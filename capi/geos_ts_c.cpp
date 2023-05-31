@@ -935,7 +935,11 @@ extern "C" {
     GEOSGeomToWKT_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
         return execute(extHandle, [&]() {
-            char* result = gstrdup(g1->toString());
+            // Deprecated, show untrimmed 2D output
+            geos::io::WKTWriter writer;
+            writer.setTrim(false);
+            writer.setOutputDimension(2);
+            char* result = gstrdup(writer.write(g1));
             return result;
         });
     }

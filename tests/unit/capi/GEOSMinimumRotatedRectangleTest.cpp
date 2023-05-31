@@ -19,7 +19,6 @@ namespace tut {
 // Common data used in test cases.
 struct test_minimumrotatedrectangle_data : public capitest::utility {
     test_minimumrotatedrectangle_data() {
-        GEOSWKTWriter_setTrim(wktw_, 1);
         GEOSWKTWriter_setRoundingPrecision(wktw_, 8);
     }
 

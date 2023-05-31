@@ -28,7 +28,6 @@ namespace capitest {
         {
             initGEOS(notice, notice);
             wktw_ = GEOSWKTWriter_create();
-            GEOSWKTWriter_setTrim(wktw_, 1);
             GEOSWKTWriter_setRoundingPrecision(wktw_, 10);
 
             std::feclearexcept(FE_ALL_EXCEPT);

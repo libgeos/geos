@@ -43,7 +43,6 @@ struct test_quadedgesub_data {
         reader(),
         writer()
     {
-        writer.setTrim(true);
     }
 };
 

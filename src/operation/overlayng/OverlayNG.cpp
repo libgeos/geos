@@ -184,8 +184,6 @@ OverlayNG::getResult()
 
 #if GEOS_DEBUG
     io::WKTWriter w;
-    w.setOutputDimension(3);
-    w.setTrim(true);
 
     std::cerr << "Before populatingZ: " << w.write(result.get()) << std::endl;
 #endif

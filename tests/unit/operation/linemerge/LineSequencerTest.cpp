@@ -39,7 +39,6 @@ struct test_linesequencer_data {
     test_linesequencer_data()
         : wktreader(), wktwriter()
     {
-        wktwriter.setTrim(true);
     }
 
     ~test_linesequencer_data()

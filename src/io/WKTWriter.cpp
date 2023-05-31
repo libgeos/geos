@@ -57,9 +57,9 @@ WKTWriter::WKTWriter():
     decimalPlaces(6),
     isFormatted(false),
     roundingPrecision(-1),
-    trim(false),
+    trim(true),
     level(0),
-    defaultOutputDimension(2),
+    defaultOutputDimension(4),
     old3D(false)
 {
 }

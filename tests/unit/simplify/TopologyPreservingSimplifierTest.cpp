@@ -33,7 +33,6 @@ struct test_tpsimp_data {
         , wktreader(gf.get())
         , wktwriter()
     {
-        //wktwriter.setTrim(1);
     }
 };
 

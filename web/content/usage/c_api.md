@@ -291,7 +291,7 @@ GEOSGeometry* geom = GEOSWKTReader_read(reader, wkt_in);
 
 /* Convert geometry back to WKT */
 GEOSWKTWriter* writer = GEOSWKTWriter_create();
-/* Trim trailing zeros off output */
+/* Trim trailing zeros off output; only needed before GEOS 3.12 */
 GEOSWKTWriter_setTrim(writer, 1);
 char* wkt_out = GEOSWKTWriter_write(writer, geom);
 

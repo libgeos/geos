@@ -20,8 +20,6 @@ namespace tut {
 struct test_capi_buildarea_data : public capitest::utility {
     test_capi_buildarea_data()
     {
-        GEOSWKTWriter_setTrim(wktw_, 1);
-        GEOSWKTWriter_setOutputDimension(wktw_, 3);
     }
 };
 

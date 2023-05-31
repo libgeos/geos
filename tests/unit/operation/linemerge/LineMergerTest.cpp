@@ -40,7 +40,6 @@ struct test_linemerger_data {
     test_linemerger_data()
         : wktreader(), wktwriter()
     {
-        wktwriter.setTrim(true);
     }
 
     ~test_linemerger_data()

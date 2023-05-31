@@ -25,7 +25,6 @@ struct test_capigeosbuffer_data : public capitest::utility {
     test_capigeosbuffer_data()
         : bp_(nullptr)
     {
-        GEOSWKTWriter_setTrim(wktw_, 1);
     }
 
     ~test_capigeosbuffer_data()

@@ -27,7 +27,6 @@ struct test_geometry_normalize_data {
     test_geometry_normalize_data()
         : reader(), writer()
     {
-        writer.setTrim(true);
     }
 
     void

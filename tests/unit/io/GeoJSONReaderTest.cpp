@@ -52,7 +52,7 @@ void object::test<1>
 {
     std::string geojson { "{\"type\":\"Point\",\"coordinates\":[-117.0,33.0]}" };
     GeomPtr geom(geojsonreader.read(geojson));
-    ensure_equals(geom->toText(), "POINT (-117.000 33.000)");
+    ensure_equals(geom->toText(), "POINT (-117 33)");
     ensure_equals(static_cast<size_t>(geom->getCoordinateDimension()), 2u);
 }
 
@@ -64,7 +64,7 @@ void object::test<2>
 {
     std::string geojson { "{\"type\":\"LineString\",\"coordinates\":[[102.0,0.0],[103.0,1.0],[104.0,0.0],[105.0,1.0]]}" };
     GeomPtr geom(geojsonreader.read(geojson));
-    ensure_equals(geom->toText(), "LINESTRING (102.000 0.000, 103.000 1.000, 104.000 0.000, 105.000 1.000)");
+    ensure_equals(geom->toText(), "LINESTRING (102 0, 103 1, 104 0, 105 1)");
     ensure_equals(static_cast<size_t>(geom->getCoordinateDimension()), 2u);
 }
 
@@ -76,7 +76,7 @@ void object::test<3>
 {
     std::string geojson { "{\"type\":\"Polygon\",\"coordinates\":[[[30,10],[40,40],[20,40],[10,20],[30,10]]]}" };
     GeomPtr geom(geojsonreader.read(geojson));
-    ensure_equals(geom->toText(), "POLYGON ((30.000 10.000, 40.000 40.000, 20.000 40.000, 10.000 20.000, 30.000 10.000))");
+    ensure_equals(geom->toText(), "POLYGON ((30 10, 40 40, 20 40, 10 20, 30 10))");
     ensure_equals(static_cast<size_t>(geom->getCoordinateDimension()), 2u);
 }
 
@@ -88,7 +88,7 @@ void object::test<4>
 {
     std::string geojson { "{\"type\":\"Polygon\",\"coordinates\":[[[35,10],[45,45],[15,40],[10,20],[35,10]],[[20,30],[35,35],[30,20],[20,30]]]}" };
     GeomPtr geom(geojsonreader.read(geojson));
-    ensure_equals(geom->toText(), "POLYGON ((35.000 10.000, 45.000 45.000, 15.000 40.000, 10.000 20.000, 35.000 10.000), (20.000 30.000, 35.000 35.000, 30.000 20.000, 20.000 30.000))");
+    ensure_equals(geom->toText(), "POLYGON ((35 10, 45 45, 15 40, 10 20, 35 10), (20 30, 35 35, 30 20, 20 30))");
     ensure_equals(static_cast<size_t>(geom->getCoordinateDimension()), 2u);
 }
 
@@ -100,7 +100,7 @@ void object::test<5>
 {
     std::string geojson { "{\"type\":\"MultiPoint\",\"coordinates\":[[10, 40], [40, 30], [20, 20], [30, 10]]}" };
     GeomPtr geom(geojsonreader.read(geojson));
-    ensure_equals(geom->toText(), "MULTIPOINT ((10.000 40.000), (40.000 30.000), (20.000 20.000), (30.000 10.000))");
+    ensure_equals(geom->toText(), "MULTIPOINT ((10 40), (40 30), (20 20), (30 10))");
     ensure_equals(static_cast<size_t>(geom->getCoordinateDimension()), 2u);
 }
 
@@ -112,7 +112,7 @@ void object::test<6>
 {
     std::string geojson { "{\"type\":\"MultiLineString\",\"coordinates\":[[[10, 10], [20, 20], [10, 40]],[[40, 40], [30, 30], [40, 20], [30, 10]]]}" };
     GeomPtr geom(geojsonreader.read(geojson));
-    ensure_equals(geom->toText(), "MULTILINESTRING ((10.000 10.000, 20.000 20.000, 10.000 40.000), (40.000 40.000, 30.000 30.000, 40.000 20.000, 30.000 10.000))");
+    ensure_equals(geom->toText(), "MULTILINESTRING ((10 10, 20 20, 10 40), (40 40, 30 30, 40 20, 30 10))");
     ensure_equals(static_cast<size_t>(geom->getCoordinateDimension()), 2u);
 }
 
@@ -124,7 +124,7 @@ void object::test<7>
 {
     std::string geojson { "{\"type\": \"MultiPolygon\", \"coordinates\": [[[[40, 40], [20, 45], [45, 30], [40, 40]]], [[[20, 35], [10, 30], [10, 10], [30, 5], [45, 20], [20, 35]], [[30, 20], [20, 15], [20, 25], [30, 20]]]]}" };
     GeomPtr geom(geojsonreader.read(geojson));
-    ensure_equals(geom->toText(), "MULTIPOLYGON (((40.000 40.000, 20.000 45.000, 45.000 30.000, 40.000 40.000)), ((20.000 35.000, 10.000 30.000, 10.000 10.000, 30.000 5.000, 45.000 20.000, 20.000 35.000), (30.000 20.000, 20.000 15.000, 20.000 25.000, 30.000 20.000)))");
+    ensure_equals(geom->toText(), "MULTIPOLYGON (((40 40, 20 45, 45 30, 40 40)), ((20 35, 10 30, 10 10, 30 5, 45 20, 20 35), (30 20, 20 15, 20 25, 30 20)))");
     ensure_equals(static_cast<size_t>(geom->getCoordinateDimension()), 2u);
 }
 
@@ -136,7 +136,7 @@ void object::test<8>
 {
     std::string geojson { "{\"type\": \"GeometryCollection\",\"geometries\": [{\"type\": \"Point\",\"coordinates\": [40, 10]},{\"type\": \"LineString\",\"coordinates\": [[10, 10], [20, 20], [10, 40]]},{\"type\": \"Polygon\",\"coordinates\": [[[40, 40], [20, 45], [45, 30], [40, 40]]]}]}" };
     GeomPtr geom(geojsonreader.read(geojson));
-    ensure_equals(geom->toText(), "GEOMETRYCOLLECTION (POINT (40.000 10.000), LINESTRING (10.000 10.000, 20.000 20.000, 10.000 40.000), POLYGON ((40.000 40.000, 20.000 45.000, 45.000 30.000, 40.000 40.000)))");
+    ensure_equals(geom->toText(), "GEOMETRYCOLLECTION (POINT (40 10), LINESTRING (10 10, 20 20, 10 40), POLYGON ((40 40, 20 45, 45 30, 40 40)))");
     ensure_equals(static_cast<size_t>(geom->getCoordinateDimension()), 2u);
 }
 
@@ -148,7 +148,7 @@ void object::test<9>
 {
     std::string geojson { "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-117.0,33.0]}}" };
     GeomPtr geom(geojsonreader.read(geojson));
-    ensure_equals(geom->toText(), "POINT (-117.000 33.000)");
+    ensure_equals(geom->toText(), "POINT (-117 33)");
     ensure_equals(static_cast<size_t>(geom->getCoordinateDimension()), 2u);
 }
 
@@ -160,7 +160,7 @@ void object::test<10>
 {
     std::string geojson { "{\"type\":\"FeatureCollection\",\"features\":[{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-117.0,33.0]}},{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-122.0,45.0]}}]}" };
     GeomPtr geom(geojsonreader.read(geojson));
-    ensure_equals(geom->toText(), "GEOMETRYCOLLECTION (POINT (-117.000 33.000), POINT (-122.000 45.000))");
+    ensure_equals(geom->toText(), "GEOMETRYCOLLECTION (POINT (-117 33), POINT (-122 45))");
     ensure_equals(static_cast<size_t>(geom->getCoordinateDimension()), 2u);
 }
 
@@ -258,7 +258,7 @@ void object::test<18>
     geos::io::GeoJSONFeatureCollection features(geojsonreader.readFeatures(geojson));
     ensure_equals(features.getFeatures().size(), static_cast<size_t>(1));
     ensure_equals(static_cast<size_t>(features.getFeatures()[0].getGeometry()->getCoordinateDimension()), 2u);
-    ensure_equals(features.getFeatures()[0].getGeometry()->toText(), "POINT (-117.000 33.000)");
+    ensure_equals(features.getFeatures()[0].getGeometry()->toText(), "POINT (-117 33)");
     ensure_equals(features.getFeatures()[0].getProperties().at("id").getNumber(), 1.0);
     ensure_equals(features.getFeatures()[0].getProperties().at("name").getString(), "one");
     ensure_equals(features.getFeatures()[0].getProperties().at("required").getBoolean(), true);
@@ -274,7 +274,7 @@ void object::test<19>
     geos::io::GeoJSONFeatureCollection features(geojsonreader.readFeatures(geojson));
     ensure_equals(features.getFeatures().size(), static_cast<size_t>(1));
     ensure_equals(static_cast<size_t>(features.getFeatures()[0].getGeometry()->getCoordinateDimension()), 2u);
-    ensure_equals(features.getFeatures()[0].getGeometry()->toText(), "POINT (-117.000 33.000)");
+    ensure_equals(features.getFeatures()[0].getGeometry()->toText(), "POINT (-117 33)");
     ensure_equals(features.getFeatures()[0].getProperties().at("id").getNumber(), 1.0);
     ensure_equals(features.getFeatures()[0].getProperties().at("name").getString(), "one");
     std::vector<geos::io::GeoJSONValue> values = features.getFeatures()[0].getProperties().at("items").getArray();
@@ -299,9 +299,9 @@ void object::test<20>
     geos::io::GeoJSONFeatureCollection features(geojsonreader.readFeatures(geojson));
     ensure_equals(features.getFeatures().size(), static_cast<size_t>(3));
     ensure_equals(static_cast<size_t>(features.getFeatures()[0].getGeometry()->getCoordinateDimension()), 2u);
-    ensure_equals(features.getFeatures()[0].getGeometry()->toText(), "POLYGON ((87.890 64.923, 76.992 55.178, 102.656 46.558, 115.312 60.413, 94.570 58.447, 87.890 64.923))");
+    ensure_equals(features.getFeatures()[0].getGeometry()->toText(), "POLYGON ((87.89 64.923, 76.992 55.178, 102.656 46.558, 115.312 60.413, 94.57 58.447, 87.89 64.923))");
     ensure_equals(features.getFeatures()[0].getProperties().at("id").getNumber(), 1.0);
-    ensure_equals(features.getFeatures()[1].getGeometry()->toText(), "LINESTRING (1.406 48.690, 41.835 34.016, 22.500 13.923)");
+    ensure_equals(features.getFeatures()[1].getGeometry()->toText(), "LINESTRING (1.406 48.69, 41.835 34.016, 22.5 13.923)");
     ensure_equals(features.getFeatures()[1].getProperties().at("id").getNumber(), 2.0);
     ensure_equals(features.getFeatures()[2].getGeometry()->toText(), "POINT (-28.125 39.095)");
     ensure_equals(features.getFeatures()[2].getProperties().at("id").getNumber(), 3.0);

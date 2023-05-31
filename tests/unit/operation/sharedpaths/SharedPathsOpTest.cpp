@@ -37,7 +37,6 @@ struct test_shpathop_data {
     test_shpathop_data()
         : wktreader(), wktwriter()
     {
-        wktwriter.setTrim(true);
     }
 
 private:

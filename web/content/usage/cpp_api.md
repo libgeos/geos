@@ -79,7 +79,7 @@ int main()
 
     /* Convert Geometry to WKT */
     WKTWriter writer;
-    writer.setTrim(true);
+    writer.setTrim(true); /* Only needed before GEOS 3.12 */
     std::string inter_wkt = writer.write(inter.get());
 
     /* Print out results */

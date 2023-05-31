@@ -107,10 +107,10 @@ const char* linestring = "LINESTRING(0 0 1, 1 1 1, 2 1 2)";
 GEOSWKTReader* reader = GEOSWKTReader_create();
 GEOSGeom* geom = GEOSWKTReader_read(reader, linestring);
 
-/* Get a WKT  writer*/
+/* Get a WKT writer */
 GEOSWKTWriter* writer = GEOSWKTWriter_create();
 
-/* Preserve the Z dimension. */
+/* Preserve the Z dimension -- only needed before GEOS 3.12 */
 GEOSWKTWriter_setOutputDimension(writer, 3);
 
 /* Sets the number places after the decimal to output in WKT. Default 16. */
@@ -121,6 +121,7 @@ GEOSWKTWriter_setRoundingPrecision(writer, 4);
  * With trim set to 1, the writer will strip trailing 0's from
  * the output coordinates. With 0, all coordinates will be
  * padded with 0's out to the rounding precision.
+ * This is generally only needed before GEOS 3.12.
  */
 GEOSWKTWriter_setTrim(writer, 1);
 

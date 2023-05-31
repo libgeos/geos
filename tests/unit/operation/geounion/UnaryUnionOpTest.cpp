@@ -37,7 +37,6 @@ struct test_unaryuniontest_data {
         : gf(GeometryFactory::create()),
           wktreader(gf.get())
     {
-        wktwriter.setTrim(true);
     }
 
     void

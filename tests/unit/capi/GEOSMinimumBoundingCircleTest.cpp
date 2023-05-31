@@ -22,7 +22,6 @@ namespace tut {
 struct test_capiminimumboundingcircle_data : public capitest::utility {
     test_capiminimumboundingcircle_data()
     {
-        GEOSWKTWriter_setTrim(wktw_, 1);
         GEOSWKTWriter_setRoundingPrecision(wktw_, 8);
     }
 };

@@ -5412,8 +5412,9 @@ extern char GEOS_DLL *GEOSWKTWriter_write(
 * With trim set to 1, the writer will strip trailing 0's from
 * the output coordinates. With 0, all coordinates will be
 * padded with 0's out to the rounding precision.
+* Default since GEOS 3.12 is with trim set to 1 for 'on'.
 * \param writer A \ref GEOSWKTWriter.
-* \param trim The trimming behaviour to set, 1 for 'on', 0 for 'off', default 'off'
+* \param trim The trimming behaviour to set, 1 for 'on', 0 for 'off'
 *
 * \since 3.3
 */
@@ -5434,10 +5435,10 @@ extern void GEOS_DLL GEOSWKTWriter_setRoundingPrecision(
     int precision);
 
 /**
-* Sets whether or not to write out XY or XYZ coordinates.
-* Legal values are 2 or 3.
+* Set the output dimensionality of the writer. Either
+* 2, 3, or 4 dimensions. Default since GEOS 3.12 is 4.
 * \param writer A \ref GEOSWKTWriter.
-* \param dim The desired dimension, default 2.
+* \param dim The dimensionality desired.
 *
 * \since 3.3
 */

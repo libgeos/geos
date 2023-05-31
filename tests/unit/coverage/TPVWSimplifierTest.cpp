@@ -21,7 +21,6 @@ struct test_tpvwsimplifier_data {
     WKTWriter w;
 
     test_tpvwsimplifier_data() {
-        w.setTrim(true);
     }
 
     void

@@ -21,7 +21,6 @@ namespace tut {
 struct test_capigeosnode_data : public capitest::utility {
     test_capigeosnode_data()
     {
-        GEOSWKTWriter_setTrim(wktw_, 1);
     }
 };
 
@@ -140,7 +139,6 @@ void object::test<6>
 
     GEOSNormalize(result_);
     GEOSNormalize(expected_);
-    GEOSWKTWriter_setOutputDimension(wktw_, 3);
 
     auto wkt_result = GEOSWKTWriter_write(wktw_, result_);
     auto wkt_expected = GEOSWKTWriter_write(wktw_, expected_);
@@ -167,7 +165,6 @@ void object::test<7>
 
     GEOSNormalize(result_);
     GEOSNormalize(expected_);
-    GEOSWKTWriter_setOutputDimension(wktw_, 3);
 
     auto wkt_result = GEOSWKTWriter_write(wktw_, result_);
     auto wkt_expected = GEOSWKTWriter_write(wktw_, expected_);
@@ -194,7 +191,6 @@ void object::test<8>
 
     GEOSNormalize(result_);
     GEOSNormalize(expected_);
-    GEOSWKTWriter_setOutputDimension(wktw_, 4);
 
     auto wkt_result = GEOSWKTWriter_write(wktw_, result_);
     auto wkt_expected = GEOSWKTWriter_write(wktw_, expected_);

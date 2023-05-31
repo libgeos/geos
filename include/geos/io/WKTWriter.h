@@ -161,7 +161,7 @@ public:
     /**
      * Enable old style 3D/4D WKT generation.
      *
-     * By default the WKBWriter produces new style 3D/4D WKT
+     * By default the WKTWriter produces new style 3D/4D WKT
      * (ie. "POINT Z (10 20 30)") but if this method is used
      * to turn on old style WKT production then the WKT will
      * be formatted in the style "POINT (10 20 30)".
@@ -177,7 +177,7 @@ public:
     /*
      * \brief
      * Returns the output dimension used by the
-     * <code>WKBWriter</code>.
+     * <code>WKTWriter</code>.
      */
     int
     getOutputDimension() const
@@ -186,11 +186,12 @@ public:
     }
 
     /*
-     * Sets the output dimension used by the <code>WKBWriter</code>.
+     * Sets the output dimension used by the <code>WKTWriter</code>.
      *
-     * @param newOutputDimension Supported values are 2 or 3.
+     * @param newOutputDimension Supported values are 2, 3 or 4.
+     *        Default since GEOS 3.12 is 4.
      *        Note that 3 indicates up to 3 dimensions will be
-     *        written but 2D WKB is still produced for 2D geometries.
+     *        written but 2D WKT is still produced for 2D geometries.
      */
     void setOutputDimension(uint8_t newOutputDimension);
 

@@ -23,7 +23,6 @@ namespace tut {
 // Common data used in test cases.
 struct test_capigeosdistance_data : public capitest::utility {
     test_capigeosdistance_data() {
-        GEOSWKTWriter_setTrim(wktw_, 1);
     }
 };
 
