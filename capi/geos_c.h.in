@@ -87,19 +87,18 @@ extern "C" {
 
 
 /**
-* Type returned by GEOS_init_r(), for use in multi-threaded
-* applications.
+* Type returned by GEOS_init_r(), for use with the functions ending in `_r`
+* (the reentrant API).
 *
-* There should be only one GEOSContextHandle_t per thread.
+* Contexts must only be used from a single thread at a time.
 */
 typedef struct GEOSContextHandle_HS *GEOSContextHandle_t;
 
 /**
 * Callback function for passing GEOS error messages to parent process.
 *
-* Set the \ref GEOSMessageHandler function for error and notice messages in \ref initGEOS
-* for single-threaded programs, or using \ref initGEOS_r for threaded
-* programs
+* Set the \ref GEOSMessageHandler function for error and notice messages using
+* \ref initGEOS or \ref initGEOS_r.
 *
 * \param fmt the message format template
 */
@@ -331,9 +330,10 @@ extern void GEOS_DLL GEOS_interruptCancel(void);
 /* ========== Initialization and Cleanup ========== */
 
 /**
-* Initialize a context for this thread. Pass this context into
-* your other calls of `*_r` functions.
-* \return a GEOS context for this thread
+* Allocate and initialize a context. Pass this context as the first argument
+* when calling other `*_r` functions. Contexts must only be used from a single
+* thread at a time.
+* \return a new GEOS context.
 *
 * \since 3.5
 */
