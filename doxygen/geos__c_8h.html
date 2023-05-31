@@ -1325,8 +1325,8 @@ Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Type returned by <a class="el" href="geos__c_8h.html#a30f811be4f94eca255d6741f361969c1">GEOS_init_r()</a>, for use in multi-threaded applications.</p>
-<p>There should be only one GEOSContextHandle_t per thread. </p>
+<p>Type returned by <a class="el" href="geos__c_8h.html#a30f811be4f94eca255d6741f361969c1">GEOS_init_r()</a>, for use with the functions ending in <code>_r</code> (the reentrant API).</p>
+<p>Contexts must only be used from a single thread at a time. </p>
 
 </div>
 </div>
@@ -1481,7 +1481,7 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Callback function for passing GEOS error messages to parent process.</p>
-<p>Set the <a class="el" href="geos__c_8h.html#adee59c8031be8d7e7e6a9d12c97e1b13">GEOSMessageHandler</a> function for error and notice messages in <a class="el" href="geos__c_8h.html#a40c8f12b7f49e3389467d7507e1539fe">initGEOS</a> for single-threaded programs, or using <a class="el" href="geos__c_8h.html#a59012707bc14b8a64990b85155f35a8f">initGEOS_r</a> for threaded programs</p>
+<p>Set the <a class="el" href="geos__c_8h.html#adee59c8031be8d7e7e6a9d12c97e1b13">GEOSMessageHandler</a> function for error and notice messages using <a class="el" href="geos__c_8h.html#a40c8f12b7f49e3389467d7507e1539fe">initGEOS</a> or <a class="el" href="geos__c_8h.html#a59012707bc14b8a64990b85155f35a8f">initGEOS_r</a>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">fmt</td><td>the message format template </td></tr>
@@ -2073,7 +2073,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Initialize a context for this thread. Pass this context into your other calls of <code>*_r</code> functions. </p><dl class="section return"><dt>Returns</dt><dd>a GEOS context for this thread</dd></dl>
+<p>Allocate and initialize a context. Pass this context as the first argument when calling other <code>*_r</code> functions. Contexts must only be used from a single thread at a time. </p><dl class="section return"><dt>Returns</dt><dd>a new GEOS context.</dd></dl>
 <dl class="section since"><dt>Since</dt><dd>3.5 </dd></dl>
 
 </div>
