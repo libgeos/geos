@@ -25,6 +25,8 @@
 #include <geos/io/GeoJSONWriter.h>
 #include <geos/util/Interrupt.h>
 
+#include <ryu/ryu.h>
+
 #include <stdexcept>
 #include <new>
 
@@ -1441,6 +1443,11 @@ extern "C" {
     GEOSWKBWriter_setIncludeSRID(GEOSWKBWriter* writer, const char newIncludeSRID)
     {
         GEOSWKBWriter_setIncludeSRID_r(handle, writer, newIncludeSRID);
+    }
+
+    int
+    GEOS_d2sfixed_buffered_n(double d, unsigned int precision, char *result) {
+        return geos_d2sfixed_buffered_n(d, precision, result);
     }
 
     /* GeoJSON Reader */

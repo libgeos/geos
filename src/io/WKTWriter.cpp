@@ -404,11 +404,8 @@ WKTWriter::appendSequenceText(const CoordinateSequence& seq,
     }
 }
 
-/* protected */
 std::string
-WKTWriter::writeNumber(double d) const
-{
-    uint32_t precision = decimalPlaces >= 0 ? static_cast<std::uint32_t>(decimalPlaces) : 0;
+WKTWriter::writeNumber(double d, bool trim, uint32_t precision) {
     /*
     * For a "trimmed" result, with no trailing zeros we use
     * the ryu library.
@@ -431,6 +428,14 @@ WKTWriter::writeNumber(double d) const
         ss << d;
         return ss.str();
     }
+}
+
+/* protected */
+std::string
+WKTWriter::writeNumber(double d) const
+{
+    uint32_t precision = decimalPlaces >= 0 ? static_cast<std::uint32_t>(decimalPlaces) : 0;
+    return writeNumber(d, trim, precision);
 }
 
 void
