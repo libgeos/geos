@@ -25,6 +25,11 @@ xxxx-xx-xx
   - CAPI: GEOSGeom_releaseCollection (GH-848)
   - CAPI: GEOSMinimumRotatedRectangle now uses MinimumAreaRectangle (Paul Ramsey)
 
+- Breaking Changes
+  - CoverageUnion now requires valid inputs to produce valid outputs
+    and may return invalid outputs silently when fed invalid inputs.
+    Use CoverageValidator first if you do not know the validity of your data.
+
 - Fixes/Improvements:
   - WKTReader: Fix parsing of Z and M flags in WKTReader (#676 and GH-669, Dan Baston)
   - WKTReader: Throw exception on inconsistent geometry dimension (#1080, Dan Baston)
