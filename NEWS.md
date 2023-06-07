@@ -74,6 +74,7 @@ xxxx-xx-xx
   - Remove Orientation.isCCW exception to simplify logic and align with JTS (GH-878, Martin Davis)
   - Change MultiPoint WKT to use parentheses in sub-members (GH-903, Mike Taves)
   - Change WKBWriter default output dimension to 4 (GH-908, Mike Taves)
+  - Change WKTWriter defaults output dimension to 4 and trim to 'on' (GH-915, Mike Taves)
 
 ## Changes in 3.11.0
 2022-07-01

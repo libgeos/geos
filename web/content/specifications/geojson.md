@@ -70,7 +70,7 @@ void main(void)
 
     // Prepare WKT writer
     WKTWriter writer;
-    writer.setTrim(true);
+    writer.setTrim(true); // Only needed before GEOS 3.12
     writer.setRoundingPrecision(2);
 
     // Print out the features

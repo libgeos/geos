@@ -36,8 +36,6 @@ struct test_geometryfixer_data {
 
     test_geometryfixer_data()
     {
-        wktwriter_.setTrim(true);
-        wktwriter_.setOutputDimension(3);
     }
 
     void checkFix(const std::string& wkt, const std::string& wktExpected) {

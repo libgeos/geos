@@ -35,7 +35,6 @@ struct test_rectangleintersectiontest_data {
     test_rectangleintersectiontest_data()
         : wktreader()
     {
-        wktwriter.setTrim(true);
         // wktwriter.setRoundingPrecision(30);
     }
 

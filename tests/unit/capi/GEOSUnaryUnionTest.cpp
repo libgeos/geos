@@ -21,8 +21,6 @@ namespace tut {
 struct test_capiunaryunion_data : public capitest::utility {
 
     test_capiunaryunion_data() {
-        GEOSWKTWriter_setTrim(wktw_, 1);
-        GEOSWKTWriter_setOutputDimension(wktw_, 3);
     }
 
 };

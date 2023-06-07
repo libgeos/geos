@@ -22,7 +22,6 @@ struct test_coveragesimplifier_data {
     std::vector<std::unique_ptr<Geometry>> geomArray;
 
     test_coveragesimplifier_data() {
-        w.setTrim(true);
     }
 
     void checkNoop(

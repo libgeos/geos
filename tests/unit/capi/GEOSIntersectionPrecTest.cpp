@@ -20,8 +20,6 @@ namespace tut {
 // Common data used in test cases.
 struct test_capigeosintersectionprec_data : public capitest::utility {
     test_capigeosintersectionprec_data() {
-        GEOSWKTWriter_setTrim(wktw_, 1);
-        GEOSWKTWriter_setOutputDimension(wktw_, 3);
     }
 
     static int

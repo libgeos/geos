@@ -36,8 +36,6 @@ struct test_overlayngz_data {
 
     test_overlayngz_data()
     {
-        w.setTrim(true);
-        w.setOutputDimension(3);
     }
 
     void checkOverlay(int opCode, const std::string& wktA, const std::string& wktB, const std::string& wktExpected)

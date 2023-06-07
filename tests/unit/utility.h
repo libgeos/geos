@@ -219,7 +219,6 @@ ensure_equals_geometry(T const* lhs_in, T const* rhs_in, double tolerance = 0.0)
 
     if(! (areCoordsEqual && areaNumPointsEqual)) {
         WKTWriter writer;
-        writer.setTrim(true);
         std::cout << std::endl
             << writer.write(*rhs) << std::endl
             << writer.write(*lhs) << std::endl;

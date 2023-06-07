@@ -36,7 +36,6 @@ struct test_lengthindexedline_data {
     test_lengthindexedline_data()
         : reader(), writer()
     {
-        writer.setTrim(true);
     }
 
     geos::io::WKTReader reader;

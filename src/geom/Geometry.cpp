@@ -454,6 +454,9 @@ std::string
 Geometry::toText() const
 {
     io::WKTWriter writer;
+    // To enable "GEOS<3.12" outputs, uncomment the following:
+    // writer.setTrim(false);
+    // writer.setOutputDimension(2);
     return writer.write(this);
 }
 

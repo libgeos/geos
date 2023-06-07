@@ -22,7 +22,6 @@ namespace tut {
 struct test_capipointonsurface_data : public capitest::utility {
     test_capipointonsurface_data()
     {
-        GEOSWKTWriter_setTrim(wktw_, 1);
         GEOSWKTWriter_setRoundingPrecision(wktw_, 4);
     }
 };

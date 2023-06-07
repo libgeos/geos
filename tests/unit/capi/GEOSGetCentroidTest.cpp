@@ -21,7 +21,6 @@ namespace tut {
 // Common data used in test cases.
 struct test_capicentroid_data : public capitest::utility {
     test_capicentroid_data() {
-        GEOSWKTWriter_setTrim(wktw_, 1);
         GEOSWKTWriter_setRoundingPrecision(wktw_, 6);
     }
 };

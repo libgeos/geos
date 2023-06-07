@@ -37,8 +37,6 @@ struct test_overlayng_elevationmodel_data {
 
     test_overlayng_elevationmodel_data()
     {
-        w.setTrim(true);
-        w.setOutputDimension(3);
     }
 
     void checkElevation(const std::string& wkt1, const std::string& wkt2, std::initializer_list<double> ords)

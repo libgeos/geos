@@ -25,8 +25,6 @@ struct test_capiisvaliddetail_data : public capitest::utility {
 
     test_capiisvaliddetail_data() : loc_(nullptr), reason_(nullptr)
     {
-        GEOSWKTWriter_setTrim(wktw_, 1);
-        GEOSWKTWriter_setOutputDimension(wktw_, 3);
     }
 
     void

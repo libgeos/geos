@@ -104,7 +104,6 @@ runVoronoi(const char* sitesWkt, const char* expectedWkt, const double tolerance
                   static_cast<std::size_t>(expected->getCoordinateDimension()));
     bool eq = results->equalsExact(expected.get(), 1e-7);
     if(! eq) {
-        writer.setTrim(true);
         std::cout << std::endl;
         std::cout << " Expected: " << writer.write(expected.get()) << std::endl;
         std::cout << " Obtained: " << writer.write(results.get()) << std::endl;

@@ -53,7 +53,6 @@ struct test_snaproundingnoder_data {
 
         std::unique_ptr<Geometry> expected = r.read(expected_wkt);
 
-        // w.setOutputDimension(4);
         // std::cout << std::endl << "result" << std::endl;
         // std::cout << std::endl << w.write(result.get()) << std::endl;
         // std::cout << std::endl << "expected" << std::endl;

@@ -20,8 +20,6 @@ namespace tut {
 // Common data used in test cases.
 struct test_capiremoverepeatedpoints_data : public capitest::utility {
     test_capiremoverepeatedpoints_data() {
-        GEOSWKTWriter_setTrim(wktw_, 1);
-        GEOSWKTWriter_setOutputDimension(wktw_, 3);
     }
 };
 

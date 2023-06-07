@@ -620,7 +620,6 @@ BufferBuilder::computeNodedEdges(SegmentString::NonConstVect& bufferSegStrList,
 
 #if JTS_DEBUG
     geos::io::WKTWriter wktWriter;
-    wktWriter.setTrim(true);
     std::cerr << "before noding: "
               << wktWriter.write(
                   convertSegStrings(geomFact, bufferSegStrList.begin(),

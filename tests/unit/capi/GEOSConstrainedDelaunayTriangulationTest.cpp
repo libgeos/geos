@@ -20,7 +20,6 @@ namespace tut {
 // Common data used in test cases.
 struct test_capiconstrainedgeosdelaunaytriangulation_data : public capitest::utility {
     test_capiconstrainedgeosdelaunaytriangulation_data() {
-        GEOSWKTWriter_setTrim(wktw_, 1);
     }
 };
 

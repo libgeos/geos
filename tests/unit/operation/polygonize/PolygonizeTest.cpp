@@ -47,7 +47,6 @@ struct test_polygonizetest_data {
     test_polygonizetest_data()
         : wktreader()
     {
-        wktwriter.setTrim(true);
     }
 
     template <class T>

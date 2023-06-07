@@ -25,7 +25,6 @@ struct test_coverageringedges_data
     WKTWriter w;
 
     test_coverageringedges_data() {
-        w.setTrim(true);
     }
 
     void

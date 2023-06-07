@@ -41,7 +41,6 @@ struct test_repeated_point_remover_test_data
     std::string
     wkt(const Geometry& geom)
     {
-        writer.setTrim(true);
         return writer.write(&geom);
     }
 

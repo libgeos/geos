@@ -51,12 +51,12 @@ void object::test<1>
         {"id",   geos::io::GeoJSONValue(1.0)     },
         {"name", geos::io::GeoJSONValue(std::string{"One"}) },
     }};
-    ensure_equals(feature.getGeometry()->toText(), "POINT (-117.000 33.000)");
+    ensure_equals(feature.getGeometry()->toText(), "POINT (-117 33)");
     ensure_equals(feature.getProperties().at("id").getNumber(), 1.0);
     ensure_equals(feature.getProperties().at("name").getString(), "One");
 
     const geos::io::GeoJSONFeature feature2 = feature;
-    ensure_equals(feature2.getGeometry()->toText(), "POINT (-117.000 33.000)");
+    ensure_equals(feature2.getGeometry()->toText(), "POINT (-117 33)");
     ensure_equals(feature2.getProperties().at("id").getNumber(), 1.0);
     ensure_equals(feature2.getProperties().at("name").getString(), "One");
 }
@@ -78,10 +78,10 @@ void object::test<2>
         }}
     }};
     ensure_equals(static_cast<size_t>(2), features.getFeatures().size());
-    ensure_equals(features.getFeatures()[0].getGeometry()->toText(), "POINT (-117.000 33.000)");
+    ensure_equals(features.getFeatures()[0].getGeometry()->toText(), "POINT (-117 33)");
     ensure_equals(features.getFeatures()[0].getProperties().at("id").getNumber(), 1.0);
     ensure_equals(features.getFeatures()[0].getProperties().at("name").getString(), "One");
-    ensure_equals(features.getFeatures()[1].getGeometry()->toText(), "POINT (-127.000 53.000)");
+    ensure_equals(features.getFeatures()[1].getGeometry()->toText(), "POINT (-127 53)");
     ensure_equals(features.getFeatures()[1].getProperties().at("id").getNumber(), 2.0);
     ensure_equals(features.getFeatures()[1].getProperties().at("name").getString(), "Two");
 }

@@ -21,7 +21,6 @@ namespace tut {
 struct test_capigeossharedpaths_data : public capitest::utility {
     test_capigeossharedpaths_data()
     {
-        GEOSWKTWriter_setTrim(wktw_, 1);
     }
 };
 

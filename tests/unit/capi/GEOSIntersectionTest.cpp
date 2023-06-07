@@ -13,8 +13,6 @@ namespace tut {
 struct test_capigeosintersection_data : public capitest::utility
 {
     test_capigeosintersection_data() {
-        GEOSWKTWriter_setTrim(wktw_, 1);
-        GEOSWKTWriter_setOutputDimension(wktw_, 3);
     }
 };
 

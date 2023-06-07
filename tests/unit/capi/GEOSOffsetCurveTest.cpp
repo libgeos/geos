@@ -20,7 +20,6 @@ namespace tut {
 // Common data used in test cases.
 struct test_capioffsetcurve_data : public capitest::utility {
     test_capioffsetcurve_data() {
-        GEOSWKTWriter_setTrim(wktw_, 1);
     }
 
     void debugOutput (const char* label, GEOSGeometry* geom)
