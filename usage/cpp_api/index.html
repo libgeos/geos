@@ -70,7 +70,7 @@ You can explore the C&#43;&#43; model via the Doxygen reference." />
       "url" : "https://libgeos.org/usage/cpp_api/",
       "headline": "C++ API Programming",
       "description": "The GEOS C\u002b\u002b API is included in the collection of header files installed in include\/geos which is a very large collection. Effectively it includes both “public” headers that a user might be expected to make use of and “private” headers that are mostly only used by internal algorithms. Currently, the two kinds of headers are not marked in any way, nor is there an easy way to disentagle them.\nYou can explore the C\u002b\u002b model via the Doxygen reference.",
-      "wordCount" : "449",
+      "wordCount" : "456",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1552,7 +1552,7 @@ You can explore the C&#43;&#43; model via the Doxygen reference." />
 
     <span class="cm">/* Convert Geometry to WKT */</span>
     <span class="n">WKTWriter</span> <span class="n">writer</span><span class="p">;</span>
-    <span class="n">writer</span><span class="p">.</span><span class="n">setTrim</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
+    <span class="n">writer</span><span class="p">.</span><span class="n">setTrim</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span> <span class="cm">/* Only needed before GEOS 3.12 */</span>
     <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">inter_wkt</span> <span class="o">=</span> <span class="n">writer</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">inter</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
 
     <span class="cm">/* Print out results */</span>

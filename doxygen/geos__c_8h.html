@@ -20303,10 +20303,10 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Sets whether or not to write out XY or XYZ coordinates. Legal values are 2 or 3. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Set the output dimensionality of the writer. Either 2, 3, or 4 dimensions. Default since GEOS 3.12 is 4. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">writer</td><td>A <a class="el" href="geos__c_8h.html#a664daad6642852a44dac7a51320f8b66">GEOSWKTWriter</a>. </td></tr>
-    <tr><td class="paramname">dim</td><td>The desired dimension, default 2.</td></tr>
+    <tr><td class="paramname">dim</td><td>The dimensionality desired.</td></tr>
   </table>
   </dd>
 </dl>
@@ -20445,10 +20445,10 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Sets the number trimming option on a <a class="el" href="geos__c_8h.html#a664daad6642852a44dac7a51320f8b66">GEOSWKTWriter</a>. With trim set to 1, the writer will strip trailing 0's from the output coordinates. With 0, all coordinates will be padded with 0's out to the rounding precision. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Sets the number trimming option on a <a class="el" href="geos__c_8h.html#a664daad6642852a44dac7a51320f8b66">GEOSWKTWriter</a>. With trim set to 1, the writer will strip trailing 0's from the output coordinates. With 0, all coordinates will be padded with 0's out to the rounding precision. Default since GEOS 3.12 is with trim set to 1 for 'on'. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">writer</td><td>A <a class="el" href="geos__c_8h.html#a664daad6642852a44dac7a51320f8b66">GEOSWKTWriter</a>. </td></tr>
-    <tr><td class="paramname">trim</td><td>The trimming behaviour to set, 1 for 'on', 0 for 'off', default 'off'</td></tr>
+    <tr><td class="paramname">trim</td><td>The trimming behaviour to set, 1 for 'on', 0 for 'off'</td></tr>
   </table>
   </dd>
 </dl>

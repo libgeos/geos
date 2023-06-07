@@ -70,7 +70,7 @@
       "url" : "https://libgeos.org/usage/c_api/",
       "headline": "C API Programming",
       "description": "Most programs using GEOS use the C API, rather than building against the C\u002b\u002b headers. The C API offers several benefits:\n Stable API, that preserves behaviour and function naming over multiple releases. Stable ABI, allowing new binaries to be dropped into place without requiring a rebuild of dependent applications. Simple access pattern, using the simple features model as the basis for most operations.  In exchange for this simplicity and stability, the C API has a few requirements from application authors:",
-      "wordCount" : "1576",
+      "wordCount" : "1581",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1772,7 +1772,7 @@ so freeing the geometry with <code>GEOSGeom_destroy()</code> frees all the alloc
 
 <span class="cm">/* Convert geometry back to WKT */</span>
 <span class="n">GEOSWKTWriter</span><span class="o">*</span> <span class="n">writer</span> <span class="o">=</span> <span class="n">GEOSWKTWriter_create</span><span class="p">();</span>
-<span class="cm">/* Trim trailing zeros off output */</span>
+<span class="cm">/* Trim trailing zeros off output; only needed before GEOS 3.12 */</span>
 <span class="n">GEOSWKTWriter_setTrim</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
 <span class="kt">char</span><span class="o">*</span> <span class="n">wkt_out</span> <span class="o">=</span> <span class="n">GEOSWKTWriter_write</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">geom</span><span class="p">);</span>
 

@@ -73,7 +73,7 @@ Unlike WKB and WKT, GeoJSON does not restrict itself to just geometry representa
       "url" : "https://libgeos.org/specifications/geojson/",
       "headline": "GeoJSON",
       "description": "“GeoJSON” is a standard for structuring JSON when encoding geometry and features. By using GeoJSON, rather than some other arbitrary scheme for structuring JSON, you maximize the interoperability of your JSON output. There are dozens of tools and websites that happily consume and emit GeoJSON.\nThe GeoJSON standard is formally maintained by the IETF as “RFC 7946”.\nUnlike WKB and WKT, GeoJSON does not restrict itself to just geometry representation. It also standardizes the transport of attribution.",
-      "wordCount" : "405",
+      "wordCount" : "411",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1570,8 +1570,8 @@ Unlike WKB and WKT, GeoJSON does not restrict itself to just geometry representa
 
     <span class="c1">// Prepare WKT writer
 </span><span class="c1"></span>    <span class="n">WKTWriter</span> <span class="n">writer</span><span class="p">;</span>
-    <span class="n">writer</span><span class="p">.</span><span class="n">setTrim</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span>
-    <span class="n">writer</span><span class="p">.</span><span class="n">setRoundingPrecision</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+    <span class="n">writer</span><span class="p">.</span><span class="n">setTrim</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span> <span class="c1">// Only needed before GEOS 3.12
+</span><span class="c1"></span>    <span class="n">writer</span><span class="p">.</span><span class="n">setRoundingPrecision</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
 
     <span class="c1">// Print out the features
 </span><span class="c1"></span>    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">feature</span><span class="p">:</span> <span class="n">fc</span><span class="p">)</span> <span class="p">{</span>
