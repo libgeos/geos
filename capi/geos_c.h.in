@@ -263,7 +263,7 @@ typedef void (*GEOSQueryCallback)(void *item, void *userdata);
 * \param distance the distance between the items here
 * \param userdata extra data for the calculation
 *
-* \return zero if distance calculation succeeded, non-zero otherwise
+* \return 1 if distance calculation succeeds, 0 otherwise
 *
 * \see GEOSSTRtree_nearest_generic
 * \see GEOSSTRtree_iterate
