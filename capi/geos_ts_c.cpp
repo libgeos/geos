@@ -391,7 +391,7 @@ inline auto execute(
                                   decltype(std::declval<F>()())>::type errval,
         F&& f) -> decltype(errval) {
     if (extHandle == nullptr) {
-        throw std::runtime_error("GEOS context handle is unintialized, call initGEOS");
+        throw std::runtime_error("GEOS context handle is uninitialized, call initGEOS");
     }
 
     GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
@@ -415,7 +415,7 @@ inline auto execute(
 template<typename F, typename std::enable_if<!std::is_void<decltype(std::declval<F>()())>::value, std::nullptr_t>::type = nullptr>
 inline auto execute(GEOSContextHandle_t extHandle, F&& f) -> decltype(f()) {
     if (extHandle == nullptr) {
-        throw std::runtime_error("context handle is unintialized, call initGEOS");
+        throw std::runtime_error("context handle is uninitialized, call initGEOS");
     }
 
     GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
