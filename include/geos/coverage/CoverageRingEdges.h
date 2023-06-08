@@ -72,16 +72,6 @@ private:
 
 public:
 
-    /**
-    * Create a new instance for a given coverage.
-    *
-    * @param coverage the set of polygonal geometries in the coverage
-    * @return the edges of the coverage
-    */
-    // static std::unique_ptr<CoverageRingEdges> create(
-    //     std::vector<const Geometry*>& coverage);
-
-
     CoverageRingEdges(std::vector<const Geometry*>& coverage)
         : m_coverage(coverage)
     {
