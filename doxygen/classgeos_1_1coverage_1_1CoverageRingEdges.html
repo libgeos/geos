@@ -55,7 +55,8 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a9db71183225e4116868bb4d364521062"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1coverage_1_1CoverageRingEdges.html#a9db71183225e4116868bb4d364521062">CoverageRingEdges</a> (std::vector&lt; const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> * &gt; &amp;coverage)</td></tr>
+<tr class="memitem:a9db71183225e4116868bb4d364521062"><td class="memItemLeft" align="right" valign="top"><a id="a9db71183225e4116868bb4d364521062"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>CoverageRingEdges</b> (std::vector&lt; const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> * &gt; &amp;coverage)</td></tr>
 <tr class="separator:a9db71183225e4116868bb4d364521062"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa4cf8330080eb1c4ec2122309c60060a"><td class="memItemLeft" align="right" valign="top"><a id="aa4cf8330080eb1c4ec2122309c60060a"></a>
 std::vector&lt; <a class="el" href="classgeos_1_1coverage_1_1CoverageEdge.html">CoverageEdge</a> * &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getEdges</b> ()</td></tr>
@@ -68,42 +69,7 @@ std::vector&lt; <a class="el" href="classgeos_1_1coverage_1_1CoverageEdge.html">
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Models a polygonal coverage as a set of unique <a class="el" href="classgeos_1_1coverage_1_1CoverageEdge.html">CoverageEdge</a>s, linked to the parent rings in the coverage polygons. Each edge has either one or two parent rings, depending on whether it is an inner or outer edge of the coverage. The source coverage is represented as a array of polygonal geometries (either <a class="el" href="classgeos_1_1geom_1_1Polygon.html">geos::geom::Polygon</a>s or <a class="el" href="classgeos_1_1geom_1_1MultiPolygon.html">geos::geom::MultiPolygon</a>s).</p>
 <dl class="section author"><dt>Author</dt><dd>Martin Davis </dd></dl>
-</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a9db71183225e4116868bb4d364521062"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9db71183225e4116868bb4d364521062">&#9670;&nbsp;</a></span>CoverageRingEdges()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">geos::coverage::CoverageRingEdges::CoverageRingEdges </td>
-          <td>(</td>
-          <td class="paramtype">std::vector&lt; const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> * &gt; &amp;&#160;</td>
-          <td class="paramname"><em>coverage</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Create a new instance for a given coverage.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">coverage</td><td>the set of polygonal geometries in the coverage </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>the edges of the coverage </dd></dl>
-
-</div>
-</div>
-<h2 class="groupheader">Member Function Documentation</h2>
+</div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a2179b4df5a2ff8ce2ea124e183e25a9d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2179b4df5a2ff8ce2ea124e183e25a9d">&#9670;&nbsp;</a></span>buildCoverage()</h2>
 
