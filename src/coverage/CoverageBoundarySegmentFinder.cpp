@@ -1,14 +1,16 @@
-/*
+/**********************************************************************
+ *
+ * GEOS - Geometry Engine Open Source
+ * http://geos.osgeo.org
+ *
  * Copyright (c) 2022 Martin Davis.
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License 2.0
- * and Eclipse Distribution License v. 1.0 which accompanies this distribution.
- * The Eclipse Public License is available at http://www.eclipse.org/legal/epl-v20.html
- * and the Eclipse Distribution License is available at
+ * This is free software; you can redistribute and/or modify it under
+ * the terms of the GNU Lesser General Public Licence as published
+ * by the Free Software Foundation.
+ * See the COPYING file for more information.
  *
- * http://www.eclipse.org/org/documents/edl-v10.php.
- */
+ **********************************************************************/
 
 #include <geos/coverage/CoverageBoundarySegmentFinder.h>
 #include <geos/geom/CoordinateSequence.h>
