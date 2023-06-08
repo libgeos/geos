@@ -70,7 +70,7 @@
       "url" : "https://libgeos.org/usage/c_api/",
       "headline": "C API Programming",
       "description": "Most programs using GEOS use the C API, rather than building against the C\u002b\u002b headers. The C API offers several benefits:\n Stable API, that preserves behaviour and function naming over multiple releases. Stable ABI, allowing new binaries to be dropped into place without requiring a rebuild of dependent applications. Simple access pattern, using the simple features model as the basis for most operations.  In exchange for this simplicity and stability, the C API has a few requirements from application authors:",
-      "wordCount" : "1581",
+      "wordCount" : "2297",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1840,9 +1840,102 @@ so freeing the geometry with <code>GEOSGeom_destroy()</code> frees all the alloc
         </a>
     </h3>
 </div>
+<p>The STRTree index allows you to create, populate, and query a spatial index. Like most spatial indexes, the STRTree is based on <a
+  class="gdoc-markdown__link"
+  href="https://en.wikipedia.org/wiki/R-tree"
+>indexing rectangles</a>. For a complete example using a reader and writer, see <a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/blob/main/examples/capi_strtree.c"
+>capi_strtree.c</a>.</p>
+<p>When you build an index, you will usually insert an &ldquo;item&rdquo; &ndash; some kind of <code>struct</code> that you are interested in indexing &ndash; and an associated bounds for that item, in the form of a <code>GEOSGeometry</code>. The geometry does not need to be rectangular, a rectangular bounding box will be automatically calculated for the geometry.</p>
+<p>Once you have built an STRTree, you have two basic ways to query:</p>
 <ul>
-<li><code>GEOSSTRtree</code></li>
+<li>Find the <strong>nearest item</strong> to a query geometry, using <code>GEOSSTRtree_nearest_generic()</code></li>
+<li>Find all the <strong>items that intersect</strong> with a query rectangle, using <code>GEOSSTRtree_query()</code></li>
 </ul>
+<p>Build the tree by creating it, then inserting items.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cm">/*
+</span><span class="cm">* An application will want to index items, which have
+</span><span class="cm">* some attributes and a geometry part.
+</span><span class="cm">*/</span>
+<span class="k">typedef</span> <span class="k">struct</span>
+<span class="p">{</span>
+    <span class="n">GEOSGeometry</span><span class="o">*</span> <span class="n">geom</span><span class="p">;</span>
+    <span class="n">size_t</span> <span class="n">id</span><span class="p">;</span>
+<span class="p">}</span> <span class="n">item</span><span class="p">;</span>
+
+<span class="cm">/*
+</span><span class="cm">* The tree doesn&#39;t take ownership of inputs just
+</span><span class="cm">* holds references, so we keep our point field
+</span><span class="cm">* handy in an array
+</span><span class="cm">*/</span>
+<span class="n">item</span><span class="o">*</span> <span class="n">items</span><span class="p">[</span><span class="n">nItems</span><span class="p">];</span>
+
+<span class="cm">/*
+</span><span class="cm">* The create parameter for the tree is not the
+</span><span class="cm">* number of inputs, it is the number of entries
+</span><span class="cm">* per node. 10 is a good default number to use.
+</span><span class="cm">*/</span>
+<span class="n">GEOSSTRtree</span><span class="o">*</span> <span class="n">tree</span> <span class="o">=</span> <span class="n">GEOSSTRtree_create</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+
+<span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nItems</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+    <span class="cm">/* Make a random point */</span>
+    <span class="n">item</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">random_item</span><span class="p">(</span><span class="n">range</span><span class="p">);</span>
+    <span class="cm">/* Store away a reference so we can free it after */</span>
+    <span class="n">items</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span><span class="p">;</span>
+    <span class="cm">/* Add an entry for it to the tree */</span>
+    <span class="n">GEOSSTRtree_insert</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">obj</span><span class="o">-&gt;</span><span class="n">geom</span><span class="p">,</span> <span class="n">obj</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div><p>Note that the index does <strong>not take ownership</strong> of the inserted <code>GEOSGeometry</code> or the item, it just stores pointers. So remember to keep a list of the items you create in order to free them at the end of your process.</p>
+<p>Once the tree is built, you can query it.</p>
+<p>The generic <strong>nearest-neighbor query</strong> uses a callback to check the actual distance between the search item and the indexed item. In this way it can filter through the many candidate nearest nodes in the index to find the <strong>actual</strong> nearest node.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cm">/*
+</span><span class="cm">* Item distance callback for GEOSSTRtree_nearest_generic()
+</span><span class="cm">*/</span>
+<span class="kt">int</span>
+<span class="nf">itemDistanceCallback</span><span class="p">(</span><span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">item1</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">item2</span><span class="p">,</span> <span class="kt">double</span><span class="o">*</span> <span class="n">distance</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">userdata</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">item_t</span><span class="o">*</span> <span class="n">obj1</span> <span class="o">=</span> <span class="p">(</span><span class="n">item_t</span><span class="o">*</span><span class="p">)</span><span class="n">item1</span><span class="p">;</span>
+    <span class="n">item_t</span><span class="o">*</span> <span class="n">obj2</span> <span class="o">=</span> <span class="p">(</span><span class="n">item_t</span><span class="o">*</span><span class="p">)</span><span class="n">item2</span><span class="p">;</span>
+    <span class="k">return</span> <span class="n">GEOSDistance</span><span class="p">(</span><span class="n">obj1</span><span class="o">-&gt;</span><span class="n">geom</span><span class="p">,</span> <span class="n">obj2</span><span class="o">-&gt;</span><span class="n">geom</span><span class="p">,</span> <span class="n">distance</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div><p>The query call requires the tree, the item driving the search (so it can be fed into the callback), the geometry driving the search (because the library doesn&rsquo;t know how to extract the geometry from the item <em>a priori</em>), the callback, and whatever extra information want sent into the callback.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cm">/* Random item to query the index with */</span>
+<span class="n">item_t</span><span class="o">*</span> <span class="n">item_random</span> <span class="o">=</span> <span class="n">random_item</span><span class="p">(</span><span class="n">range</span><span class="p">);</span>
+
+<span class="cm">/* Nearest item in the index to our random item */</span>
+<span class="k">const</span> <span class="n">item_t</span><span class="o">*</span> <span class="n">item_nearest</span> <span class="o">=</span> <span class="n">GEOSSTRtree_nearest_generic</span><span class="p">(</span>
+    <span class="n">tree</span><span class="p">,</span>                 <span class="c1">// STRTree to query
+</span><span class="c1"></span>    <span class="n">item_random</span><span class="p">,</span>          <span class="c1">// Item to use in search
+</span><span class="c1"></span>    <span class="n">item_random</span><span class="o">-&gt;</span><span class="n">geom</span><span class="p">,</span>    <span class="c1">// Geometry to seed search
+</span><span class="c1"></span>    <span class="n">itemDistanceCallback</span><span class="p">,</span> <span class="c1">// Callback to process nearest object
+</span><span class="c1"></span>    <span class="nb">NULL</span><span class="p">);</span>                <span class="c1">// Userdata to hand to the callback
+</span></code></pre></div><p>The <strong>query by rectangle</strong> function also uses a callback, which could be used to exactly test for a spatial relationship (intersects, contains, etc), for all the index nodes that meet the rough &ldquo;bounds interact&rdquo; filter the index applies.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cm">/*
+</span><span class="cm">* Item query callback for GEOSSTRtree_query()
+</span><span class="cm">*/</span>
+<span class="kt">void</span>
+<span class="nf">itemQueryCallback</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">item</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">userdata</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+    <span class="n">item_t</span><span class="o">*</span> <span class="n">i</span> <span class="o">=</span> <span class="p">(</span><span class="n">item_t</span><span class="o">*</span><span class="p">)</span><span class="n">item</span><span class="p">;</span>
+    <span class="n">GEOSGeomGetX</span><span class="p">(</span><span class="n">i</span><span class="o">-&gt;</span><span class="n">geom</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">);</span>
+    <span class="n">GEOSGeomGetY</span><span class="p">(</span><span class="n">i</span><span class="o">-&gt;</span><span class="n">geom</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">y</span><span class="p">);</span>
+    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Found item %10zu at (%g, %g)</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">i</span><span class="o">-&gt;</span><span class="n">id</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div><p>This example just prints out every candidate that passes the index filter.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cm">/* Set up a query rectangle for index query */</span>
+<span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">wkt_bounds</span> <span class="o">=</span> <span class="s">&#34;POLYGON((20 20, 22 20, 22 22, 20 22, 20 20))&#34;</span><span class="p">;</span>
+<span class="n">GEOSGeometry</span><span class="o">*</span> <span class="n">geom_query</span> <span class="o">=</span> <span class="n">GEOSWKTReader_read</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="n">wkt_bounds</span><span class="p">);</span>
+
+<span class="cm">/* Find all items that touch the bounds */</span>
+<span class="cm">/* For non-rectangular query geometry, this will be an over-determined set */</span>
+<span class="n">GEOSSTRtree_query</span><span class="p">(</span>
+    <span class="n">tree</span><span class="p">,</span>              <span class="c1">// STRTree to query
+</span><span class="c1"></span>    <span class="n">geom_query</span><span class="p">,</span>        <span class="c1">// GEOSGeometry query bounds
+</span><span class="c1"></span>    <span class="n">itemQueryCallback</span><span class="p">,</span> <span class="c1">// Callback to process index entries that pass query
+</span><span class="c1"></span>    <span class="nb">NULL</span><span class="p">);</span>             <span class="c1">// Userdata to hand to the callback
+</span></code></pre></div><p>The query itself just uses the tree, the query bounds geometry, the callback, and optional user data. You could use the user data to pass in an array to write results out to, or a prepared geometry to use for exact tests.</p>
 
   </article>
 
