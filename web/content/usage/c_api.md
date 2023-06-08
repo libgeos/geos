@@ -351,4 +351,118 @@ For a complete example of using prepared geometry to accelerate multiple predica
 
 ### STRTree Index
 
-* `GEOSSTRtree`
+The STRTree index allows you to create, populate, and query a spatial index. Like most spatial indexes, the STRTree is based on [indexing rectangles](https://en.wikipedia.org/wiki/R-tree). For a complete example using a reader and writer, see [capi_strtree.c](https://github.com/libgeos/geos/blob/main/examples/capi_strtree.c).
+
+When you build an index, you will usually insert an "item" -- some kind of `struct` that you are interested in indexing -- and an associated bounds for that item, in the form of a `GEOSGeometry`. The geometry does not need to be rectangular, a rectangular bounding box will be automatically calculated for the geometry.
+
+Once you have built an STRTree, you have two basic ways to query:
+
+* Find the **nearest item** to a query geometry, using `GEOSSTRtree_nearest_generic()`
+* Find all the **items that intersect** with a query rectangle, using `GEOSSTRtree_query()`
+
+Build the tree by creating it, then inserting items.
+
+```c
+/*
+* An application will want to index items, which have
+* some attributes and a geometry part.
+*/
+typedef struct
+{
+    GEOSGeometry* geom;
+    size_t id;
+} item;
+
+/*
+* The tree doesn't take ownership of inputs just
+* holds references, so we keep our point field
+* handy in an array
+*/
+item* items[nItems];
+
+/*
+* The create parameter for the tree is not the
+* number of inputs, it is the number of entries
+* per node. 10 is a good default number to use.
+*/
+GEOSSTRtree* tree = GEOSSTRtree_create(10);
+
+for (size_t i = 0; i < nItems; i++) {
+    /* Make a random point */
+    item* obj = random_item(range);
+    /* Store away a reference so we can free it after */
+    items[i] = obj;
+    /* Add an entry for it to the tree */
+    GEOSSTRtree_insert(tree, obj->geom, obj);
+}
+```
+
+Note that the index does **not take ownership** of the inserted `GEOSGeometry` or the item, it just stores pointers. So remember to keep a list of the items you create in order to free them at the end of your process.
+
+Once the tree is built, you can query it.
+
+The generic **nearest-neighbor query** uses a callback to check the actual distance between the search item and the indexed item. In this way it can filter through the many candidate nearest nodes in the index to find the **actual** nearest node.
+
+```c
+/*
+* Item distance callback for GEOSSTRtree_nearest_generic()
+*/
+int
+itemDistanceCallback(const void* item1, const void* item2, double* distance, void* userdata)
+{
+    item_t* obj1 = (item_t*)item1;
+    item_t* obj2 = (item_t*)item2;
+    return GEOSDistance(obj1->geom, obj2->geom, distance);
+}
+```
+
+The query call requires the tree, the item driving the search (so it can be fed into the callback), the geometry driving the search (because the library doesn't know how to extract the geometry from the item *a priori*), the callback, and whatever extra information want sent into the callback.
+
+```c
+/* Random item to query the index with */
+item_t* item_random = random_item(range);
+
+/* Nearest item in the index to our random item */
+const item_t* item_nearest = GEOSSTRtree_nearest_generic(
+    tree,                 // STRTree to query
+    item_random,          // Item to use in search
+    item_random->geom,    // Geometry to seed search
+    itemDistanceCallback, // Callback to process nearest object
+    NULL);                // Userdata to hand to the callback
+```
+
+The **query by rectangle** function also uses a callback, which could be used to exactly test for a spatial relationship (intersects, contains, etc), for all the index nodes that meet the rough "bounds interact" filter the index applies.
+
+```c
+/*
+* Item query callback for GEOSSTRtree_query()
+*/
+void
+itemQueryCallback(void* item, void* userdata)
+{
+    double x, y;
+    item_t* i = (item_t*)item;
+    GEOSGeomGetX(i->geom, &x);
+    GEOSGeomGetY(i->geom, &y);
+    printf("Found item %10zu at (%g, %g)\n", i->id, x, y);
+}
+```
+
+This example just prints out every candidate that passes the index filter.
+
+```c
+/* Set up a query rectangle for index query */
+const char* wkt_bounds = "POLYGON((20 20, 22 20, 22 22, 20 22, 20 20))";
+GEOSGeometry* geom_query = GEOSWKTReader_read(reader, wkt_bounds);
+
+/* Find all items that touch the bounds */
+/* For non-rectangular query geometry, this will be an over-determined set */
+GEOSSTRtree_query(
+    tree,              // STRTree to query
+    geom_query,        // GEOSGeometry query bounds
+    itemQueryCallback, // Callback to process index entries that pass query
+    NULL);             // Userdata to hand to the callback
+```
+
+The query itself just uses the tree, the query bounds geometry, the callback, and optional user data. You could use the user data to pass in an array to write results out to, or a prepared geometry to use for exact tests.
+
