@@ -25,8 +25,6 @@
 #include <geos/io/GeoJSONWriter.h>
 #include <geos/util/Interrupt.h>
 
-#include <ryu/ryu.h>
-
 #include <stdexcept>
 #include <new>
 
@@ -1446,8 +1444,8 @@ extern "C" {
     }
 
     int
-    GEOS_d2sfixed_buffered_n(double d, unsigned int precision, char *result) {
-        return geos_d2sfixed_buffered_n(d, precision, result);
+    GEOS_printDouble(double d, unsigned int precision, char *result) {
+        return WKTWriter::writeTrimmedNumber(d, precision, result);
     }
 
     /* GeoJSON Reader */

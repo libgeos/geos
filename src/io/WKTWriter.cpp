@@ -404,6 +404,12 @@ WKTWriter::appendSequenceText(const CoordinateSequence& seq,
     }
 }
 
+int 
+WKTWriter::writeTrimmedNumber(double d, uint32_t precision, char* buf)
+{
+    return geos_d2sfixed_buffered_n(d, precision, buf);
+}
+
 std::string
 WKTWriter::writeNumber(double d, bool trim, uint32_t precision) {
     /*
@@ -412,7 +418,7 @@ WKTWriter::writeNumber(double d, bool trim, uint32_t precision) {
     */
     if (trim) {
         char buf[128];
-        int len = geos_d2sfixed_buffered_n(d, precision, buf);
+        int len = writeTrimmedNumber(d, precision, buf);
         buf[len] = '\0';
         std::string s(buf);
         return s;

@@ -1905,7 +1905,7 @@ extern void GEOS_DLL GEOSWKTWriter_setOld3D_r(
  * \param result The buffer to write the result to.
  * \return the length of the written string.
  */
-extern int GEOS_DLL GEOS_d2sfixed_buffered_n(
+extern int GEOS_DLL GEOS_printDouble(
     double d,
     unsigned int precision,
     char *result
