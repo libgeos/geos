@@ -32,7 +32,7 @@ namespace geom {
 class Geometry;
 class GeometryFactory;
 }
-};
+}
 
 
 namespace geos {
@@ -75,6 +75,8 @@ public:
 
     static void toVector(const Geometry* g, std::vector<const Geometry*>& v);
     void preprocess(void);
+
+    static bool needsStructured(const Geometry* g);
 
 
 private:

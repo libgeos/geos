@@ -49,9 +49,8 @@ HeuristicOverlay(const Geometry* g0, const Geometry* g1, int opCode)
     * GeometryCollection (collections of mixed dimension)
     * so we handle that case here.
     */
-    if (!(g0->isEmpty() || g1->isEmpty()) &&
-         (g0->getGeometryTypeId() == GEOS_GEOMETRYCOLLECTION ||
-          g1->getGeometryTypeId() == GEOS_GEOMETRYCOLLECTION))
+    if (StructuredCollection::needsStructured(g0) ||
+        StructuredCollection::needsStructured(g1))
     {
         StructuredCollection s0(g0);
         StructuredCollection s1(g1);
@@ -108,6 +107,12 @@ HeuristicOverlay(const Geometry* g0, const Geometry* g1, int opCode)
     return ret;
 }
 
+
+bool
+StructuredCollection::needsStructured(const Geometry* g)
+{
+    return (! g->isEmpty()) && ! (g->isPuntal() || g->isLineal() || g->isPolygonal());
+}
 
 /* public */
 void
