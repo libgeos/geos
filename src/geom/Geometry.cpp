@@ -168,7 +168,7 @@ Geometry::isMixedDimension() const
     return isMixedDimension(&baseDim);
 }
 
-/* private */
+/* public */
 bool
 Geometry::isMixedDimension(Dimension::DimensionType* baseDim) const
 {

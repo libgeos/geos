@@ -53,7 +53,7 @@ public:
         , poly_union(nullptr)
     {
         readCollection(g);
-        preprocess();
+        unionByDimension();
     };
 
     StructuredCollection()
@@ -75,7 +75,7 @@ public:
     std::unique_ptr<Geometry> doUnaryUnion() const;
 
     static void toVector(const Geometry* g, std::vector<const Geometry*>& v);
-    void preprocess(void);
+    void unionByDimension(void);
 
 
 private:

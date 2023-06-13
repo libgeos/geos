@@ -140,13 +140,13 @@ StructuredCollection::readCollection(const Geometry* g)
 void
 StructuredCollection::toVector(const Geometry* g, std::vector<const Geometry*>& v)
 {
+    if (!g || g->isEmpty()) return;
     if (g->isCollection()) {
         for (std::size_t i = 0; i < g->getNumGeometries(); i++) {
             toVector(g->getGeometryN(i), v);
         }
     }
     else {
-        if (g->isEmpty()) return;
         switch (g->getGeometryTypeId()) {
             case GEOS_POINT:
             case GEOS_LINESTRING:
@@ -162,8 +162,15 @@ StructuredCollection::toVector(const Geometry* g, std::vector<const Geometry*>& 
 
 /* public */
 void
-StructuredCollection::preprocess(void)
+StructuredCollection::unionByDimension(void)
 {
+    /*
+    * Remove duplication within each dimension, so that there
+    * is only one object covering any particular space within
+    * that dimension.
+    * This makes reasoning about the collection-on-collection
+    * operations a little easier later on.
+    */
     std::unique_ptr<MultiPoint> pt_col = factory->createMultiPoint(pts);
     std::unique_ptr<MultiLineString> line_col = factory->createMultiLineString(lines);
     std::unique_ptr<MultiPolygon> poly_col = factory->createMultiPolygon(polys);
@@ -186,35 +193,14 @@ StructuredCollection::preprocess(void)
 
 /* public */
 std::unique_ptr<Geometry>
-StructuredCollection::doUnion(const StructuredCollection& a) const
-{
-    auto poly_union_poly = OverlayNGRobust::Overlay(
-        a.getPolyUnion(),
-        poly_union.get(),
-        OverlayNG::UNION);
-
-    auto line_union_line = OverlayNGRobust::Overlay(
-        a.getLineUnion(),
-        line_union.get(),
-        OverlayNG::UNION);
-
-    auto pt_union_pt = OverlayNGRobust::Overlay(
-        a.getPointUnion(),
-        pt_union.get(),
-        OverlayNG::UNION);
-
-    StructuredCollection c;
-    c.readCollection(poly_union_poly.get());
-    c.readCollection(line_union_line.get());
-    c.readCollection(pt_union_pt.get());
-    c.preprocess();
-    return c.doUnaryUnion();
-}
-
-/* public */
-std::unique_ptr<Geometry>
 StructuredCollection::doUnaryUnion() const
 {
+    /*
+    * Before output, we clean up the components to remove spatial
+    * duplication. Points that lines pass through. Lines that are covered
+    * by polygonal areas already. Provides a "neater" output that still
+    * covers all the area it should.
+    */
     std::unique_ptr<Geometry> pts_less_lines = OverlayNGRobust::Overlay(
         pt_union.get(),
         line_union.get(),
@@ -238,6 +224,34 @@ StructuredCollection::doUnaryUnion() const
     return factory->buildGeometry(geoms.begin(), geoms.end());
 }
 
+
+/* public */
+std::unique_ptr<Geometry>
+StructuredCollection::doUnion(const StructuredCollection& a) const
+{
+
+    auto poly_union_poly = OverlayNGRobust::Overlay(
+        a.getPolyUnion(),
+        poly_union.get(),
+        OverlayNG::UNION);
+
+    auto line_union_line = OverlayNGRobust::Overlay(
+        a.getLineUnion(),
+        line_union.get(),
+        OverlayNG::UNION);
+
+    auto pt_union_pt = OverlayNGRobust::Overlay(
+        a.getPointUnion(),
+        pt_union.get(),
+        OverlayNG::UNION);
+
+    StructuredCollection c;
+    c.readCollection(poly_union_poly.get());
+    c.readCollection(line_union_line.get());
+    c.readCollection(pt_union_pt.get());
+    c.unionByDimension();
+    return c.doUnaryUnion();
+}
 
 
 std::unique_ptr<Geometry>
@@ -308,7 +322,7 @@ StructuredCollection::doIntersection(const StructuredCollection& a) const
     c.readCollection(pt_inter_poly.get());
     c.readCollection(pt_inter_line.get());
     c.readCollection(pt_inter_pt.get());
-    c.preprocess();
+    c.unionByDimension();
     return c.doUnaryUnion();
 }
 
@@ -350,7 +364,7 @@ StructuredCollection::doDifference(const StructuredCollection& a) const
     c.readCollection(poly_diff_poly.get());
     c.readCollection(line_diff_poly_line.get());
     c.readCollection(pt_diff_poly_line_pt.get());
-    c.preprocess();
+    c.unionByDimension();
     return c.doUnaryUnion();
 }
 
@@ -376,7 +390,7 @@ StructuredCollection::doSymDifference(const StructuredCollection& a) const
     c.readCollection(poly_symdiff_poly.get());
     c.readCollection(line_symdiff_line.get());
     c.readCollection(pt_symdiff_pt.get());
-    c.preprocess();
+    c.unionByDimension();
     return c.doUnaryUnion();
 }
 

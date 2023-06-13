@@ -5,6 +5,7 @@
 #include <tut/tut.hpp>
 // geos
 #include <geos/geom/Dimension.h>
+#include <geos/io/WKTReader.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/util.h>
 
@@ -136,6 +137,22 @@ void object::test<5>
         ensure(msg != nullptr);
     }
 }
+
+template<>
+template<>
+void object::test<6>
+()
+{
+    using geos::geom::Dimension;
+    geos::io::WKTReader reader;
+    auto geom = reader.read("GEOMETRYCOLLECTION(POINT(1 1), LINESTRING(2 2, 3 3))");
+    Dimension::DimensionType d = geom->getDimension();
+    // std::cout << d << std::endl;
+    // getDimension() finds the highest dimension in the collection
+    ensure(d == Dimension::L);
+}
+
+
 
 } // namespace tut
 
