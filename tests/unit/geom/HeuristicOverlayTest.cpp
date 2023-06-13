@@ -60,6 +60,16 @@ group test_heuristic_data("geos::geom::HeuristicOverlay");
 // Test Cases
 //
 
+//
+// These tests exercise the special cast code in HeuristicOverlay
+// for GeometryCollection in which the contents are "mixed dimension",
+// such as points and lines or lines and polygons in the same collection.
+// For those cases the result of the overlay might be a matter of
+// interpretation, depending on the inputs and the opinions of the
+// end user. The implementation just tries to generate a visually
+// defensible, simplified answer.
+//
+
 template<>
 template<>
 void object::test<1> ()
