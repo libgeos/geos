@@ -21,6 +21,7 @@
 
 #include <geos/export.h>
 #include <geos/geom/Geometry.h>
+#include <geos/geom/Dimension.h>
 
 
 #include <memory> // for unique_ptr
@@ -77,7 +78,8 @@ public:
     void preprocess(void);
 
     static bool needsStructured(const Geometry* g);
-
+    static bool consistentType(const Geometry* g);
+    static bool consistentType(const Geometry* g, Dimension::DimensionType* baseDim);
 
 private:
 

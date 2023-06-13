@@ -26,6 +26,7 @@
 #include <geos/geom/HeuristicOverlay.h>
 #include <geos/operation/overlayng/OverlayNGRobust.h>
 #include <geos/util/IllegalArgumentException.h>
+#include <geos/geom/Dimension.h>
 #include <geos/geom/MultiPoint.h>
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/MultiPolygon.h>
@@ -111,8 +112,36 @@ HeuristicOverlay(const Geometry* g0, const Geometry* g1, int opCode)
 bool
 StructuredCollection::needsStructured(const Geometry* g)
 {
-    return (! g->isEmpty()) && ! (g->isPuntal() || g->isLineal() || g->isPolygonal());
+    return (!g->isEmpty()) && (!consistentType(g));
 }
+
+bool
+StructuredCollection::consistentType(const Geometry* g)
+{
+    Dimension::DimensionType baseDim = Dimension::DONTCARE;
+    return consistentType(g, &baseDim);
+}
+
+bool
+StructuredCollection::consistentType(const Geometry* g, Dimension::DimensionType* baseDim)
+{
+    if (g->isCollection()) {
+        for (std::size_t i = 0; i < g->getNumGeometries(); i++) {
+            bool isConsistent = consistentType(g->getGeometryN(i), baseDim);
+            if (!isConsistent)
+                return false;
+        }
+        return true;
+    }
+    else {
+        if (*baseDim == Dimension::DONTCARE) {
+            *baseDim = g->getDimension();
+            return true;
+        }
+        return *baseDim == g->getDimension();
+    }
+}
+
 
 /* public */
 void
