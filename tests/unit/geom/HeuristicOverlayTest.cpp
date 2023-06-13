@@ -40,10 +40,11 @@ struct test_heuristic_data {
         std::unique_ptr<Geometry> g1 = reader_.read(wkt1);
         std::unique_ptr<Geometry> g2 = reader_.read(wkt2);
         std::unique_ptr<Geometry> expected = reader_.read(wkt_expected);
-
         std::unique_ptr<Geometry> actual = HeuristicOverlay(g1.get(), g2.get(), opCode);
+
         // std::cout << "expected:" << std::endl << writer_.write(*expected) << std::endl;
         // std::cout << "actual:" << std::endl << writer_.write(*actual) << std::endl;
+
         ensure_equals_geometry(expected.get(), actual.get());
     }
 
@@ -168,5 +169,29 @@ void object::test<9> ()
         );
 }
 
+
+template<>
+template<>
+void object::test<10> ()
+{
+    checkOverlay(
+        "GEOMETRYCOLLECTION(POLYGON((0 0, 10 0, 10 10, 0 10, 0 0)), POINT EMPTY, MULTIPOINT(4 4, 11 11), LINESTRING(5 5, 6 6))",
+        "GEOMETRYCOLLECTION(POLYGON((2 2, 12 2, 12 12, 2 12, 2 2)), LINESTRING EMPTY, MULTIPOINT(4 4, 11 11), LINESTRING(5 6, 6 5))",
+        OverlayNG::INTERSECTION,
+        "GEOMETRYCOLLECTION (POINT (11 11), POLYGON ((10 10, 10 2, 2 2, 2 10, 10 10)))"
+        );
+}
+
+template<>
+template<>
+void object::test<11> ()
+{
+    checkOverlay(
+        "GEOMETRYCOLLECTION(POLYGON((0 0, 10 0, 10 10, 0 10, 0 0)), POINT EMPTY, MULTIPOINT(4 4, 11 11), LINESTRING(5 5, 6 6))",
+        "GEOMETRYCOLLECTION(POLYGON((2 2, 12 2, 12 12, 2 12, 2 2)), LINESTRING EMPTY, MULTIPOINT(4 4, 11 11), LINESTRING(5 6, 6 5))",
+        OverlayNG::UNION,
+        "POLYGON ((2 12, 12 12, 12 2, 10 2, 10 0, 0 0, 0 10, 2 10, 2 12))"
+        );
+}
 
 } // namespace tut
