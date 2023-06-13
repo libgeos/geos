@@ -77,9 +77,6 @@ public:
     static void toVector(const Geometry* g, std::vector<const Geometry*>& v);
     void preprocess(void);
 
-    static bool needsStructured(const Geometry* g);
-    static bool consistentType(const Geometry* g);
-    static bool consistentType(const Geometry* g, Dimension::DimensionType* baseDim);
 
 private:
 

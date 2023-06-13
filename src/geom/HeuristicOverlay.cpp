@@ -50,8 +50,8 @@ HeuristicOverlay(const Geometry* g0, const Geometry* g1, int opCode)
     * GeometryCollection (collections of mixed dimension)
     * so we handle that case here.
     */
-    if (StructuredCollection::needsStructured(g0) ||
-        StructuredCollection::needsStructured(g1))
+    if ((g0->isMixedDimension() && !g0->isEmpty()) ||
+        (g1->isMixedDimension() && !g1->isEmpty()))
     {
         StructuredCollection s0(g0);
         StructuredCollection s1(g1);
@@ -107,41 +107,6 @@ HeuristicOverlay(const Geometry* g0, const Geometry* g1, int opCode)
 
     return ret;
 }
-
-
-bool
-StructuredCollection::needsStructured(const Geometry* g)
-{
-    return (!g->isEmpty()) && (!consistentType(g));
-}
-
-bool
-StructuredCollection::consistentType(const Geometry* g)
-{
-    Dimension::DimensionType baseDim = Dimension::DONTCARE;
-    return consistentType(g, &baseDim);
-}
-
-bool
-StructuredCollection::consistentType(const Geometry* g, Dimension::DimensionType* baseDim)
-{
-    if (g->isCollection()) {
-        for (std::size_t i = 0; i < g->getNumGeometries(); i++) {
-            bool isConsistent = consistentType(g->getGeometryN(i), baseDim);
-            if (!isConsistent)
-                return false;
-        }
-        return true;
-    }
-    else {
-        if (*baseDim == Dimension::DONTCARE) {
-            *baseDim = g->getDimension();
-            return true;
-        }
-        return *baseDim == g->getDimension();
-    }
-}
-
 
 /* public */
 void

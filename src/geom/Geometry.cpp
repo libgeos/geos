@@ -160,6 +160,34 @@ Geometry::getCentroid() const
     return std::unique_ptr<Point>(getFactory()->createPoint(centPt));
 }
 
+/* public */
+bool
+Geometry::isMixedDimension() const
+{
+    Dimension::DimensionType baseDim = Dimension::DONTCARE;
+    return isMixedDimension(&baseDim);
+}
+
+/* private */
+bool
+Geometry::isMixedDimension(Dimension::DimensionType* baseDim) const
+{
+    if (isCollection()) {
+        for (std::size_t i = 0; i < getNumGeometries(); i++) {
+            if (getGeometryN(i)->isMixedDimension(baseDim))
+                return true;
+        }
+        return false;
+    }
+    else {
+        if (*baseDim == Dimension::DONTCARE) {
+            *baseDim = getDimension();
+            return false;
+        }
+        return *baseDim != getDimension();
+    }
+}
+
 /*public*/
 bool
 Geometry::getCentroid(CoordinateXY& ret) const

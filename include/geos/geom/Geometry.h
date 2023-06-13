@@ -364,6 +364,9 @@ public:
         return isDimensionStrict(Dimension::A);
     }
 
+    bool isMixedDimension() const;
+    bool isMixedDimension(Dimension::DimensionType* baseDim) const;
+
     bool isCollection() const {
         int t = getGeometryTypeId();
         return t == GEOS_GEOMETRYCOLLECTION ||
