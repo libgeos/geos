@@ -421,7 +421,7 @@ HeuristicOverlay(const Geometry* g0, const Geometry* g1, int opCode)
 
         return ret;
     }
-    catch(const std::exception& ex) {
+    catch(const geos::util::TopologyException& ex) {
         ::geos::ignore_unused_variable_warning(ex);
 
 #if GEOS_DEBUG_HEURISTICOVERLAY
