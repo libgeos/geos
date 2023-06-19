@@ -56,5 +56,26 @@ void object::test<1>
     ensure_equals_geometry(expected.get(), result.get());
 }
 
+// https://github.com/libgeos/geos/issues/924
+template<>
+template<>
+void object::test<2>
+()
+{
+    std::string wkt1("GEOMETRYCOLLECTION(POLYGON((0 0, 10 0, 10 10, 0 10, 0 0)), LINESTRING(20 20, 30 30))");
+    std::unique_ptr<geos::geom::Geometry> g1(wktreader.read(wkt1));
+
+    std::string wkt2("GEOMETRYCOLLECTION(POLYGON((9 9, 21 9, 21 21, 9 21, 9 9)), POINT(5 5))");
+    std::unique_ptr<geos::geom::Geometry> g2(wktreader.read(wkt2));
+
+    auto result = g1->difference(g2.get());
+    result->normalize();
+
+    std::string wktExpected("GEOMETRYCOLLECTION (LINESTRING (21 21, 30 30), POLYGON ((10 0, 0 0, 0 10, 9 10, 9 9, 10 9, 10 0)))");
+    std::unique_ptr<geos::geom::Geometry> expected(wktreader.read(wktExpected));
+
+    ensure_equals_geometry(expected.get(), result.get());
+}
+
 
 } // namespace tut
