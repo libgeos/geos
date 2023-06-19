@@ -428,6 +428,11 @@ HeuristicOverlay(const Geometry* g0, const Geometry* g1, int opCode)
         std::cerr << "OverlayNGRobust: " << ex.what() << std::endl;
 #endif
     }
+    catch(const geos::util::IllegalArgumentException& ex) {
+#if GEOS_DEBUG_HEURISTICOVERLAY
+        std::cerr << "OverlayNGRobust: " << ex.what() << std::endl;
+#endif
+    }
 
         check_valid(*g0, "Input geom 0", true, true);
         check_valid(*g1, "Input geom 1", true, true);
