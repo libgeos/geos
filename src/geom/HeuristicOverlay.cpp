@@ -429,6 +429,8 @@ HeuristicOverlay(const Geometry* g0, const Geometry* g1, int opCode)
 #endif
     }
     catch(const geos::util::IllegalArgumentException& ex) {
+        ::geos::ignore_unused_variable_warning(ex);
+
 #if GEOS_DEBUG_HEURISTICOVERLAY
         std::cerr << "OverlayNGRobust: " << ex.what() << std::endl;
 #endif
