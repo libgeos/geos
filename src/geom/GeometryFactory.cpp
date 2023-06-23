@@ -226,8 +226,6 @@ GeometryFactory::createPoint(std::unique_ptr<CoordinateSequence>&& coords) const
 {
     if (!coords) {
         return createPoint();
-    } else if ((*coords).isNullPoint()) {
-        return createPoint((*coords).getDimension());
     }
     return std::unique_ptr<Point>(new Point(std::move(*coords), this));
 }
@@ -235,55 +233,32 @@ GeometryFactory::createPoint(std::unique_ptr<CoordinateSequence>&& coords) const
 std::unique_ptr<Point>
 GeometryFactory::createPoint(const CoordinateXY& coordinate) const
 {
-    if(coordinate.isNull()) {
-        return createPoint(2);
-    }
-    else {
-        return std::unique_ptr<Point>(new Point(coordinate, this));
-    }
+    return std::unique_ptr<Point>(new Point(coordinate, this));
 }
 
 /*public*/
 std::unique_ptr<Point>
 GeometryFactory::createPoint(const Coordinate& coordinate) const
 {
-    if(coordinate.isNull()) {
-        return createPoint(3);
-    }
-    else {
-        return std::unique_ptr<Point>(new Point(coordinate, this));
-    }
+    return std::unique_ptr<Point>(new Point(coordinate, this));
 }
 
 std::unique_ptr<Point>
 GeometryFactory::createPoint(const CoordinateXYM& coordinate) const
 {
-    if(coordinate.isNull()) {
-        return createPoint(4);  // can't do XYM!
-    }
-    else {
-        return std::unique_ptr<Point>(new Point(coordinate, this));
-    }
+    return std::unique_ptr<Point>(new Point(coordinate, this));
 }
 
 std::unique_ptr<Point>
 GeometryFactory::createPoint(const CoordinateXYZM& coordinate) const
 {
-    if(coordinate.isNull()) {
-        return createPoint(4);
-    }
-    else {
-        return std::unique_ptr<Point>(new Point(coordinate, this));
-    }
+    return std::unique_ptr<Point>(new Point(coordinate, this));
 }
 
 /*public*/
 std::unique_ptr<Point>
 GeometryFactory::createPoint(const CoordinateSequence& fromCoords) const
 {
-    if (fromCoords.isNullPoint()) {
-        return createPoint(fromCoords.getDimension());
-    }
     CoordinateSequence newCoords(fromCoords);
     return std::unique_ptr<Point>(new Point(std::move(newCoords), this));
 

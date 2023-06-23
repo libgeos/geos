@@ -447,4 +447,20 @@ void object::test<22>
     ensure_dimension("MULTIPOINT ZM ((0 0 4 3), (1 2 4 5))", true, true);
 }
 
+// accept NaN coordinates
+template<>
+template<>
+void object::test<23>
+()
+{
+    GeomPtr geom(wktreader.read("POINT(NaN NaN)"));
+    auto coords = geom->getCoordinates();
+
+    ensure(!coords->isEmpty());
+    ensure(coords->getDimension() == 2);
+    ensure(std::isnan(coords->getX(0)));
+    ensure(std::isnan(coords->getY(0)));
+}
+
+
 } // namespace tut
