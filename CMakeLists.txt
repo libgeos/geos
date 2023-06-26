@@ -454,24 +454,22 @@ if(PROJECT_IS_TOP_LEVEL)
     set(CPACK_PACKAGE_VERSION_MINOR ${GEOS_VERSION_MINOR})
     set(CPACK_PACKAGE_VERSION_PATCH ${GEOS_VERSION_PATCH})
     set(CPACK_SOURCE_PACKAGE_FILE_NAME "geos-${GEOS_VERSION}")
-
+    set(CPACK_VERBATIM_VARIABLES TRUE)
     set(CPACK_SOURCE_IGNORE_FILES
-      "/\\\\.git"
-      "/autogen\\\\.sh"
-      "/tools/ci"
-      "/HOWTO_RELEASE"
-      "/autom4te\\\\.cache"
-      "\\\\.yml\$"
-      "\\\\.deps"
-      "/debian/"
-      "/php/"
-      "/.*build-.*/"
-      "cmake_install\\\\.cmake\$"
-      "/include/geos/version\\\\.h\$"
-      "/tools/geos-config\$"
-      "/tools/geos\\\\.pc\$"
-      "/bin/"
-      "/web/"
+      /\\..*  # any file/directory starting with .
+      /.*build.*/
+      /autogen\\.sh
+      /autom4te\\.cache
+      /bin/
+      /debian/
+      /HOWTO_RELEASE
+      /include/geos/version\\.h\$
+      /php/
+      /tools/ci
+      /tools/geos-config\$
+      /tools/geos\\.pc\$
+      /web/
+      cmake_install\\.cmake\$
       ${CMAKE_CURRENT_BINARY_DIR}
       )
 
