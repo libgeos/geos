@@ -12,8 +12,12 @@
 <meta name="generator" content="Hugo 0.88.1" />
 
 
+  <meta name="description" content="The 3.12 release of GEOS is now available to download.
+  This release includes the following new features in the C API (and of course underlying changes to the C&#43;&#43; code to support these features):
+ GEOSDisjointSubsetUnion, anptimized union algorithm for inputs that can be divided into subsets. GEOSLineSubstring, to clip a line using a start and end fractional length. GEOSEqualsIdentical, to test exact equality (with regards to order, structure, etc) of two geometries. GEOSOrientPolygons, to enforce a ring orientation on all polygonal elements in the input geometry. GEOSSTRtree_build, to force an immediate build of an STRtree. GEOSConcaveHullByLength, to build a concave hull by removing the longest outer edges of the Delaunay Triangulation of the space between the polygons, until the specified maximm edge length is reached GEOSGeomGetM, to read the M-dimensional value of a geometry. GEOSVoronoiDiagram, returns the Voronoi polygons or edges of the vertices of the given geometry. GEOSCoverageSimplifyVW, GEOSCoverageUnion, GEOSCoverageIsValid for working with &ldquo;polygonal coverages&rdquo;, collections of polygons that follow coverage rules (no overlaps, exact vertex equivalence on shared edges). GEOSGeom_releaseCollection, to free a collection while leaving the sub-geometries intact. GEOSMinimumRotatedRectangle, a rework of the minimum rectangle code to be faster and more correct.    GEOS has been updated to read and write &ldquo;M&rdquo; dimension. As with the &ldquo;Z&rdquo; coordinate support, not all operations can preserve the &ldquo;M&rdquo; dimension, but best efforts are made to retain it through calculations, input and output.
+ " />
 
-    <title>News | GEOS</title>
+    <title>Version 3.12.0 | GEOS</title>
 
     <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
 <link
@@ -34,19 +38,69 @@
     
   <meta
     property="og:title"
-    content="News"
+    content="Version 3.12.0"
   />
   <meta property="og:site_name" content="GEOS" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://libgeos.org/posts/" />
+  <meta property="og:description" content="The 3.12 release of GEOS is now available to download.
+  This release includes the following new features in the C API (and of course underlying changes to the C&#43;&#43; code to support these features):
+ GEOSDisjointSubsetUnion, anptimized union algorithm for inputs that can be divided into subsets. GEOSLineSubstring, to clip a line using a start and end fractional length. GEOSEqualsIdentical, to test exact equality (with regards to order, structure, etc) of two geometries. GEOSOrientPolygons, to enforce a ring orientation on all polygonal elements in the input geometry. GEOSSTRtree_build, to force an immediate build of an STRtree. GEOSConcaveHullByLength, to build a concave hull by removing the longest outer edges of the Delaunay Triangulation of the space between the polygons, until the specified maximm edge length is reached GEOSGeomGetM, to read the M-dimensional value of a geometry. GEOSVoronoiDiagram, returns the Voronoi polygons or edges of the vertices of the given geometry. GEOSCoverageSimplifyVW, GEOSCoverageUnion, GEOSCoverageIsValid for working with “polygonal coverages”, collections of polygons that follow coverage rules (no overlaps, exact vertex equivalence on shared edges). GEOSGeom_releaseCollection, to free a collection while leaving the sub-geometries intact. GEOSMinimumRotatedRectangle, a rework of the minimum rectangle code to be faster and more correct.    GEOS has been updated to read and write “M” dimension. As with the “Z” coordinate support, not all operations can preserve the “M” dimension, but best efforts are made to retain it through calculations, input and output.
+ " />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://libgeos.org/posts/2023-06-27-geos-3-12-released/" />
 
-
+<meta property="article:section" content="Posts" />
+    <meta
+      property="article:published_time"
+      content="2023-06-27T00:00:00+00:00"
+    />
+    <meta
+      property="article:modified_time"
+      content="2023-06-27T00:00:00+00:00"
+    />
 
 
   <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="News" />
+<meta name="twitter:title" content="Version 3.12.0" />
+  <meta name="twitter:description" content="The 3.12 release of GEOS is now available to download.
+  This release includes the following new features in the C API (and of course underlying changes to the C&#43;&#43; code to support these features):
+ GEOSDisjointSubsetUnion, anptimized union algorithm for inputs that can be divided into subsets. GEOSLineSubstring, to clip a line using a start and end fractional length. GEOSEqualsIdentical, to test exact equality (with regards to order, structure, etc) of two geometries. GEOSOrientPolygons, to enforce a ring orientation on all polygonal elements in the input geometry. GEOSSTRtree_build, to force an immediate build of an STRtree. GEOSConcaveHullByLength, to build a concave hull by removing the longest outer edges of the Delaunay Triangulation of the space between the polygons, until the specified maximm edge length is reached GEOSGeomGetM, to read the M-dimensional value of a geometry. GEOSVoronoiDiagram, returns the Voronoi polygons or edges of the vertices of the given geometry. GEOSCoverageSimplifyVW, GEOSCoverageUnion, GEOSCoverageIsValid for working with “polygonal coverages”, collections of polygons that follow coverage rules (no overlaps, exact vertex equivalence on shared edges). GEOSGeom_releaseCollection, to free a collection while leaving the sub-geometries intact. GEOSMinimumRotatedRectangle, a rework of the minimum rectangle code to be faster and more correct.    GEOS has been updated to read and write “M” dimension. As with the “Z” coordinate support, not all operations can preserve the “M” dimension, but best efforts are made to retain it through calculations, input and output.
+ " />
 
 
+  <script type="application/ld+json">
+  {
+      "@context": "http://schema.org",
+      "@type": "TechArticle",
+      "articleSection": "Posts",
+      "name": "Version 3.12.0",
+      "url" : "https://libgeos.org/posts/2023-06-27-geos-3-12-released/",
+      "headline": "Version 3.12.0",
+      "description": "The 3.12 release of GEOS is now available to download.\n  This release includes the following new features in the C API (and of course underlying changes to the C\u002b\u002b code to support these features):\n GEOSDisjointSubsetUnion, anptimized union algorithm for inputs that can be divided into subsets. GEOSLineSubstring, to clip a line using a start and end fractional length. GEOSEqualsIdentical, to test exact equality (with regards to order, structure, etc) of two geometries. GEOSOrientPolygons, to enforce a ring orientation on all polygonal elements in the input geometry. GEOSSTRtree_build, to force an immediate build of an STRtree. GEOSConcaveHullByLength, to build a concave hull by removing the longest outer edges of the Delaunay Triangulation of the space between the polygons, until the specified maximm edge length is reached GEOSGeomGetM, to read the M-dimensional value of a geometry. GEOSVoronoiDiagram, returns the Voronoi polygons or edges of the vertices of the given geometry. GEOSCoverageSimplifyVW, GEOSCoverageUnion, GEOSCoverageIsValid for working with “polygonal coverages”, collections of polygons that follow coverage rules (no overlaps, exact vertex equivalence on shared edges). GEOSGeom_releaseCollection, to free a collection while leaving the sub-geometries intact. GEOSMinimumRotatedRectangle, a rework of the minimum rectangle code to be faster and more correct.    GEOS has been updated to read and write “M” dimension. As with the “Z” coordinate support, not all operations can preserve the “M” dimension, but best efforts are made to retain it through calculations, input and output.\n ",
+      "wordCount" : "888",
+      "inLanguage": "en",
+      "isFamilyFriendly": "true",
+      "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://libgeos.org/posts/2023-06-27-geos-3-12-released/"
+      },
+      "copyrightHolder" : "GEOS",
+      "copyrightYear" : "2023",
+      "dateCreated": "2023-06-27T00:00:00.00Z",
+      "datePublished": "2023-06-27T00:00:00.00Z",
+      "dateModified": "2023-06-27T00:00:00.00Z",
+      "publisher":{
+          "@type":"Organization",
+          "name": "GEOS",
+          "url": "https://libgeos.org/",
+          "logo": {
+              "@type": "ImageObject",
+              "url": "https://libgeos.org/brand.svg",
+              "width":"32",
+              "height":"32"
+          }
+      }
+  }
+  </script>
 
 
     
@@ -111,7 +165,7 @@
   href="/custom.css"
   media="all"
 />
-  <link href="https://libgeos.org/posts/" rel="canonical" type="text/html" />
+  <link href="https://libgeos.org/posts/2023-06-27-geos-3-12-released/" rel="canonical" type="text/html" />
 
 <!-- Made with Geekdoc theme https://github.com/thegeeklab/hugo-geekdoc -->
 
@@ -1229,7 +1283,7 @@
                 
                 <a
                   href="/posts"
-                  class="gdoc-nav__entry is-active"
+                  class="gdoc-nav__entry"
                 >
                   News
                 </a>
@@ -1354,15 +1408,34 @@
 
         <div class="gdoc-page">
           
-  
-    <article class="gdoc-markdown gdoc-post">
-      <header class="gdoc-post__header">
-        <h1 class="gdoc-post__title">
-          <a href="/posts/2023-06-27-geos-3-12-released/">Version 3.12.0</a>
-        </h1>
-      </header>
-      <section>
-        <p>The 3.12 release of GEOS is now available <a
+  <article class="gdoc-post">
+    <header class="gdoc-post__header">
+      <h1 class="gdoc-post__title">Version 3.12.0</h1>
+      <div class="flex flex-wrap align-center gdoc-post__meta gdoc-post__meta--head">
+        <span class="flex align-center no-wrap">
+  <svg class="gdoc-icon gdoc_date"><use xlink:href="#gdoc_date"></use></svg>
+  <span class="gdoc-post__tag">
+    <time datetime="2023-06-27T00:00:00Z">
+      
+      Jun 27, 2023
+    </time>
+  </span>
+</span>
+
+<span class="flex align-center no-wrap">
+  <svg class="gdoc-icon gdoc_timer"><use xlink:href="#gdoc_timer"></use></svg>
+  <span class="gdoc-post__tag">5 minutes to read</span>
+</span>
+
+
+
+
+
+
+      </div>
+    </header>
+    <section class="gdoc-markdown">
+      <p>The 3.12 release of GEOS is now available <a
   class="gdoc-markdown__link"
   href="https://libgeos.org/usage/download/"
 >to download</a>.</p>
@@ -1387,477 +1460,305 @@
 <p>GEOS has been updated to read and write &ldquo;M&rdquo; dimension. As with the &ldquo;Z&rdquo; coordinate support, not all operations can preserve the &ldquo;M&rdquo; dimension, but best efforts are made to retain it through calculations, input and output.</p>
 </li>
 </ul>
-      </section>
-      <div class="gdoc-post__readmore">
-        
-          <a
-            class="flex-inline align-center fake-link"
-            title="Read full post"
-            href="/posts/2023-06-27-geos-3-12-released/"
-          >
-            Read full post
-            <i class="gdoc-icon">gdoc_arrow_right_alt</i>
-          </a>
-        
-      </div>
-
-      <footer class="gdoc-post__footer">
-        <div class="flex flex-wrap align-center gdoc-post__meta">
-          <span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_date"><use xlink:href="#gdoc_date"></use></svg>
-  <span class="gdoc-post__tag">
-    <time datetime="2023-06-27T00:00:00Z">
-      
-      Jun 27, 2023
-    </time>
-  </span>
-</span>
-
-<span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_timer"><use xlink:href="#gdoc_timer"></use></svg>
-  <span class="gdoc-post__tag">5 minutes to read</span>
-</span>
-
-
-
-
-
-
-        </div>
-      </footer>
-    </article>
-  
-    <article class="gdoc-markdown gdoc-post">
-      <header class="gdoc-post__header">
-        <h1 class="gdoc-post__title">
-          <a href="/posts/2023-03-16-geos-3-11-2-released/">Version 3.11.2</a>
-        </h1>
-      </header>
-      <section>
-        <p>As part of a batch release of patches for stable branches, the 3.11.2 release of GEOS is now available <a
-  class="gdoc-markdown__link"
-  href="https://libgeos.org/usage/download/"
->to download</a>.</p>
-<p>Release notes for the various branches are available:
-<a
-  class="gdoc-markdown__link"
-  href="https://github.com/libgeos/geos/blob/3.10.5/NEWS"
->3.10.5</a>, and
-<a
-  class="gdoc-markdown__link"
-  href="https://github.com/libgeos/geos/blob/3.11.2/NEWS"
->3.11.2</a></p>
-<p>The 3.11.2 release is a bug fix release.</p>
-      </section>
-      <div class="gdoc-post__readmore">
-        
-          <a
-            class="flex-inline align-center fake-link"
-            title="Read full post"
-            href="/posts/2023-03-16-geos-3-11-2-released/"
-          >
-            Read full post
-            <i class="gdoc-icon">gdoc_arrow_right_alt</i>
-          </a>
-        
-      </div>
-
-      <footer class="gdoc-post__footer">
-        <div class="flex flex-wrap align-center gdoc-post__meta">
-          <span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_date"><use xlink:href="#gdoc_date"></use></svg>
-  <span class="gdoc-post__tag">
-    <time datetime="2023-03-16T00:00:00Z">
-      
-      Mar 16, 2023
-    </time>
-  </span>
-</span>
-
-<span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_timer"><use xlink:href="#gdoc_timer"></use></svg>
-  <span class="gdoc-post__tag">One minute to read</span>
-</span>
-
-
-
-
-
-
-        </div>
-      </footer>
-    </article>
-  
-    <article class="gdoc-markdown gdoc-post">
-      <header class="gdoc-post__header">
-        <h1 class="gdoc-post__title">
-          <a href="/posts/2022-11-14-geos-3-11-1-released/">Version 3.11.1</a>
-        </h1>
-      </header>
-      <section>
-        <p>As part of a batch release of patches for stable branches, the 3.11.1 release of GEOS is now available <a
-  class="gdoc-markdown__link"
-  href="https://libgeos.org/usage/download/"
->to download</a>.</p>
-<p>Release notes for the various branches are available:
-<a
-  class="gdoc-markdown__link"
-  href="https://github.com/libgeos/geos/blob/3.9.4/NEWS"
->3.9.4</a>,
-<a
-  class="gdoc-markdown__link"
-  href="https://github.com/libgeos/geos/blob/3.10.4/NEWS"
->3.10.4</a>, and
-<a
-  class="gdoc-markdown__link"
-  href="https://github.com/libgeos/geos/blob/3.11.1/NEWS"
->3.11.1</a></p>
-<p>The 3.11.1 release is a bug fix release.</p>
-      </section>
-      <div class="gdoc-post__readmore">
-        
-          <a
-            class="flex-inline align-center fake-link"
-            title="Read full post"
-            href="/posts/2022-11-14-geos-3-11-1-released/"
-          >
-            Read full post
-            <i class="gdoc-icon">gdoc_arrow_right_alt</i>
-          </a>
-        
-      </div>
-
-      <footer class="gdoc-post__footer">
-        <div class="flex flex-wrap align-center gdoc-post__meta">
-          <span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_date"><use xlink:href="#gdoc_date"></use></svg>
-  <span class="gdoc-post__tag">
-    <time datetime="2022-11-14T00:00:00Z">
-      
-      Nov 14, 2022
-    </time>
-  </span>
-</span>
-
-<span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_timer"><use xlink:href="#gdoc_timer"></use></svg>
-  <span class="gdoc-post__tag">One minute to read</span>
-</span>
-
-
-
-
-
-
-        </div>
-      </footer>
-    </article>
-  
-    <article class="gdoc-markdown gdoc-post">
-      <header class="gdoc-post__header">
-        <h1 class="gdoc-post__title">
-          <a href="/posts/2022-07-01-geos-3-11-0-released/">Version 3.11.0</a>
-        </h1>
-      </header>
-      <section>
-        <p>The 3.11.0 release of GEOS is now available <a
-  class="gdoc-markdown__link"
-  href="https://libgeos.org/usage/download/"
->to download</a>.</p>
-<p>This release includes new features for building &ldquo;concave hulls&rdquo; for both point and polygon input. For polygon input, the hull will be guaranteed to not cross into the interiors of the input polygons.</p>
-<p>The line merger has been enhanced to support a mode that only merges lines which share orientation.</p>
-<p>The offset curve algorithm has been updated to be more reliable for different kinds of semi-degenerate inputs, and may output different curves than the previous implementation, for those kinds of inputs. For &ldquo;normal&rdquo; inputs, the results should look very much like the old implementation.</p>
-<p>As usual, numerous bugs have been fixed, and a few performance improvements discovered and implemented.</p>
-      </section>
-      <div class="gdoc-post__readmore">
-        
-          <a
-            class="flex-inline align-center fake-link"
-            title="Read full post"
-            href="/posts/2022-07-01-geos-3-11-0-released/"
-          >
-            Read full post
-            <i class="gdoc-icon">gdoc_arrow_right_alt</i>
-          </a>
-        
-      </div>
-
-      <footer class="gdoc-post__footer">
-        <div class="flex flex-wrap align-center gdoc-post__meta">
-          <span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_date"><use xlink:href="#gdoc_date"></use></svg>
-  <span class="gdoc-post__tag">
-    <time datetime="2022-07-01T00:00:00Z">
-      
-      Jul 1, 2022
-    </time>
-  </span>
-</span>
-
-<span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_timer"><use xlink:href="#gdoc_timer"></use></svg>
-  <span class="gdoc-post__tag">2 minutes to read</span>
-</span>
-
-
-
-
-
-
-        </div>
-      </footer>
-    </article>
-  
-    <article class="gdoc-markdown gdoc-post">
-      <header class="gdoc-post__header">
-        <h1 class="gdoc-post__title">
-          <a href="/posts/2022-06-03-geos-3-10-3-released/">Version 3.10.3</a>
-        </h1>
-      </header>
-      <section>
-        <p>As part of a batch release of patches for all stable branches, the 3.10.3 release of GEOS is now available <a
-  class="gdoc-markdown__link"
-  href="https://libgeos.org/usage/download/"
->to download</a>.</p>
-<p>Release notes for the various branches are available:
-<a
-  class="gdoc-markdown__link"
-  href="https://github.com/libgeos/geos/blob/3.7.4/NEWS"
->3.7.4</a>,
-<a
-  class="gdoc-markdown__link"
-  href="https://github.com/libgeos/geos/blob/3.8.3/NEWS"
->3.8.3</a>,
-<a
-  class="gdoc-markdown__link"
-  href="https://github.com/libgeos/geos/blob/3.9.3/NEWS"
->3.9.3</a> and
-<a
-  class="gdoc-markdown__link"
-  href="https://github.com/libgeos/geos/blob/3.10.3/NEWS"
->3.10.3</a>.</p>
-<p>The 3.10.3 release is a bug fix release.</p>
-      </section>
-      <div class="gdoc-post__readmore">
-        
-          <a
-            class="flex-inline align-center fake-link"
-            title="Read full post"
-            href="/posts/2022-06-03-geos-3-10-3-released/"
-          >
-            Read full post
-            <i class="gdoc-icon">gdoc_arrow_right_alt</i>
-          </a>
-        
-      </div>
-
-      <footer class="gdoc-post__footer">
-        <div class="flex flex-wrap align-center gdoc-post__meta">
-          <span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_date"><use xlink:href="#gdoc_date"></use></svg>
-  <span class="gdoc-post__tag">
-    <time datetime="2022-06-03T00:00:00Z">
-      
-      Jun 3, 2022
-    </time>
-  </span>
-</span>
-
-<span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_timer"><use xlink:href="#gdoc_timer"></use></svg>
-  <span class="gdoc-post__tag">One minute to read</span>
-</span>
-
-
-
-
-
-
-        </div>
-      </footer>
-    </article>
-  
-    <article class="gdoc-markdown gdoc-post">
-      <header class="gdoc-post__header">
-        <h1 class="gdoc-post__title">
-          <a href="/posts/2021-11-02-geos-3-10-2-released/">Version 3.10.2</a>
-        </h1>
-      </header>
-      <section>
-        <p>The 3.10.2 release of GEOS is now available <a
-  class="gdoc-markdown__link"
-  href="https://libgeos.org/usage/download/"
->to download</a>.</p>
-<p>This release is a bug fix release.</p>
-      </section>
-      <div class="gdoc-post__readmore">
-        
-          <a
-            class="flex-inline align-center fake-link"
-            title="Read full post"
-            href="/posts/2021-11-02-geos-3-10-2-released/"
-          >
-            Read full post
-            <i class="gdoc-icon">gdoc_arrow_right_alt</i>
-          </a>
-        
-      </div>
-
-      <footer class="gdoc-post__footer">
-        <div class="flex flex-wrap align-center gdoc-post__meta">
-          <span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_date"><use xlink:href="#gdoc_date"></use></svg>
-  <span class="gdoc-post__tag">
-    <time datetime="2022-01-15T00:00:00Z">
-      
-      Jan 15, 2022
-    </time>
-  </span>
-</span>
-
-<span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_timer"><use xlink:href="#gdoc_timer"></use></svg>
-  <span class="gdoc-post__tag">One minute to read</span>
-</span>
-
-
-
-
-
-
-        </div>
-      </footer>
-    </article>
-  
-    <article class="gdoc-markdown gdoc-post">
-      <header class="gdoc-post__header">
-        <h1 class="gdoc-post__title">
-          <a href="/posts/2021-11-02-geos-3-10-1-released/">Version 3.10.1</a>
-        </h1>
-      </header>
-      <section>
-        <p>The 3.10.1 release of GEOS is now available <a
-  class="gdoc-markdown__link"
-  href="https://libgeos.org/usage/download/"
->to download</a>.</p>
-<p>This release is primarily to fix some version numbering issues in the initial 3.10.0 source tarball. Some extra fixes are bundled as well.</p>
-      </section>
-      <div class="gdoc-post__readmore">
-        
-          <a
-            class="flex-inline align-center fake-link"
-            title="Read full post"
-            href="/posts/2021-11-02-geos-3-10-1-released/"
-          >
-            Read full post
-            <i class="gdoc-icon">gdoc_arrow_right_alt</i>
-          </a>
-        
-      </div>
-
-      <footer class="gdoc-post__footer">
-        <div class="flex flex-wrap align-center gdoc-post__meta">
-          <span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_date"><use xlink:href="#gdoc_date"></use></svg>
-  <span class="gdoc-post__tag">
-    <time datetime="2021-11-02T00:00:00Z">
-      
-      Nov 2, 2021
-    </time>
-  </span>
-</span>
-
-<span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_timer"><use xlink:href="#gdoc_timer"></use></svg>
-  <span class="gdoc-post__tag">One minute to read</span>
-</span>
-
-
-
-
-
-
-        </div>
-      </footer>
-    </article>
-  
-    <article class="gdoc-markdown gdoc-post">
-      <header class="gdoc-post__header">
-        <h1 class="gdoc-post__title">
-          <a href="/posts/2021-10-01-geos-3-10-released/">Version 3.10.0</a>
-        </h1>
-      </header>
-      <section>
-        <p>The 3.10 release of GEOS is now available <a
-  class="gdoc-markdown__link"
-  href="https://libgeos.org/usage/download/"
->to download</a>.</p>
+<p>The full list of changes is as follows:</p>
 <ul>
 <li>
-<p>This release includes the following new features in the C API (and of course underlying changes to the C++ code to support these features):</p>
+<p>New things:</p>
 <ul>
-<li>CAPI additions for testing whether geometries are within a distance of each other, <code>GEOSDistanceWithin</code> and <code>GEOSPreparedDistanceWithin</code></li>
-<li>CAPI addition for adding extra vertices to a geometry, <code>GEOSDensify</code></li>
-<li>CAPI additions for high-performance construction/reading of coordinate sequences from/to memory buffers, <code>GEOSCoordSeq_copyFromArrays</code>, <code>GEOSCoordSeq_copyFromBuffer</code>, <code>GEOSCoordSeq_copyToArrays</code>, and <code>GEOSCoordSeq_copyToBuffer</code></li>
-<li>CAPI addition for new validity enforement algorithm, <code>GEOSMakeValidWithParams</code></li>
-<li>CAPI addition for ISO WKB output, <code>GEOSWKBWriter_getFlavor</code> and <code>GEOSWKBWriter_setFlavor</code></li>
-<li>CAPI addition to create a constrained delaunay of polygonal input, <code>GEOSConstrainedDelaunayTriangulation</code></li>
+<li>C++14 is now required.</li>
+<li>Polygonal coverages: CoverageValidator, CoveragePolygonValidator,
+CoverageGapFinder, CoverageUnion (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/locationtech/jts/issues/900"
+>JTS-900</a>, Martin Davis &amp; Paul Ramsey)</li>
+<li>Support reading and writing M values through WKB and WKT readers/writers
+(<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/721"
+>GH-721</a>, Dan Baston)</li>
+<li>Interpolate M values in overlay results (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/802"
+>GH-802</a>, Dan Baston)</li>
+<li>CAPI: GEOSPreparedContainsXY, GEOSPreparedIntersectsXY (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/677"
+>GH-677</a>, Dan Baston)</li>
+<li>Add CoordinateSequenceIterator (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/685"
+>GH-685</a>, Dan Baston)</li>
+<li>Geometry clustering: DBSCAN, geometry intersection/distance, envelope
+intersection/distance (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/688"
+>GH-688</a>, Dan Baston)</li>
+<li>CAPI: GEOSDisjointSubsetUnion (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/692"
+>GH-692</a>, Dan Baston)</li>
+<li>CAPI: GEOSLineSubstring (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/706"
+>GH-706</a>, Dan Baston)</li>
+<li>CAPI: GEOSEqualsIdentical (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/810"
+>GH-810</a>, Dan Baston)</li>
+<li>CAPI: GEOSOrientPolygons (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/818"
+>GH-818</a>, Dan Baston)</li>
+<li>CAPI: GEOSSTRtree_build (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/835"
+>GH-835</a>, Dan Baston)</li>
+<li>CAPI: GEOSConcaveHullByLength (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/849"
+>GH-849</a>, Martin Davis)</li>
+<li>CAPI: GEOSGeomGetM (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/864"
+>GH-864</a>, Mike Taves)</li>
+<li>Voronoi: Add option to create diagram in order consistent with inputs (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/781"
+>GH-781</a>, Dan Baston)</li>
+<li>Polygonal coverages: CoverageSimplifier (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/locationtech/jts/issues/911"
+>JTS-911</a>, Martin Davis)</li>
+<li>CAPI: GEOSCoverageIsValid, GEOSCoverageSimplifyVW (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/867"
+>GH-867</a>, Paul Ramsey)</li>
+<li>CAPI: GEOSGeom_releaseCollection (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/848"
+>GH-848</a>)</li>
+<li>CAPI: GEOSMinimumRotatedRectangle now uses MinimumAreaRectangle (Paul Ramsey)</li>
+</ul>
+</li>
+<li>
+<p>Breaking Changes</p>
+<ul>
+<li>CoverageUnion now requires valid inputs to produce valid outputs
+and may return invalid outputs silently when fed invalid inputs.
+Use CoverageValidator first if you do not know the validity of your data.</li>
+</ul>
+</li>
+<li>
+<p>Fixes/Improvements:</p>
+<ul>
+<li>WKTReader: Fix parsing of Z and M flags in WKTReader (<a
+  class="gdoc-markdown__link"
+  href="https://trac.osgeo.org/geos/ticket/676"
+>#676</a> and <a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/669"
+>GH-669</a>, Dan Baston)</li>
+<li>WKTReader: Throw exception on inconsistent geometry dimension (<a
+  class="gdoc-markdown__link"
+  href="https://trac.osgeo.org/geos/ticket/1080"
+>#1080</a>, Dan Baston)</li>
+<li>WKTReader: Throw exception if WKT contains extra text after end of geometry (<a
+  class="gdoc-markdown__link"
+  href="https://trac.osgeo.org/geos/ticket/1095"
+>#1095</a>, Dan Baston)</li>
+<li>GEOSIntersects: Fix crash with empty point inputs (<a
+  class="gdoc-markdown__link"
+  href="https://trac.osgeo.org/geos/ticket/1110"
+>#1110</a>, Dan Baston)</li>
+<li>GEOSIntersects: Improve performance/robustness by using PreparedGeometry algorithm (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/775"
+>GH-775</a>, Dan Baston)</li>
+<li>LineMerger: Recursively collect all components from GeometryCollections (<a
+  class="gdoc-markdown__link"
+  href="https://trac.osgeo.org/geos/ticket/401"
+>#401</a>, Dan Baston)</li>
+<li>GeometryPrecisionReducer: Return correct dimensionality for empty results (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/684"
+>GH-684</a>, Dan Baston)</li>
+<li>Improve performance of coverage union (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/681"
+>GH-681</a>, Dan Baston)</li>
+<li>Improve performance of prepared polygon intersection (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/690"
+>GH-690</a>, Dan Baston)</li>
+<li>Improve performance of prepared polygon distance (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/693"
+>GH-693</a>, Dan Baston)</li>
+<li>Implement indexed calculations for prepared geometry isWithinDistance (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/691"
+>GH-691</a>, Dan Baston)</li>
+<li>Fix LineSegment.orientationIndex(LineSegment) (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/699"
+>GH-699</a>, Martin Davis)</li>
+<li>Fix DepthSegment comparison operation (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/707"
+>GH-707</a>, Martin Davis)</li>
+<li>Add OverlayNG support for simple GeometryCollection inputs (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/716"
+>GH-716</a>, Martin Davis)</li>
+<li>Fix TopologyPreservingSimplifier to produce stable results for Multi inputs (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/718"
+>GH-718</a>, Martin Davis)</li>
+<li>Improve ConvexHull radial sort robustness (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/724"
+>GH-724</a>, Martin Davis)</li>
+<li>Use more robust Delaunay Triangulation frame size heuristic (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/728"
+>GH-728</a>, Martin Davis)</li>
+<li>DiscreteFrechetDistance: Fix crash with empty inputs (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/751"
+>GH-751</a>, Dan Baston)</li>
+<li>GEOSSimplify / DouglasPeuckerSimplifier: Allow ring origin to be removed (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/773"
+>GH-773</a>, Dan Baston)</li>
+<li>GEOSTopologyPreserveSimplify / TopologyPreservingSimplifier: Allow ring origin to be removed (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/784"
+>GH-784</a>, Dan Baston)</li>
+<li>PreparedLineStringIntersects: Fix incorrect result with mixed-dim collection (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/774"
+>GH-774</a>, Dan Baston)</li>
+<li>GEOSIntersection: Fix FE_INVALID exception on intersection of disjoint geometries
+(<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/791"
+>GH-791</a>, Joris Van den Bossche &amp; Dan Baston)</li>
+<li>Fix incorrect result from Envelope::disjoint (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/791"
+>GH-791</a>, Dan Baston)</li>
+<li>Polygonizer: Fix duplicate lines return by getInvalidRingLines (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/782"
+>GH-782</a>, Martin Davis &amp; Dan Baston)</li>
+<li>GEOSUnaryUnion: Fix crash on collection containing empty point (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/830"
+>GH-830</a>, Dan Baston)</li>
+<li>GEOSBuffer: Fix crash with Inf coordinates (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/822"
+>GH-822</a>, Dan Baston)</li>
+<li>GEOSSTRtree_iterate: Do not return removed items (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/833"
+>GH-833</a>, Dan Baston)</li>
+<li>IndexedFacetDistance: Fix crash with Inf coordinates (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/821"
+>GH-821</a>, Dan Baston)</li>
+<li>HausdorffDistance: Fix crash on collection containing empty point (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/840"
+>GH-840</a>, Dan Baston)</li>
+<li>MaximumInscribedCircle: Fix infinite loop with non-finite coordinates (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/843"
+>GH-843</a>, Dan Baston)</li>
+<li>DistanceOp: Fix crash on collection containing empty point (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/842"
+>GH-842</a>, Dan Baston)</li>
+<li>OffsetCurve: improve behaviour and add Joined mode (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/locationtech/jts/issues/956"
+>JTS-956</a>, Martin Davis)</li>
+<li>GeometryPrecisionReducer: preserve input collection types (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/846"
+>GH-846</a>, Paul Ramsey)</li>
+<li>OffsetCurve: handle zero-distance offsets (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/850"
+>GH-850</a>, Martin Davis)</li>
+<li>Tri: add exceptions for invalid indexes (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/853"
+>GH-853</a>, Martin Davis)</li>
+<li>LargestEmptyCircle: enhance boundary to allow any polygonal geometry (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/859"
+>GH-859</a>, Martin Davis)</li>
+<li>Fix MaximumInscribedCircle and LargestEmptyCircle performance and memory issues (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/883"
+>GH-883</a>, Martin Davis)</li>
+<li>GEOSHasZ: Fix handling with empty geometries (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/887"
+>GH-887</a>, Mike Taves)</li>
+<li>OffsetCurve: fix EndCap parameter handling (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/899"
+>GH-899</a>, Martin Davis)</li>
+<li>Reduce artifacts in single-sided Buffers: (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/665"
+>GH-665</a> <a
+  class="gdoc-markdown__link"
+  href="https://trac.osgeo.org/geos/ticket/810"
+>#810</a> and <a
+  class="gdoc-markdown__link"
+  href="https://trac.osgeo.org/geos/ticket/712"
+>#712</a>, Sandro Santilli)</li>
+<li>GeoJSONReader: Fix 2D empty geometry creation (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/909"
+>GH-909</a>, Mike Taves)</li>
+<li>GEOSClipByRect: Fix case with POINT EMPTY (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/913"
+>GH-913</a>, Mike Taves)</li>
+<li>Support mixed GeometryCollection in overlay ops (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/797"
+>GH-797</a>, Paul Ramsey)</li>
+</ul>
+</li>
+<li>
+<p>Changes:</p>
+<ul>
+<li>Remove Orientation.isCCW exception to simplify logic and align with JTS (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/878"
+>GH-878</a>, Martin Davis)</li>
+<li>Change MultiPoint WKT to use parentheses in sub-members (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/903"
+>GH-903</a>, Mike Taves)</li>
+<li>Change WKBWriter default output dimension to 4 (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/908"
+>GH-908</a>, Mike Taves)</li>
+<li>Change WKTWriter defaults output dimension to 4 and trim to &lsquo;on&rsquo; (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/915"
+>GH-915</a>, Mike Taves)</li>
 </ul>
 </li>
 </ul>
-      </section>
-      <div class="gdoc-post__readmore">
-        
-          <a
-            class="flex-inline align-center fake-link"
-            title="Read full post"
-            href="/posts/2021-10-01-geos-3-10-released/"
-          >
-            Read full post
-            <i class="gdoc-icon">gdoc_arrow_right_alt</i>
-          </a>
-        
-      </div>
-
-      <footer class="gdoc-post__footer">
-        <div class="flex flex-wrap align-center gdoc-post__meta">
-          <span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_date"><use xlink:href="#gdoc_date"></use></svg>
-  <span class="gdoc-post__tag">
-    <time datetime="2021-10-21T00:00:00Z">
-      
-      Oct 21, 2021
-    </time>
-  </span>
-</span>
-
-<span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_timer"><use xlink:href="#gdoc_timer"></use></svg>
-  <span class="gdoc-post__tag">One minute to read</span>
-</span>
-
-
-
-
-
-
-        </div>
-      </footer>
-    </article>
-  
-  
-
-
-<nav class="gdoc-paging flex flex-even align-center" role="navigation">
-  <div class="gdoc-paging__item gdoc-paging__item--prev">
-    
-  </div>
-  <div class="gdoc-paging__state">1/1</div>
-  <div class="gdoc-paging__item gdoc-paging__item--next">
-    
-  </div>
-</nav>
-
+    </section>
+  </article>
 
 
 

@@ -6,7 +6,40 @@
     <description>Recent content in News on GEOS</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 16 Mar 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://libgeos.org/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 27 Jun 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://libgeos.org/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Version 3.12.0</title>
+      <link>https://libgeos.org/posts/2023-06-27-geos-3-12-released/</link>
+      <pubDate>Tue, 27 Jun 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://libgeos.org/posts/2023-06-27-geos-3-12-released/</guid>
+      <description>&lt;p&gt;The 3.12 release of GEOS is now available &lt;a
+  class=&#34;gdoc-markdown__link&#34;
+  href=&#34;https://libgeos.org/usage/download/&#34;
+&gt;to download&lt;/a&gt;.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;This release includes the following new features in the C API (and of course underlying changes to the C++ code to support these features):&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;GEOSDisjointSubsetUnion, anptimized union algorithm for inputs that can be divided into subsets.&lt;/li&gt;
+&lt;li&gt;GEOSLineSubstring, to clip a line using a start and end fractional length.&lt;/li&gt;
+&lt;li&gt;GEOSEqualsIdentical, to test exact equality (with regards to order, structure, etc) of two geometries.&lt;/li&gt;
+&lt;li&gt;GEOSOrientPolygons, to enforce a ring orientation on all polygonal elements in the input geometry.&lt;/li&gt;
+&lt;li&gt;GEOSSTRtree_build, to force an immediate build of an STRtree.&lt;/li&gt;
+&lt;li&gt;GEOSConcaveHullByLength, to build a concave hull by removing the longest outer edges of the Delaunay Triangulation of the space between the polygons, until the specified maximm edge length is reached&lt;/li&gt;
+&lt;li&gt;GEOSGeomGetM, to read the M-dimensional value of a geometry.&lt;/li&gt;
+&lt;li&gt;GEOSVoronoiDiagram, returns the Voronoi polygons or edges of the vertices of the given geometry.&lt;/li&gt;
+&lt;li&gt;GEOSCoverageSimplifyVW, GEOSCoverageUnion, GEOSCoverageIsValid for working with &amp;ldquo;polygonal coverages&amp;rdquo;, collections of polygons that follow coverage rules (no overlaps, exact vertex equivalence on shared edges).&lt;/li&gt;
+&lt;li&gt;GEOSGeom_releaseCollection, to free a collection while leaving the sub-geometries intact.&lt;/li&gt;
+&lt;li&gt;GEOSMinimumRotatedRectangle, a rework of the minimum rectangle code to be faster and more correct.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;GEOS has been updated to read and write &amp;ldquo;M&amp;rdquo; dimension. As with the &amp;ldquo;Z&amp;rdquo; coordinate support, not all operations can preserve the &amp;ldquo;M&amp;rdquo; dimension, but best efforts are made to retain it through calculations, input and output.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
     <item>
       <title>Version 3.11.2</title>
       <link>https://libgeos.org/posts/2023-03-16-geos-3-11-2-released/</link>
