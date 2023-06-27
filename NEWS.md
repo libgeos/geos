@@ -6,6 +6,8 @@
 - Breaking Changes
 
 - Fixes/Improvements:
+  - WKTReader: Points with all-NaN coordinates are not considered empty anymore (GH-927, Casper van der Wel)
+  - WKTWriter: Points with all-NaN coordinates are written as such (GH-927, Casper van der Wel)
 
 
 ## Changes in 3.12.0
@@ -39,13 +41,11 @@
   - CoverageUnion now requires valid inputs to produce valid outputs
     and may return invalid outputs silently when fed invalid inputs.
     Use CoverageValidator first if you do not know the validity of your data.
-  - WKTReader: Points with all-NaN coordinates are not considered empty anymore (#..., Casper van der Wel)
 
 - Fixes/Improvements:
   - WKTReader: Fix parsing of Z and M flags in WKTReader (#676 and GH-669, Dan Baston)
   - WKTReader: Throw exception on inconsistent geometry dimension (#1080, Dan Baston)
   - WKTReader: Throw exception if WKT contains extra text after end of geometry (#1095, Dan Baston)
-  - WKTReader: Points with all-NaN coordinates are written as such (#..., Casper van der Wel)
   - GEOSIntersects: Fix crash with empty point inputs (#1110, Dan Baston)
   - GEOSIntersects: Improve performance/robustness by using PreparedGeometry algorithm (GH-775, Dan Baston)
   - LineMerger: Recursively collect all components from GeometryCollections (#401, Dan Baston)
