@@ -151,452 +151,439 @@ $(function() {
 <div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;        <span class="keywordflow">return</span> m_vect.empty();</div>
 <div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;    }</div>
 <div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160; </div>
-<div class="line"><a name="l00201"></a><span class="lineno"><a class="line" href="group__prop.html#ga95200b5645cd6b5919ff30d6b9e22dac">  201</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="group__prop.html#ga95200b5645cd6b5919ff30d6b9e22dac">isNullPoint</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;        <span class="keywordflow">if</span> (size() != 1) {</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;        }</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;        <span class="keywordflow">switch</span>(getCoordinateType()) {</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XY: <span class="keywordflow">return</span> getAt&lt;CoordinateXY&gt;(0).isNull();</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYZ: <span class="keywordflow">return</span> getAt&lt;Coordinate&gt;(0).isNull();</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYZM: <span class="keywordflow">return</span> getAt&lt;CoordinateXYZM&gt;(0).isNull();</div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYM: <span class="keywordflow">return</span> getAt&lt;CoordinateXYM&gt;(0).isNull();</div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;            <span class="keywordflow">default</span>: <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;        }</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;    }</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160; </div>
-<div class="line"><a name="l00220"></a><span class="lineno"><a class="line" href="group__prop.html#gabaeb1320a591615a4907cc6929f42e15">  220</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="group__prop.html#gabaeb1320a591615a4907cc6929f42e15">isRing</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160; </div>
-<div class="line"><a name="l00228"></a><span class="lineno"><a class="line" href="group__prop.html#gad396612f604ab2cb228e8526abb1b0c4">  228</a></span>&#160;    std::size_t <a class="code" href="group__prop.html#gad396612f604ab2cb228e8526abb1b0c4">getDimension</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00206"></a><span class="lineno"><a class="line" href="group__prop.html#gabaeb1320a591615a4907cc6929f42e15">  206</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="group__prop.html#gabaeb1320a591615a4907cc6929f42e15">isRing</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160; </div>
+<div class="line"><a name="l00214"></a><span class="lineno"><a class="line" href="group__prop.html#gad396612f604ab2cb228e8526abb1b0c4">  214</a></span>&#160;    std::size_t <a class="code" href="group__prop.html#gad396612f604ab2cb228e8526abb1b0c4">getDimension</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160; </div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;    <span class="keywordtype">bool</span> hasZ()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;        <span class="keywordflow">return</span> m_hasdim ? m_hasz : (m_vect.empty() || !std::isnan(m_vect[2]));</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;    }</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160; </div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;    <span class="keywordtype">bool</span> hasM()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;        <span class="keywordflow">return</span> m_hasm;</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;    }</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160; </div>
+<div class="line"><a name="l00225"></a><span class="lineno"><a class="line" href="group__prop.html#ga9d18ad27b99881dcf2282a2b5ee7a003">  225</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="group__prop.html#ga9d18ad27b99881dcf2282a2b5ee7a003">hasRepeatedPoints</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160; </div>
+<div class="line"><a name="l00228"></a><span class="lineno"><a class="line" href="group__prop.html#ga6c3c8170fb1bd1313c9f40b582048be0">  228</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="group__prop.html#ga6c3c8170fb1bd1313c9f40b582048be0">hasRepeatedOrInvalidPoints</a>() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160; </div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;    <span class="keywordtype">bool</span> hasZ()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;        <span class="keywordflow">return</span> m_hasdim ? m_hasz : (m_vect.empty() || !std::isnan(m_vect[2]));</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;    }</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160; </div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;    <span class="keywordtype">bool</span> hasM()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;        <span class="keywordflow">return</span> m_hasm;</div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;    }</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160; </div>
-<div class="line"><a name="l00239"></a><span class="lineno"><a class="line" href="group__prop.html#ga9d18ad27b99881dcf2282a2b5ee7a003">  239</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="group__prop.html#ga9d18ad27b99881dcf2282a2b5ee7a003">hasRepeatedPoints</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00233"></a><span class="lineno"><a class="line" href="group__prop.html#gaa8ff355f1567a5b910cdff2f9181976e">  233</a></span>&#160;    CoordinateType <a class="code" href="group__prop.html#gaa8ff355f1567a5b910cdff2f9181976e">getCoordinateType</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;        <span class="keywordflow">switch</span>(stride()) {</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;            <span class="keywordflow">case</span> 4: <span class="keywordflow">return</span> CoordinateType::XYZM;</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;            <span class="keywordflow">case</span> 2: <span class="keywordflow">return</span> CoordinateType::XY;</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;            <span class="keywordflow">default</span>: <span class="keywordflow">return</span> hasM() ? CoordinateType::XYM : CoordinateType::XYZ;</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;        }</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;    }</div>
 <div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160; </div>
-<div class="line"><a name="l00242"></a><span class="lineno"><a class="line" href="group__prop.html#ga6c3c8170fb1bd1313c9f40b582048be0">  242</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="group__prop.html#ga6c3c8170fb1bd1313c9f40b582048be0">hasRepeatedOrInvalidPoints</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160; </div>
-<div class="line"><a name="l00247"></a><span class="lineno"><a class="line" href="group__prop.html#gaa8ff355f1567a5b910cdff2f9181976e">  247</a></span>&#160;    CoordinateType <a class="code" href="group__prop.html#gaa8ff355f1567a5b910cdff2f9181976e">getCoordinateType</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;        <span class="keywordflow">switch</span>(stride()) {</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;            <span class="keywordflow">case</span> 4: <span class="keywordflow">return</span> CoordinateType::XYZM;</div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;            <span class="keywordflow">case</span> 2: <span class="keywordflow">return</span> CoordinateType::XY;</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;            <span class="keywordflow">default</span>: <span class="keywordflow">return</span> hasM() ? CoordinateType::XYM : CoordinateType::XYZ;</div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;        }</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;    }</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160; </div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160; </div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T=Coordinate&gt;</div>
-<div class="line"><a name="l00263"></a><span class="lineno"><a class="line" href="group__access.html#gac8256373579d4568e0920a69969c1296">  263</a></span>&#160;    <span class="keyword">const</span> T&amp; <a class="code" href="group__access.html#gac8256373579d4568e0920a69969c1296">getAt</a>(std::size_t i)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;        static_assert(std::is_base_of&lt;CoordinateXY, T&gt;::value, <span class="stringliteral">&quot;Must be a Coordinate class&quot;</span>);</div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;        assert(<span class="keyword">sizeof</span>(T) &lt;= <span class="keyword">sizeof</span>(<span class="keywordtype">double</span>) * stride());</div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;        assert(i*stride() &lt; m_vect.size());</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;        <span class="keyword">const</span> T* orig = <span class="keyword">reinterpret_cast&lt;</span><span class="keyword">const </span>T*<span class="keyword">&gt;</span>(&amp;m_vect[i*stride()]);</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;        <span class="keywordflow">return</span> *orig;</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;    }</div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160; </div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T=Coordinate&gt;</div>
-<div class="line"><a name="l00275"></a><span class="lineno"><a class="line" href="group__access.html#ga4152a6b33f8b83897b8df829adb0e4ef">  275</a></span>&#160;    T&amp; <a class="code" href="group__access.html#ga4152a6b33f8b83897b8df829adb0e4ef">getAt</a>(std::size_t i) {</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;        static_assert(std::is_base_of&lt;CoordinateXY, T&gt;::value, <span class="stringliteral">&quot;Must be a Coordinate class&quot;</span>);</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        assert(<span class="keyword">sizeof</span>(T) &lt;= <span class="keyword">sizeof</span>(<span class="keywordtype">double</span>) * stride());</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;        assert(i*stride() &lt; m_vect.size());</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;        T* orig = <span class="keyword">reinterpret_cast&lt;</span>T*<span class="keyword">&gt;</span>(&amp;m_vect[i*stride()]);</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;        <span class="keywordflow">return</span> *orig;</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160; </div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T=Coordinate&gt;</div>
+<div class="line"><a name="l00249"></a><span class="lineno"><a class="line" href="group__access.html#gac8256373579d4568e0920a69969c1296">  249</a></span>&#160;    <span class="keyword">const</span> T&amp; <a class="code" href="group__access.html#gac8256373579d4568e0920a69969c1296">getAt</a>(std::size_t i)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;        static_assert(std::is_base_of&lt;CoordinateXY, T&gt;::value, <span class="stringliteral">&quot;Must be a Coordinate class&quot;</span>);</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;        assert(<span class="keyword">sizeof</span>(T) &lt;= <span class="keyword">sizeof</span>(<span class="keywordtype">double</span>) * stride());</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;        assert(i*stride() &lt; m_vect.size());</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;        <span class="keyword">const</span> T* orig = <span class="keyword">reinterpret_cast&lt;</span><span class="keyword">const </span>T*<span class="keyword">&gt;</span>(&amp;m_vect[i*stride()]);</div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;        <span class="keywordflow">return</span> *orig;</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;    }</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160; </div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T=Coordinate&gt;</div>
+<div class="line"><a name="l00261"></a><span class="lineno"><a class="line" href="group__access.html#ga4152a6b33f8b83897b8df829adb0e4ef">  261</a></span>&#160;    T&amp; <a class="code" href="group__access.html#ga4152a6b33f8b83897b8df829adb0e4ef">getAt</a>(std::size_t i) {</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;        static_assert(std::is_base_of&lt;CoordinateXY, T&gt;::value, <span class="stringliteral">&quot;Must be a Coordinate class&quot;</span>);</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;        assert(<span class="keyword">sizeof</span>(T) &lt;= <span class="keyword">sizeof</span>(<span class="keywordtype">double</span>) * stride());</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;        assert(i*stride() &lt; m_vect.size());</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;        T* orig = <span class="keyword">reinterpret_cast&lt;</span>T*<span class="keyword">&gt;</span>(&amp;m_vect[i*stride()]);</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;        <span class="keywordflow">return</span> *orig;</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;    }</div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160; </div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00273"></a><span class="lineno"><a class="line" href="group__access.html#ga83ee824a5f6d8b1322ea0ea539d9e0bc">  273</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="group__access.html#ga83ee824a5f6d8b1322ea0ea539d9e0bc">getAt</a>(std::size_t i, T&amp; c)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;        <span class="keywordflow">switch</span>(getCoordinateType()) {</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XY: c = getAt&lt;CoordinateXY&gt;(i); <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYZ: c = getAt&lt;Coordinate&gt;(i); <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYZM: c = getAt&lt;CoordinateXYZM&gt;(i); <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYM: c = getAt&lt;CoordinateXYM&gt;(i); <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;            <span class="keywordflow">default</span>: getAt&lt;Coordinate&gt;(i);</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;        }</div>
 <div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;    }</div>
 <div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160; </div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00287"></a><span class="lineno"><a class="line" href="group__access.html#ga83ee824a5f6d8b1322ea0ea539d9e0bc">  287</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="group__access.html#ga83ee824a5f6d8b1322ea0ea539d9e0bc">getAt</a>(std::size_t i, T&amp; c)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;        <span class="keywordflow">switch</span>(getCoordinateType()) {</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XY: c = getAt&lt;CoordinateXY&gt;(i); <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYZ: c = getAt&lt;Coordinate&gt;(i); <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYZM: c = getAt&lt;CoordinateXYZM&gt;(i); <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYM: c = getAt&lt;CoordinateXYM&gt;(i); <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;            <span class="keywordflow">default</span>: getAt&lt;Coordinate&gt;(i);</div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;        }</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;    }</div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160; </div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;    <span class="keywordtype">void</span> getAt(std::size_t i, CoordinateXY&amp; c)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;        c = getAt&lt;CoordinateXY&gt;(i);</div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;    }</div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160; </div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;    <span class="comment">// TODO: change to return CoordinateXY</span></div>
-<div class="line"><a name="l00305"></a><span class="lineno"><a class="line" href="group__access.html#gac01cfaddbe448affadfefa50eaea9d8e">  305</a></span>&#160;<span class="comment"></span>    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; <a class="code" href="group__access.html#gac01cfaddbe448affadfefa50eaea9d8e">operator[]</a>(std::size_t i)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;        <span class="keywordflow">return</span> getAt(i);</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;    }</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160; </div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;    <span class="comment">// TODO: change to return CoordinateXY</span></div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;<span class="comment"></span>    <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp;</div>
-<div class="line"><a name="l00315"></a><span class="lineno"><a class="line" href="group__access.html#gadde8b64f4e22635a7917cc38b1270164">  315</a></span>&#160;    <a class="code" href="group__access.html#gadde8b64f4e22635a7917cc38b1270164">operator[]</a>(std::size_t i)</div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;    {</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;        <span class="keywordflow">return</span> getAt(i);</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;    }</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160; </div>
-<div class="line"><a name="l00330"></a><span class="lineno"><a class="line" href="group__access.html#ga4f0bb3d886e036e5f2a26620b7bea63b">  330</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="group__access.html#ga4f0bb3d886e036e5f2a26620b7bea63b">getOrdinate</a>(std::size_t index, std::size_t ordinateIndex) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160; </div>
-<div class="line"><a name="l00338"></a><span class="lineno"><a class="line" href="group__access.html#gadc750ec82bcc62a5c9a358826b1c7f2f">  338</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="group__access.html#gadc750ec82bcc62a5c9a358826b1c7f2f">getX</a>(std::size_t index)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160;        <span class="keywordflow">return</span> m_vect[index * stride()];</div>
-<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;    }</div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160; </div>
-<div class="line"><a name="l00349"></a><span class="lineno"><a class="line" href="group__access.html#gaedc561083d2e5ee9ed2d1912c3395eed">  349</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="group__access.html#gaedc561083d2e5ee9ed2d1912c3395eed">getY</a>(std::size_t index)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;        <span class="keywordflow">return</span> m_vect[index * stride() + 1];</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;    <span class="keywordtype">void</span> getAt(std::size_t i, CoordinateXY&amp; c)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;        c = getAt&lt;CoordinateXY&gt;(i);</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;    }</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160; </div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;    <span class="comment">// TODO: change to return CoordinateXY</span></div>
+<div class="line"><a name="l00291"></a><span class="lineno"><a class="line" href="group__access.html#gac01cfaddbe448affadfefa50eaea9d8e">  291</a></span>&#160;<span class="comment"></span>    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; <a class="code" href="group__access.html#gac01cfaddbe448affadfefa50eaea9d8e">operator[]</a>(std::size_t i)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;        <span class="keywordflow">return</span> getAt(i);</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;    }</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160; </div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;    <span class="comment">// TODO: change to return CoordinateXY</span></div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;<span class="comment"></span>    <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp;</div>
+<div class="line"><a name="l00301"></a><span class="lineno"><a class="line" href="group__access.html#gadde8b64f4e22635a7917cc38b1270164">  301</a></span>&#160;    <a class="code" href="group__access.html#gadde8b64f4e22635a7917cc38b1270164">operator[]</a>(std::size_t i)</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;    {</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;        <span class="keywordflow">return</span> getAt(i);</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;    }</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160; </div>
+<div class="line"><a name="l00316"></a><span class="lineno"><a class="line" href="group__access.html#ga4f0bb3d886e036e5f2a26620b7bea63b">  316</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="group__access.html#ga4f0bb3d886e036e5f2a26620b7bea63b">getOrdinate</a>(std::size_t index, std::size_t ordinateIndex) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160; </div>
+<div class="line"><a name="l00324"></a><span class="lineno"><a class="line" href="group__access.html#gadc750ec82bcc62a5c9a358826b1c7f2f">  324</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="group__access.html#gadc750ec82bcc62a5c9a358826b1c7f2f">getX</a>(std::size_t index)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;        <span class="keywordflow">return</span> m_vect[index * stride()];</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;    }</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160; </div>
+<div class="line"><a name="l00335"></a><span class="lineno"><a class="line" href="group__access.html#gaedc561083d2e5ee9ed2d1912c3395eed">  335</a></span>&#160;    <span class="keywordtype">double</span> <a class="code" href="group__access.html#gaedc561083d2e5ee9ed2d1912c3395eed">getY</a>(std::size_t index)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;        <span class="keywordflow">return</span> m_vect[index * stride() + 1];</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;    }</div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160; </div>
+<div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T=Coordinate&gt;</div>
+<div class="line"><a name="l00342"></a><span class="lineno"><a class="line" href="group__access.html#gaa1bbf3593a22cb34dc59aeb42206bdaf">  342</a></span>&#160;    <span class="keyword">const</span> T&amp; <a class="code" href="group__access.html#gaa1bbf3593a22cb34dc59aeb42206bdaf">back</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;        <span class="keywordflow">return</span> getAt&lt;T&gt;(size() - 1);</div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;    }</div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160; </div>
+<div class="line"><a name="l00348"></a><span class="lineno">  348</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T=Coordinate&gt;</div>
+<div class="line"><a name="l00349"></a><span class="lineno"><a class="line" href="group__access.html#ga47fa2c2296f7b23175791ff9eb87a7a3">  349</a></span>&#160;    T&amp; <a class="code" href="group__access.html#ga47fa2c2296f7b23175791ff9eb87a7a3">back</a>()</div>
+<div class="line"><a name="l00350"></a><span class="lineno">  350</span>&#160;    {</div>
+<div class="line"><a name="l00351"></a><span class="lineno">  351</span>&#160;        <span class="keywordflow">return</span> getAt&lt;T&gt;(size() - 1);</div>
 <div class="line"><a name="l00352"></a><span class="lineno">  352</span>&#160;    }</div>
 <div class="line"><a name="l00353"></a><span class="lineno">  353</span>&#160; </div>
 <div class="line"><a name="l00355"></a><span class="lineno">  355</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T=Coordinate&gt;</div>
-<div class="line"><a name="l00356"></a><span class="lineno"><a class="line" href="group__access.html#gaa1bbf3593a22cb34dc59aeb42206bdaf">  356</a></span>&#160;    <span class="keyword">const</span> T&amp; <a class="code" href="group__access.html#gaa1bbf3593a22cb34dc59aeb42206bdaf">back</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00356"></a><span class="lineno"><a class="line" href="group__access.html#ga75ca961fcb621b141c39e81fca70f62c">  356</a></span>&#160;    <span class="keyword">const</span> T&amp; <a class="code" href="group__access.html#ga75ca961fcb621b141c39e81fca70f62c">front</a>()<span class="keyword"> const</span></div>
 <div class="line"><a name="l00357"></a><span class="lineno">  357</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;        <span class="keywordflow">return</span> getAt&lt;T&gt;(size() - 1);</div>
+<div class="line"><a name="l00358"></a><span class="lineno">  358</span>&#160;        <span class="keywordflow">return</span> *(<span class="keyword">reinterpret_cast&lt;</span><span class="keyword">const </span>T*<span class="keyword">&gt;</span>(m_vect.data()));</div>
 <div class="line"><a name="l00359"></a><span class="lineno">  359</span>&#160;    }</div>
 <div class="line"><a name="l00360"></a><span class="lineno">  360</span>&#160; </div>
 <div class="line"><a name="l00362"></a><span class="lineno">  362</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T=Coordinate&gt;</div>
-<div class="line"><a name="l00363"></a><span class="lineno"><a class="line" href="group__access.html#ga47fa2c2296f7b23175791ff9eb87a7a3">  363</a></span>&#160;    T&amp; <a class="code" href="group__access.html#ga47fa2c2296f7b23175791ff9eb87a7a3">back</a>()</div>
+<div class="line"><a name="l00363"></a><span class="lineno"><a class="line" href="group__access.html#ga755282f2708362f581f1bb2bb2a57fca">  363</a></span>&#160;    T&amp; <a class="code" href="group__access.html#ga755282f2708362f581f1bb2bb2a57fca">front</a>()</div>
 <div class="line"><a name="l00364"></a><span class="lineno">  364</span>&#160;    {</div>
-<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;        <span class="keywordflow">return</span> getAt&lt;T&gt;(size() - 1);</div>
+<div class="line"><a name="l00365"></a><span class="lineno">  365</span>&#160;        <span class="keywordflow">return</span> *(<span class="keyword">reinterpret_cast&lt;</span>T*<span class="keyword">&gt;</span>(m_vect.data()));</div>
 <div class="line"><a name="l00366"></a><span class="lineno">  366</span>&#160;    }</div>
 <div class="line"><a name="l00367"></a><span class="lineno">  367</span>&#160; </div>
-<div class="line"><a name="l00369"></a><span class="lineno">  369</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T=Coordinate&gt;</div>
-<div class="line"><a name="l00370"></a><span class="lineno"><a class="line" href="group__access.html#ga75ca961fcb621b141c39e81fca70f62c">  370</a></span>&#160;    <span class="keyword">const</span> T&amp; <a class="code" href="group__access.html#ga75ca961fcb621b141c39e81fca70f62c">front</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160;        <span class="keywordflow">return</span> *(<span class="keyword">reinterpret_cast&lt;</span><span class="keyword">const </span>T*<span class="keyword">&gt;</span>(m_vect.data()));</div>
-<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160;    }</div>
-<div class="line"><a name="l00374"></a><span class="lineno">  374</span>&#160; </div>
-<div class="line"><a name="l00376"></a><span class="lineno">  376</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T=Coordinate&gt;</div>
-<div class="line"><a name="l00377"></a><span class="lineno"><a class="line" href="group__access.html#ga755282f2708362f581f1bb2bb2a57fca">  377</a></span>&#160;    T&amp; <a class="code" href="group__access.html#ga755282f2708362f581f1bb2bb2a57fca">front</a>()</div>
-<div class="line"><a name="l00378"></a><span class="lineno">  378</span>&#160;    {</div>
-<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;        <span class="keywordflow">return</span> *(<span class="keyword">reinterpret_cast&lt;</span>T*<span class="keyword">&gt;</span>(m_vect.data()));</div>
-<div class="line"><a name="l00380"></a><span class="lineno">  380</span>&#160;    }</div>
-<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160; </div>
-<div class="line"><a name="l00383"></a><span class="lineno"><a class="line" href="group__access.html#ga3be70d74c163ee237ee0786e2058ac8c">  383</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="group__access.html#ga3be70d74c163ee237ee0786e2058ac8c">toVector</a>(std::vector&lt;Coordinate&gt;&amp; coords) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160; </div>
-<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;    <span class="keywordtype">void</span> toVector(std::vector&lt;CoordinateXY&gt;&amp; coords) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160; </div>
-<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160; </div>
-<div class="line"><a name="l00391"></a><span class="lineno">  391</span>&#160; </div>
-<div class="line"><a name="l00393"></a><span class="lineno">  393</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00394"></a><span class="lineno"><a class="line" href="group__mutate.html#ga8e7e357116832e340ba1e4b35ddba6b3">  394</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="group__mutate.html#ga8e7e357116832e340ba1e4b35ddba6b3">setAt</a>(<span class="keyword">const</span> T&amp; c, std::size_t pos) {</div>
-<div class="line"><a name="l00395"></a><span class="lineno">  395</span>&#160;        <span class="keywordflow">switch</span>(getCoordinateType()) {</div>
-<div class="line"><a name="l00396"></a><span class="lineno">  396</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XY: setAtImpl&lt;CoordinateXY&gt;(c, pos); <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00397"></a><span class="lineno">  397</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYZ: setAtImpl&lt;Coordinate&gt;(c, pos); <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00398"></a><span class="lineno">  398</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYZM: setAtImpl&lt;CoordinateXYZM&gt;(c, pos); <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYM: setAtImpl&lt;CoordinateXYM&gt;(c, pos); <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00400"></a><span class="lineno">  400</span>&#160;            <span class="keywordflow">default</span>: setAtImpl&lt;Coordinate&gt;(c, pos);</div>
-<div class="line"><a name="l00401"></a><span class="lineno">  401</span>&#160;        }</div>
-<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160;    }</div>
-<div class="line"><a name="l00403"></a><span class="lineno">  403</span>&#160; </div>
-<div class="line"><a name="l00412"></a><span class="lineno"><a class="line" href="group__mutate.html#ga4cdec235879fc02491ac44ba377f8d52">  412</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="group__mutate.html#ga4cdec235879fc02491ac44ba377f8d52">setOrdinate</a>(std::size_t index, std::size_t ordinateIndex, <span class="keywordtype">double</span> value);</div>
-<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160; </div>
-<div class="line"><a name="l00415"></a><span class="lineno"><a class="line" href="group__mutate.html#ga55b7f07173fed6b48eae8f045064aa34">  415</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="group__mutate.html#ga55b7f07173fed6b48eae8f045064aa34">setPoints</a>(<span class="keyword">const</span> std::vector&lt;Coordinate&gt;&amp; v);</div>
-<div class="line"><a name="l00416"></a><span class="lineno">  416</span>&#160; </div>
-<div class="line"><a name="l00420"></a><span class="lineno">  420</span>&#160; </div>
-<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T=Coordinate&gt;</div>
-<div class="line"><a name="l00426"></a><span class="lineno"><a class="line" href="group__add.html#ga9fa8f1bf92b1e6f28f64d6d5a4750f0b">  426</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="group__add.html#ga9fa8f1bf92b1e6f28f64d6d5a4750f0b">add</a>(<span class="keyword">const</span> T&amp; c) {</div>
-<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;        add(c, size());</div>
-<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;    }</div>
-<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160; </div>
-<div class="line"><a name="l00436"></a><span class="lineno">  436</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00437"></a><span class="lineno"><a class="line" href="group__add.html#ga6bb200879c236e234d4ba6ac78bd5a18">  437</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="group__add.html#ga6bb200879c236e234d4ba6ac78bd5a18">add</a>(<span class="keyword">const</span> T&amp; c, <span class="keywordtype">bool</span> allowRepeated)</div>
-<div class="line"><a name="l00438"></a><span class="lineno">  438</span>&#160;    {</div>
-<div class="line"><a name="l00439"></a><span class="lineno">  439</span>&#160;        <span class="keywordflow">if</span>(!allowRepeated &amp;&amp; !isEmpty()) {</div>
-<div class="line"><a name="l00440"></a><span class="lineno">  440</span>&#160;            <span class="keyword">const</span> CoordinateXY&amp; last = back&lt;CoordinateXY&gt;();</div>
-<div class="line"><a name="l00441"></a><span class="lineno">  441</span>&#160;            <span class="keywordflow">if</span>(last.equals2D(c)) {</div>
-<div class="line"><a name="l00442"></a><span class="lineno">  442</span>&#160;                <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;            }</div>
-<div class="line"><a name="l00444"></a><span class="lineno">  444</span>&#160;        }</div>
-<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160; </div>
-<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;        add(c);</div>
-<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160;    }</div>
-<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160; </div>
-<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00458"></a><span class="lineno"><a class="line" href="group__add.html#gaa999bccc601bc2ebe80ba98ef0a0e058">  458</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="group__add.html#gaa999bccc601bc2ebe80ba98ef0a0e058">add</a>(<span class="keyword">const</span> T&amp; c, std::size_t pos)</div>
-<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160;    {</div>
-<div class="line"><a name="l00460"></a><span class="lineno">  460</span>&#160;        static_assert(std::is_base_of&lt;CoordinateXY, T&gt;::value, <span class="stringliteral">&quot;Must be a Coordinate class&quot;</span>);</div>
-<div class="line"><a name="l00461"></a><span class="lineno">  461</span>&#160; </div>
-<div class="line"><a name="l00462"></a><span class="lineno">  462</span>&#160;        <span class="comment">// c may be a reference inside m_vect, so we make sure it will not</span></div>
-<div class="line"><a name="l00463"></a><span class="lineno">  463</span>&#160;        <span class="comment">// grow before adding it</span></div>
-<div class="line"><a name="l00464"></a><span class="lineno">  464</span>&#160;        <span class="keywordflow">if</span> (m_vect.size() + stride() &lt;= m_vect.capacity()) {</div>
-<div class="line"><a name="l00465"></a><span class="lineno">  465</span>&#160;            make_space(pos, 1);</div>
-<div class="line"><a name="l00466"></a><span class="lineno">  466</span>&#160;            setAt(c, <span class="keyword">static_cast&lt;</span>std::size_t<span class="keyword">&gt;</span>(pos));</div>
-<div class="line"><a name="l00467"></a><span class="lineno">  467</span>&#160;        } <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00468"></a><span class="lineno">  468</span>&#160;            T tmp{c};</div>
-<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;            make_space(pos, 1);</div>
-<div class="line"><a name="l00470"></a><span class="lineno">  470</span>&#160;            setAt(tmp, <span class="keyword">static_cast&lt;</span>std::size_t<span class="keyword">&gt;</span>(pos));</div>
-<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;        }</div>
-<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;    }</div>
-<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160; </div>
-<div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00484"></a><span class="lineno"><a class="line" href="group__add.html#ga798d63a907608a3379f54588736620c7">  484</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="group__add.html#ga798d63a907608a3379f54588736620c7">add</a>(std::size_t i, <span class="keyword">const</span> T&amp; coord, <span class="keywordtype">bool</span> allowRepeated)</div>
-<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160;    {</div>
-<div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160;        <span class="comment">// don&#39;t add duplicate coordinates</span></div>
-<div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160;        <span class="keywordflow">if</span>(! allowRepeated) {</div>
-<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;            std::size_t sz = size();</div>
-<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160;            <span class="keywordflow">if</span>(sz &gt; 0) {</div>
-<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160;                <span class="keywordflow">if</span>(i &gt; 0) {</div>
-<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;                    <span class="keyword">const</span> CoordinateXY&amp; prev = getAt&lt;CoordinateXY&gt;(i - 1);</div>
-<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;                    <span class="keywordflow">if</span>(prev.equals2D(coord)) {</div>
-<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160;                        <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160;                    }</div>
-<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;                }</div>
-<div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160;                <span class="keywordflow">if</span>(i &lt; sz) {</div>
-<div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160;                    <span class="keyword">const</span> CoordinateXY&amp; next = getAt&lt;CoordinateXY&gt;(i);</div>
-<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160;                    <span class="keywordflow">if</span>(next.equals2D(coord)) {</div>
-<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160;                        <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160;                    }</div>
-<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160;                }</div>
-<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160;            }</div>
-<div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160;        }</div>
+<div class="line"><a name="l00369"></a><span class="lineno"><a class="line" href="group__access.html#ga3be70d74c163ee237ee0786e2058ac8c">  369</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="group__access.html#ga3be70d74c163ee237ee0786e2058ac8c">toVector</a>(std::vector&lt;Coordinate&gt;&amp; coords) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00370"></a><span class="lineno">  370</span>&#160; </div>
+<div class="line"><a name="l00371"></a><span class="lineno">  371</span>&#160;    <span class="keywordtype">void</span> toVector(std::vector&lt;CoordinateXY&gt;&amp; coords) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00372"></a><span class="lineno">  372</span>&#160; </div>
+<div class="line"><a name="l00373"></a><span class="lineno">  373</span>&#160; </div>
+<div class="line"><a name="l00377"></a><span class="lineno">  377</span>&#160; </div>
+<div class="line"><a name="l00379"></a><span class="lineno">  379</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00380"></a><span class="lineno"><a class="line" href="group__mutate.html#ga8e7e357116832e340ba1e4b35ddba6b3">  380</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="group__mutate.html#ga8e7e357116832e340ba1e4b35ddba6b3">setAt</a>(<span class="keyword">const</span> T&amp; c, std::size_t pos) {</div>
+<div class="line"><a name="l00381"></a><span class="lineno">  381</span>&#160;        <span class="keywordflow">switch</span>(getCoordinateType()) {</div>
+<div class="line"><a name="l00382"></a><span class="lineno">  382</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XY: setAtImpl&lt;CoordinateXY&gt;(c, pos); <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00383"></a><span class="lineno">  383</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYZ: setAtImpl&lt;Coordinate&gt;(c, pos); <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00384"></a><span class="lineno">  384</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYZM: setAtImpl&lt;CoordinateXYZM&gt;(c, pos); <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00385"></a><span class="lineno">  385</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYM: setAtImpl&lt;CoordinateXYM&gt;(c, pos); <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00386"></a><span class="lineno">  386</span>&#160;            <span class="keywordflow">default</span>: setAtImpl&lt;Coordinate&gt;(c, pos);</div>
+<div class="line"><a name="l00387"></a><span class="lineno">  387</span>&#160;        }</div>
+<div class="line"><a name="l00388"></a><span class="lineno">  388</span>&#160;    }</div>
+<div class="line"><a name="l00389"></a><span class="lineno">  389</span>&#160; </div>
+<div class="line"><a name="l00398"></a><span class="lineno"><a class="line" href="group__mutate.html#ga4cdec235879fc02491ac44ba377f8d52">  398</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="group__mutate.html#ga4cdec235879fc02491ac44ba377f8d52">setOrdinate</a>(std::size_t index, std::size_t ordinateIndex, <span class="keywordtype">double</span> value);</div>
+<div class="line"><a name="l00399"></a><span class="lineno">  399</span>&#160; </div>
+<div class="line"><a name="l00401"></a><span class="lineno"><a class="line" href="group__mutate.html#ga55b7f07173fed6b48eae8f045064aa34">  401</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="group__mutate.html#ga55b7f07173fed6b48eae8f045064aa34">setPoints</a>(<span class="keyword">const</span> std::vector&lt;Coordinate&gt;&amp; v);</div>
+<div class="line"><a name="l00402"></a><span class="lineno">  402</span>&#160; </div>
+<div class="line"><a name="l00406"></a><span class="lineno">  406</span>&#160; </div>
+<div class="line"><a name="l00411"></a><span class="lineno">  411</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T=Coordinate&gt;</div>
+<div class="line"><a name="l00412"></a><span class="lineno"><a class="line" href="group__add.html#ga9fa8f1bf92b1e6f28f64d6d5a4750f0b">  412</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="group__add.html#ga9fa8f1bf92b1e6f28f64d6d5a4750f0b">add</a>(<span class="keyword">const</span> T&amp; c) {</div>
+<div class="line"><a name="l00413"></a><span class="lineno">  413</span>&#160;        add(c, size());</div>
+<div class="line"><a name="l00414"></a><span class="lineno">  414</span>&#160;    }</div>
+<div class="line"><a name="l00415"></a><span class="lineno">  415</span>&#160; </div>
+<div class="line"><a name="l00422"></a><span class="lineno">  422</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00423"></a><span class="lineno"><a class="line" href="group__add.html#ga6bb200879c236e234d4ba6ac78bd5a18">  423</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="group__add.html#ga6bb200879c236e234d4ba6ac78bd5a18">add</a>(<span class="keyword">const</span> T&amp; c, <span class="keywordtype">bool</span> allowRepeated)</div>
+<div class="line"><a name="l00424"></a><span class="lineno">  424</span>&#160;    {</div>
+<div class="line"><a name="l00425"></a><span class="lineno">  425</span>&#160;        <span class="keywordflow">if</span>(!allowRepeated &amp;&amp; !isEmpty()) {</div>
+<div class="line"><a name="l00426"></a><span class="lineno">  426</span>&#160;            <span class="keyword">const</span> CoordinateXY&amp; last = back&lt;CoordinateXY&gt;();</div>
+<div class="line"><a name="l00427"></a><span class="lineno">  427</span>&#160;            <span class="keywordflow">if</span>(last.equals2D(c)) {</div>
+<div class="line"><a name="l00428"></a><span class="lineno">  428</span>&#160;                <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00429"></a><span class="lineno">  429</span>&#160;            }</div>
+<div class="line"><a name="l00430"></a><span class="lineno">  430</span>&#160;        }</div>
+<div class="line"><a name="l00431"></a><span class="lineno">  431</span>&#160; </div>
+<div class="line"><a name="l00432"></a><span class="lineno">  432</span>&#160;        add(c);</div>
+<div class="line"><a name="l00433"></a><span class="lineno">  433</span>&#160;    }</div>
+<div class="line"><a name="l00434"></a><span class="lineno">  434</span>&#160; </div>
+<div class="line"><a name="l00443"></a><span class="lineno">  443</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00444"></a><span class="lineno"><a class="line" href="group__add.html#gaa999bccc601bc2ebe80ba98ef0a0e058">  444</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="group__add.html#gaa999bccc601bc2ebe80ba98ef0a0e058">add</a>(<span class="keyword">const</span> T&amp; c, std::size_t pos)</div>
+<div class="line"><a name="l00445"></a><span class="lineno">  445</span>&#160;    {</div>
+<div class="line"><a name="l00446"></a><span class="lineno">  446</span>&#160;        static_assert(std::is_base_of&lt;CoordinateXY, T&gt;::value, <span class="stringliteral">&quot;Must be a Coordinate class&quot;</span>);</div>
+<div class="line"><a name="l00447"></a><span class="lineno">  447</span>&#160; </div>
+<div class="line"><a name="l00448"></a><span class="lineno">  448</span>&#160;        <span class="comment">// c may be a reference inside m_vect, so we make sure it will not</span></div>
+<div class="line"><a name="l00449"></a><span class="lineno">  449</span>&#160;        <span class="comment">// grow before adding it</span></div>
+<div class="line"><a name="l00450"></a><span class="lineno">  450</span>&#160;        <span class="keywordflow">if</span> (m_vect.size() + stride() &lt;= m_vect.capacity()) {</div>
+<div class="line"><a name="l00451"></a><span class="lineno">  451</span>&#160;            make_space(pos, 1);</div>
+<div class="line"><a name="l00452"></a><span class="lineno">  452</span>&#160;            setAt(c, <span class="keyword">static_cast&lt;</span>std::size_t<span class="keyword">&gt;</span>(pos));</div>
+<div class="line"><a name="l00453"></a><span class="lineno">  453</span>&#160;        } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00454"></a><span class="lineno">  454</span>&#160;            T tmp{c};</div>
+<div class="line"><a name="l00455"></a><span class="lineno">  455</span>&#160;            make_space(pos, 1);</div>
+<div class="line"><a name="l00456"></a><span class="lineno">  456</span>&#160;            setAt(tmp, <span class="keyword">static_cast&lt;</span>std::size_t<span class="keyword">&gt;</span>(pos));</div>
+<div class="line"><a name="l00457"></a><span class="lineno">  457</span>&#160;        }</div>
+<div class="line"><a name="l00458"></a><span class="lineno">  458</span>&#160;    }</div>
+<div class="line"><a name="l00459"></a><span class="lineno">  459</span>&#160; </div>
+<div class="line"><a name="l00469"></a><span class="lineno">  469</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00470"></a><span class="lineno"><a class="line" href="group__add.html#ga798d63a907608a3379f54588736620c7">  470</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="group__add.html#ga798d63a907608a3379f54588736620c7">add</a>(std::size_t i, <span class="keyword">const</span> T&amp; coord, <span class="keywordtype">bool</span> allowRepeated)</div>
+<div class="line"><a name="l00471"></a><span class="lineno">  471</span>&#160;    {</div>
+<div class="line"><a name="l00472"></a><span class="lineno">  472</span>&#160;        <span class="comment">// don&#39;t add duplicate coordinates</span></div>
+<div class="line"><a name="l00473"></a><span class="lineno">  473</span>&#160;        <span class="keywordflow">if</span>(! allowRepeated) {</div>
+<div class="line"><a name="l00474"></a><span class="lineno">  474</span>&#160;            std::size_t sz = size();</div>
+<div class="line"><a name="l00475"></a><span class="lineno">  475</span>&#160;            <span class="keywordflow">if</span>(sz &gt; 0) {</div>
+<div class="line"><a name="l00476"></a><span class="lineno">  476</span>&#160;                <span class="keywordflow">if</span>(i &gt; 0) {</div>
+<div class="line"><a name="l00477"></a><span class="lineno">  477</span>&#160;                    <span class="keyword">const</span> CoordinateXY&amp; prev = getAt&lt;CoordinateXY&gt;(i - 1);</div>
+<div class="line"><a name="l00478"></a><span class="lineno">  478</span>&#160;                    <span class="keywordflow">if</span>(prev.equals2D(coord)) {</div>
+<div class="line"><a name="l00479"></a><span class="lineno">  479</span>&#160;                        <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00480"></a><span class="lineno">  480</span>&#160;                    }</div>
+<div class="line"><a name="l00481"></a><span class="lineno">  481</span>&#160;                }</div>
+<div class="line"><a name="l00482"></a><span class="lineno">  482</span>&#160;                <span class="keywordflow">if</span>(i &lt; sz) {</div>
+<div class="line"><a name="l00483"></a><span class="lineno">  483</span>&#160;                    <span class="keyword">const</span> CoordinateXY&amp; next = getAt&lt;CoordinateXY&gt;(i);</div>
+<div class="line"><a name="l00484"></a><span class="lineno">  484</span>&#160;                    <span class="keywordflow">if</span>(next.equals2D(coord)) {</div>
+<div class="line"><a name="l00485"></a><span class="lineno">  485</span>&#160;                        <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00486"></a><span class="lineno">  486</span>&#160;                    }</div>
+<div class="line"><a name="l00487"></a><span class="lineno">  487</span>&#160;                }</div>
+<div class="line"><a name="l00488"></a><span class="lineno">  488</span>&#160;            }</div>
+<div class="line"><a name="l00489"></a><span class="lineno">  489</span>&#160;        }</div>
+<div class="line"><a name="l00490"></a><span class="lineno">  490</span>&#160; </div>
+<div class="line"><a name="l00491"></a><span class="lineno">  491</span>&#160;        add(coord, i);</div>
+<div class="line"><a name="l00492"></a><span class="lineno">  492</span>&#160;    }</div>
+<div class="line"><a name="l00493"></a><span class="lineno">  493</span>&#160; </div>
+<div class="line"><a name="l00494"></a><span class="lineno">  494</span>&#160;    <span class="keywordtype">void</span> add(<span class="keywordtype">double</span> x, <span class="keywordtype">double</span> y) {</div>
+<div class="line"><a name="l00495"></a><span class="lineno">  495</span>&#160;        CoordinateXY c(x, y);</div>
+<div class="line"><a name="l00496"></a><span class="lineno">  496</span>&#160;        add(c);</div>
+<div class="line"><a name="l00497"></a><span class="lineno">  497</span>&#160;    }</div>
+<div class="line"><a name="l00498"></a><span class="lineno">  498</span>&#160; </div>
+<div class="line"><a name="l00499"></a><span class="lineno">  499</span>&#160;    <span class="keywordtype">void</span> add(<span class="keyword">const</span> CoordinateSequence&amp; cs);</div>
+<div class="line"><a name="l00500"></a><span class="lineno">  500</span>&#160; </div>
+<div class="line"><a name="l00501"></a><span class="lineno">  501</span>&#160;    <span class="keywordtype">void</span> add(<span class="keyword">const</span> CoordinateSequence&amp; cs, <span class="keywordtype">bool</span> allowRepeated);</div>
+<div class="line"><a name="l00502"></a><span class="lineno">  502</span>&#160; </div>
+<div class="line"><a name="l00503"></a><span class="lineno">  503</span>&#160;    <span class="keywordtype">void</span> add(<span class="keyword">const</span> CoordinateSequence&amp; cl, <span class="keywordtype">bool</span> allowRepeated, <span class="keywordtype">bool</span> forwardDirection);</div>
 <div class="line"><a name="l00504"></a><span class="lineno">  504</span>&#160; </div>
-<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;        add(coord, i);</div>
-<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160;    }</div>
-<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160; </div>
-<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160;    <span class="keywordtype">void</span> add(<span class="keywordtype">double</span> x, <span class="keywordtype">double</span> y) {</div>
-<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;        CoordinateXY c(x, y);</div>
-<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;        add(c);</div>
-<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;    }</div>
-<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160; </div>
-<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;    <span class="keywordtype">void</span> add(<span class="keyword">const</span> CoordinateSequence&amp; cs);</div>
-<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160; </div>
-<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160;    <span class="keywordtype">void</span> add(<span class="keyword">const</span> CoordinateSequence&amp; cs, <span class="keywordtype">bool</span> allowRepeated);</div>
-<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160; </div>
-<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;    <span class="keywordtype">void</span> add(<span class="keyword">const</span> CoordinateSequence&amp; cl, <span class="keywordtype">bool</span> allowRepeated, <span class="keywordtype">bool</span> forwardDirection);</div>
-<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160; </div>
-<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;    <span class="keywordtype">void</span> add(<span class="keyword">const</span> CoordinateSequence&amp; cs, std::size_t from, std::size_t to);</div>
+<div class="line"><a name="l00505"></a><span class="lineno">  505</span>&#160;    <span class="keywordtype">void</span> add(<span class="keyword">const</span> CoordinateSequence&amp; cs, std::size_t from, std::size_t to);</div>
+<div class="line"><a name="l00506"></a><span class="lineno">  506</span>&#160; </div>
+<div class="line"><a name="l00507"></a><span class="lineno">  507</span>&#160;    <span class="keywordtype">void</span> add(<span class="keyword">const</span> CoordinateSequence&amp; cs, std::size_t from, std::size_t to, <span class="keywordtype">bool</span> allowRepeated);</div>
+<div class="line"><a name="l00508"></a><span class="lineno">  508</span>&#160; </div>
+<div class="line"><a name="l00509"></a><span class="lineno">  509</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span>... Args&gt;</div>
+<div class="line"><a name="l00510"></a><span class="lineno">  510</span>&#160;    <span class="keywordtype">void</span> add(T begin, T end, Args... args) {</div>
+<div class="line"><a name="l00511"></a><span class="lineno">  511</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">auto</span> it = begin; it != end; ++it) {</div>
+<div class="line"><a name="l00512"></a><span class="lineno">  512</span>&#160;            add(*it, args...);</div>
+<div class="line"><a name="l00513"></a><span class="lineno">  513</span>&#160;        }</div>
+<div class="line"><a name="l00514"></a><span class="lineno">  514</span>&#160;    }</div>
+<div class="line"><a name="l00515"></a><span class="lineno">  515</span>&#160; </div>
+<div class="line"><a name="l00516"></a><span class="lineno">  516</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00517"></a><span class="lineno">  517</span>&#160;    <span class="keywordtype">void</span> add(std::size_t i, T from, T to) {</div>
+<div class="line"><a name="l00518"></a><span class="lineno">  518</span>&#160;        <span class="keyword">auto</span> npts = <span class="keyword">static_cast&lt;</span>std::size_t<span class="keyword">&gt;</span>(std::distance(from, to));</div>
+<div class="line"><a name="l00519"></a><span class="lineno">  519</span>&#160;        make_space(i, npts);</div>
 <div class="line"><a name="l00520"></a><span class="lineno">  520</span>&#160; </div>
-<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;    <span class="keywordtype">void</span> add(<span class="keyword">const</span> CoordinateSequence&amp; cs, std::size_t from, std::size_t to, <span class="keywordtype">bool</span> allowRepeated);</div>
-<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160; </div>
-<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span>... Args&gt;</div>
-<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;    <span class="keywordtype">void</span> add(T begin, T end, Args... args) {</div>
-<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">auto</span> it = begin; it != end; ++it) {</div>
-<div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160;            add(*it, args...);</div>
-<div class="line"><a name="l00527"></a><span class="lineno">  527</span>&#160;        }</div>
-<div class="line"><a name="l00528"></a><span class="lineno">  528</span>&#160;    }</div>
-<div class="line"><a name="l00529"></a><span class="lineno">  529</span>&#160; </div>
-<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;    <span class="keywordtype">void</span> add(std::size_t i, T from, T to) {</div>
-<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;        <span class="keyword">auto</span> npts = <span class="keyword">static_cast&lt;</span>std::size_t<span class="keyword">&gt;</span>(std::distance(from, to));</div>
-<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;        make_space(i, npts);</div>
+<div class="line"><a name="l00521"></a><span class="lineno">  521</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">auto</span> it = from; it != to; ++it) {</div>
+<div class="line"><a name="l00522"></a><span class="lineno">  522</span>&#160;            setAt(*it, i);</div>
+<div class="line"><a name="l00523"></a><span class="lineno">  523</span>&#160;            i++;</div>
+<div class="line"><a name="l00524"></a><span class="lineno">  524</span>&#160;        }</div>
+<div class="line"><a name="l00525"></a><span class="lineno">  525</span>&#160;    }</div>
+<div class="line"><a name="l00526"></a><span class="lineno">  526</span>&#160; </div>
+<div class="line"><a name="l00530"></a><span class="lineno">  530</span>&#160; </div>
+<div class="line"><a name="l00531"></a><span class="lineno">  531</span>&#160;    <span class="keywordtype">void</span> clear() {</div>
+<div class="line"><a name="l00532"></a><span class="lineno">  532</span>&#160;        m_vect.clear();</div>
+<div class="line"><a name="l00533"></a><span class="lineno">  533</span>&#160;    }</div>
 <div class="line"><a name="l00534"></a><span class="lineno">  534</span>&#160; </div>
-<div class="line"><a name="l00535"></a><span class="lineno">  535</span>&#160;        <span class="keywordflow">for</span> (<span class="keyword">auto</span> it = from; it != to; ++it) {</div>
-<div class="line"><a name="l00536"></a><span class="lineno">  536</span>&#160;            setAt(*it, i);</div>
-<div class="line"><a name="l00537"></a><span class="lineno">  537</span>&#160;            i++;</div>
-<div class="line"><a name="l00538"></a><span class="lineno">  538</span>&#160;        }</div>
-<div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160;    }</div>
-<div class="line"><a name="l00540"></a><span class="lineno">  540</span>&#160; </div>
+<div class="line"><a name="l00535"></a><span class="lineno">  535</span>&#160;    <span class="keywordtype">void</span> reserve(std::size_t capacity) {</div>
+<div class="line"><a name="l00536"></a><span class="lineno">  536</span>&#160;        m_vect.reserve(capacity * stride());</div>
+<div class="line"><a name="l00537"></a><span class="lineno">  537</span>&#160;    }</div>
+<div class="line"><a name="l00538"></a><span class="lineno">  538</span>&#160; </div>
+<div class="line"><a name="l00539"></a><span class="lineno">  539</span>&#160;    <span class="keywordtype">void</span> resize(std::size_t capacity) {</div>
+<div class="line"><a name="l00540"></a><span class="lineno">  540</span>&#160;        m_vect.resize(capacity * stride());</div>
+<div class="line"><a name="l00541"></a><span class="lineno">  541</span>&#160;    }</div>
+<div class="line"><a name="l00542"></a><span class="lineno">  542</span>&#160; </div>
+<div class="line"><a name="l00543"></a><span class="lineno">  543</span>&#160;    <span class="keywordtype">void</span> pop_back();</div>
 <div class="line"><a name="l00544"></a><span class="lineno">  544</span>&#160; </div>
-<div class="line"><a name="l00545"></a><span class="lineno">  545</span>&#160;    <span class="keywordtype">void</span> clear() {</div>
-<div class="line"><a name="l00546"></a><span class="lineno">  546</span>&#160;        m_vect.clear();</div>
-<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160;    }</div>
-<div class="line"><a name="l00548"></a><span class="lineno">  548</span>&#160; </div>
-<div class="line"><a name="l00549"></a><span class="lineno">  549</span>&#160;    <span class="keywordtype">void</span> reserve(std::size_t capacity) {</div>
-<div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160;        m_vect.reserve(capacity * stride());</div>
-<div class="line"><a name="l00551"></a><span class="lineno">  551</span>&#160;    }</div>
-<div class="line"><a name="l00552"></a><span class="lineno">  552</span>&#160; </div>
-<div class="line"><a name="l00553"></a><span class="lineno">  553</span>&#160;    <span class="keywordtype">void</span> resize(std::size_t capacity) {</div>
-<div class="line"><a name="l00554"></a><span class="lineno">  554</span>&#160;        m_vect.resize(capacity * stride());</div>
-<div class="line"><a name="l00555"></a><span class="lineno">  555</span>&#160;    }</div>
-<div class="line"><a name="l00556"></a><span class="lineno">  556</span>&#160; </div>
-<div class="line"><a name="l00557"></a><span class="lineno">  557</span>&#160;    <span class="keywordtype">void</span> pop_back();</div>
-<div class="line"><a name="l00558"></a><span class="lineno">  558</span>&#160; </div>
-<div class="line"><a name="l00560"></a><span class="lineno"><a class="line" href="group__util.html#gaca9592f066ecbc03dde2e827aa59b54f">  560</a></span>&#160;    std::string <a class="code" href="group__util.html#gaca9592f066ecbc03dde2e827aa59b54f">toString</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00561"></a><span class="lineno">  561</span>&#160; </div>
-<div class="line"><a name="l00563"></a><span class="lineno"><a class="line" href="group__util.html#ga68a5bb38c125bf5775f96ba8b7862ec9">  563</a></span>&#160;    <span class="keyword">const</span> CoordinateXY* <a class="code" href="group__util.html#ga68a5bb38c125bf5775f96ba8b7862ec9">minCoordinate</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00546"></a><span class="lineno"><a class="line" href="group__util.html#gaca9592f066ecbc03dde2e827aa59b54f">  546</a></span>&#160;    std::string <a class="code" href="group__util.html#gaca9592f066ecbc03dde2e827aa59b54f">toString</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00547"></a><span class="lineno">  547</span>&#160; </div>
+<div class="line"><a name="l00549"></a><span class="lineno"><a class="line" href="group__util.html#ga68a5bb38c125bf5775f96ba8b7862ec9">  549</a></span>&#160;    <span class="keyword">const</span> CoordinateXY* <a class="code" href="group__util.html#ga68a5bb38c125bf5775f96ba8b7862ec9">minCoordinate</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00550"></a><span class="lineno">  550</span>&#160; </div>
+<div class="line"><a name="l00555"></a><span class="lineno"><a class="line" href="group__util.html#gad5dbb8e6b020b0db7945a3ffa535de54">  555</a></span>&#160;    <span class="keyword">static</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>* <a class="code" href="group__util.html#gad5dbb8e6b020b0db7945a3ffa535de54">atLeastNCoordinatesOrNothing</a>(std::size_t n,</div>
+<div class="line"><a name="l00556"></a><span class="lineno">  556</span>&#160;            <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>* c);</div>
+<div class="line"><a name="l00557"></a><span class="lineno">  557</span>&#160; </div>
+<div class="line"><a name="l00559"></a><span class="lineno">  559</span>&#160;    <span class="comment">//</span></div>
+<div class="line"><a name="l00562"></a><span class="lineno"><a class="line" href="group__util.html#gae655a4ee179280a37400c97ec5f37a03">  562</a></span>&#160;<span class="comment"></span>    <span class="keyword">static</span> std::size_t <a class="code" href="group__util.html#gae655a4ee179280a37400c97ec5f37a03">indexOf</a>(<span class="keyword">const</span> CoordinateXY* coordinate,</div>
+<div class="line"><a name="l00563"></a><span class="lineno">  563</span>&#160;                               <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>* cl);</div>
 <div class="line"><a name="l00564"></a><span class="lineno">  564</span>&#160; </div>
-<div class="line"><a name="l00569"></a><span class="lineno"><a class="line" href="group__util.html#gad5dbb8e6b020b0db7945a3ffa535de54">  569</a></span>&#160;    <span class="keyword">static</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>* <a class="code" href="group__util.html#gad5dbb8e6b020b0db7945a3ffa535de54">atLeastNCoordinatesOrNothing</a>(std::size_t n,</div>
-<div class="line"><a name="l00570"></a><span class="lineno">  570</span>&#160;            <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>* c);</div>
-<div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160; </div>
-<div class="line"><a name="l00573"></a><span class="lineno">  573</span>&#160;    <span class="comment">//</span></div>
-<div class="line"><a name="l00576"></a><span class="lineno"><a class="line" href="group__util.html#gae655a4ee179280a37400c97ec5f37a03">  576</a></span>&#160;<span class="comment"></span>    <span class="keyword">static</span> std::size_t <a class="code" href="group__util.html#gae655a4ee179280a37400c97ec5f37a03">indexOf</a>(<span class="keyword">const</span> CoordinateXY* coordinate,</div>
-<div class="line"><a name="l00577"></a><span class="lineno">  577</span>&#160;                               <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>* cl);</div>
-<div class="line"><a name="l00578"></a><span class="lineno">  578</span>&#160; </div>
-<div class="line"><a name="l00584"></a><span class="lineno"><a class="line" href="group__util.html#gaefd3dacec98fad79435ba76601e61880">  584</a></span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="group__util.html#gaefd3dacec98fad79435ba76601e61880">equals</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>* cl1,</div>
-<div class="line"><a name="l00585"></a><span class="lineno">  585</span>&#160;                       <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>* cl2);</div>
-<div class="line"><a name="l00586"></a><span class="lineno">  586</span>&#160; </div>
-<div class="line"><a name="l00592"></a><span class="lineno"><a class="line" href="group__util.html#ga0b6fc62c3a901496be471de894c312fa">  592</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="group__util.html#ga0b6fc62c3a901496be471de894c312fa">equalsIdentical</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>&amp; other) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160; </div>
-<div class="line"><a name="l00595"></a><span class="lineno"><a class="line" href="group__util.html#ga7545644308ae3b237ac8f3a2462f6a8d">  595</a></span>&#160;    <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="group__util.html#ga7545644308ae3b237ac8f3a2462f6a8d">scroll</a>(<a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>* cl, <span class="keyword">const</span> CoordinateXY* firstCoordinate);</div>
-<div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160; </div>
-<div class="line"><a name="l00614"></a><span class="lineno"><a class="line" href="group__util.html#ga8fa893acf32a068019741318ade63896">  614</a></span>&#160;    <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="group__util.html#ga8fa893acf32a068019741318ade63896">increasingDirection</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>&amp; pts);</div>
-<div class="line"><a name="l00615"></a><span class="lineno">  615</span>&#160; </div>
-<div class="line"><a name="l00617"></a><span class="lineno"><a class="line" href="group__util.html#ga18952029ba26af894137333b708d4d2f">  617</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="group__util.html#ga18952029ba26af894137333b708d4d2f">reverse</a>();</div>
-<div class="line"><a name="l00618"></a><span class="lineno">  618</span>&#160; </div>
-<div class="line"><a name="l00619"></a><span class="lineno">  619</span>&#160;    <span class="keywordtype">void</span> sort();</div>
+<div class="line"><a name="l00570"></a><span class="lineno"><a class="line" href="group__util.html#gaefd3dacec98fad79435ba76601e61880">  570</a></span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> <a class="code" href="group__util.html#gaefd3dacec98fad79435ba76601e61880">equals</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>* cl1,</div>
+<div class="line"><a name="l00571"></a><span class="lineno">  571</span>&#160;                       <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>* cl2);</div>
+<div class="line"><a name="l00572"></a><span class="lineno">  572</span>&#160; </div>
+<div class="line"><a name="l00578"></a><span class="lineno"><a class="line" href="group__util.html#ga0b6fc62c3a901496be471de894c312fa">  578</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="group__util.html#ga0b6fc62c3a901496be471de894c312fa">equalsIdentical</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>&amp; other) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00579"></a><span class="lineno">  579</span>&#160; </div>
+<div class="line"><a name="l00581"></a><span class="lineno"><a class="line" href="group__util.html#ga7545644308ae3b237ac8f3a2462f6a8d">  581</a></span>&#160;    <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code" href="group__util.html#ga7545644308ae3b237ac8f3a2462f6a8d">scroll</a>(<a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>* cl, <span class="keyword">const</span> CoordinateXY* firstCoordinate);</div>
+<div class="line"><a name="l00582"></a><span class="lineno">  582</span>&#160; </div>
+<div class="line"><a name="l00600"></a><span class="lineno"><a class="line" href="group__util.html#ga8fa893acf32a068019741318ade63896">  600</a></span>&#160;    <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code" href="group__util.html#ga8fa893acf32a068019741318ade63896">increasingDirection</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>&amp; pts);</div>
+<div class="line"><a name="l00601"></a><span class="lineno">  601</span>&#160; </div>
+<div class="line"><a name="l00603"></a><span class="lineno"><a class="line" href="group__util.html#ga18952029ba26af894137333b708d4d2f">  603</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="group__util.html#ga18952029ba26af894137333b708d4d2f">reverse</a>();</div>
+<div class="line"><a name="l00604"></a><span class="lineno">  604</span>&#160; </div>
+<div class="line"><a name="l00605"></a><span class="lineno">  605</span>&#160;    <span class="keywordtype">void</span> sort();</div>
+<div class="line"><a name="l00606"></a><span class="lineno">  606</span>&#160; </div>
+<div class="line"><a name="l00607"></a><span class="lineno">  607</span>&#160; </div>
+<div class="line"><a name="l00613"></a><span class="lineno"><a class="line" href="group__util.html#ga941242198fbe4ec05127503bfce9f9bc">  613</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="group__util.html#ga941242198fbe4ec05127503bfce9f9bc">expandEnvelope</a>(<a class="code" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a>&amp; env) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00614"></a><span class="lineno">  614</span>&#160; </div>
+<div class="line"><a name="l00615"></a><span class="lineno">  615</span>&#160;    <span class="keywordtype">void</span> closeRing(<span class="keywordtype">bool</span> allowRepeated = <span class="keyword">false</span>);</div>
+<div class="line"><a name="l00616"></a><span class="lineno">  616</span>&#160; </div>
 <div class="line"><a name="l00620"></a><span class="lineno">  620</span>&#160; </div>
-<div class="line"><a name="l00621"></a><span class="lineno">  621</span>&#160; </div>
-<div class="line"><a name="l00627"></a><span class="lineno"><a class="line" href="group__util.html#ga941242198fbe4ec05127503bfce9f9bc">  627</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="group__util.html#ga941242198fbe4ec05127503bfce9f9bc">expandEnvelope</a>(<a class="code" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a>&amp; env) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00628"></a><span class="lineno">  628</span>&#160; </div>
-<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160;    <span class="keywordtype">void</span> closeRing(<span class="keywordtype">bool</span> allowRepeated = <span class="keyword">false</span>);</div>
-<div class="line"><a name="l00630"></a><span class="lineno">  630</span>&#160; </div>
-<div class="line"><a name="l00634"></a><span class="lineno">  634</span>&#160; </div>
-<div class="line"><a name="l00635"></a><span class="lineno">  635</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Filter&gt;</div>
-<div class="line"><a name="l00636"></a><span class="lineno">  636</span>&#160;    <span class="keywordtype">void</span> apply_rw(<span class="keyword">const</span> Filter* filter) {</div>
-<div class="line"><a name="l00637"></a><span class="lineno">  637</span>&#160;        <span class="keywordflow">switch</span>(getCoordinateType()) {</div>
-<div class="line"><a name="l00638"></a><span class="lineno">  638</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XY:    <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; c : items&lt;CoordinateXY&gt;())   { filter-&gt;filter_rw(&amp;c); } <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00639"></a><span class="lineno">  639</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYZ:   <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; c : items&lt;Coordinate&gt;())     { filter-&gt;filter_rw(&amp;c); } <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00640"></a><span class="lineno">  640</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYM:   <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; c : items&lt;CoordinateXYM&gt;())  { filter-&gt;filter_rw(&amp;c); } <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00641"></a><span class="lineno">  641</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYZM:  <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; c : items&lt;CoordinateXYZM&gt;()) { filter-&gt;filter_rw(&amp;c); } <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00642"></a><span class="lineno">  642</span>&#160;        }</div>
-<div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160;        m_hasdim = m_hasz = <span class="keyword">false</span>; <span class="comment">// re-check (see http://trac.osgeo.org/geos/ticket/435)</span></div>
-<div class="line"><a name="l00644"></a><span class="lineno">  644</span>&#160;    }</div>
-<div class="line"><a name="l00645"></a><span class="lineno">  645</span>&#160; </div>
-<div class="line"><a name="l00646"></a><span class="lineno">  646</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Filter&gt;</div>
-<div class="line"><a name="l00647"></a><span class="lineno">  647</span>&#160;    <span class="keywordtype">void</span> apply_ro(Filter* filter)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00648"></a><span class="lineno">  648</span>&#160;        <span class="keywordflow">switch</span>(getCoordinateType()) {</div>
-<div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XY:    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; c : items&lt;CoordinateXY&gt;())   { filter-&gt;filter_ro(&amp;c); } <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYZ:   <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; c : items&lt;Coordinate&gt;())     { filter-&gt;filter_ro(&amp;c); } <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYM:   <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; c : items&lt;CoordinateXYM&gt;())  { filter-&gt;filter_ro(&amp;c); } <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYZM:  <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; c : items&lt;CoordinateXYZM&gt;()) { filter-&gt;filter_ro(&amp;c); } <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00653"></a><span class="lineno">  653</span>&#160;        }</div>
-<div class="line"><a name="l00654"></a><span class="lineno">  654</span>&#160;    }</div>
-<div class="line"><a name="l00655"></a><span class="lineno">  655</span>&#160; </div>
-<div class="line"><a name="l00656"></a><span class="lineno">  656</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> F&gt;</div>
-<div class="line"><a name="l00657"></a><span class="lineno">  657</span>&#160;    <span class="keywordtype">void</span> forEach(F&amp;&amp; fun)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00658"></a><span class="lineno">  658</span>&#160;        <span class="keywordflow">switch</span>(getCoordinateType()) {</div>
-<div class="line"><a name="l00659"></a><span class="lineno">  659</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XY:    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; c : items&lt;CoordinateXY&gt;())   { fun(c); } <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00660"></a><span class="lineno">  660</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYZ:   <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; c : items&lt;Coordinate&gt;())     { fun(c); } <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00661"></a><span class="lineno">  661</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYM:   <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; c : items&lt;CoordinateXYM&gt;())  { fun(c); } <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00662"></a><span class="lineno">  662</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYZM:  <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; c : items&lt;CoordinateXYZM&gt;()) { fun(c); } <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00663"></a><span class="lineno">  663</span>&#160;        }</div>
-<div class="line"><a name="l00664"></a><span class="lineno">  664</span>&#160;    }</div>
-<div class="line"><a name="l00665"></a><span class="lineno">  665</span>&#160; </div>
-<div class="line"><a name="l00666"></a><span class="lineno">  666</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> F&gt;</div>
-<div class="line"><a name="l00667"></a><span class="lineno">  667</span>&#160;    <span class="keywordtype">void</span> forEach(F&amp;&amp; fun)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00668"></a><span class="lineno">  668</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00669"></a><span class="lineno">  669</span>&#160;        <span class="keywordflow">for</span> (std::size_t i = 0; i &lt; size(); i++) {</div>
-<div class="line"><a name="l00670"></a><span class="lineno">  670</span>&#160;            fun(getAt&lt;T&gt;(i));</div>
-<div class="line"><a name="l00671"></a><span class="lineno">  671</span>&#160;        }</div>
-<div class="line"><a name="l00672"></a><span class="lineno">  672</span>&#160;    }</div>
-<div class="line"><a name="l00673"></a><span class="lineno">  673</span>&#160; </div>
-<div class="line"><a name="l00674"></a><span class="lineno">  674</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> F&gt;</div>
-<div class="line"><a name="l00675"></a><span class="lineno">  675</span>&#160;    <span class="keywordtype">void</span> forEach(std::size_t from, std::size_t to, F&amp;&amp; fun)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00676"></a><span class="lineno">  676</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00677"></a><span class="lineno">  677</span>&#160;        <span class="keywordflow">for</span> (std::size_t i = from; i &lt;= to; i++) {</div>
-<div class="line"><a name="l00678"></a><span class="lineno">  678</span>&#160;            fun(getAt&lt;T&gt;(i));</div>
-<div class="line"><a name="l00679"></a><span class="lineno">  679</span>&#160;        }</div>
-<div class="line"><a name="l00680"></a><span class="lineno">  680</span>&#160;    }</div>
-<div class="line"><a name="l00681"></a><span class="lineno">  681</span>&#160; </div>
-<div class="line"><a name="l00682"></a><span class="lineno">  682</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00683"></a><span class="lineno">  683</span>&#160;    <span class="keyword">class </span>Coordinates {</div>
-<div class="line"><a name="l00684"></a><span class="lineno">  684</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00685"></a><span class="lineno">  685</span>&#160;        <span class="keyword">using</span> SequenceType = <span class="keyword">typename</span> std::conditional&lt;std::is_const&lt;T&gt;::value, <span class="keyword">const</span> CoordinateSequence, CoordinateSequence&gt;::type;</div>
-<div class="line"><a name="l00686"></a><span class="lineno">  686</span>&#160; </div>
-<div class="line"><a name="l00687"></a><span class="lineno">  687</span>&#160;        <span class="keyword">explicit</span> Coordinates(SequenceType* seq) : m_seq(seq) {}</div>
-<div class="line"><a name="l00688"></a><span class="lineno">  688</span>&#160; </div>
-<div class="line"><a name="l00689"></a><span class="lineno">  689</span>&#160;        CoordinateSequenceIterator&lt;SequenceType, T&gt; begin() {</div>
-<div class="line"><a name="l00690"></a><span class="lineno">  690</span>&#160;            <span class="keywordflow">return</span> {m_seq};</div>
+<div class="line"><a name="l00621"></a><span class="lineno">  621</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Filter&gt;</div>
+<div class="line"><a name="l00622"></a><span class="lineno">  622</span>&#160;    <span class="keywordtype">void</span> apply_rw(<span class="keyword">const</span> Filter* filter) {</div>
+<div class="line"><a name="l00623"></a><span class="lineno">  623</span>&#160;        <span class="keywordflow">switch</span>(getCoordinateType()) {</div>
+<div class="line"><a name="l00624"></a><span class="lineno">  624</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XY:    <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; c : items&lt;CoordinateXY&gt;())   { filter-&gt;filter_rw(&amp;c); } <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00625"></a><span class="lineno">  625</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYZ:   <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; c : items&lt;Coordinate&gt;())     { filter-&gt;filter_rw(&amp;c); } <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00626"></a><span class="lineno">  626</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYM:   <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; c : items&lt;CoordinateXYM&gt;())  { filter-&gt;filter_rw(&amp;c); } <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00627"></a><span class="lineno">  627</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYZM:  <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; c : items&lt;CoordinateXYZM&gt;()) { filter-&gt;filter_rw(&amp;c); } <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00628"></a><span class="lineno">  628</span>&#160;        }</div>
+<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160;        m_hasdim = m_hasz = <span class="keyword">false</span>; <span class="comment">// re-check (see http://trac.osgeo.org/geos/ticket/435)</span></div>
+<div class="line"><a name="l00630"></a><span class="lineno">  630</span>&#160;    }</div>
+<div class="line"><a name="l00631"></a><span class="lineno">  631</span>&#160; </div>
+<div class="line"><a name="l00632"></a><span class="lineno">  632</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> Filter&gt;</div>
+<div class="line"><a name="l00633"></a><span class="lineno">  633</span>&#160;    <span class="keywordtype">void</span> apply_ro(Filter* filter)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00634"></a><span class="lineno">  634</span>&#160;        <span class="keywordflow">switch</span>(getCoordinateType()) {</div>
+<div class="line"><a name="l00635"></a><span class="lineno">  635</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XY:    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; c : items&lt;CoordinateXY&gt;())   { filter-&gt;filter_ro(&amp;c); } <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00636"></a><span class="lineno">  636</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYZ:   <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; c : items&lt;Coordinate&gt;())     { filter-&gt;filter_ro(&amp;c); } <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00637"></a><span class="lineno">  637</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYM:   <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; c : items&lt;CoordinateXYM&gt;())  { filter-&gt;filter_ro(&amp;c); } <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00638"></a><span class="lineno">  638</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYZM:  <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; c : items&lt;CoordinateXYZM&gt;()) { filter-&gt;filter_ro(&amp;c); } <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00639"></a><span class="lineno">  639</span>&#160;        }</div>
+<div class="line"><a name="l00640"></a><span class="lineno">  640</span>&#160;    }</div>
+<div class="line"><a name="l00641"></a><span class="lineno">  641</span>&#160; </div>
+<div class="line"><a name="l00642"></a><span class="lineno">  642</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> F&gt;</div>
+<div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160;    <span class="keywordtype">void</span> forEach(F&amp;&amp; fun)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00644"></a><span class="lineno">  644</span>&#160;        <span class="keywordflow">switch</span>(getCoordinateType()) {</div>
+<div class="line"><a name="l00645"></a><span class="lineno">  645</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XY:    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; c : items&lt;CoordinateXY&gt;())   { fun(c); } <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00646"></a><span class="lineno">  646</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYZ:   <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; c : items&lt;Coordinate&gt;())     { fun(c); } <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00647"></a><span class="lineno">  647</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYM:   <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; c : items&lt;CoordinateXYM&gt;())  { fun(c); } <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00648"></a><span class="lineno">  648</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYZM:  <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; c : items&lt;CoordinateXYZM&gt;()) { fun(c); } <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160;        }</div>
+<div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160;    }</div>
+<div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160; </div>
+<div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> F&gt;</div>
+<div class="line"><a name="l00653"></a><span class="lineno">  653</span>&#160;    <span class="keywordtype">void</span> forEach(F&amp;&amp; fun)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00654"></a><span class="lineno">  654</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00655"></a><span class="lineno">  655</span>&#160;        <span class="keywordflow">for</span> (std::size_t i = 0; i &lt; size(); i++) {</div>
+<div class="line"><a name="l00656"></a><span class="lineno">  656</span>&#160;            fun(getAt&lt;T&gt;(i));</div>
+<div class="line"><a name="l00657"></a><span class="lineno">  657</span>&#160;        }</div>
+<div class="line"><a name="l00658"></a><span class="lineno">  658</span>&#160;    }</div>
+<div class="line"><a name="l00659"></a><span class="lineno">  659</span>&#160; </div>
+<div class="line"><a name="l00660"></a><span class="lineno">  660</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> F&gt;</div>
+<div class="line"><a name="l00661"></a><span class="lineno">  661</span>&#160;    <span class="keywordtype">void</span> forEach(std::size_t from, std::size_t to, F&amp;&amp; fun)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00662"></a><span class="lineno">  662</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00663"></a><span class="lineno">  663</span>&#160;        <span class="keywordflow">for</span> (std::size_t i = from; i &lt;= to; i++) {</div>
+<div class="line"><a name="l00664"></a><span class="lineno">  664</span>&#160;            fun(getAt&lt;T&gt;(i));</div>
+<div class="line"><a name="l00665"></a><span class="lineno">  665</span>&#160;        }</div>
+<div class="line"><a name="l00666"></a><span class="lineno">  666</span>&#160;    }</div>
+<div class="line"><a name="l00667"></a><span class="lineno">  667</span>&#160; </div>
+<div class="line"><a name="l00668"></a><span class="lineno">  668</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00669"></a><span class="lineno">  669</span>&#160;    <span class="keyword">class </span>Coordinates {</div>
+<div class="line"><a name="l00670"></a><span class="lineno">  670</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00671"></a><span class="lineno">  671</span>&#160;        <span class="keyword">using</span> SequenceType = <span class="keyword">typename</span> std::conditional&lt;std::is_const&lt;T&gt;::value, <span class="keyword">const</span> CoordinateSequence, CoordinateSequence&gt;::type;</div>
+<div class="line"><a name="l00672"></a><span class="lineno">  672</span>&#160; </div>
+<div class="line"><a name="l00673"></a><span class="lineno">  673</span>&#160;        <span class="keyword">explicit</span> Coordinates(SequenceType* seq) : m_seq(seq) {}</div>
+<div class="line"><a name="l00674"></a><span class="lineno">  674</span>&#160; </div>
+<div class="line"><a name="l00675"></a><span class="lineno">  675</span>&#160;        CoordinateSequenceIterator&lt;SequenceType, T&gt; begin() {</div>
+<div class="line"><a name="l00676"></a><span class="lineno">  676</span>&#160;            <span class="keywordflow">return</span> {m_seq};</div>
+<div class="line"><a name="l00677"></a><span class="lineno">  677</span>&#160;        }</div>
+<div class="line"><a name="l00678"></a><span class="lineno">  678</span>&#160; </div>
+<div class="line"><a name="l00679"></a><span class="lineno">  679</span>&#160;        CoordinateSequenceIterator&lt;SequenceType, T&gt; end() {</div>
+<div class="line"><a name="l00680"></a><span class="lineno">  680</span>&#160;            <span class="keywordflow">return</span> {m_seq, m_seq-&gt;getSize()};</div>
+<div class="line"><a name="l00681"></a><span class="lineno">  681</span>&#160;        }</div>
+<div class="line"><a name="l00682"></a><span class="lineno">  682</span>&#160; </div>
+<div class="line"><a name="l00683"></a><span class="lineno">  683</span>&#160;        CoordinateSequenceIterator&lt;const SequenceType, typename std::add_const&lt;T&gt;::type&gt;</div>
+<div class="line"><a name="l00684"></a><span class="lineno">  684</span>&#160;        begin()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00685"></a><span class="lineno">  685</span>&#160;            <span class="keywordflow">return</span> CoordinateSequenceIterator&lt;const SequenceType, typename std::add_const&lt;T&gt;::type&gt;{m_seq};</div>
+<div class="line"><a name="l00686"></a><span class="lineno">  686</span>&#160;        }</div>
+<div class="line"><a name="l00687"></a><span class="lineno">  687</span>&#160; </div>
+<div class="line"><a name="l00688"></a><span class="lineno">  688</span>&#160;        CoordinateSequenceIterator&lt;const SequenceType, typename std::add_const&lt;T&gt;::type&gt;</div>
+<div class="line"><a name="l00689"></a><span class="lineno">  689</span>&#160;        end()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00690"></a><span class="lineno">  690</span>&#160;            <span class="keywordflow">return</span> CoordinateSequenceIterator&lt;const SequenceType, typename std::add_const&lt;T&gt;::type&gt;{m_seq, m_seq-&gt;getSize()};</div>
 <div class="line"><a name="l00691"></a><span class="lineno">  691</span>&#160;        }</div>
 <div class="line"><a name="l00692"></a><span class="lineno">  692</span>&#160; </div>
-<div class="line"><a name="l00693"></a><span class="lineno">  693</span>&#160;        CoordinateSequenceIterator&lt;SequenceType, T&gt; end() {</div>
-<div class="line"><a name="l00694"></a><span class="lineno">  694</span>&#160;            <span class="keywordflow">return</span> {m_seq, m_seq-&gt;getSize()};</div>
-<div class="line"><a name="l00695"></a><span class="lineno">  695</span>&#160;        }</div>
-<div class="line"><a name="l00696"></a><span class="lineno">  696</span>&#160; </div>
-<div class="line"><a name="l00697"></a><span class="lineno">  697</span>&#160;        CoordinateSequenceIterator&lt;const SequenceType, typename std::add_const&lt;T&gt;::type&gt;</div>
-<div class="line"><a name="l00698"></a><span class="lineno">  698</span>&#160;        begin()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00699"></a><span class="lineno">  699</span>&#160;            <span class="keywordflow">return</span> CoordinateSequenceIterator&lt;const SequenceType, typename std::add_const&lt;T&gt;::type&gt;{m_seq};</div>
-<div class="line"><a name="l00700"></a><span class="lineno">  700</span>&#160;        }</div>
-<div class="line"><a name="l00701"></a><span class="lineno">  701</span>&#160; </div>
-<div class="line"><a name="l00702"></a><span class="lineno">  702</span>&#160;        CoordinateSequenceIterator&lt;const SequenceType, typename std::add_const&lt;T&gt;::type&gt;</div>
-<div class="line"><a name="l00703"></a><span class="lineno">  703</span>&#160;        end()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00704"></a><span class="lineno">  704</span>&#160;            <span class="keywordflow">return</span> CoordinateSequenceIterator&lt;const SequenceType, typename std::add_const&lt;T&gt;::type&gt;{m_seq, m_seq-&gt;getSize()};</div>
-<div class="line"><a name="l00705"></a><span class="lineno">  705</span>&#160;        }</div>
+<div class="line"><a name="l00693"></a><span class="lineno">  693</span>&#160;        CoordinateSequenceIterator&lt;const SequenceType, typename std::add_const&lt;T&gt;::type&gt;</div>
+<div class="line"><a name="l00694"></a><span class="lineno">  694</span>&#160;        cbegin()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00695"></a><span class="lineno">  695</span>&#160;            <span class="keywordflow">return</span> CoordinateSequenceIterator&lt;const SequenceType, typename std::add_const&lt;T&gt;::type&gt;{m_seq};</div>
+<div class="line"><a name="l00696"></a><span class="lineno">  696</span>&#160;        }</div>
+<div class="line"><a name="l00697"></a><span class="lineno">  697</span>&#160; </div>
+<div class="line"><a name="l00698"></a><span class="lineno">  698</span>&#160;        CoordinateSequenceIterator&lt;const SequenceType, typename std::add_const&lt;T&gt;::type&gt;</div>
+<div class="line"><a name="l00699"></a><span class="lineno">  699</span>&#160;        cend()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00700"></a><span class="lineno">  700</span>&#160;            <span class="keywordflow">return</span> CoordinateSequenceIterator&lt;const SequenceType, typename std::add_const&lt;T&gt;::type&gt;{m_seq, m_seq-&gt;getSize()};</div>
+<div class="line"><a name="l00701"></a><span class="lineno">  701</span>&#160;        }</div>
+<div class="line"><a name="l00702"></a><span class="lineno">  702</span>&#160; </div>
+<div class="line"><a name="l00703"></a><span class="lineno">  703</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00704"></a><span class="lineno">  704</span>&#160;        SequenceType* m_seq;</div>
+<div class="line"><a name="l00705"></a><span class="lineno">  705</span>&#160;    };</div>
 <div class="line"><a name="l00706"></a><span class="lineno">  706</span>&#160; </div>
-<div class="line"><a name="l00707"></a><span class="lineno">  707</span>&#160;        CoordinateSequenceIterator&lt;const SequenceType, typename std::add_const&lt;T&gt;::type&gt;</div>
-<div class="line"><a name="l00708"></a><span class="lineno">  708</span>&#160;        cbegin()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00709"></a><span class="lineno">  709</span>&#160;            <span class="keywordflow">return</span> CoordinateSequenceIterator&lt;const SequenceType, typename std::add_const&lt;T&gt;::type&gt;{m_seq};</div>
-<div class="line"><a name="l00710"></a><span class="lineno">  710</span>&#160;        }</div>
+<div class="line"><a name="l00707"></a><span class="lineno">  707</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00708"></a><span class="lineno">  708</span>&#160;    Coordinates&lt;typename std::add_const&lt;T&gt;::type&gt; items()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00709"></a><span class="lineno">  709</span>&#160;        <span class="keywordflow">return</span> Coordinates&lt;typename std::add_const&lt;T&gt;::type&gt;(<span class="keyword">this</span>);</div>
+<div class="line"><a name="l00710"></a><span class="lineno">  710</span>&#160;    }</div>
 <div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160; </div>
-<div class="line"><a name="l00712"></a><span class="lineno">  712</span>&#160;        CoordinateSequenceIterator&lt;const SequenceType, typename std::add_const&lt;T&gt;::type&gt;</div>
-<div class="line"><a name="l00713"></a><span class="lineno">  713</span>&#160;        cend()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00714"></a><span class="lineno">  714</span>&#160;            <span class="keywordflow">return</span> CoordinateSequenceIterator&lt;const SequenceType, typename std::add_const&lt;T&gt;::type&gt;{m_seq, m_seq-&gt;getSize()};</div>
-<div class="line"><a name="l00715"></a><span class="lineno">  715</span>&#160;        }</div>
+<div class="line"><a name="l00712"></a><span class="lineno">  712</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00713"></a><span class="lineno">  713</span>&#160;    Coordinates&lt;T&gt; items() {</div>
+<div class="line"><a name="l00714"></a><span class="lineno">  714</span>&#160;        <span class="keywordflow">return</span> Coordinates&lt;T&gt;(<span class="keyword">this</span>);</div>
+<div class="line"><a name="l00715"></a><span class="lineno">  715</span>&#160;    }</div>
 <div class="line"><a name="l00716"></a><span class="lineno">  716</span>&#160; </div>
-<div class="line"><a name="l00717"></a><span class="lineno">  717</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00718"></a><span class="lineno">  718</span>&#160;        SequenceType* m_seq;</div>
-<div class="line"><a name="l00719"></a><span class="lineno">  719</span>&#160;    };</div>
-<div class="line"><a name="l00720"></a><span class="lineno">  720</span>&#160; </div>
-<div class="line"><a name="l00721"></a><span class="lineno">  721</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00722"></a><span class="lineno">  722</span>&#160;    Coordinates&lt;typename std::add_const&lt;T&gt;::type&gt; items()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00723"></a><span class="lineno">  723</span>&#160;        <span class="keywordflow">return</span> Coordinates&lt;typename std::add_const&lt;T&gt;::type&gt;(<span class="keyword">this</span>);</div>
-<div class="line"><a name="l00724"></a><span class="lineno">  724</span>&#160;    }</div>
-<div class="line"><a name="l00725"></a><span class="lineno">  725</span>&#160; </div>
-<div class="line"><a name="l00726"></a><span class="lineno">  726</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00727"></a><span class="lineno">  727</span>&#160;    Coordinates&lt;T&gt; items() {</div>
-<div class="line"><a name="l00728"></a><span class="lineno">  728</span>&#160;        <span class="keywordflow">return</span> Coordinates&lt;T&gt;(<span class="keyword">this</span>);</div>
-<div class="line"><a name="l00729"></a><span class="lineno">  729</span>&#160;    }</div>
+<div class="line"><a name="l00717"></a><span class="lineno">  717</span>&#160; </div>
+<div class="line"><a name="l00719"></a><span class="lineno">  719</span>&#160; </div>
+<div class="line"><a name="l00720"></a><span class="lineno">  720</span>&#160;    <span class="keywordtype">double</span>* data() {</div>
+<div class="line"><a name="l00721"></a><span class="lineno">  721</span>&#160;        <span class="keywordflow">return</span> m_vect.data();</div>
+<div class="line"><a name="l00722"></a><span class="lineno">  722</span>&#160;    }</div>
+<div class="line"><a name="l00723"></a><span class="lineno">  723</span>&#160; </div>
+<div class="line"><a name="l00724"></a><span class="lineno">  724</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">double</span>* data()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00725"></a><span class="lineno">  725</span>&#160;        <span class="keywordflow">return</span> m_vect.data();</div>
+<div class="line"><a name="l00726"></a><span class="lineno">  726</span>&#160;    }</div>
+<div class="line"><a name="l00727"></a><span class="lineno">  727</span>&#160; </div>
+<div class="line"><a name="l00728"></a><span class="lineno">  728</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00729"></a><span class="lineno">  729</span>&#160;    std::vector&lt;double&gt; m_vect; <span class="comment">// Vector to store values</span></div>
 <div class="line"><a name="l00730"></a><span class="lineno">  730</span>&#160; </div>
-<div class="line"><a name="l00731"></a><span class="lineno">  731</span>&#160; </div>
-<div class="line"><a name="l00733"></a><span class="lineno">  733</span>&#160; </div>
-<div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160;    <span class="keywordtype">double</span>* data() {</div>
-<div class="line"><a name="l00735"></a><span class="lineno">  735</span>&#160;        <span class="keywordflow">return</span> m_vect.data();</div>
-<div class="line"><a name="l00736"></a><span class="lineno">  736</span>&#160;    }</div>
-<div class="line"><a name="l00737"></a><span class="lineno">  737</span>&#160; </div>
-<div class="line"><a name="l00738"></a><span class="lineno">  738</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">double</span>* data()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00739"></a><span class="lineno">  739</span>&#160;        <span class="keywordflow">return</span> m_vect.data();</div>
-<div class="line"><a name="l00740"></a><span class="lineno">  740</span>&#160;    }</div>
-<div class="line"><a name="l00741"></a><span class="lineno">  741</span>&#160; </div>
-<div class="line"><a name="l00742"></a><span class="lineno">  742</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00743"></a><span class="lineno">  743</span>&#160;    std::vector&lt;double&gt; m_vect; <span class="comment">// Vector to store values</span></div>
-<div class="line"><a name="l00744"></a><span class="lineno">  744</span>&#160; </div>
-<div class="line"><a name="l00745"></a><span class="lineno">  745</span>&#160;    uint8_t m_stride;           <span class="comment">// Stride of stored values, corresponding to underlying type</span></div>
+<div class="line"><a name="l00731"></a><span class="lineno">  731</span>&#160;    uint8_t m_stride;           <span class="comment">// Stride of stored values, corresponding to underlying type</span></div>
+<div class="line"><a name="l00732"></a><span class="lineno">  732</span>&#160; </div>
+<div class="line"><a name="l00733"></a><span class="lineno">  733</span>&#160;    <span class="keyword">mutable</span> <span class="keywordtype">bool</span> m_hasdim;      <span class="comment">// Has the dimension of this sequence been determined? Or was it created with no</span></div>
+<div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160;                                <span class="comment">// explicit dimensionality, and we&#39;re waiting for getDimension() to be called</span></div>
+<div class="line"><a name="l00735"></a><span class="lineno">  735</span>&#160;                                <span class="comment">// after some coordinates have been added?</span></div>
+<div class="line"><a name="l00736"></a><span class="lineno">  736</span>&#160;    <span class="keyword">mutable</span> <span class="keywordtype">bool</span> m_hasz;</div>
+<div class="line"><a name="l00737"></a><span class="lineno">  737</span>&#160;    <span class="keywordtype">bool</span> m_hasm;</div>
+<div class="line"><a name="l00738"></a><span class="lineno">  738</span>&#160; </div>
+<div class="line"><a name="l00739"></a><span class="lineno">  739</span>&#160;    <span class="keywordtype">void</span> initialize();</div>
+<div class="line"><a name="l00740"></a><span class="lineno">  740</span>&#160; </div>
+<div class="line"><a name="l00741"></a><span class="lineno">  741</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T1, <span class="keyword">typename</span> T2&gt;</div>
+<div class="line"><a name="l00742"></a><span class="lineno">  742</span>&#160;    <span class="keywordtype">void</span> setAtImpl(<span class="keyword">const</span> T2&amp; c, std::size_t pos) {</div>
+<div class="line"><a name="l00743"></a><span class="lineno">  743</span>&#160;        <span class="keyword">auto</span>&amp; orig = getAt&lt;T1&gt;(pos);</div>
+<div class="line"><a name="l00744"></a><span class="lineno">  744</span>&#160;        orig = c;</div>
+<div class="line"><a name="l00745"></a><span class="lineno">  745</span>&#160;    }</div>
 <div class="line"><a name="l00746"></a><span class="lineno">  746</span>&#160; </div>
-<div class="line"><a name="l00747"></a><span class="lineno">  747</span>&#160;    <span class="keyword">mutable</span> <span class="keywordtype">bool</span> m_hasdim;      <span class="comment">// Has the dimension of this sequence been determined? Or was it created with no</span></div>
-<div class="line"><a name="l00748"></a><span class="lineno">  748</span>&#160;                                <span class="comment">// explicit dimensionality, and we&#39;re waiting for getDimension() to be called</span></div>
-<div class="line"><a name="l00749"></a><span class="lineno">  749</span>&#160;                                <span class="comment">// after some coordinates have been added?</span></div>
-<div class="line"><a name="l00750"></a><span class="lineno">  750</span>&#160;    <span class="keyword">mutable</span> <span class="keywordtype">bool</span> m_hasz;</div>
-<div class="line"><a name="l00751"></a><span class="lineno">  751</span>&#160;    <span class="keywordtype">bool</span> m_hasm;</div>
+<div class="line"><a name="l00747"></a><span class="lineno">  747</span>&#160;    <span class="keywordtype">void</span> make_space(std::size_t pos, std::size_t n) {</div>
+<div class="line"><a name="l00748"></a><span class="lineno">  748</span>&#160;        m_vect.insert(std::next(m_vect.begin(), <span class="keyword">static_cast&lt;</span>std::ptrdiff_t<span class="keyword">&gt;</span>(pos * stride())),</div>
+<div class="line"><a name="l00749"></a><span class="lineno">  749</span>&#160;                      m_stride * n,</div>
+<div class="line"><a name="l00750"></a><span class="lineno">  750</span>&#160;                      DoubleNotANumber);</div>
+<div class="line"><a name="l00751"></a><span class="lineno">  751</span>&#160;    }</div>
 <div class="line"><a name="l00752"></a><span class="lineno">  752</span>&#160; </div>
-<div class="line"><a name="l00753"></a><span class="lineno">  753</span>&#160;    <span class="keywordtype">void</span> initialize();</div>
-<div class="line"><a name="l00754"></a><span class="lineno">  754</span>&#160; </div>
-<div class="line"><a name="l00755"></a><span class="lineno">  755</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T1, <span class="keyword">typename</span> T2&gt;</div>
-<div class="line"><a name="l00756"></a><span class="lineno">  756</span>&#160;    <span class="keywordtype">void</span> setAtImpl(<span class="keyword">const</span> T2&amp; c, std::size_t pos) {</div>
-<div class="line"><a name="l00757"></a><span class="lineno">  757</span>&#160;        <span class="keyword">auto</span>&amp; orig = getAt&lt;T1&gt;(pos);</div>
-<div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160;        orig = c;</div>
-<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;    }</div>
+<div class="line"><a name="l00753"></a><span class="lineno">  753</span>&#160;    std::uint8_t stride()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00754"></a><span class="lineno">  754</span>&#160;        <span class="keywordflow">return</span> m_stride;</div>
+<div class="line"><a name="l00755"></a><span class="lineno">  755</span>&#160;    }</div>
+<div class="line"><a name="l00756"></a><span class="lineno">  756</span>&#160; </div>
+<div class="line"><a name="l00757"></a><span class="lineno">  757</span>&#160;};</div>
+<div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160; </div>
+<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;GEOS_DLL std::ostream&amp; operator&lt;&lt; (std::ostream&amp; os, <span class="keyword">const</span> CoordinateSequence&amp; cs);</div>
 <div class="line"><a name="l00760"></a><span class="lineno">  760</span>&#160; </div>
-<div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160;    <span class="keywordtype">void</span> make_space(std::size_t pos, std::size_t n) {</div>
-<div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160;        m_vect.insert(std::next(m_vect.begin(), <span class="keyword">static_cast&lt;</span>std::ptrdiff_t<span class="keyword">&gt;</span>(pos * stride())),</div>
-<div class="line"><a name="l00763"></a><span class="lineno">  763</span>&#160;                      m_stride * n,</div>
-<div class="line"><a name="l00764"></a><span class="lineno">  764</span>&#160;                      DoubleNotANumber);</div>
-<div class="line"><a name="l00765"></a><span class="lineno">  765</span>&#160;    }</div>
-<div class="line"><a name="l00766"></a><span class="lineno">  766</span>&#160; </div>
-<div class="line"><a name="l00767"></a><span class="lineno">  767</span>&#160;    std::uint8_t stride()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00768"></a><span class="lineno">  768</span>&#160;        <span class="keywordflow">return</span> m_stride;</div>
-<div class="line"><a name="l00769"></a><span class="lineno">  769</span>&#160;    }</div>
-<div class="line"><a name="l00770"></a><span class="lineno">  770</span>&#160; </div>
-<div class="line"><a name="l00771"></a><span class="lineno">  771</span>&#160;};</div>
-<div class="line"><a name="l00772"></a><span class="lineno">  772</span>&#160; </div>
-<div class="line"><a name="l00773"></a><span class="lineno">  773</span>&#160;GEOS_DLL std::ostream&amp; operator&lt;&lt; (std::ostream&amp; os, <span class="keyword">const</span> CoordinateSequence&amp; cs);</div>
-<div class="line"><a name="l00774"></a><span class="lineno">  774</span>&#160; </div>
-<div class="line"><a name="l00775"></a><span class="lineno">  775</span>&#160;GEOS_DLL <span class="keywordtype">bool</span> operator== (<span class="keyword">const</span> CoordinateSequence&amp; s1, <span class="keyword">const</span> CoordinateSequence&amp; s2);</div>
-<div class="line"><a name="l00776"></a><span class="lineno">  776</span>&#160; </div>
-<div class="line"><a name="l00777"></a><span class="lineno">  777</span>&#160;GEOS_DLL <span class="keywordtype">bool</span> operator!= (<span class="keyword">const</span> CoordinateSequence&amp; s1, <span class="keyword">const</span> CoordinateSequence&amp; s2);</div>
-<div class="line"><a name="l00778"></a><span class="lineno">  778</span>&#160; </div>
-<div class="line"><a name="l00779"></a><span class="lineno">  779</span>&#160;} <span class="comment">// namespace geos::geom</span></div>
-<div class="line"><a name="l00780"></a><span class="lineno">  780</span>&#160;} <span class="comment">// namespace geos</span></div>
-<div class="line"><a name="l00781"></a><span class="lineno">  781</span>&#160; </div>
+<div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160;GEOS_DLL <span class="keywordtype">bool</span> operator== (<span class="keyword">const</span> CoordinateSequence&amp; s1, <span class="keyword">const</span> CoordinateSequence&amp; s2);</div>
+<div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160; </div>
+<div class="line"><a name="l00763"></a><span class="lineno">  763</span>&#160;GEOS_DLL <span class="keywordtype">bool</span> operator!= (<span class="keyword">const</span> CoordinateSequence&amp; s1, <span class="keyword">const</span> CoordinateSequence&amp; s2);</div>
+<div class="line"><a name="l00764"></a><span class="lineno">  764</span>&#160; </div>
+<div class="line"><a name="l00765"></a><span class="lineno">  765</span>&#160;} <span class="comment">// namespace geos::geom</span></div>
+<div class="line"><a name="l00766"></a><span class="lineno">  766</span>&#160;} <span class="comment">// namespace geos</span></div>
+<div class="line"><a name="l00767"></a><span class="lineno">  767</span>&#160; </div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequence_html"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequence.html">geos::geom::CoordinateSequence</a></div><div class="ttdoc">The internal representation of a list of coordinates inside a Geometry.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:56</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a></div><div class="ttdoc">Coordinate is the lightweight class used to store coordinates.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:216</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Envelope_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Envelope.html">geos::geom::Envelope</a></div><div class="ttdoc">An Envelope defines a rectangulare region of the 2D coordinate plane.</div><div class="ttdef"><b>Definition:</b> Envelope.h:58</div></div>
 <div class="ttc" id="agroup__access_html_ga3be70d74c163ee237ee0786e2058ac8c"><div class="ttname"><a href="group__access.html#ga3be70d74c163ee237ee0786e2058ac8c">geos::geom::CoordinateSequence::toVector</a></div><div class="ttdeci">void toVector(std::vector&lt; Coordinate &gt; &amp;coords) const</div><div class="ttdoc">Pushes all Coordinates of this sequence into the provided vector.</div></div>
-<div class="ttc" id="agroup__access_html_ga4152a6b33f8b83897b8df829adb0e4ef"><div class="ttname"><a href="group__access.html#ga4152a6b33f8b83897b8df829adb0e4ef">geos::geom::CoordinateSequence::getAt</a></div><div class="ttdeci">T &amp; getAt(std::size_t i)</div><div class="ttdoc">Returns a reference to Coordinate at position i.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:275</div></div>
-<div class="ttc" id="agroup__access_html_ga47fa2c2296f7b23175791ff9eb87a7a3"><div class="ttname"><a href="group__access.html#ga47fa2c2296f7b23175791ff9eb87a7a3">geos::geom::CoordinateSequence::back</a></div><div class="ttdeci">T &amp; back()</div><div class="ttdoc">Return last Coordinate in the sequence.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:363</div></div>
+<div class="ttc" id="agroup__access_html_ga4152a6b33f8b83897b8df829adb0e4ef"><div class="ttname"><a href="group__access.html#ga4152a6b33f8b83897b8df829adb0e4ef">geos::geom::CoordinateSequence::getAt</a></div><div class="ttdeci">T &amp; getAt(std::size_t i)</div><div class="ttdoc">Returns a reference to Coordinate at position i.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:261</div></div>
+<div class="ttc" id="agroup__access_html_ga47fa2c2296f7b23175791ff9eb87a7a3"><div class="ttname"><a href="group__access.html#ga47fa2c2296f7b23175791ff9eb87a7a3">geos::geom::CoordinateSequence::back</a></div><div class="ttdeci">T &amp; back()</div><div class="ttdoc">Return last Coordinate in the sequence.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:349</div></div>
 <div class="ttc" id="agroup__access_html_ga4f0bb3d886e036e5f2a26620b7bea63b"><div class="ttname"><a href="group__access.html#ga4f0bb3d886e036e5f2a26620b7bea63b">geos::geom::CoordinateSequence::getOrdinate</a></div><div class="ttdeci">double getOrdinate(std::size_t index, std::size_t ordinateIndex) const</div></div>
-<div class="ttc" id="agroup__access_html_ga755282f2708362f581f1bb2bb2a57fca"><div class="ttname"><a href="group__access.html#ga755282f2708362f581f1bb2bb2a57fca">geos::geom::CoordinateSequence::front</a></div><div class="ttdeci">T &amp; front()</div><div class="ttdoc">Return first Coordinate in the sequence.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:377</div></div>
-<div class="ttc" id="agroup__access_html_ga75ca961fcb621b141c39e81fca70f62c"><div class="ttname"><a href="group__access.html#ga75ca961fcb621b141c39e81fca70f62c">geos::geom::CoordinateSequence::front</a></div><div class="ttdeci">const T &amp; front() const</div><div class="ttdoc">Return first Coordinate in the sequence.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:370</div></div>
-<div class="ttc" id="agroup__access_html_ga83ee824a5f6d8b1322ea0ea539d9e0bc"><div class="ttname"><a href="group__access.html#ga83ee824a5f6d8b1322ea0ea539d9e0bc">geos::geom::CoordinateSequence::getAt</a></div><div class="ttdeci">void getAt(std::size_t i, T &amp;c) const</div><div class="ttdoc">Write Coordinate at position i to given Coordinate.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:287</div></div>
-<div class="ttc" id="agroup__access_html_gaa1bbf3593a22cb34dc59aeb42206bdaf"><div class="ttname"><a href="group__access.html#gaa1bbf3593a22cb34dc59aeb42206bdaf">geos::geom::CoordinateSequence::back</a></div><div class="ttdeci">const T &amp; back() const</div><div class="ttdoc">Return last Coordinate in the sequence.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:356</div></div>
-<div class="ttc" id="agroup__access_html_gac01cfaddbe448affadfefa50eaea9d8e"><div class="ttname"><a href="group__access.html#gac01cfaddbe448affadfefa50eaea9d8e">geos::geom::CoordinateSequence::operator[]</a></div><div class="ttdeci">const Coordinate &amp; operator[](std::size_t i) const</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:305</div></div>
-<div class="ttc" id="agroup__access_html_gac8256373579d4568e0920a69969c1296"><div class="ttname"><a href="group__access.html#gac8256373579d4568e0920a69969c1296">geos::geom::CoordinateSequence::getAt</a></div><div class="ttdeci">const T &amp; getAt(std::size_t i) const</div><div class="ttdoc">Returns a read-only reference to Coordinate at position i.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:263</div></div>
-<div class="ttc" id="agroup__access_html_gadc750ec82bcc62a5c9a358826b1c7f2f"><div class="ttname"><a href="group__access.html#gadc750ec82bcc62a5c9a358826b1c7f2f">geos::geom::CoordinateSequence::getX</a></div><div class="ttdeci">double getX(std::size_t index) const</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:338</div></div>
-<div class="ttc" id="agroup__access_html_gadde8b64f4e22635a7917cc38b1270164"><div class="ttname"><a href="group__access.html#gadde8b64f4e22635a7917cc38b1270164">geos::geom::CoordinateSequence::operator[]</a></div><div class="ttdeci">Coordinate &amp; operator[](std::size_t i)</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:315</div></div>
-<div class="ttc" id="agroup__access_html_gaedc561083d2e5ee9ed2d1912c3395eed"><div class="ttname"><a href="group__access.html#gaedc561083d2e5ee9ed2d1912c3395eed">geos::geom::CoordinateSequence::getY</a></div><div class="ttdeci">double getY(std::size_t index) const</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:349</div></div>
-<div class="ttc" id="agroup__add_html_ga6bb200879c236e234d4ba6ac78bd5a18"><div class="ttname"><a href="group__add.html#ga6bb200879c236e234d4ba6ac78bd5a18">geos::geom::CoordinateSequence::add</a></div><div class="ttdeci">void add(const T &amp;c, bool allowRepeated)</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:437</div></div>
-<div class="ttc" id="agroup__add_html_ga798d63a907608a3379f54588736620c7"><div class="ttname"><a href="group__add.html#ga798d63a907608a3379f54588736620c7">geos::geom::CoordinateSequence::add</a></div><div class="ttdeci">void add(std::size_t i, const T &amp;coord, bool allowRepeated)</div><div class="ttdoc">Inserts the specified coordinate at the specified position in this list.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:484</div></div>
-<div class="ttc" id="agroup__add_html_ga9fa8f1bf92b1e6f28f64d6d5a4750f0b"><div class="ttname"><a href="group__add.html#ga9fa8f1bf92b1e6f28f64d6d5a4750f0b">geos::geom::CoordinateSequence::add</a></div><div class="ttdeci">void add(const T &amp;c)</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:426</div></div>
-<div class="ttc" id="agroup__add_html_gaa999bccc601bc2ebe80ba98ef0a0e058"><div class="ttname"><a href="group__add.html#gaa999bccc601bc2ebe80ba98ef0a0e058">geos::geom::CoordinateSequence::add</a></div><div class="ttdeci">void add(const T &amp;c, std::size_t pos)</div><div class="ttdoc">Inserts the specified coordinate at the specified position in this sequence. If multiple coordinates ...</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:458</div></div>
+<div class="ttc" id="agroup__access_html_ga755282f2708362f581f1bb2bb2a57fca"><div class="ttname"><a href="group__access.html#ga755282f2708362f581f1bb2bb2a57fca">geos::geom::CoordinateSequence::front</a></div><div class="ttdeci">T &amp; front()</div><div class="ttdoc">Return first Coordinate in the sequence.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:363</div></div>
+<div class="ttc" id="agroup__access_html_ga75ca961fcb621b141c39e81fca70f62c"><div class="ttname"><a href="group__access.html#ga75ca961fcb621b141c39e81fca70f62c">geos::geom::CoordinateSequence::front</a></div><div class="ttdeci">const T &amp; front() const</div><div class="ttdoc">Return first Coordinate in the sequence.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:356</div></div>
+<div class="ttc" id="agroup__access_html_ga83ee824a5f6d8b1322ea0ea539d9e0bc"><div class="ttname"><a href="group__access.html#ga83ee824a5f6d8b1322ea0ea539d9e0bc">geos::geom::CoordinateSequence::getAt</a></div><div class="ttdeci">void getAt(std::size_t i, T &amp;c) const</div><div class="ttdoc">Write Coordinate at position i to given Coordinate.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:273</div></div>
+<div class="ttc" id="agroup__access_html_gaa1bbf3593a22cb34dc59aeb42206bdaf"><div class="ttname"><a href="group__access.html#gaa1bbf3593a22cb34dc59aeb42206bdaf">geos::geom::CoordinateSequence::back</a></div><div class="ttdeci">const T &amp; back() const</div><div class="ttdoc">Return last Coordinate in the sequence.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:342</div></div>
+<div class="ttc" id="agroup__access_html_gac01cfaddbe448affadfefa50eaea9d8e"><div class="ttname"><a href="group__access.html#gac01cfaddbe448affadfefa50eaea9d8e">geos::geom::CoordinateSequence::operator[]</a></div><div class="ttdeci">const Coordinate &amp; operator[](std::size_t i) const</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:291</div></div>
+<div class="ttc" id="agroup__access_html_gac8256373579d4568e0920a69969c1296"><div class="ttname"><a href="group__access.html#gac8256373579d4568e0920a69969c1296">geos::geom::CoordinateSequence::getAt</a></div><div class="ttdeci">const T &amp; getAt(std::size_t i) const</div><div class="ttdoc">Returns a read-only reference to Coordinate at position i.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:249</div></div>
+<div class="ttc" id="agroup__access_html_gadc750ec82bcc62a5c9a358826b1c7f2f"><div class="ttname"><a href="group__access.html#gadc750ec82bcc62a5c9a358826b1c7f2f">geos::geom::CoordinateSequence::getX</a></div><div class="ttdeci">double getX(std::size_t index) const</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:324</div></div>
+<div class="ttc" id="agroup__access_html_gadde8b64f4e22635a7917cc38b1270164"><div class="ttname"><a href="group__access.html#gadde8b64f4e22635a7917cc38b1270164">geos::geom::CoordinateSequence::operator[]</a></div><div class="ttdeci">Coordinate &amp; operator[](std::size_t i)</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:301</div></div>
+<div class="ttc" id="agroup__access_html_gaedc561083d2e5ee9ed2d1912c3395eed"><div class="ttname"><a href="group__access.html#gaedc561083d2e5ee9ed2d1912c3395eed">geos::geom::CoordinateSequence::getY</a></div><div class="ttdeci">double getY(std::size_t index) const</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:335</div></div>
+<div class="ttc" id="agroup__add_html_ga6bb200879c236e234d4ba6ac78bd5a18"><div class="ttname"><a href="group__add.html#ga6bb200879c236e234d4ba6ac78bd5a18">geos::geom::CoordinateSequence::add</a></div><div class="ttdeci">void add(const T &amp;c, bool allowRepeated)</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:423</div></div>
+<div class="ttc" id="agroup__add_html_ga798d63a907608a3379f54588736620c7"><div class="ttname"><a href="group__add.html#ga798d63a907608a3379f54588736620c7">geos::geom::CoordinateSequence::add</a></div><div class="ttdeci">void add(std::size_t i, const T &amp;coord, bool allowRepeated)</div><div class="ttdoc">Inserts the specified coordinate at the specified position in this list.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:470</div></div>
+<div class="ttc" id="agroup__add_html_ga9fa8f1bf92b1e6f28f64d6d5a4750f0b"><div class="ttname"><a href="group__add.html#ga9fa8f1bf92b1e6f28f64d6d5a4750f0b">geos::geom::CoordinateSequence::add</a></div><div class="ttdeci">void add(const T &amp;c)</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:412</div></div>
+<div class="ttc" id="agroup__add_html_gaa999bccc601bc2ebe80ba98ef0a0e058"><div class="ttname"><a href="group__add.html#gaa999bccc601bc2ebe80ba98ef0a0e058">geos::geom::CoordinateSequence::add</a></div><div class="ttdeci">void add(const T &amp;c, std::size_t pos)</div><div class="ttdoc">Inserts the specified coordinate at the specified position in this sequence. If multiple coordinates ...</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:444</div></div>
 <div class="ttc" id="agroup__construct_html_ga1152c9784b410473ef3d355a3cadbfe1"><div class="ttname"><a href="group__construct.html#ga1152c9784b410473ef3d355a3cadbfe1">geos::geom::CoordinateSequence::CoordinateSequence</a></div><div class="ttdeci">CoordinateSequence(const std::initializer_list&lt; CoordinateXYZM &gt; &amp;)</div></div>
 <div class="ttc" id="agroup__construct_html_ga1930c9f651dcb5ed97efc2d1ac40486a"><div class="ttname"><a href="group__construct.html#ga1930c9f651dcb5ed97efc2d1ac40486a">geos::geom::CoordinateSequence::XYM</a></div><div class="ttdeci">static CoordinateSequence XYM(std::size_t size)</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:155</div></div>
 <div class="ttc" id="agroup__construct_html_ga1b13a3f46e2cd29c977d413f978b7d0d"><div class="ttname"><a href="group__construct.html#ga1b13a3f46e2cd29c977d413f978b7d0d">geos::geom::CoordinateSequence::CoordinateSequence</a></div><div class="ttdeci">CoordinateSequence(const std::initializer_list&lt; CoordinateXY &gt; &amp;)</div></div>
@@ -611,14 +598,13 @@ $(function() {
 <div class="ttc" id="agroup__construct_html_gae393d391d965183ec6f803c890c29d54"><div class="ttname"><a href="group__construct.html#gae393d391d965183ec6f803c890c29d54">geos::geom::CoordinateSequence::CoordinateSequence</a></div><div class="ttdeci">CoordinateSequence(const std::initializer_list&lt; Coordinate &gt; &amp;)</div></div>
 <div class="ttc" id="agroup__mutate_html_ga4cdec235879fc02491ac44ba377f8d52"><div class="ttname"><a href="group__mutate.html#ga4cdec235879fc02491ac44ba377f8d52">geos::geom::CoordinateSequence::setOrdinate</a></div><div class="ttdeci">void setOrdinate(std::size_t index, std::size_t ordinateIndex, double value)</div></div>
 <div class="ttc" id="agroup__mutate_html_ga55b7f07173fed6b48eae8f045064aa34"><div class="ttname"><a href="group__mutate.html#ga55b7f07173fed6b48eae8f045064aa34">geos::geom::CoordinateSequence::setPoints</a></div><div class="ttdeci">void setPoints(const std::vector&lt; Coordinate &gt; &amp;v)</div><div class="ttdoc">Substitute Coordinate list with a copy of the given vector.</div></div>
-<div class="ttc" id="agroup__mutate_html_ga8e7e357116832e340ba1e4b35ddba6b3"><div class="ttname"><a href="group__mutate.html#ga8e7e357116832e340ba1e4b35ddba6b3">geos::geom::CoordinateSequence::setAt</a></div><div class="ttdeci">void setAt(const T &amp;c, std::size_t pos)</div><div class="ttdoc">Copy Coordinate c to position pos.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:394</div></div>
+<div class="ttc" id="agroup__mutate_html_ga8e7e357116832e340ba1e4b35ddba6b3"><div class="ttname"><a href="group__mutate.html#ga8e7e357116832e340ba1e4b35ddba6b3">geos::geom::CoordinateSequence::setAt</a></div><div class="ttdeci">void setAt(const T &amp;c, std::size_t pos)</div><div class="ttdoc">Copy Coordinate c to position pos.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:380</div></div>
 <div class="ttc" id="agroup__prop_html_ga2255ef6f65c1fe9159820ffa5256b33a"><div class="ttname"><a href="group__prop.html#ga2255ef6f65c1fe9159820ffa5256b33a">geos::geom::CoordinateSequence::getSize</a></div><div class="ttdeci">std::size_t getSize() const</div><div class="ttdoc">Returns the number of Coordinates.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:178</div></div>
 <div class="ttc" id="agroup__prop_html_ga256f09c71a46c1c079b3bfd781fd6329"><div class="ttname"><a href="group__prop.html#ga256f09c71a46c1c079b3bfd781fd6329">geos::geom::CoordinateSequence::getEnvelope</a></div><div class="ttdeci">Envelope getEnvelope() const</div></div>
 <div class="ttc" id="agroup__prop_html_ga6c3c8170fb1bd1313c9f40b582048be0"><div class="ttname"><a href="group__prop.html#ga6c3c8170fb1bd1313c9f40b582048be0">geos::geom::CoordinateSequence::hasRepeatedOrInvalidPoints</a></div><div class="ttdeci">bool hasRepeatedOrInvalidPoints() const</div><div class="ttdoc">Returns true if contains any NaN/Inf coordinates.</div></div>
 <div class="ttc" id="agroup__prop_html_ga885b821fe2928633cd6de16474dee54c"><div class="ttname"><a href="group__prop.html#ga885b821fe2928633cd6de16474dee54c">geos::geom::CoordinateSequence::size</a></div><div class="ttdeci">size_t size() const</div><div class="ttdoc">Returns the number of Coordinates.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:185</div></div>
-<div class="ttc" id="agroup__prop_html_ga95200b5645cd6b5919ff30d6b9e22dac"><div class="ttname"><a href="group__prop.html#ga95200b5645cd6b5919ff30d6b9e22dac">geos::geom::CoordinateSequence::isNullPoint</a></div><div class="ttdeci">bool isNullPoint() const</div><div class="ttdoc">Returns true if there is 1 coordinate and if it is null.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:201</div></div>
 <div class="ttc" id="agroup__prop_html_ga9d18ad27b99881dcf2282a2b5ee7a003"><div class="ttname"><a href="group__prop.html#ga9d18ad27b99881dcf2282a2b5ee7a003">geos::geom::CoordinateSequence::hasRepeatedPoints</a></div><div class="ttdeci">bool hasRepeatedPoints() const</div><div class="ttdoc">Returns true if contains any two consecutive points.</div></div>
-<div class="ttc" id="agroup__prop_html_gaa8ff355f1567a5b910cdff2f9181976e"><div class="ttname"><a href="group__prop.html#gaa8ff355f1567a5b910cdff2f9181976e">geos::geom::CoordinateSequence::getCoordinateType</a></div><div class="ttdeci">CoordinateType getCoordinateType() const</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:247</div></div>
+<div class="ttc" id="agroup__prop_html_gaa8ff355f1567a5b910cdff2f9181976e"><div class="ttname"><a href="group__prop.html#gaa8ff355f1567a5b910cdff2f9181976e">geos::geom::CoordinateSequence::getCoordinateType</a></div><div class="ttdeci">CoordinateType getCoordinateType() const</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:233</div></div>
 <div class="ttc" id="agroup__prop_html_gab726c5b705885c57f54273280225828f"><div class="ttname"><a href="group__prop.html#gab726c5b705885c57f54273280225828f">geos::geom::CoordinateSequence::isEmpty</a></div><div class="ttdeci">bool isEmpty() const</div><div class="ttdoc">Returns true if list contains no coordinates.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:196</div></div>
 <div class="ttc" id="agroup__prop_html_gabaeb1320a591615a4907cc6929f42e15"><div class="ttname"><a href="group__prop.html#gabaeb1320a591615a4907cc6929f42e15">geos::geom::CoordinateSequence::isRing</a></div><div class="ttdeci">bool isRing() const</div><div class="ttdoc">Tests whether an a CoordinateSequence forms a ring, by checking length and closure....</div></div>
 <div class="ttc" id="agroup__prop_html_gad396612f604ab2cb228e8526abb1b0c4"><div class="ttname"><a href="group__prop.html#gad396612f604ab2cb228e8526abb1b0c4">geos::geom::CoordinateSequence::getDimension</a></div><div class="ttdeci">std::size_t getDimension() const</div></div>
