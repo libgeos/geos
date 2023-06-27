@@ -1,5 +1,5 @@
 ## Changes in 3.12.0
-xxxx-xx-xx
+2023-06-27
 
 - New things:
   - C++14 is now required.
