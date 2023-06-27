@@ -1898,6 +1898,19 @@ extern void GEOS_DLL GEOSWKTWriter_setOld3D_r(
     GEOSWKTWriter *writer,
     int useOld3D);
 
+/** Print the shortest representation of a double using fixed notation.
+ * Only works for numbers smaller than 1e17 (absolute value).
+ * \param d The number to format.
+ * \param precision The desired precision. (max digits after decimal point)
+ * \param result The buffer to write the result to.
+ * \return the length of the written string.
+ */
+extern int GEOS_DLL GEOS_printDouble(
+    double d,
+    unsigned int precision,
+    char *result
+);
+
 /* ========== WKB Reader ========== */
 
 /** \see GEOSWKBReader_create */

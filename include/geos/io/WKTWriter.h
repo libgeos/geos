@@ -195,6 +195,9 @@ public:
      */
     void setOutputDimension(uint8_t newOutputDimension);
 
+    static std::string writeNumber(double d, bool trim, uint32_t precision);
+    static int writeTrimmedNumber(double d, uint32_t precision, char* buf);
+
 protected:
 
     int decimalPlaces;

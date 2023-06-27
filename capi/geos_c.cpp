@@ -1443,6 +1443,11 @@ extern "C" {
         GEOSWKBWriter_setIncludeSRID_r(handle, writer, newIncludeSRID);
     }
 
+    int
+    GEOS_printDouble(double d, unsigned int precision, char *result) {
+        return WKTWriter::writeTrimmedNumber(d, precision, result);
+    }
+
     /* GeoJSON Reader */
     GeoJSONReader*
     GEOSGeoJSONReader_create()

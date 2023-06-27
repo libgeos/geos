@@ -404,18 +404,21 @@ WKTWriter::appendSequenceText(const CoordinateSequence& seq,
     }
 }
 
-/* protected */
-std::string
-WKTWriter::writeNumber(double d) const
+int 
+WKTWriter::writeTrimmedNumber(double d, uint32_t precision, char* buf)
 {
-    uint32_t precision = decimalPlaces >= 0 ? static_cast<std::uint32_t>(decimalPlaces) : 0;
+    return geos_d2sfixed_buffered_n(d, precision, buf);
+}
+
+std::string
+WKTWriter::writeNumber(double d, bool trim, uint32_t precision) {
     /*
     * For a "trimmed" result, with no trailing zeros we use
     * the ryu library.
     */
     if (trim) {
         char buf[128];
-        int len = geos_d2sfixed_buffered_n(d, precision, buf);
+        int len = writeTrimmedNumber(d, precision, buf);
         buf[len] = '\0';
         std::string s(buf);
         return s;
@@ -431,6 +434,14 @@ WKTWriter::writeNumber(double d) const
         ss << d;
         return ss.str();
     }
+}
+
+/* protected */
+std::string
+WKTWriter::writeNumber(double d) const
+{
+    uint32_t precision = decimalPlaces >= 0 ? static_cast<std::uint32_t>(decimalPlaces) : 0;
+    return writeNumber(d, trim, precision);
 }
 
 void
