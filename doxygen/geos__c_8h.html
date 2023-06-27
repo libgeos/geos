@@ -614,6 +614,8 @@ Functions</h2></td></tr>
 <tr class="separator:ab880bef64b333fc6e3e0903b404fc69f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a19255d4c0ae2511a8270680f584ef2e0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a19255d4c0ae2511a8270680f584ef2e0">GEOSWKTWriter_setOld3D_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle, <a class="el" href="geos__c_8h.html#a664daad6642852a44dac7a51320f8b66">GEOSWKTWriter</a> *writer, int useOld3D)</td></tr>
 <tr class="separator:a19255d4c0ae2511a8270680f584ef2e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a143ca93693050c42a964a3d311409839"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a143ca93693050c42a964a3d311409839">GEOS_printDouble</a> (double d, unsigned int precision, char *result)</td></tr>
+<tr class="separator:a143ca93693050c42a964a3d311409839"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6c6c66ac349741cf9d3a3a79c6d6bb6f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a1b8d454eb2cf3e6f20d0eaf374592e41">GEOSWKBReader</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a6c6c66ac349741cf9d3a3a79c6d6bb6f">GEOSWKBReader_create_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle)</td></tr>
 <tr class="separator:a6c6c66ac349741cf9d3a3a79c6d6bb6f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2798a8484aa3e44d66f84b859c2783e4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a2798a8484aa3e44d66f84b859c2783e4">GEOSWKBReader_destroy_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle, <a class="el" href="geos__c_8h.html#a1b8d454eb2cf3e6f20d0eaf374592e41">GEOSWKBReader</a> *reader)</td></tr>
@@ -2140,6 +2142,49 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
       </table>
 </div><div class="memdoc">
 <p>Request safe interruption of operations </p><dl class="section since"><dt>Since</dt><dd>3.4 </dd></dl>
+
+</div>
+</div>
+<a id="a143ca93693050c42a964a3d311409839"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a143ca93693050c42a964a3d311409839">&#9670;&nbsp;</a></span>GEOS_printDouble()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int GEOS_printDouble </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>d</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned int&#160;</td>
+          <td class="paramname"><em>precision</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char *&#160;</td>
+          <td class="paramname"><em>result</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Print the shortest representation of a double using fixed notation. Only works for numbers smaller than 1e17 (absolute value). </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">d</td><td>The number to format. </td></tr>
+    <tr><td class="paramname">precision</td><td>The desired precision. (max digits after decimal point) </td></tr>
+    <tr><td class="paramname">result</td><td>The buffer to write the result to. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the length of the written string. </dd></dl>
 
 </div>
 </div>
