@@ -11,6 +11,7 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h> // required for use in unique_ptr
 #include <geos/geom/Coordinate.h>
+#include <geos/util.h>
 // std
 #include <cmath>
 #include <sstream>
@@ -102,24 +103,27 @@ void object::test<1>
     try {
         runTest("LINESTRING (0 0, 2 1)", "LINESTRING EMPTY", 0.0, 0);
     }
-    catch(const geos::util::IllegalArgumentException& ) {
+    catch(const geos::util::IllegalArgumentException& e) {
         // We do expect an exception
+        ::geos::ignore_unused_variable_warning(e);
     }
 
     // too big densify factor
     try {
         runTest("LINESTRING (0 0, 2 1)", "LINESTRING EMPTY", 1 + 1e-10, 0);
     }
-    catch(const geos::util::IllegalArgumentException& ) {
+    catch(const geos::util::IllegalArgumentException& e) {
         // We do expect an exception
+        ::geos::ignore_unused_variable_warning(e);
     }
 
     // too small positive densify factor
     try {
         runTest("LINESTRING (0 0, 2 1)", "LINESTRING EMPTY", 1e-30, 0);
     }
-    catch(const geos::util::IllegalArgumentException& ) {
+    catch(const geos::util::IllegalArgumentException& e) {
         // We do expect an exception
+        ::geos::ignore_unused_variable_warning(e);
     }
 }
 
@@ -176,7 +180,7 @@ void object::test<6>
     try {
         DiscreteFrechetDistance::distance(*g1, *g2);
     } catch (const geos::util::GEOSException& e) {
-
+        ::geos::ignore_unused_variable_warning(e);
     }
 }
 

@@ -41,37 +41,6 @@ namespace geos {
 namespace precision { // geos.precision
 
 
-/* public */
-std::unique_ptr<Geometry>
-GeometryPrecisionReducer::reduce(const Geometry& geom)
-{
-    std::unique_ptr<Geometry> reduced;
-    if (isPointwise) {
-        reduced = PointwisePrecisionReducerTransformer::reduce(geom, targetPM);
-    }
-    else {
-        reduced = PrecisionReducerTransformer::reduce(geom, targetPM, removeCollapsed);
-    }
-
-    // Match the collection level of the output to the input
-    // if necessary
-    if (geom.isCollection()
-        && ! reduced->isCollection()
-        && (geom.getCoordinateDimension() == reduced->getCoordinateDimension()))
-    {
-        reduced = geom.getFactory()->createMulti(std::move(reduced));
-    }
-
-    // TODO: incorporate this in the Transformer above
-    if (changePrecisionModel &&
-        (&targetPM != geom.getFactory()->getPrecisionModel()))
-    {
-         return changePM(reduced.get(), targetPM);
-    }
-
-    return reduced;
-}
-
 
 /* private */
 std::unique_ptr<Geometry>
@@ -156,6 +125,36 @@ GeometryPrecisionReducer::createFactory(const GeometryFactory& oldGF,
     return p_newFactory;
 }
 
+/* public */
+std::unique_ptr<Geometry>
+GeometryPrecisionReducer::reduce(const Geometry& geom)
+{
+    std::unique_ptr<Geometry> reduced;
+    if (isPointwise) {
+        reduced = PointwisePrecisionReducerTransformer::reduce(geom, targetPM);
+    }
+    else {
+        reduced = PrecisionReducerTransformer::reduce(geom, targetPM, removeCollapsed);
+    }
+
+    // Match the collection level of the output to the input
+    // if necessary
+    if (geom.isCollection()
+        && ! reduced->isCollection()
+        && (geom.getCoordinateDimension() == reduced->getCoordinateDimension()))
+    {
+        reduced = geom.getFactory()->createMulti(std::move(reduced));
+    }
+
+    // TODO: incorporate this in the Transformer above
+    if (changePrecisionModel &&
+        (&targetPM != geom.getFactory()->getPrecisionModel()))
+    {
+         return changePM(reduced.get(), targetPM);
+    }
+
+    return reduced;
+}
 
 
 } // namespace geos.precision

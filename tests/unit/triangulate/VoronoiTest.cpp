@@ -17,6 +17,8 @@
 #include <geos/geom/GeometryFactory.h>
 
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/util.h>
+
 //#include <stdio.h>
 #include <iostream>
 using namespace geos::triangulate;
@@ -322,6 +324,7 @@ void object::test<14>
         runVoronoi(wkt, "", 0, false, true);
         fail();
     } catch (const geos::util::GEOSException & e) {
+        ::geos::ignore_unused_variable_warning(e);
     }
 }
 

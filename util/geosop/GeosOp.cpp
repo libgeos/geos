@@ -130,7 +130,7 @@ int main(int argc, char** argv) {
         auto fmt = result["format"].as<std::string>();
         // Use lowercase matching
         std::transform(fmt.begin(), fmt.end(), fmt.begin(),
-            [](unsigned char c){ return std::tolower(c); });
+            [](unsigned char c){ return (unsigned char)std::tolower(c); });
         if (fmt == "txt" || fmt == "wkt" ) {
             cmdArgs.format = GeosOpArgs::fmtText;
         }

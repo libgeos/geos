@@ -193,6 +193,8 @@ public:
 
     std::unique_ptr<geom::Geometry> reduce(const geom::Geometry& geom);
 
+
+
 };
 
 } // namespace geos.precision

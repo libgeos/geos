@@ -13,6 +13,7 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKTWriter.h>
+#include <geos/util.h>
 // std
 #include <sstream>
 #include <string>
@@ -210,13 +211,17 @@ void object::test<8>
     try {
         MaximumInscribedCircle mic(g1.get(), 1);
         mic.getCenter();
-    } catch (const util::GEOSException & e) {}
+    } catch (const util::GEOSException & e) {
+        ::geos::ignore_unused_variable_warning(e);
+    }
 
     auto g2 = reader_.read("POLYGON ((0 0, 1 0, 2 NaN,  0 0))");
     try {
         MaximumInscribedCircle mic(g1.get(), 1);
         mic.getCenter();
-    } catch (const util::GEOSException & e) {}
+    } catch (const util::GEOSException & e) {
+        ::geos::ignore_unused_variable_warning(e);
+    }
 }
 
   /**
