@@ -37,6 +37,12 @@
 &lt;li&gt;
 &lt;p&gt;GEOS has been updated to read and write &amp;ldquo;M&amp;rdquo; dimension. As with the &amp;ldquo;Z&amp;rdquo; coordinate support, not all operations can preserve the &amp;ldquo;M&amp;rdquo; dimension, but best efforts are made to retain it through calculations, input and output.&lt;/p&gt;
 &lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Much work on the core code of GEOS was carried out with a maintenance grant funded by the GDAL project and &lt;a
+  class=&#34;gdoc-markdown__link&#34;
+  href=&#34;https://www.mail-archive.com/gdal-dev@lists.osgeo.org/msg39018.html&#34;
+&gt;carried out by Dan Baston&lt;/a&gt;.&lt;/p&gt;
+&lt;/li&gt;
 &lt;/ul&gt;</description>
     </item>
     
