@@ -597,7 +597,7 @@ void object::test<46>
     coords->add(Coordinate(geos::DoubleNotANumber, geos::DoubleNotANumber));
 
     auto point = factory_->createPoint(std::move(coords));
-    ensure("point->isEmpty()", point->isEmpty());
+    ensure("point->isEmpty()", !point->isEmpty());
     ensure("point->getCoordinateDimension() == 2", point->getCoordinateDimension() == 2);
 }
 

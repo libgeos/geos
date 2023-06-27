@@ -306,5 +306,17 @@ void object::test<19>
     ensure_equals(result, "{\"type\":\"LineString\",\"coordinates\":[[0.0,0.0],[1.0,1.0],[1.0,0.0],[0.0,0.0]]}");
 }
 
+// Write a point with all-nan coordinates
+// https://github.com/libgeos/geos/issues/885
+template<>
+template<>
+void object::test<20>
+()
+{
+    GeomPtr geom(wktreader.read("POINT (NaN NaN)"));
+    std::string result = geojsonwriter.write(geom.get());
+    ensure_equals(result, "{\"type\":\"Point\",\"coordinates\":[null,null]}");
+}
+
 
 }

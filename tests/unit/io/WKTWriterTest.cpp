@@ -223,7 +223,7 @@ void object::test<7>
     auto point = factory_->createPoint(std::move(coords));
 
     std::string result = wktwriter.write(point.get());
-    ensure_equals(result, std::string("POINT EMPTY"));
+    ensure_equals(result, std::string("POINT (NaN NaN)"));
 }
 
 
@@ -406,4 +406,3 @@ void object::test<14>
 }
 
 } // namespace tut
-

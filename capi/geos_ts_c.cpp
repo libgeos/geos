@@ -3785,7 +3785,7 @@ extern "C" {
             geos::linearref::LengthIndexedLine lil(g);
             geos::geom::Coordinate coord = lil.extractPoint(d);
             const GeometryFactory* gf = handle->geomFactory;
-            auto point = gf->createPoint(coord);
+            auto point = coord.isNull() ? gf->createPoint(g->getCoordinateDimension()) : gf->createPoint(coord);
             point->setSRID(g->getSRID());
             return point.release();
         });
