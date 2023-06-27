@@ -22,6 +22,8 @@ The 3.12 release of GEOS is now available [to download]({{< ref "/usage/download
 
 * GEOS has been updated to read and write "M" dimension. As with the "Z" coordinate support, not all operations can preserve the "M" dimension, but best efforts are made to retain it through calculations, input and output.
 
+* Much work on the core code of GEOS was carried out with a maintenance grant funded by the GDAL project and [carried out by Dan Baston](https://www.mail-archive.com/gdal-dev@lists.osgeo.org/msg39018.html).
+
 <!--more-->
 
 The full list of changes is as follows:
