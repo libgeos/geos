@@ -1,3 +1,11 @@
+
+## Changes in 3.12.1
+2023-xx-xx
+
+- Fixes:
+  - Remove undefined behaviour in use of null PrecisionModel (GH-931, Jeff Walton)
+
+
 ## Changes in 3.12.0
 2023-06-27
 
