@@ -74,7 +74,7 @@ private:
 /*public*/
 OverlayMixedPoints::OverlayMixedPoints(int p_opCode, const Geometry* geom0, const Geometry* geom1, const PrecisionModel* p_pm)
     : opCode(p_opCode)
-    , pm(p_pm)
+    , pm(p_pm ? p_pm : geom0->getPrecisionModel())
     , geometryFactory(geom0->getFactory())
     , resultDim(OverlayUtil::resultDimension(opCode, geom0->getDimension(), geom1->getDimension()))
 {
