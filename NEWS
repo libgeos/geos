@@ -6,6 +6,7 @@ Changes in 3.10.6
   - Build issues with gcc-13 (GH-863)
   - GeoJSONReader: Fix 2D empty geometry creation (GH-910, Mike Taves)
   - GEOSClipByRect: Fix case with POINT EMPTY (GH-913, Mike Taves)
+  - Remove undefined behaviour in use of null PrecisionModel (GH-931, Jeff Walton)
 
 Changes in 3.10.5
 2023-03-16
