@@ -10,7 +10,7 @@
   - GeoJSONReader: Fix 2D empty geometry creation (GH-910, Mike Taves)
   - OffsetCurve: add minimum threshold for quadsegs (GH-897, Martin Davis, Paul Ramsey)
   - GEOSClipByRect: Fix case with POINT EMPTY (GH-913, Mike Taves)
-
+  - Remove undefined behaviour in use of null PrecisionModel (GH-931, Jeff Walton)
 
 ## Changes in 3.11.2
 2023-03-16
