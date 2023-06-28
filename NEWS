@@ -8,6 +8,7 @@ Changes in 3.9.5
   - MaximumInscribedCircle: Fix infinite loop with non-finite coordinates (GH-843, Dan Baston)
   - DistanceOp: Fix crash on collection containing empty point (GH-842, Dan Baston)
   - GEOSClipByRect: Fix case with POINT EMPTY (GH-913, Mike Taves)
+  - Remove undefined behaviour in use of null PrecisionModel (GH-931, Jeff Walton)
 
 
 Changes in 3.9.4
