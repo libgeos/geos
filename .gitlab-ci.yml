@@ -5,12 +5,10 @@ before_script:
     - uname -a
 
 test:
-  except:
-    - master
   script:
     - mkdir build
     - cd build
     - cmake ..
     - make V=0
-    - install -m 755 /bin/true /usr/local/bin/git2cl
+    #- install -m 755 /bin/true /usr/local/bin/git2cl
     - make distcheck
