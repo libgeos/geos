@@ -47,6 +47,8 @@ struct test_convexhull_data {
         std::unique_ptr<Geometry> geom = rdr.read(wkt);
         std::unique_ptr<Geometry> actual = geom->convexHull();
         std::unique_ptr<Geometry> expected = rdr.read(wktExpected);
+        // std::cout << *actual << std::endl;
+        // std::cout << *expected << std::endl;
         ensure_equals_geometry(expected.get(), actual.get());
     }
 
@@ -70,6 +72,8 @@ void object::test<1>
     checkHull("LINESTRING (30 220, 240 220, 240 220)",
         "LINESTRING (30 220, 240 220)");
 }
+
+
 
 // 2 - Test convex hull of multipoint
 template<>
@@ -166,5 +170,25 @@ void object::test<9>
         "POLYGON ((-0.2 -0.1, -0.2 0.1, 0.2 0.1, 0.2 -0.1, -0.2 -0.1))"
     );
 }
+
+
+template<>
+template<>
+void object::test<10>
+()
+{
+    checkHull("LINESTRING (30 220, 240 220, 240 220, 240 220, 240 220)",
+        "LINESTRING (30 220, 240 220)");
+}
+
+template<>
+template<>
+void object::test<11>
+()
+{
+    checkHull("MULTIPOINT ((0 0), (5 1), (10 0), (5 0))",
+        "POLYGON ((0 0, 5 1, 10 0, 0 0))");
+}
+
 
 } // namespace tut

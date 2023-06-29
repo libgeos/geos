@@ -31,6 +31,7 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Geometry.h>
 #include <geos/util/UniqueCoordinateArrayFilter.h>
+#include <geos/util/CoordinateArrayFilter.h>
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -60,15 +61,12 @@ namespace algorithm { // geos::algorithm
  */
 class GEOS_DLL ConvexHull {
 private:
+
+    static constexpr std::size_t TUNING_REDUCE_SIZE = 50;
+
+    const geom::Geometry* inputGeom;
     const geom::GeometryFactory* geomFactory;
     geom::Coordinate::ConstVect inputPts;
-
-    void
-    extractCoordinates(const geom::Geometry* geom)
-    {
-        util::UniqueCoordinateArrayFilter filter(inputPts);
-        geom->apply_ro(&filter);
-    }
 
     /// Create a CoordinateSequence from the Coordinate::ConstVect
     /// This is needed to construct the geometries.
@@ -76,11 +74,13 @@ private:
     /// The returned object is newly allocated !NO EXCEPTION SAFE!
     std::unique_ptr<geom::CoordinateSequence> toCoordinateSequence(geom::Coordinate::ConstVect& cv);
 
-    void computeOctPts(const geom::Coordinate::ConstVect& src,
-                       geom::Coordinate::ConstVect& tgt);
+    void computeInnerOctolateralPts(
+        const geom::Coordinate::ConstVect& src,
+        geom::Coordinate::ConstVect& tgt);
 
-    bool computeOctRing(const geom::Coordinate::ConstVect& src,
-                        geom::Coordinate::ConstVect& tgt);
+    bool computeInnerOctolateralRing(
+        const geom::Coordinate::ConstVect& src,
+        geom::Coordinate::ConstVect& tgt);
 
     /**
      * Uses a heuristic to reduce the number of points scanned
@@ -132,7 +132,8 @@ private:
      * equal to or greater than q
      */
     int polarCompare(const geom::Coordinate& o,
-                     const geom::Coordinate& p, const geom::Coordinate& q);
+                     const geom::Coordinate& p,
+                     const geom::Coordinate& q);
 
     void grahamScan(const geom::Coordinate::ConstVect& c,
                     geom::Coordinate::ConstVect& ps);
@@ -159,7 +160,15 @@ private:
      * @return  whether the three coordinates are collinear
      *          and c2 lies between c1 and c3 inclusive
      */
-    bool isBetween(const geom::Coordinate& c1, const geom::Coordinate& c2, const geom::Coordinate& c3);
+    bool isBetween(
+        const geom::Coordinate& c1,
+        const geom::Coordinate& c2,
+        const geom::Coordinate& c3);
+
+    bool extractUnique(geom::Coordinate::ConstVect& pts, std::size_t maxPts);
+    std::unique_ptr<geom::Geometry> createFewPointsResult();
+
+
 
 public:
 
@@ -167,10 +176,9 @@ public:
      * Create a new convex hull construction for the input Geometry.
      */
     ConvexHull(const geom::Geometry* newGeometry)
-        : geomFactory(newGeometry->getFactory())
-    {
-        extractCoordinates(newGeometry);
-    };
+        : inputGeom(newGeometry)
+        , geomFactory(newGeometry->getFactory())
+    {};
 
     ~ConvexHull() {};
 

@@ -8,6 +8,7 @@
 - Fixes/Improvements:
   - WKTReader: Points with all-NaN coordinates are not considered empty anymore (GH-927, Casper van der Wel)
   - WKTWriter: Points with all-NaN coordinates are written as such (GH-927, Casper van der Wel)
+  - ConvexHull: Performance improvement for larger geometries (JTS-985, Martin Davis)
 
 
 ## Changes in 3.12.0

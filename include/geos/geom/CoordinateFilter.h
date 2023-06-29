@@ -45,6 +45,11 @@ public:
     virtual
     ~CoordinateFilter() {}
 
+    virtual bool isDone() const
+    {
+        return false;
+    }
+
     /** \brief
      * Performs an operation on `coord`.
      *

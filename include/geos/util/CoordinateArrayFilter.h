@@ -17,46 +17,69 @@
 
 #include <geos/export.h>
 #include <cassert>
+#include <set>
+#include <vector>
 
 #include <geos/geom/CoordinateFilter.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Coordinate.h>
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
+#endif
+
 namespace geos {
 namespace util { // geos::util
 
-/** \brief
- * A CoordinateFilter that adds read-only pointers
- * to every Coordinate in a Geometry to a given
- * vector.
- *
- * Last port: util/CoordinateArrayFilter.java rev. 1.15
+/*
+ *  A CoordinateFilter that fills a vector of Coordinate const pointers.
  */
-class GEOS_DLL CoordinateArrayFilter: public geom::CoordinateFilter {
-private:
-    geom::Coordinate::ConstVect& pts; // target vector reference
+class GEOS_DLL CoordinateArrayFilter : public geom::CoordinateInspector<CoordinateArrayFilter> {
 public:
-    /** \brief
-     * Constructs a CoordinateArrayFilter.
-     *
-     * @param target The destination vector.
-     */
-    CoordinateArrayFilter(geom::Coordinate::ConstVect& target)
-        :
-        pts(target)
+
+    CoordinateArrayFilter(std::vector<const geom::Coordinate*>& target)
+        : pts(target)
     {}
 
-    virtual
-    ~CoordinateArrayFilter() {}
+    /**
+     * Destructor.
+     * Virtual dctor promises appropriate behaviour when someone will
+     * delete a derived-class object via a base-class pointer.
+     * http://www.parashift.com/c++-faq-lite/virtual-functions.html#faq-20.7
+     */
+    ~CoordinateArrayFilter() override {}
 
-    virtual void
-    filter_ro(const geom::Coordinate* coord)
+    template<typename CoordType>
+    void filter(const CoordType* coord)
     {
         pts.push_back(coord);
     }
+
+    void filter(const geom::CoordinateXY*) {
+        assert(0); // not supported
+    }
+
+    void filter(const geom::CoordinateXYM*) {
+        assert(0); // not supported
+    }
+
+private:
+    std::vector<const geom::Coordinate*>& pts;  // target set reference
+
+    // Declare type as noncopyable
+    CoordinateArrayFilter(const CoordinateArrayFilter& other) = delete;
+    CoordinateArrayFilter& operator=(const CoordinateArrayFilter& rhs) = delete;
 };
 
 
-} // namespace geos.util
+
+
+
+} // namespace geos::util
 } // namespace geos
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 

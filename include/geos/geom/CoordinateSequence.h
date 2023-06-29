@@ -621,10 +621,30 @@ public:
     template<typename Filter>
     void apply_rw(const Filter* filter) {
         switch(getCoordinateType()) {
-            case CoordinateType::XY:    for (auto& c : items<CoordinateXY>())   { filter->filter_rw(&c); } break;
-            case CoordinateType::XYZ:   for (auto& c : items<Coordinate>())     { filter->filter_rw(&c); } break;
-            case CoordinateType::XYM:   for (auto& c : items<CoordinateXYM>())  { filter->filter_rw(&c); } break;
-            case CoordinateType::XYZM:  for (auto& c : items<CoordinateXYZM>()) { filter->filter_rw(&c); } break;
+            case CoordinateType::XY:
+                for (auto& c : items<CoordinateXY>()) {
+                    if (filter->isDone()) break;
+                    filter->filter_rw(&c);
+                }
+                break;
+            case CoordinateType::XYZ:
+                for (auto& c : items<Coordinate>()) {
+                    if (filter->isDone()) break;
+                    filter->filter_rw(&c);
+                }
+                break;
+            case CoordinateType::XYM:
+                for (auto& c : items<CoordinateXYM>()) {
+                    if (filter->isDone()) break;
+                    filter->filter_rw(&c);
+                }
+                break;
+            case CoordinateType::XYZM:
+                for (auto& c : items<CoordinateXYZM>()) {
+                    if (filter->isDone()) break;
+                    filter->filter_rw(&c);
+                }
+                break;
         }
         m_hasdim = m_hasz = false; // re-check (see http://trac.osgeo.org/geos/ticket/435)
     }
@@ -632,10 +652,30 @@ public:
     template<typename Filter>
     void apply_ro(Filter* filter) const {
         switch(getCoordinateType()) {
-            case CoordinateType::XY:    for (const auto& c : items<CoordinateXY>())   { filter->filter_ro(&c); } break;
-            case CoordinateType::XYZ:   for (const auto& c : items<Coordinate>())     { filter->filter_ro(&c); } break;
-            case CoordinateType::XYM:   for (const auto& c : items<CoordinateXYM>())  { filter->filter_ro(&c); } break;
-            case CoordinateType::XYZM:  for (const auto& c : items<CoordinateXYZM>()) { filter->filter_ro(&c); } break;
+            case CoordinateType::XY:
+                for (const auto& c : items<CoordinateXY>()) {
+                    if (filter->isDone()) break;
+                    filter->filter_ro(&c);
+                }
+                break;
+            case CoordinateType::XYZ:
+                for (const auto& c : items<Coordinate>()) {
+                    if (filter->isDone()) break;
+                    filter->filter_ro(&c);
+                }
+                break;
+            case CoordinateType::XYM:
+                for (const auto& c : items<CoordinateXYM>()) {
+                    if (filter->isDone()) break;
+                    filter->filter_ro(&c);
+                }
+                break;
+            case CoordinateType::XYZM:
+                for (const auto& c : items<CoordinateXYZM>()) {
+                    if (filter->isDone()) break;
+                    filter->filter_ro(&c);
+                }
+                break;
         }
     }
 

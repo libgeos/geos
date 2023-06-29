@@ -47,6 +47,12 @@ public:
      */
     UniqueCoordinateArrayFilter(std::vector<const geom::Coordinate*>& target)
         : pts(target)
+        , maxUnique(NO_COORD_INDEX)
+    {}
+
+    UniqueCoordinateArrayFilter(std::vector<const geom::Coordinate*>& target, std::size_t p_maxUnique)
+        : pts(target)
+        , maxUnique(p_maxUnique)
     {}
 
     /**
@@ -69,6 +75,9 @@ public:
             // TODO make `pts` a CoordinateSequence rather than coercing the type
             pts.push_back(coord);
         }
+        if(maxUnique != NO_COORD_INDEX && uniqPts.size() > maxUnique) {
+            done = true;
+        }
     }
 
     void filter(const geom::CoordinateXY*) {
@@ -80,14 +89,21 @@ public:
         assert(0); // not supported
     }
 
+    bool isDone() const override {
+        return done;
+    }
+
 private:
     std::vector<const geom::Coordinate*>& pts;	// target set reference
     std::set<const geom::CoordinateXY*, geom::CoordinateLessThan> uniqPts; 	// unique points set
+    std::size_t maxUnique; // stop visiting when we have this many unique coordinates
+    bool done = false;
 
     // Declare type as noncopyable
     UniqueCoordinateArrayFilter(const UniqueCoordinateArrayFilter& other) = delete;
     UniqueCoordinateArrayFilter& operator=(const UniqueCoordinateArrayFilter& rhs) = delete;
 };
+
 
 } // namespace geos::util
 } // namespace geos

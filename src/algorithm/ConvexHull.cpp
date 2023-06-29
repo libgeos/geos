@@ -126,7 +126,7 @@ ConvexHull::toCoordinateSequence(Coordinate::ConstVect& cv)
 
 /* private */
 void
-ConvexHull::computeOctPts(const Coordinate::ConstVect& p_inputPts,
+ConvexHull::computeInnerOctolateralPts(const Coordinate::ConstVect& p_inputPts,
                           Coordinate::ConstVect& pts)
 {
     // Initialize all slots with first input coordinate
@@ -164,10 +164,10 @@ ConvexHull::computeOctPts(const Coordinate::ConstVect& p_inputPts,
 
 /* private */
 bool
-ConvexHull::computeOctRing(const Coordinate::ConstVect& p_inputPts,
+ConvexHull::computeInnerOctolateralRing(const Coordinate::ConstVect& p_inputPts,
                            Coordinate::ConstVect& dest)
 {
-    computeOctPts(p_inputPts, dest);
+    computeInnerOctolateralPts(p_inputPts, dest);
 
     // Remove consecutive equal Coordinates
     // unique() returns an iterator to the end of the resulting
@@ -191,7 +191,7 @@ ConvexHull::reduce(Coordinate::ConstVect& pts)
 {
     Coordinate::ConstVect polyPts;
 
-    if(! computeOctRing(pts, polyPts)) {
+    if(! computeInnerOctolateralRing(pts, polyPts)) {
         // unable to compute interior polygon for some reason
         return;
     }
@@ -234,26 +234,22 @@ ConvexHull::padArray3(geom::Coordinate::ConstVect& pts)
 std::unique_ptr<Geometry>
 ConvexHull::getConvexHull()
 {
+    std::unique_ptr<Geometry> fewPointsGeom = createFewPointsResult();
+    if (fewPointsGeom != nullptr)
+        return fewPointsGeom;
+
+    util::CoordinateArrayFilter filter(inputPts);
+    inputGeom->apply_ro(&filter);
+
     std::size_t nInputPts = inputPts.size();
 
-    if(nInputPts == 0) { // Return an empty geometry
-        return geomFactory->createEmptyGeometry();
-    }
-
-    if(nInputPts == 1) { // Return a Point
-        // Copy the Coordinate from the ConstVect
-        return std::unique_ptr<Geometry>(geomFactory->createPoint(*(inputPts[0])));
-    }
-
-    if(nInputPts == 2) { // Return a LineString
-        // Copy all Coordinates from the ConstVect
-        auto cs = toCoordinateSequence(inputPts);
-        return geomFactory->createLineString(std::move(cs));
-    }
-
     // use heuristic to reduce points, if large
-    if(nInputPts > 50) {
+    if(nInputPts > TUNING_REDUCE_SIZE) {
         reduce(inputPts);
+    }
+    else {
+        inputPts.clear();
+        extractUnique(inputPts, NO_COORD_INDEX);
     }
 
     GEOS_CHECK_FOR_INTERRUPTS();
@@ -396,6 +392,46 @@ ConvexHull::cleanRing(const Coordinate::ConstVect& original,
 
     cleaned.push_back(last);
 
+}
+
+
+/*
+* Returns true if the extraction is stopped
+* by the maxPts restriction. That is, if there
+* are yet more points to be processed.
+*/
+/* private */
+bool
+ConvexHull::extractUnique(Coordinate::ConstVect& pts, std::size_t maxPts)
+{
+    util::UniqueCoordinateArrayFilter filter(pts, maxPts);
+    inputGeom->apply_ro(&filter);
+    return filter.isDone();
+}
+
+
+/* private */
+std::unique_ptr<Geometry>
+ConvexHull::createFewPointsResult()
+{
+    Coordinate::ConstVect uniquePts;
+    bool ok = extractUnique(uniquePts, 2);
+
+    if (ok) {
+        return nullptr;
+    }
+
+    if(uniquePts.size() == 0) { // Return an empty geometry
+        return geomFactory->createEmptyGeometry();
+    }
+    else if(uniquePts.size() == 1) { // Return a Point
+        // Copy the Coordinate from the ConstVect
+        return std::unique_ptr<Geometry>(geomFactory->createPoint(*(uniquePts[0])));
+    }
+    else { // Return a LineString
+        auto cs = toCoordinateSequence(uniquePts);
+        return geomFactory->createLineString(std::move(cs));
+    }
 }
 
 
