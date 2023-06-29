@@ -91,44 +91,60 @@ $(function() {
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    UniqueCoordinateArrayFilter(std::vector&lt;const geom::Coordinate*&gt;&amp; target)</div>
 <div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        : pts(target)</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    {}</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    ~UniqueCoordinateArrayFilter()<span class="keyword"> override </span>{}</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> CoordType&gt;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keywordtype">void</span> filter(<span class="keyword">const</span> CoordType* coord)</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    {</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keywordflow">if</span>(uniqPts.insert(coord).second) {</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;            <span class="comment">// TODO make `pts` a CoordinateSequence rather than coercing the type</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;            pts.push_back(coord);</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        }</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    }</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keywordtype">void</span> filter(<span class="keyword">const</span> geom::CoordinateXY*) {</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        assert(0); <span class="comment">// not supported</span></div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    }</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keywordtype">void</span> filter(<span class="keyword">const</span> geom::CoordinateXYM*) {</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        assert(0); <span class="comment">// not supported</span></div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        , maxUnique(NO_COORD_INDEX)</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    {}</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    UniqueCoordinateArrayFilter(std::vector&lt;const geom::Coordinate*&gt;&amp; target, std::size_t p_maxUnique)</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        : pts(target)</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        , maxUnique(p_maxUnique)</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    {}</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    ~UniqueCoordinateArrayFilter()<span class="keyword"> override </span>{}</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> CoordType&gt;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keywordtype">void</span> filter(<span class="keyword">const</span> CoordType* coord)</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    {</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <span class="keywordflow">if</span>(uniqPts.insert(coord).second) {</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;            <span class="comment">// TODO make `pts` a CoordinateSequence rather than coercing the type</span></div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;            pts.push_back(coord);</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;        }</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <span class="keywordflow">if</span>(maxUnique != NO_COORD_INDEX &amp;&amp; uniqPts.size() &gt; maxUnique) {</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;            done = <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;        }</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    }</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    std::vector&lt;const geom::Coordinate*&gt;&amp; pts;  <span class="comment">// target set reference</span></div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    std::set&lt;const geom::CoordinateXY*, geom::CoordinateLessThan&gt; uniqPts;      <span class="comment">// unique points set</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    <span class="keywordtype">void</span> filter(<span class="keyword">const</span> geom::CoordinateXY*) {</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        assert(0); <span class="comment">// not supported</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    }</div>
 <div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="comment">// Declare type as noncopyable</span></div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    UniqueCoordinateArrayFilter(<span class="keyword">const</span> UniqueCoordinateArrayFilter&amp; other) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    UniqueCoordinateArrayFilter&amp; operator=(<span class="keyword">const</span> UniqueCoordinateArrayFilter&amp; rhs) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;};</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keywordtype">void</span> filter(<span class="keyword">const</span> geom::CoordinateXYM*) {</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        assert(0); <span class="comment">// not supported</span></div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    }</div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;} <span class="comment">// namespace geos::util</span></div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;} <span class="comment">// namespace geos</span></div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;<span class="preprocessor">#ifdef _MSC_VER</span></div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="preprocessor">#pragma warning(pop)</span></div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keywordtype">bool</span> isDone()<span class="keyword"> const override </span>{</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        <span class="keywordflow">return</span> done;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    }</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    std::vector&lt;const geom::Coordinate*&gt;&amp; pts;  <span class="comment">// target set reference</span></div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    std::set&lt;const geom::CoordinateXY*, geom::CoordinateLessThan&gt; uniqPts;      <span class="comment">// unique points set</span></div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    std::size_t maxUnique; <span class="comment">// stop visiting when we have this many unique coordinates</span></div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <span class="keywordtype">bool</span> done = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="comment">// Declare type as noncopyable</span></div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    UniqueCoordinateArrayFilter(<span class="keyword">const</span> UniqueCoordinateArrayFilter&amp; other) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    UniqueCoordinateArrayFilter&amp; operator=(<span class="keyword">const</span> UniqueCoordinateArrayFilter&amp; rhs) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;};</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;} <span class="comment">// namespace geos::util</span></div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;} <span class="comment">// namespace geos</span></div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="preprocessor">#ifdef _MSC_VER</span></div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="preprocessor">#pragma warning(pop)</span></div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:25</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->

@@ -66,42 +66,66 @@ $(function() {
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
 <div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;geos/export.h&gt;</span></div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &lt;cassert&gt;</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &lt;geos/geom/CoordinateFilter.h&gt;</span></div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &lt;geos/geom/CoordinateSequence.h&gt;</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &lt;geos/geom/Coordinate.h&gt;</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">namespace </span>util { <span class="comment">// geos::util</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="classgeos_1_1util_1_1CoordinateArrayFilter.html">   35</a></span>&#160;<span class="keyword">class </span>GEOS_DLL <a class="code" href="classgeos_1_1util_1_1CoordinateArrayFilter.html">CoordinateArrayFilter</a>: <span class="keyword">public</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateFilter.html">geom::CoordinateFilter</a> {</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1Coordinate.html#a59a363dbe699943a46ea014355e63cac">geom::Coordinate::ConstVect</a>&amp; pts; <span class="comment">// target vector reference</span></div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00044"></a><span class="lineno"><a class="line" href="classgeos_1_1util_1_1CoordinateArrayFilter.html#a3cfaa8c1191cba37e04449cf79a2617f">   44</a></span>&#160;    <a class="code" href="classgeos_1_1util_1_1CoordinateArrayFilter.html#a3cfaa8c1191cba37e04449cf79a2617f">CoordinateArrayFilter</a>(<a class="code" href="classgeos_1_1geom_1_1Coordinate.html#a59a363dbe699943a46ea014355e63cac">geom::Coordinate::ConstVect</a>&amp; target)</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        :</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        pts(target)</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    {}</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keyword">virtual</span></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    ~<a class="code" href="classgeos_1_1util_1_1CoordinateArrayFilter.html">CoordinateArrayFilter</a>() {}</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    filter_ro(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>* coord)</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    {</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        pts.push_back(coord);</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    }</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;};</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &lt;set&gt;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &lt;geos/geom/CoordinateFilter.h&gt;</span></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &lt;geos/geom/CoordinateSequence.h&gt;</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &lt;geos/geom/Coordinate.h&gt;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#ifdef _MSC_VER</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#pragma warning(push)</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#pragma warning(disable: 4251) </span><span class="comment">// warning C4251: needs to have dll-interface to be used by clients of class</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">namespace </span>util { <span class="comment">// geos::util</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="comment">/*</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="comment"> *  A CoordinateFilter that fills a vector of Coordinate const pointers.</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="comment"> */</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">class </span>GEOS_DLL CoordinateArrayFilter : <span class="keyword">public</span> geom::CoordinateInspector&lt;CoordinateArrayFilter&gt; {</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    CoordinateArrayFilter(std::vector&lt;const geom::Coordinate*&gt;&amp; target)</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        : pts(target)</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    {}</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    ~CoordinateArrayFilter()<span class="keyword"> override </span>{}</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> CoordType&gt;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keywordtype">void</span> filter(<span class="keyword">const</span> CoordType* coord)</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    {</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        pts.push_back(coord);</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    }</div>
 <div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;} <span class="comment">// namespace geos.util</span></div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;} <span class="comment">// namespace geos</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordtype">void</span> filter(<span class="keyword">const</span> geom::CoordinateXY*) {</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        assert(0); <span class="comment">// not supported</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    }</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateFilter_html"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateFilter.html">geos::geom::CoordinateFilter</a></div><div class="ttdoc">Geometry classes support the concept of applying a coordinate filter to every coordinate in the Geome...</div><div class="ttdef"><b>Definition:</b> CoordinateFilter.h:43</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a></div><div class="ttdoc">Coordinate is the lightweight class used to store coordinates.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:216</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html_a59a363dbe699943a46ea014355e63cac"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html#a59a363dbe699943a46ea014355e63cac">geos::geom::Coordinate::ConstVect</a></div><div class="ttdeci">std::vector&lt; const Coordinate * &gt; ConstVect</div><div class="ttdoc">A vector of const Coordinate pointers.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:227</div></div>
-<div class="ttc" id="aclassgeos_1_1util_1_1CoordinateArrayFilter_html"><div class="ttname"><a href="classgeos_1_1util_1_1CoordinateArrayFilter.html">geos::util::CoordinateArrayFilter</a></div><div class="ttdoc">A CoordinateFilter that adds read-only pointers to every Coordinate in a Geometry to a given vector.</div><div class="ttdef"><b>Definition:</b> CoordinateArrayFilter.h:35</div></div>
-<div class="ttc" id="aclassgeos_1_1util_1_1CoordinateArrayFilter_html_a3cfaa8c1191cba37e04449cf79a2617f"><div class="ttname"><a href="classgeos_1_1util_1_1CoordinateArrayFilter.html#a3cfaa8c1191cba37e04449cf79a2617f">geos::util::CoordinateArrayFilter::CoordinateArrayFilter</a></div><div class="ttdeci">CoordinateArrayFilter(geom::Coordinate::ConstVect &amp;target)</div><div class="ttdoc">Constructs a CoordinateArrayFilter.</div><div class="ttdef"><b>Definition:</b> CoordinateArrayFilter.h:44</div></div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordtype">void</span> filter(<span class="keyword">const</span> geom::CoordinateXYM*) {</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        assert(0); <span class="comment">// not supported</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    }</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    std::vector&lt;const geom::Coordinate*&gt;&amp; pts;  <span class="comment">// target set reference</span></div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="comment">// Declare type as noncopyable</span></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    CoordinateArrayFilter(<span class="keyword">const</span> CoordinateArrayFilter&amp; other) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    CoordinateArrayFilter&amp; operator=(<span class="keyword">const</span> CoordinateArrayFilter&amp; rhs) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;};</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;} <span class="comment">// namespace geos::util</span></div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;} <span class="comment">// namespace geos</span></div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;<span class="preprocessor">#ifdef _MSC_VER</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="preprocessor">#pragma warning(pop)</span></div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:25</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
