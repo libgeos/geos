@@ -168,13 +168,13 @@ message(STATUS "GEOS: Archives output: ${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
 #   -D CMAKE_CXX_COMPILER=/opt/local/bin/clang-mp-15++ \
 #   -D CMAKE_BUILD_TYPE=ASAN
 #
-# To suppress reporting on leaks in MacOS itself (yes, really), 
-# add a suppression file to your build directory. 
+# To suppress reporting on leaks in MacOS itself (yes, really),
+# add a suppression file to your build directory.
 #
 #  echo leak:realizeClassWithoutSwift >> lsan.supp
 #
 # Now run the program with env vars set to turn on leak checking and suppression.
-# 
+#
 #  MallocNanoZone=0 \
 #  ASAN_OPTIONS=detect_leaks=1 \
 #  LSAN_OPTIONS=suppressions=lsan.supp \
@@ -457,7 +457,8 @@ if(PROJECT_IS_TOP_LEVEL)
     set(CPACK_VERBATIM_VARIABLES TRUE)
     set(CPACK_SOURCE_IGNORE_FILES
       /\\..*  # any file/directory starting with .
-      /.*build.*/
+      /.*build-.*/
+      #/.*build.*/ #taken out because breaks gitlab make distcheck
       /autogen\\.sh
       /autom4te\\.cache
       /bin/
