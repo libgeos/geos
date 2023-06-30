@@ -327,6 +327,7 @@ void object::test<11>
     std::stringstream iso_result_stream;
     wkbwriter.setOutputDimension(4);
     wkbwriter.setFlavor(geos::io::WKBConstants::wkbFlavour::wkbIso);
+    wkbwriter.setByteOrder(1); // little endian
     wkbwriter.writeHEX(*geom, iso_result_stream);
 
     ensure_equals("XYZM ISO",
@@ -358,6 +359,7 @@ void object::test<12>
     std::stringstream iso_result_stream;
     wkbwriter.setOutputDimension(4);
     wkbwriter.setFlavor(geos::io::WKBConstants::wkbFlavour::wkbIso);
+    wkbwriter.setByteOrder(1); // little endian
     wkbwriter.writeHEX(*geom, iso_result_stream);
 
     ensure_equals("XYM ISO",

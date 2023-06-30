@@ -15,7 +15,9 @@ struct test_geoswkbwriter_data : public capitest::utility {
     test_geoswkbwriter_data() :
         wkbwriter_(GEOSWKBWriter_create()),
         buf_(nullptr)
-    {}
+    {
+        GEOSWKBWriter_setByteOrder(wkbwriter_, GEOS_WKB_NDR);
+    }
 
     ~test_geoswkbwriter_data() {
         GEOSWKBWriter_destroy(wkbwriter_);
