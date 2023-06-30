@@ -69,6 +69,13 @@
 #include <sstream>
 #include <iomanip>
 
+// Quiet MSVC warning we cannot fix without
+// a bunch of function renaming,
+// see https://github.com/libgeos/geos/issues/929
+#ifdef _MSC_VER
+#pragma warning (disable : 4573)
+#endif
+
 using geos::operation::overlayng::OverlayNG;
 using geos::algorithm::distance::DiscreteFrechetDistance;
 using geos::operation::relate::RelateOp;
