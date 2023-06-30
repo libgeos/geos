@@ -32,7 +32,7 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/algorithm/NotRepresentableException.h>
-#include <geos/algorithm/Intersection.h>
+#include <geos/algorithm/CGAlgorithmsDD.h>
 #include <geos/util.h>
 
 #ifndef GEOS_DEBUG
@@ -483,7 +483,7 @@ OffsetSegmentGenerator::addMitreJoin(const geom::Coordinate& cornerPt,
      * However, this situation should have been eliminated earlier by the check
      * for whether the offset segment endpoints are almost coincident
      */
-    CoordinateXY intPt = algorithm::Intersection::intersection(p_offset0.p0, p_offset0.p1, p_offset1.p0, p_offset1.p1);
+    CoordinateXY intPt = algorithm::CGAlgorithmsDD::intersection(p_offset0.p0, p_offset0.p1, p_offset1.p0, p_offset1.p1);
 
     if (!intPt.isNull() && intPt.distance(cornerPt) <= mitreLimitDistance) {
         segList.addPt(Coordinate(intPt));
