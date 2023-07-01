@@ -38,8 +38,9 @@ template<>
 template<>
 void object::test<1>()
 {
+    GEOSWKBWriter_setByteOrder(wkbwriter_, GEOS_WKB_XDR);
     ensure_equals(GEOSWKBWriter_getIncludeSRID(wkbwriter_), 0);
-    ensure_equals(GEOSWKBWriter_getByteOrder(wkbwriter_), getMachineByteOrder());
+    ensure_equals(GEOSWKBWriter_getByteOrder(wkbwriter_), GEOS_WKB_XDR);
     ensure_equals(GEOSWKBWriter_getFlavor(wkbwriter_), GEOS_WKB_EXTENDED);
     ensure_equals(GEOSWKBWriter_getOutputDimension(wkbwriter_), 4);
 }
