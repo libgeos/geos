@@ -9,9 +9,10 @@
 # See the COPYING file for more information.
 ##############################################################################
 
-# Require CMake 3.13+ with support for meta-features that request compiler
-# modes for specific C/C++ language standard levels, and object libraries.
-cmake_minimum_required(VERSION 3.13)
+# Require CMake 3.15+ with support for handling MSVC warning flags, meta-features 
+# that request compiler modes for specific C/C++ language standard levels, and 
+# object libraries.
+cmake_minimum_required(VERSION 3.15)
 
 #-----------------------------------------------------------------------------
 # Version
