@@ -120,5 +120,28 @@ void object::test<3>()
     }
 }
 
+// see https://github.com/locationtech/jts/issues/396
+// testContainsNoding
+template<>
+template<>
+void object::test<4> ()
+{
+    checkRelate(
+        "LINESTRING (1 0, 0 2, 0 0, 2 2)",
+        "LINESTRING (0 0, 2 2)",
+        "101F00FF2"    );
+}
+
+// see https://github.com/libgeos/geos/issues/933
+// testContainsNoding
+template<>
+template<>
+void object::test<5> ()
+{
+    checkRelate(
+        "MULTILINESTRING ((0 0, 1 1), (0.5 0.5, 1 0.1, -1 0.1))",
+        "LINESTRING (0 0, 1 1)",
+        "1F1000FF2"    );
+}
 
 } // namespace tut
