@@ -1,6 +1,6 @@
 // $Id$
 //
-// Test Suite for C-API GEOSGetCentroid
+// Test Suite for C-API GEOSMaximumInscribedCircle
 
 #include <tut/tut.hpp>
 // geos
@@ -44,7 +44,7 @@ group test_capimaximuminscribedcircle_group("capi::GEOSMaximumInscribedCircle");
 // Test Cases
 //
 
-// Single point
+// Square
 template<>
 template<>
 void object::test<1>
@@ -60,28 +60,11 @@ void object::test<1>
     ensure_equals(std::string(wkt_), std::string("LINESTRING (150 150, 150 200)"));
 }
 
-// Single point
-template<>
-template<>
-void object::test<2>
-()
-{
-    geom1_ = GEOSGeomFromWKT("MULTIPOINT ((100 100), (100 200), (200 200), (200 100))");
-    ensure(nullptr != geom1_);
-    geom2_ = GEOSLargestEmptyCircle(geom1_, nullptr, 0.001);
-    ensure(nullptr != geom2_);
-
-    wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
-
-    ensure_equals(std::string(wkt_), std::string("LINESTRING (150 150, 100 100)"));
-}
-
-
 // Crash with Inf coords
 // https://github.com/libgeos/geos/issues/821
 template<>
 template<>
-void object::test<3>
+void object::test<2>
 ()
 {
     std::string wkb("0106000020E61000000100000001030000000100000005000000000000000000F07F000000000000F07F000000000000F07F000000000000F07F000000000000F07F000000000000F07F000000000000F07F000000000000F07F000000000000F07F000000000000F07F");

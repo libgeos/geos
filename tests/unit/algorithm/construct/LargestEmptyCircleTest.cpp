@@ -1,7 +1,6 @@
 //
 // Test Suite for geos::algorithm::construct::LargestEmptyCircle
 
-
 #include <tut/tut.hpp>
 // geos
 #include <geos/operation/distance/IndexedFacetDistance.h>
@@ -19,8 +18,6 @@
 #include <sstream>
 #include <string>
 #include <memory>
-
-
 
 using namespace geos;
 using namespace geos::geom;
@@ -150,112 +147,83 @@ typedef group::object object;
 
 group test_lec_group("geos::algorithm::construct::LargestEmptyCircle");
 
-//
 // testPointsSquare
-//
+template<>  
 template<>
-template<>
-void object::test<1>
-()
+void object::test<1>()
 {
-
     checkCircle("MULTIPOINT ((100 100), (100 200), (200 200), (200 100))",
-       0.01, 150, 150, 70.71 );}
+       0.01, 150, 150, 70.71 );
+}
 
-//
 // testPointsTriangleOnHull
-//
 template<>
 template<>
-void object::test<2>
-()
+void object::test<2>()
 {
     checkCircle("MULTIPOINT ((100 100), (300 100), (150 50))",
        0.01, 216.66, 99.99, 83.33 );
 }
 
-//
 // testPointsTriangleInterior
-//
 template<>
 template<>
-void object::test<3>
-()
+void object::test<3>()
 {
  checkCircle("MULTIPOINT ((100 100), (300 100), (200 250))",
        0.01, 200.00, 141.66, 108.33 );
 }
 
-//
 // testLinesOpenDiamond
-//
 template<>
 template<>
-void object::test<4>
-()
+void object::test<4>()
 {
 
     checkCircle("MULTILINESTRING ((50 100, 150 50), (250 50, 350 100), (350 150, 250 200), (50 150, 150 200))",
-       0.01, 200, 125, 90.13 );}
+       0.01, 200, 125, 90.13 );
+}
 
-//
 //    testLinesCrossed
-//
 template<>
 template<>
-void object::test<5>
-()
+void object::test<5>()
 {
   checkCircle("MULTILINESTRING ((100 100, 300 300), (100 200, 300 0))",
        0.01, 299.99, 150.00, 106.05 );
 }
 
-
-//
 // testLinesZigzag
-//
 template<>
 template<>
-void object::test<6>
-()
+void object::test<6>()
 {
-
     checkCircle("MULTILINESTRING ((100 100, 200 150, 100 200, 250 250, 100 300, 300 350, 100 400), (70 380, 0 350, 50 300, 0 250, 50 200, 0 150, 50 120))",
        0.01, 77.52, 249.99, 54.81 );
 }
 
-//
 // testPointsLinesTriangle
-//
 template<>
 template<>
-void object::test<7>
-()
+void object::test<7>()
 {
 checkCircle("GEOMETRYCOLLECTION (LINESTRING (100 100, 300 100), POINT (250 200))",
        0.01, 196.49, 164.31, 64.31 );
 }
 
-
-//
 // testPointsLinesTriangle
-//
 template<>
 template<>
-void object::test<8>
-()
+void object::test<8>()
 {
 checkCircleZeroRadius("POINT (100 100)",
        0.01 );
 }
 
-//
 // testLineFlat
-//
 template<>
 template<>
-void object::test<9>
-()
+void object::test<9>()
 {
  checkCircleZeroRadius("LINESTRING (0 0, 50 50)",
        0.01 );
@@ -264,18 +232,47 @@ void object::test<9>
 // testThinExtent
 template<>
 template<>
-void object::test<10>
-()
+void object::test<10>()
 {
     checkCircle("MULTIPOINT ((100 100), (300 100), (200 100.1))",
        0.01 );
 }
 
+//------------ Polygon Obstacles -----------------
+
+// testPolygonConcave
+template<>
+template<>
+void object::test<11>()
+{
+    checkCircle("POLYGON ((1 9, 9 6, 6 5, 5 3, 8 3, 9 4, 9 1, 1 1, 1 9))", 
+        0.01, 7.495, 4.216, 1.21);
+} 
+
+// testPolygonsBoxes
+template<>
+template<>
+void object::test<12>()
+{
+    checkCircle("MULTIPOLYGON (((1 6, 6 6, 6 1, 1 1, 1 6)), ((6 7, 4 7, 4 9, 6 9, 6 7)))", 
+        0.01, 2.50, 7.50, 1.50);
+} 
+
+// testPolygonLines
+template<>
+template<>
+void object::test<13>()
+{
+    checkCircle("GEOMETRYCOLLECTION (POLYGON ((1 6, 6 6, 6 1, 1 1, 1 6)), LINESTRING (6 7, 3 9), LINESTRING (1 7, 3 8))", 
+        0.01, 3.74, 7.14, 1.14);
+} 
+
+//----------  Obstacles and Boundary  --------------
+
 // testBoundaryEmpty
 template<>
 template<>
-void object::test<11>
-()
+void object::test<14>()
 {
  checkCircle("MULTIPOINT ((2 2), (8 8), (7 5))",
         "POLYGON EMPTY",
@@ -285,8 +282,7 @@ void object::test<11>
 // testBoundarySquare
 template<>
 template<>
-void object::test<12>
-()
+void object::test<15>()
 {
     checkCircle("MULTIPOINT ((2 2), (6 4), (8 8))",
         "POLYGON ((1 9, 9 9, 9 1, 1 1, 1 9))",
@@ -296,8 +292,7 @@ void object::test<12>
 //testBoundarySquareObstaclesOutside
 template<>
 template<>
-void object::test<13>
-()
+void object::test<16>()
 {
     checkCircle("MULTIPOINT ((10 10), (10 0))",
         "POLYGON ((1 9, 9 9, 9 1, 1 1, 1 9))",
@@ -307,8 +302,7 @@ void object::test<13>
 // testBoundaryMultiSquares
 template<>
 template<>
-void object::test<14>
-()
+void object::test<17>()
 {
     checkCircle("MULTIPOINT ((10 10), (10 0), (5 5))",
         "MULTIPOLYGON (((1 9, 9 9, 9 1, 1 1, 1 9)), ((15 20, 20 20, 20 15, 15 15, 15 20)))",
@@ -318,12 +312,20 @@ void object::test<14>
 // testBoundaryAsObstacle
 template<>
 template<>
-void object::test<15>
-()
+void object::test<18>()
 {
-    checkCircle("GEOMETRYCOLLECTION (POLYGON ((1 9, 9 9, 9 1, 1 1, 1 9)), POINT (4 3), POINT (7 6))",
+    checkCircle("GEOMETRYCOLLECTION (LINESTRING (1 9, 9 9, 9 1, 1 1, 1 9), POINT (4 3), POINT (7 6))",
         "POLYGON ((1 9, 9 9, 9 1, 1 1, 1 9))",
         0.01, 4, 6, 3 );
+}
+
+// testObstacleEmptyElement
+template<>
+template<>
+void object::test<19>()
+{
+    checkCircle("GEOMETRYCOLLECTION (LINESTRING EMPTY, POINT (4 3), POINT (7 6), POINT (4 6))", 
+        0.01, 5.5, 4.5, 2.12 );
 }
 
 } // namespace tut

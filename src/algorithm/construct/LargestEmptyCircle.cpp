@@ -49,8 +49,8 @@ LargestEmptyCircle::LargestEmptyCircle(const Geometry* p_obstacles, const Geomet
     : tolerance(p_tolerance)
     , obstacles(p_obstacles)
     , factory(p_obstacles->getFactory())
-    , obstacleDistance(p_obstacles)
     , done(false)
+    , obstacleDistance(*p_obstacles)
 {
     if (obstacles->isEmpty()) {
         throw util::IllegalArgumentException("Empty obstacles geometry is not supported");
@@ -164,14 +164,14 @@ LargestEmptyCircle::mayContainCircleCenter(const Cell& cell, const Cell& farthes
 double
 LargestEmptyCircle::distanceToConstraints(const Coordinate& c)
 {
-    bool isOutside = ptLocator && (Location::EXTERIOR == ptLocator->locate(&c));
+    bool isOutside = boundaryPtLocater && (Location::EXTERIOR == boundaryPtLocater->locate(&c));
     std::unique_ptr<Point> pt(factory->createPoint(c));
     if (isOutside) {
         double boundaryDist = boundaryDistance->distance(pt.get());
         return -boundaryDist;
 
     }
-    double dist = obstacleDistance.distance(pt.get());
+    double dist = obstacleDistance.distance(*(pt.get()));
     return dist;
 }
 
@@ -200,8 +200,8 @@ LargestEmptyCircle::initBoundary()
     gridEnv = *(boundary->getEnvelopeInternal());
     // if boundary does not enclose an area cannot create a ptLocator
     if (boundary->getDimension() >= 2) {
-        ptLocator.reset(new algorithm::locate::IndexedPointInAreaLocator(*(boundary.get())));
-        boundaryDistance.reset(new operation::distance::IndexedFacetDistance(boundary.get()));
+        boundaryPtLocater = detail::make_unique<algorithm::locate::IndexedPointInAreaLocator>(*(boundary.get()));
+        boundaryDistance = detail::make_unique<operation::distance::IndexedFacetDistance>(boundary.get());
     }
 }
 
@@ -214,7 +214,7 @@ LargestEmptyCircle::compute()
 
     initBoundary();
     // if ptLocator is not present then result is degenerate (represented as zero-radius circle)
-    if (!ptLocator) {
+    if (!boundaryPtLocater) {
         const CoordinateXY* pt = obstacles->getCoordinate();
         centerPt = *pt;
         radiusPt = *pt;
@@ -273,7 +273,7 @@ LargestEmptyCircle::compute()
 
     // compute radius point
     std::unique_ptr<Point> centerPoint(factory->createPoint(centerPt));
-    const auto& nearestPts = obstacleDistance.nearestPoints(centerPoint.get());
+    const auto& nearestPts = obstacleDistance.nearestPoints(*(centerPoint.get()));
     radiusPt = nearestPts->getAt(0);
 
     // flag computation
