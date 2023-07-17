@@ -30,24 +30,19 @@ namespace tut {
 //
 
 // dummy data, not used
-struct test_lec_data {
-    geos::geom::Geometry* geom_;
+struct test_data_LargestEmptyCircle {
     geos::geom::PrecisionModel pm_;
     geos::geom::GeometryFactory::Ptr factory_;
     geos::io::WKTReader reader_;
-    geos::io::WKTWriter writer_;
 
-    test_lec_data():
-        geom_(nullptr),
+    test_data_LargestEmptyCircle():
         pm_(geos::geom::PrecisionModel::FLOATING),
         factory_(GeometryFactory::create(&pm_, 0)),
         reader_(factory_.get())
     {}
 
-    ~test_lec_data()
+    ~test_data_LargestEmptyCircle()
     {
-        factory_->destroyGeometry(geom_);
-        geom_ = nullptr;
     }
 
     void
@@ -142,10 +137,10 @@ struct test_lec_data {
 
 };
 
-typedef test_group<test_lec_data> group;
+typedef test_group<test_data_LargestEmptyCircle> group;
 typedef group::object object;
 
-group test_lec_group("geos::algorithm::construct::LargestEmptyCircle");
+group test_group_LargestEmptyCircle("geos::algorithm::construct::LargestEmptyCircle");
 
 // testPointsSquare
 template<>  
