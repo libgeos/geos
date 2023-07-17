@@ -19,9 +19,7 @@
 #include <string>
 #include <memory>
 
-using namespace geos;
 using namespace geos::geom;
-
 using geos::algorithm::construct::LargestEmptyCircle;
 
 namespace tut {
@@ -31,12 +29,12 @@ namespace tut {
 
 // dummy data, not used
 struct test_data_LargestEmptyCircle {
-    geos::geom::PrecisionModel pm_;
-    geos::geom::GeometryFactory::Ptr factory_;
+    PrecisionModel pm_;
+    GeometryFactory::Ptr factory_;
     geos::io::WKTReader reader_;
 
     test_data_LargestEmptyCircle():
-        pm_(geos::geom::PrecisionModel::FLOATING),
+        pm_(PrecisionModel::FLOATING),
         factory_(GeometryFactory::create(&pm_, 0)),
         reader_(factory_.get())
     {}
@@ -46,8 +44,8 @@ struct test_data_LargestEmptyCircle {
     }
 
     void
-    ensure_equals_coordinate(const geos::geom::Coordinate &lhs,
-                             const geos::geom::Coordinate &rhs, double tolerance)
+    ensure_equals_coordinate(const Coordinate &lhs,
+                             const Coordinate &rhs, double tolerance)
     {
         ensure_equals("x coordinate does not match", lhs.x, rhs.x, tolerance);
         ensure_equals("y coordinate does not match", lhs.y, rhs.y, tolerance);
