@@ -152,8 +152,8 @@ namespace capitest {
             if (rslt == 1) return;
             //TODO: handle rslt exception value
 
-            char* wkt1;
-            char* wkt2;
+            char* wkt1 = nullptr;
+            char* wkt2 = nullptr;
             if (g1 != nullptr)
                 wkt1 = GEOSWKTWriter_write(wktw_, g1);
             if (g2 != nullptr)
@@ -161,8 +161,8 @@ namespace capitest {
             const char* val1 = (g1 == nullptr) ? "null" : wkt1;
             const char* val2 = (g2 == nullptr) ? "null" : wkt2;
             std::fprintf(stdout, "\n%s : %s != %s (tol = %f)\n", tag, val1, val2, tolerance);
-            if (g1 != nullptr) GEOSFree(wkt1);
-            if (g2 != nullptr) GEOSFree(wkt2);
+            if (wkt1 != nullptr) GEOSFree(wkt1);
+            if (wkt2 != nullptr) GEOSFree(wkt2);
         }
 
     };

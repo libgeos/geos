@@ -3,7 +3,6 @@
 
 #include <tut/tut.hpp>
 // geos
-#include <geos/operation/distance/IndexedFacetDistance.h>
 #include <geos/algorithm/construct/LargestEmptyCircle.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Dimension.h>
