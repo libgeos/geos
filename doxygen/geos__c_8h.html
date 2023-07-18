@@ -7538,9 +7538,10 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Free strings and byte buffers returned by functions such as <a class="el" href="geos__c_8h.html#ae44097c01738103bb8447385d92381f7">GEOSWKBWriter_write()</a>, <a class="el" href="geos__c_8h.html#acca3e02392629aacea5c05ed055a1695">GEOSWKBWriter_writeHEX()</a> and <a class="el" href="geos__c_8h.html#a146a442754fc86e2ece9b11c9aa1c165">GEOSWKTWriter_write()</a>, etc. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Free strings and byte buffers returned by functions such as <a class="el" href="geos__c_8h.html#ae44097c01738103bb8447385d92381f7">GEOSWKBWriter_write()</a>, <a class="el" href="geos__c_8h.html#acca3e02392629aacea5c05ed055a1695">GEOSWKBWriter_writeHEX()</a> and <a class="el" href="geos__c_8h.html#a146a442754fc86e2ece9b11c9aa1c165">GEOSWKTWriter_write()</a>, etc. If passed a null pointer the function does nothing.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">buffer</td><td>The memory to free </td></tr>
+    <tr><td class="paramname">buffer</td><td>The memory to free (may be null) </td></tr>
   </table>
   </dd>
 </dl>
