@@ -5,13 +5,10 @@
 // geos
 #include <geos/algorithm/construct/LargestEmptyCircle.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/Dimension.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
-#include <geos/geom/LineString.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/io/WKTReader.h>
-#include <geos/io/WKTWriter.h>
 #include <geos/constants.h>
 // std
 #include <sstream>
