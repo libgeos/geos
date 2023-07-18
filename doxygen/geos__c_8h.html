@@ -12688,13 +12688,14 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Sews together a set of fully noded LineStrings removing any cardinality 2 nodes in the linework. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Merges a set of LineStrings, joining them at nodes which have cardinality 2. Lines may have their direction reversed.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The input linework </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The merged linework Caller is responsible for freeing with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a>. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The merged linework. Caller is responsible for freeing with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a>. </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1operation_1_1linemerge_1_1LineMerger.html" title="Sews together a set of fully noded LineStrings.">geos::operation::linemerge::LineMerger</a> </dd></dl>
 <dl class="section since"><dt>Since</dt><dd>2.2 </dd></dl>
 
@@ -12744,13 +12745,14 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Sews together a set of fully noded LineStrings removing any cardinality 2 nodes in the linework only if possible without changing order of points. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Merges a set of LineStrings, joining them at nodes which have cardinality 2. and where the lines have the same direction. This means that lines do not have their direction reversed.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The input linework </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The merged linework Caller is responsible for freeing with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a>. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The merged linework. Caller is responsible for freeing with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a>. </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1operation_1_1linemerge_1_1LineMerger.html" title="Sews together a set of fully noded LineStrings.">geos::operation::linemerge::LineMerger</a></dd></dl>
 <dl class="section since"><dt>Since</dt><dd>3.11 </dd></dl>
 
