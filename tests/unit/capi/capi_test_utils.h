@@ -161,8 +161,8 @@ namespace capitest {
             const char* val1 = (g1 == nullptr) ? "null" : wkt1;
             const char* val2 = (g2 == nullptr) ? "null" : wkt2;
             std::fprintf(stdout, "\n%s : %s != %s (tol = %f)\n", tag, val1, val2, tolerance);
-            if (wkt1 != nullptr) GEOSFree(wkt1);
-            if (wkt2 != nullptr) GEOSFree(wkt2);
+            GEOSFree(wkt1);
+            GEOSFree(wkt2);
         }
 
     };
