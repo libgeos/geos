@@ -23,7 +23,6 @@ namespace tut {
 // Test Group
 //
 
-// dummy data, not used
 struct test_data_LargestEmptyCircle {
     PrecisionModel pm_;
     GeometryFactory::Ptr factory_;
