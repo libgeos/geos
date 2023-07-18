@@ -58,8 +58,7 @@ $(function() {
 Public Member Functions</h2></td></tr>
 <tr class="memitem:af8f86ef6c4c401cc4c783adbf4708e7a"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1construct_1_1LargestEmptyCircle.html#af8f86ef6c4c401cc4c783adbf4708e7a">LargestEmptyCircle</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *p_obstacles, double p_tolerance)</td></tr>
 <tr class="separator:af8f86ef6c4c401cc4c783adbf4708e7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4b24896938ef39af4e413ae3d42c47e0"><td class="memItemLeft" align="right" valign="top"><a id="a4b24896938ef39af4e413ae3d42c47e0"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>LargestEmptyCircle</b> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *p_obstacles, const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *p_boundary, double p_tolerance)</td></tr>
+<tr class="memitem:a4b24896938ef39af4e413ae3d42c47e0"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1construct_1_1LargestEmptyCircle.html#a4b24896938ef39af4e413ae3d42c47e0">LargestEmptyCircle</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *p_obstacles, const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *p_boundary, double p_tolerance)</td></tr>
 <tr class="separator:a4b24896938ef39af4e413ae3d42c47e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a754bc7836b46e880e05abbef6b54d45b"><td class="memItemLeft" align="right" valign="top"><a id="a754bc7836b46e880e05abbef6b54d45b"></a>
 std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Point.html">geom::Point</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getCenter</b> ()</td></tr>
@@ -79,13 +78,15 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a7bd5a9a6cedaaaae863628f1fa0eb47b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Constructs the Largest Empty Circle for a set of obstacle geometries, up to a specified tolerance. The obstacles are point and line geometries.</p>
-<p>The Largest Empty Circle is the largest circle which has its center in the convex hull of the obstacles (the boundary), and whose interior does not intersect with any obstacle. The circle center is the point in the interior of the boundary which has the farthest distance from the obstacles (up to tolerance). The circle is determined by the center point and a point lying on an obstacle indicating the circle radius.</p>
+<div class="textblock"><p>Constructs the Largest Empty Circle for a set of obstacle geometries, up to a specified tolerance. The obstacles may be any combination of point, linear and polygonal geometries.</p>
+<p>The Largest Empty Circle (LEC) is the largest circle whose interior does not intersect with any obstacle and whose center lies within a polygonal boundary. The circle center is the point in the interior of the boundary which has the farthest distance from the obstacles (up to the accuracy of the distance tolerance). The circle itself is determined by the center point and a point lying on an obstacle determining the circle radius.</p>
+<p>The polygonal boundary may be supplied explicitly. If it is not specified the convex hull of the obstacles is used as the boundary.</p>
+<p>To compute an LEC which lies wholly within a polygonal boundary, include the boundary of the polygon(s) as an obstacle.</p>
 <p>The implementation uses a successive-approximation technique over a grid of square cells covering the obstacles and boundary. The grid is refined using a branch-and-bound algorithm. Point containment and distance are computed in a performant way by using spatial indexes.</p>
 <dl class="section author"><dt>Author</dt><dd>Martin Davis </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="af8f86ef6c4c401cc4c783adbf4708e7a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af8f86ef6c4c401cc4c783adbf4708e7a">&#9670;&nbsp;</a></span>LargestEmptyCircle()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#af8f86ef6c4c401cc4c783adbf4708e7a">&#9670;&nbsp;</a></span>LargestEmptyCircle() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -109,10 +110,53 @@ Static Public Member Functions</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Creates a new instance of a Largest Empty Circle construction.</p>
+<p>Creates a new instance of a Largest Empty Circle construction. The obstacles may be any collection of points, lines and polygons. The constructed circle center lies within the convex hull of the obstacles.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">p_obstacles</td><td>a geometry representing the obstacles (points and lines) </td></tr>
+    <tr><td class="paramname">p_obstacles</td><td>a geometry representing the obstacles </td></tr>
+    <tr><td class="paramname">p_tolerance</td><td>the distance tolerance for computing the circle center point </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4b24896938ef39af4e413ae3d42c47e0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b24896938ef39af4e413ae3d42c47e0">&#9670;&nbsp;</a></span>LargestEmptyCircle() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">geos::algorithm::construct::LargestEmptyCircle::LargestEmptyCircle </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *&#160;</td>
+          <td class="paramname"><em>p_obstacles</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *&#160;</td>
+          <td class="paramname"><em>p_boundary</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>p_tolerance</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Creates a new instance of a Largest Empty Circle construction, interior-disjoint to a set of obstacle geometries and having its center within a polygonal boundary. The obstacles may be any collection of points, lines and polygons. If the boundary is null or empty the convex hull of the obstacles is used as the boundary.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p_obstacles</td><td>a geometry representing the obstacles </td></tr>
+    <tr><td class="paramname">p_boundary</td><td>a polygonal geometry to contain the LEC center </td></tr>
     <tr><td class="paramname">p_tolerance</td><td>the distance tolerance for computing the circle center point </td></tr>
   </table>
   </dd>
@@ -154,10 +198,10 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Computes the center point of the Largest Empty Circle within a set of obstacles, up to a given tolerance distance.</p>
+<p>Computes the center point of the Largest Empty Circle within a set of obstacles, up to a given tolerance distance. The obstacles may be any collection of points, lines and polygons.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">p_obstacles</td><td>a geometry representing the obstacles (points and lines) </td></tr>
+    <tr><td class="paramname">p_obstacles</td><td>a geometry representing the obstacles </td></tr>
     <tr><td class="paramname">p_tolerance</td><td>the distance tolerance for computing the center point </td></tr>
   </table>
   </dd>
@@ -199,10 +243,10 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Computes a radius line of the Largest Empty Circle within a set of obstacles, up to a given distance tolerance.</p>
+<p>Computes a radius line of the Largest Empty Circle within a set of obstacles, up to a given distance tolerance. The obstacles may be any collection of points, lines and polygons.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">p_obstacles</td><td>a geometry representing the obstacles (points and lines) </td></tr>
+    <tr><td class="paramname">p_obstacles</td><td>a geometry representing the obstacles </td></tr>
     <tr><td class="paramname">p_tolerance</td><td>the distance tolerance for computing the center point </td></tr>
   </table>
   </dd>
