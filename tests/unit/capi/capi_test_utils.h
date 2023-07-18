@@ -93,17 +93,30 @@ namespace capitest {
         void
         ensure_geometry_equals(GEOSGeometry* g1, GEOSGeometry* g2, double tolerance)
         {
-            GEOSNormalize(g1);
-            GEOSNormalize(g2);
-            char rslt = GEOSEqualsExact(g1, g2, tolerance);
-            if (rslt != 1)
-            {
-                char* wkt1 = GEOSWKTWriter_write(wktw_, g1);
-                char* wkt2 = GEOSGeomToWKT(g2);
-                std::fprintf(stdout, "\n%s != %s\n", wkt1, wkt2);
-                GEOSFree(wkt1);
-                GEOSFree(wkt2);
+            char rslt;
+            if (g1 == nullptr || g2 == nullptr) {
+                rslt = (g1 == nullptr && g2 == nullptr) ? 1 : 0;
+            } 
+            else {
+                GEOSNormalize(g1);
+                GEOSNormalize(g2);
+                rslt = GEOSEqualsExact(g1, g2, tolerance);
             }
+            report_not_equal("ensure_equals_norm", g1, g2, tolerance, rslt);
+            tut::ensure_equals("GEOSEqualsExact(g1, g2, tolerance)", rslt, 1);
+        }
+
+        void
+        ensure_geometry_equals_exact(GEOSGeometry* g1, GEOSGeometry* g2, double tolerance)
+        {
+            char rslt;
+            if (g1 == nullptr || g2 == nullptr) {
+                rslt = (g1 == nullptr && g2 == nullptr) ? 1 : 0;
+            } 
+            else {
+                rslt = GEOSEqualsExact(g1, g2, tolerance);
+            }
+            report_not_equal("ensure_equals_exact", g1, g2, tolerance, rslt);
             tut::ensure_equals("GEOSEqualsExact(g1, g2, tolerance)", rslt, 1);
         }
 
@@ -133,7 +146,24 @@ namespace capitest {
             tut::ensure_equals("GEOSEqualsExact(g1, g2, 1e-12)", rslt, 1);
         }
 
+        void
+        report_not_equal(const char* tag, GEOSGeometry* g1, GEOSGeometry* g2, double tolerance, char rslt)
+        {
+            if (rslt == 1) return;
+            //TODO: handle rslt exception value
 
+            char* wkt1 = nullptr;
+            char* wkt2 = nullptr;
+            if (g1 != nullptr)
+                wkt1 = GEOSWKTWriter_write(wktw_, g1);
+            if (g2 != nullptr)
+                wkt2 = GEOSWKTWriter_write(wktw_, g2);
+            const char* val1 = (g1 == nullptr) ? "null" : wkt1;
+            const char* val2 = (g2 == nullptr) ? "null" : wkt2;
+            std::fprintf(stdout, "\n%s : %s != %s (tol = %f)\n", tag, val1, val2, tolerance);
+            GEOSFree(wkt1);
+            GEOSFree(wkt2);
+        }
 
     };
 

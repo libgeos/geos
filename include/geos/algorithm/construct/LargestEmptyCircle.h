@@ -22,13 +22,12 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/Envelope.h>
+#include <geos/algorithm/construct/IndexedDistanceToPoint.h>
 #include <geos/algorithm/locate/IndexedPointInAreaLocator.h>
 #include <geos/operation/distance/IndexedFacetDistance.h>
 
 #include <memory>
 #include <queue>
-
-
 
 namespace geos {
 namespace geom {
@@ -39,13 +38,9 @@ class GeometryFactory;
 class LineString;
 class Point;
 }
-namespace operation {
-namespace distance {
-class IndexedFacetDistance;
-}
-}
 }
 
+using geos::operation::distance::IndexedFacetDistance;
 
 namespace geos {
 namespace algorithm { // geos::algorithm
@@ -53,15 +48,23 @@ namespace construct { // geos::algorithm::construct
 
 /**
 * Constructs the Largest Empty Circle for a set of obstacle geometries,
-* up to a specified tolerance. The obstacles are point and line geometries.
+* up to a specified tolerance. 
+* The obstacles may be any combination of point, linear and polygonal geometries.
 *
-* The Largest Empty Circle is the largest circle which has its center
-* in the convex hull of the obstacles (the boundary), and whose
-* interior does not intersect with any obstacle. The circle center
-* is the point in the interior of the boundary which has the
-* farthest distance from the obstacles (up to tolerance).
-* The circle is determined by the center point and a point lying
-* on an obstacle indicating the circle radius.
+* The Largest Empty Circle (LEC) is the largest circle 
+* whose interior does not intersect with any obstacle
+* and whose center lies within a polygonal boundary.
+* The circle center is the point in the interior of the boundary 
+* which has the farthest distance from the obstacles 
+* (up to the accuracy of the distance tolerance).
+* The circle itself is determined by the center point
+* and a point lying on an obstacle determining the circle radius.
+* 
+* The polygonal boundary may be supplied explicitly.
+* If it is not specified the convex hull of the obstacles is used as the boundary.
+* 
+* To compute an LEC which lies wholly within
+* a polygonal boundary, include the boundary of the polygon(s) as an obstacle.
 *
 * The implementation uses a successive-approximation technique
 * over a grid of square cells covering the obstacles and boundary.
@@ -77,19 +80,36 @@ public:
 
     /**
     * Creates a new instance of a Largest Empty Circle construction.
+    * The obstacles may be any collection of points, lines and polygons.
+    * The constructed circle center lies within the convex hull of the obstacles.
     *
-    * @param p_obstacles a geometry representing the obstacles (points and lines)
+    * @param p_obstacles a geometry representing the obstacles
     * @param p_tolerance the distance tolerance for computing the circle center point
     */
     LargestEmptyCircle(const geom::Geometry* p_obstacles, double p_tolerance);
+
+    /**
+    * Creates a new instance of a Largest Empty Circle construction,
+    * interior-disjoint to a set of obstacle geometries 
+    * and having its center within a polygonal boundary.
+    * The obstacles may be any collection of points, lines and polygons.
+    * If the boundary is null or empty the convex hull
+    * of the obstacles is used as the boundary.
+    *
+    * @param p_obstacles a geometry representing the obstacles
+    * @param p_boundary a polygonal geometry to contain the LEC center
+    * @param p_tolerance the distance tolerance for computing the circle center point
+    */
     LargestEmptyCircle(const geom::Geometry* p_obstacles, const geom::Geometry* p_boundary, double p_tolerance);
+
     ~LargestEmptyCircle() = default;
 
     /**
     * Computes the center point of the Largest Empty Circle
     * within a set of obstacles, up to a given tolerance distance.
+    * The obstacles may be any collection of points, lines and polygons.
     *
-    * @param p_obstacles a geometry representing the obstacles (points and lines)
+    * @param p_obstacles a geometry representing the obstacles
     * @param p_tolerance the distance tolerance for computing the center point
     * @return the center point of the Largest Empty Circle
     */
@@ -98,8 +118,9 @@ public:
     /**
     * Computes a radius line of the Largest Empty Circle
     * within a set of obstacles, up to a given distance tolerance.
+    * The obstacles may be any collection of points, lines and polygons.
     *
-    * @param p_obstacles a geometry representing the obstacles (points and lines)
+    * @param p_obstacles a geometry representing the obstacles
     * @param p_tolerance the distance tolerance for computing the center point
     * @return a line from the center of the circle to a point on the edge
     */
@@ -118,10 +139,10 @@ private:
     std::unique_ptr<geom::Geometry> boundary;
     const geom::GeometryFactory* factory;
     geom::Envelope gridEnv;
-    operation::distance::IndexedFacetDistance obstacleDistance;
     bool done;
-    std::unique_ptr<algorithm::locate::IndexedPointInAreaLocator> ptLocator;
-    std::unique_ptr<operation::distance::IndexedFacetDistance> boundaryDistance;
+    std::unique_ptr<algorithm::locate::IndexedPointInAreaLocator> boundaryPtLocater;
+    IndexedDistanceToPoint obstacleDistance;
+    std::unique_ptr<IndexedFacetDistance> boundaryDistance;
     geom::CoordinateXY centerPt;
     geom::CoordinateXY radiusPt;
 
