@@ -32,12 +32,18 @@ struct test_polygonnodetopology_data {
     }
 
     void
+    checkNonCrossing(const std::string& wktA, const std::string& wktB)
+    {
+        checkCrossing(wktA, wktB, false);
+    }
+
+    void
     checkCrossing(const std::string& wktA, const std::string& wktB, bool isExpected)
     {
         std::unique_ptr<CoordinateSequence> a = readPts(wktA);
         std::unique_ptr<CoordinateSequence> b = readPts(wktB);
         // assert: a[1] = b[1]
-        bool isCrossing = ! PolygonNodeTopology::isCrossing(
+        bool isCrossing = PolygonNodeTopology::isCrossing(
             &a->getAt(1), &a->getAt(0), &a->getAt(2), &b->getAt(0), &b->getAt(2));
         ensure(isCrossing == isExpected);
     }
@@ -60,7 +66,7 @@ struct test_polygonnodetopology_data {
         std::unique_ptr<CoordinateSequence> a = readPts(wktA);
         std::unique_ptr<CoordinateSequence> b = readPts(wktB);
         // assert: a[1] = b[1]
-        bool isInterior = ! PolygonNodeTopology::isInteriorSegment(
+        bool isInterior = PolygonNodeTopology::isInteriorSegment(
             &a->getAt(1), &a->getAt(0), &a->getAt(2), &b->getAt(1));
         ensure(isInterior == isExpected);
     }
@@ -94,30 +100,30 @@ void object::test<1> ()
 {
     checkCrossing(
         "LINESTRING (500 1000, 1000 1000, 1000 1500)",
-        "LINESTRING (1000 500, 1000 1000, 500 1500)", false);
+        "LINESTRING (1000 500, 1000 1000, 500 1500)");
 }
 
 
 //
-// testCrossingQuadrant2
+// testNonCrossingQuadrant2
 //
 template<>
 template<>
 void object::test<2> ()
 {
-    checkCrossing(
+    checkNonCrossing(
         "LINESTRING (500 1000, 1000 1000, 1000 1500)",
         "LINESTRING (300 1200, 1000 1000, 500 1500)");
 }
 
 //
-// testCrossingQuadrant4
+// testNonCrossingQuadrant4
 //
 template<>
 template<>
 void object::test<3> ()
 {
-    checkCrossing(
+    checkNonCrossing(
         "LINESTRING (500 1000, 1000 1000, 1000 1500)",
         "LINESTRING (1000 500, 1000 1000, 1500 1000)");
 }
@@ -131,7 +137,7 @@ void object::test<4> ()
 {
     checkInterior(
         "LINESTRING (5 9, 5 5, 9 5)",
-        "LINESTRING (5 5, 9 9)");
+        "LINESTRING (5 5, 0 0)");
 }
 
 //
@@ -143,7 +149,7 @@ void object::test<5> ()
 {
     checkExterior(
         "LINESTRING (5 9, 5 5, 9 5)",
-        "LINESTRING (5 5, 0 0)");
+        "LINESTRING (5 5, 9 9)");
 }
 
 } // namespace tut
