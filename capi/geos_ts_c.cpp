@@ -1184,7 +1184,7 @@ extern "C" {
     {
         return execute(extHandle, [&]() {
             BufferParameters bp;
-            //-- use default cap style ROUND 
+            //-- use default cap style ROUND
             bp.setQuadrantSegments(quadsegs);
 
             if(joinStyle > BufferParameters::JOIN_BEVEL) {
@@ -2069,10 +2069,11 @@ extern "C" {
             GeometryCollection *col = dynamic_cast<GeometryCollection*>(collection);
             if (!col) {
                 handle->ERROR_MESSAGE("Parameter collection of GEOSGeom_releaseCollection_r must not be a collection");
+            } else {
+                *ngeoms = static_cast<unsigned int>(col->getNumGeometries());
             }
 
             // Early exit on empty/null input
-            *ngeoms = static_cast<unsigned int>(col->getNumGeometries());
             if (!col || *ngeoms == 0) {
                 return static_cast<Geometry**>(nullptr);
             }
