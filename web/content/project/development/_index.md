@@ -9,7 +9,7 @@ weight: 5
 
 * **git** repository: https://github.com/libgeos/geos
 * [**geos-devel** mailing list](https://lists.osgeo.org/mailman/listinfo/geos-devel) and [archive](https://lists.osgeo.org/pipermail/geos-devel/)
-* **#geos** chat channel (all bridged):
+* **#geos** chat channels:
   * Matrix: https://matrix.to/#/#geos:osgeo.org
   * IRC: irc://irc.libera.chat/#osgeo-geos (https://kiwiirc.com/nextclient/irc.libera.chat/#osgeo-geos)
   * Slack: https://osgeo.slack.com/messages/C07RKJ06B/
