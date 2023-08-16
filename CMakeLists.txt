@@ -114,8 +114,12 @@ endif()
 
 # Make sure we know our build type
 if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE ${DEFAULT_BUILD_TYPE})
-  message(STATUS "GEOS: Using default build type: ${CMAKE_BUILD_TYPE}")
+  get_property(_is_multi_config_generator GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
+  if (NOT _is_multi_config_generator)
+    set(CMAKE_BUILD_TYPE ${DEFAULT_BUILD_TYPE})
+    message(STATUS "GEOS: Using default build type: ${CMAKE_BUILD_TYPE}")
+  endif()
+  unset(_is_multi_config_generator)
 else()
   message(STATUS "GEOS: Build type: ${CMAKE_BUILD_TYPE}")
 endif()
@@ -186,7 +190,11 @@ set(CMAKE_CXX_FLAGS_ASAN "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=address -fno-omit-
 set(CMAKE_EXE_LINKER_FLAGS_ASAN "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -fsanitize=address")
 set(CMAKE_SHARED_LINKER_FLAGS_ASAN "${CMAKE_SHARED_LINKER_FLAGS_DEBUG} -fsanitize=address")
 
-set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo" "ASAN")
+get_property(_cmake_build_type_is_cache CACHE CMAKE_BUILD_TYPE PROPERTY TYPE)
+if (_cmake_build_type_is_cache)
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo" "ASAN")
+endif()
+unset(_cmake_build_type_is_cache)
 
 #-----------------------------------------------------------------------------
 # Install directories
