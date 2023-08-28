@@ -302,8 +302,13 @@ public:
     /// Return an integer representation of this Geometry type
     virtual GeometryTypeId getGeometryTypeId() const = 0; //Abstract
 
-    /// Returns the number of geometries in this collection
-    /// (or 1 if this is not a collection)
+    /**
+     * \brief Returns the number of geometries in this collection,
+     * or 1 if this is not a collection.
+     *
+     * Empty collection or multi-geometry types return 0,
+     * and empty simple geometry types return 1.
+     */
     virtual std::size_t
     getNumGeometries() const
     {

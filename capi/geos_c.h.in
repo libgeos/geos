@@ -2580,6 +2580,8 @@ extern void GEOS_DLL *GEOSGeom_getUserData(const GEOSGeometry* g);
 * multi-geometry or collection or 1 for a simple geometry.
 * For nested collections, remember to check if returned
 * sub-geometries are **themselves** also collections.
+* Empty collection or multi-geometry types return 0,
+* and empty simple geometry types return 1.
 * \param g Input geometry
 * \return Number of direct children in this collection
 * \warning For GEOS < 3.2 this function may crash when fed simple geometries
