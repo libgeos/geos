@@ -11156,7 +11156,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns the number of sub-geometries immediately under a multi-geometry or collection or 1 for a simple geometry. For nested collections, remember to check if returned sub-geometries are <b>themselves</b> also collections. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Returns the number of sub-geometries immediately under a multi-geometry or collection or 1 for a simple geometry. For nested collections, remember to check if returned sub-geometries are <b>themselves</b> also collections. Empty collection or multi-geometry types return 0, and empty simple geometry types return 1. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>Input geometry </td></tr>
   </table>

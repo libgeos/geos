@@ -148,6 +148,7 @@ virtual <a class="el" href="namespacegeos_1_1geom.html#a98c5b0e81001a7c3fdc7a058
 <tr class="memdesc:a3680d76fcb2b2f8e2336ea3a2de5cbf8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return an integer representation of this <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a> type. <br /></td></tr>
 <tr class="separator:a3680d76fcb2b2f8e2336ea3a2de5cbf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac26f3cc7e069f67a1ab47e286d7df690"><td class="memItemLeft" align="right" valign="top">virtual std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#ac26f3cc7e069f67a1ab47e286d7df690">getNumGeometries</a> () const</td></tr>
+<tr class="memdesc:ac26f3cc7e069f67a1ab47e286d7df690"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of geometries in this collection, or 1 if this is not a collection.  <a href="classgeos_1_1geom_1_1Geometry.html#ac26f3cc7e069f67a1ab47e286d7df690">More...</a><br /></td></tr>
 <tr class="separator:ac26f3cc7e069f67a1ab47e286d7df690"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adb1b4249226d55c9dba83a4044a39868"><td class="memItemLeft" align="right" valign="top"><a id="adb1b4249226d55c9dba83a4044a39868"></a>
 virtual const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#adb1b4249226d55c9dba83a4044a39868">getGeometryN</a> (std::size_t) const</td></tr>
@@ -1135,7 +1136,9 @@ next lower dimension."</p>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns the number of geometries in this collection (or 1 if this is not a collection) </p>
+
+<p>Returns the number of geometries in this collection, or 1 if this is not a collection. </p>
+<p>Empty collection or multi-geometry types return 0, and empty simple geometry types return 1. </p>
 
 <p>Reimplemented in <a class="el" href="classgeos_1_1geom_1_1GeometryCollection.html#ad72892e0efeb775e0fd274a779b53d69">geos::geom::GeometryCollection</a>.</p>
 
