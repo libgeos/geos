@@ -405,4 +405,63 @@ void object::test<14>
     ensure_equals(wktwriter.write(*g), "LINESTRING M (1 2 3, 4 5 NaN)");
 }
 
+// Test multi-part geometries with zero or more empty parts
+// https://github.com/libgeos/geos/issues/951
+template<>
+template<>
+void object::test<15>
+()
+{
+    // zero empties -- but don't check dim types
+    // https://github.com/libgeos/geos/issues/888
+    std::vector<std::string> variants0{
+        "MULTIPOINT EMPTY", "MULTILINESTRING EMPTY",
+        "MULTIPOLYGON EMPTY", "GEOMETRYCOLLECTION EMPTY"
+    };
+    for (const auto& wkt : variants0) {
+        const auto g = wktreader.read(wkt);
+        ensure_equals(wktwriter.write(*g), wkt);
+        ensure_equals(g->getNumGeometries(), 0u);
+    }
+
+    // single empty
+    std::vector<std::string> variants1{
+        "MULTIPOINT (EMPTY)", "MULTIPOINT Z (EMPTY)",
+        "MULTIPOINT M (EMPTY)", "MULTIPOINT ZM (EMPTY)",
+        "MULTILINESTRING (EMPTY)", "MULTILINESTRING Z (EMPTY)",
+        "MULTILINESTRING M (EMPTY)", "MULTILINESTRING ZM (EMPTY)",
+        "MULTIPOLYGON (EMPTY)", "MULTIPOLYGON Z (EMPTY)",
+        "MULTIPOLYGON M (EMPTY)", "MULTIPOLYGON ZM (EMPTY)",
+        "GEOMETRYCOLLECTION (MULTIPOINT EMPTY)",
+        "GEOMETRYCOLLECTION Z (POINT Z EMPTY)",
+        "GEOMETRYCOLLECTION M (LINESTRING M EMPTY)",
+        "GEOMETRYCOLLECTION ZM (POLYGON ZM EMPTY)"
+    };
+    for (const auto& wkt : variants1) {
+        const auto g = wktreader.read(wkt);
+        ensure_equals(wktwriter.write(*g), wkt);
+        ensure_equals(g->getNumGeometries(), 1u);
+    }
+
+    // two empties
+    std::vector<std::string> variants2{
+        "MULTIPOINT (EMPTY, EMPTY)", "MULTIPOINT Z (EMPTY, EMPTY)",
+        "MULTIPOINT M (EMPTY, EMPTY)", "MULTIPOINT ZM (EMPTY, EMPTY)",
+        "MULTILINESTRING (EMPTY, EMPTY)", "MULTILINESTRING Z (EMPTY, EMPTY)",
+        "MULTILINESTRING M (EMPTY, EMPTY)", "MULTILINESTRING ZM (EMPTY, EMPTY)",
+        "MULTIPOLYGON (EMPTY, EMPTY)", "MULTIPOLYGON Z (EMPTY, EMPTY)",
+        "MULTIPOLYGON M (EMPTY, EMPTY)", "MULTIPOLYGON ZM (EMPTY, EMPTY)",
+        "GEOMETRYCOLLECTION (POLYGON EMPTY, LINESTRING EMPTY)",
+        "GEOMETRYCOLLECTION Z (LINESTRING Z EMPTY, POINT Z EMPTY)",
+        "GEOMETRYCOLLECTION M (POINT M EMPTY, LINESTRING M EMPTY)",
+        "GEOMETRYCOLLECTION ZM (POINT ZM EMPTY, LINESTRING ZM EMPTY)"
+    };
+    for (const auto& wkt : variants2) {
+        const auto g = wktreader.read(wkt);
+        ensure_equals(wktwriter.write(*g), wkt);
+        ensure_equals(g->getNumGeometries(), 2u);
+    }
+
+}
+
 } // namespace tut

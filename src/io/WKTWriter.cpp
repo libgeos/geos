@@ -477,12 +477,13 @@ void
 WKTWriter::appendMultiPointText(const MultiPoint& multiPoint, OrdinateSet outputOrdinates,
                                 int /*level*/, Writer& writer) const
 {
-    if(multiPoint.isEmpty()) {
+    const std::size_t n = multiPoint.getNumGeometries();
+    if(n == 0) {
         writer.write("EMPTY");
     }
     else {
         writer.write("(");
-        for(std::size_t i = 0, n = multiPoint.getNumGeometries(); i < n; ++i) {
+        for(std::size_t i = 0; i < n; ++i) {
             if(i > 0) {
                 writer.write(", ");
             }
@@ -506,15 +507,15 @@ void
 WKTWriter::appendMultiLineStringText(const MultiLineString& multiLineString, OrdinateSet outputOrdinates, int p_level, bool indentFirst,
                                      Writer& writer) const
 {
-    if(multiLineString.isEmpty()) {
+    const std::size_t n = multiLineString.getNumGeometries();
+    if(n == 0) {
         writer.write("EMPTY");
     }
     else {
         int level2 = p_level;
         bool doIndent = indentFirst;
         writer.write("(");
-        for(std::size_t i = 0, n = multiLineString.getNumGeometries();
-                i < n; ++i) {
+        for(std::size_t i = 0; i < n; ++i) {
             if(i > 0) {
                 writer.write(", ");
                 level2 = p_level + 1;
@@ -530,15 +531,15 @@ WKTWriter::appendMultiLineStringText(const MultiLineString& multiLineString, Ord
 void
 WKTWriter::appendMultiPolygonText(const MultiPolygon& multiPolygon, OrdinateSet outputOrdinates, int p_level, Writer& writer) const
 {
-    if(multiPolygon.isEmpty()) {
+    const std::size_t n = multiPolygon.getNumGeometries();
+    if(n == 0) {
         writer.write("EMPTY");
     }
     else {
         int level2 = p_level;
         bool doIndent = false;
         writer.write("(");
-        for(std::size_t i = 0, n = multiPolygon.getNumGeometries();
-                i < n; ++i) {
+        for(std::size_t i = 0; i < n; ++i) {
             if(i > 0) {
                 writer.write(", ");
                 level2 = p_level + 1;
@@ -558,11 +559,14 @@ WKTWriter::appendGeometryCollectionText(
     int p_level,
     Writer& writer) const
 {
-    if(geometryCollection.getNumGeometries() > 0) {
+    const std::size_t n = geometryCollection.getNumGeometries();
+    if(n == 0) {
+        writer.write("EMPTY");
+    }
+    else {
         int level2 = p_level;
         writer.write("(");
-        for(std::size_t i = 0, n = geometryCollection.getNumGeometries();
-                i < n; ++i) {
+        for(std::size_t i = 0; i < n; ++i) {
             if(i > 0) {
                 writer.write(", ");
                 level2 = p_level + 1;
@@ -570,9 +574,6 @@ WKTWriter::appendGeometryCollectionText(
             appendGeometryTaggedText(*geometryCollection.getGeometryN(i), outputOrdinates, level2, writer);
         }
         writer.write(")");
-    }
-    else {
-        writer.write("EMPTY");
     }
 }
 

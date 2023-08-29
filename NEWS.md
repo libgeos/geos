@@ -11,6 +11,7 @@
   - ConvexHull: Performance improvement for larger geometries (JTS-985, Martin Davis)
   - Intersection: change to using DoubleDouble computation to improve robustness (GH-937, Martin Davis)
   - Fix LargestEmptyCircle to respect polygonal obstacles (GH-939, Martin Davis)
+  - Fix WKTWriter to emit EMPTY elements in multi-geometries (GH-952, Mike Taves)
 
 
 ## Changes in 3.12.0
