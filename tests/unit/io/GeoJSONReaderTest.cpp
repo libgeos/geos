@@ -434,7 +434,7 @@ void object::test<28>
 {
     std::string geojson { "{\"type\":\"MultiLineString\",\"coordinates\":[[],[],[]]}" };
     GeomPtr geom(geojsonreader.read(geojson));
-    ensure_equals(geom->toText(), "MULTILINESTRING EMPTY");
+    ensure_equals(geom->toText(), "MULTILINESTRING (EMPTY, EMPTY, EMPTY)");
     ensure_equals(static_cast<size_t>(geom->getCoordinateDimension()), 2u);
 }
 
