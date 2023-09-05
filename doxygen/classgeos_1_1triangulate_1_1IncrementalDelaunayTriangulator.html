@@ -67,6 +67,8 @@ typedef std::vector&lt; <a class="el" href="classgeos_1_1triangulate_1_1quadedge
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a1dbfa9296b8cdc00b44a0826021ed7a4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1triangulate_1_1IncrementalDelaunayTriangulator.html#a1dbfa9296b8cdc00b44a0826021ed7a4">IncrementalDelaunayTriangulator</a> (<a class="el" href="classgeos_1_1triangulate_1_1quadedge_1_1QuadEdgeSubdivision.html">quadedge::QuadEdgeSubdivision</a> *subdiv)</td></tr>
 <tr class="separator:a1dbfa9296b8cdc00b44a0826021ed7a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a41239b3cc423e4008a8baac3484fc29e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1triangulate_1_1IncrementalDelaunayTriangulator.html#a41239b3cc423e4008a8baac3484fc29e">forceConvex</a> (bool isForceConvex)</td></tr>
+<tr class="separator:a41239b3cc423e4008a8baac3484fc29e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5bbf2ff5d755818476b732b16132363f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1triangulate_1_1IncrementalDelaunayTriangulator.html#a5bbf2ff5d755818476b732b16132363f">insertSites</a> (const VertexList &amp;vertices)</td></tr>
 <tr class="separator:a5bbf2ff5d755818476b732b16132363f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a820bc36d3e16f115c8bef205965b0790"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgeos_1_1triangulate_1_1quadedge_1_1QuadEdge.html">quadedge::QuadEdge</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1triangulate_1_1IncrementalDelaunayTriangulator.html#a820bc36d3e16f115c8bef205965b0790">insertSite</a> (const <a class="el" href="classgeos_1_1triangulate_1_1quadedge_1_1Vertex.html">quadedge::Vertex</a> &amp;v)</td></tr>
@@ -104,6 +106,31 @@ Benjamin Campbell </dd></dl>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a41239b3cc423e4008a8baac3484fc29e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a41239b3cc423e4008a8baac3484fc29e">&#9670;&nbsp;</a></span>forceConvex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void geos::triangulate::IncrementalDelaunayTriangulator::forceConvex </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>isForceConvex</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Sets whether the triangulation is forced to have a convex boundary. Because of the use of a finite-size frame, this condition requires special logic to enforce. The default is true, since this is a requirement for some uses of Delaunay Triangulations (such as Concave Hull generation). However, forcing the triangulation boundary to be convex may cause the overall frame triangulation to be non-Delaunay. This can cause a problem for Voronoi generation, so the logic can be disabled via this method.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">isForceConvex</td><td>true if the triangulation boundary is forced to be convex </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a820bc36d3e16f115c8bef205965b0790"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a820bc36d3e16f115c8bef205965b0790">&#9670;&nbsp;</a></span>insertSite()</h2>
 
