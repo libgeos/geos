@@ -47,6 +47,11 @@ namespace geos {
 namespace triangulate { //geos.triangulate
 namespace quadedge { //geos.triangulate.quadedge
 
+const double EDGE_COINCIDENCE_TOL_FACTOR = 1000;
+
+//-- Frame size factor for initializing subdivision frame.  Larger is more robust
+const double FRAME_SIZE_FACTOR = 10;
+
 void
 QuadEdgeSubdivision::getTriangleEdges(const QuadEdge& startQE,
                                       const QuadEdge* triEdge[3])
