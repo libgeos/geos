@@ -94,6 +94,11 @@ void object::test<2>
     IncrementalDelaunayTriangulator::VertexList vertices = DelaunayTriangulationBuilder::toVertices(*siteCoords);
     std::unique_ptr<QuadEdgeSubdivision> subdiv(new quadedge::QuadEdgeSubdivision(Env, 0));
     IncrementalDelaunayTriangulator triangulator(subdiv.get());
+        /**
+     * Avoid creating very narrow triangles along triangulation boundary.
+     * These otherwise can cause malformed Voronoi cells.
+     */
+    triangulator.forceConvex(false);
     triangulator.insertSites(vertices);
 
     //Test for getVoronoiDiagram::
@@ -104,11 +109,11 @@ void object::test<2>
 
     // return value depends on subdivision frame vertices
     auto expected = reader.read(
-                "GEOMETRYCOLLECTION (POLYGON ((-45175 15275, -30075 15250, 150 137.5, 150 -30050, -45175 15275)), POLYGON ((-30075 15250, 30375 15250, 150 137.5, -30075 15250)), POLYGON ((30375 15250, 45475 15275, 150 -30050, 150 137.5, 30375 15250)))"
+                "GEOMETRYCOLLECTION (POLYGON ((150 -3050, 150 137.5, 3375 1750, 4975 1775, 150 -3050)), POLYGON ((-4675 1775, -3075 1750, 150 137.5, 150 -3050, -4675 1775)), POLYGON ((-3075 1750, 3375 1750, 150 137.5, -3075 1750)))"
     );
     polys->normalize();
     expected->normalize();
-    ensure(polys->equalsExact(expected.get(), 1e-7));
+    ensure(polys->toString(), polys->equalsExact(expected.get(), 1e-7));
 //		ensure(polys->getCoordinateDimension() == expected->getCoordinateDimension());
 }
 
