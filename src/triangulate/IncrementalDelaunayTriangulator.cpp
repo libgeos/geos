@@ -21,16 +21,25 @@
 #include <geos/triangulate/quadedge/QuadEdge.h>
 #include <geos/triangulate/quadedge/QuadEdgeSubdivision.h>
 #include <geos/triangulate/quadedge/LocateFailureException.h>
+#include <geos/algorithm/Orientation.h>
 
 namespace geos {
 namespace triangulate { //geos.triangulate
 
+using namespace algorithm;
 using namespace quadedge;
 
 IncrementalDelaunayTriangulator::IncrementalDelaunayTriangulator(
     QuadEdgeSubdivision* p_subdiv) :
-    subdiv(p_subdiv), isUsingTolerance(p_subdiv->getTolerance() > 0.0)
+    subdiv(p_subdiv), isUsingTolerance(p_subdiv->getTolerance() > 0.0),
+    m_isForceConvex(true)
 {
+}
+
+void 
+IncrementalDelaunayTriangulator::forceConvex(bool isForceConvex) 
+{
+    m_isForceConvex = isForceConvex;
 }
 
 void
@@ -82,25 +91,76 @@ IncrementalDelaunayTriangulator::insertSite(const Vertex& v)
     }
     while(&e->lNext() != startEdge);
 
-
-    // Examine suspect edges to ensure that the Delaunay condition
-    // is satisfied.
+    /**
+     * Examine suspect edges to ensure that the Delaunay condition is satisfied.
+     * If it is not, flip the edge and continue scanning.
+     * 
+     * Since the frame is not infinitely far away,
+     * edges which touch the frame or are adjacent to it require special logic
+     * to ensure the inner triangulation maintains a convex boundary.
+     */
     for(;;) {
+        //-- general case - flip if vertex is in circumcircle
         QuadEdge* t = &e->oPrev();
-        if(t->dest().rightOf(*e) &&
-                v.isInCircle(e->orig(), t->dest(), e->dest())) {
+        bool doFlip = t->dest().rightOf(*e) &&
+                v.isInCircle(e->orig(), t->dest(), e->dest());
+        
+        if (m_isForceConvex) {
+            //-- special cases to ensure triangulation boundary is convex
+            if (isConcaveBoundary(*e)) {
+            //-- flip if the triangulation boundary is concave
+                doFlip = true;
+            }
+            else if (isBetweenFrameAndInserted(*e, v)) {
+            //-- don't flip if edge lies between the inserted vertex and a frame vertex
+                doFlip = false;
+            }
+        }
+
+        if (doFlip) {
             QuadEdge::swap(*e);
             e = &e->oPrev();
+            continue;
         }
-        else if(&e->oNext() == startEdge) {
+        if (&e->oNext() == startEdge) {
             return *base; // no more suspect edges.
         }
-        else {
-            e = &e->oNext().lPrev();
-        }
+        //-- check next edge
+        e = &e->oNext().lPrev();
     }
 }
 
+bool 
+IncrementalDelaunayTriangulator::isConcaveBoundary(const QuadEdge& e) 
+{
+    if (subdiv->isFrameVertex(e.dest())) {
+        return isConcaveAtOrigin(e);
+    }
+    if (subdiv->isFrameVertex(e.orig())) {
+        return isConcaveAtOrigin(e.sym());
+    }
+    return false;
+}
+
+bool 
+IncrementalDelaunayTriangulator::isConcaveAtOrigin(const QuadEdge& e) 
+{
+    Coordinate p = e.orig().getCoordinate();
+    Coordinate pp = e.oPrev().dest().getCoordinate();
+    Coordinate pn = e.oNext().dest().getCoordinate();
+    bool isConcave = Orientation::COUNTERCLOCKWISE == Orientation::index(pp, pn, p);
+    return isConcave;
+}
+
+bool 
+IncrementalDelaunayTriangulator::isBetweenFrameAndInserted(const QuadEdge& e, const Vertex& vInsert) 
+{
+    const Vertex v1 = e.oNext().dest();
+    const Vertex v2 = e.oPrev().dest();
+    return (v1.getCoordinate() == vInsert.getCoordinate() && subdiv->isFrameVertex(v2))
+        || (v2.getCoordinate() == vInsert.getCoordinate() && subdiv->isFrameVertex(v1));
+}
+
 } //namespace geos.triangulate
-} //namespace goes
+} //namespace geos
 

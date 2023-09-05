@@ -5,6 +5,8 @@
 // tut
 #include <tut/tut.hpp>
 // geos
+#include <geos/algorithm/ConvexHull.h>
+#include <geos/coverage/CoverageUnion.h>
 #include <geos/triangulate/quadedge/QuadEdge.h>
 #include <geos/triangulate/quadedge/QuadEdgeSubdivision.h>
 #include <geos/triangulate/IncrementalDelaunayTriangulator.h>
@@ -39,6 +41,27 @@ typedef group::object object;
 group test_incdelaunaytri_group("geos::triangulate::Delaunay");
 
 //helper function for running triangulation
+void
+checkDelaunayHull(const char* sitesWkt)
+{
+    WKTReader reader;
+    auto sites = reader.read(sitesWkt);
+
+    DelaunayTriangulationBuilder builder;
+    const GeometryFactory& geomFact(*GeometryFactory::getDefaultInstance());
+    builder.setSites(*sites);
+    std::unique_ptr<Geometry> tris = builder.getTriangles(geomFact);
+
+    std::unique_ptr<Geometry> hullTris = geos::coverage::CoverageUnion::Union(tris.get());
+    std::unique_ptr<Geometry> hullSites = sites->convexHull();
+
+    //std::cout << "hullTris: " << hullTris->toString() << std::endl;
+    //std::cout << "hullSites: " << hullSites->toString() << std::endl;
+
+    //-- use topological equality, because there may be collinear vertices in the union
+    ensure(hullTris->equals(hullSites.get()));
+}
+
 void
 runDelaunay(const char* sitesWkt, bool computeTriangles, const char* expectedWkt, double tolerance = 0.0)
 {
@@ -269,6 +292,80 @@ void object::test<13>
     const char* expected =
         "GEOMETRYCOLLECTION (POLYGON ((0 194, 66 151, 203 80, 0 194)), POLYGON ((0 194, 203 80, 273 43, 0 194)), POLYGON ((273 43, 203 80, 340 0, 273 43)), POLYGON ((340 0, 203 80, 66 151, 340 0)))";
     runDelaunay(wkt, true, expected);
+}
+
+// see https://github.com/libgeos/geos/issues/719
+// testNarrow_GEOS_719()
+template<>
+template<>
+void object::test<14>()
+{
+    const char* wkt = "MULTIPOINT ((1139294.6389832513 8201313.534695469), (1139360.8549531854 8201271.189805277), (1139497.5995843115 8201199.995542546), (1139567.7837303514 8201163.348533507), (1139635.3942210067 8201119.902527407))";
+    const char* expected = "GEOMETRYCOLLECTION (POLYGON ((1139294.6389832513 8201313.534695469, 1139360.8549531854 8201271.189805277, 1139497.5995843115 8201199.995542546, 1139294.6389832513 8201313.534695469)), POLYGON ((1139294.6389832513 8201313.534695469, 1139497.5995843115 8201199.995542546, 1139567.7837303514 8201163.348533507, 1139294.6389832513 8201313.534695469)), POLYGON ((1139567.7837303514 8201163.348533507, 1139497.5995843115 8201199.995542546, 1139635.3942210067 8201119.902527407, 1139567.7837303514 8201163.348533507)), POLYGON ((1139635.3942210067 8201119.902527407, 1139497.5995843115 8201199.995542546, 1139360.8549531854 8201271.189805277, 1139635.3942210067 8201119.902527407)))";
+    runDelaunay(wkt, true, expected);
+}
+
+// testNarrowTriangle()
+template<>
+template<>
+void object::test<15>()
+  {
+    const char*  wkt = "MULTIPOINT ((100 200), (200 190), (300 200))";
+    const char*  expected = "GEOMETRYCOLLECTION (POLYGON ((100 200, 300 200, 200 190, 100 200)))";
+    runDelaunay(wkt, true, expected);
+  }
+
+// seee https://github.com/locationtech/jts/issues/477
+// testNarrow_GH477_1()
+template<>
+template<>
+void object::test<16>()
+{
+    const char*  wkt = "MULTIPOINT ((0 0), (1 0), (-1 0.05), (0 0))";
+    const char*  expected = "GEOMETRYCOLLECTION (POLYGON ((-1 0.05, 1 0, 0 0, -1 0.05)))";
+    runDelaunay(wkt, true, expected);
+}
+
+// see https://github.com/locationtech/jts/issues/477
+// testNarrow_GH477_2()
+template<>
+template<>
+void object::test<17>()
+{
+    const char*  wkt = "MULTIPOINT ((0 0), (0 486), (1 486), (1 22), (2 22), (2 0))";
+    const char*  expected = "GEOMETRYCOLLECTION (POLYGON ((0 0, 0 486, 1 22, 0 0)), POLYGON ((0 0, 1 22, 2 0, 0 0)), POLYGON ((0 486, 1 486, 1 22, 0 486)), POLYGON ((1 22, 1 486, 2 22, 1 22)), POLYGON ((1 22, 2 22, 2 0, 1 22)))";
+    runDelaunay(wkt, true, expected);
+}
+
+// see https://github.com/libgeos/geos/issues/946
+// testNarrow_GEOS_946()
+template<>
+template<>
+void object::test<18>()
+{
+    const char*  wkt = "MULTIPOINT ((113.56577197798602 22.80081530883069),(113.565723279387 22.800815316487014),(113.56571548761124 22.80081531771092),(113.56571548780202 22.800815317674463),(113.56577197817877 22.8008153088047),(113.56577197798602 22.80081530883069))";
+    const char*  expected = "GEOMETRYCOLLECTION (POLYGON ((113.56571548761124 22.80081531771092, 113.565723279387 22.800815316487014, 113.56571548780202 22.800815317674463, 113.56571548761124 22.80081531771092)), POLYGON ((113.56571548780202 22.800815317674463, 113.565723279387 22.800815316487014, 113.56577197817877 22.8008153088047, 113.56571548780202 22.800815317674463)), POLYGON ((113.565723279387 22.800815316487014, 113.56577197798602 22.80081530883069, 113.56577197817877 22.8008153088047, 113.565723279387 22.800815316487014)))";
+    runDelaunay(wkt, true, expected);
+}
+
+// see https://github.com/shapely/shapely/issues/1873
+// testNarrow_Shapely_1873()
+template<>
+template<>
+void object::test<19>()
+{
+    const char*  wkt = "MULTIPOINT ((584245.72096874 7549593.72686167), (584251.71398371 7549594.01629478), (584242.72446125 7549593.58214511), (584230.73978847 7549592.9760418), (584233.73581213 7549593.13045099), (584236.7318358 7549593.28486019), (584239.72795377 7549593.43742855), (584227.74314188 7549592.83423486))";
+    const char*  expected = "GEOMETRYCOLLECTION (POLYGON ((584227.74314188 7549592.83423486, 584233.73581213 7549593.13045099, 584230.73978847 7549592.9760418, 584227.74314188 7549592.83423486)), POLYGON ((584227.74314188 7549592.83423486, 584236.7318358 7549593.28486019, 584233.73581213 7549593.13045099, 584227.74314188 7549592.83423486)), POLYGON ((584227.74314188 7549592.83423486, 584239.72795377 7549593.43742855, 584236.7318358 7549593.28486019, 584227.74314188 7549592.83423486)), POLYGON ((584230.73978847 7549592.9760418, 584233.73581213 7549593.13045099, 584245.72096874 7549593.72686167, 584230.73978847 7549592.9760418)), POLYGON ((584230.73978847 7549592.9760418, 584245.72096874 7549593.72686167, 584251.71398371 7549594.01629478, 584230.73978847 7549592.9760418)), POLYGON ((584233.73581213 7549593.13045099, 584236.7318358 7549593.28486019, 584242.72446125 7549593.58214511, 584233.73581213 7549593.13045099)), POLYGON ((584233.73581213 7549593.13045099, 584242.72446125 7549593.58214511, 584245.72096874 7549593.72686167, 584233.73581213 7549593.13045099)), POLYGON ((584236.7318358 7549593.28486019, 584239.72795377 7549593.43742855, 584242.72446125 7549593.58214511, 584236.7318358 7549593.28486019)))";
+    runDelaunay(wkt, true, expected);
+}
+
+// testNarrowPoints()
+template<>
+template<>
+void object::test<20>()
+{
+    const char*  wkt = "MULTIPOINT ((2 204), (3 66), (1 96), (0 236), (3 173), (2 114), (3 201), (0 46), (1 181))";
+    checkDelaunayHull(wkt);
 }
 
 } // namespace tut
