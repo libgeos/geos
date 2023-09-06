@@ -131,7 +131,7 @@ IncrementalDelaunayTriangulator::insertSite(const Vertex& v)
 }
 
 bool 
-IncrementalDelaunayTriangulator::isConcaveBoundary(const QuadEdge& e) 
+IncrementalDelaunayTriangulator::isConcaveBoundary(const QuadEdge& e) const
 {
     if (subdiv->isFrameVertex(e.dest())) {
         return isConcaveAtOrigin(e);
@@ -143,20 +143,20 @@ IncrementalDelaunayTriangulator::isConcaveBoundary(const QuadEdge& e)
 }
 
 bool 
-IncrementalDelaunayTriangulator::isConcaveAtOrigin(const QuadEdge& e) 
+IncrementalDelaunayTriangulator::isConcaveAtOrigin(const QuadEdge& e) const 
 {
-    Coordinate p = e.orig().getCoordinate();
-    Coordinate pp = e.oPrev().dest().getCoordinate();
-    Coordinate pn = e.oNext().dest().getCoordinate();
+    const Coordinate& p = e.orig().getCoordinate();
+    const Coordinate& pp = e.oPrev().dest().getCoordinate();
+    const Coordinate& pn = e.oNext().dest().getCoordinate();
     bool isConcave = Orientation::COUNTERCLOCKWISE == Orientation::index(pp, pn, p);
     return isConcave;
 }
 
 bool 
-IncrementalDelaunayTriangulator::isBetweenFrameAndInserted(const QuadEdge& e, const Vertex& vInsert) 
+IncrementalDelaunayTriangulator::isBetweenFrameAndInserted(const QuadEdge& e, const Vertex& vInsert) const
 {
-    const Vertex v1 = e.oNext().dest();
-    const Vertex v2 = e.oPrev().dest();
+    const Vertex& v1 = e.oNext().dest();
+    const Vertex& v2 = e.oPrev().dest();
     return (v1.getCoordinate() == vInsert.getCoordinate() && subdiv->isFrameVertex(v2))
         || (v2.getCoordinate() == vInsert.getCoordinate() && subdiv->isFrameVertex(v1));
 }
