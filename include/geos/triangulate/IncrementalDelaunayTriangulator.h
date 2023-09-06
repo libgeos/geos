@@ -94,11 +94,11 @@ public:
 
 private:
 
-    bool isConcaveBoundary(const quadedge::QuadEdge& e);
+    bool isConcaveBoundary(const quadedge::QuadEdge& e) const;
 
-    bool isConcaveAtOrigin(const quadedge::QuadEdge& e);
+    bool isConcaveAtOrigin(const quadedge::QuadEdge& e) const;
 
-    bool isBetweenFrameAndInserted(const quadedge::QuadEdge& e, const quadedge::Vertex& vInsert);
+    bool isBetweenFrameAndInserted(const quadedge::QuadEdge& e, const quadedge::Vertex& vInsert) const;
 };
 
 } //namespace geos.triangulate
