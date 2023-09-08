@@ -201,5 +201,18 @@ void object::test<12>()
     ensure_equals(GEOSGeom_getCoordinateDimension(geom2_), 2);
 }
 
+// Test more exact rounding for integral scale factors
+// see https://trac.osgeo.org/postgis/ticket/5520
+template<>
+template<>
+void object::test<13>()
+{
+    geom1_ = fromWKT("LINESTRING (657035.913 6475590.114,657075.57 6475500)");
+    geom2_ = GEOSGeom_setPrecision(geom1_, .001, 0);
+//std::cout << toWKT(geom2_) << std::endl;
+    ensure_geometry_equals(geom2_,
+        "LINESTRING (657035.913 6475590.114, 657075.57 6475500)");
+}
+
 } // namespace tut
 

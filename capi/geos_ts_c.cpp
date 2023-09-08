@@ -2978,9 +2978,16 @@ extern "C" {
         return execute(extHandle, [&]() {
             PrecisionModel newpm;
             if(gridSize != 0) {
-                // Use negative scale to indicate you actually want a gridSize
-                double scale = -1.0 * std::abs(gridSize);
-                newpm = PrecisionModel(scale);
+                double scaleNom = 1.0 / gridSize;
+                double scaleInt = std::floor(scaleNom);
+                if (std::abs(scaleNom - scaleInt) < 1e-5) {
+                    //-- if scale factor is nearly integral, use an exact integer value
+                    newpm = PrecisionModel(scaleInt);
+                }
+                else {
+                    //-- otherwise, just use the reciprocal of the grid size
+                    newpm = PrecisionModel(scaleNom);
+                }
             }
 
             const PrecisionModel* pm = g->getPrecisionModel();
