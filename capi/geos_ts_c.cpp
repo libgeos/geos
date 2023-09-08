@@ -2969,6 +2969,8 @@ extern "C" {
         });
     }
 
+    const double GRIDSIZE_INTEGER_TOLERANCE = 1e-5;
+
     Geometry*
     GEOSGeom_setPrecision_r(GEOSContextHandle_t extHandle, const GEOSGeometry* g,
                             double gridSize, int flags)
@@ -2980,7 +2982,7 @@ extern "C" {
             if(gridSize != 0) {
                 double scaleNom = 1.0 / gridSize;
                 double scaleInt = std::floor(scaleNom);
-                if (std::abs(scaleNom - scaleInt) < 1e-5) {
+                if (std::abs(scaleNom - scaleInt) < GRIDSIZE_INTEGER_TOLERANCE) {
                     //-- if scale factor is nearly integral, use an exact integer value
                     newpm = PrecisionModel(scaleInt);
                 }
