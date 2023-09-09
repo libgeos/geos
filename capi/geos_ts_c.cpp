@@ -2979,17 +2979,16 @@ extern "C" {
 
         return execute(extHandle, [&]() {
             PrecisionModel newpm;
-            if(gridSize != 0) {
-                double scaleNom = 1.0 / gridSize;
-                double scaleInt = std::floor(scaleNom);
-                if (std::abs(scaleNom - scaleInt) < GRIDSIZE_INTEGER_TOLERANCE) {
-                    //-- if scale factor is nearly integral, use an exact integer value
-                    newpm = PrecisionModel(scaleInt);
+            if (gridSize != 0) {
+                //-- check for an integral scale
+                double scale = 1.0 / gridSize;
+                //-- add a small "bump" to ensure flooring works
+                double scaleInt = std::floor(scale + 0.1);
+                //-- if scale factor is essentially integral, use the exact integer value
+                if (std::abs(scale - scaleInt) < GRIDSIZE_INTEGER_TOLERANCE) {
+                    scale = scaleInt;
                 }
-                else {
-                    //-- otherwise, just use the reciprocal of the grid size
-                    newpm = PrecisionModel(scaleNom);
-                }
+                newpm = PrecisionModel(scale);
             }
 
             const PrecisionModel* pm = g->getPrecisionModel();
