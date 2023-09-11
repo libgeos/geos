@@ -2982,8 +2982,7 @@ extern "C" {
             if (gridSize != 0) {
                 //-- check for an integral scale
                 double scale = 1.0 / gridSize;
-                //-- add a small "bump" to ensure flooring works
-                double scaleInt = std::floor(scale + 2 * GRIDSIZE_INTEGER_TOLERANCE);
+                double scaleInt = std::round(scale);
                 //-- if scale factor is essentially integral, use the exact integer value
                 if (std::abs(scale - scaleInt) < GRIDSIZE_INTEGER_TOLERANCE) {
                     scale = scaleInt;
