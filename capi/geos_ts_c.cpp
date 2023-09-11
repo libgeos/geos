@@ -2980,12 +2980,14 @@ extern "C" {
         return execute(extHandle, [&]() {
             PrecisionModel newpm;
             if (gridSize != 0) {
-                //-- check for an integral scale
                 double scale = 1.0 / gridSize;
-                double scaleInt = std::round(scale);
-                //-- if scale factor is essentially integral, use the exact integer value
-                if (std::abs(scale - scaleInt) < GRIDSIZE_INTEGER_TOLERANCE) {
-                    scale = scaleInt;
+                //-- check if the gridsize corresponds to an integral scale
+                if (gridSize < 1) {
+                    double scaleInt = std::round(scale);
+                    //-- if scale factor is essentially integral, use the exact integer value
+                    if (std::abs(scale - scaleInt) < GRIDSIZE_INTEGER_TOLERANCE) {
+                        scale = scaleInt;
+                    }
                 }
                 newpm = PrecisionModel(scale);
             }

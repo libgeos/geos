@@ -214,5 +214,17 @@ void object::test<13>()
         "LINESTRING (657035.913 6475590.114, 657075.57 6475500)");
 }
 
+//-- test that a large gridsize works
+template<>
+template<>
+void object::test<14>()
+{
+    geom1_ = fromWKT("LINESTRING (657035.913 6475590.114,657075.57 6475500)");
+    geom2_ = GEOSGeom_setPrecision(geom1_, 100, 0);
+//std::cout << toWKT(geom2_) << std::endl;
+    ensure_geometry_equals(geom2_,
+        "LINESTRING (657000 6475600, 657100 6475500)");
+}
+
 } // namespace tut
 
