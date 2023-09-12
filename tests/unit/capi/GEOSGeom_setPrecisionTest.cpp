@@ -291,5 +291,16 @@ void object::test<20>()
         "POINT(1.235 9.877)");
 }
 
+// see https://lists.osgeo.org/pipermail/postgis-users/2023-September/046107.html
+template<>
+template<>
+void object::test<21>()
+{
+    geom1_ = fromWKT("LINESTRING(334729.13 4103548.88, 334729.12 4103548.53)");
+    geom2_ = GEOSGeom_setPrecision(geom1_, .001, 0);
+    ensure_geometry_equals(geom2_,
+        "LINESTRING(334729.13 4103548.88,334729.12 4103548.53)");
+}
+
 } // namespace tut
 
