@@ -238,7 +238,17 @@ void object::test<15>()
         "LINESTRING (674169.89 198051.38, 674197.7 198065.55, 674200.36 198052.38)");
 }
 
-
+// see https://trac.osgeo.org/postgis/ticket/3929
+template<>
+template<>
+void object::test<16>()
+{
+    geom1_ = fromWKT("POINT(311.4 0)");
+    geom2_ = GEOSGeom_setPrecision(geom1_, .1, 0);
+//std::cout << toWKT(geom2_) << std::endl;
+    ensure_geometry_equals(geom2_,
+        "POINT(311.4 0)");
+}
 
 } // namespace tut
 
