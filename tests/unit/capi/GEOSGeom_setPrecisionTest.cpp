@@ -208,7 +208,6 @@ void object::test<13>()
 {
     geom1_ = fromWKT("LINESTRING (657035.913 6475590.114,657075.57 6475500)");
     geom2_ = GEOSGeom_setPrecision(geom1_, 100, 0);
-//std::cout << toWKT(geom2_) << std::endl;
     ensure_geometry_equals(geom2_,
         "LINESTRING (657000 6475600, 657100 6475500)");
 }
@@ -221,7 +220,6 @@ void object::test<14>()
 {
     geom1_ = fromWKT("LINESTRING (657035.913 6475590.114,657075.57 6475500)");
     geom2_ = GEOSGeom_setPrecision(geom1_, .001, 0);
-//std::cout << toWKT(geom2_) << std::endl;
     ensure_geometry_equals(geom2_,
         "LINESTRING (657035.913 6475590.114, 657075.57 6475500)");
 }
@@ -233,7 +231,6 @@ void object::test<15>()
 {
     geom1_ = fromWKT("LINESTRING(674169.89 198051.38,674197.7 198065.55,674200.36 198052.38)");
     geom2_ = GEOSGeom_setPrecision(geom1_, .001, 0);
-//std::cout << toWKT(geom2_) << std::endl;
     ensure_geometry_equals(geom2_,
         "LINESTRING (674169.89 198051.38, 674197.7 198065.55, 674200.36 198052.38)");
 }
@@ -245,9 +242,53 @@ void object::test<16>()
 {
     geom1_ = fromWKT("POINT(311.4 0)");
     geom2_ = GEOSGeom_setPrecision(geom1_, .1, 0);
-//std::cout << toWKT(geom2_) << std::endl;
     ensure_geometry_equals(geom2_,
         "POINT(311.4 0)");
+}
+
+// see https://gis.stackexchange.com/questions/465485/postgis-reduce-precision-in-linestring
+template<>
+template<>
+void object::test<17>()
+{
+    geom1_ = fromWKT("LINESTRING (16.418792399944802 54.24801559999939, 16.4176588 54.248003)");
+    geom2_ = GEOSGeom_setPrecision(geom1_, .0000001, 0);
+    ensure_geometry_equals(geom2_,
+        "LINESTRING (16.4187924 54.2480156, 16.4176588 54.248003)");
+}
+
+// see https://gis.stackexchange.com/questions/321814/st-snaptogrid-doesnt-work-properly-e-g-41-94186153740355-41-94186149999999
+template<>
+template<>
+void object::test<18>()
+{
+    geom1_ = fromWKT("POINT (21.619820510769063 41.94186153740355)");
+    geom2_ = GEOSGeom_setPrecision(geom1_, .0000001, 0);
+    ensure_geometry_equals(geom2_,
+        "POINT (21.6198205 41.9418615)");
+}
+
+// see https://gis.stackexchange.com/questions/321814/st-snaptogrid-doesnt-work-properly-e-g-41-94186153740355-41-94186149999999
+template<>
+template<>
+void object::test<19>()
+{
+    geom1_ = fromWKT("POINT (22.49594094391644 41.20357506925623)");
+    geom2_ = GEOSGeom_setPrecision(geom1_, .0000001, 0);
+    ensure_geometry_equals(geom2_,
+        "POINT (22.4959409 41.2035751)");
+}
+
+// see https://lists.osgeo.org/pipermail/postgis-users/2006-January/010861.html
+template<>
+template<>
+void object::test<20>()
+{
+    geom1_ = fromWKT("POINT(1.23456789 9.87654321)");
+    geom2_ = GEOSGeom_setPrecision(geom1_, .000001, 0);
+    geom3_ = GEOSGeom_setPrecision(geom2_, .001, 0);
+    ensure_geometry_equals(geom3_,
+        "POINT(1.235 9.877)");
 }
 
 } // namespace tut
