@@ -169,6 +169,7 @@ PrecisionModel::setScale(double newScale)
     /**
     * A negative scale indicates the grid size is being set.
     * The scale is set as well, as the reciprocal.
+    * NOTE: may not need to support negative grid size now due to robust arithmetic
     */
     if (newScale < 0) {
         scale = 1.0 / std::fabs(newScale);
