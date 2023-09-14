@@ -298,19 +298,23 @@ void object::test<22>()
 {
     const char* wkt = "LINESTRING(674169.89 198051.619820510769063, 674197.71234 1448065.55674200)";
 
-    checkPrecision(wkt, 0.1,   "LINESTRING (674169.9  198051.6,  674197.7   1448065.6)");
-    checkPrecision(wkt, 0.01,  "LINESTRING (674169.89 198051.62, 674197.71  1448065.56)");
-    checkPrecision(wkt, 0.001, "LINESTRING (674169.89 198051.62, 674197.712 1448065.557)");
+    checkPrecision(wkt, 0.1,       "LINESTRING (674169.9  198051.6,       674197.7     1448065.6 )");
+    checkPrecision(wkt, 0.01,      "LINESTRING (674169.89 198051.62,      674197.71    1448065.56 )");
+    checkPrecision(wkt, 0.001,     "LINESTRING (674169.89 198051.62,      674197.712   1448065.557 )");
+    checkPrecision(wkt, 0.0001,    "LINESTRING (674169.89 198051.6198,    674197.7123  1448065.5567 )");
+    checkPrecision(wkt, 0.00001,   "LINESTRING (674169.89 198051.61982,   674197.71234 1448065.55674 )");
+    checkPrecision(wkt, 0.000001,  "LINESTRING (674169.89 198051.619821,  674197.71234 1448065.556742 )");
+    checkPrecision(wkt, 0.0000001, "LINESTRING (674169.89 198051.6198205, 674197.71234 1448065.556742 )");
 
     checkPrecision(wkt,       1, "LINESTRING ( 674170 198052,  674198 1448066)");
     checkPrecision(wkt,      10, "LINESTRING ( 674170 198050,  674200 1448070)");
     checkPrecision(wkt,     100, "LINESTRING ( 674200 198100,  674200 1448100)");
     checkPrecision(wkt,    1000, "LINESTRING ( 674000 198000,  674000 1448000)");
     checkPrecision(wkt,   10000, "LINESTRING ( 670000 200000,  670000 1450000)");
-    // this fails for some reason although WKT looks identical
-    //checkPrecision(wkt,  100000, "LINESTRING (700000 200000, 700000 1400000)");
+    // this fails due to rounding error if computed directly with scale factor
+    checkPrecision(wkt,  100000, "LINESTRING ( 700000 200000,  700000 1400000)");
     checkPrecision(wkt, 1000000, "LINESTRING (1000000      0, 1000000 1000000)");
-
 }
+
 } // namespace tut
 

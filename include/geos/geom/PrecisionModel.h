@@ -348,6 +348,11 @@ private:
     void setScale(double newScale);
     // throw IllegalArgumentException
 
+    /** \brief
+     * Snaps a value to nearest integer, if within tolerance.
+     */
+    static double snapToInt(double val, double tolerance);
+
     Type modelType;
 
     /**
