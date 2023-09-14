@@ -313,9 +313,17 @@ void object::test<22>()
     checkPrecision(wkt,     100, "LINESTRING ( 674200 198100,  674200 1448100)");
     checkPrecision(wkt,    1000, "LINESTRING ( 674000 198000,  674000 1448000)");
     checkPrecision(wkt,   10000, "LINESTRING ( 670000 200000,  670000 1450000)");
-    // this fails due to rounding error if computed directly with scale factor
     checkPrecision(wkt,  100000, "LINESTRING ( 700000 200000,  700000 1400000)");
     checkPrecision(wkt, 1000000, "LINESTRING (1000000      0, 1000000 1000000)");
+}
+
+// This case with a large scale factor produced inexact rounding before code update 
+template<>
+template<>
+void object::test<23>()
+{
+    const char* wkt = "LINESTRING(674169.89 198051.619820510769063, 674197.71234 1448065.55674200)";
+    checkPrecision(wkt,  100000, "LINESTRING ( 700000 200000,  700000 1400000)");
 }
 
 } // namespace tut
