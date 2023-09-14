@@ -62,7 +62,9 @@ PrecisionModel::makePrecise(double val) const
 //std::cout << std::setprecision(16) << "GS[" << gridSize << "] " << val << " -> "  << v2 << std::endl;
             return util::round(val / gridSize) * gridSize;
         }
-        else {
+        //-- since grid size is <= 1, scale must be >= 1 OR 0
+        //-- if scale == 0, this is a no-op (should never happen)
+        else if (scale != 0.0) {
 //double v2 = util::round(val * scale) / scale;
 //std::cout << std::setprecision(16) << "SC[" << scale << "] " << val << " -> " << "SC " << v2 << std::endl;
             return util::round(val * scale) / scale;
@@ -166,6 +168,11 @@ const double GRIDSIZE_INTEGER_TOLERANCE = 1e-5;
 void
 PrecisionModel::setScale(double newScale)
 {
+    //-- should never happen, but make this a no-op in case
+    if (newScale == 0) {
+        scale = 0.0;
+        gridSize = 0.0;
+    }
     /**
     * A negative scale indicates the grid size is being set.
     * The scale is set as well, as the reciprocal.
