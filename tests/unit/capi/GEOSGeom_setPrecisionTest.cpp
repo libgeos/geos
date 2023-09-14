@@ -13,10 +13,12 @@ struct test_capigeosgeomsetprecision_data : public capitest::utility {
     void
     checkPrecision(const char* wktInput, double gridSize, const char* wktExpected)
     {
-        geom1_ = fromWKT(wktInput);
-        geom2_ = GEOSGeom_setPrecision(geom1_, gridSize, 0);
-        ensure(geom2_ != nullptr);
-        ensure_geometry_equals(geom2_, wktExpected);
+        GEOSGeometry* input = fromWKT(wktInput);
+        GEOSGeometry* result = GEOSGeom_setPrecision(input, gridSize, 0);
+        ensure(result != nullptr);
+        ensure_geometry_equals(result, wktExpected);
+        GEOSGeom_destroy(input);
+        GEOSGeom_destroy(result);
     }
 };
 
