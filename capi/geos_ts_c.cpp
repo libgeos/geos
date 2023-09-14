@@ -2969,8 +2969,6 @@ extern "C" {
         });
     }
 
-    //const double GRIDSIZE_INTEGER_TOLERANCE = 1e-5;
-
     Geometry*
     GEOSGeom_setPrecision_r(GEOSContextHandle_t extHandle, const GEOSGeometry* g,
                             double gridSize, int flags)
