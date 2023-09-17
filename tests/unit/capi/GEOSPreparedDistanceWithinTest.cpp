@@ -213,5 +213,18 @@ void object::test<11>
     );
 }
 
+template<>
+template<>
+void object::test<12>
+()
+{
+    checkDistanceWithin(
+        "LINESTRING (2 2, 3 3, 4 4, 5 5, 6 6, 7 7)",
+        "LINESTRING (0 0, 1 1, 2 2, 3 3, 4 4, 5 5, 6 6, 7 7, 8 8, 9 9)",
+        1,
+        1
+    );
+}
+
 } // namespace tut
 
