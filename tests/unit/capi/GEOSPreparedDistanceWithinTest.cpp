@@ -213,6 +213,7 @@ void object::test<11>
     );
 }
 
+// see https://github.com/libgeos/geos/issues/958
 template<>
 template<>
 void object::test<12>
