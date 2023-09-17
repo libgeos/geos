@@ -65,11 +65,6 @@ IndexedFacetDistance::isWithinDistance(const Geometry* g, double maxDistance) co
         return false;
     }
 
-    auto env2 = g->getEnvelope();
-    if (distance(env2.get()) > maxDistance) {
-        return false;
-    }
-
     auto tree2 = FacetSequenceTreeBuilder::build(g);
     return cachedTree->isWithinDistance<FacetDistance>(*tree2, maxDistance);
 }
