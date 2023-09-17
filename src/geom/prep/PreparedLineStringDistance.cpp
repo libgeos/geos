@@ -49,7 +49,15 @@ PreparedLineStringDistance::isWithinDistance(const geom::Geometry* g, double d) 
     }
 
     operation::distance::IndexedFacetDistance *idf = prepLine.getIndexedFacetDistance();
-    return idf->isWithinDistance(g, d);
+    bool withinDistance = idf->isWithinDistance(g, d);
+
+    // If any point from prepLine is contained by g, the distance is zero
+    // Do this last because this PIP test is not indexed.
+    if ( g->getDimension() == 2 && ! withinDistance) {
+        return prepLine.isAnyTargetComponentInTest(g);
+    }
+
+    return withinDistance;
 }
 
 

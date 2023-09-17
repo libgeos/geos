@@ -213,6 +213,7 @@ void object::test<11>
     );
 }
 
+// Prepared line within envelope of test line
 // see https://github.com/libgeos/geos/issues/958
 template<>
 template<>
@@ -222,6 +223,35 @@ void object::test<12>
     checkDistanceWithin(
         "LINESTRING (2 2, 3 3, 4 4, 5 5, 6 6, 7 7)",
         "LINESTRING (0 0, 1 1, 2 2, 3 3, 4 4, 5 5, 6 6, 7 7, 8 8, 9 9)",
+        1,
+        1
+    );
+}
+
+// Prepared line within test geometry
+// see https://github.com/libgeos/geos/issues/960
+template<>
+template<>
+void object::test<13>
+()
+{
+    checkDistanceWithin(
+        "LINESTRING (30 30, 70 70)",
+        "POLYGON ((0 100, 100 100, 100 0, 0 0, 0 100))",
+        1,
+        1
+    );
+}
+
+// Prepared multiline with one element within test geometry
+template<>
+template<>
+void object::test<14>
+()
+{
+    checkDistanceWithin(
+        "MULTILINESTRING ((30 30, 70 70), (170 200, 200 170))",
+        "POLYGON ((0 100, 100 100, 100 0, 0 0, 0 100))",
         1,
         1
     );
