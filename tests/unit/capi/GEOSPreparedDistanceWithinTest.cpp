@@ -264,7 +264,7 @@ void object::test<15>
 ()
 {
     checkDistanceWithin(
-        "MULTILINESTRING ((1 6, 1 1), (14 16, 16 14))",
+        "MULTILINESTRING ((1 6, 1 1), (15 16, 15 14))",
         "MULTIPOLYGON (((10 20, 20 20, 20 10, 10 10, 10 20)), ((30 20, 40 20, 40 10, 30 10, 30 20)))",
         1,
         1
