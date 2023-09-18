@@ -32,12 +32,18 @@ PreparedLineStringDistance::distance(const geom::Geometry* g) const
         return DoubleInfinity;
     }
 
-    // TODO: test if this shortcut be any useful
-    //if ( prepLine.intersects(g) ) return 0.0;
-
-    /* Not intersecting, compute distance from facets */
+    /* Compute potential distance from facets */
     operation::distance::IndexedFacetDistance *idf = prepLine.getIndexedFacetDistance();
-    return idf->distance(g);
+    double dist = idf->distance(g);
+
+    // If any point from prepLine is contained by g, the distance is zero
+    // Do this last because this PIP test is not indexed.
+    if ( g->getDimension() == 2 
+            && dist > 0 
+            && prepLine.isAnyTargetComponentInTest(g)) {
+        return 0.0;
+    }
+    return dist;
 }
 
 bool

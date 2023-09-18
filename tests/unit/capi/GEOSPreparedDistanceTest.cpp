@@ -178,5 +178,44 @@ void object::test<9>
     );
 }
 
+// Prepared line within envelope of test line
+template<>
+template<>
+void object::test<12>
+()
+{
+    checkDistance(
+        "LINESTRING (1 4, 4 7)",
+        "LINESTRING (1 1, 5 5, 5 9)",
+        1
+    );
+}
+
+// Prepared line within polygon
+template<>
+template<>
+void object::test<13>
+()
+{
+    checkDistance(
+        "LINESTRING (30 30, 70 70)",
+        "POLYGON ((0 100, 100 100, 100 0, 0 0, 0 100))",
+        0
+    );
+}
+
+// Prepared multiline with one element within polygon
+template<>
+template<>
+void object::test<14>
+()
+{
+    checkDistance(
+        "MULTILINESTRING ((30 30, 70 70), (170 200, 200 170))",
+        "POLYGON ((0 100, 100 100, 100 0, 0 0, 0 100))",
+        0
+    );
+}
+
 } // namespace tut
 
