@@ -1,5 +1,5 @@
 //
-// Test Suite for C-API GEOSPreparedDistance
+// Test Suite for C-API GEOSPreparedDistanceWithin
 
 #include <tut/tut.hpp>
 // geos
@@ -243,7 +243,7 @@ void object::test<13>
     );
 }
 
-// Prepared multiline with one element within test geometry
+// Prepared multiline with one element within Polygon
 template<>
 template<>
 void object::test<14>
@@ -252,6 +252,20 @@ void object::test<14>
     checkDistanceWithin(
         "MULTILINESTRING ((30 30, 70 70), (170 200, 200 170))",
         "POLYGON ((0 100, 100 100, 100 0, 0 0, 0 100))",
+        1,
+        1
+    );
+}
+
+// Prepared multiline with one element within MultiPolygon.
+template<>
+template<>
+void object::test<15>
+()
+{
+    checkDistanceWithin(
+        "MULTILINESTRING ((1 6, 1 1), (14 16, 16 14))",
+        "MULTIPOLYGON (((10 20, 20 20, 20 10, 10 10, 10 20)), ((30 20, 40 20, 40 10, 30 10, 30 20)))",
         1,
         1
     );
