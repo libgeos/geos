@@ -271,5 +271,18 @@ void object::test<15>
     );
 }
 
+// Indexed multiline with one element within line envelope.
+template<>
+template<>
+void object::test<16>()
+{
+    checkDistanceWithin(
+        "MULTILINESTRING ((1 6, 1 1), (11 14, 11 11))",
+        "LINESTRING (10 10, 10 20, 30 20)",
+        2,
+        1
+    );
+}
+
 } // namespace tut
 

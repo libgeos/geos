@@ -59,12 +59,26 @@ IndexedFacetDistance::distance(const Geometry* g) const
 bool
 IndexedFacetDistance::isWithinDistance(const Geometry* g, double maxDistance) const
 {
+    std::cout << "geom dist = " << distance(g) << std::endl;
+
     // short-circuit check
     double envDist = baseGeometry.getEnvelopeInternal()->distance(*g->getEnvelopeInternal());
     if (envDist > maxDistance) {
         return false;
     }
-
+//*
+    //-- heuristic: for atomic indexed geom, test distance to envelope of test geom
+    if (baseGeometry.getNumGeometries() == 1
+        && ! g->getEnvelopeInternal()->contains(baseGeometry.getEnvelopeInternal()))
+    {
+        auto env2 = g->getEnvelope();
+std::cout << "env dist = " << distance(env2.get()) << std::endl;
+        if (distance(env2.get()) > maxDistance) {
+std::cout << "env dist > maxdistance of " << maxDistance << std::endl;
+            return false;
+        }
+    }
+//*/
     auto tree2 = FacetSequenceTreeBuilder::build(g);
     return cachedTree->isWithinDistance<FacetDistance>(*tree2, maxDistance);
 }
