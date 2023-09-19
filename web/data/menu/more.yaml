@@ -8,7 +8,7 @@ more:
     external: false
     icon: "gdoc_download"
   - name: "View Source"
-    ref: "https://git.osgeo.org/gitea/postgis/postgis"
+    ref: "https://github.com/libgeos/geos"
     external: true
     icon: "gdoc_github"
 
