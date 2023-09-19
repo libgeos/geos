@@ -1,5 +1,5 @@
 //
-// Test Suite for C-API GEOSPreparedDistance
+// Test Suite for C-API GEOSPreparedDistanceWithin
 
 #include <tut/tut.hpp>
 // geos
@@ -209,6 +209,77 @@ void object::test<11>
         "POLYGON((1 1,1 5,5 5,5 1,1 1))",
         "POLYGON((0 0, 0 10, 10 10, 10 0, 0 0))",
         0,
+        1
+    );
+}
+
+// Prepared line within envelope of test line
+// see https://github.com/libgeos/geos/issues/958
+template<>
+template<>
+void object::test<12>
+()
+{
+    checkDistanceWithin(
+        "LINESTRING (2 2, 3 3, 4 4, 5 5, 6 6, 7 7)",
+        "LINESTRING (0 0, 1 1, 2 2, 3 3, 4 4, 5 5, 6 6, 7 7, 8 8, 9 9)",
+        1,
+        1
+    );
+}
+
+// Prepared line within test geometry
+// see https://github.com/libgeos/geos/issues/960
+template<>
+template<>
+void object::test<13>
+()
+{
+    checkDistanceWithin(
+        "LINESTRING (30 30, 70 70)",
+        "POLYGON ((0 100, 100 100, 100 0, 0 0, 0 100))",
+        1,
+        1
+    );
+}
+
+// Prepared multiline with one element within Polygon
+template<>
+template<>
+void object::test<14>
+()
+{
+    checkDistanceWithin(
+        "MULTILINESTRING ((30 30, 70 70), (170 200, 200 170))",
+        "POLYGON ((0 100, 100 100, 100 0, 0 0, 0 100))",
+        1,
+        1
+    );
+}
+
+// Prepared multiline with one element within MultiPolygon.
+template<>
+template<>
+void object::test<15>
+()
+{
+    checkDistanceWithin(
+        "MULTILINESTRING ((1 6, 1 1), (15 16, 15 14))",
+        "MULTIPOLYGON (((10 20, 20 20, 20 10, 10 10, 10 20)), ((30 20, 40 20, 40 10, 30 10, 30 20)))",
+        1,
+        1
+    );
+}
+
+// Indexed multiline with one element within line envelope.
+template<>
+template<>
+void object::test<16>()
+{
+    checkDistanceWithin(
+        "MULTILINESTRING ((1 6, 1 1), (11 14, 11 11))",
+        "LINESTRING (10 10, 10 20, 30 20)",
+        2,
         1
     );
 }
