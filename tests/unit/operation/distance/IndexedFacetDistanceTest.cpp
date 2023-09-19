@@ -88,7 +88,6 @@ struct test_facetdistanceop_data {
 
         IndexedFacetDistance ifd(g1.get());
         bool result = ifd.isWithinDistance(g2.get(), distance);
-std::cout << "result = " << result << "  expected = " << expected << std::endl;
         ensure_equals(result, expected);
     }
 
