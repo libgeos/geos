@@ -14,6 +14,7 @@
   - Fix WKTWriter to emit EMPTY elements in multi-geometries (GH-952, Mike Taves)
   - Fix IncrementalDelaunayTriangulator to ensure triangulation boundary is convex (GH-953, Martin Davis)
   - Fix PreparedLineStringDistance for lines within envelope and polygons (GH-959, Martin Davis) 
+  - Improve scale handling for PrecisionModel (GH-956, Martin Davis)
 
 
 ## Changes in 3.12.0
