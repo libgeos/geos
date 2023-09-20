@@ -27,6 +27,7 @@
 #include <string>
 #include <cmath>
 #include <iostream>
+#include <iomanip> 
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -55,10 +56,17 @@ PrecisionModel::makePrecise(double val) const
         return static_cast<double>(floatSingleVal);
     }
     if(modelType == FIXED) {
-        if (gridSize > 0) {
+        //-- make arithmetic robust by using integral value if available
+        if (gridSize > 1) {
+//double v2 = util::round(val / gridSize) * gridSize;
+//std::cout << std::setprecision(16) << "GS[" << gridSize << "] " << val << " -> "  << v2 << std::endl;
             return util::round(val / gridSize) * gridSize;
         }
-        else {
+        //-- since grid size is <= 1, scale must be >= 1 OR 0
+        //-- if scale == 0, this is a no-op (should never happen)
+        else if (scale != 0.0) {
+//double v2 = util::round(val * scale) / scale;
+//std::cout << std::setprecision(16) << "SC[" << scale << "] " << val << " -> " << "SC " << v2 << std::endl;
             return util::round(val * scale) / scale;
         }
     }
@@ -85,7 +93,7 @@ PrecisionModel::PrecisionModel(Type nModelType)
     :
     modelType(nModelType),
     scale(1.0),
-    gridSize(0.0)
+    gridSize(1.0)
 {
 #if GEOS_DEBUG
     std::cerr << "PrecisionModel[" << this << "] ctor(Type)" << std::endl;
@@ -153,25 +161,48 @@ PrecisionModel::getMaximumSignificantDigits() const
     return maxSigDigits;
 }
 
+//-- this value is not critical, since most common usage should be VERY close to integral
+const double GRIDSIZE_INTEGER_TOLERANCE = 1e-5;
+
 /*private*/
 void
 PrecisionModel::setScale(double newScale)
 {
+    //-- should never happen, but make this a no-op in case
+    if (newScale == 0) {
+        scale = 0.0;
+        gridSize = 0.0;
+    }
     /**
     * A negative scale indicates the grid size is being set.
     * The scale is set as well, as the reciprocal.
+    * NOTE: may not need to support negative grid size now due to robust arithmetic
     */
     if (newScale < 0) {
-        gridSize = std::fabs(newScale);
-        scale = 1.0 / gridSize;
+        scale = 1.0 / std::fabs(newScale);
     }
     else {
-        scale = std::fabs(newScale);
-        /**
-        * Leave gridSize as 0, to ensure it is computed using scale
-        */
-        gridSize = 0.0;
+        scale = newScale;
     }
+    //-- snap nearly integral scale or gridsize to exact integer
+    //-- this handles the most common case of fractional powers of ten
+    if (scale < 1) {
+        gridSize = snapToInt(1.0 / scale, GRIDSIZE_INTEGER_TOLERANCE);
+    }
+    else {
+        scale = snapToInt( scale, GRIDSIZE_INTEGER_TOLERANCE);
+        gridSize = 1.0 / scale;
+    }
+}
+
+/*private*/ 
+double
+PrecisionModel::snapToInt(double val, double tolerance) {
+    double valInt = std::round(val);
+    if (std::abs(val - valInt) < tolerance) {
+        return valInt;
+    }
+    return val;
 }
 
 /*public*/
