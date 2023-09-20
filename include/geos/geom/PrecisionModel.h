@@ -77,8 +77,6 @@ namespace geom { // geos::geom
  *
  * It is also supported to specify a precise grid size
  * by providing it as a negative scale factor.
- * This allows setting a precise grid size rather than using a fractional scale,
- * which provides more accurate and robust rounding.
  * For example, to specify rounding to the nearest 1000 use a scale factor of -1000.
  *
  * Coordinates are represented internally as Java double-precision values.
@@ -347,6 +345,11 @@ private:
      */
     void setScale(double newScale);
     // throw IllegalArgumentException
+
+    /** \brief
+     * Snaps a value to nearest integer, if within tolerance.
+     */
+    static double snapToInt(double val, double tolerance);
 
     Type modelType;
 
