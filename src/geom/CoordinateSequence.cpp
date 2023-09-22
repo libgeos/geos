@@ -191,8 +191,13 @@ CoordinateSequence::add(const CoordinateSequence& cs, std::size_t from, std::siz
         }
     }
 
+    if (first > to) {
+        // No unique points to add.
+        return;
+    }
+
     std::size_t last = first + 1;
-    const CoordinateXY* last_unique = &cs.front<CoordinateXY>();
+    const CoordinateXY* last_unique = &cs.getAt<CoordinateXY>(first);
     while(last <= to) {
         const CoordinateXY* curr = &cs.getAt<CoordinateXY>(last);
         if (curr->equals2D(*last_unique)) {
