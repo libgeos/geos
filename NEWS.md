@@ -6,9 +6,8 @@
   - Remove undefined behaviour in use of null PrecisionModel (GH-931, Jeff Walton)
   - Explicitly set endianness for some tests so that output matches expected (GH-934, Paul Ramsey)
   - Fix IncrementalDelaunayTriangulator to ensure triangulation boundary is convex (GH-953, Martin Davis)
-  - Fix PreparedLineStringDistance for lines within envelope and polygons (GH-959, Martin Davis) 
-
-
+  - Fix PreparedLineStringDistance for lines within envelope and polygons (GH-959, Martin Davis)
+  - Fix error in CoordinateSequence::add when disallowing repeated points (GH-963, Dan Baston)
 
 
 ## Changes in 3.12.0
