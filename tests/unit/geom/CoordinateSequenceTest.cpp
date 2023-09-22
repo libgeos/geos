@@ -1493,4 +1493,21 @@ void object::test<54>
     ensure(xyz3_2.equalsIdentical(xyz3));
 }
 
+
+// test add(CoordinateSequence&, false) when last point of receiving sequence is found after the beginning of donor sequence
+template<>
+template<>
+void object::test<55>
+()
+{
+    CoordinateSequence seq1{CoordinateXY(1,2), CoordinateXY(3, 4)};
+    CoordinateSequence seq2{CoordinateXY(3, 4), CoordinateXY(3, 4), CoordinateXY(5, 6), CoordinateXY(3, 4), CoordinateXY(7, 8), CoordinateXY(7, 8), CoordinateXY(9, 10)};
+
+    CoordinateSequence expected{CoordinateXY(1, 2), CoordinateXY(3, 4), CoordinateXY(5, 6), CoordinateXY(3, 4), CoordinateXY(7, 8), CoordinateXY(9, 10)};
+
+    seq1.add(seq2, false);
+
+    ensure_equals(seq1, expected);
+}
+
 } // namespace tut
