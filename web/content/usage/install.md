@@ -25,7 +25,7 @@ The [Ubuntu GIS](https://wiki.ubuntu.com/UbuntuGIS) project maintains a collecti
 
 ```bash
 # Add the Ubuntu GIS PPA
-sudo apt-get install python-software-properties
+sudo apt-get install software-properties-common
 sudo add-apt-repository ppa:ubuntugis/ppa
 
 # Install the packages
