@@ -407,7 +407,21 @@ WKTWriter::appendSequenceText(const CoordinateSequence& seq,
 int 
 WKTWriter::writeTrimmedNumber(double d, uint32_t precision, char* buf)
 {
-    return geos_d2sfixed_buffered_n(d, precision, buf);
+    const auto da = std::fabs(d);
+    if ( !std::isfinite(d) || (da == 0.0) )
+        // non-finite or exactly zero
+        return geos_d2sfixed_buffered_n(d, precision, buf);
+    else if ( (da >= 1e+17) || (da < 1e-4) )
+        // very large or small numbers, use scientific notation
+        return geos_d2sexp_buffered_n(d, precision, buf);
+    else {
+        // most real-world coordinates, use positional notation
+        if ( (precision < 4) && (da < 1.0) ) {
+            // adjust precision to avoid rounding to zero
+            precision = static_cast<std::uint32_t>(-floor(log10(da)));
+        }
+        return geos_d2sfixed_buffered_n(d, precision, buf);
+    }
 }
 
 std::string
@@ -417,7 +431,7 @@ WKTWriter::writeNumber(double d, bool trim, uint32_t precision) {
     * the ryu library.
     */
     if (trim) {
-        char buf[128];
+        char buf[28];
         int len = writeTrimmedNumber(d, precision, buf);
         buf[len] = '\0';
         std::string s(buf);
