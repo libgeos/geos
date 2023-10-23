@@ -2176,11 +2176,11 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Print the shortest representation of a double using fixed notation. Only works for numbers smaller than 1e17 (absolute value). </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Print the shortest representation of a double. Non-zero absolute values that are &lt;1e-4 and &gt;=1e+17 are formatted using scientific notation, and other values are formatted with positional notation with precision used for the max digits after decimal point. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">d</td><td>The number to format. </td></tr>
-    <tr><td class="paramname">precision</td><td>The desired precision. (max digits after decimal point) </td></tr>
-    <tr><td class="paramname">result</td><td>The buffer to write the result to. </td></tr>
+    <tr><td class="paramname">precision</td><td>The desired precision. </td></tr>
+    <tr><td class="paramname">result</td><td>The buffer to write the result to, with a suggested size 28. </td></tr>
   </table>
   </dd>
 </dl>
@@ -20497,7 +20497,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Sets the number trimming option on a <a class="el" href="geos__c_8h.html#a664daad6642852a44dac7a51320f8b66">GEOSWKTWriter</a>. With trim set to 1, the writer will strip trailing 0's from the output coordinates. With 0, all coordinates will be padded with 0's out to the rounding precision. Default since GEOS 3.12 is with trim set to 1 for 'on'. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Sets the number trimming option on a <a class="el" href="geos__c_8h.html#a664daad6642852a44dac7a51320f8b66">GEOSWKTWriter</a>. With trim set to 1, the writer will strip trailing 0's from the output coordinates. With 1 (trimming enabled), big and small absolute coordinates will use scientific notation, otherwise positional notation is used; see <a class="el" href="geos__c_8h.html#a143ca93693050c42a964a3d311409839">GEOS_printDouble</a> for details. With 0 (trimming disabled), all coordinates will be padded with 0's out to the rounding precision. Default since GEOS 3.12 is with trim set to 1 for 'on'. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">writer</td><td>A <a class="el" href="geos__c_8h.html#a664daad6642852a44dac7a51320f8b66">GEOSWKTWriter</a>. </td></tr>
     <tr><td class="paramname">trim</td><td>The trimming behaviour to set, 1 for 'on', 0 for 'off'</td></tr>
