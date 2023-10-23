@@ -1898,11 +1898,13 @@ extern void GEOS_DLL GEOSWKTWriter_setOld3D_r(
     GEOSWKTWriter *writer,
     int useOld3D);
 
-/** Print the shortest representation of a double using fixed notation.
- * Only works for numbers smaller than 1e17 (absolute value).
+/** Print the shortest representation of a double. Non-zero absolute values
+ * that are <1e-4 and >=1e+17 are formatted using scientific notation, and
+ * other values are formatted with positional notation with precision used for
+ * the max digits after decimal point.
  * \param d The number to format.
- * \param precision The desired precision. (max digits after decimal point)
- * \param result The buffer to write the result to.
+ * \param precision The desired precision.
+ * \param result The buffer to write the result to, with a suggested size 28.
  * \return the length of the written string.
  */
 extern int GEOS_DLL GEOS_printDouble(
@@ -5436,7 +5438,10 @@ extern char GEOS_DLL *GEOSWKTWriter_write(
 /**
 * Sets the number trimming option on a \ref GEOSWKTWriter.
 * With trim set to 1, the writer will strip trailing 0's from
-* the output coordinates. With 0, all coordinates will be
+* the output coordinates. With 1 (trimming enabled), big and small
+* absolute coordinates will use scientific notation, otherwise
+* positional notation is used; see \ref GEOS_printDouble for details.
+* With 0 (trimming disabled), all coordinates will be
 * padded with 0's out to the rounding precision.
 * Default since GEOS 3.12 is with trim set to 1 for 'on'.
 * \param writer A \ref GEOSWKTWriter.

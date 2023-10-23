@@ -16,6 +16,7 @@
   - Fix PreparedLineStringDistance for lines within envelope and polygons (GH-959, Martin Davis)
   - Improve scale handling for PrecisionModel (GH-956, Martin Davis)
   - Fix error in CoordinateSequence::add when disallowing repeated points (GH-963, Dan Baston)
+  - Fix WKTWriter::writeTrimmedNumber for big and small values (GH-973, Mike Taves)
 
 
 ## Changes in 3.12.0

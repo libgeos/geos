@@ -464,4 +464,115 @@ void object::test<15>
 
 }
 
+// Test big, small, and non-finite values
+// https://github.com/libgeos/geos/issues/970
+template<>
+template<>
+void object::test<16>
+()
+{
+    PrecisionModel pmf(PrecisionModel::FLOATING);
+    GeometryFactory::Ptr gff(GeometryFactory::create(&pmf));
+    WKTReader wktreaderf(gff.get());
+
+    // Big values
+    auto big = wktreaderf.read("POINT (-1.234e+15 1.234e+16 1.234e+17 -1.234e+18)");
+
+    // Check precision from 0 to 5
+    wktwriter.setRoundingPrecision(0);
+    wktwriter.setTrim(true);
+    ensure_equals(wktwriter.write(*big), "POINT ZM (-1234000000000000 12340000000000000 1e+17 -1e+18)");
+    wktwriter.setTrim(false);
+    ensure_equals(wktwriter.write(*big), "POINT ZM (-1234000000000000 12340000000000000 123400000000000000 -1234000000000000000)");
+
+    wktwriter.setRoundingPrecision(1);
+    wktwriter.setTrim(true);
+    ensure_equals(wktwriter.write(*big), "POINT ZM (-1234000000000000 12340000000000000 1.2e+17 -1.2e+18)");
+    wktwriter.setTrim(false);
+    ensure_equals(wktwriter.write(*big), "POINT ZM (-1234000000000000.0 12340000000000000.0 123400000000000000.0 -1234000000000000000.0)");
+
+    wktwriter.setRoundingPrecision(2);
+    wktwriter.setTrim(true);
+    ensure_equals(wktwriter.write(*big), "POINT ZM (-1234000000000000 12340000000000000 1.23e+17 -1.23e+18)");
+    wktwriter.setTrim(false);
+    ensure_equals(wktwriter.write(*big), "POINT ZM (-1234000000000000.00 12340000000000000.00 123400000000000000.00 -1234000000000000000.00)");
+
+    wktwriter.setRoundingPrecision(3);
+    wktwriter.setTrim(true);
+    ensure_equals(wktwriter.write(*big), "POINT ZM (-1234000000000000 12340000000000000 1.234e+17 -1.234e+18)");
+    wktwriter.setTrim(false);
+    ensure_equals(wktwriter.write(*big), "POINT ZM (-1234000000000000.000 12340000000000000.000 123400000000000000.000 -1234000000000000000.000)");
+
+    wktwriter.setRoundingPrecision(4);
+    wktwriter.setTrim(true);
+    ensure_equals(wktwriter.write(*big), "POINT ZM (-1234000000000000 12340000000000000 1.234e+17 -1.234e+18)");
+    wktwriter.setTrim(false);
+    ensure_equals(wktwriter.write(*big), "POINT ZM (-1234000000000000.0000 12340000000000000.0000 123400000000000000.0000 -1234000000000000000.0000)");
+
+    wktwriter.setRoundingPrecision(5);
+    wktwriter.setTrim(true);
+    ensure_equals(wktwriter.write(*big), "POINT ZM (-1234000000000000 12340000000000000 1.234e+17 -1.234e+18)");
+    wktwriter.setTrim(false);
+    ensure_equals(wktwriter.write(*big), "POINT ZM (-1234000000000000.00000 12340000000000000.00000 123400000000000000.00000 -1234000000000000000.00000)");
+
+    // Small values
+    auto small = wktreaderf.read("POINT (-1.234e-3 2.234e-4 1.234e-5 -1.234e-6)");
+
+    // Check precision from 0 to 5
+    wktwriter.setRoundingPrecision(0);
+    wktwriter.setTrim(true);
+    ensure_equals(wktwriter.write(*small), "POINT ZM (-0.001 0.0002 1e-5 -1e-6)");
+    wktwriter.setTrim(false);
+    ensure_equals(wktwriter.write(*small), "POINT ZM (-0 0 0 -0)");
+
+    wktwriter.setRoundingPrecision(1);
+    wktwriter.setTrim(true);
+    ensure_equals(wktwriter.write(*small), "POINT ZM (-0.001 0.0002 1.2e-5 -1.2e-6)");
+    wktwriter.setTrim(false);
+    ensure_equals(wktwriter.write(*small), "POINT ZM (-0.0 0.0 0.0 -0.0)");
+
+    wktwriter.setRoundingPrecision(2);
+    wktwriter.setTrim(true);
+    ensure_equals(wktwriter.write(*small), "POINT ZM (-0.001 0.0002 1.23e-5 -1.23e-6)");
+    wktwriter.setTrim(false);
+    ensure_equals(wktwriter.write(*small), "POINT ZM (-0.00 0.00 0.00 -0.00)");
+
+    wktwriter.setRoundingPrecision(3);
+    wktwriter.setTrim(true);
+    ensure_equals(wktwriter.write(*small), "POINT ZM (-0.001 0.0002 1.234e-5 -1.234e-6)");
+    wktwriter.setTrim(false);
+    ensure_equals(wktwriter.write(*small), "POINT ZM (-0.001 0.000 0.000 -0.000)");
+
+    wktwriter.setRoundingPrecision(4);
+    wktwriter.setTrim(true);
+    ensure_equals(wktwriter.write(*small), "POINT ZM (-0.0012 0.0002 1.234e-5 -1.234e-6)");
+    wktwriter.setTrim(false);
+    ensure_equals(wktwriter.write(*small), "POINT ZM (-0.0012 0.0002 0.0000 -0.0000)");
+
+    wktwriter.setRoundingPrecision(5);
+    wktwriter.setTrim(true);
+    ensure_equals(wktwriter.write(*small), "POINT ZM (-0.00123 0.00022 1.234e-5 -1.234e-6)");
+    wktwriter.setTrim(false);
+    ensure_equals(wktwriter.write(*small), "POINT ZM (-0.00123 0.00022 0.00001 -0.00000)");
+
+    // Extremely small and big
+    auto extreme = wktreaderf.read("POINT (-1.2e-208 9.1e-191 3.8e+221 4.9e+154)");
+    wktwriter.setRoundingPrecision(5);
+    wktwriter.setTrim(true);
+    ensure_equals(wktwriter.write(*extreme), "POINT ZM (-1.2e-208 9.1e-191 3.8e+221 4.9e+154)");
+    // Skip non-trim, as this may vary between compilers
+    // wktwriter.setTrim(false);
+    // ensure_equals(wktwriter.write(*extreme), "POINT ZM (-0.00000 0.00000 ...)");
+
+    // Non-finite values
+    auto nonfinite = wktreaderf.read("POINT(-inf inf nan)");
+
+    wktwriter.setTrim(true);
+    ensure_equals(wktwriter.write(*nonfinite), "POINT Z (-Infinity Infinity NaN)");
+    // Skip non-trim, as this may vary between compilers
+    // wktwriter.setTrim(false);
+    // ensure_equals(wktwriter.write(*nonfinite), "POINT Z (-inf inf nan)");
+
+}
+
 } // namespace tut
