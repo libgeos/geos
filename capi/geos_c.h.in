@@ -2949,6 +2949,7 @@ extern int GEOS_DLL GEOSNormalize(GEOSGeometry* g);
 * \param exteriorCW if 1, exterior rings will be clockwise and interior rings
 *                         will be counter-clockwise
 * \return 0 on success or -1 on exception
+* \since 3.12
 */
 extern int GEOS_DLL GEOSOrientPolygons(GEOSGeometry* g,
                                        int exteriorCW);
