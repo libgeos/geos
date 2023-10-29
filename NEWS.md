@@ -17,6 +17,7 @@
   - Improve scale handling for PrecisionModel (GH-956, Martin Davis)
   - Fix error in CoordinateSequence::add when disallowing repeated points (GH-963, Dan Baston)
   - Fix WKTWriter::writeTrimmedNumber for big and small values (GH-973, Mike Taves)
+  - Fix InteriorPointPoint to handle empty elements (GH-977, Martin Davis)
 
 
 ## Changes in 3.12.0
