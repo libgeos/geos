@@ -2484,7 +2484,7 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createCollection(
 *       with GEOSFree() and all the elements with GEOSGeom_destroy().
 *       If called with an empty collection, null will be returned
 *       and ngeoms set to zero.
-* \since 3.4
+* \since 3.12
 */
 extern GEOSGeometry GEOS_DLL ** GEOSGeom_releaseCollection(
     GEOSGeometry * collection,
