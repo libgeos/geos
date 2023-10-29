@@ -9,6 +9,7 @@
   - Improve scale handling for PrecisionModel (GH-956, Martin Davis)
   - Fix PreparedLineStringDistance for lines within envelope and polygons (GH-959, Martin Davis)
   - Fix error in CoordinateSequence::add when disallowing repeated points (GH-963, Dan Baston)
+  - Fix InteriorPointPoint to handle empty elements (GH-977, Martin Davis)
 
 
 ## Changes in 3.12.0
