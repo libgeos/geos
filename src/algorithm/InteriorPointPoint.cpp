@@ -47,6 +47,9 @@ InteriorPointPoint::InteriorPointPoint(const Geometry* g)
 void
 InteriorPointPoint::add(const Geometry* geom)
 {
+    if (geom->isEmpty())
+        return;
+
     const Point* po = dynamic_cast<const Point*>(geom);
     if (po) {
         add(po->getCoordinate());
