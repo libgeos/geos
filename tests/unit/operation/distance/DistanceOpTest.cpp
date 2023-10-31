@@ -565,6 +565,11 @@ void object::test<21>()
     ensure_equals(g1->distance(g2.get()), 1.9996999774966246);
 }
 
+//
+// Variations on a theme: testing EMPTY and collections with EMPTY
+//
+
+// Ignoring empty component
 template<>
 template<>
 void object::test<22>()
@@ -575,6 +580,57 @@ void object::test<22>()
     ensure_equals(g1->distance(g2.get()), 1);
     ensure_equals(g2->distance(g1.get()), 1);
 }
+
+// Empty is same as empty so zero...?
+template<>
+template<>
+void object::test<23>()
+{
+    auto g1 = wktreader.read("POINT EMPTY");
+    auto g2 = wktreader.read("LINESTRING EMPTY");
+
+    ensure(g1 != nullptr && g2 != nullptr);
+    ensure_equals(g1->distance(g2.get()), 0);
+    ensure_equals(g2->distance(g1.get()), 0);
+}
+
+template<>
+template<>
+void object::test<24>()
+{
+    auto g1 = wktreader.read("GEOMETRYCOLLECTION(POINT EMPTY, LINESTRING EMPTY)");
+    auto g2 = wktreader.read("LINESTRING EMPTY");
+
+    ensure(g1 != nullptr && g2 != nullptr);
+    ensure_equals(g1->distance(g2.get()), 0);
+    ensure_equals(g2->distance(g1.get()), 0);
+}
+
+// But ignore empty if there's a real distance?
+template<>
+template<>
+void object::test<25>()
+{
+    auto g1 = wktreader.read("GEOMETRYCOLLECTION(LINESTRING EMPTY, POINT(2 1))");
+    auto g2 = wktreader.read("POINT(1 1)");
+
+    ensure(g1 != nullptr && g2 != nullptr);
+    ensure_equals(g1->distance(g2.get()), 1);
+    ensure_equals(g2->distance(g1.get()), 1);
+}
+
+template<>
+template<>
+void object::test<26>()
+{
+    auto g1 = wktreader.read("GEOMETRYCOLLECTION(POINT(-2 0), POINT EMPTY)");
+    auto g2 = wktreader.read("GEOMETRYCOLLECTION(POINT(1 0),LINESTRING(0 0,1 0))");
+
+    ensure(g1 != nullptr && g2 != nullptr);
+    ensure_equals(g1->distance(g2.get()), 2);
+    ensure_equals(g2->distance(g1.get()), 2);
+}
+
 
 // TODO: finish the tests by adding:
 // 	LINESTRING - *all*

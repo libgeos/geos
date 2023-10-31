@@ -358,6 +358,10 @@ DistanceOp::computeMinDistanceLines(
 {
     for(const LineString* line0 : lines0) {
         for(const LineString* line1 : lines1) {
+
+            if (line0->isEmpty() || line1->isEmpty())
+                continue;
+
             computeMinDistance(line0, line1, locGeom);
             if(minDistance <= terminateDistance) {
                 return;
@@ -374,13 +378,11 @@ DistanceOp::computeMinDistancePoints(
     std::array<std::unique_ptr<GeometryLocation>, 2> & locGeom)
 {
     for(const Point* pt0 : points0) {
-        if (pt0->isEmpty()) {
-            continue;
-        }
         for(const Point* pt1 : points1) {
-            if (pt1->isEmpty()) {
+
+            if (pt1->isEmpty() || pt0->isEmpty())
                 continue;
-            }
+
             double dist = pt0->getCoordinate()->distance(*(pt1->getCoordinate()));
 
 #if GEOS_DEBUG
@@ -414,6 +416,10 @@ DistanceOp::computeMinDistanceLinesPoints(
 {
     for(const LineString* line : lines) {
         for(const Point* pt : points) {
+
+            if (line->isEmpty() || pt->isEmpty())
+                continue;
+
             computeMinDistance(line, pt, locGeom);
             if(minDistance <= terminateDistance) {
                 return;
