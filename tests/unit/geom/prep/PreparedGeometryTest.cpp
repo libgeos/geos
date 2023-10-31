@@ -68,4 +68,21 @@ void object::test<1>
     ensure( pg1->covers(g2.get()));
 }
 
+
+// See https://trac.osgeo.org/postgis/ticket/5601
+template<>
+template<>
+void object::test<2>
+()
+{
+    g1 = reader.read( "LINESTRING(-1 0,0 0)" );
+    g2 = reader.read( "GEOMETRYCOLLECTION(MULTIPOINT(-1 0),LINESTRING(0 -1,1 0))" );
+
+    pg1 = prep::PreparedGeometryFactory::prepare(g1.get());
+
+    ensure(  g1->intersects(g2.get()) );
+    ensure( pg1->intersects(g2.get()) );
+}
+
+
 } // namespace tut
