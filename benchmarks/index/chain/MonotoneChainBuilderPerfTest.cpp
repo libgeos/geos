@@ -60,7 +60,7 @@ static void BM_MonotoneChainBuilder(benchmark::State& state) {
 
     for (auto _ : state) {
         std::vector<MonotoneChain> chains;
-        MonotoneChainBuilder::getChains(&cs, nullptr, chains);
+        MonotoneChainBuilder::getChains(&cs, nullptr, 0, chains);
     }
 }
 

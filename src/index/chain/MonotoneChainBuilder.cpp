@@ -48,13 +48,14 @@ namespace chain { // geos.index.chain
  */
 class ChainBuilder : public CoordinateFilter {
 public:
-    ChainBuilder(const CoordinateSequence* pts, void* context, std::vector<MonotoneChain> & list) :
+    ChainBuilder(const CoordinateSequence* pts, void* context, double expansionDistance, std::vector<MonotoneChain> & list) :
      m_prev(nullptr),
      m_i(0),
      m_quadrant(-1),
      m_start(0),
      m_seq(pts),
      m_context(context),
+     m_distance(expansionDistance),
      m_list(list) {}
 
     void filter_ro(const CoordinateXY* c) override {
@@ -72,7 +73,7 @@ private:
     void finishChain() {
         if ( m_i == 0 ) return;
         std::size_t chainEnd = m_i - 1;
-        m_list.emplace_back(*m_seq, m_start, chainEnd, m_context);
+        m_list.emplace_back(*m_seq, m_start, chainEnd, m_context, m_distance);
         m_start = chainEnd;
     }
 
@@ -99,6 +100,7 @@ private:
     std::size_t m_start;
     const CoordinateSequence* m_seq;
     void* m_context;
+    double m_distance;
     std::vector<MonotoneChain>& m_list;
 };
 
@@ -106,8 +108,9 @@ private:
 /* static public */
 void
 MonotoneChainBuilder::getChains(const CoordinateSequence* pts, void* context,
+                                double expansionDistance,
                                 std::vector<MonotoneChain>& mcList) {
-    ChainBuilder builder(pts, context, mcList);
+    ChainBuilder builder(pts, context, expansionDistance, mcList);
     pts->apply_ro(&builder);
     builder.finish();
 }

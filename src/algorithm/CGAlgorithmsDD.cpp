@@ -31,7 +31,8 @@ namespace {
 inline int
 OrientationDD(const DD &dd)
 {
-    static DD const zero(0.0);
+    constexpr const DD zero(0.0);
+
     if(dd < zero) {
         return CGAlgorithmsDD::RIGHT;
     }

@@ -58,10 +58,11 @@ noding::FastSegmentSetIntersectionFinder*
 PreparedPolygon::
 getIntersectionFinder() const
 {
-    if(! segIntFinder) {
+    std::call_once(segIntFinderFlag, [this]() {
         noding::SegmentStringUtil::extractSegmentStrings(&getGeometry(), segStrings);
-        segIntFinder.reset(new noding::FastSegmentSetIntersectionFinder(&segStrings));
-    }
+        segIntFinder = detail::make_unique<noding::FastSegmentSetIntersectionFinder>(&segStrings);
+    });
+
     return segIntFinder.get();
 }
 
@@ -73,12 +74,20 @@ getPointLocator() const
     // instead of an IndexedPointInAreaLocator. There's a reasonable chance we will only use this locator
     // once (for example, if we get here through Geometry::intersects). So we create a simple locator for the
     // first usage and switch to an indexed locator when it is clear we're in a multiple-use scenario.
-    if(! ptOnGeomLoc) {
+    bool first_call = false;
+
+    std::call_once(ptOnGeomLocFlag, [this, &first_call]() {
         ptOnGeomLoc = detail::make_unique<algorithm::locate::SimplePointInAreaLocator>(&getGeometry());
+        first_call = true;
+    });
+
+    if (first_call) {
         return ptOnGeomLoc.get();
-    } else if (!indexedPtOnGeomLoc) {
-        indexedPtOnGeomLoc = detail::make_unique<algorithm::locate::IndexedPointInAreaLocator>(getGeometry());
     }
+
+    std::call_once(indexedPtOnGeomLocFlag, [this]() {
+        indexedPtOnGeomLoc = detail::make_unique<algorithm::locate::IndexedPointInAreaLocator>(getGeometry());
+    });
 
     return indexedPtOnGeomLoc.get();
 }
@@ -157,9 +166,10 @@ operation::distance::IndexedFacetDistance*
 PreparedPolygon::
 getIndexedFacetDistance() const
 {
-    if(! indexedDistance ) {
-        indexedDistance.reset(new operation::distance::IndexedFacetDistance(&getGeometry()));
-    }
+    std::call_once(indexedDistanceFlag, [this]() {
+        indexedDistance = detail::make_unique<operation::distance::IndexedFacetDistance>(&getGeometry());
+    });
+
     return indexedDistance.get();
 }
 

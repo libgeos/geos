@@ -51,7 +51,7 @@ MCIndexNoder::computeNodes(SegmentString::NonConstVect* inputSegStrings)
 
     if (!indexBuilt) {
         for(const auto& mc : monoChains) {
-            index.insert(mc.getEnvelope(overlapTolerance), &mc);
+            index.insert(mc.getEnvelope(), &mc);
         }
         indexBuilt = true;
     }
@@ -85,7 +85,7 @@ MCIndexNoder::add(SegmentString* segStr)
 
     // segChains will contain newly allocated MonotoneChain objects
     MonotoneChainBuilder::getChains(segStr->getCoordinates(),
-                                    segStr, monoChains);
+                                    segStr, overlapTolerance, monoChains);
 
 }
 

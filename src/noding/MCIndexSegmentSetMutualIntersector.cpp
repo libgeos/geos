@@ -13,14 +13,11 @@
  **********************************************************************/
 
 #include <geos/noding/MCIndexSegmentSetMutualIntersector.h>
-#include <geos/noding/SegmentSetMutualIntersector.h>
 #include <geos/noding/SegmentString.h>
 #include <geos/noding/SegmentIntersector.h>
-#include <geos/index/SpatialIndex.h>
 #include <geos/index/chain/MonotoneChain.h>
 #include <geos/index/chain/MonotoneChainBuilder.h>
 #include <geos/index/chain/MonotoneChainOverlapAction.h>
-#include <geos/index/strtree/SimpleSTRtree.h>
 
 // std
 #include <cstddef>
@@ -33,37 +30,26 @@ namespace noding { // geos::noding
 
 /*private*/
 void
-MCIndexSegmentSetMutualIntersector::addToIndex(SegmentString* segStr)
-{
-    MonotoneChainBuilder::getChains(segStr->getCoordinates(),
-                                    segStr, indexChains);
-
-}
-
-
-/*private*/
-void
-MCIndexSegmentSetMutualIntersector::addToMonoChains(SegmentString* segStr)
+MCIndexSegmentSetMutualIntersector::addChains(const SegmentString* segStr, MonoChains& chains) const
 {
     if (segStr->size() == 0)
         return;
     MonotoneChainBuilder::getChains(segStr->getCoordinates(),
-                                    segStr, monoChains);
+                                    (void*) segStr, overlapTolerance, chains);
 }
 
 
 /*private*/
 void
-MCIndexSegmentSetMutualIntersector::intersectChains()
+MCIndexSegmentSetMutualIntersector::intersectChains(const MonoChains& chains, SegmentIntersector& segmentIntersector)
 {
-    MCIndexSegmentSetMutualIntersector::SegmentOverlapAction overlapAction(*segInt);
+    MCIndexSegmentSetMutualIntersector::SegmentOverlapAction overlapAction(segmentIntersector);
 
-    for(auto& queryChain : monoChains) {
-        index.query(queryChain.getEnvelope(overlapTolerance), [&queryChain, &overlapAction, this](const MonotoneChain* testChain) -> bool {
+    for(auto& queryChain : chains) {
+        index.query(queryChain.getEnvelope(), [&queryChain, &overlapAction, &segmentIntersector, this](const MonotoneChain* testChain) -> bool {
             queryChain.computeOverlaps(testChain, overlapTolerance, &overlapAction);
-            nOverlaps++;
 
-            return !segInt->isDone(); // abort early if segInt->isDone()
+            return !segmentIntersector.isDone(); // abort early if segmentIntersector->isDone()
         });
     }
 }
@@ -73,13 +59,8 @@ MCIndexSegmentSetMutualIntersector::intersectChains()
 void
 MCIndexSegmentSetMutualIntersector::setBaseSegments(SegmentString::ConstVect* segStrings)
 {
-    // NOTE - mloskot: const qualifier is removed silently, dirty.
-
     for(const SegmentString* css: *segStrings) {
-        if (css->size() == 0)
-            continue;
-        SegmentString* ss = const_cast<SegmentString*>(css);
-        addToIndex(ss);
+        addChains(css, indexChains);
     }
 }
 
@@ -87,23 +68,29 @@ MCIndexSegmentSetMutualIntersector::setBaseSegments(SegmentString::ConstVect* se
 void
 MCIndexSegmentSetMutualIntersector::process(SegmentString::ConstVect* segStrings)
 {
-    if (!indexBuilt) {
+    process(segStrings, segInt);
+}
+
+/*public*/
+void
+MCIndexSegmentSetMutualIntersector::process(SegmentString::ConstVect* segStrings,
+                                            SegmentIntersector* segmentIntersector)
+{
+    std::call_once(indexBuilt, [this]() {
         for (auto& mc: indexChains) {
-            index.insert(&(mc.getEnvelope(overlapTolerance)), &mc);
+            index.insert(&(mc.getEnvelope()), &mc);
         }
-        indexBuilt = true;
-    }
+    });
 
-    // Reset counters for new inputs
-    monoChains.clear();
-    processCounter = indexCounter + 1;
-    nOverlaps = 0;
-
+    // TODO: Rework MonotoneChain extraction to take a callback, so we can pass the chains
+    // to intersectChains as they are identified.
+    MonoChains monoChains;
     for(const SegmentString* css: *segStrings) {
         SegmentString* ss = const_cast<SegmentString*>(css);
-        addToMonoChains(ss);
+        addChains(ss, monoChains);
     }
-    intersectChains();
+
+    intersectChains(monoChains, *segmentIntersector);
 }
 
 

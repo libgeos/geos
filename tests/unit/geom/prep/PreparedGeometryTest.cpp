@@ -12,6 +12,7 @@
 #include <geos/io/WKTReader.h>
 // std
 #include <memory>
+#include <thread>
 
 using namespace geos::geom;
 using geos::geom::prep::PreparedGeometry;
@@ -66,6 +67,60 @@ void object::test<1>
     ensure( pg1->intersects(g2.get()));
     ensure( pg1->contains(g2.get()));
     ensure( pg1->covers(g2.get()));
+}
+
+// Check prepared geometry can be used from multiple threads
+template<>
+template<>
+void object::test<2>
+()
+{
+    std::vector<std::unique_ptr<Geometry>> geoms;
+    std::vector<std::unique_ptr<PreparedGeometry>> ppolys;
+    std::vector<std::unique_ptr<PreparedGeometry>> plines;
+    std::vector<std::thread> threads;
+
+    constexpr std::size_t nrow = 10;
+    constexpr std::size_t ncol = 10;
+    constexpr std::size_t nthreads = 10;
+
+    for (std::size_t i = 0; i < ncol; i++) {
+        for (std::size_t j = 0; j < nrow; j++) {
+            CoordinateXY c(static_cast<double>(i), static_cast<double>(j));
+            auto pt = factory->createPoint(c);
+
+            geoms.emplace_back(pt->buffer(1.5));
+            ppolys.push_back(prep::PreparedGeometryFactory::prepare(geoms.back().get()));
+            plines.push_back(prep::PreparedGeometryFactory::prepare(static_cast<Polygon*>(geoms.back().get())->getExteriorRing()));
+        }
+    }
+
+    auto findIntersects = [&geoms](const PreparedGeometry* pg) {
+        for (const auto& geom : geoms) {
+            pg->intersects(geom.get());
+            pg->distance(geom.get());
+        }
+    };
+
+    // check PreparedPolygon
+    for (std::size_t i = 0; i < nthreads; i++) {
+        threads.emplace_back(findIntersects, ppolys[0].get());
+    }
+
+    for (auto& thread : threads) {
+        thread.join();
+    }
+
+    // check PreparedLineString
+    threads.clear();
+    for (std::size_t i = 0; i < nthreads; i++) {
+        threads.emplace_back(findIntersects, plines[0].get());
+    }
+
+    for (auto& thread : threads) {
+        thread.join();
+    }
+
 }
 
 } // namespace tut

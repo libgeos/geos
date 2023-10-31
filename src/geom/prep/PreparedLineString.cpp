@@ -27,6 +27,8 @@
 #include <geos/noding/FastSegmentSetIntersectionFinder.h>
 #include <geos/operation/distance/IndexedFacetDistance.h>
 
+#include <mutex>
+
 namespace geos {
 namespace geom { // geos.geom
 namespace prep { // geos.geom.prep
@@ -44,12 +46,12 @@ PreparedLineString::~PreparedLineString()
 }
 
 noding::FastSegmentSetIntersectionFinder*
-PreparedLineString::getIntersectionFinder()
+PreparedLineString::getIntersectionFinder() const
 {
-    if(! segIntFinder) {
+    std::call_once(segIntFinderFlag, [this]() {
         noding::SegmentStringUtil::extractSegmentStrings(&getGeometry(), segStrings);
-        segIntFinder.reset(new noding::FastSegmentSetIntersectionFinder(&segStrings));
-    }
+        segIntFinder = detail::make_unique<noding::FastSegmentSetIntersectionFinder>(&segStrings);
+    });
 
     return segIntFinder.get();
 }
@@ -68,12 +70,12 @@ PreparedLineString::intersects(const geom::Geometry* g) const
 
 /* public */
 operation::distance::IndexedFacetDistance*
-PreparedLineString::
-getIndexedFacetDistance() const
+PreparedLineString::getIndexedFacetDistance() const
 {
-    if(! indexedDistance ) {
-        indexedDistance.reset(new operation::distance::IndexedFacetDistance(&getGeometry()));
-    }
+    std::call_once(indexedDistanceFlag, [this]() {
+        indexedDistance = detail::make_unique<operation::distance::IndexedFacetDistance>(&getGeometry());
+    });
+
     return indexedDistance.get();
 }
 

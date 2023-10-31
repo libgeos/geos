@@ -40,7 +40,7 @@ void object::test<1>
     std::vector<geos::index::chain::MonotoneChain> chain;
     geos::geom::CoordinateSequence pts;
 
-    geos::index::chain::MonotoneChainBuilder::getChains(&pts, 0, chain);
+    geos::index::chain::MonotoneChainBuilder::getChains(&pts, nullptr, 0, chain);
 
     ensure_equals(chain.size(), 0u);
 }
