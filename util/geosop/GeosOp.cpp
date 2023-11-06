@@ -214,7 +214,12 @@ std::vector<std::unique_ptr<Geometry>> collect( std::vector<std::unique_ptr<Geom
 
 bool isWKTLiteral(std::string s) {
     // check for empty geoms (which do not have parens)
-    if (endsWith(s, " EMPTY")) return true;
+    const size_t slen = s.size();
+    if (slen < 6) return false;
+    auto lastWord = s.substr(slen - 6, slen);
+    for (char& c : lastWord)
+        c = static_cast<char>(toupper(static_cast<unsigned char>(c)));
+    if ( lastWord.compare(" EMPTY") == 0 ) return true;
 
     // assume if string contains a ( it is WKT
     auto numLParen = std::count(s.begin(), s.end(), '(');
