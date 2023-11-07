@@ -11,6 +11,7 @@
   - Fix error in CoordinateSequence::add when disallowing repeated points (GH-963, Dan Baston)
   - Fix InteriorPointPoint to handle empty elements (GH-977, Martin Davis)
   - Skip over testing empty distances for mixed collections. (GH-979, Paul Ramsey)
+  - Fix TopologyPreservingSimplifier endpoint handling to avoid self-intersections (GH-986, Martin Davis)
 
 
 ## Changes in 3.12.0
