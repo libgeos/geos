@@ -113,12 +113,12 @@ private:
         double& maxDistance);
 
     bool hasBadIntersection(const TaggedLineString* parentLine,
-                            const std::pair<std::size_t, std::size_t>& sectionIndex,
+                            const size_t excludeStart, const size_t excludeEnd,
                             const geom::LineSegment& candidateSeg);
 
     bool hasBadInputIntersection(const TaggedLineString* parentLine,
-                                 const std::pair<std::size_t, std::size_t>& sectionIndex,
-                                 const geom::LineSegment& candidateSeg);
+                                const size_t excludeStart, const size_t excludeEnd,
+                                const geom::LineSegment& candidateSeg);
 
     bool hasBadOutputIntersection(const geom::LineSegment& candidateSeg);
 
@@ -129,16 +129,20 @@ private:
         std::size_t start, std::size_t end);
 
     /** \brief
-     * Tests whether a segment is in a section of a TaggedLineString
+     * Tests whether a segment is in a section of a TaggedLineString.
+     * Sections may wrap around the endpoint of the line, 
+     * to support ring endpoint simplification.
+     * This is indicated by excludedStart > excludedEnd
      *
      * @param line line to be checked for the presence of `seg`
-     * @param sectionIndex start and end indices of the section to check
+     * @param excludeStart  the index of the first segment in the excluded section  
+     * @param excludeEnd the index of the last segment in the excluded section
      * @param seg segment to look for in `line`
-     * @return
+     * @return true if the test segment intersects some segment in the line not in the excluded section
      */
     static bool isInLineSection(
         const TaggedLineString* line,
-        const std::pair<std::size_t, std::size_t>& sectionIndex,
+        const size_t excludeStart, const size_t excludeEnd,
         const TaggedLineSegment* seg);
 
     /** \brief
