@@ -34,6 +34,18 @@ struct test_tpsimp_data {
         , wktwriter()
     {
     }
+
+    void
+    checkTPS(const std::string& wkt, double tolerance, const std::string& wkt_expected)
+    {
+        GeomPtr g(wktreader.read(wkt));
+        GeomPtr simplified = TopologyPreservingSimplifier::simplify(g.get(), tolerance);
+
+        ensure("Simplified geometry is invalid!", simplified->isValid());
+    
+        GeomPtr exp(wktreader.read(wkt_expected));
+        ensure_equals_geometry(exp.get(), simplified.get());
+    }
 };
 
 typedef test_group<test_tpsimp_data> group;
@@ -377,6 +389,20 @@ void object::test<18>
     auto simplified = TopologyPreservingSimplifier::simplify(g.get(), 0.1);
 
     ensure_equals_geometry(simplified.get(), g.get());
+}
+
+// testPolygonKeepEndpointWithCross
+// Test that endpoint is not simplified if it breaks topology
+template<>
+template<>
+void object::test<19>
+()
+{
+    checkTPS(
+      "POLYGON ((50 52, 60 50, 90 60, 90 10, 10 10, 10 90, 60 90, 50 55, 40 80, 20 60, 40 50, 50 52))",
+        10,
+        "POLYGON ((50 52, 90 60, 90 10, 10 10, 10 90, 60 90, 50 55, 40 80, 20 60, 50 52))"
+        );
 }
 
 } // namespace tut
