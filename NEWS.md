@@ -18,7 +18,7 @@
   - Fix error in CoordinateSequence::add when disallowing repeated points (GH-963, Dan Baston)
   - Fix WKTWriter::writeTrimmedNumber for big and small values (GH-973, Mike Taves)
   - Fix InteriorPointPoint to handle empty elements (GH-977, Martin Davis)
-
+  - Fix TopologyPreservingSimplifier endpoint handling to avoid self-intersections (GH-986, Martin Davis)
 
 ## Changes in 3.12.0
 2023-06-27
