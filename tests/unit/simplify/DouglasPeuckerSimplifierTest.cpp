@@ -35,6 +35,24 @@ struct test_dpsimp_data {
         :
         wktreader()
     {}
+
+    void
+    checkDP(const std::string& wkt, double tolerance, const std::string& wkt_expected)
+    {
+        GeomPtr g(wktreader.read(wkt));
+        GeomPtr simplified = DouglasPeuckerSimplifier::simplify(g.get(), tolerance);
+
+        ensure("Simplified geometry is invalid!", simplified->isValid());
+    
+        GeomPtr exp(wktreader.read(wkt_expected));
+        ensure_equals_geometry(exp.get(), simplified.get());
+    }
+
+    void
+    checkDPNoChange(const std::string& wkt, double tolerance)
+    {
+        checkDP(wkt, tolerance, wkt);
+    }
 };
 
 typedef test_group<test_dpsimp_data> group;
@@ -46,262 +64,118 @@ group test_dpsimp_group("geos::simplify::DouglasPeuckerSimplifier");
 // Test Cases
 //
 
-// 1 - PolygonNoReduction
+// 1 - testPolygonWithFlatVertices
 template<>
 template<>
-void object::test<1>
-()
+void object::test<1>()
 {
-    std::string wkt("POLYGON((20 220, 40 220, 60 220, 80 220, 100 220, \
-					120 220, 140 220, 140 180, 100 180, 60 180, 20 180, 20 220))");
-
-    GeomPtr g(wktreader.read(wkt));
-
-    GeomPtr simplified = DouglasPeuckerSimplifier::simplify(
-                             g.get(), 10.0);
-
-    ensure(simplified->isValid());
-
-    // topology is unchanged
-    ensure(simplified->equals(g.get()));
+    checkDP("POLYGON ((20 220, 40 220, 60 220, 80 220, 100 220, 120 220, 140 220, 140 180, 100 180, 60 180, 20 180, 20 220))", 
+        10.0, 
+        "POLYGON ((20 220, 140 220, 140 180, 20 180, 20 220))");
 }
 
 // 2 - PolygonReductionWithSplit
 template<>
 template<>
-void object::test<2>
-()
+void object::test<2>()
 {
-    std::string wkt_in("POLYGON ((40 240, 160 241, 280 240, 280 160, \
-					160 240, 40 140, 40 240))");
-
-    std::string wkt_ex("MULTIPOLYGON (((40.0 240.0, 160.0 240.0, 40.0 140.0, 40.0 240.0)), \
-					((160.0 240.0, 280.0 240.0, 280.0 160.0, 160.0 240.0)))");
-
-    GeomPtr g(wktreader.read(wkt_in));
-
-    GeomPtr expected(wktreader.read(wkt_ex));
-
-    // TODO: This test blows because if instability of geos.index.strtree::yComparator() predicate
-
-    GeomPtr simplified = DouglasPeuckerSimplifier::simplify(
-                             g.get(), 10.0);
-
-    ensure(simplified->isValid());
-
-    ensure(simplified->equalsExact(expected.get()));
-
+    checkDP("POLYGON ((40 240, 160 241, 280 240, 280 160, 160 240, 40 140, 40 240))", 
+        1, 
+        "MULTIPOLYGON (((40 240, 160 240, 40 140, 40 240)), ((160 240, 280 240, 280 160, 160 240)))");
 }
 
 // 3 - PolygonReduction
 template<>
 template<>
-void object::test<3>
-()
+void object::test<3>()
 {
-    std::string wkt_in("POLYGON ((120 120, 121 121, 122 122, 220 120, \
-					180 199, 160 200, 140 199, 120 120))");
-
-    std::string wkt_ex("POLYGON ((120 120, 220 120, 180 199, 160 200, 140 199, 120 120))");
-
-    GeomPtr g(wktreader.read(wkt_in));
-
-    GeomPtr expected(wktreader.read(wkt_ex));
-
-    GeomPtr simplified = DouglasPeuckerSimplifier::simplify(
-                             g.get(), 10.0);
-
-    ensure(simplified->isValid());
-
-    ensure(simplified->equalsExact(expected.get()));
-
+    checkDP("POLYGON ((120 120, 121 121, 122 122, 220 120, 180 199, 160 200, 140 199, 120 120))",
+        10, 
+        "POLYGON ((120 120, 220 120, 180 199, 160 200, 140 199, 120 120))");
 }
 
 // 4 - PolygonWithTouchingHole
 template<>
 template<>
-void object::test<4>
-()
+void object::test<4>()
 {
-    std::string wkt_in("POLYGON ((80 200, 240 200, 240 60, 80 60, 80 200), \
-					(120 120, 220 120, 180 199, 160 200, 140 199, 120 120))");
-
-    std::string wkt_ex("POLYGON ((80 200, 240 200, 240 60, 80 60, 80 200), \
-					(120 120, 220 120, 180 199, 160 200, 140 199, 120 120))");
-
-    GeomPtr g(wktreader.read(wkt_in));
-
-    GeomPtr expected(wktreader.read(wkt_ex));
-
-    GeomPtr simplified = DouglasPeuckerSimplifier::simplify(
-                             g.get(), 10.0);
-
-    ensure(simplified->isValid());
-
-    ensure(simplified->isValid());
-
-    ensure(simplified->equalsExact(expected.get()));
-
+    checkDP("POLYGON ((80 200, 240 200, 240 60, 80 60, 80 200), (120 120, 220 120, 180 199, 160 200, 140 199, 120 120))",
+        10,
+        "POLYGON ((80 200, 240 200, 240 60, 80 60, 80 200), (120 120, 220 120, 180 199, 160 200, 140 199, 120 120))");
 }
 
 // 5 - FlattishPolygon
 template<>
 template<>
-void object::test<5>
-()
+void object::test<5>()
 {
-    std::string wkt_in("POLYGON ((0 0, 50 0, 53 0, 55 0, 100 0, 70 1, 60 1, 50 1, 40 1, 0 0))");
-    std::string wkt_ex("POLYGON EMPTY");
-
-    GeomPtr g(wktreader.read(wkt_in));
-
-    GeomPtr expected(wktreader.read(wkt_ex));
-
-    GeomPtr simplified = DouglasPeuckerSimplifier::simplify(
-                             g.get(), 10.0);
-
-    ensure(simplified->isValid());
-
-    ensure(simplified->equalsExact(expected.get()));
-    //ensure_equals( *simplified, *expected );
-
+    checkDP("POLYGON ((0 0, 50 0, 53 0, 55 0, 100 0, 70 1,  60 1, 50 1, 40 1, 0 0))",
+        10,
+        "POLYGON EMPTY");
 }
 
 // 6 - TinySquare
 template<>
 template<>
-void object::test<6>
-()
+void object::test<6>()
 {
-    std::string wkt_in("POLYGON ((0 5, 5 5, 5 0, 0 0, 0 1, 0 5))");
-    std::string wkt_ex("POLYGON EMPTY");
-
-
-    GeomPtr g(wktreader.read(wkt_in));
-
-    GeomPtr expected(wktreader.read(wkt_ex));
-
-    GeomPtr simplified = DouglasPeuckerSimplifier::simplify(
-                             g.get(), 10.0);
-
-    ensure(simplified->isValid());
-
-    ensure(simplified->equalsExact(expected.get()));
-
+    checkDP("POLYGON ((0 5, 5 5, 5 0, 0 0, 0 1, 0 5))",
+        10,
+        "POLYGON EMPTY");
 }
 
 // TinyHole
 template<>
 template<>
-void object::test<7>
-()
+void object::test<7>()
 {
-    std::string wkt_in("POLYGON ((10 10, 10 310, 370 310, 370 10, 10 10), (160 190, 180 190, 180 170, 160 190))");
-    std::string wkt_ex("POLYGON ((10 10, 10 310, 370 310, 370 10, 10 10))");
-
-    GeomPtr g(wktreader.read(wkt_in));
-    GeomPtr expected(wktreader.read(wkt_ex));
-
-    GeomPtr simplified = DouglasPeuckerSimplifier::simplify(
-                             g.get(), 30.0);
-
-    ensure(simplified->isValid());
-    ensure(simplified->equalsExact(expected.get()));
+    checkDP("POLYGON ((10 10, 10 310, 370 310, 370 10, 10 10), (160 190, 180 190, 180 170, 160 190))",
+        30,
+        "POLYGON ((10 10, 10 310, 370 310, 370 10, 10 10))");
 }
 
 // 7 - TinyLineString
 template<>
 template<>
-void object::test<8>
-()
+void object::test<8>()
 {
-    std::string wkt_in("LINESTRING (0 5, 1 5, 2 5, 5 5)");
-    std::string wkt_ex("LINESTRING (0 5, 5 5)");
-
-    GeomPtr g(wktreader.read(wkt_in));
-
-    GeomPtr expected(wktreader.read(wkt_ex));
-
-    GeomPtr simplified = DouglasPeuckerSimplifier::simplify(
-                             g.get(), 10.0);
-
-    ensure(simplified->isValid());
-
-    ensure(simplified->equalsExact(expected.get()));
-
+    checkDP("LINESTRING (0 5, 1 5, 2 5, 5 5)",
+        10,
+        "LINESTRING (0 5, 5 5)");
 }
 
 // 8 - MultiPoint
 template<>
 template<>
-void object::test<9>
-()
+void object::test<9>()
 {
-    std::string wkt_in("MULTIPOINT((80 200), (240 200), (240 60), (80 60), (80 200), (140 199), (120 120))");
-
-    GeomPtr g(wktreader.read(wkt_in));
-
-    GeomPtr simplified = DouglasPeuckerSimplifier::simplify(
-                             g.get(), 10.0);
-
-    // MultiPoint is *not* simplified
-    ensure(simplified->equalsExact(g.get()));
+    checkDPNoChange("MULTIPOINT(80 200, 240 200, 240 60, 80 60, 80 200, 140 199, 120 120)",
+        10);
 }
 
 // 9 - MultiLineString
 template<>
 template<>
-void object::test<10>
-()
+void object::test<10>()
 {
-    std::string wkt_in("MULTILINESTRING( (0 0, 50 0, 70 0, 80 0, 100 0), \
-					(0 0, 50 1, 60 1, 100 0) )");
-
-    std::string wkt_ex("MULTILINESTRING( (0 0, 100 0), (0 0, 100 0) )");
-
-    GeomPtr g(wktreader.read(wkt_in));
-
-    GeomPtr expected(wktreader.read(wkt_ex));
-
-    GeomPtr simplified = DouglasPeuckerSimplifier::simplify(
-                             g.get(), 10.0);
-
-    ensure(simplified->isValid());
-
-    ensure(simplified->equalsExact(expected.get()));
+    checkDP("MULTILINESTRING((0 0, 50 0, 70 0, 80 0, 100 0), (0 0, 50 1, 60 1, 100 0) )",
+        10,
+        "MULTILINESTRING ((0 0, 100 0), (0 0, 100 0))");
 }
 
 // 10 - GeometryCollection
 template<>
 template<>
-void object::test<11>
-()
+void object::test<11>()
 {
-    std::string wkt_in("GEOMETRYCOLLECTION ( \
-					MULTIPOINT ((80 200), (240 200), (240 60), (80 60), (80 200), (140 199), (120 120)), \
-					POLYGON ((80 200, 240 200, 240 60, 80 60, 80 200)), \
-					LINESTRING (80 200, 240 200, 240 60, 80 60, 80 200, 140 199, 120 120) )");
-
-    std::string wkt_ex("MULTILINESTRING( (0 0, 100 0), (0 0, 100 0) )");
-
-    GeomPtr g(wktreader.read(wkt_in));
-
-    GeomPtr expected(wktreader.read(wkt_ex));
-
-    GeomPtr simplified = DouglasPeuckerSimplifier::simplify(
-                             g.get(), 10.0);
-
-    ensure(simplified->isValid());
-
-    // Non simplification occurs
-    ensure(simplified->equalsExact(g.get()));
+    checkDPNoChange("GEOMETRYCOLLECTION (MULTIPOINT (80 200, 240 200, 240 60, 80 60, 80 200, 140 199, 120 120), POLYGON ((80 200, 240 200, 240 60, 80 60, 80 200)), LINESTRING (80 200, 240 200, 240 60, 80 60, 80 200, 140 199, 120 120))",
+      10.0);
 }
 
 // 11 - A kind of reversed simplification
 template<>
 template<>
-void object::test<12>
-()
+void object::test<12>()
 {
     using namespace geos::geom;
 
@@ -373,23 +247,13 @@ void object::test<12>
 // 13 - Polygon with inner ring whose extent is less than the simplify distance (#741)
 template<>
 template<>
-void object::test<13>
-()
+void object::test<13>()
 {
-    std::string wkt_in("POLYGON ((0 0,0 1,1 1,0 0),(0.1 0.1,0.2 0.1,0.2 0.2,0.1 0.1))");
-
-    std::string wkt_ex("POLYGON ((0 0,0 1,1 1,0 0))");
-
-    GeomPtr g(wktreader.read(wkt_in));
-
-    GeomPtr expected(wktreader.read(wkt_ex));
-
-    GeomPtr simplified = DouglasPeuckerSimplifier::simplify(
-                             g.get(), 0.5);
-
-    ensure(simplified->isValid());
-
-    ensure(simplified->equalsExact(expected.get()));
+    checkDP(
+        "POLYGON ((0 0,0 1,1 1,0 0),(0.1 0.1,0.2 0.1,0.2 0.2,0.1 0.1))",
+        0.5,
+        "POLYGON ((0 0,0 1,1 1,0 0))"
+        );
 }
 
 /**
@@ -400,16 +264,13 @@ void object::test<13>
 */
 template<>
 template<>
-void object::test<14>
-()
+void object::test<14>()
 {
-    std::string wkt_in("POLYGON ((21.32686 47.78723, 21.32386 47.79023, 21.32186 47.80223, 21.31486 47.81023, 21.32786 47.81123, 21.33986 47.80223, 21.33886 47.81123, 21.32686 47.82023, 21.32586 47.82723, 21.32786 47.82323, 21.33886 47.82623, 21.34186 47.82123, 21.36386 47.82223, 21.40686 47.81723, 21.32686 47.78723))");
-    std::string wkt_ex("POLYGON ((21.32686 47.78723, 21.31486 47.81023, 21.32786 47.81123, 21.33986 47.80223, 21.328068201892744 47.823286782334385, 21.33886 47.82623, 21.34186 47.82123, 21.40686 47.81723, 21.32686 47.78723))");
-    GeomPtr g(wktreader.read(wkt_in));
-    GeomPtr expected(wktreader.read(wkt_ex));
-    GeomPtr simplified = DouglasPeuckerSimplifier::simplify(g.get(), 0.0036);
-    ensure(simplified->isValid());
-    ensure_equals_geometry(simplified.get(), expected.get());
+    checkDP(
+        "POLYGON ((21.32686 47.78723, 21.32386 47.79023, 21.32186 47.80223, 21.31486 47.81023, 21.32786 47.81123, 21.33986 47.80223, 21.33886 47.81123, 21.32686 47.82023, 21.32586 47.82723, 21.32786 47.82323, 21.33886 47.82623, 21.34186 47.82123, 21.36386 47.82223, 21.40686 47.81723, 21.32686 47.78723))", 
+        0.0036,
+        "POLYGON ((21.32686 47.78723, 21.31486 47.81023, 21.32786 47.81123, 21.33986 47.80223, 21.328068201892744 47.823286782334385, 21.33886 47.82623, 21.34186 47.82123, 21.40686 47.81723, 21.32686 47.78723))"
+        );
 }
 
   /**
@@ -420,40 +281,57 @@ void object::test<14>
    */
 template<>
 template<>
-void object::test<15>
-()
+void object::test<15>()
 {
-    std::string wkt_in("MULTIPOLYGON (((-76.02716827 36.55671692, -75.99866486 36.55665207, -75.91191864 36.54253006, -75.92480469 36.47397614, -75.97727966 36.4780159, -75.97628784 36.51792526, -76.02716827 36.55671692)), ((-75.90198517 36.55619812, -75.8781662 36.55587387, -75.77315521 36.22925568, -75.78317261 36.22519302, -75.90198517 36.55619812)))");
-    std::string wkt_ex("POLYGON ((-76.02716827 36.55671692, -75.91191864 36.54253006, -75.92480469 36.47397614, -76.02716827 36.55671692))");
-    GeomPtr g(wktreader.read(wkt_in));
-    GeomPtr expected(wktreader.read(wkt_ex));
-    GeomPtr simplified = DouglasPeuckerSimplifier::simplify(g.get(), 0.05);
-    ensure(simplified->isValid());
-    ensure_equals_geometry(simplified.get(), expected.get());
+    checkDP(
+        "MULTIPOLYGON (((-76.02716827 36.55671692, -75.99866486 36.55665207, -75.91191864 36.54253006, -75.92480469 36.47397614, -75.97727966 36.4780159, -75.97628784 36.51792526, -76.02716827 36.55671692)), ((-75.90198517 36.55619812, -75.8781662 36.55587387, -75.77315521 36.22925568, -75.78317261 36.22519302, -75.90198517 36.55619812)))", 
+        0.05,
+        "POLYGON ((-76.02716827 36.55671692, -75.91191864 36.54253006, -75.92480469 36.47397614, -76.02716827 36.55671692))"
+        );
 }
 
 // Test that start point of a polygon can be removed
 template<>
 template<>
-void object::test<16>
-()
+void object::test<16>()
 {
-     auto g = wktreader.read("POLYGON ((1 0, 2 0, 2 2, 0 2, 0 0, 1 0))");
-     auto simplified = DouglasPeuckerSimplifier::simplify(g.get(), 0);
-     auto expected = wktreader.read("POLYGON (( 0 0, 2 0, 2 2, 0 2, 0 0))");
-     ensure_equals_geometry(simplified.get(), expected.get());
+    checkDP("POLYGON ((1 0, 2 0, 2 2, 0 2, 0 0, 1 0))", 
+        0,
+        "POLYGON (( 0 0, 2 0, 2 2, 0 2, 0 0))");
 }
 
 // Test that start point of a closed LineString is not changed
 template<>
 template<>
-void object::test<17>
-()
+void object::test<17>()
 {
-     auto g = wktreader.read("LINESTRING (1 0, 2 0, 2 2, 0 2, 0 0, 1 0)");
-     auto simplified = DouglasPeuckerSimplifier::simplify(g.get(), 0);
-     ensure_equals_geometry(simplified.get(), g.get());
+    checkDPNoChange("LINESTRING (1 0, 2 0, 2 2, 0 2, 0 0, 1 0)", 
+        0);
 }
 
+// testPolygonRemoveFlatEndpoint
+// see https://trac.osgeo.org/geos/ticket/1064
+template<>
+template<>
+void object::test<18>()
+{
+    checkDP(
+      "POLYGON ((42 42, 0 42, 0 100, 42 100, 100 42, 42 42))",
+        1,
+        "POLYGON ((100 42, 0 42, 0 100, 42 100, 100 42))"
+        );
+}
+
+// testPolygonEndpointCollapse
+template<>
+template<>
+void object::test<19>()
+{
+    checkDP(
+        "POLYGON ((5 2, 9 1, 1 1, 5 2))",
+        1,
+        "POLYGON EMPTY"
+        );
+}
 
 } // namespace tut
