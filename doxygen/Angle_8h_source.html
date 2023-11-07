@@ -132,16 +132,27 @@ $(function() {
 <div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160; </div>
 <div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160; </div>
 <div class="line"><a name="l00218"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1Angle.html#a11b9891ce2c21eb4988bcb18ac245e25">  218</a></span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> <a class="code" href="classgeos_1_1algorithm_1_1Angle.html#a11b9891ce2c21eb4988bcb18ac245e25">diff</a>(<span class="keywordtype">double</span> ang1, <span class="keywordtype">double</span> ang2);</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;};</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160; </div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160; </div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;} <span class="comment">// namespace geos::algorithm</span></div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;} <span class="comment">// namespace geos</span></div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160; </div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160; </div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160; </div>
+<div class="line"><a name="l00231"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1Angle.html#a1d8b47d753ccf73804df7ac03d81dafc">  231</a></span>&#160;    <span class="keyword">static</span> <span class="keyword">inline</span> <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1algorithm_1_1Angle.html#a1d8b47d753ccf73804df7ac03d81dafc">SinCos</a>(<span class="keyword">const</span> <span class="keywordtype">double</span> ang, <span class="keywordtype">double</span>&amp; rSin, <span class="keywordtype">double</span>&amp; rCos) {</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;        <span class="comment">// calculate both; may be optimized with FSINCOS instruction</span></div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;        rSin = std::sin(ang);</div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;        rCos = std::cos(ang);</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;        <span class="comment">// clip near zero values</span></div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;        <span class="keywordflow">if</span> (std::fabs(rSin) &lt; 5e-16) rSin = 0.0;</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;        <span class="keywordflow">if</span> (std::fabs(rCos) &lt; 5e-16) rCos = 0.0;</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;    }</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160; </div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;};</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160; </div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160; </div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;} <span class="comment">// namespace geos::algorithm</span></div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;} <span class="comment">// namespace geos</span></div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160; </div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160; </div>
 <div class="ttc" id="aclassgeos_1_1algorithm_1_1Angle_html"><div class="ttname"><a href="classgeos_1_1algorithm_1_1Angle.html">geos::algorithm::Angle</a></div><div class="ttdoc">Utility functions for working with angles.</div><div class="ttdef"><b>Definition:</b> Angle.h:38</div></div>
 <div class="ttc" id="aclassgeos_1_1algorithm_1_1Angle_html_a0b260a30182a59e310c3821a5c7e5177"><div class="ttname"><a href="classgeos_1_1algorithm_1_1Angle.html#a0b260a30182a59e310c3821a5c7e5177">geos::algorithm::Angle::angle</a></div><div class="ttdeci">static double angle(const geom::CoordinateXY &amp;p)</div><div class="ttdoc">Returns the angle that the vector from (0,0) to p, relative to the positive X-axis.</div></div>
 <div class="ttc" id="aclassgeos_1_1algorithm_1_1Angle_html_a11b9891ce2c21eb4988bcb18ac245e25"><div class="ttname"><a href="classgeos_1_1algorithm_1_1Angle.html#a11b9891ce2c21eb4988bcb18ac245e25">geos::algorithm::Angle::diff</a></div><div class="ttdeci">static double diff(double ang1, double ang2)</div></div>
+<div class="ttc" id="aclassgeos_1_1algorithm_1_1Angle_html_a1d8b47d753ccf73804df7ac03d81dafc"><div class="ttname"><a href="classgeos_1_1algorithm_1_1Angle.html#a1d8b47d753ccf73804df7ac03d81dafc">geos::algorithm::Angle::SinCos</a></div><div class="ttdeci">static void SinCos(const double ang, double &amp;rSin, double &amp;rCos)</div><div class="ttdoc">Computes both sin and cos of an angle.</div><div class="ttdef"><b>Definition:</b> Angle.h:231</div></div>
 <div class="ttc" id="aclassgeos_1_1algorithm_1_1Angle_html_a3c4a567ff3e8688d299df4fcd5aeb607"><div class="ttname"><a href="classgeos_1_1algorithm_1_1Angle.html#a3c4a567ff3e8688d299df4fcd5aeb607">geos::algorithm::Angle::angleBetween</a></div><div class="ttdeci">static double angleBetween(const geom::CoordinateXY &amp;tip1, const geom::CoordinateXY &amp;tail, const geom::CoordinateXY &amp;tip2)</div></div>
 <div class="ttc" id="aclassgeos_1_1algorithm_1_1Angle_html_a4e25f61567be2ab03f92d36c775a9b9b"><div class="ttname"><a href="classgeos_1_1algorithm_1_1Angle.html#a4e25f61567be2ab03f92d36c775a9b9b">geos::algorithm::Angle::getTurn</a></div><div class="ttdeci">static int getTurn(double ang1, double ang2)</div><div class="ttdoc">Returns whether an angle must turn clockwise or counterclockwise to overlap another angle.</div></div>
 <div class="ttc" id="aclassgeos_1_1algorithm_1_1Angle_html_a70da495e1f8afb9d1dc1de9519db456d"><div class="ttname"><a href="classgeos_1_1algorithm_1_1Angle.html#a70da495e1f8afb9d1dc1de9519db456d">geos::algorithm::Angle::interiorAngle</a></div><div class="ttdeci">static double interiorAngle(const geom::CoordinateXY &amp;p0, const geom::CoordinateXY &amp;p1, const geom::CoordinateXY &amp;p2)</div></div>
