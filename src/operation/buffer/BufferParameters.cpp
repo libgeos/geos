@@ -19,6 +19,7 @@
 #include <cstdlib> // for std::abs()
 #include <cmath> // for cos
 
+#include <geos/algorithm/Angle.h>
 #include <geos/constants.h>
 #include <geos/operation/buffer/BufferParameters.h>
 
@@ -95,7 +96,7 @@ BufferParameters::setQuadrantSegments(int quadSegs)
 double
 BufferParameters::bufferDistanceError(int quadSegs)
 {
-    double alpha = MATH_PI / 2.0 / quadSegs;
+    double alpha = algorithm::Angle::PI_OVER_2 / quadSegs;
     return 1 - cos(alpha / 2.0);
 }
 
