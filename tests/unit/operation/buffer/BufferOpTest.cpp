@@ -95,7 +95,24 @@ void object::test<2>
     ensure_not(gBuffer->isEmpty());
     ensure(gBuffer->isValid());
     ensure_equals(gBuffer->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
-    ensure(gBuffer->getNumPoints() > std::size_t(32));
+    ensure_equals(gBuffer->getNumPoints(), 33u);
+    auto coords = gBuffer->getCoordinates();
+    ensure_equals(coords->getSize(), 33u);
+
+    // Check four sides to check they are exactly on unit circle
+    auto coord = coords->getAt(0);
+    ensure_equals(coord.x, 1.0);
+    ensure_equals(coord.y, 0.0);
+    coord = coords->getAt(8);
+    ensure_equals(coord.x, 0.0);
+    ensure_equals(coord.y, -1.0);
+    coord = coords->getAt(16);
+    ensure_equals(coord.x, -1.0);
+    ensure_equals(coord.y, 0.0);
+    coord = coords->getAt(24);
+    ensure_equals(coord.x, 0.0);
+    ensure_equals(coord.y, 1.0);
+
 }
 
 template<>

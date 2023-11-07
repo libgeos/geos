@@ -17,6 +17,7 @@
  *
  **********************************************************************/
 
+#include <geos/algorithm/Angle.h>
 #include <geos/constants.h>
 #include <geos/util/GeometricShapeFactory.h>
 #include <geos/geom/Coordinate.h>
@@ -31,6 +32,7 @@
 #include <memory>
 
 
+using namespace geos::algorithm;
 using namespace geos::geom;
 
 namespace geos {
@@ -134,10 +136,11 @@ GeometricShapeFactory::createCircle()
 
     auto pts = detail::make_unique<CoordinateSequence>(nPts + 1);
     uint32_t iPt = 0;
+    double sinang, cosang;
     for(uint32_t i = 0; i < nPts; i++) {
-        double ang = i * (2 * 3.14159265358979 / nPts);
-        double x = xRadius * cos(ang) + centreX;
-        double y = yRadius * sin(ang) + centreY;
+        Angle::SinCos(i * Angle::PI_TIMES_2 / nPts, sinang, cosang);
+        double x = xRadius * cosang + centreX;
+        double y = yRadius * sinang + centreY;
         (*pts)[iPt++] = coord(x, y);
     }
     (*pts)[iPt++] = (*pts)[0];
@@ -158,17 +161,18 @@ GeometricShapeFactory::createArc(double startAng, double angExtent)
     env.reset();
 
     double angSize = angExtent;
-    if(angSize <= 0.0 || angSize > 2 * MATH_PI) {
-        angSize = 2 * MATH_PI;
+    if(angSize <= 0.0 || angSize > Angle::PI_TIMES_2) {
+        angSize = Angle::PI_TIMES_2;
     }
     double angInc = angSize / (nPts - 1);
 
     auto pts = detail::make_unique<CoordinateSequence>(nPts);
     uint32_t iPt = 0;
+    double sinang, cosang;
     for(uint32_t i = 0; i < nPts; i++) {
-        double ang = startAng + i * angInc;
-        double x = xRadius * cos(ang) + centreX;
-        double y = yRadius * sin(ang) + centreY;
+        Angle::SinCos(startAng + i * angInc, sinang, cosang);
+        double x = xRadius * cosang + centreX;
+        double y = yRadius * sinang + centreY;
         (*pts)[iPt++] = coord(x, y);
     }
     auto line = geomFact->createLineString(std::move(pts));
@@ -187,18 +191,19 @@ GeometricShapeFactory::createArcPolygon(double startAng, double angExtent)
     env.reset();
 
     double angSize = angExtent;
-    if(angSize <= 0.0 || angSize > 2 * MATH_PI) {
-        angSize = 2 * MATH_PI;
+    if(angSize <= 0.0 || angSize > Angle::PI_TIMES_2) {
+        angSize = Angle::PI_TIMES_2;
     }
     double angInc = angSize / (nPts - 1);
 
     auto pts = detail::make_unique<CoordinateSequence>(nPts + 2);
     uint32_t iPt = 0;
     (*pts)[iPt++] = coord(centreX, centreY);
+    double sinang, cosang;
     for(uint32_t i = 0; i < nPts; i++) {
-        double ang = startAng + i * angInc;
-        double x = xRadius * cos(ang) + centreX;
-        double y = yRadius * sin(ang) + centreY;
+        Angle::SinCos(startAng + i * angInc, sinang, cosang);
+        double x = xRadius * cosang + centreX;
+        double y = yRadius * sinang + centreY;
         (*pts)[iPt++] = coord(x, y);
     }
     (*pts)[iPt++] = coord(centreX, centreY);

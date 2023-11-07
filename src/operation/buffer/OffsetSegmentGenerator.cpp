@@ -79,11 +79,11 @@ OffsetSegmentGenerator::OffsetSegmentGenerator(
 {
     // compute intersections in full precision, to provide accuracy
     // the points are rounded as they are inserted into the curve line
-    filletAngleQuantum = MATH_PI / 2.0 / bufParams.getQuadrantSegments();
+    filletAngleQuantum = Angle::PI_OVER_2 / bufParams.getQuadrantSegments();
 
     int quadSegs = bufParams.getQuadrantSegments();
     if (quadSegs < 1) quadSegs = 1;
-    filletAngleQuantum = MATH_PI / 2.0 / quadSegs;
+    filletAngleQuantum = Angle::PI_OVER_2 / quadSegs;
 
     /*
      * Non-round joins cause issues with short closing segments,
@@ -208,7 +208,7 @@ OffsetSegmentGenerator::addLineEndCap(const Coordinate& p0, const Coordinate& p1
     case BufferParameters::CAP_ROUND:
         // add offset seg points with a fillet between them
         segList.addPt(offsetL.p1);
-        addDirectedFillet(p1, angle + MATH_PI / 2.0, angle - MATH_PI / 2.0,
+        addDirectedFillet(p1, angle + Angle::PI_OVER_2, angle - Angle::PI_OVER_2,
                   Orientation::CLOCKWISE, distance);
         segList.addPt(offsetR.p1);
         break;
@@ -221,8 +221,10 @@ OffsetSegmentGenerator::addLineEndCap(const Coordinate& p0, const Coordinate& p1
         // add a square defined by extensions of the offset
         // segment endpoints
         Coordinate squareCapSideOffset;
-        squareCapSideOffset.x = fabs(distance) * cos(angle);
-        squareCapSideOffset.y = fabs(distance) * sin(angle);
+        double sinangle, cosangle;
+        Angle::SinCos(angle, sinangle, cosangle);
+        squareCapSideOffset.x = fabs(distance) * cosangle;
+        squareCapSideOffset.y = fabs(distance) * sinangle;
 
         Coordinate squareCapLOffset(
             offsetL.p1.x + squareCapSideOffset.x,
@@ -250,12 +252,12 @@ OffsetSegmentGenerator::addDirectedFillet(const Coordinate& p, const Coordinate&
 
     if(direction == Orientation::CLOCKWISE) {
         if(startAngle <= endAngle) {
-            startAngle += 2.0 * MATH_PI;
+            startAngle += Angle::PI_TIMES_2;
         }
     }
     else {    // direction==COUNTERCLOCKWISE
         if(startAngle >= endAngle) {
-            startAngle -= 2.0 * MATH_PI;
+            startAngle -= Angle::PI_TIMES_2;
         }
     }
 
@@ -277,13 +279,13 @@ OffsetSegmentGenerator::addDirectedFillet(const Coordinate& p, double startAngle
     // no segments because angle is less than increment-nothing to do!
     if(nSegs < 1) return;
 
-    // double initAngle, currAngleInc;
     double angleInc = totalAngle / nSegs;
+    double sinangle, cosangle;
     Coordinate pt;
     for (int i = 0; i < nSegs; i++) {
-        double angle = startAngle + directionFactor * i * angleInc;
-        pt.x = p.x + radius * cos(angle);
-        pt.y = p.y + radius * sin(angle);
+        Angle::SinCos(startAngle + directionFactor * i * angleInc, sinangle, cosangle);
+        pt.x = p.x + radius * cosangle;
+        pt.y = p.y + radius * sinangle;
         segList.addPt(pt);
     }
 }
@@ -295,7 +297,7 @@ OffsetSegmentGenerator::createCircle(const Coordinate& p, double p_distance)
     // add start point
     Coordinate pt(p.x + p_distance, p.y);
     segList.addPt(pt);
-    addDirectedFillet(p, 0.0, 2.0 * MATH_PI, -1, p_distance);
+    addDirectedFillet(p, 0.0, Angle::PI_TIMES_2, -1, p_distance);
     segList.closeRing();
 }
 
@@ -531,7 +533,7 @@ OffsetSegmentGenerator::addLimitedMitreJoin(
     Coordinate bevelMidPt = project(cornerPt, p_mitreLimitDistance, dirBisectorOut);
 
     // slope angle of bevel segment
-    double dirBevel = Angle::normalize(dirBisectorOut + MATH_PI/2.0);
+    double dirBevel = Angle::normalize(dirBisectorOut + Angle::PI_OVER_2);
 
     // compute the candidate bevel segment by projecting both sides of the midpoint
     Coordinate bevel0 = project(bevelMidPt, p_distance, dirBevel);
@@ -580,8 +582,10 @@ OffsetSegmentGenerator::extend(const LineSegment& seg, double dist)
 Coordinate
 OffsetSegmentGenerator::project(const Coordinate& pt, double d, double dir)
 {
-    double x = pt.x + d * std::cos(dir);
-    double y = pt.y + d * std::sin(dir);
+    double sindir, cosdir;
+    Angle::SinCos(dir, sindir, cosdir);
+    double x = pt.x + d * cosdir;
+    double y = pt.y + d * sindir;
     return Coordinate(x, y);
 }
 

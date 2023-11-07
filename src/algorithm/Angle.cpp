@@ -195,7 +195,7 @@ Angle::diff(double ang1, double ang2)
     }
 
     if(delAngle > MATH_PI) {
-        delAngle = (2 * MATH_PI) - delAngle;
+        delAngle = PI_TIMES_2 - delAngle;
     }
 
     return delAngle;

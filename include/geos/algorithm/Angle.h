@@ -216,6 +216,27 @@ public:
     ///         (in range [0, Pi] )
     ///
     static double diff(double ang1, double ang2);
+
+    /// \brief
+    /// Computes both sin and cos of an angle.
+    ///
+    /// The angle does not need to be normalized. Unlike std::sin
+    /// and std::cos, this method will clip near-zero values to zero
+    /// for (e.g.) sin(pi) and cos(pi/2).
+    ///
+    /// @param ang the input angle (in radians)
+    /// @param rSin the result of sin(ang)
+    /// @param rCos the result of cos(ang)
+    ///
+    static inline void SinCos(const double ang, double& rSin, double& rCos) {
+        // calculate both; may be optimized with FSINCOS instruction
+        rSin = std::sin(ang);
+        rCos = std::cos(ang);
+        // clip near zero values
+        if (std::fabs(rSin) < 5e-16) rSin = 0.0;
+        if (std::fabs(rCos) < 5e-16) rCos = 0.0;
+    }
+
 };
 
 

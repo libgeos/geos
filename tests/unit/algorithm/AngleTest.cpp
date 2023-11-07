@@ -162,6 +162,45 @@ void object::test<5>
         TOL);
 }
 
+// testSinCos()
+template<>
+template<>
+void object::test<6>
+()
+{
+    double rSin, rCos;
+
+    // -720 to 720 degrees with 1 degree increments
+    for (int angdeg = -720; angdeg <= 720; angdeg++) {
+        const double ang = Angle::toRadians(angdeg);
+
+        Angle::SinCos(ang, rSin, rCos);
+
+        double cSin = std::sin(ang);
+        double cCos = std::cos(ang);
+        if ( (angdeg % 90) == 0 ) {
+            // not always the same for multiples of 90 degrees
+            ensure(std::to_string(angdeg), std::fabs(rSin - cSin) < 1e-15);
+            ensure(std::to_string(angdeg), std::fabs(rCos - cCos) < 1e-15);
+        } else {
+            ensure_equals(std::to_string(angdeg), rSin, cSin);
+            ensure_equals(std::to_string(angdeg), rCos, cCos);
+        }
+
+    }
+
+    // use radian increments that don't snap to exact degrees or zero
+    for (double angrad = -6.3; angrad < 6.3; angrad += 0.013) {
+
+        Angle::SinCos(angrad, rSin, rCos);
+
+        ensure_equals(std::to_string(angrad), rSin, std::sin(angrad));
+        ensure_equals(std::to_string(angrad), rCos, std::cos(angrad));
+
+    }
+
+}
+
 
 } // namespace tut
 
