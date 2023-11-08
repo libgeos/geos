@@ -228,7 +228,7 @@ public:
     /// @param rSin the result of sin(ang)
     /// @param rCos the result of cos(ang)
     ///
-    static inline void SinCos(const double ang, double& rSin, double& rCos) {
+    static inline void sinCos(const double ang, double& rSin, double& rCos) {
         // calculate both; may be optimized with FSINCOS instruction
         rSin = std::sin(ang);
         rCos = std::cos(ang);

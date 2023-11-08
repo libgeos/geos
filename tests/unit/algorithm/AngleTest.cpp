@@ -174,7 +174,7 @@ void object::test<6>
     for (int angdeg = -720; angdeg <= 720; angdeg++) {
         const double ang = Angle::toRadians(angdeg);
 
-        Angle::SinCos(ang, rSin, rCos);
+        Angle::sinCos(ang, rSin, rCos);
 
         double cSin = std::sin(ang);
         double cCos = std::cos(ang);
@@ -192,7 +192,7 @@ void object::test<6>
     // use radian increments that don't snap to exact degrees or zero
     for (double angrad = -6.3; angrad < 6.3; angrad += 0.013) {
 
-        Angle::SinCos(angrad, rSin, rCos);
+        Angle::sinCos(angrad, rSin, rCos);
 
         ensure_equals(std::to_string(angrad), rSin, std::sin(angrad));
         ensure_equals(std::to_string(angrad), rCos, std::cos(angrad));

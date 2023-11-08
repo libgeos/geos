@@ -222,7 +222,7 @@ OffsetSegmentGenerator::addLineEndCap(const Coordinate& p0, const Coordinate& p1
         // segment endpoints
         Coordinate squareCapSideOffset;
         double sinangle, cosangle;
-        Angle::SinCos(angle, sinangle, cosangle);
+        Angle::sinCos(angle, sinangle, cosangle);
         squareCapSideOffset.x = fabs(distance) * cosangle;
         squareCapSideOffset.y = fabs(distance) * sinangle;
 
@@ -283,7 +283,7 @@ OffsetSegmentGenerator::addDirectedFillet(const Coordinate& p, double startAngle
     double sinangle, cosangle;
     Coordinate pt;
     for (int i = 0; i < nSegs; i++) {
-        Angle::SinCos(startAngle + directionFactor * i * angleInc, sinangle, cosangle);
+        Angle::sinCos(startAngle + directionFactor * i * angleInc, sinangle, cosangle);
         pt.x = p.x + radius * cosangle;
         pt.y = p.y + radius * sinangle;
         segList.addPt(pt);
@@ -583,7 +583,7 @@ Coordinate
 OffsetSegmentGenerator::project(const Coordinate& pt, double d, double dir)
 {
     double sindir, cosdir;
-    Angle::SinCos(dir, sindir, cosdir);
+    Angle::sinCos(dir, sindir, cosdir);
     double x = pt.x + d * cosdir;
     double y = pt.y + d * sindir;
     return Coordinate(x, y);
