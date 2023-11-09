@@ -20,6 +20,7 @@
   - Fix WKTWriter::writeTrimmedNumber for big and small values (GH-973, Mike Taves)
   - Fix InteriorPointPoint to handle empty elements (GH-977, Martin Davis)
   - Fix TopologyPreservingSimplifier endpoint handling to avoid self-intersections (GH-986, Martin Davis)
+  - Fix spatial predicates for MultiPoint with EMPTY (GH-989, Martin Davis)
 
 ## Changes in 3.12.0
 2023-06-27
