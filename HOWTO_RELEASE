@@ -21,35 +21,29 @@
    $ ctest --output-on-failure .
    $ cmake --build . --target distcheck
 
-4. Update the NEWS file (extract most important things from the
-   repository log). Make sure to update the release date.
+4. Update the NEWS file (extract most important things from the repository log).
+Make sure to update the release date.
 
 5. Commit the changes in the NEWS file.
 
-6. Build the distribution package.
+6. Tag the release:
 
-   $ BRANCH_NAME=main
-   $ git clone --depth 1 --branch $BRANCH_NAME \
-         https://github.com/libgeos/geos.git geos-$BRANCH_NAME
-   $ cd geos-$BRANCH_NAME
-   $ mkdir _build && cd _build
-   $ cmake ..
-   $ cmake --build . --target dist
+   $ git tag MAJOR.MINOR.PATCH
+   $ git push origin MAJOR.MINOR.PATCH
 
-7. Verify that you can un-pack and build the tarball.
+7. At this point the github/release.yml action should run, wait for it to finish.
 
-   $ tar xvfz geos-VERSION.tar.bz2
-   $ cd geos-VERSION
+8. Verify that you can use the released tarball, replacing MAJOR.MINOR.PATCH with the tagged version variables
+
+   $ VERSION=MAJOR.MINOR.PATCH
+   $ wget https://github.com/libgeos/geos/releases/download/$VERSION/geos-$VERSION.tar.bz2
+   $ tar xvfz geos-$VERSION.tar.bz2
+   $ cd geos-$VERSION
    $ mkdir _build && cd _build && cmake ..
    $ cmake --build .
    $ ctest --output-on-failure .
 
-8. Copy the tarball to upload.osgeo.org:/osgeo/download/geos
-
-9. Tag the release:
-
-   $ git tag MAJOR.MINOR.PATCH
-   $ git push origin MAJOR.MINOR.PATCH
+9. Copy the tar.bz2 file to upload.osgeo.org:/osgeo/download/geos
 
 10. Create and push a release branch if this was a PATCH=0 release,
     update the versions for next release in Version.txt (both in
@@ -62,5 +56,5 @@
 
 12. Close current GitHub milestone and add a new one for next release.
 
-12. Announce on geos-devel
+13. Announce on geos-devel
 
