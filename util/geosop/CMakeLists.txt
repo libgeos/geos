@@ -19,3 +19,18 @@ target_link_libraries(geosop PRIVATE geos geos_c)
 install(TARGETS geosop
   DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
+
+if(BUILD_SHARED_LIBS)
+  if(NOT DEFINED CMAKE_INSTALL_RPATH)
+    # Use relative rpath
+    if(APPLE)
+      set_target_properties(geosop PROPERTIES
+        INSTALL_RPATH "@loader_path/../${CMAKE_INSTALL_LIBDIR}")
+    else()
+      set_target_properties(geosop PROPERTIES
+        INSTALL_RPATH "\$ORIGIN/../${CMAKE_INSTALL_LIBDIR}")
+    endif()
+  endif()
+endif()
+
+
