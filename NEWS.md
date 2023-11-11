@@ -1,5 +1,5 @@
 ## Changes in 3.11.3
-2023-xx-xx
+2023-11-11
 
 - Fixes/Improvements:
   - Tri: add exceptions for invalid indexes (GH-853, Martin Davis)
@@ -14,6 +14,7 @@
   - Fix InteriorPointPoint to handle empty elements (GH-977, Martin Davis)
   - PreparedLineStringIntersects: Fix incorrect result with mixed-dim collection with points (GH-774, Dan Baston)
   - Skip over testing empty distances for mixed collections (GH-979, Paul Ramsey)
+  - geosop: change output to show Z (Mike Taves)
 
 ## Changes in 3.11.2
 2023-03-16
