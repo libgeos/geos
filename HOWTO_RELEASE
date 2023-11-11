@@ -43,7 +43,7 @@
    $ cmake --build .
    $ ctest --output-on-failure .
 
-8. Copy the tarball to upload.osgeo.org:/osgeo/download/geos
+8. Copy the tar.bz2 tarball to upload.osgeo.org:/osgeo/download/geos
 
 9. Create and push a release branch if this was a PATCH=0 release,
     update the versions for next release in Version.txt (both in

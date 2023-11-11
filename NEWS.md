@@ -1,3 +1,5 @@
+## Changes in 3.12.2
+xxxx-xx-xx
 
 ## Changes in 3.12.1
 2023-11-11
