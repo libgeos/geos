@@ -24,6 +24,8 @@
 4. Update the NEWS file (extract most important things from the repository log). Make sure to update the release date.
 
 5. Commit the changes in the NEWS file.
+   Push changes with:  git push origin,
+   and confirm all bots are green before moving forward
 
 6. Tag the release:
 
@@ -32,7 +34,7 @@
 
 7. At this point the github/release.yml action should run, 
    wait for it to finish and then verify you can build with it.
-   
+
    $ VERSION=MAJOR.MINOR.PATCH
    $ wget https://github.com/libgeos/geos/releases/download/$VERSION/geos-$VERSION.tar.bz2
    $ tar xvfz geos-$VERSION.tar.bz2
@@ -47,7 +49,7 @@
     update the versions for next release in Version.txt (both in
     main and release branch if this was a PATCH=0 release).
 
-10. Update download page: web/content/usage/download.md
+10. Update download page in main branch: web/content/usage/download.md
 
     - Add latest release
     - Remove previous patch level release (if any)

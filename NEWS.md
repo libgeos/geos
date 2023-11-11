@@ -1,6 +1,6 @@
 
 ## Changes in 3.12.1
-2023-xx-xx
+2023-11-11
 
 - Fixes:
   - Remove undefined behaviour in use of null PrecisionModel (GH-931, Jeff Walton)
@@ -12,7 +12,8 @@
   - Fix InteriorPointPoint to handle empty elements (GH-977, Martin Davis)
   - Skip over testing empty distances for mixed collections. (GH-979, Paul Ramsey)
   - Fix TopologyPreservingSimplifier endpoint handling to avoid self-intersections (GH-986, Martin Davis)
-
+  - Build warnings with Visual Studio (GH-929, Jeff Mckenna, Paul Ramsey)
+  - Fix CMake on Windows with Visual Studio (GH-945, Aaron Barany)
 
 ## Changes in 3.12.0
 2023-06-27
