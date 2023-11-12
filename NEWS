@@ -1,5 +1,5 @@
 
-Changes in 3.8.4 EOL
+## Changes in 3.8.4 EOL
 2024-11-xx
 
 - Bug fixes / improvements
@@ -8,7 +8,7 @@ Changes in 3.8.4 EOL
   - Fix Crash in GEOSIntersects with empty point inputs (GH-673, Daniel Baston)
 
 
-Changes in 3.8.3
+## Changes in 3.8.3
 2022-06-02
 
 - Bug fixes / improvements
