@@ -1,5 +1,5 @@
-Changes in 3.10.6
-2023-xx-xx
+## Changes in 3.10.6
+2023-11-11
 
 - Fixes/Improvements:
   - LargestEmptyCircle: enhance boundary to allow any polygonal geometry (GH-859, Martin Davis)
@@ -9,8 +9,9 @@ Changes in 3.10.6
   - Remove undefined behaviour in use of null PrecisionModel (GH-931, Jeff Walton)
   - PreparedLineStringIntersects: Fix incorrect result with mixed-dim collection with points (GH-774, Dan Baston)
   - Skip over testing empty distances for mixed collections (GH-979, Paul Ramsey)
+  - Do not hide illegal argument exception in HeuristicOverlay (GH-925, Sandro Santilli)
 
-Changes in 3.10.5
+## Changes in 3.10.5
 2023-03-16
 
 - Fixes/Improvements:

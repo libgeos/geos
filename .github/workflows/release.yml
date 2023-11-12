@@ -1,0 +1,77 @@
+#
+# GitHub Actions for GEOS Web Pages
+# Paul Ramsey <pramsey@cleverelephant.ca>, Regina Obe <lr@pcorp.us>
+#
+
+#
+# Only run on tag
+# Only release if distcheck succeeds
+# Only release of the tag name is identical to the full version
+# Use the first block of NEWS entries as release notes
+#
+
+name: 'Release'
+
+on:
+  push:
+    tags:
+      - '*.*.*'
+
+jobs:
+  release:
+    name: 'Release on Tag'
+    runs-on: ubuntu-latest
+
+    # Only run docbuild on central repo
+    if: github.repository == 'libgeos/geos'
+    steps:
+
+    - name: 'Install'
+      run: |
+        pwd
+        uname -a
+        sudo -E apt-get -yq --no-install-suggests --no-install-recommends install make doxygen
+
+    - name: 'Check Out'
+      uses: actions/checkout@v3
+
+    - name: Get tag
+      id: tag
+      uses: dawidd6/action-get-tag@v1
+
+    - name: 'Read Version'
+      id: version
+      run: |
+        pwd
+        source Version.txt
+        GEOS_FULL_VERSION=${GEOS_VERSION_MAJOR}.${GEOS_VERSION_MINOR}.${GEOS_VERSION_PATCH}${GEOS_PATCH_WORD}
+        echo GEOS_FULL_VERSION $GEOS_FULL_VERSION
+        echo "::set-output name=geosversion::${GEOS_FULL_VERSION}"
+
+    - name: 'Create Release Notes'
+      id: notes
+      run: |
+        pwd
+        perl tools/ci/releasenotes.pl NEWS > release.md
+        echo "::set-output name=geosnotes::./release.md"
+
+    - name: 'Bundle & Check Package'
+      id: bundle
+      run: |
+        pwd
+        set -e
+        mkdir _build && cd _build
+        cmake -DBUILD_DOCUMENTATION=YES ..
+        cmake --version
+        cmake --build . --target distcheck
+
+    - name: Create Release
+      if: ${{ steps.tag.outputs.tag == steps.version.outputs.geosversion }}
+      id: create_release
+      uses: softprops/action-gh-release@v1
+      with:
+        body_path: ${{ steps.notes.outputs.geosnotes }}
+        name: Release ${{ steps.version.outputs.geosversion }}
+        prerelease: false
+        files: |
+          ./_build/geos*.tar.bz2
