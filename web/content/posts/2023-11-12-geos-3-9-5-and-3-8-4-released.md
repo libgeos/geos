@@ -9,4 +9,4 @@ If you haven't already upgraded to a newer GEOS minor version from GEOS 3.8, we 
 
 Release notes for 3.8.4 and 3.9.5 are below:
 [3.8.4](https://github.com/libgeos/geos/blob/3.8.4/NEWS),
-[3.9.5](https://github.com/libgeos/geos/blob/3.9.5/NEWS.md),
+[3.9.5](https://github.com/libgeos/geos/blob/3.9.5/NEWS),
