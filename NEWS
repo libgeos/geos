@@ -1,6 +1,6 @@
 
 ## Changes in 3.8.4 EOL
-2024-11-xx
+2024-11-12
 
 - Bug fixes / improvements
   - Fix PreparedGeometry to avoid crashes with EMPTY elements in input (GH-678, Martin Davis)
