@@ -14,6 +14,8 @@
 
 #pragma once
 
+#include <cstdint>
+
 #include <geos/geom/Location.h>
 #include <geos/geom/Position.h>
 #include <geos/export.h>

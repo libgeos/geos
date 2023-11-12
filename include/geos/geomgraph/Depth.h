@@ -21,9 +21,11 @@
 #ifndef GEOS_GEOMGRAPH_DEPTH_H
 #define GEOS_GEOMGRAPH_DEPTH_H
 
+#include <cstdint>
+#include <string>
+
 #include <geos/export.h>
 #include <geos/geom/Location.h>
-#include <string>
 
 #include <geos/inline.h>
 

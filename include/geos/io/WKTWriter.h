@@ -25,6 +25,7 @@
 
 #include <string>
 #include <cctype>
+#include <cstdint>
 
 #ifdef _MSC_VER
 #pragma warning(push)

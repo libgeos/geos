@@ -1,5 +1,5 @@
-Changes in 3.9.5
-2023-11-xx
+## Changes in 3.9.5
+2023-11-12
 
 - Bug fixes / improvements:
   - GEOSUnaryUnion: Fix crash on collection containing empty point (GH-830, Dan Baston)
@@ -10,9 +10,10 @@ Changes in 3.9.5
   - GEOSClipByRect: Fix case with POINT EMPTY (GH-913, Mike Taves)
   - Remove undefined behaviour in use of null PrecisionModel (GH-931, Jeff Walton)
   - Skip over testing empty distances for mixed collections (GH-979, Paul Ramsey)
+  - Add missing cstdint headers (GH-990, GH-743, Regina Obe, Sergei Trofimovich)
 
 
-Changes in 3.9.4
+## Changes in 3.9.4
 2022-11-14
 
 - Bug fixes / improvements:
