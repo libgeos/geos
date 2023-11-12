@@ -1,12 +1,11 @@
-before_script:
-    - apt-get update -qq
-    - apt-get install -y --allow-unauthenticated build-essential cmake lsb-release
-    - lsb_release -a
-    - uname -a
-
-test:
+.build_definition: &build_definition
   except:
     - master
+  before_script:
+      - apt-get update -qq
+      - apt-get install -y --allow-unauthenticated build-essential cmake lsb-release
+      - lsb_release -a
+      - uname -a
   script:
     - mkdir build
     - cd build
@@ -14,3 +13,11 @@ test:
     - make V=0
     - install -m 755 /bin/true /usr/local/bin/git2cl
     - make distcheck
+
+test:
+  image: debian:bookworm
+  <<: *build_definition
+test32:
+  image: i386/debian:bookworm
+  <<: *build_definition
+
