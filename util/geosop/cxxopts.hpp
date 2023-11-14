@@ -677,12 +677,14 @@ namespace cxxopts
       integer_parser(text, value);
     }
 
+    #ifndef __illumos__
     inline
     void
     parse_value(const std::string& text, int8_t& value)
     {
       integer_parser(text, value);
     }
+    #endif
 
     inline
     void
