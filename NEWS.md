@@ -1,6 +1,9 @@
 ## Changes in 3.12.2
 xxxx-xx-xx
 
+- Fixes:
+  - Fix build on Illumus (GH-971)
+
 ## Changes in 3.12.1
 2023-11-11
 
