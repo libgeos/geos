@@ -270,13 +270,14 @@ template<>
 void object::test<19>
 ()
 {
-    std::string geojson { "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-117.0,33.0]}, \"properties\": {\"id\": 1, \"name\": \"one\", \"items\": [1,2,3,4], \"nested\": {\"id\":2, \"name\":\"two\"}}}" };
+    std::string geojson { "{\"type\":\"Feature\",\"id\":\"id123\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-117.0,33.0]}, \"properties\": {\"id\": 1, \"name\": \"one\", \"items\": [1,2,3,4], \"nested\": {\"id\":2, \"name\":\"two\"}}}" };
     geos::io::GeoJSONFeatureCollection features(geojsonreader.readFeatures(geojson));
     ensure_equals(features.getFeatures().size(), static_cast<size_t>(1));
     ensure_equals(static_cast<size_t>(features.getFeatures()[0].getGeometry()->getCoordinateDimension()), 2u);
     ensure_equals(features.getFeatures()[0].getGeometry()->toText(), "POINT (-117 33)");
     ensure_equals(features.getFeatures()[0].getProperties().at("id").getNumber(), 1.0);
     ensure_equals(features.getFeatures()[0].getProperties().at("name").getString(), "one");
+    ensure_equals(features.getFeatures()[0].getId(), "id123");
     std::vector<geos::io::GeoJSONValue> values = features.getFeatures()[0].getProperties().at("items").getArray();
     ensure_equals(values.size(), static_cast<size_t>(4));
     ensure_equals(values[0].getNumber(), 1.0);

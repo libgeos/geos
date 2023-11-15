@@ -125,9 +125,13 @@ std::string GeoJSONWriter::write(const GeoJSONFeatureCollection& features)
 void GeoJSONWriter::encodeFeature(const GeoJSONFeature& feature, geos_nlohmann::ordered_json& j)
 {
     j["type"] = "Feature";
+
+    if (feature.getId().size() > 0) j["id"] = feature.getId();
+
     json geometryJson;
     encodeGeometry(feature.getGeometry(), geometryJson);
     j["geometry"] = geometryJson;
+
     json propertiesJson = json::object();
     for (auto const& property : feature.getProperties()) {
         std::string key = property.first;
