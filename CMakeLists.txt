@@ -301,10 +301,11 @@ target_link_libraries(geos PUBLIC geos_cxx_flags PRIVATE $<BUILD_INTERFACE:ryu>)
 # ryu is an object library, nothing is actually being linked here. The BUILD_INTERFACE
 # switch was necessary to build on AppVeyor (CMake 3.16.2) but not locally (CMake 3.16.3)
 
-if(APPLE AND BUILD_SHARED_LIBS)
-  set_target_properties(geos PROPERTIES
-    INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}")
-endif()
+# Leave install with an RPATH approach to linking
+#if(APPLE AND BUILD_SHARED_LIBS)
+#  set_target_properties(geos PROPERTIES
+#    INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}")
+#endif()
 
 add_subdirectory(include)
 add_subdirectory(src)
@@ -332,10 +333,11 @@ add_library(geos_c "")
 add_library(GEOS::geos_c ALIAS geos_c)
 target_link_libraries(geos_c PRIVATE geos)
 
-if(APPLE AND BUILD_SHARED_LIBS)
-  set_target_properties(geos_c PROPERTIES
-    INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}")
-endif()
+# Leave install with an RPATH approach to linking
+#if(APPLE AND BUILD_SHARED_LIBS)
+#  set_target_properties(geos_c PROPERTIES
+#    INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}")
+#endif()
 
 if(BUILD_SHARED_LIBS)
   target_compile_definitions(geos_c
