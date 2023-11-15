@@ -90,9 +90,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:aad6d7eb020edf56d3289bb58b7235997"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a11b9891ce2c21eb4988bcb18ac245e25"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1Angle.html#a11b9891ce2c21eb4988bcb18ac245e25">diff</a> (double ang1, double ang2)</td></tr>
 <tr class="separator:a11b9891ce2c21eb4988bcb18ac245e25"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5702db02426d44591db802b462721c62"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1Angle.html#a5702db02426d44591db802b462721c62">sinCos</a> (const double ang, double &amp;rSin, double &amp;rCos)</td></tr>
-<tr class="memdesc:a5702db02426d44591db802b462721c62"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes both sin and cos of an angle.  <a href="classgeos_1_1algorithm_1_1Angle.html#a5702db02426d44591db802b462721c62">More...</a><br /></td></tr>
-<tr class="separator:a5702db02426d44591db802b462721c62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a187158d7ff569463500ceb1d9cbcb0fc"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1Angle.html#a187158d7ff569463500ceb1d9cbcb0fc">sinCosSnap</a> (const double ang, double &amp;rSin, double &amp;rCos)</td></tr>
+<tr class="memdesc:a187158d7ff569463500ceb1d9cbcb0fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes both sin and cos of an angle, snapping near-zero values to zero.  <a href="classgeos_1_1algorithm_1_1Angle.html#a187158d7ff569463500ceb1d9cbcb0fc">More...</a><br /></td></tr>
+<tr class="separator:a187158d7ff569463500ceb1d9cbcb0fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -630,8 +630,8 @@ static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el
 
 </div>
 </div>
-<a id="a5702db02426d44591db802b462721c62"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5702db02426d44591db802b462721c62">&#9670;&nbsp;</a></span>sinCos()</h2>
+<a id="a187158d7ff569463500ceb1d9cbcb0fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a187158d7ff569463500ceb1d9cbcb0fc">&#9670;&nbsp;</a></span>sinCosSnap()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -640,7 +640,7 @@ static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static void geos::algorithm::Angle::sinCos </td>
+          <td class="memname">static void geos::algorithm::Angle::sinCosSnap </td>
           <td>(</td>
           <td class="paramtype">const double&#160;</td>
           <td class="paramname"><em>ang</em>, </td>
@@ -670,8 +670,8 @@ static const int&#160;</td><td class="memItemRight" valign="bottom"><a class="el
 </table>
 </div><div class="memdoc">
 
-<p>Computes both sin and cos of an angle. </p>
-<p>The angle does not need to be normalized. Unlike std::sin and std::cos, this method will clip near-zero values to zero for (e.g.) sin(pi) and cos(pi/2).</p>
+<p>Computes both sin and cos of an angle, snapping near-zero values to zero. </p>
+<p>The angle does not need to be normalized. Unlike std::sin and std::cos, this method will snap near-zero values to zero for (e.g.) sin(pi) and cos(pi/2).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">ang</td><td>the input angle (in radians) </td></tr>
