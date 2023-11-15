@@ -138,7 +138,7 @@ GeometricShapeFactory::createCircle()
     uint32_t iPt = 0;
     double sinang, cosang;
     for(uint32_t i = 0; i < nPts; i++) {
-        Angle::sinCos(i * Angle::PI_TIMES_2 / nPts, sinang, cosang);
+        Angle::sinCosSnap(i * Angle::PI_TIMES_2 / nPts, sinang, cosang);
         double x = xRadius * cosang + centreX;
         double y = yRadius * sinang + centreY;
         (*pts)[iPt++] = coord(x, y);
@@ -170,7 +170,7 @@ GeometricShapeFactory::createArc(double startAng, double angExtent)
     uint32_t iPt = 0;
     double sinang, cosang;
     for(uint32_t i = 0; i < nPts; i++) {
-        Angle::sinCos(startAng + i * angInc, sinang, cosang);
+        Angle::sinCosSnap(startAng + i * angInc, sinang, cosang);
         double x = xRadius * cosang + centreX;
         double y = yRadius * sinang + centreY;
         (*pts)[iPt++] = coord(x, y);
@@ -201,7 +201,7 @@ GeometricShapeFactory::createArcPolygon(double startAng, double angExtent)
     (*pts)[iPt++] = coord(centreX, centreY);
     double sinang, cosang;
     for(uint32_t i = 0; i < nPts; i++) {
-        Angle::sinCos(startAng + i * angInc, sinang, cosang);
+        Angle::sinCosSnap(startAng + i * angInc, sinang, cosang);
         double x = xRadius * cosang + centreX;
         double y = yRadius * sinang + centreY;
         (*pts)[iPt++] = coord(x, y);

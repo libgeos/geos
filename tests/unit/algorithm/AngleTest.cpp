@@ -162,7 +162,7 @@ void object::test<5>
         TOL);
 }
 
-// testSinCos()
+// testSinCosSnap()
 template<>
 template<>
 void object::test<6>
@@ -174,7 +174,7 @@ void object::test<6>
     for (int angdeg = -720; angdeg <= 720; angdeg++) {
         const double ang = Angle::toRadians(angdeg);
 
-        Angle::sinCos(ang, rSin, rCos);
+        Angle::sinCosSnap(ang, rSin, rCos);
 
         double cSin = std::sin(ang);
         double cCos = std::cos(ang);
@@ -192,7 +192,7 @@ void object::test<6>
     // use radian increments that don't snap to exact degrees or zero
     for (double angrad = -6.3; angrad < 6.3; angrad += 0.013) {
 
-        Angle::sinCos(angrad, rSin, rCos);
+        Angle::sinCosSnap(angrad, rSin, rCos);
 
         ensure_equals(std::to_string(angrad), rSin, std::sin(angrad));
         ensure_equals(std::to_string(angrad), rCos, std::cos(angrad));

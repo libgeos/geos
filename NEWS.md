@@ -2,7 +2,7 @@
 20xx-xx-xx
 
 - New things:
-  - Add Angle::sinCos to avoid small errors, e.g. with buffer operations (GH-978, Mike Taves)
+  - Add Angle::sinCosSnap to avoid small errors, e.g. with buffer operations (GH-978, Mike Taves)
 
 - Breaking Changes
 
