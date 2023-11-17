@@ -3,6 +3,7 @@ xxxx-xx-xx
 
 - Fixes:
   - Fix build on Illumus (GH-971)
+  - Buffer mitre join error (GH-995, Paul Ramsey)
 
 ## Changes in 3.12.1
 2023-11-11
