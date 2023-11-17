@@ -35,10 +35,6 @@
 #include <geos/algorithm/Intersection.h>
 #include <geos/util.h>
 
-#ifndef GEOS_DEBUG
-#define GEOS_DEBUG 0
-#endif
-
 
 using namespace geos::algorithm;
 using namespace geos::geom;
@@ -536,15 +532,9 @@ OffsetSegmentGenerator::addLimitedMitreJoin(
     // compute the candidate bevel segment by projecting both sides of the midpoint
     Coordinate bevel0 = project(bevelMidPt, p_distance, dirBevel);
     Coordinate bevel1 = project(bevelMidPt, p_distance, dirBevel + MATH_PI);
-    LineSegment bevel(bevel0, bevel1);
 
-    //-- compute intersections with extended offset segments
-    double extendLen = p_mitreLimitDistance < p_distance ? p_distance : p_mitreLimitDistance;
-
-    LineSegment extend0 = extend(p_offset0, 2 * extendLen);
-    LineSegment extend1 = extend(p_offset1, -2 * extendLen);
-    Coordinate bevelInt0 = bevel.intersection(extend0);
-    Coordinate bevelInt1 = bevel.intersection(extend1);
+    Coordinate bevelInt0(Intersection::intersectionLineSegment(p_offset0.p0, p_offset0.p1, bevel0, bevel1));
+    Coordinate bevelInt1(Intersection::intersectionLineSegment(p_offset1.p0, p_offset1.p1, bevel0, bevel1));
 
     //-- add the limited bevel, if it intersects the offsets
     if (!bevelInt0.isNull() && !bevelInt1.isNull()) {
@@ -558,21 +548,6 @@ OffsetSegmentGenerator::addLimitedMitreJoin(
      * In this case just bevel the join.
      */
     addBevelJoin(p_offset0, p_offset1);
-}
-
-
-/* private static */
-LineSegment
-OffsetSegmentGenerator::extend(const LineSegment& seg, double dist)
-{
-    double distFrac = std::abs(dist) / seg.getLength();
-    double segFrac = dist >= 0 ? 1 + distFrac : 0 - distFrac;
-    Coordinate extendPt;
-    seg.pointAlong(segFrac, extendPt);
-    if (dist > 0)
-        return LineSegment(seg.p0, extendPt);
-    else
-        return LineSegment(extendPt, seg.p1);
 }
 
 
