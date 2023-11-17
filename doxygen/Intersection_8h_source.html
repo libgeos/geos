@@ -68,22 +68,32 @@ $(function() {
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &lt;geos/geom/CoordinateSequence.h&gt;</span></div>
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">namespace </span>algorithm { <span class="comment">// geos::algorithm</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">namespace </span>algorithm {</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1Intersection.html">   45</a></span>&#160;<span class="keyword">class </span>GEOS_DLL <a class="code" href="classgeos_1_1algorithm_1_1Intersection.html">Intersection</a> {</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="keyword">static</span> geom::CoordinateXY intersection(<span class="keyword">const</span> geom::CoordinateXY&amp; p1, <span class="keyword">const</span> geom::CoordinateXY&amp; p2,</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;                                       <span class="keyword">const</span> geom::CoordinateXY&amp; q1, <span class="keyword">const</span> geom::CoordinateXY&amp; q2);</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;};</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;} <span class="comment">// namespace geos::algorithm</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;} <span class="comment">// namespace geos</span></div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="ttc" id="aclassgeos_1_1algorithm_1_1Intersection_html"><div class="ttname"><a href="classgeos_1_1algorithm_1_1Intersection.html">geos::algorithm::Intersection</a></div><div class="ttdoc">Computes the intersection point of two lines. If the lines are parallel or collinear this case is det...</div><div class="ttdef"><b>Definition:</b> Intersection.h:45</div></div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1Intersection.html">   36</a></span>&#160;<span class="keyword">class </span>GEOS_DLL <a class="code" href="classgeos_1_1algorithm_1_1Intersection.html">Intersection</a> {</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1Intersection.html#a1181eb029c488a5e8c0c2c0c8c7ad4b8">   54</a></span>&#160;<span class="keyword">static</span> geom::CoordinateXY <a class="code" href="classgeos_1_1algorithm_1_1Intersection.html#a1181eb029c488a5e8c0c2c0c8c7ad4b8">intersection</a>(<span class="keyword">const</span> geom::CoordinateXY&amp; p1, <span class="keyword">const</span> geom::CoordinateXY&amp; p2,</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;                                       <span class="keyword">const</span> geom::CoordinateXY&amp; q1, <span class="keyword">const</span> geom::CoordinateXY&amp; q2);</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
+<div class="line"><a name="l00072"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1Intersection.html#a4bdda0d9487702183e7f7e8f3ee7b7ad">   72</a></span>&#160;<span class="keyword">static</span> geom::CoordinateXY <a class="code" href="classgeos_1_1algorithm_1_1Intersection.html#a4bdda0d9487702183e7f7e8f3ee7b7ad">intersectionLineSegment</a>(</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keyword">const</span> geom::CoordinateXY&amp; line1,</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="keyword">const</span> geom::CoordinateXY&amp; line2,</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keyword">const</span> geom::CoordinateXY&amp; seg1,</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keyword">const</span> geom::CoordinateXY&amp; seg2);</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;};</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;} <span class="comment">// namespace geos::algorithm</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;} <span class="comment">// namespace geos</span></div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
+<div class="ttc" id="aclassgeos_1_1algorithm_1_1Intersection_html"><div class="ttname"><a href="classgeos_1_1algorithm_1_1Intersection.html">geos::algorithm::Intersection</a></div><div class="ttdoc">Functions to compute intersection points between lines and line segments.</div><div class="ttdef"><b>Definition:</b> Intersection.h:36</div></div>
+<div class="ttc" id="aclassgeos_1_1algorithm_1_1Intersection_html_a1181eb029c488a5e8c0c2c0c8c7ad4b8"><div class="ttname"><a href="classgeos_1_1algorithm_1_1Intersection.html#a1181eb029c488a5e8c0c2c0c8c7ad4b8">geos::algorithm::Intersection::intersection</a></div><div class="ttdeci">static geom::CoordinateXY intersection(const geom::CoordinateXY &amp;p1, const geom::CoordinateXY &amp;p2, const geom::CoordinateXY &amp;q1, const geom::CoordinateXY &amp;q2)</div><div class="ttdoc">Computes the intersection point of two lines. If the lines are parallel or collinear this case is det...</div></div>
+<div class="ttc" id="aclassgeos_1_1algorithm_1_1Intersection_html_a4bdda0d9487702183e7f7e8f3ee7b7ad"><div class="ttname"><a href="classgeos_1_1algorithm_1_1Intersection.html#a4bdda0d9487702183e7f7e8f3ee7b7ad">geos::algorithm::Intersection::intersectionLineSegment</a></div><div class="ttdeci">static geom::CoordinateXY intersectionLineSegment(const geom::CoordinateXY &amp;line1, const geom::CoordinateXY &amp;line2, const geom::CoordinateXY &amp;seg1, const geom::CoordinateXY &amp;seg2)</div></div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:25</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->

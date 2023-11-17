@@ -51,20 +51,71 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Computes the intersection point of two lines. If the lines are parallel or collinear this case is detected and <code>null</code> is returned.  
+<p>Functions to compute intersection points between lines and line segments.  
  <a href="classgeos_1_1algorithm_1_1Intersection.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="Intersection_8h_source.html">Intersection.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a1181eb029c488a5e8c0c2c0c8c7ad4b8"><td class="memItemLeft" align="right" valign="top"><a id="a1181eb029c488a5e8c0c2c0c8c7ad4b8"></a>
-static geom::CoordinateXY&#160;</td><td class="memItemRight" valign="bottom"><b>intersection</b> (const geom::CoordinateXY &amp;p1, const geom::CoordinateXY &amp;p2, const geom::CoordinateXY &amp;q1, const geom::CoordinateXY &amp;q2)</td></tr>
+<tr class="memitem:a1181eb029c488a5e8c0c2c0c8c7ad4b8"><td class="memItemLeft" align="right" valign="top">static geom::CoordinateXY&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1Intersection.html#a1181eb029c488a5e8c0c2c0c8c7ad4b8">intersection</a> (const geom::CoordinateXY &amp;p1, const geom::CoordinateXY &amp;p2, const geom::CoordinateXY &amp;q1, const geom::CoordinateXY &amp;q2)</td></tr>
+<tr class="memdesc:a1181eb029c488a5e8c0c2c0c8c7ad4b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the intersection point of two lines. If the lines are parallel or collinear this case is detected and <code>null</code> is returned.  <a href="classgeos_1_1algorithm_1_1Intersection.html#a1181eb029c488a5e8c0c2c0c8c7ad4b8">More...</a><br /></td></tr>
 <tr class="separator:a1181eb029c488a5e8c0c2c0c8c7ad4b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4bdda0d9487702183e7f7e8f3ee7b7ad"><td class="memItemLeft" align="right" valign="top">static geom::CoordinateXY&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1Intersection.html#a4bdda0d9487702183e7f7e8f3ee7b7ad">intersectionLineSegment</a> (const geom::CoordinateXY &amp;line1, const geom::CoordinateXY &amp;line2, const geom::CoordinateXY &amp;seg1, const geom::CoordinateXY &amp;seg2)</td></tr>
+<tr class="separator:a4bdda0d9487702183e7f7e8f3ee7b7ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Computes the intersection point of two lines. If the lines are parallel or collinear this case is detected and <code>null</code> is returned. </p>
-<p>In general it is not possible to accurately compute the intersection point of two lines, due to numerical roundoff. This is particularly true when the input lines are nearly parallel. This routine uses numerical conditioning on the input values to ensure that the computed value should be very close to the correct value.</p>
+<div class="textblock"><p>Functions to compute intersection points between lines and line segments. </p>
+<p>In general it is not possible to compute the intersection point of two lines exactly, due to numerical roundoff. This is particularly true when the lines are nearly parallel. These routines uses numerical conditioning on the input values to ensure that the computed value is very close to the correct value.</p>
+<p>The Z-ordinate is ignored, and not populated. </p>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a1181eb029c488a5e8c0c2c0c8c7ad4b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1181eb029c488a5e8c0c2c0c8c7ad4b8">&#9670;&nbsp;</a></span>intersection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static geom::CoordinateXY geos::algorithm::Intersection::intersection </td>
+          <td>(</td>
+          <td class="paramtype">const geom::CoordinateXY &amp;&#160;</td>
+          <td class="paramname"><em>p1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const geom::CoordinateXY &amp;&#160;</td>
+          <td class="paramname"><em>p2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const geom::CoordinateXY &amp;&#160;</td>
+          <td class="paramname"><em>q1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const geom::CoordinateXY &amp;&#160;</td>
+          <td class="paramname"><em>q2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Computes the intersection point of two lines. If the lines are parallel or collinear this case is detected and <code>null</code> is returned. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">p1</td><td>an endpoint of line 1 </td></tr>
@@ -76,7 +127,74 @@ static geom::CoordinateXY&#160;</td><td class="memItemRight" valign="bottom"><b>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the intersection point between the lines, if there is one, or null if the lines are parallel or collinear</dd></dl>
 <dl class="section see"><dt>See also</dt><dd>CGAlgorithmsDD::intersection(Coordinate, Coordinate, Coordinate, Coordinate) </dd></dl>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+
+</div>
+</div>
+<a id="a4bdda0d9487702183e7f7e8f3ee7b7ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4bdda0d9487702183e7f7e8f3ee7b7ad">&#9670;&nbsp;</a></span>intersectionLineSegment()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static geom::CoordinateXY geos::algorithm::Intersection::intersectionLineSegment </td>
+          <td>(</td>
+          <td class="paramtype">const geom::CoordinateXY &amp;&#160;</td>
+          <td class="paramname"><em>line1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const geom::CoordinateXY &amp;&#160;</td>
+          <td class="paramname"><em>line2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const geom::CoordinateXY &amp;&#160;</td>
+          <td class="paramname"><em>seg1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const geom::CoordinateXY &amp;&#160;</td>
+          <td class="paramname"><em>seg2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Computes the intersection point of a line and a line segment (if any). There will be no intersection point if:</p>
+<ul>
+<li>the segment does not intersect the line</li>
+<li>the line or the segment are degenerate (have zero length)</li>
+</ul>
+<p>If the segment is collinear with the line the first segment endpoint is returned.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">line1</td><td>a point on the line </td></tr>
+    <tr><td class="paramname">line2</td><td>a point on the line </td></tr>
+    <tr><td class="paramname">seg1</td><td>an endpoint of the line segment </td></tr>
+    <tr><td class="paramname">seg2</td><td>an endpoint of the line segment </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the intersection point, or null if it is not possible to find an intersection </dd></dl>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li><a class="el" href="Intersection_8h_source.html">Intersection.h</a></li>
 </ul>
 </div><!-- contents -->
