@@ -37,18 +37,13 @@ template<>
 void object::test<1>
 ()
 {
-    geom1_ = GEOSGeomFromWKT("POLYGON EMPTY");
-    geom2_ = GEOSGeomFromWKT("POLYGON EMPTY");
-
-    ensure(nullptr != geom1_);
-    ensure(nullptr != geom2_);
+    geom1_ = fromWKT("POLYGON EMPTY");
+    geom2_ = fromWKT("POLYGON EMPTY");
 
     char const r1 = GEOSContains(geom1_, geom2_);
-
     ensure_equals(r1, 0);
 
     char const r2 = GEOSContains(geom2_, geom1_);
-
     ensure_equals(r2, 0);
 }
 
@@ -57,18 +52,13 @@ template<>
 void object::test<2>
 ()
 {
-    geom1_ = GEOSGeomFromWKT("POLYGON((1 1,1 5,5 5,5 1,1 1))");
-    geom2_ = GEOSGeomFromWKT("POINT(2 2)");
-
-    ensure(nullptr != geom1_);
-    ensure(nullptr != geom2_);
+    geom1_ = fromWKT("POLYGON((1 1,1 5,5 5,5 1,1 1))");
+    geom2_ = fromWKT("POINT(2 2)");
 
     char const r1 = GEOSContains(geom1_, geom2_);
-
     ensure_equals(int(r1), 1);
 
     char const r2 = GEOSContains(geom2_, geom1_);
-
     ensure_equals(int(r2), 0);
 }
 
@@ -77,18 +67,13 @@ template<>
 void object::test<3>
 ()
 {
-    geom1_ = GEOSGeomFromWKT("MULTIPOLYGON(((0 0,0 10,10 10,10 0,0 0)))");
-    geom2_ = GEOSGeomFromWKT("POLYGON((1 1,1 2,2 2,2 1,1 1))");
-
-    ensure(nullptr != geom1_);
-    ensure(nullptr != geom2_);
+    geom1_ = fromWKT("MULTIPOLYGON(((0 0,0 10,10 10,10 0,0 0)))");
+    geom2_ = fromWKT("POLYGON((1 1,1 2,2 2,2 1,1 1))");
 
     char const r1 = GEOSContains(geom1_, geom2_);
-
     ensure_equals(int(r1), 1);
 
     char const r2 = GEOSContains(geom2_, geom1_);
-
     ensure_equals(int(r2), 0);
 }
 

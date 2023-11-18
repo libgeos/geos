@@ -21,22 +21,16 @@ namespace tut {
 //
 
 struct test_capigeosdistancewithin_data : public capitest::utility {
-  void testGEOSDistanceWithin(const char* wkt1, const char* wkt2,
-                              double distance, char expectedResult) {
 
-    GEOSGeometry *input1 = GEOSGeomFromWKT(wkt1);
-    ensure(input1 != nullptr);
-    GEOSGeometry *input2 = GEOSGeomFromWKT(wkt2);
-    ensure(input2 != nullptr);
-
-    char ret = GEOSDistanceWithin(input1, input2, distance);
-
-    GEOSGeom_destroy(input1);
-    GEOSGeom_destroy(input2);
-
-    ensure_equals("return code", (int)ret, (int)expectedResult);
-
-  };
+    void testGEOSDistanceWithin(
+        const char* wkt1, const char* wkt2,
+        double distance, char expectedResult)
+    {
+        geom1_ = fromWKT(wkt1);
+        geom2_ = fromWKT(wkt2);
+        char ret = GEOSDistanceWithin(geom1_, geom2_, distance);
+        ensure_equals("return code", (int)ret, (int)expectedResult);
+    };
 };
 
 typedef test_group<test_capigeosdistancewithin_data> group;

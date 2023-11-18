@@ -9,7 +9,18 @@ namespace tut {
 // Test Group
 //
 
-struct test_geosenvelope_data : public capitest::utility {};
+struct test_geosenvelope_data : public capitest::utility
+{
+    void
+    checkEnvelope(const char* wktIn, const char* wktExp)
+    {
+        input_ = fromWKT(wktIn);
+        result_ = GEOSEnvelope(input_);
+        expected_ = fromWKT(wktExp);
+        ensure_geometry_equals(result_, expected_, 0);
+    }
+
+};
 
 typedef test_group<test_geosenvelope_data> group;
 typedef group::object object;
@@ -19,72 +30,42 @@ group test_geosenvelope("capi::GEOSEnvelope");
 // non-degenerate input
 template<>
 template<>
-void object::test<1>
-()
+void object::test<1>()
 {
-    GEOSGeometry* input = GEOSGeomFromWKT("LINESTRING (1 2, 4 5, 9 -2)");
-    GEOSGeometry* result = GEOSEnvelope(input);
-    GEOSGeometry* expected = GEOSGeomFromWKT("POLYGON ((1 -2, 9 -2, 9 5, 1 5, 1 -2))");
-
-    ensure_equals(GEOSEqualsExact(result, expected, 0), 1);
-
-    GEOSGeom_destroy(input);
-    GEOSGeom_destroy(result);
-    GEOSGeom_destroy(expected);
+    checkEnvelope(
+        "LINESTRING (1 2, 4 5, 9 -2)",
+        "POLYGON ((1 -2, 9 -2, 9 5, 1 5, 1 -2))"
+        );
 }
 
 // point input
 template<>
 template<>
-void object::test<2>
-()
+void object::test<2>()
 {
-    GEOSGeometry* input = GEOSGeomFromWKT("POINT (3 8)");
-    GEOSGeometry* result = GEOSEnvelope(input);
-
-    GEOSGeometry* expected = GEOSGeomFromWKT("POINT (3 8)");
-
-    ensure_geometry_equals(result, expected);
-
-    GEOSGeom_destroy(input);
-    GEOSGeom_destroy(result);
-    GEOSGeom_destroy(expected);
+    checkEnvelope(
+        "POINT (3 8)",
+        "POINT (3 8)");
 }
 
 // empty point input
 template<>
 template<>
-void object::test<3>
-()
+void object::test<3>()
 {
-    GEOSGeometry* input = GEOSGeomFromWKT("POINT EMPTY");
-    GEOSGeometry* result = GEOSEnvelope(input);
-
-    GEOSGeometry* expected = GEOSGeomFromWKT("POINT EMPTY");
-
-    ensure_geometry_equals(result, expected);
-
-    GEOSGeom_destroy(input);
-    GEOSGeom_destroy(result);
-    GEOSGeom_destroy(expected);
+    checkEnvelope(
+        "POINT EMPTY",
+        "POINT EMPTY");
 }
 
 // empty polygon input
 template<>
 template<>
-void object::test<4>
-()
+void object::test<4>()
 {
-    GEOSGeometry* input = GEOSGeomFromWKT("POLYGON EMPTY");
-    GEOSGeometry* result = GEOSEnvelope(input);
-
-    GEOSGeometry* expected = GEOSGeomFromWKT("POINT EMPTY");
-
-    ensure_geometry_equals(result, expected);
-
-    GEOSGeom_destroy(input);
-    GEOSGeom_destroy(result);
-    GEOSGeom_destroy(expected);
+    checkEnvelope(
+        "POLYGON EMPTY",
+        "POINT EMPTY");
 }
 
 } // namespace tut

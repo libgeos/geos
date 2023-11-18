@@ -17,11 +17,7 @@ namespace tut {
 //
 
 // Common data used in test cases.
-struct test_capi_buildarea_data : public capitest::utility {
-    test_capi_buildarea_data()
-    {
-    }
-};
+struct test_capi_buildarea_data : public capitest::utility {};
 
 typedef test_group<test_capi_buildarea_data> group;
 typedef group::object object;
@@ -34,11 +30,12 @@ group test_capi_buildarea_group("capi::GEOSBuildArea");
 
 template<>
 template<>
-void object::test<1>
-()
+void object::test<1>()
 {
-    geom1_ = GEOSGeomFromWKT("GEOMETRYCOLLECTION(LINESTRING(0 0,0 1,1 1),LINESTRING(1 1,1 0,0 0))");
-    geom2_ = GEOSBuildArea(geom1_);
-    ensure_equals(toWKT(geom2_), std::string("POLYGON ((0 0, 0 1, 1 1, 1 0, 0 0))"));
+    input_ = fromWKT("GEOMETRYCOLLECTION(LINESTRING(0 0,0 1,1 1),LINESTRING(1 1,1 0,0 0))");
+    result_ = GEOSBuildArea(input_);
+    expected_ = fromWKT("POLYGON ((0 0, 0 1, 1 1, 1 0, 0 0))");
+    ensure_geometry_equals(result_, expected_, 0);
 }
+
 } // namespace tut

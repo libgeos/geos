@@ -34,17 +34,12 @@ template<>
 void object::test<1>
 ()
 {
-    input_ = GEOSGeomFromWKT("MULTIPOINT ((130 240), (130 240), (570 240), (570 290), (650 240))");
-    ensure(nullptr != input_);
-
-    expected_ = GEOSGeomFromWKT("POLYGON ((130 240, 570 290, 650 240, 130 240))");
-    ensure(nullptr != expected_);
-
-    GEOSGeometry* output = GEOSConvexHull(input_);
-    ensure(nullptr != output);
-    ensure(0 == GEOSisEmpty(output));
-    ensure_geometry_equals(output, expected_);
-    GEOSGeom_destroy(output);
+    input_ = fromWKT("MULTIPOINT ((130 240), (130 240), (570 240), (570 290), (650 240))");
+    expected_ = fromWKT("POLYGON ((130 240, 570 290, 650 240, 130 240))");
+    result_ = GEOSConvexHull(input_);
+    ensure(nullptr != result_);
+    ensure(0 == GEOSisEmpty(result_));
+    ensure_geometry_equals(result_, expected_);
 }
 
 } // namespace tut

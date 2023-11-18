@@ -34,11 +34,10 @@ template<>
 template<>
 void object::test<1>()
 {
-    input_ = GEOSGeomFromWKT("POLYGON EMPTY");
-    ensure(nullptr != input_);
+    input_ = fromWKT("POLYGON EMPTY");
     geom1_ = GEOSConcaveHullOfPolygons(input_, 0.7, false, false);
     ensure(nullptr != geom1_);
-    expected_ = GEOSGeomFromWKT("POLYGON EMPTY");
+    expected_ = fromWKT("POLYGON EMPTY");
     ensure_geometry_equals(geom1_, expected_);
 }
 
@@ -46,11 +45,10 @@ template<>
 template<>
 void object::test<2>()
 {
-    input_ = GEOSGeomFromWKT("MULTIPOLYGON(((0 0, 0 1, 1 1, 1 0, 0 0)))");
-    ensure(nullptr != input_);
+    input_ = fromWKT("MULTIPOLYGON(((0 0, 0 1, 1 1, 1 0, 0 0)))");
     geom1_ = GEOSConcaveHullOfPolygons(input_, 0.7, false, false);
     ensure(nullptr != geom1_);
-    expected_ = GEOSGeomFromWKT("MULTIPOLYGON(((0 0, 0 1, 1 1, 1 0, 0 0)))");
+    expected_ = fromWKT("MULTIPOLYGON(((0 0, 0 1, 1 1, 1 0, 0 0)))");
     ensure_geometry_equals(geom1_, expected_);
 }
 

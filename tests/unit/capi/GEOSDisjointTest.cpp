@@ -21,11 +21,8 @@ template<>
 void object::test<1>()
 {
     geom1_ = fromWKT("POINT (0 0)");
-    ensure(geom1_);
     geom2_ = fromWKT("LINESTRING(2 0, 0 2)");
-    ensure(geom2_);
     geom3_ = fromWKT("LINESTRING(0 0, 0 2)");
-    ensure(geom3_);
 
     ensure_equals(1, GEOSDisjoint(geom1_, geom2_));
     ensure_equals(0, GEOSDisjoint(geom1_, geom3_));

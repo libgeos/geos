@@ -20,24 +20,15 @@ template<>
 template<>
 void object::test<1>()
 {
-    GEOSGeometry* a = GEOSGeomFromWKT("LINESTRING (2 8, 10 8)");
-    GEOSGeometry* b = GEOSGeomFromWKT("LINESTRING (3.9 8.1, 6.1 7.9)");
+    geom1_ = fromWKT("LINESTRING (2 8, 10 8)");
+    geom2_ = fromWKT("LINESTRING (3.9 8.1, 6.1 7.9)");
+    GEOSSetSRID(geom1_, 4326);
 
-    ensure(a);
-    ensure(b);
+    result_ = GEOSDifferencePrec(geom1_, geom2_, 2);
+    ensure(result_);
 
-    GEOSSetSRID(a, 4326);
-
-    GEOSGeometry* result = GEOSDifferencePrec(a, b, 2);
-
-    ensure(result);
-
-    ensure_geometry_equals(result, "MULTILINESTRING ((6 8, 10 8), (2 8, 4 8))");
-    ensure_equals(GEOSGetSRID(a), GEOSGetSRID(result));
-
-    GEOSGeom_destroy(a);
-    GEOSGeom_destroy(b);
-    GEOSGeom_destroy(result);
+    ensure_geometry_equals(result_, "MULTILINESTRING ((6 8, 10 8), (2 8, 4 8))");
+    ensure_equals(GEOSGetSRID(geom1_), GEOSGetSRID(result_));
 }
 
 } // namespace tut

@@ -14,26 +14,23 @@ namespace tut {
 
 struct test_capigeosdensify_data : public capitest::utility
 {
-    void testDensify(const std::string &wkt_input,
-                            const std::string &wkt_output,
-                            double tolerance)
+    void testDensify(
+        const std::string &wkt_input,
+        const std::string &wkt_output,
+        double tolerance)
     {
         int srid = 3857;
 
-        GEOSGeometry *input = GEOSGeomFromWKT(wkt_input.c_str());
-        GEOSSetSRID(input, srid);
+        input_ = fromWKT(wkt_input.c_str());
+        GEOSSetSRID(input_, srid);
 
-        GEOSGeometry *expected = GEOSGeomFromWKT(wkt_output.c_str());
+        expected_ = fromWKT(wkt_output.c_str());
 
-        GEOSGeometry *result = GEOSDensify(input, tolerance);
-        ensure("result not NULL", result != nullptr);
+        result_ = GEOSDensify(input_, tolerance);
+        ensure("result not NULL", result_ != nullptr);
 
-        ensure_geometry_equals(result, expected);
-        ensure_equals("result SRID == expected SRID", GEOSGetSRID(result), srid);
-
-        GEOSGeom_destroy(input);
-        GEOSGeom_destroy(expected);
-        GEOSGeom_destroy(result);
+        ensure_geometry_equals(result_, expected_);
+        ensure_equals("result SRID == expected SRID", GEOSGetSRID(result_), srid);
     }
 };
 
@@ -153,15 +150,13 @@ template <>
 template <>
 void object::test<9>()
 {
-    GEOSGeometry *input = GEOSGeomFromWKT("POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0))");
+    input_ = fromWKT("POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0))");
 
-    GEOSGeometry *result = GEOSDensify(input, 0.0);
-    ensure("result expected to be NULL", result == nullptr);
+    result_ = GEOSDensify(input_, 0.0);
+    ensure("result expected to be NULL", result_ == nullptr);
 
-    result = GEOSDensify(input, -1.0);
-    ensure("result expected to be NULL", result == nullptr);
-
-    GEOSGeom_destroy(input);
+    result_ = GEOSDensify(input_, -1.0);
+    ensure("result expected to be NULL", result_ == nullptr);
 }
 
 } // namespace tut

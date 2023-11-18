@@ -38,7 +38,7 @@ template<>
 void object::test<1>
 ()
 {
-    geom1_ = GEOSGeomFromWKT("POLYGON EMPTY");
+    geom1_ = fromWKT("POLYGON EMPTY");
     ensure_equals(GEOSisEmpty(geom1_), 1);
 
     geom2_ = GEOSConstrainedDelaunayTriangulation(geom1_);
@@ -53,7 +53,7 @@ template<>
 void object::test<2>
 ()
 {
-    geom1_ = GEOSGeomFromWKT("POINT(0 0)");
+    geom1_ = fromWKT("POINT(0 0)");
     geom2_ = GEOSConstrainedDelaunayTriangulation(geom1_);
     ensure_equals(GEOSisEmpty(geom2_), 1);
     ensure_equals(GEOSGeomTypeId(geom2_), GEOS_GEOMETRYCOLLECTION);
@@ -65,8 +65,8 @@ template<>
 void object::test<3>
 ()
 {
-    geom1_ = GEOSGeomFromWKT("POLYGON ((10 10, 20 40, 90 90, 90 10, 10 10))");
-    geom2_ = GEOSGeomFromWKT("GEOMETRYCOLLECTION (POLYGON ((10 10, 20 40, 90 10, 10 10)), POLYGON ((90 90, 20 40, 90 10, 90 90)))");
+    geom1_ = fromWKT("POLYGON ((10 10, 20 40, 90 90, 90 10, 10 10))");
+    geom2_ = fromWKT("GEOMETRYCOLLECTION (POLYGON ((10 10, 20 40, 90 10, 10 10)), POLYGON ((90 90, 20 40, 90 10, 90 90)))");
     geom3_ = GEOSConstrainedDelaunayTriangulation(geom1_);
     ensure_geometry_equals(geom2_, geom3_);
 }

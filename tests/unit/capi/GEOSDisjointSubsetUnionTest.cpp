@@ -27,7 +27,7 @@ template<>
 template<>
 void object::test<1>()
 {
-    input_ = GEOSGeomFromWKT("POLYGON EMPTY");
+    input_ = fromWKT("POLYGON EMPTY");
     GEOSSetSRID(input_, 1234);
 
     result_ = GEOSDisjointSubsetUnion(input_);
@@ -40,10 +40,9 @@ template<>
 template<>
 void object::test<2>()
 {
-    input_ = GEOSGeomFromWKT("MULTIPOLYGON (((0 0, 1 0, 1 1, 0 1, 0 0)), ((1 0, 2 0, 2 1, 1 1, 1 0)), ((3 3, 4 3, 4 4, 3 3)))");
-    expected_ = GEOSGeomFromWKT("MULTIPOLYGON (((0 0, 1 0, 2 0, 2 1, 1 1, 0 1, 0 0)), ((3 3, 4 3, 4 4, 3 3)))");
+    input_ = fromWKT("MULTIPOLYGON (((0 0, 1 0, 1 1, 0 1, 0 0)), ((1 0, 2 0, 2 1, 1 1, 1 0)), ((3 3, 4 3, 4 4, 3 3)))");
+    expected_ = fromWKT("MULTIPOLYGON (((0 0, 1 0, 2 0, 2 1, 1 1, 0 1, 0 0)), ((3 3, 4 3, 4 4, 3 3)))");
     result_ = GEOSDisjointSubsetUnion(input_);
-
     ensure_geometry_equals(result_, expected_);
 }
 
