@@ -21,7 +21,7 @@ template<>
 void object::test<1>
 ()
 {
-    input_ = GEOSGeomFromWKT("LINESTRING (1 2, 4 5, 9 -2)");
+    input_ = fromWKT("LINESTRING (1 2, 4 5, 9 -2)");
     const GEOSCoordSequence* seq = GEOSGeom_getCoordSeq(input_);
 
     double x = -1;
@@ -36,7 +36,7 @@ template<>
 template<>
 void object::test<2>()
 {
-    input_ = GEOSGeomFromWKT("POLYGON ((1 1, 2 1, 2 2, 1 1))");
+    input_ = fromWKT("POLYGON ((1 1, 2 1, 2 2, 1 1))");
     const GEOSCoordSequence* seq = GEOSGeom_getCoordSeq(input_);
 
     ensure(seq == nullptr); // can't get seq from Polygon
@@ -46,7 +46,7 @@ template<>
 template<>
 void object::test<3>()
 {
-    input_ = GEOSGeomFromWKT("POINT (3 8)");
+    input_ = fromWKT("POINT (3 8)");
     const GEOSCoordSequence* seq = GEOSGeom_getCoordSeq(input_);
 
     double x = -1;

@@ -19,10 +19,7 @@ namespace tut {
 //
 
 // Common data used in test cases.
-struct test_capigeosfrechetdistance_data : public capitest::utility {
-    test_capigeosfrechetdistance_data() {
-    }
-};
+struct test_capigeosfrechetdistance_data : public capitest::utility {};
 
 typedef test_group<test_capigeosfrechetdistance_data> group;
 typedef group::object object;
@@ -38,8 +35,8 @@ template<>
 void object::test<1>
 ()
 {
-    geom1_ = GEOSGeomFromWKT("LINESTRING (0 0, 100 0)");
-    geom2_ = GEOSGeomFromWKT("LINESTRING (0 0, 50 50, 100 0)");
+    geom1_ = fromWKT("LINESTRING (0 0, 100 0)");
+    geom2_ = fromWKT("LINESTRING (0 0, 50 50, 100 0)");
 
     double dist;
     int ret = GEOSFrechetDistance(geom1_, geom2_, &dist);
@@ -53,8 +50,8 @@ template<>
 void object::test<2>
 ()
 {
-    geom1_ = GEOSGeomFromWKT("LINESTRING (0 0, 100 0)");
-    geom2_ = GEOSGeomFromWKT("LINESTRING (0 0, 50 50, 100 0)");
+    geom1_ = fromWKT("LINESTRING (0 0, 100 0)");
+    geom2_ = fromWKT("LINESTRING (0 0, 50 50, 100 0)");
 
     double dist;
     int ret = GEOSFrechetDistanceDensify(geom1_, geom2_, 0.5, &dist);
@@ -70,13 +67,13 @@ template<>
 void object::test<3>
 ()
 {
-    geom1_ = GEOSGeomFromWKT("LINESTRING (0 0, 3 7, 5 5)");
-    geom2_ = GEOSGeomFromWKT("LINESTRING (0 0, 9 1, 2 2)");
+    geom1_ = fromWKT("LINESTRING (0 0, 3 7, 5 5)");
+    geom2_ = fromWKT("LINESTRING (0 0, 9 1, 2 2)");
 
-    double dist;
+    double dist = 0;
     GEOSFrechetDistanceDensify(geom1_, geom2_, 1e-40, &dist);
 
-    // no crash
+    ensure(dist >= 0); // no crash
 }
 
 // No crash with tiny densify fraction
@@ -86,13 +83,13 @@ template<>
 void object::test<4>
 ()
 {
-    geom1_ = GEOSGeomFromWKT("LINESTRING (0 0, 3 7, 5 5)");
-    geom2_ = GEOSGeomFromWKT("LINESTRING (0 0, 9 1, 2 2)");
+    geom1_ = fromWKT("LINESTRING (0 0, 3 7, 5 5)");
+    geom2_ = fromWKT("LINESTRING (0 0, 9 1, 2 2)");
 
-    double dist;
+    double dist = 0;
     GEOSFrechetDistanceDensify(geom1_, geom2_, 1e-19, &dist);
 
-    // no crash
+    ensure(dist >= 0); // no crash
 }
 
 } // namespace tut

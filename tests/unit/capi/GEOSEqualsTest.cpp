@@ -35,19 +35,11 @@ template<>
 void object::test<1>
 ()
 {
-    geom1_ = GEOSGeomFromWKT("POLYGON EMPTY");
-    geom2_ = GEOSGeomFromWKT("POLYGON EMPTY");
+    geom1_ = fromWKT("POLYGON EMPTY");
+    geom2_ = fromWKT("POLYGON EMPTY");
 
-    ensure(nullptr != geom1_);
-    ensure(nullptr != geom2_);
-
-    char const r1 = GEOSEquals(geom1_, geom2_);
-
-    ensure_equals(r1, 1);
-
-    char const r2 = GEOSEquals(geom2_, geom1_);
-
-    ensure_equals(r2, 1);
+    ensure_equals(GEOSEquals(geom1_, geom2_), 1);
+    ensure_equals(GEOSEquals(geom2_, geom1_), 1);
 }
 
 template<>
@@ -55,18 +47,13 @@ template<>
 void object::test<2>
 ()
 {
-    geom1_ = GEOSGeomFromWKT("POINT(2 3)");
-    geom2_ = GEOSGeomFromWKT("POINT(2 2)");
-
-    ensure(nullptr != geom1_);
-    ensure(nullptr != geom2_);
+    geom1_ = fromWKT("POINT(2 3)");
+    geom2_ = fromWKT("POINT(2 2)");
 
     char const r1 = GEOSEquals(geom1_, geom2_);
-
     ensure_equals(int(r1), 0);
 
     char const r2 = GEOSEquals(geom2_, geom1_);
-
     ensure_equals(int(r2), 0);
 }
 
@@ -75,18 +62,13 @@ template<>
 void object::test<3>
 ()
 {
-    geom1_ = GEOSGeomFromWKT("MULTIPOLYGON(((0 0,0 10,10 10,10 0,0 0)))");
-    geom2_ = GEOSGeomFromWKT("POLYGON((0 0,0 10,10 10,10 0,0 0))");
-
-    ensure(nullptr != geom1_);
-    ensure(nullptr != geom2_);
+    geom1_ = fromWKT("MULTIPOLYGON(((0 0,0 10,10 10,10 0,0 0)))");
+    geom2_ = fromWKT("POLYGON((0 0,0 10,10 10,10 0,0 0))");
 
     char const r1 = GEOSEquals(geom1_, geom2_);
-
     ensure_equals(int(r1), 1);
 
     char const r2 = GEOSEquals(geom2_, geom1_);
-
     ensure_equals(int(r2), 1);
 }
 
@@ -111,9 +93,7 @@ void object::test<4>
                                     nullptr, 0);
 
     char const r1 = GEOSEquals(geom1_, geom1_);
-
     ensure_equals(int(r1), 2);
-
 }
 
 // This is a test for bug #357 (GEOSEquals with inf coords)
@@ -126,17 +106,16 @@ void object::test<5>
         "0103000020E61000000100000005000000737979F3DDCC2CC0F92154F9E7534540000000000000F07F000000000000F07F8F806E993F7E55C0304B29FFEA8554400634E8D1DD424540B5FEE6A37FCD4540737979F3DDCC2CC0F92154F9E7534540";
 
     geom1_ = GEOSGeomFromHEX_buf((unsigned char*)hex, std::strlen(hex));
-
     ensure(nullptr != geom1_);
 
     char const r1 = GEOSEquals(geom1_, geom1_);
-
     ensure_equals(int(r1), 2);
-
 }
 
-#if 0 // fails
-// This is a test for bug #752 (GEOSEquals with collection)
+#if 0
+// FAILS
+// https://trac.osgeo.org/geos/ticket/752
+// GEOSEquals with collection inputs
 template<>
 template<>
 void object::test<6>
@@ -147,12 +126,9 @@ void object::test<6>
                        "POLYGON ((3 3, 3 4, 4 4, 4 3, 3 3))"
                        ")";
 
-    geom1_ = GEOSGeomFromWKT(wkt1);
-
-    ensure(0 != geom1_);
+    geom1_ = fromWKT(wkt1);
 
     char const r1 = GEOSEquals(geom1_, geom1_);
-
     ensure_equals(int(r1), 1);
 }
 #endif

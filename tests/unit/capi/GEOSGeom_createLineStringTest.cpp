@@ -19,18 +19,14 @@ void object::test<1>
 ()
 {
     GEOSCoordSequence* seq = GEOSCoordSeq_create(3, 2);
-
     GEOSCoordSeq_setXY(seq, 0, 1, 2);
     GEOSCoordSeq_setXY(seq, 1, 4, 5);
     GEOSCoordSeq_setXY(seq, 2, 9, -2);
 
-    GEOSGeometry* result = GEOSGeom_createLineString(seq);
-    GEOSGeometry* expected = GEOSGeomFromWKT("LINESTRING (1 2, 4 5, 9 -2)");
+    result_ = GEOSGeom_createLineString(seq);
+    expected_ = fromWKT("LINESTRING (1 2, 4 5, 9 -2)");
 
-    ensure_equals(GEOSEqualsExact(result, expected, 0), 1);
-
-    GEOSGeom_destroy(result);
-    GEOSGeom_destroy(expected);
+    ensure_geometry_equals(result_, expected_, 0);
 }
 
 } // namespace tut

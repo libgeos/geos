@@ -13,61 +13,32 @@
 #include <string>
 #include <vector>
 
+#include "capi_test_utils.h"
+
 namespace tut {
 //
 // Test Group
 //
 
 // Common data used in test cases.
-struct test_capigeosgeom_createcollection_data {
-    GEOSContextHandle_t handle_;
-    GEOSWKTReader * reader_;
-    GEOSGeometry * geom_;
-    GEOSGeometry ** geoms_;
-    unsigned int ngeoms_;
-
-    enum { geom_size = 3 };
-
-    static void
-    notice(const char* fmt, ...)
-    {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
-
-    GEOSGeometry*
-    read(const char* wkt)
-    {
-        return GEOSWKTReader_read_r(handle_, reader_, wkt);
-    }
+struct test_capigeosgeom_createcollection_data : public capitest::utility
+{
+    GEOSGeometry ** m_geoms;
+    unsigned int m_ngeoms;
 
     test_capigeosgeom_createcollection_data()
-        : handle_(initGEOS_r(notice, notice))
-        , reader_(GEOSWKTReader_create_r(handle_))
-        , geom_(nullptr)
-        , geoms_(nullptr)
-        , ngeoms_(0)
-    {
-    }
+        : m_geoms(nullptr)
+        , m_ngeoms(0)
+    {}
 
     ~test_capigeosgeom_createcollection_data()
     {
-        if (reader_) GEOSWKTReader_destroy_r(handle_, reader_);
-        if (geom_)   GEOSGeom_destroy_r(handle_, geom_);
-        if (geoms_)  GEOSFree_r(handle_, geoms_);
-        finishGEOS_r(handle_);
-        handle_ = nullptr;
-        reader_ = nullptr;
-        geom_ = nullptr;
-        geoms_ = nullptr;
+        if (m_geoms) GEOSFree(m_geoms);
+        m_geoms = nullptr;
     }
 };
+
+#define geom_size 3
 
 typedef test_group<test_capigeosgeom_createcollection_data> group;
 typedef group::object object;
@@ -81,83 +52,87 @@ group test_capigeosgeom_createcollection_group("capi::GEOSGeom_createCollection"
 // Create collection from constant length C-array
 template<>
 template<>
-void object::test<1>
-()
+void object::test<1>()
 {
-    GEOSGeom geoms[geom_size];
-    geoms[0] = GEOSGeom_createEmptyPoint_r(handle_);
-    geoms[1] = GEOSGeom_createEmptyPoint_r(handle_);
-    geoms[2] = GEOSGeom_createEmptyPoint_r(handle_);
+    GEOSGeometry* geoms[geom_size];
+    geoms[0] = GEOSGeom_createEmptyPoint();
+    geoms[1] = GEOSGeom_createEmptyPoint();
+    geoms[2] = GEOSGeom_createEmptyPoint();
+
     // takes ownership of individual geometries
-    geom_ = GEOSGeom_createCollection_r(handle_, GEOS_MULTIPOINT, geoms, geom_size);
-    ensure_equals(GEOSGetNumGeometries_r(handle_, geom_), (int)geom_size);
+    geom1_ = GEOSGeom_createCollection(GEOS_MULTIPOINT, geoms, geom_size);
+    ensure_equals(GEOSGetNumGeometries(geom1_), geom_size);
 }
 
 // Create collection from constant length std::array
 template<>
 template<>
-void object::test<2>
-()
+void object::test<2>()
 {
-    std::array<GEOSGeom, geom_size> geoms = {{
-        GEOSGeom_createEmptyLineString_r(handle_),
-        GEOSGeom_createEmptyLineString_r(handle_),
-        GEOSGeom_createEmptyLineString_r(handle_)
+    std::array<GEOSGeometry*, geom_size> geoms = {{
+        GEOSGeom_createEmptyLineString(),
+        GEOSGeom_createEmptyLineString(),
+        GEOSGeom_createEmptyLineString()
     }};
+
     // takes ownership of individual geometries
-    geom_ = GEOSGeom_createCollection_r(handle_, GEOS_MULTILINESTRING,
-                                        geoms.data(), static_cast<unsigned int>(geoms.size()));
-    ensure_equals(GEOSGetNumGeometries_r(handle_, geom_), geom_size);
+    geom1_ = GEOSGeom_createCollection(
+        GEOS_MULTILINESTRING,
+        geoms.data(),
+        static_cast<unsigned int>(geoms.size()));
+
+    ensure_equals(GEOSGetNumGeometries(geom1_), geom_size);
 }
 
 // Create collection from dynamic length std::vector of geometries
 template<>
 template<>
-void object::test<3>
-()
+void object::test<3>()
 {
-    std::vector<GEOSGeom> geoms;
-    geoms.push_back(GEOSGeom_createEmptyPolygon_r(handle_));
-    geoms.push_back(GEOSGeom_createEmptyPolygon_r(handle_));
-    geoms.push_back(GEOSGeom_createEmptyPolygon_r(handle_));
-    geoms.push_back(GEOSGeom_createEmptyPolygon_r(handle_));
-    geoms.push_back(GEOSGeom_createEmptyPolygon_r(handle_));
+    std::vector<GEOSGeometry*> geoms;
+    geoms.push_back(GEOSGeom_createEmptyPolygon());
+    geoms.push_back(GEOSGeom_createEmptyPolygon());
+    geoms.push_back(GEOSGeom_createEmptyPolygon());
+    geoms.push_back(GEOSGeom_createEmptyPolygon());
+    geoms.push_back(GEOSGeom_createEmptyPolygon());
+
     // takes ownership of individual geometries
-    geom_ = GEOSGeom_createCollection_r(handle_, GEOS_MULTIPOLYGON,
-                                        geoms.data(), static_cast<unsigned int>(geoms.size()));
-    ensure_equals(static_cast<size_t>(GEOSGetNumGeometries_r(handle_, geom_)), geoms.size());
+    geom1_ = GEOSGeom_createCollection(
+        GEOS_MULTIPOLYGON,
+        geoms.data(),
+        static_cast<unsigned int>(geoms.size()));
+
+    ensure_equals(static_cast<size_t>(GEOSGetNumGeometries(geom1_)), geoms.size());
 }
 
 // Error on invalid collection type, ownership is still transferred
 template<>
 template<>
-void object::test<4>
-()
+void object::test<4>()
 {
-    std::vector<GEOSGeom> geoms;
-    geoms.push_back(GEOSGeom_createEmptyPolygon_r(handle_));
+    std::vector<GEOSGeometry*> geoms;
+    geoms.push_back(GEOSGeom_createEmptyPolygon());
     // takes ownership of individual geometries
-    geom_ = GEOSGeom_createCollection_r(handle_, 12345,
-                                        geoms.data(), static_cast<unsigned int>(geoms.size()));
-    ensure(geom_ == nullptr);
+    geom1_ = GEOSGeom_createCollection(
+        12345,
+        geoms.data(),
+        static_cast<unsigned int>(geoms.size()));
+    ensure(geom1_ == nullptr);
 
-    geom_ = GEOSGeom_createEmptyCollection_r(handle_, 12345);
-    ensure(geom_ == nullptr);
+    geom1_ = GEOSGeom_createEmptyCollection(12345);
+    ensure(geom1_ == nullptr);
 }
 
 // Release empty collection
 template<>
 template<>
-void object::test<5>
-()
+void object::test<5>()
 {
-    const char *wkt = "MULTIPOLYGON EMPTY";
-    geom_ = read(wkt);
-    ensure(geom_ != nullptr);
+    geom1_ = fromWKT("MULTIPOLYGON EMPTY");
 
-    geoms_ = GEOSGeom_releaseCollection_r(handle_, geom_, &ngeoms_);
-    ensure(geoms_ == nullptr);
-    ensure(ngeoms_ == 0);
+    m_geoms = GEOSGeom_releaseCollection(geom1_, &m_ngeoms);
+    ensure(m_geoms == nullptr);
+    ensure(m_ngeoms == 0);
 }
 
 
@@ -167,19 +142,16 @@ template<>
 void object::test<6>
 ()
 {
-    const char *wkt = "GEOMETRYCOLLECTION(POINT(0 0), POINT(1 1))";
-    geom_ = read(wkt);
-    ensure(geom_ != nullptr);
+    geom1_ = fromWKT("GEOMETRYCOLLECTION(POINT(0 0), POINT(1 1))");
 
-    geoms_ = GEOSGeom_releaseCollection_r(handle_, geom_, &ngeoms_);
-    ensure(geoms_ != nullptr);
-    ensure(ngeoms_ == 2);
+    m_geoms = GEOSGeom_releaseCollection(geom1_, &m_ngeoms);
+    ensure(m_geoms != nullptr);
+    ensure(m_ngeoms == 2);
 
-    for (size_t i = 0 ; i < ngeoms_; i++) {
-        ensure(GEOSGeomTypeId_r(handle_, geoms_[i]) == GEOS_POINT);
-        GEOSGeom_destroy_r(handle_, geoms_[i]);
+    for (size_t i = 0 ; i < m_ngeoms; i++) {
+        ensure(GEOSGeomTypeId(m_geoms[i]) == GEOS_POINT);
+        GEOSGeom_destroy(m_geoms[i]);
     }
-
 }
 
 // Release typed collection
@@ -188,19 +160,16 @@ template<>
 void object::test<7>
 ()
 {
-    const char *wkt = "MULTIPOINT((0 0), (1 1))";
-    geom_ = read(wkt);
-    ensure(geom_ != nullptr);
+    geom1_ = fromWKT("MULTIPOINT((0 0), (1 1))");
 
-    geoms_ = GEOSGeom_releaseCollection_r(handle_, geom_, &ngeoms_);
-    ensure(geoms_ != nullptr);
-    ensure(ngeoms_ == 2);
+    m_geoms = GEOSGeom_releaseCollection(geom1_, &m_ngeoms);
+    ensure(m_geoms != nullptr);
+    ensure(m_ngeoms == 2);
 
-    for (size_t i = 0 ; i < ngeoms_; i++) {
-        ensure(GEOSGeomTypeId_r(handle_, geoms_[i]) == GEOS_POINT);
-        GEOSGeom_destroy_r(handle_, geoms_[i]);
+    for (size_t i = 0 ; i < m_ngeoms; i++) {
+        ensure(GEOSGeomTypeId(m_geoms[i]) == GEOS_POINT);
+        GEOSGeom_destroy(m_geoms[i]);
     }
-
 }
 
 } // namespace tut

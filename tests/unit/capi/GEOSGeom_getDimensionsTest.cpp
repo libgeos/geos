@@ -21,17 +21,14 @@ template<>
 void object::test<1>
 ()
 {
-    GEOSGeometry* point = GEOSGeomFromWKT("POINT (4 2 7)");
-    GEOSGeometry* line = GEOSGeomFromWKT("LINESTRING (4 2 7 1, 8 2 9 5)");
-    GEOSGeometry* poly = GEOSGeomFromWKT("POLYGON ((0 0, 1 0, 1 1, 0 0))");
+    geom1_ = fromWKT("POLYGON ((0 0, 1 0, 1 1, 0 0))");
+    ensure_equals(GEOSGeom_getDimensions(geom1_), 2);
 
-    ensure_equals(GEOSGeom_getDimensions(point), 0);
-    ensure_equals(GEOSGeom_getDimensions(line), 1);
-    ensure_equals(GEOSGeom_getDimensions(poly), 2);
+    geom3_ = fromWKT("LINESTRING (4 2 7 1, 8 2 9 5)");
+    ensure_equals(GEOSGeom_getDimensions(geom3_), 1);
 
-    GEOSGeom_destroy(point);
-    GEOSGeom_destroy(line);
-    GEOSGeom_destroy(poly);
+    geom2_ = fromWKT("POINT (4 2 7)");
+    ensure_equals(GEOSGeom_getDimensions(geom2_), 0);
 }
 
 } // namespace tut
