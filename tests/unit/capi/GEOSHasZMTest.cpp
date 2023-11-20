@@ -20,7 +20,7 @@ template<>
 template<>
 void object::test<1>()
 {
-    input_ = GEOSGeomFromWKT("POLYGON ((1 -2, 9 -2, 9 5, 1 5, 1 -2))");
+    input_ = fromWKT("POLYGON ((1 -2, 9 -2, 9 5, 1 5, 1 -2))");
 
     ensure_equals(GEOSHasZ(input_), 0);
     ensure_equals(GEOSHasM(input_), 0);
@@ -30,7 +30,7 @@ template<>
 template<>
 void object::test<2>()
 {
-    input_ = GEOSGeomFromWKT("POINT M (1 2 3)");
+    input_ = fromWKT("POINT M (1 2 3)");
 
     ensure_equals(GEOSHasZ(input_), 0);
     ensure_equals(GEOSHasM(input_), 1);
@@ -40,7 +40,7 @@ template<>
 template<>
 void object::test<3>()
 {
-    input_ = GEOSGeomFromWKT("POINT EMPTY");
+    input_ = fromWKT("POINT EMPTY");
 
     ensure_equals(GEOSHasZ(input_), 0);
     ensure_equals(GEOSHasM(input_), 0);
@@ -50,7 +50,7 @@ template<>
 template<>
 void object::test<4>()
 {
-    input_ = GEOSGeomFromWKT("POINT Z EMPTY");
+    input_ = fromWKT("POINT Z EMPTY");
 
     ensure_equals(GEOSHasZ(input_), 1);
     ensure_equals(GEOSHasM(input_), 0);
@@ -60,7 +60,7 @@ template<>
 template<>
 void object::test<5>()
 {
-    input_ = GEOSGeomFromWKT("POINT M EMPTY");
+    input_ = fromWKT("POINT M EMPTY");
 
     ensure_equals(GEOSHasZ(input_), 0);
     ensure_equals(GEOSHasM(input_), 1);
@@ -70,9 +70,39 @@ template<>
 template<>
 void object::test<6>()
 {
-    input_ = GEOSGeomFromWKT("POINT ZM EMPTY");
+    input_ = fromWKT("POINT ZM EMPTY");
 
     ensure_equals(GEOSHasZ(input_), 1);
+    ensure_equals(GEOSHasM(input_), 1);
+}
+
+template<>
+template<>
+void object::test<7>()
+{
+    input_ = fromWKT("LINESTRING EMPTY");
+
+    ensure_equals(GEOSHasZ(input_), 0);
+    ensure_equals(GEOSHasM(input_), 0);
+}
+
+template<>
+template<>
+void object::test<8>()
+{
+    input_ = fromWKT("LINESTRING Z EMPTY");
+
+    ensure_equals(GEOSHasZ(input_), 1);
+    ensure_equals(GEOSHasM(input_), 0);
+}
+
+template<>
+template<>
+void object::test<9>()
+{
+    input_ = fromWKT("LINESTRING M EMPTY");
+
+    ensure_equals(GEOSHasZ(input_), 0);
     ensure_equals(GEOSHasM(input_), 1);
 }
 
