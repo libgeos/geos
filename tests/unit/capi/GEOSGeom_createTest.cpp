@@ -11,13 +11,16 @@
 #include <cstdlib>
 #include <memory>
 
+#include "capi_test_utils.h"
+
 namespace tut {
 //
 // Test Group
 //
 
 // Common data used in test cases.
-struct test_capigeosgeom_create_data {
+struct test_capigeosgeom_create_data  : public capitest::utility
+{
     GEOSGeometry* geom1_;
     GEOSContextHandle_t handle_;
 
@@ -149,6 +152,14 @@ void object::test<7>
     geom1_ = nullptr;
 }
 
+template<>
+template<>
+void object::test<8>()
+{
+    input_ = GEOSGeom_createLineString(NULL);
+    ensure_equals(GEOSHasZ(input_), 0);
+    ensure_equals(GEOSHasM(input_), 0);
+}
 
 } // namespace tut
 

@@ -106,14 +106,6 @@ void object::test<9>()
     ensure_equals(GEOSHasM(input_), 1);
 }
 
-template<>
-template<>
-void object::test<10>()
-{
-    input_ = GEOSGeom_createLineString(NULL);
-    ensure_equals(GEOSHasZ(input_), 0);
-    ensure_equals(GEOSHasM(input_), 0);
-}
 
 } // namespace tut
 
