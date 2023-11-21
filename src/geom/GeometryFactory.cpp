@@ -534,6 +534,8 @@ std::unique_ptr<LineString>
 GeometryFactory::createLineString(CoordinateSequence::Ptr && newCoords)
 const
 {
+    if (!newCoords)
+        return createLineString();
     // Can't use make_unique with protected constructor
     return std::unique_ptr<LineString>(new LineString(std::move(newCoords), *this));
 }

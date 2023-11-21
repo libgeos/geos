@@ -106,5 +106,6 @@ void object::test<9>()
     ensure_equals(GEOSHasM(input_), 1);
 }
 
+
 } // namespace tut
 
