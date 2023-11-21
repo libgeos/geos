@@ -477,5 +477,27 @@ void object::test<30>
     ensure(errorMessage.find("ParseException: Error parsing JSON") != std::string::npos);
 }
 
+// Read a GeoJSON FeatureCollection with multiple Features with id
+template<>
+template<>
+void object::test<31>
+()
+{
+    std::string geojson { "{\"type\":\"FeatureCollection\",\"features\":[{\"type\":\"Feature\", \"id\":\"123\",    \"geometry\":{\"type\":\"Point\",\"coordinates\":[0.0,0.0]}, \"properties\":{}},"
+                                                                        "{\"type\":\"Feature\", \"id\": 123,       \"geometry\":{\"type\":\"Point\",\"coordinates\":[0.0,0.0]}, \"properties\":{}},"
+                                                                        "{\"type\":\"Feature\", \"id\": null,      \"geometry\":{\"type\":\"Point\",\"coordinates\":[0.0,0.0]}, \"properties\":{}},"
+                                                                        "{\"type\":\"Feature\", \"id\": {},        \"geometry\":{\"type\":\"Point\",\"coordinates\":[0.0,0.0]}, \"properties\":{}},"
+                                                                        "{\"type\":\"Feature\", \"id\": [\"123\"], \"geometry\":{\"type\":\"Point\",\"coordinates\":[0.0,0.0]}, \"properties\":{}},"
+                                                                        "{\"type\":\"Feature\",                    \"geometry\":{\"type\":\"Point\",\"coordinates\":[0.0,0.0]}, \"properties\":{}}]}" };
+    geos::io::GeoJSONFeatureCollection features(geojsonreader.readFeatures(geojson));
+    ensure_equals(features.getFeatures().size(), static_cast<size_t>(6));
+    ensure_equals(features.getFeatures()[0].getId(), "123");
+    ensure_equals(features.getFeatures()[1].getId(), "123");
+    ensure_equals(features.getFeatures()[2].getId(), "");
+    ensure_equals(features.getFeatures()[3].getId(), "");
+    ensure_equals(features.getFeatures()[4].getId(), "");
+    ensure_equals(features.getFeatures()[5].getId(), "");
+}
+
 }
 

@@ -100,7 +100,10 @@ GeoJSONFeature GeoJSONReader::readFeature(const geos_nlohmann::json& j) const
     const auto& properties = j.at("properties");
 
     std::string id = "";
-    if (j.contains("id")) id = j.at("id").get<std::string>();
+    if (j.contains("id") && !j.at("id").is_null()) {
+        if (j.at("id").is_string()) id = j.at("id").get<std::string>();
+        if (j.at("id").is_number()) id = std::to_string(j.at("id").get<int>());
+    }
 
     return GeoJSONFeature{readGeometry(geometryJson), readProperties(properties), id};
 }
