@@ -485,18 +485,24 @@ void object::test<31>
 {
     std::string geojson { "{\"type\":\"FeatureCollection\",\"features\":[{\"type\":\"Feature\", \"id\":\"123\",    \"geometry\":{\"type\":\"Point\",\"coordinates\":[0.0,0.0]}, \"properties\":{}},"
                                                                         "{\"type\":\"Feature\", \"id\": 123,       \"geometry\":{\"type\":\"Point\",\"coordinates\":[0.0,0.0]}, \"properties\":{}},"
+                                                                        "{\"type\":\"Feature\", \"id\": 123.0,     \"geometry\":{\"type\":\"Point\",\"coordinates\":[0.0,0.0]}, \"properties\":{}},"
+                                                                        "{\"type\":\"Feature\", \"id\": 123.000,   \"geometry\":{\"type\":\"Point\",\"coordinates\":[0.0,0.0]}, \"properties\":{}},"
+                                                                        "{\"type\":\"Feature\", \"id\": 123.9,     \"geometry\":{\"type\":\"Point\",\"coordinates\":[0.0,0.0]}, \"properties\":{}},"
                                                                         "{\"type\":\"Feature\", \"id\": null,      \"geometry\":{\"type\":\"Point\",\"coordinates\":[0.0,0.0]}, \"properties\":{}},"
                                                                         "{\"type\":\"Feature\", \"id\": {},        \"geometry\":{\"type\":\"Point\",\"coordinates\":[0.0,0.0]}, \"properties\":{}},"
                                                                         "{\"type\":\"Feature\", \"id\": [\"123\"], \"geometry\":{\"type\":\"Point\",\"coordinates\":[0.0,0.0]}, \"properties\":{}},"
                                                                         "{\"type\":\"Feature\",                    \"geometry\":{\"type\":\"Point\",\"coordinates\":[0.0,0.0]}, \"properties\":{}}]}" };
     geos::io::GeoJSONFeatureCollection features(geojsonreader.readFeatures(geojson));
-    ensure_equals(features.getFeatures().size(), static_cast<size_t>(6));
+    ensure_equals(features.getFeatures().size(), static_cast<size_t>(9));
     ensure_equals(features.getFeatures()[0].getId(), "123");
     ensure_equals(features.getFeatures()[1].getId(), "123");
-    ensure_equals(features.getFeatures()[2].getId(), "");
-    ensure_equals(features.getFeatures()[3].getId(), "");
-    ensure_equals(features.getFeatures()[4].getId(), "");
+    ensure_equals(features.getFeatures()[2].getId(), "123.0");
+    ensure_equals(features.getFeatures()[3].getId(), "123.0");
+    ensure_equals(features.getFeatures()[4].getId(), "123.9");
     ensure_equals(features.getFeatures()[5].getId(), "");
+    ensure_equals(features.getFeatures()[6].getId(), "");
+    ensure_equals(features.getFeatures()[7].getId(), "");
+    ensure_equals(features.getFeatures()[8].getId(), "");
 }
 
 }
