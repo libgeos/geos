@@ -151,7 +151,7 @@ CoordinateSequence::initialize()
 void
 CoordinateSequence::add(const CoordinateSequence& cs, std::size_t from, std::size_t to)
 {
-    if (cs.stride() == stride() && cs.hasM() == cs.hasM()) {
+    if (cs.stride() == stride() && cs.hasM() == hasM()) {
         m_vect.insert(m_vect.end(),
                       std::next(cs.m_vect.cbegin(), static_cast<std::ptrdiff_t>(from * stride())),
                       std::next(cs.m_vect.cbegin(), static_cast<std::ptrdiff_t>((to + 1u)*stride())));

@@ -1344,7 +1344,7 @@ void object::test<49>
     ensure_same(c1.z, 2);
 }
 
-// Test move contructor
+// Test move constructor
 template<>
 template<>
 void object::test<50>
@@ -1508,6 +1508,32 @@ void object::test<55>
     seq1.add(seq2, false);
 
     ensure_equals(seq1, expected);
+}
+
+// add XYM seq to XYZ seq
+template<>
+template<>
+void object::test<56>
+()
+{
+    CoordinateSequence seq1 = CoordinateSequence::XYZ(0);
+    CoordinateSequence seq2 = CoordinateSequence::XYM(0);
+
+    seq1.add(Coordinate(1, 2, 3));
+    seq1.add(Coordinate(4, 5, 6));
+
+    seq2.add(CoordinateXYM(7, 8, 9));
+    seq2.add(CoordinateXYM(10, 11, 12));
+
+    seq1.add(seq2);
+
+    ensure(seq1.hasZ());
+    ensure(!seq1.hasM());
+
+    ensure_equals_xyz(seq1.getAt(0), Coordinate{1, 2, 3});
+    ensure_equals_xyz(seq1.getAt(1), Coordinate{4, 5, 6});
+    ensure_equals_xyz(seq1.getAt(2), Coordinate{7, 8, DoubleNotANumber});
+    ensure_equals_xyz(seq1.getAt(3), Coordinate{10, 11, DoubleNotANumber});
 }
 
 } // namespace tut
