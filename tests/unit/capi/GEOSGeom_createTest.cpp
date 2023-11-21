@@ -66,6 +66,10 @@ void object::test<1>
     geom1_ = GEOSGeom_createEmptyPoint_r(handle_);
     ensure(0 != GEOSisEmpty_r(handle_, geom1_));
     ensure_equals(GEOSGeomTypeId_r(handle_, geom1_), GEOS_POINT);
+
+    ensure_equals(GEOSHasZ_r(handle_, geom1_), 0);
+    ensure_equals(GEOSHasM_r(handle_, geom1_), 0);
+
     GEOSGeom_destroy(geom1_);
     geom1_ = nullptr;
 }
@@ -79,6 +83,10 @@ void object::test<2>
     geom1_ = GEOSGeom_createEmptyLineString_r(handle_);
     ensure(0 != GEOSisEmpty_r(handle_, geom1_));
     ensure_equals(GEOSGeomTypeId_r(handle_, geom1_), GEOS_LINESTRING);
+
+    ensure_equals(GEOSHasZ_r(handle_, geom1_), 0);
+    ensure_equals(GEOSHasM_r(handle_, geom1_), 0);
+
     GEOSGeom_destroy(geom1_);
     geom1_ = nullptr;
 }
@@ -93,6 +101,10 @@ void object::test<3>
     geom1_ = GEOSGeom_createEmptyPolygon_r(handle_);
     ensure(0 != GEOSisEmpty_r(handle_, geom1_));
     ensure_equals(GEOSGeomTypeId_r(handle_, geom1_), GEOS_POLYGON);
+
+    ensure_equals(GEOSHasZ_r(handle_, geom1_), 0);
+    ensure_equals(GEOSHasM_r(handle_, geom1_), 0);
+
     GEOSGeom_destroy(geom1_);
     geom1_ = nullptr;
 }
@@ -106,6 +118,10 @@ void object::test<4>
     geom1_ = GEOSGeom_createEmptyCollection_r(handle_, GEOS_MULTIPOINT);
     ensure(0 != GEOSisEmpty_r(handle_, geom1_));
     ensure_equals(GEOSGeomTypeId_r(handle_, geom1_), GEOS_MULTIPOINT);
+
+    ensure_equals(GEOSHasZ_r(handle_, geom1_), 0);
+    ensure_equals(GEOSHasM_r(handle_, geom1_), 0);
+
     GEOSGeom_destroy(geom1_);
     geom1_ = nullptr;
 }
@@ -119,6 +135,10 @@ void object::test<5>
     geom1_ = GEOSGeom_createEmptyCollection_r(handle_, GEOS_MULTILINESTRING);
     ensure(0 != GEOSisEmpty_r(handle_, geom1_));
     ensure_equals(GEOSGeomTypeId_r(handle_, geom1_), GEOS_MULTILINESTRING);
+
+    ensure_equals(GEOSHasZ_r(handle_, geom1_), 0);
+    ensure_equals(GEOSHasM_r(handle_, geom1_), 0);
+
     GEOSGeom_destroy(geom1_);
     geom1_ = nullptr;
 }
@@ -132,6 +152,10 @@ void object::test<6>
     geom1_ = GEOSGeom_createEmptyCollection_r(handle_, GEOS_MULTIPOLYGON);
     ensure(0 != GEOSisEmpty_r(handle_, geom1_));
     ensure_equals(GEOSGeomTypeId_r(handle_, geom1_), GEOS_MULTIPOLYGON);
+
+    ensure_equals(GEOSHasZ_r(handle_, geom1_), 0);
+    ensure_equals(GEOSHasM_r(handle_, geom1_), 0);
+
     GEOSGeom_destroy(geom1_);
     geom1_ = nullptr;
 }
@@ -145,6 +169,10 @@ void object::test<7>
     geom1_ = GEOSGeom_createEmptyCollection_r(handle_, GEOS_GEOMETRYCOLLECTION);
     ensure(0 != GEOSisEmpty_r(handle_, geom1_));
     ensure_equals(GEOSGeomTypeId_r(handle_, geom1_), GEOS_GEOMETRYCOLLECTION);
+
+    ensure_equals(GEOSHasZ_r(handle_, geom1_), 0);
+    ensure_equals(GEOSHasM_r(handle_, geom1_), 0);
+
     GEOSGeom_destroy(geom1_);
     geom1_ = nullptr;
 }
