@@ -240,15 +240,15 @@ void object::test<14>
     geos::io::GeoJSONFeatureCollection features {{
         geos::io::GeoJSONFeature { wktreader.read("POINT(-117 33)"), std::map<std::string, geos::io::GeoJSONValue> {
             {"id",   geos::io::GeoJSONValue(1.0)     },
-            {"name", geos::io::GeoJSONValue(std::string{"One"}) },
-        }},
+            {"name", geos::io::GeoJSONValue(std::string{"One"})}},
+             "id123"},
         geos::io::GeoJSONFeature { wktreader.read("POINT(-127 53)"), std::map<std::string, geos::io::GeoJSONValue> {
             {"id",   geos::io::GeoJSONValue(2.0)     },
             {"name", geos::io::GeoJSONValue(std::string{"Two"}) },
         }}
     }};
     std::string result = geojsonwriter.write(features);
-    ensure_equals(result, "{\"type\":\"FeatureCollection\",\"features\":[{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-117.0,33.0]},\"properties\":{\"id\":1.0,\"name\":\"One\"}},{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-127.0,53.0]},\"properties\":{\"id\":2.0,\"name\":\"Two\"}}]}");
+    ensure_equals(result, "{\"type\":\"FeatureCollection\",\"features\":[{\"type\":\"Feature\",\"id\":\"id123\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-117.0,33.0]},\"properties\":{\"id\":1.0,\"name\":\"One\"}},{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-127.0,53.0]},\"properties\":{\"id\":2.0,\"name\":\"Two\"}}]}");
 }
 
 // Write an empty point

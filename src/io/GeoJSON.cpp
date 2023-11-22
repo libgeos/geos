@@ -224,16 +224,26 @@ bool GeoJSONValue::isArray() const
 // GeoJSONFeature
 
 GeoJSONFeature::GeoJSONFeature(std::unique_ptr<geom::Geometry> g,
-                               const std::map<std::string, GeoJSONValue>& p) : geometry(std::move(g)), properties(p) {}
+                               const std::map<std::string, GeoJSONValue>& p) : geometry(std::move(g)), properties(p), id("") {}
 
 GeoJSONFeature::GeoJSONFeature(std::unique_ptr<geom::Geometry> g,
-                               std::map<std::string, GeoJSONValue>&& p) : geometry(std::move(g)), properties(std::move(p)) {}
+                               std::map<std::string, GeoJSONValue>&& p) : geometry(std::move(g)), properties(std::move(p)), id("") {}
+
+GeoJSONFeature::GeoJSONFeature(std::unique_ptr<geom::Geometry> g,
+                               const std::map<std::string, GeoJSONValue>& p,
+                               const std::string& i)
+    : geometry(std::move(g)), properties(p), id(i) {}
+
+GeoJSONFeature::GeoJSONFeature(std::unique_ptr<geom::Geometry> g,
+                               std::map<std::string, GeoJSONValue>&& p,
+                               std::string i)
+    : geometry(std::move(g)), properties(std::move(p)), id(std::move(i)) {}
 
 GeoJSONFeature::GeoJSONFeature(GeoJSONFeature const& other) : geometry(other.geometry->clone()),
-    properties(other.properties) {}
+    properties(other.properties), id(other.id) {}
 
 GeoJSONFeature::GeoJSONFeature(GeoJSONFeature&& other) : geometry(std::move(other.geometry)),
-    properties(std::move(other.properties)) {}
+    properties(std::move(other.properties)), id(std::move(other.id)) {}
 
 GeoJSONFeature& GeoJSONFeature::operator=(const GeoJSONFeature& other)
 {
@@ -261,6 +271,8 @@ const std::map<std::string, GeoJSONValue>& GeoJSONFeature::getProperties() const
 {
     return properties;
 }
+
+const std::string& GeoJSONFeature::getId() const { return id; }
 
 // GeoJSONFeatureCollection
 

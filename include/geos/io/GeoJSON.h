@@ -98,6 +98,13 @@ public:
     GeoJSONFeature(std::unique_ptr<geom::Geometry> g,
                    std::map<std::string, GeoJSONValue>&& p);
 
+    GeoJSONFeature(std::unique_ptr<geom::Geometry> g,
+                   const std::map<std::string, GeoJSONValue>& p,
+                   const std::string& id);
+
+    GeoJSONFeature(std::unique_ptr<geom::Geometry> g,
+                   std::map<std::string, GeoJSONValue>&& p, std::string id);
+
     GeoJSONFeature(GeoJSONFeature const& other);
 
     GeoJSONFeature(GeoJSONFeature&& other);
@@ -110,11 +117,15 @@ public:
 
     const std::map<std::string, GeoJSONValue>& getProperties() const;
 
+    const std::string& getId() const;
+
 private:
 
     std::unique_ptr<geom::Geometry> geometry;
 
     std::map<std::string, GeoJSONValue> properties;
+
+    std::string id;
 
 };
 

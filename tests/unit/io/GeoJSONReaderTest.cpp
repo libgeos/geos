@@ -270,13 +270,14 @@ template<>
 void object::test<19>
 ()
 {
-    std::string geojson { "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-117.0,33.0]}, \"properties\": {\"id\": 1, \"name\": \"one\", \"items\": [1,2,3,4], \"nested\": {\"id\":2, \"name\":\"two\"}}}" };
+    std::string geojson { "{\"type\":\"Feature\",\"id\":\"id123\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[-117.0,33.0]}, \"properties\": {\"id\": 1, \"name\": \"one\", \"items\": [1,2,3,4], \"nested\": {\"id\":2, \"name\":\"two\"}}}" };
     geos::io::GeoJSONFeatureCollection features(geojsonreader.readFeatures(geojson));
     ensure_equals(features.getFeatures().size(), static_cast<size_t>(1));
     ensure_equals(static_cast<size_t>(features.getFeatures()[0].getGeometry()->getCoordinateDimension()), 2u);
     ensure_equals(features.getFeatures()[0].getGeometry()->toText(), "POINT (-117 33)");
     ensure_equals(features.getFeatures()[0].getProperties().at("id").getNumber(), 1.0);
     ensure_equals(features.getFeatures()[0].getProperties().at("name").getString(), "one");
+    ensure_equals(features.getFeatures()[0].getId(), "id123");
     std::vector<geos::io::GeoJSONValue> values = features.getFeatures()[0].getProperties().at("items").getArray();
     ensure_equals(values.size(), static_cast<size_t>(4));
     ensure_equals(values[0].getNumber(), 1.0);
@@ -474,6 +475,34 @@ void object::test<30>
     }
     ensure(error == true);
     ensure(errorMessage.find("ParseException: Error parsing JSON") != std::string::npos);
+}
+
+// Read a GeoJSON FeatureCollection with multiple Features with id
+template<>
+template<>
+void object::test<31>
+()
+{
+    std::string geojson { "{\"type\":\"FeatureCollection\",\"features\":[{\"type\":\"Feature\", \"id\":\"123\",    \"geometry\":{\"type\":\"Point\",\"coordinates\":[0.0,0.0]}, \"properties\":{}},"
+                                                                        "{\"type\":\"Feature\", \"id\": 123,       \"geometry\":{\"type\":\"Point\",\"coordinates\":[0.0,0.0]}, \"properties\":{}},"
+                                                                        "{\"type\":\"Feature\", \"id\": 123.0,     \"geometry\":{\"type\":\"Point\",\"coordinates\":[0.0,0.0]}, \"properties\":{}},"
+                                                                        "{\"type\":\"Feature\", \"id\": 123.000,   \"geometry\":{\"type\":\"Point\",\"coordinates\":[0.0,0.0]}, \"properties\":{}},"
+                                                                        "{\"type\":\"Feature\", \"id\": 123.9,     \"geometry\":{\"type\":\"Point\",\"coordinates\":[0.0,0.0]}, \"properties\":{}},"
+                                                                        "{\"type\":\"Feature\", \"id\": null,      \"geometry\":{\"type\":\"Point\",\"coordinates\":[0.0,0.0]}, \"properties\":{}},"
+                                                                        "{\"type\":\"Feature\", \"id\": {},        \"geometry\":{\"type\":\"Point\",\"coordinates\":[0.0,0.0]}, \"properties\":{}},"
+                                                                        "{\"type\":\"Feature\", \"id\": [\"123\"], \"geometry\":{\"type\":\"Point\",\"coordinates\":[0.0,0.0]}, \"properties\":{}},"
+                                                                        "{\"type\":\"Feature\",                    \"geometry\":{\"type\":\"Point\",\"coordinates\":[0.0,0.0]}, \"properties\":{}}]}" };
+    geos::io::GeoJSONFeatureCollection features(geojsonreader.readFeatures(geojson));
+    ensure_equals(features.getFeatures().size(), static_cast<size_t>(9));
+    ensure_equals(features.getFeatures()[0].getId(), "123");
+    ensure_equals(features.getFeatures()[1].getId(), "123");
+    ensure_equals(features.getFeatures()[2].getId(), "123.0");
+    ensure_equals(features.getFeatures()[3].getId(), "123.0");
+    ensure_equals(features.getFeatures()[4].getId(), "123.9");
+    ensure_equals(features.getFeatures()[5].getId(), "");
+    ensure_equals(features.getFeatures()[6].getId(), "");
+    ensure_equals(features.getFeatures()[7].getId(), "");
+    ensure_equals(features.getFeatures()[8].getId(), "");
 }
 
 }
