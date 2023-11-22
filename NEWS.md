@@ -3,6 +3,7 @@ xxxx-xx-xx
 
 - Fixes/Improvements:
   - Fix build on Illumus (GH-971)
+  - Fix DiscreteHausdorffDistance for LinearRing (GH-1000, Martin Davis)
 
 ## Changes in 3.11.3
 2023-11-11
