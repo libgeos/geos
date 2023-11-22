@@ -36,18 +36,10 @@
 #endif
 
 namespace geos {
-namespace algorithm {
-//class RayCrossingCounter;
-}
 namespace geom {
 class Geometry;
 class Coordinate;
 //class CoordinateSequence;
-}
-namespace index {
-namespace intervalrtree {
-//class SortedPackedIntervalRTree;
-}
 }
 }
 

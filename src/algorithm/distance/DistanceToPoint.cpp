@@ -45,7 +45,7 @@ DistanceToPoint::computeDistance(const geom::Geometry& geom,
         return;
     }
 
-    if(geom.getGeometryTypeId() == GEOS_LINESTRING) {
+    if(geom.getGeometryTypeId() == GEOS_LINESTRING || geom.getGeometryTypeId() == GEOS_LINEARRING) {
         const LineString* ls = static_cast<const LineString*>(&geom);
         computeDistance(*ls, pt, ptDist);
     }

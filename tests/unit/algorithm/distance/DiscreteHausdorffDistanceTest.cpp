@@ -216,5 +216,16 @@ void object::test<7>
                   DiscreteHausdorffDistance::distance(*g2, *g3));
 }
 
+// see https://github.com/libgeos/geos/issues/987
+template<>
+template<>
+void object::test<8>
+()
+{
+    runTest("LINEARRING (0 0, 0 10, 10 10, 10 0, 0 0)",
+            "LINEARRING (1 1, 1 9, 8 8, 9 1, 1 1)", 
+            2.8284271247461903);
+}
+
 } // namespace tut
 
