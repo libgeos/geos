@@ -5,6 +5,7 @@ xxxx-xx-xx
   - Fix build on Illumus (GH-971)
   - Buffer mitre join error (GH-995, Paul Ramsey)
   - Return 2D empty linestring on GEOSGeom_createLineString(NULL) (GH-998, Paul Ramsey)
+  - Fix DiscreteHausdorffDistance for LinearRing (GH-1000, Martin Davis)
 
 ## Changes in 3.12.1
 2023-11-11
