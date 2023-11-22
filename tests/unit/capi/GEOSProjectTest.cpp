@@ -95,4 +95,25 @@ void object::test<4>
     ensure_equals(dist_norm, 0.0);
 }
 
+// Test invalid value warning
+// https://github.com/shapely/shapely/issues/1796
+template<>
+template<>
+void object::test<5>
+()
+{
+    geom1_ = GEOSGeomFromWKT("LINESTRING (0 0, 1 1, 1 1, 2 2)");
+    geom2_ = GEOSGeomFromWKT("POINT (0 1)");
+
+    std::feclearexcept(FE_ALL_EXCEPT);
+    double dist = GEOSProject(geom1_, geom2_);
+    ensure("FE_INVALID raised", !std::fetestexcept(FE_INVALID));
+    ensure_equals("GEOSProject", dist, 0.7071, 0.0001);
+
+    std::feclearexcept(FE_ALL_EXCEPT);
+    double dist_norm = GEOSProjectNormalized(geom1_, geom2_);
+    ensure("FE_INVALID raised", !std::fetestexcept(FE_INVALID));
+    ensure_equals("GEOSProjectNormalized", dist_norm, 0.25);
+}
+
 } // namespace tut
