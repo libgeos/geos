@@ -6,6 +6,7 @@ xxxx-xx-xx
   - Buffer mitre join error (GH-995, Paul Ramsey)
   - Return 2D empty linestring on GEOSGeom_createLineString(NULL) (GH-998, Paul Ramsey)
   - Fix DiscreteHausdorffDistance for LinearRing (GH-1000, Martin Davis)
+  - PointOnSurface crashes with a collection containing a empty linestring (GH-1002, Paul Ramsey)
 
 ## Changes in 3.12.1
 2023-11-11
