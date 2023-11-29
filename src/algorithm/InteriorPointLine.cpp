@@ -65,6 +65,7 @@ InteriorPointLine::addInterior(const Geometry* geom)
 {
     const LineString* ls = dynamic_cast<const LineString*>(geom);
     if (ls) {
+        if (ls->isEmpty()) return;
         addInterior(ls->getCoordinatesRO());
         return;
     }
