@@ -206,7 +206,6 @@ public:
     /** Determine the two closest items in the tree using distance metric `distance`. */
     template<typename ItemDistance>
     std::pair<ItemType, ItemType> nearestNeighbour() {
-        ItemDistance id;
         return nearestNeighbour(*this);
     }
 
