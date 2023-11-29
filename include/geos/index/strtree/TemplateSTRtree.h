@@ -203,7 +203,7 @@ public:
         return nearestNeighbour(*this, distance);
     }
 
-    /** Determine the two closest items in the tree using distance metric `distance`. */
+    /** Determine the two closest items in the tree using distance metric `ItemDistance`. */
     template<typename ItemDistance>
     std::pair<ItemType, ItemType> nearestNeighbour() {
         return nearestNeighbour(*this);
@@ -221,7 +221,7 @@ public:
         return td.nearestNeighbour(*root, *other.root);
     }
 
-    /** Determine the two closest items this tree and `other` tree using distance metric `distance`. */
+    /** Determine the two closest items this tree and `other` tree using distance metric `ItemDistance`. */
     template<typename ItemDistance>
     std::pair<ItemType, ItemType> nearestNeighbour(TemplateSTRtreeImpl<ItemType, BoundsTraits>& other) {
         ItemDistance id;
