@@ -4,6 +4,7 @@ xxxx-xx-xx
 - Fixes/Improvements:
   - Fix build on Illumus (GH-971)
   - Fix DiscreteHausdorffDistance for LinearRing (GH-1000, Martin Davis)
+  - PointOnSurface crashes with a collection containing a empty linestring (GH-1002, Paul Ramsey)
 
 ## Changes in 3.11.3
 2023-11-11
