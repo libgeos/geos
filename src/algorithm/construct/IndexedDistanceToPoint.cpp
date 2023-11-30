@@ -36,7 +36,7 @@ IndexedDistanceToPoint::IndexedDistanceToPoint(const Geometry& geom)
 void IndexedDistanceToPoint::init()
 {
     if (facetDistance != nullptr)
-      return;
+        return;
     ptLocator.reset(new IndexedPointInPolygonsLocator(targetGeometry));
     facetDistance.reset(new IndexedFacetDistance(&targetGeometry));
 }
@@ -62,6 +62,7 @@ bool IndexedDistanceToPoint::isInArea(const Point& pt)
 std::unique_ptr<geom::CoordinateSequence> 
 IndexedDistanceToPoint::nearestPoints(const Point& pt)
 {
+    init();
     return facetDistance->nearestPoints(&pt);
 }
 
