@@ -146,6 +146,8 @@ IsSimpleOp::isSimpleMultiPoint(const MultiPoint& mp)
 
     for (std::size_t i = 0; i < mp.getNumGeometries(); i++) {
         const Point* pt = mp.getGeometryN(i);
+        if (pt->isEmpty())
+            continue;
         const Coordinate* p = pt->getCoordinate();
         if (points.find(*p) != points.end()) {
             nonSimplePts.push_back(*p);
