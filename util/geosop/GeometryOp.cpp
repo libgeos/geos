@@ -372,9 +372,18 @@ std::vector<GeometryOpCreator> opRegistry {
 }},
 {"largestEmptyCircle", [](std::string name) { return GeometryOp::create(name,
     catConst,
-    "compute radius line of largest empty circle of geometry up to a distance tolerance",
+    "compute radius line of largest empty circle between obstacles up to a distance tolerance",
     [](const std::unique_ptr<Geometry>& geom, double d) {
         geos::algorithm::construct::LargestEmptyCircle lec( geom.get(), d );
+        std::unique_ptr<Geometry> res = lec.getRadiusLine();
+        return new Result( std::move(res) );
+    });
+}},
+{"largestEmptyCircleBdy", [](std::string name) { return GeometryOp::create(name,
+    catConst,
+    "compute radius line of largest empty circle between obstacles with center in a boundary, up to a distance tolerance",
+    [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geom2, double d) {
+        geos::algorithm::construct::LargestEmptyCircle lec( geom.get(), geom2.get(), d );
         std::unique_ptr<Geometry> res = lec.getRadiusLine();
         return new Result( std::move(res) );
     });
