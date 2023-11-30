@@ -326,4 +326,17 @@ void object::test<15>
         0.01, 4, 6, 3 );
 }
 
+// https://trac.osgeo.org/postgis/ticket/5626
+template<>
+template<>
+void object::test<21>()
+{
+    checkCircle(
+        "POINT(-11.1111111 40)", // input
+        "POLYGON((-71.0821 42.3036,-71.0821 42.3936,-71.0901 42.3036,-71.0821 42.3036))", // boundary
+        1, // test tolerance
+        -71.15, 42.34, 60.19588 ); // expected x, y, radius
+}
+
+
 } // namespace tut
