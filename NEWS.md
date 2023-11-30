@@ -22,6 +22,7 @@
   - Fix TopologyPreservingSimplifier endpoint handling to avoid self-intersections (GH-986, Martin Davis)
   - Fix spatial predicates for MultiPoint with EMPTY (GH-989, Martin Davis)
   - Fix DiscreteHausdorffDistance for LinearRing (GH-1000, Martin Davis)
+  - Fix IsSimpleOp for MultiPoint with empty element (GH-1005, Martin Davis)
 
 ## Changes in 3.12.0
 2023-06-27
