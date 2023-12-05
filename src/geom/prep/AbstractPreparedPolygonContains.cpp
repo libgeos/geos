@@ -201,13 +201,12 @@ bool AbstractPreparedPolygonContains::evalPointTestGeom(const Geometry *geom, Lo
         return true;
     }
 
-    if (geom->getNumGeometries() > 1) {
-        // for MultiPoint, try to find at least one point
-        // in interior
-        return isAnyTestComponentInTargetInterior(geom);
+    // a single point must not be in interior
+    if (geom->getNumPoints() <= 1) {
+        return false;
     }
-
-    return false;
+    // for multiple points have to check all
+    return isAnyTestComponentInTargetInterior(geom);
 }
 
 //
