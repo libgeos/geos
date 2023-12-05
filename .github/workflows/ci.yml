@@ -9,10 +9,10 @@ on:
   push:
     paths-ignore:
       - 'web/**'
-      - '**/.md'
+      - '**.md'
   pull_request:
     paths-ignore:
-      - '**/.md'
+      - '**.md'
 
 env:
   CCACHE_BASEDIR: ${{ github.workspace }}
