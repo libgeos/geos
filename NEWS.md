@@ -23,6 +23,7 @@
   - Fix spatial predicates for MultiPoint with EMPTY (GH-989, Martin Davis)
   - Fix DiscreteHausdorffDistance for LinearRing (GH-1000, Martin Davis)
   - Fix IsSimpleOp for MultiPoint with empty element (GH-1005, Martin Davis)
+  - Fix PreparedPolygonContains for GC with MultiPoint (GH-1008, Martin Davis)
 
 ## Changes in 3.12.0
 2023-06-27
