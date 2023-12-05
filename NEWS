@@ -5,7 +5,8 @@
   - Fix build on Illumus (GH-971)
   - PointOnSurface crashes with a collection containing a empty linestring (GH-1002, Paul Ramsey)
   - Fix IsSimpleOp for MultiPoint with empty element (GH-1005, Martin Davis)
-  
+  - Fix PreparedPolygonContains for GC with MultiPoint (GH-1008, Martin Davis)
+
 ## Changes in 3.10.6
 2023-11-11
 
