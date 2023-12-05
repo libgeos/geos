@@ -84,5 +84,19 @@ void object::test<2>
     ensure( pg1->intersects(g2.get()) );
 }
 
+// See https://github.com/libgeos/geos/issues/1007
+template<>
+template<>
+void object::test<3>
+()
+{
+    g1 = reader.read( "MULTIPOLYGON(((-60 -50,-70 -50,-60 -40,-60 -50)))" );
+    g2 = reader.read( "GEOMETRYCOLLECTION(MULTIPOINT((-60 -50),(-63 -49)))" );
+
+    pg1 = prep::PreparedGeometryFactory::prepare(g1.get());
+
+    ensure(  g1->contains(g2.get()) );
+    ensure( pg1->contains(g2.get()) );
+}
 
 } // namespace tut

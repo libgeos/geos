@@ -186,7 +186,6 @@ bool AbstractPreparedPolygonContains::evalPointTestGeom(const Geometry *geom, Lo
     if (outermostLoc == Location::EXTERIOR) {
         return false;
     }
-
     // For the Covers predicate, we can return true
     // since no Points are on the exterior of the target
     // geometry.
@@ -195,19 +194,18 @@ bool AbstractPreparedPolygonContains::evalPointTestGeom(const Geometry *geom, Lo
     }
 
     // For the Contains predicate, we need to test if any
-    // of those points lie in the interior of the target
+    // of the test points lie in the interior of the target
     // geometry.
     if (outermostLoc == Location::INTERIOR) {
         return true;
     }
 
-    if (geom->getNumGeometries() > 1) {
-        // for MultiPoint, try to find at least one point
-        // in interior
-        return isAnyTestComponentInTargetInterior(geom);
+    // a single point must not be in interior
+    if (geom->getNumPoints() <= 1) {
+        return false;
     }
-
-    return false;
+    // for multiple points have to check all
+    return isAnyTestComponentInTargetInterior(geom);
 }
 
 //
