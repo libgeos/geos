@@ -9,6 +9,7 @@ on:
   push:
     paths-ignore:
       - 'web/**'
+      - '**/.md'
   pull_request:
     paths-ignore:
       - '**/.md'
