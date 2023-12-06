@@ -77,35 +77,34 @@ public:
      * @param begin iterator to the first element to be simplified.
      * @param end an iterator to one-past-last element to be simplified.
      */
-    template <class iterator_type>
-    void
-    simplify(
-        iterator_type begin,
-        iterator_type end)
-    {
-        // add lines to the index
-        for(iterator_type it = begin; it != end; ++it) {
-            assert(*it);
-            inputIndex->add(*(*it));
-        }
+    // template <class iterator_type>
+    // void
+    // simplify(
+    //     iterator_type begin,
+    //     iterator_type end)
+    // {
+    //     // add lines to the index
+    //     for(iterator_type it = begin; it != end; ++it) {
+    //         assert(*it);
+    //         inputIndex->add(*(*it));
+    //     }
 
-        // Simplify lines
-        for(iterator_type it = begin; it != end; ++it) {
-            assert(*it);
-            simplify(*(*it));
-        }
-    }
+    //     // Simplify lines
+    //     for(iterator_type it = begin; it != end; ++it) {
+    //         assert(*it);
+    //         simplify(*(*it));
+    //     }
+    // }
 
+    void simplify(std::vector<TaggedLineString*>& tlsVector);
 
 private:
-
-    void simplify(TaggedLineString& line);
 
     std::unique_ptr<LineSegmentIndex> inputIndex;
 
     std::unique_ptr<LineSegmentIndex> outputIndex;
 
-    std::unique_ptr<TaggedLineStringSimplifier> taggedlineSimplifier;
+    double distanceTolerance;
 };
 
 } // namespace geos::simplify

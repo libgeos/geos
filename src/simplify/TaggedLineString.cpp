@@ -44,12 +44,11 @@ namespace simplify { // geos::simplify
 
 /*public*/
 TaggedLineString::TaggedLineString(const geom::LineString* nParentLine,
-                                   std::size_t nMinimumSize,
-                                   bool bPreserveEndpoint)
-    :
-    parentLine(nParentLine),
-    minimumSize(nMinimumSize),
-    preserveEndpoint(bPreserveEndpoint)
+    std::size_t nMinimumSize,
+    bool bIsRing)
+    : parentLine(nParentLine)
+    , minimumSize(nMinimumSize)
+    , m_isRing(bIsRing)
 {
     init();
 }
@@ -115,9 +114,9 @@ TaggedLineString::getMinimumSize() const
 
 /*public*/
 bool
-TaggedLineString::getPreserveEndpoint() const
+TaggedLineString::isRing() const
 {
-    return preserveEndpoint;
+    return m_isRing;
 }
 
 /*public*/
@@ -181,6 +180,30 @@ TaggedLineString::extractCoordinates(
 
     return pts;
 }
+
+
+const Coordinate&
+TaggedLineString::getCoordinate(std::size_t i) const
+{
+
+    return parentLine->getCoordinateN(i);
+}
+
+std::size_t
+TaggedLineString::size() const
+{
+    return parentLine->getNumPoints();
+}
+
+const Coordinate&
+TaggedLineString::getComponentPoint() const
+{
+    return getParentCoordinates()->getAt(1);
+}
+
+
+
+
 
 /*public*/
 std::size_t

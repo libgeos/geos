@@ -170,18 +170,17 @@ void
 LineStringMapBuilderFilter::filter_ro(const Geometry* geom)
 {
     auto typ = geom->getGeometryTypeId();
-    bool preserveEndpoint = true;
+    bool isRing = false;
 
     if (typ == GEOS_LINEARRING) {
-        preserveEndpoint = false;
+        isRing = true;
     } else if (typ != GEOS_LINESTRING) {
         return;
     }
 
-
     auto ls = static_cast<const LineString*>(geom);
     std::size_t minSize = ls->isClosed() ? 4 : 2;
-    TaggedLineString* taggedLine = new TaggedLineString(ls, minSize, preserveEndpoint);
+    TaggedLineString* taggedLine = new TaggedLineString(ls, minSize, isRing);
 
     // Duplicated Geometry pointers shouldn't happen
     if(! linestringMap.insert(std::make_pair(geom, taggedLine)).second) {
@@ -253,7 +252,7 @@ TopologyPreservingSimplifier::getResultGeometry()
                   << linestringMap.size() << " elements\n";
 #endif
 
-        lineSimplifier->simplify(tlsVector.begin(), tlsVector.end());
+        lineSimplifier->simplify(tlsVector);
 
 #if GEOS_DEBUG
         std::cerr << "all TaggedLineString simplified\n";
