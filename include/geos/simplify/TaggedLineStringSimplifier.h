@@ -79,6 +79,7 @@ public:
      * using the distance tolerance specified.
      *
      * @param line the linestring to simplify
+     * @param distanceTolerance simplification tolerance
      */
     void simplify(TaggedLineString* line, double distanceTolerance);
 
