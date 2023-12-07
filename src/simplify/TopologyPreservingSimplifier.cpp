@@ -92,7 +92,9 @@ LineStringTransformer::transformCoordinates(
     std::cerr << __FUNCTION__ << ": parent: " << parent
               << std::endl;
 #endif
-    if((!parent->isEmpty()) && dynamic_cast<const LineString*>(parent)) {
+    if (coords->size() == 0) return nullptr;
+
+    if(dynamic_cast<const LineString*>(parent)) {
         LinesMap::iterator it = linestringMap.find(parent);
         assert(it != linestringMap.end());
 
@@ -172,13 +174,13 @@ LineStringMapBuilderFilter::filter_ro(const Geometry* geom)
     auto typ = geom->getGeometryTypeId();
     bool isRing = false;
 
+    if (geom->isEmpty()) return;
+
     if (typ == GEOS_LINEARRING) {
         isRing = true;
     } else if (typ != GEOS_LINESTRING) {
         return;
     }
-
-    if (geom->isEmpty()) return;
 
     auto ls = static_cast<const LineString*>(geom);
     std::size_t minSize = ls->isClosed() ? 4 : 2;
