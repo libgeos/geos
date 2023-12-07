@@ -1,0 +1,24 @@
+<run>
+
+<case>
+  <desc>A/GC-mP</desc>
+  <a>
+    POLYGON((-60 -50,-70 -50,-60 -40,-60 -50))
+  </a>
+  <b>
+    GEOMETRYCOLLECTION(MULTIPOINT((-60 -50),(-63 -49)))
+  </b>
+  <test><op name="relate" arg3="0F20F1FF2" arg1="A" arg2="B"> true </op></test>
+  <test><op name="contains"   arg1="A" arg2="B"> true </op></test>
+  <test><op name="coveredBy"  arg1="A" arg2="B"> false </op></test>
+  <test><op name="covers"     arg1="A" arg2="B"> true </op></test>
+  <test><op name="crosses"    arg1="A" arg2="B"> false </op></test>
+  <test><op name="disjoint"   arg1="A" arg2="B"> false </op></test>
+  <test><op name="equalsTopo" arg1="A" arg2="B"> false </op></test>
+  <test><op name="intersects" arg1="A" arg2="B"> true </op></test>
+  <test><op name="overlaps"   arg1="A" arg2="B"> false </op></test>
+  <test><op name="touches"    arg1="A" arg2="B"> false </op></test>
+  <test><op name="within"     arg1="A" arg2="B"> false </op></test>
+</case>
+
+</run>
