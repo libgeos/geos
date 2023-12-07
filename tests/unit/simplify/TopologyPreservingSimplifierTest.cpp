@@ -144,7 +144,7 @@ void object::test<8>()
 {
     checkTPS("POLYGON ((0 5, 5 5, 5 0, 0 0, 0 1, 0 5))",
         10,
-        "POLYGON ((0 0, 5 5, 5 0, 0 0))");
+        "POLYGON ((0 0, 0 5, 5 5, 5 0, 0 0))");
 }
 
 // testTinyLineString
@@ -182,11 +182,8 @@ void object::test<12>()
 {
     checkTPS("MULTILINESTRING( (0 0, 50 0, 70 0, 80 0, 100 0), (0 0, 50 1, 60 1, 100 0) )",
     10,
-    "MULTILINESTRING ((0 0, 100 0), (0 0, 100 0))");
+    "MULTILINESTRING ((0 0, 50 1, 100 0), (0 0, 100 0))");
 
-    //TODO: investigate why TPS does not prevent lines from collapsing 
-    // JTS has correct behaviour - result should be:
-    //std::string wkt_exp("MULTILINESTRING ((0 0, 100 0), (0 0, 50 1, 100 0))");
 }
 
 // testMultiLineStringWithEmpty
