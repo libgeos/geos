@@ -84,7 +84,7 @@ TaggedLineStringSimplifier::simplify(TaggedLineString* nLine, double distanceTol
     }
     simplifySection(0, linePts->size() - 1, 0, distanceTolerance);
 
-    if(!line->isRing() && linePts->isRing()) {
+    if(line->isRing() && linePts->isRing()) {
         simplifyRingEndpoint(distanceTolerance);
     }
 }
@@ -183,10 +183,6 @@ TaggedLineStringSimplifier::simplifyRingEndpoint(double distanceTolerance)
         const auto* lastSeg = static_cast<LineSegment*>(line->getResultSegments().back());
 
         LineSegment simpSeg(lastSeg->p0, firstSeg->p1);
-        // if (simpSeg.distance(firstSeg->p0) <= distanceTolerance &&
-                // ! hasBadIntersection(line, line->getSegments().size() - 2, 0, simpSeg)) {
-            //auto newSeg = detail::make_unique<TaggedLineSegment>(candidateSeg.p0, candidateSeg.p1);
-
         const Coordinate& endPt = firstSeg->p0;
         if (simpSeg.distance(endPt) <= distanceTolerance &&
             isTopologyValid(line, firstSeg, lastSeg, simpSeg))
@@ -393,8 +389,8 @@ TaggedLineStringSimplifier::findFurthestPoint(
     }
     maxDistance = maxDist;
     return maxIndex;
-
 }
+
 
 } // namespace geos::simplify
 } // namespace geos

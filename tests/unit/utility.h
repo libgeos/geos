@@ -244,6 +244,7 @@ ensure_equals_geometry(T const* lhs_in, T const* rhs_in, double tolerance = 0.0)
     ensure("number of points do not match", areaNumPointsEqual);
 
     ensure("coordinates do not match", areCoordsEqual);
+
     // Dispatch to run more specific testes
     // if(isInstanceOf<Polygon>(lhs)
     //         && isInstanceOf<Polygon>(rhs)) {
