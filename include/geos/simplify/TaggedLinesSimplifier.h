@@ -68,34 +68,6 @@ public:
      */
     void setDistanceTolerance(double tolerance);
 
-    /** \brief
-     * Simplify a set of {@link TaggedLineString}s
-     *
-     * @tparam iterator_type an iterator, must support assignment, increment,
-     *                       inequality and dereference operators. Dereference
-     *                       operator must return a `TaggedLineString*`.
-     * @param begin iterator to the first element to be simplified.
-     * @param end an iterator to one-past-last element to be simplified.
-     */
-    // template <class iterator_type>
-    // void
-    // simplify(
-    //     iterator_type begin,
-    //     iterator_type end)
-    // {
-    //     // add lines to the index
-    //     for(iterator_type it = begin; it != end; ++it) {
-    //         assert(*it);
-    //         inputIndex->add(*(*it));
-    //     }
-
-    //     // Simplify lines
-    //     for(iterator_type it = begin; it != end; ++it) {
-    //         assert(*it);
-    //         simplify(*(*it));
-    //     }
-    // }
-
     void simplify(std::vector<TaggedLineString*>& tlsVector);
 
 private:

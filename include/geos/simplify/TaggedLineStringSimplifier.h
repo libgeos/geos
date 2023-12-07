@@ -74,16 +74,6 @@ public:
                                LineSegmentIndex* outputIndex,
                                const ComponentJumpChecker* jumpChecker);
 
-    /** \brief
-     * Sets the distance tolerance for the simplification.
-     *
-     * All vertices in the simplified geometry will be within this
-     * distance of the original geometry.
-     *
-     * @param d the approximation tolerance to use
-     */
-    void setDistanceTolerance(double d);
-
     /**
      * Simplifies the given {@link TaggedLineString}
      * using the distance tolerance specified.
