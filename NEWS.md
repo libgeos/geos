@@ -9,6 +9,7 @@ xxxx-xx-xx
   - PointOnSurface crashes with a collection containing a empty linestring (GH-1002, Paul Ramsey)
   - Fix IsSimpleOp for MultiPoint with empty element (GH-1005, Martin Davis)
   - Fix PreparedPolygonContains for GC with MultiPoint (GH-1008, Martin Davis)
+  - Fix TopologyPreservingSimplifier to prevent jumping components (GH-1012, Martin Davis)
 
 ## Changes in 3.12.1
 2023-11-11

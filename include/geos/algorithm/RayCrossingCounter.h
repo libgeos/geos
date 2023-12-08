@@ -66,7 +66,7 @@ class GEOS_DLL RayCrossingCounter {
 private:
     const geom::CoordinateXY& point;
 
-    int crossingCount;
+    std::size_t crossingCount;
 
     // true if the test point lies on an input segment
     bool isPointOnSegment;
@@ -144,6 +144,8 @@ public:
      * @return `true` if the point lies in or on the supplied polygon
      */
     bool isPointInPolygon() const;
+
+    std::size_t getCount() const { return crossingCount; };
 
 };
 
