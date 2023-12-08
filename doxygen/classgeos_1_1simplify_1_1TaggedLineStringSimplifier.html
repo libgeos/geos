@@ -58,55 +58,17 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a07da7da48f9b0a37f63ae9f410741a45"><td class="memItemLeft" align="right" valign="top"><a id="a07da7da48f9b0a37f63ae9f410741a45"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>TaggedLineStringSimplifier</b> (LineSegmentIndex *inputIndex, LineSegmentIndex *outputIndex)</td></tr>
-<tr class="separator:a07da7da48f9b0a37f63ae9f410741a45"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab032e26b22038a618c076a626cc6bdb9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1simplify_1_1TaggedLineStringSimplifier.html#ab032e26b22038a618c076a626cc6bdb9">setDistanceTolerance</a> (double d)</td></tr>
-<tr class="memdesc:ab032e26b22038a618c076a626cc6bdb9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the distance tolerance for the simplification.  <a href="classgeos_1_1simplify_1_1TaggedLineStringSimplifier.html#ab032e26b22038a618c076a626cc6bdb9">More...</a><br /></td></tr>
-<tr class="separator:ab032e26b22038a618c076a626cc6bdb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a41cb77a995ad3a6a5edbcd2aeb72267e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1simplify_1_1TaggedLineStringSimplifier.html#a41cb77a995ad3a6a5edbcd2aeb72267e">simplify</a> (<a class="el" href="classgeos_1_1simplify_1_1TaggedLineString.html">TaggedLineString</a> *line)</td></tr>
-<tr class="separator:a41cb77a995ad3a6a5edbcd2aeb72267e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ff4f7ec698aa2d9f20e8ad080362680"><td class="memItemLeft" align="right" valign="top"><a id="a2ff4f7ec698aa2d9f20e8ad080362680"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>TaggedLineStringSimplifier</b> (LineSegmentIndex *inputIndex, LineSegmentIndex *outputIndex, const ComponentJumpChecker *jumpChecker)</td></tr>
+<tr class="separator:a2ff4f7ec698aa2d9f20e8ad080362680"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93634014d23d62a5dacf120af3450545"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1simplify_1_1TaggedLineStringSimplifier.html#a93634014d23d62a5dacf120af3450545">simplify</a> (<a class="el" href="classgeos_1_1simplify_1_1TaggedLineString.html">TaggedLineString</a> *line, double distanceTolerance)</td></tr>
+<tr class="separator:a93634014d23d62a5dacf120af3450545"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Simplifies a <a class="el" href="classgeos_1_1simplify_1_1TaggedLineString.html" title="Contains and owns a list of TaggedLineSegments.">TaggedLineString</a>, preserving topology (in the sense that no new intersections are introduced). Uses the recursive Douglas-Peucker algorithm. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="ab032e26b22038a618c076a626cc6bdb9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab032e26b22038a618c076a626cc6bdb9">&#9670;&nbsp;</a></span>setDistanceTolerance()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void geos::simplify::TaggedLineStringSimplifier::setDistanceTolerance </td>
-          <td>(</td>
-          <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>d</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Sets the distance tolerance for the simplification. </p>
-<p>All vertices in the simplified geometry will be within this distance of the original geometry.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">d</td><td>the approximation tolerance to use </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="a41cb77a995ad3a6a5edbcd2aeb72267e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a41cb77a995ad3a6a5edbcd2aeb72267e">&#9670;&nbsp;</a></span>simplify()</h2>
+<a id="a93634014d23d62a5dacf120af3450545"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a93634014d23d62a5dacf120af3450545">&#9670;&nbsp;</a></span>simplify()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -115,8 +77,18 @@ Public Member Functions</h2></td></tr>
           <td class="memname">void geos::simplify::TaggedLineStringSimplifier::simplify </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classgeos_1_1simplify_1_1TaggedLineString.html">TaggedLineString</a> *&#160;</td>
-          <td class="paramname"><em>line</em></td><td>)</td>
+          <td class="paramname"><em>line</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>distanceTolerance</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -124,6 +96,7 @@ Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">line</td><td>the linestring to simplify </td></tr>
+    <tr><td class="paramname">distanceTolerance</td><td>simplification tolerance </td></tr>
   </table>
   </dd>
 </dl>

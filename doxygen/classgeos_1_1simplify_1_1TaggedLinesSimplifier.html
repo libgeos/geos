@@ -61,10 +61,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad15b9d648ed52c7130eca6750576ded4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1simplify_1_1TaggedLinesSimplifier.html#ad15b9d648ed52c7130eca6750576ded4">setDistanceTolerance</a> (double tolerance)</td></tr>
 <tr class="memdesc:ad15b9d648ed52c7130eca6750576ded4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the distance tolerance for the simplification.  <a href="classgeos_1_1simplify_1_1TaggedLinesSimplifier.html#ad15b9d648ed52c7130eca6750576ded4">More...</a><br /></td></tr>
 <tr class="separator:ad15b9d648ed52c7130eca6750576ded4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:add2b72048f396af3735fa6628f3496ab"><td class="memTemplParams" colspan="2">template&lt;class iterator_type &gt; </td></tr>
-<tr class="memitem:add2b72048f396af3735fa6628f3496ab"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgeos_1_1simplify_1_1TaggedLinesSimplifier.html#add2b72048f396af3735fa6628f3496ab">simplify</a> (iterator_type begin, iterator_type end)</td></tr>
-<tr class="memdesc:add2b72048f396af3735fa6628f3496ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">Simplify a set of <a class="el" href="classgeos_1_1simplify_1_1TaggedLineString.html">TaggedLineString</a>s.  <a href="classgeos_1_1simplify_1_1TaggedLinesSimplifier.html#add2b72048f396af3735fa6628f3496ab">More...</a><br /></td></tr>
-<tr class="separator:add2b72048f396af3735fa6628f3496ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a223b51ad0b4421097b0109866751a6d6"><td class="memItemLeft" align="right" valign="top"><a id="a223b51ad0b4421097b0109866751a6d6"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>simplify</b> (std::vector&lt; <a class="el" href="classgeos_1_1simplify_1_1TaggedLineString.html">TaggedLineString</a> * &gt; &amp;tlsVector)</td></tr>
+<tr class="separator:a223b51ad0b4421097b0109866751a6d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Simplifies a collection of TaggedLineStrings, preserving topology (in the sense that no new intersections are introduced). </p>
@@ -90,59 +89,6 @@ Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">tolerance</td><td>the approximation tolerance to use </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
-<a id="add2b72048f396af3735fa6628f3496ab"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#add2b72048f396af3735fa6628f3496ab">&#9670;&nbsp;</a></span>simplify()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<div class="memtemplate">
-template&lt;class iterator_type &gt; </div>
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void geos::simplify::TaggedLinesSimplifier::simplify </td>
-          <td>(</td>
-          <td class="paramtype">iterator_type&#160;</td>
-          <td class="paramname"><em>begin</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">iterator_type&#160;</td>
-          <td class="paramname"><em>end</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Simplify a set of <a class="el" href="classgeos_1_1simplify_1_1TaggedLineString.html">TaggedLineString</a>s. </p>
-<dl class="tparams"><dt>Template Parameters</dt><dd>
-  <table class="tparams">
-    <tr><td class="paramname">iterator_type</td><td>an iterator, must support assignment, increment, inequality and dereference operators. Dereference operator must return a <code>TaggedLineString*</code>. </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">begin</td><td>iterator to the first element to be simplified. </td></tr>
-    <tr><td class="paramname">end</td><td>an iterator to one-past-last element to be simplified. </td></tr>
   </table>
   </dd>
 </dl>

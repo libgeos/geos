@@ -105,48 +105,26 @@ $(function() {
 <div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
 <div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="classgeos_1_1simplify_1_1TaggedLinesSimplifier.html#ad15b9d648ed52c7130eca6750576ded4">   69</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1simplify_1_1TaggedLinesSimplifier.html#ad15b9d648ed52c7130eca6750576ded4">setDistanceTolerance</a>(<span class="keywordtype">double</span> tolerance);</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <span class="keyword">template</span> &lt;<span class="keyword">class</span> iterator_type&gt;</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keywordtype">void</span></div>
-<div class="line"><a name="l00082"></a><span class="lineno"><a class="line" href="classgeos_1_1simplify_1_1TaggedLinesSimplifier.html#add2b72048f396af3735fa6628f3496ab">   82</a></span>&#160;    <a class="code" href="classgeos_1_1simplify_1_1TaggedLinesSimplifier.html#add2b72048f396af3735fa6628f3496ab">simplify</a>(</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        iterator_type begin,</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        iterator_type end)</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    {</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <span class="comment">// add lines to the index</span></div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        <span class="keywordflow">for</span>(iterator_type it = begin; it != end; ++it) {</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            assert(*it);</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;            inputIndex-&gt;add(*(*it));</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        }</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        <span class="comment">// Simplify lines</span></div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        <span class="keywordflow">for</span>(iterator_type it = begin; it != end; ++it) {</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;            assert(*it);</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;            simplify(*(*it));</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        }</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    }</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keywordtype">void</span> simplify(<a class="code" href="classgeos_1_1simplify_1_1TaggedLineString.html">TaggedLineString</a>&amp; line);</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    std::unique_ptr&lt;LineSegmentIndex&gt; inputIndex;</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    std::unique_ptr&lt;LineSegmentIndex&gt; outputIndex;</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    std::unique_ptr&lt;TaggedLineStringSimplifier&gt; taggedlineSimplifier;</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;};</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;} <span class="comment">// namespace geos::simplify</span></div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;} <span class="comment">// namespace geos</span></div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="preprocessor">#ifdef _MSC_VER</span></div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="preprocessor">#pragma warning(pop)</span></div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
-<div class="ttc" id="aclassgeos_1_1simplify_1_1TaggedLineString_html"><div class="ttname"><a href="classgeos_1_1simplify_1_1TaggedLineString.html">geos::simplify::TaggedLineString</a></div><div class="ttdoc">Contains and owns a list of TaggedLineSegments.</div><div class="ttdef"><b>Definition:</b> TaggedLineString.h:57</div></div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="keywordtype">void</span> simplify(std::vector&lt;TaggedLineString*&gt;&amp; tlsVector);</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    std::unique_ptr&lt;LineSegmentIndex&gt; inputIndex;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    std::unique_ptr&lt;LineSegmentIndex&gt; outputIndex;</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <span class="keywordtype">double</span> distanceTolerance;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;};</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;} <span class="comment">// namespace geos::simplify</span></div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;} <span class="comment">// namespace geos</span></div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;<span class="preprocessor">#ifdef _MSC_VER</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;<span class="preprocessor">#pragma warning(pop)</span></div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
 <div class="ttc" id="aclassgeos_1_1simplify_1_1TaggedLinesSimplifier_html"><div class="ttname"><a href="classgeos_1_1simplify_1_1TaggedLinesSimplifier.html">geos::simplify::TaggedLinesSimplifier</a></div><div class="ttdoc">Simplifies a collection of TaggedLineStrings, preserving topology (in the sense that no new intersect...</div><div class="ttdef"><b>Definition:</b> TaggedLinesSimplifier.h:55</div></div>
 <div class="ttc" id="aclassgeos_1_1simplify_1_1TaggedLinesSimplifier_html_ad15b9d648ed52c7130eca6750576ded4"><div class="ttname"><a href="classgeos_1_1simplify_1_1TaggedLinesSimplifier.html#ad15b9d648ed52c7130eca6750576ded4">geos::simplify::TaggedLinesSimplifier::setDistanceTolerance</a></div><div class="ttdeci">void setDistanceTolerance(double tolerance)</div><div class="ttdoc">Sets the distance tolerance for the simplification.</div></div>
-<div class="ttc" id="aclassgeos_1_1simplify_1_1TaggedLinesSimplifier_html_add2b72048f396af3735fa6628f3496ab"><div class="ttname"><a href="classgeos_1_1simplify_1_1TaggedLinesSimplifier.html#add2b72048f396af3735fa6628f3496ab">geos::simplify::TaggedLinesSimplifier::simplify</a></div><div class="ttdeci">void simplify(iterator_type begin, iterator_type end)</div><div class="ttdoc">Simplify a set of TaggedLineStrings.</div><div class="ttdef"><b>Definition:</b> TaggedLinesSimplifier.h:82</div></div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:25</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
