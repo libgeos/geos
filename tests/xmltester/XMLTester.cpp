@@ -45,6 +45,8 @@
 #include <geos/operation/polygonize/BuildArea.h>
 #include <geos/operation/valid/MakeValid.h>
 #include <geos/precision/MinimumClearance.h>
+#include <geos/simplify/TopologyPreservingSimplifier.h>
+#include <geos/simplify/DouglasPeuckerSimplifier.h>
 #include <geos/util.h>
 #include <geos/util/Interrupt.h>
 #include <geos/io/WKBReader.h>
@@ -2190,6 +2192,41 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
             else
             {
                 success = false;
+            }
+        }
+
+        else if(opName == "simplifydp" || opName == "simplifytp")
+        {
+            geom::Geometry* p_gT = gA;
+            if((opArg1 == "B" || opArg1 == "b") && gB) {
+                p_gT = gB;
+            }
+
+            GeomPtr gRes(parseGeometry(opRes, "expected"));
+            gRes->normalize();
+
+            profile.start();
+
+            GeomPtr gRealRes;
+            double tolerance = std::atof(opArg2.c_str());
+
+            if (opName == "simplifydp") {
+                gRealRes = geos::simplify::DouglasPeuckerSimplifier::simplify(p_gT, tolerance);
+            }
+            else {
+                gRealRes = geos::simplify::TopologyPreservingSimplifier::simplify(p_gT, tolerance);
+            }
+
+            profile.stop();
+            gRealRes->normalize();
+
+            actual_result = printGeom(gRealRes.get());
+            expected_result = printGeom(gRes.get());
+
+            success = gRealRes.get()->equalsExact(gRes.get(), 0.000001) ? 1 : 0;
+
+            if(testValidOutput) {
+                success &= int(testValid(gRealRes.get(), "result"));
             }
         }
 
