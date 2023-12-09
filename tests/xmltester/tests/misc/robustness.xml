@@ -1,8 +1,4 @@
 <run>
-  <!-- first occurrence is used -->
-  <precisionModel type="FLOATING" />
-  <precisionModel type="FLOATING_SINGLE" />
-  <precisionModel scale="1.0" offsetx="0.0" offsety="0.0"/>
 
 <case>
 <desc>http://geos.osgeo.org/pipermail/geos-devel/2005-May/001441.html</desc>

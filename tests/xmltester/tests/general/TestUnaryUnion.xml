@@ -1,6 +1,5 @@
 <run>
   <desc>Tests for Geometry.union() method (unary union)</desc>
-  <precisionModel scale="1.0" offsetx="0.0" offsety="0.0"/>
 
 <case>
   <desc>P - point (showing merging of identical points)</desc>

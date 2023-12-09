@@ -1,5 +1,4 @@
 <run>
-  <precisionModel scale="1.0" offsetx="0.0" offsety="0.0"/>
 <!--
 This test is to verify difference() can be used to split linestrings
 and multilinestring using a "cutter" linesting.

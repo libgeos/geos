@@ -1,6 +1,4 @@
 <run>
-  <precisionModel type="FLOATING" />
-  <precisionModel scale="1.0" offsetx="0.0" offsety="0.0"/>
 
    <case>
       <desc>http://lists.refractions.net/pipermail/jts-devel/2006-March/001447.html (1)</desc>

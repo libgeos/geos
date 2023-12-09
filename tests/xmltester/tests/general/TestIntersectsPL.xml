@@ -1,8 +1,5 @@
 <run>
   <desc>Test P/L intersects cases that require robust determinant. See discussion http://trac.osgeo.org/geos/ticket/591</desc>
-  <!-- first occurrence is used -->
-  <precisionModel type="FLOATING"/> <!-- passes -->
-  <precisionModel scale="1.0" offsetx="0.0" offsety="0.0"/> <!-- passes -->
 
 <case>
   <desc>Point on segment between 3rd and 4th vertex of line</desc>
