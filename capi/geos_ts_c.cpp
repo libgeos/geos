@@ -119,6 +119,9 @@
 
 // Some extra magic to make type declarations in geos_c.h work -
 // for cross-checking of types in header.
+// NOTE: the below defines or struct definition must be kept in exact
+// sync between geos_c.cpp and geos_ts_c.cpp to avoid C++ One Definition Rule
+// violations.
 #define GEOSGeometry geos::geom::Geometry
 #define GEOSPreparedGeometry geos::geom::prep::PreparedGeometry
 #define GEOSCoordSequence geos::geom::CoordinateSequence
