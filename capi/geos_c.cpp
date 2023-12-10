@@ -23,6 +23,7 @@
 #include <geos/io/WKBWriter.h>
 #include <geos/io/GeoJSONReader.h>
 #include <geos/io/GeoJSONWriter.h>
+#include <geos/operation/buffer/BufferParameters.h>
 #include <geos/util/Interrupt.h>
 
 #include <stdexcept>
@@ -32,10 +33,15 @@
 #pragma warning(disable : 4099)
 #endif
 
-// Some extra magic to make type declarations in geos_c.h work - for cross-checking of types in header.
+// Some extra magic to make type declarations in geos_c.h work -
+// for cross-checking of types in header.
+// NOTE: the below defines or struct definition must be kept in exact
+// sync between geos_c.cpp and geos_ts_c.cpp to avoid C++ One Definition Rule
+// violations.
 #define GEOSGeometry geos::geom::Geometry
 #define GEOSPreparedGeometry geos::geom::prep::PreparedGeometry
 #define GEOSCoordSequence geos::geom::CoordinateSequence
+#define GEOSBufferParams geos::operation::buffer::BufferParameters
 #define GEOSSTRtree geos::index::strtree::TemplateSTRtree<void*>
 #define GEOSWKTReader geos::io::WKTReader
 #define GEOSWKTWriter geos::io::WKTWriter
@@ -43,8 +49,12 @@
 #define GEOSWKBWriter geos::io::WKBWriter
 #define GEOSGeoJSONReader geos::io::GeoJSONReader
 #define GEOSGeoJSONWriter geos::io::GeoJSONWriter
-typedef struct GEOSBufParams_t GEOSBufferParams;
-typedef struct GEOSMakeValidParams_t GEOSMakeValidParams;
+
+// Implementation struct for the GEOSMakeValidParams object
+typedef struct {
+    int method;
+    int keepCollapsed;
+} GEOSMakeValidParams;
 
 #include "geos_c.h"
 
