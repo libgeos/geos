@@ -624,7 +624,7 @@ std::vector<GeometryOpCreator> opRegistry {
     catRel, "test if geometry A covers geometry B",
     Result::typeBool,
     [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB) {
-        return new Result( geom->contains( geomB.get() ) );
+        return new Result( geom->covers( geomB.get() ) );
     });
 }},
 { "crosses", [](std::string name) { return GeometryOp::create(name,
