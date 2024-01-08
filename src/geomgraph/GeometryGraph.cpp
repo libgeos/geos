@@ -209,10 +209,9 @@ GeometryGraph::addCollection(const GeometryCollection* gc)
 {
     for(std::size_t i = 0, n = gc->getNumGeometries(); i < n; ++i) {
         const Geometry* g = gc->getGeometryN(i);
-        //if (! g->isEmpty()) {
+        if (! g->isEmpty()) {
             add(g);
-        //}
-        
+        }
     }
 }
 
