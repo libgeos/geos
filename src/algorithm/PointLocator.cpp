@@ -75,11 +75,10 @@ void
 PointLocator::computeLocation(const CoordinateXY& p, const Geometry* geom)
 {
     //-- handle empty elements
-    /*
     if (geom->isEmpty()) {
         return;
     }
-*/
+    
     GeometryTypeId geomTypeId = geom->getGeometryTypeId();
     switch (geomTypeId)
     {
