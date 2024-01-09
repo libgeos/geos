@@ -462,5 +462,15 @@ void object::test<23>
     ensure(std::isnan(coords->getY(0)));
 }
 
+// EMPTY token with some white space
+template<>
+template<>
+void object::test<24>
+()
+{
+    GeomPtr geom(wktreader.read("MULTIPOINT( EMPTY, (10 10), (20 20))"));
+
+    ensure_equals(geom->getNumGeometries(), 3u);
+}
 
 } // namespace tut

@@ -24,6 +24,7 @@
   - Fix DiscreteHausdorffDistance for LinearRing (GH-1000, Martin Davis)
   - Fix IsSimpleOp for MultiPoint with empty element (GH-1005, Martin Davis)
   - Fix PreparedPolygonContains for GC with MultiPoint (GH-1008, Martin Davis)
+  - Fix reading WKT with EMPTY token with white space (GH-1025, Mike Taves)
 
 ## Changes in 3.12.0
 2023-06-27
