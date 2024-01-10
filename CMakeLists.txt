@@ -155,6 +155,20 @@ add_library(geos_cxx_flags INTERFACE)
 target_compile_features(geos_cxx_flags INTERFACE cxx_std_11)
 
 #-----------------------------------------------------------------------------
+# Add flags to prevent 'fused multiply-add' operations on targets (ARM64)
+# that allow it, as it breaks calculations in DD.cpp.
+# TODO: Replace DD calculations with 'long float' where target supports
+# true long float, and remove other cases where FMA causes regression
+# failures.
+#   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98207
+#-----------------------------------------------------------------------------
+target_compile_options(geos_cxx_flags INTERFACE
+	"$<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:-ffp-contract=off>"
+	"$<$<CXX_COMPILER_ID:GNU>:-ffp-contract=off>"
+	"$<$<CXX_COMPILER_ID:MSVC>:/fp:precise>"
+	)
+
+#-----------------------------------------------------------------------------
 # Target geos_cxx_flags: common compilation flags
 #-----------------------------------------------------------------------------
 option(DISABLE_GEOS_INLINE "Disable inlining" OFF)
