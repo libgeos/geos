@@ -164,7 +164,7 @@ target_compile_features(geos_cxx_flags INTERFACE cxx_std_11)
 #-----------------------------------------------------------------------------
 
 target_compile_options(geos_cxx_flags INTERFACE
-	"$<$<CXX_COMPILER_ID:Clang>:-ffp-contract=off>"
+	"$<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:-ffp-contract=off>"
 	"$<$<CXX_COMPILER_ID:GNU>:-ffp-contract=off>"
 	"$<$<CXX_COMPILER_ID:MSVC>:/fp:precise>"
 	)
