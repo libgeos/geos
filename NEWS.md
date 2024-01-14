@@ -6,6 +6,7 @@ xxxx-xx-xx
   - Fix DiscreteHausdorffDistance for LinearRing (GH-1000, Martin Davis)
   - PointOnSurface crashes with a collection containing a empty linestring (GH-1002, Paul Ramsey)
   - Fix IsSimpleOp for MultiPoint with empty element (GH-1005, Martin Davis)
+  - Fix reading WKT with EMPTY token with white space (GH-1025, Mike Taves)
   
 ## Changes in 3.11.3
 2023-11-11
