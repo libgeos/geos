@@ -447,4 +447,15 @@ void object::test<22>
     ensure_dimension("MULTIPOINT ZM ((0 0 4 3), (1 2 4 5))", true, true);
 }
 
+// EMPTY token with some white space
+template<>
+template<>
+void object::test<23>
+()
+{
+    GeomPtr geom(wktreader.read("MULTIPOINT( EMPTY, (10 10), (20 20))"));
+
+    ensure_equals(geom->getNumGeometries(), 3u);
+}
+
 } // namespace tut
