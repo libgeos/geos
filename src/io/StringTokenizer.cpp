@@ -154,10 +154,8 @@ StringTokenizer::peekNextToken()
         return str[pos];
     }
 
-    // It's either a Number or a Word, let's
-    // see when it ends
-
-    pos = str.find_first_of("\n\r\t() ,", static_cast<string::size_type>(iter - str.begin()));
+    // It's either a Number or a Word, let's see when it ends
+    pos = str.find_first_of("\n\r\t() ,", pos + 1);
 
     if(pos == string::npos) {
         if(iter != str.end()) {

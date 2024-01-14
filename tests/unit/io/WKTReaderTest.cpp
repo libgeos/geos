@@ -304,4 +304,15 @@ void object::test<12>
 }
 
 
+// EMPTY token with some white space
+template<>
+template<>
+void object::test<13>
+()
+{
+    GeomPtr geom(wktreader.read("MULTIPOINT( EMPTY, (10 10), (20 20))"));
+
+    ensure_equals(geom->getNumGeometries(), 3u);
+}
+
 } // namespace tut
