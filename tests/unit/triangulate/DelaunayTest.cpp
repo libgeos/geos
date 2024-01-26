@@ -6,7 +6,8 @@
 #include <tut/tut.hpp>
 // geos
 #include <geos/algorithm/ConvexHull.h>
-#include <geos/coverage/CoverageUnion.h>
+// #include <geos/coverage/CoverageUnion.h>
+#include <geos/operation/overlayng/CoverageUnion.h>
 #include <geos/triangulate/quadedge/QuadEdge.h>
 #include <geos/triangulate/quadedge/QuadEdgeSubdivision.h>
 #include <geos/triangulate/IncrementalDelaunayTriangulator.h>
@@ -52,7 +53,8 @@ checkDelaunayHull(const char* sitesWkt)
     builder.setSites(*sites);
     std::unique_ptr<Geometry> tris = builder.getTriangles(geomFact);
 
-    std::unique_ptr<Geometry> hullTris = geos::coverage::CoverageUnion::Union(tris.get());
+    // std::unique_ptr<Geometry> hullTris = geos::coverage::CoverageUnion::Union(tris.get());
+    std::unique_ptr<Geometry> hullTris = geos::operation::overlayng::CoverageUnion::geomunion(tris.get());
     std::unique_ptr<Geometry> hullSites = sites->convexHull();
 
     //std::cout << "hullTris: " << hullTris->toString() << std::endl;
