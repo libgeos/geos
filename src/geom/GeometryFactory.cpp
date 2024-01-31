@@ -20,14 +20,19 @@
 
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/CircularString.h>
+#include <geos/geom/CurvePolygon.h>
+#include <geos/geom/CompoundCurve.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/Polygon.h>
+#include <geos/geom/MultiCurve.h>
 #include <geos/geom/MultiPoint.h>
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/MultiPolygon.h>
+#include <geos/geom/MultiSurface.h>
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/Envelope.h>
@@ -303,6 +308,23 @@ GeometryFactory::createMultiLineString(std::vector<std::unique_ptr<Geometry>> &&
     return std::unique_ptr<MultiLineString>(new MultiLineString(std::move(fromLines), *this));
 }
 
+std::unique_ptr<MultiCurve>
+GeometryFactory::createMultiCurve() const {
+    return createMultiCurve(std::vector<std::unique_ptr<Curve>>());
+}
+
+std::unique_ptr<MultiCurve>
+GeometryFactory::createMultiCurve(std::vector<std::unique_ptr<Curve>> && fromCurves) const {
+    // Can't use make_unique because constructor is protected
+    return std::unique_ptr<MultiCurve>(new MultiCurve(std::move(fromCurves), *this));
+}
+
+std::unique_ptr<MultiCurve>
+GeometryFactory::createMultiCurve(std::vector<std::unique_ptr<Geometry>> && fromCurves) const {
+    // Can't use make_unique because constructor is protected
+    return std::unique_ptr<MultiCurve>(new MultiCurve(std::move(fromCurves), *this));
+}
+
 /*public*/
 std::unique_ptr<GeometryCollection>
 GeometryFactory::createGeometryCollection() const
@@ -363,6 +385,27 @@ GeometryFactory::createMultiPolygon(const std::vector<const Geometry*>& fromPoly
     }
 
     return createMultiPolygon(std::move(newGeoms));
+}
+
+std::unique_ptr<MultiSurface>
+GeometryFactory::createMultiSurface() const
+{
+    // Can't use make_unique because constructor is protected
+    return std::unique_ptr<MultiSurface>(new MultiSurface(std::vector<std::unique_ptr<Surface>>(), *this));
+}
+
+std::unique_ptr<MultiSurface>
+GeometryFactory::createMultiSurface(std::vector<std::unique_ptr<Geometry>> && newSurfaces) const
+{
+    // Can't use make_unique because constructor is protected
+    return std::unique_ptr<MultiSurface>(new MultiSurface(std::move(newSurfaces), *this));
+}
+
+std::unique_ptr<MultiSurface>
+GeometryFactory::createMultiSurface(std::vector<std::unique_ptr<Surface>> && newSurfaces) const
+{
+    // Can't use make_unique because constructor is protected
+    return std::unique_ptr<MultiSurface>(new MultiSurface(std::move(newSurfaces), *this));
 }
 
 /*public*/
@@ -488,6 +531,25 @@ const
     return new Polygon(std::move(newRing), std::move(newHoles), *this);
 }
 
+/* public */
+std::unique_ptr<CurvePolygon>
+GeometryFactory::createCurvePolygon(std::unique_ptr<Curve> && shell)
+const
+{
+    //auto shellCurve = std::unique_ptr<Curve>(detail::down_cast<Curve*>(shell.release()));
+    // Can't use make_unique with protected constructor
+    return std::unique_ptr<CurvePolygon>(new CurvePolygon(std::move(shell), *this));
+}
+
+/* public */
+std::unique_ptr<CurvePolygon>
+GeometryFactory::createCurvePolygon(std::unique_ptr<Curve> && shell, std::vector<std::unique_ptr<Curve>> && holes)
+const
+{
+    // Can't use make_unique with protected constructor
+    return std::unique_ptr<CurvePolygon>(new CurvePolygon(std::move(shell), std::move(holes), *this));
+}
+
 /*public*/
 std::unique_ptr<LineString>
 GeometryFactory::createLineString(std::size_t coordinateDimension) const
@@ -497,11 +559,27 @@ GeometryFactory::createLineString(std::size_t coordinateDimension) const
 }
 
 /*public*/
+std::unique_ptr<CircularString>
+GeometryFactory::createCircularString(bool hasZ, bool hasM) const
+{
+    auto cs = detail::make_unique<CoordinateSequence>(0u, hasZ, hasM);
+    return createCircularString(std::move(cs));
+}
+
+/*public*/
 std::unique_ptr<LineString>
 GeometryFactory::createLineString(const LineString& ls) const
 {
     // Can't use make_unique with protected constructor
     return std::unique_ptr<LineString>(new LineString(ls));
+}
+
+/*public*/
+std::unique_ptr<CircularString>
+GeometryFactory::createCircularString(const CircularString& ls) const
+{
+    // Can't use make_unique with protected constructor
+    return std::unique_ptr<CircularString>(new CircularString(ls));
 }
 
 /*public*/
@@ -516,12 +594,48 @@ const
 }
 
 /*public*/
+std::unique_ptr<CircularString>
+GeometryFactory::createCircularString(CoordinateSequence::Ptr && newCoords)
+const
+{
+    if (!newCoords)
+        return createCircularString();
+    // Can't use make_unique with protected constructor
+    return std::unique_ptr<CircularString>(new CircularString(std::move(newCoords), *this));
+}
+
+/*public*/
+std::unique_ptr<CompoundCurve>
+GeometryFactory::createCompoundCurve()
+const
+{
+    return std::unique_ptr<CompoundCurve>();
+}
+
+/*public*/
+std::unique_ptr<CompoundCurve>
+GeometryFactory::createCompoundCurve(std::vector<std::unique_ptr<SimpleCurve>>&& curves)
+const
+{
+    return std::unique_ptr<CompoundCurve>(new CompoundCurve(std::move(curves), *this));
+}
+
+/*public*/
 std::unique_ptr<LineString>
 GeometryFactory::createLineString(const CoordinateSequence& fromCoords)
 const
 {
     // Can't use make_unique with protected constructor
     return std::unique_ptr<LineString>(new LineString(fromCoords.clone(), *this));
+}
+
+/*public*/
+std::unique_ptr<CircularString>
+GeometryFactory::createCircularString(const CoordinateSequence& fromCoords)
+const
+{
+    // Can't use make_unique with protected constructor
+    return std::unique_ptr<CircularString>(new CircularString(fromCoords.clone(), *this));
 }
 
 /*public*/

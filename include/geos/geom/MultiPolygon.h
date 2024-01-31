@@ -26,7 +26,6 @@
 #include <geos/geom/GeometryCollection.h> // for inheritance
 #include <geos/geom/Polygon.h> // for inheritance
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
-#include <geos/geom/MultiPolygon.h>
 #include <geos/geom/GeometryCollection.h>
 
 
@@ -35,6 +34,7 @@ namespace geos {
 namespace geom { // geos::geom
 class Coordinate;
 class MultiPoint;
+class Polygon;
 }
 }
 

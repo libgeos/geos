@@ -245,6 +245,11 @@ WKTWriter::appendGeometryTaggedText(const Geometry& geometry,
         case GEOS_MULTILINESTRING:    appendMultiLineStringTaggedText(static_cast<const MultiLineString&>(geometry), outputOrdinates, p_level, writer); break;
         case GEOS_MULTIPOLYGON:       appendMultiPolygonTaggedText(static_cast<const MultiPolygon&>(geometry), outputOrdinates, p_level, writer); break;
         case GEOS_GEOMETRYCOLLECTION: appendGeometryCollectionTaggedText(static_cast<const GeometryCollection&>(geometry), outputOrdinates, p_level, writer); break;
+        case GEOS_CIRCULARSTRING:
+        case GEOS_CURVEPOLYGON:
+        case GEOS_MULTICURVE:
+        case GEOS_MULTISURFACE:
+        case GEOS_COMPOUNDCURVE: throw std::runtime_error("Not handled yet");
     }
 }
 

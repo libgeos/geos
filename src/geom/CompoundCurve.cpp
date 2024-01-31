@@ -1,0 +1,315 @@
+/**********************************************************************
+ *
+ * GEOS - Geometry Engine Open Source
+ * http://geos.osgeo.org
+ *
+ * Copyright (C) 2024 ISciences, LLC
+ *
+ * This is free software; you can redistribute and/or modify it under
+ * the terms of the GNU Lesser General Public Licence as published
+ * by the Free Software Foundation.
+ * See the COPYING file for more information.
+ *
+ **********************************************************************/
+
+#include <geos/geom/CompoundCurve.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/operation/BoundaryOp.h>
+#include <geos/util.h>
+
+namespace geos {
+namespace geom {
+
+CompoundCurve::CompoundCurve(std::vector<std::unique_ptr<SimpleCurve>>&& p_curves,
+                             const GeometryFactory& gf)
+    : Curve(gf),
+      curves(std::move(p_curves)) {}
+
+CompoundCurve::CompoundCurve(const CompoundCurve& other)
+    : Curve(other),
+      curves(other.curves.size()),
+      envelope(other.envelope)
+{
+    for (std::size_t i = 0; i < curves.size(); i++) {
+        curves[i].reset(static_cast<SimpleCurve*>(other.curves[i]->clone().release()));
+    }
+}
+
+CompoundCurve&
+CompoundCurve::operator=(const CompoundCurve& other)
+{
+    curves.resize(other.curves.size());
+    envelope = other.envelope;
+
+    for (std::size_t i =0; i < curves.size(); i++) {
+        curves[i].reset(static_cast<SimpleCurve*>(other.curves[i]->clone().release()));
+    }
+
+    return *this;
+}
+
+std::unique_ptr<CoordinateSequence>
+CompoundCurve::getCoordinates() const
+{
+    // FIXME: CoordinateSequence would have curved and linear sections?
+    auto ret = std::make_unique<CoordinateSequence>(0, hasZ(), hasM());
+    for (const auto& curve : curves) {
+        ret->add(*curve->getCoordinatesRO());
+    }
+    return ret;
+}
+
+const CoordinateXY*
+CompoundCurve::getCoordinate() const
+{
+    for (const auto& curve : curves) {
+        if (!curve->isEmpty()) {
+            return curve->getCoordinate();
+        }
+    }
+
+    return nullptr;
+}
+
+uint8_t
+CompoundCurve::getCoordinateDimension() const
+{
+    return static_cast<std::uint8_t>(2 + hasZ() + hasM());
+}
+
+bool
+CompoundCurve::hasZ() const
+{
+    return std::any_of(curves.begin(), curves.end(), [](const auto& curve) {
+        return curve->hasZ();
+    });
+}
+
+bool
+CompoundCurve::hasM() const
+{
+    return std::any_of(curves.begin(), curves.end(), [](const auto& curve) {
+        return curve->hasM();
+    });
+}
+
+bool
+CompoundCurve::isEmpty() const
+{
+    return !std::any_of(curves.begin(), curves.end(), [](const auto& curve) {
+        return !curve->isEmpty();
+    });
+}
+
+bool
+CompoundCurve::isClosed() const
+{
+    if (isEmpty()) {
+        return false;
+    }
+
+    const SimpleCurve& first = *curves.front();
+    const SimpleCurve& last = *curves.back();
+
+    return first.getCoordinateN(0) == last.getCoordinateN(last.getNumPoints() - 1);
+}
+
+std::size_t
+CompoundCurve::getNumPoints() const
+{
+    std::size_t n =0;
+    for (const auto& curve : curves) {
+        n += curve->getNumPoints();
+    }
+    return n;
+}
+
+std::size_t
+CompoundCurve::getNumCurves() const
+{
+    return curves.size();
+}
+
+std::size_t
+CompoundCurve::getNumGeometries() const
+{
+    return curves.size();
+}
+
+const SimpleCurve*
+CompoundCurve::getCurveN(std::size_t i) const
+{
+    return curves[i].get();
+}
+
+const Geometry*
+CompoundCurve::getGeometryN(std::size_t i) const
+{
+    return curves[i].get();
+}
+
+std::unique_ptr<Geometry>
+CompoundCurve::getBoundary() const
+{
+    operation::BoundaryOp bop(*this);
+    return bop.getBoundary();
+}
+
+
+std::string
+CompoundCurve::getGeometryType() const
+{
+    return "CompoundCurve";
+}
+
+GeometryTypeId
+CompoundCurve::getGeometryTypeId() const
+{
+    return GEOS_COMPOUNDCURVE;
+}
+
+bool
+CompoundCurve::equalsExact(const Geometry* other, double tolerance) const
+{
+    if (!isEquivalentClass(other)) {
+        return false;
+    }
+
+    const CompoundCurve* otherCurve = static_cast<const CompoundCurve*>(other);
+    if (curves.size() != otherCurve->curves.size()) {
+        return false;
+    }
+
+    for (std::size_t i = 0; i < otherCurve->curves.size(); i++) {
+        if (!curves[i]->equalsExact(otherCurve->curves[i].get(), tolerance)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool
+CompoundCurve::equalsIdentical(const Geometry* other) const
+{
+    if (!isEquivalentClass(other)) {
+        return false;
+    }
+
+    const CompoundCurve* otherCurve = static_cast<const CompoundCurve*>(other);
+    if (curves.size() != otherCurve->curves.size()) {
+        return false;
+    }
+
+    for (std::size_t i = 0; i < otherCurve->curves.size(); i++) {
+        if (!curves[i]->equalsIdentical(otherCurve->curves[i].get())) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+std::unique_ptr<CompoundCurve>
+CompoundCurve::clone() const
+{
+    return std::unique_ptr<CompoundCurve>(cloneImpl());
+}
+
+CompoundCurve*
+CompoundCurve::cloneImpl() const
+{
+    return new CompoundCurve(*this);
+}
+
+std::unique_ptr<CompoundCurve>
+CompoundCurve::reverse() const
+{
+    return std::unique_ptr<CompoundCurve>(reverseImpl());
+}
+
+CompoundCurve*
+CompoundCurve::reverseImpl() const
+{
+    std::vector<std::unique_ptr<SimpleCurve>> reversed(curves.size());
+    std::transform(curves.rbegin(), curves.rend(), reversed.end(), [](const auto& curve) {
+        return std::unique_ptr<SimpleCurve>(static_cast<SimpleCurve*>(curve->reverse().release()));
+    });
+
+    return getFactory()->createCompoundCurve(std::move(reversed)).release();
+}
+
+Envelope
+CompoundCurve::computeEnvelopeInternal()
+{
+    Envelope e;
+    for (const auto& curve : curves) {
+        e.expandToInclude(curve->getEnvelopeInternal());
+    }
+    return e;
+}
+
+int
+CompoundCurve::compareToSameClass(const Geometry* g) const
+{
+    const CompoundCurve* curve = detail::down_cast<const CompoundCurve*>(g);
+    return compare(curves, curve->curves);
+}
+
+void
+CompoundCurve::normalize()
+{
+    throw std::runtime_error("Not implemented.");
+}
+
+void
+CompoundCurve::apply_ro(GeometryFilter*) const
+{
+    throw std::runtime_error("Not implemented.");
+}
+
+void
+CompoundCurve::apply_ro(GeometryComponentFilter*) const
+{
+    throw std::runtime_error("Not implemented.");
+}
+
+void
+CompoundCurve::apply_ro(CoordinateFilter*) const
+{
+    throw std::runtime_error("Not implemented.");
+}
+
+void
+CompoundCurve::apply_ro(CoordinateSequenceFilter&) const
+{
+    throw std::runtime_error("Not implemented.");
+}
+
+void
+CompoundCurve::apply_rw(GeometryFilter*)
+{
+    throw std::runtime_error("Not implemented.");
+}
+
+void
+CompoundCurve::apply_rw(GeometryComponentFilter*)
+{
+    throw std::runtime_error("Not implemented.");
+}
+
+void
+CompoundCurve::apply_rw(const CoordinateFilter*)
+{
+    throw std::runtime_error("Not implemented.");
+}
+
+void
+CompoundCurve::apply_rw(CoordinateSequenceFilter&)
+{
+    throw std::runtime_error("Not implemented.");
+}
+
+
+}
+}
