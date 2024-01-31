@@ -2,6 +2,7 @@
 xxxx-xx-xx
 
 - Fixes/Improvements:
+  - Fix IncrementalDelaunayTriangulator to ensure triangulation boundary is convex (GH-953, Martin Davis)
   - Fix build on Illumus (GH-971)
   - Fix DiscreteHausdorffDistance for LinearRing (GH-1000, Martin Davis)
   - PointOnSurface crashes with a collection containing a empty linestring (GH-1002, Paul Ramsey)

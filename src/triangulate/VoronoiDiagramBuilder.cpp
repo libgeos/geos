@@ -94,6 +94,11 @@ VoronoiDiagramBuilder::create()
 
     subdiv.reset(new quadedge::QuadEdgeSubdivision(diagramEnv, tolerance));
     IncrementalDelaunayTriangulator triangulator(subdiv.get());
+    /**
+     * Avoid creating very narrow triangles along triangulation boundary.
+     * These otherwise can cause malformed Voronoi cells.
+     */
+    triangulator.forceConvex(false);
     triangulator.insertSites(vertices);
 }
 
