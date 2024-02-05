@@ -431,7 +431,7 @@ void object::test<24> ()
             "POLYGON EMPTY",
             "POLYGON EMPTY" })
     );
-  }
+}
 
 // testOneEmpty
 template<>
@@ -446,7 +446,7 @@ void object::test<25> ()
             "POLYGON ((1 9, 9 9, 9 1, 1 1, 1 9))",
             "POLYGON EMPTY" })
     );
-  }
+}
 
 // testEmptyHole()
 template<>
@@ -461,6 +461,26 @@ void object::test<26> ()
             "POLYGON ((1 9, 9 9, 9 1, 1 1, 1 9), EMPTY)",
             "POLYGON EMPTY" })
     );
-  }
+}
+
+// Test non-polygon inputs (GH-1031)
+template<>
+template<>
+void object::test<30> ()
+{
+    auto input = readArray({
+        "MULTILINESTRING ((200 100, 100 100, 200 200), (200 200, 200 100), (200 200, 300 100, 200 100))"
+        });
+    try {
+        std::vector<std::unique_ptr<Geometry>> result =
+        CoverageSimplifier::simplify(input, 10);
+    }
+    catch (geos::util::IllegalArgumentException& iae) {
+        ensure("caught IllegalArgumentException", true);
+        return;
+    }
+    ensure("did not throw IllegalArgumentException", false);
+}
+
 
 } // namespace tut
