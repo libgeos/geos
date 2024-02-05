@@ -11,6 +11,7 @@ xxxx-xx-xx
   - Fix PreparedPolygonContains for GC with MultiPoint (GH-1008, Martin Davis)
   - Fix TopologyPreservingSimplifier to prevent jumping components (GH-1012, Martin Davis)
   - Fix reading WKT with EMPTY token with white space (GH-1025, Mike Taves)
+  - Segfault in CoverageSimplify for non-polygonal inputs (GH-1039, Paul Ramsey)
 
 ## Changes in 3.12.1
 2023-11-11
