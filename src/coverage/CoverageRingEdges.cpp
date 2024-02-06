@@ -252,7 +252,7 @@ CoverageRingEdges::next(std::size_t index, const CoordinateSequence& ring)
 
 /* private */
 Coordinate::UnorderedSet
-CoverageRingEdges::findMultiRingNodes(std::vector<const Geometry*>& coverage)
+CoverageRingEdges::findMultiRingNodes(const std::vector<const Geometry*>& coverage)
 {
     std::map<Coordinate, std::size_t> vertexRingCount;
     VertexRingCounter::count(coverage, vertexRingCount);
