@@ -241,7 +241,7 @@ jobs:
           -DUSE_CCACHE=ON \
           -DBUILD_DOCUMENTATION=YES \
           -DCMAKE_BUILD_TYPE=${{ matrix.ci.build_type }} ..
-        make -j 2
+        make -j $(nproc)
         cmake --build . --target docs
         ccache -s
 
@@ -322,7 +322,7 @@ jobs:
         -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
         -DUSE_CCACHE=ON \
         -G"MSYS Makefiles" ..
-       cmake --build . -j 2
+       cmake --build . -j 4
 
     - name: Save build cache
       uses: actions/cache/save@v3
@@ -370,7 +370,7 @@ jobs:
        cd build
        cmake --version
        cmake -DCMAKE_BUILD_TYPE=${{ matrix.ci.build_type }} -DCMAKE_CXX_STANDARD=${{ matrix.ci.cxxstd }} -DBUILD_SHARED_LIBS=ON -DUSE_CCACHE=ON ..
-       cmake --build . --config ${{ matrix.ci.build_type }} -j 2
+       cmake --build . --config ${{ matrix.ci.build_type }} -j 4
 
     - name: Save build cache
       uses: actions/cache/save@v3
@@ -439,7 +439,7 @@ jobs:
           -DCMAKE_CXX_STANDARD=${CXX_STANDARD} \
           -DUSE_CCACHE=ON \
           -DCMAKE_BUILD_TYPE=${BUILD_TYPE} ..
-        cmake --build . --config ${BUILD_TYPE} -j 3
+        cmake --build . --config ${BUILD_TYPE} -j 4
 
     - name: Save build cache
       uses: actions/cache/save@v3
@@ -496,6 +496,6 @@ jobs:
         cp geos/examples/capi_read.c .
         cmake --version
         cmake -S . -B build
-        cmake --build build -j 2
+        cmake --build build -j $(nproc)
         build/capi_read
         test ! -f build/geos/bin/test_geos_unit || { echo "Error: GEOS tests were built" 1>&2 ; exit 1; }
