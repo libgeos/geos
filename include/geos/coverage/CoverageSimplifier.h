@@ -83,7 +83,7 @@ public:
     *
     * @param coverage a set of polygonal geometries forming a coverage
     */
-    CoverageSimplifier(std::vector<const Geometry*>& coverage);
+    CoverageSimplifier(const std::vector<const Geometry*>& coverage);
 
     /**
     * Simplifies the boundaries of a set of polygonal geometries forming a coverage,
@@ -142,7 +142,7 @@ public:
 private:
 
     // Members
-    std::vector<const Geometry*>& m_input; // TODO? make this const
+    const std::vector<const Geometry*>& m_input;
     const GeometryFactory* m_geomFactory;
 
     // Methods

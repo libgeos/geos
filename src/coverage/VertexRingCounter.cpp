@@ -33,7 +33,7 @@ namespace coverage { // geos.coverage
 /* public static  */
 void
 VertexRingCounter::count(
-    std::vector<const Geometry*>& geoms,
+    const std::vector<const Geometry*>& geoms,
     std::map<Coordinate, std::size_t>& counts)
 {
     VertexRingCounter vertextCounter(counts);

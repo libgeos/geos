@@ -81,7 +81,7 @@ CoverageSimplifier::simplifyInner(
 
 
 /* public */
-CoverageSimplifier::CoverageSimplifier(std::vector<const Geometry*>& coverage)
+CoverageSimplifier::CoverageSimplifier(const std::vector<const Geometry*>& coverage)
     : m_input(coverage)
     , m_geomFactory(coverage.empty() ? nullptr : coverage[0]->getFactory())
     {

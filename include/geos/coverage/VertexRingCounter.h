@@ -56,7 +56,7 @@ public:
     void filter_ro(const CoordinateSequence& seq, std::size_t i) override;
 
     static void count(
-        std::vector<const Geometry*>& geoms,
+        const std::vector<const Geometry*>& geoms,
         std::map<Coordinate, std::size_t>& counts);
 
 private:
