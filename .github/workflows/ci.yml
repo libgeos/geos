@@ -397,15 +397,19 @@ jobs:
         xcode: [11.7, 12.4, 13.2.1]
         cxxstd: [14]
         build_type: ['ASAN']
+        runs_on: ['macos-11']
         include:
           - xcode: 13.2.1
             cxxstd: 17
             build_type: Debug
-          - xcode: 13.2.1
+            runs_on: macos-11
+          # arm64 build
+          - xcode: 14.3
             cxxstd: 20
-            build_type: Debug
+            build_type: Release
+            runs_on: macOS-14
 
-    runs-on: macos-11
+    runs-on: ${{ matrix.runs_on }}
     steps:
 
     - name: 'Setup'
