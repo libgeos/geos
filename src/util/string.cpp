@@ -12,6 +12,7 @@
  *
  **********************************************************************/
 
+#include <algorithm>
 #include <geos/util/string.h>
 
 namespace geos {
@@ -51,6 +52,11 @@ bool startsWith(const std::string & s, char prefix) {
     }
 
     return s[0] == prefix;
+}
+
+void toUpper(std::string& s)
+{
+    std::transform(s.begin(), s.end(), s.begin(), ::toupper);
 }
 
 

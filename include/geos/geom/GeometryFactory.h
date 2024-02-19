@@ -147,6 +147,7 @@ public:
 
     /// Creates an EMPTY Point
     std::unique_ptr<Point> createPoint(std::size_t coordinateDimension = 2) const;
+    std::unique_ptr<Point> createPoint(bool hasZ, bool hasM) const;
 
     /// Creates a Point using the given Coordinate
     std::unique_ptr<Point> createPoint(const Coordinate& coordinate) const;
@@ -164,7 +165,7 @@ public:
     std::unique_ptr<GeometryCollection> createGeometryCollection() const;
 
     /// Construct the EMPTY Geometry
-    std::unique_ptr<Geometry> createEmptyGeometry() const;
+    std::unique_ptr<Geometry> createEmptyGeometry(GeometryTypeId type = GEOS_GEOMETRYCOLLECTION, bool hasZ=false, bool hasM=false) const;
 
     /// Construct a GeometryCollection taking ownership of given arguments
     template<typename T>
@@ -228,6 +229,7 @@ public:
 
     /// Construct an EMPTY LinearRing
     std::unique_ptr<LinearRing> createLinearRing(std::size_t coordinateDimension = 2) const;
+    std::unique_ptr<LinearRing> createLinearRing(bool hasZ, bool hasM) const;
 
     /// Construct a LinearRing taking ownership of given arguments
     std::unique_ptr<LinearRing> createLinearRing(
@@ -269,6 +271,7 @@ public:
 
     /// Construct an EMPTY Polygon
     std::unique_ptr<Polygon> createPolygon(std::size_t coordinateDimension = 2) const;
+    std::unique_ptr<Polygon> createPolygon(bool hasZ, bool hasM) const;
 
     /// Construct a Polygon taking ownership of given arguments
     std::unique_ptr<Polygon> createPolygon(std::unique_ptr<LinearRing> && shell) const;
@@ -284,6 +287,9 @@ public:
                            const std::vector<LinearRing*>& holes) const;
 
 
+    /// Construct an EMPTY CurvePolygon
+    std::unique_ptr<CurvePolygon> createCurvePolygon(bool hasZ, bool hasM) const;
+
     /// Construct a CurvePolygon taking ownership of given arguments
     std::unique_ptr<CurvePolygon> createCurvePolygon(std::unique_ptr<Curve>&& shell) const;
 
@@ -292,6 +298,7 @@ public:
 
     /// Construct an EMPTY LineString
     std::unique_ptr<LineString> createLineString(std::size_t coordinateDimension = 2) const;
+    std::unique_ptr<LineString> createLineString(bool hasZ, bool hasM) const;
 
     /// Copy a LineString
     std::unique_ptr<LineString> createLineString(const LineString& ls) const;
@@ -305,7 +312,7 @@ public:
         const CoordinateSequence& coordinates) const;
 
     /// Construct an EMPTY CircularString
-    std::unique_ptr<CircularString> createCircularString(bool hasZ = false, bool hasM = false) const;
+    std::unique_ptr<CircularString> createCircularString(bool hasZ, bool hasM) const;
 
     /// Copy a CircularString
     std::unique_ptr<CircularString> createCircularString(const CircularString& ls) const;

@@ -265,14 +265,19 @@ WKTReader::getNextWord(StringTokenizer* tokenizer)
 }
 
 std::unique_ptr<Geometry>
-WKTReader::readGeometryTaggedText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const
+WKTReader::readGeometryTaggedText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags, const GeometryTypeId* emptyType) const
 {
     std::string type = getNextWord(tokenizer);
 
     std::unique_ptr<Geometry> geom;
     OrdinateSet origFlags = ordinateFlags;
+
     OrdinateSet newFlags = OrdinateSet::createXY();
-    readOrdinateFlags(type, newFlags);
+    if (type == "EMPTY") {
+        newFlags = origFlags;
+    } else {
+        readOrdinateFlags(type, newFlags);
+    }
 
     if(isTypeName(type, "POINT")) {
         geom = readPointText(tokenizer, newFlags);
@@ -312,6 +317,8 @@ WKTReader::readGeometryTaggedText(StringTokenizer* tokenizer, OrdinateSet& ordin
     }
     else if(isTypeName(type, "GEOMETRYCOLLECTION")) {
         geom = readGeometryCollectionText(tokenizer, newFlags);
+    } else if (type == "EMPTY" && emptyType != nullptr) {
+        return geometryFactory->createEmptyGeometry(*emptyType, newFlags.hasZ(), newFlags.hasM());
     } else {
         throw ParseException("Unknown type", type);
     }
@@ -327,7 +334,7 @@ WKTReader::readGeometryTaggedText(StringTokenizer* tokenizer, OrdinateSet& ordin
 std::unique_ptr<Point>
 WKTReader::readPointText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const
 {
-    auto coords = getCoordinates(tokenizer, ordinateFlags);
+    auto&& coords = getCoordinates(tokenizer, ordinateFlags);
     return geometryFactory->createPoint(std::move(coords));
 }
 
@@ -363,7 +370,8 @@ WKTReader::readCurveText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags)
         return readLineStringText(tokenizer, ordinateFlags);
     }
 
-    auto component = readGeometryTaggedText(tokenizer, ordinateFlags);
+    GeometryTypeId defaultType = GEOS_LINESTRING;
+    auto component = readGeometryTaggedText(tokenizer, ordinateFlags, &defaultType);
     if (dynamic_cast<Curve*>(component.get())) {
         return std::unique_ptr<Curve>(static_cast<Curve*>(component.release()));
     }
@@ -379,8 +387,9 @@ WKTReader::readSurfaceText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlag
         return readPolygonText(tokenizer, ordinateFlags);
     }
 
-    auto component = readGeometryTaggedText(tokenizer, ordinateFlags);
-    if (dynamic_cast<CurvePolygon*>(component.get())) {
+    GeometryTypeId defaultType = GEOS_POLYGON;
+    auto component = readGeometryTaggedText(tokenizer, ordinateFlags, &defaultType);
+    if (dynamic_cast<Surface*>(component.get())) {
         return component;
     }
 
