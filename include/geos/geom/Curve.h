@@ -36,6 +36,17 @@ public:
 
     virtual bool isClosed() const = 0;
 
+    using Geometry::apply_ro;
+    using Geometry::apply_rw;
+
+    void apply_rw(GeometryFilter* filter) override;
+
+    void apply_ro(GeometryFilter* filter) const override;
+
+    void apply_rw(GeometryComponentFilter* filter) override;
+
+    void apply_ro(GeometryComponentFilter* filter) const override;
+
 protected:
 
     Curve(const GeometryFactory& factory) : Geometry(&factory) {}

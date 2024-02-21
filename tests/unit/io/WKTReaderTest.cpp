@@ -496,8 +496,6 @@ void object::test<26>
     ensure_equals(geom->getGeometryTypeId(), geos::geom::GEOS_COMPOUNDCURVE);
     ensure_equals(geom->getNumPoints(), 5u);
 
-    ensure_equals(geom->getNumGeometries(), 2u);
-
     // explicit form
     auto geom2 = wktreader.read("COMPOUNDCURVE (CIRCULARSTRING (0 0, 1 1, 1 0), LINESTRING (1 0, 0 1))");
     ensure(geom->equalsIdentical(geom2.get()));

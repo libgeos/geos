@@ -668,7 +668,8 @@ std::unique_ptr<CompoundCurve>
 GeometryFactory::createCompoundCurve()
 const
 {
-    return std::unique_ptr<CompoundCurve>();
+    std::vector<std::unique_ptr<SimpleCurve>> curves;
+    return createCompoundCurve(std::move(curves));
 }
 
 /*public*/

@@ -153,23 +153,6 @@ Polygon::getArea() const
     return area;
 }
 
-/**
- * Returns the perimeter of this <code>Polygon</code>
- *
- * @return the perimeter of the polygon
- */
-double
-Polygon::getLength() const
-{
-    double len = 0.0;
-    len += shell->getLength();
-    for(const auto& hole : holes) {
-        len += hole->getLength();
-    }
-    return len;
-}
-
-
 GeometryTypeId
 Polygon::getGeometryTypeId() const
 {

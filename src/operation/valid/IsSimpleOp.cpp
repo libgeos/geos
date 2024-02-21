@@ -115,24 +115,27 @@ IsSimpleOp::computeSimple(const Geometry& geom)
 {
     if (geom.isEmpty()) return true;
     switch(geom.getGeometryTypeId()) {
+        case GEOS_POINT:
+            return true;
         case GEOS_MULTIPOINT:
             return isSimpleMultiPoint(dynamic_cast<const MultiPoint&>(geom));
         case GEOS_LINESTRING:
-            return isSimpleLinearGeometry(geom);
         case GEOS_MULTILINESTRING:
             return isSimpleLinearGeometry(geom);
         case GEOS_LINEARRING:
-            return isSimplePolygonal(geom);
         case GEOS_POLYGON:
-            return isSimplePolygonal(geom);
         case GEOS_MULTIPOLYGON:
             return isSimplePolygonal(geom);
         case GEOS_GEOMETRYCOLLECTION:
             return isSimpleGeometryCollection(geom);
-        // all other geometry types are simple by definition
-        default:
-            return true;
+        case GEOS_CIRCULARSTRING:
+        case GEOS_COMPOUNDCURVE:
+        case GEOS_MULTICURVE:
+        case GEOS_CURVEPOLYGON:
+        case GEOS_MULTISURFACE:
+            throw util::UnsupportedOperationException("Curved types not supported in IsSimpleOp.");
     }
+    throw util::UnsupportedOperationException("Unexpected type.");
 }
 
 /* private */

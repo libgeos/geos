@@ -266,6 +266,15 @@ Surface::isEmpty() const
     return getExteriorRing()->isEmpty();
 }
 
+double Surface::getLength() const {
+    double len = 0.0;
+    len += getExteriorRing()->getLength();
+    for(std::size_t i = 0; i < getNumInteriorRing(); i++) {
+        len += getInteriorRingN(i)->getLength();
+    }
+    return len;
+}
+
 std::unique_ptr<Geometry>
 Surface::createEmptyRing(const GeometryFactory& factory)
 {

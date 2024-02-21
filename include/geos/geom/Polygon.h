@@ -100,9 +100,6 @@ public:
 
     double getArea() const override;
 
-    /// Returns the perimeter of this <code>Polygon</code>
-    double getLength() const override;
-
     bool isRectangle() const override;
 
     /**

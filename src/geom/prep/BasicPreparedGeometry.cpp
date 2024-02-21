@@ -23,6 +23,8 @@
 #include <geos/geom/util/ComponentCoordinateExtracter.h>
 #include <geos/operation/distance/DistanceOp.h>
 
+#include "geos/util.h"
+
 namespace geos {
 namespace geom { // geos.geom
 namespace prep { // geos.geom.prep

@@ -309,6 +309,11 @@ public:
     /// Return a string representation of this Geometry type
     virtual std::string getGeometryType() const = 0; //Abstract
 
+    /// Returns whether the Geometry type _may_ contain curved elements
+    virtual bool isCurvedType() const;
+
+    static bool isCurvedType(GeometryTypeId);
+
     /// Return an integer representation of this Geometry type
     virtual GeometryTypeId getGeometryTypeId() const = 0; //Abstract
 

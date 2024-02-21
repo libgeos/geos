@@ -15,6 +15,7 @@
 #pragma once
 
 #include <geos/geom/SimpleCurve.h>
+#include <geos/util.h>
 #include <vector>
 
 namespace geos {
@@ -48,10 +49,6 @@ public:
 
     const SimpleCurve* getCurveN(std::size_t) const;
 
-    std::size_t getNumGeometries() const override;
-
-    const Geometry* getGeometryN(std::size_t) const override;
-
     std::size_t getNumPoints() const override;
 
     std::unique_ptr<Geometry> getBoundary() const override;
@@ -78,17 +75,14 @@ public:
 
     CompoundCurve* reverseImpl() const override;
 
+    double getLength() const override;
+
+    using Curve::apply_ro;
+    using Curve::apply_rw;
+
     void apply_rw(const CoordinateFilter* filter) override;
 
     void apply_ro(CoordinateFilter* filter) const override;
-
-    void apply_rw(GeometryFilter* filter) override;
-
-    void apply_ro(GeometryFilter* filter) const override;
-
-    void apply_rw(GeometryComponentFilter* filter) override;
-
-    void apply_ro(GeometryComponentFilter* filter) const override;
 
     void apply_rw(CoordinateSequenceFilter& filter) override;
 
@@ -113,7 +107,7 @@ protected:
         envelope = computeEnvelopeInternal();
     }
 
-    Envelope computeEnvelopeInternal();
+    Envelope computeEnvelopeInternal() const;
 
 private:
     std::vector<std::unique_ptr<SimpleCurve>> curves;

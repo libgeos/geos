@@ -15,6 +15,7 @@
 #pragma once
 
 #include <geos/geom/SimpleCurve.h>
+#include <geos/util/UnsupportedOperationException.h>
 
 namespace geos {
 namespace geom {
@@ -46,6 +47,10 @@ public:
     {
         return SORTINDEX_LINESTRING;
     };
+
+    double getLength() const override {
+        throw util::UnsupportedOperationException("Cannot calculate length of CircularString");
+    }
 
 };
 

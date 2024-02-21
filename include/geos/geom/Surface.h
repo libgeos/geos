@@ -45,7 +45,7 @@ public:
 
 
     bool
-    equalsExact(const Geometry* other, double tolerance) const override;
+    equalsExact(const Geometry* other, double tolerance = 0.0) const override;
 
     bool
     equalsIdentical(const Geometry* other) const override;
@@ -74,6 +74,9 @@ public:
     bool hasZ() const override;
 
     bool isEmpty() const override;
+
+    /// Returns the perimeter of this Surface
+    double getLength() const override;
 
     void
     apply_ro(CoordinateFilter* filter) const override;

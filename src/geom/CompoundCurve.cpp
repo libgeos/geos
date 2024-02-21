@@ -12,6 +12,7 @@
  *
  **********************************************************************/
 
+#include <geos/geom/CoordinateFilter.h>
 #include <geos/geom/CompoundCurve.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/operation/BoundaryOp.h>
@@ -23,7 +24,8 @@ namespace geom {
 CompoundCurve::CompoundCurve(std::vector<std::unique_ptr<SimpleCurve>>&& p_curves,
                              const GeometryFactory& gf)
     : Curve(gf),
-      curves(std::move(p_curves)) {}
+      curves(std::move(p_curves)),
+    envelope(computeEnvelopeInternal()) {}
 
 CompoundCurve::CompoundCurve(const CompoundCurve& other)
     : Curve(other),
@@ -130,20 +132,8 @@ CompoundCurve::getNumCurves() const
     return curves.size();
 }
 
-std::size_t
-CompoundCurve::getNumGeometries() const
-{
-    return curves.size();
-}
-
 const SimpleCurve*
 CompoundCurve::getCurveN(std::size_t i) const
-{
-    return curves[i].get();
-}
-
-const Geometry*
-CompoundCurve::getGeometryN(std::size_t i) const
 {
     return curves[i].get();
 }
@@ -232,16 +222,23 @@ CompoundCurve*
 CompoundCurve::reverseImpl() const
 {
     std::vector<std::unique_ptr<SimpleCurve>> reversed(curves.size());
-    std::transform(curves.rbegin(), curves.rend(), reversed.end(), [](const auto& curve) {
+    std::transform(curves.rbegin(), curves.rend(), reversed.begin(), [](const auto& curve) {
         return std::unique_ptr<SimpleCurve>(static_cast<SimpleCurve*>(curve->reverse().release()));
     });
 
     return getFactory()->createCompoundCurve(std::move(reversed)).release();
 }
 
+double CompoundCurve::getLength() const {
+    double sum = 0;
+    for (const auto& curve : curves) {
+        sum += curve->getLength();
+    }
+    return sum;
+}
+
 Envelope
-CompoundCurve::computeEnvelopeInternal()
-{
+CompoundCurve::computeEnvelopeInternal() const {
     Envelope e;
     for (const auto& curve : curves) {
         e.expandToInclude(curve->getEnvelopeInternal());
@@ -259,55 +256,43 @@ CompoundCurve::compareToSameClass(const Geometry* g) const
 void
 CompoundCurve::normalize()
 {
-    throw std::runtime_error("Not implemented.");
+    throw util::UnsupportedOperationException();
 }
 
 void
-CompoundCurve::apply_ro(GeometryFilter*) const
+CompoundCurve::apply_ro(CoordinateFilter* cf) const
 {
-    throw std::runtime_error("Not implemented.");
+    for (const auto& curve : curves) {
+        curve->apply_ro(cf);
+    }
 }
 
 void
-CompoundCurve::apply_ro(GeometryComponentFilter*) const
+CompoundCurve::apply_ro(CoordinateSequenceFilter& csf) const
 {
-    throw std::runtime_error("Not implemented.");
+    for (const auto& curve : curves) {
+        const auto& seq = *curve->getCoordinatesRO();
+        for (std::size_t i = 0; i < seq.size(); i++) {
+            if (csf.isDone()) {
+                return;
+            }
+            csf.filter_ro(seq, i);
+        }
+    }
 }
 
 void
-CompoundCurve::apply_ro(CoordinateFilter*) const
+CompoundCurve::apply_rw(const CoordinateFilter* cf)
 {
-    throw std::runtime_error("Not implemented.");
-}
-
-void
-CompoundCurve::apply_ro(CoordinateSequenceFilter&) const
-{
-    throw std::runtime_error("Not implemented.");
-}
-
-void
-CompoundCurve::apply_rw(GeometryFilter*)
-{
-    throw std::runtime_error("Not implemented.");
-}
-
-void
-CompoundCurve::apply_rw(GeometryComponentFilter*)
-{
-    throw std::runtime_error("Not implemented.");
-}
-
-void
-CompoundCurve::apply_rw(const CoordinateFilter*)
-{
-    throw std::runtime_error("Not implemented.");
+    for (auto& curve : curves) {
+        curve->apply_rw(cf);
+    }
 }
 
 void
 CompoundCurve::apply_rw(CoordinateSequenceFilter&)
 {
-    throw std::runtime_error("Not implemented.");
+    throw util::UnsupportedOperationException();
 }
 
 

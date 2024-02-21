@@ -41,6 +41,8 @@ public:
 
     void normalize() override;
 
+    double getArea() const override;
+
 protected:
     using SurfaceImpl::SurfaceImpl;
 

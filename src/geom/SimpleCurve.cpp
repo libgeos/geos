@@ -45,6 +45,16 @@ SimpleCurve::SimpleCurve(std::unique_ptr<CoordinateSequence>&& newCoords,
 {
 }
 
+Envelope
+SimpleCurve::computeEnvelopeInternal() const
+{
+    if(isEmpty()) {
+        return Envelope();
+    }
+
+    return points->getEnvelope();
+}
+
 std::unique_ptr<CoordinateSequence>
 SimpleCurve::getCoordinates() const
 {
@@ -169,7 +179,7 @@ SimpleCurve::getBoundary() const
 }
 
 bool
-SimpleCurve::isCoordinate(Coordinate& pt) const
+SimpleCurve::isCoordinate(CoordinateXY& pt) const
 {
     assert(points.get());
     std::size_t npts = points->getSize();
@@ -179,17 +189,6 @@ SimpleCurve::isCoordinate(Coordinate& pt) const
         }
     }
     return false;
-}
-
-/*protected*/
-Envelope
-SimpleCurve::computeEnvelopeInternal() const
-{
-    if(isEmpty()) {
-        return Envelope();
-    }
-
-    return points->getEnvelope();
 }
 
 const CoordinateXY*
@@ -293,6 +292,8 @@ SimpleCurve::normalizeClosed()
 void
 SimpleCurve::normalize()
 {
+    util::ensureNotCurvedType(*this);
+
     if (isEmpty()) return;
     assert(points.get());
     if (isClosed()) {
@@ -327,33 +328,6 @@ SimpleCurve::apply_ro(CoordinateFilter* filter) const
     points->apply_ro(filter);
 }
 
-void
-SimpleCurve::apply_rw(GeometryFilter* filter)
-{
-    assert(filter);
-    filter->filter_rw(this);
-}
-
-void
-SimpleCurve::apply_ro(GeometryFilter* filter) const
-{
-    assert(filter);
-    filter->filter_ro(this);
-}
-
-void
-SimpleCurve::apply_rw(GeometryComponentFilter* filter)
-{
-    assert(filter);
-    filter->filter_rw(this);
-}
-
-void
-SimpleCurve::apply_ro(GeometryComponentFilter* filter) const
-{
-    assert(filter);
-    filter->filter_ro(this);
-}
 
 void
 SimpleCurve::apply_rw(CoordinateSequenceFilter& filter)

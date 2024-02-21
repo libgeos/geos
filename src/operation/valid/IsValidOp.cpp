@@ -107,7 +107,7 @@ IsValidOp::isValidGeometry(const Geometry* g)
         case GEOS_CURVEPOLYGON:
         case GEOS_MULTICURVE:
         case GEOS_MULTISURFACE:
-            throw util::IllegalArgumentException("Curved types not supported in IsValidOp.");
+            throw util::UnsupportedOperationException("Curved types not supported in IsValidOp.");
     }
 
     // geometry type not known

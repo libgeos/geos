@@ -85,7 +85,7 @@ public:
 
     bool isRing() const;
 
-    virtual bool isCoordinate(Coordinate& pt) const;
+    virtual bool isCoordinate(CoordinateXY& pt) const;
 
     bool equalsExact(const Geometry* other, double tolerance = 0)
     const override;
@@ -99,17 +99,12 @@ public:
         return &envelope;
     }
 
+    using Curve::apply_ro;
+    using Curve::apply_rw;
+
     void apply_rw(const CoordinateFilter* filter) override;
 
     void apply_ro(CoordinateFilter* filter) const override;
-
-    void apply_rw(GeometryFilter* filter) override;
-
-    void apply_ro(GeometryFilter* filter) const override;
-
-    void apply_rw(GeometryComponentFilter* filter) override;
-
-    void apply_ro(GeometryComponentFilter* filter) const override;
 
     void apply_rw(CoordinateSequenceFilter& filter) override;
 

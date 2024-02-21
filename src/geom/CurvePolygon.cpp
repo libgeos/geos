@@ -15,6 +15,7 @@
 #include <geos/geom/Curve.h>
 #include <geos/geom/CurvePolygon.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/util/UnsupportedOperationException.h>
 
 namespace geos {
 namespace geom {
@@ -24,12 +25,14 @@ namespace geom {
     {
         auto coordinates = shell->getCoordinates();
         for (const auto& hole : holes) {
-            // FIXME remove unncessary copy
-            coordinates->add(*hole->getCoordinates());
+            if (auto simpleHole = dynamic_cast<const SimpleCurve*>(hole.get())) {
+                coordinates->add(*simpleHole->getCoordinatesRO());
+            } else {
+                coordinates->add(*hole->getCoordinates());
+            }
         }
         return coordinates;
     }
-
 
     std::string CurvePolygon::getGeometryType() const {
         return "CurvePolygon";
@@ -41,22 +44,31 @@ namespace geom {
 
     std::unique_ptr<Geometry>
     CurvePolygon::getBoundary() const {
-        throw std::runtime_error("Not implemented.");
+        throw util::UnsupportedOperationException();
     }
 
     void
     CurvePolygon::normalize() {
-        throw std::runtime_error("Not implemented.");
+        throw util::UnsupportedOperationException();
+    }
+
+    double CurvePolygon::getArea() const {
+        throw util::UnsupportedOperationException();
     }
 
     Geometry*
     CurvePolygon::cloneImpl() const {
-        throw std::runtime_error("Not implemented.");
+        return new CurvePolygon(*this);
     }
 
     Geometry*
     CurvePolygon::reverseImpl() const {
-        throw std::runtime_error("Not implemented.");
+        std::unique_ptr<Curve> revShell(static_cast<Curve*>(shell->reverse().release()));
+        std::vector<std::unique_ptr<Curve>> revHoles(holes.size());
+        for (std::size_t i = 0; i < revHoles.size(); i++) {
+            revHoles[i].reset(static_cast<Curve*>(holes[i]->reverse().release()));
+        }
+        return new CurvePolygon(std::move(revShell), std::move(revHoles), *getFactory());
     }
 
 }

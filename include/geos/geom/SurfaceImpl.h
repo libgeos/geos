@@ -108,8 +108,8 @@ public:
 
     /**
     * \brief
-    * Take ownership of this Polygon's exterior ring.
-    * After releasing the exterior ring, the Polygon should be
+    * Take ownership of this Surface's exterior ring.
+    * After releasing the exterior ring, the Surface should be
     * considered in a moved-from state and should not be accessed,
     * except to release the interior rings (if desired.)
     * @return exterior ring
@@ -139,14 +139,13 @@ public:
 
     /**
     * \brief
-    * Take ownership of this Polygon's interior rings.
-    * After releasing the rings, the Polygon should be
+    * Take ownership of this Surfaces's interior rings.
+    * After releasing the rings, the Surface should be
     * considered in a moved-from state and should not be accessed,
     * except to release the exterior ring (if desired.)
     * @return vector of rings (may be empty)
     */
-    std::vector<std::unique_ptr<RingType>>
-                                        releaseInteriorRings()
+    std::vector<std::unique_ptr<RingType>> releaseInteriorRings()
     {
         return std::move(holes);
     }

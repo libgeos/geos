@@ -15,6 +15,7 @@
 #include <geos/geom/CircularString.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/GeometryFactory.h>
+#include <geos/util/UnsupportedOperationException.h>
 
 namespace geos {
 namespace geom {
