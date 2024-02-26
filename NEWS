@@ -2,6 +2,7 @@
 xxxx-xx-xx
 
 - Bug fixes / improvements:
+  - Intersection: change to using DoubleDouble computation to improve robustness (GH-937, Martin Davis)
 
 
 ## Changes in 3.9.5
