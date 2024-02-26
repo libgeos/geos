@@ -40,5 +40,33 @@ void object::test<1>()
     GEOSGeom_destroy(result);
 }
 
+/**
+* Mixed GeometryCollection types permitted at a high-level
+*/
+template<>
+template<>
+void object::test<2>()
+{
+    GEOSGeometry* a = GEOSGeomFromWKT("GEOMETRYCOLLECTION (POINT (51 -1), LINESTRING (52 -1, 49 2))");
+    GEOSGeometry* b = GEOSGeomFromWKT("POINT (2 3)");
+
+    ensure(a);
+    ensure(b);
+
+    GEOSGeometry* ab = GEOSDifference(a, b);
+    GEOSGeometry* ba = GEOSDifference(b, a);
+
+    ensure(ab);
+    ensure(ba);
+
+    ensure_geometry_equals(ab, a);
+    ensure_geometry_equals(ba, b);
+
+    GEOSGeom_destroy(a);
+    GEOSGeom_destroy(b);
+    GEOSGeom_destroy(ab);
+    GEOSGeom_destroy(ba);
+}
+
 } // namespace tut
 
