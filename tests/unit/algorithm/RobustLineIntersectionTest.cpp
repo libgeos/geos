@@ -305,25 +305,21 @@ void object::test<2>
 // but apparently works now.
 // Possibly normalization has fixed this?
 //
-#if 0 // fails: finds 1 intersection rather then two
 template<>
 template<>
 void object::test<3>
 ()
 {
     std::vector<Coordinate> intPt;
-    intPt.push_back(Coordinate(2089426.5233462777, 1180182.3877339689));
-    intPt.push_back(Coordinate(2085646.6891757075, 1195618.7333999649));
+    intPt.push_back(Coordinate(2087600.4716727887, 1187639.7426241424));
 
     checkIntersection(
         "LINESTRING ( 2089426.5233462777 1180182.3877339689, 2085646.6891757075 1195618.7333999649 )",
         "LINESTRING ( 1889281.8148903656 1997547.0560044837, 2259977.3672235999 483675.17050843034 )",
-        2,
+        1,
         intPt, 0);
 }
-#endif // fails
 
-#if 0 // fails: the intersection point doesn't match
 // 4 - Outside envelope using HCoordinate method (testCmp5CaseWKT)
 template<>
 template<>
@@ -331,7 +327,7 @@ void object::test<4>
 ()
 {
     std::vector<Coordinate> intPt;
-    intPt.push_back(Coordinate(4348437.0557510145, 5552597.375203926));
+    intPt.push_back(Coordinate(4348440.8493873989, 5552599.2720221197));
 
     checkIntersection(
         "LINESTRING (4348433.262114629 5552595.478385733, 4348440.849387404 5552599.272022122 )",
@@ -339,9 +335,7 @@ void object::test<4>
         1,
         intPt, 0);
 }
-#endif // fails
 
-#if 0 // fails: the intersection point doesn't match
 // 5 - Result of this test should be the same as the WKT one!
 //     (testCmp5CaseRaw)
 template<>
@@ -356,11 +350,10 @@ void object::test<5>
     pt.push_back(Coordinate(4348440.8493874,   5552599.27202212));
 
     std::vector<Coordinate> intPt;
-    intPt.push_back(Coordinate(4348437.0557510145, 5552597.375203926));
+    intPt.push_back(Coordinate(4348440.8493873989, 5552599.2720221197));
 
     checkIntersection(pt, 1, intPt, 0);
 }
-#endif // fails
 
 /**
  * Test involving two non-almost-parallel lines.
@@ -453,7 +446,7 @@ void object::test<10>
         "LINESTRING (-215.22279674875 -158.65425425385, -218.1208801283 -160.68343590235)",
         1,
         "POINT ( -215.22279674875 -158.65425425385 )",
-        0);
+        1.0e-10);
 }
 
 /**

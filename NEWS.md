@@ -2,6 +2,7 @@
 xxxx-xx-xx
 
 - Fixes:
+  - Intersection: change to using DoubleDouble computation to improve robustness (GH-937, Martin Davis)
   - Fix build on Illumus (GH-971)
   - Buffer mitre join error (GH-995, Paul Ramsey)
   - Return 2D empty linestring on GEOSGeom_createLineString(NULL) (GH-998, Paul Ramsey)
