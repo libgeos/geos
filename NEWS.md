@@ -2,6 +2,7 @@
 xxxx-xx-xx
 
 - Fixes/Improvements:
+  - Intersection: change to using DoubleDouble computation to improve robustness (GH-937, Martin Davis)
   - Fix IncrementalDelaunayTriangulator to ensure triangulation boundary is convex (GH-953, Martin Davis)
   - Fix build on Illumus (GH-971)
   - Fix DiscreteHausdorffDistance for LinearRing (GH-1000, Martin Davis)
