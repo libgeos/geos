@@ -5,6 +5,9 @@
 #include <tut/tut.hpp>
 // geos
 #include <geos/operation/buffer/BufferParameters.h>
+#include <geos/operation/buffer/BufferOp.h>
+#include <geos/geom/Geometry.h>
+#include <geos/io/WKTReader.h>
 #include <geos/constants.h>
 // std
 #include <memory>
@@ -14,9 +17,15 @@ namespace tut {
 // Test Group
 //
 
+using geos::operation::buffer::BufferParameters;
+using geos::operation::buffer::BufferOp;
+using geos::geom::Geometry;
+
 // Common data used by tests
 struct test_bufferparameters_data {
     typedef geos::operation::buffer::BufferParameters BufferParameters;
+
+    geos::io::WKTReader _reader;
 
     test_bufferparameters_data() { }
 
@@ -206,6 +215,23 @@ void object::test<10>
     ensure_equals(bp.getQuadrantSegments(), int(8));
     ensure_equals(bp.getMitreLimit(), 5.0);
 }
+
+// Buffer produces invalid output
+// https://github.com/libgeos/geos/issues/856
+template<>
+template<>
+void object::test<23>()
+{
+    auto geom = _reader.read("POLYGON ((-23.989123360549296 73.1287474328027, -22.537997105552297 94.06368412079055,-18.796973600895146 93.80437130274495,-17.80121237894408 108.16990157009043,-21.542235883601226 108.42921438813606,-20.967403753721864 116.7221345967023,-4.728530705460814 116.7221568196225,-7.82790182044367 72.00851605865441,-23.989123360549296 73.1287474328027))");
+
+    BufferParameters bp;
+    bp.setJoinStyle(BufferParameters::JOIN_MITRE);
+    BufferOp op(geom.get(), bp);
+
+    auto result = op.getResultGeometry(10);
+    ensure(result->isValid());
+}
+
 
 } // namespace tut
 
