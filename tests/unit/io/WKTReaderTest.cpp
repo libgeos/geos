@@ -497,6 +497,10 @@ void object::test<26>
     ensure_equals(geom->getNumPoints(), 5u);
 
     ensure_equals(geom->getNumGeometries(), 2u);
+
+    // explicit form
+    auto geom2 = wktreader.read("COMPOUNDCURVE (CIRCULARSTRING (0 0, 1 1, 1 0), LINESTRING (1 0, 0 1))");
+    ensure(geom->equalsIdentical(geom2.get()));
 }
 
 // Read a CurvePolygon whose components are simple curves
@@ -530,6 +534,10 @@ void object::test<29>
     auto geom = wktreader.read("MULTICURVE( (0 0, 5 5), CIRCULARSTRING(4 0, 4 4, 8 4))");
 
     ensure_equals(geom->getGeometryTypeId(), geos::geom::GEOS_MULTICURVE);
+
+    // explicit form
+    auto geom2 = wktreader.read("MULTICURVE( LINESTRING(0 0, 5 5), CIRCULARSTRING(4 0, 4 4, 8 4))");
+    ensure(geom->equalsIdentical(geom2.get()));
 }
 
 // Read a MultiCurve whose elements contain CompoundCurves
@@ -552,6 +560,10 @@ void object::test<31>
     auto geom = wktreader.read("MULTISURFACE( CURVEPOLYGON( CIRCULARSTRING( 0 0, 4 0, 4 4, 0 4, 0 0), (1 1, 3 3, 3 1, 1 1)), ((10 10, 14 12, 11 10, 10 10), (11 11, 11.5 11, 11 11.5, 11 11)))");
 
     ensure_equals(geom->getGeometryTypeId(), geos::geom::GEOS_MULTISURFACE);
+
+    // explicit form
+    auto geom2 = wktreader.read("MULTISURFACE( CURVEPOLYGON( CIRCULARSTRING( 0 0, 4 0, 4 4, 0 4, 0 0), (1 1, 3 3, 3 1, 1 1)), POLYGON ((10 10, 14 12, 11 10, 10 10), (11 11, 11.5 11, 11 11.5, 11 11)))");
+    ensure(geom->equalsIdentical(geom2.get()));
 }
 
 
