@@ -18,6 +18,7 @@ xxxx-xx-xx
   - Remove undefined behaviour in use of null PrecisionModel (GH-931, Jeff Walton)
   - Skip over testing empty distances for mixed collections (GH-979, Paul Ramsey)
   - Add missing cstdint headers (GH-990, GH-743, Regina Obe, Sergei Trofimovich)
+  - HeuristicOverlay: Fix overlay op regression (GH-1050, Mike Taves)
 
 
 ## Changes in 3.9.4
