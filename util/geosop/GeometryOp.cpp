@@ -27,6 +27,7 @@
 #include <geos/algorithm/construct/LargestEmptyCircle.h>
 #include <geos/algorithm/construct/MaximumInscribedCircle.h>
 #include <geos/algorithm/BoundaryNodeRule.h>
+#include <geos/algorithm/MinimumAreaRectangle.h>
 #include <geos/algorithm/MinimumDiameter.h>
 #include <geos/algorithm/MinimumBoundingCircle.h>
 #include <geos/algorithm/distance/DiscreteHausdorffDistance.h>
@@ -394,6 +395,14 @@ std::vector<GeometryOpCreator> opRegistry {
     [](const std::unique_ptr<Geometry>& geom, double d) {
         geos::algorithm::construct::MaximumInscribedCircle mc( geom.get(), d );
         std::unique_ptr<Geometry> res = mc.getRadiusLine();
+        return new Result( std::move(res) );
+    });
+    }},
+{"minAreaRectangle", [](std::string name) { return GeometryOp::create(name,
+    catConst,
+    "compute minimum-area rectangle enclosing geometry",
+    [](const std::unique_ptr<Geometry>& geom) {
+        std::unique_ptr<Geometry> res = geos::algorithm::MinimumAreaRectangle::getMinimumRectangle(geom.get());
         return new Result( std::move(res) );
     });
     }},
