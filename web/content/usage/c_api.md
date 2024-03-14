@@ -178,7 +178,7 @@ GEOSCoordSequence* seq = GEOSCoordSeq_copyFromArrays(
 GEOSCoordSeq_destroy(seq);
 ```
 
-Finally, you can create a `GEOSCoordSequence` and initialize it from a coordinate buffer (an array of double in coordinate order, eg: `XYXYXYX`).
+Finally, you can create a `GEOSCoordSequence` and initialize it from a coordinate buffer (an array of double in coordinate order, eg: `XYXYXY`).
 
 ```c
 /* Coordinates in a buffer (X,Y, X,Y, X,Y) */
