@@ -1654,7 +1654,7 @@ Coordinates are 2 (XY) or 3 (XYZ) dimensional.</p>
     <span class="n">seqSize</span><span class="p">);</span>
 
 <span class="n">GEOSCoordSeq_destroy</span><span class="p">(</span><span class="n">seq</span><span class="p">);</span>
-</code></pre></div><p>Finally, you can create a <code>GEOSCoordSequence</code> and initialize it from a coordinate buffer (an array of double in coordinate order, eg: <code>XYXYXYX</code>).</p>
+</code></pre></div><p>Finally, you can create a <code>GEOSCoordSequence</code> and initialize it from a coordinate buffer (an array of double in coordinate order, eg: <code>XYXYXY</code>).</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cm">/* Coordinates in a buffer (X,Y, X,Y, X,Y) */</span>
 <span class="kt">double</span> <span class="n">coordBuf</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">};</span>
 <span class="n">size_t</span> <span class="n">seqSize</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
