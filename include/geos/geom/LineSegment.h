@@ -250,12 +250,19 @@ public:
     //
     /// @param ret will be set to the midpoint of the segment
     ///
-    void midPoint(Coordinate& ret) const
+    Coordinate midPoint() const
     {
-        ret = Coordinate(
+        return Coordinate(
             (p0.x + p1.x) / 2,
             (p0.y + p1.y) / 2);
     };
+
+    static Coordinate midPoint(const Coordinate& pt0, const Coordinate& pt1)
+    {
+        return Coordinate(
+            (pt0.x + pt1.x) / 2,
+            (pt0.y + pt1.y) / 2);        
+    }
 
     /// Computes the distance between this line segment and another one.
     double distance(const LineSegment& ls) const
