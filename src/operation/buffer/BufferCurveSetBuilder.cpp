@@ -401,7 +401,7 @@ BufferCurveSetBuilder::hasPointOnBuffer(
     double distTol = NEARNESS_FACTOR * fabs(dist);
 
     for (std::size_t i = 0; i < curveRing->size(); i++) {
-        const Coordinate& v = curveRing->getAt(i);
+        const CoordinateXY& v = curveRing->getAt(i);
 
         //-- check curve vertices
         double distVertex = Distance::pointToSegmentString(v, inputRing);
@@ -411,8 +411,8 @@ BufferCurveSetBuilder::hasPointOnBuffer(
 
         //-- check curve segment midpoints
         std::size_t iNext = (i < curveRing->size() - 1) ? i + 1 : 0;
-        const Coordinate& vnext = curveRing->getAt(iNext);
-        Coordinate midPt = LineSegment::midPoint(v, vnext);
+        const CoordinateXY& vnext = curveRing->getAt(iNext);
+        CoordinateXY midPt = LineSegment::midPoint(v, vnext);
 
         double distMid = Distance::pointToSegmentString(midPt, inputRing);
         if (distMid > distTol) {
