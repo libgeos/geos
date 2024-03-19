@@ -43,6 +43,22 @@ struct test_bufferop_data {
     {
         ensure_equals(default_quadrant_segments, int(8));
     }
+
+    void checkBufferEmpty(const std::string& wkt, double dist, bool isEmpty)
+    {
+        std::unique_ptr<Geometry> geom = wktreader.read(wkt);
+        std::unique_ptr<Geometry> actual = geom->buffer(dist);
+        ensure_equals(actual->isEmpty(), isEmpty);
+    }
+
+    void checkBuffer(const std::string& wkt, double dist, double tolerance, const std::string& wktExpected)
+    {
+        std::unique_ptr<Geometry> geom = wktreader.read(wkt);
+        std::unique_ptr<Geometry> actual = geom->buffer(dist);
+        std::unique_ptr<Geometry> expected = wktreader.read(wktExpected);
+        ensure_equals_geometry(expected.get(), actual.get(), tolerance);
+    }
+
 private:
     // noncopyable
     test_bufferop_data(test_bufferop_data const& other) = delete;
@@ -465,37 +481,33 @@ void object::test<15>
     ensure_equals_geometry(gresult.get(), gexpected.get());
 }
 
-// Test for #1101 - Non-empty negative buffer of 4-pt convex polygon
+// Test for https://trac.osgeo.org/geos/ticket/1101 - Non-empty negative buffer of 4-pt convex polygon
 template<>
 template<>
 void object::test<16>
 ()
 {
     std::string wkt0("POLYGON ((666360.09 429614.71, 666344.4 429597.12, 666358.47 429584.52, 666374.5 429602.33, 666360.09 429614.71))");
-    GeomPtr g0(wktreader.read(wkt0));
-
-    ensure_not( GeomPtr(g0->buffer( -9 ))->isEmpty() );
-    ensure( GeomPtr(g0->buffer( -10 ))->isEmpty() );
-    ensure( GeomPtr(g0->buffer( -15 ))->isEmpty() );
-    ensure( GeomPtr(g0->buffer( -18 ))->isEmpty() );
+    checkBufferEmpty(wkt0, -9, false);
+    checkBufferEmpty(wkt0, -10, true);
+    checkBufferEmpty(wkt0, -15, true);
+    checkBufferEmpty(wkt0, -18, true);
 }
 
-// Test for #1101 - Non-empty negative buffer of 5-pt convex polygon
+// Test for https://trac.osgeo.org/geos/ticket/1101 - Non-empty negative buffer of 5-pt convex polygon
 template<>
 template<>
 void object::test<17>
 ()
 {
     std::string wkt0("POLYGON ((6 20, 16 20, 21 9, 9 0, 0 10, 6 20))");
-    GeomPtr g0(wktreader.read(wkt0));
-
-    ensure_not( GeomPtr(g0->buffer( -8 ))->isEmpty() );
-    ensure( GeomPtr(g0->buffer( -8.6 ))->isEmpty() );
-    ensure( GeomPtr(g0->buffer( -9.6 ))->isEmpty() );
-    ensure( GeomPtr(g0->buffer( -11 ))->isEmpty() );
+    checkBufferEmpty(wkt0, -8, false);
+    checkBufferEmpty(wkt0, -8.6, true);
+    checkBufferEmpty(wkt0, -9.6, true);
+    checkBufferEmpty(wkt0, -11, true);
 }
 
-// Test for #1101 - Buffer of Polygon with hole with hole eroded
+// Test for https://trac.osgeo.org/geos/ticket/1101 - Buffer of Polygon with hole with hole eroded
 template<>
 template<>
 void object::test<18>
@@ -517,7 +529,7 @@ void object::test<18>
     ensure( 0 == dynamic_cast<const geos::geom::Polygon*>(result2.get())->getNumInteriorRing() );
 }
 
-// Test for #1101 - Non-empty negative buffer of 5-pt convex polygon
+// Test for https://trac.osgeo.org/geos/ticket/1101 - Non-empty negative buffer of 5-pt convex polygon
 template<>
 template<>
 void object::test<19>
@@ -539,9 +551,6 @@ template<>
 void object::test<20>
 ()
 {
-    using geos::operation::buffer::BufferOp;
-    using geos::operation::buffer::BufferParameters;
-
     std::string wkt0("LINESTRING (-20 0, 0 20, 20 0, 0 -20, -20 0)");
     GeomPtr g0(wktreader.read(wkt0));
 
@@ -590,6 +599,36 @@ void object::test<22>
     std::unique_ptr<Geometry> result = op.getResultGeometry(-10);
     ensure_equals(result->getNumGeometries(), 2u);
     ensure_equals(result->getArea(), 200);
+}
+
+// Checks a bug in the inverted-ring-removal heuristic.
+// See https://github.com/libgeos/geos/issues/984
+template<>
+template<>
+void object::test<24>
+()
+{
+    std::string wkt("MULTIPOLYGON (((833454.7163917861 6312507.405413097, 833455.3726665961 6312510.208920742, 833456.301153878 6312514.207390314, 833492.2432584754 6312537.770332065, 833493.0901320165 6312536.098774815, 833502.6580673696 6312517.561360772, 833503.9404352929 6312515.0542803425, 833454.7163917861 6312507.405413097)))");
+
+    checkBuffer(wkt, -3.8, 0.1, 
+        "POLYGON ((833490.79 6312532.27, 833498.15 6312518, 833459.97 6312512.07, 833490.79 6312532.27))");
+    checkBuffer(wkt, -7, 0.1,
+        "POLYGON ((833489.57 6312527.65, 833493.27 6312520.48, 833474.09 6312517.5, 833489.57 6312527.65))");
+}
+
+// Checks a bug in the inverted-ring-removal heuristic.
+// See https://github.com/libgeos/geos/issues/984
+template<>
+template<>
+void object::test<23>
+()
+{
+    std::string wkt("POLYGON ((182719.04521570954238996 224897.14115349075291306, 182807.02887436276068911 224880.64421749324537814, 182808.47314301913138479 224877.25002362736267969, 182718.38701137207681313 224740.00115247094072402, 182711.82697281913715415 224742.08599378637154587, 182717.1393717635946814 224895.61432328051887453, 182719.04521570954238996 224897.14115349075291306))");
+
+    checkBuffer(wkt, -5, 0.1, 
+        "POLYGON ((182722 224891.5, 182802 224876.5, 182717 224747, 182722 224891.5))");
+    checkBuffer(wkt, -30, 0.1,
+        "POLYGON ((182745.98 224861.57, 182760.51 224858.84, 182745.07 224835.33, 182745.98 224861.57))");
 }
 
 } // namespace tut
