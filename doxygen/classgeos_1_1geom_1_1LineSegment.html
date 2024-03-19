@@ -46,6 +46,7 @@ $(function() {
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="#pub-attribs">Public Attributes</a> &#124;
 <a href="classgeos_1_1geom_1_1LineSegment-members.html">List of all members</a>  </div>
   <div class="headertitle">
@@ -134,9 +135,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="separator:a80f3d6aab7d8a3e527833731194f7b72"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa636352264af78395ace8a3fa865dca"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1LineSegment.html#aaa636352264af78395ace8a3fa865dca">angle</a> () const</td></tr>
 <tr class="separator:aaa636352264af78395ace8a3fa865dca"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1b8f2b3d28c736f6a3ab141f1b0bbe7f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1LineSegment.html#a1b8f2b3d28c736f6a3ab141f1b0bbe7f">midPoint</a> (<a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;ret) const</td></tr>
-<tr class="memdesc:a1b8f2b3d28c736f6a3ab141f1b0bbe7f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the midpoint of the segment.  <a href="classgeos_1_1geom_1_1LineSegment.html#a1b8f2b3d28c736f6a3ab141f1b0bbe7f">More...</a><br /></td></tr>
-<tr class="separator:a1b8f2b3d28c736f6a3ab141f1b0bbe7f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a73f486cc79e9c1efdca204950e79258f"><td class="memItemLeft" align="right" valign="top">CoordinateXY&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1LineSegment.html#a73f486cc79e9c1efdca204950e79258f">midPoint</a> () const</td></tr>
+<tr class="memdesc:a73f486cc79e9c1efdca204950e79258f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the midpoint of the segment.  <a href="classgeos_1_1geom_1_1LineSegment.html#a73f486cc79e9c1efdca204950e79258f">More...</a><br /></td></tr>
+<tr class="separator:a73f486cc79e9c1efdca204950e79258f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a77c887a97ed508033f8c9a192733b12b"><td class="memItemLeft" align="right" valign="top"><a id="a77c887a97ed508033f8c9a192733b12b"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1LineSegment.html#a77c887a97ed508033f8c9a192733b12b">distance</a> (const <a class="el" href="classgeos_1_1geom_1_1LineSegment.html">LineSegment</a> &amp;ls) const</td></tr>
 <tr class="memdesc:a77c887a97ed508033f8c9a192733b12b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the distance between this line segment and another one. <br /></td></tr>
@@ -205,6 +206,12 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&lt;</b> (con
 <tr class="memitem:ad2910c1eea7e3d580c5044bca30e2c9c"><td class="memItemLeft" align="right" valign="top"><a id="ad2910c1eea7e3d580c5044bca30e2c9c"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator&gt;</b> (const <a class="el" href="classgeos_1_1geom_1_1LineSegment.html">LineSegment</a> &amp;rhs) const</td></tr>
 <tr class="separator:ad2910c1eea7e3d580c5044bca30e2c9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a275a9b23688200eba524768c0686debc"><td class="memItemLeft" align="right" valign="top"><a id="a275a9b23688200eba524768c0686debc"></a>
+static CoordinateXY&#160;</td><td class="memItemRight" valign="bottom"><b>midPoint</b> (const CoordinateXY &amp;pt0, const CoordinateXY &amp;pt1)</td></tr>
+<tr class="separator:a275a9b23688200eba524768c0686debc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
@@ -544,8 +551,8 @@ Public Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a1b8f2b3d28c736f6a3ab141f1b0bbe7f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1b8f2b3d28c736f6a3ab141f1b0bbe7f">&#9670;&nbsp;</a></span>midPoint()</h2>
+<a id="a73f486cc79e9c1efdca204950e79258f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a73f486cc79e9c1efdca204950e79258f">&#9670;&nbsp;</a></span>midPoint()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -554,10 +561,9 @@ Public Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void geos::geom::LineSegment::midPoint </td>
+          <td class="memname">CoordinateXY geos::geom::LineSegment::midPoint </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;&#160;</td>
-          <td class="paramname"><em>ret</em></td><td>)</td>
+          <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
