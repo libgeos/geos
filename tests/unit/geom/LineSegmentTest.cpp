@@ -11,15 +11,16 @@
 // std
 #include <iostream>
 
+using geos::geom::Coordinate;
+using geos::geom::CoordinateXY;
+using geos::geom::LineSegment;
+
 namespace tut {
 //
 // Test Group
 //
 
 struct test_lineseg_data {
-
-    typedef geos::geom::Coordinate Coordinate;
-    typedef geos::geom::LineSegment LineSegment;
 
     geos::geom::Coordinate ph1;
     geos::geom::Coordinate ph2;
@@ -117,6 +118,17 @@ struct test_lineseg_data {
         Coordinate c(px, py);
         double dist = seg.distancePerpendicularOriented(c);
         ensure_equals("checkDistancePerpendicularOriented", expected, dist, 0.000001);
+    }
+
+    void checkMidPoint(
+        double x0, double y0,
+        double x1, double y1,
+        double px, double py)
+    {
+        LineSegment seg(x0, y0, x1, y1);
+        Coordinate expected(px, py);
+        Coordinate actual = Coordinate(seg.midPoint());
+        ensure_equals_xy(actual, expected);
     }
 
     test_lineseg_data()
@@ -331,6 +343,16 @@ void object::test<13>()
     checkDistancePerpendicularOriented(1,1,  1,1,  1,2, 1);
 }
 
+// test midpoint
+template<>
+template<>
+void object::test<14>()
+{
+    //-- right of line
+    checkMidPoint(1,1,  1,3,  1,2);
+    checkMidPoint(1,1,  1,1,  1,1);
+    checkMidPoint(1,1,  5,5,  3,3);
+}
 
 
 } // namespace tut

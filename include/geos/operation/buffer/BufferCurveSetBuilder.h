@@ -169,14 +169,19 @@ private:
         const geom::CoordinateSequence* curvePts);
 
     /**
-     * Computes the maximum distance out of a set of points to a linestring.
-     *
-     * @param pts the points
-     * @param line the linestring vertices
-     * @return the maximum distance
+     * Tests if there are points on the raw offset curve which may
+     * lie on the final buffer curve
+     * (i.e. they are (approximately) at the buffer distance from the input ring). 
+     * For efficiency this only tests a limited set of points on the curve.
+     * 
+     * @param inputRing
+     * @param distance
+     * @param curveRing
+     * @return true if the curve contains points lying at the required buffer distance
      */
-    static double maxDistance(
-        const geom::CoordinateSequence*  pts, const geom::CoordinateSequence*  line);
+    static bool hasPointOnBuffer(
+        const CoordinateSequence* inputRing, double dist,
+        const CoordinateSequence* curveRing);
 
     /**
      * The ringCoord is assumed to contain no repeated points.

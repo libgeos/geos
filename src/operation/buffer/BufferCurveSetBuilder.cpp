@@ -38,10 +38,12 @@
 #include <geos/geomgraph/Label.h>
 #include <geos/noding/NodedSegmentString.h>
 #include <geos/util.h>
+#include <geos/io/WKTWriter.h>
 
 #include <algorithm> // for min
 #include <cmath>
 #include <cassert>
+#include <iomanip>
 #include <memory>
 #include <vector>
 #include <typeinfo>
@@ -357,56 +359,67 @@ BufferCurveSetBuilder::addRingSide(const CoordinateSequence* coord,
 /* private static*/
 bool
 BufferCurveSetBuilder::isRingCurveInverted(
-    const CoordinateSequence* inputPts, double dist,
-    const CoordinateSequence* curvePts)
+    const CoordinateSequence* inputRing, double dist,
+    const CoordinateSequence* curveRing)
 {
     if (dist == 0.0) return false;
     /**
      * Only proper rings can invert.
      */
-    if (inputPts->size() <= 3) return false;
+    if (inputRing->size() <= 3) return false;
     /**
      * Heuristic based on low chance that a ring with many vertices will invert.
      * This low limit ensures this test is fairly efficient.
      */
-    if (inputPts->size() >= MAX_INVERTED_RING_SIZE) return false;
+    if (inputRing->size() >= MAX_INVERTED_RING_SIZE) return false;
 
     /**
      * An inverted curve has no more points than the input ring.
      * This also eliminates concave inputs (which will produce fillet arcs)
      */
-    if (curvePts->size() > INVERTED_CURVE_VERTEX_FACTOR * inputPts->size()) return false;
+    if (curveRing->size() > INVERTED_CURVE_VERTEX_FACTOR * inputRing->size()) return false;
 
     /**
-     * Check if the curve vertices are all closer to the input ring
-     * than the buffer distance.
-     * If so, the curve is NOT a valid buffer curve.
+     * If curve contains points which are on the buffer, 
+     * it is not inverted and can be included in the raw curves.
      */
-    double distTol = NEARNESS_FACTOR * fabs(dist);
-    double maxDist = maxDistance(curvePts, inputPts);
-    bool isCurveTooClose = maxDist < distTol;
-    return isCurveTooClose;
+    if (hasPointOnBuffer(inputRing, dist, curveRing))
+      return false;
+
+    //-- curve is inverted, so discard it
+    return true;
+//std::cout << std::setprecision(10) << io::WKTWriter::toLineString(*curveRing) << std::endl;
+//std::cout << "isRingCurveInverted: " << isCurveTooClose <<  "  maxDist = " << maxDist << std::endl;
 }
 
-/**
- * Computes the maximum distance out of a set of points to a linestring.
- *
- * @param pts the points
- * @param line the linestring vertices
- * @return the maximum distance
- */
-/* private static */
-double
-BufferCurveSetBuilder::maxDistance(const CoordinateSequence*  pts, const CoordinateSequence*  line) {
-    double maxDistance = 0;
-    for (std::size_t i = 0; i < pts->size(); i++) {
-        const Coordinate& p = pts->getAt(i);
-        double dist = Distance::pointToSegmentString(p, line);
-        if (dist > maxDistance) {
-            maxDistance = dist;
+/* private static*/
+bool
+BufferCurveSetBuilder::hasPointOnBuffer(
+    const CoordinateSequence* inputRing, double dist, 
+    const CoordinateSequence* curveRing) 
+{
+    double distTol = NEARNESS_FACTOR * fabs(dist);
+
+    for (std::size_t i = 0; i < curveRing->size(); i++) {
+        const CoordinateXY& v = curveRing->getAt(i);
+
+        //-- check curve vertices
+        double distVertex = Distance::pointToSegmentString(v, inputRing);
+        if (distVertex > distTol) {
+            return true; 
+        }
+
+        //-- check curve segment midpoints
+        std::size_t iNext = (i < curveRing->size() - 1) ? i + 1 : 0;
+        const CoordinateXY& vnext = curveRing->getAt(iNext);
+        CoordinateXY midPt = LineSegment::midPoint(v, vnext);
+
+        double distMid = Distance::pointToSegmentString(midPt, inputRing);
+        if (distMid > distTol) {
+            return true; 
         }
     }
-    return maxDistance;
+    return false;
 }
 
 /*private*/
