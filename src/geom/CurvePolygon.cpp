@@ -56,6 +56,18 @@ namespace geom {
         throw util::UnsupportedOperationException();
     }
 
+    bool CurvePolygon::hasCurvedComponents() const {
+        if (shell->hasCurvedComponents()) {
+            return true;
+        }
+        for (const auto& hole : holes) {
+            if (hole->hasCurvedComponents()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     Geometry*
     CurvePolygon::cloneImpl() const {
         return new CurvePolygon(*this);

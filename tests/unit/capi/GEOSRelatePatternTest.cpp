@@ -31,5 +31,19 @@ void object::test<1>()
     ensure_equals(1, GEOSRelatePattern(geom1_, geom3_, "*FF*FF212"));
 }
 
+template<>
+template<>
+void object::test<11>()
+{
+    geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    geom2_ = fromWKT("LINESTRING (1 0, 2 1)");
+
+    ensure(geom1_);
+    ensure(geom2_);
+
+    ensure_equals("curved geometry not supported", GEOSRelatePattern(geom1_, geom2_, "0********"), 2);
+    ensure_equals("curved geometry not supported", GEOSRelatePattern(geom2_, geom1_, "0********"), 2);
+}
+
 } // namespace tut
 

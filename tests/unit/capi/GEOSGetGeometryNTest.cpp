@@ -23,15 +23,26 @@ void object::test<1>()
     geom1_ = fromWKT("MULTIPOINT ((1 1), (2 2), (3 3))");
     ensure(nullptr != geom1_);
 
-    GEOSGeometry* result = const_cast<GEOSGeometry*>(GEOSGetGeometryN(geom1_, 0));
+    const GEOSGeometry* result = GEOSGetGeometryN(geom1_, 0);
     ensure(nullptr != result);
     ensure_equals("POINT (1 1)", toWKT(result));
     
-    result = const_cast<GEOSGeometry*>(GEOSGetGeometryN(geom1_, 2));
+    result = GEOSGetGeometryN(geom1_, 2);
     ensure(nullptr != result);
     ensure_equals("POINT (3 3)", toWKT(result));
 
     ensure(GEOSGetGeometryN(geom1_, -1) == nullptr);
+}
+
+template<>
+template<>
+void object::test<2>()
+{
+    input_ = fromWKT("MULTICURVE ((0 0, 1 1), CIRCULARSTRING (1 1, 2 0, 3 1))");
+    ensure(input_);
+
+    ensure_equals(toWKT(GEOSGetGeometryN(input_, 0)), "LINESTRING (0 0, 1 1)");
+    ensure_equals(toWKT(GEOSGetGeometryN(input_, 1)), "CIRCULARSTRING (1 1, 2 0, 3 1)");
 }
 
 } // namespace tut

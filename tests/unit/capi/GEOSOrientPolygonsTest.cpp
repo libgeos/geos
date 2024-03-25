@@ -90,5 +90,16 @@ void object::test<5>()
     ensure_equals(toWKT(geom1_), "GEOMETRYCOLLECTION (GEOMETRYCOLLECTION (MULTIPOLYGON (((0 0, 0 10, 10 10, 10 0, 0 0)))))");
 }
 
+template<>
+template<>
+void object::test<6>()
+{
+    input_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE( CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 0 0)))");
+    ensure(input_);
+
+    auto ret = GEOSOrientPolygons(input_, 0);
+    ensure_equals("curved geometries not supported", ret, -1);
+}
+
 } // namespace tut
 

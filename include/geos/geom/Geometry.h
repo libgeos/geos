@@ -310,9 +310,13 @@ public:
     virtual std::string getGeometryType() const = 0; //Abstract
 
     /// Returns whether the Geometry type _may_ contain curved elements
-    virtual bool isCurvedType() const;
+    /// FIXME: this would be true for GeometryCollection ?
+    bool isCurvedType() const;
 
     static bool isCurvedType(GeometryTypeId);
+
+    /// Returns whether the Geometry contains curved components
+    virtual bool hasCurvedComponents() const;
 
     /// Return an integer representation of this Geometry type
     virtual GeometryTypeId getGeometryTypeId() const = 0; //Abstract

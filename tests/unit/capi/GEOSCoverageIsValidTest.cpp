@@ -88,6 +88,16 @@ template<> void object::test<2>
     ensure_geometry_equals(result_, expected_, 0.01);
 }
 
+template<>
+template<> void object::test<3>
+()
+{
+    input_ = fromWKT("GEOMETRYCOLLECTION ( "
+        "CURVEPOLYGON (COMPOUNDCURVE ( CIRCULARSTRING (2 0, 1 1, 2 2), (2 2, 0 2, 0 0, 2 0))), "
+        "CURVEPOLYGON (COMPOUNDCURVE ( CIRCULARSTRING (2 2, 1 1, 2 0), (2 0, 4 0, 4 2, 2 2))))");
+    ensure(input_);
 
+    ensure_equals("curved geometry not supported", GEOSCoverageIsValid(input_, 0, nullptr), 2);
+}
 
 } // namespace tut

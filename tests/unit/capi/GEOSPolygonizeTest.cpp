@@ -187,5 +187,28 @@ void object::test<6>
     GEOSGeom_destroy(expected_invalidRings);
 }
 
+template<>
+template<>
+void object::test<7>
+()
+{
+    constexpr int size = 2;
+    GEOSGeometry* geoms[size];
+    geoms[0] = GEOSGeomFromWKT("LINESTRING (0 0, 2 0)");
+    geoms[1] = GEOSGeomFromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+
+    for (auto& geom : geoms) {
+        ensure(geom != nullptr);
+    }
+
+    GEOSGeometry* g = GEOSPolygonize(geoms, size);
+
+    ensure("curved geometries not supported", g == nullptr);
+
+    for(auto& input : geoms) {
+        GEOSGeom_destroy(input);
+    }
+}
+
 } // namespace tut
 

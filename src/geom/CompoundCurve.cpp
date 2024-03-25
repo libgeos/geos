@@ -253,6 +253,15 @@ CompoundCurve::compareToSameClass(const Geometry* g) const
     return compare(curves, curve->curves);
 }
 
+bool CompoundCurve::hasCurvedComponents() const {
+    for (const auto& curve : curves) {
+        if (curve->hasCurvedComponents()) {
+            return true;
+        }
+    }
+    return false;
+}
+
 void
 CompoundCurve::normalize()
 {

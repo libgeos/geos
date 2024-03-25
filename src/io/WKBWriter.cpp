@@ -36,6 +36,8 @@
 #include <sstream>
 #include <cassert>
 
+#include "geos/util.h"
+
 #undef DEBUG_WKB_WRITER
 
 
@@ -97,6 +99,8 @@ WKBWriter::writeHEX(const Geometry& g, std::ostream& os)
 void
 WKBWriter::write(const Geometry& g, std::ostream& os)
 {
+    util::ensureNotCurvedType(g);
+
     OrdinateSet inputOrdinates = OrdinateSet::createXY();
     inputOrdinates.setM(g.hasM());
     inputOrdinates.setZ(g.hasZ());

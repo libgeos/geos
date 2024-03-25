@@ -48,5 +48,12 @@ Curve::apply_ro(GeometryComponentFilter* filter) const
     filter->filter_ro(this);
 }
 
+bool
+Curve::isRing() const
+{
+    return isClosed() && isSimple();
+}
+
+
 }
 }

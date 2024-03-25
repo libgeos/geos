@@ -29,6 +29,11 @@ void object::test<1>()
     char* type2 = GEOSGeomType(geom2_);
     ensure_equals(std::string(type2), "LineString");
     GEOSFree(type2);
+
+    geom3_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 2)");
+    char* type3 = GEOSGeomType(geom3_);
+    ensure_equals(std::string(type3), "CircularString");
+    GEOSFree(type3);
 }
 
 } // namespace tut

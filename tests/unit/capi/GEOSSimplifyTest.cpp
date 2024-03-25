@@ -44,5 +44,16 @@ void object::test<1>
     ensure(0 != GEOSisEmpty(geom2_));
 }
 
+template<>
+template<>
+void object::test<2>()
+{
+    input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    ensure(input_ != nullptr);
+
+    result_ = GEOSSimplify(input_, 2);
+    ensure(result_ == nullptr);
+}
+
 } // namespace tut
 

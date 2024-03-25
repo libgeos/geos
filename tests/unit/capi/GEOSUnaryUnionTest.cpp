@@ -218,6 +218,18 @@ void object::test<11>
     ensure_geometry_equals(result_, expected_);
 }
 
+template<>
+template<>
+void object::test<12>()
+{
+    input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+
+    ensure(input_);
+
+    result_ = GEOSUnaryUnion(input_);
+    ensure("curved geometry not supported", result_ == nullptr);
+}
+
 
 } // namespace tut
 

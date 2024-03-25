@@ -139,5 +139,16 @@ void object::test<5>
 
 }
 
+template<>
+template<>
+void object::test<6>()
+{
+    input_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE (CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 0 0)))");
+    ensure(input_ != nullptr);
+
+    result_ = GEOSGetCentroid(input_);
+    ensure("curved geometry not supported", result_ == nullptr);
+}
+
 } // namespace tut
 

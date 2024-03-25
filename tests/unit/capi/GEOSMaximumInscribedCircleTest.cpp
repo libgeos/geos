@@ -75,7 +75,16 @@ void object::test<2>
     // no crash
 }
 
+template<>
+template<>
+void object::test<3>()
+{
+    input_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE (CIRCULARSTRING (0 0, 10 10, 20 0), (20 0, 0 0)))");
+    ensure(input_);
 
+    result_ = GEOSMaximumInscribedCircle(input_, 1);
+    ensure("curved geometry not supported", result_ == nullptr);
+}
 
 } // namespace tut
 

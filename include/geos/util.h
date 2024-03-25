@@ -66,7 +66,7 @@ namespace util {
 template<typename T>
 void ensureNotCurvedType(const T* geom)
 {
-    if (geom->isCurvedType()) {
+    if (geom->hasCurvedComponents()) {
         throw UnsupportedOperationException("Curved geometry types are not supported.");
     }
 }
@@ -74,7 +74,7 @@ void ensureNotCurvedType(const T* geom)
 template<typename T>
 void ensureNotCurvedType(const T& geom)
 {
-    if (geom.isCurvedType()) {
+    if (geom.hasCurvedComponents()) {
         throw UnsupportedOperationException("Curved geometry types are not supported.");
     }
 }

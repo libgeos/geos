@@ -140,6 +140,11 @@ protected:
         return SORTINDEX_MULTIPOLYGON;
     };
 
+    bool hasCurvedComponents() const override
+    {
+        return false;
+    }
+
 };
 
 #ifdef _MSC_VER

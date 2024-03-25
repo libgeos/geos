@@ -212,5 +212,16 @@ void object::test<16>
     ensure_equals(GEOSEqualsIdentical(geom1_, geom2_), 1);
 }
 
+template<>
+template<>
+void object::test<17>
+()
+{
+    geom1_ = GEOSGeomFromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    geom2_ = GEOSGeomFromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+
+    ensure_equals(GEOSEqualsIdentical(geom1_, geom2_), 1);
+}
+
 } // namespace tut
 

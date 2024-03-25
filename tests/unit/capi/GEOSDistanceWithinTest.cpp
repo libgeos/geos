@@ -415,6 +415,19 @@ void object::test<31>() {
     );
 }
 
+template<>
+template<>
+void object::test<32>()
+{
+    geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    geom2_ = fromWKT("LINESTRING (1 1.0001, 2 1)");
+
+    ensure(geom1_);
+    ensure(geom2_);
+
+    char ret = GEOSDistanceWithin(geom1_, geom2_, 0.1);
+    ensure_equals("curved geometry not supported", ret, 2);
+}
 
 
 

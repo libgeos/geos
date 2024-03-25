@@ -210,7 +210,12 @@ enum GEOSGeomTypes {
     /** Multipolygon, a homogeneous collection of polygons */
     GEOS_MULTIPOLYGON,
     /** Geometry collection, a heterogeneous collection of geometry */
-    GEOS_GEOMETRYCOLLECTION
+    GEOS_GEOMETRYCOLLECTION,
+    GEOS_CIRCULARSTRING,
+    GEOS_COMPOUNDCURVE,
+    GEOS_CURVEPOLYGON,
+    GEOS_MULTICURVE,
+    GEOS_MULTISURFACE,
 };
 
 /**

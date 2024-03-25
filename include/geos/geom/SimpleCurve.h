@@ -83,8 +83,6 @@ public:
 
     bool isClosed() const override;
 
-    bool isRing() const;
-
     virtual bool isCoordinate(CoordinateXY& pt) const;
 
     bool equalsExact(const Geometry* other, double tolerance = 0)

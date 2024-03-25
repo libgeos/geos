@@ -205,6 +205,8 @@ Geometry::getCentroid(CoordinateXY& ret) const
 std::unique_ptr<Point>
 Geometry::getInteriorPoint() const
 {
+    geos::util::ensureNotCurvedType(this);
+
     Coordinate interiorPt;
     int dim = getDimension();
     if(dim == 0) {
@@ -813,6 +815,11 @@ Geometry::isCurvedType(GeometryTypeId typ) {
 bool
 Geometry::isCurvedType() const {
     return isCurvedType(getGeometryTypeId());
+}
+
+bool
+Geometry::hasCurvedComponents() const {
+    return false;
 }
 
 } // namespace geos::geom

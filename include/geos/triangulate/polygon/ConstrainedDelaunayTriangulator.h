@@ -55,7 +55,7 @@ private:
     const Geometry* inputGeom;
     const GeometryFactory* geomFact;
 
-    std::unique_ptr<Geometry> compute();
+    std::unique_ptr<Geometry> compute() const;
 
     static std::unique_ptr<Geometry> toGeometry(
         const geom::GeometryFactory* geomFact,

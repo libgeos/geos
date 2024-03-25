@@ -93,6 +93,16 @@ void object::test<5>()
     ensure_geometry_equals(geom1_, expected_);
 }
 
+template<>
+template<>
+void object::test<6>()
+{
+    input_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE( CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 1 0.0001, 0 0)))");
+    ensure(input_);
+
+    result_ = GEOSPolygonHullSimplify(input_, 1, 0.8);
+    ensure("curved geometries not supported", result_ == nullptr);
+}
 
 
 } // namespace tut

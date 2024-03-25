@@ -333,6 +333,15 @@ GeometryCollection::compareToSameClass(const Geometry* g) const
     return compare(geometries, gc->geometries);
 }
 
+bool GeometryCollection::hasCurvedComponents() const {
+    for (const auto& g : geometries) {
+        if (g->hasCurvedComponents()) {
+            return true;
+        }
+    }
+    return false;
+}
+
 const CoordinateXY*
 GeometryCollection::getCoordinate() const
 {

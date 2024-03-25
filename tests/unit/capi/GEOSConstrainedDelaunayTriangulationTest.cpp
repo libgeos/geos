@@ -71,6 +71,17 @@ void object::test<3>
     ensure_geometry_equals(geom2_, geom3_);
 }
 
+// CurvePolygon
+template<>
+template<>
+void object::test<4>()
+{
+    input_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE (CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 0 0)))");
+    ensure(input_ != nullptr);
+
+    result_ = GEOSConstrainedDelaunayTriangulation(input_);
+    ensure("curved geometry not supported", result_ == nullptr);
+}
 
 
 } // namespace tut

@@ -31,5 +31,13 @@ void object::test<1>
     ensure_equals(GEOSGeom_getDimensions(geom2_), 0);
 }
 
+template<>
+template<>
+void object::test<2>()
+{
+    input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    ensure_equals(GEOSGeom_getDimensions(input_), 1);
+}
+
 } // namespace tut
 

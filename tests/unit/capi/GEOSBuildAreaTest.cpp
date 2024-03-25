@@ -38,4 +38,15 @@ void object::test<1>()
     ensure_geometry_equals(result_, expected_, 0);
 }
 
+template<>
+template<>
+void object::test<2>()
+{
+    input_ = fromWKT("MULTICURVE( CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 0 0) )");
+    ensure(input_ != nullptr);
+
+    result_ = GEOSBuildArea(input_);
+    ensure(result_ == nullptr);
+}
+
 } // namespace tut

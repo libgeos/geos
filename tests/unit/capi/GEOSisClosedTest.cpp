@@ -36,7 +36,7 @@ void object::test<1>
 ()
 {
     geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 1 0, 1 1)");
-    int r = GEOSisClosed(geom1_);
+    char r = GEOSisClosed(geom1_);
     ensure_equals(r, 0);
 }
 
@@ -46,7 +46,7 @@ void object::test<2>
 ()
 {
     geom1_ = GEOSGeomFromWKT("LINESTRING(0 0, 0 1, 1 1, 0 0)");
-    int r = GEOSisClosed(geom1_);
+    char r = GEOSisClosed(geom1_);
     ensure_equals(r, 1);
 }
 
@@ -56,7 +56,7 @@ void object::test<3>
 ()
 {
     geom1_ = GEOSGeomFromWKT("MULTILINESTRING ((1 1, 1 2, 2 2, 1 1), (0 0, 0 1, 1 1))");
-    int r = GEOSisClosed(geom1_);
+    char r = GEOSisClosed(geom1_);
     ensure_equals(r, 0);
 }
 
@@ -66,7 +66,7 @@ void object::test<4>
 ()
 {
     geom1_ = GEOSGeomFromWKT("MULTILINESTRING ((1 1, 1 2, 2 2, 1 1), (0 0, 0 1, 1 1, 0 0))");
-    int r = GEOSisClosed(geom1_);
+    char r = GEOSisClosed(geom1_);
     ensure_equals(r, 1);
 }
 
@@ -76,8 +76,20 @@ void object::test<5>
 ()
 {
     geom1_ = GEOSGeomFromWKT("POINT (1 1)");
-    int r = GEOSisClosed(geom1_);
+    char r = GEOSisClosed(geom1_);
     ensure_equals(r, 2);
+}
+
+template<>
+template<>
+void object::test<6>
+()
+{
+    geom1_ = GEOSGeomFromWKT("COMPOUNDCURVE (CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 0 0))");
+    ensure(geom1_);
+
+    char r = GEOSisClosed(geom1_);
+    ensure_equals(r, 1);
 }
 
 } // namespace tut

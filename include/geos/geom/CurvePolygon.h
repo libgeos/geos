@@ -43,6 +43,8 @@ public:
 
     double getArea() const override;
 
+    bool hasCurvedComponents() const override;
+
 protected:
     using SurfaceImpl::SurfaceImpl;
 

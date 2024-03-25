@@ -52,6 +52,10 @@ public:
         throw util::UnsupportedOperationException("Cannot calculate length of CircularString");
     }
 
+    bool hasCurvedComponents() const override {
+        return true;
+    }
+
 };
 
 

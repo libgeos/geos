@@ -78,5 +78,7 @@ void object::test<3>()
     GEOS_finish_r(handle);
 }
 
+
+
 } // namespace tut
 

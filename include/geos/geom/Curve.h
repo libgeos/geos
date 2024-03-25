@@ -36,6 +36,8 @@ public:
 
     virtual bool isClosed() const = 0;
 
+    bool isRing() const;
+
     using Geometry::apply_ro;
     using Geometry::apply_rw;
 

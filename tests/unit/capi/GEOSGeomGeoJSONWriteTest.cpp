@@ -100,4 +100,17 @@ void object::test<3>
         "}");
     test_geojson(wkt, expected, 4);
 }
+
+template<>
+template<>
+void object::test<4>
+()
+{
+    input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    ensure(input_);
+
+    char* geojson = GEOSGeoJSONWriter_writeGeometry(writer_, input_, 0);
+    ensure("curved geometry not supported", geojson == nullptr);
+}
+
 }

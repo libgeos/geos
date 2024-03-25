@@ -271,6 +271,17 @@ void object::test<16>
     }
 }
 
+template<>
+template<>
+void object::test<17>()
+{
+    input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    ensure(input_ != nullptr);
+
+    result_ = GEOSClipByRect(input_, 0, 0, 1, 1);
+    ensure(result_ == nullptr);
+}
+
 
 } // namespace tut
 

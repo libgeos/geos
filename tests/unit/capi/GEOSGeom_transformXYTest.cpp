@@ -294,4 +294,15 @@ void object::test<13>() {
     GEOSGeom_destroy(out);
 }
 
+template <>
+template <>
+void object::test<14>() {
+    input_ = GEOSGeomFromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    ensure(input_);
+
+    result_ = GEOSGeom_transformXY(input_, SCALE_2_3, nullptr);
+
+    ensure_equals(toWKT(result_), "CIRCULARSTRING (0 0, 2 3, 4 0)");
+}
+
 }  // namespace tut

@@ -63,4 +63,19 @@ void object::test<2>
     ensure_distance(dist, 70., 1e-12);
 }
 
+template<>
+template<>
+void object::test<3>()
+{
+    geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    geom2_ = fromWKT("LINESTRING (1 2, 2 2)");
+
+    ensure(geom1_);
+    ensure(geom2_);
+
+    double dist;
+    ensure_equals("curved geometry not supported", GEOSHausdorffDistance(geom1_, geom2_, &dist), 0);
+    ensure_equals("curved geometry not supported", GEOSHausdorffDistance(geom2_, geom1_, &dist), 0);
+}
+
 } // namespace tut

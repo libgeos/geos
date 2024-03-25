@@ -201,5 +201,17 @@ void object::test<8>
     GEOSFree(wkt_expected);
 }
 
+template<>
+template<>
+void object::test<9>()
+{
+    input_ = fromWKT("MULTICURVE (CIRCULARSTRING (0 0, 1 1, 2 0), CIRCULARSTRING (0 1, 1 0, 2 1))");
+    ensure(input_);
+
+    result_ = GEOSNode(input_);
+
+    ensure("curved geometries not supported", result_ == nullptr);
+}
+
 } // namespace tut
 

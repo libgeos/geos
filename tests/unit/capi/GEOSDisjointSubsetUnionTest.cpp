@@ -46,6 +46,15 @@ void object::test<2>()
     ensure_geometry_equals(result_, expected_);
 }
 
+template <>
+template <>
+void object::test<3>() {
+    input_ = fromWKT("MULTICURVE ((0 0, 1 1), CIRCULARSTRING (1 1, 2 0, 3 1), (5 5, 8 8))");
+    ensure(input_);
+
+    result_ = GEOSDisjointSubsetUnion(input_);
+    ensure("curved geometry not supported", result_ == nullptr);
+}
 
 } // namespace tut
 

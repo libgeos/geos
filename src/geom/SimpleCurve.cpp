@@ -165,12 +165,6 @@ SimpleCurve::isClosed() const
     return points->front<CoordinateXY>().equals2D(points->back<CoordinateXY>());
 }
 
-bool
-SimpleCurve::isRing() const
-{
-    return isClosed() && isSimple();
-}
-
 std::unique_ptr<Geometry>
 SimpleCurve::getBoundary() const
 {

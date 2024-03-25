@@ -32,5 +32,18 @@ void object::test<1>()
     ensure_equals(0, GEOSCovers(geom3_, geom2_));
 }
 
+template<>
+template<>
+void object::test<2>()
+{
+    geom1_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE (CIRCULARSTRING (0 0, 10 10, 20 0), (20 0, 0 0)))");
+    geom2_ = fromWKT("LINESTRING (5 3, 5 4)");
+
+    ensure(geom1_);
+    ensure(geom2_);
+
+    ensure_equals("curved geometry not supported", GEOSCovers(geom1_, geom2_), 2);
+}
+
 } // namespace tut
 

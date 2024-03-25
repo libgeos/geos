@@ -92,6 +92,7 @@ public:
 
     int compareToSameClass(const Geometry* geom) const override;
 
+    bool hasCurvedComponents() const override;
 
 protected:
     CompoundCurve(std::vector<std::unique_ptr<SimpleCurve>>&&,
