@@ -130,7 +130,7 @@ DirectedEdgeStar::getRightmostEdge()
 
 /*public*/
 void
-DirectedEdgeStar::computeLabelling(std::vector<GeometryGraph*>* geom)
+DirectedEdgeStar::computeLabelling(const std::vector<std::unique_ptr<GeometryGraph>>&geom)
 //throw(TopologyException *)
 {
     // this call can throw a TopologyException

@@ -52,7 +52,7 @@ RelateOp::relate(const Geometry* a, const Geometry* b,
 
 RelateOp::RelateOp(const Geometry* g0, const Geometry* g1):
     GeometryGraphOperation(g0, g1),
-    relateComp(&arg)
+    relateComp(arg)
 {
 }
 
@@ -60,7 +60,7 @@ RelateOp::RelateOp(const Geometry* g0, const Geometry* g1,
                    const algorithm::BoundaryNodeRule& boundaryNodeRule)
     :
     GeometryGraphOperation(g0, g1, boundaryNodeRule),
-    relateComp(&arg)
+    relateComp(arg)
 {
 }
 
