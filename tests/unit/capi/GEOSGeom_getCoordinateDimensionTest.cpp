@@ -21,14 +21,35 @@ template<>
 void object::test<1>
 ()
 {
-    geom1_ = fromWKT("POLYGON ((0 0, 1 0, 1 1, 0 0))");
-    ensure_equals(GEOSGeom_getCoordinateDimension(geom1_), 2);
+    input_ = fromWKT("POLYGON ((0 0, 1 0, 1 1, 0 0))");
+    ensure_equals(GEOSGeom_getCoordinateDimension(input_), 2);
+}
 
-    geom2_ = fromWKT("POINT (4 2 7)");
-    ensure_equals(GEOSGeom_getCoordinateDimension(geom2_), 3);
+template<>
+template<>
+void object::test<2>
+()
+{
+    input_ = fromWKT("POINT (4 2 7)");
+    ensure_equals(GEOSGeom_getCoordinateDimension(input_), 3);
+}
 
-    geom3_ = fromWKT("LINESTRING (4 2 7 1, 8 2 9 5)");
-    ensure_equals(GEOSGeom_getCoordinateDimension(geom3_), 4);
+template<>
+template<>
+void object::test<3>
+()
+{
+    input_ = fromWKT("LINESTRING (4 2 7 1, 8 2 9 5)");
+    ensure_equals(GEOSGeom_getCoordinateDimension(input_), 4);
+}
+
+template<>
+template<>
+void object::test<4>
+()
+{
+    input_ = fromWKT("CIRCULARSTRING Z (0 0 0, 1 1 1, 2 0 2)");
+    ensure_equals(GEOSGeom_getCoordinateDimension(input_), 3);
 }
 
 } // namespace tut

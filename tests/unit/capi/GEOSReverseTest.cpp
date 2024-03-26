@@ -123,4 +123,12 @@ void object::test<8>
     testReverse("GEOMETRYCOLLECTION EMPTY", "GEOMETRYCOLLECTION EMPTY");
 }
 
+template<>
+template<>
+void object::test<9>()
+{
+    testReverse("CIRCULARSTRING (0 0, 1 1, 2 0)",
+                "CIRCULARSTRING (2 0, 1 1, 0 0)");
+}
+
 } // namespace tut

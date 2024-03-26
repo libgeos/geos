@@ -144,5 +144,16 @@ void object::test<6>
     ensure_equals(r, 0); // invalid
 }
 
+template<>
+template<>
+void object::test<7>()
+{
+    input_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE( CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 1 1)))");
+    ensure(input_ != nullptr);
+
+    char ret = GEOSisValidDetail(input_, 0, nullptr, nullptr);
+    ensure_equals("error raised on curved geometry", ret, 2);
+}
+
 } // namespace tut
 

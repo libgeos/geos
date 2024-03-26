@@ -220,5 +220,19 @@ void object::test<10>
     ensure_equals(r2, 1);
 }
 
+template<>
+template<>
+void object::test<11>()
+{
+    geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    geom2_ = fromWKT("LINESTRING (1 0, 2 1)");
+
+    ensure(geom1_);
+    ensure(geom2_);
+
+    ensure_equals("curved geometry not supported", GEOSIntersects(geom1_, geom2_), 2);
+    ensure_equals("curved geometry not supported", GEOSIntersects(geom2_, geom1_), 2);
+}
+
 } // namespace tut
 

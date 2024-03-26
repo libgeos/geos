@@ -200,16 +200,6 @@ public:
      *
      * @param g a Geometry with linework to be polygonized
      */
-    void add(geom::Geometry* g);
-
-    /**
-     * Add a geometry to the linework to be polygonized.
-     * May be called multiple times.
-     * Any dimension of Geometry may be added;
-     * the constituent linework will be extracted and used
-     *
-     * @param g a Geometry with linework to be polygonized
-     */
     void add(const geom::Geometry* g);
 
     /** \brief

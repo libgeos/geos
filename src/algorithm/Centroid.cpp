@@ -28,6 +28,8 @@
 
 #include <cmath> // for std::abs
 
+#include "geos/util.h"
+
 using namespace geos::geom;
 
 namespace geos {
@@ -68,6 +70,8 @@ Centroid::getCentroid(CoordinateXY& cent) const
 void
 Centroid::add(const Geometry& geom)
 {
+    util::ensureNotCurvedType(geom);
+
     if(geom.isEmpty()) {
         return;
     }

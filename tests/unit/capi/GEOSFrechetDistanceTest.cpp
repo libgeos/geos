@@ -92,4 +92,19 @@ void object::test<4>
     ensure(dist >= 0); // no crash
 }
 
+template<>
+template<>
+void object::test<5>()
+{
+    geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    geom2_ = fromWKT("LINESTRING (1 2, 2 2)");
+
+    ensure(geom1_);
+    ensure(geom2_);
+
+    double dist;
+    ensure_equals("curved geometry not supported", GEOSFrechetDistance(geom1_, geom2_, &dist), 0);
+    ensure_equals("curved geometry not supported", GEOSFrechetDistance(geom2_, geom1_, &dist), 0);
+}
+
 } // namespace tut

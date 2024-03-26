@@ -35,6 +35,8 @@
 #include <geos/geom/util/GeometryCombiner.h>
 #include <geos/algorithm/PointLocator.h>
 
+#include "geos/util.h"
+
 namespace geos {
 namespace operation { // geos::operation
 namespace geounion {  // geos::operation::geounion

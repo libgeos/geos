@@ -157,5 +157,20 @@ void object::test<5>
     ensure_equals(raised & FE_OVERFLOW, 0);
 }
 
+template<>
+template<>
+void object::test<6>()
+{
+    geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    geom2_ = fromWKT("LINESTRING (1 1.0001, 2 1)");
+
+    ensure(geom1_);
+    ensure(geom2_);
+
+    double dist;
+    int ret = GEOSDistance(geom1_, geom2_, &dist);
+    ensure_equals("curved geometry not supported", ret, 0);
+}
+
 } // namespace tut
 

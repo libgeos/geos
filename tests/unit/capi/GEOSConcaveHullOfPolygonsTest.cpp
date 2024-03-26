@@ -52,6 +52,17 @@ void object::test<2>()
     ensure_geometry_equals(geom1_, expected_);
 }
 
+template<>
+template<>
+void object::test<3>()
+{
+    input_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE( CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 0 0) ))");
+    ensure(input_ != nullptr);
+
+    result_ = GEOSConcaveHullOfPolygons(input_, 0.7, false, false);
+    ensure("curved geometry not supported", result_ == nullptr);
+}
+
 
 } // namespace tut
 

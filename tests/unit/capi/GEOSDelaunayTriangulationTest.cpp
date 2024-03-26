@@ -128,5 +128,16 @@ void object::test<6>
                       "MULTILINESTRING ((10 0, 10 10), (0 0, 10 10), (0 0, 10 0))");
 }
 
+template<>
+template<>
+void object::test<7>()
+{
+    input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0, 3 -1, 4 0)");
+    ensure(input_);
+
+    result_ = GEOSDelaunayTriangulation(input_, 0, 0);
+    ensure("curved geometry not supported", result_ == nullptr);
+}
+
 } // namespace tut
 

@@ -65,5 +65,32 @@ void object::test<2>
     ensure_geometry_equals_exact(result_, expected_, 0.0001);
 }
 
+template<>
+template<>
+void object::test<3>()
+{
+    input_ = fromWKT("MULTICURVE (CIRCULARSTRING (0 0, 1 1, 2 0), (0 3, 2 3))");
+    ensure(input_);
+
+    result_ = GEOSLargestEmptyCircle(input_, nullptr, 0.001);
+
+    ensure("curved geometries not supported", result_ == nullptr);
+}
+
+template<>
+template<>
+void object::test<4>()
+{
+    input_ = GEOSGeomFromWKT("MULTILINESTRING ((40 90, 90 60), (90 40, 40 10))");
+    geom2_ = GEOSGeomFromWKT("CURVEPOLYGON (COMPOUNDCURVE (CIRCULARSTRING(0 100, 50 150, 100 100), (100 100, 100 0, 0 0, 0 100)))");
+    ensure(input_);
+    ensure(geom2_);
+
+    result_ = GEOSLargestEmptyCircle(input_, geom2_, 0.001);
+
+    ensure("curved geometries not supported", result_ == nullptr);
+}
+
+
 } // namespace tut
 

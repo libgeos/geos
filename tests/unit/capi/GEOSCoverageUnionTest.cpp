@@ -10,13 +10,15 @@
 #include <cstdlib>
 #include <cstring>
 
+#include "capi_test_utils.h"
+
 namespace tut {
 //
 // Test Group
 //
 
 // Common data used in test cases.
-struct test_capicoverageunion_data {
+struct test_capicoverageunion_data : public capitest::utility {
     static void
     notice(const char *fmt, ...) {
         std::fprintf(stdout, "NOTICE: ");
@@ -103,6 +105,18 @@ void object::test<2>
     GEOSGeom_destroy_r(m_context, result);
 }
 
+template<>
+template<> void object::test<4>
+()
+{
+    input_ = fromWKT("GEOMETRYCOLLECTION ( "
+        "CURVEPOLYGON (COMPOUNDCURVE ( CIRCULARSTRING (2 0, 1 1, 2 2), (2 2, 0 2, 0 0, 2 0))), "
+        "CURVEPOLYGON (COMPOUNDCURVE ( CIRCULARSTRING (2 2, 1 1, 2 0), (2 0, 4 0, 4 2, 2 2))))");
+    ensure(input_);
+
+    result_ = GEOSCoverageSimplifyVW(input_, 0.1, false);
+    ensure("curved geometry not supported", result_ == nullptr);
+}
 
 } // namespace tut
 

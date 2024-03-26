@@ -57,5 +57,19 @@ void object::test<3>()
     ensure_equals(y, 8);
 }
 
+template<>
+template<>
+void object::test<4>()
+{
+    input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    const GEOSCoordSequence* seq = GEOSGeom_getCoordSeq(input_);
+
+    ensure(seq);
+
+    unsigned int size;
+    ensure(GEOSCoordSeq_getSize(seq, &size));
+    ensure_equals(size, 3u);
+}
+
 } // namespace tut
 

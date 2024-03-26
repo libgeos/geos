@@ -91,10 +91,10 @@ EdgeEndStar::getNextCW(EdgeEnd* ee)
 
 /*public*/
 void
-EdgeEndStar::computeLabelling(std::vector<GeometryGraph*>* geomGraph)
+EdgeEndStar::computeLabelling(const std::vector<std::unique_ptr<GeometryGraph>>& geomGraph)
 //throw(TopologyException *)
 {
-    computeEdgeEndLabels((*geomGraph)[0]->getBoundaryNodeRule());
+    computeEdgeEndLabels(geomGraph[0]->getBoundaryNodeRule());
 
     // Propagate side labels  around the edges in the star
     // for each parent Geometry
@@ -185,12 +185,12 @@ EdgeEndStar::computeEdgeEndLabels(
 /*public*/
 Location
 EdgeEndStar::getLocation(uint32_t geomIndex,
-                         const Coordinate& p, std::vector<GeometryGraph*>* geom)
+                         const Coordinate& p, const std::vector<std::unique_ptr<GeometryGraph>>& geom)
 {
     // compute location only on demand
     if(ptInAreaLocation[geomIndex] == Location::NONE) {
         ptInAreaLocation[geomIndex] = algorithm::locate::SimplePointInAreaLocator::locate(p,
-                                      (*geom)[geomIndex]->getGeometry());
+                                      geom[geomIndex]->getGeometry());
     }
     return ptInAreaLocation[geomIndex];
 }

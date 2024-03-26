@@ -159,4 +159,14 @@ void object::test<9>()
     ensure("result expected to be NULL", result_ == nullptr);
 }
 
+template<>
+template<>
+void object::test<10>()
+{
+    input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    ensure(input_);
+
+    result_ = GEOSDensify(input_, 0.1);
+    ensure("curved geometries not supported", result_ == nullptr);
+}
 } // namespace tut

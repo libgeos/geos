@@ -82,7 +82,7 @@ namespace capitest {
         }
 
         std::string
-        toWKT(GEOSGeometry* g)
+        toWKT(const GEOSGeometry* g)
         {
             char* wkt = GEOSWKTWriter_write(wktw_, g);
             std::string ret(wkt);

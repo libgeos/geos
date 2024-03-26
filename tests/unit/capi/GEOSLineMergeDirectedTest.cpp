@@ -60,5 +60,18 @@ void object::test<2>
     GEOSGeom_destroy(expected);
 }
 
+
+template<>
+template<>
+void object::test<3>()
+{
+    input_ = fromWKT("MULTICURVE (CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 3 0))");
+    ensure(input_);
+
+    result_ = GEOSLineMergeDirected(input_);
+
+    ensure("curved geometries not supported", result_ == nullptr);
+}
+
 } // namesplace tut
 

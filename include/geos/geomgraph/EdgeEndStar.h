@@ -27,6 +27,7 @@
 #include <geos/geom/Coordinate.h>  // for p0,p1
 
 #include <array>
+#include <memory>
 #include <set>
 #include <string>
 #include <vector>
@@ -115,7 +116,7 @@ public:
 
     virtual EdgeEnd* getNextCW(EdgeEnd* ee);
 
-    virtual void computeLabelling(std::vector<GeometryGraph*>* geomGraph);
+    virtual void computeLabelling(const std::vector<std::unique_ptr<GeometryGraph>>&geomGraph);
     // throw(TopologyException *);
 
     virtual bool isAreaLabelsConsistent(const GeometryGraph& geomGraph);
@@ -148,8 +149,8 @@ protected:
 private:
 
     virtual geom::Location getLocation(uint32_t geomIndex,
-                                       const geom::Coordinate& p,
-                                       std::vector<GeometryGraph*>* geom);
+                                       const geom::Coordinate&p,
+                                       const std::vector<std::unique_ptr<GeometryGraph>>&geom);
 
     /** \brief
      * The location of the point for this star in

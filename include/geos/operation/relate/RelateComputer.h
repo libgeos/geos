@@ -76,7 +76,7 @@ namespace relate { // geos::operation::relate
  */
 class GEOS_DLL RelateComputer {
 public:
-    RelateComputer(std::vector<geomgraph::GeometryGraph*>* newArg);
+    RelateComputer(std::vector<std::unique_ptr<geomgraph::GeometryGraph>>& newArg);
     ~RelateComputer() = default;
 
     std::unique_ptr<geom::IntersectionMatrix> computeIM();
@@ -87,7 +87,7 @@ private:
     algorithm::PointLocator ptLocator;
 
     /// the arg(s) of the operation
-    std::vector<geomgraph::GeometryGraph*>* arg;
+    const std::vector<std::unique_ptr<geomgraph::GeometryGraph>>& arg;
 
     geomgraph::NodeMap nodes;
 

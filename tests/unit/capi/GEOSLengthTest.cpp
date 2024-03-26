@@ -58,5 +58,17 @@ void object::test<3>()
     ensure_equals(length, 0);
 }
 
+template<>
+template<>
+void object::test<4>()
+{
+    input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    ensure(input_ != nullptr);
+
+    double length = -1;
+    int ret = GEOSLength(input_, &length);
+    ensure_equals("error raised on curved geometry", ret, 0);
+}
+
 } // namespace tut
 

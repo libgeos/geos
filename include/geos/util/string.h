@@ -25,5 +25,7 @@ bool endsWith(const std::string & s, char suffix);
 bool startsWith(const std::string & s, const std::string & prefix);
 bool startsWith(const std::string & s, char prefix);
 
+void toUpper(std::string& s);
+
 }
 }

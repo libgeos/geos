@@ -209,5 +209,19 @@ void object::test<10>
     ensure_equals(out, "LINESTRING (-71.1257 42.2703, -71.1261 42.2703, -71.1261 42.2702, -71.1317 42.2509)");
 }
 
+template<>
+template<>
+void object::test<11>()
+{
+    geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    geom2_ = fromWKT("LINESTRING (1 1.0001, 2 1)");
+
+    ensure(geom1_);
+    ensure(geom2_);
+
+    result_ = GEOSSnap(geom1_, geom2_, 0.1);
+    ensure("curved geometry not supported", result_ == nullptr);
+}
+
 } // namespace tut
 

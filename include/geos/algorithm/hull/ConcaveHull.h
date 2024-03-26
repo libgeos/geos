@@ -96,15 +96,7 @@ class GEOS_DLL ConcaveHull {
 
 public:
 
-    ConcaveHull(const Geometry* geom)
-        : inputGeometry(geom)
-        , maxEdgeLengthRatio(-1.0)
-        , alpha(-1)
-        , isHolesAllowed(false)
-        , criteriaType(PARAM_EDGE_LENGTH)
-        , maxSizeInHull(0.0)
-        , geomFactory(geom->getFactory())
-        {};
+    ConcaveHull(const Geometry* geom);
 
     /**
     * Computes the approximate edge length of

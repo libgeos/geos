@@ -460,4 +460,15 @@ void object::test<25>()
     ensure_geometry_equals(geom3_, geom2_, 0.001);
 }
 
+template<>
+template<>
+void object::test<26>()
+{
+    input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    ensure(input_ != nullptr);
+
+    result_ = GEOSBuffer(input_, 1, 8);
+    ensure(result_ == nullptr);
+}
+
 } // namespace tut

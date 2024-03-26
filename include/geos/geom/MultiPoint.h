@@ -134,6 +134,11 @@ protected:
         return SORTINDEX_MULTIPOINT;
     };
 
+    bool hasCurvedComponents() const override
+    {
+        return false;
+    }
+
 };
 
 #ifdef _MSC_VER

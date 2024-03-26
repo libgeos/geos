@@ -57,6 +57,17 @@ void object::test<3>()
     GEOSFree(reason);
 }
 
+template<>
+template<>
+void object::test<7>()
+{
+    input_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE( CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 1 1)))");
+    ensure(input_ != nullptr);
+
+    char* reason = GEOSisValidReason(input_);
+    ensure(reason == nullptr);
+}
+
 
 } // namespace tut
 

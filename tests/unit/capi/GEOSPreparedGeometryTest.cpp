@@ -441,5 +441,17 @@ void object::test<15>
 }
 
 
+template<>
+template<>
+void object::test<16>()
+{
+    geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+
+    ensure(geom1_);
+
+    prepGeom1_ = GEOSPrepare(geom1_);
+    ensure("curved geometries not supported", prepGeom1_ == nullptr);
+}
+
 } // namespace tut
 

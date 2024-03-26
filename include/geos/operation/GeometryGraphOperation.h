@@ -74,9 +74,13 @@ protected:
     /** \brief
      * The operation args into an array so they can be accessed by index
      */
-    std::vector<geomgraph::GeometryGraph*> arg;
+    std::vector<std::unique_ptr<geomgraph::GeometryGraph>> arg;
 
     void setComputationPrecision(const geom::PrecisionModel* pm);
+
+    // Declare type as noncopyable
+    GeometryGraphOperation(const GeometryGraphOperation& other) = delete;
+    GeometryGraphOperation& operator=(const GeometryGraphOperation& rhs) = delete;
 };
 
 } // namespace geos.operation

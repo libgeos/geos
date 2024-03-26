@@ -119,6 +119,17 @@ void object::test<6>
     ensure_geometry_equals(result_, expected_);
 }
 
+template<>
+template<>
+void object::test<7>()
+{
+    input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    ensure(input_);
+
+    result_ = GEOSLineSubstring(input_, 0.5, 0);
+
+    ensure("curved geometries not supported", result_ == nullptr);
+}
 
 } // namespace tut
 

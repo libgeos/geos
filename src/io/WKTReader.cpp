@@ -22,14 +22,20 @@
 #include <geos/io/ParseException.h>
 #include <geos/io/CLocalizer.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/CircularString.h>
+#include <geos/geom/CompoundCurve.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/Polygon.h>
+#include <geos/geom/CurvePolygon.h>
 #include <geos/geom/MultiPoint.h>
 #include <geos/geom/MultiLineString.h>
+#include <geos/geom/MultiCurve.h>
 #include <geos/geom/MultiPolygon.h>
+#include <geos/geom/MultiSurface.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/Surface.h>
 #include <geos/util.h>
 #include <geos/util/string.h>
 
@@ -259,14 +265,19 @@ WKTReader::getNextWord(StringTokenizer* tokenizer)
 }
 
 std::unique_ptr<Geometry>
-WKTReader::readGeometryTaggedText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const
+WKTReader::readGeometryTaggedText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags, const GeometryTypeId* emptyType) const
 {
     std::string type = getNextWord(tokenizer);
 
     std::unique_ptr<Geometry> geom;
     OrdinateSet origFlags = ordinateFlags;
+
     OrdinateSet newFlags = OrdinateSet::createXY();
-    readOrdinateFlags(type, newFlags);
+    if (type == "EMPTY") {
+        newFlags = origFlags;
+    } else {
+        readOrdinateFlags(type, newFlags);
+    }
 
     if(isTypeName(type, "POINT")) {
         geom = readPointText(tokenizer, newFlags);
@@ -277,8 +288,17 @@ WKTReader::readGeometryTaggedText(StringTokenizer* tokenizer, OrdinateSet& ordin
     else if(isTypeName(type, "LINEARRING")) {
         geom = readLinearRingText(tokenizer, newFlags);
     }
+    else if(isTypeName(type, "CIRCULARSTRING")) {
+        geom = readCircularStringText(tokenizer, newFlags);
+    }
+    else if(isTypeName(type, "COMPOUNDCURVE")) {
+        geom = readCompoundCurveText(tokenizer, newFlags);
+    }
     else if(isTypeName(type, "POLYGON")) {
         geom = readPolygonText(tokenizer, newFlags);
+    }
+    else if(isTypeName(type, "CURVEPOLYGON")) {
+        geom = readCurvePolygonText(tokenizer, newFlags);
     }
     else if(isTypeName(type,  "MULTIPOINT")) {
         geom = readMultiPointText(tokenizer, newFlags);
@@ -286,11 +306,19 @@ WKTReader::readGeometryTaggedText(StringTokenizer* tokenizer, OrdinateSet& ordin
     else if(isTypeName(type, "MULTILINESTRING")) {
         geom = readMultiLineStringText(tokenizer, newFlags);
     }
+    else if(isTypeName(type, "MULTICURVE")) {
+        geom = readMultiCurveText(tokenizer, newFlags);
+    }
     else if(isTypeName(type, "MULTIPOLYGON")) {
         geom = readMultiPolygonText(tokenizer, newFlags);
     }
+    else if(isTypeName(type, "MULTISURFACE")) {
+        geom = readMultiSurfaceText(tokenizer, newFlags);
+    }
     else if(isTypeName(type, "GEOMETRYCOLLECTION")) {
         geom = readGeometryCollectionText(tokenizer, newFlags);
+    } else if (type == "EMPTY" && emptyType != nullptr) {
+        return geometryFactory->createEmptyGeometry(*emptyType, newFlags.hasZ(), newFlags.hasM());
     } else {
         throw ParseException("Unknown type", type);
     }
@@ -306,7 +334,7 @@ WKTReader::readGeometryTaggedText(StringTokenizer* tokenizer, OrdinateSet& ordin
 std::unique_ptr<Point>
 WKTReader::readPointText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const
 {
-    auto coords = getCoordinates(tokenizer, ordinateFlags);
+    auto&& coords = getCoordinates(tokenizer, ordinateFlags);
     return geometryFactory->createPoint(std::move(coords));
 }
 
@@ -325,6 +353,69 @@ WKTReader::readLinearRingText(StringTokenizer* tokenizer, OrdinateSet& ordinateF
         coords->closeRing();
     }
     return geometryFactory->createLinearRing(std::move(coords));
+}
+
+std::unique_ptr<CircularString>
+WKTReader::readCircularStringText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const
+{
+    auto&& coords = getCoordinates(tokenizer, ordinateFlags);
+    return geometryFactory->createCircularString(std::move(coords));
+}
+
+std::unique_ptr<Curve>
+WKTReader::readCurveText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const
+{
+    int type = tokenizer->peekNextToken();
+    if (type == '(') {
+        return readLineStringText(tokenizer, ordinateFlags);
+    }
+
+    GeometryTypeId defaultType = GEOS_LINESTRING;
+    auto component = readGeometryTaggedText(tokenizer, ordinateFlags, &defaultType);
+    if (dynamic_cast<Curve*>(component.get())) {
+        return std::unique_ptr<Curve>(static_cast<Curve*>(component.release()));
+    }
+
+    throw ParseException("Expected LINESTRING/CIRCULARSTRING/COMPOUNDCURVE but got " + component->getGeometryType());
+}
+
+std::unique_ptr<Geometry>
+WKTReader::readSurfaceText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const
+{
+    int type = tokenizer->peekNextToken();
+    if (type == '(') {
+        return readPolygonText(tokenizer, ordinateFlags);
+    }
+
+    GeometryTypeId defaultType = GEOS_POLYGON;
+    auto component = readGeometryTaggedText(tokenizer, ordinateFlags, &defaultType);
+    if (dynamic_cast<Surface*>(component.get())) {
+        return component;
+    }
+
+    throw ParseException("Expected POLYGON or CURVEPOLYGON but got " + component->getGeometryType());
+}
+
+std::unique_ptr<CompoundCurve>
+WKTReader::readCompoundCurveText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const
+{
+    std::string nextToken = getNextEmptyOrOpener(tokenizer, ordinateFlags);
+    if (nextToken == "EMPTY") {
+        return geometryFactory->createCompoundCurve();
+    }
+
+    std::vector<std::unique_ptr<SimpleCurve>> curves;
+    do {
+        auto curve = readCurveText(tokenizer, ordinateFlags);
+        if (dynamic_cast<SimpleCurve*>(curve.get())) {
+            curves.emplace_back(static_cast<SimpleCurve*>(curve.release()));
+        } else {
+            throw ParseException("Expected LINESTRING or CIRCULARSTRING but got " + curve->getGeometryType());
+        }
+        nextToken = getNextCloserOrComma(tokenizer);
+    } while (nextToken == ",");
+
+    return geometryFactory->createCompoundCurve(std::move(curves));
 }
 
 std::unique_ptr<MultiPoint>
@@ -418,6 +509,27 @@ WKTReader::readPolygonText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlag
     return geometryFactory->createPolygon(std::move(shell), std::move(holes));
 }
 
+std::unique_ptr<CurvePolygon>
+WKTReader::readCurvePolygonText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const
+{
+    std::string nextToken = getNextEmptyOrOpener(tokenizer, ordinateFlags);
+    if(nextToken == "EMPTY") {
+        auto coords = detail::make_unique<CoordinateSequence>(0u, ordinateFlags.hasZ(), ordinateFlags.hasM());
+        std::unique_ptr<Curve> ring = geometryFactory->createLinearRing(std::move(coords));
+        return geometryFactory->createCurvePolygon(std::move(ring));
+    }
+
+    std::vector<std::unique_ptr<Curve>> holes;
+    auto shell = readCurveText(tokenizer, ordinateFlags);
+    nextToken = getNextCloserOrComma(tokenizer);
+    while(nextToken == ",") {
+        holes.push_back(readCurveText(tokenizer, ordinateFlags));
+        nextToken = getNextCloserOrComma(tokenizer);
+    }
+
+    return geometryFactory->createCurvePolygon(std::move(shell), std::move(holes));
+}
+
 std::unique_ptr<MultiLineString>
 WKTReader::readMultiLineStringText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const
 {
@@ -435,6 +547,23 @@ WKTReader::readMultiLineStringText(StringTokenizer* tokenizer, OrdinateSet& ordi
     return geometryFactory->createMultiLineString(std::move(lineStrings));
 }
 
+std::unique_ptr<MultiCurve>
+WKTReader::readMultiCurveText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const
+{
+    std::string nextToken = getNextEmptyOrOpener(tokenizer, ordinateFlags);
+    if(nextToken == "EMPTY") {
+        return geometryFactory->createMultiCurve();
+    }
+
+    std::vector<std::unique_ptr<Curve>> curves;
+    do {
+        curves.push_back(readCurveText(tokenizer, ordinateFlags));
+        nextToken = getNextCloserOrComma(tokenizer);
+    } while(nextToken == ",");
+
+    return geometryFactory->createMultiCurve(std::move(curves));
+}
+
 std::unique_ptr<MultiPolygon>
 WKTReader::readMultiPolygonText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const
 {
@@ -450,6 +579,23 @@ WKTReader::readMultiPolygonText(StringTokenizer* tokenizer, OrdinateSet& ordinat
     } while(nextToken == ",");
 
     return geometryFactory->createMultiPolygon(std::move(polygons));
+}
+
+std::unique_ptr<MultiSurface>
+WKTReader::readMultiSurfaceText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const
+{
+    std::string nextToken = getNextEmptyOrOpener(tokenizer, ordinateFlags);
+    if(nextToken == "EMPTY") {
+        return geometryFactory->createMultiSurface();
+    }
+
+    std::vector<std::unique_ptr<Geometry>> surfaces;
+    do {
+        surfaces.push_back(readSurfaceText(tokenizer, ordinateFlags));
+        nextToken = getNextCloserOrComma(tokenizer);
+    } while(nextToken == ",");
+
+    return geometryFactory->createMultiSurface(std::move(surfaces));
 }
 
 std::unique_ptr<GeometryCollection>

@@ -37,8 +37,7 @@ void object::test<1>()
 */
 template<>
 template<>
-void object::test<2>()
-{
+void object::test<2>() {
     GEOSGeometry* a = GEOSGeomFromWKT("GEOMETRYCOLLECTION (POINT (51 -1), LINESTRING (52 -1, 49 2))");
     GEOSGeometry* b = GEOSGeomFromWKT("POINT (2 3)");
 
@@ -58,6 +57,20 @@ void object::test<2>()
     GEOSGeom_destroy(b);
     GEOSGeom_destroy(ab);
     GEOSGeom_destroy(ba);
+}
+
+template<>
+template<>
+void object::test<3>()
+{
+    geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    geom2_ = fromWKT("LINESTRING (1 0, 2 1)");
+
+    ensure(geom1_);
+    ensure(geom2_);
+
+    result_ = GEOSDifference(geom1_, geom2_);
+    ensure("curved geometry not supported", result_ == nullptr);
 }
 
 } // namespace tut

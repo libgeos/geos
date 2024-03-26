@@ -6,6 +6,11 @@
 // geos
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKTWriter.h>
+#include <geos/geom/CircularString.h>
+#include <geos/geom/CompoundCurve.h>
+#include <geos/geom/CurvePolygon.h>
+#include <geos/geom/MultiCurve.h>
+#include <geos/geom/MultiSurface.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Point.h>
@@ -416,7 +421,8 @@ void object::test<15>
     // https://github.com/libgeos/geos/issues/888
     std::vector<std::string> variants0{
         "MULTIPOINT EMPTY", "MULTILINESTRING EMPTY",
-        "MULTIPOLYGON EMPTY", "GEOMETRYCOLLECTION EMPTY"
+        "MULTIPOLYGON EMPTY", "GEOMETRYCOLLECTION EMPTY",
+        "MULTICURVE EMPTY", "MULTISURFACE EMPTY"
     };
     for (const auto& wkt : variants0) {
         const auto g = wktreader.read(wkt);
@@ -435,7 +441,15 @@ void object::test<15>
         "GEOMETRYCOLLECTION (MULTIPOINT EMPTY)",
         "GEOMETRYCOLLECTION Z (POINT Z EMPTY)",
         "GEOMETRYCOLLECTION M (LINESTRING M EMPTY)",
-        "GEOMETRYCOLLECTION ZM (POLYGON ZM EMPTY)"
+        "GEOMETRYCOLLECTION ZM (POLYGON ZM EMPTY)",
+        "MULTICURVE (EMPTY)", "MULTICURVE Z (EMPTY)",
+        "MULTICURVE M (EMPTY)", "MULTICURVE ZM (EMPTY)",
+        "MULTICURVE (CIRCULARSTRING EMPTY)", "MULTICURVE Z (CIRCULARSTRING Z EMPTY)",
+        "MULTICURVE M (CIRCULARSTRING M EMPTY)", "MULTICURVE ZM (CIRCULARSTRING ZM EMPTY)",
+        "MULTISURFACE (EMPTY)", "MULTISURFACE Z (EMPTY)",
+        "MULTISURFACE M (EMPTY)", "MULTISURFACE ZM (EMPTY)",
+        "MULTISURFACE (EMPTY)", "MULTISURFACE Z (CURVEPOLYGON Z EMPTY)",
+        "MULTISURFACE M (CURVEPOLYGON M EMPTY)", "MULTISURFACE ZM (CURVEPOLYGON ZM EMPTY)",
     };
     for (const auto& wkt : variants1) {
         const auto g = wktreader.read(wkt);
@@ -454,7 +468,11 @@ void object::test<15>
         "GEOMETRYCOLLECTION (POLYGON EMPTY, LINESTRING EMPTY)",
         "GEOMETRYCOLLECTION Z (LINESTRING Z EMPTY, POINT Z EMPTY)",
         "GEOMETRYCOLLECTION M (POINT M EMPTY, LINESTRING M EMPTY)",
-        "GEOMETRYCOLLECTION ZM (POINT ZM EMPTY, LINESTRING ZM EMPTY)"
+        "GEOMETRYCOLLECTION ZM (POINT ZM EMPTY, LINESTRING ZM EMPTY)",
+        "MULTICURVE (EMPTY, CIRCULARSTRING EMPTY)", "MULTICURVE Z (EMPTY, CIRCULARSTRING Z EMPTY)",
+        "MULTICURVE M (EMPTY, CIRCULARSTRING M EMPTY)", "MULTICURVE ZM (EMPTY, CIRCULARSTRING ZM EMPTY)",
+        "MULTISURFACE (EMPTY, EMPTY)", "MULTISURFACE Z (EMPTY, CURVEPOLYGON Z EMPTY)",
+        "MULTISURFACE M (EMPTY, CURVEPOLYGON M EMPTY)", "MULTISURFACE ZM (EMPTY, CURVEPOLYGON ZM EMPTY)",
     };
     for (const auto& wkt : variants2) {
         const auto g = wktreader.read(wkt);
@@ -574,5 +592,228 @@ void object::test<16>
     // ensure_equals(wktwriter.write(*nonfinite), "POINT Z (-inf inf nan)");
 
 }
+
+// test CircularString
+template<>
+template<>
+void object::test<17>()
+{
+    CoordinateSequence seq{
+        CoordinateXY(0, 0),
+        CoordinateXY(1, 1),
+        CoordinateXY(2, 0)
+    };
+    auto geom = gf->createCircularString(std::move(seq));
+
+    ensure_equals(wktwriter.write(*geom), "CIRCULARSTRING (0 0, 1 1, 2 0)");
+}
+
+// test CompoundCurve
+template<>
+template<>
+void object::test<18>()
+{
+    std::vector<std::unique_ptr<geos::geom::SimpleCurve>> curves;
+
+    curves.emplace_back(gf->createCircularString({
+        CoordinateXY(0, 0),
+        CoordinateXY(1, 1),
+        CoordinateXY(2, 0)
+    }));
+
+    curves.emplace_back(gf->createLineString({
+         CoordinateXY(2, 0),
+         CoordinateXY(2, 2)
+     }));
+
+    auto geom = gf->createCompoundCurve(std::move(curves));
+
+    ensure_equals(wktwriter.write(*geom), "COMPOUNDCURVE (CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 2 2))");
+}
+
+// test CurvePolygon
+template<>
+template<>
+void object::test<19>()
+{
+    std::vector<std::unique_ptr<geos::geom::Curve>> holes;
+
+    std::vector<std::unique_ptr<geos::geom::SimpleCurve>> shell_sections;
+    shell_sections.emplace_back(
+         gf->createCircularString({
+             CoordinateXY(0, 0),
+             CoordinateXY(2, 0),
+             CoordinateXY(2, 1),
+             CoordinateXY(2, 3),
+             CoordinateXY(4, 3)
+    }));
+    shell_sections.emplace_back(
+         gf->createLineString({
+             CoordinateXY(4, 3),
+             CoordinateXY(4, 5),
+             CoordinateXY(1, 4),
+             CoordinateXY(0, 0)
+    }));
+
+    auto shell = gf->createCompoundCurve(std::move(shell_sections));
+
+    holes.emplace_back(gf->createCircularString({
+        CoordinateXY(1.7, 1),
+        CoordinateXY(1.4, 0.4),
+        CoordinateXY(1.6, 0.4),
+        CoordinateXY(1.6, 0.5),
+        CoordinateXY(1.7, 1)
+    }));
+
+    auto geom = gf->createCurvePolygon(std::move(shell), std::move(holes));
+
+    ensure_equals(wktwriter.write(*geom), "CURVEPOLYGON (COMPOUNDCURVE (CIRCULARSTRING (0 0, 2 0, 2 1, 2 3, 4 3), (4 3, 4 5, 1 4, 0 0)), CIRCULARSTRING (1.7 1, 1.4 0.4, 1.6 0.4, 1.6 0.5, 1.7 1))");
+}
+
+// test MultiCurve
+template<>
+template<>
+void object::test<20>()
+{
+    std::vector<std::unique_ptr<geos::geom::Curve>> curves;
+
+    // Add a CompoundCurve
+    std::vector<std::unique_ptr<geos::geom::SimpleCurve>> cc_sections;
+    cc_sections.emplace_back(
+         gf->createCircularString({
+             CoordinateXY(0, 0),
+             CoordinateXY(2, 0),
+             CoordinateXY(2, 1),
+             CoordinateXY(2, 3),
+             CoordinateXY(4, 3)
+    }));
+    cc_sections.emplace_back(
+         gf->createLineString({
+             CoordinateXY(4, 3),
+             CoordinateXY(4, 5),
+             CoordinateXY(1, 4),
+             CoordinateXY(0, 0)
+    }));
+
+    curves.emplace_back(gf->createCompoundCurve(std::move(cc_sections)));
+
+    // Add a LineString
+    curves.emplace_back(gf->createLineString({CoordinateXY(8, 9), CoordinateXY(10, 11)}));
+
+    // Add a CircularString
+    curves.emplace_back(gf->createCircularString({
+        CoordinateXY(1.7, 1),
+        CoordinateXY(1.4, 0.4),
+        CoordinateXY(1.6, 0.4),
+        CoordinateXY(1.6, 0.5),
+        CoordinateXY(1.7, 1)
+    }));
+
+    auto geom = gf->createMultiCurve(std::move(curves));
+
+    ensure_equals(wktwriter.write(*geom), "MULTICURVE (COMPOUNDCURVE (CIRCULARSTRING (0 0, 2 0, 2 1, 2 3, 4 3), (4 3, 4 5, 1 4, 0 0)), (8 9, 10 11), CIRCULARSTRING (1.7 1, 1.4 0.4, 1.6 0.4, 1.6 0.5, 1.7 1))");
+}
+
+// test MultiSurface
+template<>
+template<>
+void object::test<21>()
+{
+    std::vector<std::unique_ptr<geos::geom::Surface>> surfaces;
+
+    surfaces.emplace_back(
+        gf->createPolygon(
+            gf->createLinearRing({
+                 CoordinateXY(0, 0),
+                 CoordinateXY(1, 0),
+                 CoordinateXY(1, 1),
+                 CoordinateXY(0, 1),
+                 CoordinateXY(0, 0)
+    })));
+
+    surfaces.emplace_back(
+        gf->createCurvePolygon(
+            gf->createCircularString({
+                 CoordinateXY(10, 10),
+                 CoordinateXY(11, 11),
+                 CoordinateXY(12, 10),
+                 CoordinateXY(11, 9),
+                 CoordinateXY(10, 10)
+    })));
+
+    auto geom = gf->createMultiSurface(std::move(surfaces));
+
+    ensure_equals(wktwriter.write(*geom), "MULTISURFACE (((0 0, 1 0, 1 1, 0 1, 0 0)), CURVEPOLYGON (CIRCULARSTRING (10 10, 11 11, 12 10, 11 9, 10 10)))");
+}
+
+// test formatted output
+template<>
+template<>
+void object::test<22>()
+{
+    auto geom = wktreader.read("POINT (1 1)");
+    ensure_equals(wktwriter.writeFormatted(geom.get()), "POINT (1 1)");
+
+    geom = wktreader.read("LINESTRING (1 2, 3 4)");
+    ensure_equals(wktwriter.writeFormatted(geom.get()), "LINESTRING (1 2, 3 4)");
+
+    geom = wktreader.read("LINEARRING (0 0, 1 0, 1 1, 0 0)");
+    ensure_equals(wktwriter.writeFormatted(geom.get()), "LINEARRING (0 0, 1 0, 1 1, 0 0)");
+
+    geom = wktreader.read("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    ensure_equals(wktwriter.writeFormatted(geom.get()), "CIRCULARSTRING (0 0, 1 1, 2 0)");
+
+    geom = wktreader.read("COMPOUNDCURVE((0 10, 0 5), CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 3 0))");
+    ensure_equals(wktwriter.writeFormatted(geom.get()), "COMPOUNDCURVE ((0 10, 0 5), \n"
+                                                        "  CIRCULARSTRING (0 0, 1 1, 2 0), \n"
+                                                        "  (2 0, 3 0))");
+
+    geom = wktreader.read("POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1), (3 3, 3 4, 4 4, 4 3, 3 3))");
+    ensure_equals(wktwriter.writeFormatted(geom.get()), "POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), \n"
+                                                        "  (1 1, 1 2, 2 2, 2 1, 1 1), \n"
+                                                        "  (3 3, 3 4, 4 4, 4 3, 3 3))");
+
+    geom = wktreader.read("CURVEPOLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1), CIRCULARSTRING (3 3, 3 4, 5 3, 3 2, 3 3))");
+    ensure_equals(wktwriter.writeFormatted(geom.get()), "CURVEPOLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), \n"
+                                                        "  (1 1, 1 2, 2 2, 2 1, 1 1), \n"
+                                                        "  CIRCULARSTRING (3 3, 3 4, 5 3, 3 2, 3 3))");
+
+    geom = wktreader.read("MULTIPOINT ((0 0), (1 1), (2 2))");
+    ensure_equals(wktwriter.writeFormatted(geom.get()), "MULTIPOINT ((0 0), (1 1), (2 2))");
+
+    geom = wktreader.read("MULTILINESTRING ((0 0, 1 1), (2 2, 3 3), (4 4, 5 5))");
+    ensure_equals(wktwriter.writeFormatted(geom.get()), "MULTILINESTRING ((0 0, 1 1), \n"
+                                                        "  (2 2, 3 3), \n"
+                                                        "  (4 4, 5 5))");
+
+    geom = wktreader.read("MULTICURVE ((0 0, 1 1), COMPOUNDCURVE ((2 2, 3 3), CIRCULARSTRING (4 4, 5 5, 6 4), (6 4, 7 4)), (100 100, 200 200))");
+    ensure_equals(wktwriter.writeFormatted(geom.get()), "MULTICURVE ((0 0, 1 1), \n"
+                                                        "  COMPOUNDCURVE ((2 2, 3 3), \n"
+                                                        "    CIRCULARSTRING (4 4, 5 5, 6 4), \n"
+                                                        "    (6 4, 7 4)), \n"
+                                                        "  (100 100, 200 200))");
+
+    geom = wktreader.read("MULTIPOLYGON (((0 0, 10 0, 10 10, 0 10, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1), (3 3, 3 4, 4 4, 4 3, 3 3)), ((100 100, 200 100, 200 200, 100 100)))");
+    ensure_equals(wktwriter.writeFormatted(geom.get()), "MULTIPOLYGON (((0 0, 10 0, 10 10, 0 10, 0 0), \n"
+                                                        "  (1 1, 1 2, 2 2, 2 1, 1 1), \n"
+                                                        "  (3 3, 3 4, 4 4, 4 3, 3 3)), \n"
+                                                        "  ((100 100, 200 100, 200 200, 100 100)))");
+
+    geom = wktreader.read("MULTISURFACE (CURVEPOLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1), CIRCULARSTRING (3 3, 3 4, 5 3, 3 2, 3 3)), ((100 100, 200 100, 200 200, 100 100)))");
+    ensure_equals(wktwriter.writeFormatted(geom.get()), "MULTISURFACE (CURVEPOLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), \n"
+                                                        "  (1 1, 1 2, 2 2, 2 1, 1 1), \n"
+                                                        "  CIRCULARSTRING (3 3, 3 4, 5 3, 3 2, 3 3)), \n"
+                                                        "  ((100 100, 200 100, 200 200, 100 100)))");
+
+    geom = wktreader.read("GEOMETRYCOLLECTION (LINESTRING (0 0, 1 1), MULTIPOLYGON (((0 0, 10 0, 10 10, 0 10, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1), (3 3, 3 4, 4 4, 4 3, 3 3)), ((100 100, 200 100, 200 200, 100 100))), POINT (2 2))");
+    ensure_equals(wktwriter.writeFormatted(geom.get()), "GEOMETRYCOLLECTION (LINESTRING (0 0, 1 1), \n"
+                                                        "  MULTIPOLYGON (((0 0, 10 0, 10 10, 0 10, 0 0), \n"
+                                                        "    (1 1, 1 2, 2 2, 2 1, 1 1), \n"
+                                                        "    (3 3, 3 4, 4 4, 4 3, 3 3)), \n"
+                                                        "    ((100 100, 200 100, 200 200, 100 100))), \n"
+                                                        "  POINT (2 2))");
+}
+
+
 
 } // namespace tut

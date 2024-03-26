@@ -106,6 +106,15 @@ void object::test<9>()
     ensure_equals(GEOSHasM(input_), 1);
 }
 
+template<>
+template<>
+void object::test<10>()
+{
+    input_ = fromWKT("CIRCULARSTRING M (0 0 0, 1 1 1, 2 0 2)");
+
+    ensure_equals(GEOSHasZ(input_), 0);
+    ensure_equals(GEOSHasM(input_), 1);
+}
 
 } // namespace tut
 

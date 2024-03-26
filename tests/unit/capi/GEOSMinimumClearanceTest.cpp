@@ -120,4 +120,5 @@ void object::test<5>
                   geos::DoubleInfinity);
 }
 
+
 } // namespace tut

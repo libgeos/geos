@@ -65,6 +65,17 @@ void object::test<3>
     ensure_geometry_equals(geom3_, geom2_);
 }
 
+template <>
+template <>
+void object::test<4>() {
+    input_ = GEOSGeomFromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    ensure(input_);
+
+    result_ = GEOSGeom_extractUniquePoints(input_);
+
+    ensure_geometry_equals(result_, "MULTIPOINT ((0 0), (1 1), (2 0))");
+}
+
 
 } // namespace tut
 

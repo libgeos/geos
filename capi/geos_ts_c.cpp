@@ -33,6 +33,7 @@
 #include <geos/coverage/CoverageUnion.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/Curve.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryCollection.h>
@@ -41,12 +42,14 @@
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/LineSegment.h>
 #include <geos/geom/LineString.h>
+#include <geos/geom/MultiCurve.h>
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/MultiPoint.h>
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/Polygon.h>
 #include <geos/geom/PrecisionModel.h>
+#include <geos/geom/SimpleCurve.h>
 #include <geos/geom/prep/PreparedGeometry.h>
 #include <geos/geom/prep/PreparedGeometryFactory.h>
 #include <geos/geom/util/Densifier.h>
@@ -162,17 +165,21 @@ using geos::geom::CoordinateXY;
 using geos::geom::CoordinateXYM;
 using geos::geom::CoordinateXYZM;
 using geos::geom::CoordinateSequence;
+using geos::geom::Curve;
 using geos::geom::Envelope;
 using geos::geom::Geometry;
 using geos::geom::GeometryCollection;
 using geos::geom::GeometryFactory;
 using geos::geom::LineString;
 using geos::geom::LinearRing;
+using geos::geom::MultiCurve;
 using geos::geom::MultiLineString;
 using geos::geom::MultiPolygon;
 using geos::geom::Point;
 using geos::geom::Polygon;
 using geos::geom::PrecisionModel;
+using geos::geom::SimpleCurve;
+using geos::geom::Surface;
 
 using geos::io::WKTReader;
 using geos::io::WKTWriter;
@@ -1048,8 +1055,7 @@ extern "C" {
     GEOSisRing_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
         return execute(extHandle, 2, [&]() {
-            // both LineString* and LinearRing* can cast to LineString*
-            const LineString* ls = dynamic_cast<const LineString*>(g);
+            const Curve* ls = dynamic_cast<const Curve*>(g);
             if(ls) {
                 return ls->isRing();
             }
@@ -1692,6 +1698,8 @@ extern "C" {
                     if (g->getGeometryTypeId() == geos::geom::GeometryTypeId::GEOS_POLYGON) {
                         auto p = geos::detail::down_cast<Polygon*>(g);
                         p->orientRings(exteriorCW);
+                    } else if (g->getGeometryTypeId() == geos::geom::GeometryTypeId::GEOS_CURVEPOLYGON) {
+                        throw geos::util::UnsupportedOperationException("Curved geometries not supported.");
                     }
                 }
 
@@ -1710,9 +1718,9 @@ extern "C" {
     GEOSGetNumInteriorRings_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
         return execute(extHandle, -1, [&]() {
-            const Polygon* p = dynamic_cast<const Polygon*>(g1);
+            const Surface* p = dynamic_cast<const Surface*>(g1);
             if(!p) {
-                throw IllegalArgumentException("Argument is not a Polygon");
+                throw IllegalArgumentException("Argument is not a Surface");
             }
             return static_cast<int>(p->getNumInteriorRing());
         });
@@ -1802,7 +1810,7 @@ extern "C" {
     GEOSisClosed_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
         return execute(extHandle, 2, [&]() {
-            const LineString* ls = dynamic_cast<const LineString*>(g1);
+            const Curve* ls = dynamic_cast<const Curve*>(g1);
             if(ls) {
                 return ls->isClosed();
             }
@@ -1812,7 +1820,12 @@ extern "C" {
                 return mls->isClosed();
             }
 
-            throw IllegalArgumentException("Argument is not a LineString or MultiLineString");
+            const MultiCurve* mc = dynamic_cast<const MultiCurve*>(g1);
+            if(mc) {
+                return mc->isClosed();
+            }
+
+            throw IllegalArgumentException("Argument is not a Curve, MultiLineString, or MultiCurve");
         });
     }
 
@@ -1840,9 +1853,9 @@ extern "C" {
     GEOSGeomGetNumPoints_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
         return execute(extHandle, -1, [&]() {
-            const LineString* ls = dynamic_cast<const LineString*>(g1);
+            const SimpleCurve* ls = dynamic_cast<const SimpleCurve*>(g1);
             if(!ls) {
-                throw IllegalArgumentException("Argument is not a LineString");
+                throw IllegalArgumentException("Argument is not a SimpleCurve");
             }
             return static_cast<int>(ls->getNumPoints());
         });
@@ -1926,9 +1939,9 @@ extern "C" {
     GEOSGetExteriorRing_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
         return execute(extHandle, [&]() {
-            const Polygon* p = dynamic_cast<const Polygon*>(g1);
+            const Surface* p = dynamic_cast<const Surface*>(g1);
             if(!p) {
-                throw IllegalArgumentException("Invalid argument (must be a Polygon)");
+                throw IllegalArgumentException("Invalid argument (must be a Surface)");
             }
             return p->getExteriorRing();
         });
@@ -1942,9 +1955,9 @@ extern "C" {
     GEOSGetInteriorRingN_r(GEOSContextHandle_t extHandle, const Geometry* g1, int n)
     {
         return execute(extHandle, [&]() {
-            const Polygon* p = dynamic_cast<const Polygon*>(g1);
+            const Surface* p = dynamic_cast<const Surface*>(g1);
             if(!p) {
-                throw IllegalArgumentException("Invalid argument (must be a Polygon)");
+                throw IllegalArgumentException("Invalid argument (must be a Surface)");
             }
             if(n < 0) {
                 throw IllegalArgumentException("Index must be non-negative.");
@@ -2813,7 +2826,7 @@ extern "C" {
     GEOSGeom_getCoordSeq_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
         return execute(extHandle, [&]() {
-            const LineString* ls = dynamic_cast<const LineString*>(g);
+            const SimpleCurve* ls = dynamic_cast<const SimpleCurve*>(g);
             if(ls) {
                 return ls->getCoordinatesRO();
             }

@@ -24,9 +24,12 @@ void object::test<1>()
     ensure(nullptr != geom1_);
     geom2_ = fromWKT("LINESTRING (1 2, 3 4)");
     ensure(nullptr != geom2_);
+    geom3_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    ensure(nullptr != geom3_);
 
-    ensure_equals(0, GEOSGeomTypeId(geom1_));
-    ensure_equals(1, GEOSGeomTypeId(geom2_));
+    ensure_equals(GEOS_POINT, GEOSGeomTypeId(geom1_));
+    ensure_equals(GEOS_LINESTRING, GEOSGeomTypeId(geom2_));
+    ensure_equals(GEOS_CIRCULARSTRING, GEOSGeomTypeId(geom3_));
 }
 
 } // namespace tut
