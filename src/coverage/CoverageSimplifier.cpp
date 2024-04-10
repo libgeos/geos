@@ -87,7 +87,7 @@ CoverageSimplifier::CoverageSimplifier(const std::vector<const Geometry*>& cover
     {
         for (const Geometry* g: m_input) {
             if (!g->isPolygonal())
-                throw util::IllegalArgumentException("Argument is not a non-polygonal");
+                throw util::IllegalArgumentException("Argument is non-polygonal");
         }
     }
 
