@@ -58,7 +58,7 @@ LineString::LineString(const LineString& ls)
 LineString::LineString(CoordinateSequence::Ptr && newCoords,
                        const GeometryFactory& factory)
     :
-    SimpleCurve(std::move(newCoords), factory)
+    SimpleCurve(std::move(newCoords), true, factory)
 {
     validateConstruction();
 }

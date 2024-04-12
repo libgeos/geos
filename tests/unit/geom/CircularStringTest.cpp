@@ -77,8 +77,8 @@ void object::test<2>()
     ensure_THROW(cs_->getLength(), geos::util::UnsupportedOperationException);
     ensure_equals("getNumGeometries", cs_->getNumGeometries(), 1u);
     ensure_equals("getNumPoints", cs_->getNumPoints(), 5u);
-    ensure(!cs_->getEnvelopeInternal()->isNull());
-    // FIXME calculate envelope correctly
+    geos::geom::Envelope expected(0, 4, -1, 1);
+    ensure("getEnvelopeInternal", cs_->getEnvelopeInternal()->equals(&expected));
 
     // Geometry dimension functions
     ensure_equals("getDimension", cs_->getDimension(), geos::geom::Dimension::L);

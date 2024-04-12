@@ -120,6 +120,11 @@ protected:
         return SORTINDEX_LINESTRING;
     };
 
+    void geometryChangedAction() override
+    {
+        envelope = computeEnvelopeInternal(true);
+    }
+
 private:
 
     void validateConstruction();

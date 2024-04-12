@@ -56,6 +56,19 @@ public:
         return true;
     }
 
+protected:
+
+    /// \brief
+    /// Constructs a CircularString taking ownership the
+    /// given CoordinateSequence.
+    CircularString(std::unique_ptr<CoordinateSequence> && pts,
+                   const GeometryFactory& newFactory);
+
+    void geometryChangedAction() override
+    {
+        envelope = computeEnvelopeInternal(false);
+    }
+
 };
 
 

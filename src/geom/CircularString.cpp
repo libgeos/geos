@@ -20,6 +20,15 @@
 namespace geos {
 namespace geom {
 
+/*public*/
+CircularString::CircularString(std::unique_ptr<CoordinateSequence> && newCoords,
+                               const GeometryFactory& factory)
+    :
+    SimpleCurve(std::move(newCoords), false, factory)
+{
+    //validateConstruction();
+}
+
 CircularString::~CircularString() = default;
 
 std::string

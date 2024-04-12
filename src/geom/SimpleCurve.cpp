@@ -17,6 +17,7 @@
 
 #include <geos/geom/SimpleCurve.h>
 
+#include <geos/algorithm/CircularArcs.h>
 #include <geos/algorithm/Orientation.h>
 #include <geos/geom/CoordinateFilter.h>
 #include <geos/geom/GeometryFactory.h>
@@ -38,21 +39,33 @@ SimpleCurve::SimpleCurve(const SimpleCurve& other)
 }
 
 SimpleCurve::SimpleCurve(std::unique_ptr<CoordinateSequence>&& newCoords,
+                         bool isLinear,
             const GeometryFactory& factory)
     : Curve(factory),
     points(newCoords ? std::move(newCoords) : std::make_unique<CoordinateSequence>()),
-    envelope(computeEnvelopeInternal())
+    envelope(computeEnvelopeInternal(isLinear))
 {
 }
 
 Envelope
-SimpleCurve::computeEnvelopeInternal() const
+SimpleCurve::computeEnvelopeInternal(bool isLinear) const
 {
     if(isEmpty()) {
         return Envelope();
     }
 
-    return points->getEnvelope();
+    if(isLinear) {
+        return points->getEnvelope();
+    } else {
+        Envelope e;
+        for (std::size_t i = 2; i < points->size(); i++) {
+            algorithm::CircularArcs::expandEnvelope(e,
+                                                    points->getAt<CoordinateXY>(i-2),
+                                                    points->getAt<CoordinateXY>(i-1),
+                                                    points->getAt<CoordinateXY>(i));
+        }
+        return e;
+    }
 }
 
 std::unique_ptr<CoordinateSequence>

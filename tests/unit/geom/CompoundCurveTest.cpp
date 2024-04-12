@@ -85,7 +85,8 @@ void object::test<2>()
     ensure_equals("getNumGeometries", cc_->getNumGeometries(), 1u);
     ensure_equals("getNumCurves", cc_->getNumCurves(), 2u);
     ensure_equals("getNumPoints", cc_->getNumPoints(), 5u); // FIXME should this be 5 or 4?
-    ensure(!cc_->getEnvelopeInternal()->isNull());
+    geos::geom::Envelope expected(0, 2, 0, 2);
+    ensure("getEnvelopeInternal", cc_->getEnvelopeInternal()->equals(&expected));
 
     // Geometry dimension functions
     ensure_equals("getDimension", cc_->getDimension(), geos::geom::Dimension::L);

@@ -126,14 +126,10 @@ protected:
     SimpleCurve(const SimpleCurve& other);
 
     SimpleCurve(std::unique_ptr<CoordinateSequence>&& newCoords,
+                bool isLinear,
                 const GeometryFactory& factory);
 
-    Envelope computeEnvelopeInternal() const;
-
-    void geometryChangedAction() override
-    {
-        envelope = computeEnvelopeInternal();
-    }
+    Envelope computeEnvelopeInternal(bool isLinear) const;
 
     // TODO: hold value or shared_ptr instead of unique_ptr
     std::unique_ptr<CoordinateSequence> points;

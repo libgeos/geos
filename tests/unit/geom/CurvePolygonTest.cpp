@@ -95,7 +95,15 @@ void object::test<2>()
     ensure_equals("getNumGeometries", cp_->getNumGeometries(), 1u);
     ensure_equals("getNumPoints", cp_->getNumPoints(), 14u);
     ensure_equals("getNumInteriorRing", cp_->getNumInteriorRing(), 1u);
-    ensure(!cp_->getEnvelopeInternal()->isNull());
+    {
+        geos::geom::Envelope expected(0, 4, -0.618033988749895, 5);
+        const geos::geom::Envelope& actual = *cp_->getEnvelopeInternal();
+
+        ensure_equals("getEnvelopeInternal MinX", actual.getMinX(), expected.getMinX());
+        ensure_equals("getEnvelopeInternal MinY", actual.getMinY(), expected.getMinY());
+        ensure_equals("getEnvelopeInternal MaxX", actual.getMaxX(), expected.getMaxX());
+        ensure_equals("getEnvelopeInternal MaxY", actual.getMaxY(), expected.getMaxY());
+    }
 
     // Geometry dimension functions
     ensure_equals("getDimension", cp_->getDimension(), geos::geom::Dimension::A);
