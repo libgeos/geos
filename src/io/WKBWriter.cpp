@@ -99,7 +99,7 @@ WKBWriter::writeHEX(const Geometry& g, std::ostream& os)
 void
 WKBWriter::write(const Geometry& g, std::ostream& os)
 {
-    util::ensureNotCurvedType(g);
+    util::ensureNoCurvedComponents(g);
 
     OrdinateSet inputOrdinates = OrdinateSet::createXY();
     inputOrdinates.setM(g.hasM());

@@ -74,7 +74,7 @@ GeometryEditor::GeometryEditor(const GeometryFactory* newFactory)
 std::unique_ptr<Geometry>
 GeometryEditor::edit(const Geometry* geometry, GeometryEditorOperation* operation)
 {
-    geos::util::ensureNotCurvedType(geometry);
+    geos::util::ensureNoCurvedComponents(geometry);
 
     // if client did not supply a GeometryFactory, use the one from the input Geometry
     if(factory == nullptr) {

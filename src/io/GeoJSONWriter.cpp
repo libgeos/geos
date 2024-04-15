@@ -176,7 +176,7 @@ void GeoJSONWriter::encodeFeatureCollection(const geom::Geometry* g, geos_nlohma
 
 void GeoJSONWriter::encodeGeometry(const geom::Geometry* geometry, geos_nlohmann::ordered_json& j)
 {
-    util::ensureNotCurvedType(geometry);
+    util::ensureNoCurvedComponents(geometry);
 
     auto type = geometry->getGeometryTypeId();
     if (type == GEOS_POINT) {

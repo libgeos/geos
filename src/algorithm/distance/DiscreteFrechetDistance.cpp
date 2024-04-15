@@ -144,8 +144,8 @@ DiscreteFrechetDistance::compute(
         throw util::IllegalArgumentException("DiscreteFrechetDistance called with empty inputs.");
     }
 
-    util::ensureNotCurvedType(discreteGeom);
-    util::ensureNotCurvedType(geom);
+    util::ensureNoCurvedComponents(discreteGeom);
+    util::ensureNoCurvedComponents(geom);
 
     auto lp = discreteGeom.getCoordinates();
     auto lq = geom.getCoordinates();

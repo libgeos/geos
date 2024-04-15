@@ -104,8 +104,8 @@ DistanceOp::distance()
 {
     using geos::util::IllegalArgumentException;
 
-    util::ensureNotCurvedType(geom[0]);
-    util::ensureNotCurvedType(geom[1]);
+    util::ensureNoCurvedComponents(geom[0]);
+    util::ensureNoCurvedComponents(geom[1]);
 
     if(geom[0] == nullptr || geom[1] == nullptr) {
         throw IllegalArgumentException("null geometries are not supported");

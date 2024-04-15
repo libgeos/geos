@@ -26,8 +26,28 @@ public:
 
     ~MultiSurface() override;
 
+    std::unique_ptr<MultiSurface> clone() const
+    {
+        return std::unique_ptr<MultiSurface>(cloneImpl());
+    };
+
+    /** \brief
+     * Computes the boundary of this geometry
+     *
+     * @return a lineal geometry (which may be empty)
+     * @see Geometry#getBoundary
+     */
+    std::unique_ptr<Geometry> getBoundary() const override;
+
+    /// Returns 1 (MultiSurface boundary is MultiCurve)
+    int getBoundaryDimension() const override;
+
     /// Returns surface dimension (2)
     Dimension::DimensionType getDimension() const override;
+
+    std::string getGeometryType() const override;
+
+    GeometryTypeId getGeometryTypeId() const override;
 
     bool hasDimension(Dimension::DimensionType d) const override
     {
@@ -38,26 +58,6 @@ public:
     {
         return d == Dimension::A;
     }
-
-    /// Returns 1 (MultiSurface boundary is MultiCurve)
-    int getBoundaryDimension() const override;
-
-    /** \brief
-     * Computes the boundary of this geometry
-     *
-     * @return a lineal geometry (which may be empty)
-     * @see Geometry#getBoundary
-     */
-    std::unique_ptr<Geometry> getBoundary() const override;
-
-    std::string getGeometryType() const override;
-
-    GeometryTypeId getGeometryTypeId() const override;
-
-    std::unique_ptr<MultiSurface> clone() const
-    {
-        return std::unique_ptr<MultiSurface>(cloneImpl());
-    };
 
     std::unique_ptr<MultiSurface> reverse() const
     {
@@ -81,13 +81,13 @@ protected:
         return new MultiSurface(*this);
     }
 
-    MultiSurface* reverseImpl() const override;
-
     int
     getSortIndex() const override
     {
         return SORTINDEX_MULTISURFACE;
     };
+
+    MultiSurface* reverseImpl() const override;
 
 };
 }

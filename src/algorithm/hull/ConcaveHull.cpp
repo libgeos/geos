@@ -58,7 +58,7 @@ ConcaveHull::ConcaveHull(const Geometry* geom)
     , maxSizeInHull(0.0)
     , geomFactory(geom->getFactory())
 {
-    util::ensureNotCurvedType(geom);
+    util::ensureNoCurvedComponents(geom);
 }
 
 /* public static */

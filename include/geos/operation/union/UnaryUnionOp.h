@@ -171,7 +171,7 @@ private:
     void
     extract(const geom::Geometry& geom)
     {
-        util::ensureNotCurvedType(geom);
+        util::ensureNoCurvedComponents(geom);
 
         using namespace geom::util;
 

@@ -309,12 +309,6 @@ public:
     /// Return a string representation of this Geometry type
     virtual std::string getGeometryType() const = 0; //Abstract
 
-    /// Returns whether the Geometry type _may_ contain curved elements
-    /// FIXME: this would be true for GeometryCollection ?
-    bool isCurvedType() const;
-
-    static bool isCurvedType(GeometryTypeId);
-
     /// Returns whether the Geometry contains curved components
     virtual bool hasCurvedComponents() const;
 
@@ -946,21 +940,25 @@ protected:
         while(i < a.size() && j < b.size()) {
             const auto& aGeom = *a[i];
             const auto& bGeom = *b[j];
-        int comparison = aGeom.compareTo(&bGeom);
-        if(comparison != 0) {
-            return comparison;
-        }
-        i++;
-        j++;
-        }
-        if(i < a.size()) {
-        return 1;
-        }
-        if(j < b.size()) {
-        return -1;
-        }
-        return 0;
 
+            int comparison = aGeom.compareTo(&bGeom);
+            if(comparison != 0) {
+                return comparison;
+            }
+
+            i++;
+            j++;
+        }
+
+        if(i < a.size()) {
+            return 1;
+        }
+
+        if(j < b.size()) {
+            return -1;
+        }
+
+        return 0;
     }
 
     bool equal(const CoordinateXY& a, const CoordinateXY& b,

@@ -113,7 +113,7 @@ ConcaveHullOfPolygons::ConcaveHullOfPolygons(const Geometry* geom)
     , isHolesAllowed(false)
     , isTight(false)
 {
-    util::ensureNotCurvedType(geom);
+    util::ensureNoCurvedComponents(geom);
     if (! geom->isPolygonal()) {
         throw util::IllegalArgumentException("Input must be polygonal");
     }

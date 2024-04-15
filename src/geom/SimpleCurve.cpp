@@ -40,23 +40,94 @@ SimpleCurve::SimpleCurve(const SimpleCurve& other)
 
 SimpleCurve::SimpleCurve(std::unique_ptr<CoordinateSequence>&& newCoords,
                          bool isLinear,
-            const GeometryFactory& factory)
+                         const GeometryFactory& factory)
     : Curve(factory),
-    points(newCoords ? std::move(newCoords) : std::make_unique<CoordinateSequence>()),
-    envelope(computeEnvelopeInternal(isLinear))
+      points(newCoords ? std::move(newCoords) : std::make_unique<CoordinateSequence>()),
+      envelope(computeEnvelopeInternal(isLinear))
 {
+}
+
+void
+SimpleCurve::apply_ro(CoordinateFilter* filter) const
+{
+    assert(points.get());
+    points->apply_ro(filter);
+}
+
+void
+SimpleCurve::apply_ro(CoordinateSequenceFilter& filter) const
+{
+    std::size_t npts = points->size();
+    if (!npts) {
+        return;
+    }
+    for (std::size_t i = 0; i < npts; ++i) {
+        filter.filter_ro(*points, i);
+        if (filter.isDone()) {
+            break;
+        }
+    }
+}
+
+void
+SimpleCurve::apply_rw(const CoordinateFilter* filter)
+{
+    assert(points.get());
+    points->apply_rw(filter);
+}
+
+void
+SimpleCurve::apply_rw(CoordinateSequenceFilter& filter)
+{
+    std::size_t npts = points->size();
+    if (!npts) {
+        return;
+    }
+    for (std::size_t i = 0; i < npts; ++i) {
+        filter.filter_rw(*points, i);
+        if (filter.isDone()) {
+            break;
+        }
+    }
+    if (filter.isGeometryChanged()) {
+        geometryChanged();
+    }
+}
+
+int
+SimpleCurve::compareToSameClass(const Geometry* ls) const
+{
+    const SimpleCurve* line = detail::down_cast<const SimpleCurve*>(ls);
+
+    // MD - optimized implementation
+    std::size_t mynpts = points->getSize();
+    std::size_t othnpts = line->points->getSize();
+    if (mynpts > othnpts) {
+        return 1;
+    }
+    if (mynpts < othnpts) {
+        return -1;
+    }
+    for (std::size_t i = 0; i < mynpts; i++) {
+        int cmp = points->getAt<CoordinateXY>(i).compareTo(line->points->getAt<CoordinateXY>(i));
+        if (cmp) {
+            return cmp;
+        }
+    }
+    return 0;
 }
 
 Envelope
 SimpleCurve::computeEnvelopeInternal(bool isLinear) const
 {
-    if(isEmpty()) {
+    if (isEmpty()) {
         return Envelope();
     }
 
-    if(isLinear) {
+    if (isLinear) {
         return points->getEnvelope();
-    } else {
+    }
+    else {
         Envelope e;
         for (std::size_t i = 2; i < points->size(); i++) {
             algorithm::CircularArcs::expandEnvelope(e,
@@ -66,6 +137,71 @@ SimpleCurve::computeEnvelopeInternal(bool isLinear) const
         }
         return e;
     }
+}
+
+bool
+SimpleCurve::equalsExact(const Geometry* other, double tolerance) const
+{
+    if (!isEquivalentClass(other)) {
+        return false;
+    }
+
+    const SimpleCurve* otherCurve = detail::down_cast<const SimpleCurve*>(other);
+    std::size_t npts = points->getSize();
+    if (npts != otherCurve->points->getSize()) {
+        return false;
+    }
+    for (std::size_t i = 0; i < npts; ++i) {
+        if (!equal(points->getAt<CoordinateXY>(i), otherCurve->points->getAt<CoordinateXY>(i), tolerance)) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool
+SimpleCurve::equalsIdentical(const Geometry* other_g) const
+{
+    if (!isEquivalentClass(other_g)) {
+        return false;
+    }
+
+    const auto& other = static_cast<const SimpleCurve&>(*other_g);
+
+    if (envelope != other.envelope) {
+        return false;
+    }
+
+    return getCoordinatesRO()->equalsIdentical(*other.getCoordinatesRO());
+}
+
+std::unique_ptr<Geometry>
+SimpleCurve::getBoundary() const
+{
+    operation::BoundaryOp bop(*this);
+    return bop.getBoundary();
+}
+
+const CoordinateXY*
+SimpleCurve::getCoordinate() const
+{
+    if (isEmpty()) {
+        return nullptr;
+    }
+    return &(points->getAt<CoordinateXY>(0));
+}
+
+uint8_t
+SimpleCurve::getCoordinateDimension() const
+{
+    return (uint8_t) points->getDimension();
+}
+
+const Coordinate&
+SimpleCurve::getCoordinateN(std::size_t n) const
+{
+    assert(points.get());
+    return points->getAt(n);
 }
 
 std::unique_ptr<CoordinateSequence>
@@ -82,57 +218,13 @@ SimpleCurve::getCoordinatesRO() const
     return points.get();
 }
 
-std::unique_ptr<CoordinateSequence>
-SimpleCurve::releaseCoordinates()
+std::unique_ptr<Point>
+SimpleCurve::getEndPoint() const
 {
-    auto newPts = std::make_unique<CoordinateSequence>(0u, points->hasZ(), points->hasM());
-    auto ret = std::move(points);
-    points = std::move(newPts);
-    geometryChanged();
-    return ret;
-}
-
-
-const Coordinate&
-SimpleCurve::getCoordinateN(std::size_t n) const
-{
-    assert(points.get());
-    return points->getAt(n);
-}
-
-uint8_t
-SimpleCurve::getCoordinateDimension() const
-{
-    return (uint8_t) points->getDimension();
-}
-
-bool
-SimpleCurve::hasM() const
-{
-    return points->hasM();
-}
-
-bool
-SimpleCurve::hasZ() const
-{
-    return points->hasZ();
-}
-
-int
-SimpleCurve::getBoundaryDimension() const
-{
-    if(isClosed()) {
-        return Dimension::False;
+    if (isEmpty()) {
+        return nullptr;
     }
-    return 0;
-}
-
-
-bool
-SimpleCurve::isEmpty() const
-{
-    assert(points.get());
-    return points->isEmpty();
+    return getPointN(getNumPoints() - 1);
 }
 
 std::size_t
@@ -153,36 +245,32 @@ SimpleCurve::getPointN(std::size_t n) const
 std::unique_ptr<Point>
 SimpleCurve::getStartPoint() const
 {
-    if(isEmpty()) {
+    if (isEmpty()) {
         return nullptr;
     }
     return getPointN(0);
 }
 
-std::unique_ptr<Point>
-SimpleCurve::getEndPoint() const
+bool
+SimpleCurve::hasM() const
 {
-    if(isEmpty()) {
-        return nullptr;
-    }
-    return getPointN(getNumPoints() - 1);
+    return points->hasM();
+}
+
+bool
+SimpleCurve::hasZ() const
+{
+    return points->hasZ();
 }
 
 bool
 SimpleCurve::isClosed() const
 {
-    if(isEmpty()) {
+    if (isEmpty()) {
         return false;
     }
 
     return points->front<CoordinateXY>().equals2D(points->back<CoordinateXY>());
-}
-
-std::unique_ptr<Geometry>
-SimpleCurve::getBoundary() const
-{
-    operation::BoundaryOp bop(*this);
-    return bop.getBoundary();
 }
 
 bool
@@ -190,88 +278,51 @@ SimpleCurve::isCoordinate(CoordinateXY& pt) const
 {
     assert(points.get());
     std::size_t npts = points->getSize();
-    for(std::size_t i = 0; i < npts; i++) {
-        if(points->getAt<CoordinateXY>(i) == pt) {
+    for (std::size_t i = 0; i < npts; i++) {
+        if (points->getAt<CoordinateXY>(i) == pt) {
             return true;
         }
     }
     return false;
 }
 
-const CoordinateXY*
-SimpleCurve::getCoordinate() const
+bool
+SimpleCurve::isEmpty() const
 {
-    if(isEmpty()) {
-        return nullptr;
-    }
-    return &(points->getAt<CoordinateXY>(0));
+    assert(points.get());
+    return points->isEmpty();
 }
 
-bool
-SimpleCurve::equalsExact(const Geometry* other, double tolerance) const
+/*public*/
+void
+SimpleCurve::normalize()
 {
-    if(!isEquivalentClass(other)) {
-        return false;
-    }
+    util::ensureNoCurvedComponents(*this);
 
-    const SimpleCurve* otherCurve = detail::down_cast<const SimpleCurve*>(other);
+    if (isEmpty()) return;
+    assert(points.get());
+    if (isClosed()) {
+        normalizeClosed();
+        return;
+    }
     std::size_t npts = points->getSize();
-    if(npts != otherCurve->points->getSize()) {
-        return false;
-    }
-    for(std::size_t i = 0; i < npts; ++i) {
-        if(!equal(points->getAt<CoordinateXY>(i), otherCurve->points->getAt<CoordinateXY>(i), tolerance)) {
-            return false;
+    std::size_t n = npts / 2;
+    for (std::size_t i = 0; i < n; i++) {
+        std::size_t j = npts - 1 - i;
+        if (!(points->getAt<CoordinateXY>(i) == points->getAt<CoordinateXY>(j))) {
+            if (points->getAt<CoordinateXY>(i).compareTo(points->getAt<CoordinateXY>(j)) > 0) {
+                points->reverse();
+            }
+            return;
         }
     }
-    return true;
 }
-
-bool
-SimpleCurve::equalsIdentical(const Geometry* other_g) const
-{
-    if(!isEquivalentClass(other_g)) {
-        return false;
-    }
-
-    const auto& other = static_cast<const SimpleCurve&>(*other_g);
-
-    if (envelope != other.envelope) {
-        return false;
-    }
-
-    return getCoordinatesRO()->equalsIdentical(*other.getCoordinatesRO());
-}
-
-int
-SimpleCurve::compareToSameClass(const Geometry* ls) const
-{
-    const SimpleCurve* line = detail::down_cast<const SimpleCurve*>(ls);
-
-    // MD - optimized implementation
-    std::size_t mynpts = points->getSize();
-    std::size_t othnpts = line->points->getSize();
-    if(mynpts > othnpts) {
-        return 1;
-    }
-    if(mynpts < othnpts) {
-        return -1;
-    }
-    for(std::size_t i = 0; i < mynpts; i++) {
-        int cmp = points->getAt<CoordinateXY>(i).compareTo(line->points->getAt<CoordinateXY>(i));
-        if(cmp) {
-            return cmp;
-        }
-    }
-    return 0;
-}
-
 
 /*private*/
 void
 SimpleCurve::normalizeClosed()
 {
-    if(isEmpty()) {
+    if (isEmpty()) {
         return;
     }
 
@@ -287,87 +338,21 @@ SimpleCurve::normalizeClosed()
     CoordinateSequence::scroll(coords.get(), minCoordinate);
     coords->closeRing(true);
 
-    if(coords->size() >= 4 && algorithm::Orientation::isCCW(coords.get())) {
+    if (coords->size() >= 4 && algorithm::Orientation::isCCW(coords.get())) {
         coords->reverse();
     }
 
     points = std::move(coords);
 }
 
-
-/*public*/
-void
-SimpleCurve::normalize()
+std::unique_ptr<CoordinateSequence>
+SimpleCurve::releaseCoordinates()
 {
-    util::ensureNotCurvedType(*this);
-
-    if (isEmpty()) return;
-    assert(points.get());
-    if (isClosed()) {
-        normalizeClosed();
-        return;
-    }
-    std::size_t npts = points->getSize();
-    std::size_t n = npts / 2;
-    for(std::size_t i = 0; i < n; i++) {
-        std::size_t j = npts - 1 - i;
-        if(!(points->getAt<CoordinateXY>(i) == points->getAt<CoordinateXY>(j))) {
-            if(points->getAt<CoordinateXY>(i).compareTo(points->getAt<CoordinateXY>(j)) > 0) {
-                points->reverse();
-            }
-            return;
-        }
-    }
-}
-
-
-void
-SimpleCurve::apply_rw(const CoordinateFilter* filter)
-{
-    assert(points.get());
-    points->apply_rw(filter);
-}
-
-void
-SimpleCurve::apply_ro(CoordinateFilter* filter) const
-{
-    assert(points.get());
-    points->apply_ro(filter);
-}
-
-
-void
-SimpleCurve::apply_rw(CoordinateSequenceFilter& filter)
-{
-    std::size_t npts = points->size();
-    if(!npts) {
-        return;
-    }
-    for(std::size_t i = 0; i < npts; ++i) {
-        filter.filter_rw(*points, i);
-        if(filter.isDone()) {
-            break;
-        }
-    }
-    if(filter.isGeometryChanged()) {
-        geometryChanged();
-    }
-}
-
-void
-SimpleCurve::apply_ro(CoordinateSequenceFilter& filter) const
-{
-    std::size_t npts = points->size();
-    if(!npts) {
-        return;
-    }
-    for(std::size_t i = 0; i < npts; ++i) {
-        filter.filter_ro(*points, i);
-        if(filter.isDone()) {
-            break;
-        }
-    }
-    //if (filter.isGeometryChanged()) geometryChanged();
+    auto newPts = std::make_unique<CoordinateSequence>(0u, points->hasZ(), points->hasM());
+    auto ret = std::move(points);
+    points = std::move(newPts);
+    geometryChanged();
+    return ret;
 }
 
 } // namespace geos::geom

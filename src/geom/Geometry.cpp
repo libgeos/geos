@@ -205,7 +205,7 @@ Geometry::getCentroid(CoordinateXY& ret) const
 std::unique_ptr<Point>
 Geometry::getInteriorPoint() const
 {
-    geos::util::ensureNotCurvedType(this);
+    geos::util::ensureNoCurvedComponents(this);
 
     Coordinate interiorPt;
     int dim = getDimension();
@@ -796,25 +796,6 @@ const PrecisionModel*
 Geometry::getPrecisionModel() const
 {
     return _factory->getPrecisionModel();
-}
-
-bool
-Geometry::isCurvedType(GeometryTypeId typ) {
-    switch(typ) {
-        case GEOS_CIRCULARSTRING:
-        case GEOS_COMPOUNDCURVE:
-        case GEOS_CURVEPOLYGON:
-        case GEOS_MULTICURVE:
-        case GEOS_MULTISURFACE:
-            return true;
-        default:
-            return false;
-    }
-}
-
-bool
-Geometry::isCurvedType() const {
-    return isCurvedType(getGeometryTypeId());
 }
 
 bool

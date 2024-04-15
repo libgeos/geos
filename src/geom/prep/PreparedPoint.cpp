@@ -29,7 +29,7 @@ namespace prep { // geos.geom.prep
 bool
 PreparedPoint::intersects(const geom::Geometry* g) const
 {
-    util::ensureNotCurvedType(g);
+    util::ensureNoCurvedComponents(g);
 
     if(! envelopesIntersect(g)) {
         return false;

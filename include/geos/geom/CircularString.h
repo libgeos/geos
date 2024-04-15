@@ -35,25 +35,19 @@ public:
 
     GeometryTypeId getGeometryTypeId() const override;
 
-    CircularString* cloneImpl() const override
+    double getLength() const override
     {
-        return new CircularString(*this);
-    }
-
-    CircularString* reverseImpl() const override;
-
-    int
-    getSortIndex() const override
-    {
-        return SORTINDEX_LINESTRING;
-    };
-
-    double getLength() const override {
         throw util::UnsupportedOperationException("Cannot calculate length of CircularString");
     }
 
-    bool hasCurvedComponents() const override {
+    bool hasCurvedComponents() const override
+    {
         return true;
+    }
+
+    std::unique_ptr<CircularString> reverse() const
+    {
+        return std::unique_ptr<CircularString>(reverseImpl());
     }
 
 protected:
@@ -61,13 +55,28 @@ protected:
     /// \brief
     /// Constructs a CircularString taking ownership the
     /// given CoordinateSequence.
-    CircularString(std::unique_ptr<CoordinateSequence> && pts,
+    CircularString(std::unique_ptr<CoordinateSequence>&& pts,
                    const GeometryFactory& newFactory);
+
+    CircularString* cloneImpl() const override
+    {
+        return new CircularString(*this);
+    }
 
     void geometryChangedAction() override
     {
         envelope = computeEnvelopeInternal(false);
     }
+
+    int
+    getSortIndex() const override
+    {
+        return SORTINDEX_LINESTRING;
+    };
+
+    CircularString* reverseImpl() const override;
+
+    void validateConstruction();
 
 };
 

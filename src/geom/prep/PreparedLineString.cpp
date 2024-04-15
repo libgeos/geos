@@ -57,7 +57,7 @@ PreparedLineString::getIntersectionFinder()
 bool
 PreparedLineString::intersects(const geom::Geometry* g) const
 {
-    geos::util::ensureNotCurvedType(g);
+    geos::util::ensureNoCurvedComponents(g);
 
     if(! envelopesIntersect(g)) {
         return false;

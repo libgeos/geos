@@ -71,7 +71,7 @@ CoverageRingEdges::build()
     std::map<LineSegment, CoverageEdge*> uniqueEdgeMap;
     for (const Geometry* geom : m_coverage) {
         for (std::size_t ipoly = 0; ipoly < geom->getNumGeometries(); ipoly++) {
-            util::ensureNotCurvedType(geom->getGeometryN(ipoly));
+            util::ensureNoCurvedComponents(geom->getGeometryN(ipoly));
 
             const Polygon* poly = static_cast<const Polygon*>(geom->getGeometryN(ipoly));
 

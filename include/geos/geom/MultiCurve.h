@@ -26,18 +26,13 @@ class GEOS_DLL MultiCurve : public GeometryCollection {
 public:
     ~MultiCurve() override = default;
 
-    /// Returns line dimension (1)
-    Dimension::DimensionType getDimension() const override;
-
-    bool hasDimension(Dimension::DimensionType d) const override
+    std::unique_ptr<MultiCurve> clone() const
     {
-        return d == Dimension::L;
-    }
+        return std::unique_ptr<MultiCurve>(cloneImpl());
+    };
 
-    bool isDimensionStrict(Dimension::DimensionType d) const override
-    {
-        return d == Dimension::L;
-    }
+    /// Returns a (possibly empty) [MultiPoint](@ref geom::MultiPoint)
+    std::unique_ptr<Geometry> getBoundary() const override;
 
     /**
      * \brief
@@ -46,8 +41,8 @@ public:
      */
     int getBoundaryDimension() const override;
 
-    /// Returns a (possibly empty) [MultiPoint](@ref geom::MultiPoint)
-    std::unique_ptr<Geometry> getBoundary() const override;
+    /// Returns line dimension (1)
+    Dimension::DimensionType getDimension() const override;
 
     const Curve* getGeometryN(std::size_t n) const override;
 
@@ -55,12 +50,19 @@ public:
 
     GeometryTypeId getGeometryTypeId() const override;
 
+    bool hasDimension(Dimension::DimensionType d) const override
+    {
+        return d == Dimension::L;
+    }
+
+    /// Returns true if the MultiCurve is not empty, and every included
+    /// Curve is also closed.
     bool isClosed() const;
 
-    std::unique_ptr<MultiCurve> clone() const
+    bool isDimensionStrict(Dimension::DimensionType d) const override
     {
-        return std::unique_ptr<MultiCurve>(cloneImpl());
-    };
+        return d == Dimension::L;
+    }
 
     /**
      * Creates a MultiCurve in the reverse

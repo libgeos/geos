@@ -17,12 +17,12 @@
 
 #pragma once
 
-#include <geos/geom/Curve.h>
-#include <geos/geom/Surface.h>
 #include <geos/geom/CoordinateSequenceFilter.h>
+#include <geos/geom/Curve.h>
 #include <geos/geom/GeometryComponentFilter.h>
 #include <geos/geom/GeometryFilter.h>
 #include <geos/geom/LinearRing.h>
+#include <geos/geom/Surface.h>
 #include <geos/util/IllegalArgumentException.h>
 
 namespace geos {
@@ -93,7 +93,6 @@ protected:
 
 public:
 
-
     const RingType*
     getExteriorRing() const override
     {
@@ -104,6 +103,23 @@ public:
     getExteriorRing() override
     {
         return shell.get();
+    }
+
+    const RingType*
+    getInteriorRingN(std::size_t n) const override
+    {
+        return holes[n].get();
+    }
+
+    RingType*
+    getInteriorRingN(std::size_t n) override
+    {
+        return holes[n].get();
+    }
+
+    size_t getNumInteriorRing() const override
+    {
+        return holes.size();
     }
 
     /**
@@ -118,23 +134,6 @@ public:
     releaseExteriorRing()
     {
         return std::move(shell);
-    }
-
-    size_t getNumInteriorRing() const override
-    {
-        return holes.size();
-    }
-
-    const RingType*
-    getInteriorRingN(std::size_t n) const override
-    {
-        return holes[n].get();
-    }
-
-    RingType*
-    getInteriorRingN(std::size_t n) override
-    {
-        return holes[n].get();
     }
 
     /**

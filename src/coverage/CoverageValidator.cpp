@@ -74,7 +74,7 @@ CoverageValidator::validate()
     TemplateSTRtree<const Geometry*> index;
     std::vector<std::unique_ptr<Geometry>> invalidLines;
     for (auto* geom : m_coverage) {
-        util::ensureNotCurvedType(geom);
+        util::ensureNoCurvedComponents(geom);
 
         index.insert(geom);
         invalidLines.emplace_back(nullptr);

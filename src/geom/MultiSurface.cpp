@@ -14,18 +14,21 @@
  *
  **********************************************************************/
 
-#include <geos/geom/MultiSurface.h>
-#include <geos/geom/MultiCurve.h>
 #include <geos/geom/GeometryFactory.h>
+#include <geos/geom/MultiCurve.h>
+#include <geos/geom/MultiSurface.h>
 
 namespace geos {
 namespace geom {
 
-/*protected*/
 MultiSurface::MultiSurface(std::vector<std::unique_ptr<Geometry>>&& newPolys, const GeometryFactory& factory)
     : GeometryCollection(std::move(newPolys), factory)
 {
-    // FIXME check that all elements are in fact surfaces
+    for (const auto& geom : geometries) {
+        if (!dynamic_cast<const Surface*>(geom.get())) {
+            throw util::IllegalArgumentException("All elements of MultiSurface must be a Surface");
+        }
+    }
 }
 
 MultiSurface::MultiSurface(std::vector<std::unique_ptr<Surface>>&& newPolys, const GeometryFactory& factory)
@@ -35,33 +38,12 @@ MultiSurface::MultiSurface(std::vector<std::unique_ptr<Surface>>&& newPolys, con
 
 MultiSurface::~MultiSurface() {}
 
-Dimension::DimensionType
-MultiSurface::getDimension() const
-{
-    return Dimension::A; // area
-}
-
-int
-MultiSurface::getBoundaryDimension() const
-{
-    return 1;
-}
-
-std::string
-MultiSurface::getGeometryType() const
-{
-    return "MultiSurface";
-}
-
 std::unique_ptr<Geometry>
 MultiSurface::getBoundary() const
 {
-    // FIXME implement
-#if 0
     if (isEmpty()) {
         return std::unique_ptr<Geometry>(getFactory()->createMultiCurve());
     }
-#endif
 
     std::vector<std::unique_ptr<Geometry>> allRings;
     for (const auto& pg : geometries) {
@@ -71,14 +53,31 @@ MultiSurface::getBoundary() const
             allRings.push_back(std::move(g));
         }
         else {
-            for (std::size_t i = 0; i < g->getNumGeometries(); ++i) {
-                // TODO avoid this clone
-                allRings.push_back(g->getGeometryN(i)->clone());
+            for (auto& gi : (static_cast<GeometryCollection&>(*g)).releaseGeometries()) {
+                allRings.push_back(std::move(gi));
             }
         }
     }
 
     return getFactory()->createMultiCurve(std::move(allRings));
+}
+
+int
+MultiSurface::getBoundaryDimension() const
+{
+    return 1;
+}
+
+Dimension::DimensionType
+MultiSurface::getDimension() const
+{
+    return Dimension::A; // area
+}
+
+std::string
+MultiSurface::getGeometryType() const
+{
+    return "MultiSurface";
 }
 
 GeometryTypeId
@@ -105,7 +104,6 @@ MultiSurface::reverseImpl() const
 
     return getFactory()->createMultiSurface(std::move(reversed)).release();
 }
-
 
 }
 }

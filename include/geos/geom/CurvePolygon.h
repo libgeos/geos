@@ -25,30 +25,30 @@ class GEOS_DLL CurvePolygon : public SurfaceImpl<Curve> {
 public:
     ~CurvePolygon() override = default;
 
+    double getArea() const override;
+
+    std::unique_ptr<Geometry> getBoundary() const override;
+
     std::unique_ptr<CoordinateSequence> getCoordinates() const override;
+
+    std::string getGeometryType() const override;
+
+    GeometryTypeId getGeometryTypeId() const override;
+
+    bool hasCurvedComponents() const override;
+
+    void normalize() override;
+
+protected:
+    using SurfaceImpl::SurfaceImpl;
+
+    Geometry* cloneImpl() const override;
 
     int
     getSortIndex() const override
     {
         return SORTINDEX_CURVEPOLYGON;
     }
-
-    std::string getGeometryType() const override;
-
-    GeometryTypeId getGeometryTypeId() const override;
-
-    std::unique_ptr<Geometry> getBoundary() const override;
-
-    void normalize() override;
-
-    double getArea() const override;
-
-    bool hasCurvedComponents() const override;
-
-protected:
-    using SurfaceImpl::SurfaceImpl;
-
-    Geometry* cloneImpl() const override;
 
     Geometry* reverseImpl() const override;
 };

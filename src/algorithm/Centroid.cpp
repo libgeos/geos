@@ -70,7 +70,7 @@ Centroid::getCentroid(CoordinateXY& cent) const
 void
 Centroid::add(const Geometry& geom)
 {
-    util::ensureNotCurvedType(geom);
+    util::ensureNoCurvedComponents(geom);
 
     if(geom.isEmpty()) {
         return;

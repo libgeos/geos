@@ -64,20 +64,19 @@ template<typename To, typename From> inline To down_cast(From* f)
 namespace util {
 
 template<typename T>
-void ensureNotCurvedType(const T* geom)
-{
-    if (geom->hasCurvedComponents()) {
-        throw UnsupportedOperationException("Curved geometry types are not supported.");
-    }
-}
-
-template<typename T>
-void ensureNotCurvedType(const T& geom)
+void ensureNoCurvedComponents(const T& geom)
 {
     if (geom.hasCurvedComponents()) {
         throw UnsupportedOperationException("Curved geometry types are not supported.");
     }
 }
+
+template<typename T>
+void ensureNoCurvedComponents(const T* geom)
+{
+    ensureNoCurvedComponents(*geom);
+}
+
 
 }
 

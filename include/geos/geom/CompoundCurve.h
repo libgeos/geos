@@ -24,91 +24,93 @@ namespace geom {
 class GEOS_DLL CompoundCurve : public Curve {
     friend class GeometryFactory;
 
-
 public:
+    using Curve::apply_ro;
+    using Curve::apply_rw;
 
-    CompoundCurve(const CompoundCurve&);
+    void apply_ro(CoordinateFilter* filter) const override;
 
-    CompoundCurve& operator=(const CompoundCurve&);
+    void apply_ro(CoordinateSequenceFilter& filter) const override;
 
-    std::unique_ptr<CoordinateSequence> getCoordinates() const override;
+    void apply_rw(CoordinateSequenceFilter& filter) override;
 
-    const CoordinateXY* getCoordinate() const override;
+    void apply_rw(const CoordinateFilter* filter) override;
 
-    uint8_t getCoordinateDimension() const override;
+    int compareToSameClass(const Geometry* geom) const override;
 
-    bool hasZ() const override;
-
-    bool hasM() const override;
-
-    bool isEmpty() const override;
-
-    bool isClosed() const override;
-
-    std::size_t getNumCurves() const;
-
-    const SimpleCurve* getCurveN(std::size_t) const;
-
-    std::size_t getNumPoints() const override;
-
-    std::unique_ptr<Geometry> getBoundary() const override;
-
-    std::string getGeometryType() const override;
-
-    GeometryTypeId getGeometryTypeId() const override;
+    std::unique_ptr<CompoundCurve> clone() const;
 
     bool equalsExact(const Geometry* other, double tolerance = 0)
     const override;
 
     bool equalsIdentical(const Geometry* other) const override;
 
+    std::unique_ptr<Geometry> getBoundary() const override;
+
+    const CoordinateXY* getCoordinate() const override;
+
+    uint8_t getCoordinateDimension() const override;
+
+    std::unique_ptr<CoordinateSequence> getCoordinates() const override;
+
+    /// Returns the nth section of the CompoundCurve
+    const SimpleCurve* getCurveN(std::size_t) const;
+
     const Envelope* getEnvelopeInternal() const override
     {
         return &envelope;
     }
 
-    std::unique_ptr<CompoundCurve> clone() const;
+    std::string getGeometryType() const override;
 
-    CompoundCurve* cloneImpl() const override;
-
-    std::unique_ptr<CompoundCurve> reverse() const;
-
-    CompoundCurve* reverseImpl() const override;
+    GeometryTypeId getGeometryTypeId() const override;
 
     double getLength() const override;
 
-    using Curve::apply_ro;
-    using Curve::apply_rw;
+    /// Returns the number of sections in the CompoundCurve
+    std::size_t getNumCurves() const;
 
-    void apply_rw(const CoordinateFilter* filter) override;
-
-    void apply_ro(CoordinateFilter* filter) const override;
-
-    void apply_rw(CoordinateSequenceFilter& filter) override;
-
-    void apply_ro(CoordinateSequenceFilter& filter) const override;
-
-    void normalize() override;
-
-    int compareToSameClass(const Geometry* geom) const override;
+    std::size_t getNumPoints() const override;
 
     bool hasCurvedComponents() const override;
 
+    bool hasM() const override;
+
+    bool hasZ() const override;
+
+    bool isClosed() const override;
+
+    bool isEmpty() const override;
+
+    void normalize() override;
+
+    std::unique_ptr<CompoundCurve> reverse() const;
+
 protected:
+    /// Construct a CompoundCurve, taking ownership of the
+    /// provided CoordinateSequence
     CompoundCurve(std::vector<std::unique_ptr<SimpleCurve>>&&,
                   const GeometryFactory&);
 
-    int getSortIndex() const override
-    {
-        return SORTINDEX_COMPOUNDCURVE;
-    }
+    CompoundCurve(const CompoundCurve&);
+
+    CompoundCurve& operator=(const CompoundCurve&);
+
+    CompoundCurve* cloneImpl() const override;
+
+    Envelope computeEnvelopeInternal() const;
 
     void geometryChangedAction() override
     {
         envelope = computeEnvelopeInternal();
     }
 
-    Envelope computeEnvelopeInternal() const;
+    int getSortIndex() const override
+    {
+        return SORTINDEX_COMPOUNDCURVE;
+    }
+
+    CompoundCurve* reverseImpl() const override;
 
 private:
     std::vector<std::unique_ptr<SimpleCurve>> curves;

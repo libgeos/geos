@@ -325,8 +325,10 @@ public:
     std::unique_ptr<CircularString> createCircularString(
         const CoordinateSequence& coordinates) const;
 
+    /// Construct an EMPTY CompoundCurve
     std::unique_ptr<CompoundCurve> createCompoundCurve() const;
 
+    /// Construct a CompoundCurve taking ownership of given argument
     std::unique_ptr<CompoundCurve> createCompoundCurve(std::vector<std::unique_ptr<SimpleCurve>>&&) const;
 
     /**

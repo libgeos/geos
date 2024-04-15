@@ -21,10 +21,10 @@ namespace geos {
 namespace geom {
 
 void
-Curve::apply_rw(GeometryFilter* filter)
+Curve::apply_ro(GeometryComponentFilter* filter) const
 {
     assert(filter);
-    filter->filter_rw(this);
+    filter->filter_ro(this);
 }
 
 void
@@ -42,10 +42,10 @@ Curve::apply_rw(GeometryComponentFilter* filter)
 }
 
 void
-Curve::apply_ro(GeometryComponentFilter* filter) const
+Curve::apply_rw(GeometryFilter* filter)
 {
     assert(filter);
-    filter->filter_ro(this);
+    filter->filter_rw(this);
 }
 
 bool

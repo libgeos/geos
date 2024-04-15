@@ -21,15 +21,21 @@ namespace geos {
 namespace geom {
 
 /*public*/
-CircularString::CircularString(std::unique_ptr<CoordinateSequence> && newCoords,
+CircularString::CircularString(std::unique_ptr<CoordinateSequence>&& newCoords,
                                const GeometryFactory& factory)
     :
     SimpleCurve(std::move(newCoords), false, factory)
 {
-    //validateConstruction();
+    validateConstruction();
 }
 
 CircularString::~CircularString() = default;
+
+std::unique_ptr<CircularString>
+CircularString::clone() const
+{
+    return std::unique_ptr<CircularString>(cloneImpl());
+}
 
 std::string
 CircularString::getGeometryType() const
@@ -41,12 +47,6 @@ GeometryTypeId
 CircularString::getGeometryTypeId() const
 {
     return GEOS_CIRCULARSTRING;
-}
-
-std::unique_ptr<CircularString>
-CircularString::clone() const
-{
-    return std::unique_ptr<CircularString>(cloneImpl());
 }
 
 CircularString*
@@ -61,6 +61,19 @@ CircularString::reverseImpl() const
     seq->reverse();
     assert(getFactory());
     return getFactory()->createCircularString(std::move(seq)).release();
+}
+
+void
+CircularString::validateConstruction()
+{
+    if (points.get() == nullptr) {
+        points = std::make_unique<CoordinateSequence>();
+        return;
+    }
+
+    if (points->size() == 2) {
+        throw util::IllegalArgumentException("point array must contain 0 or >2 elements\n");
+    }
 }
 
 }

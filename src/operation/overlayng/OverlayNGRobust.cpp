@@ -83,8 +83,8 @@ OverlayNGRobust::Union(const Geometry* a)
 std::unique_ptr<Geometry>
 OverlayNGRobust::Overlay(const Geometry* geom0, const Geometry* geom1, int opCode)
 {
-    geos::util::ensureNotCurvedType(geom0);
-    geos::util::ensureNotCurvedType(geom1);
+    geos::util::ensureNoCurvedComponents(geom0);
+    geos::util::ensureNoCurvedComponents(geom1);
 
     std::unique_ptr<Geometry> result;
     std::runtime_error exOriginal("");

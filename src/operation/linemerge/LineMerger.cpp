@@ -94,7 +94,7 @@ struct LMGeometryComponentFilter: public GeometryComponentFilter {
 void
 LineMerger::add(const Geometry* geometry)
 {
-    util::ensureNotCurvedType(geometry);
+    util::ensureNoCurvedComponents(geometry);
 
     LMGeometryComponentFilter lmgcf(this);
     geometry->apply_ro(&lmgcf);

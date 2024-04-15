@@ -169,7 +169,7 @@ void
 GeometryGraph::add(const Geometry* g)
 //throw (UnsupportedOperationException *)
 {
-    util::ensureNotCurvedType(g);
+    util::ensureNoCurvedComponents(g);
 
     if(g->isEmpty()) {
         return;

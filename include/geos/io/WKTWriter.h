@@ -282,13 +282,6 @@ protected:
         OrdinateSet outputOrdinates,
         int level, bool doIndent, Writer& writer) const;
 
-#if 0
-    void appendLineStringText(
-        const geom::LineString& lineString,
-        OrdinateSet outputOrdinates,
-        int level, bool doIndent, Writer& writer) const;
-#endif
-
     void appendSurfaceText(
         const geom::Surface& polygon,
         OrdinateSet outputOrdinates,

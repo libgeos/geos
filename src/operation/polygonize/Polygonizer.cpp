@@ -114,7 +114,7 @@ Polygonizer::add(std::vector<const Geometry*>* geomList)
 void
 Polygonizer::add(const Geometry* g)
 {
-    util::ensureNotCurvedType(g);
+    util::ensureNoCurvedComponents(g);
     g->apply_ro(&lineStringAdder);
 }
 

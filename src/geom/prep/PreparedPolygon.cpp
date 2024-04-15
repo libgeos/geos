@@ -136,7 +136,7 @@ bool
 PreparedPolygon::
 intersects(const geom::Geometry* g) const
 {
-    geos::util::ensureNotCurvedType(g);
+    geos::util::ensureNoCurvedComponents(g);
 
     // envelope test
     if(!envelopesIntersect(g)) {

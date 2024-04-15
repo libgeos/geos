@@ -37,24 +37,13 @@ Surface::apply_ro(CoordinateFilter* filter) const
 }
 
 void
-Surface::apply_rw(const CoordinateFilter* filter)
+Surface::apply_ro(CoordinateSequenceFilter& filter) const
 {
-    getExteriorRing()->apply_rw(filter);
-    for (std::size_t i = 0; i < getNumInteriorRing(); i++) {
-        getInteriorRingN(i)->apply_rw(filter);
+    getExteriorRing()->apply_ro(filter);
+
+    for (std::size_t i = 0; !filter.isDone() && i < getNumInteriorRing(); i++) {
+        getInteriorRingN(i)->apply_ro(filter);
     }
-}
-
-void
-Surface::apply_rw(GeometryFilter* filter)
-{
-    filter->filter_rw(this);
-}
-
-void
-Surface::apply_ro(GeometryFilter* filter) const
-{
-    filter->filter_ro(this);
 }
 
 void
@@ -68,11 +57,16 @@ Surface::apply_ro(GeometryComponentFilter* filter) const
 }
 
 void
-Surface::apply_rw(GeometryComponentFilter* filter)
+Surface::apply_ro(GeometryFilter* filter) const
 {
-    filter->filter_rw(this);
+    filter->filter_ro(this);
+}
+
+void
+Surface::apply_rw(const CoordinateFilter* filter)
+{
     getExteriorRing()->apply_rw(filter);
-    for (std::size_t i = 0; !filter->isDone() && i < getNumInteriorRing(); i++) {
+    for (std::size_t i = 0; i < getNumInteriorRing(); i++) {
         getInteriorRingN(i)->apply_rw(filter);
     }
 }
@@ -92,13 +86,19 @@ Surface::apply_rw(CoordinateSequenceFilter& filter)
 }
 
 void
-Surface::apply_ro(CoordinateSequenceFilter& filter) const
+Surface::apply_rw(GeometryComponentFilter* filter)
 {
-    getExteriorRing()->apply_ro(filter);
-
-    for (std::size_t i = 0; !filter.isDone() && i < getNumInteriorRing(); i++) {
-        getInteriorRingN(i)->apply_ro(filter);
+    filter->filter_rw(this);
+    getExteriorRing()->apply_rw(filter);
+    for (std::size_t i = 0; !filter->isDone() && i < getNumInteriorRing(); i++) {
+        getInteriorRingN(i)->apply_rw(filter);
     }
+}
+
+void
+Surface::apply_rw(GeometryFilter* filter)
+{
+    filter->filter_rw(this);
 }
 
 int
@@ -136,6 +136,11 @@ Surface::convexHull() const
     return getExteriorRing()->convexHull();
 }
 
+std::unique_ptr<Geometry>
+Surface::createEmptyRing(const GeometryFactory& factory)
+{
+    return factory.createLinearRing();
+}
 
 bool
 Surface::equalsExact(const Geometry* other, double tolerance) const
@@ -222,6 +227,17 @@ Surface::getEnvelopeInternal() const
     return getExteriorRing()->getEnvelopeInternal();
 }
 
+double
+Surface::getLength() const
+{
+    double len = 0.0;
+    len += getExteriorRing()->getLength();
+    for (std::size_t i = 0; i < getNumInteriorRing(); i++) {
+        len += getInteriorRingN(i)->getLength();
+    }
+    return len;
+}
+
 size_t
 Surface::getNumPoints() const
 {
@@ -264,21 +280,6 @@ bool
 Surface::isEmpty() const
 {
     return getExteriorRing()->isEmpty();
-}
-
-double Surface::getLength() const {
-    double len = 0.0;
-    len += getExteriorRing()->getLength();
-    for(std::size_t i = 0; i < getNumInteriorRing(); i++) {
-        len += getInteriorRingN(i)->getLength();
-    }
-    return len;
-}
-
-std::unique_ptr<Geometry>
-Surface::createEmptyRing(const GeometryFactory& factory)
-{
-    return factory.createLinearRing();
 }
 
 }

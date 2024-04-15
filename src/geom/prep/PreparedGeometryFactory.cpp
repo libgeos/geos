@@ -45,7 +45,7 @@ PreparedGeometryFactory::create(const geom::Geometry* g) const
         throw util::IllegalArgumentException("PreparedGeometry constructed with null Geometry object");
     }
 
-    util::ensureNotCurvedType(g);
+    util::ensureNoCurvedComponents(g);
 
     std::unique_ptr<PreparedGeometry> pg;
 
