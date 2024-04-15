@@ -110,6 +110,10 @@ DistanceOp::distance()
     if(geom[0]->isEmpty() || geom[1]->isEmpty()) {
         return 0.0;
     }
+    if(geom[0]->getGeometryTypeId() == GEOS_POINT && geom[1]->getGeometryTypeId() == GEOS_POINT) {
+        return static_cast<const Point*>(geom[0])->getCoordinate()->distance(*static_cast<const Point*>(geom[1])->getCoordinate());
+    }
+
     computeMinDistance();
     return minDistance;
 }
