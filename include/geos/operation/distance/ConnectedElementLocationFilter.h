@@ -50,7 +50,7 @@ namespace distance { // geos::operation::distance
 class GEOS_DLL ConnectedElementLocationFilter: public geom::GeometryFilter {
 private:
 
-    std::vector<std::unique_ptr<GeometryLocation>> locations;
+    std::vector<GeometryLocation> locations;
     ConnectedElementLocationFilter() = default;
     ConnectedElementLocationFilter(const ConnectedElementLocationFilter&) = delete;
     ConnectedElementLocationFilter& operator=(const ConnectedElementLocationFilter&) = delete;
@@ -63,7 +63,7 @@ public:
      * an empty list will be returned. The elements of the list
      * are [GeometryLocations](@ref operation::distance::GeometryLocation).
      */
-    static std::vector<std::unique_ptr<GeometryLocation>> getLocations(const geom::Geometry* geom);
+    static std::vector<GeometryLocation> getLocations(const geom::Geometry* geom);
 
     void filter_ro(const geom::Geometry* geom) override;
     void filter_rw(geom::Geometry* geom) override;
