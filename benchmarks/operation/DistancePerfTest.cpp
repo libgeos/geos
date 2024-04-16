@@ -34,7 +34,47 @@ static void BM_PointPointDistance(benchmark::State& state) {
     }
 }
 
+static void BM_PointLineDistance(benchmark::State& state) {
+    geos::geom::Envelope e(-100, 100, -100, 100);
+
+    auto points = geos::benchmark::createPoints(e, 1000);
+
+    std::size_t points_per_line = 30;
+    std::size_t nlines = 100;
+    double line_size = e.getWidth() / static_cast<double>(nlines * nlines);
+
+    auto lines = geos::benchmark::createLines(e, nlines, line_size, points_per_line);
+
+    for (auto _ : state) {
+        for (const auto& line : lines) {
+            for (const auto& point : points) {
+                line->distance(point.get());
+            }
+        }
+    }
+}
+
+static void BM_LineLineDistance(benchmark::State& state) {
+    geos::geom::Envelope e(-100, 100, -100, 100);
+
+    std::size_t points_per_line = 30;
+    std::size_t nlines = 100;
+    double line_size = e.getWidth() / static_cast<double>(nlines * nlines);
+
+    auto lines = geos::benchmark::createLines(e, nlines, line_size, points_per_line);
+
+    for (auto _ : state) {
+        for (const auto& line1 : lines) {
+            for (const auto& line2 : lines) {
+                line1->distance(line2.get());
+            }
+        }
+    }
+}
+
 BENCHMARK(BM_PointPointDistance);
+BENCHMARK(BM_PointLineDistance);
+BENCHMARK(BM_LineLineDistance);
 
 BENCHMARK_MAIN();
 
