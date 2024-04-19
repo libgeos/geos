@@ -124,6 +124,10 @@ Centroid::addShell(const CoordinateSequence& pts)
 void
 Centroid::addHole(const CoordinateSequence& pts)
 {
+    if (pts.isEmpty()) {
+        return;
+    }
+
     bool isPositiveArea = Orientation::isCCW(&pts);
     for(size_t i = 0, e = pts.size() - 1; i < e; ++i) {
         addTriangle(*areaBasePt, pts[i], pts[i + 1], isPositiveArea);
