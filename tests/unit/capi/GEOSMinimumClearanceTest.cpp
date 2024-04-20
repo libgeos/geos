@@ -120,4 +120,14 @@ void object::test<5>
                   geos::DoubleInfinity);
 }
 
+template<>
+template<>
+void object::test<6>
+()
+{
+    input_ = GEOSGeom_createPointFromXY(std::numeric_limits<double>::quiet_NaN(), 1);
+    double d;
+    ensure_equals(GEOSMinimumClearance(input_, &d), 2);
+}
+
 } // namespace tut
