@@ -122,5 +122,11 @@ void object::test<5>() {
         "POLYGON EMPTY");
 }
 
+template<>
+template<>
+void object::test<6>() {
+    checkCentroid("POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0), EMPTY)", 0.5, 0.5);
+}
+
 } // namespace tut
 
