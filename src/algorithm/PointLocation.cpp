@@ -55,13 +55,12 @@ PointLocation::isOnLine(const geom::CoordinateXY& p, const geom::CoordinateSeque
         return false;
     }
 
-    const geom::CoordinateXY* pp = &(pt->getAt<geom::CoordinateXY>(0));
     for(std::size_t i = 1; i < ptsize; ++i) {
-        const geom::CoordinateXY& p1 = pt->getAt<geom::CoordinateXY>(i);
-        if(isOnSegment(p, *pp, p1)) {
+        if(isOnSegment(p, 
+                        pt->getAt<geom::CoordinateXY>(i - 1), 
+                        pt->getAt<geom::CoordinateXY>(i))) {
             return true;
         }
-        pp = &p1;
     }
     return false;
 }
