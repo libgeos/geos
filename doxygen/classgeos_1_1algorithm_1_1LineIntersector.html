@@ -79,8 +79,6 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5297a7c9d67fd8e0ac88acc723ba2444"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a742294f2808e7d07387771ca31a6c07f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1LineIntersector.html#a742294f2808e7d07387771ca31a6c07f">setPrecisionModel</a> (const <a class="el" href="classgeos_1_1geom_1_1PrecisionModel.html">geom::PrecisionModel</a> *newPM)</td></tr>
 <tr class="separator:a742294f2808e7d07387771ca31a6c07f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a452ecd15c6e39e2b5f079ec9a3fd7fbd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1LineIntersector.html#a452ecd15c6e39e2b5f079ec9a3fd7fbd">computeIntersection</a> (const geom::CoordinateXY &amp;p, const geom::CoordinateXY &amp;p1, const geom::CoordinateXY &amp;p2)</td></tr>
-<tr class="separator:a452ecd15c6e39e2b5f079ec9a3fd7fbd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab2306b29dd15cb7e11c98e43e8799360"><td class="memTemplParams" colspan="2"><a id="ab2306b29dd15cb7e11c98e43e8799360"></a>
 template&lt;typename C1 , typename C2 &gt; </td></tr>
 <tr class="memitem:ab2306b29dd15cb7e11c98e43e8799360"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1LineIntersector.html#ab2306b29dd15cb7e11c98e43e8799360">computeIntersection</a> (const C1 &amp;p1, const C1 &amp;p2, const C2 &amp;p3, const C2 &amp;p4)</td></tr>
@@ -124,10 +122,6 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:ad28d55013c5d7df0ca36eadaeb06c6bb"><td class="memItemLeft" align="right" valign="top"><a id="ad28d55013c5d7df0ca36eadaeb06c6bb"></a>
 static double&#160;</td><td class="memItemRight" valign="bottom"><b>nonRobustComputeEdgeDistance</b> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;p, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;p1, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;p2)</td></tr>
 <tr class="separator:ad28d55013c5d7df0ca36eadaeb06c6bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa4dccffe6f0ceceee2fd002d7755ff70"><td class="memItemLeft" align="right" valign="top"><a id="aa4dccffe6f0ceceee2fd002d7755ff70"></a>
-static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1LineIntersector.html#aa4dccffe6f0ceceee2fd002d7755ff70">hasIntersection</a> (const geom::CoordinateXY &amp;p, const geom::CoordinateXY &amp;p1, const geom::CoordinateXY &amp;p2)</td></tr>
-<tr class="memdesc:aa4dccffe6f0ceceee2fd002d7755ff70"><td class="mdescLeft">&#160;</td><td class="mdescRight">Same as above but doesn't compute intersection point. Faster. <br /></td></tr>
-<tr class="separator:aa4dccffe6f0ceceee2fd002d7755ff70"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a97a04a7c7894f88f4c86c488b32f7921"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1LineIntersector.html#a97a04a7c7894f88f4c86c488b32f7921">isSameSignAndNonZero</a> (double a, double b)</td></tr>
 <tr class="separator:a97a04a7c7894f88f4c86c488b32f7921"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -201,42 +195,6 @@ static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hre
 <p>The edge distance is a metric of the point along the edge. The metric used is a robust and easy to compute metric function. It is <b>not</b> equivalent to the usual Euclidean metric. It relies on the fact that either the x or the y ordinates of the points in the edge are unique, depending on whether the edge is longer in the horizontal or vertical direction.</p>
 <p>NOTE: This function may produce incorrect distances for inputs where p is not precisely on p1-p2 (E.g. p = (139,9) p1 = (139,10), p2 = (280,1) produces distanct 0.0, which is incorrect.</p>
 <p>My hypothesis is that the function is safe to use for points which are the result of <b>rounding</b> points which lie on the line, but not safe to use for <b>truncated</b> points. </p>
-
-</div>
-</div>
-<a id="a452ecd15c6e39e2b5f079ec9a3fd7fbd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a452ecd15c6e39e2b5f079ec9a3fd7fbd">&#9670;&nbsp;</a></span>computeIntersection()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void geos::algorithm::LineIntersector::computeIntersection </td>
-          <td>(</td>
-          <td class="paramtype">const geom::CoordinateXY &amp;&#160;</td>
-          <td class="paramname"><em>p</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const geom::CoordinateXY &amp;&#160;</td>
-          <td class="paramname"><em>p1</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const geom::CoordinateXY &amp;&#160;</td>
-          <td class="paramname"><em>p2</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Compute the intersection of a point p and the line p1-p2.</p>
-<p>This function computes the boolean value of the hasIntersection test. The actual value of the intersection (if there is one) is equal to the value of <code>p</code>. </p>
 
 </div>
 </div>
