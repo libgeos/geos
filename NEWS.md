@@ -26,6 +26,7 @@
   - Fix PreparedPolygonContains for GC with MultiPoint (GH-1008, Martin Davis)
   - Fix reading WKT with EMPTY token with white space (GH-1025, Mike Taves)
   - Fix buffer Inverted Ring Removal check (GH-1056, Martin Davis)
+  - Add PointLocation.isOnSegment and remove LineIntersector point methods (GH-1083, Martin Davis)
 
 ## Changes in 3.12.0
 2023-06-27
