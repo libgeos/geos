@@ -180,8 +180,7 @@ PolygonTopologyAnalyzer::intersectingSegIndex(const CoordinateSequence* ringPts,
 {
     algorithm::LineIntersector li;
     for (std::size_t i = 0; i < ringPts->size() - 1; i++) {
-      li.computeIntersection(*pt, ringPts->getAt<CoordinateXY>(i), ringPts->getAt<CoordinateXY>(i+1));
-      if (li.hasIntersection()) {
+      if ( algorithm::PointLocation::isOnSegment(*pt, ringPts->getAt<CoordinateXY>(i), ringPts->getAt<CoordinateXY>(i+1)) ) {
         //-- check if pt is the start point of the next segment
         if (pt->equals2D(ringPts->getAt<CoordinateXY>(i + 1))) {
           return i + 1;
