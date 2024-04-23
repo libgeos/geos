@@ -134,17 +134,6 @@ public:
         precisionModel = newPM;
     }
 
-    /// Compute the intersection of a point p and the line p1-p2.
-    ///
-    /// This function computes the boolean value of the hasIntersection test.
-    /// The actual value of the intersection (if there is one)
-    /// is equal to the value of <code>p</code>.
-    ///
-    void computeIntersection(const geom::CoordinateXY& p, const geom::CoordinateXY& p1, const geom::CoordinateXY& p2);
-
-    /// Same as above but doesn't compute intersection point. Faster.
-    static bool hasIntersection(const geom::CoordinateXY& p, const geom::CoordinateXY& p1, const geom::CoordinateXY& p2);
-
     enum intersection_type : uint8_t {
         /// Indicates that line segments do not intersect
         NO_INTERSECTION = 0,
