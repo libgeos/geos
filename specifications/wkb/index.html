@@ -73,7 +73,7 @@ GEOS can read and write three “flavours” of WKB:
       "url" : "https://libgeos.org/specifications/wkb/",
       "headline": "Well-Known Binary (WKB)",
       "description": "“Well-known binary” is a scheme for writing a simple features geometry into a platform-independent array of bytes, usually for transport between systems or between programs. By using WKB, systems can avoid exposing their particular internal implementation of geometry storage, for greater overall interoperability.\nGEOS can read and write three “flavours” of WKB:\n Standard WKB Extended WKB ISO WKB  When reading WKB, GEOS will transparently detect the flavour of WKB and automatically read it.",
-      "wordCount" : "1136",
+      "wordCount" : "1185",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1575,6 +1575,19 @@ GEOS can read and write three “flavours” of WKB:
     Point  points[numPoints];
 };
 </code></pre><div class="gdoc-page__anchorwrap">
+    <h3 id="empty-geometries"
+    >
+        Empty Geometries
+        <a data-clipboard-text="https://libgeos.org/specifications/wkb/#empty-geometries" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Empty Geometries" aria-label="Anchor to: Empty Geometries" href="#empty-geometries">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>For most geometry types, empty geometries are indicated naturally by having <code>numPoints</code> = 0.
+Points do not have a <code>numPoints</code> field, so <code>POINT EMPTY</code> is represented by a <code>Point</code>
+with each ordinate value set to an IEEE-754 quiet NaN value
+(big endian 0x7ff8000000000000 or little endian 0x000000000000f87f).</p>
+<div class="gdoc-page__anchorwrap">
     <h3 id="geometry-types"
     >
         Geometry Types
