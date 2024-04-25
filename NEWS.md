@@ -7,7 +7,8 @@
   - GEOSRelatePatternMatch: Fix crash on invalid DE-9IM pattern (GH-1089, Dan Baston)
   - Port TopologyPreservingSimplifier fixes (GH-986, GH-1107, GH-857, GH-784, GH-1070, Paul Ramsey)
   - Fix ConcaveHullOfPolygons nested shell handling (GH-1169, Martin Davis)
-  - GEOSConcaveHullOfPolygons, Avoid crash on zero-area input (GH-1071, Dan Baston)
+  - GEOSConcaveHullOfPolygons, avoid crash on zero-area input (GH-1071, Dan Baston)
+  - MinimumClearance, avoid crash on NaN inputs (GH-1079, Dan Baston)
 
 ## Changes in 3.11.4
 2024-06-05
