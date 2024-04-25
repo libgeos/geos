@@ -139,7 +139,7 @@ void object::test<8>
 // https://github.com/libgeos/geos/issues/1077
 template<>
 template<>
-void object::test<8>
+void object::test<9>
 ()
 {
     input_ = fromWKT("LINESTRING EMPTY");
@@ -152,7 +152,7 @@ void object::test<8>
 
 template<>
 template<>
-void object::test<9>
+void object::test<10>
 ()
 {
     input_ = fromWKT("POLYGON ((0 0, 1 0, 1 1, 0 0))");
