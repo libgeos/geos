@@ -72,4 +72,14 @@ void object::test<4>
     ensure_geometry_equals(result_, expected_);
 }
 
+// ensure NaN argument does not crash
+template<>
+template<>
+void object::test<5>
+()
+{
+    geom1_ = GEOSGeomFromWKT("LINESTRING (0 0, 1 1)");
+    result_ = GEOSInterpolate(geom1_, std::numeric_limits<double>::quiet_NaN());
+}
+
 } // namespace tut
