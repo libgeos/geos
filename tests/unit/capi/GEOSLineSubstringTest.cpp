@@ -146,5 +146,16 @@ void object::test<8>
     ensure(result_ == nullptr);
 }
 
+template<>
+template<>
+void object::test<9>
+()
+{
+    input_ = fromWKT("POLYGON ((0 0, 1 0, 1 1, 0 0))");
+    result_ = GEOSLineSubstring(input_, 0.2, 0.3);
+
+    ensure(result_ == nullptr);
+}
+
 } // namespace tut
 
