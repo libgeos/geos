@@ -8,6 +8,7 @@
 #include <cstdarg>
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
 
 namespace tut {
 //
@@ -99,6 +100,19 @@ void object::test<5>
 
     ret = GEOSRelatePatternMatch(mat, "TT1TFTTTF");
     ensure_equals(ret, char(0));
+}
+
+// invalid DE-9IM argument
+// https://github.com/libgeos/geos/issues/1084
+template<>
+template<>
+void object::test<6>
+()
+{
+    const char* mat = "0000000000";
+    ensure_equals(strlen(mat), 10u); // not a valid DE-9IM!
+
+    GEOSRelatePatternMatch(mat,  "111111111");
 }
 
 } // namespace tut
