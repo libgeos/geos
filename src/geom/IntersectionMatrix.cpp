@@ -144,7 +144,7 @@ IntersectionMatrix::set(Location row, Location col, int dimensionValue)
 void
 IntersectionMatrix::set(const std::string& dimensionSymbols)
 {
-    auto limit = dimensionSymbols.length();
+    auto limit = std::min(dimensionSymbols.length(), static_cast<std::size_t>(9));
 
     for(std::size_t i = 0; i < limit; i++) {
         auto row = i / firstDim;
