@@ -3,6 +3,8 @@
 
 - New things:
   - Add Angle::sinCosSnap to avoid small errors, e.g. with buffer operations (GH-978, Mike Taves)
+  - Add classes for curved geometry types: CircularString, CompoundCurve, CurvedPolygon, MultiCurve,
+    MultiSurface (GH-1046, Dan Baston)
 
 - Breaking Changes
 
