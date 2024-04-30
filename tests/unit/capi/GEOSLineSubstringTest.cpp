@@ -131,5 +131,20 @@ void object::test<7>()
     ensure("curved geometries not supported", result_ == nullptr);
 }
 
+// NaN start fraction
+// https://github.com/libgeos/geos/issues/1077
+template<>
+template<>
+void object::test<8>
+()
+{
+    input_ = fromWKT("LINESTRING EMPTY");
+    double start = std::numeric_limits<double>::quiet_NaN();
+    double end = 0.1;
+    result_ = GEOSLineSubstring(input_, start, end);
+
+    ensure(result_ == nullptr);
+}
+
 } // namespace tut
 

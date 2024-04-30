@@ -57,6 +57,13 @@ LengthIndexedLine::extractPoint(double index, double offsetDistance) const
 std::unique_ptr<Geometry>
 LengthIndexedLine::extractLine(double startIndex, double endIndex) const
 {
+    if (std::isnan(startIndex)) {
+        throw util::IllegalArgumentException("startIndex is NaN");
+    }
+    if (std::isnan(endIndex)) {
+        throw util::IllegalArgumentException("endIndex is NaN");
+    }
+
     const LocationIndexedLine lil(linearGeom);
     const double startIndex2 = clampIndex(startIndex);
     const double endIndex2 = clampIndex(endIndex);
