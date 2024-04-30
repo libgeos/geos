@@ -69,8 +69,6 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3d6eba30fe37c83c036fe7c25f0624fa"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1polygonize_1_1Polygonizer.html#a3d6eba30fe37c83c036fe7c25f0624fa">add</a> (std::vector&lt; const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> * &gt; *geomList)</td></tr>
 <tr class="memdesc:a3d6eba30fe37c83c036fe7c25f0624fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a collection of geometries to be polygonized. May be called multiple times. Any dimension of Geometry may be added; the constituent linework will be extracted and used.  <a href="classgeos_1_1operation_1_1polygonize_1_1Polygonizer.html#a3d6eba30fe37c83c036fe7c25f0624fa">More...</a><br /></td></tr>
 <tr class="separator:a3d6eba30fe37c83c036fe7c25f0624fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b1fb0421e283c019beccb32bd9fa313"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1polygonize_1_1Polygonizer.html#a7b1fb0421e283c019beccb32bd9fa313">add</a> (<a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *g)</td></tr>
-<tr class="separator:a7b1fb0421e283c019beccb32bd9fa313"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a55c8d19b82467e50c7728103e0cf4fd3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1polygonize_1_1Polygonizer.html#a55c8d19b82467e50c7728103e0cf4fd3">add</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *g)</td></tr>
 <tr class="separator:a55c8d19b82467e50c7728103e0cf4fd3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:accd244bb3b17a1601b1ed69e92af4208"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Polygon.html">geom::Polygon</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1polygonize_1_1Polygonizer.html#accd244bb3b17a1601b1ed69e92af4208">getPolygons</a> ()</td></tr>
@@ -176,7 +174,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Polygonizer::LineStr
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
 <a id="a55c8d19b82467e50c7728103e0cf4fd3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a55c8d19b82467e50c7728103e0cf4fd3">&#9670;&nbsp;</a></span>add() <span class="overload">[1/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a55c8d19b82467e50c7728103e0cf4fd3">&#9670;&nbsp;</a></span>add() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -200,33 +198,8 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Polygonizer::LineStr
 
 </div>
 </div>
-<a id="a7b1fb0421e283c019beccb32bd9fa313"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a7b1fb0421e283c019beccb32bd9fa313">&#9670;&nbsp;</a></span>add() <span class="overload">[2/4]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void geos::operation::polygonize::Polygonizer::add </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *&#160;</td>
-          <td class="paramname"><em>g</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Add a geometry to the linework to be polygonized. May be called multiple times. Any dimension of Geometry may be added; the constituent linework will be extracted and used</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">g</td><td>a Geometry with linework to be polygonized </td></tr>
-  </table>
-  </dd>
-</dl>
-
-</div>
-</div>
 <a id="a3d6eba30fe37c83c036fe7c25f0624fa"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3d6eba30fe37c83c036fe7c25f0624fa">&#9670;&nbsp;</a></span>add() <span class="overload">[3/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a3d6eba30fe37c83c036fe7c25f0624fa">&#9670;&nbsp;</a></span>add() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -252,7 +225,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Polygonizer::LineStr
 </div>
 </div>
 <a id="ad4faf520a6b996535440cf368878012f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad4faf520a6b996535440cf368878012f">&#9670;&nbsp;</a></span>add() <span class="overload">[4/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ad4faf520a6b996535440cf368878012f">&#9670;&nbsp;</a></span>add() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">

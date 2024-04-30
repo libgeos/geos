@@ -68,13 +68,11 @@ Inheritance diagram for geos::geom::Geometry:</div>
   <img src="classgeos_1_1geom_1_1Geometry.png" usemap="#geos::geom::Geometry_map" alt=""/>
   <map id="geos::geom::Geometry_map" name="geos::geom::Geometry_map">
 <area href="classgeos_1_1geom_1_1GeometryCollection.html" title="Represents a collection of heterogeneous Geometry objects." alt="geos::geom::GeometryCollection" shape="rect" coords="201,56,392,80"/>
-<area href="classgeos_1_1geom_1_1LineString.html" alt="geos::geom::LineString" shape="rect" coords="603,56,794,80"/>
-<area href="classgeos_1_1geom_1_1Point.html" alt="geos::geom::Point" shape="rect" coords="804,56,995,80"/>
-<area href="classgeos_1_1geom_1_1Polygon.html" title="Represents a linear polygon, which may include holes." alt="geos::geom::Polygon" shape="rect" coords="1005,56,1196,80"/>
+<area href="classgeos_1_1geom_1_1Point.html" alt="geos::geom::Point" shape="rect" coords="402,56,593,80"/>
+<area href="classgeos_1_1geom_1_1Surface.html" alt="geos::geom::Surface" shape="rect" coords="603,56,794,80"/>
 <area href="classgeos_1_1geom_1_1MultiLineString.html" title="Models a collection of LineStrings." alt="geos::geom::MultiLineString" shape="rect" coords="0,112,191,136"/>
 <area href="classgeos_1_1geom_1_1MultiPoint.html" alt="geos::geom::MultiPoint" shape="rect" coords="201,112,392,136"/>
 <area href="classgeos_1_1geom_1_1MultiPolygon.html" alt="geos::geom::MultiPolygon" shape="rect" coords="402,112,593,136"/>
-<area href="classgeos_1_1geom_1_1LinearRing.html" title="Models an OGC SFS LinearRing. A LinearRing is a LineString which is both closed and simple." alt="geos::geom::LinearRing" shape="rect" coords="603,112,794,136"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -143,6 +141,10 @@ virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 virtual std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a4290decd50c0d21fd976d34ab418ef0f">getGeometryType</a> () const =0</td></tr>
 <tr class="memdesc:a4290decd50c0d21fd976d34ab418ef0f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a string representation of this <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a> type. <br /></td></tr>
 <tr class="separator:a4290decd50c0d21fd976d34ab418ef0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a682b1a34ab2003cbc47e858668a8c9c9"><td class="memItemLeft" align="right" valign="top"><a id="a682b1a34ab2003cbc47e858668a8c9c9"></a>
+virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a682b1a34ab2003cbc47e858668a8c9c9">hasCurvedComponents</a> () const</td></tr>
+<tr class="memdesc:a682b1a34ab2003cbc47e858668a8c9c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether the <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a> contains curved components. <br /></td></tr>
+<tr class="separator:a682b1a34ab2003cbc47e858668a8c9c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3680d76fcb2b2f8e2336ea3a2de5cbf8"><td class="memItemLeft" align="right" valign="top"><a id="a3680d76fcb2b2f8e2336ea3a2de5cbf8"></a>
 virtual <a class="el" href="namespacegeos_1_1geom.html#a98c5b0e81001a7c3fdc7a058960356d8">GeometryTypeId</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a3680d76fcb2b2f8e2336ea3a2de5cbf8">getGeometryTypeId</a> () const =0</td></tr>
 <tr class="memdesc:a3680d76fcb2b2f8e2336ea3a2de5cbf8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return an integer representation of this <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a> type. <br /></td></tr>
@@ -398,15 +400,6 @@ virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" hr
 <tr class="memitem:a3d64998d440dadd536ccf357c1d02988"><td class="memItemLeft" align="right" valign="top"><a id="a3d64998d440dadd536ccf357c1d02988"></a>
 virtual int&#160;</td><td class="memItemRight" valign="bottom"><b>compareToSameClass</b> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> *geom) const =0</td></tr>
 <tr class="separator:a3d64998d440dadd536ccf357c1d02988"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0e7fb97b6862b59d2f42a852a06a740b"><td class="memItemLeft" align="right" valign="top"><a id="a0e7fb97b6862b59d2f42a852a06a740b"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>compare</b> (std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &gt; a, std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &gt; b) const</td></tr>
-<tr class="separator:a0e7fb97b6862b59d2f42a852a06a740b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a05a256a13aee25f9c4d6714f751187ae"><td class="memItemLeft" align="right" valign="top"><a id="a05a256a13aee25f9c4d6714f751187ae"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>compare</b> (std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> * &gt; a, std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> * &gt; b) const</td></tr>
-<tr class="separator:a05a256a13aee25f9c4d6714f751187ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6fe5125c761df16c097e6ab94de494a2"><td class="memItemLeft" align="right" valign="top"><a id="a6fe5125c761df16c097e6ab94de494a2"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>compare</b> (const std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt;&gt; &amp;a, const std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt;&gt; &amp;b) const</td></tr>
-<tr class="separator:a6fe5125c761df16c097e6ab94de494a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6bb005d642dc273cb759a674c9ad8734"><td class="memItemLeft" align="right" valign="top"><a id="a6bb005d642dc273cb759a674c9ad8734"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>equal</b> (const CoordinateXY &amp;a, const CoordinateXY &amp;b, double tolerance) const</td></tr>
 <tr class="separator:a6bb005d642dc273cb759a674c9ad8734"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -439,6 +432,10 @@ template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a8171b99f5d8008ace488987cf8ed5a92"><td class="memItemLeft" align="right" valign="top"><a id="a8171b99f5d8008ace488987cf8ed5a92"></a>
 static void&#160;</td><td class="memItemRight" valign="bottom"><b>checkNotGeometryCollection</b> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> *g)</td></tr>
 <tr class="separator:a8171b99f5d8008ace488987cf8ed5a92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae065bdd23214b13cbeda79de2cc4ff84"><td class="memTemplParams" colspan="2"><a id="ae065bdd23214b13cbeda79de2cc4ff84"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:ae065bdd23214b13cbeda79de2cc4ff84"><td class="memTemplItemLeft" align="right" valign="top">static int&#160;</td><td class="memTemplItemRight" valign="bottom"><b>compare</b> (const T &amp;a, const T &amp;b)</td></tr>
+<tr class="separator:ae065bdd23214b13cbeda79de2cc4ff84"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0011cf7156ff985f7847eb56369d5881"><td class="memTemplParams" colspan="2"><a id="a0011cf7156ff985f7847eb56369d5881"></a>
 template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a0011cf7156ff985f7847eb56369d5881"><td class="memTemplItemLeft" align="right" valign="top">static std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt; &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>toGeometryArray</b> (std::vector&lt; std::unique_ptr&lt; T &gt;&gt; &amp;&amp;v)</td></tr>
@@ -549,7 +546,7 @@ Noded applies only to overlays involving <code><a class="el" href="classgeos_1_1
   </dd>
 </dl>
 
-<p>Implemented in <a class="el" href="classgeos_1_1geom_1_1Polygon.html#a8fdf67ba2bc055c0887510c8390fe537">geos::geom::Polygon</a>, <a class="el" href="classgeos_1_1geom_1_1Point.html#a523970887b3aacae63b4cd20be5c8183">geos::geom::Point</a>, <a class="el" href="classgeos_1_1geom_1_1LineString.html#a0f9f6154547017eacd2d4678427f41a4">geos::geom::LineString</a>, and <a class="el" href="classgeos_1_1geom_1_1GeometryCollection.html#a52ed668c8a491c8d031a52f978fa972a">geos::geom::GeometryCollection</a>.</p>
+<p>Implemented in <a class="el" href="classgeos_1_1geom_1_1Surface.html#af0ac18f9819a5fa845eb0db1222d77da">geos::geom::Surface</a>, <a class="el" href="classgeos_1_1geom_1_1Point.html#a523970887b3aacae63b4cd20be5c8183">geos::geom::Point</a>, and <a class="el" href="classgeos_1_1geom_1_1GeometryCollection.html#a52ed668c8a491c8d031a52f978fa972a">geos::geom::GeometryCollection</a>.</p>
 
 </div>
 </div>
@@ -584,7 +581,7 @@ Noded applies only to overlays involving <code><a class="el" href="classgeos_1_1
   </dd>
 </dl>
 
-<p>Implemented in <a class="el" href="classgeos_1_1geom_1_1Polygon.html#afd4eeb114370f72a4b52b9eb7643b552">geos::geom::Polygon</a>, <a class="el" href="classgeos_1_1geom_1_1Point.html#a7a06da255614d042367177d10c9ae36a">geos::geom::Point</a>, <a class="el" href="classgeos_1_1geom_1_1LineString.html#a66a5465b8058a613366f70801f1d1fb3">geos::geom::LineString</a>, and <a class="el" href="classgeos_1_1geom_1_1GeometryCollection.html#afd0accfd9fdb24df4d45795d4ee9b129">geos::geom::GeometryCollection</a>.</p>
+<p>Implemented in <a class="el" href="classgeos_1_1geom_1_1Surface.html#a78bc9d3f550926424273158c1f5308d3">geos::geom::Surface</a>, <a class="el" href="classgeos_1_1geom_1_1Point.html#a7a06da255614d042367177d10c9ae36a">geos::geom::Point</a>, and <a class="el" href="classgeos_1_1geom_1_1GeometryCollection.html#afd0accfd9fdb24df4d45795d4ee9b129">geos::geom::GeometryCollection</a>.</p>
 
 </div>
 </div>
@@ -1003,7 +1000,7 @@ template&lt;class T &gt; </div>
 next lower dimension."</p>
 <dl class="section return"><dt>Returns</dt><dd>the closure of the combinatorial boundary of this <code><a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a></code>. Ownershipof the returned object transferred to caller. </dd></dl>
 
-<p>Implemented in <a class="el" href="classgeos_1_1geom_1_1Polygon.html#ae505b31127dd675608b7ab9d0212c0e4">geos::geom::Polygon</a>, <a class="el" href="classgeos_1_1geom_1_1Point.html#abce6b6a58877a95f0a8734156d892009">geos::geom::Point</a>, <a class="el" href="classgeos_1_1geom_1_1MultiPolygon.html#aa83bcd7cc0faae0bfe1bf09cdac82d2e">geos::geom::MultiPolygon</a>, <a class="el" href="classgeos_1_1geom_1_1MultiPoint.html#a64b8fac40a95255d43bbd4ebf363fdd3">geos::geom::MultiPoint</a>, <a class="el" href="classgeos_1_1geom_1_1MultiLineString.html#a3b7dcf10ac582ae05a0f2304f905851e">geos::geom::MultiLineString</a>, <a class="el" href="classgeos_1_1geom_1_1LineString.html#a29cc9de845fbce90a0b79adf29336d31">geos::geom::LineString</a>, and <a class="el" href="classgeos_1_1geom_1_1GeometryCollection.html#aa566b9cf882b92bafe862b3bf7a15ada">geos::geom::GeometryCollection</a>.</p>
+<p>Implemented in <a class="el" href="classgeos_1_1geom_1_1Polygon.html#ae505b31127dd675608b7ab9d0212c0e4">geos::geom::Polygon</a>, <a class="el" href="classgeos_1_1geom_1_1Point.html#abce6b6a58877a95f0a8734156d892009">geos::geom::Point</a>, <a class="el" href="classgeos_1_1geom_1_1MultiPolygon.html#aa83bcd7cc0faae0bfe1bf09cdac82d2e">geos::geom::MultiPolygon</a>, <a class="el" href="classgeos_1_1geom_1_1MultiPoint.html#a64b8fac40a95255d43bbd4ebf363fdd3">geos::geom::MultiPoint</a>, <a class="el" href="classgeos_1_1geom_1_1MultiLineString.html#a3b7dcf10ac582ae05a0f2304f905851e">geos::geom::MultiLineString</a>, and <a class="el" href="classgeos_1_1geom_1_1GeometryCollection.html#aa566b9cf882b92bafe862b3bf7a15ada">geos::geom::GeometryCollection</a>.</p>
 
 </div>
 </div>
@@ -1329,7 +1326,7 @@ next lower dimension."</p>
 </div><div class="memdoc">
 <p>Reorganizes this <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a> into normal form (or canonical form). Starting point of rings is lower left, collections are ordered by geometry type, etc. </p>
 
-<p>Implemented in <a class="el" href="classgeos_1_1geom_1_1Point.html#a696338f7fafa4ea3edb07ff54c0dd5f0">geos::geom::Point</a>, <a class="el" href="classgeos_1_1geom_1_1Polygon.html#a09d5aa2c344c9ba6dafc261655de4484">geos::geom::Polygon</a>, <a class="el" href="classgeos_1_1geom_1_1LineString.html#a2a88ddbfc1533447b469b00907144733">geos::geom::LineString</a>, and <a class="el" href="classgeos_1_1geom_1_1GeometryCollection.html#aec41161875abcda23423d6033c58ba2e">geos::geom::GeometryCollection</a>.</p>
+<p>Implemented in <a class="el" href="classgeos_1_1geom_1_1Point.html#a696338f7fafa4ea3edb07ff54c0dd5f0">geos::geom::Point</a>, <a class="el" href="classgeos_1_1geom_1_1Polygon.html#a09d5aa2c344c9ba6dafc261655de4484">geos::geom::Polygon</a>, and <a class="el" href="classgeos_1_1geom_1_1GeometryCollection.html#aec41161875abcda23423d6033c58ba2e">geos::geom::GeometryCollection</a>.</p>
 
 </div>
 </div>

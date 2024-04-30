@@ -86,9 +86,9 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a01e0cf468ec3e86e0dd1868fba9fd6df"><td class="memItemLeft" align="right" valign="top"><a id="a01e0cf468ec3e86e0dd1868fba9fd6df"></a>
 std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getCoordinates</b> (io::StringTokenizer *tokenizer, <a class="el" href="classgeos_1_1io_1_1OrdinateSet.html">OrdinateSet</a> &amp;ordinates) const</td></tr>
 <tr class="separator:a01e0cf468ec3e86e0dd1868fba9fd6df"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa1fd3978c454c670ad5c77b874d90c58"><td class="memItemLeft" align="right" valign="top"><a id="aa1fd3978c454c670ad5c77b874d90c58"></a>
-std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>readGeometryTaggedText</b> (io::StringTokenizer *tokenizer, <a class="el" href="classgeos_1_1io_1_1OrdinateSet.html">OrdinateSet</a> &amp;ordinateFlags) const</td></tr>
-<tr class="separator:aa1fd3978c454c670ad5c77b874d90c58"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e2c2fa7f3a0e6cc5d282f35b378ba88"><td class="memItemLeft" align="right" valign="top"><a id="a9e2c2fa7f3a0e6cc5d282f35b378ba88"></a>
+std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>readGeometryTaggedText</b> (io::StringTokenizer *tokenizer, <a class="el" href="classgeos_1_1io_1_1OrdinateSet.html">OrdinateSet</a> &amp;ordinateFlags, const <a class="el" href="namespacegeos_1_1geom.html#a98c5b0e81001a7c3fdc7a058960356d8">geom::GeometryTypeId</a> *emptyType=nullptr) const</td></tr>
+<tr class="separator:a9e2c2fa7f3a0e6cc5d282f35b378ba88"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac9f69142f7635403985260b5b08a0a36"><td class="memItemLeft" align="right" valign="top"><a id="ac9f69142f7635403985260b5b08a0a36"></a>
 std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Point.html">geom::Point</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>readPointText</b> (io::StringTokenizer *tokenizer, <a class="el" href="classgeos_1_1io_1_1OrdinateSet.html">OrdinateSet</a> &amp;ordinateFlags) const</td></tr>
 <tr class="separator:ac9f69142f7635403985260b5b08a0a36"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -113,6 +113,29 @@ std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1MultiPolygon.html">
 <tr class="memitem:accc0a8ebc0adc541abdbb8b90222baa4"><td class="memItemLeft" align="right" valign="top"><a id="accc0a8ebc0adc541abdbb8b90222baa4"></a>
 std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1GeometryCollection.html">geom::GeometryCollection</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>readGeometryCollectionText</b> (io::StringTokenizer *tokenizer, <a class="el" href="classgeos_1_1io_1_1OrdinateSet.html">OrdinateSet</a> &amp;ordinateFlags) const</td></tr>
 <tr class="separator:accc0a8ebc0adc541abdbb8b90222baa4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc43a3a69f20e7b45bd95b9090af01de"><td class="memItemLeft" align="right" valign="top"><a id="adc43a3a69f20e7b45bd95b9090af01de"></a>
+std::unique_ptr&lt; geom::CircularString &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>readCircularStringText</b> (io::StringTokenizer *tokenizer, <a class="el" href="classgeos_1_1io_1_1OrdinateSet.html">OrdinateSet</a> &amp;ordinateFlags) const</td></tr>
+<tr class="separator:adc43a3a69f20e7b45bd95b9090af01de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a757c3d562632ca9be6d118f19b1deeb9"><td class="memItemLeft" align="right" valign="top"><a id="a757c3d562632ca9be6d118f19b1deeb9"></a>
+std::unique_ptr&lt; geom::CompoundCurve &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>readCompoundCurveText</b> (io::StringTokenizer *tokenizer, <a class="el" href="classgeos_1_1io_1_1OrdinateSet.html">OrdinateSet</a> &amp;ordinateFlags) const</td></tr>
+<tr class="separator:a757c3d562632ca9be6d118f19b1deeb9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5540ac8e1e71da48365c1527be9959a4"><td class="memItemLeft" align="right" valign="top"><a id="a5540ac8e1e71da48365c1527be9959a4"></a>
+std::unique_ptr&lt; geom::CurvePolygon &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>readCurvePolygonText</b> (io::StringTokenizer *tokenizer, <a class="el" href="classgeos_1_1io_1_1OrdinateSet.html">OrdinateSet</a> &amp;ordinateFlags) const</td></tr>
+<tr class="separator:a5540ac8e1e71da48365c1527be9959a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a640b9c5323ebca1d70fa4d69319e2ab1"><td class="memItemLeft" align="right" valign="top"><a id="a640b9c5323ebca1d70fa4d69319e2ab1"></a>
+std::unique_ptr&lt; geom::MultiCurve &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>readMultiCurveText</b> (io::StringTokenizer *tokenizer, <a class="el" href="classgeos_1_1io_1_1OrdinateSet.html">OrdinateSet</a> &amp;ordinateFlags) const</td></tr>
+<tr class="separator:a640b9c5323ebca1d70fa4d69319e2ab1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab6156b2037a4f9b02c0701d62b860c1c"><td class="memItemLeft" align="right" valign="top"><a id="ab6156b2037a4f9b02c0701d62b860c1c"></a>
+std::unique_ptr&lt; geom::MultiSurface &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>readMultiSurfaceText</b> (io::StringTokenizer *tokenizer, <a class="el" href="classgeos_1_1io_1_1OrdinateSet.html">OrdinateSet</a> &amp;ordinateFlags) const</td></tr>
+<tr class="separator:ab6156b2037a4f9b02c0701d62b860c1c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a861663531bbd6e0b6cfff8de974e1f08"><td class="memItemLeft" align="right" valign="top"><a id="a861663531bbd6e0b6cfff8de974e1f08"></a>
+std::unique_ptr&lt; geom::Curve &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1io_1_1WKTReader.html#a861663531bbd6e0b6cfff8de974e1f08">readCurveText</a> (io::StringTokenizer *tokenizer, <a class="el" href="classgeos_1_1io_1_1OrdinateSet.html">OrdinateSet</a> &amp;ordinateFlags) const</td></tr>
+<tr class="memdesc:a861663531bbd6e0b6cfff8de974e1f08"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the contents of a LINEARRING, LINESTRING, CIRCULARSTRING, or COMPOUNDCURVE. <br /></td></tr>
+<tr class="separator:a861663531bbd6e0b6cfff8de974e1f08"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad2dd523d3430372d2192d12a74a16ad1"><td class="memItemLeft" align="right" valign="top"><a id="ad2dd523d3430372d2192d12a74a16ad1"></a>
+std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1io_1_1WKTReader.html#ad2dd523d3430372d2192d12a74a16ad1">readSurfaceText</a> (io::StringTokenizer *tokenizer, <a class="el" href="classgeos_1_1io_1_1OrdinateSet.html">OrdinateSet</a> &amp;ordinateFlags) const</td></tr>
+<tr class="memdesc:ad2dd523d3430372d2192d12a74a16ad1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Read the contents of a POLYGON or a CURVEPOLYGON. <br /></td></tr>
+<tr class="separator:ad2dd523d3430372d2192d12a74a16ad1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-static-methods"></a>
 Static Protected Member Functions</h2></td></tr>

@@ -70,107 +70,108 @@ $(function() {
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#pragma once</span></div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &lt;geos/export.h&gt;</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &lt;set&gt;</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &lt;geos/geomgraph/EdgeEndStar.h&gt;</span>  <span class="comment">// for inheritance</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &lt;geos/geomgraph/Label.h&gt;</span>  <span class="comment">// for private member</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &lt;geos/geom/Coordinate.h&gt;</span>  <span class="comment">// for p0,p1</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &lt;memory&gt;</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &lt;geos/export.h&gt;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &lt;set&gt;</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &lt;geos/geomgraph/EdgeEndStar.h&gt;</span>  <span class="comment">// for inheritance</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#include &lt;geos/geomgraph/Label.h&gt;</span>  <span class="comment">// for private member</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#include &lt;geos/geom/Coordinate.h&gt;</span>  <span class="comment">// for p0,p1</span></div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="comment">// Forward declarations</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keyword">namespace </span>geomgraph {</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">class </span>DirectedEdge;</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">class </span>EdgeRing;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;}</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="comment">// Forward declarations</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">namespace </span>geomgraph {</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">class </span>DirectedEdge;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keyword">class </span>EdgeRing;</div>
 <div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;}</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="keyword">namespace </span>geomgraph { <span class="comment">// geos.geomgraph</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html">   53</a></span>&#160;<span class="keyword">class </span>GEOS_DLL <a class="code" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html">DirectedEdgeStar</a>: <span class="keyword">public</span> <a class="code" href="classgeos_1_1geomgraph_1_1EdgeEndStar.html">EdgeEndStar</a> {</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <a class="code" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html">DirectedEdgeStar</a>()</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        :</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <a class="code" href="classgeos_1_1geomgraph_1_1EdgeEndStar.html">EdgeEndStar</a>(),</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        label(),</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        resultAreaEdgesComputed(<span class="keyword">false</span>)</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    {}</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    ~<a class="code" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html">DirectedEdgeStar</a>() <span class="keyword">override</span> = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
-<div class="line"><a name="l00067"></a><span class="lineno"><a class="line" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#a3bc931bd7335281438c388d4d631e994">   67</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#a3bc931bd7335281438c388d4d631e994">insert</a>(<a class="code" href="classgeos_1_1geomgraph_1_1EdgeEnd.html">EdgeEnd</a>* ee) <span class="keyword">override</span>;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <a class="code" href="classgeos_1_1geomgraph_1_1Label.html">Label</a>&amp;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    getLabel()</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    {</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <span class="keywordflow">return</span> label;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    }</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keywordtype">int</span> getOutgoingDegree();</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="keywordtype">int</span> getOutgoingDegree(<a class="code" href="classgeos_1_1geomgraph_1_1EdgeRing.html">EdgeRing</a>* er);</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <a class="code" href="classgeos_1_1geomgraph_1_1DirectedEdge.html">DirectedEdge</a>* getRightmostEdge();</div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
-<div class="line"><a name="l00084"></a><span class="lineno"><a class="line" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#ad225bbd4924ef720ae0ecdbf44863bba">   84</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#ad225bbd4924ef720ae0ecdbf44863bba">computeLabelling</a>(std::vector&lt;GeometryGraph*&gt;* geom) <span class="keyword">override</span>; <span class="comment">// throw(TopologyException *);</span></div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
-<div class="line"><a name="l00089"></a><span class="lineno"><a class="line" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#a40bb61006da610f01b6d0a254afe3652">   89</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#a40bb61006da610f01b6d0a254afe3652">mergeSymLabels</a>();</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
-<div class="line"><a name="l00092"></a><span class="lineno"><a class="line" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#a13795cfe144f59f6b06891a8b66a5e00">   92</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#a13795cfe144f59f6b06891a8b66a5e00">updateLabelling</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geomgraph_1_1Label.html">Label</a>&amp; nodeLabel);</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;}</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="keyword">namespace </span>geomgraph { <span class="comment">// geos.geomgraph</span></div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno"><a class="line" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html">   54</a></span>&#160;<span class="keyword">class </span>GEOS_DLL <a class="code" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html">DirectedEdgeStar</a>: <span class="keyword">public</span> <a class="code" href="classgeos_1_1geomgraph_1_1EdgeEndStar.html">EdgeEndStar</a> {</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <a class="code" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html">DirectedEdgeStar</a>()</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        :</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <a class="code" href="classgeos_1_1geomgraph_1_1EdgeEndStar.html">EdgeEndStar</a>(),</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        label(),</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        resultAreaEdgesComputed(<span class="keyword">false</span>)</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    {}</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    ~<a class="code" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html">DirectedEdgeStar</a>() <span class="keyword">override</span> = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#a3bc931bd7335281438c388d4d631e994">   68</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#a3bc931bd7335281438c388d4d631e994">insert</a>(<a class="code" href="classgeos_1_1geomgraph_1_1EdgeEnd.html">EdgeEnd</a>* ee) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <a class="code" href="classgeos_1_1geomgraph_1_1Label.html">Label</a>&amp;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    getLabel()</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    {</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        <span class="keywordflow">return</span> label;</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    }</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <span class="keywordtype">int</span> getOutgoingDegree();</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <span class="keywordtype">int</span> getOutgoingDegree(<a class="code" href="classgeos_1_1geomgraph_1_1EdgeRing.html">EdgeRing</a>* er);</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <a class="code" href="classgeos_1_1geomgraph_1_1DirectedEdge.html">DirectedEdge</a>* getRightmostEdge();</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
+<div class="line"><a name="l00085"></a><span class="lineno"><a class="line" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#afdb3608fa35958cb161e3e0458ae293e">   85</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#afdb3608fa35958cb161e3e0458ae293e">computeLabelling</a>(<span class="keyword">const</span> std::vector&lt;std::unique_ptr&lt;GeometryGraph&gt;&gt;&amp;geom) <span class="keyword">override</span>; <span class="comment">// throw(TopologyException *);</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
+<div class="line"><a name="l00090"></a><span class="lineno"><a class="line" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#a40bb61006da610f01b6d0a254afe3652">   90</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#a40bb61006da610f01b6d0a254afe3652">mergeSymLabels</a>();</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
+<div class="line"><a name="l00093"></a><span class="lineno"><a class="line" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#a13795cfe144f59f6b06891a8b66a5e00">   93</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#a13795cfe144f59f6b06891a8b66a5e00">updateLabelling</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geomgraph_1_1Label.html">Label</a>&amp; nodeLabel);</div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
-<div class="line"><a name="l00112"></a><span class="lineno"><a class="line" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#a270d057a50781283471fdbe44e7ac378">  112</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#a270d057a50781283471fdbe44e7ac378">linkResultDirectedEdges</a>(); <span class="comment">// throw(TopologyException *);</span></div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    <span class="keywordtype">void</span> linkMinimalDirectedEdges(<a class="code" href="classgeos_1_1geomgraph_1_1EdgeRing.html">EdgeRing</a>* er);</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    <span class="keywordtype">void</span> linkAllDirectedEdges();</div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
-<div class="line"><a name="l00124"></a><span class="lineno"><a class="line" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#a2f66aa2feae3ca7ee67e3b7619001440">  124</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#a2f66aa2feae3ca7ee67e3b7619001440">findCoveredLineEdges</a>();</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
-<div class="line"><a name="l00129"></a><span class="lineno"><a class="line" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#a018f0767bb5919dfefa24412deb37639">  129</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#a018f0767bb5919dfefa24412deb37639">computeDepths</a>(<a class="code" href="classgeos_1_1geomgraph_1_1DirectedEdge.html">DirectedEdge</a>* de);</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160; </div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    std::string print() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160; </div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160; </div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;    std::vector&lt;DirectedEdge*&gt; resultAreaEdgeList;</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160; </div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;    <a class="code" href="classgeos_1_1geomgraph_1_1Label.html">Label</a> label;</div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160; </div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    <span class="keywordtype">bool</span> resultAreaEdgesComputed;</div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160; </div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;    <span class="keyword">const</span> std::vector&lt;DirectedEdge*&gt;&amp; getResultAreaEdges();</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160; </div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
+<div class="line"><a name="l00113"></a><span class="lineno"><a class="line" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#a270d057a50781283471fdbe44e7ac378">  113</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#a270d057a50781283471fdbe44e7ac378">linkResultDirectedEdges</a>(); <span class="comment">// throw(TopologyException *);</span></div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="keywordtype">void</span> linkMinimalDirectedEdges(<a class="code" href="classgeos_1_1geomgraph_1_1EdgeRing.html">EdgeRing</a>* er);</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keywordtype">void</span> linkAllDirectedEdges();</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
+<div class="line"><a name="l00125"></a><span class="lineno"><a class="line" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#a2f66aa2feae3ca7ee67e3b7619001440">  125</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#a2f66aa2feae3ca7ee67e3b7619001440">findCoveredLineEdges</a>();</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
+<div class="line"><a name="l00130"></a><span class="lineno"><a class="line" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#a018f0767bb5919dfefa24412deb37639">  130</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#a018f0767bb5919dfefa24412deb37639">computeDepths</a>(<a class="code" href="classgeos_1_1geomgraph_1_1DirectedEdge.html">DirectedEdge</a>* de);</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160; </div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    std::string print() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160; </div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160; </div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;    std::vector&lt;DirectedEdge*&gt; resultAreaEdgeList;</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160; </div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;    <a class="code" href="classgeos_1_1geomgraph_1_1Label.html">Label</a> label;</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160; </div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;    <span class="keywordtype">bool</span> resultAreaEdgesComputed;</div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160; </div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;    <span class="keyword">const</span> std::vector&lt;DirectedEdge*&gt;&amp; getResultAreaEdges();</div>
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160; </div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    <span class="keyword">enum</span> {</div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        SCANNING_FOR_INCOMING = 1,</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        LINKING_TO_OUTGOING</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    };</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160; </div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;    <span class="keywordtype">int</span> computeDepths(EdgeEndStar::iterator startIt,</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;                      EdgeEndStar::iterator endIt, <span class="keywordtype">int</span> startDepth);</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;};</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160; </div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160; </div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    <span class="keyword">enum</span> {</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        SCANNING_FOR_INCOMING = 1,</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        LINKING_TO_OUTGOING</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;    };</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160; </div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;    <span class="keywordtype">int</span> computeDepths(EdgeEndStar::iterator startIt,</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;                      EdgeEndStar::iterator endIt, <span class="keywordtype">int</span> startDepth);</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;};</div>
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160; </div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;} <span class="comment">// namespace geos.geomgraph</span></div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;} <span class="comment">// namespace geos</span></div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160; </div>
-<div class="ttc" id="aclassgeos_1_1geomgraph_1_1DirectedEdgeStar_html"><div class="ttname"><a href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html">geos::geomgraph::DirectedEdgeStar</a></div><div class="ttdoc">A DirectedEdgeStar is an ordered list of outgoing DirectedEdges around a node.</div><div class="ttdef"><b>Definition:</b> geomgraph/DirectedEdgeStar.h:53</div></div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160; </div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;} <span class="comment">// namespace geos.geomgraph</span></div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;} <span class="comment">// namespace geos</span></div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160; </div>
+<div class="ttc" id="aclassgeos_1_1geomgraph_1_1DirectedEdgeStar_html"><div class="ttname"><a href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html">geos::geomgraph::DirectedEdgeStar</a></div><div class="ttdoc">A DirectedEdgeStar is an ordered list of outgoing DirectedEdges around a node.</div><div class="ttdef"><b>Definition:</b> geomgraph/DirectedEdgeStar.h:54</div></div>
 <div class="ttc" id="aclassgeos_1_1geomgraph_1_1DirectedEdgeStar_html_a018f0767bb5919dfefa24412deb37639"><div class="ttname"><a href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#a018f0767bb5919dfefa24412deb37639">geos::geomgraph::DirectedEdgeStar::computeDepths</a></div><div class="ttdeci">void computeDepths(DirectedEdge *de)</div><div class="ttdoc">Compute the DirectedEdge depths for a subsequence of the edge array.</div></div>
 <div class="ttc" id="aclassgeos_1_1geomgraph_1_1DirectedEdgeStar_html_a13795cfe144f59f6b06891a8b66a5e00"><div class="ttname"><a href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#a13795cfe144f59f6b06891a8b66a5e00">geos::geomgraph::DirectedEdgeStar::updateLabelling</a></div><div class="ttdeci">void updateLabelling(const Label &amp;nodeLabel)</div><div class="ttdoc">Update incomplete dirEdge labels from the labelling for the node.</div></div>
 <div class="ttc" id="aclassgeos_1_1geomgraph_1_1DirectedEdgeStar_html_a270d057a50781283471fdbe44e7ac378"><div class="ttname"><a href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#a270d057a50781283471fdbe44e7ac378">geos::geomgraph::DirectedEdgeStar::linkResultDirectedEdges</a></div><div class="ttdeci">void linkResultDirectedEdges()</div><div class="ttdoc">Traverse the star of DirectedEdges, linking the included edges together.</div></div>
 <div class="ttc" id="aclassgeos_1_1geomgraph_1_1DirectedEdgeStar_html_a2f66aa2feae3ca7ee67e3b7619001440"><div class="ttname"><a href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#a2f66aa2feae3ca7ee67e3b7619001440">geos::geomgraph::DirectedEdgeStar::findCoveredLineEdges</a></div><div class="ttdeci">void findCoveredLineEdges()</div><div class="ttdoc">Traverse the star of edges, maintaing the current location in the result area at this node (if any).</div></div>
 <div class="ttc" id="aclassgeos_1_1geomgraph_1_1DirectedEdgeStar_html_a3bc931bd7335281438c388d4d631e994"><div class="ttname"><a href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#a3bc931bd7335281438c388d4d631e994">geos::geomgraph::DirectedEdgeStar::insert</a></div><div class="ttdeci">void insert(EdgeEnd *ee) override</div><div class="ttdoc">Insert a directed edge in the list.</div></div>
 <div class="ttc" id="aclassgeos_1_1geomgraph_1_1DirectedEdgeStar_html_a40bb61006da610f01b6d0a254afe3652"><div class="ttname"><a href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#a40bb61006da610f01b6d0a254afe3652">geos::geomgraph::DirectedEdgeStar::mergeSymLabels</a></div><div class="ttdeci">void mergeSymLabels()</div><div class="ttdoc">For each dirEdge in the star, merge the label from the sym dirEdge into the label.</div></div>
-<div class="ttc" id="aclassgeos_1_1geomgraph_1_1DirectedEdgeStar_html_ad225bbd4924ef720ae0ecdbf44863bba"><div class="ttname"><a href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#ad225bbd4924ef720ae0ecdbf44863bba">geos::geomgraph::DirectedEdgeStar::computeLabelling</a></div><div class="ttdeci">void computeLabelling(std::vector&lt; GeometryGraph * &gt; *geom) override</div><div class="ttdoc">Compute the labelling for all dirEdges in this star, as well as the overall labelling.</div></div>
+<div class="ttc" id="aclassgeos_1_1geomgraph_1_1DirectedEdgeStar_html_afdb3608fa35958cb161e3e0458ae293e"><div class="ttname"><a href="classgeos_1_1geomgraph_1_1DirectedEdgeStar.html#afdb3608fa35958cb161e3e0458ae293e">geos::geomgraph::DirectedEdgeStar::computeLabelling</a></div><div class="ttdeci">void computeLabelling(const std::vector&lt; std::unique_ptr&lt; GeometryGraph &gt;&gt; &amp;geom) override</div><div class="ttdoc">Compute the labelling for all dirEdges in this star, as well as the overall labelling.</div></div>
 <div class="ttc" id="aclassgeos_1_1geomgraph_1_1DirectedEdge_html"><div class="ttname"><a href="classgeos_1_1geomgraph_1_1DirectedEdge.html">geos::geomgraph::DirectedEdge</a></div><div class="ttdoc">A directed EdgeEnd.</div><div class="ttdef"><b>Definition:</b> geomgraph/DirectedEdge.h:42</div></div>
-<div class="ttc" id="aclassgeos_1_1geomgraph_1_1EdgeEndStar_html"><div class="ttname"><a href="classgeos_1_1geomgraph_1_1EdgeEndStar.html">geos::geomgraph::EdgeEndStar</a></div><div class="ttdoc">A EdgeEndStar is an ordered list of EdgeEnds around a node.</div><div class="ttdef"><b>Definition:</b> EdgeEndStar.h:62</div></div>
+<div class="ttc" id="aclassgeos_1_1geomgraph_1_1EdgeEndStar_html"><div class="ttname"><a href="classgeos_1_1geomgraph_1_1EdgeEndStar.html">geos::geomgraph::EdgeEndStar</a></div><div class="ttdoc">A EdgeEndStar is an ordered list of EdgeEnds around a node.</div><div class="ttdef"><b>Definition:</b> EdgeEndStar.h:63</div></div>
 <div class="ttc" id="aclassgeos_1_1geomgraph_1_1EdgeEnd_html"><div class="ttname"><a href="classgeos_1_1geomgraph_1_1EdgeEnd.html">geos::geomgraph::EdgeEnd</a></div><div class="ttdoc">Models the end of an edge incident on a node.</div><div class="ttdef"><b>Definition:</b> EdgeEnd.h:54</div></div>
 <div class="ttc" id="aclassgeos_1_1geomgraph_1_1EdgeRing_html"><div class="ttname"><a href="classgeos_1_1geomgraph_1_1EdgeRing.html">geos::geomgraph::EdgeRing</a></div><div class="ttdef"><b>Definition:</b> geomgraph/EdgeRing.h:57</div></div>
 <div class="ttc" id="aclassgeos_1_1geomgraph_1_1Label_html"><div class="ttname"><a href="classgeos_1_1geomgraph_1_1Label.html">geos::geomgraph::Label</a></div><div class="ttdoc">A Label indicates the topological relationship of a component of a topology graph to a given Geometry...</div><div class="ttdef"><b>Definition:</b> Label.h:57</div></div>
