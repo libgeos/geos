@@ -27,6 +27,10 @@ namespace util { // geos.geom.util
 void
 PolygonExtracter::getPolygons(const Geometry& geom, std::vector<const Polygon*>& ret)
 {
+    if (!geom.hasDimension(Dimension::A)) {
+        return;
+    }
+
     PolygonExtracter pe(ret);
     geom.apply_ro(&pe);
 }

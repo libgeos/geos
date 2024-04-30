@@ -62,6 +62,13 @@ public:
      */
     static const int INSIDE_AREA = -1;
 
+    GeometryLocation() :
+        component(nullptr),
+        segIndex(0),
+        inside_area(false),
+        pt()
+    {}
+
     /** \brief
      * Constructs a GeometryLocation specifying a point on a geometry,
      * as well as the segment that the point is on (or INSIDE_AREA if

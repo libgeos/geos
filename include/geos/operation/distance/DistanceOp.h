@@ -172,19 +172,19 @@ private:
 
     // working
     algorithm::PointLocator ptLocator;
-    std::array<std::unique_ptr<GeometryLocation>, 2> minDistanceLocation;
+    std::array<GeometryLocation, 2> minDistanceLocation;
     double minDistance;
     bool computed = false;
 
-    void updateMinDistance(std::array<std::unique_ptr<GeometryLocation>, 2> & locGeom, bool flip);
+    void updateMinDistance(std::array<GeometryLocation, 2> & locGeom, bool flip);
 
     void computeMinDistance();
 
     void computeContainmentDistance();
 
-    void computeInside(std::vector<std::unique_ptr<GeometryLocation>> & locs,
+    void computeInside(std::vector<GeometryLocation> & locs,
                        const std::vector<const geom::Polygon*>& polys,
-                       std::array<std::unique_ptr<GeometryLocation>, 2> & locPtPoly);
+                       std::array<GeometryLocation, 2> & locPtPoly);
 
 
     /**
@@ -196,25 +196,25 @@ private:
     void computeMinDistanceLines(
         const std::vector<const geom::LineString*>& lines0,
         const std::vector<const geom::LineString*>& lines1,
-        std::array<std::unique_ptr<GeometryLocation>, 2> & locGeom);
+        std::array<GeometryLocation, 2> & locGeom);
 
     void computeMinDistancePoints(
         const std::vector<const geom::Point*>& points0,
         const std::vector<const geom::Point*>& points1,
-        std::array<std::unique_ptr<GeometryLocation>, 2> & locGeom);
+        std::array<GeometryLocation, 2> & locGeom);
 
     void computeMinDistanceLinesPoints(
         const std::vector<const geom::LineString*>& lines0,
         const std::vector<const geom::Point*>& points1,
-        std::array<std::unique_ptr<GeometryLocation>, 2> & locGeom);
+        std::array<GeometryLocation, 2> & locGeom);
 
     void computeMinDistance(const geom::LineString* line0,
                             const geom::LineString* line1,
-                            std::array<std::unique_ptr<GeometryLocation>, 2> & locGeom);
+                            std::array<GeometryLocation, 2> & locGeom);
 
     void computeMinDistance(const geom::LineString* line,
                             const geom::Point* pt,
-                            std::array<std::unique_ptr<GeometryLocation>, 2> & locGeom);
+                            std::array<GeometryLocation, 2> & locGeom);
 };
 
 

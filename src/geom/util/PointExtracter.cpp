@@ -28,6 +28,10 @@ namespace util { // geos.geom.util
 void
 PointExtracter::getPoints(const Geometry& geom, Point::ConstVect& ret)
 {
+    if (!geom.hasDimension(Dimension::P)) {
+        return;
+    }
+
     PointExtracter pe(ret);
     geom.apply_ro(&pe);
 }
@@ -44,16 +48,16 @@ PointExtracter::PointExtracter(Point::ConstVect& newComps)
 void
 PointExtracter::filter_rw(Geometry* geom)
 {
-    if(const Point* p = dynamic_cast<const Point*>(geom)) {
-        comps.push_back(p);
+    if (geom->getGeometryTypeId() == GEOS_POINT) {
+        comps.push_back(static_cast<const Point*>(geom));
     }
 }
 
 void
 PointExtracter::filter_ro(const Geometry* geom)
 {
-    if(const Point* p = dynamic_cast<const Point*>(geom)) {
-        comps.push_back(p);
+    if (geom->getGeometryTypeId() == GEOS_POINT) {
+        comps.push_back(static_cast<const Point*>(geom));
     }
 }
 }

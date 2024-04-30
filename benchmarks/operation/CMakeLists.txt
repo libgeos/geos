@@ -10,3 +10,13 @@
 ################################################################################
 add_subdirectory(buffer)
 add_subdirectory(predicate)
+
+if (benchmark_FOUND)
+    add_executable(perf_distance DistancePerfTest.cpp)
+    target_include_directories(perf_distance PUBLIC
+            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+            $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
+            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/benchmarks>)
+    target_link_libraries(perf_distance PRIVATE
+            benchmark::benchmark geos geos_cxx_flags)
+endif()

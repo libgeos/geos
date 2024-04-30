@@ -32,6 +32,10 @@ LinearComponentExtracter::LinearComponentExtracter(std::vector<const LineString*
 void
 LinearComponentExtracter::getLines(const Geometry& geom, std::vector<const LineString*>& ret)
 {
+    if (geom.getDimension() == Dimension::P) {
+        return;
+    }
+
     LinearComponentExtracter lce(ret);
     geom.apply_ro(&lce);
 }

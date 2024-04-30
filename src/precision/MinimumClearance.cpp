@@ -176,6 +176,10 @@ MinimumClearance::compute()
     MinClearanceDistance mcd;
     auto nearest = tree->nearestNeighbour(mcd);
 
+    if (nearest.first == nullptr || nearest.second == nullptr) {
+        throw util::GEOSException("Failed to find nearest items");
+    }
+
     minClearance = mcd.distance(nearest.first, nearest.second);
 
     const std::vector<Coordinate>* minClearancePtsVec = mcd.getCoordinates();
