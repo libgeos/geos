@@ -97,13 +97,13 @@
   - MaximumInscribedCircle: Fix infinite loop with non-finite coordinates (GH-843, Dan Baston)
   - DistanceOp: Fix crash on collection containing empty point (GH-842, Dan Baston)
   - OffsetCurve: improve behaviour and add Joined mode (JTS-956, Martin Davis)
-  - GeometryPrecisionReducer: preserve input collection types (GH-846, Paul Ramsey)
   - OffsetCurve: handle zero-distance offsets (GH-850, Martin Davis)
+  - OffsetCurve: fix EndCap parameter handling (GH-899, Martin Davis)
+  - GeometryPrecisionReducer: preserve input collection types (GH-846, Paul Ramsey)
   - Tri: add exceptions for invalid indexes (GH-853, Martin Davis)
   - LargestEmptyCircle: enhance boundary to allow any polygonal geometry (GH-859, Martin Davis)
   - Fix MaximumInscribedCircle and LargestEmptyCircle performance and memory issues (GH-883, Martin Davis)
   - GEOSHasZ: Fix handling with empty geometries (GH-887, Mike Taves)
-  - OffsetCurve: fix EndCap parameter handling (GH-899, Martin Davis)
   - Reduce artifacts in single-sided Buffers: (GH-665 #810 and #712, Sandro Santilli)
   - GeoJSONReader: Fix 2D empty geometry creation (GH-909, Mike Taves)
   - GEOSClipByRect: Fix case with POINT EMPTY (GH-913, Mike Taves)
@@ -156,6 +156,8 @@
   - Fix BufferOp inverted ring check (JTS-878, Martin Davis)
   - Fix OverlayNG geomunion to avoid lines in result (Martin Davis)
 
+- Changes:
+  - Offset curves now have the same direction as the input line, for both positive and negative offsets.
 
 ## Changes in 3.10.0
 2021-10-20
