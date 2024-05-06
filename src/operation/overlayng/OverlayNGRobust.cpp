@@ -109,7 +109,9 @@ OverlayNGRobust::Overlay(const Geometry* geom0, const Geometry* geom1, int opCod
      */
     try {
         geom::PrecisionModel PM_FLOAT;
-        // std::cerr << "Using floating point overlay." << std::endl;
+#if GEOS_DEBUG
+        std::cerr << "Using floating point overlay." << std::endl;
+#endif
         result = OverlayNG::overlay(geom0, geom1, opCode, &PM_FLOAT);
 
         // Simple noding with no validation
