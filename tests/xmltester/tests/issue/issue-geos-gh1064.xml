@@ -1,0 +1,19 @@
+<run>
+  <precisionModel type="FLOATING" />
+
+<case>
+  <desc>See https://github.com/libgeos/geos/issues/1064</desc>
+  <a>
+    010200000002000000B02EA9C2AE5430400E3994256830514037F136E82055304039FAE86851305140
+  </a>
+  <b>
+    01020000000200000064AB380D714E3040A38E9F0E1F305140E798A2D4E85430405F5969945C305140
+  </b>
+<test>
+  <op name="relatestring" arg1="A" arg2="B">
+    FF1FF0102
+  </op>
+</test>
+</case>
+
+</run>
