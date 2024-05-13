@@ -121,6 +121,20 @@ namespace capitest {
         }
 
         void
+        ensure_geometry_equals_identical(GEOSGeometry* g1, GEOSGeometry* g2)
+        {
+            char rslt;
+            if (g1 == nullptr || g2 == nullptr) {
+                rslt = (g1 == nullptr && g2 == nullptr) ? 1 : 0;
+            } 
+            else {
+                rslt = GEOSEqualsIdentical(g1, g2);
+            }
+            report_not_equal("ensure_equals_identical", g1, g2, 1e-12, rslt);
+            tut::ensure_equals("GEOSEqualsIdentical(g1, g2)", rslt, 1);
+        }        
+
+        void
         ensure_geometry_equals(GEOSGeometry* g1, GEOSGeometry* g2)
         {
             return ensure_geometry_equals(g1, g2, 1e-12);

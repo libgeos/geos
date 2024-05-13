@@ -29,7 +29,7 @@ struct test_capigeosdensify_data : public capitest::utility
         result_ = GEOSDensify(input_, tolerance);
         ensure("result not NULL", result_ != nullptr);
 
-        ensure_geometry_equals(result_, expected_);
+        ensure_geometry_equals_identical(result_, expected_);
         ensure_equals("result SRID == expected SRID", GEOSGetSRID(result_), srid);
     }
 };
@@ -169,4 +169,40 @@ void object::test<10>()
     result_ = GEOSDensify(input_, 0.1);
     ensure("curved geometries not supported", result_ == nullptr);
 }
+// Densify a LINESTRING Z, check that Z gets interpolated
+template <>
+template <>
+void object::test<11>()
+{
+    testDensify(
+        "LINESTRING Z (0 0 0, 0 6 2)",
+        "LINESTRING Z (0 0 0, 0 3 1, 0 6 2)",
+        3.0
+    );
+}
+
+// Densify a LINEARRING Z
+template <>
+template <>
+void object::test<12>()
+{
+    testDensify(
+        "LINEARRING Z (0 0 0, 0 6 2, 6 6 12, 0 0 0)", 
+        "LINEARRING Z (0 0 0, 0 3 1, 0 6 2, 3 6 7, 6 6 12, 4 4 8, 2 2 4, 0 0 0)",
+        3.0
+    );
+}
+
+// Densify a POLYGON Z
+template <>
+template <>
+void object::test<13>()
+{
+    testDensify(
+        "POLYGON Z ((0 0 0, 10 0 2, 10 10 10, 0 10 2, 0 0 0), (1 1 0, 1 7 0, 7 7 0, 7 1 0, 1 1 0))",
+        "POLYGON Z ((0 0 0, 5 0 1, 10 0 2, 10 5 6, 10 10 10, 5 10 6, 0 10 2, 0 5 1, 0 0 0), (1 1 0, 1 4 0, 1 7 0, 4 7 0, 7 7 0, 7 4 0, 7 1 0, 4 1 0, 1 1 0))",
+        5.0
+    );
+}
+
 } // namespace tut
