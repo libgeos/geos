@@ -42,6 +42,27 @@ struct test_capigeosclipbyrect_data : public capitest::utility {
         ensure(equal);
     }
 
+    void
+    checkClipByRectIdentical(
+        const char* wktInput,
+        double xmin, double ymin,
+        double xmax, double ymax,
+        const char* wktExpected)
+    {
+        input_ = fromWKT(wktInput);
+        result_ = GEOSClipByRect(input_, xmin, ymin, xmax, ymax);
+        expected_ = fromWKT(wktExpected);
+
+        bool equal =  GEOSEqualsIdentical(result_, expected_) == 1;
+        if (!equal) {
+            wkt_ = GEOSWKTWriter_write(wktw_, expected_);
+            std::printf("EXP: %s\n", wkt_);
+            GEOSFree(wkt_);
+            wkt_ = GEOSWKTWriter_write(wktw_, result_);
+            std::printf("OBT: %s\n", wkt_);
+        }
+        ensure(equal);
+    }
 };
 
 typedef test_group<test_capigeosclipbyrect_data> group;
@@ -70,7 +91,7 @@ template<>
 template<>
 void object::test<2>()
 {
-    checkClipByRect(
+    checkClipByRectIdentical(
         "POINT(15 15)",
         10, 10, 20, 20,
         "POINT(15 15)"
@@ -106,7 +127,7 @@ template<>
 template<>
 void object::test<5>()
 {
-    checkClipByRect(
+    checkClipByRectIdentical(
         "LINESTRING(15 15, 16 15)",
         10, 10, 20, 20,
         "LINESTRING(15 15, 16 15)"
@@ -130,7 +151,7 @@ template<>
 template<>
 void object::test<7>()
 {
-    checkClipByRect(
+    checkClipByRectIdentical(
         "LINESTRING(10 5, 25 20)",
         10, 10, 20, 20,
         "LINESTRING (15 10, 20 15)"
@@ -191,7 +212,7 @@ template<>
 void object::test<12>()
 {
     const char* wkt = "POLYGON((1 1, 1 30, 30 30, 30 1, 1 1),(10 10, 20 10, 20 20, 10 20, 10 10))";
-    checkClipByRect(
+    checkClipByRectIdentical(
         wkt,
         0, 0, 40, 40,
         wkt);
@@ -202,7 +223,7 @@ template<>
 template<>
 void object::test<13>()
 {
-    checkClipByRect(
+    checkClipByRectIdentical(
         "POLYGON((0 0, 0 30, 30 30, 30 0, 0 0),(10 10, 20 10, 20 20, 10 20, 10 10))",
         5, 5, 15, 15,
         "POLYGON ((5 5, 5 15, 10 15, 10 10, 15 10, 15 5, 5 5))"
@@ -280,6 +301,66 @@ void object::test<17>()
 
     result_ = GEOSClipByRect(input_, 0, 0, 1, 1);
     ensure(result_ == nullptr);
+}
+
+/// Point Z inside
+template<>
+template<>
+void object::test<18>()
+{
+    checkClipByRectIdentical(
+        "POINT Z (15 15 100)",
+        10, 10, 20, 20,
+        "POINT Z (15 15 100)"
+        );
+}
+
+/// Line Z inside
+template<>
+template<>
+void object::test<19>()
+{
+    checkClipByRectIdentical(
+        "LINESTRING Z (15 15 0, 16 15 100)",
+        10, 10, 20, 20,
+        "LINESTRING Z (15 15 0, 16 15 100)"
+        );
+}
+
+/// Line Z splitting rectangle
+template<>
+template<>
+void object::test<20>()
+{
+    checkClipByRectIdentical(
+        "LINESTRING Z (0 15 0, 100 15 100)",
+        10, 10, 20, 20,
+        "LINESTRING Z (10 15 10, 20 15 20)"
+        );
+}
+
+/// Polygon Z overlapping rectangle
+template<>
+template<>
+void object::test<21>()
+{
+    checkClipByRectIdentical(
+        "POLYGON Z ((0 0 100, 0 30 100, 30 30 100, 30 0 100, 0 0 100),(10 10 100, 20 10 100, 20 20 100, 10 20 100, 10 10 100))",
+        5, 5, 15, 15,
+        "POLYGON Z ((5 5 100, 5 15 100, 10 15 100, 10 10 100, 15 10 100, 15 5 100, 5 5 100))"
+        );
+}
+
+/// Polygon Z enclosing rectangle
+template<>
+template<>
+void object::test<22>()
+{
+    checkClipByRectIdentical(
+        "POLYGON Z ((0 0 100, 0 30 100, 30 30 100, 30 0 100, 0 0 100))",
+        5, 5, 15, 15,
+        "POLYGON Z ((5 5 100, 5 15 100, 15 15 100, 15 5 100, 5 5 100))"
+        );
 }
 
 
