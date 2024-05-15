@@ -321,7 +321,8 @@ public:
     {
         ret = Coordinate(
             p0.x + segmentLengthFraction * (p1.x - p0.x),
-            p0.y + segmentLengthFraction * (p1.y - p0.y));
+            p0.y + segmentLengthFraction * (p1.y - p0.y),
+            p0.z + segmentLengthFraction * (p1.z - p0.z));
     };
 
     /** \brief
