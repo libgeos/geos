@@ -135,5 +135,31 @@ void object::test<8>
     ensure(result_ == nullptr);
 }
 
+// NaN start fraction
+// https://github.com/libgeos/geos/issues/1077
+template<>
+template<>
+void object::test<8>
+()
+{
+    input_ = fromWKT("LINESTRING EMPTY");
+    double start = std::numeric_limits<double>::quiet_NaN();
+    double end = 0.1;
+    result_ = GEOSLineSubstring(input_, start, end);
+
+    ensure(result_ == nullptr);
+}
+
+template<>
+template<>
+void object::test<9>
+()
+{
+    input_ = fromWKT("POLYGON ((0 0, 1 0, 1 1, 0 0))");
+    result_ = GEOSLineSubstring(input_, 0.2, 0.3);
+
+    ensure(result_ == nullptr);
+}
+
 } // namespace tut
 
