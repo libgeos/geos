@@ -4,7 +4,7 @@
 - New things:
   - Add Angle::sinCosSnap to avoid small errors, e.g. with buffer operations (GH-978, Mike Taves)
   - Add classes for curved geometry types: CircularString, CompoundCurve, CurvedPolygon, MultiCurve,
-    MultiSurface (GH-1046, Dan Baston)
+    MultiSurface (GH-1046, Dan Baston/German QGIS users group/Canton of Basel-Landschaft/Canton of Zug)
 
 - Breaking Changes
 
@@ -12,6 +12,7 @@
   - WKTReader: Points with all-NaN coordinates are not considered empty anymore (GH-927, Casper van der Wel)
   - WKTWriter: Points with all-NaN coordinates are written as such (GH-927, Casper van der Wel)
   - ConvexHull: Performance improvement for larger geometries (JTS-985, Martin Davis)
+  - Distance: Improve performance, especially for point-point distance (GH-1067, Dan Baston)
   - Intersection: change to using DoubleDouble computation to improve robustness (GH-937, Martin Davis)
   - Fix LargestEmptyCircle to respect polygonal obstacles (GH-939, Martin Davis)
   - Fix WKTWriter to emit EMPTY elements in multi-geometries (GH-952, Mike Taves)
@@ -29,6 +30,10 @@
   - Fix reading WKT with EMPTY token with white space (GH-1025, Mike Taves)
   - Fix buffer Inverted Ring Removal check (GH-1056, Martin Davis)
   - Add PointLocation.isOnSegment and remove LineIntersector point methods (GH-1083, Martin Davis)
+  - Densify: Interpolate Z coordinates (GH-1094)
+  - GEOSLineSubstring: Fix crash on NaN length fractions (GH-1088, Dan Baston)
+  - MinimumClearance: Fix crash on NaN inputs (GH-1082, Dan Baston)
+  - Centroid: Fix crash on polygons with empty holes (GH-1075, Dan Baston)
 
 ## Changes in 3.12.0
 2023-06-27
