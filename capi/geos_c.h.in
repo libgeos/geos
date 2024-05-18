@@ -5144,6 +5144,7 @@ extern GEOSSTRtree GEOS_DLL *GEOSSTRtree_create(size_t nodeCapacity);
 * `GEOSSTRtree_build` unless it is desired to explicity construct the tree
 * in a certain section of code or using a certain thread.
 *
+* \param tree the \ref GEOSSTRtree to apply the build to
 * \return 1 on success, 0 on error
 *
 * \since 3.12
@@ -5271,6 +5272,8 @@ extern char GEOS_DLL GEOSSTRtree_remove(
 * Only the tree is freed. The geometries and items fed into
 * GEOSSTRtree_insert() are not owned by the tree, and are
 * still left to the caller to manage.
+*
+* \param tree the \ref GEOSSTRtree to destroy
 *
 * \since 3.2
 */
