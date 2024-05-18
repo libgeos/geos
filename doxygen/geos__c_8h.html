@@ -17271,6 +17271,12 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
       </table>
 </div><div class="memdoc">
 <p>Construct an STRtree from items that have been inserted. Once constructed, no more items may be inserted into the tree. Functions that require a constructed tree will build it automatically, so there is no need to call <code>GEOSSTRtree_build</code> unless it is desired to explicity construct the tree in a certain section of code or using a certain thread.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tree</td><td>the <a class="el" href="geos__c_8h.html#aee0e622ed8fcc9f5959b27cf4b26c31b">GEOSSTRtree</a> to apply the build to </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>1 on success, 0 on error</dd></dl>
 <dl class="section since"><dt>Since</dt><dd>3.12 </dd></dl>
 
@@ -17377,6 +17383,12 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
       </table>
 </div><div class="memdoc">
 <p>Frees all the memory associated with a <a class="el" href="geos__c_8h.html#aee0e622ed8fcc9f5959b27cf4b26c31b">GEOSSTRtree</a>. Only the tree is freed. The geometries and items fed into <a class="el" href="geos__c_8h.html#ad61927f5f808c166c7993a189c3b53d1">GEOSSTRtree_insert()</a> are not owned by the tree, and are still left to the caller to manage.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tree</td><td>the <a class="el" href="geos__c_8h.html#aee0e622ed8fcc9f5959b27cf4b26c31b">GEOSSTRtree</a> to destroy</td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section since"><dt>Since</dt><dd>3.2 </dd></dl>
 
 </div>
