@@ -4563,6 +4563,10 @@ extern char GEOS_DLL GEOSSTRtree_remove(
 * Only the tree is freed. The geometries and items fed into
 * GEOSSTRtree_insert() are not owned by the tree, and are
 * still left to the caller to manage.
+*
+* \param tree the \ref GEOSSTRtree to destroy
+*
+* \since 3.2
 */
 extern void GEOS_DLL GEOSSTRtree_destroy(GEOSSTRtree *tree);
 
