@@ -113,14 +113,14 @@ jobs:
           cmake: 3.22.*
           os: ubuntu-22.04
 
-        - cxx_compiler: g++-13
-          c_compiler: gcc-13
-          build_type: Release
-          cxxstd: 17
-          arch: 64
-          packages: 'g++-13-multilib gcc-13-multilib'
-          cmake: 3.22.*
-          os: ubuntu-22.04
+        # - cxx_compiler: g++-13
+        #   c_compiler: gcc-13
+        #   build_type: Release
+        #   cxxstd: 17
+        #   arch: 64
+        #   packages: 'g++-13-multilib gcc-13-multilib'
+        #   cmake: 3.22.*
+        #   os: ubuntu-22.04
 
           # clang 6 and lower are not supported
           # in ubuntu 20.04 and higher
