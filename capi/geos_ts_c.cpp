@@ -118,6 +118,9 @@
 
 #ifdef _MSC_VER
 #pragma warning(disable : 4099)
+#endif
+
+#ifndef __GNUC__
 #define __attribute__(x)
 #endif
 

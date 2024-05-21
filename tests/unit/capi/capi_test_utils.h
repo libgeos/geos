@@ -11,7 +11,7 @@
 #include <cstring>
 #include <cfenv>
 
-#ifdef _MSC_VER
+#ifndef __GNUC__
 #define __attribute__(x)
 #endif
 
