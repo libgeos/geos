@@ -11,6 +11,10 @@
 #include <cstring>
 #include <cfenv>
 
+#ifdef _MSC_VER
+#define __attribute__(x)
+#endif
+
 
 namespace capitest {
 
@@ -61,7 +65,7 @@ namespace capitest {
             finishGEOS();
         }
 
-        static void notice(const char* fmt, ...)
+        static void notice(const char* fmt, ...) __attribute__ (( format(printf, 1, 2) ))
         {
             std::fprintf(stdout, "NOTICE: ");
 

@@ -118,6 +118,7 @@
 
 #ifdef _MSC_VER
 #pragma warning(disable : 4099)
+#define __attribute__(x)
 #endif
 
 // Some extra magic to make type declarations in geos_c.h work -
@@ -289,7 +290,7 @@ typedef struct GEOSContextHandle_HS {
     }
 
     void
-    NOTICE_MESSAGE(const char *fmt, ...)
+    NOTICE_MESSAGE(const char *fmt, ...) __attribute__ (( format(printf, 2, 3) ))
     {
         if(nullptr == noticeMessageOld && nullptr == noticeMessageNew) {
             return;
@@ -311,7 +312,7 @@ typedef struct GEOSContextHandle_HS {
     }
 
     void
-    ERROR_MESSAGE(const char *fmt, ...)
+    ERROR_MESSAGE(const char *fmt, ...) __attribute__ (( format(printf, 2, 3) ))
     {
         if(nullptr == errorMessageOld && nullptr == errorMessageNew) {
             return;
