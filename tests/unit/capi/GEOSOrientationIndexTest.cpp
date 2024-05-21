@@ -11,39 +11,15 @@
 #include <cstdlib>
 #include <memory>
 
+#include "capi_test_utils.h"
+
 namespace tut {
 //
 // Test Group
 //
 
 // Common data used in test cases.
-struct test_capigeosorientationindex_data {
-    GEOSContextHandle_t handle_;
-
-    static void
-    notice(const char* fmt, ...)
-    {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
-
-    test_capigeosorientationindex_data()
-        : handle_(initGEOS_r(notice, notice))
-    {
-    }
-
-    ~test_capigeosorientationindex_data()
-    {
-        finishGEOS_r(handle_);
-    }
-
-};
+struct test_capigeosorientationindex_data : public capitest::utility {};
 
 typedef test_group<test_capigeosorientationindex_data> group;
 typedef group::object object;
@@ -60,7 +36,7 @@ template<>
 void object::test<1>
 ()
 {
-    int ret = GEOSOrientationIndex_r(handle_, 0, 0, 10, 0, 5, 0);
+    int ret = GEOSOrientationIndex(0, 0, 10, 0, 5, 0);
     ensure_equals(ret, 0);
 }
 
@@ -70,7 +46,7 @@ template<>
 void object::test<2>
 ()
 {
-    int ret = GEOSOrientationIndex_r(handle_, 0, 0, 10, 0, 10, 0);
+    int ret = GEOSOrientationIndex(0, 0, 10, 0, 10, 0);
     ensure_equals(ret, 0);
 }
 
@@ -80,7 +56,7 @@ template<>
 void object::test<3>
 ()
 {
-    int ret = GEOSOrientationIndex_r(handle_, 0, 0, 10, 0, 0, 0);
+    int ret = GEOSOrientationIndex(0, 0, 10, 0, 0, 0);
     ensure_equals(ret, 0);
 }
 
@@ -90,7 +66,7 @@ template<>
 void object::test<4>
 ()
 {
-    int ret = GEOSOrientationIndex_r(handle_, 0, 0, 10, 0, -5, 0);
+    int ret = GEOSOrientationIndex(0, 0, 10, 0, -5, 0);
     ensure_equals(ret, 0);
 }
 
@@ -100,7 +76,7 @@ template<>
 void object::test<5>
 ()
 {
-    int ret = GEOSOrientationIndex_r(handle_, 0, 0, 10, 0, 20, 0);
+    int ret = GEOSOrientationIndex(0, 0, 10, 0, 20, 0);
     ensure_equals(ret, 0);
 }
 
@@ -110,7 +86,7 @@ template<>
 void object::test<6>
 ()
 {
-    int ret = GEOSOrientationIndex_r(handle_, 0, 0, 10, 10, 5, 6);
+    int ret = GEOSOrientationIndex(0, 0, 10, 10, 5, 6);
     ensure_equals(ret, 1);
 }
 
@@ -120,7 +96,7 @@ template<>
 void object::test<7>
 ()
 {
-    int ret = GEOSOrientationIndex_r(handle_, 0, 0, 10, 10, 5, 20);
+    int ret = GEOSOrientationIndex(0, 0, 10, 10, 5, 20);
     ensure_equals(ret, 1);
 }
 
@@ -130,7 +106,7 @@ template<>
 void object::test<8>
 ()
 {
-    int ret = GEOSOrientationIndex_r(handle_, 0, 0, 10, 10, 5, 3);
+    int ret = GEOSOrientationIndex(0, 0, 10, 10, 5, 3);
     ensure_equals(ret, -1);
 }
 
@@ -140,7 +116,7 @@ template<>
 void object::test<9>
 ()
 {
-    int ret = GEOSOrientationIndex_r(handle_, 0, 0, 10, 10, 5, -2);
+    int ret = GEOSOrientationIndex(0, 0, 10, 10, 5, -2);
     ensure_equals(ret, -1);
 }
 
@@ -150,7 +126,7 @@ template<>
 void object::test<10>
 ()
 {
-    int ret = GEOSOrientationIndex_r(handle_, 0, 0, 10, 10, 1000000, 1000001);
+    int ret = GEOSOrientationIndex(0, 0, 10, 10, 1000000, 1000001);
     ensure_equals(ret, 1);
 }
 
@@ -160,7 +136,7 @@ template<>
 void object::test<11>
 ()
 {
-    int ret = GEOSOrientationIndex_r(handle_, 0, 0, 10, 10, 1000000,  999999);
+    int ret = GEOSOrientationIndex(0, 0, 10, 10, 1000000,  999999);
     ensure_equals(ret, -1);
 }
 
