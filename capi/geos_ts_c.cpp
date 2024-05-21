@@ -120,9 +120,9 @@
 #pragma warning(disable : 4099)
 #endif
 
-#ifndef __GNUC__
-#define __attribute__(x)
-#endif
+//#ifndef __GNUC__
+//#define __attribute__(x)
+//#endif
 
 // Some extra magic to make type declarations in geos_c.h work -
 // for cross-checking of types in header.
