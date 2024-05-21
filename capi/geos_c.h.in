@@ -4151,7 +4151,7 @@ extern GEOSGeometry GEOS_DLL *GEOSMaximumInscribedCircle(
 * The LEC is determined by the center point and a point indicating the circle radius
 * (which will lie on an obstacle).
 * \n
-* To compute an LEC which lies **wholly** within a polygonal boundary, 
+* To compute an LEC which lies **wholly** within a polygonal boundary,
 * include the boundary of the polygon(s) as a linear obstacle.
 * \n
 * The implementation uses a successive-approximation technique over a grid of square cells covering the obstacles and boundary.
@@ -4366,9 +4366,9 @@ extern GEOSGeometry GEOS_DLL *GEOSPolygonize(
     unsigned int ngeoms);
 
 /**
-* Has the same polygonizing behavior as GEOSPolygonize(), 
+* Has the same polygonizing behavior as GEOSPolygonize(),
 * but returns a result which is a valid polygonal geometry.
-* The result will not contain any edge-adjacent elements. 
+* The result will not contain any edge-adjacent elements.
 *
 * \param geoms Array of linear geometries to polygons. Caller retains ownersihp of both array container and objects.
 * \param ngeoms Size of the geoms array.

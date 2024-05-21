@@ -96,7 +96,7 @@ namespace capitest {
             char rslt;
             if (g1 == nullptr || g2 == nullptr) {
                 rslt = (g1 == nullptr && g2 == nullptr) ? 1 : 0;
-            } 
+            }
             else {
                 GEOSNormalize(g1);
                 GEOSNormalize(g2);
@@ -112,7 +112,7 @@ namespace capitest {
             char rslt;
             if (g1 == nullptr || g2 == nullptr) {
                 rslt = (g1 == nullptr && g2 == nullptr) ? 1 : 0;
-            } 
+            }
             else {
                 rslt = GEOSEqualsExact(g1, g2, tolerance);
             }
@@ -126,13 +126,13 @@ namespace capitest {
             char rslt;
             if (g1 == nullptr || g2 == nullptr) {
                 rslt = (g1 == nullptr && g2 == nullptr) ? 1 : 0;
-            } 
+            }
             else {
                 rslt = GEOSEqualsIdentical(g1, g2);
             }
             report_not_equal("ensure_equals_identical", g1, g2, 1e-12, rslt);
             tut::ensure_equals("GEOSEqualsIdentical(g1, g2)", rslt, 1);
-        }        
+        }
 
         void
         ensure_geometry_equals(GEOSGeometry* g1, GEOSGeometry* g2)
