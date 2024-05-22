@@ -50,6 +50,8 @@ public:
     int offsetA = -1;
     bool isCollect = true;
     bool isExplode = false;
+    bool isSelect = false;
+    bool isSelectNot = false;
 
     std::string srcB;
 
@@ -91,7 +93,7 @@ private:
         unsigned int indexA, const  std::unique_ptr<Geometry>& geomA,
         unsigned int indexB, const  std::unique_ptr<Geometry>& geomB,
         OpArguments& opArgs);
-    void output(Result* result);
+    void output(Result* result, Geometry* geom);
     void outputExplode(std::unique_ptr<Geometry>& geom);
     void outputGeometry( const Geometry* geom);
     void outputGeometryList(std::vector<std::unique_ptr<const Geometry>> & val);

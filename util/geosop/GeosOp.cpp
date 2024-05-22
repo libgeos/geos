@@ -89,6 +89,8 @@ int main(int argc, char** argv) {
         ("p,precision", "Set number of decimal places in output coordinates", cxxopts::value<int>( cmdArgs.precision ) )
         ("q,quiet", "Disable result output", cxxopts::value<bool>( cmdArgs.isQuiet ) )
         ("r,repeat", "Repeat operation N times", cxxopts::value<int>( cmdArgs.repeatNum ) )
+        ("select", "Selects geometries where op result is true", cxxopts::value<bool>( cmdArgs.isSelect ) )
+        ("selectNot", "Selects geometries where op result is false", cxxopts::value<bool>( cmdArgs.isSelectNot ) )
         ("t,time", "Print execution time", cxxopts::value<bool>( cmdArgs.isShowTime ) )
         ("v,verbose", "Verbose output", cxxopts::value<bool>( cmdArgs.isVerbose )->default_value("false"))
         ("h,help", "Print help")
@@ -439,8 +441,7 @@ void GeosOp::executeUnary(GeometryOp * op, OpArguments& opArgs) {
     for (unsigned i = 0; i < geomA.size(); i++) {
         vertexCount += geomA[i]->getNumPoints();
         Result* result = executeOpRepeat(op, i, geomA[i], 0, nullptr, opArgs);
-
-        output(result);
+        output(result, geomA[i].get());
         delete result;
     }
 }
@@ -452,7 +453,7 @@ void GeosOp::executeBinary(GeometryOp * op, OpArguments& opArgs) {
             vertexCount += geomB[ib]->getNumPoints();
             Result* result = executeOpRepeat(op, ia, geomA[ia], ib, geomB[ib], opArgs);
 
-            output(result);
+            output(result, geomA[ia].get());
             delete result;
         }
     }
@@ -512,7 +513,7 @@ Result* GeosOp::executeOp(GeometryOp * op,
     return result;
 }
 
-void GeosOp::output(Result* result) {
+void GeosOp::output(Result* result, Geometry* geom) {
     //---- print result if format specified
     if (args.isQuiet)
         return;
@@ -527,6 +528,18 @@ void GeosOp::output(Result* result) {
     }
     else if (result->isGeometryList() ) {
         outputGeometryList( result->valGeomList );
+    }
+    else if (result->isBool() ) {
+        if (args.isSelect || args.isSelectNot) {
+            bool isSelected = (args.isSelect && result->toBool())
+                    || (args.isSelectNot && ! result->toBool());
+            if (isSelected) {
+                outputGeometry( geom );
+            }
+        }
+        else {
+            std::cout << result->toString() << std::endl;
+        }
     }
     else {
         // output as text/WKT
