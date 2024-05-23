@@ -25,7 +25,7 @@ class Polygon;
 }
 }
 
-using geos::geom::Coordinate;
+using geos::geom::CoordinateXY;
 using geos::geom::Envelope;
 using geos::geom::Polygon;
 using geos::algorithm::locate::IndexedPointInAreaLocator;
@@ -36,19 +36,19 @@ namespace coverage {    // geos::coverage
 class GEOS_DLL CoveragePolygon {
 
     // Members
-    const Polygon* polygon;
+    const Polygon* m_polygon;
     Envelope polyEnv;
-    std::unique_ptr<IndexedPointInAreaLocator> locator;
+    mutable std::unique_ptr<IndexedPointInAreaLocator> m_locator;
 
 public:
     CoveragePolygon(const Polygon* poly);
 
-    bool intersectsEnv(const Envelope env);
-    bool intersectsEnv(const Coordinate p);
-    bool contains(const Coordinate p);
+    bool intersectsEnv(const Envelope& env) const;
+    bool intersectsEnv(const CoordinateXY& p) const;
+    bool contains(const CoordinateXY& p) const;
     
 private:
-    IndexedPointInAreaLocator* getLocator();  
+    IndexedPointInAreaLocator& getLocator() const;  
 
 };
 

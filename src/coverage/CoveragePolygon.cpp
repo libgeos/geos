@@ -20,7 +20,7 @@
 #include <geos/geom/Polygon.h>
 
 using geos::algorithm::locate::IndexedPointInAreaLocator;
-using geos::geom::Coordinate;
+using geos::geom::CoordinateXY;
 using geos::geom::Envelope;
 using geos::geom::Location;
 using geos::geom::Polygon;
@@ -30,44 +30,43 @@ namespace coverage { // geos.coverage
 
 /* public */
 CoveragePolygon::CoveragePolygon(const Polygon* poly)
-    : polygon(poly)
+    : m_polygon(poly)
 {
     polyEnv = *(poly->getEnvelopeInternal());
 }
 
 /* public */
 bool 
-CoveragePolygon::intersectsEnv(const Envelope env)
+CoveragePolygon::intersectsEnv(const Envelope& env) const
 {
     return polyEnv.intersects(env);
 }
 
 /* public */
 bool 
-CoveragePolygon::intersectsEnv(const Coordinate p)
+CoveragePolygon::intersectsEnv(const CoordinateXY& p) const
 {
     return polyEnv.intersects(p);
 }
 
 /* public */
 bool 
-CoveragePolygon::contains(const Coordinate p)
+CoveragePolygon::contains(const CoordinateXY& p) const
 {
     if (! intersectsEnv(p))
         return false;
-    IndexedPointInAreaLocator* pia = getLocator();
-    return Location::INTERIOR == pia->locate(&p);
+    IndexedPointInAreaLocator& pia = getLocator();
+    return Location::INTERIOR == pia.locate(&p);
 }
 
 /* private */
-IndexedPointInAreaLocator*
-CoveragePolygon::getLocator()
+IndexedPointInAreaLocator&
+CoveragePolygon::getLocator() const
 {
-    if (locator == nullptr) {
-        //locator = std::make_unique<IndexedPointInAreaLocator>(new IndexedPointInAreaLocator(*polygon));
-        locator = std::unique_ptr<IndexedPointInAreaLocator>(new IndexedPointInAreaLocator(*polygon));
+    if (m_locator == nullptr) {
+        m_locator = std::make_unique<IndexedPointInAreaLocator>(*m_polygon);
     }
-    return locator.get();
+    return *m_locator;
 }
 
 } // namespace geos.coverage

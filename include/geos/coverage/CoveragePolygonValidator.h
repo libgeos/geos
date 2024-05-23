@@ -345,13 +345,13 @@ private:
         std::vector<std::unique_ptr<CoveragePolygon>>& adjCovPolygons);
 
     void markInvalidInteriorSection(
-        CoverageRing* ring,
+        CoverageRing& ring,
         std::size_t iStart, 
         std::size_t iEnd, 
         std::vector<std::unique_ptr<CoveragePolygon>>& adjCovPolygons );
 
     void markInvalidInteriorSegment(
-        CoverageRing* ring, std::size_t i, CoveragePolygon* adjPoly);
+        CoverageRing& ring, std::size_t i, CoveragePolygon* adjPoly);
 
     void checkTargetRings(
         std::vector<CoverageRing*>& targetRings,

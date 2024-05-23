@@ -33,7 +33,7 @@
 
 using geos::algorithm::locate::IndexedPointInAreaLocator;
 using geos::algorithm::Orientation;
-using geos::geom::Coordinate;
+using geos::geom::CoordinateXY;
 using geos::geom::Envelope;
 using geos::geom::Geometry;
 using geos::geom::GeometryFactory;
@@ -113,7 +113,7 @@ std::vector<std::unique_ptr<CoveragePolygon>>
 CoveragePolygonValidator::toCoveragePolygons(std::vector<const Polygon*> polygons) {
     std::vector<std::unique_ptr<CoveragePolygon>> covPolys;
     for (const Polygon* poly : polygons) {
-        covPolys.push_back( std::unique_ptr<CoveragePolygon>(new CoveragePolygon(poly)) );
+        covPolys.push_back( std::make_unique<CoveragePolygon>(poly) );
     }
     return covPolys;
 }
@@ -264,7 +264,7 @@ CoveragePolygonValidator::markInvalidInteriorSegments(
             std::size_t iEnd = i + stride;
             if (iEnd >= ring->size())
                 iEnd = ring->size() - 1;
-            markInvalidInteriorSection(ring, i, iEnd, adjCovPolygons);
+            markInvalidInteriorSection(*ring, i, iEnd, adjCovPolygons);
         }
     }
 }
@@ -272,12 +272,12 @@ CoveragePolygonValidator::markInvalidInteriorSegments(
 /* private */
 void
 CoveragePolygonValidator::markInvalidInteriorSection(
-    CoverageRing* ring,
+    CoverageRing& ring,
     std::size_t iStart, 
     std::size_t iEnd, 
     std::vector<std::unique_ptr<CoveragePolygon>>& adjCovPolygons )
 {
-    Envelope sectionEnv = ring->getEnvelope(iStart, iEnd);
+    Envelope sectionEnv = ring.getEnvelope(iStart, iEnd);
     //TODO: is it worth indexing polygons?
     for (auto& adjPoly : adjCovPolygons) {
         if (adjPoly->intersectsEnv(sectionEnv)) {
@@ -292,10 +292,10 @@ CoveragePolygonValidator::markInvalidInteriorSection(
 /* private */
 void 
 CoveragePolygonValidator::markInvalidInteriorSegment(
-    CoverageRing* ring, std::size_t i, CoveragePolygon* adjPoly)
+    CoverageRing& ring, std::size_t i, CoveragePolygon* adjPoly)
 {
     //-- skip check for segments with known state.
-    if (ring->isKnown(i))
+    if (ring.isKnown(i))
         return;
 
     /**
@@ -303,13 +303,13 @@ CoveragePolygonValidator::markInvalidInteriorSegment(
      * If so, the segments on either side are in the interior.
      * Mark them invalid, unless they are already matched.
      */
-    const Coordinate& p = ring->getCoordinate(i);
+    const CoordinateXY& p = ring.getCoordinate(i);
     if (adjPoly->contains(p)) {
-        ring->markInvalid(i);
+        ring.markInvalid(i);
         //-- previous segment may be interior (but may also be matched)
-        std::size_t iPrev = i == 0 ? ring->size()-2 : i-1;
-        if (! ring->isKnown(iPrev))
-            ring->markInvalid(iPrev);
+        std::size_t iPrev = i == 0 ? ring.size()-2 : i-1;
+        if (! ring.isKnown(iPrev))
+            ring.markInvalid(iPrev);
     }
 }
 
