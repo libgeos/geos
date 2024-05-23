@@ -307,7 +307,7 @@ target_compile_definitions(geos_developer_cxx_flags
 
 target_compile_options(geos_developer_cxx_flags
   INTERFACE
-    $<$<CXX_COMPILER_ID:MSVC>:-W4>
+    $<$<CXX_COMPILER_ID:MSVC>:-W4>  # consider -analyze
     $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:-Werror -pedantic -Wall -Wextra -Wno-long-long -Wcast-align -Wconversion -Wsign-conversion -Wchar-subscripts -Wdouble-promotion -Wpointer-arith -Wformat -Wformat-security -Wshadow -Wuninitialized -Wunused-parameter -fno-common>
     $<$<CXX_COMPILER_ID:GNU>:-fno-implicit-inline-templates -Wno-psabi -Wsuggest-attribute=format>
     $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:-Wno-unknown-warning-option>

@@ -102,11 +102,8 @@ typedef struct GEOSContextHandle_HS *GEOSContextHandle_t;
 *
 * \param fmt the message format template
 */
-#ifndef __GNUC__
- typedef void (*GEOSMessageHandler)(const char *fmt, ...);
-#else
- typedef void (*GEOSMessageHandler)(const char *fmt, ...) __attribute__ (( format(printf, 1, 2) ));
-#endif
+typedef void (*GEOSMessageHandler)(GEOS_PRINTF_FORMAT const char *fmt, ...)
+    GEOS_PRINTF_FORMAT_ATTR(1, 2);
 
 /**
 * A GEOS message handler function.
