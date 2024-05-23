@@ -34,7 +34,7 @@
   - GEOSLineSubstring: Fix crash on NaN length fractions (GH-1088, Dan Baston)
   - MinimumClearance: Fix crash on NaN inputs (GH-1082, Dan Baston)
   - Centroid: Fix crash on polygons with empty holes (GH-1075, Dan Baston)
-  - Add CoveragePolygonValidator section performance optimization (GH-1099, Martin Davis)
+  - CoveragePolygonValidator: add section performance optimization (GH-1099, Martin Davis)
 
 ## Changes in 3.12.0
 2023-06-27
