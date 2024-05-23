@@ -83,6 +83,8 @@ public:
 
     CoverageRing(const LinearRing* ring, bool isShell);
 
+    geom::Envelope getEnvelope(std::size_t start, std::size_t end);
+
     /**
     * Tests if all rings have known status (matched or invalid)
     * for all segments.
