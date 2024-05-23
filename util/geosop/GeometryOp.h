@@ -46,6 +46,9 @@ public:
 
     static std::string code(int typeCode);
 
+    bool isBool();
+    bool toBool();
+
     bool isGeometry();
     bool isGeometryList();
     std::string metadata();

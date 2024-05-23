@@ -1083,6 +1083,18 @@ Result::isGeometry() {
 }
 
 bool
+Result::isBool() {
+    return typeCode == typeBool;
+}
+
+bool
+Result::toBool() {
+    if (typeCode == typeBool)
+        return valBool;
+    return false;
+}
+
+bool
 Result::isGeometryList() {
     return typeCode == typeGeomList;
 }
