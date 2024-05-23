@@ -14,6 +14,7 @@ xxxx-xx-xx
   - Fix reading WKT with EMPTY token with white space (GH-1025, Mike Taves)
   - Segfault in CoverageSimplify for non-polygonal inputs (GH-1039, Paul Ramsey)
   - Fix buffer Inverted Ring Removal check (GH-1056, Martin Davis)
+  - CoveragePolygonValidator: add section performance optimization (GH-1099, Martin Davis)
 
 ## Changes in 3.12.1
 2023-11-11
