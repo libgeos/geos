@@ -274,7 +274,7 @@ public:
 private:
 
     static std::vector<std::unique_ptr<CoveragePolygon>> 
-        toCoveragePolygons(std::vector<const Polygon*> polygons);
+        toCoveragePolygons(const std::vector<const Polygon*> polygons);
     static std::vector<const Polygon*> extractPolygons(std::vector<const Geometry*>& geoms);
 
     /* private */

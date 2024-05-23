@@ -110,7 +110,7 @@ CoveragePolygonValidator::validate()
 
 /* private static */
 std::vector<std::unique_ptr<CoveragePolygon>> 
-CoveragePolygonValidator::toCoveragePolygons(std::vector<const Polygon*> polygons) {
+CoveragePolygonValidator::toCoveragePolygons(const std::vector<const Polygon*> polygons) {
     std::vector<std::unique_ptr<CoveragePolygon>> covPolys;
     for (const Polygon* poly : polygons) {
         covPolys.push_back( std::make_unique<CoveragePolygon>(poly) );
