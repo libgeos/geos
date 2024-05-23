@@ -32,6 +32,7 @@ namespace coverage { // geos.coverage
 CoveragePolygon::CoveragePolygon(const Polygon* poly)
     : m_polygon(poly)
 {
+    //-- cache polygon envelope for maximum performance
     polyEnv = *(poly->getEnvelopeInternal());
 }
 
