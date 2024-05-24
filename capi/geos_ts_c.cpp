@@ -289,7 +289,7 @@ typedef struct GEOSContextHandle_HS {
     }
 
     void
-    NOTICE_MESSAGE(const char *fmt, ...)
+    NOTICE_MESSAGE(GEOS_PRINTF_FORMAT const char *fmt, ...) GEOS_PRINTF_FORMAT_ATTR(2, 3)
     {
         if(nullptr == noticeMessageOld && nullptr == noticeMessageNew) {
             return;
@@ -297,7 +297,14 @@ typedef struct GEOSContextHandle_HS {
 
         va_list args;
         va_start(args, fmt);
+        #ifdef __MINGW32__
+        #pragma GCC diagnostic push
+        #pragma GCC diagnostic ignored "-Wsuggest-attribute=format"
+        #endif
         int result = vsnprintf(msgBuffer, sizeof(msgBuffer) - 1, fmt, args);
+        #ifdef __MINGW32__
+        #pragma GCC diagnostic pop
+        #endif
         va_end(args);
 
         if(result > 0) {
@@ -311,7 +318,7 @@ typedef struct GEOSContextHandle_HS {
     }
 
     void
-    ERROR_MESSAGE(const char *fmt, ...)
+    ERROR_MESSAGE(GEOS_PRINTF_FORMAT const char *fmt, ...) GEOS_PRINTF_FORMAT_ATTR(2, 3)
     {
         if(nullptr == errorMessageOld && nullptr == errorMessageNew) {
             return;
@@ -319,7 +326,14 @@ typedef struct GEOSContextHandle_HS {
 
         va_list args;
         va_start(args, fmt);
+        #ifdef __MINGW32__
+        #pragma GCC diagnostic push
+        #pragma GCC diagnostic ignored "-Wsuggest-attribute=format"
+        #endif
         int result = vsnprintf(msgBuffer, sizeof(msgBuffer) - 1, fmt, args);
+        #ifdef __MINGW32__
+        #pragma GCC diagnostic pop
+        #endif
         va_end(args);
 
         if(result > 0) {

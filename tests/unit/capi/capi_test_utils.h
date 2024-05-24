@@ -61,13 +61,20 @@ namespace capitest {
             finishGEOS();
         }
 
-        static void notice(const char* fmt, ...)
+        static void notice(GEOS_PRINTF_FORMAT const char* fmt, ...) GEOS_PRINTF_FORMAT_ATTR(1, 2)
         {
             std::fprintf(stdout, "NOTICE: ");
 
             va_list ap;
             va_start(ap, fmt);
+            #ifdef __MINGW32__
+            #pragma GCC diagnostic push
+            #pragma GCC diagnostic ignored "-Wsuggest-attribute=format"
+            #endif
             std::vfprintf(stdout, fmt, ap);
+            #ifdef __MINGW32__
+            #pragma GCC diagnostic pop
+            #endif
             va_end(ap);
 
             std::fprintf(stdout, "\n");
