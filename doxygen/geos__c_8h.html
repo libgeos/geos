@@ -63,10 +63,10 @@ $(function() {
 Typedefs</h2></td></tr>
 <tr class="memitem:a8fbe3d578fe2ba147a7a6a0c7a3d8f85"><td class="memItemLeft" align="right" valign="top">typedef struct GEOSContextHandle_HS *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a></td></tr>
 <tr class="separator:a8fbe3d578fe2ba147a7a6a0c7a3d8f85"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adee59c8031be8d7e7e6a9d12c97e1b13"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#adee59c8031be8d7e7e6a9d12c97e1b13">GEOSMessageHandler</a>) (const char *fmt,...)</td></tr>
-<tr class="separator:adee59c8031be8d7e7e6a9d12c97e1b13"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a46e651e7c7e163592e75755dfb2a5edd"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a46e651e7c7e163592e75755dfb2a5edd">GEOSMessageHandler_r</a>) (const char *message, void *userdata)</td></tr>
-<tr class="separator:a46e651e7c7e163592e75755dfb2a5edd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1e1d60369332e2b1c50af0f8548939c7"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a1e1d60369332e2b1c50af0f8548939c7">GEOSMessageHandler</a>) (GEOS_PRINTF_FORMAT const char *fmt,...) GEOS_PRINTF_FORMAT_ATTR(1</td></tr>
+<tr class="separator:a1e1d60369332e2b1c50af0f8548939c7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d2ed9d92d065c3ad5f21210f105a586"><td class="memItemLeft" align="right" valign="top">typedef void(*) typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a0d2ed9d92d065c3ad5f21210f105a586">GEOSMessageHandler_r</a>) (const char *message, void *userdata)</td></tr>
+<tr class="separator:a0d2ed9d92d065c3ad5f21210f105a586"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3109c0fe2dc30842f0403c1f67618047"><td class="memItemLeft" align="right" valign="top">typedef struct GEOSGeom_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a></td></tr>
 <tr class="separator:a3109c0fe2dc30842f0403c1f67618047"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aff9f7bbb2dcdbd813d9055414a18785e"><td class="memItemLeft" align="right" valign="top">typedef struct GEOSPrepGeom_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#aff9f7bbb2dcdbd813d9055414a18785e">GEOSPreparedGeometry</a></td></tr>
@@ -175,13 +175,13 @@ Functions</h2></td></tr>
 <tr class="separator:a30f811be4f94eca255d6741f361969c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aca8fb9d37be103f0787fb6607b8ad8f9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#aca8fb9d37be103f0787fb6607b8ad8f9">GEOS_finish_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle)</td></tr>
 <tr class="separator:aca8fb9d37be103f0787fb6607b8ad8f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a50ce12ecba0305b1f488cb34ff42e686"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#adee59c8031be8d7e7e6a9d12c97e1b13">GEOSMessageHandler</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a50ce12ecba0305b1f488cb34ff42e686">GEOSContext_setNoticeHandler_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> extHandle, <a class="el" href="geos__c_8h.html#adee59c8031be8d7e7e6a9d12c97e1b13">GEOSMessageHandler</a> nf)</td></tr>
+<tr class="memitem:a50ce12ecba0305b1f488cb34ff42e686"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a1e1d60369332e2b1c50af0f8548939c7">GEOSMessageHandler</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a50ce12ecba0305b1f488cb34ff42e686">GEOSContext_setNoticeHandler_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> extHandle, <a class="el" href="geos__c_8h.html#a1e1d60369332e2b1c50af0f8548939c7">GEOSMessageHandler</a> nf)</td></tr>
 <tr class="separator:a50ce12ecba0305b1f488cb34ff42e686"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab7503ef580e599508dfebe7219c110fd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#adee59c8031be8d7e7e6a9d12c97e1b13">GEOSMessageHandler</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#ab7503ef580e599508dfebe7219c110fd">GEOSContext_setErrorHandler_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> extHandle, <a class="el" href="geos__c_8h.html#adee59c8031be8d7e7e6a9d12c97e1b13">GEOSMessageHandler</a> ef)</td></tr>
+<tr class="memitem:ab7503ef580e599508dfebe7219c110fd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a1e1d60369332e2b1c50af0f8548939c7">GEOSMessageHandler</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#ab7503ef580e599508dfebe7219c110fd">GEOSContext_setErrorHandler_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> extHandle, <a class="el" href="geos__c_8h.html#a1e1d60369332e2b1c50af0f8548939c7">GEOSMessageHandler</a> ef)</td></tr>
 <tr class="separator:ab7503ef580e599508dfebe7219c110fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a25d9d123caff86aba6994d44308a482e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a46e651e7c7e163592e75755dfb2a5edd">GEOSMessageHandler_r</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a25d9d123caff86aba6994d44308a482e">GEOSContext_setNoticeMessageHandler_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> extHandle, <a class="el" href="geos__c_8h.html#a46e651e7c7e163592e75755dfb2a5edd">GEOSMessageHandler_r</a> nf, void *userData)</td></tr>
+<tr class="memitem:a25d9d123caff86aba6994d44308a482e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a0d2ed9d92d065c3ad5f21210f105a586">GEOSMessageHandler_r</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a25d9d123caff86aba6994d44308a482e">GEOSContext_setNoticeMessageHandler_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> extHandle, <a class="el" href="geos__c_8h.html#a0d2ed9d92d065c3ad5f21210f105a586">GEOSMessageHandler_r</a> nf, void *userData)</td></tr>
 <tr class="separator:a25d9d123caff86aba6994d44308a482e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a68b1a9f6da8fc95c4eea5433768afa50"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a46e651e7c7e163592e75755dfb2a5edd">GEOSMessageHandler_r</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a68b1a9f6da8fc95c4eea5433768afa50">GEOSContext_setErrorMessageHandler_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> extHandle, <a class="el" href="geos__c_8h.html#a46e651e7c7e163592e75755dfb2a5edd">GEOSMessageHandler_r</a> ef, void *userData)</td></tr>
+<tr class="memitem:a68b1a9f6da8fc95c4eea5433768afa50"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a0d2ed9d92d065c3ad5f21210f105a586">GEOSMessageHandler_r</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a68b1a9f6da8fc95c4eea5433768afa50">GEOSContext_setErrorMessageHandler_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> extHandle, <a class="el" href="geos__c_8h.html#a0d2ed9d92d065c3ad5f21210f105a586">GEOSMessageHandler_r</a> ef, void *userData)</td></tr>
 <tr class="separator:a68b1a9f6da8fc95c4eea5433768afa50"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae70405a5fec6c416461f360c28acb185"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a20364ac461610266953754281d93408a">GEOSCoordSequence</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#ae70405a5fec6c416461f360c28acb185">GEOSCoordSeq_create_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle, unsigned int size, unsigned int dims)</td></tr>
 <tr class="separator:ae70405a5fec6c416461f360c28acb185"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -676,7 +676,7 @@ Functions</h2></td></tr>
 <tr><td colspan="2"><div class="groupHeader">Library and Memory Management</div></td></tr>
 <tr><td colspan="2"><div class="groupText"><p>Functions to initialize and tear down the library, and deallocate memory. </p>
 </div></td></tr>
-<tr class="memitem:a40c8f12b7f49e3389467d7507e1539fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a40c8f12b7f49e3389467d7507e1539fe">initGEOS</a> (<a class="el" href="geos__c_8h.html#adee59c8031be8d7e7e6a9d12c97e1b13">GEOSMessageHandler</a> notice_function, <a class="el" href="geos__c_8h.html#adee59c8031be8d7e7e6a9d12c97e1b13">GEOSMessageHandler</a> error_function)</td></tr>
+<tr class="memitem:a40c8f12b7f49e3389467d7507e1539fe"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a40c8f12b7f49e3389467d7507e1539fe">initGEOS</a> (<a class="el" href="geos__c_8h.html#a1e1d60369332e2b1c50af0f8548939c7">GEOSMessageHandler</a> notice_function, <a class="el" href="geos__c_8h.html#a1e1d60369332e2b1c50af0f8548939c7">GEOSMessageHandler</a> error_function)</td></tr>
 <tr class="separator:a40c8f12b7f49e3389467d7507e1539fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad9d8ccc4c6a7d7d0e0f12629fd96ef7c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#ad9d8ccc4c6a7d7d0e0f12629fd96ef7c">finishGEOS</a> (void)</td></tr>
 <tr class="separator:ad9d8ccc4c6a7d7d0e0f12629fd96ef7c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1198,7 +1198,7 @@ Functions</h2></td></tr>
 <tr class="separator:adbe3cd8cefb5083563f4d9073b3e1137"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a517e7ee856540e31df202b3a25cef9bf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a517e7ee856540e31df202b3a25cef9bf">GEOSSingleSidedBuffer_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle, const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g, double width, int quadsegs, int joinStyle, double mitreLimit, int leftSide)</td></tr>
 <tr class="separator:a517e7ee856540e31df202b3a25cef9bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a59012707bc14b8a64990b85155f35a8f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a59012707bc14b8a64990b85155f35a8f">initGEOS_r</a> (<a class="el" href="geos__c_8h.html#adee59c8031be8d7e7e6a9d12c97e1b13">GEOSMessageHandler</a> notice_function, <a class="el" href="geos__c_8h.html#adee59c8031be8d7e7e6a9d12c97e1b13">GEOSMessageHandler</a> error_function)</td></tr>
+<tr class="memitem:a59012707bc14b8a64990b85155f35a8f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a59012707bc14b8a64990b85155f35a8f">initGEOS_r</a> (<a class="el" href="geos__c_8h.html#a1e1d60369332e2b1c50af0f8548939c7">GEOSMessageHandler</a> notice_function, <a class="el" href="geos__c_8h.html#a1e1d60369332e2b1c50af0f8548939c7">GEOSMessageHandler</a> error_function)</td></tr>
 <tr class="separator:a59012707bc14b8a64990b85155f35a8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab28e31ca1d697748a447e60d66ec55b0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#ab28e31ca1d697748a447e60d66ec55b0">finishGEOS_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle)</td></tr>
 <tr class="separator:ab28e31ca1d697748a447e60d66ec55b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1478,19 +1478,19 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="adee59c8031be8d7e7e6a9d12c97e1b13"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adee59c8031be8d7e7e6a9d12c97e1b13">&#9670;&nbsp;</a></span>GEOSMessageHandler</h2>
+<a id="a1e1d60369332e2b1c50af0f8548939c7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1e1d60369332e2b1c50af0f8548939c7">&#9670;&nbsp;</a></span>GEOSMessageHandler</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef void(* GEOSMessageHandler) (const char *fmt,...)</td>
+          <td class="memname">typedef void(* GEOSMessageHandler) (GEOS_PRINTF_FORMAT const char *fmt,...) GEOS_PRINTF_FORMAT_ATTR(1</td>
         </tr>
       </table>
 </div><div class="memdoc">
 <p>Callback function for passing GEOS error messages to parent process.</p>
-<p>Set the <a class="el" href="geos__c_8h.html#adee59c8031be8d7e7e6a9d12c97e1b13">GEOSMessageHandler</a> function for error and notice messages using <a class="el" href="geos__c_8h.html#a40c8f12b7f49e3389467d7507e1539fe">initGEOS</a> or <a class="el" href="geos__c_8h.html#a59012707bc14b8a64990b85155f35a8f">initGEOS_r</a>.</p>
+<p>Set the <a class="el" href="geos__c_8h.html#a1e1d60369332e2b1c50af0f8548939c7">GEOSMessageHandler</a> function for error and notice messages using <a class="el" href="geos__c_8h.html#a40c8f12b7f49e3389467d7507e1539fe">initGEOS</a> or <a class="el" href="geos__c_8h.html#a59012707bc14b8a64990b85155f35a8f">initGEOS_r</a>.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">fmt</td><td>the message format template </td></tr>
@@ -1500,14 +1500,14 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a46e651e7c7e163592e75755dfb2a5edd"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a46e651e7c7e163592e75755dfb2a5edd">&#9670;&nbsp;</a></span>GEOSMessageHandler_r</h2>
+<a id="a0d2ed9d92d065c3ad5f21210f105a586"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d2ed9d92d065c3ad5f21210f105a586">&#9670;&nbsp;</a></span>GEOSMessageHandler_r</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">typedef void(* GEOSMessageHandler_r) (const char *message, void *userdata)</td>
+          <td class="memname">typedef void(*) typedef void(* GEOSMessageHandler_r) (const char *message, void *userdata)</td>
         </tr>
       </table>
 </div><div class="memdoc">
@@ -3760,7 +3760,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="geos__c_8h.html#adee59c8031be8d7e7e6a9d12c97e1b13">GEOSMessageHandler</a> GEOSContext_setErrorHandler_r </td>
+          <td class="memname"><a class="el" href="geos__c_8h.html#a1e1d60369332e2b1c50af0f8548939c7">GEOSMessageHandler</a> GEOSContext_setErrorHandler_r </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>&#160;</td>
           <td class="paramname"><em>extHandle</em>, </td>
@@ -3768,7 +3768,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="geos__c_8h.html#adee59c8031be8d7e7e6a9d12c97e1b13">GEOSMessageHandler</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a1e1d60369332e2b1c50af0f8548939c7">GEOSMessageHandler</a>&#160;</td>
           <td class="paramname"><em>ef</em>&#160;</td>
         </tr>
         <tr>
@@ -3797,7 +3797,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="geos__c_8h.html#a46e651e7c7e163592e75755dfb2a5edd">GEOSMessageHandler_r</a> GEOSContext_setErrorMessageHandler_r </td>
+          <td class="memname"><a class="el" href="geos__c_8h.html#a0d2ed9d92d065c3ad5f21210f105a586">GEOSMessageHandler_r</a> GEOSContext_setErrorMessageHandler_r </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>&#160;</td>
           <td class="paramname"><em>extHandle</em>, </td>
@@ -3805,7 +3805,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="geos__c_8h.html#a46e651e7c7e163592e75755dfb2a5edd">GEOSMessageHandler_r</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a0d2ed9d92d065c3ad5f21210f105a586">GEOSMessageHandler_r</a>&#160;</td>
           <td class="paramname"><em>ef</em>, </td>
         </tr>
         <tr>
@@ -3842,7 +3842,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="geos__c_8h.html#adee59c8031be8d7e7e6a9d12c97e1b13">GEOSMessageHandler</a> GEOSContext_setNoticeHandler_r </td>
+          <td class="memname"><a class="el" href="geos__c_8h.html#a1e1d60369332e2b1c50af0f8548939c7">GEOSMessageHandler</a> GEOSContext_setNoticeHandler_r </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>&#160;</td>
           <td class="paramname"><em>extHandle</em>, </td>
@@ -3850,7 +3850,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="geos__c_8h.html#adee59c8031be8d7e7e6a9d12c97e1b13">GEOSMessageHandler</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a1e1d60369332e2b1c50af0f8548939c7">GEOSMessageHandler</a>&#160;</td>
           <td class="paramname"><em>nf</em>&#160;</td>
         </tr>
         <tr>
@@ -3879,7 +3879,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="geos__c_8h.html#a46e651e7c7e163592e75755dfb2a5edd">GEOSMessageHandler_r</a> GEOSContext_setNoticeMessageHandler_r </td>
+          <td class="memname"><a class="el" href="geos__c_8h.html#a0d2ed9d92d065c3ad5f21210f105a586">GEOSMessageHandler_r</a> GEOSContext_setNoticeMessageHandler_r </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>&#160;</td>
           <td class="paramname"><em>extHandle</em>, </td>
@@ -3887,7 +3887,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="geos__c_8h.html#a46e651e7c7e163592e75755dfb2a5edd">GEOSMessageHandler_r</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a0d2ed9d92d065c3ad5f21210f105a586">GEOSMessageHandler_r</a>&#160;</td>
           <td class="paramname"><em>nf</em>, </td>
         </tr>
         <tr>
@@ -20644,13 +20644,13 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
         <tr>
           <td class="memname">void initGEOS </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="geos__c_8h.html#adee59c8031be8d7e7e6a9d12c97e1b13">GEOSMessageHandler</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a1e1d60369332e2b1c50af0f8548939c7">GEOSMessageHandler</a>&#160;</td>
           <td class="paramname"><em>notice_function</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="geos__c_8h.html#adee59c8031be8d7e7e6a9d12c97e1b13">GEOSMessageHandler</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a1e1d60369332e2b1c50af0f8548939c7">GEOSMessageHandler</a>&#160;</td>
           <td class="paramname"><em>error_function</em>&#160;</td>
         </tr>
         <tr>
@@ -20660,7 +20660,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
         </tr>
       </table>
 </div><div class="memdoc">
-<p>For non-reentrant code, set up an execution contact, and associate <a class="el" href="geos__c_8h.html#adee59c8031be8d7e7e6a9d12c97e1b13">GEOSMessageHandler</a> functions with it, to pass error and notice messages back to the calling application. </p><pre>
+<p>For non-reentrant code, set up an execution contact, and associate <a class="el" href="geos__c_8h.html#a1e1d60369332e2b1c50af0f8548939c7">GEOSMessageHandler</a> functions with it, to pass error and notice messages back to the calling application. </p><pre>
 typedef void (*GEOSMessageHandler)(const char *fmt, ...);
 </pre><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -20682,13 +20682,13 @@ typedef void (*GEOSMessageHandler)(const char *fmt, ...);
         <tr>
           <td class="memname"><a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> initGEOS_r </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="geos__c_8h.html#adee59c8031be8d7e7e6a9d12c97e1b13">GEOSMessageHandler</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a1e1d60369332e2b1c50af0f8548939c7">GEOSMessageHandler</a>&#160;</td>
           <td class="paramname"><em>notice_function</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="geos__c_8h.html#adee59c8031be8d7e7e6a9d12c97e1b13">GEOSMessageHandler</a>&#160;</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a1e1d60369332e2b1c50af0f8548939c7">GEOSMessageHandler</a>&#160;</td>
           <td class="paramname"><em>error_function</em>&#160;</td>
         </tr>
         <tr>
