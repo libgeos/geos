@@ -23,7 +23,15 @@
 
     * Yes, we know in your last job you were taught all member variables are prefixed with `m_`, but please don't.
 
+## C/C++ Guidelines
 
+C++ (in particular) is a large complex language, with many patterns that have evolved over the years.
+The GEOS codebase has also evolved over the years, but parts still exhibit obsolete language
+or project patterns.
+When porting or adding code, follow the style of the most recently written code (use the commit history to find this).
+
+In general, we follow the [C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines).
+The following summarizes some of the key patterns used in GEOS.
 
 ### Manage Lifecycles
 
