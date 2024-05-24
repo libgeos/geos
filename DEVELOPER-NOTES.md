@@ -7,9 +7,9 @@
   * Having various visual tooling, JTS is an easier platform to debug spatial algorithms in.
   * Being Java, JTS has less language legacy than GEOS, which was originally ported when STL was not part of the standard, and therefore reflects a mix of styles and eras.
 
-* Ideally, new algorithms will be implemented in JTS and then ported to GEOS.
-* Smaller performance optimizations in GEOS can travel back to JTS.
-
+* Ideally, new algorithms are implemented in JTS and then ported to GEOS.
+  * Sometimes GEOS gains new functionality; ideally this is backported to JTS
+* Performance optimizations in GEOS can backport to JTS.
   * Short circuits, indexes, other non-language optimizations, should be ticketed in JTS when they are added to GEOS.
 
 ### Follow JTS as Much as Possible
