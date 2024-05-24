@@ -24,9 +24,9 @@
 
 ## C/C++ Guidelines
 
-C++ (in particular) is a large complex language, with many patterns that have evolved over the years.
+C++ is a large, complex language, with many patterns that have evolved over the years.
 The GEOS codebase has also evolved over the years, but parts still exhibit obsolete language
-or project patterns.
+and project patterns.
 When porting or adding code, follow the style of the most recently written code (use the commit history to find this).
 
 In general, we follow the [C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines).
