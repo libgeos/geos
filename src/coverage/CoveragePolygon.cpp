@@ -56,7 +56,7 @@ CoveragePolygon::contains(const CoordinateXY& p) const
 {
     if (! intersectsEnv(p))
         return false;
-    IndexedPointInAreaLocator& pia = getLocator();
+    auto& pia = getLocator();
     return Location::INTERIOR == pia.locate(&p);
 }
 

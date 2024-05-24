@@ -282,7 +282,7 @@ CoveragePolygonValidator::markInvalidInteriorSection(
     for (auto& adjPoly : adjCovPolygons) {
         if (adjPoly->intersectsEnv(sectionEnv)) {
             //-- test vertices in section
-            for (std::size_t i = iStart; i < iEnd; i++) {
+            for (auto i = iStart; i < iEnd; i++) {
                 markInvalidInteriorSegment(ring, i, adjPoly.get());
             }
         }
@@ -307,7 +307,7 @@ CoveragePolygonValidator::markInvalidInteriorSegment(
     if (adjPoly->contains(p)) {
         ring.markInvalid(i);
         //-- previous segment may be interior (but may also be matched)
-        std::size_t iPrev = i == 0 ? ring.size()-2 : i-1;
+        auto iPrev = i == 0 ? ring.size()-2 : i-1;
         if (! ring.isKnown(iPrev))
             ring.markInvalid(iPrev);
     }
