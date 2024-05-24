@@ -20,7 +20,7 @@
   * Method names
   * Variable names
   * Class members
-    * Sometimes class members are shadowed by local variables.  In this case, use the `m_` prefix convention for the member.
+    * If class members are shadowed by local variables, use the `m_` prefix convention for the member.
 
 ## C/C++ Guidelines
 
