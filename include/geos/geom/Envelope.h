@@ -48,7 +48,8 @@ class Coordinate;
  * It is often used to represent the bounding box of a Geometry,
  * e.g. the minimum and maximum x and y values of the Coordinates.
  *
- * Note that Envelopes support infinite or half-infinite regions, by using
+ * Envelopes allow null values, which are represented with NaN values for ordinates.
+ * Envelopes support infinite or half-infinite regions, by using
  * the values of `Double_POSITIVE_INFINITY` and `Double_NEGATIVE_INFINITY`.
  *
  * When Envelope objects are created or initialized, the supplies extent
@@ -301,8 +302,8 @@ public:
     }
 
     /** \brief
-     * Returns the Envelope maximum y-value. `min y > max y` indicates
-     * that this is a null Envelope.
+     * Returns the Envelope maximum y-value. 
+     * Null envelopes do not have maximum values.
      */
     double getMaxY() const
     {
@@ -311,8 +312,8 @@ public:
     };
 
     /** \brief
-     * Returns the Envelope maximum x-value. `min x > max x` indicates
-     * that this is a null Envelope.
+     * Returns the Envelope maximum x-value. 
+     * Null envelopes do not have maximum values.
      */
     double getMaxX() const
     {
@@ -321,8 +322,8 @@ public:
     };
 
     /** \brief
-     * Returns the Envelope minimum y-value. `min y > max y` indicates
-     * that this is a null Envelope.
+     * Returns the Envelope minimum y-value. 
+     * Null envelopes do not have maximum values.
      */
     double getMinY() const
     {
@@ -331,8 +332,8 @@ public:
     };
 
     /** \brief
-     * Returns the Envelope minimum x-value. `min x > max x` indicates
-     * that this is a null Envelope.
+     * Returns the Envelope minimum x-value. 
+     * Null envelopes do not have maximum values.
      */
     double getMinX() const
     {
@@ -371,7 +372,7 @@ public:
      * @param result the envelope representing the intersection of
      *               the envelopes (this will be the null envelope
      *               if either argument is null, or they do not intersect)
-     * @return false if not intersection is found
+     * @return false if no intersection is found
      */
     bool intersection(const Envelope& env, Envelope& result) const;
 
