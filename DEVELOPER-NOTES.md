@@ -5,7 +5,7 @@
   * This is just history, JTS was written first and GEOS was a slavish port.
   * Being memory managed, JTS is an easier language to prototype in.
   * Having various visual tooling, JTS is an easier platform to debug spatial algorithms in.
-  * Being Java, JTS has less language legacy than GEOS, which was originally ported when STL was still not part of the standard, and therefor reflects a mix of styles and eras.
+  * Being Java, JTS has less language legacy than GEOS, which was originally ported when STL was not part of the standard, and therefore reflects a mix of styles and eras.
 
 * Ideally, new algorithms will be implemented in JTS and then ported to GEOS.
 * Smaller performance optimizations in GEOS can travel back to JTS.
