@@ -65,6 +65,16 @@ public:
 
 * You can pass pointers to the object to other methods using `std::unique_ptr<>.get()`.
 
+### Resource Management
+[Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#r-resource-management).
+* [A raw pointer (a T*) is non-owning](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rr-ptr)
+* [A raw reference (a T&) is non-owning](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rr-ref)
+  
+### Function calling conventions
+
+
+* Prefer T* over T& when “no argument” is a valid option
+
 ### Avoid Many Small Heap Allocations
 
 * Heap allocations (objects created using `new`) are more expensive than stack allocations, but they can show up in batchs in JTS in places where structures are built, like index trees, or graphs.
