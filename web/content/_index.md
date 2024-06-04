@@ -65,6 +65,6 @@ A BibTeX entry for LaTeX users is
   organization = {Open Source Geospatial Foundation},
   year = {2021},
   url = {https://libgeos.org/},
-  doi = "10.5281/zenodo.11396894",
+  doi = {10.5281/zenodo.11396894}
 }
 ```
