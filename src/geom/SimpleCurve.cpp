@@ -218,6 +218,12 @@ SimpleCurve::getCoordinatesRO() const
     return points.get();
 }
 
+const SimpleCurve*
+SimpleCurve::getCurveN(std::size_t) const
+{
+    return this;
+}
+
 std::unique_ptr<Point>
 SimpleCurve::getEndPoint() const
 {
@@ -225,6 +231,12 @@ SimpleCurve::getEndPoint() const
         return nullptr;
     }
     return getPointN(getNumPoints() - 1);
+}
+
+std::size_t
+SimpleCurve::getNumCurves() const
+{
+    return 1;
 }
 
 std::size_t

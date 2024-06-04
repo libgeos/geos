@@ -22,6 +22,7 @@
 #include <geos/export.h>
 #include <geos/geom/Location.h>
 
+#include <array>
 #include <vector>
 
 // forward declarations
@@ -30,6 +31,8 @@ namespace geom {
 class Coordinate;
 class CoordinateXY;
 class CoordinateSequence;
+class CircularArc;
+class Curve;
 }
 }
 
@@ -92,6 +95,9 @@ public:
     static geom::Location locatePointInRing(const geom::CoordinateXY& p,
                                  const std::vector<const geom::Coordinate*>& ring);
 
+    static geom::Location locatePointInRing(const geom::CoordinateXY& p,
+                                 const geom::Curve& ring);
+
     RayCrossingCounter(const geom::CoordinateXY& p_point)
         : point(p_point),
           crossingCount(0),
@@ -106,6 +112,15 @@ public:
      */
     void countSegment(const geom::CoordinateXY& p1,
                       const geom::CoordinateXY& p2);
+
+    void countArc(const geom::CoordinateXY& p1,
+                  const geom::CoordinateXY& p2,
+                  const geom::CoordinateXY& p3);
+
+    /** \brief
+     *  Counts all segments or arcs in the sequence
+     */
+    void processSequence(const geom::CoordinateSequence& seq, bool isLinear);
 
     /** \brief
      * Reports whether the point lies exactly on one of the supplied segments.
@@ -146,6 +161,11 @@ public:
     bool isPointInPolygon() const;
 
     std::size_t getCount() const { return crossingCount; };
+
+    static bool shouldCountCrossing(const geom::CircularArc& arc, const geom::CoordinateXY& q);
+
+    static std::array<geom::CoordinateXY, 2>
+    pointsIntersectingHorizontalRay(const geom::CircularArc& arc, const geom::CoordinateXY& origin);
 
 };
 

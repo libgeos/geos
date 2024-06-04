@@ -205,7 +205,7 @@ public:
      * @return true if this vertex is in the circumcircle of (a,b,c)
      */
     bool isInCircle(const Vertex& a, const Vertex& b, const Vertex& c) const {
-        return triangulate::quadedge::TrianglePredicate::isInCircleRobust(a.p, b.p, c.p, this->p);
+        return triangulate::quadedge::TrianglePredicate::isInCircleRobust(a.p, b.p, c.p, this->p) == geom::Location::INTERIOR;
     }
 
     /**

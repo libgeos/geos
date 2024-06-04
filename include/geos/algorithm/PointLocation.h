@@ -19,11 +19,18 @@
 #pragma once
 
 #include <geos/export.h>
-#include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Location.h>
+#include <vector>
 
 namespace geos {
+
+namespace geom {
+class Coordinate;
+class CoordinateXY;
+class CoordinateSequence;
+class Curve;
+}
+
 namespace algorithm { // geos::algorithm
 
 /** \brief
@@ -90,6 +97,7 @@ public:
      */
     static geom::Location locateInRing(const geom::CoordinateXY& p, const std::vector<const geom::Coordinate*>& ring);
     static geom::Location locateInRing(const geom::CoordinateXY& p, const geom::CoordinateSequence& ring);
+    static geom::Location locateInRing(const geom::CoordinateXY& p, const geom::Curve& ring);
 
 };
 

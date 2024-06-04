@@ -33,32 +33,42 @@ namespace tut {
 // Test Group
 //
 
-// dummy data, not used
-struct test_locatepointinring_data {};
+struct test_locatepointinring_data {
+    geos::io::WKTReader reader;
+
+    std::string locationText(Location loc) {
+        switch(loc) {
+            case Location::BOUNDARY: return "BOUNDARY";
+            case Location::EXTERIOR: return "EXTERIOR";
+            case Location::INTERIOR: return "INTERIOR";
+            default: return "NONE";
+        }
+    }
+
+    void
+    runPtLocator(Location expected, const CoordinateXY& pt,
+             const std::string& wkt, bool checkReverse=true)
+    {
+        std::unique_ptr<Geometry> geom(reader.read(wkt));
+        const Surface* poly = dynamic_cast<Surface*>(geom.get());
+        const Curve* cs = poly->getExteriorRing();
+        Location loc = PointLocation::locateInRing(pt, *cs);
+
+        if (loc != expected) {
+            std::string message = "Expected (" + pt.toString() + ") to be " + locationText(expected) + " but got " + locationText(loc) + " for " + wkt;
+            fail(message);
+        }
+
+        if (checkReverse) {
+            runPtLocator(expected, pt, geom->reverse()->toString(), false);
+        }
+    }
+};
 
 typedef test_group<test_locatepointinring_data> group;
 typedef group::object object;
 
 group test_locatepointinring_group("geos::algorithm::LocatePointInRing");
-
-// These are static to avoid namespace pollution
-// The struct test_*_data above is probably there
-// for the same reason...
-//
-static PrecisionModel pm;
-static GeometryFactory::Ptr gf = GeometryFactory::create(&pm);
-static geos::io::WKTReader reader(gf.get());
-
-static void
-runPtLocator(Location expected, const Coordinate& pt,
-             const std::string& wkt)
-{
-    std::unique_ptr<Geometry> geom(reader.read(wkt));
-    const Polygon* poly = dynamic_cast<Polygon*>(geom.get());
-    const CoordinateSequence* cs = poly->getExteriorRing()->getCoordinatesRO();
-    Location loc = PointLocation::locateInRing(pt, *cs);
-    ensure_equals(loc, expected);
-}
 
 const std::string
 wkt_comb("POLYGON ((0 0, 0 10, 4 5, 6 10, 7 5, 9 10, 10 5, 13 5, 15 10, 16 3, 17 10, 18 3, 25 10, 30 10, 30 0, 15 0, 14 5, 13 0, 9 0, 8 5, 6 0, 0 0))");
@@ -172,6 +182,108 @@ void object::test<7>
                  "POLYGON ((2.152214146946829 50.470470727186765, 18.381941666723034 19.567250592139274, 2.390837642830135 49.228045261718165, 2.152214146946829 50.470470727186765))");
 }
 
+// basic curve
+template<>
+template<>
+void object::test<8>
+()
+{
+    std::vector<std::string> wkts{
+        "CURVEPOLYGON (COMPOUNDCURVE((0 0, 0 2), CIRCULARSTRING (0 2, 1 1, 0 0)))",
+        "CURVEPOLYGON (COMPOUNDCURVE((0 2, 0 0), CIRCULARSTRING (0 0, 1 1, 0 2)))",
+        "CURVEPOLYGON (COMPOUNDCURVE(CIRCULARSTRING (0 2, 1 1, 0 0), (0 0, 0 2)))",
+        "CURVEPOLYGON (COMPOUNDCURVE(CIRCULARSTRING (0 0, 1 1, 0 2), (0 2, 0 0)))",
+    };
+
+    for (const auto& wkt: wkts) {
+        // left of shape
+        runPtLocator(Location::EXTERIOR,
+             CoordinateXY(-1, 0.5),
+             wkt);
+
+        // right of shape
+        runPtLocator(Location::EXTERIOR,
+             CoordinateXY(1.1, 0.5),
+             wkt);
+
+        // on line segment
+        runPtLocator(Location::BOUNDARY,
+             CoordinateXY(0, 0.5),
+             wkt);
+
+        // on vertex
+        runPtLocator(Location::BOUNDARY,
+             CoordinateXY(0, 0),
+             wkt);
+
+        // on vertex
+        runPtLocator(Location::BOUNDARY,
+             CoordinateXY(0, 2),
+             wkt);
+
+        // inside
+        runPtLocator(Location::INTERIOR,
+             CoordinateXY(0.5, 1),
+             wkt);
+    }
+}
+
+// more complex curve (curved version of #2)
+template<>
+template<>
+void object::test<9>()
+{
+    std::string wkt = "CURVEPOLYGON (COMPOUNDCURVE ("
+                                   "(-40 80, -40 -80),"
+                                   "CIRCULARSTRING (-40 -80, 0 -50, 20 0),"
+                                   "(20 0, 20 -100),"
+                                   "CIRCULARSTRING (20 -100, 40 -30, 40 40, 70 -10, 80 -80, 95 0, 100 80, 115 35, 140 -20, 115 80, 120 140, 95 200, 40 180, 85 125, 60 40, 60 115, 0 120),"
+                                   "(0 120, -10 120, -20 -20, -40 80)))";
+
+    runPtLocator(Location::EXTERIOR, CoordinateXY(-50, 40), wkt);
+    runPtLocator(Location::INTERIOR, CoordinateXY(39, 40), wkt);
+    runPtLocator(Location::BOUNDARY, CoordinateXY(40, 40), wkt);
+    runPtLocator(Location::BOUNDARY, CoordinateXY(60, 40), wkt);
+
+    runPtLocator(Location::EXTERIOR, CoordinateXY(-20, 100), wkt);
+    runPtLocator(Location::INTERIOR, CoordinateXY(0, 100), wkt);
+    runPtLocator(Location::EXTERIOR, CoordinateXY(80, 100), wkt);
+    runPtLocator(Location::INTERIOR, CoordinateXY(100, 100), wkt);
+    runPtLocator(Location::EXTERIOR, CoordinateXY(130, 100), wkt);
+
+    runPtLocator(Location::EXTERIOR, CoordinateXY(-15, 120), wkt);
+    runPtLocator(Location::BOUNDARY, CoordinateXY(-10, 120), wkt);
+    runPtLocator(Location::BOUNDARY, CoordinateXY(-5, 120), wkt);
+    runPtLocator(Location::BOUNDARY, CoordinateXY(0, 120), wkt);
+    runPtLocator(Location::INTERIOR, CoordinateXY(5, 120), wkt);
+    runPtLocator(Location::EXTERIOR, CoordinateXY(75, 120), wkt);
+    runPtLocator(Location::INTERIOR, CoordinateXY(100, 120), wkt);
+    runPtLocator(Location::EXTERIOR, CoordinateXY(120, 120), wkt);
+}
+
+// horizontal ray is tangent to curve
+template<>
+template<>
+void object::test<10>()
+{
+    std::string wkt = "CURVEPOLYGON (COMPOUNDCURVE(CIRCULARSTRING(0 0, 1 1, 2 0), (2 0, 0 0)))";
+
+    runPtLocator(Location::EXTERIOR, CoordinateXY(0, 1), wkt);
+    runPtLocator(Location::BOUNDARY, CoordinateXY(1, 1), wkt);
+    runPtLocator(Location::EXTERIOR, CoordinateXY(1.1, 1), wkt);
+}
+
+// degenerate arc (collinear points)
+template<>
+template<>
+void object::test<11>()
+{
+    std::string wkt = "CURVEPOLYGON (CIRCULARSTRING(0 0, 4 6, 10 10, 9 6, 8 2, 1 1, 0 0))";
+
+    runPtLocator(Location::EXTERIOR, CoordinateXY(0, 7), wkt);
+    runPtLocator(Location::EXTERIOR, CoordinateXY(0, 6), wkt);
+    runPtLocator(Location::EXTERIOR, CoordinateXY(0, 5), wkt);
+}
 
 
 } // namespace tut

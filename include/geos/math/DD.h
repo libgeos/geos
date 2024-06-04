@@ -93,6 +93,7 @@
 #pragma once
 
 #include <cmath>
+#include <geos/export.h>
 
 namespace geos {
 namespace math { // geos.math

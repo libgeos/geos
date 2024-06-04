@@ -19,6 +19,8 @@
 namespace geos {
 namespace geom {
 
+class SimpleCurve;
+
 class GEOS_DLL Curve : public Geometry {
 
 public:
@@ -55,6 +57,10 @@ public:
 
     /// Returns true if the curve is closed and simple
     bool isRing() const;
+
+    virtual std::size_t getNumCurves() const = 0;
+
+    virtual const SimpleCurve* getCurveN(std::size_t) const = 0;
 
 protected:
     Curve(const GeometryFactory& factory) : Geometry(&factory) {}

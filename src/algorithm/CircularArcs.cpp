@@ -18,10 +18,13 @@
 #include "geos/geom/Envelope.h"
 #include "geos/geom/Quadrant.h"
 
+#include <array>
+
 using geos::geom::CoordinateXY;
 
 namespace geos {
 namespace algorithm {
+
 
 CoordinateXY
 CircularArcs::getCenter(const CoordinateXY& p0, const CoordinateXY& p1, const CoordinateXY& p2)

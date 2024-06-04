@@ -23,6 +23,8 @@
 #include <geos/triangulate/quadedge/LocateFailureException.h>
 #include <geos/algorithm/Orientation.h>
 
+using geos::geom::Coordinate;
+
 namespace geos {
 namespace triangulate { //geos.triangulate
 
