@@ -138,7 +138,7 @@ TriDelaunayImprover::isInCircle(
     const Coordinate& a, const Coordinate& b,
     const Coordinate& c, const Coordinate& p)
 {
-    return triangulate::quadedge::TrianglePredicate::isInCircleRobust(a, c, b, p);
+    return triangulate::quadedge::TrianglePredicate::isInCircleRobust(a, c, b, p) == geom::Location::INTERIOR;
 }
 
 
