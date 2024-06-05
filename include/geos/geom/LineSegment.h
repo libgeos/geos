@@ -248,7 +248,7 @@ public:
 
     /// Computes the midpoint of the segment
     //
-    /// @param ret will be set to the midpoint of the segment
+    /// @return the midpoint of the segment
     ///
     CoordinateXY midPoint() const
     {
