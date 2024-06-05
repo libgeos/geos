@@ -1,5 +1,5 @@
 ## Changes in 3.11.4
-xxxx-xx-xx
+2024-06-05
 
 - Fixes/Improvements:
   - Intersection: change to using DoubleDouble computation to improve robustness (GH-937, Martin Davis)

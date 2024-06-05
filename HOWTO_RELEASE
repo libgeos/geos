@@ -21,8 +21,8 @@
    $ ctest --output-on-failure .
    $ cmake --build . --target distcheck
 
-4. Update the NEWS file (extract most important things from the repository log). 
-   Make sure to update the release date.
+4. Update the NEWS file (extract most important things from the
+   repository log). Make sure to update the release date.
 
 5. Commit the changes in the NEWS file.
    Push changes with:  git push origin,
