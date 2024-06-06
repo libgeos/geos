@@ -30,19 +30,23 @@ foreach(file ${files})
     message(STATUS "\tTrying to execute remove command anyway.")
   endif()
 
-  exec_program("@CMAKE_COMMAND@" ARGS "-E remove \"$ENV{DESTDIR}${file}\""
+  execute_process(
+    COMMAND "@CMAKE_COMMAND@" -E remove \"$ENV{DESTDIR}${file}\"
     OUTPUT_VARIABLE rm_out
-    RETURN_VALUE rm_retval)
+    RESULT_VARIABLE rm_retval)
+
   if(NOT "${rm_retval}" STREQUAL 0)
     message(FATAL_ERROR "Problem when removing \"$ENV{DESTDIR}${file}\"")
   endif()
+
 endforeach()
 
 message(STATUS "Deleting ${GEOS_INCLUDE_DIR} directory")
-exec_program("@CMAKE_COMMAND@"
-  ARGS "-E remove_directory \"${GEOS_INCLUDE_DIR}\""
+execute_process(
+  COMMAND "@CMAKE_COMMAND@" -E remove_directory \"${GEOS_INCLUDE_DIR}\"
   OUTPUT_VARIABLE rm_out
-  RETURN_VALUE rm_retval)
+  RESULT_VARIABLE rm_retval)
+
 if(NOT "${rm_retval}" STREQUAL 0)
   message(FATAL_ERROR "Problem when removing \"${GEOS_INCLUDE_DIR}\"")
 endif()
