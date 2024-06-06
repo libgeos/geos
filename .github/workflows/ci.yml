@@ -86,7 +86,7 @@ jobs:
         echo "$(python3 -m site --user-base)/bin" >> $GITHUB_PATH
 
     - name: 'Check Out'
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: 'Build'
       env:
@@ -142,7 +142,7 @@ jobs:
         shell: msys2 {0}
     steps:
     - name: 'Check Out'
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: 'Setup'
       uses: msys2/setup-msys2@v2
@@ -171,7 +171,7 @@ jobs:
         shell: msys2 {0}
     steps:
     - name: 'Check Out'
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: 'Setup'
       uses: msys2/setup-msys2@v2
@@ -197,7 +197,7 @@ jobs:
     runs-on: windows-2022
     steps:
     - name: 'Check Out'
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: 'Build'
       run: |
@@ -217,7 +217,7 @@ jobs:
     runs-on: windows-2019
     steps:
     - name: 'Check Out'
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: 'Build'
       run: |
@@ -237,7 +237,7 @@ jobs:
   #   runs-on: windows-2016
   #   steps:
   #   - name: 'Check Out'
-  #     uses: actions/checkout@v3
+  #     uses: actions/checkout@v4
 
   #   - name: 'Build'
   #     run: |
@@ -266,7 +266,7 @@ jobs:
         echo "$(python3 -m site --user-base)/bin" >> $GITHUB_PATH
 
     - name: 'Check Out'
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         path: geos
 
