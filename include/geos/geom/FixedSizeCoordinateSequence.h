@@ -106,7 +106,9 @@ namespace geom {
 
         void setPoints(const std::vector<Coordinate> & v) final override {
             assert(v.size() == N);
-            std::copy(v.begin(), v.end(), m_data.begin());
+            if (N > 0) {
+                std::copy(v.begin(), v.end(), m_data.begin());
+            }
         }
 
         void apply_ro(CoordinateFilter* filter) const final override {
