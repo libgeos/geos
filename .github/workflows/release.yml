@@ -33,7 +33,7 @@ jobs:
         sudo -E apt-get -yq --no-install-suggests --no-install-recommends install make doxygen
 
     - name: 'Check Out'
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Get tag
       id: tag

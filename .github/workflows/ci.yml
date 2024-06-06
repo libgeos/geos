@@ -205,10 +205,10 @@ jobs:
         echo "$(python3 -m site --user-base)/bin" >> $GITHUB_PATH
 
     - name: 'Check Out'
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Retrieve build cache
-      uses: actions/cache/restore@v3
+      uses: actions/cache/restore@v4
       id: restore-cache
       with:
         path: .ccache
@@ -236,7 +236,7 @@ jobs:
         ccache -s
 
     - name: Save build cache
-      uses: actions/cache/save@v3
+      uses: actions/cache/save@v4
       with:
         path: .ccache
         key: ${{ steps.restore-cache.outputs.cache-primary-key }}
@@ -286,7 +286,7 @@ jobs:
 
     steps:
     - name: 'Check Out'
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: 'Setup'
       uses: msys2/setup-msys2@v2
@@ -296,7 +296,7 @@ jobs:
 
     - name: Retrieve build cache
       id: restore-cache
-      uses: actions/cache/restore@v3
+      uses: actions/cache/restore@v4
       with:
         path: .ccache
         key: windows-mingw-${{ matrix.build_type}}-${{ github.ref_name }}-${{ github.run_id }}
@@ -315,7 +315,7 @@ jobs:
        cmake --build . -j 2
 
     - name: Save build cache
-      uses: actions/cache/save@v3
+      uses: actions/cache/save@v4
       with:
         path: .ccache
         key: ${{ steps.restore-cache.outputs.cache-primary-key }}
@@ -341,14 +341,14 @@ jobs:
     runs-on: ${{ matrix.ci.os }}
     steps:
     - name: 'Check Out'
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: 'Setup'
       run: choco install ccache
 
     - name: Retrieve build cache
       id: restore-cache
-      uses: actions/cache/restore@v3
+      uses: actions/cache/restore@v4
       with:
         path: .ccache
         key: windows-msvc-${{ matrix.build_type}}-${{ github.ref_name }}-${{ github.run_id }}
@@ -363,7 +363,7 @@ jobs:
        cmake --build . --config ${{ matrix.ci.build_type }} -j 2
 
     - name: Save build cache
-      uses: actions/cache/save@v3
+      uses: actions/cache/save@v4
       with:
         path: .ccache
         key: ${{ steps.restore-cache.outputs.cache-primary-key }}
@@ -406,11 +406,11 @@ jobs:
         clang++ --version
 
     - name: 'Check Out'
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Retrieve build cache
       id: restore-cache
-      uses: actions/cache/restore@v3
+      uses: actions/cache/restore@v4
       with:
         path: .ccache
         key: ${{ runner.os }}-${{ matrix.xcode }}-${{ matrix.build_type}}-${{ matrix.cxxstd }}-${{ github.ref_name }}-${{ github.run_id }}
@@ -432,7 +432,7 @@ jobs:
         cmake --build . --config ${BUILD_TYPE} -j 3
 
     - name: Save build cache
-      uses: actions/cache/save@v3
+      uses: actions/cache/save@v4
       with:
         path: .ccache
         key: ${{ steps.restore-cache.outputs.cache-primary-key }}
@@ -454,7 +454,7 @@ jobs:
         sudo -E apt-get -yq --no-install-suggests --no-install-recommends install cppcheck
 
     - name: 'Check Out'
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: 'cppcheck'
       run: |
@@ -475,7 +475,7 @@ jobs:
         echo "$(python3 -m site --user-base)/bin" >> $GITHUB_PATH
 
     - name: 'Check Out'
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         path: geos
 
