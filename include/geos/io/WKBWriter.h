@@ -33,6 +33,8 @@ namespace geos {
 namespace geom {
 
 class CoordinateSequence;
+class CompoundCurve;
+class CurvePolygon;
 class Geometry;
 class GeometryCollection;
 class Point;
@@ -43,6 +45,7 @@ class MultiPoint;
 class MultiLineString;
 class MultiPolygon;
 class PrecisionModel;
+class SimpleCurve;
 
 } // namespace geom
 } // namespace geos
@@ -194,6 +197,8 @@ public:
     void writeHEX(const geom::Geometry& g, std::ostream& os);
     // throws IOException, ParseException
 
+    static int getWkbType(const geom::Geometry&);
+
 private:
 
     // 2, 3, or 4
@@ -215,13 +220,17 @@ private:
     void writePointEmpty(const geom::Point& p);
     // throws IOException
 
-    void writeLineString(const geom::LineString& ls);
+    void writeSimpleCurve(const geom::SimpleCurve& ls);
     // throws IOException
+
+    void writeCompoundCurve(const geom::CompoundCurve& curve);
 
     void writePolygon(const geom::Polygon& p);
     // throws IOException
 
-    void writeGeometryCollection(const geom::GeometryCollection& c, int wkbtype);
+    void writeCurvePolygon(const geom::CurvePolygon& p);
+
+    void writeGeometryCollection(const geom::GeometryCollection& gc);
     // throws IOException, ParseException
 
     void writeCoordinateSequence(const geom::CoordinateSequence& cs, bool sized);

@@ -186,18 +186,5 @@ void object::test<9>()
     ensure_equals(hexstr, "010100008000000000000008400000000000002040000000000000F03F");
 }
 
-template<>
-template<>
-void object::test<10>
-()
-{
-    input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
-    ensure(input_);
-
-    std::size_t hex_size = 0;
-    buf_ =  GEOSWKBWriter_writeHEX(wkbwriter_, input_, &hex_size);
-    ensure("curved geometry not supported", buf_ == nullptr);
-}
-
 } // namespace tut
 
