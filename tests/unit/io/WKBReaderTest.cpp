@@ -12,6 +12,8 @@
 #include <geos/io/WKBConstants.h>
 #include <geos/io/WKBWriter.h>
 #include <geos/io/WKTReader.h>
+#include <geos/geom/CompoundCurve.h>
+#include <geos/geom/CurvePolygon.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
@@ -739,6 +741,101 @@ void object::test<30>
         "010700000009000000010100000000000000000010400000000000001040",
         "ParseException: Input buffer is smaller than requested object size"
     );
+}
+
+// CircularString
+template<>
+template<>
+void object::test<31>
+()
+{
+    // CIRCULARSTRING(1 3,2 4,3 1)
+    auto g = readHex("010800000003000000000000000000F03F0000000000000840000000000000004000000000000010400000000000000840000000000000F03F");
+
+    ensure_equals(g->getGeometryTypeId(), geos::geom::GEOS_CIRCULARSTRING);
+    ensure_equals(g->getNumPoints(), 3u);
+}
+
+// CompoundCurve
+template<>
+template<>
+void object::test<32>
+()
+{
+    //  SRID=5646;COMPOUNDCURVE(CIRCULARSTRING(1 3,2 4,3 1),(3 1,0 0))
+    auto g = readHex("01090000200E16000002000000010800000003000000000000000000F03F0000000000000840000000000000004000000000000010400000000000000840000000000000F03F0102000000020000000000000000000840000000000000F03F00000000000000000000000000000000");
+
+    ensure_equals(g->getGeometryTypeId(), geos::geom::GEOS_COMPOUNDCURVE);
+    ensure_equals(g->getSRID(), 5646);
+
+    const auto* cc = static_cast<const geos::geom::CompoundCurve*>(g.get());
+    ensure_equals(cc->getNumCurves(), 2u);
+    ensure_equals(cc->getCurveN(0)->getGeometryTypeId(), geos::geom::GEOS_CIRCULARSTRING);
+    ensure_equals(cc->getCurveN(0)->getNumPoints(), 3u);
+
+    ensure_equals(cc->getCurveN(1)->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
+    ensure_equals(cc->getCurveN(1)->getNumPoints(), 2u);
+}
+
+// CurvePolygon
+template<>
+template<>
+void object::test<33>
+()
+{
+    // SRID=5646;CURVEPOLYGON(COMPOUNDCURVE(CIRCULARSTRING(0 0,2 0,2 1,2 3,4 3),(4 3,4 5,1 4,0 0)),
+    //                        CIRCULARSTRING(1.7 1,1.4 0.4,1.6 0.4,1.6 0.5,1.7 1))
+    auto g = readHex("010A0000200E1600000200000001090000000200000001080000000500000000000000000000000000000000000000000000000000004000000000000000000000000000000040000000000000F03F00000000000000400000000000000840000000000000104000000000000008400102000000040000000000000000001040000000000000084000000000000010400000000000001440000000000000F03F000000000000104000000000000000000000000000000000010800000005000000333333333333FB3F000000000000F03F666666666666F63F9A9999999999D93F9A9999999999F93F9A9999999999D93F9A9999999999F93F000000000000E03F333333333333FB3F000000000000F03F");
+
+    ensure_equals(g->getGeometryTypeId(), geos::geom::GEOS_CURVEPOLYGON);
+    ensure_equals(g->getSRID(), 5646);
+
+    const auto* cp = static_cast<const geos::geom::CurvePolygon*>(g.get());
+    ensure_equals(cp->getExteriorRing()->getGeometryTypeId(), geos::geom::GEOS_COMPOUNDCURVE);
+    ensure_equals(cp->getNumInteriorRing(), 1u);
+    ensure_equals(cp->getInteriorRingN(0)->getGeometryTypeId(), geos::geom::GEOS_CIRCULARSTRING);
+}
+
+// MultiCurve
+template<>
+template<>
+void object::test<34>
+()
+{
+    // MULTICURVE((0 0,5 5),
+    //            COMPOUNDCURVE((-1 -1,0 0),CIRCULARSTRING(0 0,1 1,2 0)),
+    //            CIRCULARSTRING(4 0,4 4,8 4))
+    auto g = readHex("010B000000030000000102000000020000000000000000000000000000000000000000000000000014400000000000001440010900000002000000010200000002000000000000000000F0BF000000000000F0BF0000000000000000000000000000000001080000000300000000000000000000000000000000000000000000000000F03F000000000000F03F00000000000000400000000000000000010800000003000000000000000000104000000000000000000000000000001040000000000000104000000000000020400000000000001040");
+    ensure_equals(g->getGeometryTypeId(), geos::geom::GEOS_MULTICURVE);
+    ensure_equals(g->getNumGeometries(), 3u);
+    ensure_equals(g->getGeometryN(0)->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
+    ensure_equals(g->getGeometryN(1)->getGeometryTypeId(), geos::geom::GEOS_COMPOUNDCURVE);
+    ensure_equals(g->getGeometryN(2)->getGeometryTypeId(), geos::geom::GEOS_CIRCULARSTRING);
+}
+
+// MultiSurface
+template<>
+template<>
+void object::test<35>
+()
+{
+    // MULTISURFACE(CURVEPOLYGON(CIRCULARSTRING(0 0,4 0,4 4,0 4,0 0),(1 1,3 3,3 1,1 1)),
+    //             ((10 10,14 12,11 10,10 10),(11 11,11.5 11,11 11.5,11 11))
+    auto g = readHex("010C00000002000000010A000000020000000108000000050000000000000000000000000000000000000000000000000010400000000000000000000000000000104000000000000010400000000000000000000000000000104000000000000000000000000000000000010200000004000000000000000000F03F000000000000F03F000000000000084000000000000008400000000000000840000000000000F03F000000000000F03F000000000000F03F01030000000200000004000000000000000000244000000000000024400000000000002C40000000000000284000000000000026400000000000002440000000000000244000000000000024400400000000000000000026400000000000002640000000000000274000000000000026400000000000002640000000000000274000000000000026400000000000002640");
+    ensure_equals(g->getGeometryTypeId(), geos::geom::GEOS_MULTISURFACE);
+    ensure_equals(g->getNumGeometries(), 2u);
+    ensure_equals(g->getGeometryN(0)->getGeometryTypeId(), geos::geom::GEOS_CURVEPOLYGON);
+    ensure_equals(g->getGeometryN(1)->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
+}
+
+// Invalid CompoundCurve with Point as a member
+template<>
+template<>
+void object::test<36>
+()
+{
+    testParseError("01090000200E160000010000000101000000000000000000F03F000000000000F03F",
+                   "ParseException: Expected SimpleCurve but got Point");
 }
 
 } // namespace tut
