@@ -112,11 +112,9 @@ int main(int argc, char** argv) {
 
     std::ifstream f(fname);
     std::string line;
-    long i = 0;
     while(std::getline(f, line)) {
         if (line != "") {
             geoms.push_back(GEOSGeomFromWKT(line.c_str()));
-            i++;
         }
     }
     f.close();
