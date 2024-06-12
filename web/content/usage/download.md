@@ -55,7 +55,7 @@ Options are specified via [`cmake` variables](https://cmake.org/cmake/help/lates
 They are specified on the `cmake` cmdline as `-DVAR=VALUE`.
 
 {{< hint warning >}}
-*NOTE: Running cmake with no variables does NOT clear current variable settings. They must be set explicitly on the cmdline or interactively using `ccmake ..`. To revert to the defaults, clear the build directory contents using `rm -rf *`.*
+*NOTE: Running cmake with no variables does NOT clear current variable settings. They must be set explicitly on the cmdline, or interactively using `ccmake ..`. To revert to the defaults, clear the build directory contents using `rm -rf *`.*
 {{< /hint >}}
 
 | Option               | Default    | Note  |
@@ -63,9 +63,10 @@ They are specified on the `cmake` cmdline as `-DVAR=VALUE`.
 | CMAKE_BUILD_TYPE     | Release    | Use `Debug` to build with debug flags and optimizations off. Use `Release` for packaging and production installs. Use `RelWithDebInfo` for optimized build with debug symbols. |
 | CMAKE_INSTALL_PREFIX | /usr/local | Set to install root. Libraries end up in `./lib` or `./lib64`, headers in `./include`, executables in `./bin` |
 | BUILD_DOCUMENTATION  | ON         | Attempt to find `doxygen` executable and build API docs |
-| BUILD_SHARED_LIBS    | ON         | Build dynamically linkable libraries. |
-| BUILD_TESTING        | ON         | Build unit tests. |
-| USE_CCACHE           | OFF        | Use [`ccache`](https://ccache.dev/) to compile C/C++ objects, making subsequent builds quicker. |
+| BUILD_SHARED_LIBS    | ON         | Build dynamically linkable libraries |
+| BUILD_TESTING        | ON         | Build unit tests |
+| BUILD_BENCHMARKS     | OFF        | Build benchmark tests |
+| USE_CCACHE           | OFF        | Use [`ccache`](https://ccache.dev/) to compile C/C++ objects, making subsequent builds quicker |
 
 
 ## Testing
