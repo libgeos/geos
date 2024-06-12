@@ -59,7 +59,7 @@
       "url" : "https://libgeos.org/usage/download/",
       "headline": "Download and Build",
       "description": "Download Project        Release Release Date First Release Final Release Download Link Changes     3.12.2 2024\/06\/05 2023\/06\/27 2027\/07\/01 geos-3.12.2.tar.bz2 Changes   3.11.4 2024\/06\/05 2022\/07\/01 2026\/07\/01 geos-3.11.4.tar.bz2 Changes   3.10.6 2023\/11\/11 2021\/10\/20 2025\/10\/20 geos-3.10.6.tar.bz2 Changes   3.9.5 2023\/11\/12 2020\/12\/09 2024\/12\/09 geos-3.9.5.tar.bz2 Changes   3.8.4 EOL 2023\/11\/12 2019\/10\/10 2023\/11\/12 geos-3.8.4.tar.bz2 Changes    Old releases can be downloaded from https:\/\/download.",
-      "wordCount" : "408",
+      "wordCount" : "413",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1637,7 +1637,7 @@ They are specified on the <code>cmake</code> cmdline as <code>-DVAR=VALUE</code>
 
 <blockquote class="gdoc-hint note">
   <div class="gdoc-hint__title flex align-center"><i class="fa note" title="Note"></i></div>
-  <div class="gdoc-hint__text"><em>NOTE: Running cmake with no variables does NOT clear current variable settings. They must be set explicitly on the cmdline or interactively using <code>ccmake ..</code>. To revert to the defaults, clear the build directory contents using <code>rm -rf *</code>.</em></div>
+  <div class="gdoc-hint__text"><em>NOTE: Running cmake with no variables does NOT clear current variable settings. They must be set explicitly on the cmdline, or interactively using <code>ccmake ..</code>. To revert to the defaults, clear the build directory contents using <code>rm -rf *</code>.</em></div>
 </blockquote>
 
 <div class="table-wrap"> <table>
@@ -1667,12 +1667,17 @@ They are specified on the <code>cmake</code> cmdline as <code>-DVAR=VALUE</code>
 <tr>
 <td style="text-align:center">BUILD_SHARED_LIBS</td>
 <td style="text-align:center">ON</td>
-<td style="text-align:center">Build dynamically linkable libraries.</td>
+<td style="text-align:center">Build dynamically linkable libraries</td>
 </tr>
 <tr>
 <td style="text-align:center">BUILD_TESTING</td>
 <td style="text-align:center">ON</td>
-<td style="text-align:center">Build unit tests.</td>
+<td style="text-align:center">Build unit tests</td>
+</tr>
+<tr>
+<td style="text-align:center">BUILD_BENCHMARKS</td>
+<td style="text-align:center">OFF</td>
+<td style="text-align:center">Build benchmark tests</td>
 </tr>
 <tr>
 <td style="text-align:center">USE_CCACHE</td>
@@ -1680,7 +1685,7 @@ They are specified on the <code>cmake</code> cmdline as <code>-DVAR=VALUE</code>
 <td style="text-align:center">Use <a
   class="gdoc-markdown__link--code"
   href="https://ccache.dev/"
-><code>ccache</code></a> to compile C/C++ objects, making subsequent builds quicker.</td>
+><code>ccache</code></a> to compile C/C++ objects, making subsequent builds quicker</td>
 </tr>
 </tbody>
 </table> </div>
