@@ -105,7 +105,7 @@ public:
 
     void addToResult(std::unique_ptr<TaggedLineSegment> seg);
 
-    void removeRingEndpoint();
+    TaggedLineSegment* removeRingEndpoint();
 
     std::unique_ptr<geom::Geometry> asLineString() const;
 
