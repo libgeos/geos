@@ -38,6 +38,15 @@ GEOSGeometry* readGeom(std::string& fname) {
     return geom;
 }
 
+void write(GEOSGeometry* g) 
+{
+    GEOSWKTWriter* writer = GEOSWKTWriter_create();
+    char* wkt = GEOSWKTWriter_write(writer, g);
+    GEOSWKTWriter_destroy(writer);
+    std::cout << wkt << std::endl;
+    GEOSFree(wkt);
+}
+
     //----------  Run test  ---------------
 void run(std::string& fname, int nRuns, double tolerance)
 {
@@ -57,8 +66,8 @@ void run(std::string& fname, int nRuns, double tolerance)
         //std::cout << "Run " << i << std::endl;
         if (! isEqualExact || ! isDiffEmpty) {
             nErrors++;
-            std::cout << "simplified results are not identical" << std::endl;
-            std::cout << diff << std::endl;
+            std::cout << "Run " << i << " - simplified results not identical: equals=" << isEqualExact << ", empty=" << isDiffEmpty << std::endl;
+            write(diff);
         }
 
         GEOSGeom_destroy(simp1);
