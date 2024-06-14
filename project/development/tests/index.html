@@ -70,7 +70,7 @@
       "url" : "https://libgeos.org/project/development/tests/",
       "headline": "Testing",
       "description": "Testing executables are in bin\n See also the ctest documentation.  Unit Tests     The GEOS unit tests are written using the TUT framework. There are tests for both the C\u002b\u002b code and the C API. The test source files are in the test\/unit directory. The test group names are in the group declaration in each XXXTest.cpp file. By convention the test group name is based on the test file path and name.",
-      "wordCount" : "254",
+      "wordCount" : "303",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1543,10 +1543,23 @@ Options:
         </a>
     </h3>
 </div>
-<p>There are performance tests which are built, but not run as part of the standard test suite.
-These can be run from the command line:</p>
+<p>There are performance tests which are not built or run as part of the standard test suite.
+Building this is enabled by the <code>cmake -DBUILD_BENCHMARKS=ON</code> flag.
+The various tests can be run from the command line, e.g.:</p>
 <pre tabindex="0"><code>$ bin/perf_iterated_buffer
-</code></pre>
+</code></pre><div class="gdoc-page__anchorwrap">
+    <h3 id="memory-usage-testing"
+    >
+        Memory Usage testing
+        <a data-clipboard-text="https://libgeos.org/project/development/tests/#memory-usage-testing" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Memory Usage testing" aria-label="Anchor to: Memory Usage testing" href="#memory-usage-testing">
+            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
+        </a>
+    </h3>
+</div>
+<p>In some cases bugs are caused by improper memory access after deallocation (<code>heap-use-after-free</code>).
+This may be able to be detected and reported by using the Address Sanitizer compiler capability.
+Enable this via <code>cmake -DCMAKE_BUILD_TYPE=ASAN</code>.</p>
+
   </article>
 
 
