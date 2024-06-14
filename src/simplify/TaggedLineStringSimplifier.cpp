@@ -187,8 +187,6 @@ TaggedLineStringSimplifier::simplifyRingEndpoint(double distanceTolerance)
         if (simpSeg.distance(endPt) <= distanceTolerance &&
             isTopologyValid(line, firstSeg, lastSeg, simpSeg))
         {
-            line->removeRingEndpoint();
-            /*
             //-- don't know if segments are original or new, so remove from all indexes
             inputIndex->remove(firstSeg);
             inputIndex->remove(lastSeg);
@@ -198,7 +196,6 @@ TaggedLineStringSimplifier::simplifyRingEndpoint(double distanceTolerance)
             TaggedLineSegment* flatSeg = line->removeRingEndpoint();
             //-- removed endpoint alters an existing result edge
             outputIndex->add(flatSeg);
-            */
         }
     }
 }
