@@ -281,7 +281,7 @@ TaggedLineString::addToResult(std::unique_ptr<TaggedLineSegment> seg)
 #endif
 }
 
-TaggedLineSegment*
+const TaggedLineSegment*
 TaggedLineString::removeRingEndpoint()
 {
     auto* firstSeg = resultSegs.front();

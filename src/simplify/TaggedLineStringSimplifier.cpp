@@ -193,7 +193,7 @@ TaggedLineStringSimplifier::simplifyRingEndpoint(double distanceTolerance)
             outputIndex->remove(firstSeg);
             outputIndex->remove(lastSeg);
 
-            TaggedLineSegment* flatSeg = line->removeRingEndpoint();
+            const TaggedLineSegment* flatSeg = line->removeRingEndpoint();
             //-- removed endpoint alters an existing result edge
             outputIndex->add(flatSeg);
         }
