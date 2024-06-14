@@ -36,6 +36,7 @@
   - Centroid: Fix crash on polygons with empty holes (GH-1075, Dan Baston)
   - GEOSRelatePatternMatch: Fix crash on invalid DE-9IM pattern (GH-1089, Dan Baston)
   - CoveragePolygonValidator: add section performance optimization (GH-1099, Martin Davis)
+  - TopologyPreservingSimplifier: fix to remove ring endpoints safely (GH-1110, Martin Davis)
 
 ## Changes in 3.12.0
 2023-06-27
