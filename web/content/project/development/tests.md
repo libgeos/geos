@@ -61,9 +61,17 @@ Options:
 
 ### Performance Tests
 
-There are performance tests which are built, but not run as part of the standard test suite.
-These can be run from the command line:
+There are performance tests which are not built or run as part of the standard test suite.
+Building this is enabled by the `cmake -DBUILD_BENCHMARKS=ON` flag.
+The various tests can be run from the command line, e.g.:
 
 ```
 $ bin/perf_iterated_buffer
 ```
+
+### Memory Usage testing
+
+In some cases bugs are caused by improper memory access after deallocation (`heap-use-after-free`).
+This may be able to be detected and reported by using the Address Sanitizer compiler capability.
+Enable this via `cmake -DCMAKE_BUILD_TYPE=ASAN`.
+

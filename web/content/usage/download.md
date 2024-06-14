@@ -60,13 +60,14 @@ They are specified on the `cmake` cmdline as `-DVAR=VALUE`.
 
 | Option               | Default    | Note  |
 | :------------------: | :--------: | :---: |
-| CMAKE_BUILD_TYPE     | Release    | Use `Debug` to build with debug flags and optimizations off. Use `Release` for packaging and production installs. Use `RelWithDebInfo` for optimized build with debug symbols. |
+| CMAKE_BUILD_TYPE     | Release    | Use `Debug` to build with debug flags and optimizations off. Use `Release` for packaging and production installs. Use `RelWithDebInfo` for optimized build with debug symbols. Use `ASAN` to enable memory usage checking. |
 | CMAKE_INSTALL_PREFIX | /usr/local | Set to install root. Libraries end up in `./lib` or `./lib64`, headers in `./include`, executables in `./bin` |
 | BUILD_DOCUMENTATION  | ON         | Attempt to find `doxygen` executable and build API docs |
 | BUILD_SHARED_LIBS    | ON         | Build dynamically linkable libraries |
 | BUILD_TESTING        | ON         | Build unit tests |
 | BUILD_BENCHMARKS     | OFF        | Build benchmark tests |
 | USE_CCACHE           | OFF        | Use [`ccache`](https://ccache.dev/) to compile C/C++ objects, making subsequent builds quicker |
+
 
 
 ## Testing
