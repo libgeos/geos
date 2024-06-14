@@ -281,15 +281,16 @@ TaggedLineString::addToResult(std::unique_ptr<TaggedLineSegment> seg)
 #endif
 }
 
-void
+const TaggedLineSegment*
 TaggedLineString::removeRingEndpoint()
 {
     auto* firstSeg = resultSegs.front();
     auto* lastSeg = resultSegs.back();
 
     firstSeg->p0 = lastSeg->p0;
-    delete lastSeg;
     resultSegs.pop_back();
+    delete lastSeg;
+    return firstSeg;
 }
 
 } // namespace geos::simplify
