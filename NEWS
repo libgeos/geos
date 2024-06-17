@@ -3,7 +3,8 @@ xxxx-xx-xx
 
 - Bug fixes / improvements:
   - Intersection: change to using DoubleDouble computation to improve robustness (GH-937, Martin Davis)
-
+  - Centroid: Fix crash on polygons with empty holes (GH-1075, Dan Baston)
+  - GEOSRelatePatternMatch: Fix crash on invalid DE-9IM pattern (GH-1089, Dan Baston)
 
 ## Changes in 3.9.5
 2023-11-12
