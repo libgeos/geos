@@ -3,6 +3,10 @@
 
 - Fixes:
   - TopologyPreservingSimplifier: fix to remove ring endpoints safely (GH-1110, Martin Davis)
+  - Centroid: Fix crash on polygons with empty holes (GH-1075, Dan Baston)
+  - MinimumClearance: Fix crash on NaN inputs (GH-1082, Dan Baston)
+  - GEOSLineSubstring: Fix crash on NaN length fractions (GH-1088, Dan Baston)
+  - GEOSRelatePatternMatch: Fix crash on invalid DE-9IM pattern (GH-1089, Dan Baston)
 
 ## Changes in 3.12.2
 2024-06-05
