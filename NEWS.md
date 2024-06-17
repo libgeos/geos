@@ -1,3 +1,11 @@
+## Changes in 3.11.5
+20xx-xx-xx
+
+- Fixes/Improvements:
+  - Centroid: Fix crash on polygons with empty holes (GH-1075, Dan Baston)
+  - MinimumClearance: Fix crash on NaN inputs (GH-1082, Dan Baston)
+  - GEOSRelatePatternMatch: Fix crash on invalid DE-9IM pattern (GH-1089, Dan Baston)
+
 ## Changes in 3.11.4
 2024-06-05
 
@@ -10,7 +18,7 @@
   - Fix IsSimpleOp for MultiPoint with empty element (GH-1005, Martin Davis)
   - Fix reading WKT with EMPTY token with white space (GH-1025, Mike Taves)
   - Fix PreparedPolygonContains for GC with MultiPoint (GH-1008, Martin Davis)
-  
+
 ## Changes in 3.11.3
 2023-11-11
 
