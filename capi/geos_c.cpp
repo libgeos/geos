@@ -1205,6 +1205,24 @@ extern "C" {
     }
 
     Geometry*
+    GEOSGeom_createCircularString(CoordinateSequence* cs)
+    {
+        return GEOSGeom_createCircularString_r(handle, cs);
+    }
+
+    Geometry*
+    GEOSGeom_createCompoundCurve(Geometry** curves, unsigned int ngeoms)
+    {
+        return GEOSGeom_createCompoundCurve_r(handle, curves, ngeoms);
+    }
+
+    Geometry*
+    GEOSGeom_createCurvePolygon(Geometry* shell, Geometry** holes, unsigned int nholes)
+    {
+        return GEOSGeom_createCurvePolygon_r(handle, shell, holes, nholes);
+    }
+
+    Geometry*
     GEOSGeom_clone(const Geometry* g)
     {
         return GEOSGeom_clone_r(handle, g);
@@ -1726,6 +1744,24 @@ extern "C" {
     GEOSGeom_createEmptyPolygon()
     {
         return GEOSGeom_createEmptyPolygon_r(handle);
+    }
+
+    geos::geom::Geometry*
+    GEOSGeom_createEmptyCircularString()
+    {
+        return GEOSGeom_createEmptyCircularString_r(handle);
+    }
+
+    geos::geom::Geometry*
+    GEOSGeom_createEmptyCompoundCurve()
+    {
+        return GEOSGeom_createEmptyCompoundCurve_r(handle);
+    }
+
+    geos::geom::Geometry*
+    GEOSGeom_createEmptyCurvePolygon()
+    {
+        return GEOSGeom_createEmptyCurvePolygon_r(handle);
     }
 
     geos::geom::Geometry*

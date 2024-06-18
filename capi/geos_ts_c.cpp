@@ -31,9 +31,12 @@
 #include <geos/coverage/CoverageValidator.h>
 #include <geos/coverage/CoverageSimplifier.h>
 #include <geos/coverage/CoverageUnion.h>
+#include <geos/geom/CircularString.h>
+#include <geos/geom/CompoundCurve.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Curve.h>
+#include <geos/geom/CurvePolygon.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryCollection.h>
@@ -46,6 +49,7 @@
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/MultiPoint.h>
 #include <geos/geom/MultiPolygon.h>
+#include <geos/geom/MultiSurface.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/Polygon.h>
 #include <geos/geom/PrecisionModel.h>
@@ -2078,6 +2082,12 @@ extern "C" {
             case GEOS_MULTIPOLYGON:
                 g = gf->createMultiPolygon(std::move(vgeoms));
                 break;
+            case GEOS_MULTICURVE:
+                g = gf->createMultiCurve(std::move(vgeoms));
+                break;
+            case GEOS_MULTISURFACE:
+                g = gf->createMultiSurface(std::move(vgeoms));
+                break;
             default:
                 handle->ERROR_MESSAGE("Unsupported type request for GEOSGeom_createCollection_r");
             }
@@ -2988,6 +2998,113 @@ extern "C" {
             const GeometryFactory* gf = handle->geomFactory;
             Envelope env(xmin, xmax, ymin, ymax);
             return (gf->toGeometry(&env)).release();
+        });
+    }
+
+    Geometry*
+    GEOSGeom_createCircularString_r(GEOSContextHandle_t extHandle, CoordinateSequence* cs)
+    {
+        return execute(extHandle, [&]() {
+            GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+            const GeometryFactory* gf = handle->geomFactory;
+
+            return gf->createCircularString(std::unique_ptr<CoordinateSequence>(cs)).release();
+        });
+    }
+
+    Geometry*
+    GEOSGeom_createEmptyCircularString_r(GEOSContextHandle_t extHandle)
+    {
+        return execute(extHandle, [&]() {
+            GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+            const GeometryFactory* gf = handle->geomFactory;
+
+            return gf->createCircularString(false, false).release();
+        });
+    }
+
+    Geometry*
+    GEOSGeom_createCompoundCurve_r(GEOSContextHandle_t extHandle, Geometry** geoms, unsigned int ngeoms)
+    {
+        return execute(extHandle, [&]() -> Geometry* {
+            GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+            const GeometryFactory* gf = handle->geomFactory;
+
+            bool invalid_input = false;
+            std::vector<std::unique_ptr<SimpleCurve>> geom_vec(ngeoms);
+            for (std::size_t i = 0; i < ngeoms; i++) {
+                if (SimpleCurve* c = dynamic_cast<SimpleCurve*>(geoms[i])) {
+                    geom_vec[i].reset(c);
+                } else {
+                    delete geoms[i];
+                    invalid_input = true;
+                }
+            }
+
+            if (invalid_input) {
+                throw IllegalArgumentException("Input is not a SimpleCurve");
+            }
+
+            return gf->createCompoundCurve(std::move(geom_vec)).release();
+        });
+    }
+
+    Geometry*
+    GEOSGeom_createEmptyCompoundCurve_r(GEOSContextHandle_t extHandle)
+    {
+        return execute(extHandle, [&]() {
+            GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+            const GeometryFactory* gf = handle->geomFactory;
+
+            return gf->createCompoundCurve().release();
+        });
+    }
+
+    Geometry*
+    GEOSGeom_createCurvePolygon_r(GEOSContextHandle_t extHandle, Geometry* p_shell, Geometry** p_holes, unsigned int nholes)
+    {
+        return execute(extHandle, [&]() {
+            GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+            const GeometryFactory* gf = handle->geomFactory;
+            bool good_holes = true, good_shell = true;
+
+            std::unique_ptr<Curve> shell;
+            std::vector<std::unique_ptr<Curve>> holes(nholes);
+
+            if (Curve* c = dynamic_cast<Curve*>(p_shell)) {
+                shell.reset(c);
+            } else {
+                good_shell = false;
+                delete p_shell;
+            }
+
+            for (std::size_t i = 0; i < nholes; i++) {
+                if (Curve* c = dynamic_cast<Curve*>(p_holes[i])) {
+                    holes[i].reset(c);
+                } else {
+                    good_shell = false;
+                    delete p_holes[i];
+                }
+            }
+
+            if (good_shell && good_holes) {
+                return gf->createCurvePolygon(std::move(shell), std::move(holes)).release();
+            } else if (!good_shell) {
+                throw IllegalArgumentException("Shell is not a Curve");
+            } else {
+                throw IllegalArgumentException("Hole is not a Curve");
+            }
+        });
+    }
+
+
+    Geometry*
+    GEOSGeom_createEmptyCurvePolygon_r(GEOSContextHandle_t extHandle)
+    {
+        return execute(extHandle, [&]() {
+            GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+            const GeometryFactory* gf = handle->geomFactory;
+            return gf->createCurvePolygon(false, false).release();
         });
     }
 

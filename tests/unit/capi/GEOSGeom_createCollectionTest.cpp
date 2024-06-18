@@ -172,5 +172,38 @@ void object::test<7>
     }
 }
 
+// Create MultiCurve
+template<>
+template<>
+void object::test<8>
+()
+{
+    GEOSGeometry* geoms[2];
+    geoms[0] = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    geoms[1] = fromWKT("LINESTRING (2 0, 3 3)");
+
+    result_ = GEOSGeom_createCollection(GEOS_MULTICURVE, geoms, 2);
+    expected_ = fromWKT("MULTICURVE (CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 3 3))");
+
+    ensure_geometry_equals_identical(result_, expected_);
+}
+
+// Create MultiSurface
+template<>
+template<>
+void object::test<9>
+()
+{
+    GEOSGeometry* geoms[2];
+    geoms[0] = fromWKT("POLYGON ((0 0, 1 0, 1 1, 0 0))");
+    geoms[1] = fromWKT("CURVEPOLYGON (CIRCULARSTRING (10 10, 20 10, 15 15, 10 10))");
+
+    result_ = GEOSGeom_createCollection(GEOS_MULTISURFACE, geoms, 2);
+    expected_ = fromWKT("MULTISURFACE (((0 0, 1 0, 1 1, 0 0)), CURVEPOLYGON (CIRCULARSTRING (10 10, 20 10, 15 15, 10 10)))");
+
+    ensure_geometry_equals_identical(result_, expected_);
+}
+
+
 } // namespace tut
 

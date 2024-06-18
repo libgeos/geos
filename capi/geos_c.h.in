@@ -763,6 +763,36 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_clone_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry* g);
 
+/** \see GEOSGeom_createCircularString */
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createCircularString_r(
+    GEOSContextHandle_t handle,
+    GEOSCoordSequence* s);
+
+/** \see GEOSGeom_createEmptyCircularString */
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCircularString_r(
+    GEOSContextHandle_t handle);
+
+/** \see GEOSGeom_createCompoundCurve */
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createCompoundCurve_r(
+    GEOSContextHandle_t handle,
+    GEOSGeometry** curves,
+    unsigned int ncurves);
+
+/** \see GEOSGeom_createEmptyCompoundCurve */
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCompoundCurve_r(
+    GEOSContextHandle_t handle);
+
+/** \see GEOSGeom_createCurvePolygon */
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createCurvePolygon_r(
+    GEOSContextHandle_t handle,
+    GEOSGeometry* shell,
+    GEOSGeometry** holes,
+    unsigned int nholes);
+
+/** \see GEOSGeom_createEmptyCurvePolygon */
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCurvePolygon_r(
+    GEOSContextHandle_t handle);
+
 /* ========= Memory management ========= */
 
 /** \see GEOSGeom_destroy */
@@ -2457,6 +2487,68 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createPolygon(
     GEOSGeometry* shell,
     GEOSGeometry** holes,
     unsigned int nholes);
+
+/**
+* Creates a CircularString geometry.
+* \param s Input coordinate sequence, ownership passes to the geometry
+* \return A newly allocated CircularString geometry. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+* \since 3.13
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createCircularString(GEOSCoordSequence* s);
+
+/**
+* Creates an empty CircularString geometry.
+* \return A newly allocated CircularString geometry. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+* \since 3.13
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCircularString();
+
+/**
+* Creates a CompoundCurve geometry.
+* \param curves A list of geometries that will form the CompoundCurve
+* \param ncurves The number of geometries in the curves list
+* \return A newly allocated CompoundCurve geometry. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+* \since 3.13
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createCompoundCurve(GEOSGeometry** curves,
+                                                           unsigned int ncurves);
+
+/**
+* Creates an empty CompoundCurve geometry.
+* \return A newly allocated CompoundCurve geometry. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+* \since 3.13
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCompoundCurve();
+
+/**
+* Creates a CurvePolygon geometry from ring geometries.
+* \param shell A ring that is the exterior ring of the polygon.
+* \param holes An array of rings that are the holes.
+* \param nholes The number of rings in the holes array.
+* \return A newly allocated geometry. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+* \note The holes argument is an array of GEOSGeometry* objects.
+*       The caller **retains ownership** of the containing array,
+*       but the ownership of the pointed-to objects is transferred
+*       to the returned \ref GEOSGeometry.
+* \since 3.13
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createCurvePolygon(
+    GEOSGeometry* shell,
+    GEOSGeometry** holes,
+    unsigned int nholes);
+
+/**
+* Creates an empty CurvePolygon geometry.
+* \return A newly allocated CurvePolygon geometry. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+* \since 3.13
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCurvePolygon();
 
 /**
 * Create a geometry collection.
