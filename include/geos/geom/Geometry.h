@@ -70,7 +70,7 @@ namespace geos { // geos
 namespace geom { // geos::geom
 
 /// Geometry types
-enum GeometryTypeId {
+enum GeometryTypeId : int {
     /// a point
     GEOS_POINT,
     /// a linestring
