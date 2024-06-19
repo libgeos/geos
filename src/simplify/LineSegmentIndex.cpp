@@ -54,15 +54,14 @@ private:
 
     const LineSegment* querySeg;
 
-    std::unique_ptr< std::vector<LineSegment*> > items;
+    std::vector<const LineSegment*> items;
 
 public:
 
     LineSegmentVisitor(const LineSegment* s)
         :
         ItemVisitor(),
-        querySeg(s),
-        items(new std::vector<LineSegment*>())
+        querySeg(s)
     {}
 
     ~LineSegmentVisitor() override
@@ -70,42 +69,22 @@ public:
         // nothing to do, LineSegments are not owned by us
     }
 
-    LineSegmentVisitor(const LineSegmentVisitor& o)
-        :
-        ItemVisitor(),
-        querySeg(o.querySeg),
-        items(new std::vector<LineSegment*>(*(o.items.get())))
-    {
-    }
-
-    LineSegmentVisitor&
-    operator=(const LineSegmentVisitor& o)
-    {
-        if(this == &o) {
-            return *this;
-        }
-        querySeg = o.querySeg;
-        items.reset(new std::vector<LineSegment*>(*(o.items.get())));
-        return *this;
-    }
-
     void
     visitItem(void* item) override
     {
-        LineSegment* seg = static_cast<LineSegment*>(item);
+        const LineSegment* seg = static_cast<const LineSegment*>(item);
         if(Envelope::intersects(seg->p0, seg->p1,
                                 querySeg->p0, querySeg->p1)) {
-            items->push_back(seg);
+            items.push_back(seg);
         }
     }
 
-    std::unique_ptr< std::vector<LineSegment*> >
+    std::vector<const LineSegment*>
     getItems()
     {
         // NOTE: Apparently, this is 'source' method giving up the object resource.
         return std::move(items);
     }
-
 
 };
 
@@ -144,7 +123,7 @@ LineSegmentIndex::remove(const LineSegment* seg)
 }
 
 /*public*/
-std::unique_ptr< std::vector<LineSegment*> >
+std::vector<const LineSegment*>
 LineSegmentIndex::query(const LineSegment* querySeg)
 {
     Envelope env(querySeg->p0, querySeg->p1);
@@ -152,7 +131,7 @@ LineSegmentIndex::query(const LineSegment* querySeg)
     LineSegmentVisitor visitor(querySeg);
     index.query(&env, visitor);
 
-    std::unique_ptr< std::vector<LineSegment*> > itemsFound = visitor.getItems();
+    auto itemsFound = visitor.getItems();
 
     return itemsFound;
 }
