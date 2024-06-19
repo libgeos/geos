@@ -21,6 +21,7 @@
 #include <geos/geom/LineSegment.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/util.h>
+#include <geos/util/IllegalArgumentException.h>
 
 #include <vector>
 #include <memory> // for unique_ptr
@@ -58,6 +59,9 @@ void
 DouglasPeuckerLineSimplifier::setDistanceTolerance(
     double nDistanceTolerance)
 {
+    if (std::isnan(nDistanceTolerance)) {
+        throw util::IllegalArgumentException("Tolerance must not be NaN");
+    }
     distanceTolerance = nDistanceTolerance;
 }
 
@@ -110,6 +114,7 @@ DouglasPeuckerLineSimplifier::simplifySection(
     std::size_t j)
 {
     if((i + 1) == j) {
+
         return;
     }
 
