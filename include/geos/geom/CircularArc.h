@@ -47,7 +47,7 @@ public:
 
     int orientation() const {
         if (!m_orientation_known) {
-            m_orientation = algorithm::Orientation::index(center(), p0, p1);
+            m_orientation = algorithm::Orientation::index(p0, p1, p2);
             m_orientation_known = true;
         }
         return m_orientation;
@@ -69,6 +69,43 @@ public:
         }
 
         return m_radius;
+    }
+
+    bool isLinear() const {
+        return std::isnan(radius());
+    }
+
+    bool isCircle() const {
+        return p0.equals(p2);
+    }
+
+    double angle() const {
+        if (isCircle()) {
+            return 2*MATH_PI;
+        }
+
+        auto t0 = theta0();
+        auto t2 = theta2();
+
+        if (orientation() == algorithm::Orientation::COUNTERCLOCKWISE) {
+            std::swap(t0, t2);
+        }
+
+        if (t0 < t2) {
+            t0 += 2*MATH_PI;
+        }
+
+        auto diff = t0-t2;
+
+        return diff;
+    }
+
+    double length() const {
+        if (isLinear()) {
+            return p0.distance(p2);
+        }
+
+        return angle()*radius();
     }
 
     double theta0() const {
@@ -123,11 +160,11 @@ public:
         t2 -= t0;
         theta -= t0;
 
-        if (t2 < 0){
-            t2 += 2*algorithm::CircularArcs::PI;
+        if (t2 < 0) {
+            t2 += 2*MATH_PI;
         }
         if (theta < 0) {
-            theta += 2*algorithm::CircularArcs::PI;
+            theta += 2*MATH_PI;
         }
 
         return theta >= t2;

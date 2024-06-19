@@ -91,7 +91,7 @@ void object::test<2>()
     // Geometry size functions
     ensure("isEmpty", !cp_->isEmpty());
     ensure_THROW(cp_->getArea(), geos::util::UnsupportedOperationException);
-    ensure_THROW(cp_->getLength(), geos::util::UnsupportedOperationException);
+    ensure_equals("getLength", cp_->getLength(), 19.236489581872586, 1e-8);
     ensure_equals("getNumGeometries", cp_->getNumGeometries(), 1u);
     ensure_equals("getNumPoints", cp_->getNumPoints(), 14u);
     ensure_equals("getNumInteriorRing", cp_->getNumInteriorRing(), 1u);

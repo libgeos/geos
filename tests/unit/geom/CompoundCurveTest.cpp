@@ -65,7 +65,7 @@ void object::test<1>()
     ensure("getCoordinate", cc->getCoordinate() == nullptr);
 
     ensure_equals("getArea", cc->getArea(), 0);
-    ensure_THROW(cc_->getLength(), geos::util::UnsupportedOperationException);
+    ensure_equals("getLength", cc->getLength(), 0);
 }
 
 // Basic Geometry API
@@ -81,7 +81,7 @@ void object::test<2>()
     // Geometry size functions
     ensure("isEmpty", !cc_->isEmpty());
     ensure_equals("getArea", cc_->getArea(), 0);
-    ensure_THROW(cc_->getLength(), geos::util::UnsupportedOperationException);
+    ensure_equals("getLength", cc_->getLength(), geos::MATH_PI + 2);
     ensure_equals("getNumGeometries", cc_->getNumGeometries(), 1u);
     ensure_equals("getNumCurves", cc_->getNumCurves(), 2u);
     ensure_equals("getNumPoints", cc_->getNumPoints(), 5u); // FIXME should this be 5 or 4?

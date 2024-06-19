@@ -58,7 +58,7 @@ void object::test<1>()
     ensure(cs->getCoordinate() == nullptr);
 
     ensure_equals(cs->getArea(), 0);
-    ensure_THROW(cs_->getLength(), geos::util::UnsupportedOperationException);
+    ensure_equals(cs->getLength(), 0);
 }
 
 // Basic Geometry API
@@ -74,7 +74,7 @@ void object::test<2>()
     // Geometry size functions
     ensure("isEmpty", !cs_->isEmpty());
     ensure_equals("getArea", cs_->getArea(), 0);
-    ensure_THROW(cs_->getLength(), geos::util::UnsupportedOperationException);
+    ensure_equals("getLength", cs_->getLength(), 2*geos::MATH_PI);
     ensure_equals("getNumGeometries", cs_->getNumGeometries(), 1u);
     ensure_equals("getNumPoints", cs_->getNumPoints(), 5u);
     geos::geom::Envelope expected(0, 4, -1, 1);
