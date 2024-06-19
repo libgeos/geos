@@ -278,7 +278,7 @@ TaggedLineStringSimplifier::hasOutputIntersection(
     //std::unique_ptr<std::vector<LineSegment*>>
     auto querySegs = outputIndex->query(&flatSeg);
 
-    for(const LineSegment* querySeg : *querySegs) {
+    for(const LineSegment* querySeg : querySegs) {
         if(hasInvalidIntersection(*querySeg, flatSeg)) {
             return true;
         }
@@ -314,7 +314,7 @@ TaggedLineStringSimplifier::hasInputIntersection(
 {
     const auto& querySegs = inputIndex->query(&flatSeg);
 
-    for(const LineSegment* ls : *querySegs) {
+    for(const LineSegment* ls : querySegs) {
         const TaggedLineSegment* querySeg = static_cast<const TaggedLineSegment*>(ls);
 
         if (hasInvalidIntersection(*ls, flatSeg)) {
