@@ -157,5 +157,15 @@ void object::test<8>()
     ensure("curved geometry not supported", result_ == nullptr);
 }
 
+template<>
+template<>
+void object::test<9>()
+{
+    geom1_ = fromWKT("GEOMETRYCOLLECTION(POINT(0 0 59.083333333333336), POINT(1 1 59.083333333333336), LINESTRING(2 4 111 1, 2 223 22 2), POLYGON((42 -2.222222223222222e+155 111 1, 2 3 1 1, 2 4 111 NaN, 42 -2.222222223222222e+155 111 NaN)), POLYGON((2.2222222212222224e+149 4 111 1, 42 -2.222222222222222e+149 22 2, 2 4 111 1, 22 2222222222222223 22 NaN, 2.2222222212222224e+149 4 111 NaN)))");
+    geom2_ = fromWKT("LINESTRING (1.6409301755752343e+149 -5.298190649085575e+148, 1.6666666660752404e+149 -5.55555555396982e+148)");
+
+    result_ = GEOSIntersection(geom1_, geom2_);
+}
+
 } // namespace tut
 
