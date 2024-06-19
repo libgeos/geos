@@ -7,6 +7,7 @@
 #include <geos/geom/MultiSurface.h>
 #include <geos/geom/IntersectionMatrix.h>
 #include <geos/io/WKTReader.h>
+#include <geos/util/UnsupportedOperationException.h>
 
 using geos::geom::CoordinateXY;
 
@@ -85,7 +86,7 @@ void object::test<2>()
     // Geometry size functions
     ensure("isEmpty", !ms_->isEmpty());
     ensure_THROW(ms_->getArea(), geos::util::UnsupportedOperationException);
-    ensure_THROW(ms_->getLength(), geos::util::UnsupportedOperationException);
+    ensure_equals("getLength", ms_->getLength(), 10.283185307179586);
     ensure_equals("getNumGeometries", ms_->getNumGeometries(), 2u);
     ensure_equals("getNumPoints", ms_->getNumPoints(), 10u);
     ensure(!ms_->getEnvelopeInternal()->isNull());
