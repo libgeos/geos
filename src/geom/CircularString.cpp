@@ -12,6 +12,7 @@
  *
  **********************************************************************/
 
+#include <geos/geom/CircularArc.h>
 #include <geos/geom/CircularString.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/GeometryFactory.h>
@@ -47,6 +48,23 @@ GeometryTypeId
 CircularString::getGeometryTypeId() const
 {
     return GEOS_CIRCULARSTRING;
+}
+
+double
+CircularString::getLength() const
+{
+    if (isEmpty()) {
+        return 0;
+    }
+
+    const CoordinateSequence& coords = *getCoordinatesRO();
+
+    double tot = 0;
+    for (std::size_t i = 2; i < coords.size(); i += 2) {
+        auto len = CircularArc(coords[i-2], coords[i-1], coords[i]).length();
+        tot += len;
+    }
+    return tot;
 }
 
 CircularString*
