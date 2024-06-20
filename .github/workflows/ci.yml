@@ -398,17 +398,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        xcode: [11.7, 12.4, 13.2.1]
+        xcode: [13.2.1]
         cxxstd: [14]
         build_type: ['ASAN']
-        runs_on: ['macos-11']
+        runs_on: ['macos-12']
         include:
-          - xcode: 13.2.1
+          - xcode: 14.3.1
             cxxstd: 17
             build_type: Debug
-            runs_on: macos-11
+            runs_on: macos-13
           # arm64 build
-          - xcode: 14.3
+          - xcode: 15.4
             cxxstd: 20
             build_type: Release
             runs_on: macOS-14
