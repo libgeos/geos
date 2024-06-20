@@ -38,6 +38,7 @@
   - CoveragePolygonValidator: add section performance optimization (GH-1099, Martin Davis)
   - TopologyPreservingSimplifier: fix to remove ring endpoints safely (GH-1110, Martin Davis)
   - TopologyPreservingSimplifier: fix stack overflow on degenerate inputs (GH-1113, Dan Baston)
+  - DouglasPeuckerSimplifier: fix stack overflow on NaN tolerance (GH-1114, Dan Baston)
 
 ## Changes in 3.12.0
 2023-06-27
