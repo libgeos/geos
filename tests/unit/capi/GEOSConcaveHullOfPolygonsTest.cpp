@@ -54,6 +54,15 @@ void object::test<2>()
     ensure_geometry_equals(geom1_, expected_);
 }
 
+template<>
+template<>
+void object::test<4>()
+{
+    input_ = fromWKT("POLYGON((0 0, 0 0, 0 0))");
+    result_ = GEOSConcaveHullOfPolygons(input_, 0.7, false, false);
+    ensure(GEOSisEmpty(result_));
+}
+
 
 } // namespace tut
 
