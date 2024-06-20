@@ -8,6 +8,7 @@
   - GEOSLineSubstring: Fix crash on NaN length fractions (GH-1088, Dan Baston)
   - GEOSRelatePatternMatch: Fix crash on invalid DE-9IM pattern (GH-1089, Dan Baston)
   - Fix ConcaveHullOfPolygons nested shell handling (GH-1169, Martin Davis)
+  - GEOSConcaveHullOfPolygons, Avoid crash on zero-area input (GH-1071, Dan Baston)
 
 ## Changes in 3.12.2
 2024-06-05
