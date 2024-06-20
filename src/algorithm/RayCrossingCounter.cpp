@@ -211,8 +211,8 @@ RayCrossingCounter::shouldCountCrossing(const geom::CircularArc& arc, const geom
 /// some Coordinates in the returned array will be equal to CoordinateXY::getNull().
 std::array<geom::CoordinateXY, 2>
 RayCrossingCounter::pointsIntersectingHorizontalRay(const geom::CircularArc& arc, const geom::CoordinateXY& origin) {
-    auto c = arc.center();
-    auto R = arc.radius();
+    const auto& c = arc.getCenter();
+    const auto& R = arc.getRadius();
 
     auto dx = std::sqrt(R*R - std::pow(origin.y - c.y, 2) );
 
@@ -262,7 +262,7 @@ RayCrossingCounter::countArc(const CoordinateXY& p1,
     geom::CircularArc arc(p1, p2, p3);
 
     // If the arc is degenerate, process it is two line segments
-    if (arc.isCollinear()) {
+    if (arc.isLinear()) {
         countSegment(p1, p2);
         countSegment(p2, p3);
         return;

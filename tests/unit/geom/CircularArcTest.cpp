@@ -16,18 +16,18 @@ struct test_circulararc_data {
 
     void checkAngle(const CoordinateXY& p0, const CoordinateXY& p1, const CoordinateXY& p2, double expected) {
         CircularArc arc(p0, p1, p2);
-        ensure_equals(p0.toString() + " / " + p1.toString() + " / " + p2.toString(), arc.angle(), expected, eps);
+        ensure_equals(p0.toString() + " / " + p1.toString() + " / " + p2.toString(), arc.getAngle(), expected, eps);
 
         CircularArc rev(p2, p1, p0);
-        ensure_equals(p2.toString() + " / " + p1.toString() + " / " + p0.toString(), rev.angle(), expected, eps);
+        ensure_equals(p2.toString() + " / " + p1.toString() + " / " + p0.toString(), rev.getAngle(), expected, eps);
     }
 
     void checkLength(const CoordinateXY& p0, const CoordinateXY& p1, const CoordinateXY& p2, double expected) {
         CircularArc arc(p0, p1, p2);
-        ensure_equals(p0.toString() + " / " + p1.toString() + " / " + p2.toString(), arc.length(), expected, eps);
+        ensure_equals(p0.toString() + " / " + p1.toString() + " / " + p2.toString(), arc.getLength(), expected, eps);
 
         CircularArc rev(p2, p1, p0);
-        ensure_equals(p2.toString() + " / " + p1.toString() + " / " + p0.toString(), rev.length(), expected, eps);
+        ensure_equals(p2.toString() + " / " + p1.toString() + " / " + p0.toString(), rev.getLength(), expected, eps);
     }
 };
 
