@@ -31,20 +31,23 @@ public:
 
     using CoordinateXY = geom::CoordinateXY;
 
-    CircularArc(const CoordinateXY& q0, const CoordinateXY& q1, const CoordinateXY& q2) : p0(q0), p1(q1), p2(q2) {}
+    CircularArc(const CoordinateXY& q0, const CoordinateXY& q1, const CoordinateXY& q2)
+        : p0(q0)
+        , p1(q1)
+        , p2(q2)
+        , m_center_known(false)
+        , m_radius_known(false)
+        , m_orientation_known(false)
+    {}
 
     const CoordinateXY& p0;
     const CoordinateXY& p1;
     const CoordinateXY& p2;
 
-    bool isZeroLength() const {
-        return center().equals2D(p0) || center().equals2D(p1);
-    }
-
-    bool isCollinear() const {
-        return std::isnan(center().x);
-    }
-
+    /// Return the orientation of the arc as one of:
+    /// - algorithm::Orientation::CLOCKWISE,
+    /// - algorithm::Orientation::COUNTERCLOCKWISE
+    /// - algorithm::Orientation::COLLINEAR
     int orientation() const {
         if (!m_orientation_known) {
             m_orientation = algorithm::Orientation::index(p0, p1, p2);
@@ -53,7 +56,8 @@ public:
         return m_orientation;
     }
 
-    const CoordinateXY& center() const {
+    /// Return the center point of the circle associated with this arc
+    const CoordinateXY& getCenter() const {
         if (!m_center_known) {
             m_center = algorithm::CircularArcs::getCenter(p0, p1, p2);
             m_center_known = true;
@@ -62,24 +66,28 @@ public:
         return m_center;
     }
 
-    double radius() const {
+    /// Return the radius of the circle associated with this arc
+    double getRadius() const {
         if (!m_radius_known) {
-            m_radius = center().distance(p0);
+            m_radius = getCenter().distance(p0);
             m_radius_known = true;
         }
 
         return m_radius;
     }
 
-    bool isLinear() const {
-        return std::isnan(radius());
-    }
-
+    /// Return whether this arc forms a complete circle
     bool isCircle() const {
         return p0.equals(p2);
     }
 
-    double angle() const {
+    /// Returns whether this arc forms a straight line (p0, p1, and p2 are collinear)
+    bool isLinear() const {
+        return std::isnan(getRadius());
+    }
+
+    /// Return the inner angle of the sector associated with this arc
+    double getAngle() const {
         if (isCircle()) {
             return 2*MATH_PI;
         }
@@ -100,37 +108,41 @@ public:
         return diff;
     }
 
-    double length() const {
+    /// Return the length of the arc
+    double getLength() const {
         if (isLinear()) {
             return p0.distance(p2);
         }
 
-        return angle()*radius();
+        return getAngle()*getRadius();
     }
 
+    /// Return the area enclosed by the arc p0-p1-p2 and the line segment p2-p0
     double getArea() const {
         if (isLinear()) {
             return 0;
         }
 
-        auto R = radius();
-        auto theta = angle();
+        auto R = getRadius();
+        auto theta = getAngle();
         return R*R/2*(theta - std::sin(theta));
     }
 
+    /// Return the angle of p0
     double theta0() const {
-        return std::atan2(p0.y - center().y, p0.x - center().x);
+        return std::atan2(p0.y - getCenter().y, p0.x - getCenter().x);
     }
 
+    /// Return the angle of p2
     double theta2() const {
-        return std::atan2(p2.y - center().y, p2.x - center().x);
+        return std::atan2(p2.y - getCenter().y, p2.x - getCenter().x);
     }
 
     /// Check to see if a coordinate lies on the arc
     /// Only the angle is checked, so it is assumed that the point lies on
     /// the circle of which this arc is a part.
     bool containsPointOnCircle(const CoordinateXY& q) const {
-        double theta = std::atan2(q.y - center().y, q.x - center().x);
+        double theta = std::atan2(q.y - getCenter().y, q.x - getCenter().x);
         return containsAngle(theta);
     }
 
@@ -141,7 +153,7 @@ public:
             return true;
         }
 
-        auto dist = std::abs(q.distance(center()) - radius());
+        auto dist = std::abs(q.distance(getCenter()) - getRadius());
 
         if (dist > 1e-8) {
             return false;
@@ -184,7 +196,7 @@ public:
     /// at the location of a specified point. The point is assumed to
     /// be on the arc.
     bool isUpwardAtPoint(const CoordinateXY& q) const {
-        auto quad = geom::Quadrant::quadrant(center(), q);
+        auto quad = geom::Quadrant::quadrant(getCenter(), q);
         bool isUpward;
 
         if (orientation() == algorithm::Orientation::CLOCKWISE) {

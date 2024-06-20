@@ -13,12 +13,9 @@
  **********************************************************************/
 
 #include <geos/algorithm/CircularArcs.h>
-
-#include "geos/algorithm/Angle.h"
-#include "geos/geom/Envelope.h"
-#include "geos/geom/Quadrant.h"
-
-#include <array>
+#include <geos/algorithm/Orientation.h>
+#include <geos/geom/Envelope.h>
+#include <geos/geom/Quadrant.h>
 
 using geos::geom::CoordinateXY;
 
