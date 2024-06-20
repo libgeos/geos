@@ -85,7 +85,7 @@ void object::test<2>()
 
     // Geometry size functions
     ensure("isEmpty", !ms_->isEmpty());
-    ensure_THROW(ms_->getArea(), geos::util::UnsupportedOperationException);
+    ensure_equals("getArea", ms_->getArea(), 4.141592653589132, 1e-6); // expected value from PostGIS with ST_CurveToLine(geom, 1e-13, 1)
     ensure_equals("getLength", ms_->getLength(), 10.283185307179586);
     ensure_equals("getNumGeometries", ms_->getNumGeometries(), 2u);
     ensure_equals("getNumPoints", ms_->getNumPoints(), 10u);

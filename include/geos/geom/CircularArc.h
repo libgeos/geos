@@ -108,6 +108,16 @@ public:
         return angle()*radius();
     }
 
+    double getArea() const {
+        if (isLinear()) {
+            return 0;
+        }
+
+        auto R = radius();
+        auto theta = angle();
+        return R*R/2*(theta - std::sin(theta));
+    }
+
     double theta0() const {
         return std::atan2(p0.y - center().y, p0.x - center().x);
     }
