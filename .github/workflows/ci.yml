@@ -41,7 +41,7 @@ jobs:
           arch: 64
           packages: g++
           cmake: 3.15.*
-          cmake_extra: '-DBUILD_BENCHMARKS=ON'
+          cmake_extra: -D BUILD_BENCHMARKS=ON
           os: ubuntu-latest
 
           # gcc 6 and lower are not supported
@@ -217,6 +217,7 @@ jobs:
         set -e
         uname -a
         sudo -E apt-get update
+        sudo -E apt-get autopurge -y needrestart
         sudo -E apt-get -yq --no-install-suggests --no-install-recommends install make doxygen python3-pip ccache valgrind ${{ matrix.ci.packages }}
         python3 -m pip install --disable-pip-version-check --user cmake==${{ matrix.ci.cmake }}
         echo "$(python3 -m site --user-base)/bin" >> $GITHUB_PATH
@@ -238,19 +239,20 @@ jobs:
         CXXFLAGS: "-m${{ matrix.ci.arch }}"
       run: |
         set -e
-        mkdir build.cmake
-        cd build.cmake
+        mkdir build
+        cd build
         cmake --version
         cmake ${{ matrix.ci.cmake_extra }} \
-          -DCMAKE_C_COMPILER=${{ matrix.ci.c_compiler }} \
-          -DCMAKE_CXX_COMPILER=${{ matrix.ci.cxx_compiler }} \
-          -DCMAKE_CXX_STANDARD=${{ matrix.ci.cxxstd }} \
-          -DUSE_CCACHE=ON \
-          -DBUILD_DOCUMENTATION=YES \
-          -DCMAKE_BUILD_TYPE=${{ matrix.ci.build_type }} ..
+          -D CMAKE_BUILD_TYPE=${{ matrix.ci.build_type }} \
+          -D CMAKE_C_COMPILER=${{ matrix.ci.c_compiler }} \
+          -D CMAKE_CXX_COMPILER=${{ matrix.ci.cxx_compiler }} \
+          -D CMAKE_CXX_STANDARD=${{ matrix.ci.cxxstd }} \
+          -D BUILD_DOCUMENTATION=YES \
+          -D USE_CCACHE=ON \
+          ..
         make -j $(nproc)
         cmake --build . --target docs
-        ccache -s
+        ccache --show-stats
 
     - name: Save build cache
       uses: actions/cache/save@v4
@@ -259,19 +261,16 @@ jobs:
         key: ${{ steps.restore-cache.outputs.cache-primary-key }}
 
     - name: Test
-      run: |
-        set -e
-        cd build.cmake
-        ctest --output-on-failure .
+      working-directory: ./build
+      run: ctest --output-on-failure
 
     # Run the all-unit-tests under
     # the memory checker when we have Debug symbols
     # available. Change to ^all to also check all-xml-tests
     - name: Valgrind
       if: matrix.ci.build_type == 'Debug'
+      working-directory: ./build
       run: |
-        set -e
-        cd build.cmake
         ctest --output-on-failure \
           --overwrite MemoryCheckCommandOptions="--leak-check=full --error-exitcode=100" \
           -R ^all-unit -C Valgrind -T memcheck
@@ -281,7 +280,7 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: valgrind-log
-        path: build.cmake/Testing/Temporary/MemoryChecker.**.log
+        path: build/Testing/Temporary/MemoryChecker.**.log
         retention-days: 1
 
     - name: Upload Coverage to Codecov
@@ -308,8 +307,13 @@ jobs:
     - name: 'Setup'
       uses: msys2/setup-msys2@v2
       with:
-        install: mingw-w64-x86_64-gcc mingw-w64-x86_64-cmake make mingw-w64-x86_64-ccache
+        msystem: MINGW64
         update: true
+        install:  >-
+          make
+          mingw-w64-x86_64-ccache
+          mingw-w64-x86_64-cmake
+          mingw-w64-x86_64-gcc
 
     - name: Retrieve build cache
       id: restore-cache
@@ -320,16 +324,19 @@ jobs:
         restore-keys: windows-mingw-${{ matrix.build_type}}
 
     - name: 'Build'
+      env:
+        CCACHE_DIR: ${{ github.workspace }}\.ccache
       run: |
-       export CCACHE_BASE_DIR=$(pwd)
-       mkdir build
-       cd build
-       cmake --version
-       cmake \
-        -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
-        -DUSE_CCACHE=ON \
-        -G"MSYS Makefiles" ..
-       cmake --build . -j 4
+        mkdir build
+        cd build
+        cmake --version
+        cmake \
+          -G "MSYS Makefiles" \
+          -D CMAKE_BUILD_TYPE=${{ matrix.build_type}} \
+          -D USE_CCACHE=ON \
+          ..
+        cmake --build . -j 4
+        ccache --show-stats --verbose
 
     - name: Save build cache
       uses: actions/cache/save@v4
@@ -338,9 +345,8 @@ jobs:
         key: ${{ steps.restore-cache.outputs.cache-primary-key }}
 
     - name: 'Test'
-      run: |
-       cd build
-       ctest --output-on-failure .
+      working-directory: ./build
+      run: ctest --output-on-failure
 
   windows-msvc:
     name: 'Windows (Visual Studio)'
@@ -350,10 +356,12 @@ jobs:
           - build_type: Debug
             cxxstd: 14
             os: windows-2022
+            vcdir: C:\Program Files\Microsoft Visual Studio\2022\Enterprise
 
           - build_type: Release
             cxxstd: 14
             os: windows-2019
+            vcdir: C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise
 
     runs-on: ${{ matrix.ci.os }}
     steps:
@@ -361,23 +369,34 @@ jobs:
       uses: actions/checkout@v4
 
     - name: 'Setup'
-      run: choco install ccache
+      run: choco install ccache ninja
 
     - name: Retrieve build cache
       id: restore-cache
       uses: actions/cache/restore@v4
       with:
         path: .ccache
-        key: windows-msvc-${{ matrix.build_type}}-${{ github.ref_name }}-${{ github.run_id }}
-        restore-keys: windows-msvc-${{ matrix.build_type}}
+        key: windows-msvc-${{ matrix.ci.os}}-${{ matrix.ci.build_type}}-${{ github.ref_name }}-${{ github.run_id }}
+        restore-keys: windows-msvc-${{ matrix.ci.os}}-${{ matrix.ci.build_type}}
 
     - name: 'Build'
+      env:
+        CCACHE_DIR: ${{ github.workspace }}\.ccache
+      shell: cmd
       run: |
-       mkdir build
-       cd build
-       cmake --version
-       cmake -DCMAKE_BUILD_TYPE=${{ matrix.ci.build_type }} -DCMAKE_CXX_STANDARD=${{ matrix.ci.cxxstd }} -DBUILD_SHARED_LIBS=ON -DUSE_CCACHE=ON ..
-       cmake --build . --config ${{ matrix.ci.build_type }} -j 4
+        call "${{ matrix.ci.vcdir }}\VC\Auxiliary\Build\vcvars64.bat"
+        md build
+        cd build
+        cmake --version
+        cmake ^
+          -G Ninja ^
+          -D CMAKE_BUILD_TYPE=${{ matrix.ci.build_type }} ^
+          -D CMAKE_CXX_STANDARD=${{ matrix.ci.cxxstd }} ^
+          -D BUILD_SHARED_LIBS=ON ^
+          -D USE_CCACHE=ON ^
+          ..
+        cmake --build . --config ${{ matrix.ci.build_type }} -j 4
+        ccache --show-stats --verbose
 
     - name: Save build cache
       uses: actions/cache/save@v4
@@ -386,9 +405,8 @@ jobs:
         key: ${{ steps.restore-cache.outputs.cache-primary-key }}
 
     - name: 'Test'
-      run: |
-       cd build
-       ctest --output-on-failure -C ${{ matrix.ci.build_type }}
+      working-directory: build
+      run: ctest --output-on-failure -C ${{ matrix.ci.build_type }}
 
   macos:
     name: 'macOS clang'
@@ -413,8 +431,7 @@ jobs:
     steps:
 
     - name: 'Setup'
-      run: |
-        brew install ccache
+      run: brew install ccache
 
     - name: 'Install'
       env:
@@ -438,19 +455,18 @@ jobs:
         restore-keys: ${{ runner.os }}-${{ matrix.xcode }}-${{ matrix.build_type}}-${{ matrix.cxxstd }}
 
     - name: 'Build'
-      env:
-        BUILD_TYPE: ${{ matrix.build_type }}
-        CXX_STANDARD: ${{ matrix.cxxstd }}
       run: |
         set -e
         mkdir build
         cd build
         cmake --version
         cmake \
-          -DCMAKE_CXX_STANDARD=${CXX_STANDARD} \
-          -DUSE_CCACHE=ON \
-          -DCMAKE_BUILD_TYPE=${BUILD_TYPE} ..
-        cmake --build . --config ${BUILD_TYPE} -j 4
+          -D CMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+          -D CMAKE_CXX_STANDARD=${{ matrix.cxxstd }} \
+          -D USE_CCACHE=ON \
+          ..
+        cmake --build . --config ${{ matrix.build_type }} -j 4
+        ccache --show-stats
 
     - name: Save build cache
       uses: actions/cache/save@v4
@@ -459,9 +475,8 @@ jobs:
         key: ${{ steps.restore-cache.outputs.cache-primary-key }}
 
     - name: 'Test'
-      run: |
-        cd build
-        ctest -V --output-on-failure -C ${BUILD_TYPE}
+      working-directory: ./build
+      run: ctest -V --output-on-failure -C ${{ matrix.build_type }}
 
 
   code-quality:
@@ -478,8 +493,7 @@ jobs:
       uses: actions/checkout@v4
 
     - name: 'cppcheck'
-      run: |
-        ./tools/cppcheck.sh
+      run: ./tools/cppcheck.sh
 
 
   cmake-subproject:
@@ -491,6 +505,7 @@ jobs:
         set -e
         uname -a
         sudo -E apt-get update
+        sudo -E apt-get autopurge -y needrestart
         sudo -E apt-get -yq --no-install-suggests --no-install-recommends install make python3-pip g++
         python3 -m pip install --disable-pip-version-check --user cmake==3.13.*
         echo "$(python3 -m site --user-base)/bin" >> $GITHUB_PATH
