@@ -62,6 +62,15 @@ void object::test<3>()
     result_ = GEOSConcaveHullOfPolygons(input_, 0.7, false, false);
     ensure("curved geometry not supported", result_ == nullptr);
 }
+  
+template<>
+template<>
+void object::test<4>()
+{
+    input_ = fromWKT("POLYGON((0 0, 0 0, 0 0))");
+    result_ = GEOSConcaveHullOfPolygons(input_, 0.7, false, false);
+    ensure(GEOSisEmpty(result_));
+}
 
 
 } // namespace tut
