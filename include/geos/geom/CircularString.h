@@ -41,6 +41,10 @@ public:
         return true;
     }
 
+    bool isCurved() const override {
+        return true;
+    }
+
     std::unique_ptr<CircularString> reverse() const
     {
         return std::unique_ptr<CircularString>(reverseImpl());
