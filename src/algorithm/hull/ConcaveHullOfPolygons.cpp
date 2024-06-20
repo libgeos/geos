@@ -153,7 +153,7 @@ ConcaveHullOfPolygons::setTight(bool p_isTight)
 std::unique_ptr<Geometry>
 ConcaveHullOfPolygons::getHull()
 {
-    if (inputPolygons->isEmpty() || inputPolygons->getEnvelopeInternal()->getArea() == 0) {
+    if (inputPolygons->isEmpty() || inputPolygons->getArea() == 0) {
         return createEmptyHull();
     }
     buildHullTris();
