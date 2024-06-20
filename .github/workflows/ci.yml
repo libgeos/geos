@@ -380,7 +380,7 @@ jobs:
        cmake --build . --config ${{ matrix.ci.build_type }} -j 4
 
     - name: Save build cache
-      uses: actions/cache/save@v3
+      uses: actions/cache/save@v4
       with:
         path: .ccache
         key: ${{ steps.restore-cache.outputs.cache-primary-key }}
