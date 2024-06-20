@@ -37,7 +37,12 @@ namespace WKBConstants {
         wkbMultiPoint = 4,
         wkbMultiLineString = 5,
         wkbMultiPolygon = 6,
-        wkbGeometryCollection = 7
+        wkbGeometryCollection = 7,
+        wkbCircularString = 8,
+        wkbCompoundCurve = 9,
+        wkbCurvePolygon = 10,
+        wkbMultiCurve = 11,
+        wkbMultiSurface = 12,
     };
 
     enum wkbFlavour {

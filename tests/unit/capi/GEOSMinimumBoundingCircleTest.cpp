@@ -116,5 +116,19 @@ void object::test<4>
     ensure(fabs(radius) - 5.0 < 0.001);
 }
 
+template<>
+template<>
+void object::test<5>
+()
+{
+    input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    ensure(input_);
+
+    GEOSGeometry* center;
+    double radius;
+    result_ = GEOSMinimumBoundingCircle(input_, &radius, &center);
+    ensure("curved geometry not supported", result_ == nullptr);
+}
+
 } // namespace tut
 

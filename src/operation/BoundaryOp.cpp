@@ -52,6 +52,8 @@ BoundaryOp::BoundaryOp(const geom::Geometry& geom, const algorithm::BoundaryNode
 std::unique_ptr<geom::Geometry>
 BoundaryOp::getBoundary()
 {
+    util::ensureNoCurvedComponents(m_geom);
+
     if (auto ls = dynamic_cast<const LineString*>(&m_geom)) {
         return boundaryLineString(*ls);
     }

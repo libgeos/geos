@@ -54,9 +54,9 @@ GeometryGraphOperation::GeometryGraphOperation(const Geometry* g0,
         setComputationPrecision(pm1);
     }
 
-    arg[0] = new GeometryGraph(0, g0,
+    arg[0] = std::make_unique<GeometryGraph>(0, g0,
                                algorithm::BoundaryNodeRule::getBoundaryOGCSFS());
-    arg[1] = new GeometryGraph(1, g1,
+    arg[1] = std::make_unique<GeometryGraph>(1, g1,
                                algorithm::BoundaryNodeRule::getBoundaryOGCSFS());
 }
 
@@ -80,8 +80,8 @@ GeometryGraphOperation::GeometryGraphOperation(const Geometry* g0,
         setComputationPrecision(pm1);
     }
 
-    arg[0] = new GeometryGraph(0, g0, boundaryNodeRule);
-    arg[1] = new GeometryGraph(1, g1, boundaryNodeRule);
+    arg[0] = std::make_unique<GeometryGraph>(0, g0, boundaryNodeRule);
+    arg[1] = std::make_unique<GeometryGraph>(1, g1, boundaryNodeRule);
 }
 
 
@@ -93,7 +93,7 @@ GeometryGraphOperation::GeometryGraphOperation(const Geometry* g0):
 
     setComputationPrecision(pm0);
 
-    arg[0] = new GeometryGraph(0, g0);
+    arg[0] = std::make_unique<GeometryGraph>(0, g0);
 }
 
 const Geometry*
@@ -114,9 +114,6 @@ GeometryGraphOperation::setComputationPrecision(const PrecisionModel* pm)
 
 GeometryGraphOperation::~GeometryGraphOperation()
 {
-    for(unsigned int i = 0; i < arg.size(); ++i) {
-        delete arg[i];
-    }
 }
 
 } // namespace geos.operation

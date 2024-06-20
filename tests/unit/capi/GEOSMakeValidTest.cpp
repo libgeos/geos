@@ -94,5 +94,16 @@ void object::test<4>
     ensure(GEOSEqualsExact(geom2_, expected_, 0.01));
 }
 
+template<>
+template<>
+void object::test<5>()
+{
+    // ring outside shell
+    input_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE (CIRCULARSTRING (0 0, 10 10, 20 0), (20 0, 0 0)), (10 10, 30 10, 30 30, 10 10))");
+    ensure(input_);
+
+    result_ = GEOSMakeValid(input_);
+    ensure("curved geometry not supported", result_ == nullptr);
+}
 
 } // namespace tut

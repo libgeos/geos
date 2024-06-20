@@ -38,5 +38,15 @@ void object::test<2>()
     GEOSGeom_destroy(input);
 }
 
+template<>
+template<>
+void object::test<3>()
+{
+    input_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE (CIRCULARSTRING (0 0, 10 10, 20 0), (20 0, 0 0)), (8 8, 9 9, 9 8, 8 8))");
+    ensure(input_ != nullptr);
+
+    ensure_equals(GEOSGetNumInteriorRings(input_), 1);
+}
+
 } // namespace tut
 

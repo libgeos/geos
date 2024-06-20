@@ -246,10 +246,11 @@ public:
         return std::atan2(p1.y - p0.y, p1.x - p0.x);
     };
 
-    /// Computes the midpoint of the segment
-    //
-    /// @param ret will be set to the midpoint of the segment
-    ///
+    /** \brief
+     * Computes the midpoint of the segment
+     *
+     *  @return the midpoint of the segment
+     */
     CoordinateXY midPoint() const
     {
         return midPoint(p0, p1);
@@ -321,7 +322,8 @@ public:
     {
         ret = Coordinate(
             p0.x + segmentLengthFraction * (p1.x - p0.x),
-            p0.y + segmentLengthFraction * (p1.y - p0.y));
+            p0.y + segmentLengthFraction * (p1.y - p0.y),
+            p0.z + segmentLengthFraction * (p1.z - p0.z));
     };
 
     /** \brief

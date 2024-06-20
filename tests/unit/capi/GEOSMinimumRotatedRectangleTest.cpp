@@ -122,5 +122,16 @@ void object::test<7>
         "POLYGON ((1 2, 3 8, 9 6, 7 0, 1 2))");
 }
 
+template<>
+template<>
+void object::test<8>
+()
+{
+    input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    ensure(input_);
+
+    result_ = GEOSMinimumRotatedRectangle(input_);
+    ensure("curved geometry not supported", result_ == nullptr);
+}
 
 } // namespace tut

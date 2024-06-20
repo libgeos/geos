@@ -30,6 +30,16 @@ void object::test<1>()
     ensure_equals(GEOSGetSRID(input_), GEOSGetSRID(result_));
 }
 
+template<>
+template<>
+void object::test<2>()
+{
+    input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    ensure(input_ != nullptr);
+
+    result_ = GEOSBoundary(input_);
+    ensure(result_ == nullptr);
+}
 
 } // namespace tut
 

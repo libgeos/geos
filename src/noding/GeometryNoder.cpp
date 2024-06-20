@@ -92,6 +92,7 @@ GeometryNoder::GeometryNoder(const geom::Geometry& g)
     :
     argGeom(g)
 {
+    util::ensureNoCurvedComponents(argGeom);
 }
 
 /* private */

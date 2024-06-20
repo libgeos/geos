@@ -5,11 +5,11 @@
   * This is just history, JTS was written first and GEOS was a slavish port.
   * Being memory managed, JTS is an easier language to prototype in.
   * Having various visual tooling, JTS is an easier platform to debug spatial algorithms in.
-  * Being Java, JTS has less language legacy than GEOS, which was originally ported when STL was still not part of the standard, and therefor reflects a mix of styles and eras.
+  * Being Java, JTS has less language legacy than GEOS, which was originally ported when STL was not part of the standard, and therefore reflects a mix of styles and eras.
 
-* Ideally, new algorithms will be implemented in JTS and then ported to GEOS.
-* Smaller performance optimizations in GEOS can travel back to JTS.
-
+* Ideally, new algorithms are implemented in JTS and then ported to GEOS.
+  * Sometimes GEOS gains new functionality; ideally this is backported to JTS
+* Performance optimizations in GEOS can backport to JTS.
   * Short circuits, indexes, other non-language optimizations, should be ticketed in JTS when they are added to GEOS.
 
 ### Follow JTS as Much as Possible
@@ -20,10 +20,17 @@
   * Method names
   * Variable names
   * Class members
+    * If class members are shadowed by local variables, use the `m_` prefix convention for the member.
 
-    * Yes, we know in your last job you were taught all member variables are prefixed with `m_`, but please don't.
+## C/C++ Guidelines
 
+C++ is a large, complex language, with many patterns that have evolved over the years.
+The GEOS codebase has also evolved over the years, but parts still exhibit obsolete language
+and project patterns.
+When porting or adding code, follow the style of the most recently written code (use the commit history to find this).
 
+In general, we follow the [C++ Core Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines).
+The following summarizes some of the key patterns used in GEOS.
 
 ### Manage Lifecycles
 
@@ -57,6 +64,16 @@ public:
 ```
 
 * You can pass pointers to the object to other methods using `std::unique_ptr<>.get()`.
+
+### Resource Management
+[Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#r-resource-management).
+* [A raw pointer (a T*) is non-owning](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rr-ptr)
+* [A raw reference (a T&) is non-owning](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rr-ref)
+  
+### Function calling conventions
+
+
+* Prefer T* over T& when “no argument” is a valid option
 
 ### Avoid Many Small Heap Allocations
 

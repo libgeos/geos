@@ -212,40 +212,6 @@ LineIntersector::computeIntersection(const CoordinateSequence& p, std::size_t p0
     CoordinateSequences::binaryDispatch(p, q, dis);
 }
 
-/*public*/
-void
-LineIntersector::computeIntersection(const CoordinateXY& p, const CoordinateXY& p1, const CoordinateXY& p2)
-{
-    isProperVar = false;
-
-    // do between check first, since it is faster than the orientation test
-    if(Envelope::intersects(p1, p2, p)) {
-        if((Orientation::index(p1, p2, p) == 0) &&
-                (Orientation::index(p2, p1, p) == 0)) {
-            isProperVar = true;
-            if((p == p1) || (p == p2)) { // 2d only test
-                isProperVar = false;
-            }
-            result = POINT_INTERSECTION;
-            return;
-        }
-    }
-    result = NO_INTERSECTION;
-}
-
-/* public static */
-bool
-LineIntersector::hasIntersection(const CoordinateXY& p, const CoordinateXY& p1, const CoordinateXY& p2)
-{
-    if(Envelope::intersects(p1, p2, p)) {
-        if((Orientation::index(p1, p2, p) == 0) &&
-                (Orientation::index(p2, p1, p) == 0)) {
-            return true;
-        }
-    }
-    return false;
-}
-
 /* private static */
 const CoordinateXY&
 LineIntersector::nearestEndpoint(const CoordinateXY& p1, const CoordinateXY& p2,

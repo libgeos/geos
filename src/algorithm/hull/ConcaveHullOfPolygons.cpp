@@ -26,6 +26,8 @@
 #include <geos/triangulate/tri/Tri.h>
 #include <geos/util/IllegalArgumentException.h>
 
+#include "geos/util.h"
+
 
 using geos::geom::Coordinate;
 using geos::geom::Geometry;
@@ -111,6 +113,7 @@ ConcaveHullOfPolygons::ConcaveHullOfPolygons(const Geometry* geom)
     , isHolesAllowed(false)
     , isTight(false)
 {
+    util::ensureNoCurvedComponents(geom);
     if (! geom->isPolygonal()) {
         throw util::IllegalArgumentException("Input must be polygonal");
     }

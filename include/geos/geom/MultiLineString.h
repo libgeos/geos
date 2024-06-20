@@ -138,6 +138,11 @@ protected:
         return SORTINDEX_MULTILINESTRING;
     };
 
+    bool hasCurvedComponents() const override
+    {
+        return false;
+    }
+
 };
 
 

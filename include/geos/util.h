@@ -24,6 +24,7 @@
 #include <cassert>
 #include <memory>
 #include <type_traits>
+#include <geos/util/UnsupportedOperationException.h>
 
 //
 // Private macros definition
@@ -59,6 +60,27 @@ template<typename To, typename From> inline To down_cast(From* f)
 }
 
 } // namespace detail
+
+namespace util {
+
+template<typename T>
+void ensureNoCurvedComponents(const T& geom)
+{
+    if (geom.hasCurvedComponents()) {
+        throw UnsupportedOperationException("Curved geometry types are not supported.");
+    }
+}
+
+template<typename T>
+void ensureNoCurvedComponents(const T* geom)
+{
+    ensureNoCurvedComponents(*geom);
+}
+
+
+}
+
+
 } // namespace geos
 
 #endif // GEOS_UTIL_H

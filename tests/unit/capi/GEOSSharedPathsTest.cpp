@@ -88,5 +88,19 @@ void object::test<3>
     ensure(!geom3_);
 }
 
+template<>
+template<>
+void object::test<4>()
+{
+    geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    geom2_ = fromWKT("LINESTRING (1 0, 2 1)");
+
+    ensure(geom1_);
+    ensure(geom2_);
+
+    result_ = GEOSSharedPaths(geom1_, geom2_);
+    ensure("curved geometry not supported", result_ == nullptr);
+}
+
 } // namespace tut
 

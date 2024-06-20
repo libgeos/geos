@@ -73,6 +73,16 @@ CoverageRing::CoverageRing(const LinearRing* ring, bool isShell)
         algorithm::Orientation::isCCW(ring->getCoordinatesRO()) != isShell)
 {}
 
+/* public */ 
+geom::Envelope CoverageRing::getEnvelope(std::size_t start, std::size_t end) 
+{
+    geom::Envelope env;
+    for (std::size_t i = start; i < end; i++) {
+        env.expandToInclude(getCoordinate(i));
+    }
+    return env;
+}
+
 
 /* public */
 bool

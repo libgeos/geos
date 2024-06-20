@@ -60,10 +60,11 @@ To cite GEOS in publications use:
 A BibTeX entry for LaTeX users is
 ```
 @Manual{,
-  title = {{GEOS} coordinate transformation software library},
+  title = {{GEOS} computational geometry library},
   author = {{GEOS contributors}},
   organization = {Open Source Geospatial Foundation},
   year = {2021},
   url = {https://libgeos.org/},
+  doi = {10.5281/zenodo.11396894}
 }
 ```

@@ -28,6 +28,7 @@
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/util/IllegalStateException.h>
 #include <geos/util/Assert.h>
+#include <geos/util.h>
 
 
 using geos::geom::Coordinate;
@@ -48,6 +49,17 @@ namespace geos {
 namespace algorithm { // geos.algorithm
 namespace hull {      // geos.algorithm.hulll
 
+ConcaveHull::ConcaveHull(const Geometry* geom)
+    : inputGeometry(geom)
+    , maxEdgeLengthRatio(-1.0)
+    , alpha(-1)
+    , isHolesAllowed(false)
+    , criteriaType(PARAM_EDGE_LENGTH)
+    , maxSizeInHull(0.0)
+    , geomFactory(geom->getFactory())
+{
+    util::ensureNoCurvedComponents(geom);
+}
 
 /* public static */
 double

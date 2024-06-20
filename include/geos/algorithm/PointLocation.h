@@ -37,6 +37,16 @@ class GEOS_DLL PointLocation {
 public:
 
     /** \brief
+     * Tests whether a point lies on a line segment.
+     * 
+     * @param p the point to test
+     * @param p0 a point of the line segment
+     * @param p1 a point of the line segment
+     * @return true if the point lies on the line segment
+     */
+    static bool isOnSegment(const geom::CoordinateXY& p, const geom::CoordinateXY& p0, const geom::CoordinateXY& p1);
+
+    /** \brief
      * Tests whether a point lies on the line defined by a
      * [CoordinateSequence](@ref geom::CoordinateSequence).
      *

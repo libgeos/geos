@@ -60,7 +60,7 @@ public:
 
     void remove(const geom::LineSegment* seg);
 
-    std::unique_ptr< std::vector<geom::LineSegment*> >
+    std::vector<const geom::LineSegment*>
     query(const geom::LineSegment* seg);
 
 

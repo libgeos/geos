@@ -10,36 +10,17 @@
 #include <cstdlib>
 #include <memory>
 
+#include "capi_test_utils.h"
+
 namespace tut {
 //
 // Test Group
 //
 
 // Common data used in test cases.
-struct test_capiinterrupt_data {
+struct test_capiinterrupt_data : public capitest::utility {
     static int numcalls;
     static GEOSInterruptCallback* nextcb;
-
-    static void
-    notice(const char* fmt, ...)
-    {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
-
-    test_capiinterrupt_data()
-    {
-    }
-
-    ~test_capiinterrupt_data()
-    {
-    }
 
     static void
     interruptNow()

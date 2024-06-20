@@ -61,13 +61,20 @@ namespace capitest {
             finishGEOS();
         }
 
-        static void notice(const char* fmt, ...)
+        static void notice(GEOS_PRINTF_FORMAT const char* fmt, ...) GEOS_PRINTF_FORMAT_ATTR(1, 2)
         {
             std::fprintf(stdout, "NOTICE: ");
 
             va_list ap;
             va_start(ap, fmt);
+            #ifdef __MINGW32__
+            #pragma GCC diagnostic push
+            #pragma GCC diagnostic ignored "-Wsuggest-attribute=format"
+            #endif
             std::vfprintf(stdout, fmt, ap);
+            #ifdef __MINGW32__
+            #pragma GCC diagnostic pop
+            #endif
             va_end(ap);
 
             std::fprintf(stdout, "\n");
@@ -82,7 +89,7 @@ namespace capitest {
         }
 
         std::string
-        toWKT(GEOSGeometry* g)
+        toWKT(const GEOSGeometry* g)
         {
             char* wkt = GEOSWKTWriter_write(wktw_, g);
             std::string ret(wkt);
@@ -96,7 +103,7 @@ namespace capitest {
             char rslt;
             if (g1 == nullptr || g2 == nullptr) {
                 rslt = (g1 == nullptr && g2 == nullptr) ? 1 : 0;
-            } 
+            }
             else {
                 GEOSNormalize(g1);
                 GEOSNormalize(g2);
@@ -112,12 +119,26 @@ namespace capitest {
             char rslt;
             if (g1 == nullptr || g2 == nullptr) {
                 rslt = (g1 == nullptr && g2 == nullptr) ? 1 : 0;
-            } 
+            }
             else {
                 rslt = GEOSEqualsExact(g1, g2, tolerance);
             }
             report_not_equal("ensure_equals_exact", g1, g2, tolerance, rslt);
             tut::ensure_equals("GEOSEqualsExact(g1, g2, tolerance)", rslt, 1);
+        }
+
+        void
+        ensure_geometry_equals_identical(GEOSGeometry* g1, GEOSGeometry* g2)
+        {
+            char rslt;
+            if (g1 == nullptr || g2 == nullptr) {
+                rslt = (g1 == nullptr && g2 == nullptr) ? 1 : 0;
+            }
+            else {
+                rslt = GEOSEqualsIdentical(g1, g2);
+            }
+            report_not_equal("ensure_equals_identical", g1, g2, 1e-12, rslt);
+            tut::ensure_equals("GEOSEqualsIdentical(g1, g2)", rslt, 1);
         }
 
         void

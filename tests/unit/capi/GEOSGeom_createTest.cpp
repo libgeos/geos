@@ -22,23 +22,9 @@ namespace tut {
 struct test_capigeosgeom_create_data  : public capitest::utility
 {
     GEOSGeometry* geom1_;
-    GEOSContextHandle_t handle_;
-
-    static void
-    notice(const char* fmt, ...)
-    {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
 
     test_capigeosgeom_create_data()
-        : geom1_(nullptr), handle_(initGEOS_r(notice, notice))
+        : geom1_(nullptr)
     {
     }
 
@@ -46,7 +32,6 @@ struct test_capigeosgeom_create_data  : public capitest::utility
     {
         GEOSGeom_destroy(geom1_);
         geom1_ = nullptr;
-        finishGEOS_r(handle_);
     }
 
 };
@@ -66,12 +51,12 @@ template<>
 void object::test<1>
 ()
 {
-    geom1_ = GEOSGeom_createEmptyPoint_r(handle_);
-    ensure(0 != GEOSisEmpty_r(handle_, geom1_));
-    ensure_equals(GEOSGeomTypeId_r(handle_, geom1_), GEOS_POINT);
+    geom1_ = GEOSGeom_createEmptyPoint();
+    ensure(0 != GEOSisEmpty(geom1_));
+    ensure_equals(GEOSGeomTypeId(geom1_), GEOS_POINT);
 
-    ensure_equals(GEOSHasZ_r(handle_, geom1_), 0);
-    ensure_equals(GEOSHasM_r(handle_, geom1_), 0);
+    ensure_equals(GEOSHasZ(geom1_), 0);
+    ensure_equals(GEOSHasM(geom1_), 0);
 
     GEOSGeom_destroy(geom1_);
     geom1_ = nullptr;
@@ -83,12 +68,12 @@ template<>
 void object::test<2>
 ()
 {
-    geom1_ = GEOSGeom_createEmptyLineString_r(handle_);
-    ensure(0 != GEOSisEmpty_r(handle_, geom1_));
-    ensure_equals(GEOSGeomTypeId_r(handle_, geom1_), GEOS_LINESTRING);
+    geom1_ = GEOSGeom_createEmptyLineString();
+    ensure(0 != GEOSisEmpty(geom1_));
+    ensure_equals(GEOSGeomTypeId(geom1_), GEOS_LINESTRING);
 
-    ensure_equals(GEOSHasZ_r(handle_, geom1_), 0);
-    ensure_equals(GEOSHasM_r(handle_, geom1_), 0);
+    ensure_equals(GEOSHasZ(geom1_), 0);
+    ensure_equals(GEOSHasM(geom1_), 0);
 
     GEOSGeom_destroy(geom1_);
     geom1_ = nullptr;
@@ -101,12 +86,12 @@ template<>
 void object::test<3>
 ()
 {
-    geom1_ = GEOSGeom_createEmptyPolygon_r(handle_);
-    ensure(0 != GEOSisEmpty_r(handle_, geom1_));
-    ensure_equals(GEOSGeomTypeId_r(handle_, geom1_), GEOS_POLYGON);
+    geom1_ = GEOSGeom_createEmptyPolygon();
+    ensure(0 != GEOSisEmpty(geom1_));
+    ensure_equals(GEOSGeomTypeId(geom1_), GEOS_POLYGON);
 
-    ensure_equals(GEOSHasZ_r(handle_, geom1_), 0);
-    ensure_equals(GEOSHasM_r(handle_, geom1_), 0);
+    ensure_equals(GEOSHasZ(geom1_), 0);
+    ensure_equals(GEOSHasM(geom1_), 0);
 
     GEOSGeom_destroy(geom1_);
     geom1_ = nullptr;
@@ -118,12 +103,12 @@ template<>
 void object::test<4>
 ()
 {
-    geom1_ = GEOSGeom_createEmptyCollection_r(handle_, GEOS_MULTIPOINT);
-    ensure(0 != GEOSisEmpty_r(handle_, geom1_));
-    ensure_equals(GEOSGeomTypeId_r(handle_, geom1_), GEOS_MULTIPOINT);
+    geom1_ = GEOSGeom_createEmptyCollection(GEOS_MULTIPOINT);
+    ensure(0 != GEOSisEmpty(geom1_));
+    ensure_equals(GEOSGeomTypeId(geom1_), GEOS_MULTIPOINT);
 
-    ensure_equals(GEOSHasZ_r(handle_, geom1_), 0);
-    ensure_equals(GEOSHasM_r(handle_, geom1_), 0);
+    ensure_equals(GEOSHasZ(geom1_), 0);
+    ensure_equals(GEOSHasM(geom1_), 0);
 
     GEOSGeom_destroy(geom1_);
     geom1_ = nullptr;
@@ -135,12 +120,12 @@ template<>
 void object::test<5>
 ()
 {
-    geom1_ = GEOSGeom_createEmptyCollection_r(handle_, GEOS_MULTILINESTRING);
-    ensure(0 != GEOSisEmpty_r(handle_, geom1_));
-    ensure_equals(GEOSGeomTypeId_r(handle_, geom1_), GEOS_MULTILINESTRING);
+    geom1_ = GEOSGeom_createEmptyCollection(GEOS_MULTILINESTRING);
+    ensure(0 != GEOSisEmpty(geom1_));
+    ensure_equals(GEOSGeomTypeId(geom1_), GEOS_MULTILINESTRING);
 
-    ensure_equals(GEOSHasZ_r(handle_, geom1_), 0);
-    ensure_equals(GEOSHasM_r(handle_, geom1_), 0);
+    ensure_equals(GEOSHasZ(geom1_), 0);
+    ensure_equals(GEOSHasM(geom1_), 0);
 
     GEOSGeom_destroy(geom1_);
     geom1_ = nullptr;
@@ -152,12 +137,12 @@ template<>
 void object::test<6>
 ()
 {
-    geom1_ = GEOSGeom_createEmptyCollection_r(handle_, GEOS_MULTIPOLYGON);
-    ensure(0 != GEOSisEmpty_r(handle_, geom1_));
-    ensure_equals(GEOSGeomTypeId_r(handle_, geom1_), GEOS_MULTIPOLYGON);
+    geom1_ = GEOSGeom_createEmptyCollection(GEOS_MULTIPOLYGON);
+    ensure(0 != GEOSisEmpty(geom1_));
+    ensure_equals(GEOSGeomTypeId(geom1_), GEOS_MULTIPOLYGON);
 
-    ensure_equals(GEOSHasZ_r(handle_, geom1_), 0);
-    ensure_equals(GEOSHasM_r(handle_, geom1_), 0);
+    ensure_equals(GEOSHasZ(geom1_), 0);
+    ensure_equals(GEOSHasM(geom1_), 0);
 
     GEOSGeom_destroy(geom1_);
     geom1_ = nullptr;
@@ -169,12 +154,12 @@ template<>
 void object::test<7>
 ()
 {
-    geom1_ = GEOSGeom_createEmptyCollection_r(handle_, GEOS_GEOMETRYCOLLECTION);
-    ensure(0 != GEOSisEmpty_r(handle_, geom1_));
-    ensure_equals(GEOSGeomTypeId_r(handle_, geom1_), GEOS_GEOMETRYCOLLECTION);
+    geom1_ = GEOSGeom_createEmptyCollection(GEOS_GEOMETRYCOLLECTION);
+    ensure(0 != GEOSisEmpty(geom1_));
+    ensure_equals(GEOSGeomTypeId(geom1_), GEOS_GEOMETRYCOLLECTION);
 
-    ensure_equals(GEOSHasZ_r(handle_, geom1_), 0);
-    ensure_equals(GEOSHasM_r(handle_, geom1_), 0);
+    ensure_equals(GEOSHasZ(geom1_), 0);
+    ensure_equals(GEOSHasM(geom1_), 0);
 
     GEOSGeom_destroy(geom1_);
     geom1_ = nullptr;

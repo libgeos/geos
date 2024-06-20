@@ -22,6 +22,8 @@
 #include <geos/io/CheckOrdinatesFilter.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/CompoundCurve.h>
+#include <geos/geom/CurvePolygon.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/LineString.h>
@@ -35,6 +37,8 @@
 #include <ostream>
 #include <sstream>
 #include <cassert>
+
+#include "geos/util.h"
 
 #undef DEBUG_WKB_WRITER
 
@@ -104,36 +108,21 @@ WKBWriter::write(const Geometry& g, std::ostream& os)
 
     outStream = &os;
 
-    if (const Point* x = dynamic_cast<const Point*>(&g)) {
-        return writePoint(*x);
+    switch(g.getGeometryTypeId()) {
+        case GEOS_POINT: writePoint(static_cast<const Point&>(g)); break;
+        case GEOS_LINESTRING:
+        case GEOS_LINEARRING:
+        case GEOS_CIRCULARSTRING: writeSimpleCurve(static_cast<const SimpleCurve&>(g)); break;
+        case GEOS_COMPOUNDCURVE: writeCompoundCurve(static_cast<const CompoundCurve&>(g)); break;
+        case GEOS_POLYGON: writePolygon(static_cast<const Polygon&>(g)); break;
+        case GEOS_CURVEPOLYGON: writeCurvePolygon(static_cast<const CurvePolygon&>(g)); break;
+        case GEOS_MULTIPOINT:
+        case GEOS_MULTILINESTRING:
+        case GEOS_MULTIPOLYGON:
+        case GEOS_MULTICURVE:
+        case GEOS_MULTISURFACE:
+        case GEOS_GEOMETRYCOLLECTION: writeGeometryCollection(static_cast<const GeometryCollection&>(g)); break;
     }
-
-    if (const LineString* x = dynamic_cast<const LineString*>(&g)) {
-        return writeLineString(*x);
-    }
-
-    if (const Polygon* x = dynamic_cast<const Polygon*>(&g)) {
-        return writePolygon(*x);
-    }
-
-    if (const MultiPoint* x = dynamic_cast<const MultiPoint*>(&g)) {
-        return writeGeometryCollection(*x, WKBConstants::wkbMultiPoint);
-    }
-
-    if (const MultiLineString* x = dynamic_cast<const MultiLineString*>(&g)) {
-        return writeGeometryCollection(*x, WKBConstants::wkbMultiLineString);
-    }
-
-    if (const MultiPolygon* x = dynamic_cast<const MultiPolygon*>(&g)) {
-        return writeGeometryCollection(*x, WKBConstants::wkbMultiPolygon);
-    }
-
-    if (const GeometryCollection* x =
-                dynamic_cast<const GeometryCollection*>(&g)) {
-        return writeGeometryCollection(*x, WKBConstants::wkbGeometryCollection);
-    }
-
-    assert(0); // Unknown Geometry type
 }
 
 void
@@ -168,11 +157,11 @@ WKBWriter::writePoint(const Point& g)
 }
 
 void
-WKBWriter::writeLineString(const LineString& g)
+WKBWriter::writeSimpleCurve(const SimpleCurve& g)
 {
     writeByteOrder();
 
-    writeGeometryType(WKBConstants::wkbLineString, g.getSRID());
+    writeGeometryType(getWkbType(g), g.getSRID());
     writeSRID(g.getSRID());
 
     const CoordinateSequence* cs = g.getCoordinatesRO();
@@ -181,11 +170,32 @@ WKBWriter::writeLineString(const LineString& g)
 }
 
 void
+WKBWriter::writeCompoundCurve(const CompoundCurve& g)
+{
+    writeByteOrder();
+
+    writeGeometryType(getWkbType(g), g.getSRID());
+    writeSRID(g.getSRID());
+
+    writeInt(static_cast<int>(g.getNumCurves()));
+
+    auto orig_includeSRID = includeSRID;
+    includeSRID = false;
+
+    for (std::size_t i = 0; i < g.getNumCurves(); i++) {
+        const SimpleCurve& section = *g.getCurveN(i);
+        writeSimpleCurve(section);
+    }
+
+    includeSRID = orig_includeSRID;
+}
+
+void
 WKBWriter::writePolygon(const Polygon& g)
 {
     writeByteOrder();
 
-    writeGeometryType(WKBConstants::wkbPolygon, g.getSRID());
+    writeGeometryType(getWkbType(g), g.getSRID());
     writeSRID(g.getSRID());
 
     if (g.isEmpty()) {
@@ -215,12 +225,42 @@ WKBWriter::writePolygon(const Polygon& g)
 }
 
 void
-WKBWriter::writeGeometryCollection(const GeometryCollection& g,
-                                   int wkbtype)
+WKBWriter::writeCurvePolygon(const CurvePolygon& g)
+{
+    // Why not combine this with writePolygon?
+    // A CurvePolygon differs from a Polygon in that its rings
+    // can one of three different types. Therefore, the type
+    // information is written for each ring, unlike a Polygon.
+
+    writeByteOrder();
+
+    writeGeometryType(getWkbType(g), g.getSRID());
+
+    writeSRID(g.getSRID());
+
+    if (g.isEmpty()) {
+        writeInt(0);
+        return;
+    }
+
+    std::size_t nholes = g.getNumInteriorRing();
+    writeInt(static_cast<int>(nholes + 1));
+
+    const Curve* ring = g.getExteriorRing();
+    write(*ring, *outStream);
+
+    for(std::size_t i = 0; i < nholes; i++) {
+        ring = g.getInteriorRingN(i);
+        write(*ring, *outStream);
+    }
+}
+
+void
+WKBWriter::writeGeometryCollection(const GeometryCollection& g)
 {
     writeByteOrder();
 
-    writeGeometryType(wkbtype, g.getSRID());
+    writeGeometryType(getWkbType(g), g.getSRID());
     writeSRID(g.getSRID());
 
     auto ngeoms = g.getNumGeometries();
@@ -375,6 +415,28 @@ WKBWriter::getOutputOrdinates(OrdinateSet ordinates)
     }
 
     return newOrdinates;
+}
+
+int
+WKBWriter::getWkbType(const Geometry& g) {
+    switch(g.getGeometryTypeId()) {
+        case GEOS_POINT: return WKBConstants::wkbPoint;
+        case GEOS_LINESTRING:
+        case GEOS_LINEARRING: return WKBConstants::wkbLineString;
+        case GEOS_CIRCULARSTRING: return WKBConstants::wkbCircularString;
+        case GEOS_COMPOUNDCURVE: return WKBConstants::wkbCompoundCurve;
+        case GEOS_POLYGON: return WKBConstants::wkbPolygon;
+        case GEOS_CURVEPOLYGON: return WKBConstants::wkbCurvePolygon;
+        case GEOS_MULTIPOINT: return WKBConstants::wkbMultiPoint;
+        case GEOS_MULTILINESTRING: return WKBConstants::wkbMultiLineString;
+        case GEOS_MULTICURVE: return WKBConstants::wkbMultiCurve;
+        case GEOS_MULTIPOLYGON: return WKBConstants::wkbMultiPolygon;
+        case GEOS_MULTISURFACE: return WKBConstants::wkbMultiSurface;
+        case GEOS_GEOMETRYCOLLECTION: return WKBConstants::wkbGeometryCollection;
+    }
+
+    // Avoid -Wreturn-type warning
+    throw util::IllegalArgumentException("Invalid geometry type.");
 }
 
 

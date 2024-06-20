@@ -53,4 +53,15 @@ void object::test<2>()
     ensure_geometry_equals(result_, expected_);
 }
 
+template<>
+template<>
+void object::test<3>()
+{
+    input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    ensure(input_ != nullptr);
+
+    result_ = GEOSConcaveHull(input_, 0, 0);
+    ensure(result_ == nullptr);
+}
+
 } // namespace tut

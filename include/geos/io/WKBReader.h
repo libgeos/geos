@@ -20,15 +20,14 @@
 #pragma once
 
 #include <geos/export.h>
-
+#include <geos/geom/Geometry.h>
+#include <geos/geom/GeometryTypeName.h>
 #include <geos/io/ByteOrderDataInStream.h> // for composition
 
 #include <iosfwd> // ostream, istream
 #include <memory>
 // #include <vector>
 #include <array>
-
-#define BAD_GEOM_TYPE_MSG "Bad geometry type encountered in"
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -41,17 +40,24 @@ namespace geom {
 
 class GeometryFactory;
 class Coordinate;
+class CircularString;
+class CompoundCurve;
+class CurvePolygon;
 class Geometry;
+enum GeometryTypeId : int;
 class GeometryCollection;
 class Point;
 class LineString;
 class LinearRing;
 class Polygon;
+class MultiCurve;
 class MultiPoint;
 class MultiLineString;
 class MultiPolygon;
+class MultiSurface;
 class PrecisionModel;
 class CoordinateSequence;
+class SimpleCurve;
 
 } // namespace geom
 } // namespace geos
@@ -148,21 +154,41 @@ private:
 
     std::unique_ptr<geom::LinearRing> readLinearRing();
 
+    std::unique_ptr<geom::CircularString> readCircularString();
+
+    std::unique_ptr<geom::CompoundCurve> readCompoundCurve();
+
     std::unique_ptr<geom::Polygon> readPolygon();
+
+    std::unique_ptr<geom::CurvePolygon> readCurvePolygon();
 
     std::unique_ptr<geom::MultiPoint> readMultiPoint();
 
     std::unique_ptr<geom::MultiLineString> readMultiLineString();
 
+    std::unique_ptr<geom::MultiCurve> readMultiCurve();
+
     std::unique_ptr<geom::MultiPolygon> readMultiPolygon();
+
+    std::unique_ptr<geom::MultiSurface> readMultiSurface();
 
     std::unique_ptr<geom::GeometryCollection> readGeometryCollection();
 
     std::unique_ptr<geom::CoordinateSequence> readCoordinateSequence(unsigned int); // throws IOException
 
-    void minMemSize(int geomType, uint64_t size);
+    void minMemSize(geom::GeometryTypeId geomType, uint64_t size) const;
 
     void readCoordinate(); // throws IOException
+
+    template<typename T>
+    std::unique_ptr<T> readChild()
+    {
+        auto g = readGeometry();
+        if (dynamic_cast<const T*>(g.get())) {
+            return std::unique_ptr<T>(static_cast<T*>(g.release()));
+        }
+        throw io::ParseException(std::string("Expected ") + geom::GeometryTypeName<T>::name + " but got " + g->getGeometryType());
+    }
 
     // Declare type as noncopyable
     WKBReader(const WKBReader& other) = delete;

@@ -102,7 +102,8 @@ typedef struct GEOSContextHandle_HS *GEOSContextHandle_t;
 *
 * \param fmt the message format template
 */
-typedef void (*GEOSMessageHandler)(const char *fmt, ...);
+typedef void (*GEOSMessageHandler)(GEOS_PRINTF_FORMAT const char *fmt, ...)
+    GEOS_PRINTF_FORMAT_ATTR(1, 2);
 
 /**
 * A GEOS message handler function.
@@ -210,7 +211,12 @@ enum GEOSGeomTypes {
     /** Multipolygon, a homogeneous collection of polygons */
     GEOS_MULTIPOLYGON,
     /** Geometry collection, a heterogeneous collection of geometry */
-    GEOS_GEOMETRYCOLLECTION
+    GEOS_GEOMETRYCOLLECTION,
+    GEOS_CIRCULARSTRING,
+    GEOS_COMPOUNDCURVE,
+    GEOS_CURVEPOLYGON,
+    GEOS_MULTICURVE,
+    GEOS_MULTISURFACE,
 };
 
 /**
@@ -756,6 +762,36 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createRectangle_r(
 extern GEOSGeometry GEOS_DLL *GEOSGeom_clone_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry* g);
+
+/** \see GEOSGeom_createCircularString */
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createCircularString_r(
+    GEOSContextHandle_t handle,
+    GEOSCoordSequence* s);
+
+/** \see GEOSGeom_createEmptyCircularString */
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCircularString_r(
+    GEOSContextHandle_t handle);
+
+/** \see GEOSGeom_createCompoundCurve */
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createCompoundCurve_r(
+    GEOSContextHandle_t handle,
+    GEOSGeometry** curves,
+    unsigned int ncurves);
+
+/** \see GEOSGeom_createEmptyCompoundCurve */
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCompoundCurve_r(
+    GEOSContextHandle_t handle);
+
+/** \see GEOSGeom_createCurvePolygon */
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createCurvePolygon_r(
+    GEOSContextHandle_t handle,
+    GEOSGeometry* shell,
+    GEOSGeometry** holes,
+    unsigned int nholes);
+
+/** \see GEOSGeom_createEmptyCurvePolygon */
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCurvePolygon_r(
+    GEOSContextHandle_t handle);
 
 /* ========= Memory management ========= */
 
@@ -2453,6 +2489,68 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createPolygon(
     unsigned int nholes);
 
 /**
+* Creates a CircularString geometry.
+* \param s Input coordinate sequence, ownership passes to the geometry
+* \return A newly allocated CircularString geometry. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+* \since 3.13
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createCircularString(GEOSCoordSequence* s);
+
+/**
+* Creates an empty CircularString geometry.
+* \return A newly allocated CircularString geometry. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+* \since 3.13
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCircularString();
+
+/**
+* Creates a CompoundCurve geometry.
+* \param curves A list of geometries that will form the CompoundCurve
+* \param ncurves The number of geometries in the curves list
+* \return A newly allocated CompoundCurve geometry. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+* \since 3.13
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createCompoundCurve(GEOSGeometry** curves,
+                                                           unsigned int ncurves);
+
+/**
+* Creates an empty CompoundCurve geometry.
+* \return A newly allocated CompoundCurve geometry. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+* \since 3.13
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCompoundCurve();
+
+/**
+* Creates a CurvePolygon geometry from ring geometries.
+* \param shell A ring that is the exterior ring of the polygon.
+* \param holes An array of rings that are the holes.
+* \param nholes The number of rings in the holes array.
+* \return A newly allocated geometry. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+* \note The holes argument is an array of GEOSGeometry* objects.
+*       The caller **retains ownership** of the containing array,
+*       but the ownership of the pointed-to objects is transferred
+*       to the returned \ref GEOSGeometry.
+* \since 3.13
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createCurvePolygon(
+    GEOSGeometry* shell,
+    GEOSGeometry** holes,
+    unsigned int nholes);
+
+/**
+* Creates an empty CurvePolygon geometry.
+* \return A newly allocated CurvePolygon geometry. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+* \since 3.13
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCurvePolygon();
+
+/**
 * Create a geometry collection.
 * \param type The geometry type, enumerated by \ref GEOSGeomTypes
 * \param geoms A list of geometries that will form the collection
@@ -4146,7 +4244,7 @@ extern GEOSGeometry GEOS_DLL *GEOSMaximumInscribedCircle(
 * The LEC is determined by the center point and a point indicating the circle radius
 * (which will lie on an obstacle).
 * \n
-* To compute an LEC which lies **wholly** within a polygonal boundary, 
+* To compute an LEC which lies **wholly** within a polygonal boundary,
 * include the boundary of the polygon(s) as a linear obstacle.
 * \n
 * The implementation uses a successive-approximation technique over a grid of square cells covering the obstacles and boundary.
@@ -4361,9 +4459,9 @@ extern GEOSGeometry GEOS_DLL *GEOSPolygonize(
     unsigned int ngeoms);
 
 /**
-* Has the same polygonizing behavior as GEOSPolygonize(), 
+* Has the same polygonizing behavior as GEOSPolygonize(),
 * but returns a result which is a valid polygonal geometry.
-* The result will not contain any edge-adjacent elements. 
+* The result will not contain any edge-adjacent elements.
 *
 * \param geoms Array of linear geometries to polygons. Caller retains ownersihp of both array container and objects.
 * \param ngeoms Size of the geoms array.
@@ -5173,6 +5271,7 @@ extern GEOSSTRtree GEOS_DLL *GEOSSTRtree_create(size_t nodeCapacity);
 * `GEOSSTRtree_build` unless it is desired to explicity construct the tree
 * in a certain section of code or using a certain thread.
 *
+* \param tree the \ref GEOSSTRtree to apply the build to
 * \return 1 on success, 0 on error
 *
 * \since 3.12
@@ -5300,6 +5399,8 @@ extern char GEOS_DLL GEOSSTRtree_remove(
 * Only the tree is freed. The geometries and items fed into
 * GEOSSTRtree_insert() are not owned by the tree, and are
 * still left to the caller to manage.
+*
+* \param tree the \ref GEOSSTRtree to destroy
 *
 * \since 3.2
 */

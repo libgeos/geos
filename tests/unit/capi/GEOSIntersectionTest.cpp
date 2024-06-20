@@ -143,6 +143,19 @@ void object::test<7>
     ensure(!std::fetestexcept(FE_INVALID));
 }
 
+template<>
+template<>
+void object::test<8>()
+{
+    geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    geom2_ = fromWKT("LINESTRING (1 0, 2 1)");
+
+    ensure(geom1_);
+    ensure(geom2_);
+
+    result_ = GEOSIntersection(geom1_, geom2_);
+    ensure("curved geometry not supported", result_ == nullptr);
+}
 
 } // namespace tut
 

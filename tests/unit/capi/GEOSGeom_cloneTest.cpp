@@ -34,6 +34,16 @@ void object::test<1>
     ensure(GEOSGeom_getUserData(geom2_) == nullptr); // userData not transferred
 }
 
+template<>
+template<>
+void object::test<2>
+()
+{
+    input_ = GEOSGeomFromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    result_ = GEOSGeom_clone(input_);
+
+    ensure_equals(toWKT(result_), "CIRCULARSTRING (0 0, 1 1, 2 0)");
+}
 
 } // namespace tut
 

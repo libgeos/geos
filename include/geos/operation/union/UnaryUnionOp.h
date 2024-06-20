@@ -29,6 +29,8 @@
 #include <geos/geom/util/GeometryExtracter.h>
 #include <geos/operation/union/CascadedPolygonUnion.h>
 
+#include <geos/util.h>
+
 #ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
@@ -169,6 +171,8 @@ private:
     void
     extract(const geom::Geometry& geom)
     {
+        util::ensureNoCurvedComponents(geom);
+
         using namespace geom::util;
 
         if(! geomFact) {

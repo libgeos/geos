@@ -3,6 +3,8 @@
 
 - New things:
   - Add Angle::sinCosSnap to avoid small errors, e.g. with buffer operations (GH-978, Mike Taves)
+  - Add classes for curved geometry types: CircularString, CompoundCurve, CurvedPolygon, MultiCurve,
+    MultiSurface (GH-1046, Dan Baston/German QGIS users group/Canton of Basel-Landschaft/Canton of Zug)
 
 - Breaking Changes
 
@@ -10,6 +12,7 @@
   - WKTReader: Points with all-NaN coordinates are not considered empty anymore (GH-927, Casper van der Wel)
   - WKTWriter: Points with all-NaN coordinates are written as such (GH-927, Casper van der Wel)
   - ConvexHull: Performance improvement for larger geometries (JTS-985, Martin Davis)
+  - Distance: Improve performance, especially for point-point distance (GH-1067, Dan Baston)
   - Intersection: change to using DoubleDouble computation to improve robustness (GH-937, Martin Davis)
   - Fix LargestEmptyCircle to respect polygonal obstacles (GH-939, Martin Davis)
   - Fix WKTWriter to emit EMPTY elements in multi-geometries (GH-952, Mike Taves)
@@ -26,6 +29,16 @@
   - Fix PreparedPolygonContains for GC with MultiPoint (GH-1008, Martin Davis)
   - Fix reading WKT with EMPTY token with white space (GH-1025, Mike Taves)
   - Fix buffer Inverted Ring Removal check (GH-1056, Martin Davis)
+  - Add PointLocation.isOnSegment and remove LineIntersector point methods (GH-1083, Martin Davis)
+  - Densify: Interpolate Z coordinates (GH-1094)
+  - GEOSLineSubstring: Fix crash on NaN length fractions (GH-1088, Dan Baston)
+  - MinimumClearance: Fix crash on NaN inputs (GH-1082, Dan Baston)
+  - Centroid: Fix crash on polygons with empty holes (GH-1075, Dan Baston)
+  - GEOSRelatePatternMatch: Fix crash on invalid DE-9IM pattern (GH-1089, Dan Baston)
+  - CoveragePolygonValidator: add section performance optimization (GH-1099, Martin Davis)
+  - TopologyPreservingSimplifier: fix to remove ring endpoints safely (GH-1110, Martin Davis)
+  - TopologyPreservingSimplifier: fix stack overflow on degenerate inputs (GH-1113, Dan Baston)
+  - DouglasPeuckerSimplifier: fix stack overflow on NaN tolerance (GH-1114, Dan Baston)
 
 ## Changes in 3.12.0
 2023-06-27
@@ -94,13 +107,13 @@
   - MaximumInscribedCircle: Fix infinite loop with non-finite coordinates (GH-843, Dan Baston)
   - DistanceOp: Fix crash on collection containing empty point (GH-842, Dan Baston)
   - OffsetCurve: improve behaviour and add Joined mode (JTS-956, Martin Davis)
-  - GeometryPrecisionReducer: preserve input collection types (GH-846, Paul Ramsey)
   - OffsetCurve: handle zero-distance offsets (GH-850, Martin Davis)
+  - OffsetCurve: fix EndCap parameter handling (GH-899, Martin Davis)
+  - GeometryPrecisionReducer: preserve input collection types (GH-846, Paul Ramsey)
   - Tri: add exceptions for invalid indexes (GH-853, Martin Davis)
   - LargestEmptyCircle: enhance boundary to allow any polygonal geometry (GH-859, Martin Davis)
   - Fix MaximumInscribedCircle and LargestEmptyCircle performance and memory issues (GH-883, Martin Davis)
   - GEOSHasZ: Fix handling with empty geometries (GH-887, Mike Taves)
-  - OffsetCurve: fix EndCap parameter handling (GH-899, Martin Davis)
   - Reduce artifacts in single-sided Buffers: (GH-665 #810 and #712, Sandro Santilli)
   - GeoJSONReader: Fix 2D empty geometry creation (GH-909, Mike Taves)
   - GEOSClipByRect: Fix case with POINT EMPTY (GH-913, Mike Taves)
@@ -153,6 +166,8 @@
   - Fix BufferOp inverted ring check (JTS-878, Martin Davis)
   - Fix OverlayNG geomunion to avoid lines in result (Martin Davis)
 
+- Changes:
+  - Offset curves now have the same direction as the input line, for both positive and negative offsets.
 
 ## Changes in 3.10.0
 2021-10-20

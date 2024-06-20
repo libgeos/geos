@@ -28,6 +28,8 @@
 
 #include <cmath> // for std::abs
 
+#include "geos/util.h"
+
 using namespace geos::geom;
 
 namespace geos {
@@ -68,6 +70,8 @@ Centroid::getCentroid(CoordinateXY& cent) const
 void
 Centroid::add(const Geometry& geom)
 {
+    util::ensureNoCurvedComponents(geom);
+
     if(geom.isEmpty()) {
         return;
     }
@@ -124,6 +128,10 @@ Centroid::addShell(const CoordinateSequence& pts)
 void
 Centroid::addHole(const CoordinateSequence& pts)
 {
+    if (pts.isEmpty()) {
+        return;
+    }
+
     bool isPositiveArea = Orientation::isCCW(&pts);
     for(std::size_t i = 0, e = pts.size() - 1; i < e; ++i) {
         addTriangle(*areaBasePt, pts.getAt<CoordinateXY>(i), pts.getAt<CoordinateXY>(i + 1), isPositiveArea);

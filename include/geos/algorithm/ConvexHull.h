@@ -33,6 +33,8 @@
 #include <geos/util/UniqueCoordinateArrayFilter.h>
 #include <geos/util/CoordinateArrayFilter.h>
 
+#include "geos/util.h"
+
 #ifdef _MSC_VER
 #pragma warning(push)
 #pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
@@ -178,7 +180,9 @@ public:
     ConvexHull(const geom::Geometry* newGeometry)
         : inputGeom(newGeometry)
         , geomFactory(newGeometry->getFactory())
-    {};
+    {
+      util::ensureNoCurvedComponents(inputGeom);
+    };
 
     ~ConvexHull() {};
 

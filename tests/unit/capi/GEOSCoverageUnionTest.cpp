@@ -10,36 +10,24 @@
 #include <cstdlib>
 #include <cstring>
 
+#include "capi_test_utils.h"
+
 namespace tut {
 //
 // Test Group
 //
 
 // Common data used in test cases.
-struct test_capicoverageunion_data {
-    static void
-    notice(const char *fmt, ...) {
-        std::fprintf(stdout, "NOTICE: ");
-
-        va_list ap;
-        va_start(ap, fmt);
-        std::vfprintf(stdout, fmt, ap);
-        va_end(ap);
-
-        std::fprintf(stdout, "\n");
-    }
+struct test_capicoverageunion_data : public capitest::utility {
 
     test_capicoverageunion_data() {
-        m_context = initGEOS_r(notice, notice);
-        m_reader = GEOSWKTReader_create_r(m_context);
+        m_reader = GEOSWKTReader_create();
     }
 
     ~test_capicoverageunion_data() {
-        GEOSWKTReader_destroy_r(m_context, m_reader);
-        finishGEOS_r(m_context);
+        GEOSWKTReader_destroy(m_reader);
     }
 
-    GEOSContextHandle_t m_context;
     GEOSWKTReader* m_reader;
 };
 
@@ -64,19 +52,19 @@ template<> void object::test<1>
             "POLYGON ((1 0, 1 1, 2 1, 2 0, 1 0))"
     };
 
-    auto g1 = GEOSWKTReader_read_r(m_context, m_reader, wkt[0].c_str());
-    auto g2 = GEOSWKTReader_read_r(m_context, m_reader, wkt[1].c_str());
+    auto g1 = GEOSWKTReader_read(m_reader, wkt[0].c_str());
+    auto g2 = GEOSWKTReader_read(m_reader, wkt[1].c_str());
 
     GEOSGeometry* geoms[2] = { g1, g2 };
 
-    auto input = GEOSGeom_createCollection_r(m_context, GEOS_GEOMETRYCOLLECTION, geoms, 2);
-    auto result = GEOSCoverageUnion_r(m_context, input);
+    auto input = GEOSGeom_createCollection(GEOS_GEOMETRYCOLLECTION, geoms, 2);
+    auto result = GEOSCoverageUnion(input);
 
     ensure( result != nullptr );
-    ensure( GEOSGeomTypeId_r(m_context, result) == GEOS_POLYGON );
+    ensure( GEOSGeomTypeId(result) == GEOS_POLYGON );
 
-    GEOSGeom_destroy_r(m_context, input);
-    GEOSGeom_destroy_r(m_context, result);
+    GEOSGeom_destroy(input);
+    GEOSGeom_destroy(result);
 }
 
 template<>
@@ -89,20 +77,32 @@ void object::test<2>
             "POLYGON ((1 0, 0.9 1, 2 1, 2 0, 1 0))"
     };
 
-    auto g1 = GEOSWKTReader_read_r(m_context, m_reader, wkt[0].c_str());
-    auto g2 = GEOSWKTReader_read_r(m_context, m_reader, wkt[1].c_str());
+    auto g1 = GEOSWKTReader_read(m_reader, wkt[0].c_str());
+    auto g2 = GEOSWKTReader_read(m_reader, wkt[1].c_str());
 
     GEOSGeometry* geoms[2] = { g1, g2 };
 
-    auto input = GEOSGeom_createCollection_r(m_context, GEOS_GEOMETRYCOLLECTION, geoms, 2);
-    auto result = GEOSCoverageUnion_r(m_context, input);
+    auto input = GEOSGeom_createCollection(GEOS_GEOMETRYCOLLECTION, geoms, 2);
+    auto result = GEOSCoverageUnion(input);
     ensure( result != nullptr );
-    ensure( GEOSEquals_r(m_context, input, result) );
+    ensure( GEOSEquals(input, result) );
 
-    GEOSGeom_destroy_r(m_context, input);
-    GEOSGeom_destroy_r(m_context, result);
+    GEOSGeom_destroy(input);
+    GEOSGeom_destroy(result);
 }
 
+template<>
+template<> void object::test<4>
+()
+{
+    input_ = fromWKT("GEOMETRYCOLLECTION ( "
+        "CURVEPOLYGON (COMPOUNDCURVE ( CIRCULARSTRING (2 0, 1 1, 2 2), (2 2, 0 2, 0 0, 2 0))), "
+        "CURVEPOLYGON (COMPOUNDCURVE ( CIRCULARSTRING (2 2, 1 1, 2 0), (2 0, 4 0, 4 2, 2 2))))");
+    ensure(input_);
+
+    result_ = GEOSCoverageSimplifyVW(input_, 0.1, false);
+    ensure("curved geometry not supported", result_ == nullptr);
+}
 
 } // namespace tut
 

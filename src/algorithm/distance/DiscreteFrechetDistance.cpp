@@ -28,6 +28,8 @@
 #include <algorithm>
 #include <limits>
 #include <iostream>
+
+#include "geos/util.h"
 using namespace geos::geom;
 
 namespace geos {
@@ -141,6 +143,9 @@ DiscreteFrechetDistance::compute(
     if (discreteGeom.isEmpty() || geom.isEmpty()) {
         throw util::IllegalArgumentException("DiscreteFrechetDistance called with empty inputs.");
     }
+
+    util::ensureNoCurvedComponents(discreteGeom);
+    util::ensureNoCurvedComponents(geom);
 
     auto lp = discreteGeom.getCoordinates();
     auto lq = geom.getCoordinates();

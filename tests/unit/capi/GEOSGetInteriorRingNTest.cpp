@@ -42,5 +42,17 @@ namespace tut
         ensure(GEOSGetInteriorRingN(geom1_, 0) == nullptr);
     }
 
+    template<>
+    template<>
+    void object::test<3>()
+    {
+        input_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE (CIRCULARSTRING (0 0, 10 10, 20 0), (20 0, 0 0)), (8 8, 9 9, 9 8, 8 8))");
+        ensure(input_ != nullptr);
+
+        const GEOSGeometry* intring = GEOSGetInteriorRingN(input_, 0);
+        ensure(intring);
+
+        ensure_equals(toWKT(intring), "LINESTRING (8 8, 9 9, 9 8, 8 8)");
+    }
 
 } // namespace tut

@@ -175,4 +175,16 @@ void object::test<8>
     check_voronoi_ordered("LINESTRING (1 1, 2 2, 3 3)");
 }
 
+template<>
+template<>
+void object::test<9>
+()
+{
+    input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    ensure(input_);
+
+    result_ = GEOSVoronoiDiagram(input_, nullptr, 0, 0);
+    ensure("curved geometry not supported", result_ == nullptr);
+}
+
 } // namespace tut

@@ -102,6 +102,12 @@ IsValidOp::isValidGeometry(const Geometry* g)
             return isValid(static_cast<const GeometryCollection*>(g));
         case GEOS_GEOMETRYCOLLECTION:
             return isValid(static_cast<const GeometryCollection*>(g));
+        case GEOS_CIRCULARSTRING:
+        case GEOS_COMPOUNDCURVE:
+        case GEOS_CURVEPOLYGON:
+        case GEOS_MULTICURVE:
+        case GEOS_MULTISURFACE:
+            throw util::UnsupportedOperationException("Curved types not supported in IsValidOp.");
     }
 
     // geometry type not known

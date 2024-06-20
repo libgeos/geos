@@ -26,6 +26,7 @@
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/PrecisionModel.h>
+#include <geos/geom/Polygon.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/export.h>
 
@@ -36,6 +37,8 @@
 namespace geos {
 namespace geom {
 class Coordinate;
+class CircularString;
+class CompoundCurve;
 class CoordinateSequence;
 class Envelope;
 class Geometry;
@@ -43,9 +46,11 @@ class GeometryCollection;
 class LineString;
 class LinearRing;
 class MultiLineString;
+class MultiCurve;
 class MultiPoint;
 class MultiPolygon;
-class Polygon;
+class MultiSurface;
+class CurvePolygon;
 }
 }
 
@@ -142,6 +147,7 @@ public:
 
     /// Creates an EMPTY Point
     std::unique_ptr<Point> createPoint(std::size_t coordinateDimension = 2) const;
+    std::unique_ptr<Point> createPoint(bool hasZ, bool hasM) const;
 
     /// Creates a Point using the given Coordinate
     std::unique_ptr<Point> createPoint(const Coordinate& coordinate) const;
@@ -159,7 +165,7 @@ public:
     std::unique_ptr<GeometryCollection> createGeometryCollection() const;
 
     /// Construct the EMPTY Geometry
-    std::unique_ptr<Geometry> createEmptyGeometry() const;
+    std::unique_ptr<Geometry> createEmptyGeometry(GeometryTypeId type = GEOS_GEOMETRYCOLLECTION, bool hasZ=false, bool hasM=false) const;
 
     /// Construct a GeometryCollection taking ownership of given arguments
     template<typename T>
@@ -187,6 +193,16 @@ public:
     std::unique_ptr<MultiLineString> createMultiLineString(
             std::vector<std::unique_ptr<Geometry>> && fromLines) const;
 
+    /// Construct an EMPTY MultiCurve
+    std::unique_ptr<MultiCurve> createMultiCurve() const;
+
+    /// Construct a MultiCurve taking ownership of given arguments
+    std::unique_ptr<MultiCurve> createMultiCurve(
+            std::vector<std::unique_ptr<Geometry>> && fromCurves) const;
+
+    std::unique_ptr<MultiCurve> createMultiCurve(
+            std::vector<std::unique_ptr<Curve>> && fromCurves) const;
+
     /// Construct an EMPTY MultiPolygon
     std::unique_ptr<MultiPolygon> createMultiPolygon() const;
 
@@ -201,8 +217,19 @@ public:
     std::unique_ptr<MultiPolygon> createMultiPolygon(
             std::vector<std::unique_ptr<Geometry>> && fromPolys) const;
 
+    /// Construct an EMPTY MultiSurface
+    std::unique_ptr<MultiSurface> createMultiSurface() const;
+
+    /// Construct a MultiSurface taking ownership of given arguments
+    std::unique_ptr<MultiSurface> createMultiSurface(
+            std::vector<std::unique_ptr<Geometry>> && from) const;
+
+    std::unique_ptr<MultiSurface> createMultiSurface(
+            std::vector<std::unique_ptr<Surface>> && from) const;
+
     /// Construct an EMPTY LinearRing
     std::unique_ptr<LinearRing> createLinearRing(std::size_t coordinateDimension = 2) const;
+    std::unique_ptr<LinearRing> createLinearRing(bool hasZ, bool hasM) const;
 
     /// Construct a LinearRing taking ownership of given arguments
     std::unique_ptr<LinearRing> createLinearRing(
@@ -244,6 +271,7 @@ public:
 
     /// Construct an EMPTY Polygon
     std::unique_ptr<Polygon> createPolygon(std::size_t coordinateDimension = 2) const;
+    std::unique_ptr<Polygon> createPolygon(bool hasZ, bool hasM) const;
 
     /// Construct a Polygon taking ownership of given arguments
     std::unique_ptr<Polygon> createPolygon(std::unique_ptr<LinearRing> && shell) const;
@@ -258,8 +286,19 @@ public:
     Polygon* createPolygon(const LinearRing& shell,
                            const std::vector<LinearRing*>& holes) const;
 
+
+    /// Construct an EMPTY CurvePolygon
+    std::unique_ptr<CurvePolygon> createCurvePolygon(bool hasZ, bool hasM) const;
+
+    /// Construct a CurvePolygon taking ownership of given arguments
+    std::unique_ptr<CurvePolygon> createCurvePolygon(std::unique_ptr<Curve>&& shell) const;
+
+    std::unique_ptr<CurvePolygon> createCurvePolygon(std::unique_ptr<Curve>&& shell,
+                                                     std::vector<std::unique_ptr<Curve>> && holes) const;
+
     /// Construct an EMPTY LineString
     std::unique_ptr<LineString> createLineString(std::size_t coordinateDimension = 2) const;
+    std::unique_ptr<LineString> createLineString(bool hasZ, bool hasM) const;
 
     /// Copy a LineString
     std::unique_ptr<LineString> createLineString(const LineString& ls) const;
@@ -271,6 +310,26 @@ public:
     /// Construct a LineString with a deep-copy of given argument
     std::unique_ptr<LineString> createLineString(
         const CoordinateSequence& coordinates) const;
+
+    /// Construct an EMPTY CircularString
+    std::unique_ptr<CircularString> createCircularString(bool hasZ, bool hasM) const;
+
+    /// Copy a CircularString
+    std::unique_ptr<CircularString> createCircularString(const CircularString& ls) const;
+
+    /// Construct a CircularString taking ownership of given argument
+    std::unique_ptr<CircularString> createCircularString(
+        std::unique_ptr<CoordinateSequence> && coordinates) const;
+
+    /// Construct a CircularString with a deep-copy of given argument
+    std::unique_ptr<CircularString> createCircularString(
+        const CoordinateSequence& coordinates) const;
+
+    /// Construct an EMPTY CompoundCurve
+    std::unique_ptr<CompoundCurve> createCompoundCurve() const;
+
+    /// Construct a CompoundCurve taking ownership of given argument
+    std::unique_ptr<CompoundCurve> createCompoundCurve(std::vector<std::unique_ptr<SimpleCurve>>&&) const;
 
     /**
     * Creates an empty atomic geometry of the given dimension.

@@ -83,6 +83,9 @@ OverlayNGRobust::Union(const Geometry* a)
 std::unique_ptr<Geometry>
 OverlayNGRobust::Overlay(const Geometry* geom0, const Geometry* geom1, int opCode)
 {
+    geos::util::ensureNoCurvedComponents(geom0);
+    geos::util::ensureNoCurvedComponents(geom1);
+
     std::unique_ptr<Geometry> result;
     std::runtime_error exOriginal("");
 
@@ -106,7 +109,9 @@ OverlayNGRobust::Overlay(const Geometry* geom0, const Geometry* geom1, int opCod
      */
     try {
         geom::PrecisionModel PM_FLOAT;
-        // std::cerr << "Using floating point overlay." << std::endl;
+#if GEOS_DEBUG
+        std::cerr << "Using floating point overlay." << std::endl;
+#endif
         result = OverlayNG::overlay(geom0, geom1, opCode, &PM_FLOAT);
 
         // Simple noding with no validation

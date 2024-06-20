@@ -246,6 +246,8 @@ protected:
 
     int compareToSameClass(const Geometry* gc) const override;
 
+    bool hasCurvedComponents() const override;
+
 };
 
 } // namespace geos::geom

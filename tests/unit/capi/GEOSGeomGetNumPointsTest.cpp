@@ -40,5 +40,13 @@ void object::test<3>()
     ensure_equals(GEOSGeomGetNumPoints(input_), -1);
 }
 
+template<>
+template<>
+void object::test<4>()
+{
+    input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    ensure_equals(GEOSGeomGetNumPoints(input_), 3);
+}
+
 } // namespace tut
 

@@ -31,5 +31,40 @@ void object::test<1>()
     ensure_equals(1, GEOSRelatePattern(geom1_, geom3_, "*FF*FF212"));
 }
 
+template<>
+template<>
+void object::test<2>()
+{
+    geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    geom2_ = fromWKT("LINESTRING (1 0, 2 1)");
+
+    ensure(geom1_);
+    ensure(geom2_);
+
+    ensure_equals("curved geometry not supported", GEOSRelatePattern(geom1_, geom2_, "0********"), 2);
+    ensure_equals("curved geometry not supported", GEOSRelatePattern(geom2_, geom1_, "0********"), 2);
+}
+
+// invalid DE-9IM
+template<>
+template<>
+void object::test<3>()
+{
+    geom1_ = fromWKT("POINT(1 2)");
+    geom2_ = fromWKT("POINT(1 2)");
+
+    ensure(geom1_);
+    ensure(geom2_);
+
+    // pattern too long
+    ensure_equals(2, GEOSRelatePattern(geom1_, geom2_, "0FFFFF2120000000000000000000"));
+
+    // pattern too short
+    ensure_equals(2, GEOSRelatePattern(geom1_, geom2_, "0F"));
+
+    // pattern has invalid characters
+    ensure_equals(0, GEOSRelatePattern(geom1_, geom2_, "123456789"));
+}
+
 } // namespace tut
 

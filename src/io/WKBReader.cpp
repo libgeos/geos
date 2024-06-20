@@ -20,15 +20,21 @@
 #include <geos/io/WKBConstants.h>
 #include <geos/io/ByteOrderValues.h>
 #include <geos/io/ParseException.h>
+#include <geos/geom/CircularString.h>
+#include <geos/geom/CompoundCurve.h>
+#include <geos/geom/CurvePolygon.h>
+#include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/Polygon.h>
+#include <geos/geom/MultiCurve.h>
 #include <geos/geom/MultiPoint.h>
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/MultiPolygon.h>
+#include <geos/geom/MultiSurface.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/util.h>
@@ -57,6 +63,7 @@ WKBReader::WKBReader(geom::GeometryFactory const& f)
 WKBReader::WKBReader()
     : WKBReader(*(GeometryFactory::getDefaultInstance()))
     {}
+
 
 void
 WKBReader::setFixStructure(bool doFixStructure)
@@ -178,7 +185,7 @@ WKBReader::readHEX(std::istream& is)
 }
 
 void
-WKBReader::minMemSize(int geomType, uint64_t size)
+WKBReader::minMemSize(geom::GeometryTypeId geomType, uint64_t size) const
 {
     uint64_t minSize = 0;
     constexpr uint64_t minCoordSize = 2 * sizeof(double);
@@ -191,18 +198,24 @@ WKBReader::minMemSize(int geomType, uint64_t size)
     switch(geomType) {
         case GEOS_LINESTRING:
         case GEOS_LINEARRING:
+        case GEOS_CIRCULARSTRING:
+        case GEOS_COMPOUNDCURVE:
+        case GEOS_POINT:
             minSize = size * minCoordSize;
             break;
         case GEOS_POLYGON:
+        case GEOS_CURVEPOLYGON:
             minSize = size * minRingSize;
             break;
         case GEOS_MULTIPOINT:
             minSize = size * minPtSize;
             break;
         case GEOS_MULTILINESTRING:
+        case GEOS_MULTICURVE:
             minSize = size * minLineSize;
             break;
         case GEOS_MULTIPOLYGON:
+        case GEOS_MULTISURFACE:
             minSize = size * minPolySize;
             break;
         case GEOS_GEOMETRYCOLLECTION:
@@ -309,8 +322,17 @@ WKBReader::readGeometry()
     case WKBConstants::wkbLineString :
         result = readLineString();
         break;
+    case WKBConstants::wkbCircularString :
+        result = readCircularString();
+        break;
+    case WKBConstants::wkbCompoundCurve :
+        result = readCompoundCurve();
+        break;
     case WKBConstants::wkbPolygon :
         result = readPolygon();
+        break;
+    case WKBConstants::wkbCurvePolygon :
+        result = readCurvePolygon();
         break;
     case WKBConstants::wkbMultiPoint :
         result = readMultiPoint();
@@ -323,6 +345,12 @@ WKBReader::readGeometry()
         break;
     case WKBConstants::wkbGeometryCollection :
         result = readGeometryCollection();
+        break;
+    case WKBConstants::wkbMultiCurve :
+        result = readMultiCurve();
+        break;
+    case WKBConstants::wkbMultiSurface :
+        result = readMultiSurface();
         break;
     default:
         std::stringstream err;
@@ -376,6 +404,30 @@ WKBReader::readLinearRing()
     return factory.createLinearRing(std::move(pts));
 }
 
+std::unique_ptr<CircularString>
+WKBReader::readCircularString()
+{
+    uint32_t size = dis.readUnsigned();
+    minMemSize(GEOS_CIRCULARSTRING, size);
+    auto pts = readCoordinateSequence(size);
+    return factory.createCircularString(std::move(pts));
+}
+
+std::unique_ptr<CompoundCurve>
+WKBReader::readCompoundCurve()
+{
+    auto numCurves = dis.readUnsigned();
+    minMemSize(GEOS_COMPOUNDCURVE, numCurves);
+
+    std::vector<std::unique_ptr<SimpleCurve>> curves(numCurves);
+
+    for (std::uint32_t i = 0; i < numCurves; i++) {
+        curves[i] = readChild<SimpleCurve>();
+    }
+
+    return factory.createCompoundCurve(std::move(curves));
+}
+
 std::unique_ptr<Polygon>
 WKBReader::readPolygon()
 {
@@ -402,7 +454,36 @@ WKBReader::readPolygon()
 
         return factory.createPolygon(std::move(shell), std::move(holes));
     }
+
     return factory.createPolygon(std::move(shell));
+}
+
+std::unique_ptr<CurvePolygon>
+WKBReader::readCurvePolygon()
+{
+    uint32_t numRings = dis.readUnsigned();
+    minMemSize(GEOS_POLYGON, numRings);
+
+#if DEBUG_WKB_READER
+    std::size_t << "WKB numRings: " << numRings << std::endl;
+#endif
+
+    if (numRings == 0) {
+        return factory.createCurvePolygon(hasZ, hasM);
+    }
+
+    auto shell = readChild<Curve>();
+
+    if(numRings > 1) {
+        std::vector<std::unique_ptr<Curve>> holes(numRings - 1);
+        for(uint32_t i = 0; i < numRings - 1; i++) {
+            holes[i] = readChild<Curve>();
+        }
+
+        return factory.createCurvePolygon(std::move(shell), std::move(holes));
+    }
+
+    return factory.createCurvePolygon(std::move(shell));
 }
 
 std::unique_ptr<MultiPoint>
@@ -413,12 +494,7 @@ WKBReader::readMultiPoint()
     std::vector<std::unique_ptr<Geometry>> geoms(numGeoms);
 
     for(uint32_t i = 0; i < numGeoms; i++) {
-        geoms[i] = readGeometry();
-        if(!dynamic_cast<Point*>(geoms[i].get())) {
-            std::stringstream err;
-            err << BAD_GEOM_TYPE_MSG << " MultiPoint";
-            throw ParseException(err.str());
-        }
+        geoms[i] = readChild<Point>();
     }
 
     return factory.createMultiPoint(std::move(geoms));
@@ -432,12 +508,7 @@ WKBReader::readMultiLineString()
     std::vector<std::unique_ptr<Geometry>> geoms(numGeoms);
 
     for(uint32_t i = 0; i < numGeoms; i++) {
-        geoms[i] = readGeometry();
-        if(!dynamic_cast<LineString*>(geoms[i].get())) {
-            std::stringstream err;
-            err << BAD_GEOM_TYPE_MSG << " LineString";
-            throw  ParseException(err.str());
-        }
+        geoms[i] = readChild<LineString>();
     }
 
     return factory.createMultiLineString(std::move(geoms));
@@ -451,15 +522,38 @@ WKBReader::readMultiPolygon()
     std::vector<std::unique_ptr<Geometry>> geoms(numGeoms);
 
     for(uint32_t i = 0; i < numGeoms; i++) {
-        geoms[i] = readGeometry();
-        if(!dynamic_cast<Polygon*>(geoms[i].get())) {
-            std::stringstream err;
-            err << BAD_GEOM_TYPE_MSG << " Polygon";
-            throw ParseException(err.str());
-        }
+        geoms[i] = readChild<Polygon>();
     }
 
     return factory.createMultiPolygon(std::move(geoms));
+}
+
+std::unique_ptr<MultiCurve>
+WKBReader::readMultiCurve()
+{
+    uint32_t numGeoms = dis.readUnsigned();
+    minMemSize(GEOS_MULTICURVE, numGeoms);
+    std::vector<std::unique_ptr<Curve>> geoms(numGeoms);
+
+    for(uint32_t i = 0; i < numGeoms; i++) {
+        geoms[i] = readChild<Curve>();
+    }
+
+    return factory.createMultiCurve(std::move(geoms));
+}
+
+std::unique_ptr<MultiSurface>
+WKBReader::readMultiSurface()
+{
+    uint32_t numGeoms = dis.readUnsigned();
+    minMemSize(GEOS_MULTISURFACE, numGeoms);
+    std::vector<std::unique_ptr<Surface>> geoms(numGeoms);
+
+    for(uint32_t i = 0; i < numGeoms; i++) {
+        geoms[i] = readChild<Surface>();
+    }
+
+    return factory.createMultiSurface(std::move(geoms));
 }
 
 std::unique_ptr<GeometryCollection>

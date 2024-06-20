@@ -17,7 +17,10 @@
  **********************************************************************/
 
 
+#include <geos/geom/Geometry.h>
 #include <geos/geom/prep/PreparedPoint.h>
+
+#include "geos/util.h"
 
 namespace geos {
 namespace geom { // geos.geom
@@ -26,6 +29,8 @@ namespace prep { // geos.geom.prep
 bool
 PreparedPoint::intersects(const geom::Geometry* g) const
 {
+    util::ensureNoCurvedComponents(g);
+
     if(! envelopesIntersect(g)) {
         return false;
     }

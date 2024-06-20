@@ -30,6 +30,8 @@
 #include <sstream>
 #include <cassert>
 
+#include "geos/util.h"
+
 #define GEOS_COMPILATION
 
 using namespace geos::geom;
@@ -174,6 +176,8 @@ void GeoJSONWriter::encodeFeatureCollection(const geom::Geometry* g, geos_nlohma
 
 void GeoJSONWriter::encodeGeometry(const geom::Geometry* geometry, geos_nlohmann::ordered_json& j)
 {
+    util::ensureNoCurvedComponents(geometry);
+
     auto type = geometry->getGeometryTypeId();
     if (type == GEOS_POINT) {
         auto point = static_cast<const geom::Point*>(geometry);

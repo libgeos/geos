@@ -28,9 +28,6 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Dimension.h>
 #include <geos/geom/Envelope.h>
-#include <geos/geom/CoordinateSequenceFilter.h>
-#include <geos/geom/GeometryFilter.h>
-#include <geos/geom/GeometryComponentFilter.h>
 #include <geos/util.h>
 
 #include <vector>
@@ -48,57 +45,14 @@
 namespace geos {
 namespace geom { // geos::geom
 
-/*protected*/
-Polygon::Polygon(const Polygon& p)
-    :
-    Geometry(p),
-    shell(detail::make_unique<LinearRing>(*p.shell)),
-    holes(p.holes.size())
-{
-    for(std::size_t i = 0; i < holes.size(); ++i) {
-        holes[i] = detail::make_unique<LinearRing>(*p.holes[i]);
-    }
-}
-
-Polygon::Polygon(std::unique_ptr<LinearRing> && newShell,
-                 const GeometryFactory& newFactory) :
-        Geometry(&newFactory),
-        shell(std::move(newShell))
-{
-    if(shell == nullptr) {
-        shell = getFactory()->createLinearRing();
-    }
-}
-
-Polygon::Polygon(std::unique_ptr<LinearRing> && newShell,
-                 std::vector<std::unique_ptr<LinearRing>> && newHoles,
-                 const GeometryFactory& newFactory) :
-                 Geometry(&newFactory),
-                 shell(std::move(newShell)),
-                 holes(std::move(newHoles))
-{
-    if(shell == nullptr) {
-        shell = getFactory()->createLinearRing();
-    }
-
-    // TODO move into validateConstruction() method
-    if(shell->isEmpty() && hasNonEmptyElements(&holes)) {
-        throw util::IllegalArgumentException("shell is empty but holes are not");
-    }
-    if (hasNullElements(&holes)) {
-        throw util::IllegalArgumentException("holes must not contain null elements");
-    }
-}
-
-
 std::unique_ptr<CoordinateSequence>
 Polygon::getCoordinates() const
 {
     if(isEmpty()) {
-        return detail::make_unique<CoordinateSequence>(0u, hasZ(), hasM());
+        return std::make_unique<CoordinateSequence>(0u, hasZ(), hasM());
     }
 
-    auto cl = detail::make_unique<CoordinateSequence>(0u, hasZ(), hasM());
+    auto cl = std::make_unique<CoordinateSequence>(0u, hasZ(), hasM());
     cl->reserve(getNumPoints());
 
     // Add shell points
@@ -110,110 +64,6 @@ Polygon::getCoordinates() const
     }
 
     return cl;
-}
-
-size_t
-Polygon::getNumPoints() const
-{
-    std::size_t numPoints = shell->getNumPoints();
-    for(const auto& lr : holes) {
-        numPoints += lr->getNumPoints();
-    }
-    return numPoints;
-}
-
-Dimension::DimensionType
-Polygon::getDimension() const
-{
-    return Dimension::A; // area
-}
-
-uint8_t
-Polygon::getCoordinateDimension() const
-{
-    uint8_t dimension = 2;
-
-    if(shell != nullptr) {
-        dimension = std::max(dimension, shell->getCoordinateDimension());
-    }
-
-    for(const auto& hole : holes) {
-        dimension = std::max(dimension, hole->getCoordinateDimension());
-    }
-
-    return dimension;
-}
-
-bool
-Polygon::hasM() const {
-    if (shell->getCoordinatesRO()->hasM()) {
-        return true;
-    }
-
-    for (const auto& hole : holes) {
-        if (hole->getCoordinatesRO()->hasM()) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-bool
-Polygon::hasZ() const {
-    if (shell->getCoordinatesRO()->hasZ()) {
-        return true;
-    }
-
-    for (const auto& hole : holes) {
-        if (hole->getCoordinatesRO()->hasZ()) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
-int
-Polygon::getBoundaryDimension() const
-{
-    return 1;
-}
-
-bool
-Polygon::isEmpty() const
-{
-    return shell->isEmpty();
-}
-
-const LinearRing*
-Polygon::getExteriorRing() const
-{
-    return shell.get();
-}
-
-std::unique_ptr<LinearRing>
-Polygon::releaseExteriorRing()
-{
-    return std::move(shell);
-}
-
-size_t
-Polygon::getNumInteriorRing() const
-{
-    return holes.size();
-}
-
-const LinearRing*
-Polygon::getInteriorRingN(std::size_t n) const
-{
-    return holes[n].get();
-}
-
-std::vector<std::unique_ptr<LinearRing>>
-Polygon::releaseInteriorRings()
-{
-    return std::move(holes);
 }
 
 std::string
@@ -255,151 +105,6 @@ Polygon::getBoundary() const
     return getFactory()->createMultiLineString(std::move(rings));
 }
 
-bool
-Polygon::equalsExact(const Geometry* other, double tolerance) const
-{
-    if(!isEquivalentClass(other)) {
-        return false;
-    }
-
-    const Polygon* otherPolygon = detail::down_cast<const Polygon*>(other);
-    if(! otherPolygon) {
-        return false;
-    }
-
-    if(!shell->equalsExact(otherPolygon->shell.get(), tolerance)) {
-        return false;
-    }
-
-    std::size_t nholes = holes.size();
-
-    if(nholes != otherPolygon->holes.size()) {
-        return false;
-    }
-
-    for(std::size_t i = 0; i < nholes; i++) {
-        const LinearRing* hole = holes[i].get();
-        const LinearRing* otherhole = otherPolygon->holes[i].get();
-        if(!hole->equalsExact(otherhole, tolerance)) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-bool
-Polygon::equalsIdentical(const Geometry* other_g) const
-{
-    if(!isEquivalentClass(other_g)) {
-        return false;
-    }
-
-    const auto& other = static_cast<const Polygon&>(*other_g);
-
-    if (getNumInteriorRing() != other.getNumInteriorRing()) {
-        return false;
-    }
-
-    if (!getExteriorRing()->equalsIdentical(other.getExteriorRing())) {
-            return false;
-    }
-
-    for (std::size_t i = 0; i < getNumInteriorRing(); i++) {
-        if (!getInteriorRingN(i)->equalsIdentical(other.getInteriorRingN(i))) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
-void
-Polygon::apply_ro(CoordinateFilter* filter) const
-{
-    shell->apply_ro(filter);
-    for(const auto& lr : holes) {
-        lr->apply_ro(filter);
-    }
-}
-
-void
-Polygon::apply_rw(const CoordinateFilter* filter)
-{
-    shell->apply_rw(filter);
-    for(auto& lr : holes) {
-        lr->apply_rw(filter);
-    }
-}
-
-void
-Polygon::apply_rw(GeometryFilter* filter)
-{
-    filter->filter_rw(this);
-}
-
-void
-Polygon::apply_ro(GeometryFilter* filter) const
-{
-    filter->filter_ro(this);
-}
-
-std::unique_ptr<Geometry>
-Polygon::convexHull() const
-{
-    return getExteriorRing()->convexHull();
-}
-
-
-void
-Polygon::normalize()
-{
-    normalize(shell.get(), true);
-    for(auto& lr : holes) {
-        normalize(lr.get(), false);
-    }
-    std::sort(holes.begin(), holes.end(), [](const std::unique_ptr<LinearRing> & a, const std::unique_ptr<LinearRing> & b) {
-        return a->compareTo(b.get()) > 0;
-    });
-}
-
-void
-Polygon::orientRings(bool exteriorCW)
-{
-    shell->orient(exteriorCW);
-    for (auto& hole : holes) {
-        hole->orient(!exteriorCW);
-    }
-}
-
-int
-Polygon::compareToSameClass(const Geometry* g) const
-{
-    const Polygon* p = detail::down_cast<const Polygon*>(g);
-    int shellComp = shell->compareToSameClass(p->shell.get());
-    if (shellComp != 0) {
-        return shellComp;
-    }
-
-    size_t nHole1 = getNumInteriorRing();
-    size_t nHole2 = p->getNumInteriorRing();
-    if (nHole1 < nHole2) {
-        return -1;
-    }
-    if (nHole1 > nHole2) {
-        return 1;
-    }
-
-    for (size_t i=0; i < nHole1; i++) {
-        const LinearRing *lr = p->getInteriorRingN(i);
-        const int holeComp = getInteriorRingN(i)->compareToSameClass(lr);
-        if (holeComp != 0) {
-            return holeComp;
-        }
-    }
-
-    return 0;
-}
 
 /*
  * TODO: check this function, there should be CoordinateSequence copy
@@ -430,11 +135,6 @@ Polygon::normalize(LinearRing* ring, bool clockwise)
     ring->setPoints(&coords);
 }
 
-const CoordinateXY*
-Polygon::getCoordinate() const
-{
-    return shell->getCoordinate();
-}
 
 /*
  *  Returns the area of this <code>Polygon</code>
@@ -451,76 +151,6 @@ Polygon::getArea() const
         area -= algorithm::Area::ofRing(h);
     }
     return area;
-}
-
-/**
- * Returns the perimeter of this <code>Polygon</code>
- *
- * @return the perimeter of the polygon
- */
-double
-Polygon::getLength() const
-{
-    double len = 0.0;
-    len += shell->getLength();
-    for(const auto& hole : holes) {
-        len += hole->getLength();
-    }
-    return len;
-}
-
-void
-Polygon::apply_ro(GeometryComponentFilter* filter) const
-{
-    filter->filter_ro(this);
-    shell->apply_ro(filter);
-    for(std::size_t i = 0, n = holes.size(); i < n && !filter->isDone(); ++i) {
-        holes[i]->apply_ro(filter);
-    }
-}
-
-void
-Polygon::apply_rw(GeometryComponentFilter* filter)
-{
-    filter->filter_rw(this);
-    shell->apply_rw(filter);
-    for(std::size_t i = 0, n = holes.size(); i < n && !filter->isDone(); ++i) {
-        holes[i]->apply_rw(filter);
-    }
-}
-
-void
-Polygon::apply_rw(CoordinateSequenceFilter& filter)
-{
-    shell->apply_rw(filter);
-
-    if(! filter.isDone()) {
-        for(std::size_t i = 0, n = holes.size(); i < n; ++i) {
-            holes[i]->apply_rw(filter);
-            if(filter.isDone()) {
-                break;
-            }
-        }
-    }
-    if(filter.isGeometryChanged()) {
-        geometryChanged();
-    }
-}
-
-void
-Polygon::apply_ro(CoordinateSequenceFilter& filter) const
-{
-    shell->apply_ro(filter);
-
-    if(! filter.isDone()) {
-        for(std::size_t i = 0, n = holes.size(); i < n; ++i) {
-            holes[i]->apply_ro(filter);
-            if(filter.isDone()) {
-                break;
-            }
-        }
-    }
-    //if (filter.isGeometryChanged()) geometryChanged();
 }
 
 GeometryTypeId
@@ -572,6 +202,16 @@ Polygon::isRectangle() const
     return true;
 }
 
+void
+Polygon::orientRings(bool exteriorCW)
+{
+    shell->orient(exteriorCW);
+    for (auto& hole : holes) {
+        hole->orient(!exteriorCW);
+    }
+}
+
+
 Polygon*
 Polygon::reverseImpl() const
 {
@@ -589,6 +229,18 @@ Polygon::reverseImpl() const
     });
 
     return getFactory()->createPolygon(shell->reverse(), std::move(interiorRingsReversed)).release();
+}
+
+void
+Polygon::normalize()
+{
+    normalize(shell.get(), true);
+    for(auto& lr : holes) {
+        normalize(lr.get(), false);
+    }
+    std::sort(holes.begin(), holes.end(), [](const auto& a, const auto& b) {
+        return a->compareTo(b.get()) > 0;
+    });
 }
 
 } // namespace geos::geom

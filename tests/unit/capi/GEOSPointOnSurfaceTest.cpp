@@ -224,5 +224,17 @@ void object::test<9>
     ensure_equals(std::string(wkt_), std::string("POINT (182755.892 141812.8789)"));
 }
 
+template<>
+template<>
+void object::test<10>
+()
+{
+    input_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE(CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 0 0)))");
+    ensure(input_);
+
+    result_ = GEOSPointOnSurface(input_);
+    ensure("curved geometry not supported", result_ == nullptr);
+}
+
 } // namespace tut
 

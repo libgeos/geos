@@ -56,8 +56,20 @@ template<>
 template<>
 void object::test<3>()
 {
+    input_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE( CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 0 0) ))");
+    ensure(input_ != nullptr);
+
+    result_ = GEOSConcaveHullOfPolygons(input_, 0.7, false, false);
+    ensure("curved geometry not supported", result_ == nullptr);
+}
+  
+template<>
+template<>
+void object::test<3>()
+{
     input_ = fromWKT("POLYGON((0 0, 0 0, 0 0))");
     result_ = GEOSConcaveHullOfPolygons(input_, 0.7, false, false);
+    ensure(GEOSisEmpty(result_));
 }
 
 

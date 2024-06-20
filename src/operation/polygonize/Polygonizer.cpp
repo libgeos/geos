@@ -112,22 +112,9 @@ Polygonizer::add(std::vector<const Geometry*>* geomList)
  * @param g a Geometry with linework to be polygonized
  */
 void
-Polygonizer::add(Geometry* g)
-{
-    g->apply_ro(&lineStringAdder);
-}
-
-/*
- * Add a geometry to the linework to be polygonized.
- * May be called multiple times.
- * Any dimension of Geometry may be added;
- * the constituent linework will be extracted and used
- *
- * @param g a Geometry with linework to be polygonized
- */
-void
 Polygonizer::add(const Geometry* g)
 {
+    util::ensureNoCurvedComponents(g);
     g->apply_ro(&lineStringAdder);
 }
 
