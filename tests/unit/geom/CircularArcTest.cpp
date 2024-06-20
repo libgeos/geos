@@ -73,4 +73,19 @@ void object::test<2>()
     checkLength({1.6, 0.4}, {1.6, 0.5}, {1.7, 1}, 0.6122445326877711);
 }
 
+
+// test getArea()
+template<>
+template<>
+void object::test<3>()
+{
+    ensure_equals("half circle, R=2", CircularArc({-2, 0}, {0, 2}, {2, 0}).getArea(), MATH_PI*2);
+
+    ensure_equals("full circle, R=3", CircularArc({-3, 0}, {3, 0}, {-3, 0}).getArea(), MATH_PI*3*3);
+
+    ensure_equals("3/4, mouth up, R=2", CircularArc({-std::sqrt(2), std::sqrt(2)}, {0, -2}, {std::sqrt(2), std::sqrt(2)}).getArea(), MATH_PI*4 - 2*(MATH_PI/2-1), 1e-8);
+
+    ensure_equals("1/4, pointing up, R=2", CircularArc({-std::sqrt(2), std::sqrt(2)}, {0, 2}, {std::sqrt(2), std::sqrt(2)}).getArea(), 2*(MATH_PI/2-1), 1e-8);
+}
+
 }

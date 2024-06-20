@@ -12,6 +12,7 @@
  *
  **********************************************************************/
 
+#include <geos/algorithm/Area.h>
 #include <geos/geom/Curve.h>
 #include <geos/geom/CurvePolygon.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -53,7 +54,11 @@ namespace geom {
     }
 
     double CurvePolygon::getArea() const {
-        throw util::UnsupportedOperationException();
+        double sum = algorithm::Area::ofClosedCurve(*shell);
+        for (const auto& hole : holes) {
+            sum -= algorithm::Area::ofClosedCurve(*hole);
+        }
+        return sum;
     }
 
     bool CurvePolygon::hasCurvedComponents() const {

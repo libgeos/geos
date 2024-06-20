@@ -94,6 +94,8 @@ public:
 
     virtual bool isCoordinate(CoordinateXY& pt) const;
 
+    virtual bool isCurved() const = 0;
+
     bool isEmpty() const override;
 
     /** \brief

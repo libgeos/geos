@@ -74,7 +74,7 @@ void object::test<1>()
     ensure("getCoordinates", cp->getCoordinates()->isEmpty());
     ensure("getCoordinate", cp->getCoordinate() == nullptr);
 
-    ensure_THROW(cp->getArea(), geos::util::UnsupportedOperationException);
+    ensure_equals("getArea", cp->getArea(), 0.0);
     ensure_equals("getLength", cp->getLength(), 0.0);
 }
 
@@ -90,7 +90,7 @@ void object::test<2>()
 
     // Geometry size functions
     ensure("isEmpty", !cp_->isEmpty());
-    ensure_THROW(cp_->getArea(), geos::util::UnsupportedOperationException);
+    ensure_equals("getArea", cp_->getArea(), 9.0526564962674, 1e-8); // expected value from PostGIS with ST_CurveToLine(geom, 1e-13, 1)
     ensure_equals("getLength", cp_->getLength(), 19.236489581872586, 1e-8);
     ensure_equals("getNumGeometries", cp_->getNumGeometries(), 1u);
     ensure_equals("getNumPoints", cp_->getNumPoints(), 14u);
