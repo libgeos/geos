@@ -166,7 +166,7 @@ protected:
 
             // check rect point in poly (rect is known not to
             // touch polygon at this point)
-            if(SimplePointInAreaLocator::locatePointInPolygon(rectPt, poly) != geom::Location::EXTERIOR) {
+            if(SimplePointInAreaLocator::locatePointInSurface(rectPt, *poly) != geom::Location::EXTERIOR) {
                 containsPointVar = true;
                 return;
             }

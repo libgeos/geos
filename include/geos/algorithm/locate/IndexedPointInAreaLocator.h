@@ -60,7 +60,7 @@ private:
             // p1 follows p0 in a CoordinateSequence, we know that the address
             // of p1 is 16, 24, or 32 bytes greater than the address of p0.
             // By packing this offset into the least significant bits of p0,
-            // we can retrieve both p0 and p1 while only using 8 byytes.
+            // we can retrieve both p0 and p1 while only using 8 bytes.
             std::size_t os = static_cast<std::size_t>(reinterpret_cast<const double*>(p1) - reinterpret_cast<const double*>(p0)) - 2u;
             m_p0 = reinterpret_cast<std::size_t>(p0) | os;
 
