@@ -23,9 +23,6 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/LineString.h>
 
-#include <typeinfo>
-#include <cassert>
-
 using namespace geos::geom;
 
 namespace geos {
@@ -63,9 +60,10 @@ SimplePointInAreaLocator::locateInGeometry(const CoordinateXY& p, const Geometry
     }
 
     if (geom->getNumGeometries() == 1) {
-        if (geom->getGeometryTypeId() == GEOS_POLYGON) {
-            auto poly = static_cast<const Polygon*>(geom);
-            return locatePointInPolygon(p, poly);
+        auto typ = geom->getGeometryTypeId();
+        if (typ == GEOS_POLYGON || typ == GEOS_CURVEPOLYGON) {
+            auto surface = static_cast<const Surface*>(geom);
+            return locatePointInSurface(p, *surface);
         }
     }
     for (std::size_t i = 0; i < geom->getNumGeometries(); i++) {
@@ -80,28 +78,25 @@ SimplePointInAreaLocator::locateInGeometry(const CoordinateXY& p, const Geometry
 }
 
 geom::Location
-SimplePointInAreaLocator::locatePointInPolygon(const CoordinateXY& p, const Polygon* poly)
+SimplePointInAreaLocator::locatePointInSurface(const CoordinateXY& p, const Surface& surface)
 {
-    if(poly->isEmpty()) {
+    if(surface.isEmpty()) {
         return Location::EXTERIOR;
     }
-    if(!poly->getEnvelopeInternal()->contains(p)) {
+    if(!surface.getEnvelopeInternal()->contains(p)) {
         return Location::EXTERIOR;
     }
-    const LineString* shell = poly->getExteriorRing();
-    const CoordinateSequence* cl;
-    cl = shell->getCoordinatesRO();
-    Location shellLoc = PointLocation::locateInRing(p, *cl);
+    const Curve& shell = *surface.getExteriorRing();
+    Location shellLoc = PointLocation::locateInRing(p, shell);
     if(shellLoc != Location::INTERIOR) {
         return shellLoc;
     }
 
     // now test if the point lies in or on the holes
-    for(std::size_t i = 0, n = poly->getNumInteriorRing(); i < n; i++) {
-        const LineString* hole = poly->getInteriorRingN(i);
-        if(hole->getEnvelopeInternal()->contains(p)) {
-            cl = hole->getCoordinatesRO();
-            Location holeLoc = RayCrossingCounter::locatePointInRing(p, *cl);
+    for(std::size_t i = 0; i < surface.getNumInteriorRing(); i++) {
+        const Curve& hole = *surface.getInteriorRingN(i);
+        if(hole.getEnvelopeInternal()->contains(p)) {
+            Location holeLoc = RayCrossingCounter::locatePointInRing(p, hole);
             if(holeLoc == Location::BOUNDARY) {
                 return Location::BOUNDARY;
             }

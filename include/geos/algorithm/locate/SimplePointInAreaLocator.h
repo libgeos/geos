@@ -22,7 +22,7 @@ namespace geos {
 namespace geom {
 class Geometry;
 class Coordinate;
-class Polygon;
+class Surface;
 }
 }
 
@@ -51,7 +51,7 @@ public:
                                  const geom::Geometry* geom);
 
     /** \brief
-     * Determines the Location of a point in a [Polygon](@ref geom::Polygon).
+     * Determines the Location of a point in a [Surface](@ref geom::Surface).
      *
      * The return value is one of:
      *
@@ -69,8 +69,8 @@ public:
      * @param poly the geometry to test
      * @return the Location of the point in the polygon
      */
-    static geom::Location locatePointInPolygon(const geom::CoordinateXY& p,
-                                               const geom::Polygon* poly);
+    static geom::Location locatePointInSurface(const geom::CoordinateXY& p,
+                                               const geom::Surface& poly);
 
     /** \brief
      * Determines whether a point is contained in a [Geometry](@ref geom::Geometry),

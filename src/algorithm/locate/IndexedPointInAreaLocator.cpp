@@ -30,7 +30,6 @@
 #include <geos/index/ItemVisitor.h>
 
 #include <algorithm>
-#include <typeinfo>
 
 using geos::geom::CoordinateXY;
 
