@@ -144,6 +144,18 @@ TaggedLineStringSimplifier::simplifySection(std::size_t i,
               << std::endl;
 #endif
 
+    if (distance < 0) {
+        // negative distance indicates that we could not compute distance to the
+        // farthest point, probably because of infinite or large-magnitude coordinates.
+        // avoid trying to simplify this section.
+        for (std::size_t k = i; k < j; k++) {
+            auto newSeg = std::make_unique<TaggedLineSegment>(*(line->getSegment(k)));
+            line->addToResult(std::move(newSeg));
+        }
+
+        return;
+    }
+
     // flattening must be less than distanceTolerance
     if(distance > distanceTolerance) {
         isValidToSimplify = false;
@@ -267,7 +279,7 @@ TaggedLineStringSimplifier::hasOutputIntersection(
     //std::unique_ptr<std::vector<LineSegment*>>
     auto querySegs = outputIndex->query(&flatSeg);
 
-    for(const LineSegment* querySeg : *querySegs) {
+    for(const LineSegment* querySeg : querySegs) {
         if(hasInvalidIntersection(*querySeg, flatSeg)) {
             return true;
         }
@@ -304,7 +316,7 @@ TaggedLineStringSimplifier::hasInputIntersection(
 {
     const auto& querySegs = inputIndex->query(&flatSeg);
 
-    for(const LineSegment* ls : *querySegs) {
+    for(const LineSegment* ls : querySegs) {
         const TaggedLineSegment* querySeg = static_cast<const TaggedLineSegment*>(ls);
 
         if (hasInvalidIntersection(*ls, flatSeg)) {
