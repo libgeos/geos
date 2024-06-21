@@ -467,7 +467,6 @@ operator<<(std::ostream& os, const RelateEdge& re)
 }
 
 
-
 } // namespace geos.operation.overlayng
 } // namespace geos.operation
 } // namespace geos

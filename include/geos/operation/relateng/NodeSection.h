@@ -135,6 +135,14 @@ public:
     */
     int compareTo(const NodeSection& o) const;
 
+    /**
+     * Disable copy construction and assignment. Apparently needed to make this
+     * class compile under MSVC. (See https://stackoverflow.com/q/29565299)
+     */
+    NodeSection(const NodeSection&) = delete;
+    NodeSection& operator=(const NodeSection&) = delete;
+
+
 };
 
 } // namespace geos.operation.relateng
