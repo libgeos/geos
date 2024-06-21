@@ -76,6 +76,21 @@ public:
     static bool isInteriorSegment(const CoordinateXY* nodePt,
         const CoordinateXY* a0, const CoordinateXY* a1, const CoordinateXY* b);
 
+    /**
+    * Compares the angles of two vectors
+    * relative to the positive X-axis at their origin.
+    * Angles increase CCW from the X-axis.
+    *
+    * @param origin the origin of the vectors
+    * @param p the endpoint of the vector P
+    * @param q the endpoint of the vector Q
+    * @return a negative integer, zero, or a positive integer as this vector P has angle less than, equal to, or greater than vector Q
+    */
+    static int compareAngle(
+        const CoordinateXY* origin,
+        const CoordinateXY* p,
+        const CoordinateXY* q);
+
 
 private:
 
