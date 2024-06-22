@@ -398,7 +398,9 @@ jobs:
           -D BUILD_SHARED_LIBS=ON ^
           -D USE_CCACHE=ON ^
           ..
+        IF %ERRORLEVEL% NEQ 0 exit
         cmake --build . --config ${{ matrix.ci.build_type }} -j 4
+        IF %ERRORLEVEL% NEQ 0 exit
         ccache --show-stats --verbose
 
     - name: Save build cache
