@@ -597,7 +597,7 @@ private:
 #endif
                 ptInt = static_cast<const C1&>(nearest);
             } else {
-                if (&ptInt == static_cast<const geom::CoordinateXY*>(&p1) || &ptInt == static_cast<const geom::CoordinateXY*>(&p2)) {
+                if (&nearest == static_cast<const geom::CoordinateXY*>(&p1) || &nearest == static_cast<const geom::CoordinateXY*>(&p2)) {
                     ptInt = static_cast<const C1&>(nearest);
                 } else {
                     ptInt = static_cast<const C2&>(nearest);
