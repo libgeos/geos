@@ -9,9 +9,7 @@
 # See the COPYING file for more information.
 ##############################################################################
 
-# Require CMake 3.13+ with support for meta-features that request compiler
-# modes for specific C/C++ language standard levels, and object libraries.
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.15)
 
 #-----------------------------------------------------------------------------
 # Version
@@ -24,6 +22,7 @@ string(REGEX MATCH "GEOS_VERSION_MINOR=([0-9]+)" _ ${_version_txt})
 set(_version_minor ${CMAKE_MATCH_1})
 string(REGEX MATCH "GEOS_VERSION_PATCH=([0-9]+)" _ ${_version_txt})
 set(_version_patch ${CMAKE_MATCH_1})
+set(GEOS_VERSION_NOPATCH "${_version_major}.${_version_minor}.${_version_patch}")
 # OPTIONS: "", "dev", "rc1" etc.
 string(REGEX MATCH "GEOS_PATCH_WORD=([a-zA-Z0-9]+)" _ ${_version_txt})
 set(_version_patch_word ${CMAKE_MATCH_1})
@@ -56,23 +55,19 @@ unset(_version_capi_revision)
 #-----------------------------------------------------------------------------
 # Project
 #-----------------------------------------------------------------------------
-if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.9)
-  list(APPEND _project_info DESCRIPTION "GEOS - C++ port of the Java Topology Suite (JTS)")
-endif()
-if(CMAKE_VERSION VERSION_GREATER_EQUAL 3.12)
-  list(APPEND _project_info HOMEPAGE_URL "https://libgeos.org/")
-endif()
 
-project(GEOS VERSION "${_version_major}.${_version_minor}.${_version_patch}"
+project(GEOS
+  VERSION ${GEOS_VERSION_NOPATCH}
   LANGUAGES C CXX
-  ${_project_info})
+  DESCRIPTION "GEOS - C++ port of the Java Topology Suite (JTS)"
+  HOMEPAGE_URL "https://libgeos.org/"
+)
 
 if(NOT "${_version_patch_word}" STREQUAL "")
   # Re-write VERSION variables after project()
   set(GEOS_VERSION "${GEOS_VERSION}${_version_patch_word}")
   set(GEOS_VERSION_PATCH "${_version_patch}${_version_patch_word}")
 endif()
-set(GEOS_VERSION_NOPATCH "${_version_major}.${_version_minor}.${_version_patch}")
 
 unset(_version_major)
 unset(_version_minor)
@@ -97,12 +92,6 @@ endif()
 
 # Default to release build so packagers don't release debug builds
 set(DEFAULT_BUILD_TYPE Release)
-
-# Require CMake 3.13+ with VS generator for complete support of VS versions
-# and support by AppVeyor.
-if(${CMAKE_GENERATOR} MATCHES "Visual Studio")
-  cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
-endif()
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 

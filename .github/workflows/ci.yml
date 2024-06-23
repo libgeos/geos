@@ -54,7 +54,7 @@ jobs:
           cxxstd: 14
           arch: 64
           packages: 'g++-7-multilib gcc-7-multilib'
-          cmake: 3.13.*
+          cmake: 3.17.*
           os: ubuntu-20.04
 
         - cxx_compiler: g++-7
@@ -63,7 +63,7 @@ jobs:
           cxxstd: 14
           arch: 32
           packages: 'g++-7-multilib gcc-7-multilib g++-multilib gcc-multilib'
-          cmake: 3.13.*
+          cmake: 3.18.*
           os: ubuntu-20.04
 
         - cxx_compiler: g++-8
@@ -72,7 +72,7 @@ jobs:
           cxxstd: 14
           arch: 64
           packages: 'g++-8-multilib gcc-8-multilib'
-          cmake: 3.13.*
+          cmake: 3.21.*
           os: ubuntu-20.04
 
         - cxx_compiler: g++-9
@@ -81,7 +81,7 @@ jobs:
           cxxstd: 14
           arch: 64
           packages: 'g++-9-multilib gcc-9-multilib'
-          cmake: 3.13.*
+          cmake: 3.23.*
           os: ubuntu-20.04
 
         - cxx_compiler: g++-10
@@ -90,7 +90,7 @@ jobs:
           cxxstd: 14
           arch: 64
           packages: 'g++-10-multilib gcc-10-multilib'
-          cmake: 3.13.*
+          cmake: 3.25.*
           os: ubuntu-20.04
 
           # gcc 10 and lower are not supported
@@ -102,7 +102,7 @@ jobs:
           cxxstd: 17
           arch: 64
           packages: 'g++-11-multilib gcc-11-multilib'
-          cmake: 3.22.*
+          cmake: 3.27.*
           os: ubuntu-22.04
 
         - cxx_compiler: g++-12
@@ -111,7 +111,7 @@ jobs:
           cxxstd: 20
           arch: 64
           packages: 'g++-12-multilib gcc-12-multilib'
-          cmake: 3.22.*
+          cmake: 3.29.*
           os: ubuntu-22.04
 
         # - cxx_compiler: g++-13
@@ -132,7 +132,7 @@ jobs:
           cxxstd: 14
           arch: 64
           packages: 'clang-7'
-          cmake: 3.13.*
+          cmake: 3.15.*
           os: ubuntu-20.04
 
         - cxx_compiler: clang++-8
@@ -141,7 +141,7 @@ jobs:
           cxxstd: 14
           arch: 64
           packages: 'clang-8'
-          cmake: 3.13.*
+          cmake: 3.17.*
           os: ubuntu-20.04
 
         - cxx_compiler: clang++-9
@@ -150,7 +150,7 @@ jobs:
           cxxstd: 14
           arch: 64
           packages: 'clang-9'
-          cmake: 3.13.*
+          cmake: 3.20.*
           os: ubuntu-20.04
 
         - cxx_compiler: clang++-10
@@ -159,7 +159,7 @@ jobs:
           cxxstd: 14
           arch: 64
           packages: 'clang-10'
-          cmake: 3.17.*
+          cmake: 3.21.*
           os: ubuntu-20.04
 
           # clang 10 and lower are not supported
@@ -171,7 +171,7 @@ jobs:
           cxxstd: 14
           arch: 64
           packages: 'clang-11'
-          cmake: 3.25.*
+          cmake: 3.23.*
           os: ubuntu-22.04
 
         - cxx_compiler: clang++-12
@@ -189,7 +189,7 @@ jobs:
           cxxstd: 17
           arch: 64
           packages: 'clang-13'
-          cmake: 3.25.*
+          cmake: 3.27.*
           os: ubuntu-22.04
 
         - cxx_compiler: clang++-14
@@ -198,7 +198,7 @@ jobs:
           cxxstd: 20
           arch: 64
           packages: 'clang-14'
-          cmake: 3.25.*
+          cmake: 3.29.*
           os: ubuntu-22.04
 
     runs-on: ${{ matrix.ci.os }}
@@ -544,7 +544,7 @@ jobs:
         sudo -E apt-get update
         sudo -E apt-get autopurge -y needrestart
         sudo -E apt-get -yq --no-install-suggests --no-install-recommends install make python3-pip g++
-        python3 -m pip install --disable-pip-version-check --user cmake==3.13.*
+        python3 -m pip install --disable-pip-version-check --user cmake==3.15.*
         echo "$(python3 -m site --user-base)/bin" >> $GITHUB_PATH
 
     - name: 'Check Out'
