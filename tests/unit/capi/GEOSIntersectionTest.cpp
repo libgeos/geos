@@ -157,6 +157,9 @@ void object::test<8>()
     ensure("curved geometry not supported", result_ == nullptr);
 }
 
+// https://github.com/libgeos/geos/issues/1074
+// Make sure no crash occurs when LineIntersector has mixed-dimensionality
+// inputs and substitutes a segment endpoint for intersection point
 template<>
 template<>
 void object::test<9>()
@@ -165,6 +168,9 @@ void object::test<9>()
     geom2_ = fromWKT("LINESTRING (1.6409301755752343e+149 -5.298190649085575e+148, 1.6666666660752404e+149 -5.55555555396982e+148)");
 
     result_ = GEOSIntersection(geom1_, geom2_);
+    ensure(result_ != nullptr);
+    ensure("HasZ", GEOSHasZ(result_));
+    ensure("HasM", GEOSHasM(result_));
 }
 
 } // namespace tut
