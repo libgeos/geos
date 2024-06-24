@@ -139,8 +139,8 @@ public:
      * Disable copy construction and assignment. Apparently needed to make this
      * class compile under MSVC. (See https://stackoverflow.com/q/29565299)
      */
-    NodeSection(const NodeSection&) = delete;
-    NodeSection& operator=(const NodeSection&) = delete;
+    // NodeSection(const NodeSection&) = delete;
+    // NodeSection& operator=(const NodeSection&) = delete;
 
 
 };
