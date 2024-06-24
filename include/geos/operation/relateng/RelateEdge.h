@@ -121,12 +121,6 @@ public:
 
     friend std::ostream& operator<<(std::ostream& os, const RelateEdge& re);
 
-    /**
-     * Disable copy construction and assignment. Apparently needed to make this
-     * class compile under MSVC. (See https://stackoverflow.com/q/29565299)
-     */
-    // RelateEdge(const RelateEdge&) = delete;
-    // RelateEdge& operator=(const RelateEdge&) = delete;
 
 private:
 
