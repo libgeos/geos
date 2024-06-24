@@ -82,6 +82,13 @@ public:
 
     std::unique_ptr<RelateNode> createNode();
 
+    /**
+     * Disable copy construction and assignment. Apparently needed to make this
+     * class compile under MSVC. (See https://stackoverflow.com/q/29565299)
+     */
+    NodeSections(const NodeSections&) = delete;
+    NodeSections& operator=(const NodeSections&) = delete;
+
 };
 
 } // namespace geos.operation.relateng

@@ -123,6 +123,12 @@ public:
 
     friend std::ostream& operator<<(std::ostream& os, const RelateNode& ns);
 
+    /**
+     * Disable copy construction and assignment. Apparently needed to make this
+     * class compile under MSVC. (See https://stackoverflow.com/q/29565299)
+     */
+    RelateNode(const RelateNode&) = delete;
+    RelateNode& operator=(const RelateNode&) = delete;
 
 };
 
