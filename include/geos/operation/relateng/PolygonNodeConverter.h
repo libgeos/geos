@@ -37,28 +37,70 @@ namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace relateng { // geos.operation.relateng
 
-
+/**
+ * Converts the node sections at a polygon node where
+ * a shell and one or more holes touch, or two or more holes touch.
+ * This converts the node topological structure from
+ * the OGC "touching-rings" (AKA "minimal-ring") model to the equivalent "self-touch"
+ * (AKA "inverted/exverted ring" or "maximal ring") model.
+ * In the "self-touch" model the converted NodeSection corners enclose areas
+ * which all lies inside the polygon
+ * (i.e. they does not enclose hole edges).
+ * This allows {@link RelateNode} to use simple area-additive semantics
+ * for adding edges and propagating edge locations.
+ *
+ * The input node sections are assumed to have canonical orientation
+ * (CW shells and CCW holes).
+ * The arrangement of shells and holes must be topologically valid.
+ * Specifically, the node sections must not cross or be collinear.
+ *
+ * This supports multiple shell-shell touches
+ * (including ones containing holes), and hole-hole touches,
+ * This generalizes the relate algorithm to support
+ * both the OGC model and the self-touch model.
+ *
+ * @author Martin Davis
+ * @see RelateNode
+ */
 class GEOS_DLL PolygonNodeConverter {
-
-private:
-
-    // Members
-
-
-    // Methods
-
 
 public:
 
+    /**
+    * Converts a list of sections of valid polygon rings
+    * to have "self-touching" structure.
+    * There are the same number of output sections as input ones.
+    *
+    * @param polySections the original sections
+    * @return the converted sections
+    */
+    static std::vector<std::unique_ptr<NodeSection>> convert(
+        std::vector<const NodeSection*>& polySections);
 
-    static std::vector<const NodeSection*>
-        convert(std::vector<const NodeSection*>& polySections)
-        {
-            std::vector<const NodeSection*> sections;
-            std::size_t pssz = polySections.size();
-            std::cout << pssz;
-            return sections;
-        };
+
+private:
+
+    static std::size_t convertShellAndHoles(
+        std::vector<const NodeSection*>& sections,
+        std::size_t shellIndex,
+        std::vector<std::unique_ptr<NodeSection>>& convertedSections);
+
+    static std::vector<std::unique_ptr<NodeSection>> convertHoles(
+        std::vector<const NodeSection*>& sections);
+
+    static NodeSection* createSection(
+        const NodeSection* ns,
+        const CoordinateXY* v0,
+        const CoordinateXY* v1);
+
+    static std::vector<const NodeSection*> extractUnique(
+        std::vector<const NodeSection*>& sections);
+
+    static std::size_t next(
+        std::vector<const NodeSection *>& ns, std::size_t i);
+
+    static std::size_t findShell(
+        std::vector<const NodeSection *>& polySections);
 
 
 };

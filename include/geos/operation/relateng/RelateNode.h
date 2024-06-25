@@ -103,6 +103,7 @@ public:
     const std::vector<std::unique_ptr<RelateEdge>>& getEdges() const;
 
     void addEdges(std::vector<const NodeSection *>& nss);
+    void addEdges(std::vector<std::unique_ptr<NodeSection>>& nss);
 
     void addEdges(const NodeSection* ns);
 

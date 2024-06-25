@@ -61,6 +61,14 @@ RelateNode::addEdges(std::vector<const NodeSection *>& nss)
     }
 }
 
+/* public */
+void
+RelateNode::addEdges(std::vector<std::unique_ptr<NodeSection>>& nss)
+{
+    for (auto& ns : nss) {
+        addEdges(ns.get());
+    }
+}
 
 /* private */
 std::size_t

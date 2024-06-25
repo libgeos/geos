@@ -88,6 +88,18 @@ public:
         , m_poly(poly)
         {};
 
+    NodeSection(const NodeSection* ns)
+        : m_isA(ns->isA())
+        , m_dim(ns->dimension())
+        , m_id(ns->id())
+        , m_ringId(ns->ringId())
+        , m_isNodeAtVertex(ns->isNodeAtVertex())
+        , m_v0(ns->getVertex(0))
+        , m_nodePt(ns->nodePt())
+        , m_v1(ns->getVertex(1))
+        , m_poly(ns->getPolygonal())
+        {};
+
     const CoordinateXY* getVertex(int i) const;
 
     const CoordinateXY* nodePt() const;

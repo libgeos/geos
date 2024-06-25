@@ -90,7 +90,7 @@ NodeSections::createNode()
         //-- if there multiple polygon sections incident at node convert them to maximal-ring structure
         if (ns->isArea() && hasMultiplePolygonSections(sections, i)) {
             std::vector<const NodeSection*> polySections = collectPolygonSections(sections, i);
-            std::vector<const NodeSection*> nsConvert = PolygonNodeConverter::convert(polySections);
+            std::vector<std::unique_ptr<NodeSection>> nsConvert = PolygonNodeConverter::convert(polySections);
             node->addEdges(nsConvert);
             i += polySections.size();
         }
