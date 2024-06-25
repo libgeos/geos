@@ -35,7 +35,7 @@ namespace relateng {
 
 namespace geos {      // geos.
 namespace operation { // geos.operation
-namespace relateng { // geos.operation.relateng
+namespace relateng {  // geos.operation.relateng
 
 /**
  * Converts the node sections at a polygon node where
@@ -46,7 +46,7 @@ namespace relateng { // geos.operation.relateng
  * In the "self-touch" model the converted NodeSection corners enclose areas
  * which all lies inside the polygon
  * (i.e. they does not enclose hole edges).
- * This allows {@link RelateNode} to use simple area-additive semantics
+ * This allows RelateNode to use simple area-additive semantics
  * for adding edges and propagating edge locations.
  *
  * The input node sections are assumed to have canonical orientation
