@@ -18,6 +18,8 @@
 #include <geos/geom/Location.h>
 #include <geos/export.h>
 
+#include <memory>
+#include <vector>
 
 // Forward declarations
 namespace geos {

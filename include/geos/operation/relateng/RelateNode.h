@@ -15,10 +15,12 @@
 
 #pragma once
 
+#include <geos/operation/relateng/RelateEdge.h>
+
 #include <vector>
+#include <memory>
 #include <cassert>
 
-#include <geos/operation/relateng/RelateEdge.h>
 #include <geos/export.h>
 
 

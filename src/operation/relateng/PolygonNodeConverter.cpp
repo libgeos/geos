@@ -20,6 +20,8 @@
 #include <geos/geom/Dimension.h>
 #include <geos/constants.h>
 
+#include <algorithm>
+
 
 using geos::algorithm::PolygonNodeTopology;
 using geos::geom::CoordinateXY;
