@@ -53,11 +53,11 @@ private:
     int m_dim;
     int m_id;
     int m_ringId;
+    const Geometry* m_poly;
     bool m_isNodeAtVertex;
     const CoordinateXY* m_v0;
     const CoordinateXY* m_nodePt;
     const CoordinateXY* m_v1;
-    const Geometry* m_poly;
 
     // Methods
 
@@ -72,20 +72,20 @@ public:
         int dim,
         int id,
         int ringId,
+        const Geometry* poly,
         bool isNodeAtVertex,
         const CoordinateXY* v0,
         const CoordinateXY* nodePt,
-        const CoordinateXY* v1,
-        const Geometry* poly)
+        const CoordinateXY* v1)
         : m_isA(isA)
         , m_dim(dim)
         , m_id(id)
         , m_ringId(ringId)
+        , m_poly(poly)
         , m_isNodeAtVertex(isNodeAtVertex)
         , m_v0(v0)
         , m_nodePt(nodePt)
         , m_v1(v1)
-        , m_poly(poly)
         {};
 
     NodeSection(const NodeSection* ns)
@@ -93,11 +93,11 @@ public:
         , m_dim(ns->dimension())
         , m_id(ns->id())
         , m_ringId(ns->ringId())
+        , m_poly(ns->getPolygonal())
         , m_isNodeAtVertex(ns->isNodeAtVertex())
         , m_v0(ns->getVertex(0))
         , m_nodePt(ns->nodePt())
         , m_v1(ns->getVertex(1))
-        , m_poly(ns->getPolygonal())
         {};
 
     const CoordinateXY* getVertex(int i) const;

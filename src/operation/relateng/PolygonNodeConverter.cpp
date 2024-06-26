@@ -134,9 +134,9 @@ PolygonNodeConverter::createSection(
         ns->isA(),
         Dimension::A,
         ns->id(), 0,
+        ns->getPolygonal(),
         ns->isNodeAtVertex(),
-        v0, ns->nodePt(), v1,
-        ns->getPolygonal());
+        v0, ns->nodePt(), v1);
 }
 
 
