@@ -589,8 +589,20 @@ private:
     {
         geom::CoordinateXYZM ptInt(Intersection::intersection(p1, p2, q1, q2));
         if (ptInt.isNull()) {
-            // FIXME need to cast to correct type in mixed-dimensionality case
-            ptInt = static_cast<const C1&>(nearestEndpoint(p1, p2, q1, q2));
+            const geom::CoordinateXY& nearest = nearestEndpoint(p1, p2, q1, q2);
+#if __cplusplus >= 201703L
+            if constexpr (std::is_same<C1, C2>::value) {
+#else
+            if (std::is_same<C1, C2>::value) {
+#endif
+                ptInt = static_cast<const C1&>(nearest);
+            } else {
+                if (&nearest == static_cast<const geom::CoordinateXY*>(&p1) || &nearest == static_cast<const geom::CoordinateXY*>(&p2)) {
+                    ptInt = static_cast<const C1&>(nearest);
+                } else {
+                    ptInt = static_cast<const C2&>(nearest);
+                }
+            }
         }
         return ptInt;
     }
