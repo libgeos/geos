@@ -15,9 +15,9 @@
 
 #pragma once
 
-#include <geos/operation/relateng/NodeSection.h>
-#include <geos/geom/Coordinate.h>
-#include <geos/geom/Geometry.h>
+#include <vector>
+#include <memory>
+// #include <geos/operation/relateng/NodeSection.h>
 #include <geos/export.h>
 
 
@@ -26,7 +26,12 @@ namespace geos {
 namespace operation {
 namespace relateng {
 class RelateNode;
+class NodeSection;
 }
+}
+namespace geom {
+    class CoordinateXY;
+    class Geometry;
 }
 }
 

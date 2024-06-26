@@ -16,11 +16,8 @@
 #include <geos/operation/relateng/PolygonNodeConverter.h>
 
 #include <geos/algorithm/PolygonNodeTopology.h>
-// #include <geos/operation/relateng/RelateEdge.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Dimension.h>
-// #include <geos/geom/Position.h>
-// #include <geos/io/WKTWriter.h>
 #include <geos/constants.h>
 
 

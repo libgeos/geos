@@ -13,9 +13,11 @@
  *
  **********************************************************************/
 
-#include <geos/operation/relateng/NodeSection.h>
-#include <geos/io/WKTWriter.h>
 #include <geos/geom/Dimension.h>
+#include <geos/geom/Coordinate.h>
+#include <geos/geom/Geometry.h>
+#include <geos/io/WKTWriter.h>
+#include <geos/operation/relateng/NodeSection.h>
 #include <sstream>
 
 namespace geos {      // geos

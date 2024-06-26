@@ -15,8 +15,6 @@
 
 #pragma once
 
-#include <geos/geom/Coordinate.h>
-#include <geos/geom/Geometry.h>
 #include <geos/geom/Location.h>
 #include <geos/export.h>
 
@@ -27,6 +25,10 @@ namespace operation {
 namespace relateng {
 class RelateNode;
 }
+}
+namespace geom {
+    class CoordinateXY;
+    class Geometry;
 }
 }
 

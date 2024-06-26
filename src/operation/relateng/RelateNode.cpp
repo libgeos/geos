@@ -19,9 +19,9 @@
 #include <geos/operation/relateng/NodeSection.h>
 #include <geos/geom/Dimension.h>
 #include <geos/geom/Position.h>
+#include <geos/geom/Coordinate.h>
 #include <geos/io/WKTWriter.h>
 #include <geos/constants.h>
-#include <sstream>
 
 
 using geos::geom::CoordinateXY;

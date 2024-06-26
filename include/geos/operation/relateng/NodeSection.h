@@ -15,13 +15,20 @@
 
 #pragma once
 
-#include <geos/geom/Coordinate.h>
-#include <geos/geom/Geometry.h>
+#include <string>
+#include <sstream>
 #include <geos/export.h>
+
+// Forward declarations
+namespace geos {
+namespace geom {
+    class CoordinateXY;
+    class Geometry;
+}
+}
 
 
 using geos::geom::CoordinateXY;
-using geos::geom::Coordinate;
 using geos::geom::Geometry;
 
 

@@ -15,9 +15,10 @@
 
 #pragma once
 
+#include <vector>
+#include <cassert>
+
 #include <geos/operation/relateng/RelateEdge.h>
-#include <geos/geom/Coordinate.h>
-#include <geos/geom/Geometry.h>
 #include <geos/export.h>
 
 
@@ -27,6 +28,10 @@ namespace operation {
 namespace relateng {
     class NodeSection;
 }
+}
+namespace geom {
+    class CoordinateXY;
+    class Geometry;
 }
 }
 
