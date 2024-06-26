@@ -17,13 +17,14 @@
 
 #include <geos/operation/relateng/NodeSection.h>
 #include <geos/export.h>
-
+#include <vector>
+#include <memory>
 
 // Forward declarations
 namespace geos {
 namespace operation {
 namespace relateng {
-// class RelateNode;
+// class NodeSection;
 }
 }
 }

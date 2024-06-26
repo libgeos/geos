@@ -159,16 +159,16 @@ PolygonNodeConverter::extractUnique(std::vector<const NodeSection*>& sections)
 std::size_t
 PolygonNodeConverter::next(std::vector<const NodeSection *>& ns, std::size_t i)
 {
-    std::size_t next = i;
-    if (next == INDEX_UNKNOWN)
-        next = 0;
+    std::size_t nxt = i;
+    if (nxt == INDEX_UNKNOWN)
+        nxt = 0;
     else
-        next = i + 1;
+        nxt = i + 1;
 
-    if (next >= ns.size())
-        next = 0;
+    if (nxt >= ns.size())
+        nxt = 0;
 
-    return next;
+    return nxt;
 }
 
 

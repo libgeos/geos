@@ -16,7 +16,7 @@
 #include <geos/operation/relateng/NodeSections.h>
 #include <geos/operation/relateng/RelateNode.h>
 #include <geos/operation/relateng/PolygonNodeConverter.h>
-
+#include <algorithm>
 
 using geos::geom::CoordinateXY;
 using geos::geom::Geometry;
