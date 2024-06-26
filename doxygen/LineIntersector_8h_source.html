@@ -460,51 +460,63 @@ $(function() {
 <div class="line"><a name="l00589"></a><span class="lineno">  589</span>&#160;<span class="keyword">    </span>{</div>
 <div class="line"><a name="l00590"></a><span class="lineno">  590</span>&#160;        geom::CoordinateXYZM ptInt(<a class="code" href="classgeos_1_1algorithm_1_1Intersection.html#a1181eb029c488a5e8c0c2c0c8c7ad4b8">Intersection::intersection</a>(p1, p2, q1, q2));</div>
 <div class="line"><a name="l00591"></a><span class="lineno">  591</span>&#160;        <span class="keywordflow">if</span> (ptInt.isNull()) {</div>
-<div class="line"><a name="l00592"></a><span class="lineno">  592</span>&#160;            <span class="comment">// FIXME need to cast to correct type in mixed-dimensionality case</span></div>
-<div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160;            ptInt = <span class="keyword">static_cast&lt;</span><span class="keyword">const </span>C1&amp;<span class="keyword">&gt;</span>(nearestEndpoint(p1, p2, q1, q2));</div>
-<div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160;        }</div>
-<div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160;        <span class="keywordflow">return</span> ptInt;</div>
-<div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160;    }</div>
-<div class="line"><a name="l00597"></a><span class="lineno">  597</span>&#160; </div>
-<div class="line"><a name="l00617"></a><span class="lineno">  617</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> geom::CoordinateXY&amp; nearestEndpoint(<span class="keyword">const</span> geom::CoordinateXY&amp; p1,</div>
-<div class="line"><a name="l00618"></a><span class="lineno">  618</span>&#160;                                                     <span class="keyword">const</span> geom::CoordinateXY&amp; p2,</div>
-<div class="line"><a name="l00619"></a><span class="lineno">  619</span>&#160;                                                     <span class="keyword">const</span> geom::CoordinateXY&amp; q1,</div>
-<div class="line"><a name="l00620"></a><span class="lineno">  620</span>&#160;                                                     <span class="keyword">const</span> geom::CoordinateXY&amp; q2);</div>
-<div class="line"><a name="l00621"></a><span class="lineno">  621</span>&#160; </div>
-<div class="line"><a name="l00622"></a><span class="lineno">  622</span>&#160; </div>
-<div class="line"><a name="l00623"></a><span class="lineno">  623</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> C1, <span class="keyword">typename</span> C2&gt;</div>
-<div class="line"><a name="l00624"></a><span class="lineno">  624</span>&#160;    <span class="keyword">static</span> geom::CoordinateXYZM zmGetOrInterpolateCopy(</div>
-<div class="line"><a name="l00625"></a><span class="lineno">  625</span>&#160;        <span class="keyword">const</span> C1&amp; p,</div>
-<div class="line"><a name="l00626"></a><span class="lineno">  626</span>&#160;        <span class="keyword">const</span> C2&amp; p1,</div>
-<div class="line"><a name="l00627"></a><span class="lineno">  627</span>&#160;        <span class="keyword">const</span> C2&amp; p2)</div>
-<div class="line"><a name="l00628"></a><span class="lineno">  628</span>&#160;    {</div>
-<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160;        geom::CoordinateXYZM pCopy(p);</div>
-<div class="line"><a name="l00630"></a><span class="lineno">  630</span>&#160;        pCopy.z = Interpolate::zGetOrInterpolate(p, p1, p2);</div>
-<div class="line"><a name="l00631"></a><span class="lineno">  631</span>&#160;        pCopy.m = Interpolate::mGetOrInterpolate(p, p1, p2);</div>
-<div class="line"><a name="l00632"></a><span class="lineno">  632</span>&#160;        <span class="keywordflow">return</span> pCopy;</div>
-<div class="line"><a name="l00633"></a><span class="lineno">  633</span>&#160;    }</div>
+<div class="line"><a name="l00592"></a><span class="lineno">  592</span>&#160;            <span class="keyword">const</span> geom::CoordinateXY&amp; nearest = nearestEndpoint(p1, p2, q1, q2);</div>
+<div class="line"><a name="l00593"></a><span class="lineno">  593</span>&#160;<span class="preprocessor">#if __cplusplus &gt;= 201703L</span></div>
+<div class="line"><a name="l00594"></a><span class="lineno">  594</span>&#160;            <span class="keywordflow">if</span> constexpr (std::is_same&lt;C1, C2&gt;::value) {</div>
+<div class="line"><a name="l00595"></a><span class="lineno">  595</span>&#160;<span class="preprocessor">#else</span></div>
+<div class="line"><a name="l00596"></a><span class="lineno">  596</span>&#160;            <span class="keywordflow">if</span> (std::is_same&lt;C1, C2&gt;::value) {</div>
+<div class="line"><a name="l00597"></a><span class="lineno">  597</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00598"></a><span class="lineno">  598</span>&#160;                ptInt = <span class="keyword">static_cast&lt;</span><span class="keyword">const </span>C1&amp;<span class="keyword">&gt;</span>(nearest);</div>
+<div class="line"><a name="l00599"></a><span class="lineno">  599</span>&#160;            } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00600"></a><span class="lineno">  600</span>&#160;                <span class="keywordflow">if</span> (&amp;nearest == <span class="keyword">static_cast&lt;</span><span class="keyword">const </span>geom::CoordinateXY*<span class="keyword">&gt;</span>(&amp;p1) || &amp;nearest == <span class="keyword">static_cast&lt;</span><span class="keyword">const </span>geom::CoordinateXY*<span class="keyword">&gt;</span>(&amp;p2)) {</div>
+<div class="line"><a name="l00601"></a><span class="lineno">  601</span>&#160;                    ptInt = <span class="keyword">static_cast&lt;</span><span class="keyword">const </span>C1&amp;<span class="keyword">&gt;</span>(nearest);</div>
+<div class="line"><a name="l00602"></a><span class="lineno">  602</span>&#160;                } <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00603"></a><span class="lineno">  603</span>&#160;                    ptInt = <span class="keyword">static_cast&lt;</span><span class="keyword">const </span>C2&amp;<span class="keyword">&gt;</span>(nearest);</div>
+<div class="line"><a name="l00604"></a><span class="lineno">  604</span>&#160;                }</div>
+<div class="line"><a name="l00605"></a><span class="lineno">  605</span>&#160;            }</div>
+<div class="line"><a name="l00606"></a><span class="lineno">  606</span>&#160;        }</div>
+<div class="line"><a name="l00607"></a><span class="lineno">  607</span>&#160;        <span class="keywordflow">return</span> ptInt;</div>
+<div class="line"><a name="l00608"></a><span class="lineno">  608</span>&#160;    }</div>
+<div class="line"><a name="l00609"></a><span class="lineno">  609</span>&#160; </div>
+<div class="line"><a name="l00629"></a><span class="lineno">  629</span>&#160;    <span class="keyword">static</span> <span class="keyword">const</span> geom::CoordinateXY&amp; nearestEndpoint(<span class="keyword">const</span> geom::CoordinateXY&amp; p1,</div>
+<div class="line"><a name="l00630"></a><span class="lineno">  630</span>&#160;                                                     <span class="keyword">const</span> geom::CoordinateXY&amp; p2,</div>
+<div class="line"><a name="l00631"></a><span class="lineno">  631</span>&#160;                                                     <span class="keyword">const</span> geom::CoordinateXY&amp; q1,</div>
+<div class="line"><a name="l00632"></a><span class="lineno">  632</span>&#160;                                                     <span class="keyword">const</span> geom::CoordinateXY&amp; q2);</div>
+<div class="line"><a name="l00633"></a><span class="lineno">  633</span>&#160; </div>
 <div class="line"><a name="l00634"></a><span class="lineno">  634</span>&#160; </div>
-<div class="line"><a name="l00635"></a><span class="lineno">  635</span>&#160;};</div>
-<div class="line"><a name="l00636"></a><span class="lineno">  636</span>&#160; </div>
-<div class="line"><a name="l00637"></a><span class="lineno">  637</span>&#160; </div>
-<div class="line"><a name="l00638"></a><span class="lineno">  638</span>&#160;} <span class="comment">// namespace geos::algorithm</span></div>
-<div class="line"><a name="l00639"></a><span class="lineno">  639</span>&#160;} <span class="comment">// namespace geos</span></div>
-<div class="line"><a name="l00640"></a><span class="lineno">  640</span>&#160; </div>
-<div class="line"><a name="l00641"></a><span class="lineno">  641</span>&#160; </div>
-<div class="line"><a name="l00642"></a><span class="lineno">  642</span>&#160; </div>
-<div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160; </div>
-<div class="line"><a name="l00644"></a><span class="lineno">  644</span>&#160; </div>
-<div class="line"><a name="l00645"></a><span class="lineno">  645</span>&#160; </div>
+<div class="line"><a name="l00635"></a><span class="lineno">  635</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> C1, <span class="keyword">typename</span> C2&gt;</div>
+<div class="line"><a name="l00636"></a><span class="lineno">  636</span>&#160;    <span class="keyword">static</span> geom::CoordinateXYZM zmGetOrInterpolateCopy(</div>
+<div class="line"><a name="l00637"></a><span class="lineno">  637</span>&#160;        <span class="keyword">const</span> C1&amp; p,</div>
+<div class="line"><a name="l00638"></a><span class="lineno">  638</span>&#160;        <span class="keyword">const</span> C2&amp; p1,</div>
+<div class="line"><a name="l00639"></a><span class="lineno">  639</span>&#160;        <span class="keyword">const</span> C2&amp; p2)</div>
+<div class="line"><a name="l00640"></a><span class="lineno">  640</span>&#160;    {</div>
+<div class="line"><a name="l00641"></a><span class="lineno">  641</span>&#160;        geom::CoordinateXYZM pCopy(p);</div>
+<div class="line"><a name="l00642"></a><span class="lineno">  642</span>&#160;        pCopy.z = Interpolate::zGetOrInterpolate(p, p1, p2);</div>
+<div class="line"><a name="l00643"></a><span class="lineno">  643</span>&#160;        pCopy.m = Interpolate::mGetOrInterpolate(p, p1, p2);</div>
+<div class="line"><a name="l00644"></a><span class="lineno">  644</span>&#160;        <span class="keywordflow">return</span> pCopy;</div>
+<div class="line"><a name="l00645"></a><span class="lineno">  645</span>&#160;    }</div>
 <div class="line"><a name="l00646"></a><span class="lineno">  646</span>&#160; </div>
-<div class="line"><a name="l00647"></a><span class="lineno">  647</span>&#160; </div>
+<div class="line"><a name="l00647"></a><span class="lineno">  647</span>&#160;};</div>
 <div class="line"><a name="l00648"></a><span class="lineno">  648</span>&#160; </div>
 <div class="line"><a name="l00649"></a><span class="lineno">  649</span>&#160; </div>
-<div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160; </div>
-<div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160; </div>
+<div class="line"><a name="l00650"></a><span class="lineno">  650</span>&#160;} <span class="comment">// namespace geos::algorithm</span></div>
+<div class="line"><a name="l00651"></a><span class="lineno">  651</span>&#160;} <span class="comment">// namespace geos</span></div>
 <div class="line"><a name="l00652"></a><span class="lineno">  652</span>&#160; </div>
 <div class="line"><a name="l00653"></a><span class="lineno">  653</span>&#160; </div>
 <div class="line"><a name="l00654"></a><span class="lineno">  654</span>&#160; </div>
 <div class="line"><a name="l00655"></a><span class="lineno">  655</span>&#160; </div>
+<div class="line"><a name="l00656"></a><span class="lineno">  656</span>&#160; </div>
+<div class="line"><a name="l00657"></a><span class="lineno">  657</span>&#160; </div>
+<div class="line"><a name="l00658"></a><span class="lineno">  658</span>&#160; </div>
+<div class="line"><a name="l00659"></a><span class="lineno">  659</span>&#160; </div>
+<div class="line"><a name="l00660"></a><span class="lineno">  660</span>&#160; </div>
+<div class="line"><a name="l00661"></a><span class="lineno">  661</span>&#160; </div>
+<div class="line"><a name="l00662"></a><span class="lineno">  662</span>&#160; </div>
+<div class="line"><a name="l00663"></a><span class="lineno">  663</span>&#160; </div>
+<div class="line"><a name="l00664"></a><span class="lineno">  664</span>&#160; </div>
+<div class="line"><a name="l00665"></a><span class="lineno">  665</span>&#160; </div>
+<div class="line"><a name="l00666"></a><span class="lineno">  666</span>&#160; </div>
+<div class="line"><a name="l00667"></a><span class="lineno">  667</span>&#160; </div>
 <div class="ttc" id="aclassgeos_1_1algorithm_1_1Intersection_html_a1181eb029c488a5e8c0c2c0c8c7ad4b8"><div class="ttname"><a href="classgeos_1_1algorithm_1_1Intersection.html#a1181eb029c488a5e8c0c2c0c8c7ad4b8">geos::algorithm::Intersection::intersection</a></div><div class="ttdeci">static geom::CoordinateXY intersection(const geom::CoordinateXY &amp;p1, const geom::CoordinateXY &amp;p2, const geom::CoordinateXY &amp;q1, const geom::CoordinateXY &amp;q2)</div><div class="ttdoc">Computes the intersection point of two lines. If the lines are parallel or collinear this case is det...</div></div>
 <div class="ttc" id="aclassgeos_1_1algorithm_1_1LineIntersector_html"><div class="ttname"><a href="classgeos_1_1algorithm_1_1LineIntersector.html">geos::algorithm::LineIntersector</a></div><div class="ttdoc">A LineIntersector is an algorithm that can both test whether two line segments intersect and compute ...</div><div class="ttdef"><b>Definition:</b> LineIntersector.h:53</div></div>
 <div class="ttc" id="aclassgeos_1_1algorithm_1_1LineIntersector_html_a01e91decbc5f4c8410b965611f706a65"><div class="ttname"><a href="classgeos_1_1algorithm_1_1LineIntersector.html#a01e91decbc5f4c8410b965611f706a65">geos::algorithm::LineIntersector::intersection_type</a></div><div class="ttdeci">intersection_type</div><div class="ttdef"><b>Definition:</b> LineIntersector.h:137</div></div>
