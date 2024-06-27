@@ -15,7 +15,6 @@
 #pragma once
 
 #include <geos/geom/SimpleCurve.h>
-#include <geos/util/UnsupportedOperationException.h>
 
 namespace geos {
 namespace geom {
@@ -35,13 +34,14 @@ public:
 
     GeometryTypeId getGeometryTypeId() const override;
 
-    double getLength() const override
-    {
-        throw util::UnsupportedOperationException("Cannot calculate length of CircularString");
-    }
+    double getLength() const override;
 
     bool hasCurvedComponents() const override
     {
+        return true;
+    }
+
+    bool isCurved() const override {
         return true;
     }
 

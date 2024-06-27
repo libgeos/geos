@@ -97,6 +97,12 @@ PointLocation::locateInRing(const geom::CoordinateXY& p,
     return RayCrossingCounter::locatePointInRing(p, ring);
 }
 
+geom::Location
+PointLocation::locateInRing(const geom::CoordinateXY& p,
+                            const geom::Curve& ring) {
+    return RayCrossingCounter::locatePointInRing(p, ring);
+}
+
 
 } // namespace geos.algorithm
 } // namespace geos

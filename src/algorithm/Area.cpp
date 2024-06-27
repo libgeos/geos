@@ -20,6 +20,10 @@
 #include <vector>
 
 #include <geos/algorithm/Area.h>
+#include <geos/geom/CircularArc.h>
+#include <geos/geom/Curve.h>
+#include <geos/geom/SimpleCurve.h>
+#include <geos/util/IllegalArgumentException.h>
 
 using geos::geom::CoordinateXY;
 
@@ -93,7 +97,58 @@ Area::ofRingSigned(const geom::CoordinateSequence* ring)
     return sum / 2.0;
 }
 
+double
+Area::ofClosedCurve(const geom::Curve& ring) {
+    if (!ring.isClosed()) {
+        throw util::IllegalArgumentException("Argument is not closed");
+    }
 
+    double sum = 0;
+
+    for (std::size_t i = 0; i < ring.getNumCurves(); i++) {
+        const geom::SimpleCurve& section = *ring.getCurveN(i);
+
+        if (section.isEmpty()) {
+            continue;
+        }
+
+        const geom::CoordinateSequence& coords = *section.getCoordinatesRO();
+
+        if (section.isCurved()) {
+            for (std::size_t j = 2; j < coords.size(); j += 2) {
+                const CoordinateXY& p0 = coords.getAt<CoordinateXY>(j-2);
+                const CoordinateXY& p1 = coords.getAt<CoordinateXY>(j-1);
+                const CoordinateXY& p2 = coords.getAt<CoordinateXY>(j);
+
+                double triangleArea = 0.5*(p0.x*p2.y - p2.x*p0.y);
+                sum += triangleArea;
+
+                geom::CircularArc arc(p0, p1, p2);
+                if (arc.isLinear()) {
+                    continue;
+                }
+
+                double circularSegmentArea = arc.getArea();
+
+                if (algorithm::Orientation::index(p0, p2, p1) == algorithm::Orientation::CLOCKWISE) {
+                    sum += circularSegmentArea;
+                } else {
+                    sum -= circularSegmentArea;
+                }
+            }
+        } else {
+            for (std::size_t j = 1; j < coords.size(); j++) {
+                const CoordinateXY& p0 = coords.getAt<CoordinateXY>(j-1);
+                const CoordinateXY& p1 = coords.getAt<CoordinateXY>(j);
+
+                double triangleArea = 0.5*(p0.x*p1.y - p1.x*p0.y);
+                sum += triangleArea;
+            }
+        }
+    }
+
+    return std::abs(sum);
+}
 
 } // namespace geos.algorithm
 } //namespace geos

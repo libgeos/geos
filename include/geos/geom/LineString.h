@@ -92,6 +92,10 @@ public:
 
     double getLength() const override;
 
+    bool isCurved() const override {
+        return false;
+    }
+
     /**
      * Creates a LineString whose coordinates are in the reverse
      * order of this object's

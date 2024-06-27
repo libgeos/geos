@@ -1,6 +1,7 @@
 #include <tut/tut.hpp>
 // geos
 #include <geos_c.h>
+#include <geos/constants.h>
 
 #include "capi_test_utils.h"
 
@@ -67,7 +68,8 @@ void object::test<4>()
 
     double length = -1;
     int ret = GEOSLength(input_, &length);
-    ensure_equals("error raised on curved geometry", ret, 0);
+    ensure_equals(ret, 1);
+    ensure_equals(length, geos::MATH_PI);
 }
 
 } // namespace tut
