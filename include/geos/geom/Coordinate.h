@@ -22,6 +22,7 @@
 #include <vector> // for typedefs
 #include <string>
 #include <limits>
+#include <map>
 
 #ifdef _MSC_VER
 #pragma warning(push)
@@ -222,6 +223,7 @@ private:
 public:
     /// A set of const Coordinate pointers
     typedef std::set<const Coordinate*, CoordinateLessThan> ConstSet;
+    typedef std::set<const CoordinateXY*, CoordinateLessThan> ConstXYSet;
 
     /// A vector of const Coordinate pointers
     typedef std::vector<const Coordinate*> ConstVect;
@@ -231,6 +233,9 @@ public:
 
     /// A vector of Coordinate objects (real object, not pointers)
     typedef std::vector<Coordinate> Vect;
+
+    /// A map of const Coordinate pointers to integers
+    typedef std::map<const CoordinateXY*, int, CoordinateLessThan> ConstIntMap;
 
     /// z-coordinate
     double z;
