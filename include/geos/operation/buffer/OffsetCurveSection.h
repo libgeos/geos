@@ -16,6 +16,7 @@
 #pragma once
 
 #include <geos/export.h>
+#include <geos/geom/CoordinateSequence.h> // to materialize CoordinateSequence
 #include <memory>
 #include <vector>
 
