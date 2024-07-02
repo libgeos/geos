@@ -25,6 +25,7 @@
 
 #include <geos/export.h>
 #include <geos/operation/buffer/BufferParameters.h> // for enum values
+#include <geos/geom/Geometry.h> // to materialize Geometry
 
 #include <geos/util/TopologyException.h> // for composition
 

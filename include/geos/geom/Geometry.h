@@ -34,6 +34,7 @@
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
 #include <geos/geom/GeometryComponentFilter.h> // for inheritance
+#include <geos/geom/CoordinateSequence.h> // to materialize CoordinateSequence
 
 #include <algorithm>
 #include <string>

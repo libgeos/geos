@@ -17,6 +17,7 @@
 
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/LineSegment.h>
+#include <geos/coverage/CoverageEdge.h> // to materialize CoverageEdge
 
 #include <set>
 #include <map>

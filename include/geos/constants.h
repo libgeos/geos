@@ -29,6 +29,7 @@ typedef __int64 int64;
 #include <cmath>
 #include <limits>
 #include <cinttypes>
+#include <cstddef> // for std::size_t
 
 namespace geos {
 
