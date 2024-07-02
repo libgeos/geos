@@ -16,6 +16,9 @@
 #pragma once
 
 #include <geos/algorithm/BoundaryNodeRule.h>
+#include <geos/algorithm/locate/PointOnGeometryLocator.h>
+#include <geos/operation/relateng/AdjacentEdgeLocator.h>
+#include <geos/operation/relateng/LinearBoundary.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Location.h>
 #include <geos/export.h>
@@ -27,13 +30,13 @@
 namespace geos {
 namespace algorithm {
     namespace locate {
-        class PointOnGeometryLocator;
+        // class PointOnGeometryLocator;
     }
 }
 namespace operation {
     namespace relateng {
-        class AdjacentEdgeLocator;
-        class LinearBoundary;
+        // class LinearBoundary;
+        // class AdjacentEdgeLocator;
     }
 }
 namespace geom {

@@ -58,7 +58,7 @@ RelatePointLocator::init(const Geometry* p_geom)
     }
 
     if (!polygons.empty()) {
-        std::fill(polyLocator.begin(), polyLocator.end(), nullptr);
+        polyLocator.resize(polygons.size());
     }
         // polyLocator = isPrepared
         //     ? new IndexedPointInAreaLocator[polygons.size()]
