@@ -17,7 +17,7 @@
 using namespace geos::geom;
 using namespace geos::operation::relateng;
 using geos::io::WKTReader;
-using geos::io::WKTWriter;
+// using geos::io::WKTWriter;
 
 namespace tut {
 //
