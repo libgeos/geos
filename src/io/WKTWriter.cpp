@@ -107,17 +107,11 @@ WKTWriter::toLineString(const CoordinateSequence& seq)
 
 /*static*/
 std::string
-WKTWriter::toLineString(const Coordinate& p0, const Coordinate& p1)
+WKTWriter::toLineString(const CoordinateXY& p0, const CoordinateXY& p1)
 {
     std::stringstream ret(std::ios_base::in | std::ios_base::out);
     ret << "LINESTRING (" << p0.x << " " << p0.y;
-#if PRINT_Z
-    ret << " " << p0.z;
-#endif
     ret << ", " << p1.x << " " << p1.y;
-#if PRINT_Z
-    ret << " " << p1.z;
-#endif
     ret << ")";
 
     return ret.str();

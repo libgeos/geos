@@ -78,6 +78,37 @@ PolygonNodeTopology::isBetween(const CoordinateXY* origin,
 }
 
 
+/* public static */
+int
+PolygonNodeTopology::compareAngle(
+    const CoordinateXY* origin,
+    const CoordinateXY* p,
+    const CoordinateXY* q)
+{
+    int quadrantP = quadrant(origin, p);
+    int quadrantQ = quadrant(origin, q);
+
+    /**
+     * If the vectors are in different quadrants,
+     * that determines the ordering
+     */
+    if (quadrantP > quadrantQ) return 1;
+    if (quadrantP < quadrantQ) return -1;
+
+    //--- vectors are in the same quadrant
+    // Check relative orientation of vectors
+    // P > Q if it is CCW of Q
+    int orient = Orientation::index(*origin, *q, *p);
+    switch (orient) {
+        case Orientation::COUNTERCLOCKWISE:
+            return 1;
+        case Orientation::CLOCKWISE:
+            return -1;
+        default:
+            return 0;
+    }
+}
+
 /* private static */
 bool
 PolygonNodeTopology::isAngleGreater(const CoordinateXY* origin,

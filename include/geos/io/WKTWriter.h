@@ -121,7 +121,7 @@ public:
      *
      * @return the WKT
      */
-    static std::string toLineString(const geom::Coordinate& p0, const geom::Coordinate& p1);
+    static std::string toLineString(const geom::CoordinateXY& p0, const geom::CoordinateXY& p1);
 
     /**
      * Generates the WKT for a <code>Point</code>.
