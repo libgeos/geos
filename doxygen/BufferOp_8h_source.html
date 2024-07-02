@@ -74,154 +74,155 @@ $(function() {
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &lt;geos/export.h&gt;</span></div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="preprocessor">#include &lt;geos/operation/buffer/BufferParameters.h&gt;</span> <span class="comment">// for enum values</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#include &lt;geos/util/TopologyException.h&gt;</span> <span class="comment">// for composition</span></div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="preprocessor">#ifdef _MSC_VER</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#pragma warning(push)</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#pragma warning(disable: 4251) </span><span class="comment">// warning C4251: needs to have dll-interface to be used by clients of class</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="comment">// Forward declarations</span></div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">namespace </span>geom {</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keyword">class </span>PrecisionModel;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keyword">class </span>Geometry;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;}</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="preprocessor">#include &lt;geos/geom/Geometry.h&gt;</span> <span class="comment">// to materialize Geometry</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#include &lt;geos/util/TopologyException.h&gt;</span> <span class="comment">// for composition</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="preprocessor">#ifdef _MSC_VER</span></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="preprocessor">#pragma warning(push)</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="preprocessor">#pragma warning(disable: 4251) </span><span class="comment">// warning C4251: needs to have dll-interface to be used by clients of class</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="comment">// Forward declarations</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keyword">namespace </span>geom {</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keyword">class </span>PrecisionModel;</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="keyword">class </span>Geometry;</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;}</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keyword">namespace </span>operation { <span class="comment">// geos.operation</span></div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="keyword">namespace </span>buffer { <span class="comment">// geos.operation.buffer</span></div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00080"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html">   80</a></span>&#160;<span class="keyword">class </span>GEOS_DLL <a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html">BufferOp</a> {</div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;}</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="keyword">namespace </span>operation { <span class="comment">// geos.operation</span></div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="keyword">namespace </span>buffer { <span class="comment">// geos.operation.buffer</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
+<div class="line"><a name="l00081"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html">   81</a></span>&#160;<span class="keyword">class </span>GEOS_DLL <a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html">BufferOp</a> {</div>
 <div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160; </div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="keyword">static</span> constexpr <span class="keywordtype">int</span> MAX_PRECISION_DIGITS = 12;</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* argGeom;</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <a class="code" href="classgeos_1_1util_1_1TopologyException.html">util::TopologyException</a> saveException;</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="keywordtype">double</span> distance;</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html">BufferParameters</a> bufParams;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    std::unique_ptr&lt;geom::Geometry&gt; resultGeometry;</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="keywordtype">bool</span> isInvertOrientation = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> precisionScaleFactor(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* g,</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;                                       <span class="keywordtype">double</span> distance, <span class="keywordtype">int</span> maxPrecisionDigits);</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160; </div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keyword">static</span> constexpr <span class="keywordtype">int</span> MAX_PRECISION_DIGITS = 12;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* argGeom;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;    <a class="code" href="classgeos_1_1util_1_1TopologyException.html">util::TopologyException</a> saveException;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <span class="keywordtype">double</span> distance;</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html">BufferParameters</a> bufParams;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    std::unique_ptr&lt;geom::Geometry&gt; resultGeometry;</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <span class="keywordtype">bool</span> isInvertOrientation = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> precisionScaleFactor(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* g,</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;                                       <span class="keywordtype">double</span> distance, <span class="keywordtype">int</span> maxPrecisionDigits);</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160; </div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    <span class="keywordtype">void</span> computeGeometry();</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    <span class="keywordtype">void</span> bufferOriginalPrecision();</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    <span class="keywordtype">void</span> bufferReducedPrecision(<span class="keywordtype">int</span> precisionDigits);</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160; </div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    <span class="keywordtype">void</span> bufferReducedPrecision();</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160; </div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;    <span class="keywordtype">void</span> bufferFixedPrecision(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1PrecisionModel.html">geom::PrecisionModel</a>&amp; fixedPM);</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160; </div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">void</span> extractPolygons(</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;        <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* poly0,</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;        std::vector&lt;std::unique_ptr&lt;geom::Geometry&gt;&gt;&amp; polys);</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160; </div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160; </div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;    <span class="keyword">enum</span> {</div>
-<div class="line"><a name="l00144"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#afeb8f104361eeee3800eb1ba675803eba3dab8f3b3b9c9d389597710b380bbd50">  144</a></span>&#160;        CAP_ROUND = <a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#a4712bec3a5a2bb5c28ab43b3fe327950a2115b456f33264168ae298f31cd10e84">BufferParameters::CAP_ROUND</a>,</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160; </div>
-<div class="line"><a name="l00148"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#afeb8f104361eeee3800eb1ba675803eba49120ca8a988672bd4e07c410e60298d">  148</a></span>&#160;        CAP_BUTT = <a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#a4712bec3a5a2bb5c28ab43b3fe327950aedd88ac809cfcc7b2cc5e0300d6056a0">BufferParameters::CAP_FLAT</a>,</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160; </div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;        CAP_SQUARE = <a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#a4712bec3a5a2bb5c28ab43b3fe327950a1915b38145310e6c86cb0dc5231dd545">BufferParameters::CAP_SQUARE</a></div>
-<div class="line"><a name="l00153"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#afeb8f104361eeee3800eb1ba675803eba8757a3afe464e96cf13526aba63530fa">  153</a></span>&#160;    };</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160; </div>
-<div class="line"><a name="l00167"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#a6344e6c7aefe42189129954bdd76f0d1">  167</a></span>&#160;    <span class="keyword">static</span> std::unique_ptr&lt;geom::Geometry&gt; <a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#a6344e6c7aefe42189129954bdd76f0d1">bufferOp</a>(</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* g,</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;        <span class="keywordtype">double</span> distance,</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;        <span class="keywordtype">int</span> quadrantSegments = <a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#ab0a64ab1030d5dc576449dbf9ecde9e8">BufferParameters::DEFAULT_QUADRANT_SEGMENTS</a>,</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;        <span class="keywordtype">int</span> endCapStyle = <a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#a4712bec3a5a2bb5c28ab43b3fe327950a2115b456f33264168ae298f31cd10e84">BufferParameters::CAP_ROUND</a>);</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160; </div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;    <span class="keyword">static</span> std::unique_ptr&lt;geom::Geometry&gt; bufferOp(</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* g,</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;        <span class="keywordtype">double</span> distance,</div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;        <a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html">BufferParameters</a>&amp; bufParms);</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160; </div>
-<div class="line"><a name="l00183"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#ace333176e7988e78d32941397df0c4ec">  183</a></span>&#160;    <a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#ace333176e7988e78d32941397df0c4ec">BufferOp</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* g)</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;        :</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;        argGeom(g),</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        bufParams(),</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;        resultGeometry(nullptr),</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        isInvertOrientation(false)</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;    {</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;    }</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160; </div>
-<div class="line"><a name="l00200"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#ac57e331af7062eac25d7e563af0d234a">  200</a></span>&#160;    <a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#ac57e331af7062eac25d7e563af0d234a">BufferOp</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* g, <span class="keyword">const</span> <a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html">BufferParameters</a>&amp; params)</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;        :</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;        argGeom(g),</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;        bufParams(params),</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;        resultGeometry(nullptr),</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;        isInvertOrientation(false)</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;    {</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;    }</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160; </div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> setEndCapStyle(<span class="keywordtype">int</span> nEndCapStyle);</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160; </div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> setQuadrantSegments(<span class="keywordtype">int</span> nQuadrantSegments);</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160; </div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> setSingleSided(<span class="keywordtype">bool</span> isSingleSided);</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160; </div>
-<div class="line"><a name="l00255"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#aaad15775755e3cd57a8b12b18a017b9c">  255</a></span>&#160;    std::unique_ptr&lt;geom::Geometry&gt; <a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#aaad15775755e3cd57a8b12b18a017b9c">getResultGeometry</a>(<span class="keywordtype">double</span> nDistance);</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160; </div>
-<div class="line"><a name="l00274"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#a38fe8b5c9c693c52667a560b5add1679">  274</a></span>&#160;    <span class="keyword">static</span> std::unique_ptr&lt;geom::Geometry&gt; <a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#a38fe8b5c9c693c52667a560b5add1679">bufferByZero</a>(</div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* geom,</div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;        <span class="keywordtype">bool</span> isBothOrientations);</div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160; </div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;};</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160; </div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;<span class="comment">// BufferOp inlines</span></div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;<span class="keywordtype">void</span></div>
-<div class="line"><a name="l00282"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#a15d1764170db5d95abe50cff8fef747f">  282</a></span>&#160;<a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#a15d1764170db5d95abe50cff8fef747f">BufferOp::setQuadrantSegments</a>(<span class="keywordtype">int</span> q)</div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;{</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;    bufParams.<a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#adc5559aa27d60c7b40aba6d5c13c0c45">setQuadrantSegments</a>(q);</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;}</div>
-<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160; </div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;<span class="keywordtype">void</span></div>
-<div class="line"><a name="l00288"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#aa566f0c9ba6aabc903adb9898a196961">  288</a></span>&#160;<a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#aa566f0c9ba6aabc903adb9898a196961">BufferOp::setEndCapStyle</a>(<span class="keywordtype">int</span> s)</div>
-<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;{</div>
-<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;    bufParams.<a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#a1b884eaa4f6bb49cb7547f6cbf2035f7">setEndCapStyle</a>((<a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#a4712bec3a5a2bb5c28ab43b3fe327950">BufferParameters::EndCapStyle</a>)s);</div>
-<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;}</div>
-<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160; </div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;<span class="keywordtype">void</span></div>
-<div class="line"><a name="l00294"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#aaa8c47fc49faef0cafeb3865d8785f31">  294</a></span>&#160;<a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#aaa8c47fc49faef0cafeb3865d8785f31">BufferOp::setSingleSided</a>(<span class="keywordtype">bool</span> isSingleSided)</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;{</div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;    bufParams.<a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#ae2a7d92145547fb6e2852c41c5353700">setSingleSided</a>(isSingleSided);</div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;}</div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160; </div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;} <span class="comment">// namespace geos::operation::buffer</span></div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;} <span class="comment">// namespace geos::operation</span></div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;} <span class="comment">// namespace geos</span></div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160; </div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;<span class="preprocessor">#ifdef _MSC_VER</span></div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;<span class="preprocessor">#pragma warning(pop)</span></div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160; </div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1Geometry_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Geometry.html">geos::geom::Geometry</a></div><div class="ttdoc">Basic implementation of Geometry, constructed and destructed by GeometryFactory.</div><div class="ttdef"><b>Definition:</b> Geometry.h:196</div></div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    <span class="keywordtype">void</span> computeGeometry();</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    <span class="keywordtype">void</span> bufferOriginalPrecision();</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160; </div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    <span class="keywordtype">void</span> bufferReducedPrecision(<span class="keywordtype">int</span> precisionDigits);</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160; </div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    <span class="keywordtype">void</span> bufferReducedPrecision();</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160; </div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    <span class="keywordtype">void</span> bufferFixedPrecision(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1PrecisionModel.html">geom::PrecisionModel</a>&amp; fixedPM);</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160; </div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">void</span> extractPolygons(</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;        <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* poly0,</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;        std::vector&lt;std::unique_ptr&lt;geom::Geometry&gt;&gt;&amp; polys);</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160; </div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160; </div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    <span class="keyword">enum</span> {</div>
+<div class="line"><a name="l00145"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#afeb8f104361eeee3800eb1ba675803eba3dab8f3b3b9c9d389597710b380bbd50">  145</a></span>&#160;        CAP_ROUND = <a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#a4712bec3a5a2bb5c28ab43b3fe327950a2115b456f33264168ae298f31cd10e84">BufferParameters::CAP_ROUND</a>,</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160; </div>
+<div class="line"><a name="l00149"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#afeb8f104361eeee3800eb1ba675803eba49120ca8a988672bd4e07c410e60298d">  149</a></span>&#160;        CAP_BUTT = <a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#a4712bec3a5a2bb5c28ab43b3fe327950aedd88ac809cfcc7b2cc5e0300d6056a0">BufferParameters::CAP_FLAT</a>,</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160; </div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;        CAP_SQUARE = <a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#a4712bec3a5a2bb5c28ab43b3fe327950a1915b38145310e6c86cb0dc5231dd545">BufferParameters::CAP_SQUARE</a></div>
+<div class="line"><a name="l00154"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#afeb8f104361eeee3800eb1ba675803eba8757a3afe464e96cf13526aba63530fa">  154</a></span>&#160;    };</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160; </div>
+<div class="line"><a name="l00168"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#a6344e6c7aefe42189129954bdd76f0d1">  168</a></span>&#160;    <span class="keyword">static</span> std::unique_ptr&lt;geom::Geometry&gt; <a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#a6344e6c7aefe42189129954bdd76f0d1">bufferOp</a>(</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* g,</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;        <span class="keywordtype">double</span> distance,</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;        <span class="keywordtype">int</span> quadrantSegments = <a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#ab0a64ab1030d5dc576449dbf9ecde9e8">BufferParameters::DEFAULT_QUADRANT_SEGMENTS</a>,</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;        <span class="keywordtype">int</span> endCapStyle = <a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#a4712bec3a5a2bb5c28ab43b3fe327950a2115b456f33264168ae298f31cd10e84">BufferParameters::CAP_ROUND</a>);</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160; </div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;    <span class="keyword">static</span> std::unique_ptr&lt;geom::Geometry&gt; bufferOp(</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* g,</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;        <span class="keywordtype">double</span> distance,</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;        <a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html">BufferParameters</a>&amp; bufParms);</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160; </div>
+<div class="line"><a name="l00184"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#ace333176e7988e78d32941397df0c4ec">  184</a></span>&#160;    <a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#ace333176e7988e78d32941397df0c4ec">BufferOp</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* g)</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;        :</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;        argGeom(g),</div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;        bufParams(),</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        resultGeometry(nullptr),</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;        isInvertOrientation(false)</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;    {</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;    }</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160; </div>
+<div class="line"><a name="l00201"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#ac57e331af7062eac25d7e563af0d234a">  201</a></span>&#160;    <a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#ac57e331af7062eac25d7e563af0d234a">BufferOp</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* g, <span class="keyword">const</span> <a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html">BufferParameters</a>&amp; params)</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;        :</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;        argGeom(g),</div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;        bufParams(params),</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;        resultGeometry(nullptr),</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;        isInvertOrientation(false)</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;    {</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;    }</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160; </div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> setEndCapStyle(<span class="keywordtype">int</span> nEndCapStyle);</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160; </div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> setQuadrantSegments(<span class="keywordtype">int</span> nQuadrantSegments);</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160; </div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">void</span> setSingleSided(<span class="keywordtype">bool</span> isSingleSided);</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160; </div>
+<div class="line"><a name="l00256"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#aaad15775755e3cd57a8b12b18a017b9c">  256</a></span>&#160;    std::unique_ptr&lt;geom::Geometry&gt; <a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#aaad15775755e3cd57a8b12b18a017b9c">getResultGeometry</a>(<span class="keywordtype">double</span> nDistance);</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160; </div>
+<div class="line"><a name="l00275"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#a38fe8b5c9c693c52667a560b5add1679">  275</a></span>&#160;    <span class="keyword">static</span> std::unique_ptr&lt;geom::Geometry&gt; <a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#a38fe8b5c9c693c52667a560b5add1679">bufferByZero</a>(</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* geom,</div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;        <span class="keywordtype">bool</span> isBothOrientations);</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160; </div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;};</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160; </div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;<span class="comment">// BufferOp inlines</span></div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;<span class="keywordtype">void</span></div>
+<div class="line"><a name="l00283"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#a15d1764170db5d95abe50cff8fef747f">  283</a></span>&#160;<a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#a15d1764170db5d95abe50cff8fef747f">BufferOp::setQuadrantSegments</a>(<span class="keywordtype">int</span> q)</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;{</div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;    bufParams.<a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#adc5559aa27d60c7b40aba6d5c13c0c45">setQuadrantSegments</a>(q);</div>
+<div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160;}</div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160; </div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;<span class="keywordtype">void</span></div>
+<div class="line"><a name="l00289"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#aa566f0c9ba6aabc903adb9898a196961">  289</a></span>&#160;<a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#aa566f0c9ba6aabc903adb9898a196961">BufferOp::setEndCapStyle</a>(<span class="keywordtype">int</span> s)</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160;{</div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;    bufParams.<a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#a1b884eaa4f6bb49cb7547f6cbf2035f7">setEndCapStyle</a>((<a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#a4712bec3a5a2bb5c28ab43b3fe327950">BufferParameters::EndCapStyle</a>)s);</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;}</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160; </div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;<span class="keywordtype">void</span></div>
+<div class="line"><a name="l00295"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#aaa8c47fc49faef0cafeb3865d8785f31">  295</a></span>&#160;<a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#aaa8c47fc49faef0cafeb3865d8785f31">BufferOp::setSingleSided</a>(<span class="keywordtype">bool</span> isSingleSided)</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;{</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;    bufParams.<a class="code" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#ae2a7d92145547fb6e2852c41c5353700">setSingleSided</a>(isSingleSided);</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;}</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160; </div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;} <span class="comment">// namespace geos::operation::buffer</span></div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;} <span class="comment">// namespace geos::operation</span></div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;} <span class="comment">// namespace geos</span></div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160; </div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;<span class="preprocessor">#ifdef _MSC_VER</span></div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;<span class="preprocessor">#pragma warning(pop)</span></div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160; </div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1Geometry_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Geometry.html">geos::geom::Geometry</a></div><div class="ttdoc">Basic implementation of Geometry, constructed and destructed by GeometryFactory.</div><div class="ttdef"><b>Definition:</b> Geometry.h:197</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1PrecisionModel_html"><div class="ttname"><a href="classgeos_1_1geom_1_1PrecisionModel.html">geos::geom::PrecisionModel</a></div><div class="ttdoc">Specifies the precision model of the Coordinate in a Geometry.</div><div class="ttdef"><b>Definition:</b> PrecisionModel.h:88</div></div>
-<div class="ttc" id="aclassgeos_1_1operation_1_1buffer_1_1BufferOp_html"><div class="ttname"><a href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html">geos::operation::buffer::BufferOp</a></div><div class="ttdoc">Computes the buffer of a geometry, for both positive and negative buffer distances.</div><div class="ttdef"><b>Definition:</b> BufferOp.h:80</div></div>
-<div class="ttc" id="aclassgeos_1_1operation_1_1buffer_1_1BufferOp_html_a15d1764170db5d95abe50cff8fef747f"><div class="ttname"><a href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#a15d1764170db5d95abe50cff8fef747f">geos::operation::buffer::BufferOp::setQuadrantSegments</a></div><div class="ttdeci">void setQuadrantSegments(int nQuadrantSegments)</div><div class="ttdoc">Sets the number of segments used to approximate a angle fillet.</div><div class="ttdef"><b>Definition:</b> BufferOp.h:282</div></div>
+<div class="ttc" id="aclassgeos_1_1operation_1_1buffer_1_1BufferOp_html"><div class="ttname"><a href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html">geos::operation::buffer::BufferOp</a></div><div class="ttdoc">Computes the buffer of a geometry, for both positive and negative buffer distances.</div><div class="ttdef"><b>Definition:</b> BufferOp.h:81</div></div>
+<div class="ttc" id="aclassgeos_1_1operation_1_1buffer_1_1BufferOp_html_a15d1764170db5d95abe50cff8fef747f"><div class="ttname"><a href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#a15d1764170db5d95abe50cff8fef747f">geos::operation::buffer::BufferOp::setQuadrantSegments</a></div><div class="ttdeci">void setQuadrantSegments(int nQuadrantSegments)</div><div class="ttdoc">Sets the number of segments used to approximate a angle fillet.</div><div class="ttdef"><b>Definition:</b> BufferOp.h:283</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1buffer_1_1BufferOp_html_a38fe8b5c9c693c52667a560b5add1679"><div class="ttname"><a href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#a38fe8b5c9c693c52667a560b5add1679">geos::operation::buffer::BufferOp::bufferByZero</a></div><div class="ttdeci">static std::unique_ptr&lt; geom::Geometry &gt; bufferByZero(const geom::Geometry *geom, bool isBothOrientations)</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1buffer_1_1BufferOp_html_a6344e6c7aefe42189129954bdd76f0d1"><div class="ttname"><a href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#a6344e6c7aefe42189129954bdd76f0d1">geos::operation::buffer::BufferOp::bufferOp</a></div><div class="ttdeci">static std::unique_ptr&lt; geom::Geometry &gt; bufferOp(const geom::Geometry *g, double distance, int quadrantSegments=BufferParameters::DEFAULT_QUADRANT_SEGMENTS, int endCapStyle=BufferParameters::CAP_ROUND)</div><div class="ttdoc">Computes the buffer for a geometry for a given buffer distance and accuracy of approximation.</div></div>
-<div class="ttc" id="aclassgeos_1_1operation_1_1buffer_1_1BufferOp_html_aa566f0c9ba6aabc903adb9898a196961"><div class="ttname"><a href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#aa566f0c9ba6aabc903adb9898a196961">geos::operation::buffer::BufferOp::setEndCapStyle</a></div><div class="ttdeci">void setEndCapStyle(int nEndCapStyle)</div><div class="ttdoc">Specifies the end cap style of the generated buffer.</div><div class="ttdef"><b>Definition:</b> BufferOp.h:288</div></div>
-<div class="ttc" id="aclassgeos_1_1operation_1_1buffer_1_1BufferOp_html_aaa8c47fc49faef0cafeb3865d8785f31"><div class="ttname"><a href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#aaa8c47fc49faef0cafeb3865d8785f31">geos::operation::buffer::BufferOp::setSingleSided</a></div><div class="ttdeci">void setSingleSided(bool isSingleSided)</div><div class="ttdoc">Sets whether the computed buffer should be single-sided.</div><div class="ttdef"><b>Definition:</b> BufferOp.h:294</div></div>
+<div class="ttc" id="aclassgeos_1_1operation_1_1buffer_1_1BufferOp_html_aa566f0c9ba6aabc903adb9898a196961"><div class="ttname"><a href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#aa566f0c9ba6aabc903adb9898a196961">geos::operation::buffer::BufferOp::setEndCapStyle</a></div><div class="ttdeci">void setEndCapStyle(int nEndCapStyle)</div><div class="ttdoc">Specifies the end cap style of the generated buffer.</div><div class="ttdef"><b>Definition:</b> BufferOp.h:289</div></div>
+<div class="ttc" id="aclassgeos_1_1operation_1_1buffer_1_1BufferOp_html_aaa8c47fc49faef0cafeb3865d8785f31"><div class="ttname"><a href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#aaa8c47fc49faef0cafeb3865d8785f31">geos::operation::buffer::BufferOp::setSingleSided</a></div><div class="ttdeci">void setSingleSided(bool isSingleSided)</div><div class="ttdoc">Sets whether the computed buffer should be single-sided.</div><div class="ttdef"><b>Definition:</b> BufferOp.h:295</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1buffer_1_1BufferOp_html_aaad15775755e3cd57a8b12b18a017b9c"><div class="ttname"><a href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#aaad15775755e3cd57a8b12b18a017b9c">geos::operation::buffer::BufferOp::getResultGeometry</a></div><div class="ttdeci">std::unique_ptr&lt; geom::Geometry &gt; getResultGeometry(double nDistance)</div><div class="ttdoc">Returns the buffer computed for a geometry for a given buffer distance.</div></div>
-<div class="ttc" id="aclassgeos_1_1operation_1_1buffer_1_1BufferOp_html_ac57e331af7062eac25d7e563af0d234a"><div class="ttname"><a href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#ac57e331af7062eac25d7e563af0d234a">geos::operation::buffer::BufferOp::BufferOp</a></div><div class="ttdeci">BufferOp(const geom::Geometry *g, const BufferParameters &amp;params)</div><div class="ttdoc">Initializes a buffer computation for the given geometry with the given set of parameters.</div><div class="ttdef"><b>Definition:</b> BufferOp.h:200</div></div>
-<div class="ttc" id="aclassgeos_1_1operation_1_1buffer_1_1BufferOp_html_ace333176e7988e78d32941397df0c4ec"><div class="ttname"><a href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#ace333176e7988e78d32941397df0c4ec">geos::operation::buffer::BufferOp::BufferOp</a></div><div class="ttdeci">BufferOp(const geom::Geometry *g)</div><div class="ttdoc">Initializes a buffer computation for the given geometry.</div><div class="ttdef"><b>Definition:</b> BufferOp.h:183</div></div>
+<div class="ttc" id="aclassgeos_1_1operation_1_1buffer_1_1BufferOp_html_ac57e331af7062eac25d7e563af0d234a"><div class="ttname"><a href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#ac57e331af7062eac25d7e563af0d234a">geos::operation::buffer::BufferOp::BufferOp</a></div><div class="ttdeci">BufferOp(const geom::Geometry *g, const BufferParameters &amp;params)</div><div class="ttdoc">Initializes a buffer computation for the given geometry with the given set of parameters.</div><div class="ttdef"><b>Definition:</b> BufferOp.h:201</div></div>
+<div class="ttc" id="aclassgeos_1_1operation_1_1buffer_1_1BufferOp_html_ace333176e7988e78d32941397df0c4ec"><div class="ttname"><a href="classgeos_1_1operation_1_1buffer_1_1BufferOp.html#ace333176e7988e78d32941397df0c4ec">geos::operation::buffer::BufferOp::BufferOp</a></div><div class="ttdeci">BufferOp(const geom::Geometry *g)</div><div class="ttdoc">Initializes a buffer computation for the given geometry.</div><div class="ttdef"><b>Definition:</b> BufferOp.h:184</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1buffer_1_1BufferParameters_html"><div class="ttname"><a href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html">geos::operation::buffer::BufferParameters</a></div><div class="ttdoc">Contains the parameters which describe how a buffer should be constructed.</div><div class="ttdef"><b>Definition:</b> BufferParameters.h:56</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1buffer_1_1BufferParameters_html_a1b884eaa4f6bb49cb7547f6cbf2035f7"><div class="ttname"><a href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#a1b884eaa4f6bb49cb7547f6cbf2035f7">geos::operation::buffer::BufferParameters::setEndCapStyle</a></div><div class="ttdeci">void setEndCapStyle(EndCapStyle style)</div><div class="ttdef"><b>Definition:</b> BufferParameters.h:201</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1buffer_1_1BufferParameters_html_a4712bec3a5a2bb5c28ab43b3fe327950"><div class="ttname"><a href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#a4712bec3a5a2bb5c28ab43b3fe327950">geos::operation::buffer::BufferParameters::EndCapStyle</a></div><div class="ttdeci">EndCapStyle</div><div class="ttdoc">End cap styles.</div><div class="ttdef"><b>Definition:</b> BufferParameters.h:61</div></div>
