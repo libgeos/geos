@@ -5,6 +5,7 @@
   - Add Angle::sinCosSnap to avoid small errors, e.g. with buffer operations (GH-978, Mike Taves)
   - Add classes for curved geometry types: CircularString, CompoundCurve, CurvedPolygon, MultiCurve,
     MultiSurface (GH-1046, Dan Baston/German QGIS users group/Canton of Basel-Landschaft/Canton of Zug)
+  - Support curved geometry types in WKT/WKB readers/writers (GH-1046, GH-1104, GH-1106, Dan Baston)
 
 - Breaking Changes
 
