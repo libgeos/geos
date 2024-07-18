@@ -39,6 +39,7 @@
 #include <geos/algorithm/InteriorPointLine.h>
 #include <geos/algorithm/InteriorPointArea.h>
 #include <geos/algorithm/ConvexHull.h>
+#include <geos/algorithm/locate/SimplePointInAreaLocator.h>
 #include <geos/geom/prep/PreparedGeometryFactory.h>
 #include <geos/operation/intersection/Rectangle.h>
 #include <geos/operation/intersection/RectangleIntersection.h>
@@ -322,10 +323,19 @@ Geometry::intersects(const Geometry* g) const
         return predicate::RectangleIntersects::intersects(*p, *this);
     }
 
+    auto typ = getGeometryTypeId();
+    if (typ == GEOS_CURVEPOLYGON && g->getGeometryTypeId() == GEOS_POINT) {
+        auto loc = locate::SimplePointInAreaLocator::locatePointInSurface(*g->getCoordinate(), *detail::down_cast<const Surface*>(this));
+        return loc != Location::EXTERIOR;
+    } else if (typ == GEOS_POINT && g->getGeometryTypeId() == GEOS_CURVEPOLYGON) {
+        auto loc = locate::SimplePointInAreaLocator::locatePointInSurface(*getCoordinate(), *detail::down_cast<const Surface*>(g));
+        return loc != Location::EXTERIOR;
+    }
+
 #if USE_RELATENG
     return operation::relateng::RelateNG::intersects(this, g);
 #else
-    if (getGeometryTypeId() == GEOS_GEOMETRYCOLLECTION) {
+    if (typ == GEOS_GEOMETRYCOLLECTION) {
         auto im = relate(g);
         bool res = im->isIntersects();
         return res;
