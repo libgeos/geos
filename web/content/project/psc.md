@@ -17,13 +17,15 @@ This PSC list is valid as of February 18th, 2022.
 * [Sandro Santilli](https://strk.kbt.io)
 
 
-The PSC approves major changes and RFC documents. Other work is always ongoing, by the PSC and by the other committers, listed below:
+The PSC approves major changes and RFC documents. Other work is always
+ongoing, by the PSC and by the other core contributors, listed below:
 
+* [Even Rouault](https://git.osgeo.org/gitea/rouault)
 * [Vicky Vergara](https://github.com/cvvergara)
 * [Kurt Schwehr](https://github.com/schwehr)
 * [Mike Taves](https://github.com/mwtoews)
 
-Historical committers:
+Historical core contributors:
 
 * Mateusz Loskot
 * Charlie Savage
