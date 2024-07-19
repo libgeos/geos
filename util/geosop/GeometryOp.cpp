@@ -1145,7 +1145,7 @@ Result::metadata() {
     case typeGeomList:
         return "Geometry[" + std::to_string( valGeomList.size()) + "]";
     }
-    return "Unknonwn type";
+    return "Unknown type";
 }
 
 std::string

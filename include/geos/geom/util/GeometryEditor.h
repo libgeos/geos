@@ -55,7 +55,7 @@ namespace util { // geos.geom.util
  *   this is not checked by the GeometryEditor
  * - the coordinate lists may be changed
  *   (e.g. by adding or deleting coordinates).
- *   The modifed coordinate lists must be consistent with their original
+ *   The modified coordinate lists must be consistent with their original
  *   parent component
  *   (e.g. a LinearRing must always have at least 4 coordinates, and the
  *   first and last coordinate must be equal)

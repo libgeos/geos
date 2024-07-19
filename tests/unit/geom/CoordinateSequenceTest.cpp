@@ -83,7 +83,7 @@ void object::test<1>
     ensure(!sequence.hasM());
 }
 
-// Test of overriden constructor
+// Test of overridden constructor
 template<>
 template<>
 void object::test<2>
@@ -98,7 +98,7 @@ void object::test<2>
 
     ensure("string rep", sequence.toString() != std::string("()"));
 
-    ensure("Every coodinate in the default sequence should be same.", sequence.hasRepeatedPoints());
+    ensure("Every coordinate in the default sequence should be same.", sequence.hasRepeatedPoints());
 
     ensure_equals("default/empty coordinates now 2D", sequence.getDimension(), 2u);
     ensure("no Z", !sequence.hasZ());
@@ -601,7 +601,7 @@ void object::test<16>
 
     ensure_equals(sequence.size(), std::size_t(3));
 
-    sequence.add(0, Coordinate(4, 4), false); // don't alow repeated
+    sequence.add(0, Coordinate(4, 4), false); // don't allow repeated
     ensure_equals(sequence.size(), std::size_t(4));
     ensure_equals(sequence.getAt(0).x, 4.0);
 

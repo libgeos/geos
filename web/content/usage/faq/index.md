@@ -22,7 +22,7 @@ so it is much easier to keep stable.
 GEOS started life as a port of JTS, so its design reflects that heritage.
 JTS is still evolving and improving, so keeping GEOS fairly close to the JTS
 design and organization makes it easier to keep porting JTS changes.
-However, there have been additions to GEOS which were not orginally in JTS
+However, there have been additions to GEOS which were not originally in JTS
 (although in some cases those were superseded by later JTS development).
 Also, GEOS is intended to provide high-performance spatial algorithms,
 which sometimes requires using different code patterns than in Java.

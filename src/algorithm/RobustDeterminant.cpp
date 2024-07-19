@@ -52,7 +52,7 @@ RobustDeterminant::signOfDet2x2(double x1, double y1, double x2, double y2)
 {
     // returns -1 if the determinant is negative,
     // returns  1 if the determinant is positive,
-    // retunrs  0 if the determinant is null.
+    // returns  0 if the determinant is null.
     int sign = 1;
     double swap;
 

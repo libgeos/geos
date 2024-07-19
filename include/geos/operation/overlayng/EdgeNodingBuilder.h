@@ -110,7 +110,7 @@ private:
     * This is one of:
     *
     * - Fixed precision: a snap-rounding noder (which should be fully robust)
-    * - Floating precision: a conventional nodel (which may be non-robust).
+    * - Floating precision: a conventional model (which may be non-robust).
     *   In this case, a validation step is applied to the output from the noder.
     */
     Noder* getNoder();

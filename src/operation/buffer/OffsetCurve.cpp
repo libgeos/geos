@@ -332,13 +332,13 @@ OffsetCurve::matchSegments(
         }
 
         void select(const geom::LineSegment& seg) override {
-            (void)seg; // quiet ununsed variable warning
+            (void)seg; // quiet unused variable warning
             return;
         }
 
         void select(const MonotoneChain& mc, std::size_t segIndex) override
         {
-            (void)mc; // quiet ununsed variable warning
+            (void)mc; // quiet unused variable warning
             /**
             * A curveRingPt segment may match all or only a portion of a single raw segment.
             * There may be multiple curve ring segs that match along the raw segment.
@@ -467,7 +467,7 @@ OffsetCurve::findSectionEnd(
         /**
          *  End section at gap in raw curve.
          *  Only needed for joined curve, since otherwise
-         *  contigous buffer segments can be in same section
+         *  contiguous buffer segments can be in same section
          */
             double locDelta = std::abs(loc[next] - loc[end]);
             if (locDelta > 1)

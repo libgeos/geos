@@ -126,7 +126,7 @@ public:
     static const GeometryFactory*
     getDefaultInstance();
 
-//Skipped a lot of list to array convertors
+//Skipped a lot of list to array converters
 
     static std::unique_ptr<Point> createPointFromInternalCoord(const Coordinate* coord,
                                         const Geometry* exemplar);
@@ -389,7 +389,7 @@ public:
 
     /// See buildGeometry(std::vector<Geometry *>&) for semantics
     //
-    /// Will clone the geometries accessible trough the iterator.
+    /// Will clone the geometries accessible through the iterator.
     ///
     /// @tparam T an iterator yielding something which casts to const Geometry*
     /// @param from start iterator

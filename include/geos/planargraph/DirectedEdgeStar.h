@@ -101,7 +101,7 @@ public:
     }
 
     /**
-     * \brief Returns the coordinate for the node at wich this
+     * \brief Returns the coordinate for the node at which this
      * star is based
      */
     geom::Coordinate& getCoordinate() const;

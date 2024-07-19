@@ -20,7 +20,7 @@
  * makes it useless for a TaggedLineSegment to store copies
  * of coordinates. Using pointers would be good enough here.
  * We don't do it to avoid having to break inheritance from
- * LineSegment, which has copies intead. Wheter LineSegment
+ * LineSegment, which has copies instead. Whether LineSegment
  * itself should be refactored can be discussed.
  *  --strk 2006-04-12
  *

@@ -110,7 +110,7 @@ public:
      * that encloses a supplied bounding box.
      * A new super-bounding box that contains the triangle is computed and stored.
      *
-     * @param env the bouding box to surround
+     * @param env the bounding box to surround
      * @param tolerance the tolerance value for determining if two sites are equal
      */
     QuadEdgeSubdivision(const geom::Envelope& env, double tolerance);

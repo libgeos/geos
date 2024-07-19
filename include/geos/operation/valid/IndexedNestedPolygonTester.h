@@ -70,7 +70,7 @@ private:
     *
     * @param the shell to test
     * @param the polygon to test against
-    * @param coordNested return parametr for found coordinate
+    * @param coordNested return parameter for found coordinate
     * @return an interior segment point, or null if the shell is nested correctly
     */
     static bool findIncidentSegmentNestedPoint(

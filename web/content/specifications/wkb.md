@@ -185,7 +185,7 @@ The "Extended WKB" variant is a superset of the standard WKB, which allows appli
 
 The presence of extra dimensions is indicated by adding flag bits to the existing `wkbType` that appears in all WKB geometries.
 
-For example, here is the structure and flagging for a 3D point -- the dimensionaly flag indicates a Z dimension, and the point member therefor has three coordinates.
+For example, here is the structure and flagging for a 3D point -- the dimensionaly flag indicates a Z dimension, and the point member therefore has three coordinates.
 
 ```
 wkbZ = 0x80000000

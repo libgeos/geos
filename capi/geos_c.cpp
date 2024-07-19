@@ -146,7 +146,7 @@ extern "C" {
 
     /****************************************************************
     ** relate()-related functions
-    ** return 0 = false, 1 = true, 2 = error occured
+    ** return 0 = false, 1 = true, 2 = error occurred
     **
     */
     char

@@ -66,7 +66,7 @@ struct test_result_posix
 #endif
 
 /**
- * Return type of runned test/test group.
+ * Return type of ran test/test group.
  *
  * For test: contains result of test and, possible, message
  * for failure or exception.
@@ -95,8 +95,8 @@ struct test_result : public test_result_posix
     {
         ok,       ///< test finished successfully
         fail,     ///< test failed with ensure() or fail() methods
-        ex,       ///< test throwed an exceptions
-        warn,     ///< test finished successfully, but test destructor throwed
+        ex,       ///< test threw an exceptions
+        warn,     ///< test finished successfully, but test destructor thrown
         term,     ///< test forced test application to terminate abnormally
         ex_ctor,  ///<
         rethrown, ///<

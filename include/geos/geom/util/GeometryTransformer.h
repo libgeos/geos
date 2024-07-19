@@ -148,7 +148,7 @@ private:
     bool pruneEmptyGeometry;
 
     /**
-     * `true` if a homogenous collection result
+     * `true` if a homogeneous collection result
      * from a {@link GeometryCollection} should still
      * be a general GeometryCollection
      */

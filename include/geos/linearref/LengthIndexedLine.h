@@ -157,7 +157,7 @@ public:
      *
      * (The subline must **conform** to the line; that is,
      * all vertices in the subline (except possibly the first and last)
-     * must be vertices of the line and occcur in the same order).
+     * must be vertices of the line and occur in the same order).
      *
      * @param subLine a subLine of the line
      * @return a pair of indices for the start and end of the subline.

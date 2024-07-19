@@ -16,7 +16,7 @@ Note some executables have different names.
 
     bin/test_geos_unit [name] [test number]
     
-The test name is the **tut group name** found in the unit test file on a line begining `group` (e.g. like [this](https://github.com/libgeos/geos/blob/main/tests/unit/operation/buffer/BufferOpTest.cpp#L55).
+The test name is the **tut group name** found in the unit test file on a line beginning `group` (e.g. like [this](https://github.com/libgeos/geos/blob/main/tests/unit/operation/buffer/BufferOpTest.cpp#L55).
 
 ### Run all unit tests
 

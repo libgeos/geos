@@ -1038,7 +1038,7 @@ char* XMLNode::ParseDeep( char* p, StrPair* parentEndTag, int* curLineNumPtr )
             //
             // Optimized due to a security test case. If the first node is
             // a declaration, and the last node is a declaration, then only
-            // declarations have so far been addded.
+            // declarations have so far been added.
             bool wellLocated = false;
 
             if (ToDocument()) {

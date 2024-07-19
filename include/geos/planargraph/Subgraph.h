@@ -83,7 +83,7 @@ public:
      *
      * @return a pair with first element being an iterator
      *         to the Edge in set and second element
-     *	       being a boolean value indicating wheter
+     *	       being a boolean value indicating whether
      *	       the Edge has been inserted now or was
      *	       already in the set.
      */

@@ -56,7 +56,7 @@ This message will continue to be shown in every project that a user tries to com
 
 I propose doing this in GEOS 3.7.0.
 
-The main purpose is to discourage the use of the C++ API because we do not have the manpower to guarantee ABI or API compatiblity from minor version to minor version and thus using it in an environment where the GEOS library is shared across many software is unsupported.  We are also planning significant refactoring in GEOS 3.8 which will very likely break the C++ API.
+The main purpose is to discourage the use of the C++ API because we do not have the manpower to guarantee ABI or API compatibility from minor version to minor version and thus using it in an environment where the GEOS library is shared across many software is unsupported.  We are also planning significant refactoring in GEOS 3.8 which will very likely break the C++ API.
 
 Currently [osm2pgsql](https://github.com/openstreetmap/osm2pgsql/issues/634) and OSSIM are the only ones that used the GEOS C++ API and largely distributed in shared environment.  We want to discourage future projects that plan to be used in a shared environment from using the GEOS C++ API and to stick with the GEOS C API.
 

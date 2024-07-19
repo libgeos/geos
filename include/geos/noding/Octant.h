@@ -46,7 +46,7 @@ namespace noding { // geos.noding
  */
 class GEOS_DLL Octant {
 private:
-    Octant() {} // Can't instanciate it
+    Octant() {} // Can't instantiate it
 public:
 
     /**

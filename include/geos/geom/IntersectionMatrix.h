@@ -61,7 +61,7 @@ public:
     IntersectionMatrix();
 
     /** \brief
-     * Overriden constructor.
+     * Overridden constructor.
      *
      * Creates an IntersectionMatrix with the given dimension symbols.
      *

@@ -98,7 +98,7 @@ PSC members are expected to be active on both the [geos-devel](http://lists.osge
 
 **Note:** The following is for historical interest only. The current PSC is available [here]({{< ref "/project/psc" >}}).
 
-Prior to annointing itself the PSC must distribute this RFC to the GEOS community via [geos-devel](http://lists.osgeo.org/mailman/listinfo/geos-devel) for comment. Any and all substantive comments must be discussed (and hopefully, but not necessarily, addressed via [geos-devel](http://lists.osgeo.org/mailman/listinfo/geos-devel).
+Prior to announcing itself, the PSC must distribute this RFC to the GEOS community via [geos-devel](http://lists.osgeo.org/mailman/listinfo/geos-devel) for comment. Any and all substantive comments must be discussed (and hopefully, but not necessarily, addressed via [geos-devel](http://lists.osgeo.org/mailman/listinfo/geos-devel).
 
 Initial members are:
 

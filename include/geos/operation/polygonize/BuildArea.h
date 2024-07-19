@@ -62,7 +62,7 @@ public:
 
     ~BuildArea() = default;
 
-    /** \brief Return the area built fromthe constituent linework of the input geometry. */
+    /** \brief Return the area built from the constituent linework of the input geometry. */
     std::unique_ptr<geom::Geometry> build(const geom::Geometry* geom);
 };
 

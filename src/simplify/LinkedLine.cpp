@@ -128,7 +128,7 @@ LinkedLine::nextCoordinate(std::size_t index) const
 bool
 LinkedLine::hasCoordinate(std::size_t index) const
 {
-    //-- if not a ring, endpoints are alway present
+    //-- if not a ring, endpoints are always present
     if (! m_isRing && (index == 0 || index == m_coord.size() - 1))
         return true;
 

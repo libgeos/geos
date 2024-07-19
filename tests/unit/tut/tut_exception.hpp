@@ -83,7 +83,7 @@ struct no_such_test : public tut_error
 };
 
 /**
- * Internal exception to be throwed when
+ * Internal exception to be thrown when
  * test constructor has failed.
  */
 struct bad_ctor : public tut_error
@@ -109,7 +109,7 @@ struct bad_ctor : public tut_error
 };
 
 /**
- * Exception to be throwed when ensure() fails or fail() called.
+ * Exception to be thrown when ensure() fails or fail() called.
  */
 struct failure : public tut_error
 {
@@ -134,7 +134,7 @@ struct failure : public tut_error
 };
 
 /**
- * Exception to be throwed when test desctructor throwed an exception.
+ * Exception to be thrown when test destructor thrown an exception.
  */
 struct warning : public tut_error
 {
@@ -159,7 +159,7 @@ struct warning : public tut_error
 };
 
 /**
- * Exception to be throwed when test issued SEH (Win32)
+ * Exception to be thrown when test issued SEH (Win32)
  */
 struct seh : public tut_error
 {
@@ -184,7 +184,7 @@ struct seh : public tut_error
 };
 
 /**
- * Exception to be throwed when child processes fail.
+ * Exception to be thrown when child processes fail.
  */
 struct rethrown : public failure
 {

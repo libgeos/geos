@@ -72,7 +72,7 @@ public:
 
     /** \brief
      * Constructs a homogeneous coordinate which is the intersection
-     * of the lines define by the homogenous coordinates represented
+     * of the lines define by the homogeneous coordinates represented
      * by two [Coordinates](@ref geom::Coordinate).
      *
      * @param p1

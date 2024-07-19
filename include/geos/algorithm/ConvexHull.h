@@ -25,7 +25,7 @@
 #include <vector>
 #include <cassert>
 
-// FIXME: avoid using Cordinate:: typedefs to avoid full include
+// FIXME: avoid using Coordinate:: typedefs to avoid full include
 #include <geos/algorithm/ConvexHull.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -153,7 +153,7 @@ private:
 
     /**
      * Write in 'cleaned' a version of 'input' with collinear
-     * vertexes removed.
+     * vertices removed.
      */
     void cleanRing(const geom::Coordinate::ConstVect& input,
                    geom::Coordinate::ConstVect& cleaned);

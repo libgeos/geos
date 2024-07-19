@@ -160,7 +160,7 @@ void object::test<4>
     runTest("LINESTRING (0 0, 100 0)", "LINESTRING (0 0, 50 50, 100 0)", 0.5, 50.0);
 }
 
-// 5 - test Line Segments revealing distance intialization bug
+// 5 - test Line Segments revealing distance initialization bug
 template<>
 template<>
 void object::test<5>
