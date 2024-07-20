@@ -2666,7 +2666,7 @@ extern int GEOS_DLL GEOSGetSRID(const GEOSGeometry* g);
 /**
 * Return the anonymous "user data" for this geometry.
 * User data must be managed by the caller, and is not freed when
-* the geometry is destoryed.
+* the geometry is destroyed.
 * \param g Input geometry
 * \return A void* to the user data, caller is responsible for
 *         casting to the appropriate type.
@@ -4060,7 +4060,7 @@ extern GEOSGeometry GEOS_DLL *GEOSConcaveHull(
 * The concave hull is constructed by removing the longest outer edges
 * of the Delaunay Triangulation of the space between the polygons,
 * until the specified maximm edge length is reached.
-* A large value produces the convex hull, 0 produces the hull of maximim concaveness.
+* A large value produces the convex hull, 0 produces the hull of maximum concaveness.
 *
 * \param g The input geometry
 * \param length The maximum edge length (0 or greater)
@@ -4495,7 +4495,7 @@ extern GEOSGeometry GEOS_DLL *GEOSPolygonizer_getCutEdges(
 
 /**
 * Perform the polygonization as GEOSPolygonize() and return the
-* polygonal result as well as all extra ouputs.
+* polygonal result as well as all extra outputs.
 *
 * \param[in] input A single geometry with all the input lines to polygonize.
 * \param[out] cuts Pointer to hold "cut edges", connected on both ends but not part of output. Caller must free.
@@ -4715,7 +4715,7 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_transformXY(
 * \param input An input geometry
 * \param snap_target A geometry to snap the input to
 * \param tolerance Snapping tolerance
-* \return The snapped verion of the input. NULL on exception.
+* \return The snapped version of the input. NULL on exception.
 * Caller is responsible for freeing with GEOSGeom_destroy().
 *
 * \since 3.3
@@ -5268,7 +5268,7 @@ extern GEOSSTRtree GEOS_DLL *GEOSSTRtree_create(size_t nodeCapacity);
 * Construct an STRtree from items that have been inserted. Once constructed,
 * no more items may be inserted into the tree. Functions that require a
 * constructed tree will build it automatically, so there is no need to call
-* `GEOSSTRtree_build` unless it is desired to explicity construct the tree
+* `GEOSSTRtree_build` unless it is desired to explicitly construct the tree
 * in a certain section of code or using a certain thread.
 *
 * \param tree the \ref GEOSSTRtree to apply the build to

@@ -436,7 +436,7 @@ XMLTester::run(const std::string& source)
     const tinyxml2::XMLNode* node = xml.FirstChildElement("run");
 
     if(! node) {
-        throw(runtime_error("Document has no childs"));
+        throw(runtime_error("Document has no children"));
     }
 
     parseRun(node);
@@ -1531,7 +1531,7 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
             }
         }
 
-        // equalsTopo() is synomym for equals() in JTS
+        // equalsTopo() is synonym for equals() in JTS
         else if(opName == "equalstopo") {
             geom::Geometry* g1 = opArg1 == "B" ? gB : gA;
             geom::Geometry* g2 = opArg2 == "B" ? gB : gA;
@@ -2253,7 +2253,7 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
         }
     }
     catch(...) {
-        std::cerr << "Unknown EXEPTION on case "
+        std::cerr << "Unknown EXCEPTION on case "
                   << caseCount
                   << std::endl;
         actual_result = "Unknown exception thrown";

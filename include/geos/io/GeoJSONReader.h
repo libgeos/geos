@@ -50,7 +50,7 @@ class GEOS_DLL GeoJSONReader {
 public:
 
     /**
-     * \brief Inizialize parser with given GeometryFactory.
+     * \brief Initialize parser with given GeometryFactory.
      *
      * Note that all Geometry objects created by the
      * parser will contain a pointer to the given factory
@@ -60,7 +60,7 @@ public:
     GeoJSONReader(const geom::GeometryFactory& gf);
 
     /**
-     * \brief Inizialize parser with default GeometryFactory.
+     * \brief Initialize parser with default GeometryFactory.
      *
      */
     GeoJSONReader();

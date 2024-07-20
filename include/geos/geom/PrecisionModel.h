@@ -236,7 +236,7 @@ public:
     /**
     * Computes the grid size for a fixed precision model.
     * This is equal to the reciprocal of the scale factor.
-    * If the grid size has been set explicity (via a negative scale factor)
+    * If the grid size has been set explicitly (via a negative scale factor)
     * it will be returned.
     *
     * @return the grid size at a fixed precision scale.

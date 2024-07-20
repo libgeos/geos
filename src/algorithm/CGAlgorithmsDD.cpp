@@ -80,7 +80,7 @@ CGAlgorithmsDD::orientationIndex(double p1x, double p1y,
 }
 
 
-// inlining this method worsened performance slighly
+// inlining this method worsened performance slightly
 int
 CGAlgorithmsDD::orientationIndex(const CoordinateXY& p1,
                                  const CoordinateXY& p2,

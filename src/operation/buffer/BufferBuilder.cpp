@@ -539,7 +539,7 @@ BufferBuilder::buffer(const Geometry* g, double distance)
         std::vector<std::unique_ptr<geom::Polygon>> polys = plgnzr.getPolygons();
 
 #if GEOS_DEBUG
-        std::cerr << "Polygonization of noded linework returend: " << polys.size() << " polygons" << std::endl;
+        std::cerr << "Polygonization of noded linework returned: " << polys.size() << " polygons" << std::endl;
 #endif
 
         if ( polys.size() > 1 )

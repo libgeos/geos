@@ -45,7 +45,7 @@ void object::test<2>() {
     GEOSGeom_destroy(geom);
 }
 
-// verify that a rectange is returned if either but not both width and height are 0
+// verify that a rectangle is returned if either but not both width and height are 0
 template <>
 template <>
 void object::test<3>() {

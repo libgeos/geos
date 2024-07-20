@@ -130,7 +130,7 @@ OverlayGraph::createOverlayEdge(const CoordinateSequence* pts, OverlayLabel* lbl
 OverlayLabel*
 OverlayGraph::createOverlayLabel(const Edge* edge)
 {
-    // Instantate OverlayLabel on the std::deque
+    // Instantiate OverlayLabel on the std::deque
     ovLabelQue.emplace_back();
     // Read back a reference
     OverlayLabel& ovl = ovLabelQue.back();

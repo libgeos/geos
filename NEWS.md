@@ -218,7 +218,7 @@
   - Autoconf build system is dropped in favour of CMake
     See README.md and INSTALL.md for examples of usage
   - Libtool is no longer used for in favour of CMake
-    Therefor libgeos.la is no longer built/installed
+    Therefore libgeos.la is no longer built/installed
   - #1094, #1090: Drop inlines.cpp to address duplicate symbols on many platforms
     (Regina Obe)
   - GH475: Do not return NaN from GEOSProjectNormalized_r (Paul Ramsey)
@@ -243,7 +243,7 @@
   - Update geos-config tool for consistency
     and escape paths (https://git.osgeo.org/gitea/geos/geos/pulls/99)
     changes mostly affect CMake MSVC builds (#1015, Mike Taves)
-  - Testing on Rasberry Pi 32-bit (berrie) (#1017, Bruce Rindahl, Regina Obe)
+  - Testing on Raspberry Pi 32-bit (berrie) (#1017, Bruce Rindahl, Regina Obe)
   - Replace ttmath with JTS DD double-double implementation (Paul Ramsey)
   - Fix bug in DistanceOp for geometries with empty components (#1026, Paul Ramsey)
   - Remove undefined behaviour in CAPI (#1021, Greg Troxel)
@@ -495,7 +495,7 @@ See 3.7.0 notes
     - Fix area boundary return from GEOSPointOnSurface (#623)
     - Speedup GEOSWKBReader_read (#621)
     - Fix RobustLineIntersector handling of invalid intersection points (#622)
-    - Reduce likelyhood of invalid output from snap operation (#629, #501)
+    - Reduce likelihood of invalid output from snap operation (#629, #501)
     - Reduce memory fragmentation of prepared Polygon/Point intersection op
     - Fix mingw64 compile (#630)
     - Fix bug in HotPixel constructor (#635)
@@ -526,7 +526,7 @@ See 3.7.0 notes
 2012-11-15 -- that's Post-GIS day !
 
 - Bug fixes / improvements
-    - Add support for testing with phpunit 3.6 (not loosing support for 3.4)
+    - Add support for testing with phpunit 3.6 (not losing support for 3.4)
     - Segfault from intersection (#586, #598, #599)
 
 ## Changes in 3.3.5
@@ -607,7 +607,7 @@ See 3.7.0 notes
           GEOSGeom_createEmptyPolygon, GEOSGeom_createEmptyCollection
   - CAPI: GEOSGeom_extractUniquePoints
   - CAPI: GEOSGetGeometryN support for single geometries
-  - CAPI: GEOSPolygonize_full to return all informations computed by
+  - CAPI: GEOSPolygonize_full to return all information computed by
           the polygonizer
   - CAPI: GEOSOrientationIndex
   - CAPI: GEOSSharedPaths to find shared paths and their orientation
@@ -700,7 +700,7 @@ See 3.7.0 notes
 	- New operation/predicate package
 	- Added CGAlgorithms::isPointInRing() version working with
 	  Coordinate::ConstVect type (faster!)
-	- Added getAt(int pos, Coordinate &to) funtion to CoordinateSequence
+	- Added getAt(int pos, Coordinate &to) function to CoordinateSequence
 	  class.
 	- Moved GetNumGeometries() and GetGeometryN() interfaces
 	  from GeometryCollection to Geometry class.
@@ -772,12 +772,12 @@ See 3.7.0 notes
 	- Namespaces mapping JTS packages
 	- Renamed classes after JTS names (namespaces use made this possible
 	  w/out name clashes)
-	- Splitted headers, for build speedup and possible API reduction.
+	- Split headers, for build speedup and possible API reduction.
 	- Moved source/bigtest and source/test to tests/bigtest
 	  and test/xmltester
 	- Moved C-API in it's own top-level dir capi/
 	- Reworked automake scripts to produce a static lib for each subdir
-	  and then link all subsystem's libs togheter
+	  and then link all subsystem's libs together
 	- Renamed DefaultCoordinateSequence to CoordinateArraySequence.
 	- Renamed OverlayOp opcodes by prepending the 'op' prefix, and
 	  given the enum a name (OpCode) for type-safety.
@@ -813,7 +813,7 @@ See 3.7.0 notes
 	  	  use unsigned int rather then int
 	- Changed EdgeEndStar to maintain a single container for EdgeEnds
 	- Changed PlanarGraph::addEdges to take a const vector by ref
-	  rathern then a non-const vector by pointer
+	  rather then a non-const vector by pointer
 	- Changed EdgeList::addAll to take a const vector by ref
 	  rather then a non-const vector by pointer
 	- Added apply_rw(CoordinateFilter *) and apply_ro(CoordinateFilter *)

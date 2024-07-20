@@ -309,7 +309,7 @@ LineSequencer::addReverseSubpath(const planargraph::DirectedEdge* de,
     if(expectedClosed) {
         // the path should end at the toNode of this de,
         // otherwise we have an error
-        util::Assert::isTrue(fromNode == endNode, "path not contiguos");
+        util::Assert::isTrue(fromNode == endNode, "path not contiguous");
         //assert(fromNode == endNode);
     }
 

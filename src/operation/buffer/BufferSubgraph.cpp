@@ -71,7 +71,7 @@ BufferSubgraph::create(Node* node)
     addReachable(node);
 
     // We are assuming that dirEdgeList
-    // contains *at leas* ONE forward DirectedEdge
+    // contains *at least* ONE forward DirectedEdge
     finder.findEdge(&dirEdgeList);
 
     rightMostCoord = &(finder.getCoordinate());

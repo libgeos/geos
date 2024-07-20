@@ -226,7 +226,7 @@ class test_group : public group_base, public test_group_posix
          * Specially treats exceptions in test object destructor;
          * if test itself failed, exceptions in destructor
          * are ignored; if test was successful and destructor failed,
-         * warning exception throwed.
+         * warning exception thrown.
          */
         void release()
         {
@@ -384,7 +384,7 @@ public:
             return false;
         }
 
-        // withing scope; check if given test exists
+        // within scope; check if given test exists
         tests_iterator ti = tests_.find(n);
         if (ti == tests_.end())
         {

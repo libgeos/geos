@@ -34,7 +34,7 @@ sudo apt-get install geos
 
 ### Debian
 
-The [Debian GIS](https://wiki.debian.org/DebianGis) project maintains [GEOS packages](https://tracker.debian.org/pkg/geos) and pushes them into the appropriate Debian respositories.
+The [Debian GIS](https://wiki.debian.org/DebianGis) project maintains [GEOS packages](https://tracker.debian.org/pkg/geos) and pushes them into the appropriate Debian repositories.
 
 ```bash
 sudo apt-get install geos

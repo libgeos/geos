@@ -196,7 +196,7 @@ private:
 
     EdgeRing* findEdgeRing(PolygonizeDirectedEdge* startDE);
 
-    /* Tese are for memory management */
+    /* These are for memory management */
     std::vector<planargraph::Edge*> newEdges;
     std::vector<planargraph::DirectedEdge*> newDirEdges;
     std::vector<planargraph::Node*> newNodes;

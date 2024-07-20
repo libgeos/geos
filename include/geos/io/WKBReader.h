@@ -88,7 +88,7 @@ public:
 
     WKBReader(geom::GeometryFactory const& f);
 
-    /// Inizialize parser with default GeometryFactory.
+    /// Initialize parser with default GeometryFactory.
     WKBReader();
 
     void setFixStructure(bool doFixStructure);

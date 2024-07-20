@@ -37,7 +37,7 @@ private:
 public:
     ///
     /// \brief binaryDispatch calls a functor template, explicitly providing the backing types of two CoordinateSequences. The
-    /// CoordinateSequences are not provided to the functor as arguments but can be provided along with any other arugments
+    /// CoordinateSequences are not provided to the functor as arguments but can be provided along with any other arguments
     /// through the `args` argument.
     template<typename F, class... Args>
     static void binaryDispatch(const CoordinateSequence& seq1, const CoordinateSequence& seq2, F& fun, Args... args)

@@ -339,7 +339,7 @@ BufferCurveSetBuilder::addRingSide(const CoordinateSequence* coord,
     }
     std::vector<CoordinateSequence*> lineList;
     curveBuilder.getRingCurve(coord, side, offsetDistance, lineList);
-    // ASSERT: lineList contains exactly 1 curve (this is teh JTS semantics)
+    // ASSERT: lineList contains exactly 1 curve (this is the JTS semantics)
     if (lineList.size() > 0) {
         const CoordinateSequence* curve = lineList[0];
         /**

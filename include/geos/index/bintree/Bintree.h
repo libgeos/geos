@@ -44,7 +44,7 @@ namespace bintree { // geos::index::bintree
  * may be a single point).
  *
  * This implementation does not require specifying the extent of the inserted
- * items beforehand. It will automatically expand to accomodate any extent
+ * items beforehand. It will automatically expand to accommodate any extent
  * of dataset.
  *
  * This index is different to the "Interval Tree of Edelsbrunner"

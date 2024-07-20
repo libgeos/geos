@@ -45,7 +45,7 @@ namespace precision { // geos.precision
  * It can be forced to be reduced pointwise by using setPointwise(boolean).
  * Note that in this case the result geometry may be invalid.
  * Linear and point geometry is always reduced pointwise (i.e. without further change to
- * its topology or stucture), since this does not change validity.
+ * its topology or structure), since this does not change validity.
  *
  * By default the geometry precision model is not changed.
  * This can be overridden by usingsetChangePrecisionModel(boolean).

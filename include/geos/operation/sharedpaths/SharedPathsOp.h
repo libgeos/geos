@@ -79,12 +79,12 @@ public:
     /// @param sameDirection
     ///   Shared edges having the same direction are pushed
     ///   onto this vector. They'll be of type LineString.
-    ///   Ownership of the edges is tranferred.
+    ///   Ownership of the edges is transferred.
     ///
     /// @param oppositeDirection
     ///   Shared edges having the opposite direction are pushed
     ///   onto this vector. They'll be of type geom::LineString.
-    ///   Ownership of the edges is tranferred.
+    ///   Ownership of the edges is transferred.
     ///
     static void sharedPathsOp(const geom::Geometry& g1,
                               const geom::Geometry& g2,
@@ -106,12 +106,12 @@ public:
     /// @param sameDirection
     ///   Shared edges having the same direction are pushed
     ///   onto this vector. They'll be of type geom::LineString.
-    ///   Ownership of the edges is tranferred.
+    ///   Ownership of the edges is transferred.
     ///
     /// @param oppositeDirection
     ///   Shared edges having the opposite direction are pushed
     ///   onto this vector. They'll be of type geom::LineString.
-    ///   Ownership of the edges is tranferred.
+    ///   Ownership of the edges is transferred.
     ///
     void getSharedPaths(PathList& sameDirection, PathList& oppositeDirection);
 

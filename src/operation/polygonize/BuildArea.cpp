@@ -98,7 +98,7 @@ static bool ringsEqualAnyDirection(const LinearRing* r1, const LinearRing* r2)
 
     bool equal = true;
 
-    /* Check equals forward (skip first point, we checked it alread) */
+    /* Check equals forward (skip first point, we checked it already) */
     for (size_t i=1; i<npoints; ++i)
     {
         size_t j = ( i + offset ) % npoints;

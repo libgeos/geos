@@ -108,7 +108,7 @@ SharedPathsOp::findLinearIntersections(PathList& to)
 
     auto full = _g1.intersection(&_g2);
 
-    // NOTE: intersection of equal lines yields splitted lines,
+    // NOTE: intersection of equal lines yields split lines,
     //       should we sew them back ?
 
     for(std::size_t i = 0, n = full->getNumGeometries(); i < n; ++i) {

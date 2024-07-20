@@ -9,7 +9,7 @@
 # See the COPYING file for more information.
 ################################################################################
 add_executable(perf_memleak_mp_prep memleak_mp_prep.c)
-# test_perf_memleak_mp_prep is not dependant against geos target,
+# test_perf_memleak_mp_prep is not dependent against geos target,
 # but geos_c only, so need explicit include directories.
 target_include_directories(perf_memleak_mp_prep
   PUBLIC

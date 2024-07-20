@@ -81,7 +81,7 @@ protected:
      * on the boundary and in the interior (e.g. a LineString segment
      * lying on
      * top of a Polygon edge.) In this case the Boundary is
-     * given precendence.
+     * given precedence.
      *
      * These observations result in the following rules for computing
      * the ON location:

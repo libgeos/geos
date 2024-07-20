@@ -159,7 +159,7 @@ public:
     };
 
     /** \brief
-     * Tells wheter this edge is a Line
+     * Tells whether this edge is a Line
      *
      * This edge is a line edge if
      * - at least one of the labels is a line label
@@ -169,7 +169,7 @@ public:
     bool isLineEdge();
 
     /** \brief
-     * Tells wheter this edge is an Area
+     * Tells whether this edge is an Area
      *
      * This is an interior Area edge if
      * - its label is an Area label for both Geometries

@@ -72,7 +72,7 @@
 
   <case>
     <desc>
-      P/A-3-4: a point on the touching point of boudary [dim(0){A.P.Int = B.A.Bdy.TP}
+      P/A-3-4: a point on the touching point of boundary [dim(0){A.P.Int = B.A.Bdy.TP}
     </desc>
     <a>
       POINT(100 150)

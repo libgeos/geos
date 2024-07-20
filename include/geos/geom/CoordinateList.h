@@ -46,7 +46,7 @@ namespace geom { // geos::geom
 
 /** \brief
  * A list of {@link Coordinate}s, which may
- * be set to prevent repeated coordinates from occuring in the list.
+ * be set to prevent repeated coordinates from occurring in the list.
  *
  * Use this class when fast insertions and removal at arbitrary
  * position is needed.

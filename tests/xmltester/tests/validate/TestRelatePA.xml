@@ -146,7 +146,7 @@
 </case>
 
 <case>
-<desc>P/A-3-2: a point on the boudary of a polygon at a non-vertex [dim(0){A.P.Int = B.A.Bdy.NV}]</desc>
+<desc>P/A-3-2: a point on the boundary of a polygon at a non-vertex [dim(0){A.P.Int = B.A.Bdy.NV}]</desc>
   <a>
     POINT(110 120)
   </a>

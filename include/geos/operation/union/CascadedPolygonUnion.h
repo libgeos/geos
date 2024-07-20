@@ -73,7 +73,7 @@ private:
 
     /**
     * An alternative way of unioning polygonal geometries
-    * by using <code>bufer(0)</code>.
+    * by using <code>buffer(0)</code>.
     * Only worth using if regular overlay union fails.
     */
     std::unique_ptr<geom::Geometry> unionPolygonsByBuffer(const geom::Geometry* g0, const geom::Geometry* g1);

@@ -149,7 +149,7 @@ public:
         double distance);
 
     /** \brief
-     * If required, returning the result to the orginal precision
+     * If required, returning the result to the original precision
      * if required.
      *
      * In this current implementation, no rounding is performed on the

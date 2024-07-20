@@ -143,7 +143,7 @@ namespace index { // geos.index
 /// formats.
 ///
 /// The Java Topology Suite (JTS) is a Java API that implements a core set of
-/// spatial data operations usin g an explicit precision model and robust
+/// spatial data operations using an explicit precision model and robust
 /// geometric algorithms. JTS is intended to be used in the devel opment of
 /// applications that support the validation, cleaning, integration and
 /// querying of spatial data sets.
