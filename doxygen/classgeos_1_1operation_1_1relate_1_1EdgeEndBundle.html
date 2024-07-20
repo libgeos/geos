@@ -203,7 +203,7 @@ std::vector&lt; <a class="el" href="classgeos_1_1geomgraph_1_1EdgeEnd.html">geom
 <p>(This is essentially equivalent to computing the self-overlay of a single Geometry)</p>
 <p>edgeStubs can be either on the boundary (eg Polygon edge) OR in the interior (e.g. segment of a LineString) of their parent Geometry.</p>
 <p>In addition, GeometryCollections use a <a class="el" href="classgeos_1_1algorithm_1_1BoundaryNodeRule.html" title="An interface for rules which determine whether node points which are in boundaries of lineal geometry...">algorithm::BoundaryNodeRule</a> to determine whether a segment is on the boundary or not.</p>
-<p>Finally, in GeometryCollections it can occur that an edge is both on the boundary and in the interior (e.g. a LineString segment lying on top of a Polygon edge.) In this case the Boundary is given precendence.</p>
+<p>Finally, in GeometryCollections it can occur that an edge is both on the boundary and in the interior (e.g. a LineString segment lying on top of a Polygon edge.) In this case the Boundary is given precedence.</p>
 <p>These observations result in the following rules for computing the ON location:</p><ul>
 <li>if there are an odd number of Bdy edges, the attribute is Bdy</li>
 <li>if there are an even number &gt;= 2 of Bdy edges, the attribute is Int</li>

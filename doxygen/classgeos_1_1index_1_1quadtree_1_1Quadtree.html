@@ -113,7 +113,7 @@ Static Public Member Functions</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A <a class="el" href="classgeos_1_1index_1_1quadtree_1_1Quadtree.html" title="A Quadtree is a spatial index structure for efficient querying of 2D rectangles. If other kinds of sp...">Quadtree</a> is a spatial index structure for efficient querying of 2D rectangles. If other kinds of spatial objects need to be indexed they can be represented by their envelopes. </p>
 <p>The quadtree structure is used to provide a primary filter for range rectangle queries. The <a class="el" href="classgeos_1_1index_1_1quadtree_1_1Quadtree.html#ad8c1eb5215ad191bfbd38e8936677e72" title="Queries the tree and returns items which may lie in the given search envelope.">query()</a> method returns a list of all objects which <em>may</em> intersect the query rectangle. Note that it may return objects which do not in fact intersect. A secondary filter is required to test for exact intersection. Of course, this secondary filter may consist of other tests besides intersection, such as testing other kinds of spatial relationships.</p>
-<p>This implementation does not require specifying the extent of the inserted items beforehand. It will automatically expand to accomodate any extent of dataset.</p>
+<p>This implementation does not require specifying the extent of the inserted items beforehand. It will automatically expand to accommodate any extent of dataset.</p>
 <p>This data structure is also known as an <em>MX-CIF quadtree</em> following the usage of Samet and others. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a21f17aacc36cc529713efc0c17485598"></a>

@@ -1697,7 +1697,7 @@ WKBGeometryCollection {
 <p>The original WKB specification made no allowances for adding extra dimensions, like Z and M, that are common in GIS applications. It also had no space for embedding a spatial reference identifier (SRID), which made it unusable as a database import/export format.</p>
 <p>The &ldquo;Extended WKB&rdquo; variant is a superset of the standard WKB, which allows applications to optionally add extra dimensions, and optionally embed an SRID.</p>
 <p>The presence of extra dimensions is indicated by adding flag bits to the existing <code>wkbType</code> that appears in all WKB geometries.</p>
-<p>For example, here is the structure and flagging for a 3D point &ndash; the dimensionaly flag indicates a Z dimension, and the point member therefor has three coordinates.</p>
+<p>For example, here is the structure and flagging for a 3D point &ndash; the dimensionaly flag indicates a Z dimension, and the point member therefore has three coordinates.</p>
 <pre tabindex="0"><code>wkbZ = 0x80000000
 wkbM = 0x40000000
 wkbSRID = 0x20000000

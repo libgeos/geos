@@ -3477,7 +3477,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
       </table>
 </div><div class="memdoc">
 <p>Returns a "concave hull" of a geometry. A concave hull is a polygon which contains all the points of the input, but is a better approximation than the convex hull to the area occupied by the input. Frequently used to convert a multi-point into a polygonal area. that contains all the points in the input Geometry.</p>
-<p>A set of points has a sequence of hulls of increasing concaveness, determined by a numeric target parameter. The concave hull is constructed by removing the longest outer edges of the Delaunay Triangulation of the space between the polygons, until the specified maximm edge length is reached. A large value produces the convex hull, 0 produces the hull of maximim concaveness.</p>
+<p>A set of points has a sequence of hulls of increasing concaveness, determined by a numeric target parameter. The concave hull is constructed by removing the longest outer edges of the Delaunay Triangulation of the space between the polygons, until the specified maximm edge length is reached. A large value produces the convex hull, 0 produces the hull of maximum concaveness.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The input geometry </td></tr>
@@ -9480,7 +9480,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Return the anonymous "user data" for this geometry. User data must be managed by the caller, and is not freed when the geometry is destoryed. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Return the anonymous "user data" for this geometry. User data must be managed by the caller, and is not freed when the geometry is destroyed. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>Input geometry </td></tr>
   </table>
@@ -14910,7 +14910,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Perform the polygonization as <a class="el" href="geos__c_8h.html#a9d98e448d3b846d591c726d1c0000d25">GEOSPolygonize()</a> and return the polygonal result as well as all extra ouputs.</p>
+<p>Perform the polygonization as <a class="el" href="geos__c_8h.html#a9d98e448d3b846d591c726d1c0000d25">GEOSPolygonize()</a> and return the polygonal result as well as all extra outputs.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">input</td><td>A single geometry with all the input lines to polygonize. </td></tr>
@@ -17560,7 +17560,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The snapped verion of the input. NULL on exception. Caller is responsible for freeing with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a>.</dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The snapped version of the input. NULL on exception. Caller is responsible for freeing with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a>.</dd></dl>
 <dl class="section since"><dt>Since</dt><dd>3.3 </dd></dl>
 
 </div>
@@ -17621,7 +17621,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Construct an STRtree from items that have been inserted. Once constructed, no more items may be inserted into the tree. Functions that require a constructed tree will build it automatically, so there is no need to call <code>GEOSSTRtree_build</code> unless it is desired to explicity construct the tree in a certain section of code or using a certain thread.</p>
+<p>Construct an STRtree from items that have been inserted. Once constructed, no more items may be inserted into the tree. Functions that require a constructed tree will build it automatically, so there is no need to call <code>GEOSSTRtree_build</code> unless it is desired to explicitly construct the tree in a certain section of code or using a certain thread.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">tree</td><td>the <a class="el" href="geos__c_8h.html#aee0e622ed8fcc9f5959b27cf4b26c31b">GEOSSTRtree</a> to apply the build to </td></tr>
