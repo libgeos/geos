@@ -12,6 +12,7 @@
  *
  **********************************************************************/
 
+#include <geos/geom/Envelope.h>
 #include <geos/noding/MCIndexSegmentSetMutualIntersector.h>
 #include <geos/noding/SegmentSetMutualIntersector.h>
 #include <geos/noding/SegmentString.h>
@@ -47,8 +48,14 @@ MCIndexSegmentSetMutualIntersector::addToMonoChains(SegmentString* segStr)
 {
     if (segStr->size() == 0)
         return;
+    MonoChains segChains;
     MonotoneChainBuilder::getChains(segStr->getCoordinates(),
-                                    segStr, monoChains);
+                                    segStr, segChains);
+    for (auto& mc : segChains) {
+        if (envelope == nullptr || envelope->intersects(mc.getEnvelope())) {
+            monoChains.push_back(mc);
+        }
+    }
 }
 
 
@@ -89,7 +96,9 @@ MCIndexSegmentSetMutualIntersector::process(SegmentString::ConstVect* segStrings
 {
     if (!indexBuilt) {
         for (auto& mc: indexChains) {
-            index.insert(&(mc.getEnvelope(overlapTolerance)), &mc);
+            if (envelope == nullptr || envelope->intersects(mc.getEnvelope())) {
+                index.insert(&(mc.getEnvelope(overlapTolerance)), &mc);
+            }
         }
         indexBuilt = true;
     }

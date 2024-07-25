@@ -20,12 +20,15 @@
 #include <geos/index/strtree/TemplateSTRtree.h> // inherited
 
 namespace geos {
+namespace geom {
+    class Envelope;
+}
 namespace index {
-class SpatialIndex;
+    class SpatialIndex;
 }
 namespace noding {
-class SegmentString;
-class SegmentIntersector;
+    class SegmentString;
+    class SegmentIntersector;
 }
 }
 
@@ -51,6 +54,17 @@ public:
         , nOverlaps(0)
         , overlapTolerance(p_tolerance)
         , indexBuilt(false)
+        , envelope(nullptr)
+    {}
+
+    MCIndexSegmentSetMutualIntersector(const geom::Envelope* p_envelope)
+        : monoChains()
+        , indexCounter(0)
+        , processCounter(0)
+        , nOverlaps(0)
+        , overlapTolerance(0.0)
+        , indexBuilt(false)
+        , envelope(p_envelope)
     {}
 
     MCIndexSegmentSetMutualIntersector()
@@ -117,6 +131,7 @@ private:
      */
     bool indexBuilt;
     MonoChains indexChains;
+    const geom::Envelope* envelope;
 
     void addToIndex(SegmentString* segStr);
 
