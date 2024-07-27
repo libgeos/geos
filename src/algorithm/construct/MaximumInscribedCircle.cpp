@@ -85,9 +85,9 @@ MaximumInscribedCircle::computeMaximumIterations(const Geometry* geom, double to
     double diam = geom->getEnvelopeInternal()->getDiameter();
     double ncells = diam / toleranceDist;
     //-- Using log of ncells allows control over number of iterations
-    std::size_t factor = (std::size_t) std::log(ncells);
+    int factor = (int) std::log(ncells);
     if (factor < 1) factor = 1;
-    return 2000 + 2000 * factor;
+    return (std::size_t) (2000 + 2000 * factor);
 }
 
 /* public */
