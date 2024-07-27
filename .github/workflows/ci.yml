@@ -350,57 +350,88 @@ jobs:
       working-directory: ./build
       run: ctest --output-on-failure
 
-  windows-msvc:
-    name: 'Windows (Visual Studio)'
-    strategy:
-      fail-fast: false
-      matrix:
-        ci:
-          - build_type: Debug
-            cxxstd: 14
-            os: windows-2022
-            vcdir: C:\Program Files\Microsoft Visual Studio\2022\Enterprise
-
-          - build_type: Release
-            cxxstd: 14
-            os: windows-2019
-            vcdir: C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise
-
-    runs-on: ${{ matrix.ci.os }}
+  windows-msvc-msbuild:
+    name: Windows (MSVC MSBuild)
+    runs-on: windows-2022
     steps:
     - name: 'Check Out'
       uses: actions/checkout@v4
 
-    - name: 'Setup'
-      run: choco install ccache ninja
+    # ccache not supported for this generator and/or Debug
+
+    - name: 'Build'
+      shell: cmd
+      run: |
+        md build
+        cd build
+        cmake --version
+        cmake ^
+          -G "Visual Studio 17 2022" ^
+          -D CMAKE_BUILD_TYPE=Debug ^
+          -D CMAKE_CXX_STANDARD=17 ^
+          -D BUILD_SHARED_LIBS=ON ^
+          ..
+        IF %ERRORLEVEL% NEQ 0 exit /B 1
+        cmake --build . --config Debug -j 4 -- /p:CL_MPcount=4
+
+    - name: 'Test'
+      working-directory: build
+      run: ctest --output-on-failure -C Debug
+
+  windows-msvc-ninja:
+    name: Windows (MSVC Ninja)
+    strategy:
+      fail-fast: false
+      matrix:
+        ci:
+        - os: windows-2019
+          cxxstd: 14
+          arch: x86
+
+        - os: windows-2022
+          cxxstd: 20
+          arch: x64
+
+    runs-on: ${{ matrix.ci.os }}
+    steps:
+
+    - name: 'Check Out'
+      uses: actions/checkout@v4
 
     - name: Retrieve build cache
       id: restore-cache
       uses: actions/cache/restore@v4
       with:
         path: .ccache
-        key: windows-msvc-${{ matrix.ci.os}}-${{ matrix.ci.build_type}}-${{ github.ref_name }}-${{ github.run_id }}
-        restore-keys: windows-msvc-${{ matrix.ci.os}}-${{ matrix.ci.build_type}}
+        key: msvc-ninja-${{ matrix.ci.os }}-${{ matrix.ci.cxxstd }}-${{ matrix.ci.arch }}-${{ github.ref_name }}-${{ github.run_id }}
+        restore-keys: msvc-ninja-${{ matrix.ci.os }}-${{ matrix.ci.cxxstd }}-${{ matrix.ci.arch }}
+
+    - name: 'Setup'
+      run: choco install ccache ninja
+
+    - name: Activate MSVC
+      uses: ilammy/msvc-dev-cmd@v1
+      with:
+        arch: ${{ matrix.ci.arch }}
 
     - name: 'Build'
       env:
         CCACHE_DIR: ${{ github.workspace }}\.ccache
       shell: cmd
       run: |
-        call "${{ matrix.ci.vcdir }}\VC\Auxiliary\Build\vcvars64.bat"
         md build
         cd build
         cmake --version
         cmake ^
           -G Ninja ^
-          -D CMAKE_BUILD_TYPE=${{ matrix.ci.build_type }} ^
+          -D CMAKE_BUILD_TYPE=Release ^
           -D CMAKE_CXX_STANDARD=${{ matrix.ci.cxxstd }} ^
           -D BUILD_SHARED_LIBS=ON ^
           -D USE_CCACHE=ON ^
           ..
-        IF %ERRORLEVEL% NEQ 0 exit
-        cmake --build . --config ${{ matrix.ci.build_type }} -j 4
-        IF %ERRORLEVEL% NEQ 0 exit
+        IF %ERRORLEVEL% NEQ 0 exit /B 1
+        cmake --build . --config Release -j 4
+        IF %ERRORLEVEL% NEQ 0 exit /B 1
         ccache --show-stats --verbose
 
     - name: Save build cache
@@ -411,7 +442,7 @@ jobs:
 
     - name: 'Test'
       working-directory: build
-      run: ctest --output-on-failure -C ${{ matrix.ci.build_type }}
+      run: ctest --output-on-failure -C Release
 
   macos:
     name: 'macOS clang'
