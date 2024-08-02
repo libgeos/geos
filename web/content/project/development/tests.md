@@ -40,11 +40,11 @@ $ bin/test_geos_unit capi::GEOSBuffer 1
 ### XML Tests
 
 The XML test suite is a set of portable, declarative tests which can be run in both GEOS and JTS.
-They are located in `../geos/tests/xmltester/tests`.
+They are located in `tests/xmltester/tests`.
 XML tests can be run using `test_xmltester`:
 
 ```
-bin/test_xmltester ../geos/tests/xmltester/tests/robust/overlay/TestOverlay-geos-837.xml
+bin/test_xmltester ../tests/xmltester/tests/robust/overlay/TestOverlay-geos-837.xml
 ```
 
 The XML Tester provides the following options:
