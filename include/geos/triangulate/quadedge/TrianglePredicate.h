@@ -19,14 +19,13 @@
 #pragma once
 
 #include <geos/export.h>
+#include <geos/geom/Location.h>
 
 namespace geos {
 namespace geom {
-class Coordinate;
+class CoordinateXY;
 }
 }
-
-using geos::geom::Coordinate;
 
 namespace geos {
 namespace triangulate {
@@ -49,6 +48,8 @@ namespace quadedge {
  */
 class GEOS_DLL TrianglePredicate {
 public:
+    using CoordinateXY = geos::geom::CoordinateXY;
+
     /**
      * Tests if a point is inside the circle defined by
      * the triangle with vertices a, b, c (oriented counter-clockwise).
@@ -61,9 +62,9 @@ public:
      * @param p the point to test
      * @return true if this point is inside the circle defined by the points a, b, c
      */
-    static bool isInCircleNonRobust(
-        const Coordinate& a, const Coordinate& b, const Coordinate& c,
-        const Coordinate& p);
+    static geom::Location isInCircleNonRobust(
+        const CoordinateXY& a, const CoordinateXY& b, const CoordinateXY& c,
+        const CoordinateXY& p);
 
     /**
      * Tests if a point is inside the circle defined by
@@ -82,9 +83,9 @@ public:
      * @param p the point to test
      * @return true if this point is inside the circle defined by the points a, b, c
      */
-    static bool isInCircleNormalized(
-        const Coordinate& a, const Coordinate& b, const Coordinate& c,
-        const Coordinate& p);
+    static geom::Location isInCircleNormalized(
+        const CoordinateXY& a, const CoordinateXY& b, const CoordinateXY& c,
+        const CoordinateXY& p);
 
 private:
     /**
@@ -95,8 +96,8 @@ private:
      * @param b a vertex of the triangle
      * @param c a vertex of the triangle
      */
-    static double triArea(const Coordinate& a,
-                          const Coordinate& b, const Coordinate& c);
+    static double triArea(const CoordinateXY& a,
+                          const CoordinateXY& b, const CoordinateXY& c);
 
 public:
     /**
@@ -110,9 +111,9 @@ public:
      * @param p the point to test
      * @return true if this point is inside the circle defined by the points a, b, c
      */
-    static bool isInCircleRobust(
-        const Coordinate& a, const Coordinate& b, const Coordinate& c,
-        const Coordinate& p);
+    static geom::Location isInCircleRobust(
+        const CoordinateXY& a, const CoordinateXY& b, const CoordinateXY& c,
+        const CoordinateXY& p);
 } ;
 
 

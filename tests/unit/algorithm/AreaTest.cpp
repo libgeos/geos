@@ -13,12 +13,12 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/io/WKTReader.h>
 // std
-#include <sstream>
 #include <string>
 #include <memory>
 
 using namespace geos;
 using namespace geos::geom;
+using geos::algorithm::Area;
 
 namespace tut {
 //
@@ -33,7 +33,7 @@ struct test_area_data {
     geos::io::WKTReader reader_;
     test_area_data():
         geom_(nullptr),
-        pm_(1),
+        pm_(),
         factory_(GeometryFactory::create(&pm_, 0)), reader_(factory_.get())
     {
         assert(nullptr == geom_);
@@ -48,19 +48,23 @@ struct test_area_data {
     void
     checkAreaOfRing(std::string wkt, double expectedArea)
     {
-        std::unique_ptr<Geometry> lineGeom(reader_.read(wkt));
-        std::unique_ptr<LineString> line(dynamic_cast<LineString*>(lineGeom.release()));
-        ensure(nullptr != line.get());
-        const CoordinateSequence* ringSeq = line->getCoordinatesRO();
+        auto ringGeom = reader_.read<Curve>(wkt);
 
-        std::vector<Coordinate> ringCoords;
-        ringSeq->toVector(ringCoords);
+        if (const LineString* line = dynamic_cast<const LineString*>(ringGeom.get())) {
+            const CoordinateSequence* ringSeq = line->getCoordinatesRO();
 
-        double actual1 = algorithm::Area::ofRing(ringCoords);
-        double actual2 = algorithm::Area::ofRing(ringSeq);
+            std::vector<Coordinate> ringCoords;
+            ringSeq->toVector(ringCoords);
 
-        ensure_equals(actual1, expectedArea);
-        ensure_equals(actual2, expectedArea);
+            double actual1 = algorithm::Area::ofRing(ringCoords);
+            double actual2 = algorithm::Area::ofRing(ringSeq);
+
+            ensure_equals(actual1, expectedArea);
+            ensure_equals(actual2, expectedArea);
+        }
+
+        double actual3 = algorithm::Area::ofClosedCurve(*ringGeom);
+        ensure_equals("Area::ofClosedCurve", actual3, expectedArea, 1e-6);
     }
 
     void
@@ -113,6 +117,41 @@ void object::test<3>
 ()
 {
     checkAreaOfRingSigned("LINESTRING (100 200, 100 100, 200 100, 200 200, 100 200)", -10000.0);
+}
+
+template<>
+template<>
+void object::test<4>
+()
+{
+    checkAreaOfRing("CIRCULARSTRING (0 0, 2 2, 4 0, 2 -2, 0 0)", 4*MATH_PI);
+}
+
+template<>
+template<>
+void object::test<5>
+()
+{
+    checkAreaOfRing("COMPOUNDCURVE (CIRCULARSTRING (0 0, 2 2, 4 0), (4 0, 0 0))", 2*MATH_PI);
+}
+
+template<>
+template<>
+void object::test<6>
+()
+{
+    // expected area from PostGIS after ST_CurveToLine(geom, 1e-13, 1)
+    checkAreaOfRing("CIRCULARSTRING (0 0, 2 2, 4 0, 2 1, 0 0)", 3.48759);
+}
+
+template<>
+template<>
+void object::test<7>
+()
+{
+    // expected area from PostGIS after ST_CurveToLine(geom, 1e-13, 1)
+    checkAreaOfRing("COMPOUNDCURVE (CIRCULARSTRING (0 0, 2 0, 2 1, 2 3, 4 3, 4 5, 1 4, 0.5 0.8, 0 0))", 11.243342);
+    checkAreaOfRing("COMPOUNDCURVE (CIRCULARSTRING (0 0, 2 0, 2 1, 2 3, 4 3), (4 3, 4 5, 1 4, 0 0))", 9.321903);
 }
 
 

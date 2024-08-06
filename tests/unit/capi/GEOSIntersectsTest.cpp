@@ -234,5 +234,30 @@ void object::test<11>()
     ensure_equals("curved geometry not supported", GEOSIntersects(geom2_, geom1_), 2);
 }
 
+// test PIP special case for CurvePolygon
+template<>
+template<>
+void object::test<12>()
+{
+    geom1_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE(CIRCULARSTRING(0 0, 1 1, 2 0), (2 0, 0 0)))");
+    geom2_ = fromWKT("POINT (0.1556955 0.5355459)");
+
+    // PostGIS would return false here because geom2 is inside geom1
+    // but outside the linearized form of geom1
+    ensure_equals(GEOSIntersects(geom1_, geom2_), 1);
+    ensure_equals(GEOSIntersects(geom2_, geom1_), 1);
+}
+
+template<>
+template<>
+void object::test<13>()
+{
+    geom1_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE(CIRCULARSTRING(0 0, 1 1, 2 0), (2 0, 0 0)))");
+    geom2_ = fromWKT("POINT EMPTY");
+
+    ensure_equals(GEOSIntersects(geom1_, geom2_), 0);
+    ensure_equals(GEOSIntersects(geom2_, geom1_), 0);
+}
+
 } // namespace tut
 

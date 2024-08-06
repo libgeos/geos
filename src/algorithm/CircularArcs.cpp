@@ -13,15 +13,15 @@
  **********************************************************************/
 
 #include <geos/algorithm/CircularArcs.h>
-
-#include "geos/algorithm/Angle.h"
-#include "geos/geom/Envelope.h"
-#include "geos/geom/Quadrant.h"
+#include <geos/algorithm/Orientation.h>
+#include <geos/geom/Envelope.h>
+#include <geos/geom/Quadrant.h>
 
 using geos::geom::CoordinateXY;
 
 namespace geos {
 namespace algorithm {
+
 
 CoordinateXY
 CircularArcs::getCenter(const CoordinateXY& p0, const CoordinateXY& p1, const CoordinateXY& p2)

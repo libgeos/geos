@@ -61,6 +61,8 @@ public:
     /// Returns a read-only pointer to internal CoordinateSequence
     const CoordinateSequence* getCoordinatesRO() const;
 
+    const SimpleCurve* getCurveN(std::size_t) const override;
+
     /// \brief
     /// Return the end point of the LineString
     /// or NULL if this is an EMPTY LineString.
@@ -71,6 +73,8 @@ public:
     {
         return &envelope;
     }
+
+    std::size_t getNumCurves() const override;
 
     std::size_t getNumPoints() const override;
 
@@ -89,6 +93,8 @@ public:
     bool isClosed() const override;
 
     virtual bool isCoordinate(CoordinateXY& pt) const;
+
+    virtual bool isCurved() const = 0;
 
     bool isEmpty() const override;
 

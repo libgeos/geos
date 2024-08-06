@@ -54,7 +54,7 @@ public:
     std::unique_ptr<CoordinateSequence> getCoordinates() const override;
 
     /// Returns the nth section of the CompoundCurve
-    const SimpleCurve* getCurveN(std::size_t) const;
+    const SimpleCurve* getCurveN(std::size_t) const override;
 
     const Envelope* getEnvelopeInternal() const override
     {
@@ -68,7 +68,7 @@ public:
     double getLength() const override;
 
     /// Returns the number of sections in the CompoundCurve
-    std::size_t getNumCurves() const;
+    std::size_t getNumCurves() const override;
 
     std::size_t getNumPoints() const override;
 
