@@ -130,6 +130,16 @@ Go      gogeos  Haskell      geos hgeos  Javascript      node-geos  Julia      L
     </item>
     
     <item>
+      <title>RelateNG</title>
+      <link>https://libgeos.org/posts/2024-08-13-relateng/</link>
+      <pubDate>Tue, 13 Aug 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://libgeos.org/posts/2024-08-13-relateng/</guid>
+      <description>The upcoming 3.13 release of GEOS includes a complete re-write of the &amp;ldquo;boolean predicates&amp;rdquo;, called &amp;ldquo;RelateNG&amp;rdquo;. The boolean predicates are pairwise tests for geometries that return true/false answers. &amp;ldquo;Intersects&amp;rdquo;, &amp;ldquo;Contains&amp;rdquo;, &amp;ldquo;Touches&amp;rdquo; are all examples of boolean predicates.
+The old implementation in JTS and GEOS operated by building a complete topological relationship graph between the two inputs, then reading the result off the graph. However, computing the whole graph every time is computationally expensive, and the results of many predicates can be determined without a full graph &amp;ndash; the first time you hit an edge intersection, you know that geometries intersect, and you do not need to do any more calculations.</description>
+    </item>
+    
+    <item>
       <title>Version 3.9.5 and 3.8.4 EOL</title>
       <link>https://libgeos.org/posts/2023-11-12-geos-3-9-5-and-3-8-4-released/</link>
       <pubDate>Sun, 12 Nov 2023 00:00:00 +0000</pubDate>

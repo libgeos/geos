@@ -12,8 +12,10 @@
 <meta name="generator" content="Hugo 0.88.1" />
 
 
+  <meta name="description" content="The upcoming 3.13 release of GEOS includes a complete re-write of the &ldquo;boolean predicates&rdquo;, called &ldquo;RelateNG&rdquo;. The boolean predicates are pairwise tests for geometries that return true/false answers. &ldquo;Intersects&rdquo;, &ldquo;Contains&rdquo;, &ldquo;Touches&rdquo; are all examples of boolean predicates.
+The old implementation in JTS and GEOS operated by building a complete topological relationship graph between the two inputs, then reading the result off the graph. However, computing the whole graph every time is computationally expensive, and the results of many predicates can be determined without a full graph &ndash; the first time you hit an edge intersection, you know that geometries intersect, and you do not need to do any more calculations." />
 
-    <title>News | GEOS</title>
+    <title>RelateNG | GEOS</title>
 
     <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
 <link
@@ -34,19 +36,65 @@
     
   <meta
     property="og:title"
-    content="News"
+    content="RelateNG"
   />
   <meta property="og:site_name" content="GEOS" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://libgeos.org/posts/" />
+  <meta property="og:description" content="The upcoming 3.13 release of GEOS includes a complete re-write of the “boolean predicates”, called “RelateNG”. The boolean predicates are pairwise tests for geometries that return true/false answers. “Intersects”, “Contains”, “Touches” are all examples of boolean predicates.
+The old implementation in JTS and GEOS operated by building a complete topological relationship graph between the two inputs, then reading the result off the graph. However, computing the whole graph every time is computationally expensive, and the results of many predicates can be determined without a full graph – the first time you hit an edge intersection, you know that geometries intersect, and you do not need to do any more calculations." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://libgeos.org/posts/2024-08-13-relateng/" />
 
-
+<meta property="article:section" content="Posts" />
+    <meta
+      property="article:published_time"
+      content="2024-08-13T00:00:00+00:00"
+    />
+    <meta
+      property="article:modified_time"
+      content="2024-08-13T00:00:00+00:00"
+    />
 
 
   <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="News" />
+<meta name="twitter:title" content="RelateNG" />
+  <meta name="twitter:description" content="The upcoming 3.13 release of GEOS includes a complete re-write of the “boolean predicates”, called “RelateNG”. The boolean predicates are pairwise tests for geometries that return true/false answers. “Intersects”, “Contains”, “Touches” are all examples of boolean predicates.
+The old implementation in JTS and GEOS operated by building a complete topological relationship graph between the two inputs, then reading the result off the graph. However, computing the whole graph every time is computationally expensive, and the results of many predicates can be determined without a full graph – the first time you hit an edge intersection, you know that geometries intersect, and you do not need to do any more calculations." />
 
 
+  <script type="application/ld+json">
+  {
+      "@context": "http://schema.org",
+      "@type": "TechArticle",
+      "articleSection": "Posts",
+      "name": "RelateNG",
+      "url" : "https://libgeos.org/posts/2024-08-13-relateng/",
+      "headline": "RelateNG",
+      "description": "The upcoming 3.13 release of GEOS includes a complete re-write of the “boolean predicates”, called “RelateNG”. The boolean predicates are pairwise tests for geometries that return true\/false answers. “Intersects”, “Contains”, “Touches” are all examples of boolean predicates.\nThe old implementation in JTS and GEOS operated by building a complete topological relationship graph between the two inputs, then reading the result off the graph. However, computing the whole graph every time is computationally expensive, and the results of many predicates can be determined without a full graph – the first time you hit an edge intersection, you know that geometries intersect, and you do not need to do any more calculations.",
+      "wordCount" : "442",
+      "inLanguage": "en",
+      "isFamilyFriendly": "true",
+      "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://libgeos.org/posts/2024-08-13-relateng/"
+      },
+      "copyrightHolder" : "GEOS",
+      "copyrightYear" : "2024",
+      "dateCreated": "2024-08-13T00:00:00.00Z",
+      "datePublished": "2024-08-13T00:00:00.00Z",
+      "dateModified": "2024-08-13T00:00:00.00Z",
+      "publisher":{
+          "@type":"Organization",
+          "name": "GEOS",
+          "url": "https://libgeos.org/",
+          "logo": {
+              "@type": "ImageObject",
+              "url": "https://libgeos.org/brand.svg",
+              "width":"32",
+              "height":"32"
+          }
+      }
+  }
+  </script>
 
 
     
@@ -111,7 +159,7 @@
   href="/custom.css"
   media="all"
 />
-  <link href="https://libgeos.org/posts/" rel="canonical" type="text/html" />
+  <link href="https://libgeos.org/posts/2024-08-13-relateng/" rel="canonical" type="text/html" />
 
 <!-- Made with Geekdoc theme https://github.com/thegeeklab/hugo-geekdoc -->
 
@@ -1229,7 +1277,7 @@
                 
                 <a
                   href="/posts"
-                  class="gdoc-nav__entry is-active"
+                  class="gdoc-nav__entry"
                 >
                   News
                 </a>
@@ -1354,33 +1402,11 @@
 
         <div class="gdoc-page">
           
-  
-    <article class="gdoc-markdown gdoc-post">
-      <header class="gdoc-post__header">
-        <h1 class="gdoc-post__title">
-          <a href="/posts/2024-08-13-relateng/">RelateNG</a>
-        </h1>
-      </header>
-      <section>
-        The upcoming 3.13 release of GEOS includes a complete re-write of the &ldquo;boolean predicates&rdquo;, called &ldquo;RelateNG&rdquo;. The boolean predicates are pairwise tests for geometries that return true/false answers. &ldquo;Intersects&rdquo;, &ldquo;Contains&rdquo;, &ldquo;Touches&rdquo; are all examples of boolean predicates.
-The old implementation in JTS and GEOS operated by building a complete topological relationship graph between the two inputs, then reading the result off the graph. However, computing the whole graph every time is computationally expensive, and the results of many predicates can be determined without a full graph &ndash; the first time you hit an edge intersection, you know that geometries intersect, and you do not need to do any more calculations.
-      </section>
-      <div class="gdoc-post__readmore">
-        
-          <a
-            class="flex-inline align-center fake-link"
-            title="Read full post"
-            href="/posts/2024-08-13-relateng/"
-          >
-            Read full post
-            <i class="gdoc-icon">gdoc_arrow_right_alt</i>
-          </a>
-        
-      </div>
-
-      <footer class="gdoc-post__footer">
-        <div class="flex flex-wrap align-center gdoc-post__meta">
-          <span class="flex align-center no-wrap">
+  <article class="gdoc-post">
+    <header class="gdoc-post__header">
+      <h1 class="gdoc-post__title">RelateNG</h1>
+      <div class="flex flex-wrap align-center gdoc-post__meta gdoc-post__meta--head">
+        <span class="flex align-center no-wrap">
   <svg class="gdoc-icon gdoc_date"><use xlink:href="#gdoc_date"></use></svg>
   <span class="gdoc-post__tag">
     <time datetime="2024-08-13T00:00:00Z">
@@ -1400,565 +1426,41 @@ The old implementation in JTS and GEOS operated by building a complete topologic
 
 
 
-        </div>
-      </footer>
-    </article>
-  
-    <article class="gdoc-markdown gdoc-post">
-      <header class="gdoc-post__header">
-        <h1 class="gdoc-post__title">
-          <a href="/posts/2023-11-12-geos-3-9-5-and-3-8-4-released/">Version 3.9.5 and 3.8.4 EOL</a>
-        </h1>
-      </header>
-      <section>
-        As part of a batch release of patches for stable branches, the 3.9.5 release of GEOS is now available to download. In addition this release cycle includes the final release of GEOS 3.8 series, GEOS 3.8.4. If you haven&rsquo;t already upgraded to a newer GEOS minor version from GEOS 3.8, we highly recommend you do so.
-Release notes for 3.8.4 and 3.9.5 are below: 3.8.4, 3.9.5,
-      </section>
-      <div class="gdoc-post__readmore">
-        
       </div>
-
-      <footer class="gdoc-post__footer">
-        <div class="flex flex-wrap align-center gdoc-post__meta">
-          <span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_date"><use xlink:href="#gdoc_date"></use></svg>
-  <span class="gdoc-post__tag">
-    <time datetime="2023-11-12T00:00:00Z">
-      
-      Nov 12, 2023
-    </time>
-  </span>
-</span>
-
-<span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_timer"><use xlink:href="#gdoc_timer"></use></svg>
-  <span class="gdoc-post__tag">One minute to read</span>
-</span>
-
-
-
-
-
-
-        </div>
-      </footer>
-    </article>
-  
-    <article class="gdoc-markdown gdoc-post">
-      <header class="gdoc-post__header">
-        <h1 class="gdoc-post__title">
-          <a href="/posts/2023-11-11-geos-3-12-1-released/">Version 3.12.1</a>
-        </h1>
-      </header>
-      <section>
-        <p>As part of a batch release of patches for stable branches, the 3.12.1 release of GEOS is now available <a
+    </header>
+    <section class="gdoc-markdown">
+      <p>The upcoming 3.13 release of GEOS includes a complete re-write of the &ldquo;boolean predicates&rdquo;, called &ldquo;RelateNG&rdquo;. The boolean predicates are pairwise tests for geometries that return true/false answers.  &ldquo;Intersects&rdquo;, &ldquo;Contains&rdquo;, &ldquo;Touches&rdquo; are all examples of boolean predicates.</p>
+<p>The old implementation in JTS and GEOS operated by building a complete topological relationship graph between the two inputs, then reading the result off the graph. However, computing the whole graph every time is computationally expensive, and the results of many predicates can be determined without a full graph &ndash; the first time you hit an edge intersection, you know that geometries intersect, and you do not need to do any more calculations.</p>
+<p>The new implementation, <a
   class="gdoc-markdown__link"
-  href="https://libgeos.org/usage/download/"
->to download</a>.</p>
-<p>Release notes for the various branches are available:
-<a
-  class="gdoc-markdown__link"
-  href="https://github.com/libgeos/geos/blob/3.10.6/NEWS"
->3.10.6</a>,
-<a
-  class="gdoc-markdown__link"
-  href="https://github.com/libgeos/geos/blob/3.11.3/NEWS.md"
->3.11.3</a>,
-<a
-  class="gdoc-markdown__link"
-  href="https://github.com/libgeos/geos/blob/3.12.1/NEWS.md"
->3.12.1</a></p>
-<p>The 3.12.1 release is a bug fix release.</p>
-      </section>
-      <div class="gdoc-post__readmore">
-        
-          <a
-            class="flex-inline align-center fake-link"
-            title="Read full post"
-            href="/posts/2023-11-11-geos-3-12-1-released/"
-          >
-            Read full post
-            <i class="gdoc-icon">gdoc_arrow_right_alt</i>
-          </a>
-        
-      </div>
-
-      <footer class="gdoc-post__footer">
-        <div class="flex flex-wrap align-center gdoc-post__meta">
-          <span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_date"><use xlink:href="#gdoc_date"></use></svg>
-  <span class="gdoc-post__tag">
-    <time datetime="2023-11-11T00:00:00Z">
-      
-      Nov 11, 2023
-    </time>
-  </span>
-</span>
-
-<span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_timer"><use xlink:href="#gdoc_timer"></use></svg>
-  <span class="gdoc-post__tag">One minute to read</span>
-</span>
-
-
-
-
-
-
-        </div>
-      </footer>
-    </article>
-  
-    <article class="gdoc-markdown gdoc-post">
-      <header class="gdoc-post__header">
-        <h1 class="gdoc-post__title">
-          <a href="/posts/2023-06-27-geos-3-12-released/">Version 3.12.0</a>
-        </h1>
-      </header>
-      <section>
-        <p>The 3.12 release of GEOS is now available <a
-  class="gdoc-markdown__link"
-  href="https://libgeos.org/usage/download/"
->to download</a>.</p>
+  href="https://lin-ear-th-inking.blogspot.com/2024/05/jts-topological-relationships-next.html"
+>RelateNG</a>, has a number of advantages:</p>
 <ul>
-<li>
-<p>This release includes the following new features in the C API (and of course underlying changes to the C++ code to support these features):</p>
+<li>Efficient short-circuited evaluation of topological predicates (including matching custom DE-9IM matrix patterns)</li>
+<li>Optimized repeated evaluation of predicates against a single geometry via * cached spatial indexes (AKA &ldquo;prepared mode&rdquo;)</li>
+<li>Robust computation (only point-local geometry topology is computed, so invalid topology does not cause failures)</li>
+<li>GeometryCollection inputs containing mixed types and overlapping polygons are supported, using union semantics.</li>
+<li>Zero-length LineStrings are treated as being topologically identical to Points.</li>
+<li>Support for BoundaryNodeRules.</li>
+</ul>
+<p>The port to GEOS blends the new functionality with the existing implementation of <code>PreparedGeometry</code> and the C-API.</p>
 <ul>
-<li>GEOSDisjointSubsetUnion, anptimized union algorithm for inputs that can be divided into subsets.</li>
-<li>GEOSLineSubstring, to clip a line using a start and end fractional length.</li>
-<li>GEOSEqualsIdentical, to test exact equality (with regards to order, structure, etc) of two geometries.</li>
-<li>GEOSOrientPolygons, to enforce a ring orientation on all polygonal elements in the input geometry.</li>
-<li>GEOSSTRtree_build, to force an immediate build of an STRtree.</li>
-<li>GEOSConcaveHullByLength, to build a concave hull by removing the longest outer edges of the Delaunay Triangulation of the space between the polygons, until the specified maximm edge length is reached</li>
-<li>GEOSGeomGetM, to read the M-dimensional value of a geometry.</li>
-<li>GEOSVoronoiDiagram, returns the Voronoi polygons or edges of the vertices of the given geometry.</li>
-<li>GEOSCoverageSimplifyVW, GEOSCoverageUnion, GEOSCoverageIsValid for working with &ldquo;polygonal coverages&rdquo;, collections of polygons that follow coverage rules (no overlaps, exact vertex equivalence on shared edges).</li>
-<li>GEOSGeom_releaseCollection, to free a collection while leaving the sub-geometries intact.</li>
-<li>GEOSMinimumRotatedRectangle, a rework of the minimum rectangle code to be faster and more correct.</li>
+<li>All one-shot predicates are now handled by RelateNG, and should in general be faster. These are called in <code>Geometry.cpp</code>.</li>
+<li>The default implementation in of prepared geometry, <code>BasicPreparedGeometry.cpp</code> now uses the RelateNG implementations. The existing implementations in <code>PreparedPolygon.cpp</code>, etc, still over-ride the defaults, because they are currently slightly faster. If/when the RelateNG implementations are optimized, they can be replaced.</li>
+<li>The C-API already had functions for things like <code>GEOSPreparedTouches()</code> even though the &ldquo;touches&rdquo; predicate had no prepared implementation, and was just calling the non-optimized predicate. These functions now end up using the RelateNG prepared implementation, so they should automatically be much faster.</li>
+<li>The C-API has been expanded with two new functions, <code>GEOSPreparedRelate()</code> and <code>GEOSPreparedRelatePattern()</code>, exposing a new feature of RelateNG, the ability to do accelerated relate matrix calculations.</li>
 </ul>
-</li>
-<li>
-<p>GEOS has been updated to read and write &ldquo;M&rdquo; dimension. As with the &ldquo;Z&rdquo; coordinate support, not all operations can preserve the &ldquo;M&rdquo; dimension, but best efforts are made to retain it through calculations, input and output.</p>
-</li>
-<li>
-<p>Much work on the core code of GEOS was carried out with a maintenance grant funded by the GDAL project and <a
-  class="gdoc-markdown__link"
-  href="https://www.mail-archive.com/gdal-dev@lists.osgeo.org/msg39018.html"
->carried out by Dan Baston</a>.</p>
-</li>
+<p>The RelateNG work has been run against the entire regression suite and returns exactly the same answers over all our collected 20 years of tests.</p>
+<ul>
+<li>The only exception is the handling of a zero-length LineString, which is now treated as logically equivalent to a point.</li>
 </ul>
-      </section>
-      <div class="gdoc-post__readmore">
-        
-          <a
-            class="flex-inline align-center fake-link"
-            title="Read full post"
-            href="/posts/2023-06-27-geos-3-12-released/"
-          >
-            Read full post
-            <i class="gdoc-icon">gdoc_arrow_right_alt</i>
-          </a>
-        
-      </div>
-
-      <footer class="gdoc-post__footer">
-        <div class="flex flex-wrap align-center gdoc-post__meta">
-          <span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_date"><use xlink:href="#gdoc_date"></use></svg>
-  <span class="gdoc-post__tag">
-    <time datetime="2023-06-27T00:00:00Z">
-      
-      Jun 27, 2023
-    </time>
-  </span>
-</span>
-
-<span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_timer"><use xlink:href="#gdoc_timer"></use></svg>
-  <span class="gdoc-post__tag">5 minutes to read</span>
-</span>
-
-
-
-
-
-
-        </div>
-      </footer>
-    </article>
-  
-    <article class="gdoc-markdown gdoc-post">
-      <header class="gdoc-post__header">
-        <h1 class="gdoc-post__title">
-          <a href="/posts/2023-03-16-geos-3-11-2-released/">Version 3.11.2</a>
-        </h1>
-      </header>
-      <section>
-        <p>As part of a batch release of patches for stable branches, the 3.11.2 release of GEOS is now available <a
+<p>The RelateNG code is new and there are no doubt lots of places in the implementation that can still be tightened up. The existing pair-wise predicates can be considered deprecated, as the new <a
   class="gdoc-markdown__link"
-  href="https://libgeos.org/usage/download/"
->to download</a>.</p>
-<p>Release notes for the various branches are available:
-<a
-  class="gdoc-markdown__link"
-  href="https://github.com/libgeos/geos/blob/3.10.5/NEWS"
->3.10.5</a>, and
-<a
-  class="gdoc-markdown__link"
-  href="https://github.com/libgeos/geos/blob/3.11.2/NEWS"
->3.11.2</a></p>
-<p>The 3.11.2 release is a bug fix release.</p>
-      </section>
-      <div class="gdoc-post__readmore">
-        
-          <a
-            class="flex-inline align-center fake-link"
-            title="Read full post"
-            href="/posts/2023-03-16-geos-3-11-2-released/"
-          >
-            Read full post
-            <i class="gdoc-icon">gdoc_arrow_right_alt</i>
-          </a>
-        
-      </div>
+  href="https://lin-ear-th-inking.blogspot.com/2024/05/relateng-performance.html"
+>implementation is faster</a> and just as correct. The existing prepared geometry implementation is still faster, for the cases it supports, but for all the unsupported cases RelateNG now provides faster default implentations.</p>
 
-      <footer class="gdoc-post__footer">
-        <div class="flex flex-wrap align-center gdoc-post__meta">
-          <span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_date"><use xlink:href="#gdoc_date"></use></svg>
-  <span class="gdoc-post__tag">
-    <time datetime="2023-03-16T00:00:00Z">
-      
-      Mar 16, 2023
-    </time>
-  </span>
-</span>
-
-<span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_timer"><use xlink:href="#gdoc_timer"></use></svg>
-  <span class="gdoc-post__tag">One minute to read</span>
-</span>
-
-
-
-
-
-
-        </div>
-      </footer>
-    </article>
-  
-    <article class="gdoc-markdown gdoc-post">
-      <header class="gdoc-post__header">
-        <h1 class="gdoc-post__title">
-          <a href="/posts/2022-11-14-geos-3-11-1-released/">Version 3.11.1</a>
-        </h1>
-      </header>
-      <section>
-        <p>As part of a batch release of patches for stable branches, the 3.11.1 release of GEOS is now available <a
-  class="gdoc-markdown__link"
-  href="https://libgeos.org/usage/download/"
->to download</a>.</p>
-<p>Release notes for the various branches are available:
-<a
-  class="gdoc-markdown__link"
-  href="https://github.com/libgeos/geos/blob/3.9.4/NEWS"
->3.9.4</a>,
-<a
-  class="gdoc-markdown__link"
-  href="https://github.com/libgeos/geos/blob/3.10.4/NEWS"
->3.10.4</a>, and
-<a
-  class="gdoc-markdown__link"
-  href="https://github.com/libgeos/geos/blob/3.11.1/NEWS"
->3.11.1</a></p>
-<p>The 3.11.1 release is a bug fix release.</p>
-      </section>
-      <div class="gdoc-post__readmore">
-        
-          <a
-            class="flex-inline align-center fake-link"
-            title="Read full post"
-            href="/posts/2022-11-14-geos-3-11-1-released/"
-          >
-            Read full post
-            <i class="gdoc-icon">gdoc_arrow_right_alt</i>
-          </a>
-        
-      </div>
-
-      <footer class="gdoc-post__footer">
-        <div class="flex flex-wrap align-center gdoc-post__meta">
-          <span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_date"><use xlink:href="#gdoc_date"></use></svg>
-  <span class="gdoc-post__tag">
-    <time datetime="2022-11-14T00:00:00Z">
-      
-      Nov 14, 2022
-    </time>
-  </span>
-</span>
-
-<span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_timer"><use xlink:href="#gdoc_timer"></use></svg>
-  <span class="gdoc-post__tag">One minute to read</span>
-</span>
-
-
-
-
-
-
-        </div>
-      </footer>
-    </article>
-  
-    <article class="gdoc-markdown gdoc-post">
-      <header class="gdoc-post__header">
-        <h1 class="gdoc-post__title">
-          <a href="/posts/2022-07-01-geos-3-11-0-released/">Version 3.11.0</a>
-        </h1>
-      </header>
-      <section>
-        <p>The 3.11.0 release of GEOS is now available <a
-  class="gdoc-markdown__link"
-  href="https://libgeos.org/usage/download/"
->to download</a>.</p>
-<p>This release includes new features for building &ldquo;concave hulls&rdquo; for both point and polygon input. For polygon input, the hull will be guaranteed to not cross into the interiors of the input polygons.</p>
-<p>The line merger has been enhanced to support a mode that only merges lines which share orientation.</p>
-<p>The offset curve algorithm has been updated to be more reliable for different kinds of semi-degenerate inputs, and may output different curves than the previous implementation, for those kinds of inputs. For &ldquo;normal&rdquo; inputs, the results should look very much like the old implementation.</p>
-<p>As usual, numerous bugs have been fixed, and a few performance improvements discovered and implemented.</p>
-      </section>
-      <div class="gdoc-post__readmore">
-        
-          <a
-            class="flex-inline align-center fake-link"
-            title="Read full post"
-            href="/posts/2022-07-01-geos-3-11-0-released/"
-          >
-            Read full post
-            <i class="gdoc-icon">gdoc_arrow_right_alt</i>
-          </a>
-        
-      </div>
-
-      <footer class="gdoc-post__footer">
-        <div class="flex flex-wrap align-center gdoc-post__meta">
-          <span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_date"><use xlink:href="#gdoc_date"></use></svg>
-  <span class="gdoc-post__tag">
-    <time datetime="2022-07-01T00:00:00Z">
-      
-      Jul 1, 2022
-    </time>
-  </span>
-</span>
-
-<span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_timer"><use xlink:href="#gdoc_timer"></use></svg>
-  <span class="gdoc-post__tag">2 minutes to read</span>
-</span>
-
-
-
-
-
-
-        </div>
-      </footer>
-    </article>
-  
-    <article class="gdoc-markdown gdoc-post">
-      <header class="gdoc-post__header">
-        <h1 class="gdoc-post__title">
-          <a href="/posts/2022-06-03-geos-3-10-3-released/">Version 3.10.3</a>
-        </h1>
-      </header>
-      <section>
-        <p>As part of a batch release of patches for all stable branches, the 3.10.3 release of GEOS is now available <a
-  class="gdoc-markdown__link"
-  href="https://libgeos.org/usage/download/"
->to download</a>.</p>
-<p>Release notes for the various branches are available:
-<a
-  class="gdoc-markdown__link"
-  href="https://github.com/libgeos/geos/blob/3.7.4/NEWS"
->3.7.4</a>,
-<a
-  class="gdoc-markdown__link"
-  href="https://github.com/libgeos/geos/blob/3.8.3/NEWS"
->3.8.3</a>,
-<a
-  class="gdoc-markdown__link"
-  href="https://github.com/libgeos/geos/blob/3.9.3/NEWS"
->3.9.3</a> and
-<a
-  class="gdoc-markdown__link"
-  href="https://github.com/libgeos/geos/blob/3.10.3/NEWS"
->3.10.3</a>.</p>
-<p>The 3.10.3 release is a bug fix release.</p>
-      </section>
-      <div class="gdoc-post__readmore">
-        
-          <a
-            class="flex-inline align-center fake-link"
-            title="Read full post"
-            href="/posts/2022-06-03-geos-3-10-3-released/"
-          >
-            Read full post
-            <i class="gdoc-icon">gdoc_arrow_right_alt</i>
-          </a>
-        
-      </div>
-
-      <footer class="gdoc-post__footer">
-        <div class="flex flex-wrap align-center gdoc-post__meta">
-          <span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_date"><use xlink:href="#gdoc_date"></use></svg>
-  <span class="gdoc-post__tag">
-    <time datetime="2022-06-03T00:00:00Z">
-      
-      Jun 3, 2022
-    </time>
-  </span>
-</span>
-
-<span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_timer"><use xlink:href="#gdoc_timer"></use></svg>
-  <span class="gdoc-post__tag">One minute to read</span>
-</span>
-
-
-
-
-
-
-        </div>
-      </footer>
-    </article>
-  
-    <article class="gdoc-markdown gdoc-post">
-      <header class="gdoc-post__header">
-        <h1 class="gdoc-post__title">
-          <a href="/posts/2021-11-02-geos-3-10-2-released/">Version 3.10.2</a>
-        </h1>
-      </header>
-      <section>
-        <p>The 3.10.2 release of GEOS is now available <a
-  class="gdoc-markdown__link"
-  href="https://libgeos.org/usage/download/"
->to download</a>.</p>
-<p>This release is a bug fix release.</p>
-      </section>
-      <div class="gdoc-post__readmore">
-        
-          <a
-            class="flex-inline align-center fake-link"
-            title="Read full post"
-            href="/posts/2021-11-02-geos-3-10-2-released/"
-          >
-            Read full post
-            <i class="gdoc-icon">gdoc_arrow_right_alt</i>
-          </a>
-        
-      </div>
-
-      <footer class="gdoc-post__footer">
-        <div class="flex flex-wrap align-center gdoc-post__meta">
-          <span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_date"><use xlink:href="#gdoc_date"></use></svg>
-  <span class="gdoc-post__tag">
-    <time datetime="2022-01-15T00:00:00Z">
-      
-      Jan 15, 2022
-    </time>
-  </span>
-</span>
-
-<span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_timer"><use xlink:href="#gdoc_timer"></use></svg>
-  <span class="gdoc-post__tag">One minute to read</span>
-</span>
-
-
-
-
-
-
-        </div>
-      </footer>
-    </article>
-  
-    <article class="gdoc-markdown gdoc-post">
-      <header class="gdoc-post__header">
-        <h1 class="gdoc-post__title">
-          <a href="/posts/2021-11-02-geos-3-10-1-released/">Version 3.10.1</a>
-        </h1>
-      </header>
-      <section>
-        <p>The 3.10.1 release of GEOS is now available <a
-  class="gdoc-markdown__link"
-  href="https://libgeos.org/usage/download/"
->to download</a>.</p>
-<p>This release is primarily to fix some version numbering issues in the initial 3.10.0 source tarball. Some extra fixes are bundled as well.</p>
-      </section>
-      <div class="gdoc-post__readmore">
-        
-          <a
-            class="flex-inline align-center fake-link"
-            title="Read full post"
-            href="/posts/2021-11-02-geos-3-10-1-released/"
-          >
-            Read full post
-            <i class="gdoc-icon">gdoc_arrow_right_alt</i>
-          </a>
-        
-      </div>
-
-      <footer class="gdoc-post__footer">
-        <div class="flex flex-wrap align-center gdoc-post__meta">
-          <span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_date"><use xlink:href="#gdoc_date"></use></svg>
-  <span class="gdoc-post__tag">
-    <time datetime="2021-11-02T00:00:00Z">
-      
-      Nov 2, 2021
-    </time>
-  </span>
-</span>
-
-<span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_timer"><use xlink:href="#gdoc_timer"></use></svg>
-  <span class="gdoc-post__tag">One minute to read</span>
-</span>
-
-
-
-
-
-
-        </div>
-      </footer>
-    </article>
-  
-  
-
-
-<nav class="gdoc-paging flex flex-even align-center" role="navigation">
-  <div class="gdoc-paging__item gdoc-paging__item--prev">
-    
-  </div>
-  <div class="gdoc-paging__state">1/2</div>
-  <div class="gdoc-paging__item gdoc-paging__item--next">
-    
-      <a class="flex-inline align-center fake-link no-wrap" href="/posts/page/2/">
-        NEXT
-        <i class="gdoc-icon">gdoc_keyboard_arrow_right</i>
-      </a>
-    
-  </div>
-</nav>
-
+    </section>
+  </article>
 
 
 
