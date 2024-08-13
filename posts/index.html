@@ -1362,8 +1362,7 @@
         </h1>
       </header>
       <section>
-        The upcoming 3.13 release of GEOS includes a complete re-write of the &ldquo;boolean predicates&rdquo;, called &ldquo;RelateNG&rdquo;. The boolean predicates are pairwise tests for geometries that return true/false answers. &ldquo;Intersects&rdquo;, &ldquo;Contains&rdquo;, &ldquo;Touches&rdquo; are all examples of boolean predicates.
-The old implementation in JTS and GEOS operated by building a complete topological relationship graph between the two inputs, then reading the result off the graph. However, computing the whole graph every time is computationally expensive, and the results of many predicates can be determined without a full graph &ndash; the first time you hit an edge intersection, you know that geometries intersect, and you do not need to do any more calculations.
+        <p>The upcoming 3.13 release of GEOS includes a complete re-write of the &ldquo;boolean predicates&rdquo;, called &ldquo;RelateNG&rdquo;. The boolean predicates are pairwise tests for geometries that return true/false answers.  &ldquo;Intersects&rdquo;, &ldquo;Contains&rdquo;, &ldquo;Touches&rdquo; are all examples of boolean predicates.</p>
       </section>
       <div class="gdoc-post__readmore">
         
