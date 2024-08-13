@@ -213,15 +213,15 @@ extern "C" {
 //------------------------------------------------------------------
 
     char
-    GEOSRelatePattern(const Geometry* g1, const Geometry* g2, const char* pat)
+    GEOSRelatePattern(const Geometry* g1, const Geometry* g2, const char* imPattern)
     {
-        return GEOSRelatePattern_r(handle, g1, g2, pat);
+        return GEOSRelatePattern_r(handle, g1, g2, imPattern);
     }
 
     char
-    GEOSRelatePatternMatch(const char* mat, const char* pat)
+    GEOSRelatePatternMatch(const char* intMatrix, const char* imPattern)
     {
-        return GEOSRelatePatternMatch_r(handle, mat, pat);
+        return GEOSRelatePatternMatch_r(handle, intMatrix, imPattern);
     }
 
     char*
@@ -1610,9 +1610,9 @@ extern "C" {
     }
 
     char
-    GEOSPreparedRelatePattern(const geos::geom::prep::PreparedGeometry* pg1, const Geometry* g2, const char* pat)
+    GEOSPreparedRelatePattern(const geos::geom::prep::PreparedGeometry* pg1, const Geometry* g2, const char* imPattern)
     {
-        return GEOSPreparedRelatePattern_r(handle, pg1, g2, pat);
+        return GEOSPreparedRelatePattern_r(handle, pg1, g2, imPattern);
     }
 
     CoordinateSequence*

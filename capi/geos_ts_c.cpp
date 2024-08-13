@@ -665,23 +665,23 @@ extern "C" {
 //------------------------------------------------------------------
 
     char
-    GEOSRelatePattern_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2, const char* pat)
+    GEOSRelatePattern_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2, const char* imPattern)
     {
         return execute(extHandle, 2, [&]() {
-            std::string s(pat);
+            std::string s(imPattern);
             return g1->relate(g2, s);
         });
     }
 
     char
-    GEOSRelatePatternMatch_r(GEOSContextHandle_t extHandle, const char* mat,
-                             const char* pat)
+    GEOSRelatePatternMatch_r(GEOSContextHandle_t extHandle, const char* intMatrix,
+                             const char* imPattern)
     {
         return execute(extHandle, 2, [&]() {
             using geos::geom::IntersectionMatrix;
 
-            std::string m(mat);
-            std::string p(pat);
+            std::string m(intMatrix);
+            std::string p(imPattern);
             IntersectionMatrix im(m);
 
             return im.matches(p);
@@ -3761,10 +3761,10 @@ extern "C" {
 
     char
     GEOSPreparedRelatePattern_r(GEOSContextHandle_t extHandle,
-                         const geos::geom::prep::PreparedGeometry* pg, const Geometry* g, const char* pat)
+                         const geos::geom::prep::PreparedGeometry* pg, const Geometry* g, const char* imPattern)
     {
         return execute(extHandle, 2, [&]() {
-            return pg->relate(g, std::string(pat));
+            return pg->relate(g, std::string(imPattern));
         });
     }
 

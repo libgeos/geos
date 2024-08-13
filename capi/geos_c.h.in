@@ -1430,7 +1430,7 @@ extern char GEOS_DLL GEOSRelatePattern_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry* g1,
     const GEOSGeometry* g2,
-    const char *pat);
+    const char *imPattern);
 
 /** \see GEOSRelate */
 extern char GEOS_DLL *GEOSRelate_r(
@@ -1441,8 +1441,8 @@ extern char GEOS_DLL *GEOSRelate_r(
 /** \see GEOSRelatePatternMatch */
 extern char GEOS_DLL GEOSRelatePatternMatch_r(
     GEOSContextHandle_t handle,
-    const char *mat,
-    const char *pat);
+    const char *intMatrix,
+    const char *imPattern);
 
 /** \see GEOSRelateBoundaryNodeRule */
 extern char GEOS_DLL *GEOSRelateBoundaryNodeRule_r(
@@ -4935,14 +4935,14 @@ extern char GEOS_DLL GEOSEqualsIdentical(
 * \see geos::geom::Geometry::relate
 * \param g1 First geometry in pair
 * \param g2 Second geometry in pair
-* \param pat DE9IM pattern to check
+* \param imPattern DE9IM pattern to check
 * \return 1 on true, 0 on false, 2 on exception
 * \since 2.2
 */
 extern char GEOS_DLL GEOSRelatePattern(
     const GEOSGeometry* g1,
     const GEOSGeometry* g2,
-    const char *pat);
+    const char *imPattern);
 
 /**
 * Calculate and return the DE9IM pattern for this geometry pair.
@@ -4960,15 +4960,15 @@ extern char GEOS_DLL *GEOSRelate(
 /**
 * Compare two DE9IM patterns and return true if they
 * are consistent.
-* \param mat Complete DE9IM string (does not have "*")
-* \param pat Pattern to match to (may contain "*")
+* \param intMatrix Complete DE9IM string (does not have "*")
+* \param imPattern Pattern to match to (may contain "*")
 * \return 1 on true, 0 on false, 2 on exception
 *
 * \since 3.3
 */
 extern char GEOS_DLL GEOSRelatePatternMatch(
-    const char *mat,
-    const char *pat);
+    const char *intMatrix,
+    const char *imPattern);
 
 /**
 * Calculate and return the DE9IM pattern for this geometry pair.
@@ -5226,7 +5226,7 @@ extern char GEOS_DLL * GEOSPreparedRelate(
 * prepared and provided geometry.
 * \param pg1 The prepared geometry
 * \param g2 The geometry to test
-* \param pat The DE9IM pattern to test
+* \param imPattern The DE9IM pattern to test
 * \returns 1 on true, 0 on false, 2 on exception
 * \see GEOSPrepare
 * \see GEOSRelatePattern
@@ -5237,7 +5237,7 @@ extern char GEOS_DLL * GEOSPreparedRelate(
 extern char GEOS_DLL GEOSPreparedRelatePattern(
     const GEOSPreparedGeometry* pg1,
     const GEOSGeometry* g2,
-    const char* pat);
+    const char* imPattern);
 
 /**
 * Use a \ref GEOSPreparedGeometry do a high performance
