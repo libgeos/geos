@@ -112,7 +112,7 @@ void object::test<6>
     geom2_ = GEOSGeomFromWKT("LINESTRING(10 0, 10 -10)");
     pat_ = GEOSRelateBoundaryNodeRule(geom1_, geom2_,
                                       GEOSRELATE_BNR_MULTIVALENT_ENDPOINT);
-    ensure_equals(std::string(pat_), std::string("0F1FFF1F2"));
+    ensure_equals(std::string(pat_), std::string("FF10FF1F2"));
 }
 
 // Noded multiline touching line on node , MONOVALENT ENDPOINT rule

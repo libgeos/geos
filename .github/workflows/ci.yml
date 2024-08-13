@@ -273,7 +273,7 @@ jobs:
       working-directory: ./build
       run: |
         ctest --output-on-failure \
-          --overwrite MemoryCheckCommandOptions="--leak-check=full --error-exitcode=100" \
+          --overwrite MemoryCheckCommandOptions="--leak-check=full --error-exitcode=100 --num-callers=100" \
           -R ^all-unit -C Valgrind -T memcheck
 
     - name: 'Upload Valgrind Log'

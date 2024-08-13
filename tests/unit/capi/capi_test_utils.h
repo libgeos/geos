@@ -23,6 +23,7 @@ namespace capitest {
         GEOSGeometry* result_ = nullptr;
         GEOSGeometry* expected_ = nullptr;
         char* wkt_ = nullptr;
+       char* str_ = nullptr;
 
         utility()
         {
@@ -35,31 +36,18 @@ namespace capitest {
 
         ~utility()
         {
-            if (wktw_)
-                GEOSWKTWriter_destroy(wktw_);
-            if (geom1_) {
-                GEOSGeom_destroy(geom1_);
-            }
-            if (geom2_) {
-                GEOSGeom_destroy(geom2_);
-            }
-            if (geom3_) {
-                GEOSGeom_destroy(geom3_);
-            }
-            if (input_) {
-                GEOSGeom_destroy(input_);
-            }
-            if (result_) {
-                GEOSGeom_destroy(result_);
-            }
-            if (expected_) {
-                GEOSGeom_destroy(expected_);
-            }
-            if (wkt_) {
-                GEOSFree(wkt_);
-            }
+            if (wktw_)     GEOSWKTWriter_destroy(wktw_);
+            if (geom1_)    GEOSGeom_destroy(geom1_);
+            if (geom2_)    GEOSGeom_destroy(geom2_);
+            if (geom3_)    GEOSGeom_destroy(geom3_);
+            if (input_)    GEOSGeom_destroy(input_);
+            if (result_)   GEOSGeom_destroy(result_);
+            if (expected_) GEOSGeom_destroy(expected_);
+            if (wkt_)      GEOSFree(wkt_);
+            if (str_)      GEOSFree(str_);
             finishGEOS();
         }
+
 
         static void notice(GEOS_PRINTF_FORMAT const char* fmt, ...) GEOS_PRINTF_FORMAT_ATTR(1, 2)
         {

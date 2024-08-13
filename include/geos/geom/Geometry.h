@@ -612,11 +612,7 @@ public:
      * @see Geometry#within
      * @see Geometry#covers
      */
-    bool
-    coveredBy(const Geometry* g) const
-    {
-        return g->covers(this);
-    }
+    bool coveredBy(const Geometry* g) const;
 
 
     /// Returns the Well-known Text representation of this Geometry.

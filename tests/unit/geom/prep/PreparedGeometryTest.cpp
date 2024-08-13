@@ -99,4 +99,5 @@ void object::test<3>
     ensure( pg1->contains(g2.get()) );
 }
 
+
 } // namespace tut

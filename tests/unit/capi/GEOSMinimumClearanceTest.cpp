@@ -53,7 +53,7 @@ struct test_capigeosminimumclearance_data : public capitest::utility {
 
         GEOSGeometry* result = GEOSMinimumClearanceLine(input);
         ensure(result != nullptr);
-        ensure_equals(1, GEOSEquals(result, expected_result));
+        ensure_equals(GEOSEquals(result, expected_result), 1);
 
         GEOSGeom_destroy(input);
         GEOSGeom_destroy(expected_result);

@@ -44,7 +44,7 @@ namespace noding { // geos::noding
  *
  * @version 1.7
  */
-class MCIndexSegmentSetMutualIntersector : public SegmentSetMutualIntersector {
+class GEOS_DLL MCIndexSegmentSetMutualIntersector : public SegmentSetMutualIntersector {
 public:
 
     MCIndexSegmentSetMutualIntersector(double p_tolerance)

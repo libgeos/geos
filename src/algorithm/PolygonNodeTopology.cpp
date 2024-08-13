@@ -24,6 +24,7 @@ using geos::geom::Quadrant;
 namespace geos {
 namespace algorithm { // geos.algorithm
 
+
 /* public static */
 bool
 PolygonNodeTopology::isCrossing(const CoordinateXY* nodePt,
@@ -36,15 +37,23 @@ PolygonNodeTopology::isCrossing(const CoordinateXY* nodePt,
         aLo = a1;
         aHi = a0;
     }
+
+    // bool bBetween0 = isBetween(nodePt, b0, aLo, aHi);
+    // bool bBetween1 = isBetween(nodePt, b1, aLo, aHi);
+    // return bBetween0 != bBetween1;
+
     /**
      * Find positions of b0 and b1.
      * If they are the same they do not cross the other edge
      */
-    bool bBetween0 = isBetween(nodePt, b0, aLo, aHi);
-    bool bBetween1 = isBetween(nodePt, b1, aLo, aHi);
+    int compBetween0 = compareBetween(nodePt, b0, aLo, aHi);
+    if (compBetween0 == 0) return false;
+    int compBetween1 = compareBetween(nodePt, b1, aLo, aHi);
+    if (compBetween1 == 0) return false;
 
-    return bBetween0 != bBetween1;
+    return compBetween0 != compBetween1;
 }
+
 
 /* public static */
 bool
@@ -77,6 +86,52 @@ PolygonNodeTopology::isBetween(const CoordinateXY* origin,
     return ! isGreater1;
 }
 
+
+/* private static */
+int
+PolygonNodeTopology::compareBetween(
+    const CoordinateXY* origin, const CoordinateXY* p,
+    const CoordinateXY* e0, const CoordinateXY* e1)
+{
+    int comp0 = compareAngle(origin, p, e0);
+    if (comp0 == 0) return 0;
+    int comp1 = compareAngle(origin, p, e1);
+    if (comp1 == 0) return 0;
+    if (comp0 > 0 && comp1 < 0) return 1;
+    return -1;
+}
+
+
+/* public static */
+int
+PolygonNodeTopology::compareAngle(
+    const CoordinateXY* origin,
+    const CoordinateXY* p,
+    const CoordinateXY* q)
+{
+    int quadrantP = quadrant(origin, p);
+    int quadrantQ = quadrant(origin, q);
+
+    /**
+     * If the vectors are in different quadrants,
+     * that determines the ordering
+     */
+    if (quadrantP > quadrantQ) return 1;
+    if (quadrantP < quadrantQ) return -1;
+
+    //--- vectors are in the same quadrant
+    // Check relative orientation of vectors
+    // P > Q if it is CCW of Q
+    int orient = Orientation::index(*origin, *q, *p);
+    switch (orient) {
+        case Orientation::COUNTERCLOCKWISE:
+            return 1;
+        case Orientation::CLOCKWISE:
+            return -1;
+        default:
+            return 0;
+    }
+}
 
 /* private static */
 bool

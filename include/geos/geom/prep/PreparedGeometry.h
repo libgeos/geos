@@ -20,6 +20,7 @@
 
 #include <vector>
 #include <memory>
+#include <string>
 #include <geos/export.h>
 
 // Forward declarations
@@ -28,6 +29,7 @@ namespace geos {
         class Geometry;
         class Coordinate;
         class CoordinateSequence;
+        class IntersectionMatrix;
     }
 }
 
@@ -227,6 +229,28 @@ public:
      *
      */
     virtual bool isWithinDistance(const geom::Geometry* geom, double dist) const = 0;
+
+    /** \brief
+     * Compares the prepared geometry to the given geometry
+     * and returns the DE9IM intersection matrix as a string.
+     *
+     * @param geom the Geometry to test the
+     * @return the DE9IM matrix
+     */
+    virtual std::unique_ptr<IntersectionMatrix> relate(const geom::Geometry* geom) const = 0;
+
+    /** \brief
+     * Compares the prepared geometry to the given geometry
+     * and the provided DE9IM pattern, and returns true if the
+     * pattern is consistent with the relationship between the
+     * prepared and provided geometries.
+     *
+     * @param geom the Geometry to test the distance to
+     * @param pat the DE9IM pattern
+     * @return true if the patterns are consistent
+     */
+    virtual bool relate(const geom::Geometry* geom, const std::string& pat) const = 0;
+
 };
 
 

@@ -32,8 +32,8 @@ IF(benchmark_FOUND)
             benchmark::benchmark geos_cxx_flags)
 endif()
 
-add_executable(perf_prepared_polygon_intersects
-    PreparedPolygonIntersectsPerfTest.cpp)
-target_include_directories(perf_prepared_polygon_intersects PUBLIC
+add_executable(perf_topo_predicate
+    TopologyPredicatePerfTest.cpp)
+target_include_directories(perf_topo_predicate PUBLIC
     $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/benchmarks>)
-target_link_libraries(perf_prepared_polygon_intersects PRIVATE geos)
+target_link_libraries(perf_topo_predicate PRIVATE geos)

@@ -226,7 +226,7 @@ public:
      *
      * @return the dimension value at the given matrix position.
      */
-    int get(geom::Location row, geom::Location column) const {
+    int get(Location row, Location column) const {
         return matrix[static_cast<size_t>(row)][static_cast<size_t>(column)];
     }
 
@@ -362,6 +362,7 @@ public:
      * in row-major order.
      */
     std::string toString() const;
+
 
 private:
 

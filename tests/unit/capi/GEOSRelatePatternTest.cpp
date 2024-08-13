@@ -27,8 +27,8 @@ void object::test<1>()
     geom3_ =  GEOSBuffer(geom2_, 2, 8);
     ensure(nullptr != geom3_);
 
-    ensure_equals(1, GEOSRelatePattern(geom1_, geom3_, "0FFFFF212"));
-    ensure_equals(1, GEOSRelatePattern(geom1_, geom3_, "*FF*FF212"));
+    ensure_equals(GEOSRelatePattern(geom1_, geom3_, "0FFFFF212"), 1);
+    ensure_equals(GEOSRelatePattern(geom1_, geom3_, "*FF*FF212"), 1);
 }
 
 template<>
@@ -57,13 +57,13 @@ void object::test<3>()
     ensure(geom2_);
 
     // pattern too long
-    ensure_equals(2, GEOSRelatePattern(geom1_, geom2_, "0FFFFF2120000000000000000000"));
+    ensure_equals(GEOSRelatePattern(geom1_, geom2_, "0FFFFF2120000000000000000000"), 2);
 
     // pattern too short
-    ensure_equals(2, GEOSRelatePattern(geom1_, geom2_, "0F"));
+    ensure_equals(GEOSRelatePattern(geom1_, geom2_, "0F"), 2);
 
     // pattern has invalid characters
-    ensure_equals(0, GEOSRelatePattern(geom1_, geom2_, "123456789"));
+    ensure_equals(GEOSRelatePattern(geom1_, geom2_, "123456789"), 2);
 }
 
 } // namespace tut

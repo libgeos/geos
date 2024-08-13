@@ -456,5 +456,7 @@ GeometryCollection::reverseImpl() const
     return getFactory()->createGeometryCollection(std::move(reversed)).release();
 }
 
+
+
 } // namespace geos::geom
 } // namespace geos

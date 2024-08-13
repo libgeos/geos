@@ -406,6 +406,7 @@ void object::test<13>
 }
 
 // Verify no memory leak on exception (https://github.com/libgeos/geos/issues/505)
+// RelateNG does not throw for this case
 template<>
 template<>
 void object::test<14>
@@ -419,7 +420,7 @@ void object::test<14>
     ensure(nullptr != geom2_);
 
     int ret = GEOSPreparedTouches(prepGeom1_, geom2_);
-    ensure_equals(ret, 2);
+    ensure_equals(ret, 1);
 }
 
 // Test XY variants
@@ -450,7 +451,38 @@ void object::test<16>()
     ensure(geom1_);
 
     prepGeom1_ = GEOSPrepare(geom1_);
-    ensure("curved geometries not supported", prepGeom1_ == nullptr);
+    ensure("curved geometries not supporteds", prepGeom1_ == nullptr);
+}
+
+
+template<>
+template<>
+void object::test<17>()
+{
+    geom1_ = fromWKT("POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))");
+    geom2_ = fromWKT("POLYGON((0.5 0.5, 1.5 0.5, 1.5 1.5, 0.5 1.5, 0.5 0.5))");
+
+    ensure(geom1_);
+    ensure(geom2_);
+
+    prepGeom1_ = GEOSPrepare(geom1_);
+
+    // Run each test twice to make sure the "accelerated" second call
+    // is the same as the first one.
+    ensure_equals("prepTouches1", GEOSPreparedTouches(prepGeom1_, geom2_), GEOSTouches(geom1_, geom2_));
+    ensure_equals("prepTouches2", GEOSPreparedTouches(prepGeom1_, geom2_), GEOSTouches(geom1_, geom2_));
+    ensure_equals("prepOverlaps1", GEOSPreparedOverlaps(prepGeom1_, geom2_), GEOSOverlaps(geom1_, geom2_));
+    ensure_equals("prepOverlaps2", GEOSPreparedOverlaps(prepGeom1_, geom2_), GEOSOverlaps(geom1_, geom2_));
+    ensure_equals("prepCrosses1", GEOSPreparedCrosses(prepGeom1_, geom2_), GEOSCrosses(geom1_, geom2_));
+    ensure_equals("prepCrosses2", GEOSPreparedCrosses(prepGeom1_, geom2_), GEOSCrosses(geom1_, geom2_));
+    ensure_equals("prepDisjoint1", GEOSPreparedDisjoint(prepGeom1_, geom2_), GEOSDisjoint(geom1_, geom2_));
+    ensure_equals("prepDisjoint2", GEOSPreparedDisjoint(prepGeom1_, geom2_), GEOSDisjoint(geom1_, geom2_));
+
+    char* r1 = GEOSPreparedRelate(prepGeom1_, geom2_);
+    char* r2 = GEOSRelate(geom1_, geom2_);
+    ensure_equals("prepRelate1", std::string(r1), std::string(r2));
+    GEOSFree(r1);
+    GEOSFree(r2);
 }
 
 } // namespace tut

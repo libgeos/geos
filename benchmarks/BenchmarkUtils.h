@@ -59,6 +59,12 @@ createLine(const geom::CoordinateXY& base, double size, std::size_t npts) {
 
 
 std::vector<std::unique_ptr<geom::Geometry>>
+createPolygons(const geom::Envelope& env, std::size_t nItems, double size, std::size_t npts) {
+    return createGeometriesOnGrid(env, nItems, [size, npts](const geom::CoordinateXY& base) {
+        return createSineStar(base, size, npts);
+    });
+}
+std::vector<std::unique_ptr<geom::Geometry>>
 createLines(const geom::Envelope& env, std::size_t nItems, double size, std::size_t npts) {
     return createGeometriesOnGrid(env, nItems, [size, npts](const geom::CoordinateXY& base) {
         return createLine(base, size, npts);

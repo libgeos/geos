@@ -1603,6 +1603,18 @@ extern "C" {
         return GEOSPreparedWithin_r(handle, pg1, g2);
     }
 
+    char *
+    GEOSPreparedRelate(const geos::geom::prep::PreparedGeometry* pg1, const Geometry* g2)
+    {
+        return GEOSPreparedRelate_r(handle, pg1, g2);
+    }
+
+    char
+    GEOSPreparedRelatePattern(const geos::geom::prep::PreparedGeometry* pg1, const Geometry* g2, const char* pat)
+    {
+        return GEOSPreparedRelatePattern_r(handle, pg1, g2, pat);
+    }
+
     CoordinateSequence*
     GEOSPreparedNearestPoints(const geos::geom::prep::PreparedGeometry* g1, const Geometry* g2)
     {

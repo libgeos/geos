@@ -149,7 +149,7 @@ struct tests_registerer<Test, Group, 0>
  * each new test since we have to have reinitialized
  * Data base class.
  */
-template <class Data, int MaxTestsInGroup = 50>
+template <class Data, int MaxTestsInGroup = 100>
 class test_group : public group_base, public test_group_posix
 {
     test_group(const test_group&);

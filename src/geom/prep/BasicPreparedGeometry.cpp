@@ -19,6 +19,7 @@
 
 #include <geos/geom/prep/BasicPreparedGeometry.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/IntersectionMatrix.h>
 #include <geos/algorithm/PointLocator.h>
 #include <geos/geom/util/ComponentCoordinateExtracter.h>
 #include <geos/operation/distance/DistanceOp.h>
@@ -90,72 +91,77 @@ BasicPreparedGeometry::isAnyTargetComponentInTest(const geom::Geometry* testGeom
 }
 
 bool
+BasicPreparedGeometry::within(const geom::Geometry* g) const
+{
+    return getRelateNG()->within(g);
+}
+
+bool
 BasicPreparedGeometry::contains(const geom::Geometry* g) const
 {
-    return baseGeom->contains(g);
+    return getRelateNG()->contains(g);
 }
 
 bool
 BasicPreparedGeometry::containsProperly(const geom::Geometry* g)	const
 {
-    // since raw relate is used, provide some optimizations
-
-    // short-circuit test
-    if(! baseGeom->getEnvelopeInternal()->contains(g->getEnvelopeInternal())) {
-        return false;
-    }
-
-    // otherwise, compute using relate mask
-    return baseGeom->relate(g, "T**FF*FF*");
+    return getRelateNG()->relate(g, "T**FF*FF*");
 }
 
 bool
 BasicPreparedGeometry::coveredBy(const geom::Geometry* g) const
 {
-    return baseGeom->coveredBy(g);
+    return getRelateNG()->coveredBy(g);
 }
 
 bool
 BasicPreparedGeometry::covers(const geom::Geometry* g) const
 {
-    return baseGeom->covers(g);
+    return getRelateNG()->covers(g);
 }
 
 bool
 BasicPreparedGeometry::crosses(const geom::Geometry* g) const
 {
-    return baseGeom->crosses(g);
+    return getRelateNG()->crosses(g);
 }
 
 bool
 BasicPreparedGeometry::disjoint(const geom::Geometry* g)	const
 {
-    return ! intersects(g);
+    return getRelateNG()->disjoint(g);
 }
 
 bool
 BasicPreparedGeometry::intersects(const geom::Geometry* g) const
 {
-    return baseGeom->intersects(g);
+    return getRelateNG()->intersects(g);
 }
 
 bool
 BasicPreparedGeometry::overlaps(const geom::Geometry* g)	const
 {
-    return baseGeom->overlaps(g);
+    return getRelateNG()->overlaps(g);
 }
 
 bool
 BasicPreparedGeometry::touches(const geom::Geometry* g) const
 {
-    return baseGeom->touches(g);
+    return getRelateNG()->touches(g);
 }
 
 bool
-BasicPreparedGeometry::within(const geom::Geometry* g) const
+BasicPreparedGeometry::relate(const geom::Geometry* g, const std::string& pat) const
 {
-    return baseGeom->within(g);
+    return getRelateNG()->relate(g, pat);
 }
+
+std::unique_ptr<IntersectionMatrix>
+BasicPreparedGeometry::relate(const geom::Geometry* g) const
+{
+    return getRelateNG()->relate(g);
+}
+
 
 std::unique_ptr<geom::CoordinateSequence>
 BasicPreparedGeometry::nearestPoints(const geom::Geometry* g) const

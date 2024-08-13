@@ -76,6 +76,21 @@ public:
     static bool isInteriorSegment(const CoordinateXY* nodePt,
         const CoordinateXY* a0, const CoordinateXY* a1, const CoordinateXY* b);
 
+    /**
+    * Compares the angles of two vectors
+    * relative to the positive X-axis at their origin.
+    * Angles increase CCW from the X-axis.
+    *
+    * @param origin the origin of the vectors
+    * @param p the endpoint of the vector P
+    * @param q the endpoint of the vector Q
+    * @return a negative integer, zero, or a positive integer as this vector P has angle less than, equal to, or greater than vector Q
+    */
+    static int compareAngle(
+        const CoordinateXY* origin,
+        const CoordinateXY* p,
+        const CoordinateXY* q);
+
 
 private:
 
@@ -94,6 +109,23 @@ private:
     static bool isBetween(const CoordinateXY* origin,
         const CoordinateXY* p,
         const CoordinateXY* e0, const CoordinateXY* e1);
+
+    /**
+    * Compares whether an edge p is between or outside the edges e0 and e1,
+    * where the edges all originate at a common origin.
+    * The "inside" of e0 and e1 is the arc which does not include
+    * the positive X-axis at the origin.
+    * If p is collinear with an edge 0 is returned.
+    *
+    * @param origin the origin
+    * @param p the destination point of edge p
+    * @param e0 the destination point of edge e0
+    * @param e1 the destination point of edge e1
+    * @return a negative integer, zero or positive integer as the vector P lies outside, collinear with, or inside the vectors E0 and E1
+    */
+    static int compareBetween(const CoordinateXY* origin, const CoordinateXY* p,
+        const CoordinateXY* e0, const CoordinateXY* e1);
+
 
     /**
     * Tests if the angle with the origin of a vector P is greater than that of the

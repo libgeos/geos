@@ -131,6 +131,42 @@ public:
         return ss.getSegmentOctant(index);
     }
 
+    /**
+     * Gets the next vertex in a ring from a vertex index.
+     *
+     * @param index the vertex index
+     * @return the next vertex in the ring
+     *
+     * @see isClosed
+     */
+    const geom::CoordinateXY& nextInRing(std::size_t index) const
+    {
+        std::size_t nextIndex = index + 1;
+        if (nextIndex > size() - 1) {
+            nextIndex = 1;
+        }
+        return getCoordinate(nextIndex);
+    }
+
+    /**
+     * Gets the previous vertex in a ring from a vertex index.
+     *
+     * @param index the vertex index
+     * @return the previous vertex in the ring
+     *
+     * @see isClosed
+     */
+    const geom::CoordinateXY& prevInRing(std::size_t index) const
+    {
+        std::size_t prevIndex;
+        if (index == 0)
+            prevIndex = size() - 2;
+        else
+            prevIndex = index - 1;
+        return getCoordinate( prevIndex );
+    }
+
+
     bool isClosed() const {
         return seq->front<geom::CoordinateXY>().equals(seq->back<geom::CoordinateXY>());
     }

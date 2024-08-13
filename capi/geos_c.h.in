@@ -1281,6 +1281,19 @@ extern char GEOS_DLL GEOSPreparedWithin_r(
     const GEOSPreparedGeometry* pg1,
     const GEOSGeometry* g2);
 
+/** \see GEOSPreparedRelate */
+extern char GEOS_DLL * GEOSPreparedRelate_r(
+    GEOSContextHandle_t handle,
+    const GEOSPreparedGeometry* pg1,
+    const GEOSGeometry* g2);
+
+/** \see GEOSPreparedRelatePattern */
+extern char GEOS_DLL GEOSPreparedRelatePattern_r(
+    GEOSContextHandle_t handle,
+    const GEOSPreparedGeometry* pg1,
+    const GEOSGeometry* g2,
+    const char* im);
+
 /** \see GEOSPreparedNearestPoints */
 extern GEOSCoordSequence GEOS_DLL *GEOSPreparedNearestPoints_r(
     GEOSContextHandle_t handle,
@@ -5187,6 +5200,44 @@ extern char GEOS_DLL GEOSPreparedTouches(
 extern char GEOS_DLL GEOSPreparedWithin(
     const GEOSPreparedGeometry* pg1,
     const GEOSGeometry* g2);
+
+/**
+* Use a \ref GEOSPreparedGeometry do a high performance
+* calculation of the DE9IM relationship between the
+* prepared and provided geometry, and compare that
+* relationship to the provided DE9IM, returning
+* true if the patterns are consistent and false otherwise.
+* \param pg1 The prepared geometry
+* \param g2 The geometry to test
+* \returns The DE9IM relate pattern string
+* \see GEOSPrepare
+* \see GEOSRelate
+* \see GEOSPreparedRelatePattern
+*
+* \since 3.13
+*/
+extern char GEOS_DLL * GEOSPreparedRelate(
+    const GEOSPreparedGeometry* pg1,
+    const GEOSGeometry* g2);
+
+/**
+* Use a \ref GEOSPreparedGeometry do a high performance
+* calculation of the DE9IM relationship between the
+* prepared and provided geometry.
+* \param pg1 The prepared geometry
+* \param g2 The geometry to test
+* \param pat The DE9IM pattern to test
+* \returns 1 on true, 0 on false, 2 on exception
+* \see GEOSPrepare
+* \see GEOSRelatePattern
+* \see GEOSPreparedRelate
+*
+* \since 3.13
+*/
+extern char GEOS_DLL GEOSPreparedRelatePattern(
+    const GEOSPreparedGeometry* pg1,
+    const GEOSGeometry* g2,
+    const char* pat);
 
 /**
 * Use a \ref GEOSPreparedGeometry do a high performance

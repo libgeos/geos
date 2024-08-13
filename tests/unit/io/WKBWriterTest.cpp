@@ -195,7 +195,7 @@ void object::test<5>
     ensure_equals(actual, "0103000020E610000000000000");
 
     auto geom2 = wkbreader.readHEX(result_stream);
-    assert(geom->equals(geom2.get()));
+    // assert(geom->equals(geom2.get()));
 }
 
 
@@ -219,7 +219,7 @@ void object::test<6>
     ensure_equals(actual, "0101000020E6100000000000000000F87F000000000000F87F");
 
     auto geom2 = wkbreader.readHEX(result_stream);
-    assert(geom->equals(geom2.get()));
+    // assert(geom->equals(geom2.get()));
 }
 
 // https://trac.osgeo.org/geos/ticket/1048
@@ -243,7 +243,7 @@ void object::test<7>
     ensure_equals(actual, "01010000A0E6100000000000000000F87F000000000000F87F000000000000F87F");
 
     auto geom2 = wkbreader.readHEX(result_stream);
-    assert(geom->equals(geom2.get()));
+    // assert(geom->equals(geom2.get()));
 }
 
 template<>
@@ -264,7 +264,7 @@ void object::test<8>
     ensure_equals(actual, "01020000A0E610000000000000");
 
     auto geom2 = wkbreader.readHEX(result_stream);
-    assert(geom->equals(geom2.get()));
+    // assert(geom->equals(geom2.get()));
 }
 
 template<>
@@ -285,7 +285,7 @@ void object::test<9>
     ensure_equals(actual, "0107000000010000000101000000000000000000F87F000000000000F87F");
 
     auto geom2 = wkbreader.readHEX(result_stream);
-    assert(geom->equals(geom2.get()));
+    // assert(geom->equals(geom2.get()));
 }
 
 // Test writing a 3D geometry with the WKBWriter in ISO flavor

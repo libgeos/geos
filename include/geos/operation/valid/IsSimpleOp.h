@@ -29,9 +29,9 @@ namespace noding {
 class SegmentString;
 class BasicSegmentString;
 }
-namespace algorithm {
-class BoundaryNodeRule;
-}
+// namespace algorithm {
+// class BoundaryNodeRule;
+// }
 namespace geom {
 class LineString;
 class LinearRing;

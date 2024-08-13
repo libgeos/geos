@@ -248,6 +248,7 @@ protected:
 
     bool hasCurvedComponents() const override;
 
+
 };
 
 } // namespace geos::geom
