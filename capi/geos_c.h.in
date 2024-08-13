@@ -4934,7 +4934,7 @@ extern char GEOS_DLL GEOSEqualsIdentical(
 * The pattern is a 9-character string 
 * containing symbols in the set "012TF*".
 * "012F" match the corresponding dimension symbol;
-* "T" matches any non-empty dimension.; "*" matches any dimension.
+* "T" matches any non-empty dimension; "*" matches any dimension.
 * \see geos::geom::Geometry::relate
 * \param g1 First geometry in pair
 * \param g2 Second geometry in pair
@@ -4948,7 +4948,7 @@ extern char GEOS_DLL GEOSRelatePattern(
     const char *imPattern);
 
 /**
-* Calculate and return the DE9IM string for this geometry pair.
+* Calculate the DE9IM string for this geometry pair.
 * The result is a 9-character string containing dimension symbols in the set "012F".
 * \see geos::geom::Geometry::relate
 * \param g1 First geometry in pair
@@ -4975,7 +4975,7 @@ extern char GEOS_DLL GEOSRelatePatternMatch(
     const char *imPattern);
 
 /**
-* Calculate and return the DE9IM string for this geometry pair,
+* Calculate the DE9IM string for this geometry pair,
 * using the supplied \ref GEOSRelateBoundaryNodeRules.
 * \see geos::geom::Geometry::relate
 * \see geos::algorithm::BoundaryNodeRule
