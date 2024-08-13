@@ -6,6 +6,15 @@
   - Add classes for curved geometry types: CircularString, CompoundCurve, CurvedPolygon, MultiCurve,
     MultiSurface (GH-1046, Dan Baston/German QGIS users group/Canton of Basel-Landschaft/Canton of Zug)
   - Support curved geometry types in WKT/WKB readers/writers (GH-1046, GH-1104, GH-1106, Dan Baston)
+  - Port of RelateNG https://github.com/locationtech/jts/pull/1052 (Martin Davis, Paul Ramsey)
+    - rewrite of boolean predicates and relate matrix calculations. 
+    - "Prepared" mode now available for all predicates and relate matrix
+    - CAPI functions GEOSPreparedRelate and GEOSPreparedRelatePattern expose new functionality
+    - CAPI implementations of GEOSPreparedTouches, etc, that were previously defaulting 
+      into non-prepared implementations now default into the RelateNG prepared implementation
+    - Prepared implementations for Intersects, Covers, still use the older implementations
+    - https://lin-ear-th-inking.blogspot.com/2024/05/jts-topological-relationships-next.html
+    - https://lin-ear-th-inking.blogspot.com/2024/05/relateng-performance.html 
 
 - Breaking Changes
 
