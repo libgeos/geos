@@ -112,6 +112,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a3bab9613914dd9310030135466dec473"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1prep_1_1PreparedGeometry.html#a3bab9613914dd9310030135466dec473">isWithinDistance</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *geom, double dist) const =0</td></tr>
 <tr class="memdesc:a3bab9613914dd9310030135466dec473"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tests whether the base <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> is within a given distance from the given geometry.  <a href="classgeos_1_1geom_1_1prep_1_1PreparedGeometry.html#a3bab9613914dd9310030135466dec473">More...</a><br /></td></tr>
 <tr class="separator:a3bab9613914dd9310030135466dec473"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2eae2540f2af8589aaa674a6c104e251"><td class="memItemLeft" align="right" valign="top">virtual std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1IntersectionMatrix.html">IntersectionMatrix</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1prep_1_1PreparedGeometry.html#a2eae2540f2af8589aaa674a6c104e251">relate</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *geom) const =0</td></tr>
+<tr class="memdesc:a2eae2540f2af8589aaa674a6c104e251"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compares the prepared geometry to the given geometry and returns the DE9IM intersection matrix as a string.  <a href="classgeos_1_1geom_1_1prep_1_1PreparedGeometry.html#a2eae2540f2af8589aaa674a6c104e251">More...</a><br /></td></tr>
+<tr class="separator:a2eae2540f2af8589aaa674a6c104e251"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2eaa5f2f6a2e60614cfb411191a36b7d"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1prep_1_1PreparedGeometry.html#a2eaa5f2f6a2e60614cfb411191a36b7d">relate</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *geom, const std::string &amp;pat) const =0</td></tr>
+<tr class="memdesc:a2eaa5f2f6a2e60614cfb411191a36b7d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compares the prepared geometry to the given geometry and the provided DE9IM pattern, and returns true if the pattern is consistent with the relationship between the prepared and provided geometries.  <a href="classgeos_1_1geom_1_1prep_1_1PreparedGeometry.html#a2eaa5f2f6a2e60614cfb411191a36b7d">More...</a><br /></td></tr>
+<tr class="separator:a2eaa5f2f6a2e60614cfb411191a36b7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>An interface for classes which prepare <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>s in order to optimize the performance of repeated calls to specific geometric operations. </p>
@@ -578,6 +584,91 @@ Public Member Functions</h2></td></tr>
 <dl class="section see"><dt>See also</dt><dd>Geometry::overlaps(Geometry) </dd></dl>
 
 <p>Implemented in <a class="el" href="classgeos_1_1geom_1_1prep_1_1BasicPreparedGeometry.html#ada0bc0ee51cecbb570329bb19da6166e">geos::geom::prep::BasicPreparedGeometry</a>.</p>
+
+</div>
+</div>
+<a id="a2eae2540f2af8589aaa674a6c104e251"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2eae2540f2af8589aaa674a6c104e251">&#9670;&nbsp;</a></span>relate() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual std::unique_ptr&lt;<a class="el" href="classgeos_1_1geom_1_1IntersectionMatrix.html">IntersectionMatrix</a>&gt; geos::geom::prep::PreparedGeometry::relate </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *&#160;</td>
+          <td class="paramname"><em>geom</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Compares the prepared geometry to the given geometry and returns the DE9IM intersection matrix as a string. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">geom</td><td>the <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a> to test the </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the DE9IM matrix </dd></dl>
+
+<p>Implemented in <a class="el" href="classgeos_1_1geom_1_1prep_1_1BasicPreparedGeometry.html#ae438d935b365bbd6a95c91ddd85842f9">geos::geom::prep::BasicPreparedGeometry</a>.</p>
+
+</div>
+</div>
+<a id="a2eaa5f2f6a2e60614cfb411191a36b7d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2eaa5f2f6a2e60614cfb411191a36b7d">&#9670;&nbsp;</a></span>relate() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool geos::geom::prep::PreparedGeometry::relate </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *&#160;</td>
+          <td class="paramname"><em>geom</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>pat</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Compares the prepared geometry to the given geometry and the provided DE9IM pattern, and returns true if the pattern is consistent with the relationship between the prepared and provided geometries. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">geom</td><td>the <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a> to test the distance to </td></tr>
+    <tr><td class="paramname">pat</td><td>the DE9IM pattern </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the patterns are consistent </dd></dl>
+
+<p>Implemented in <a class="el" href="classgeos_1_1geom_1_1prep_1_1BasicPreparedGeometry.html#a3417a9497f947640d15bac63f9a4d80a">geos::geom::prep::BasicPreparedGeometry</a>.</p>
 
 </div>
 </div>

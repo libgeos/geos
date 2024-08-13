@@ -81,6 +81,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a2c365dfd861c8f0926c1d0a24ee0f41e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa1ba71b84611de71bb8c73ac22aac427"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1prep_1_1BasicPreparedGeometry.html#aa1ba71b84611de71bb8c73ac22aac427">isAnyTargetComponentInTest</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *testGeom) const</td></tr>
 <tr class="separator:aa1ba71b84611de71bb8c73ac22aac427"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae0622be9b88507d7f08757276490a632"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1prep_1_1BasicPreparedGeometry.html#ae0622be9b88507d7f08757276490a632">within</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *g) const override</td></tr>
+<tr class="separator:ae0622be9b88507d7f08757276490a632"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7417fc2dae1879bcc49a1f69468aedbb"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1prep_1_1BasicPreparedGeometry.html#a7417fc2dae1879bcc49a1f69468aedbb">contains</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *g) const override</td></tr>
 <tr class="separator:a7417fc2dae1879bcc49a1f69468aedbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afb079ffcde7ce04d0a7e51e5d0970f31"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1prep_1_1BasicPreparedGeometry.html#afb079ffcde7ce04d0a7e51e5d0970f31">containsProperly</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *g) const override</td></tr>
@@ -99,8 +101,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:ada0bc0ee51cecbb570329bb19da6166e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:acea3e74ee926bc155dab23b2ad7cacda"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1prep_1_1BasicPreparedGeometry.html#acea3e74ee926bc155dab23b2ad7cacda">touches</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *g) const override</td></tr>
 <tr class="separator:acea3e74ee926bc155dab23b2ad7cacda"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae0622be9b88507d7f08757276490a632"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1prep_1_1BasicPreparedGeometry.html#ae0622be9b88507d7f08757276490a632">within</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *g) const override</td></tr>
-<tr class="separator:ae0622be9b88507d7f08757276490a632"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae438d935b365bbd6a95c91ddd85842f9"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1IntersectionMatrix.html">IntersectionMatrix</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1prep_1_1BasicPreparedGeometry.html#ae438d935b365bbd6a95c91ddd85842f9">relate</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *g) const override</td></tr>
+<tr class="separator:ae438d935b365bbd6a95c91ddd85842f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3417a9497f947640d15bac63f9a4d80a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1prep_1_1BasicPreparedGeometry.html#a3417a9497f947640d15bac63f9a4d80a">relate</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *g, const std::string &amp;pat) const override</td></tr>
+<tr class="separator:a3417a9497f947640d15bac63f9a4d80a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab230303197319276462ae44dae7980ba"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1prep_1_1BasicPreparedGeometry.html#ab230303197319276462ae44dae7980ba">nearestPoints</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *g) const override</td></tr>
 <tr class="separator:ab230303197319276462ae44dae7980ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a96605754786187a8a8cc9ee167053411"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1prep_1_1BasicPreparedGeometry.html#a96605754786187a8a8cc9ee167053411">distance</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *g) const override</td></tr>
@@ -616,6 +620,74 @@ Protected Member Functions</h2></td></tr>
 <p>Default implementation. </p>
 
 <p>Implements <a class="el" href="classgeos_1_1geom_1_1prep_1_1PreparedGeometry.html#a2b9ebc778a38d3007439f40b7f3df2ac">geos::geom::prep::PreparedGeometry</a>.</p>
+
+</div>
+</div>
+<a id="ae438d935b365bbd6a95c91ddd85842f9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae438d935b365bbd6a95c91ddd85842f9">&#9670;&nbsp;</a></span>relate() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unique_ptr&lt;<a class="el" href="classgeos_1_1geom_1_1IntersectionMatrix.html">IntersectionMatrix</a>&gt; geos::geom::prep::BasicPreparedGeometry::relate </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *&#160;</td>
+          <td class="paramname"><em>g</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Default implementation. </p>
+
+<p>Implements <a class="el" href="classgeos_1_1geom_1_1prep_1_1PreparedGeometry.html#a2eae2540f2af8589aaa674a6c104e251">geos::geom::prep::PreparedGeometry</a>.</p>
+
+</div>
+</div>
+<a id="a3417a9497f947640d15bac63f9a4d80a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3417a9497f947640d15bac63f9a4d80a">&#9670;&nbsp;</a></span>relate() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool geos::geom::prep::BasicPreparedGeometry::relate </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *&#160;</td>
+          <td class="paramname"><em>g</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>pat</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Default implementation. </p>
+
+<p>Implements <a class="el" href="classgeos_1_1geom_1_1prep_1_1PreparedGeometry.html#a2eaa5f2f6a2e60614cfb411191a36b7d">geos::geom::prep::PreparedGeometry</a>.</p>
 
 </div>
 </div>

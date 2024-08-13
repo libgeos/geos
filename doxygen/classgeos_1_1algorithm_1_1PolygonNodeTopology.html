@@ -60,11 +60,65 @@ static bool&#160;</td><td class="memItemRight" valign="bottom"><b>isCrossing</b>
 <tr class="separator:a6f7726bc0c73ff595fb18c9ef0853d77"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae65529641071ceb6c86257ee51c16795"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1PolygonNodeTopology.html#ae65529641071ceb6c86257ee51c16795">isInteriorSegment</a> (const CoordinateXY *nodePt, const CoordinateXY *a0, const CoordinateXY *a1, const CoordinateXY *b)</td></tr>
 <tr class="separator:ae65529641071ceb6c86257ee51c16795"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0e9867d88c8fe21a5a3af1f9b68eb9e9"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1PolygonNodeTopology.html#a0e9867d88c8fe21a5a3af1f9b68eb9e9">compareAngle</a> (const CoordinateXY *origin, const CoordinateXY *p, const CoordinateXY *q)</td></tr>
+<tr class="separator:a0e9867d88c8fe21a5a3af1f9b68eb9e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Functions to compute topological information about nodes (ring intersections) in polygonal geometry.</p>
 <dl class="section author"><dt>Author</dt><dd>mdavis </dd></dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a0e9867d88c8fe21a5a3af1f9b68eb9e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0e9867d88c8fe21a5a3af1f9b68eb9e9">&#9670;&nbsp;</a></span>compareAngle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static int geos::algorithm::PolygonNodeTopology::compareAngle </td>
+          <td>(</td>
+          <td class="paramtype">const CoordinateXY *&#160;</td>
+          <td class="paramname"><em>origin</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CoordinateXY *&#160;</td>
+          <td class="paramname"><em>p</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CoordinateXY *&#160;</td>
+          <td class="paramname"><em>q</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Compares the angles of two vectors relative to the positive X-axis at their origin. Angles increase CCW from the X-axis.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">origin</td><td>the origin of the vectors </td></tr>
+    <tr><td class="paramname">p</td><td>the endpoint of the vector P </td></tr>
+    <tr><td class="paramname">q</td><td>the endpoint of the vector Q </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a negative integer, zero, or a positive integer as this vector P has angle less than, equal to, or greater than vector Q </dd></dl>
+
+</div>
+</div>
 <a id="ae65529641071ceb6c86257ee51c16795"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae65529641071ceb6c86257ee51c16795">&#9670;&nbsp;</a></span>isInteriorSegment()</h2>
 

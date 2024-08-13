@@ -97,8 +97,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setOutputDimension</b
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:ad26c022c709832a4b413571be7c88503"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1io_1_1WKTWriter.html#ad26c022c709832a4b413571be7c88503">toLineString</a> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> &amp;seq)</td></tr>
 <tr class="separator:ad26c022c709832a4b413571be7c88503"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1e532031c5766f3d174ab1d682eb7ae4"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1io_1_1WKTWriter.html#a1e532031c5766f3d174ab1d682eb7ae4">toLineString</a> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;p0, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;p1)</td></tr>
-<tr class="separator:a1e532031c5766f3d174ab1d682eb7ae4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6d760492bc7eef39360a5de5785ee108"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1io_1_1WKTWriter.html#a6d760492bc7eef39360a5de5785ee108">toLineString</a> (const geom::CoordinateXY &amp;p0, const geom::CoordinateXY &amp;p1)</td></tr>
+<tr class="separator:a6d760492bc7eef39360a5de5785ee108"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0f25ee5742c2909feaf9c693d25a6c7d"><td class="memItemLeft" align="right" valign="top">static std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1io_1_1WKTWriter.html#a0f25ee5742c2909feaf9c693d25a6c7d">toPoint</a> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;p0)</td></tr>
 <tr class="separator:a0f25ee5742c2909feaf9c693d25a6c7d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1772761cc3d6a20119280484d140c635"><td class="memItemLeft" align="right" valign="top"><a id="a1772761cc3d6a20119280484d140c635"></a>
@@ -309,53 +309,8 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>decimalPlaces</b></td>
 
 </div>
 </div>
-<a id="a1e532031c5766f3d174ab1d682eb7ae4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1e532031c5766f3d174ab1d682eb7ae4">&#9670;&nbsp;</a></span>toLineString() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static std::string geos::io::WKTWriter::toLineString </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;&#160;</td>
-          <td class="paramname"><em>p0</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;&#160;</td>
-          <td class="paramname"><em>p1</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Generates the WKT for a 2-point <code>LineString</code>.</p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">p0</td><td>the first coordinate </td></tr>
-    <tr><td class="paramname">p1</td><td>the second coordinate</td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>the WKT </dd></dl>
-
-</div>
-</div>
 <a id="ad26c022c709832a4b413571be7c88503"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad26c022c709832a4b413571be7c88503">&#9670;&nbsp;</a></span>toLineString() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ad26c022c709832a4b413571be7c88503">&#9670;&nbsp;</a></span>toLineString() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -381,6 +336,51 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>decimalPlaces</b></td>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">seq</td><td>the sequence to outpout</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the WKT </dd></dl>
+
+</div>
+</div>
+<a id="a6d760492bc7eef39360a5de5785ee108"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6d760492bc7eef39360a5de5785ee108">&#9670;&nbsp;</a></span>toLineString() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::string geos::io::WKTWriter::toLineString </td>
+          <td>(</td>
+          <td class="paramtype">const geom::CoordinateXY &amp;&#160;</td>
+          <td class="paramname"><em>p0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const geom::CoordinateXY &amp;&#160;</td>
+          <td class="paramname"><em>p1</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Generates the WKT for a 2-point <code>LineString</code>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p0</td><td>the first coordinate </td></tr>
+    <tr><td class="paramname">p1</td><td>the second coordinate</td></tr>
   </table>
   </dd>
 </dl>
