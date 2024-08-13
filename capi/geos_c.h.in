@@ -4927,15 +4927,18 @@ extern char GEOS_DLL GEOSEqualsIdentical(
         const GEOSGeometry* g2);
 
 /**
-* Calculate the DE9IM pattern for this geometry pair
-* and compare against the provided pattern to check for
-* consistency. If the result and pattern are consistent
-* return true. The pattern may include glob "*" characters
-* for portions that are allowed to match any value.
+* Calculate the DE9IM string for a geometry pair
+* and compare against a DE9IM pattern to check for
+* consistency. 
+* If the result matches the pattern return true.
+* The pattern is a 9-character string 
+* containing symbols in the set "012TF*".
+* "012F" match the corresponding dimension symbol;
+* "T" matches any non-empty dimension.; "*" matches any dimension.
 * \see geos::geom::Geometry::relate
 * \param g1 First geometry in pair
 * \param g2 Second geometry in pair
-* \param imPattern DE9IM pattern to check
+* \param imPattern DE9IM pattern to match
 * \return 1 on true, 0 on false, 2 on exception
 * \since 2.2
 */
@@ -4945,7 +4948,8 @@ extern char GEOS_DLL GEOSRelatePattern(
     const char *imPattern);
 
 /**
-* Calculate and return the DE9IM pattern for this geometry pair.
+* Calculate and return the DE9IM string for this geometry pair.
+* The result is a 9-character string containing dimension symbols in the set "012F".
 * \see geos::geom::Geometry::relate
 * \param g1 First geometry in pair
 * \param g2 Second geometry in pair
@@ -4958,10 +4962,10 @@ extern char GEOS_DLL *GEOSRelate(
     const GEOSGeometry* g2);
 
 /**
-* Compare two DE9IM patterns and return true if they
+* Compare a DE9IM string to a pattern and return true if they
 * are consistent.
-* \param intMatrix Complete DE9IM string (does not have "*")
-* \param imPattern Pattern to match to (may contain "*")
+* \param intMatrix DE9IM string (contains symbols "012F")
+* \param imPattern Pattern to match to (may also contain symbols "T" and "*")
 * \return 1 on true, 0 on false, 2 on exception
 *
 * \since 3.3
@@ -4971,8 +4975,8 @@ extern char GEOS_DLL GEOSRelatePatternMatch(
     const char *imPattern);
 
 /**
-* Calculate and return the DE9IM pattern for this geometry pair.
-* Apply the supplied \ref GEOSRelateBoundaryNodeRules.
+* Calculate and return the DE9IM string for this geometry pair,
+* using the supplied \ref GEOSRelateBoundaryNodeRules.
 * \see geos::geom::Geometry::relate
 * \see geos::algorithm::BoundaryNodeRule
 * \param g1 First geometry in pair
@@ -5202,14 +5206,12 @@ extern char GEOS_DLL GEOSPreparedWithin(
     const GEOSGeometry* g2);
 
 /**
-* Use a \ref GEOSPreparedGeometry do a high performance
+* Use a \ref GEOSPreparedGeometry do a high-performance
 * calculation of the DE9IM relationship between the
-* prepared and provided geometry, and compare that
-* relationship to the provided DE9IM, returning
-* true if the patterns are consistent and false otherwise.
+* prepared and provided geometry.
 * \param pg1 The prepared geometry
 * \param g2 The geometry to test
-* \returns The DE9IM relate pattern string
+* \returns The DE9IM string
 * \see GEOSPrepare
 * \see GEOSRelate
 * \see GEOSPreparedRelatePattern
@@ -5221,9 +5223,11 @@ extern char GEOS_DLL * GEOSPreparedRelate(
     const GEOSGeometry* g2);
 
 /**
-* Use a \ref GEOSPreparedGeometry do a high performance
+* Use a \ref GEOSPreparedGeometry do a high-performance
 * calculation of the DE9IM relationship between the
-* prepared and provided geometry.
+* prepared and provided geometry, and compare the
+* relationship to the provided DE9IM pattern.
+* Returns true if the patterns are consistent and false otherwise.
 * \param pg1 The prepared geometry
 * \param g2 The geometry to test
 * \param imPattern The DE9IM pattern to test
