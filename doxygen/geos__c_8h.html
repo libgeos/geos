@@ -16299,14 +16299,14 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Use a <a class="el" href="geos__c_8h.html#aff9f7bbb2dcdbd813d9055414a18785e">GEOSPreparedGeometry</a> do a high performance calculation of the DE9IM relationship between the prepared and provided geometry, and compare that relationship to the provided DE9IM, returning true if the patterns are consistent and false otherwise. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Use a <a class="el" href="geos__c_8h.html#aff9f7bbb2dcdbd813d9055414a18785e">GEOSPreparedGeometry</a> do a high-performance calculation of the DE9IM relationship between the prepared and provided geometry. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">pg1</td><td>The prepared geometry </td></tr>
     <tr><td class="paramname">g2</td><td>The geometry to test </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>The DE9IM relate pattern string </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>The DE9IM string </dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#a06557cad6153f56703b6875d4f21dc18">GEOSPrepare</a> </dd>
 <dd>
 <a class="el" href="geos__c_8h.html#ad1e018bb4ba119fe448a849d9d5b3739">GEOSRelate</a> </dd>
@@ -16382,7 +16382,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Use a <a class="el" href="geos__c_8h.html#aff9f7bbb2dcdbd813d9055414a18785e">GEOSPreparedGeometry</a> do a high performance calculation of the DE9IM relationship between the prepared and provided geometry. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Use a <a class="el" href="geos__c_8h.html#aff9f7bbb2dcdbd813d9055414a18785e">GEOSPreparedGeometry</a> do a high-performance calculation of the DE9IM relationship between the prepared and provided geometry, and compare the relationship to the provided DE9IM pattern. Returns true if the patterns are consistent and false otherwise. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">pg1</td><td>The prepared geometry </td></tr>
     <tr><td class="paramname">g2</td><td>The geometry to test </td></tr>
@@ -16757,7 +16757,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Calculate and return the DE9IM pattern for this geometry pair. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a7f28046f81f65582bebbbbcf5af68aa5" title="Returns true if the elements in the DE-9IM intersection matrix for the two Geometrys match the elemen...">geos::geom::Geometry::relate</a> </dd></dl>
+<p>Calculate and return the DE9IM string for this geometry pair. The result is a 9-character string containing dimension symbols in the set "012F". </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a7f28046f81f65582bebbbbcf5af68aa5" title="Returns true if the elements in the DE-9IM intersection matrix for the two Geometrys match the elemen...">geos::geom::Geometry::relate</a> </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g1</td><td>First geometry in pair </td></tr>
@@ -16836,7 +16836,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Calculate and return the DE9IM pattern for this geometry pair. Apply the supplied <a class="el" href="geos__c_8h.html#a80366ccbeabf242443e68ac6a49b09a3">GEOSRelateBoundaryNodeRules</a>. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a7f28046f81f65582bebbbbcf5af68aa5" title="Returns true if the elements in the DE-9IM intersection matrix for the two Geometrys match the elemen...">geos::geom::Geometry::relate</a> </dd>
+<p>Calculate and return the DE9IM string for this geometry pair, using the supplied <a class="el" href="geos__c_8h.html#a80366ccbeabf242443e68ac6a49b09a3">GEOSRelateBoundaryNodeRules</a>. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a7f28046f81f65582bebbbbcf5af68aa5" title="Returns true if the elements in the DE-9IM intersection matrix for the two Geometrys match the elemen...">geos::geom::Geometry::relate</a> </dd>
 <dd>
 <a class="el" href="classgeos_1_1algorithm_1_1BoundaryNodeRule.html" title="An interface for rules which determine whether node points which are in boundaries of lineal geometry...">geos::algorithm::BoundaryNodeRule</a> </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -16924,12 +16924,12 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Calculate the DE9IM pattern for this geometry pair and compare against the provided pattern to check for consistency. If the result and pattern are consistent return true. The pattern may include glob "*" characters for portions that are allowed to match any value. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a7f28046f81f65582bebbbbcf5af68aa5" title="Returns true if the elements in the DE-9IM intersection matrix for the two Geometrys match the elemen...">geos::geom::Geometry::relate</a> </dd></dl>
+<p>Calculate the DE9IM string for a geometry pair and compare against a DE9IM pattern to check for consistency. If the result matches the pattern return true. The pattern is a 9-character string containing symbols in the set "012TF*". "012F" match the corresponding dimension symbol; "T" matches any non-empty dimension.; "*" matches any dimension. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a7f28046f81f65582bebbbbcf5af68aa5" title="Returns true if the elements in the DE-9IM intersection matrix for the two Geometrys match the elemen...">geos::geom::Geometry::relate</a> </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g1</td><td>First geometry in pair </td></tr>
     <tr><td class="paramname">g2</td><td>Second geometry in pair </td></tr>
-    <tr><td class="paramname">imPattern</td><td>DE9IM pattern to check </td></tr>
+    <tr><td class="paramname">imPattern</td><td>DE9IM pattern to match </td></tr>
   </table>
   </dd>
 </dl>
@@ -17004,10 +17004,10 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Compare two DE9IM patterns and return true if they are consistent. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Compare a DE9IM string to a pattern and return true if they are consistent. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">intMatrix</td><td>Complete DE9IM string (does not have "*") </td></tr>
-    <tr><td class="paramname">imPattern</td><td>Pattern to match to (may contain "*") </td></tr>
+    <tr><td class="paramname">intMatrix</td><td>DE9IM string (contains symbols "012F") </td></tr>
+    <tr><td class="paramname">imPattern</td><td>Pattern to match to (may also contain symbols "T" and "*") </td></tr>
   </table>
   </dd>
 </dl>
