@@ -4927,7 +4927,7 @@ extern char GEOS_DLL GEOSEqualsIdentical(
         const GEOSGeometry* g2);
 
 /**
-* Calculate the DE9IM string for a geometry pair
+* Calculate the [DE9IM](https://en.wikipedia.org/wiki/DE-9IM) string for a geometry pair
 * and compare against a DE9IM pattern to check for
 * consistency. 
 * If the result matches the pattern return true.
@@ -4948,7 +4948,7 @@ extern char GEOS_DLL GEOSRelatePattern(
     const char *imPattern);
 
 /**
-* Calculate the DE9IM string for this geometry pair.
+* Calculate the [DE9IM](https://en.wikipedia.org/wiki/DE-9IM) string for this geometry pair.
 * The result is a 9-character string containing dimension symbols in the set "012F".
 * \see geos::geom::Geometry::relate
 * \param g1 First geometry in pair
@@ -4962,7 +4962,7 @@ extern char GEOS_DLL *GEOSRelate(
     const GEOSGeometry* g2);
 
 /**
-* Compare a DE9IM string to a pattern and return true if they
+* Compare a [DE9IM](https://en.wikipedia.org/wiki/DE-9IM) string to a pattern and return true if they
 * are consistent.
 * \param intMatrix DE9IM string (contains symbols "012F")
 * \param imPattern Pattern to match to (may also contain symbols "T" and "*")
@@ -4975,7 +4975,7 @@ extern char GEOS_DLL GEOSRelatePatternMatch(
     const char *imPattern);
 
 /**
-* Calculate the DE9IM string for this geometry pair,
+* Calculate the [DE9IM](https://en.wikipedia.org/wiki/DE-9IM) string for this geometry pair,
 * using the supplied \ref GEOSRelateBoundaryNodeRules.
 * \see geos::geom::Geometry::relate
 * \see geos::algorithm::BoundaryNodeRule
@@ -5207,7 +5207,7 @@ extern char GEOS_DLL GEOSPreparedWithin(
 
 /**
 * Use a \ref GEOSPreparedGeometry do a high-performance
-* calculation of the DE9IM relationship between the
+* calculation of the [DE9IM](https://en.wikipedia.org/wiki/DE-9IM) relationship between the
 * prepared and provided geometry.
 * \param pg1 The prepared geometry
 * \param g2 The geometry to test
@@ -5224,7 +5224,7 @@ extern char GEOS_DLL * GEOSPreparedRelate(
 
 /**
 * Use a \ref GEOSPreparedGeometry do a high-performance
-* calculation of the DE9IM relationship between the
+* calculation of the [DE9IM](https://en.wikipedia.org/wiki/DE-9IM) relationship between the
 * prepared and provided geometry, and compare the
 * relationship to the provided DE9IM pattern.
 * Returns true if the patterns are consistent and false otherwise.
