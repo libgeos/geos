@@ -97,7 +97,7 @@ private:
 
     static bool isZeroLength(const LineString* line);
 
-    bool isZeroLengthLine(const Geometry* g) {
+    bool isZeroLengthLine(const Geometry* g) const {
         // avoid expensive zero-length calculation if not linear
         if (getDimension() != Dimension::L)
             return false;
@@ -160,7 +160,7 @@ public:
         return geomEnv;
     }
 
-    int getDimension() const {
+    inline int getDimension() const {
         return geomDim;
     }
 
