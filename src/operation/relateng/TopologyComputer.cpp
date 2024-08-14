@@ -125,7 +125,7 @@ int
 TopologyComputer::getDimension(bool isA) const
 {
     return getGeometry(isA).getDimension();
-};
+}
 
 
 /* public */
