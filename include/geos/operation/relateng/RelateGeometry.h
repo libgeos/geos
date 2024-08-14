@@ -97,6 +97,13 @@ private:
 
     static bool isZeroLength(const LineString* line);
 
+    bool isZeroLengthLine(const Geometry* g) {
+        // avoid expensive zero-length calculation if not linear
+        if (getDimension() != Dimension::L)
+            return false;
+        return isZeroLength(g);
+    };
+
     RelatePointLocator* getLocator();
 
     Coordinate::ConstXYSet createUniquePoints();

@@ -111,11 +111,12 @@ TopologyComputer::initExteriorEmpty(bool geomNonEmpty)
 }
 
 
-/* private */
-RelateGeometry&
-TopologyComputer::getGeometry(bool isA) const
+/* public */
+bool
+TopologyComputer::isAreaArea() const
 {
-    return isA ? geomA : geomB;
+    return getDimension(RelateGeometry::GEOM_A) == Dimension::A
+        && getDimension(RelateGeometry::GEOM_B) == Dimension::A;
 }
 
 
@@ -124,16 +125,7 @@ int
 TopologyComputer::getDimension(bool isA) const
 {
     return getGeometry(isA).getDimension();
-}
-
-
-/* public */
-bool
-TopologyComputer::isAreaArea() const
-{
-    return getDimension(RelateGeometry::GEOM_A) == Dimension::A
-        && getDimension(RelateGeometry::GEOM_B) == Dimension::A;
-}
+};
 
 
 /* public */

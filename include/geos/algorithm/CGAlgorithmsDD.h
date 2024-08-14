@@ -87,7 +87,7 @@ public:
      *
      * Uses an approach due to Jonathan Shewchuk, which is in the public domain.
      */
-    static int orientationIndexFilter(
+    static inline int orientationIndexFilter(
         double pax, double pay,
         double pbx, double pby,
         double pcx, double pcy)

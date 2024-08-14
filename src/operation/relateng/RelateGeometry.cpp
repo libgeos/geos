@@ -56,7 +56,7 @@ RelateGeometry::RelateGeometry(const Geometry* input, bool isPrepared, const Bou
     , geomEnv(input->getEnvelopeInternal())
     , boundaryNodeRule(bnRule)
     , geomDim(input->getDimension())
-    , isLineZeroLen(isZeroLength(input))
+    , isLineZeroLen(isZeroLengthLine(input))
     , isGeomEmpty(input->isEmpty())
 {
     analyzeDimensions();
