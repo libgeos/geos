@@ -22,6 +22,7 @@
 
 #include <geos/export.h>
 #include <cstdint>
+#include <cstddef>
 
 //#include <geos/io/ParseException.h>
 //#include <geos/io/ByteOrderValues.h>
@@ -43,7 +44,7 @@ class GEOS_DLL ByteOrderDataInStream {
 
 public:
 
-    ByteOrderDataInStream(const unsigned char* buff = nullptr, size_t buff_sz = 0);
+    ByteOrderDataInStream(const unsigned char* buff = nullptr, std::size_t buff_sz = 0);
 
     ~ByteOrderDataInStream();
 
@@ -59,7 +60,7 @@ public:
 
     double readDouble(); // throws ParseException
 
-    size_t size() const;
+    std::size_t size() const;
 
 private:
     int byteOrder;
