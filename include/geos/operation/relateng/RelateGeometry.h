@@ -148,15 +148,30 @@ public:
 
     static std::string name(bool isA);
 
-    const Geometry* getGeometry() const;
+    const Geometry* getGeometry() const {
+        return geom;
+    }
 
-    bool isPrepared() const;
+    bool isPrepared() const {
+        return m_isPrepared;
+    }
 
-    const Envelope* getEnvelope() const;
+    const Envelope* getEnvelope() const {
+        return geomEnv;
+    }
 
-    int getDimension() const;
+    int getDimension() const {
+        return geomDim;
+    }
 
-    bool hasDimension(int dim) const;
+    bool hasDimension(int dim) const {
+        switch (dim) {
+            case Dimension::P: return hasPoints;
+            case Dimension::L: return hasLines;
+            case Dimension::A: return hasAreas;
+        }
+        return false;
+    }
 
     /**
     * Gets the actual non-empty dimension of the geometry.
