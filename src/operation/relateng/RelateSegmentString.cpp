@@ -70,30 +70,6 @@ RelateSegmentString::createSegmentString(
 
 
 /* public */
-bool
-RelateSegmentString::isA() const
-{
-    return m_isA;
-}
-
-
-/* public */
-const RelateGeometry*
-RelateSegmentString::getGeometry() const
-{
-    return m_inputGeom;
-}
-
-
-/* public */
-const Geometry*
-RelateSegmentString::getPolygonal() const
-{
-    return m_parentPolygonal;
-}
-
-
-/* public */
 NodeSection*
 RelateSegmentString::createNodeSection(std::size_t segIndex, const CoordinateXY intPt) const
 {

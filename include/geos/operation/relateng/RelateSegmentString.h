@@ -123,11 +123,17 @@ public:
         bool isA, int elementId, int ringId,
         const Geometry* poly, const RelateGeometry* parent);
 
-    bool isA() const;
+    inline bool isA() const {
+        return m_isA;
+    }
 
-    const RelateGeometry* getGeometry() const;
+    inline const RelateGeometry* getGeometry() const {
+        return m_inputGeom;
+    }
 
-    const Geometry* getPolygonal() const;
+    inline const Geometry* getPolygonal() const {
+        return m_parentPolygonal;
+    }
 
     NodeSection* createNodeSection(std::size_t segIndex, const CoordinateXY intPt) const;
 
