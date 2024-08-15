@@ -78,8 +78,7 @@ EdgeSetIntersector::process(EdgeSegmentIntersector& intersector)
 
         testChain->computeOverlaps(queryChain, &overlapAction);
 
-        if (intersector.isDone())
-            return;
+        return !intersector.isDone();
     });
 
 }
