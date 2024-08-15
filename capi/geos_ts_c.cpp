@@ -94,7 +94,6 @@
 #include <geos/operation/valid/RepeatedPointRemover.h>
 
 #include <geos/operation/relateng/RelateNG.h>
-#include <geos/operation/relateng/RelatePredicate.h>
 
 #include <geos/precision/GeometryPrecisionReducer.h>
 #include <geos/shape/fractal/HilbertEncoder.h>
@@ -210,7 +209,6 @@ using geos::operation::overlayng::OverlayNG;
 using geos::operation::overlayng::UnaryUnionNG;
 using geos::operation::overlayng::OverlayNGRobust;
 using geos::operation::relateng::RelateNG;
-using geos::operation::relateng::RelatePredicate;
 using geos::operation::valid::TopologyValidationError;
 
 using geos::precision::GeometryPrecisionReducer;
@@ -583,7 +581,7 @@ extern "C" {
     GEOSDisjoint_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
         return execute(extHandle, 2, [&]() {
-            return RelateNG::disjoint(g1, g2);
+            return g1->disjoint(g2);
         });
     }
 
@@ -591,7 +589,7 @@ extern "C" {
     GEOSTouches_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
         return execute(extHandle, 2, [&]() {
-            return RelateNG::touches(g1, g2);
+            return g1->touches(g2);
         });
     }
 
@@ -599,7 +597,7 @@ extern "C" {
     GEOSIntersects_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
         return execute(extHandle, 2, [&]() {
-            return RelateNG::intersects(g1, g2);
+            return g1->intersects(g2);
         });
     }
 
@@ -607,7 +605,7 @@ extern "C" {
     GEOSCrosses_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
         return execute(extHandle, 2, [&]() {
-            return RelateNG::crosses(g1, g2);
+            return g1->crosses(g2);
         });
     }
 
@@ -615,7 +613,7 @@ extern "C" {
     GEOSWithin_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
         return execute(extHandle, 2, [&]() {
-            return RelateNG::within(g1, g2);
+            return g1->within(g2);
         });
     }
 
@@ -623,7 +621,7 @@ extern "C" {
     GEOSContains_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
         return execute(extHandle, 2, [&]() {
-            return RelateNG::contains(g1, g2);
+            return g1->contains(g2);
         });
     }
 
@@ -631,7 +629,7 @@ extern "C" {
     GEOSOverlaps_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
         return execute(extHandle, 2, [&]() {
-            return RelateNG::overlaps(g1, g2);
+            return g1->overlaps(g2);
         });
     }
 
@@ -639,7 +637,7 @@ extern "C" {
     GEOSCovers_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
         return execute(extHandle, 2, [&]() {
-            return RelateNG::covers(g1, g2);
+            return g1->covers(g2);
         });
     }
 
@@ -647,7 +645,7 @@ extern "C" {
     GEOSCoveredBy_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
         return execute(extHandle, 2, [&]() {
-            return RelateNG::coveredBy(g1, g2);
+            return g1->coveredBy(g2);
         });
     }
 
@@ -655,7 +653,7 @@ extern "C" {
     GEOSEquals_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
         return execute(extHandle, 2, [&]() {
-            return RelateNG::equalsTopo(g1, g2);
+            return g1->equals(g2);
         });
     }
 
