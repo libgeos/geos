@@ -97,12 +97,12 @@ $(function() {
 <div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    std::vector&lt;const CoordinateXY*&gt; representativePts;</div>
 <div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keyword">mutable</span> std::unique_ptr&lt;RelateNG&gt; relate_ng;</div>
 <div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    std::unique_ptr&lt;RelateNG&gt;&amp; getRelateNG()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <a class="code" href="classgeos_1_1operation_1_1relateng_1_1RelateNG.html">RelateNG</a>&amp; getRelateNG()<span class="keyword"> const</span></div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;<span class="keyword">    </span>{</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <span class="keywordflow">if</span> (relate_ng == <span class="keyword">nullptr</span>)</div>
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;            relate_ng = <a class="code" href="classgeos_1_1operation_1_1relateng_1_1RelateNG.html#a3d62913e30ab5b31210041e1dbb68153">RelateNG::prepare</a>(baseGeom);</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="keywordflow">return</span> relate_ng;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="keywordflow">return</span> *relate_ng;</div>
 <div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    }</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="keyword">protected</span>:</div>
