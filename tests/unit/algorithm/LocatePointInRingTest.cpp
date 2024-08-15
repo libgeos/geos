@@ -15,7 +15,6 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/Coordinate.h>
 // std
-#include <sstream>
 #include <string>
 #include <memory>
 
