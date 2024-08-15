@@ -9,7 +9,9 @@
 # by the Free Software Foundation.
 # See the COPYING file for more information.
 ################################################################################
+
 file(GLOB_RECURSE _sources ${CMAKE_CURRENT_LIST_DIR}/*.cpp CONFIGURE_DEPEND)
+set_source_files_properties(${_sources} PROPERTIES COMPILE_FLAGS -O1)
 add_executable(test_geos_unit ${_sources})
 unset(_sources)
 
