@@ -92,6 +92,11 @@ public:
             return 2*MATH_PI;
         }
 
+        /// Even Rouault:
+        /// potential optimization?: using crossproduct(p0 - center, p2 - center) = radius * radius * sin(angle)
+        /// could yield the result by just doing a single asin(), instead of 2 atan2()
+        /// actually one should also likely compute dotproduct(p0 - center, p2 - center) = radius * radius * cos(angle),
+        /// and thus angle = atan2(crossproduct(p0 - center, p2 - center) , dotproduct(p0 - center, p2 - center) )
         auto t0 = theta0();
         auto t2 = theta2();
 
