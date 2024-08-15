@@ -5,6 +5,7 @@
 // geos
 #include <geos_c.h>
 // std
+#include <algorithm>
 #include <cstdarg>
 #include <cstdio>
 #include <cstdlib>
