@@ -22,6 +22,7 @@
 #include <geos/operation/relateng/RelateSegmentString.h>
 #include <geos/index/chain/MonotoneChain.h>
 #include <geos/index/chain/MonotoneChainBuilder.h>
+#include <geos/util/Interrupt.h>
 
 
 using geos::geom::Geometry;
@@ -54,7 +55,7 @@ EdgeSetIntersector::addToIndex(const SegmentString* segStr)
 
     for (MonotoneChain& mc : segChains) {
         if (envelope == nullptr || envelope->intersects(mc.getEnvelope())) {
-            mc.setId(idCounter++);
+            // mc.setId(idCounter++);
             monoChains.push_back(mc);
             MonotoneChain* mcPtr = &(monoChains.back());
             index.insert(mcPtr->getEnvelope(), mcPtr);
@@ -68,26 +69,18 @@ EdgeSetIntersector::process(EdgeSegmentIntersector& intersector)
 {
     EdgeSegmentOverlapAction overlapAction(intersector);
 
-    for (const MonotoneChain& queryChain : monoChains) {
+    // Replaces JTS implementation that manually iterates on the
+    // monoChains with the automatic queryPairs method in TemplateSTRTree
+    index.queryPairs([this, &overlapAction, &intersector](const MonotoneChain* queryChain, const MonotoneChain* testChain) {
 
-        std::vector<const MonotoneChain*> overlapChains;
-        index.query(queryChain.getEnvelope(), [&overlapChains](const MonotoneChain* mc) {
-            overlapChains.push_back(mc);
-            });
+        if (overlapCounter++ % 100000 == 0)
+            GEOS_CHECK_FOR_INTERRUPTS();
 
-        for (const MonotoneChain* testChain : overlapChains) {
-            /**
-             * following test makes sure we only compare each pair of chains once
-             * and that we don't compare a chain to itself
-             */
-            if (testChain->getId() <= queryChain.getId())
-                continue;
+        testChain->computeOverlaps(queryChain, &overlapAction);
 
-            testChain->computeOverlaps(&queryChain, &overlapAction);
-            if (intersector.isDone())
-                return;
-        }
-    }
+        return !intersector.isDone();
+    });
+
 }
 
 

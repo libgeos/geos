@@ -61,12 +61,12 @@ private:
     std::vector<const CoordinateXY*> representativePts;
     mutable std::unique_ptr<RelateNG> relate_ng;
 
-    std::unique_ptr<RelateNG>& getRelateNG() const
+    RelateNG& getRelateNG() const
     {
         if (relate_ng == nullptr)
             relate_ng = RelateNG::prepare(baseGeom);
 
-        return relate_ng;
+        return *relate_ng;
     }
 
 protected:

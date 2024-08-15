@@ -151,9 +151,6 @@ public:
         return context;
     }
 
-    void setId(int p_id) { id = p_id; }
-    int getId() const { return id; }
-
 private:
 
     void computeSelect(const geom::Envelope& searchEnv,
@@ -200,9 +197,6 @@ private:
 
     /// Owned by this class
     mutable geom::Envelope env;
-
-    /// Useful for optimizing chain comparisons
-    int id = 0;
 
 };
 

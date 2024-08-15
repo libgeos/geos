@@ -93,73 +93,73 @@ BasicPreparedGeometry::isAnyTargetComponentInTest(const geom::Geometry* testGeom
 bool
 BasicPreparedGeometry::within(const geom::Geometry* g) const
 {
-    return getRelateNG()->within(g);
+    return getRelateNG().within(g);
 }
 
 bool
 BasicPreparedGeometry::contains(const geom::Geometry* g) const
 {
-    return getRelateNG()->contains(g);
+    return getRelateNG().contains(g);
 }
 
 bool
 BasicPreparedGeometry::containsProperly(const geom::Geometry* g)	const
 {
-    return getRelateNG()->relate(g, "T**FF*FF*");
+    return getRelateNG().relate(g, "T**FF*FF*");
 }
 
 bool
 BasicPreparedGeometry::coveredBy(const geom::Geometry* g) const
 {
-    return getRelateNG()->coveredBy(g);
+    return getRelateNG().coveredBy(g);
 }
 
 bool
 BasicPreparedGeometry::covers(const geom::Geometry* g) const
 {
-    return getRelateNG()->covers(g);
+    return getRelateNG().covers(g);
 }
 
 bool
 BasicPreparedGeometry::crosses(const geom::Geometry* g) const
 {
-    return getRelateNG()->crosses(g);
+    return getRelateNG().crosses(g);
 }
 
 bool
 BasicPreparedGeometry::disjoint(const geom::Geometry* g)	const
 {
-    return getRelateNG()->disjoint(g);
+    return getRelateNG().disjoint(g);
 }
 
 bool
 BasicPreparedGeometry::intersects(const geom::Geometry* g) const
 {
-    return getRelateNG()->intersects(g);
+    return getRelateNG().intersects(g);
 }
 
 bool
 BasicPreparedGeometry::overlaps(const geom::Geometry* g)	const
 {
-    return getRelateNG()->overlaps(g);
+    return getRelateNG().overlaps(g);
 }
 
 bool
 BasicPreparedGeometry::touches(const geom::Geometry* g) const
 {
-    return getRelateNG()->touches(g);
+    return getRelateNG().touches(g);
 }
 
 bool
 BasicPreparedGeometry::relate(const geom::Geometry* g, const std::string& pat) const
 {
-    return getRelateNG()->relate(g, pat);
+    return getRelateNG().relate(g, pat);
 }
 
 std::unique_ptr<IntersectionMatrix>
 BasicPreparedGeometry::relate(const geom::Geometry* g) const
 {
-    return getRelateNG()->relate(g);
+    return getRelateNG().relate(g);
 }
 
 
