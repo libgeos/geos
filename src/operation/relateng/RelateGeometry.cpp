@@ -56,7 +56,7 @@ RelateGeometry::RelateGeometry(const Geometry* input, bool isPrepared, const Bou
     , geomEnv(input->getEnvelopeInternal())
     , boundaryNodeRule(bnRule)
     , geomDim(input->getDimension())
-    , isLineZeroLen(isZeroLength(input))
+    , isLineZeroLen(isZeroLengthLine(input))
     , isGeomEmpty(input->isEmpty())
 {
     analyzeDimensions();
@@ -155,47 +155,6 @@ RelateGeometry::isZeroLength(const LineString* line) {
 
 
 /* public */
-const Geometry*
-RelateGeometry::getGeometry() const
-{
-    return geom;
-}
-
-/* public */
-bool
-RelateGeometry::isPrepared() const
-{
-    return m_isPrepared;
-}
-
-/* public */
-const Envelope*
-RelateGeometry::getEnvelope() const
-{
-    return geomEnv;
-}
-
-/* public */
-int
-RelateGeometry::getDimension() const
-{
-    return geomDim;
-}
-
-/* public */
-bool
-RelateGeometry::hasDimension(int dim) const
-{
-    switch (dim) {
-        case Dimension::P: return hasPoints;
-        case Dimension::L: return hasLines;
-        case Dimension::A: return hasAreas;
-    }
-    return false;
-}
-
-
-/* public */
 int
 RelateGeometry::getDimensionReal() const
 {
@@ -209,6 +168,7 @@ RelateGeometry::getDimensionReal() const
         return Dimension::L;
     return Dimension::P;
 }
+
 
 /* public */
 bool

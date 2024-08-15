@@ -67,7 +67,9 @@ private:
 
     void initExteriorEmpty(bool geomNonEmpty);
 
-    RelateGeometry& getGeometry(bool isA) const;
+    inline RelateGeometry& getGeometry(bool isA) const {
+        return isA ? geomA : geomB;
+    };
 
     void updateDim(Location locA, Location locB, int dimension);
 
@@ -135,16 +137,16 @@ private:
 
 public:
 
-        TopologyComputer(
-            TopologyPredicate& p_predicate,
-            RelateGeometry& p_geomA,
-            RelateGeometry& p_geomB)
-            : predicate(p_predicate)
-            , geomA(p_geomA)
-            , geomB(p_geomB)
-            {
-                initExteriorDims();
-            };
+    TopologyComputer(
+        TopologyPredicate& p_predicate,
+        RelateGeometry& p_geomA,
+        RelateGeometry& p_geomB)
+        : predicate(p_predicate)
+        , geomA(p_geomA)
+        , geomB(p_geomB)
+        {
+            initExteriorDims();
+        };
 
     int getDimension(bool isA) const;
 

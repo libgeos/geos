@@ -97,6 +97,13 @@ private:
 
     static bool isZeroLength(const LineString* line);
 
+    bool isZeroLengthLine(const Geometry* g) const {
+        // avoid expensive zero-length calculation if not linear
+        if (getDimension() != Dimension::L)
+            return false;
+        return isZeroLength(g);
+    };
+
     RelatePointLocator* getLocator();
 
     Coordinate::ConstXYSet createUniquePoints();
@@ -141,15 +148,30 @@ public:
 
     static std::string name(bool isA);
 
-    const Geometry* getGeometry() const;
+    const Geometry* getGeometry() const {
+        return geom;
+    }
 
-    bool isPrepared() const;
+    bool isPrepared() const {
+        return m_isPrepared;
+    }
 
-    const Envelope* getEnvelope() const;
+    const Envelope* getEnvelope() const {
+        return geomEnv;
+    }
 
-    int getDimension() const;
+    inline int getDimension() const {
+        return geomDim;
+    }
 
-    bool hasDimension(int dim) const;
+    bool hasDimension(int dim) const {
+        switch (dim) {
+            case Dimension::P: return hasPoints;
+            case Dimension::L: return hasLines;
+            case Dimension::A: return hasAreas;
+        }
+        return false;
+    }
 
     /**
     * Gets the actual non-empty dimension of the geometry.
