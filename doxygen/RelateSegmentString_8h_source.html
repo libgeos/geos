@@ -159,22 +159,28 @@ $(function() {
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        <span class="keywordtype">bool</span> isA, <span class="keywordtype">int</span> elementId, <span class="keywordtype">int</span> ringId,</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* poly, <span class="keyword">const</span> RelateGeometry* parent);</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    <span class="keywordtype">bool</span> isA() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    <span class="keyword">const</span> RelateGeometry* getGeometry() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    <span class="keyword">inline</span> <span class="keywordtype">bool</span> isA()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;        <span class="keywordflow">return</span> m_isA;</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    }</div>
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160; </div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* getPolygonal() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160; </div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    NodeSection* createNodeSection(std::size_t segIndex, <span class="keyword">const</span> CoordinateXY intPt) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    <span class="keyword">inline</span> <span class="keyword">const</span> RelateGeometry* getGeometry()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;        <span class="keywordflow">return</span> m_inputGeom;</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    }</div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160; </div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;    <span class="keywordtype">bool</span> isContainingSegment(std::size_t segIndex, <span class="keyword">const</span> CoordinateXY* pt) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160; </div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;};</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160; </div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;} <span class="comment">// namespace geos.operation.relateng</span></div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;} <span class="comment">// namespace geos.operation</span></div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;} <span class="comment">// namespace geos</span></div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    <span class="keyword">inline</span> <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* getPolygonal()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;        <span class="keywordflow">return</span> m_parentPolygonal;</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;    }</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160; </div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;    NodeSection* createNodeSection(std::size_t segIndex, <span class="keyword">const</span> CoordinateXY intPt) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160; </div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    <span class="keywordtype">bool</span> isContainingSegment(std::size_t segIndex, <span class="keyword">const</span> CoordinateXY* pt) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160; </div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;};</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160; </div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;} <span class="comment">// namespace geos.operation.relateng</span></div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;} <span class="comment">// namespace geos.operation</span></div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;} <span class="comment">// namespace geos</span></div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160; </div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequence_html"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequence.html">geos::geom::CoordinateSequence</a></div><div class="ttdoc">The internal representation of a list of coordinates inside a Geometry.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:56</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Geometry_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Geometry.html">geos::geom::Geometry</a></div><div class="ttdoc">Basic implementation of Geometry, constructed and destructed by GeometryFactory.</div><div class="ttdef"><b>Definition:</b> Geometry.h:197</div></div>
 <div class="ttc" id="aclassgeos_1_1noding_1_1BasicSegmentString_html"><div class="ttname"><a href="classgeos_1_1noding_1_1BasicSegmentString.html">geos::noding::BasicSegmentString</a></div><div class="ttdoc">Represents a list of contiguous line segments, and supports noding the segments.</div><div class="ttdef"><b>Definition:</b> BasicSegmentString.h:44</div></div>
