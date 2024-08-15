@@ -46,8 +46,6 @@ NodeMap::NodeMap(const NodeFactory& newNodeFact)
 #endif
 }
 
-NodeMap::~NodeMap() = default;
-
 Node*
 NodeMap::addNode(const Coordinate& coord)
 {

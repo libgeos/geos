@@ -35,7 +35,7 @@ class Node;
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
-class GEOS_DLL NodeFactory {
+class GEOS_DLL NodeFactory /* non-final */ {
 public:
     virtual Node* createNode(const geom::Coordinate& coord) const;
     static const NodeFactory& instance();

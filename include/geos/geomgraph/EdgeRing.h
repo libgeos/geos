@@ -54,7 +54,7 @@ namespace geos {
 namespace geomgraph { // geos.geomgraph
 
 /** EdgeRing */
-class GEOS_DLL EdgeRing {
+class GEOS_DLL EdgeRing /* non-final */ {
 
 public:
     friend std::ostream& operator<< (std::ostream& os, const EdgeRing& er);

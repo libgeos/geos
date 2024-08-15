@@ -68,7 +68,7 @@ namespace geomgraph { // geos.geomgraph
 /** \brief
  * A GeometryGraph is a graph that models a given Geometry.
  */
-class GEOS_DLL GeometryGraph: public PlanarGraph {
+class GEOS_DLL GeometryGraph final: public PlanarGraph {
     using PlanarGraph::add;
     using PlanarGraph::findEdge;
 

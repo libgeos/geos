@@ -47,7 +47,7 @@ class NodeFactory;
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
-class GEOS_DLL NodeMap {
+class GEOS_DLL NodeMap final {
 public:
 
     typedef std::map<geom::Coordinate*, std::unique_ptr<Node>, geom::CoordinateLessThan> container;
@@ -64,8 +64,6 @@ public:
     /// NodeMap will keep a reference to the NodeFactory,
     /// keep it alive for the whole NodeMap lifetime
     NodeMap(const NodeFactory& newNodeFact);
-
-    virtual ~NodeMap();
 
     Node* addNode(const geom::Coordinate& coord);
 
