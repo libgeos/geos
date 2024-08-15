@@ -124,7 +124,7 @@ public:
                 : triList(p_triList)
                 {};
 
-            void visit(std::array<QuadEdge*, 3>& triEdges);
+            void visit(std::array<QuadEdge*, 3>& triEdges) override;
 
     }; // HullTriVisitor
 

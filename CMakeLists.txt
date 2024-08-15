@@ -313,6 +313,10 @@ target_compile_options(geos_developer_cxx_flags
     $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:-Wno-unknown-warning-option>
     )
 
+if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 9.2)
+  target_compile_options(geos_developer_cxx_flags INTERFACE -Wsuggest-override)
+endif()
+
 #-----------------------------------------------------------------------------
 # Define a coverage build
 #-----------------------------------------------------------------------------
