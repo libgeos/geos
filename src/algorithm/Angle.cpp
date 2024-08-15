@@ -194,6 +194,21 @@ Angle::normalizePositive(double angle)
     return angle;
 }
 
+static bool
+angleLEQ(double x, double y) {
+    return x <= y || (y == 0 && x <= Angle::PI_TIMES_2);
+}
+
+static bool
+angleGEQ(double x, double y) {
+    return x >= y || (x == 0 && Angle::PI_TIMES_2 >= y); // FIXME second part not needed?
+}
+
+bool
+Angle::isWithinCCW(double x, double a, double b) {
+    return angleGEQ(x, a) && angleLEQ(x, b);
+}
+
 /* public static */
 double
 Angle::diff(double ang1, double ang2)
