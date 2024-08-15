@@ -1631,13 +1631,13 @@ extern "C" {
     Geometry*
     GEOSGeom_transformXY_r(GEOSContextHandle_t handle, const GEOSGeometry* g, GEOSTransformXYCallback callback, void* userdata) {
 
-        struct TransformFilter : public geos::geom::CoordinateFilter {
+        struct TransformFilter final: public geos::geom::CoordinateFilter {
             TransformFilter(GEOSTransformXYCallback p_callback,
                             void* p_userdata) :
                             m_callback(p_callback),
                             m_userdata(p_userdata) {}
 
-            void filter_rw(CoordinateXY* c) const final {
+            void filter_rw(CoordinateXY* c) const override {
                 if (!m_callback(&(c->x), &(c->y), m_userdata)) {
                     throw std::runtime_error(std::string("Failed to transform coordinates."));
                 }

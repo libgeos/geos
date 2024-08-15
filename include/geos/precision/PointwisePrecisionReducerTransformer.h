@@ -63,7 +63,7 @@ protected:
 
     std::unique_ptr<geom::CoordinateSequence> transformCoordinates(
         const geom::CoordinateSequence* coords,
-        const geom::Geometry* parent);
+        const geom::Geometry* parent) override;
 
 
 };

@@ -27,14 +27,14 @@ namespace geos {      // geos
 namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
 
-struct PointExtractingFilter: public GeometryComponentFilter {
+struct PointExtractingFilter final: public GeometryComponentFilter {
 
     PointExtractingFilter(std::map<CoordinateXY, std::unique_ptr<Point>>& p_ptMap, const PrecisionModel* p_pm)
         : ptMap(p_ptMap), pm(p_pm)
     {}
 
     void
-    filter_ro(const Geometry* geom)
+    filter_ro(const Geometry* geom) override
     {
         if (geom->getGeometryTypeId() != GEOS_POINT) return;
 

@@ -189,8 +189,8 @@ public:
       :m_thousands_sep(p_thousands_sep),
        m_grouping(p_grouping){}
 protected:
-   char do_thousands_sep() const {return m_thousands_sep;}
-   std::string do_grouping() const {return m_grouping;}
+   char do_thousands_sep() const override {return m_thousands_sep;}
+   std::string do_grouping() const override {return m_grouping;}
 private:
    char m_thousands_sep;
    std::string m_grouping;
