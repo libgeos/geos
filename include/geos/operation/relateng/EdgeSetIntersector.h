@@ -59,7 +59,7 @@ private:
     // HPRtree index = new HPRtree();
     const Envelope* envelope = nullptr;
     std::deque<MonotoneChain> monoChains;
-    int idCounter = 0;
+    std::size_t overlapCounter = 0;
 
 
     // Methods
@@ -76,7 +76,6 @@ public:
         std::vector<const SegmentString*>& edgesB,
         const Envelope* env)
         : envelope(env)
-        , idCounter(0)
         {
             addEdges(edgesA);
             addEdges(edgesB);
