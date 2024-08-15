@@ -137,59 +137,54 @@ $(function() {
 <div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;        <span class="keywordflow">return</span> context;</div>
 <div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    }</div>
 <div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160; </div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    <span class="keywordtype">void</span> setId(<span class="keywordtype">int</span> p_id) { <span class="keywordtype">id</span> = p_id; }</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;    <span class="keywordtype">int</span> getId()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> id; }</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160; </div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160; </div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    <span class="keywordtype">void</span> computeSelect(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Envelope.html">geom::Envelope</a>&amp; searchEnv,</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;                       std::size_t start0,</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;                       std::size_t end0,</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;                       MonotoneChainSelectAction&amp; mcs) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160; </div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;    <span class="keywordtype">void</span> computeOverlaps(std::size_t start0, std::size_t end0, <span class="keyword">const</span> MonotoneChain&amp; mc,</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;                         std::size_t start1, std::size_t end1,</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;                         <span class="keywordtype">double</span> overlapTolerance,</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;                         MonotoneChainOverlapAction&amp; mco) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160; </div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;    <span class="keywordtype">bool</span> overlaps(std::size_t start0, std::size_t end0,</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;                  <span class="keyword">const</span> MonotoneChain&amp; mc, std::size_t start1, std::size_t end1,</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;                  <span class="keywordtype">double</span> overlapTolerance)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;        <span class="keywordflow">if</span> (overlapTolerance &gt; 0.0) {</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;            <span class="keywordflow">return</span> overlaps(pts-&gt;getAt&lt;geom::CoordinateXY&gt;(start0),</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;                            pts-&gt;getAt&lt;geom::CoordinateXY&gt;(end0),</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;                            mc.pts-&gt;getAt&lt;geom::CoordinateXY&gt;(start1),</div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;                            mc.pts-&gt;getAt&lt;geom::CoordinateXY&gt;(end1),</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;                            overlapTolerance);</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        }</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classgeos_1_1geom_1_1Envelope.html#a5fefca7e6206bb75a7ce4ebf9c3398e5">geom::Envelope::intersects</a>(pts-&gt;getAt&lt;geom::CoordinateXY&gt;(start0),</div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;                                          pts-&gt;getAt&lt;geom::CoordinateXY&gt;(end0),</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;                                          mc.pts-&gt;getAt&lt;geom::CoordinateXY&gt;(start1),</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;                                          mc.pts-&gt;getAt&lt;geom::CoordinateXY&gt;(end1));</div>
-<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;    }</div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160; </div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> overlaps(<span class="keyword">const</span> geom::CoordinateXY&amp; p1, <span class="keyword">const</span> geom::CoordinateXY&amp; p2,</div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;                  <span class="keyword">const</span> geom::CoordinateXY&amp; q1, <span class="keyword">const</span> geom::CoordinateXY&amp; q2,</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;                  <span class="keywordtype">double</span> overlapTolerance);</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160; </div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;    <span class="keywordtype">void</span> computeSelect(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Envelope.html">geom::Envelope</a>&amp; searchEnv,</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;                       std::size_t start0,</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;                       std::size_t end0,</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;                       <a class="code" href="classgeos_1_1index_1_1chain_1_1MonotoneChainSelectAction.html">MonotoneChainSelectAction</a>&amp; mcs) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160; </div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;    <span class="keywordtype">void</span> computeOverlaps(std::size_t start0, std::size_t end0, <span class="keyword">const</span> <a class="code" href="classgeos_1_1index_1_1chain_1_1MonotoneChain.html">MonotoneChain</a>&amp; mc,</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;                         std::size_t start1, std::size_t end1,</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;                         <span class="keywordtype">double</span> overlapTolerance,</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;                         <a class="code" href="classgeos_1_1index_1_1chain_1_1MonotoneChainOverlapAction.html">MonotoneChainOverlapAction</a>&amp; mco) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160; </div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;    <span class="keywordtype">bool</span> overlaps(std::size_t start0, std::size_t end0,</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;                  <span class="keyword">const</span> <a class="code" href="classgeos_1_1index_1_1chain_1_1MonotoneChain.html">MonotoneChain</a>&amp; mc, std::size_t start1, std::size_t end1,</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;                  <span class="keywordtype">double</span> overlapTolerance)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;        <span class="keywordflow">if</span> (overlapTolerance &gt; 0.0) {</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;            <span class="keywordflow">return</span> overlaps(pts-&gt;getAt&lt;geom::CoordinateXY&gt;(start0),</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;                            pts-&gt;getAt&lt;geom::CoordinateXY&gt;(end0),</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;                            mc.pts-&gt;<a class="code" href="group__access.html#gac8256373579d4568e0920a69969c1296">getAt</a>&lt;geom::CoordinateXY&gt;(start1),</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;                            mc.pts-&gt;<a class="code" href="group__access.html#gac8256373579d4568e0920a69969c1296">getAt</a>&lt;geom::CoordinateXY&gt;(end1),</div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;                            overlapTolerance);</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;        }</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="classgeos_1_1geom_1_1Envelope.html#a5fefca7e6206bb75a7ce4ebf9c3398e5">geom::Envelope::intersects</a>(pts-&gt;getAt&lt;geom::CoordinateXY&gt;(start0),</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;                                          pts-&gt;getAt&lt;geom::CoordinateXY&gt;(end0),</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;                                          mc.pts-&gt;<a class="code" href="group__access.html#gac8256373579d4568e0920a69969c1296">getAt</a>&lt;geom::CoordinateXY&gt;(start1),</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;                                          mc.pts-&gt;<a class="code" href="group__access.html#gac8256373579d4568e0920a69969c1296">getAt</a>&lt;geom::CoordinateXY&gt;(end1));</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;    }</div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160; </div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> overlaps(<span class="keyword">const</span> geom::CoordinateXY&amp; p1, <span class="keyword">const</span> geom::CoordinateXY&amp; p2,</div>
+<div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160;                  <span class="keyword">const</span> geom::CoordinateXY&amp; q1, <span class="keyword">const</span> geom::CoordinateXY&amp; q2,</div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;                  <span class="keywordtype">double</span> overlapTolerance);</div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160; </div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a>* pts;</div>
 <div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160; </div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;    <span class="keyword">const</span> geom::CoordinateSequence* pts;</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;    <span class="keywordtype">void</span>* context;</div>
 <div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160; </div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;    <span class="keywordtype">void</span>* context;</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;    std::size_t start;</div>
 <div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160; </div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;    std::size_t start;</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;    std::size_t end;</div>
 <div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160; </div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;    std::size_t end;</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;    <span class="keyword">mutable</span> <a class="code" href="classgeos_1_1geom_1_1Envelope.html">geom::Envelope</a> env;</div>
 <div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160; </div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;    <span class="keyword">mutable</span> geom::Envelope env;</div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160; </div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;    <span class="keywordtype">int</span> <span class="keywordtype">id</span> = 0;</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;};</div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160; </div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;} <span class="comment">// namespace geos::index::chain</span></div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;} <span class="comment">// namespace geos::index</span></div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;} <span class="comment">// namespace geos</span></div>
 <div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160; </div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;};</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160; </div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;} <span class="comment">// namespace geos::index::chain</span></div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;} <span class="comment">// namespace geos::index</span></div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;} <span class="comment">// namespace geos</span></div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160; </div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequence_html"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequence.html">geos::geom::CoordinateSequence</a></div><div class="ttdoc">The internal representation of a list of coordinates inside a Geometry.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:56</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Envelope_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Envelope.html">geos::geom::Envelope</a></div><div class="ttdoc">An Envelope defines a rectangulare region of the 2D coordinate plane.</div><div class="ttdef"><b>Definition:</b> Envelope.h:59</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Envelope_html_a5fefca7e6206bb75a7ce4ebf9c3398e5"><div class="ttname"><a href="classgeos_1_1geom_1_1Envelope.html#a5fefca7e6206bb75a7ce4ebf9c3398e5">geos::geom::Envelope::intersects</a></div><div class="ttdeci">static bool intersects(const CoordinateXY &amp;p1, const CoordinateXY &amp;p2, const CoordinateXY &amp;q)</div><div class="ttdoc">Test the point q to see whether it intersects the Envelope defined by p1-p2.</div></div>
@@ -203,6 +198,7 @@ $(function() {
 <div class="ttc" id="aclassgeos_1_1index_1_1chain_1_1MonotoneChain_html_a4b5e416f54a5a8ef3e5637f4aff24537"><div class="ttname"><a href="classgeos_1_1index_1_1chain_1_1MonotoneChain.html#a4b5e416f54a5a8ef3e5637f4aff24537">geos::index::chain::MonotoneChain::getLineSegment</a></div><div class="ttdeci">void getLineSegment(std::size_t index, geom::LineSegment &amp;ls) const</div><div class="ttdoc">Set given LineSegment with points of the segment starting at the given index.</div><div class="ttdef"><b>Definition:</b> index/chain/MonotoneChain.h:123</div></div>
 <div class="ttc" id="aclassgeos_1_1index_1_1chain_1_1MonotoneChain_html_a5902345293945b3530cdac2651d62086"><div class="ttname"><a href="classgeos_1_1index_1_1chain_1_1MonotoneChain.html#a5902345293945b3530cdac2651d62086">geos::index::chain::MonotoneChain::getCoordinates</a></div><div class="ttdeci">std::unique_ptr&lt; geom::CoordinateSequence &gt; getCoordinates() const</div></div>
 <div class="ttc" id="aclassgeos_1_1index_1_1chain_1_1MonotoneChain_html_a8a82cffd2b96d79e6e53e097217bc5a3"><div class="ttname"><a href="classgeos_1_1index_1_1chain_1_1MonotoneChain.html#a8a82cffd2b96d79e6e53e097217bc5a3">geos::index::chain::MonotoneChain::select</a></div><div class="ttdeci">void select(const geom::Envelope &amp;searchEnv, MonotoneChainSelectAction &amp;mcs) const</div></div>
+<div class="ttc" id="agroup__access_html_gac8256373579d4568e0920a69969c1296"><div class="ttname"><a href="group__access.html#gac8256373579d4568e0920a69969c1296">geos::geom::CoordinateSequence::getAt</a></div><div class="ttdeci">const T &amp; getAt(std::size_t i) const</div><div class="ttdoc">Returns a read-only reference to Coordinate at position i.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:249</div></div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:25</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
