@@ -82,9 +82,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a3289ee45a5385d4e754eda9b6bb70c2e"><td class="memItemLeft" align="right" valign="top"><a id="a3289ee45a5385d4e754eda9b6bb70c2e"></a>
 static <a class="el" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8">geom::Location</a>&#160;</td><td class="memItemRight" valign="bottom"><b>locate</b> (const geom::CoordinateXY &amp;p, const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *geom)</td></tr>
 <tr class="separator:a3289ee45a5385d4e754eda9b6bb70c2e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abbd395cfb1da883ae89b5376e4f1879e"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8">geom::Location</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1locate_1_1SimplePointInAreaLocator.html#abbd395cfb1da883ae89b5376e4f1879e">locatePointInPolygon</a> (const geom::CoordinateXY &amp;p, const <a class="el" href="classgeos_1_1geom_1_1Polygon.html">geom::Polygon</a> *poly)</td></tr>
-<tr class="memdesc:abbd395cfb1da883ae89b5376e4f1879e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines the Location of a point in a <a class="el" href="classgeos_1_1geom_1_1Polygon.html">Polygon</a>.  <a href="classgeos_1_1algorithm_1_1locate_1_1SimplePointInAreaLocator.html#abbd395cfb1da883ae89b5376e4f1879e">More...</a><br /></td></tr>
-<tr class="separator:abbd395cfb1da883ae89b5376e4f1879e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a347e2de0a7dc3955057f10c5fd2a0342"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8">geom::Location</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1locate_1_1SimplePointInAreaLocator.html#a347e2de0a7dc3955057f10c5fd2a0342">locatePointInSurface</a> (const geom::CoordinateXY &amp;p, const <a class="el" href="classgeos_1_1geom_1_1Surface.html">geom::Surface</a> &amp;poly)</td></tr>
+<tr class="memdesc:a347e2de0a7dc3955057f10c5fd2a0342"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines the Location of a point in a <a class="el" href="classgeos_1_1geom_1_1Surface.html">Surface</a>.  <a href="classgeos_1_1algorithm_1_1locate_1_1SimplePointInAreaLocator.html#a347e2de0a7dc3955057f10c5fd2a0342">More...</a><br /></td></tr>
+<tr class="separator:a347e2de0a7dc3955057f10c5fd2a0342"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a155981bf770bf9fed1640d1074e51a72"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1locate_1_1SimplePointInAreaLocator.html#a155981bf770bf9fed1640d1074e51a72">isContained</a> (const geom::CoordinateXY &amp;p, const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *geom)</td></tr>
 <tr class="memdesc:a155981bf770bf9fed1640d1074e51a72"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines whether a point is contained in a <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>, or lies on its boundary.  <a href="classgeos_1_1algorithm_1_1locate_1_1SimplePointInAreaLocator.html#a155981bf770bf9fed1640d1074e51a72">More...</a><br /></td></tr>
 <tr class="separator:a155981bf770bf9fed1640d1074e51a72"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -178,8 +178,8 @@ static <a class="el" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5
 
 </div>
 </div>
-<a id="abbd395cfb1da883ae89b5376e4f1879e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abbd395cfb1da883ae89b5376e4f1879e">&#9670;&nbsp;</a></span>locatePointInPolygon()</h2>
+<a id="a347e2de0a7dc3955057f10c5fd2a0342"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a347e2de0a7dc3955057f10c5fd2a0342">&#9670;&nbsp;</a></span>locatePointInSurface()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -188,7 +188,7 @@ static <a class="el" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static <a class="el" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8">geom::Location</a> geos::algorithm::locate::SimplePointInAreaLocator::locatePointInPolygon </td>
+          <td class="memname">static <a class="el" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8">geom::Location</a> geos::algorithm::locate::SimplePointInAreaLocator::locatePointInSurface </td>
           <td>(</td>
           <td class="paramtype">const geom::CoordinateXY &amp;&#160;</td>
           <td class="paramname"><em>p</em>, </td>
@@ -196,7 +196,7 @@ static <a class="el" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Polygon.html">geom::Polygon</a> *&#160;</td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Surface.html">geom::Surface</a> &amp;&#160;</td>
           <td class="paramname"><em>poly</em>&#160;</td>
         </tr>
         <tr>
@@ -212,7 +212,7 @@ static <a class="el" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5
 </table>
 </div><div class="memdoc">
 
-<p>Determines the Location of a point in a <a class="el" href="classgeos_1_1geom_1_1Polygon.html">Polygon</a>. </p>
+<p>Determines the Location of a point in a <a class="el" href="classgeos_1_1geom_1_1Surface.html">Surface</a>. </p>
 <p>The return value is one of:</p>
 <ul>
 <li><a class="el" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8aff6036f8ea763cda3177ef14f633e396">geom::Location::INTERIOR</a> if the point is in the geometry interior</li>

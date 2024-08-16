@@ -71,73 +71,92 @@ $(function() {
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &lt;geos/export.h&gt;</span></div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &lt;geos/geom/Location.h&gt;</span></div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="comment">// forward declarations</span></div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">namespace </span>geom {</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">class </span>Coordinate;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">class </span>CoordinateXY;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">class </span>CoordinateSequence;</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;}</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;}</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">namespace </span>algorithm {</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#include &lt;array&gt;</span></div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="comment">// forward declarations</span></div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">namespace </span>geom {</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">class </span>Coordinate;</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">class </span>CoordinateXY;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">class </span>CoordinateSequence;</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keyword">class </span>CircularArc;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">class </span>Curve;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;}</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;}</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
-<div class="line"><a name="l00065"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html">   65</a></span>&#160;<span class="keyword">class </span>GEOS_DLL <a class="code" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html">RayCrossingCounter</a> {</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keyword">const</span> geom::CoordinateXY&amp; point;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    std::size_t crossingCount;</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    <span class="comment">// true if the test point lies on an input segment</span></div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keywordtype">bool</span> isPointOnSegment;</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="keyword">namespace </span>algorithm {</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
+<div class="line"><a name="l00068"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html">   68</a></span>&#160;<span class="keyword">class </span>GEOS_DLL <a class="code" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html">RayCrossingCounter</a> {</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keyword">const</span> geom::CoordinateXY&amp; point;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    std::size_t crossingCount;</div>
 <div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="comment">// Declare type as noncopyable</span></div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <a class="code" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html">RayCrossingCounter</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html">RayCrossingCounter</a>&amp; other) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    <a class="code" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html">RayCrossingCounter</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html">RayCrossingCounter</a>&amp; rhs) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00088"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#a427f3b77ccb6407ec2288ed615d46599">   88</a></span>&#160;    <span class="keyword">static</span> <a class="code" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8">geom::Location</a> <a class="code" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#a427f3b77ccb6407ec2288ed615d46599">locatePointInRing</a>(<span class="keyword">const</span> geom::CoordinateXY&amp; p,</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;                                 <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a>&amp; ring);</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
-<div class="line"><a name="l00092"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#a6ff204df3f031c4dcc3c0252ae761399">   92</a></span>&#160;    <span class="keyword">static</span> <a class="code" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8">geom::Location</a> <a class="code" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#a6ff204df3f031c4dcc3c0252ae761399">locatePointInRing</a>(<span class="keyword">const</span> geom::CoordinateXY&amp; p,</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;                                 <span class="keyword">const</span> std::vector&lt;const geom::Coordinate*&gt;&amp; ring);</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <a class="code" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html">RayCrossingCounter</a>(<span class="keyword">const</span> geom::CoordinateXY&amp; p_point)</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        : point(p_point),</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;          crossingCount(0),</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;          isPointOnSegment(false)</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    { }</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="comment">// true if the test point lies on an input segment</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keywordtype">bool</span> isPointOnSegment;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    <span class="comment">// Declare type as noncopyable</span></div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;    <a class="code" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html">RayCrossingCounter</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html">RayCrossingCounter</a>&amp; other) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;    <a class="code" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html">RayCrossingCounter</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html">RayCrossingCounter</a>&amp; rhs) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00091"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#a427f3b77ccb6407ec2288ed615d46599">   91</a></span>&#160;    <span class="keyword">static</span> <a class="code" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8">geom::Location</a> <a class="code" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#a427f3b77ccb6407ec2288ed615d46599">locatePointInRing</a>(<span class="keyword">const</span> geom::CoordinateXY&amp; p,</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;                                 <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a>&amp; ring);</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
+<div class="line"><a name="l00095"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#a6ff204df3f031c4dcc3c0252ae761399">   95</a></span>&#160;    <span class="keyword">static</span> <a class="code" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8">geom::Location</a> <a class="code" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#a6ff204df3f031c4dcc3c0252ae761399">locatePointInRing</a>(<span class="keyword">const</span> geom::CoordinateXY&amp; p,</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;                                 <span class="keyword">const</span> std::vector&lt;const geom::Coordinate*&gt;&amp; ring);</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <span class="keyword">static</span> <a class="code" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8">geom::Location</a> locatePointInRing(<span class="keyword">const</span> geom::CoordinateXY&amp; p,</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;                                 <span class="keyword">const</span> geom::Curve&amp; ring);</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
-<div class="line"><a name="l00107"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#a12d48e1997ec9b57c12b07a358afa414">  107</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#a12d48e1997ec9b57c12b07a358afa414">countSegment</a>(<span class="keyword">const</span> geom::CoordinateXY&amp; p1,</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;                      <span class="keyword">const</span> geom::CoordinateXY&amp; p2);</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="keywordtype">bool</span></div>
-<div class="line"><a name="l00120"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#ab849f1d8d9a478620dcffec66a2c919c">  120</a></span>&#160;    <a class="code" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#ab849f1d8d9a478620dcffec66a2c919c">isOnSegment</a>()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;        <span class="keywordflow">return</span> isPointOnSegment;</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;    }</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <a class="code" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html">RayCrossingCounter</a>(<span class="keyword">const</span> geom::CoordinateXY&amp; p_point)</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        : point(p_point),</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;          crossingCount(0),</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;          isPointOnSegment(false)</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    { }</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
+<div class="line"><a name="l00113"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#a12d48e1997ec9b57c12b07a358afa414">  113</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#a12d48e1997ec9b57c12b07a358afa414">countSegment</a>(<span class="keyword">const</span> geom::CoordinateXY&amp; p1,</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;                      <span class="keyword">const</span> geom::CoordinateXY&amp; p2);</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    <span class="keywordtype">void</span> countArc(<span class="keyword">const</span> geom::CoordinateXY&amp; p1,</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;                  <span class="keyword">const</span> geom::CoordinateXY&amp; p2,</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;                  <span class="keyword">const</span> geom::CoordinateXY&amp; p3);</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
+<div class="line"><a name="l00123"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#ac8261426a3ffb80dfa835569aef8d505">  123</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#ac8261426a3ffb80dfa835569aef8d505">processSequence</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a>&amp; seq, <span class="keywordtype">bool</span> isLinear);</div>
 <div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160; </div>
-<div class="line"><a name="l00135"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#a5795b002e00ac37de071c0e04ef48ce1">  135</a></span>&#160;    <a class="code" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8">geom::Location</a> <a class="code" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#a5795b002e00ac37de071c0e04ef48ce1">getLocation</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160; </div>
-<div class="line"><a name="l00146"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#a96b7d66d7a64f55959106772cffaef75">  146</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#a96b7d66d7a64f55959106772cffaef75">isPointInPolygon</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160; </div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;    std::size_t getCount()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> crossingCount; };</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160; </div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;};</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;    <span class="keywordtype">bool</span></div>
+<div class="line"><a name="l00135"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#ab849f1d8d9a478620dcffec66a2c919c">  135</a></span>&#160;    <a class="code" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#ab849f1d8d9a478620dcffec66a2c919c">isOnSegment</a>()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;        <span class="keywordflow">return</span> isPointOnSegment;</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;    }</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160; </div>
+<div class="line"><a name="l00150"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#a5795b002e00ac37de071c0e04ef48ce1">  150</a></span>&#160;    <a class="code" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8">geom::Location</a> <a class="code" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#a5795b002e00ac37de071c0e04ef48ce1">getLocation</a>() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160; </div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;} <span class="comment">// geos::algorithm</span></div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;} <span class="comment">// geos</span></div>
-<div class="ttc" id="aclassgeos_1_1algorithm_1_1RayCrossingCounter_html"><div class="ttname"><a href="classgeos_1_1algorithm_1_1RayCrossingCounter.html">geos::algorithm::RayCrossingCounter</a></div><div class="ttdoc">Counts the number of segments crossed by a horizontal ray extending to the right from a given point,...</div><div class="ttdef"><b>Definition:</b> RayCrossingCounter.h:65</div></div>
+<div class="line"><a name="l00161"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#a96b7d66d7a64f55959106772cffaef75">  161</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#a96b7d66d7a64f55959106772cffaef75">isPointInPolygon</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160; </div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;    std::size_t getCount()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> crossingCount; };</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160; </div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> shouldCountCrossing(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CircularArc.html">geom::CircularArc</a>&amp; arc, <span class="keyword">const</span> geom::CoordinateXY&amp; q);</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160; </div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;    <span class="keyword">static</span> std::array&lt;geom::CoordinateXY, 2&gt;</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;    pointsIntersectingHorizontalRay(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CircularArc.html">geom::CircularArc</a>&amp; arc, <span class="keyword">const</span> geom::CoordinateXY&amp; origin);</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160; </div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;};</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160; </div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;} <span class="comment">// geos::algorithm</span></div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;} <span class="comment">// geos</span></div>
+<div class="ttc" id="aclassgeos_1_1algorithm_1_1RayCrossingCounter_html"><div class="ttname"><a href="classgeos_1_1algorithm_1_1RayCrossingCounter.html">geos::algorithm::RayCrossingCounter</a></div><div class="ttdoc">Counts the number of segments crossed by a horizontal ray extending to the right from a given point,...</div><div class="ttdef"><b>Definition:</b> RayCrossingCounter.h:68</div></div>
 <div class="ttc" id="aclassgeos_1_1algorithm_1_1RayCrossingCounter_html_a12d48e1997ec9b57c12b07a358afa414"><div class="ttname"><a href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#a12d48e1997ec9b57c12b07a358afa414">geos::algorithm::RayCrossingCounter::countSegment</a></div><div class="ttdeci">void countSegment(const geom::CoordinateXY &amp;p1, const geom::CoordinateXY &amp;p2)</div><div class="ttdoc">Counts a segment.</div></div>
 <div class="ttc" id="aclassgeos_1_1algorithm_1_1RayCrossingCounter_html_a427f3b77ccb6407ec2288ed615d46599"><div class="ttname"><a href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#a427f3b77ccb6407ec2288ed615d46599">geos::algorithm::RayCrossingCounter::locatePointInRing</a></div><div class="ttdeci">static geom::Location locatePointInRing(const geom::CoordinateXY &amp;p, const geom::CoordinateSequence &amp;ring)</div><div class="ttdoc">Determines the Location of a point in a ring.</div></div>
 <div class="ttc" id="aclassgeos_1_1algorithm_1_1RayCrossingCounter_html_a5795b002e00ac37de071c0e04ef48ce1"><div class="ttname"><a href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#a5795b002e00ac37de071c0e04ef48ce1">geos::algorithm::RayCrossingCounter::getLocation</a></div><div class="ttdeci">geom::Location getLocation() const</div><div class="ttdoc">Gets the Location of the point relative to the ring, polygon or multipolygon from which the processed...</div></div>
 <div class="ttc" id="aclassgeos_1_1algorithm_1_1RayCrossingCounter_html_a6ff204df3f031c4dcc3c0252ae761399"><div class="ttname"><a href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#a6ff204df3f031c4dcc3c0252ae761399">geos::algorithm::RayCrossingCounter::locatePointInRing</a></div><div class="ttdeci">static geom::Location locatePointInRing(const geom::CoordinateXY &amp;p, const std::vector&lt; const geom::Coordinate * &gt; &amp;ring)</div><div class="ttdoc">Semantically equal to the above, just different args encoding.</div></div>
 <div class="ttc" id="aclassgeos_1_1algorithm_1_1RayCrossingCounter_html_a96b7d66d7a64f55959106772cffaef75"><div class="ttname"><a href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#a96b7d66d7a64f55959106772cffaef75">geos::algorithm::RayCrossingCounter::isPointInPolygon</a></div><div class="ttdeci">bool isPointInPolygon() const</div><div class="ttdoc">Tests whether the point lies in or on the ring, polygon or multipolygon from which the processed segm...</div></div>
-<div class="ttc" id="aclassgeos_1_1algorithm_1_1RayCrossingCounter_html_ab849f1d8d9a478620dcffec66a2c919c"><div class="ttname"><a href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#ab849f1d8d9a478620dcffec66a2c919c">geos::algorithm::RayCrossingCounter::isOnSegment</a></div><div class="ttdeci">bool isOnSegment() const</div><div class="ttdoc">Reports whether the point lies exactly on one of the supplied segments.</div><div class="ttdef"><b>Definition:</b> RayCrossingCounter.h:120</div></div>
+<div class="ttc" id="aclassgeos_1_1algorithm_1_1RayCrossingCounter_html_ab849f1d8d9a478620dcffec66a2c919c"><div class="ttname"><a href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#ab849f1d8d9a478620dcffec66a2c919c">geos::algorithm::RayCrossingCounter::isOnSegment</a></div><div class="ttdeci">bool isOnSegment() const</div><div class="ttdoc">Reports whether the point lies exactly on one of the supplied segments.</div><div class="ttdef"><b>Definition:</b> RayCrossingCounter.h:135</div></div>
+<div class="ttc" id="aclassgeos_1_1algorithm_1_1RayCrossingCounter_html_ac8261426a3ffb80dfa835569aef8d505"><div class="ttname"><a href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#ac8261426a3ffb80dfa835569aef8d505">geos::algorithm::RayCrossingCounter::processSequence</a></div><div class="ttdeci">void processSequence(const geom::CoordinateSequence &amp;seq, bool isLinear)</div><div class="ttdoc">Counts all segments or arcs in the sequence.</div></div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1CircularArc_html"><div class="ttname"><a href="classgeos_1_1geom_1_1CircularArc.html">geos::geom::CircularArc</a></div><div class="ttdef"><b>Definition:</b> CircularArc.h:29</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequence_html"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequence.html">geos::geom::CoordinateSequence</a></div><div class="ttdoc">The internal representation of a list of coordinates inside a Geometry.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:56</div></div>
 <div class="ttc" id="anamespacegeos_1_1geom_html_ae55a225cd843a6b153a7b6ca5a4707c8"><div class="ttname"><a href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8">geos::geom::Location</a></div><div class="ttdeci">Location</div><div class="ttdoc">Constants representing the location of a point relative to a geometry.</div><div class="ttdef"><b>Definition:</b> Location.h:32</div></div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:25</div></div>

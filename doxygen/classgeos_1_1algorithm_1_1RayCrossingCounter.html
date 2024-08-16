@@ -65,6 +65,13 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a12d48e1997ec9b57c12b07a358afa414"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#a12d48e1997ec9b57c12b07a358afa414">countSegment</a> (const geom::CoordinateXY &amp;p1, const geom::CoordinateXY &amp;p2)</td></tr>
 <tr class="memdesc:a12d48e1997ec9b57c12b07a358afa414"><td class="mdescLeft">&#160;</td><td class="mdescRight">Counts a segment.  <a href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#a12d48e1997ec9b57c12b07a358afa414">More...</a><br /></td></tr>
 <tr class="separator:a12d48e1997ec9b57c12b07a358afa414"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4417f42f84c19217cc4c6e8ecdb2eb2d"><td class="memItemLeft" align="right" valign="top"><a id="a4417f42f84c19217cc4c6e8ecdb2eb2d"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>countArc</b> (const geom::CoordinateXY &amp;p1, const geom::CoordinateXY &amp;p2, const geom::CoordinateXY &amp;p3)</td></tr>
+<tr class="separator:a4417f42f84c19217cc4c6e8ecdb2eb2d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac8261426a3ffb80dfa835569aef8d505"><td class="memItemLeft" align="right" valign="top"><a id="ac8261426a3ffb80dfa835569aef8d505"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#ac8261426a3ffb80dfa835569aef8d505">processSequence</a> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> &amp;seq, bool isLinear)</td></tr>
+<tr class="memdesc:ac8261426a3ffb80dfa835569aef8d505"><td class="mdescLeft">&#160;</td><td class="mdescRight">Counts all segments or arcs in the sequence. <br /></td></tr>
+<tr class="separator:ac8261426a3ffb80dfa835569aef8d505"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab849f1d8d9a478620dcffec66a2c919c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#ab849f1d8d9a478620dcffec66a2c919c">isOnSegment</a> () const</td></tr>
 <tr class="memdesc:ab849f1d8d9a478620dcffec66a2c919c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reports whether the point lies exactly on one of the supplied segments.  <a href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#ab849f1d8d9a478620dcffec66a2c919c">More...</a><br /></td></tr>
 <tr class="separator:ab849f1d8d9a478620dcffec66a2c919c"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -87,6 +94,15 @@ Static Public Member Functions</h2></td></tr>
 static <a class="el" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8">geom::Location</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1RayCrossingCounter.html#a6ff204df3f031c4dcc3c0252ae761399">locatePointInRing</a> (const geom::CoordinateXY &amp;p, const std::vector&lt; const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> * &gt; &amp;ring)</td></tr>
 <tr class="memdesc:a6ff204df3f031c4dcc3c0252ae761399"><td class="mdescLeft">&#160;</td><td class="mdescRight">Semantically equal to the above, just different args encoding. <br /></td></tr>
 <tr class="separator:a6ff204df3f031c4dcc3c0252ae761399"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2ae9a086c60fa26f901dcf2463f46cc3"><td class="memItemLeft" align="right" valign="top"><a id="a2ae9a086c60fa26f901dcf2463f46cc3"></a>
+static <a class="el" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8">geom::Location</a>&#160;</td><td class="memItemRight" valign="bottom"><b>locatePointInRing</b> (const geom::CoordinateXY &amp;p, const geom::Curve &amp;ring)</td></tr>
+<tr class="separator:a2ae9a086c60fa26f901dcf2463f46cc3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a59aa2eb3988d00881e7886329dd8c7b7"><td class="memItemLeft" align="right" valign="top"><a id="a59aa2eb3988d00881e7886329dd8c7b7"></a>
+static bool&#160;</td><td class="memItemRight" valign="bottom"><b>shouldCountCrossing</b> (const <a class="el" href="classgeos_1_1geom_1_1CircularArc.html">geom::CircularArc</a> &amp;arc, const geom::CoordinateXY &amp;q)</td></tr>
+<tr class="separator:a59aa2eb3988d00881e7886329dd8c7b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a416e5a8c946d4bf6033fff78712d91cc"><td class="memItemLeft" align="right" valign="top"><a id="a416e5a8c946d4bf6033fff78712d91cc"></a>
+static std::array&lt; geom::CoordinateXY, 2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>pointsIntersectingHorizontalRay</b> (const <a class="el" href="classgeos_1_1geom_1_1CircularArc.html">geom::CircularArc</a> &amp;arc, const geom::CoordinateXY &amp;origin)</td></tr>
+<tr class="separator:a416e5a8c946d4bf6033fff78712d91cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Counts the number of segments crossed by a horizontal ray extending to the right from a given point, in an incremental fashion. </p>
