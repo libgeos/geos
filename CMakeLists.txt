@@ -132,7 +132,7 @@ include(CMakeDependentOption)
 
 ## CMake global variables
 option(BUILD_SHARED_LIBS "Build GEOS with shared libraries" ON)
-set(CMAKE_CXX_STANDARD 14 CACHE STRING "C++ standard version to use (default is 14)")
+set(CMAKE_CXX_STANDARD 17 CACHE STRING "C++ standard version to use (minimum requirement is c++17)")
 
 ## GEOS custom variables
 option(BUILD_BENCHMARKS "Build GEOS benchmarks" OFF)
@@ -214,7 +214,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # Target geos_cxx_flags: common compilation flags
 #-----------------------------------------------------------------------------
 add_library(geos_cxx_flags INTERFACE)
-target_compile_features(geos_cxx_flags INTERFACE cxx_std_11)
+target_compile_features(geos_cxx_flags INTERFACE cxx_std_17)
 
 #-----------------------------------------------------------------------------
 # Add flags to prevent 'fused multiply-add' operations on targets (ARM64)
