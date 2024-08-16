@@ -1,1 +1,7 @@
 _build/
+capi_read
+capi_prepared
+capi_strtree
+capi_read_ts
+cpp_strtree
+cpp_read
