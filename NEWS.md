@@ -1,5 +1,5 @@
 ## Changes in 3.13.0
-20xx-xx-xx
+2024-08-xx
 
 - New things:
   - Add Angle::sinCosSnap to avoid small errors, e.g. with buffer operations (GH-978, Mike Taves)
@@ -7,7 +7,7 @@
     MultiSurface (GH-1046, Dan Baston/German QGIS users group/Canton of Basel-Landschaft/Canton of Zug)
   - Support curved geometry types in WKT/WKB readers/writers (GH-1046, GH-1104, GH-1106, Dan Baston)
   - Port of RelateNG https://github.com/locationtech/jts/pull/1052 (Martin Davis, Paul Ramsey)
-    - rewrite of boolean predicates and relate matrix calculations. 
+    - Rewrite of boolean predicates and relate matrix calculations
     - "Prepared" mode now available for all predicates and relate matrix
     - CAPI functions GEOSPreparedRelate and GEOSPreparedRelatePattern expose new functionality
     - CAPI implementations of GEOSPreparedTouches, etc, that were previously defaulting 
@@ -17,6 +17,7 @@
     - https://lin-ear-th-inking.blogspot.com/2024/05/relateng-performance.html 
 
 - Breaking Changes
+  - Zero-length linestrings (eg LINESTRING(1 1, 1 1)) are now treated as equivalent to points (POINT(1 1)) in boolean predicates
 
 - Fixes/Improvements:
   - WKTReader: Points with all-NaN coordinates are not considered empty anymore (GH-927, Casper van der Wel)
