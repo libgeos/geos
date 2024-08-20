@@ -55,7 +55,7 @@ struct test_relatengbnr_data {
 typedef test_group<test_relatengbnr_data> group;
 typedef group::object object;
 
-group test_relatengbnr_group("geos::operation::relateng::RelateNGBoundarNodeRule");
+group test_relatengbnr_group("geos::operation::relateng::RelateNGBoundaryNodeRule");
 
 // BoundaryNodeRule::getBoundaryRuleMod2()
 // BoundaryNodeRule::getBoundaryEndPoint()
@@ -97,29 +97,32 @@ void object::test<3> ()
     std::string a = "MULTILINESTRING ((0 0, 10 10), (10 10, 20 20))";
     std::string b = "LINESTRING (10 10, 20 0)";
 
-    // under Mod2, A has no boundary - A.int / B.bdy = 0
-    // runRelateTest(a, b, BoundaryNodeRule.OGC_SFS_BOUNDARY_RULE, "F01FFF102");
+    // under Mod2, A touch point is not boundary - A.int / B.bdy = 0
+    runRelate(a, b,  BoundaryNodeRule::getBoundaryOGCSFS(), "F01FF0102");
+
     // under EndPoint, A has a boundary node - A.bdy / B.bdy = 0
     runRelate(a, b, BoundaryNodeRule::getBoundaryEndPoint(), "FF1F00102");
-    // under MultiValent, A has a boundary node but B does not - A.bdy / B.bdy = F and A.int
-    // runRelateTest(a, b, BoundaryNodeRule.MULTIVALENT_ENDPOINT_BOUNDARY_RULE, "0F1FFF1F2");
+
+    // under MultiValent, A has a boundary node but B does not - A.bdy / B.bdy = F and A.bdy / B.int = 0
+    runRelate(a, b,  BoundaryNodeRule::getBoundaryMonovalentEndPoint(), "FF10FF1F2");
 }
 
-// testLineRingTouchAtEndpoints
-// template<>
-// template<>
-// void object::test<4> ()
-// {
-//     std::string a = "LINESTRING (20 100, 20 220, 120 100, 20 100)";
-//     std::string b = "LINESTRING (20 20, 20 100)";
 
-//     // under Mod2, A has no boundary - A.int / B.bdy = 0
-//     runRelate(a, b, BoundaryNodeRule::getBoundaryOGCSFS(), "F01FFF102");
-//     // under EndPoint, A has a boundary node - A.bdy / B.bdy = 0
-//     runRelate(a, b, BoundaryNodeRule::getBoundaryEndPoint(), "FF1F0F102");
-//     // under MultiValent, A has a boundary node but B does not - A.bdy / B.bdy = F and A.int
-//     runRelate(a, b, BoundaryNodeRule::getBoundaryMonovalentEndPoint(), "FF10FF1F2");
-// }
+// testLineRingTouchAtEndpoints
+template<>
+template<>
+void object::test<4> ()
+{
+    std::string a = "LINESTRING (20 100, 20 220, 120 100, 20 100)";
+    std::string b = "LINESTRING (20 20, 20 100)";
+
+    // under Mod2, A has no boundary - A.int / B.bdy = 0
+    runRelate(a, b, BoundaryNodeRule::getBoundaryOGCSFS(), "F01FFF102");
+    // under EndPoint, A has a boundary node - A.bdy / B.bdy = 0
+    runRelate(a, b, BoundaryNodeRule::getBoundaryEndPoint(), "FF1F0F102");
+    // under MultiValent, A has a boundary node but B does not - A.bdy / B.bdy = F and A.int
+    runRelate(a, b, BoundaryNodeRule::getBoundaryMonovalentEndPoint(), "FF10FF1F2");
+}
 
 // testLineRingTouchAtEndpointAndInterior
 template<>
@@ -182,14 +185,14 @@ void object::test<8> ()
 
 
 // from PostGIS ./regress/core/relate_bnr.sql
-// template<>
-// template<>
-// void object::test<9> ()
-// {
-//     std::string a = "POLYGON((0 0,140 0,140 140,0 140,0 0))";
-//     std::string b = "POLYGON((140 0,0 0,0 140,140 140,140 0))";
-//     runRelate(a, b, BoundaryNodeRule::getBoundaryMultivalentEndPoint(), "2FFF0FFF2");
-// }
+template<>
+template<>
+void object::test<9> ()
+{
+    std::string a = "POLYGON((0 0,140 0,140 140,0 140,0 0))";
+    std::string b = "POLYGON((140 0,0 0,0 140,140 140,140 0))";
+    runRelate(a, b, BoundaryNodeRule::getBoundaryMultivalentEndPoint(), "2FFF0FFF2");
+}
 
 
 
