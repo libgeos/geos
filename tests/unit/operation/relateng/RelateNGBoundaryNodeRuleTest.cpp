@@ -192,7 +192,10 @@ void object::test<9> ()
 {
     std::string a = "POLYGON((0 0,140 0,140 140,0 140,0 0))";
     std::string b = "POLYGON((140 0,0 0,0 140,140 140,140 0))";
-    runRelate(a, b, BoundaryNodeRule::getBoundaryMultivalentEndPoint(), "2FFF0FFF2");
+    runRelate(a, b, BoundaryNodeRule::getBoundaryOGCSFS(), "2FFF1FFF2");
+    runRelate(a, b, BoundaryNodeRule::getBoundaryEndPoint(), "2FFF1FFF2");
+    runRelate(a, b, BoundaryNodeRule::getBoundaryMonovalentEndPoint(), "2FFF1FFF2");
+    runRelate(a, b, BoundaryNodeRule::getBoundaryMultivalentEndPoint(), "2FFF1FFF2");
 }
 
 
