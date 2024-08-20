@@ -1,5 +1,6 @@
 
 // geos
+#include <geos/algorithm/BoundaryNodeRule.h>
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKTWriter.h>
 #include <geos/geom/Geometry.h>
@@ -94,19 +95,24 @@ struct test_relateng_support {
         checkPredicate(*RelatePredicate::equalsTopo(), wktb, wkta, expectedValue);
     }
 
-    void checkRelate(const std::string& wkta, const std::string& wktb, const std::string expectedValue)
+    void checkRelateRule(const std::string& wkta, const std::string& wktb, const std::string expectedValue, const BoundaryNodeRule& bnRule)
     {
         std::unique_ptr<Geometry> a = r.read(wkta);
         std::unique_ptr<Geometry> b = r.read(wktb);
         RelateMatrixPredicate pred;
         // TopologyPredicate predTrace = trace(pred);
-        RelateNG::relate(a.get(), b.get(), pred);
+        RelateNG::relate(a.get(), b.get(), pred, bnRule);
         std::string actualVal = pred.getIM()->toString();
         if (actualVal != expectedValue) {
             std::cerr << std::endl << w.write(*a) << " relate " << w.write(*b) << " = " << actualVal << std::endl;
         }
         ensure_equals("checkRelate", actualVal, expectedValue);
         checkPrepared(a.get(), b.get());
+    }
+
+    void checkRelate(const std::string& wkta, const std::string& wktb, const std::string expectedValue)
+    {
+        checkRelateRule(wkta, wktb, expectedValue, BoundaryNodeRule::getBoundaryRuleMod2());
     }
 
     void checkRelateMatches(const std::string& wkta, const std::string& wktb, const std::string pattern, bool expectedValue)
