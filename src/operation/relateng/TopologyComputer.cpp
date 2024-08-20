@@ -132,9 +132,12 @@ TopologyComputer::getDimension(bool isA) const
 bool
 TopologyComputer::isSelfNodingRequired() const
 {
-    if (geomA.isSelfNodingRequired()) return true;
-    if (geomB.isSelfNodingRequired()) return true;
-    return predicate.requireSelfNoding();
+    if (predicate.requireSelfNoding()) {
+        if (geomA.isSelfNodingRequired() ||
+            geomB.isSelfNodingRequired())
+        return true;
+    }
+    return false;
 }
 
 

@@ -48,12 +48,12 @@
       LINESTRING(40 180, 140 180)
     </a>
     <b>
-      MULTIPOLYGON(
-      ((20 320, 180 320, 180 180, 20 180, 20 320)),
-      ((60 180, 60 80, 180 80, 180 180, 60 180)))
+      GEOMETRYCOLLECTION(
+      POLYGON((20 320, 180 320, 180 180, 20 180, 20 320)),
+      POLYGON((60 180, 60 80, 180 80, 180 180, 60 180)))
     </b>
     <test>
-      <op arg1="A" arg2="B" arg3="111F0F212" name="relate">true</op>
+      <op arg1="A" arg2="B" arg3="11F00F212" name="relate">true</op>
     </test>
   </case>
 

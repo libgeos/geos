@@ -245,7 +245,7 @@ RelateGeometry::isSelfNodingRequired() const
     {
          return false;
      }
-    //-- GC with a single polygon does not need noding
+    //-- a GC with a single polygon does not need noding
     if (hasAreas && geom->getNumGeometries() == 1)
         return false;
     return true;
