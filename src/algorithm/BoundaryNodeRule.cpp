@@ -48,7 +48,11 @@ public:
     {
         // the "Mod-2 Rule"
         return boundaryCount % 2 == 1;
-    }
+    };
+    std::string
+    toString() const override {
+        return "Mod2BoundaryNodeRule";
+    };
 };
 
 
@@ -84,7 +88,11 @@ class EndPointBoundaryNodeRule : public BoundaryNodeRule {
     isInBoundary(int boundaryCount) const override
     {
         return boundaryCount > 0;
-    }
+    };
+    std::string
+    toString() const override {
+        return "EndPointBoundaryNodeRule";
+    };
 };
 
 /**
@@ -103,6 +111,10 @@ class MultiValentEndPointBoundaryNodeRule : public BoundaryNodeRule {
     {
         return boundaryCount > 1;
     }
+    std::string
+    toString() const override {
+        return "MultiValentEndPointBoundaryNodeRule";
+    };
 };
 
 /**
@@ -120,6 +132,10 @@ class MonoValentEndPointBoundaryNodeRule : public BoundaryNodeRule {
     {
         return boundaryCount == 1;
     }
+    std::string
+    toString() const override {
+        return "MonoValentEndPointBoundaryNodeRule";
+    };
 };
 
 Mod2BoundaryNodeRule mod2Rule;

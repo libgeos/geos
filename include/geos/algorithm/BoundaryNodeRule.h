@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include <string>
+
 #include <geos/export.h>
 
 // Forward declarations
@@ -54,6 +56,8 @@ public:
     // virtual classes should always have a virtual destructor..
     virtual
     ~BoundaryNodeRule() {}
+
+    virtual std::string toString() const = 0;
 
     /** \brief
      * Tests whether a point that lies in `boundaryCount`
