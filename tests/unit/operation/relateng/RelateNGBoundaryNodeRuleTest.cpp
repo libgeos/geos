@@ -73,7 +73,7 @@ void object::test<1> ()
     std::string b = "LINESTRING (60 60, 20 60)";
 
     // under EndPoint, A has a boundary node - A.bdy / B.bdy = 0
-    runRelate(a, b, BoundaryNodeRule::getBoundaryEndPoint(),  "FF1F00102");
+    runRelate(a, b, BoundaryNodeRule::getBoundaryEndPoint(), "FF1F00102");
 }
 
 // testLineStringSelfIntTouchAtEndpoint
@@ -85,8 +85,8 @@ void object::test<2> ()
     std::string b = "LINESTRING (60 60, 20 60)";
 
     // results for both rules are the same
-    runRelate(a, b,  BoundaryNodeRule::getBoundaryOGCSFS(),   "F01FF0102");
-    runRelate(a, b,  BoundaryNodeRule::getBoundaryEndPoint(),  "F01FF0102");
+    runRelate(a, b, BoundaryNodeRule::getBoundaryOGCSFS(), "F01FF0102");
+    runRelate(a, b, BoundaryNodeRule::getBoundaryEndPoint(), "F01FF0102");
 }
 
 // testMultiLineStringTouchAtEndpoint
@@ -98,11 +98,11 @@ void object::test<3> ()
     std::string b = "LINESTRING (10 10, 20 0)";
 
     // under Mod2, A has no boundary - A.int / B.bdy = 0
-    // runRelateTest(a, b,  BoundaryNodeRule.OGC_SFS_BOUNDARY_RULE,   "F01FFF102");
+    // runRelateTest(a, b, BoundaryNodeRule.OGC_SFS_BOUNDARY_RULE, "F01FFF102");
     // under EndPoint, A has a boundary node - A.bdy / B.bdy = 0
-    runRelate(a, b,  BoundaryNodeRule::getBoundaryEndPoint(),  "FF1F00102");
+    runRelate(a, b, BoundaryNodeRule::getBoundaryEndPoint(), "FF1F00102");
     // under MultiValent, A has a boundary node but B does not - A.bdy / B.bdy = F and A.int
-    // runRelateTest(a, b,  BoundaryNodeRule.MULTIVALENT_ENDPOINT_BOUNDARY_RULE,  "0F1FFF1F2");
+    // runRelateTest(a, b, BoundaryNodeRule.MULTIVALENT_ENDPOINT_BOUNDARY_RULE, "0F1FFF1F2");
 }
 
 // testLineRingTouchAtEndpoints
@@ -114,11 +114,11 @@ void object::test<3> ()
 //     std::string b = "LINESTRING (20 20, 20 100)";
 
 //     // under Mod2, A has no boundary - A.int / B.bdy = 0
-//     runRelate(a, b,  BoundaryNodeRule::getBoundaryOGCSFS(),   "F01FFF102");
+//     runRelate(a, b, BoundaryNodeRule::getBoundaryOGCSFS(), "F01FFF102");
 //     // under EndPoint, A has a boundary node - A.bdy / B.bdy = 0
-//     runRelate(a, b,  BoundaryNodeRule::getBoundaryEndPoint(),  "FF1F0F102");
+//     runRelate(a, b, BoundaryNodeRule::getBoundaryEndPoint(), "FF1F0F102");
 //     // under MultiValent, A has a boundary node but B does not - A.bdy / B.bdy = F and A.int
-//     runRelate(a, b,  BoundaryNodeRule::getBoundaryMonovalentEndPoint(),  "FF10FF1F2");
+//     runRelate(a, b, BoundaryNodeRule::getBoundaryMonovalentEndPoint(), "FF10FF1F2");
 // }
 
 // testLineRingTouchAtEndpointAndInterior
@@ -130,9 +130,9 @@ void object::test<5> ()
     std::string b = "LINESTRING (20 20, 40 100)";
 
     // this is the same result as for the above test
-    runRelate(a, b,  BoundaryNodeRule::getBoundaryOGCSFS(),   "F01FFF102");
+    runRelate(a, b, BoundaryNodeRule::getBoundaryOGCSFS(), "F01FFF102");
     // this result is different - the A node is now on the boundary, so A.bdy/B.ext = 0
-    runRelate(a, b,  BoundaryNodeRule::getBoundaryEndPoint(),  "F01FF0102");
+    runRelate(a, b, BoundaryNodeRule::getBoundaryEndPoint(), "F01FF0102");
 }
 
 // testPolygonEmptyRing
@@ -144,10 +144,10 @@ void object::test<6> ()
     std::string b = "LINESTRING (20 100, 20 220, 120 100, 20 100)";
 
     // closed line has no boundary under SFS rule
-    runRelate(a, b,  BoundaryNodeRule::getBoundaryOGCSFS(),   "FFFFFF1F2");
+    runRelate(a, b, BoundaryNodeRule::getBoundaryOGCSFS(), "FFFFFF1F2");
 
     // closed line has boundary under ENDPOINT rule
-    runRelate(a, b,  BoundaryNodeRule::getBoundaryEndPoint(),  "FFFFFF102");
+    runRelate(a, b, BoundaryNodeRule::getBoundaryEndPoint(), "FFFFFF102");
 }
 
 // testPolygonEmptyMultiLineStringClosed
@@ -159,10 +159,10 @@ void object::test<7> ()
     std::string b = "MULTILINESTRING ((0 0, 0 1), (0 1, 1 1, 1 0, 0 0))";
 
     // closed line has no boundary under SFS rule
-    runRelate(a, b,  BoundaryNodeRule::getBoundaryOGCSFS(),   "FFFFFF1F2");
+    runRelate(a, b, BoundaryNodeRule::getBoundaryOGCSFS(), "FFFFFF1F2");
 
     // closed line has boundary under ENDPOINT rule
-    runRelate(a, b,  BoundaryNodeRule::getBoundaryEndPoint(),  "FFFFFF102");
+    runRelate(a, b, BoundaryNodeRule::getBoundaryEndPoint(), "FFFFFF102");
 }
 
 // testLineStringInteriorTouchMultivalent
@@ -174,12 +174,22 @@ void object::test<8> ()
     std::string b = "MULTILINESTRING ((0 0, 0 1), (0 1, 1 1, 1 0, 0 0))";
 
     // closed line has no boundary under SFS rule
-    runRelate(a, b,  BoundaryNodeRule::getBoundaryOGCSFS(),   "FFFFFF1F2");
+    runRelate(a, b, BoundaryNodeRule::getBoundaryOGCSFS(), "FFFFFF1F2");
 
     // closed line has boundary under ENDPOINT rule
-    runRelate(a, b,  BoundaryNodeRule::getBoundaryEndPoint(),  "FFFFFF102");
+    runRelate(a, b, BoundaryNodeRule::getBoundaryEndPoint(), "FFFFFF102");
 }
 
+
+// from PostGIS ./regress/core/relate_bnr.sql
+// template<>
+// template<>
+// void object::test<9> ()
+// {
+//     std::string a = "POLYGON((0 0,140 0,140 140,0 140,0 0))";
+//     std::string b = "POLYGON((140 0,0 0,0 140,140 140,140 0))";
+//     runRelate(a, b, BoundaryNodeRule::getBoundaryMultivalentEndPoint(), "2FFF0FFF2");
+// }
 
 
 
