@@ -875,16 +875,5 @@ void object::test<62> ()
     checkRelate(a, b, "212101212");
 }
 
-// Boundary node
-// template<>
-// template<>
-// void object::test<63> ()
-// {
-//     std::string a = "POLYGON((0 0,140 0,140 140,0 140,0 0))";
-//     std::string b = "POLYGON((140 0,0 0,0 140,140 140,140 0))";
-//     checkRelateRule(a, b, "2FFF0FFF2", geos::algorithm::BoundaryNodeRule::getBoundaryMultivalentEndPoint());
-// }
-
-
 
 } // namespace tut
