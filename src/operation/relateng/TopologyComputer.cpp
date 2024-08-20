@@ -132,9 +132,8 @@ TopologyComputer::getDimension(bool isA) const
 bool
 TopologyComputer::isSelfNodingRequired() const
 {
-    //TODO: change to testing for lines or GC with > 1 polygon
-    if (geomA.isPointsOrPolygons()) return false;
-    if (geomB.isPointsOrPolygons()) return false;
+    if (geomA.isSelfNodingRequired()) return true;
+    if (geomB.isSelfNodingRequired()) return true;
     return predicate.requireSelfNoding();
 }
 

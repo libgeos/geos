@@ -311,5 +311,27 @@ void object::test<22> ()
 }
 
 
+// testPolygonContainingPointsInBoundary
+// https://github.com/libgeos/geos/issues/1148
+template<>
+template<>
+void object::test<23> ()
+{
+    std::string a = "POLYGON ((0 0, 0 10, 10 10, 10 0, 0 0))";
+    std::string b = "GEOMETRYCOLLECTION (POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0)), MULTIPOINT ((0 2), (0 5)))";
+    checkEquals(a, b, true);
+}
+
+
+// testPolygonContainingLineInBoundary
+template<>
+template<>
+void object::test<24> ()
+{
+    std::string a = "POLYGON ((0 0, 0 10, 10 10, 10 0, 0 0))";
+    std::string b = "GEOMETRYCOLLECTION (POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0)), LINESTRING (0 2, 0 5))";
+    checkEquals(a, b, true);
+}
+
 
 } // namespace tut

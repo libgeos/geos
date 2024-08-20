@@ -235,13 +235,20 @@ RelateGeometry::locateWithDim(const CoordinateXY* pt)
 
 /* public */
 bool
-RelateGeometry::isPointsOrPolygons() const
+RelateGeometry::isSelfNodingRequired() const
 {
     GeometryTypeId typeId = geom->getGeometryTypeId();
-    return typeId == GEOS_POINT
+    if (typeId == GEOS_POINT
         || typeId == GEOS_MULTIPOINT
         || typeId == GEOS_POLYGON
-        || typeId == GEOS_MULTIPOLYGON;
+        || typeId == GEOS_MULTIPOLYGON)
+    {
+         return false;
+     }
+    //-- GC with a single polygon does not need noding
+    if (hasAreas && geom->getNumGeometries() == 1)
+        return false;
+    return true;
 }
 
 
