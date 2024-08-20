@@ -99,14 +99,13 @@ void object::test<3> ()
 
     // under Mod2, A touch point is not boundary - A.int / B.bdy = 0
     runRelate(a, b,  BoundaryNodeRule::getBoundaryOGCSFS(), "F01FF0102");
-
     // under EndPoint, A has a boundary node - A.bdy / B.bdy = 0
     runRelate(a, b, BoundaryNodeRule::getBoundaryEndPoint(), "FF1F00102");
-
+    // under MonoValent, A touch point is not boundary - A.bdy / B.bdy = F and A.int / B.bdy = 0
+    runRelate(a, b,  BoundaryNodeRule::getBoundaryMonovalentEndPoint(), "F01FF0102");
     // under MultiValent, A has a boundary node but B does not - A.bdy / B.bdy = F and A.bdy / B.int = 0
-    runRelate(a, b,  BoundaryNodeRule::getBoundaryMonovalentEndPoint(), "FF10FF1F2");
+    runRelate(a, b,  BoundaryNodeRule::getBoundaryMultivalentEndPoint(), "FF10FF1F2");
 }
-
 
 // testLineRingTouchAtEndpoints
 template<>
@@ -120,8 +119,10 @@ void object::test<4> ()
     runRelate(a, b, BoundaryNodeRule::getBoundaryOGCSFS(), "F01FFF102");
     // under EndPoint, A has a boundary node - A.bdy / B.bdy = 0
     runRelate(a, b, BoundaryNodeRule::getBoundaryEndPoint(), "FF1F0F102");
+    // under MonoValent, A has no boundary node but B does - A.bdy / B.bdy = F and A.int / B.bdy = 0
+    runRelate(a, b, BoundaryNodeRule::getBoundaryMonovalentEndPoint(), "F01FFF102");
     // under MultiValent, A has a boundary node but B does not - A.bdy / B.bdy = F and A.int
-    runRelate(a, b, BoundaryNodeRule::getBoundaryMonovalentEndPoint(), "FF10FF1F2");
+    runRelate(a, b, BoundaryNodeRule::getBoundaryMultivalentEndPoint(), "FF10FF1F2");
 }
 
 // testLineRingTouchAtEndpointAndInterior
