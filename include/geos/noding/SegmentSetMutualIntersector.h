@@ -33,7 +33,7 @@ namespace noding { // geos::noding
  * @author Martin Davis
  * @version 1.10
  */
-class SegmentSetMutualIntersector {
+class GEOS_DLL SegmentSetMutualIntersector {
 public:
 
     SegmentSetMutualIntersector()
