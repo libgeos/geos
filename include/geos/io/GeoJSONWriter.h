@@ -74,11 +74,33 @@ public:
 
     std::string write(const GeoJSONFeatureCollection& features);
 
+    /*
+     * \brief
+     * Returns the output dimension used by the
+     * <code>GeoJSONWriter</code>.
+     */
+    int
+    getOutputDimension() const
+    {
+        return defaultOutputDimension;
+    }
+
+    /*
+     * Sets the output dimension used by the <code>GeoJSONWriter</code>.
+     *
+     * @param newOutputDimension Supported values are 2 or 3.
+     *        Default since GEOS 3.12 is 3.
+     *        Note that 3 indicates up to 3 dimensions will be
+     *        written but 2D GeoJSON is still produced for 2D geometries.
+     */
+    void setOutputDimension(uint8_t newOutputDimension);
+
 private:
+    uint8_t defaultOutputDimension = 3;
 
-    std::pair<double, double> convertCoordinate(const geom::CoordinateXY* c);
+    std::vector<double> convertCoordinate(const geom::Coordinate* c);
 
-    std::vector<std::pair<double, double>> convertCoordinateSequence(const geom::CoordinateSequence* c);
+    std::vector<std::vector<double>> convertCoordinateSequence(const geom::CoordinateSequence* c);
 
     void encode(const geom::Geometry* g, GeoJSONType type, geos_nlohmann::ordered_json& j);
 

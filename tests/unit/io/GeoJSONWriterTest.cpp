@@ -318,5 +318,106 @@ void object::test<20>
     ensure_equals(result, "{\"type\":\"Point\",\"coordinates\":[null,null]}");
 }
 
+// Write a Point Z to GeoJSON 
+template<>
+template<>
+void object::test<21>
+()
+{
+    GeomPtr geom(wktreader.read("POINT Z (-117 33 10)"));
+    std::string result = geojsonwriter.write(geom.get());
+    ensure_equals(result, "{\"type\":\"Point\",\"coordinates\":[-117.0,33.0,10.0]}");
+}
+
+// Write a Point Z with NaN to GeoJSON 
+template<>
+template<>
+void object::test<22>
+()
+{
+    GeomPtr geom(wktreader.read("POINT Z (-117 33 NaN)"));
+    std::string result = geojsonwriter.write(geom.get());
+    ensure_equals(result, "{\"type\":\"Point\",\"coordinates\":[-117.0,33.0]}");
+}
+
+// Write a Point M to GeoJSON ignores M
+template<>
+template<>
+void object::test<23>
+()
+{
+    GeomPtr geom(wktreader.read("POINT M (-117 33 10)"));
+    std::string result = geojsonwriter.write(geom.get());
+    ensure_equals(result, "{\"type\":\"Point\",\"coordinates\":[-117.0,33.0]}");
+}
+
+// Write a Point ZM to GeoJSON ignores M
+template<>
+template<>
+void object::test<24>
+()
+{
+    GeomPtr geom(wktreader.read("POINT ZM (-117 33 10 2)"));
+    std::string result = geojsonwriter.write(geom.get());
+    ensure_equals(result, "{\"type\":\"Point\",\"coordinates\":[-117.0,33.0,10.0]}");
+}
+
+// Write a LineString Z to GeoJSON
+template<>
+template<>
+void object::test<25>
+()
+{
+    GeomPtr geom(wktreader.read("LINESTRING Z (102 0 2, 103 1 4, 104 0 8, 105 1 16)"));
+    std::string result = geojsonwriter.write(geom.get());
+    ensure_equals(result, "{\"type\":\"LineString\",\"coordinates\":[[102.0,0.0,2.0],[103.0,1.0,4.0],[104.0,0.0,8.0],[105.0,1.0,16.0]]}");
+}
+
+// Write a LineString Z with some NaN Z to GeoJSON
+template<>
+template<>
+void object::test<26>
+()
+{
+    GeomPtr geom(wktreader.read("LINESTRING Z (102 0 2, 103 1 NaN, 104 0 8, 105 1 NaN)"));
+    std::string result = geojsonwriter.write(geom.get());
+    ensure_equals(result, "{\"type\":\"LineString\",\"coordinates\":[[102.0,0.0,2.0],[103.0,1.0],[104.0,0.0,8.0],[105.0,1.0]]}");
+}
+
+
+// Setting outputs dimensions to an invalid value should raise
+template<>
+template<>
+void object::test<27>
+()
+{
+    std::string errorMessage;    
+    bool error;
+    for (auto dims: { uint8_t{1}, uint8_t{4} }) {
+        errorMessage = "";
+        error = false;
+        try {
+            geojsonwriter.setOutputDimension(dims);
+        } catch (geos::util::IllegalArgumentException& e) {
+            error = true;
+            errorMessage = e.what();
+        }
+        ensure(error == true);
+        ensure_equals(errorMessage, "IllegalArgumentException: GeoJSON output dimension must be 2 or 3");
+    }
+}
+
+
+// GeoJSONWriter without output dimensions set to 2 ignores Z and M values
+template<>
+template<>
+void object::test<28>
+()
+{
+    GeomPtr geom(wktreader.read("POINT ZM (-117 33 10 2)"));
+    geojsonwriter.setOutputDimension(2);
+    std::string result = geojsonwriter.write(geom.get());
+    ensure_equals(result, "{\"type\":\"Point\",\"coordinates\":[-117.0,33.0]}");
+}
 
 }
