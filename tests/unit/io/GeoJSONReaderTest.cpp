@@ -596,4 +596,28 @@ void object::test<38>
     ensure_equals(static_cast<size_t>(geom->getCoordinateDimension()), 3u);
 }
 
+// Read a GeoJSON MultiLineString with three dimensions
+template<>
+template<>
+void object::test<39>
+()
+{
+    std::string geojson { "{\"type\":\"MultiLineString\",\"coordinates\":[[[30,10,1],[40,40,2],[20,40,4],[10,20,8],[30,10,16]]]}" };
+    GeomPtr geom(geojsonreader.read(geojson));
+    ensure_equals(geom->toText(), "MULTILINESTRING Z ((30 10 1, 40 40 2, 20 40 4, 10 20 8, 30 10 16))");
+    ensure_equals(static_cast<size_t>(geom->getCoordinateDimension()), 3u);
+}
+
+// Read a GeoJSON MultiLineString with mixed dimensions
+template<>
+template<>
+void object::test<40>
+()
+{
+    std::string geojson { "{\"type\":\"MultiLineString\",\"coordinates\":[[[30,10],[40,40,2],[20,40],[10,20,8],[30,10]]]}" };
+    GeomPtr geom(geojsonreader.read(geojson));
+    ensure_equals(geom->toText(), "MULTILINESTRING Z ((30 10 NaN, 40 40 2, 20 40 NaN, 10 20 8, 30 10 NaN))");
+    ensure_equals(static_cast<size_t>(geom->getCoordinateDimension()), 3u);
+}
+
 }

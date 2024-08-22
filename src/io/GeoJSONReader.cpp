@@ -317,7 +317,7 @@ std::unique_ptr<geom::MultiLineString> GeoJSONReader::readMultiLineString(
         coordinates->reserve(coords.size());
         for (const auto& coord : coords) {
             const geom::Coordinate& c = readCoordinate(coord);
-            coordinates->add(geom::Coordinate{c.x, c.y});
+            coordinates->add(c);
         }
         lines.push_back(geometryFactory.createLineString(std::move(coordinates)));
     }
