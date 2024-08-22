@@ -39,7 +39,7 @@ namespace geomgraph { // geos.geomgraph
  * The intersection point must be precise.
  *
  */
-class GEOS_DLL EdgeIntersection {
+class GEOS_DLL EdgeIntersection final {
 public:
 
     // the point of intersection

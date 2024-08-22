@@ -51,7 +51,7 @@ namespace geomgraph { // geos.geomgraph
  *
  * Throws an appropriate exception if an noding error is found.
  */
-class GEOS_DLL EdgeNodingValidator {
+class GEOS_DLL EdgeNodingValidator final {
 
 private:
     std::vector<noding::SegmentString*>& toSegmentStrings(std::vector<Edge*>& edges);

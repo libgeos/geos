@@ -60,7 +60,7 @@ namespace geos {
 namespace geomgraph { // geos.geomgraph
 
 /** The edge component of a geometry graph */
-class GEOS_DLL Edge: public GraphComponent {
+class GEOS_DLL Edge final: public GraphComponent {
     using GraphComponent::updateIM;
 
 private:
@@ -102,27 +102,27 @@ public:
 
     ~Edge() override;
 
-    virtual size_t
+    size_t
     getNumPoints() const
     {
         return pts->getSize();
     }
 
-    virtual const geom::CoordinateSequence*
+    const geom::CoordinateSequence*
     getCoordinates() const
     {
         testInvariant();
         return pts.get();
     }
 
-    virtual const geom::Coordinate&
+    const geom::Coordinate&
     getCoordinate(std::size_t i) const
     {
         testInvariant();
         return pts->getAt(i);
     }
 
-    virtual const geom::Coordinate&
+    const geom::Coordinate&
     getCoordinate() const
     {
         testInvariant();
@@ -130,8 +130,8 @@ public:
     }
 
 
-    virtual Depth&
-    getDepth()
+    const Depth&
+    getDepth() const
     {
         testInvariant();
         return depth;
@@ -142,29 +142,36 @@ public:
      *
      * @return the change in depth as the edge is crossed from R to L
      */
-    virtual int
+    int
     getDepthDelta() const
     {
         testInvariant();
         return depthDelta;
     }
 
-    virtual void
+    void
     setDepthDelta(int newDepthDelta)
     {
         depthDelta = newDepthDelta;
         testInvariant();
     }
 
-    virtual size_t
+    size_t
     getMaximumSegmentIndex() const
     {
         testInvariant();
         return getNumPoints() - 1;
     }
 
-    virtual EdgeIntersectionList&
+    EdgeIntersectionList&
     getEdgeIntersectionList()
+    {
+        testInvariant();
+        return eiList;
+    }
+
+    const EdgeIntersectionList&
+    getEdgeIntersectionList() const
     {
         testInvariant();
         return eiList;
@@ -174,9 +181,9 @@ public:
     /// Return this Edge's index::MonotoneChainEdge,
     /// ownership is retained by this object.
     ///
-    virtual index::MonotoneChainEdge* getMonotoneChainEdge();
+    index::MonotoneChainEdge* getMonotoneChainEdge();
 
-    virtual bool
+    bool
     isClosed() const
     {
         testInvariant();
@@ -187,11 +194,11 @@ public:
      * An Edge is collapsed if it is an Area edge and it consists of
      * two segments which are equal and opposite (eg a zero-width V).
      */
-    virtual bool isCollapsed() const;
+     bool isCollapsed() const;
 
-    virtual Edge* getCollapsedEdge();
+    Edge* getCollapsedEdge();
 
-    virtual void
+    void
     setIsolated(bool newIsIsolated)
     {
         isIsolatedVar = newIsIsolated;
@@ -209,7 +216,7 @@ public:
      * Adds EdgeIntersections for one or both
      * intersections found for a segment of an edge to the edge intersection list.
      */
-    virtual void addIntersections(algorithm::LineIntersector* li, std::size_t segmentIndex,
+    void addIntersections(algorithm::LineIntersector* li, std::size_t segmentIndex,
                                   std::size_t geomIndex);
 
     /// Add an EdgeIntersection for intersection intIndex.
@@ -217,7 +224,7 @@ public:
     /// An intersection that falls exactly on a vertex of the edge is normalized
     /// to use the higher of the two possible segmentIndexes
     ///
-    virtual void addIntersection(algorithm::LineIntersector* li, std::size_t segmentIndex,
+    void addIntersection(algorithm::LineIntersector* li, std::size_t segmentIndex,
                                  std::size_t geomIndex, std::size_t intIndex);
 
     /// Update the IM with the contribution for this component.
@@ -233,11 +240,11 @@ public:
     }
 
     /// return true if the coordinate sequences of the Edges are identical
-    virtual bool isPointwiseEqual(const Edge* e) const;
+    bool isPointwiseEqual(const Edge* e) const;
 
-    virtual std::string print() const;
+    std::string print() const;
 
-    virtual std::string printReverse() const;
+    std::string printReverse() const;
 
     /**
      * equals is defined to be:
@@ -246,16 +253,16 @@ public:
      * <b>iff</b>
      * the coordinates of e1 are the same or the reverse of the coordinates in e2
      */
-    virtual bool equals(const Edge& e) const;
+    bool equals(const Edge& e) const;
 
-    virtual bool
+    bool
     equals(const Edge* e) const
     {
         assert(e);
         return equals(*e);
     }
 
-    virtual const geom::Envelope* getEnvelope();
+    const geom::Envelope* getEnvelope();
 };
 
 

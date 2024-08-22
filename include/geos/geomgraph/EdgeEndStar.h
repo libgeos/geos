@@ -60,7 +60,7 @@ namespace geomgraph { // geos.geomgraph
  *
  * @version 1.4
  */
-class GEOS_DLL EdgeEndStar {
+class GEOS_DLL EdgeEndStar /* non-final */ {
 public:
 
     typedef std::set<EdgeEnd*, EdgeEndLT> container;
@@ -86,46 +86,46 @@ public:
      * a Coordinate owned by the specific EdgeEnd happening
      * to be the first in the star (ordered CCW)
      */
-    virtual geom::Coordinate& getCoordinate();
+    geom::Coordinate& getCoordinate();
 
     const geom::Coordinate& getCoordinate() const;
 
-    virtual std::size_t getDegree();
+    std::size_t getDegree();
 
-    virtual iterator begin();
+    iterator begin();
 
-    virtual iterator end();
+    iterator end();
 
-    virtual reverse_iterator rbegin();
+    reverse_iterator rbegin();
 
-    virtual reverse_iterator rend();
+    reverse_iterator rend();
 
-    virtual const_iterator
+    const_iterator
     begin() const
     {
         return edgeMap.begin();
     }
 
-    virtual const_iterator
+    const_iterator
     end() const
     {
         return edgeMap.end();
     }
 
-    virtual container& getEdges();
+    container& getEdges();
 
-    virtual EdgeEnd* getNextCW(EdgeEnd* ee);
+    EdgeEnd* getNextCW(EdgeEnd* ee);
 
     virtual void computeLabelling(const std::vector<std::unique_ptr<GeometryGraph>>&geomGraph);
     // throw(TopologyException *);
 
-    virtual bool isAreaLabelsConsistent(const GeometryGraph& geomGraph);
+    bool isAreaLabelsConsistent(const GeometryGraph& geomGraph);
 
-    virtual void propagateSideLabels(uint32_t geomIndex);
+    void propagateSideLabels(uint32_t geomIndex);
     // throw(TopologyException *);
 
     //virtual int findIndex(EdgeEnd *eSearch);
-    virtual iterator find(EdgeEnd* eSearch);
+    iterator find(EdgeEnd* eSearch);
 
     virtual std::string print() const;
 
@@ -140,7 +140,7 @@ protected:
     /** \brief
      * Insert an EdgeEnd into the map.
      */
-    virtual void
+    void
     insertEdgeEnd(EdgeEnd* e)
     {
         edgeMap.insert(e);
@@ -148,7 +148,7 @@ protected:
 
 private:
 
-    virtual geom::Location getLocation(uint32_t geomIndex,
+    geom::Location getLocation(uint32_t geomIndex,
                                        const geom::Coordinate&p,
                                        const std::vector<std::unique_ptr<GeometryGraph>>&geom);
 
@@ -158,9 +158,9 @@ private:
      */
     std::array<geom::Location, 2> ptInAreaLocation;
 
-    virtual void computeEdgeEndLabels(const algorithm::BoundaryNodeRule&);
+    void computeEdgeEndLabels(const algorithm::BoundaryNodeRule&);
 
-    virtual bool checkAreaLabelsConsistent(uint32_t geomIndex);
+    bool checkAreaLabelsConsistent(uint32_t geomIndex);
 
 };
 

@@ -52,7 +52,7 @@ namespace geomgraph { // geos.geomgraph
  * It supports locating edges
  * that are pointwise equals to a target edge.
  */
-class GEOS_DLL EdgeList {
+class GEOS_DLL EdgeList final {
 
 private:
 
@@ -85,7 +85,7 @@ public:
         ocaMap()
     {}
 
-    virtual ~EdgeList() = default;
+    ~EdgeList() = default;
 
     /**
      * Insert an edge unless it is already in the list

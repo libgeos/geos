@@ -39,7 +39,7 @@ namespace geos {
 namespace geomgraph { // geos.geomgraph
 
 /// A directed EdgeEnd
-class GEOS_DLL DirectedEdge: public EdgeEnd {
+class GEOS_DLL DirectedEdge final: public EdgeEnd {
 
 public:
 

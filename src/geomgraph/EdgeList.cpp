@@ -140,7 +140,7 @@ operator<< (std::ostream& os, const EdgeList& el)
 {
     os << "EdgeList: " << std::endl;
     for(std::size_t j = 0, s = el.edges.size(); j < s; ++j) {
-        Edge* e = el.edges[j];
+        const Edge* e = el.edges[j];
         os << "  " << *e << std::endl;
     }
     return os;
