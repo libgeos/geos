@@ -29,6 +29,7 @@
 #include <ostream>
 #include <sstream>
 #include <cassert>
+#include <cmath>
 
 #include "geos/util.h"
 
@@ -39,6 +40,17 @@ using json = geos_nlohmann::ordered_json;
 
 namespace geos {
 namespace io { // geos.io
+
+
+/* public */
+void
+GeoJSONWriter::setOutputDimension(uint8_t dims)
+{
+    if(dims < 2 || dims > 3) {
+        throw util::IllegalArgumentException("GeoJSON output dimension must be 2 or 3");
+    }
+    defaultOutputDimension = dims;
+}
 
 std::string GeoJSONWriter::write(const geom::Geometry* geometry, GeoJSONType type)
 {
@@ -217,7 +229,8 @@ void GeoJSONWriter::encodePoint(const geom::Point* point, geos_nlohmann::ordered
 {
     j["type"] = "Point";
     if (!point->isEmpty()) {
-        j["coordinates"] = convertCoordinate(point->getCoordinate());
+        auto as_coord = Coordinate { point->getX(), point->getY(), point->getZ()};
+        j["coordinates"] = convertCoordinate(&as_coord);
     }
     else {
         j["coordinates"] = j.array();
@@ -233,7 +246,7 @@ void GeoJSONWriter::encodeLineString(const geom::LineString* line, geos_nlohmann
 void GeoJSONWriter::encodePolygon(const geom::Polygon* poly, geos_nlohmann::ordered_json& j)
 {
     j["type"] = "Polygon";
-    std::vector<std::vector<std::pair<double, double>>> rings;
+    std::vector<std::vector<std::vector<double>>> rings;
     auto ring = poly->getExteriorRing();
     rings.reserve(poly->getNumInteriorRing()+1);
     rings.push_back(convertCoordinateSequence(ring->getCoordinates().get()));
@@ -252,7 +265,7 @@ void GeoJSONWriter::encodeMultiPoint(const geom::MultiPoint* multiPoint, geos_nl
 void GeoJSONWriter::encodeMultiLineString(const geom::MultiLineString* multiLineString, geos_nlohmann::ordered_json& j)
 {
     j["type"] = "MultiLineString";
-    std::vector<std::vector<std::pair<double, double>>> lines;
+    std::vector<std::vector<std::vector<double>>> lines;
     lines.reserve(multiLineString->getNumGeometries());
     for (size_t i = 0; i < multiLineString->getNumGeometries(); i++) {
         lines.push_back(convertCoordinateSequence(multiLineString->getGeometryN(i)->getCoordinates().get()));
@@ -263,11 +276,11 @@ void GeoJSONWriter::encodeMultiLineString(const geom::MultiLineString* multiLine
 void GeoJSONWriter::encodeMultiPolygon(const geom::MultiPolygon* multiPolygon, geos_nlohmann::ordered_json& json)
 {
     json["type"] = "MultiPolygon";
-    std::vector<std::vector<std::vector<std::pair<double, double>>>> polygons;
+    std::vector<std::vector<std::vector<std::vector<double>>>> polygons;
     polygons.reserve(multiPolygon->getNumGeometries());
     for (size_t i = 0; i < multiPolygon->getNumGeometries(); i++) {
         const Polygon* polygon = multiPolygon->getGeometryN(i);
-        std::vector<std::vector<std::pair<double, double>>> rings;
+        std::vector<std::vector<std::vector<double>>> rings;
         auto ring = polygon->getExteriorRing();
         rings.reserve(polygon->getNumInteriorRing() + 1);
         rings.push_back(convertCoordinateSequence(ring->getCoordinates().get()));
@@ -291,15 +304,18 @@ void GeoJSONWriter::encodeGeometryCollection(const geom::GeometryCollection* g, 
     j["geometries"] = geometryArray;
 }
 
-std::pair<double, double> GeoJSONWriter::convertCoordinate(const CoordinateXY* c)
+std::vector<double> GeoJSONWriter::convertCoordinate(const Coordinate* c)
 {
-    return std::make_pair(c->x, c->y);
+    if (std::isnan(c->z) || defaultOutputDimension == 2) {
+        return std::vector<double> { c->x, c->y };
+    }
+    return std::vector<double> { c->x, c->y, c->z };
 }
 
-std::vector<std::pair<double, double>> GeoJSONWriter::convertCoordinateSequence(const CoordinateSequence*
+std::vector<std::vector<double>> GeoJSONWriter::convertCoordinateSequence(const CoordinateSequence*
                                     coordinateSequence)
 {
-    std::vector<std::pair<double, double>> coordinates;
+    std::vector<std::vector<double>> coordinates;
     coordinates.reserve(coordinateSequence->size());
     for (size_t i = 0; i<coordinateSequence->size(); i++) {
         const geom::Coordinate& c = coordinateSequence->getAt(i);

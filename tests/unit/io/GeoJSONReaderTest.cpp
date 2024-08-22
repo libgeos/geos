@@ -336,7 +336,7 @@ void object::test<22>
         errorMessage = e.what();
     }
     ensure(error == true);
-    ensure_equals(errorMessage, "ParseException: Expected two coordinates found one");
+    ensure_equals(errorMessage, "ParseException: Expected two or three coordinates found one");
 }
 
 // Throw ParseException for bad GeoJSON
@@ -374,7 +374,7 @@ void object::test<24>
         errorMessage = e.what();
     }
     ensure(error == true);
-    ensure_equals(errorMessage, "ParseException: Expected two coordinates found one");
+    ensure_equals(errorMessage, "ParseException: Expected two or three coordinates found one");
 }
 
 // Throw error when geometry type is unsupported
@@ -412,7 +412,7 @@ void object::test<26>
         errorMessage = e.what();
     }
     ensure(error == true);
-    ensure_equals(errorMessage, "ParseException: Expected two coordinates found one");
+    ensure_equals(errorMessage, "ParseException: Expected two or three coordinates found one");
 }
 
 // Read a GeoJSON empty Polygon with empty shell and empty inner rings
@@ -446,7 +446,7 @@ void object::test<29>
 ()
 {
     std::string errorMessage;    
-    std::string geojson { "{\"type\":\"Point\",\"coordinates\":[1,2,3,4,5,6]}" };
+    std::string geojson { "{\"type\":\"Point\",\"coordinates\":[1,2,3,4]}" };
     bool error = false;
     try {
         GeomPtr geom(geojsonreader.read(geojson));
@@ -455,7 +455,7 @@ void object::test<29>
         errorMessage = e.what();
     }
     ensure(error == true);
-    ensure_equals(errorMessage, "ParseException: Expected two coordinates found more than two");
+    ensure_equals(errorMessage, "ParseException: Expected two or three coordinates found more than three");
 }
 
 // Throw ParseException for bad GeoJSON
@@ -505,5 +505,95 @@ void object::test<31>
     ensure_equals(features.getFeatures()[8].getId(), "");
 }
 
+// Read a point with all-null coordinates should fail
+template<>
+template<>
+void object::test<32>
+()
+{
+    std::string errorMessage;    
+    std::string geojson { "{\"type\":\"Point\",\"coordinates\":[null,null]}" };
+    bool error = false;
+    try {
+        GeomPtr geom(geojsonreader.read(geojson));
+    } catch (geos::io::ParseException& e) {
+        error = true;
+        errorMessage = e.what();
+    }
+    ensure(error == true);
+    ensure_equals(errorMessage, "ParseException: Error parsing JSON: '[json.exception.type_error.302] type must be number, but is null'");
 }
 
+// Read a GeoJSON Point with three dimensions
+template<>
+template<>
+void object::test<33>
+()
+{
+    std::string geojson { "{\"type\":\"Point\",\"coordinates\":[-117.0,33.0,10.0]}" };
+    GeomPtr geom(geojsonreader.read(geojson));
+    ensure_equals("POINT Z (-117 33 10)", geom->toText());
+    ensure_equals(static_cast<size_t>(geom->getCoordinateDimension()), 3u);
+}
+
+// Read a GeoJSON MultiPoint with mixed dimensions
+template<>
+template<>
+void object::test<34>
+()
+{
+    std::string geojson { "{\"type\":\"MultiPoint\",\"coordinates\":[[-117.0,33.0,10.0],[-116.0,34.0]]}" };
+    GeomPtr geom(geojsonreader.read(geojson));
+    ensure_equals("MULTIPOINT Z ((-117 33 10), (-116 34 NaN))", geom->toText());
+    ensure_equals(static_cast<size_t>(geom->getCoordinateDimension()), 3u);
+}
+
+// Read a GeoJSON LineString with three dimensions
+template<>
+template<>
+void object::test<35>
+()
+{
+    std::string geojson { "{\"type\":\"LineString\",\"coordinates\":[[-117, 33, 2], [-116, 34, 4]]}" };
+    GeomPtr geom(geojsonreader.read(geojson));
+    ensure_equals("LINESTRING Z (-117 33 2, -116 34 4)", geom->toText());
+    ensure_equals(static_cast<size_t>(geom->getCoordinateDimension()), 3u);
+}
+
+// Read a GeoJSON LineString with mixed dimensions
+template<>
+template<>
+void object::test<36>
+()
+{
+    std::string geojson { "{\"type\":\"LineString\",\"coordinates\":[[-117, 33], [-116, 34, 4]]}" };
+    GeomPtr geom(geojsonreader.read(geojson));
+    ensure_equals("LINESTRING Z (-117 33 NaN, -116 34 4)", geom->toText());
+    ensure_equals(static_cast<size_t>(geom->getCoordinateDimension()), 3u);
+}
+
+// Read a GeoJSON Polygon with three dimensions
+template<>
+template<>
+void object::test<37>
+()
+{
+    std::string geojson { "{\"type\":\"Polygon\",\"coordinates\":[[[30,10,1],[40,40,2],[20,40,4],[10,20,8],[30,10,16]]]}" };
+    GeomPtr geom(geojsonreader.read(geojson));
+    ensure_equals(geom->toText(), "POLYGON Z ((30 10 1, 40 40 2, 20 40 4, 10 20 8, 30 10 16))");
+    ensure_equals(static_cast<size_t>(geom->getCoordinateDimension()), 3u);
+}
+
+// Read a GeoJSON Polygon with mixed dimensions
+template<>
+template<>
+void object::test<38>
+()
+{
+    std::string geojson { "{\"type\":\"Polygon\",\"coordinates\":[[[30,10],[40,40,2],[20,40],[10,20,8],[30,10]]]}" };
+    GeomPtr geom(geojsonreader.read(geojson));
+    ensure_equals(geom->toText(), "POLYGON Z ((30 10 NaN, 40 40 2, 20 40 NaN, 10 20 8, 30 10 NaN))");
+    ensure_equals(static_cast<size_t>(geom->getCoordinateDimension()), 3u);
+}
+
+}

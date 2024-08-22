@@ -210,13 +210,16 @@ geom::Coordinate GeoJSONReader::readCoordinate(
     const std::vector<double>& coords) const
 {
     if (coords.size() == 1) {
-        throw  ParseException("Expected two coordinates found one");
+        throw  ParseException("Expected two or three coordinates found one");
     }
-    else if (coords.size() > 2) {
-        throw  ParseException("Expected two coordinates found more than two");
+    else if (coords.size() == 2) {
+        return geom::Coordinate { coords[0], coords[1] };
+    }
+    else if (coords.size() == 3) {
+        return geom::Coordinate { coords[0], coords[1], coords[2] };
     }
     else {
-        return geom::Coordinate {coords[0], coords[1]};
+        throw  ParseException("Expected two or three coordinates found more than three");
     }
 }
 
@@ -225,7 +228,7 @@ std::unique_ptr<geom::Point> GeoJSONReader::readPoint(
 {
     const auto& coords = j.at("coordinates").get<std::vector<double>>();
     if (coords.size() == 1) {
-        throw  ParseException("Expected two coordinates found one");
+        throw  ParseException("Expected two or three coordinates found one");
     }
     else if (coords.size() < 2) {
         return geometryFactory.createPoint(2);
@@ -240,7 +243,8 @@ std::unique_ptr<geom::LineString> GeoJSONReader::readLineString(
     const geos_nlohmann::json& j) const
 {
     const auto& coords = j.at("coordinates").get<std::vector<std::vector<double>>>();
-    auto coordinates = detail::make_unique<CoordinateSequence>(0u, 2u);
+    bool has_z = std::any_of(coords.begin(), coords.end(), [](auto v) { return v.size() > 2; });
+    auto coordinates = detail::make_unique<CoordinateSequence>(0u, has_z, false);
     coordinates->reserve(coords.size());
     for (const auto& coord : coords) {
         const geom::Coordinate& c = readCoordinate(coord);
@@ -263,7 +267,8 @@ std::unique_ptr<geom::Polygon> GeoJSONReader::readPolygon(
     std::vector<std::unique_ptr<geom::LinearRing>> rings;
     rings.reserve(polygonCoords.size());
     for (const auto& ring : polygonCoords) {
-    auto coordinates = detail::make_unique<CoordinateSequence>(0u, 2u);
+        bool has_z = std::any_of(ring.begin(), ring.end(), [](auto v) { return v.size() > 2; });
+        auto coordinates = detail::make_unique<CoordinateSequence>(0u, has_z, false);
         coordinates->reserve(ring.size());
         for (const auto& coord : ring) {
             const geom::Coordinate& c = readCoordinate(coord);
@@ -307,7 +312,8 @@ std::unique_ptr<geom::MultiLineString> GeoJSONReader::readMultiLineString(
     std::vector<std::unique_ptr<geom::LineString>> lines;
     lines.reserve(listOfCoords.size());
     for (const auto& coords :  listOfCoords) {
-        auto coordinates = detail::make_unique<geom::CoordinateSequence>(0u, 2u);
+        bool has_z = std::any_of(coords.begin(), coords.end(), [](auto v) { return v.size() > 2; });
+        auto coordinates = detail::make_unique<geom::CoordinateSequence>(0u, has_z, false);
         coordinates->reserve(coords.size());
         for (const auto& coord : coords) {
             const geom::Coordinate& c = readCoordinate(coord);

@@ -475,7 +475,7 @@ void object::test<30> ()
         std::vector<std::unique_ptr<Geometry>> result =
         CoverageSimplifier::simplify(input, 10);
     }
-    catch (geos::util::IllegalArgumentException& iae) {
+    catch (geos::util::IllegalArgumentException&) {
         ensure("caught IllegalArgumentException", true);
         return;
     }

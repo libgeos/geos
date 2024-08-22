@@ -19,6 +19,7 @@
 
 - Breaking Changes
   - Zero-length linestrings (eg LINESTRING(1 1, 1 1)) are now treated as equivalent to points (POINT(1 1)) in boolean predicates
+  - CMake 3.15 or later is requried (GH-1143, Mike Taves)
 
 - Fixes/Improvements:
   - WKTReader: Points with all-NaN coordinates are not considered empty anymore (GH-927, Casper van der Wel)
