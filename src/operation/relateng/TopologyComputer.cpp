@@ -335,9 +335,13 @@ void
 TopologyComputer::addLineEndOnGeometry(bool isLineA, Location locLineEnd, Location locTarget, int dimTarget, const CoordinateXY* pt)
 {
     (void)pt;
+
+    //-- record topology at line end point
+    updateDim(isLineA, locLineEnd, locTarget, Dimension::P);
+
+    //-- Line and Area targets may have additional topology
     switch (dimTarget) {
     case Dimension::P:
-        addLineEndOnPoint(isLineA, locLineEnd, locTarget, pt);
         return;
     case Dimension::L:
         addLineEndOnLine(isLineA, locLineEnd, locTarget, pt);
@@ -349,43 +353,41 @@ TopologyComputer::addLineEndOnGeometry(bool isLineA, Location locLineEnd, Locati
     throw IllegalStateException("Unknown target dimension: " + std::to_string(dimTarget));
 }
 
-/* private */
-void
-TopologyComputer::addLineEndOnPoint(bool isLineA, Location locLineEnd, Location locPoint, const CoordinateXY* pt)
-{
-    (void)pt;
-    updateDim(isLineA, locLineEnd, locPoint, Dimension::P);
-}
 
 /* private */
 void
 TopologyComputer::addLineEndOnLine(bool isLineA, Location locLineEnd, Location locLine, const CoordinateXY* pt)
 {
     (void)pt;
-    updateDim(isLineA, locLineEnd, locLine, Dimension::P);
+    (void)locLineEnd;
     /**
-     * When a line end is in the exterior, some length of the line interior
-     * must also be in the exterior.
+     * When a line end is in the EXTERIOR of a Line,
+     * some length of the source Line INTERIOR
+     * is also in the target Line EXTERIOR.
      * This works for zero-length lines as well.
      */
-
     if (locLine == Location::EXTERIOR) {
         updateDim(isLineA, Location::INTERIOR, Location::EXTERIOR, Dimension::L);
     }
 }
+
 
 /* private */
 void
 TopologyComputer::addLineEndOnArea(bool isLineA, Location locLineEnd, Location locArea, const CoordinateXY* pt)
 {
     (void)pt;
-    if (locArea == Location::BOUNDARY) {
-        updateDim(isLineA, locLineEnd, locArea, Dimension::P);
-    }
-    else {
+    (void)locLineEnd;
+    if (locArea != Location::BOUNDARY) {
+        /**
+         * When a line end is in an Area INTERIOR or EXTERIOR
+         * some length of the source Line Interior
+         * AND the Exterior of the line
+         * is also in that location of the target.
+         * NOTE: this assumes the line end is NOT also in an Area of a mixed-dim GC
+         */
         //TODO: handle zero-length lines?
         updateDim(isLineA, Location::INTERIOR, locArea, Dimension::L);
-        updateDim(isLineA, locLineEnd, locArea, Dimension::P);
         updateDim(isLineA, Location::EXTERIOR, locArea, Dimension::A);
     }
 }

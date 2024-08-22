@@ -560,14 +560,18 @@ bool
 RelateNG::computeLineEnd(RelateGeometry& geom, bool isA, const CoordinateXY* pt,
       RelateGeometry& geomTarget, TopologyComputer& topoComputer)
 {
-    Location locLineEnd = geom.locateLineEnd(pt);
+    int locDimLineEnd = geom.locateLineEndWithDim(pt);
+    int dimLineEnd = DimensionLocation::dimension(locDimLineEnd, topoComputer.getDimension(isA));
+    //-- skip line ends which are in a GC area
+    if (dimLineEnd != Dimension::L)
+        return false;
+    Location locLineEnd = DimensionLocation::location(locDimLineEnd);
     int locDimTarget = geomTarget.locateWithDim(pt);
     Location locTarget = DimensionLocation::location(locDimTarget);
     int dimTarget = DimensionLocation::dimension(locDimTarget, topoComputer.getDimension(! isA));
     topoComputer.addLineEndOnGeometry(isA, locLineEnd, locTarget, dimTarget, pt);
     return locTarget == Location::EXTERIOR;
 }
-
 
 /* private */
 bool

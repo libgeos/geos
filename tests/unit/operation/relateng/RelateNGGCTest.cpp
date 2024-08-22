@@ -334,14 +334,15 @@ void object::test<24> ()
 }
 
 
-// template<>
-// template<>
-// void object::test<25> ()
-// {
-//     std::string a = "POLYGON ((0 0, 0 10, 10 10, 10 0, 0 0))";
-//     std::string b = "GEOMETRYCOLLECTION (POLYGON((0 0, 10 0, 10 10, 0 10, 0 0)),LINESTRING(0 2, 0 5, 5 5))";
-//     checkEquals(a, b, true);
-// }
+template<>
+template<>
+void object::test<25> ()
+{
+    std::string a = "POLYGON ((0 0, 0 10, 10 10, 10 0, 0 0))";
+    std::string b = "GEOMETRYCOLLECTION (POLYGON((0 0, 10 0, 10 10, 0 10, 0 0)),LINESTRING(0 2, 0 5, 5 5))";
+    checkEquals(a, b, true);
+}
+
 
 
 } // namespace tut

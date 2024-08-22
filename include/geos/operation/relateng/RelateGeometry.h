@@ -185,7 +185,7 @@ public:
 
     bool isNodeInArea(const CoordinateXY* nodePt, const Geometry* parentPolygonal);
 
-    Location locateLineEnd(const CoordinateXY* p) ;
+    int locateLineEndWithDim(const CoordinateXY* p);
 
     /**
      * Locates a vertex of a polygon.

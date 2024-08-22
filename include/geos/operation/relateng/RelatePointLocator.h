@@ -131,11 +131,11 @@ public:
 
     Location locate(const CoordinateXY* p);
 
-    Location locateLineEnd(const CoordinateXY* p) const;
+    int locateLineEndWithDim(const CoordinateXY* p);
 
     /*
     * Locates a point which is known to be a node of the geometry
-    * (i.e. a point or on an edge).
+    * (i.e. a vertex or on an edge).
     *
     * @param p the node point to locate
     * @param parentPolygonal the polygon the point is a node of

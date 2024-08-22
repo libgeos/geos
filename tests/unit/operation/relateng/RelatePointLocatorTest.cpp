@@ -51,7 +51,16 @@ struct test_relatepointlocator_data {
         RelatePointLocator locator(geom.get());
         CoordinateXY c(i, j);
         int actual = locator.locateWithDim(&c);
-        ensure_equals("checkLocation", expected, actual);
+        ensure_equals("checkLocation", actual, expected);
+    }
+
+    void checkLineEndDimLocation(const std::string& wkt, double x, double y, int expectedDimLoc)
+    {
+        std::unique_ptr<Geometry> geom = r.read(wkt);
+        RelatePointLocator locator(geom.get());
+        CoordinateXY c(x, y);
+        int actual = locator.locateLineEndWithDim(&c);
+        ensure_equals("checkLineEndDimLocation", actual, expectedDimLoc);
     }
 
     void checkNodeLocation(const std::string& wkt, double i, double j, Location expected)
@@ -60,7 +69,7 @@ struct test_relatepointlocator_data {
         RelatePointLocator locator(geom.get());
         CoordinateXY c(i, j);
         Location actual = locator.locateNode(&c, nullptr);
-        ensure_equals("checkNodeLocation", expected, actual);
+        ensure_equals("checkNodeLocation", actual, expected);
     }
 
 };
@@ -143,6 +152,8 @@ void object::test<8> ()
     //checkNodeLocation(gcPLA, 12.1, 12.2, Location::INTERIOR);
     checkNodeLocation(gcPLA, 3, 1, Location::BOUNDARY);
 }
+
+
 
 
 

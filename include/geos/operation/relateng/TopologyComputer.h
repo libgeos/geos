@@ -106,8 +106,6 @@ private:
 
     void addNodeSections(NodeSection* ns0, NodeSection* ns1);
 
-    void addLineEndOnPoint(bool isLineA, Location locLineEnd, Location locPoint, const CoordinateXY* pt);
-
     void addLineEndOnLine(bool isLineA, Location locLineEnd, Location locLine, const CoordinateXY* pt);
 
     void addLineEndOnArea(bool isLineA, Location locLineEnd, Location locArea, const CoordinateXY* pt);
@@ -186,6 +184,18 @@ public:
 
     void addPointOnGeometry(bool isA, Location locTarget, int dimTarget, const CoordinateXY* pt);
 
+    /**
+     * Add topology for a line end.
+     * The line end point must be "significant";
+     * i.e. not contained in an area if the source is a mixed-dimension GC.
+     *
+     * @param isLineA the input containing the line end
+     * @param locLineEnd the location of the line end (Interior or Boundary)
+     * @param locTarget the location on the target geometry
+     * @param dimTarget the dimension of the interacting target geometry element,
+     *    (if any), or the dimension of the target
+     * @param pt the line end coordinate
+     */
     void addLineEndOnGeometry(bool isLineA, Location locLineEnd, Location locTarget, int dimTarget, const CoordinateXY* pt);
 
     /**

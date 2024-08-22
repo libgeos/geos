@@ -132,10 +132,17 @@ RelatePointLocator::locate(const CoordinateXY* p)
 
 
 /* public */
-Location
-RelatePointLocator::locateLineEnd(const CoordinateXY* p) const
+int
+RelatePointLocator::locateLineEndWithDim(const CoordinateXY* p)
 {
-    return lineBoundary->isBoundary(p) ? Location::BOUNDARY : Location::INTERIOR;
+    if (!polygons.empty()) {
+        Location locPoly = locateOnPolygons(p, false, nullptr);
+        if (locPoly != Location::EXTERIOR)
+            return DimensionLocation::locationArea(locPoly);
+    }
+    return lineBoundary->isBoundary(p)
+        ? DimensionLocation::LINE_BOUNDARY
+        : DimensionLocation::LINE_INTERIOR;
 }
 
 

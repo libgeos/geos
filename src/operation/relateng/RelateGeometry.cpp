@@ -197,10 +197,10 @@ RelateGeometry::isNodeInArea(const CoordinateXY* nodePt, const Geometry* parentP
 
 
 /* public */
-Location
-RelateGeometry::locateLineEnd(const CoordinateXY* p)
+int
+RelateGeometry::locateLineEndWithDim(const CoordinateXY* p)
 {
-    return getLocator()->locateLineEnd(p);
+    return getLocator()->locateLineEndWithDim(p);
 }
 
 

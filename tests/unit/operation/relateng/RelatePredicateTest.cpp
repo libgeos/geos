@@ -47,7 +47,7 @@ struct test_relatepredicate_data {
     {
         pred.finish();
         bool actual = pred.value();
-        ensure_equals(expected, actual);
+        ensure_equals("checkPred", actual, expected);
     }
 
     static void
@@ -79,9 +79,8 @@ struct test_relatepredicate_data {
 
     const std::string A_EXT_B_INT = "***.***.1**";
     const std::string A_INT_B_INT = "1**.***.***";
-
-
 };
+
 
 typedef test_group<test_relatepredicate_data> group;
 typedef group::object object;

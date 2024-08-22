@@ -124,6 +124,19 @@ private:
 
     bool computeLineEnds(RelateGeometry& geom, bool isA, RelateGeometry& geomTarget, TopologyComputer& topoComputer);
 
+
+    /**
+     * Compute the topology of a line endpoint.
+     * Also reports if the line end is in the exterior of the target geometry,
+     * to optimize testing multiple exterior endpoints.
+     *
+     * @param geom
+     * @param isA
+     * @param pt
+     * @param geomTarget
+     * @param topoComputer
+     * @return true if the line endpoint is in the exterior of the target
+     */
     bool computeLineEnd(RelateGeometry& geom, bool isA, const CoordinateXY* pt, RelateGeometry& geomTarget, TopologyComputer& topoComputer);
 
     bool computeAreaVertex(RelateGeometry& geom, bool isA, RelateGeometry& geomTarget, TopologyComputer& topoComputer);
