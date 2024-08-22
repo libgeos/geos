@@ -69,7 +69,7 @@ namespace geomgraph { // geos.geomgraph
  *    different graphs
  *
  */
-class GEOS_DLL PlanarGraph {
+class GEOS_DLL PlanarGraph /* non-final */ {
 public:
 
     /** \brief
@@ -105,36 +105,36 @@ public:
 
     virtual ~PlanarGraph();
 
-    virtual std::vector<Edge*>::iterator getEdgeIterator();
+    std::vector<Edge*>::iterator getEdgeIterator();
 
-    virtual std::vector<EdgeEnd*>* getEdgeEnds();
+    std::vector<EdgeEnd*>* getEdgeEnds();
 
-    virtual bool isBoundaryNode(uint8_t geomIndex, const geom::Coordinate& coord);
+    bool isBoundaryNode(uint8_t geomIndex, const geom::Coordinate& coord);
 
-    virtual void add(EdgeEnd* e);
+    void add(EdgeEnd* e);
 
-    virtual NodeMap::iterator getNodeIterator();
+    NodeMap::iterator getNodeIterator();
 
-    virtual void getNodes(std::vector<Node*>&);
+    void getNodes(std::vector<Node*>&);
 
-    virtual Node* addNode(Node* node);
+    Node* addNode(Node* node);
 
-    virtual Node* addNode(const geom::Coordinate& coord);
+    Node* addNode(const geom::Coordinate& coord);
 
     /**
      * @return the node if found; null otherwise
      */
-    virtual Node* find(geom::Coordinate& coord);
+    Node* find(geom::Coordinate& coord);
 
     /** \brief
      * Add a set of edges to the graph.  For each edge two DirectedEdges
      * will be created.  DirectedEdges are NOT linked by this method.
      */
-    virtual void addEdges(const std::vector<Edge*>& edgesToAdd);
+    void addEdges(const std::vector<Edge*>& edgesToAdd);
 
-    virtual void linkResultDirectedEdges();
+    void linkResultDirectedEdges();
 
-    virtual void linkAllDirectedEdges();
+    void linkAllDirectedEdges();
 
     /** \brief
      * Returns the EdgeEnd which has edge e as its base edge
@@ -143,7 +143,7 @@ public:
      * @return the edge, if found
      *    <code>null</code> if the edge was not found
      */
-    virtual EdgeEnd* findEdgeEnd(Edge* e);
+    EdgeEnd* findEdgeEnd(Edge* e);
 
     /** \brief
      * Returns the edge whose first two coordinates are p0 and p1
@@ -151,7 +151,7 @@ public:
      * @return the edge, if found
      *    <code>null</code> if the edge was not found
      */
-    virtual Edge* findEdge(const geom::Coordinate& p0,
+    Edge* findEdge(const geom::Coordinate& p0,
                            const geom::Coordinate& p1);
 
     /** \brief
@@ -161,12 +161,12 @@ public:
      * @return the edge, if found
      *    <code>null</code> if the edge was not found
      */
-    virtual Edge* findEdgeInSameDirection(const geom::Coordinate& p0,
+    Edge* findEdgeInSameDirection(const geom::Coordinate& p0,
                                           const geom::Coordinate& p1);
 
-    virtual std::string printEdges();
+    std::string printEdges();
 
-    virtual NodeMap* getNodeMap();
+    NodeMap* getNodeMap();
 
 protected:
 
@@ -176,7 +176,7 @@ protected:
 
     std::vector<EdgeEnd*>* edgeEndList;
 
-    virtual void insertEdge(Edge* e);
+    void insertEdge(Edge* e);
 
 private:
 

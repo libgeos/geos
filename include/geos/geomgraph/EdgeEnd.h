@@ -51,7 +51,7 @@ namespace geomgraph { // geos.geomgraph
  * "a has a greater angle with the x-axis than b".
  * This ordering is used to sort EdgeEnds around a node.
  */
-class GEOS_DLL EdgeEnd {
+class GEOS_DLL EdgeEnd /* non-final */ {
 
 public:
 
@@ -101,7 +101,7 @@ public:
         return label;
     }
 
-    virtual geom::Coordinate& getCoordinate() {
+    geom::Coordinate& getCoordinate() {
         return p0;
     }
 
@@ -111,19 +111,19 @@ public:
         return p0;
     }
 
-    virtual geom::Coordinate& getDirectedCoordinate();
+    geom::Coordinate& getDirectedCoordinate();
 
-    virtual int getQuadrant();
+    int getQuadrant();
 
-    virtual double getDx();
+    double getDx();
 
-    virtual double getDy();
+    double getDy();
 
-    virtual void setNode(Node* newNode);
+    void setNode(Node* newNode);
 
-    virtual Node* getNode();
+    Node* getNode();
 
-    virtual int compareTo(const EdgeEnd* e) const;
+    int compareTo(const EdgeEnd* e) const;
 
     /**
      * Implements the total order relation:
@@ -141,7 +141,7 @@ public:
      *   computeOrientation function can be used to decide
      *   the relative orientation of the vectors.
      */
-    virtual int compareDirection(const EdgeEnd* e) const;
+    int compareDirection(const EdgeEnd* e) const;
 
     virtual void computeLabel(const algorithm::BoundaryNodeRule& bnr);
 
@@ -155,7 +155,7 @@ protected:
 
     EdgeEnd(Edge* newEdge);
 
-    virtual void init(const geom::Coordinate& newP0,
+    void init(const geom::Coordinate& newP0,
                       const geom::Coordinate& newP1);
 
 private:

@@ -54,7 +54,7 @@ namespace geomgraph { // geos.geomgraph
  * Implements splitting an edge with intersections
  * into multiple resultant edges.
  */
-class GEOS_DLL EdgeIntersectionList {
+class GEOS_DLL EdgeIntersectionList final {
 public:
     // Instead of storing edge intersections in a set, as JTS does, we store them
     // in a vector and then sort the vector if needed before iterating among the

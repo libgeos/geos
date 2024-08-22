@@ -42,7 +42,7 @@ namespace relate { // geos::operation::relate
  * Represents a node in the topological graph used to compute spatial
  * relationships.
  */
-class GEOS_DLL RelateNode: public geomgraph::Node {
+class GEOS_DLL RelateNode final: public geomgraph::Node {
 
 public:
 

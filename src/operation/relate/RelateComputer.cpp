@@ -361,10 +361,10 @@ RelateComputer::computeIntersectionNodes(uint8_t argIndex)
 void
 RelateComputer::labelIntersectionNodes(uint8_t argIndex)
 {
-    std::vector<Edge*>* edges = arg[argIndex]->getEdges();
-    for(Edge* e: *edges) {
+    const std::vector<Edge*>* edges = arg[argIndex]->getEdges();
+    for(const Edge* e: *edges) {
         Location eLoc = e->getLabel().getLocation(argIndex);
-        EdgeIntersectionList& eiL = e->getEdgeIntersectionList();
+        const EdgeIntersectionList& eiL = e->getEdgeIntersectionList();
 
         for(const EdgeIntersection& ei : eiL) {
             RelateNode* n = static_cast<RelateNode*>(nodes.find(ei.coord));

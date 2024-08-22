@@ -42,7 +42,7 @@ namespace geomgraph { // geos.geomgraph
  *
  * Each GraphComponent can carry a Label.
  */
-class GEOS_DLL GraphComponent {
+class GEOS_DLL GraphComponent /* non-final */ {
 public:
     GraphComponent();
 
@@ -69,39 +69,39 @@ public:
         label = newLabel;
     }
 
-    virtual void
+    void
     setInResult(bool p_isInResult)
     {
         isInResultVar = p_isInResult;
     }
-    virtual bool
+    bool
     isInResult() const
     {
         return isInResultVar;
     }
-    virtual void setCovered(bool isCovered);
-    virtual bool
+    void setCovered(bool isCovered);
+    bool
     isCovered() const
     {
         return isCoveredVar;
     }
-    virtual bool
+    bool
     isCoveredSet() const
     {
         return isCoveredSetVar;
     }
-    virtual bool
+    bool
     isVisited() const
     {
         return isVisitedVar;
     }
-    virtual void
+    void
     setVisited(bool p_isVisited)
     {
         isVisitedVar = p_isVisited;
     }
     virtual bool isIsolated() const = 0;
-    virtual void updateIM(geom::IntersectionMatrix& im);
+    void updateIM(geom::IntersectionMatrix& im);
 protected:
     Label label;
     virtual void computeIM(geom::IntersectionMatrix& im) = 0;

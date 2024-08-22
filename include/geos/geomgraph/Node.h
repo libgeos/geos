@@ -56,7 +56,7 @@ namespace geos {
 namespace geomgraph { // geos.geomgraph
 
 /** \brief The node component of a geometry graph. */
-class GEOS_DLL Node: public GraphComponent {
+class GEOS_DLL Node /* non-final */: public GraphComponent {
     using GraphComponent::setLabel;
 
 public:
@@ -67,18 +67,18 @@ public:
 
     ~Node() override;
 
-    virtual const geom::Coordinate& getCoordinate() const;
+    const geom::Coordinate& getCoordinate() const;
 
-    virtual EdgeEndStar* getEdges();
+    EdgeEndStar* getEdges();
 
     bool isIsolated() const override;
 
     /** \brief
      * Add the edge to the list of edges at this node
      */
-    virtual void add(EdgeEnd* e);
+    void add(EdgeEnd* e);
 
-    virtual void mergeLabel(const Node& n);
+    void mergeLabel(const Node& n);
 
     /** \brief
      * To merge labels for two nodes,
@@ -87,15 +87,15 @@ public:
      * The location for the corresponding node LabelElement is set
      * to the result, as long as the location is non-null.
      */
-    virtual void mergeLabel(const Label& label2);
+    void mergeLabel(const Label& label2);
 
-    virtual void setLabel(uint8_t argIndex, geom::Location onLocation);
+    void setLabel(uint8_t argIndex, geom::Location onLocation);
 
     /** \brief
      * Updates the label of a node to BOUNDARY,
      * obeying the mod-2 boundaryDetermination rule.
      */
-    virtual void setLabelBoundary(uint8_t argIndex);
+    void setLabelBoundary(uint8_t argIndex);
 
     /**
      * The location for a given eltIndex for a node will be one
@@ -105,13 +105,13 @@ public:
      * in the boundary.
      * The merged location is the maximum of the two input values.
      */
-    virtual geom::Location computeMergedLocation(const Label& label2, uint8_t eltIndex);
+    geom::Location computeMergedLocation(const Label& label2, uint8_t eltIndex);
 
-    virtual std::string print() const;
+    std::string print() const;
 
-    virtual const std::vector<double>& getZ() const;
+    const std::vector<double>& getZ() const;
 
-    virtual void addZ(double);
+    void addZ(double);
 
     /** \brief
      * Tests whether any incident edge is flagged as
@@ -124,7 +124,7 @@ public:
      * @return <code>true</code> if any indicident edge in the in
      *         the result
      */
-    virtual bool isIncidentEdgeInResult() const;
+    bool isIncidentEdgeInResult() const;
 
 protected:
 
