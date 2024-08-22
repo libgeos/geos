@@ -449,20 +449,20 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        xcode: [13.2.1]
-        cxxstd: [14]
-        build_type: ['ASAN']
-        runs_on: ['macos-12']
-        include:
-          - xcode: 14.3.1
-            cxxstd: 17
-            build_type: Debug
-            runs_on: macos-13
-          # arm64 build
-          - xcode: 15.4
-            cxxstd: 20
-            build_type: Release
-            runs_on: macOS-14
+        ci:
+        # - xcode: 13.2.1
+        #   cxxstd: 14
+        #   build_type: ASAN
+        #   runs_on: macos-12
+        - xcode: 14.3.1
+          cxxstd: 17
+          build_type: Debug
+          runs_on: macos-13
+        # arm64 build
+        - xcode: 15.4
+          cxxstd: 20
+          build_type: Release
+          runs_on: macOS-14
 
     runs-on: ${{ matrix.runs_on }}
     steps:
