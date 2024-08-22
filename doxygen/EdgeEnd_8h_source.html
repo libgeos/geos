@@ -90,7 +90,7 @@ $(function() {
 <div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
 <div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="keyword">namespace </span>geomgraph { <span class="comment">// geos.geomgraph</span></div>
 <div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno"><a class="line" href="classgeos_1_1geomgraph_1_1EdgeEnd.html">   54</a></span>&#160;<span class="keyword">class </span>GEOS_DLL <a class="code" href="classgeos_1_1geomgraph_1_1EdgeEnd.html">EdgeEnd</a> {</div>
+<div class="line"><a name="l00054"></a><span class="lineno"><a class="line" href="classgeos_1_1geomgraph_1_1EdgeEnd.html">   54</a></span>&#160;<span class="keyword">class </span>GEOS_DLL <a class="code" href="classgeos_1_1geomgraph_1_1EdgeEnd.html">EdgeEnd</a> <span class="comment">/* non-final */</span> {</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
 <div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
@@ -127,7 +127,7 @@ $(function() {
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        <span class="keywordflow">return</span> label;</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    }</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <span class="keyword">virtual</span> geom::Coordinate&amp; getCoordinate() {</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    geom::Coordinate&amp; getCoordinate() {</div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <span class="keywordflow">return</span> p0;</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    }</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160; </div>
@@ -137,21 +137,21 @@ $(function() {
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        <span class="keywordflow">return</span> p0;</div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    }</div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    <span class="keyword">virtual</span> geom::Coordinate&amp; getDirectedCoordinate();</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    geom::Coordinate&amp; getDirectedCoordinate();</div>
 <div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">int</span> getQuadrant();</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    <span class="keywordtype">int</span> getQuadrant();</div>
 <div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">double</span> getDx();</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    <span class="keywordtype">double</span> getDx();</div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">double</span> getDy();</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    <span class="keywordtype">double</span> getDy();</div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> setNode(Node* newNode);</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    <span class="keywordtype">void</span> setNode(Node* newNode);</div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160; </div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    <span class="keyword">virtual</span> Node* getNode();</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    Node* getNode();</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">int</span> compareTo(<span class="keyword">const</span> EdgeEnd* e) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    <span class="keywordtype">int</span> compareTo(<span class="keyword">const</span> EdgeEnd* e) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
-<div class="line"><a name="l00144"></a><span class="lineno"><a class="line" href="classgeos_1_1geomgraph_1_1EdgeEnd.html#a39a1f0dc79bdd2e59d0574469867f9cd">  144</a></span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">int</span> <a class="code" href="classgeos_1_1geomgraph_1_1EdgeEnd.html#a39a1f0dc79bdd2e59d0574469867f9cd">compareDirection</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geomgraph_1_1EdgeEnd.html">EdgeEnd</a>* e) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00144"></a><span class="lineno"><a class="line" href="classgeos_1_1geomgraph_1_1EdgeEnd.html#ab0aba047d0ff8ab1c6acbdc98ea8167e">  144</a></span>&#160;    <span class="keywordtype">int</span> <a class="code" href="classgeos_1_1geomgraph_1_1EdgeEnd.html#ab0aba047d0ff8ab1c6acbdc98ea8167e">compareDirection</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geomgraph_1_1EdgeEnd.html">EdgeEnd</a>* e) <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160; </div>
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> computeLabel(<span class="keyword">const</span> <a class="code" href="classgeos_1_1algorithm_1_1BoundaryNodeRule.html">algorithm::BoundaryNodeRule</a>&amp; bnr);</div>
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160; </div>
@@ -165,7 +165,7 @@ $(function() {
 <div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160; </div>
 <div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;    <a class="code" href="classgeos_1_1geomgraph_1_1EdgeEnd.html">EdgeEnd</a>(<a class="code" href="classgeos_1_1geomgraph_1_1Edge.html">Edge</a>* newEdge);</div>
 <div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160; </div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> init(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; newP0,</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    <span class="keywordtype">void</span> init(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; newP0,</div>
 <div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;                      <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; newP1);</div>
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160; </div>
 <div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;<span class="keyword">private</span>:</div>
@@ -196,8 +196,8 @@ $(function() {
 <div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a></div><div class="ttdoc">Coordinate is the lightweight class used to store coordinates.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:217</div></div>
 <div class="ttc" id="aclassgeos_1_1geomgraph_1_1EdgeEnd_html"><div class="ttname"><a href="classgeos_1_1geomgraph_1_1EdgeEnd.html">geos::geomgraph::EdgeEnd</a></div><div class="ttdoc">Models the end of an edge incident on a node.</div><div class="ttdef"><b>Definition:</b> EdgeEnd.h:54</div></div>
 <div class="ttc" id="aclassgeos_1_1geomgraph_1_1EdgeEnd_html_a35aeeb8d5e54f14b1deb352bb0bc9933"><div class="ttname"><a href="classgeos_1_1geomgraph_1_1EdgeEnd.html#a35aeeb8d5e54f14b1deb352bb0bc9933">geos::geomgraph::EdgeEnd::EdgeEnd</a></div><div class="ttdeci">EdgeEnd(Edge *newEdge, const geom::Coordinate &amp;newP0, const geom::Coordinate &amp;newP1, const Label &amp;newLabel)</div></div>
-<div class="ttc" id="aclassgeos_1_1geomgraph_1_1EdgeEnd_html_a39a1f0dc79bdd2e59d0574469867f9cd"><div class="ttname"><a href="classgeos_1_1geomgraph_1_1EdgeEnd.html#a39a1f0dc79bdd2e59d0574469867f9cd">geos::geomgraph::EdgeEnd::compareDirection</a></div><div class="ttdeci">virtual int compareDirection(const EdgeEnd *e) const</div></div>
 <div class="ttc" id="aclassgeos_1_1geomgraph_1_1EdgeEnd_html_a8e1d7310f89a3f625a4f1a32414b5c41"><div class="ttname"><a href="classgeos_1_1geomgraph_1_1EdgeEnd.html#a8e1d7310f89a3f625a4f1a32414b5c41">geos::geomgraph::EdgeEnd::EdgeEnd</a></div><div class="ttdeci">EdgeEnd(Edge *newEdge, const geom::Coordinate &amp;newP0, const geom::Coordinate &amp;newP1)</div></div>
+<div class="ttc" id="aclassgeos_1_1geomgraph_1_1EdgeEnd_html_ab0aba047d0ff8ab1c6acbdc98ea8167e"><div class="ttname"><a href="classgeos_1_1geomgraph_1_1EdgeEnd.html#ab0aba047d0ff8ab1c6acbdc98ea8167e">geos::geomgraph::EdgeEnd::compareDirection</a></div><div class="ttdeci">int compareDirection(const EdgeEnd *e) const</div></div>
 <div class="ttc" id="aclassgeos_1_1geomgraph_1_1Edge_html"><div class="ttname"><a href="classgeos_1_1geomgraph_1_1Edge.html">geos::geomgraph::Edge</a></div><div class="ttdef"><b>Definition:</b> geomgraph/Edge.h:63</div></div>
 <div class="ttc" id="aclassgeos_1_1geomgraph_1_1Label_html"><div class="ttname"><a href="classgeos_1_1geomgraph_1_1Label.html">geos::geomgraph::Label</a></div><div class="ttdoc">A Label indicates the topological relationship of a component of a topology graph to a given Geometry...</div><div class="ttdef"><b>Definition:</b> Label.h:57</div></div>
 <div class="ttc" id="aclassgeos_1_1geomgraph_1_1Node_html"><div class="ttname"><a href="classgeos_1_1geomgraph_1_1Node.html">geos::geomgraph::Node</a></div><div class="ttdoc">The node component of a geometry graph.</div><div class="ttdef"><b>Definition:</b> geomgraph/Node.h:59</div></div>

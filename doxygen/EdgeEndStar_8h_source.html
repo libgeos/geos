@@ -101,7 +101,7 @@ $(function() {
 <div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="keyword">namespace </span>geomgraph { <span class="comment">// geos.geomgraph</span></div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
 <div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00063"></a><span class="lineno"><a class="line" href="classgeos_1_1geomgraph_1_1EdgeEndStar.html">   63</a></span>&#160;<span class="keyword">class </span>GEOS_DLL <a class="code" href="classgeos_1_1geomgraph_1_1EdgeEndStar.html">EdgeEndStar</a> {</div>
+<div class="line"><a name="l00063"></a><span class="lineno"><a class="line" href="classgeos_1_1geomgraph_1_1EdgeEndStar.html">   63</a></span>&#160;<span class="keyword">class </span>GEOS_DLL <a class="code" href="classgeos_1_1geomgraph_1_1EdgeEndStar.html">EdgeEndStar</a> <span class="comment">/* non-final */</span> {</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keyword">typedef</span> std::set&lt;EdgeEnd*, EdgeEndLT&gt; container;</div>
@@ -117,46 +117,46 @@ $(function() {
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
 <div class="line"><a name="l00080"></a><span class="lineno"><a class="line" href="classgeos_1_1geomgraph_1_1EdgeEndStar.html#af1788054ea57ee569a5419448d576541">   80</a></span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1geomgraph_1_1EdgeEndStar.html#af1788054ea57ee569a5419448d576541">insert</a>(<a class="code" href="classgeos_1_1geomgraph_1_1EdgeEnd.html">EdgeEnd</a>* e) = 0;</div>
 <div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160; </div>
-<div class="line"><a name="l00089"></a><span class="lineno"><a class="line" href="classgeos_1_1geomgraph_1_1EdgeEndStar.html#a197f8790795be7758e4c447c4dbbe3c6">   89</a></span>&#160;    <span class="keyword">virtual</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; <a class="code" href="classgeos_1_1geomgraph_1_1EdgeEndStar.html#a197f8790795be7758e4c447c4dbbe3c6">getCoordinate</a>();</div>
+<div class="line"><a name="l00089"></a><span class="lineno"><a class="line" href="classgeos_1_1geomgraph_1_1EdgeEndStar.html#a0aba4961fbe377a5c3322392991a9d51">   89</a></span>&#160;    <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; <a class="code" href="classgeos_1_1geomgraph_1_1EdgeEndStar.html#a0aba4961fbe377a5c3322392991a9d51">getCoordinate</a>();</div>
 <div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
 <div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; getCoordinate() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keyword">virtual</span> std::size_t getDegree();</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    std::size_t getDegree();</div>
 <div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    <span class="keyword">virtual</span> iterator begin();</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;    iterator begin();</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="keyword">virtual</span> iterator end();</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    iterator end();</div>
 <div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <span class="keyword">virtual</span> reverse_iterator rbegin();</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    reverse_iterator rbegin();</div>
 <div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    <span class="keyword">virtual</span> reverse_iterator rend();</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    reverse_iterator rend();</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="keyword">virtual</span> const_iterator</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    const_iterator</div>
 <div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    begin()<span class="keyword"> const</span></div>
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;<span class="keyword">    </span>{</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <span class="keywordflow">return</span> edgeMap.begin();</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    }</div>
 <div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160; </div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    <span class="keyword">virtual</span> const_iterator</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    const_iterator</div>
 <div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    end()<span class="keyword"> const</span></div>
 <div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="keyword">    </span>{</div>
 <div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        <span class="keywordflow">return</span> edgeMap.end();</div>
 <div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;    }</div>
 <div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    <span class="keyword">virtual</span> container&amp; getEdges();</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    container&amp; getEdges();</div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    <span class="keyword">virtual</span> EdgeEnd* getNextCW(EdgeEnd* ee);</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;    EdgeEnd* getNextCW(EdgeEnd* ee);</div>
 <div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
 <div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> computeLabelling(<span class="keyword">const</span> std::vector&lt;std::unique_ptr&lt;GeometryGraph&gt;&gt;&amp;geomGraph);</div>
 <div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;    <span class="comment">// throw(TopologyException *);</span></div>
 <div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> isAreaLabelsConsistent(<span class="keyword">const</span> GeometryGraph&amp; geomGraph);</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    <span class="keywordtype">bool</span> isAreaLabelsConsistent(<span class="keyword">const</span> GeometryGraph&amp; geomGraph);</div>
 <div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160; </div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> propagateSideLabels(uint32_t geomIndex);</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;    <span class="keywordtype">void</span> propagateSideLabels(uint32_t geomIndex);</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    <span class="comment">// throw(TopologyException *);</span></div>
 <div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
 <div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    <span class="comment">//virtual int findIndex(EdgeEnd *eSearch);</span></div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    <span class="keyword">virtual</span> iterator find(EdgeEnd* eSearch);</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    iterator find(EdgeEnd* eSearch);</div>
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160; </div>
 <div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    <span class="keyword">virtual</span> std::string print() <span class="keyword">const</span>;</div>
 <div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160; </div>
@@ -164,23 +164,23 @@ $(function() {
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160; </div>
 <div class="line"><a name="l00138"></a><span class="lineno"><a class="line" href="classgeos_1_1geomgraph_1_1EdgeEndStar.html#a2463e964415e7af6452255a247e62de7">  138</a></span>&#160;    EdgeEndStar::container <a class="code" href="classgeos_1_1geomgraph_1_1EdgeEndStar.html#a2463e964415e7af6452255a247e62de7">edgeMap</a>;</div>
 <div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160; </div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span></div>
-<div class="line"><a name="l00144"></a><span class="lineno"><a class="line" href="classgeos_1_1geomgraph_1_1EdgeEndStar.html#afaec84f7e6761aa53bf5d11735220299">  144</a></span>&#160;    <a class="code" href="classgeos_1_1geomgraph_1_1EdgeEndStar.html#afaec84f7e6761aa53bf5d11735220299">insertEdgeEnd</a>(<a class="code" href="classgeos_1_1geomgraph_1_1EdgeEnd.html">EdgeEnd</a>* e)</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;    <span class="keywordtype">void</span></div>
+<div class="line"><a name="l00144"></a><span class="lineno"><a class="line" href="classgeos_1_1geomgraph_1_1EdgeEndStar.html#ad1041b0207267ba49725eb23947a19a2">  144</a></span>&#160;    <a class="code" href="classgeos_1_1geomgraph_1_1EdgeEndStar.html#ad1041b0207267ba49725eb23947a19a2">insertEdgeEnd</a>(<a class="code" href="classgeos_1_1geomgraph_1_1EdgeEnd.html">EdgeEnd</a>* e)</div>
 <div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;    {</div>
 <div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;        edgeMap.insert(e);</div>
 <div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;    }</div>
 <div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160; </div>
 <div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;<span class="keyword">private</span>:</div>
 <div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160; </div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    <span class="keyword">virtual</span> <a class="code" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8">geom::Location</a> getLocation(uint32_t geomIndex,</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    <a class="code" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8">geom::Location</a> getLocation(uint32_t geomIndex,</div>
 <div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;                                       <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp;p,</div>
 <div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;                                       <span class="keyword">const</span> std::vector&lt;std::unique_ptr&lt;GeometryGraph&gt;&gt;&amp;geom);</div>
 <div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160; </div>
 <div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    std::array&lt;geom::Location, 2&gt; ptInAreaLocation;</div>
 <div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160; </div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span> computeEdgeEndLabels(<span class="keyword">const</span> <a class="code" href="classgeos_1_1algorithm_1_1BoundaryNodeRule.html">algorithm::BoundaryNodeRule</a>&amp;);</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;    <span class="keywordtype">void</span> computeEdgeEndLabels(<span class="keyword">const</span> <a class="code" href="classgeos_1_1algorithm_1_1BoundaryNodeRule.html">algorithm::BoundaryNodeRule</a>&amp;);</div>
 <div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160; </div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> checkAreaLabelsConsistent(uint32_t geomIndex);</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;    <span class="keywordtype">bool</span> checkAreaLabelsConsistent(uint32_t geomIndex);</div>
 <div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160; </div>
 <div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;};</div>
 <div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160; </div>
@@ -238,10 +238,10 @@ $(function() {
 <div class="ttc" id="aclassgeos_1_1algorithm_1_1BoundaryNodeRule_html"><div class="ttname"><a href="classgeos_1_1algorithm_1_1BoundaryNodeRule.html">geos::algorithm::BoundaryNodeRule</a></div><div class="ttdoc">An interface for rules which determine whether node points which are in boundaries of lineal geometry...</div><div class="ttdef"><b>Definition:</b> BoundaryNodeRule.h:52</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a></div><div class="ttdoc">Coordinate is the lightweight class used to store coordinates.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:217</div></div>
 <div class="ttc" id="aclassgeos_1_1geomgraph_1_1EdgeEndStar_html"><div class="ttname"><a href="classgeos_1_1geomgraph_1_1EdgeEndStar.html">geos::geomgraph::EdgeEndStar</a></div><div class="ttdoc">A EdgeEndStar is an ordered list of EdgeEnds around a node.</div><div class="ttdef"><b>Definition:</b> EdgeEndStar.h:63</div></div>
-<div class="ttc" id="aclassgeos_1_1geomgraph_1_1EdgeEndStar_html_a197f8790795be7758e4c447c4dbbe3c6"><div class="ttname"><a href="classgeos_1_1geomgraph_1_1EdgeEndStar.html#a197f8790795be7758e4c447c4dbbe3c6">geos::geomgraph::EdgeEndStar::getCoordinate</a></div><div class="ttdeci">virtual geom::Coordinate &amp; getCoordinate()</div></div>
+<div class="ttc" id="aclassgeos_1_1geomgraph_1_1EdgeEndStar_html_a0aba4961fbe377a5c3322392991a9d51"><div class="ttname"><a href="classgeos_1_1geomgraph_1_1EdgeEndStar.html#a0aba4961fbe377a5c3322392991a9d51">geos::geomgraph::EdgeEndStar::getCoordinate</a></div><div class="ttdeci">geom::Coordinate &amp; getCoordinate()</div></div>
 <div class="ttc" id="aclassgeos_1_1geomgraph_1_1EdgeEndStar_html_a2463e964415e7af6452255a247e62de7"><div class="ttname"><a href="classgeos_1_1geomgraph_1_1EdgeEndStar.html#a2463e964415e7af6452255a247e62de7">geos::geomgraph::EdgeEndStar::edgeMap</a></div><div class="ttdeci">EdgeEndStar::container edgeMap</div><div class="ttdoc">A map which maintains the edges in sorted order around the node.</div><div class="ttdef"><b>Definition:</b> EdgeEndStar.h:138</div></div>
+<div class="ttc" id="aclassgeos_1_1geomgraph_1_1EdgeEndStar_html_ad1041b0207267ba49725eb23947a19a2"><div class="ttname"><a href="classgeos_1_1geomgraph_1_1EdgeEndStar.html#ad1041b0207267ba49725eb23947a19a2">geos::geomgraph::EdgeEndStar::insertEdgeEnd</a></div><div class="ttdeci">void insertEdgeEnd(EdgeEnd *e)</div><div class="ttdoc">Insert an EdgeEnd into the map.</div><div class="ttdef"><b>Definition:</b> EdgeEndStar.h:144</div></div>
 <div class="ttc" id="aclassgeos_1_1geomgraph_1_1EdgeEndStar_html_af1788054ea57ee569a5419448d576541"><div class="ttname"><a href="classgeos_1_1geomgraph_1_1EdgeEndStar.html#af1788054ea57ee569a5419448d576541">geos::geomgraph::EdgeEndStar::insert</a></div><div class="ttdeci">virtual void insert(EdgeEnd *e)=0</div><div class="ttdoc">Insert a EdgeEnd into this EdgeEndStar.</div></div>
-<div class="ttc" id="aclassgeos_1_1geomgraph_1_1EdgeEndStar_html_afaec84f7e6761aa53bf5d11735220299"><div class="ttname"><a href="classgeos_1_1geomgraph_1_1EdgeEndStar.html#afaec84f7e6761aa53bf5d11735220299">geos::geomgraph::EdgeEndStar::insertEdgeEnd</a></div><div class="ttdeci">virtual void insertEdgeEnd(EdgeEnd *e)</div><div class="ttdoc">Insert an EdgeEnd into the map.</div><div class="ttdef"><b>Definition:</b> EdgeEndStar.h:144</div></div>
 <div class="ttc" id="aclassgeos_1_1geomgraph_1_1EdgeEnd_html"><div class="ttname"><a href="classgeos_1_1geomgraph_1_1EdgeEnd.html">geos::geomgraph::EdgeEnd</a></div><div class="ttdoc">Models the end of an edge incident on a node.</div><div class="ttdef"><b>Definition:</b> EdgeEnd.h:54</div></div>
 <div class="ttc" id="anamespacegeos_1_1geom_html_ae55a225cd843a6b153a7b6ca5a4707c8"><div class="ttname"><a href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8">geos::geom::Location</a></div><div class="ttdeci">Location</div><div class="ttdoc">Constants representing the location of a point relative to a geometry.</div><div class="ttdef"><b>Definition:</b> Location.h:32</div></div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:25</div></div>
