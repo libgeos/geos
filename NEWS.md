@@ -6,6 +6,7 @@
   - Add classes for curved geometry types: CircularString, CompoundCurve, CurvedPolygon, MultiCurve,
     MultiSurface (GH-1046, Dan Baston/German QGIS users group/Canton of Basel-Landschaft/Canton of Zug)
   - Support curved geometry types in WKT/WKB readers/writers (GH-1046, GH-1104, GH-1106, Dan Baston)
+  - 3D read and write support for GeoJSON (GH-1150, Oreilles)
   - Port of RelateNG https://github.com/locationtech/jts/pull/1052 (Martin Davis, Paul Ramsey)
     - Rewrite of boolean predicates and relate matrix calculations
     - "Prepared" mode now available for all predicates and relate matrix
