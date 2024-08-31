@@ -1849,34 +1849,38 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_transformXYZ_r(
     void* userdata);
 
 /** \see GEOSClusterDBSCAN */
-extern GEOSGeometry GEOS_DLL *GEOSClusterDBSCAN_r(
-        GEOSContextHandle_t handle,
-        GEOSGeometry* g,
-        double eps,
-        unsigned minPoints);
-
+extern unsigned GEOS_DLL* GEOSClusterDBSCAN_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* g,
+    double eps,
+    unsigned minPoints,
+    unsigned* numClusters);
 
 /** \see GEOSClusterGeometryDistance */
-extern GEOSGeometry GEOS_DLL *GEOSClusterGeometryDistance_r(
-        GEOSContextHandle_t handle,
-        GEOSGeometry* g,
-        double d);
+extern unsigned GEOS_DLL* GEOSClusterGeometryDistance_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* g,
+    double d,
+    unsigned* numClusters);
 
 /** \see GEOSClusterGeometryIntersects */
-extern GEOSGeometry GEOS_DLL *GEOSClusterGeometryIntersects_r(
-        GEOSContextHandle_t handle,
-        GEOSGeometry* g);
+extern unsigned GEOS_DLL* GEOSClusterGeometryIntersects_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* g,
+    unsigned* numClusters);
 
 /** \see GEOSClusterEnvelopeDistance */
-extern GEOSGeometry GEOS_DLL *GEOSClusterEnvelopeDistance_r(
-        GEOSContextHandle_t handle,
-        GEOSGeometry* g,
-        double d);
+extern unsigned GEOS_DLL* GEOSClusterEnvelopeDistance_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* g,
+    double d,
+    unsigned* numClusters);
 
 /** \see GEOSClusterEnvelopeIntersects */
-extern GEOSGeometry GEOS_DLL *GEOSClusterEnvelopeIntersects_r(
-        GEOSContextHandle_t handle,
-        GEOSGeometry* g);
+extern unsigned GEOS_DLL* GEOSClusterEnvelopeIntersects_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* g,
+    unsigned* numClusters);
 
 /* ========= Algorithms ========= */
 
@@ -3791,10 +3795,13 @@ extern GEOSGeometry GEOS_DLL *GEOSSharedPaths(
     const GEOSGeometry* g2);
 ///@}
 
-/* ========== Buffer related functions ========== */
+/* ========== Clustering functions ========== */
 /** @name Clustering
 * Functions for clustering geometries
 */
+
+static const unsigned GEOS_CLUSTER_NONE = 4294967295;
+
 ///@{
 /**
  * @brief GEOSClusterDBSCAN
@@ -3804,9 +3811,11 @@ extern GEOSGeometry GEOS_DLL *GEOSSharedPaths(
  * @param g a collection of geometries to be clustered
  * @param eps distance parameter for clustering
  * @param minPoints density parameter for clustering
- * @return GeometryCollection whose components represent individual clusters
+ * @param numClusters the number of clusters formed
+ * @return an array of cluster identifiers
  */
-extern GEOSGeometry GEOS_DLL *GEOSClusterDBSCAN(GEOSGeometry* g, double eps, unsigned minPoints);
+extern unsigned GEOS_DLL* GEOSClusterDBSCAN(const GEOSGeometry* g, double eps, unsigned minPoints,
+        unsigned* numClusters);
 
 /**
  * @brief GEOSClusterGeometryDistance
@@ -3814,10 +3823,11 @@ extern GEOSGeometry GEOS_DLL *GEOSClusterDBSCAN(GEOSGeometry* g, double eps, uns
  * Cluster geometries according to a distance threshold
  *
  * @param g a collection of geometries to be clustered
- * @param d minimim distance between geometries in the same cluster
- * @return GeometryCollection whose components represent individual clusters
+ * @param d minimum distance between geometries in the same cluster
+ * @param numClusters the number of clusters formed
+ * @return an array of cluster identifiers
  */
-extern GEOSGeometry GEOS_DLL *GEOSClusterGeometryDistance(GEOSGeometry* g, double d);
+extern unsigned GEOS_DLL* GEOSClusterGeometryDistance(const GEOSGeometry* g, double d, unsigned* numClusters);
 
 /**
  * @brief GEOSClusterGeometryIntersects
@@ -3825,9 +3835,10 @@ extern GEOSGeometry GEOS_DLL *GEOSClusterGeometryDistance(GEOSGeometry* g, doubl
  * Cluster geometries that intersect
  *
  * @param g a collection of geometries to be clustered
- * @return GeometryCollection whose components represent individual clusters
+ * @param numClusters the number of clusters formed
+ * @return an array of cluster identifiers
  */
-extern GEOSGeometry GEOS_DLL *GEOSClusterGeometryIntersects(GEOSGeometry* g);
+extern unsigned GEOS_DLL* GEOSClusterGeometryIntersects(const GEOSGeometry* g, unsigned* numClusters);
 
 /**
  * @brief GEOSClusterEnvelopeDistance
@@ -3835,10 +3846,11 @@ extern GEOSGeometry GEOS_DLL *GEOSClusterGeometryIntersects(GEOSGeometry* g);
  * Cluster geometries according to an envelope distance threshold
  *
  * @param g a collection of geometries to be clustered
- * @param d minimim envelope distance between geometries in the same cluster
- * @return GeometryCollection whose components represent individual clusters
+ * @param d minimum envelope distance between geometries in the same cluster
+ * @param numClusters the number of clusters formed
+ * @return an array of cluster identifiers
  */
-extern GEOSGeometry GEOS_DLL *GEOSClusterEnvelopeDistance(GEOSGeometry* g, double d);
+extern unsigned GEOS_DLL* GEOSClusterEnvelopeDistance(const GEOSGeometry* g, double d, unsigned* numClusters);
 
 /**
  * @brief GEOSClusterEnvelopeIntersects
@@ -3846,9 +3858,10 @@ extern GEOSGeometry GEOS_DLL *GEOSClusterEnvelopeDistance(GEOSGeometry* g, doubl
  * Cluster geometries whose envelopes intersect
  *
  * @param g
- * @return GeometryCollection whose components represent individual clusters
+ * @param numClusters the number of clusters formed
+ * @return an array of cluster identifiers
  */
-extern GEOSGeometry GEOS_DLL *GEOSClusterEnvelopeIntersects(GEOSGeometry* g);
+extern unsigned GEOS_DLL* GEOSClusterEnvelopeIntersects(const GEOSGeometry* g, unsigned* numClusters);
 ///@}
 
 /* ========== Buffer related functions ========== */
@@ -5064,9 +5077,9 @@ extern char GEOS_DLL GEOSEqualsIdentical(
 
 /**
 * Calculate the [DE9IM](https://en.wikipedia.org/wiki/DE-9IM) string for a geometry pair
-* and compare against a DE9IM pattern. 
+* and compare against a DE9IM pattern.
 * Returns true if the computed matrix matches the pattern.
-* The pattern is a 9-character string 
+* The pattern is a 9-character string
 * containing symbols in the set "012TF*".
 * "012F" match the corresponding dimension symbol;
 * "T" matches any non-empty dimension; "*" matches any dimension.

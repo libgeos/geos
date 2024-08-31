@@ -953,53 +953,74 @@ extern "C" {
         });
     }
 
-    Geometry*
-    GEOSClusterDBSCAN_r(GEOSContextHandle_t extHandle, Geometry* g, double eps, unsigned minPoints)
+    static unsigned* capi_clusters(const Geometry* g,
+                                   geos::operation::cluster::AbstractClusterFinder& finder,
+                                   unsigned* numClusters)
+    {
+        std::vector<const Geometry*> input{g->getNumGeometries()};
+        for (std::size_t i = 0; i < input.size(); i++) {
+            input[i] = g->getGeometryN(i);
+        }
+
+        auto result = finder.cluster(input);
+
+        if (numClusters) {
+            *numClusters = static_cast<unsigned>(result.getNumClusters());
+        }
+
+        auto cluster_ids = result.getClusterIds(GEOS_CLUSTER_NONE);
+        unsigned* ids = (unsigned*) malloc(cluster_ids.size() * sizeof(unsigned));
+        for (std::size_t i = 0; i < cluster_ids.size(); i++) {
+            ids[i] = static_cast<unsigned>(cluster_ids[i]);
+        }
+
+        return ids;
+    }
+
+    unsigned*
+    GEOSClusterDBSCAN_r(GEOSContextHandle_t extHandle, const Geometry* g, double eps, unsigned minPoints,
+                        unsigned* numClusters)
     {
         return execute(extHandle, [&]() {
-            std::unique_ptr<Geometry> in(g);
             geos::operation::cluster::DBSCANClusterFinder finder(eps, minPoints);
-            return finder.clusterToCollection(std::move(in)).release();
+
+            return capi_clusters(g, finder, numClusters);
         });
     }
 
-    Geometry*
-    GEOSClusterGeometryIntersects_r(GEOSContextHandle_t extHandle, Geometry* g)
+    unsigned*
+    GEOSClusterGeometryIntersects_r(GEOSContextHandle_t extHandle, const Geometry* g, unsigned* numClusters)
     {
         return execute(extHandle, [&]() {
-            std::unique_ptr<Geometry> in(g);
             geos::operation::cluster::GeometryIntersectsClusterFinder finder;
-            return finder.clusterToCollection(std::move(in)).release();
+            return capi_clusters(g, finder, numClusters);
         });
     }
 
-    Geometry*
-    GEOSClusterEnvelopeIntersects_r(GEOSContextHandle_t extHandle, Geometry* g)
+    unsigned*
+    GEOSClusterEnvelopeIntersects_r(GEOSContextHandle_t extHandle, const Geometry* g, unsigned* numClusters)
     {
         return execute(extHandle, [&]() {
-            std::unique_ptr<Geometry> in(g);
             geos::operation::cluster::EnvelopeIntersectsClusterFinder finder;
-            return finder.clusterToCollection(std::move(in)).release();
+            return capi_clusters(g, finder, numClusters);
         });
     }
 
-    Geometry*
-    GEOSClusterEnvelopeDistance_r(GEOSContextHandle_t extHandle, Geometry* g, double d)
+    unsigned*
+    GEOSClusterEnvelopeDistance_r(GEOSContextHandle_t extHandle, const Geometry* g, double d, unsigned* numClusters)
     {
         return execute(extHandle, [&]() {
-            std::unique_ptr<Geometry> in(g);
             geos::operation::cluster::EnvelopeDistanceClusterFinder finder(d);
-            return finder.clusterToCollection(std::move(in)).release();
+            return capi_clusters(g, finder, numClusters);
         });
     }
 
-    Geometry*
-    GEOSClusterGeometryDistance_r(GEOSContextHandle_t extHandle, Geometry* g, double d)
+    unsigned*
+    GEOSClusterGeometryDistance_r(GEOSContextHandle_t extHandle, const Geometry* g, double d, unsigned* numClusters)
     {
         return execute(extHandle, [&]() {
-            std::unique_ptr<Geometry> in(g);
             geos::operation::cluster::GeometryDistanceClusterFinder finder(d);
-            return finder.clusterToCollection(std::move(in)).release();
+            return capi_clusters(g, finder, numClusters);
         });
     }
 

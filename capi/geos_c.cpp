@@ -343,29 +343,34 @@ extern "C" {
         return GEOSNearestPoints_r(handle, g1, g2);
     }
 
-    GEOSGeometry*
-    GEOSClusterDBSCAN(Geometry* g, double eps, unsigned minPoints) {
-        return GEOSClusterDBSCAN_r(handle, g, eps, minPoints);
+    unsigned*
+    GEOSClusterDBSCAN(const GEOSGeometry* g, double eps, unsigned minPoints, unsigned* numClusters)
+    {
+        return GEOSClusterDBSCAN_r(handle, g, eps, minPoints, numClusters);
     }
 
-    GEOSGeometry*
-    GEOSClusterGeometryDistance(GEOSGeometry* g, double d) {
-        return GEOSClusterGeometryDistance_r(handle, g, d);
+    unsigned*
+    GEOSClusterGeometryDistance(const GEOSGeometry* g, double d, unsigned* numClusters)
+    {
+        return GEOSClusterGeometryDistance_r(handle, g, d, numClusters);
     }
 
-    GEOSGeometry*
-    GEOSClusterGeometryIntersects(GEOSGeometry* g) {
-        return GEOSClusterGeometryIntersects_r(handle, g);
+    unsigned*
+    GEOSClusterGeometryIntersects(const GEOSGeometry* g, unsigned* numClusters)
+    {
+        return GEOSClusterGeometryIntersects_r(handle, g, numClusters);
     }
 
-    GEOSGeometry*
-    GEOSClusterEnvelopeDistance(GEOSGeometry* g, double d) {
-        return GEOSClusterEnvelopeDistance_r(handle, g, d);
+    unsigned*
+    GEOSClusterEnvelopeDistance(const GEOSGeometry* g, double d, unsigned* numClusters)
+    {
+        return GEOSClusterEnvelopeDistance_r(handle, g, d, numClusters);
     }
 
-    GEOSGeometry*
-    GEOSClusterEnvelopeIntersects(GEOSGeometry* g) {
-        return GEOSClusterEnvelopeIntersects_r(handle, g);
+    unsigned*
+    GEOSClusterEnvelopeIntersects(const GEOSGeometry* g, unsigned* numClusters)
+    {
+        return GEOSClusterEnvelopeIntersects_r(handle, g, numClusters);
     }
 
     Geometry*
