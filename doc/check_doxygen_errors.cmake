@@ -32,7 +32,7 @@ if(EXISTS "${DOXYGEN_LOGFILE}")
 
   foreach(LINE ${LOGFILE})
     string(REGEX MATCH
-      ".*(not documented|ignoring unsupported tag).*" IGNORE ${LINE})
+      ".*(not documented|ignoring unsupported tag|tag without matching).*" IGNORE ${LINE})
     if("${IGNORE}" STREQUAL "")
       list(APPEND ERRORS ${LINE})
     endif()
