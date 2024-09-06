@@ -22,7 +22,7 @@
    $ cmake --build . --target distcheck
 
 4. Update the NEWS file (extract most important things from the repository log).
-Make sure to update the release date.
+   Make sure to update the release date.
 
 5. Commit the changes in the NEWS file.
 
@@ -44,9 +44,16 @@ Make sure to update the release date.
 
 8. Copy the tar.bz2 file to upload.osgeo.org:/osgeo/download/geos
 
-9. Create and push a release branch if this was a PATCH=0 release,
-    update the versions for next release in Version.txt (both in
-    main and release branch if this was a PATCH=0 release).
+9. If this a PATCH=0 release.
+
+   - Create a new stable branch.
+   - Update the versions for next release in Version.txt for both
+     the main and stable branch.
+      - In stable branch, bump the CAPI_INTERFACE_REVISION to 1
+      - In main branch, bump CAPI_INTERFACE_CURRENT and CAPI_INTERFACE_AGE
+        and set CAPI_INTERFACE_REVISION to 0
+   - Remove the web/ directory from the stable branch, the web site
+     is only built from the main branch.
 
 10. Update download page of main branch: web/content/usage/download.md
 
@@ -54,6 +61,7 @@ Make sure to update the release date.
     - Remove previous patch level release (if any)
 
 11. If this is the latest stable tag release, update the: web/config.toml
+
     - Change the current_release variable to this tag release
  
 12. Close current GitHub milestone and add a new one for next release.
