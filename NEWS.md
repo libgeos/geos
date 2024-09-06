@@ -1,5 +1,5 @@
 ## Changes in 3.13.0
-2024-08-xx
+2024-09-06
 
 - New things:
   - Add Angle::sinCosSnap to avoid small errors, e.g. with buffer operations (GH-978, Mike Taves)
