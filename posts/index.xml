@@ -6,7 +6,53 @@
     <description>Recent content in News on GEOS</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 13 Aug 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://libgeos.org/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 06 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://libgeos.org/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Version 3.13.0</title>
+      <link>https://libgeos.org/posts/2024-09-06-geos-3-13-released/</link>
+      <pubDate>Fri, 06 Sep 2024 00:00:00 +0000</pubDate>
+      
+      <guid>https://libgeos.org/posts/2024-09-06-geos-3-13-released/</guid>
+      <description>&lt;p&gt;The 3.13 release of GEOS is now available &lt;a
+  class=&#34;gdoc-markdown__link&#34;
+  href=&#34;https://libgeos.org/usage/download/&#34;
+&gt;to download&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The headline features of this release are:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;
+&lt;p&gt;A new approach to boolean predicates via &lt;a
+  class=&#34;gdoc-markdown__link&#34;
+  href=&#34;https://libgeos.org/posts/2024-08-13-relateng/&#34;
+&gt;RelateNG&lt;/a&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Faster performance for many cases where a short circuit is available&lt;/li&gt;
+&lt;li&gt;Avoiding the full computation of a topology graph for every call&lt;/li&gt;
+&lt;li&gt;Ability to use a high speed &amp;ldquo;prepared&amp;rdquo; approach for the complete set of predicates as well as the relate matrix functions&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Initial support for ISO SQL/MM curve types&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Create, read and write support for CircularString, CompoundCurve, CurvedPolygon, MultiCurve, MultiSurface&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This release includes the following new features in the C API (and of course underlying changes to the C++ code to support these features):&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;GEOSGeom_createEmptyCircularString() creates a new empty CircularString&lt;/li&gt;
+&lt;li&gt;GEOSGeom_createCircularString(coordseq) creates a CircularString with the supplied coordinates&lt;/li&gt;
+&lt;li&gt;GEOSGeom_createEmptyCompoundCurve() creates a new empty CompoundCurve&lt;/li&gt;
+&lt;li&gt;GEOSGeom_createCompoundCurve(curves, ncurves) creates a CompoundCurve with the supplied components (start/end coordinates must match up)&lt;/li&gt;
+&lt;li&gt;GEOSGeom_createEmptyCurvePolygon() creates a new empty CurvePolygon&lt;/li&gt;
+&lt;li&gt;GEOSGeom_createCurvePolygon(shell, holes, nholes) creates a CurvePolygon with the supplied rings&lt;/li&gt;
+&lt;li&gt;GEOSPreparedRelate(prepgeom, geom) generates a &lt;a
+  class=&#34;gdoc-markdown__link&#34;
+  href=&#34;https://en.wikipedia.org/wiki/DE-9IM&#34;
+&gt;DE9IM&lt;/a&gt; intersection matrix for the geometry pair, where one input has been &amp;ldquo;prepared&amp;rdquo; for fast repeated calls&lt;/li&gt;
+&lt;li&gt;GEOSPreparedRelatePattern(prepgeom, geom, pattern) tests a pair of geometry against a known DE9IM pattern to see if the relationship is consistent with the pattern&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
     <item>
       <title>RelateNG</title>
       <link>https://libgeos.org/posts/2024-08-13-relateng/</link>

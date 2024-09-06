@@ -1358,6 +1358,91 @@
     <article class="gdoc-markdown gdoc-post">
       <header class="gdoc-post__header">
         <h1 class="gdoc-post__title">
+          <a href="/posts/2024-09-06-geos-3-13-released/">Version 3.13.0</a>
+        </h1>
+      </header>
+      <section>
+        <p>The 3.13 release of GEOS is now available <a
+  class="gdoc-markdown__link"
+  href="https://libgeos.org/usage/download/"
+>to download</a>.</p>
+<p>The headline features of this release are:</p>
+<ul>
+<li>
+<p>A new approach to boolean predicates via <a
+  class="gdoc-markdown__link"
+  href="/posts/2024-08-13-relateng/"
+>RelateNG</a></p>
+<ul>
+<li>Faster performance for many cases where a short circuit is available</li>
+<li>Avoiding the full computation of a topology graph for every call</li>
+<li>Ability to use a high speed &ldquo;prepared&rdquo; approach for the complete set of predicates as well as the relate matrix functions</li>
+</ul>
+</li>
+<li>
+<p>Initial support for ISO SQL/MM curve types</p>
+<ul>
+<li>Create, read and write support for CircularString, CompoundCurve, CurvedPolygon, MultiCurve, MultiSurface</li>
+</ul>
+</li>
+</ul>
+<p>This release includes the following new features in the C API (and of course underlying changes to the C++ code to support these features):</p>
+<ul>
+<li>GEOSGeom_createEmptyCircularString() creates a new empty CircularString</li>
+<li>GEOSGeom_createCircularString(coordseq) creates a CircularString with the supplied coordinates</li>
+<li>GEOSGeom_createEmptyCompoundCurve() creates a new empty CompoundCurve</li>
+<li>GEOSGeom_createCompoundCurve(curves, ncurves) creates a CompoundCurve with the supplied components (start/end coordinates must match up)</li>
+<li>GEOSGeom_createEmptyCurvePolygon() creates a new empty CurvePolygon</li>
+<li>GEOSGeom_createCurvePolygon(shell, holes, nholes) creates a CurvePolygon with the supplied rings</li>
+<li>GEOSPreparedRelate(prepgeom, geom) generates a <a
+  class="gdoc-markdown__link"
+  href="https://en.wikipedia.org/wiki/DE-9IM"
+>DE9IM</a> intersection matrix for the geometry pair, where one input has been &ldquo;prepared&rdquo; for fast repeated calls</li>
+<li>GEOSPreparedRelatePattern(prepgeom, geom, pattern) tests a pair of geometry against a known DE9IM pattern to see if the relationship is consistent with the pattern</li>
+</ul>
+      </section>
+      <div class="gdoc-post__readmore">
+        
+          <a
+            class="flex-inline align-center fake-link"
+            title="Read full post"
+            href="/posts/2024-09-06-geos-3-13-released/"
+          >
+            Read full post
+            <i class="gdoc-icon">gdoc_arrow_right_alt</i>
+          </a>
+        
+      </div>
+
+      <footer class="gdoc-post__footer">
+        <div class="flex flex-wrap align-center gdoc-post__meta">
+          <span class="flex align-center no-wrap">
+  <svg class="gdoc-icon gdoc_date"><use xlink:href="#gdoc_date"></use></svg>
+  <span class="gdoc-post__tag">
+    <time datetime="2024-09-06T00:00:00Z">
+      
+      Sep 6, 2024
+    </time>
+  </span>
+</span>
+
+<span class="flex align-center no-wrap">
+  <svg class="gdoc-icon gdoc_timer"><use xlink:href="#gdoc_timer"></use></svg>
+  <span class="gdoc-post__tag">4 minutes to read</span>
+</span>
+
+
+
+
+
+
+        </div>
+      </footer>
+    </article>
+  
+    <article class="gdoc-markdown gdoc-post">
+      <header class="gdoc-post__header">
+        <h1 class="gdoc-post__title">
           <a href="/posts/2024-08-13-relateng/">RelateNG</a>
         </h1>
       </header>
@@ -1870,58 +1955,6 @@ Release notes for 3.8.4 and 3.9.5 are below: 3.8.4, 3.9.5,
     <time datetime="2022-01-15T00:00:00Z">
       
       Jan 15, 2022
-    </time>
-  </span>
-</span>
-
-<span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_timer"><use xlink:href="#gdoc_timer"></use></svg>
-  <span class="gdoc-post__tag">One minute to read</span>
-</span>
-
-
-
-
-
-
-        </div>
-      </footer>
-    </article>
-  
-    <article class="gdoc-markdown gdoc-post">
-      <header class="gdoc-post__header">
-        <h1 class="gdoc-post__title">
-          <a href="/posts/2021-11-02-geos-3-10-1-released/">Version 3.10.1</a>
-        </h1>
-      </header>
-      <section>
-        <p>The 3.10.1 release of GEOS is now available <a
-  class="gdoc-markdown__link"
-  href="https://libgeos.org/usage/download/"
->to download</a>.</p>
-<p>This release is primarily to fix some version numbering issues in the initial 3.10.0 source tarball. Some extra fixes are bundled as well.</p>
-      </section>
-      <div class="gdoc-post__readmore">
-        
-          <a
-            class="flex-inline align-center fake-link"
-            title="Read full post"
-            href="/posts/2021-11-02-geos-3-10-1-released/"
-          >
-            Read full post
-            <i class="gdoc-icon">gdoc_arrow_right_alt</i>
-          </a>
-        
-      </div>
-
-      <footer class="gdoc-post__footer">
-        <div class="flex flex-wrap align-center gdoc-post__meta">
-          <span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_date"><use xlink:href="#gdoc_date"></use></svg>
-  <span class="gdoc-post__tag">
-    <time datetime="2021-11-02T00:00:00Z">
-      
-      Nov 2, 2021
     </time>
   </span>
 </span>

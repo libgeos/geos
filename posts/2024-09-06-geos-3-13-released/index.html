@@ -12,8 +12,14 @@
 <meta name="generator" content="Hugo 0.88.1" />
 
 
+  <meta name="description" content="The 3.13 release of GEOS is now available to download.
+The headline features of this release are:
+  A new approach to boolean predicates via RelateNG
+ Faster performance for many cases where a short circuit is available Avoiding the full computation of a topology graph for every call Ability to use a high speed &ldquo;prepared&rdquo; approach for the complete set of predicates as well as the relate matrix functions    Initial support for ISO SQL/MM curve types
+ Create, read and write support for CircularString, CompoundCurve, CurvedPolygon, MultiCurve, MultiSurface    This release includes the following new features in the C API (and of course underlying changes to the C&#43;&#43; code to support these features):
+ GEOSGeom_createEmptyCircularString() creates a new empty CircularString GEOSGeom_createCircularString(coordseq) creates a CircularString with the supplied coordinates GEOSGeom_createEmptyCompoundCurve() creates a new empty CompoundCurve GEOSGeom_createCompoundCurve(curves, ncurves) creates a CompoundCurve with the supplied components (start/end coordinates must match up) GEOSGeom_createEmptyCurvePolygon() creates a new empty CurvePolygon GEOSGeom_createCurvePolygon(shell, holes, nholes) creates a CurvePolygon with the supplied rings GEOSPreparedRelate(prepgeom, geom) generates a DE9IM intersection matrix for the geometry pair, where one input has been &ldquo;prepared&rdquo; for fast repeated calls GEOSPreparedRelatePattern(prepgeom, geom, pattern) tests a pair of geometry against a known DE9IM pattern to see if the relationship is consistent with the pattern " />
 
-    <title>News | GEOS</title>
+    <title>Version 3.13.0 | GEOS</title>
 
     <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
 <link
@@ -34,19 +40,73 @@
     
   <meta
     property="og:title"
-    content="News"
+    content="Version 3.13.0"
   />
   <meta property="og:site_name" content="GEOS" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://libgeos.org/posts/" />
+  <meta property="og:description" content="The 3.13 release of GEOS is now available to download.
+The headline features of this release are:
+  A new approach to boolean predicates via RelateNG
+ Faster performance for many cases where a short circuit is available Avoiding the full computation of a topology graph for every call Ability to use a high speed “prepared” approach for the complete set of predicates as well as the relate matrix functions    Initial support for ISO SQL/MM curve types
+ Create, read and write support for CircularString, CompoundCurve, CurvedPolygon, MultiCurve, MultiSurface    This release includes the following new features in the C API (and of course underlying changes to the C&#43;&#43; code to support these features):
+ GEOSGeom_createEmptyCircularString() creates a new empty CircularString GEOSGeom_createCircularString(coordseq) creates a CircularString with the supplied coordinates GEOSGeom_createEmptyCompoundCurve() creates a new empty CompoundCurve GEOSGeom_createCompoundCurve(curves, ncurves) creates a CompoundCurve with the supplied components (start/end coordinates must match up) GEOSGeom_createEmptyCurvePolygon() creates a new empty CurvePolygon GEOSGeom_createCurvePolygon(shell, holes, nholes) creates a CurvePolygon with the supplied rings GEOSPreparedRelate(prepgeom, geom) generates a DE9IM intersection matrix for the geometry pair, where one input has been “prepared” for fast repeated calls GEOSPreparedRelatePattern(prepgeom, geom, pattern) tests a pair of geometry against a known DE9IM pattern to see if the relationship is consistent with the pattern " />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://libgeos.org/posts/2024-09-06-geos-3-13-released/" />
 
-
+<meta property="article:section" content="Posts" />
+    <meta
+      property="article:published_time"
+      content="2024-09-06T00:00:00+00:00"
+    />
+    <meta
+      property="article:modified_time"
+      content="2024-09-06T00:00:00+00:00"
+    />
 
 
   <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="News" />
+<meta name="twitter:title" content="Version 3.13.0" />
+  <meta name="twitter:description" content="The 3.13 release of GEOS is now available to download.
+The headline features of this release are:
+  A new approach to boolean predicates via RelateNG
+ Faster performance for many cases where a short circuit is available Avoiding the full computation of a topology graph for every call Ability to use a high speed “prepared” approach for the complete set of predicates as well as the relate matrix functions    Initial support for ISO SQL/MM curve types
+ Create, read and write support for CircularString, CompoundCurve, CurvedPolygon, MultiCurve, MultiSurface    This release includes the following new features in the C API (and of course underlying changes to the C&#43;&#43; code to support these features):
+ GEOSGeom_createEmptyCircularString() creates a new empty CircularString GEOSGeom_createCircularString(coordseq) creates a CircularString with the supplied coordinates GEOSGeom_createEmptyCompoundCurve() creates a new empty CompoundCurve GEOSGeom_createCompoundCurve(curves, ncurves) creates a CompoundCurve with the supplied components (start/end coordinates must match up) GEOSGeom_createEmptyCurvePolygon() creates a new empty CurvePolygon GEOSGeom_createCurvePolygon(shell, holes, nholes) creates a CurvePolygon with the supplied rings GEOSPreparedRelate(prepgeom, geom) generates a DE9IM intersection matrix for the geometry pair, where one input has been “prepared” for fast repeated calls GEOSPreparedRelatePattern(prepgeom, geom, pattern) tests a pair of geometry against a known DE9IM pattern to see if the relationship is consistent with the pattern " />
 
 
+  <script type="application/ld+json">
+  {
+      "@context": "http://schema.org",
+      "@type": "TechArticle",
+      "articleSection": "Posts",
+      "name": "Version 3.13.0",
+      "url" : "https://libgeos.org/posts/2024-09-06-geos-3-13-released/",
+      "headline": "Version 3.13.0",
+      "description": "The 3.13 release of GEOS is now available to download.\nThe headline features of this release are:\n  A new approach to boolean predicates via RelateNG\n Faster performance for many cases where a short circuit is available Avoiding the full computation of a topology graph for every call Ability to use a high speed “prepared” approach for the complete set of predicates as well as the relate matrix functions    Initial support for ISO SQL\/MM curve types\n Create, read and write support for CircularString, CompoundCurve, CurvedPolygon, MultiCurve, MultiSurface    This release includes the following new features in the C API (and of course underlying changes to the C\u002b\u002b code to support these features):\n GEOSGeom_createEmptyCircularString() creates a new empty CircularString GEOSGeom_createCircularString(coordseq) creates a CircularString with the supplied coordinates GEOSGeom_createEmptyCompoundCurve() creates a new empty CompoundCurve GEOSGeom_createCompoundCurve(curves, ncurves) creates a CompoundCurve with the supplied components (start\/end coordinates must match up) GEOSGeom_createEmptyCurvePolygon() creates a new empty CurvePolygon GEOSGeom_createCurvePolygon(shell, holes, nholes) creates a CurvePolygon with the supplied rings GEOSPreparedRelate(prepgeom, geom) generates a DE9IM intersection matrix for the geometry pair, where one input has been “prepared” for fast repeated calls GEOSPreparedRelatePattern(prepgeom, geom, pattern) tests a pair of geometry against a known DE9IM pattern to see if the relationship is consistent with the pattern ",
+      "wordCount" : "670",
+      "inLanguage": "en",
+      "isFamilyFriendly": "true",
+      "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://libgeos.org/posts/2024-09-06-geos-3-13-released/"
+      },
+      "copyrightHolder" : "GEOS",
+      "copyrightYear" : "2024",
+      "dateCreated": "2024-09-06T00:00:00.00Z",
+      "datePublished": "2024-09-06T00:00:00.00Z",
+      "dateModified": "2024-09-06T00:00:00.00Z",
+      "publisher":{
+          "@type":"Organization",
+          "name": "GEOS",
+          "url": "https://libgeos.org/",
+          "logo": {
+              "@type": "ImageObject",
+              "url": "https://libgeos.org/brand.svg",
+              "width":"32",
+              "height":"32"
+          }
+      }
+  }
+  </script>
 
 
     
@@ -111,7 +171,7 @@
   href="/custom.css"
   media="all"
 />
-  <link href="https://libgeos.org/posts/" rel="canonical" type="text/html" />
+  <link href="https://libgeos.org/posts/2024-09-06-geos-3-13-released/" rel="canonical" type="text/html" />
 
 <!-- Made with Geekdoc theme https://github.com/thegeeklab/hugo-geekdoc -->
 
@@ -1229,7 +1289,7 @@
                 
                 <a
                   href="/posts"
-                  class="gdoc-nav__entry is-active"
+                  class="gdoc-nav__entry"
                 >
                   News
                 </a>
@@ -1354,48 +1414,23 @@
 
         <div class="gdoc-page">
           
-  
-    <article class="gdoc-markdown gdoc-post">
-      <header class="gdoc-post__header">
-        <h1 class="gdoc-post__title">
-          <a href="/posts/2021-11-02-geos-3-10-1-released/">Version 3.10.1</a>
-        </h1>
-      </header>
-      <section>
-        <p>The 3.10.1 release of GEOS is now available <a
-  class="gdoc-markdown__link"
-  href="https://libgeos.org/usage/download/"
->to download</a>.</p>
-<p>This release is primarily to fix some version numbering issues in the initial 3.10.0 source tarball. Some extra fixes are bundled as well.</p>
-      </section>
-      <div class="gdoc-post__readmore">
-        
-          <a
-            class="flex-inline align-center fake-link"
-            title="Read full post"
-            href="/posts/2021-11-02-geos-3-10-1-released/"
-          >
-            Read full post
-            <i class="gdoc-icon">gdoc_arrow_right_alt</i>
-          </a>
-        
-      </div>
-
-      <footer class="gdoc-post__footer">
-        <div class="flex flex-wrap align-center gdoc-post__meta">
-          <span class="flex align-center no-wrap">
+  <article class="gdoc-post">
+    <header class="gdoc-post__header">
+      <h1 class="gdoc-post__title">Version 3.13.0</h1>
+      <div class="flex flex-wrap align-center gdoc-post__meta gdoc-post__meta--head">
+        <span class="flex align-center no-wrap">
   <svg class="gdoc-icon gdoc_date"><use xlink:href="#gdoc_date"></use></svg>
   <span class="gdoc-post__tag">
-    <time datetime="2021-11-02T00:00:00Z">
+    <time datetime="2024-09-06T00:00:00Z">
       
-      Nov 2, 2021
+      Sep 6, 2024
     </time>
   </span>
 </span>
 
 <span class="flex align-center no-wrap">
   <svg class="gdoc-icon gdoc_timer"><use xlink:href="#gdoc_timer"></use></svg>
-  <span class="gdoc-post__tag">One minute to read</span>
+  <span class="gdoc-post__tag">4 minutes to read</span>
 </span>
 
 
@@ -1403,92 +1438,245 @@
 
 
 
-        </div>
-      </footer>
-    </article>
-  
-    <article class="gdoc-markdown gdoc-post">
-      <header class="gdoc-post__header">
-        <h1 class="gdoc-post__title">
-          <a href="/posts/2021-10-01-geos-3-10-released/">Version 3.10.0</a>
-        </h1>
-      </header>
-      <section>
-        <p>The 3.10 release of GEOS is now available <a
+      </div>
+    </header>
+    <section class="gdoc-markdown">
+      <p>The 3.13 release of GEOS is now available <a
   class="gdoc-markdown__link"
   href="https://libgeos.org/usage/download/"
 >to download</a>.</p>
+<p>The headline features of this release are:</p>
 <ul>
 <li>
-<p>This release includes the following new features in the C API (and of course underlying changes to the C++ code to support these features):</p>
+<p>A new approach to boolean predicates via <a
+  class="gdoc-markdown__link"
+  href="/posts/2024-08-13-relateng/"
+>RelateNG</a></p>
 <ul>
-<li>CAPI additions for testing whether geometries are within a distance of each other, <code>GEOSDistanceWithin</code> and <code>GEOSPreparedDistanceWithin</code></li>
-<li>CAPI addition for adding extra vertices to a geometry, <code>GEOSDensify</code></li>
-<li>CAPI additions for high-performance construction/reading of coordinate sequences from/to memory buffers, <code>GEOSCoordSeq_copyFromArrays</code>, <code>GEOSCoordSeq_copyFromBuffer</code>, <code>GEOSCoordSeq_copyToArrays</code>, and <code>GEOSCoordSeq_copyToBuffer</code></li>
-<li>CAPI addition for new validity enforement algorithm, <code>GEOSMakeValidWithParams</code></li>
-<li>CAPI addition for ISO WKB output, <code>GEOSWKBWriter_getFlavor</code> and <code>GEOSWKBWriter_setFlavor</code></li>
-<li>CAPI addition to create a constrained delaunay of polygonal input, <code>GEOSConstrainedDelaunayTriangulation</code></li>
+<li>Faster performance for many cases where a short circuit is available</li>
+<li>Avoiding the full computation of a topology graph for every call</li>
+<li>Ability to use a high speed &ldquo;prepared&rdquo; approach for the complete set of predicates as well as the relate matrix functions</li>
+</ul>
+</li>
+<li>
+<p>Initial support for ISO SQL/MM curve types</p>
+<ul>
+<li>Create, read and write support for CircularString, CompoundCurve, CurvedPolygon, MultiCurve, MultiSurface</li>
 </ul>
 </li>
 </ul>
-      </section>
-      <div class="gdoc-post__readmore">
-        
-          <a
-            class="flex-inline align-center fake-link"
-            title="Read full post"
-            href="/posts/2021-10-01-geos-3-10-released/"
-          >
-            Read full post
-            <i class="gdoc-icon">gdoc_arrow_right_alt</i>
-          </a>
-        
-      </div>
-
-      <footer class="gdoc-post__footer">
-        <div class="flex flex-wrap align-center gdoc-post__meta">
-          <span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_date"><use xlink:href="#gdoc_date"></use></svg>
-  <span class="gdoc-post__tag">
-    <time datetime="2021-10-21T00:00:00Z">
-      
-      Oct 21, 2021
-    </time>
-  </span>
-</span>
-
-<span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_timer"><use xlink:href="#gdoc_timer"></use></svg>
-  <span class="gdoc-post__tag">One minute to read</span>
-</span>
-
-
-
-
-
-
-        </div>
-      </footer>
-    </article>
-  
-  
-
-
-<nav class="gdoc-paging flex flex-even align-center" role="navigation">
-  <div class="gdoc-paging__item gdoc-paging__item--prev">
-    
-      <a class="flex-inline align-center fake-link no-wrap" href="/posts/">
-        <i class="gdoc-icon">gdoc_keyboard_arrow_left</i>
-        PREV
-      </a>
-    
-  </div>
-  <div class="gdoc-paging__state">2/2</div>
-  <div class="gdoc-paging__item gdoc-paging__item--next">
-    
-  </div>
-</nav>
-
+<p>This release includes the following new features in the C API (and of course underlying changes to the C++ code to support these features):</p>
+<ul>
+<li>GEOSGeom_createEmptyCircularString() creates a new empty CircularString</li>
+<li>GEOSGeom_createCircularString(coordseq) creates a CircularString with the supplied coordinates</li>
+<li>GEOSGeom_createEmptyCompoundCurve() creates a new empty CompoundCurve</li>
+<li>GEOSGeom_createCompoundCurve(curves, ncurves) creates a CompoundCurve with the supplied components (start/end coordinates must match up)</li>
+<li>GEOSGeom_createEmptyCurvePolygon() creates a new empty CurvePolygon</li>
+<li>GEOSGeom_createCurvePolygon(shell, holes, nholes) creates a CurvePolygon with the supplied rings</li>
+<li>GEOSPreparedRelate(prepgeom, geom) generates a <a
+  class="gdoc-markdown__link"
+  href="https://en.wikipedia.org/wiki/DE-9IM"
+>DE9IM</a> intersection matrix for the geometry pair, where one input has been &ldquo;prepared&rdquo; for fast repeated calls</li>
+<li>GEOSPreparedRelatePattern(prepgeom, geom, pattern) tests a pair of geometry against a known DE9IM pattern to see if the relationship is consistent with the pattern</li>
+</ul>
+<p>The full list of changes is as follows:</p>
+<ul>
+<li>
+<p><strong>New things:</strong></p>
+<ul>
+<li>Add classes for curved geometry types (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1046"
+>GH-1046</a>, Dan Baston/German QGIS users group/Canton of Basel-Landschaft/Canton of Zug)
+<ul>
+<li>CircularString</li>
+<li>CompoundCurve</li>
+<li>CurvedPolygon</li>
+<li>MultiCurve</li>
+<li>MultiSurface</li>
+</ul>
+</li>
+<li>Support curved geometry types in WKT/WKB readers/writers (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1046"
+>GH-1046</a>, <a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1104"
+>GH-1104</a>, <a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1106"
+>GH-1106</a>, Dan Baston)</li>
+<li>3D read and write support for GeoJSON (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1150"
+>GH-1150</a>, Oreilles)</li>
+<li>RelateNG (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/locationtech/jts/pull/1052"
+>GH-1052</a> Martin Davis, Paul Ramsey)
+<ul>
+<li>Rewrite of <a
+  class="gdoc-markdown__link"
+  href="https://lin-ear-th-inking.blogspot.com/2024/05/jts-topological-relationships-next.html"
+>boolean predicates and relate matrix calculations</a></li>
+<li>&ldquo;Prepared&rdquo; mode now <a
+  class="gdoc-markdown__link"
+  href="https://lin-ear-th-inking.blogspot.com/2024/05/relateng-performance.html"
+>available for all predicates</a> and relate matrix</li>
+<li>CAPI functions GEOSPreparedRelate and GEOSPreparedRelatePattern expose new functionality</li>
+<li>CAPI implementations of GEOSPreparedTouches, etc, that were previously defaulting
+into non-prepared implementations now default into the RelateNG prepared implementation</li>
+<li>Prepared implementations for Intersects, Covers, still use the older implementations</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>Breaking Changes:</strong></p>
+<ul>
+<li>Zero-length linestrings (eg LINESTRING(1 1, 1 1)) are now treated as equivalent to points (POINT(1 1)) in boolean predicates</li>
+<li>CMake 3.15 or later is requried (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1143"
+>GH-1143</a>, Mike Taves)</li>
+</ul>
+</li>
+<li>
+<p><strong>Fixes/Improvements:</strong></p>
+<ul>
+<li>Add Angle::sinCosSnap to avoid small errors, e.g. with buffer operations (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/978"
+>GH-978</a>, Mike Taves)</li>
+<li>WKTReader: Points with all-NaN coordinates are not considered empty anymore (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/927"
+>GH-927</a>, Casper van der Wel)</li>
+<li>WKTWriter: Points with all-NaN coordinates are written as such (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/927"
+>GH-927</a>, Casper van der Wel)</li>
+<li>ConvexHull: Performance improvement for larger geometries (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/locationtech/jts/issues/985"
+>JTS-985</a>, Martin Davis)</li>
+<li>Distance: Improve performance, especially for point-point distance (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1067"
+>GH-1067</a>, Dan Baston)</li>
+<li>Intersection: change to using DoubleDouble computation to improve robustness (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/937"
+>GH-937</a>, Martin Davis)</li>
+<li>Fix LargestEmptyCircle to respect polygonal obstacles (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/939"
+>GH-939</a>, Martin Davis)</li>
+<li>Fix WKTWriter to emit EMPTY elements in multi-geometries (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/952"
+>GH-952</a>, Mike Taves)</li>
+<li>Fix IncrementalDelaunayTriangulator to ensure triangulation boundary is convex (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/953"
+>GH-953</a>, Martin Davis)</li>
+<li>Fix PreparedLineStringDistance for lines within envelope and polygons (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/959"
+>GH-959</a>, Martin Davis)</li>
+<li>Improve scale handling for PrecisionModel (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/956"
+>GH-956</a>, Martin Davis)</li>
+<li>Fix error in CoordinateSequence::add when disallowing repeated points (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/963"
+>GH-963</a>, Dan Baston)</li>
+<li>Fix WKTWriter::writeTrimmedNumber for big and small values (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/973"
+>GH-973</a>, Mike Taves)</li>
+<li>Fix InteriorPointPoint to handle empty elements (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/977"
+>GH-977</a>, Martin Davis)</li>
+<li>Fix TopologyPreservingSimplifier endpoint handling to avoid self-intersections (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/986"
+>GH-986</a>, Martin Davis)</li>
+<li>Fix spatial predicates for MultiPoint with EMPTY (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/989"
+>GH-989</a>, Martin Davis)</li>
+<li>Fix DiscreteHausdorffDistance for LinearRing (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1000"
+>GH-1000</a>, Martin Davis)</li>
+<li>Fix IsSimpleOp for MultiPoint with empty element (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1005"
+>GH-1005</a>, Martin Davis)</li>
+<li>Fix PreparedPolygonContains for GC with MultiPoint (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1008"
+>GH-1008</a>, Martin Davis)</li>
+<li>Fix reading WKT with EMPTY token with white space (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1025"
+>GH-1025</a>, Mike Taves)</li>
+<li>Fix buffer Inverted Ring Removal check (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1056"
+>GH-1056</a>, Martin Davis)</li>
+<li>Add PointLocation.isOnSegment and remove LineIntersector point methods (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1083"
+>GH-1083</a>, Martin Davis)</li>
+<li>Densify: Interpolate Z coordinates (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1094"
+>GH-1094</a>)</li>
+<li>GEOSLineSubstring: Fix crash on NaN length fractions (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1088"
+>GH-1088</a>, Dan Baston)</li>
+<li>MinimumClearance: Fix crash on NaN inputs (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1082"
+>GH-1082</a>, Dan Baston)</li>
+<li>Centroid: Fix crash on polygons with empty holes (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1075"
+>GH-1075</a>, Dan Baston)</li>
+<li>GEOSRelatePatternMatch: Fix crash on invalid DE-9IM pattern (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1089"
+>GH-1089</a>, Dan Baston)</li>
+<li>CoveragePolygonValidator: add section performance optimization (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1099"
+>GH-1099</a>, Martin Davis)</li>
+<li>TopologyPreservingSimplifier: fix to remove ring endpoints safely (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1110"
+>GH-1110</a>, Martin Davis)</li>
+<li>TopologyPreservingSimplifier: fix stack overflow on degenerate inputs (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1113"
+>GH-1113</a>, Dan Baston)</li>
+<li>DouglasPeuckerSimplifier: fix stack overflow on NaN tolerance (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1114"
+>GH-1114</a>, Dan Baston)</li>
+<li>GEOSConcaveHullOfPolygons: Avoid crash on zero-area input (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1076"
+>GH-1076</a>, Dan Baston)</li>
+</ul>
+</li>
+</ul>
+    </section>
+  </article>
 
 
 
