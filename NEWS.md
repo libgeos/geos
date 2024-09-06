@@ -1,3 +1,13 @@
+## Changes in 3.14.0
+2025-xx-xx
+
+- New things:
+
+- Breaking Changes:
+
+- Fixes/Improvements:
+
+
 ## Changes in 3.13.0
 2024-09-06
 
@@ -17,7 +27,7 @@
     - https://lin-ear-th-inking.blogspot.com/2024/05/jts-topological-relationships-next.html
     - https://lin-ear-th-inking.blogspot.com/2024/05/relateng-performance.html 
 
-- Breaking Changes
+- Breaking Changes:
   - Zero-length linestrings (eg LINESTRING(1 1, 1 1)) are now treated as equivalent to points (POINT(1 1)) in boolean predicates
   - CMake 3.15 or later is requried (GH-1143, Mike Taves)
 
@@ -81,7 +91,7 @@
   - CAPI: GEOSGeom_releaseCollection (GH-848)
   - CAPI: GEOSMinimumRotatedRectangle now uses MinimumAreaRectangle (Paul Ramsey)
 
-- Breaking Changes
+- Breaking Changes:
   - CoverageUnion now requires valid inputs to produce valid outputs
     and may return invalid outputs silently when fed invalid inputs.
     Use CoverageValidator first if you do not know the validity of your data.
