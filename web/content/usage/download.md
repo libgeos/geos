@@ -9,7 +9,7 @@ draft: false
 
 | Release | Release Date | First Release | Final Release | Download Link | Changes |
 | :--: | :--:| :--: |:--: | :--: | :--: |
-|  **3.13.0beta2** | 2024/09/03 | 2024/08/16 | *2028/08/01* | [geos-3.13.0beta2.tar.bz2](https://download.osgeo.org/geos/geos-3.13.0beta2.tar.bz2) | [Changes](https://github.com/libgeos/geos/blob/3.13.0beta2/NEWS.md) |
+|  **3.13.0** | 2024/09/06 | 2024/09/06 | *2028/10/01* | [geos-3.13.0.tar.bz2](https://download.osgeo.org/geos/geos-3.13.0.tar.bz2) | [Changes](https://github.com/libgeos/geos/blob/3.13.0/NEWS.md) |
 |  **3.12.2** | 2024/06/05 | 2023/06/27 | *2027/07/01* | [geos-3.12.2.tar.bz2](https://download.osgeo.org/geos/geos-3.12.2.tar.bz2) | [Changes](https://github.com/libgeos/geos/blob/3.12.2/NEWS.md) |
 |  **3.11.4** | 2024/06/05 | 2022/07/01 | *2026/07/01* | [geos-3.11.4.tar.bz2](https://download.osgeo.org/geos/geos-3.11.4.tar.bz2) | [Changes](https://github.com/libgeos/geos/blob/3.11.4/NEWS.md) |
 |  **3.10.6** | 2023/11/11 | 2021/10/20 | *2025/10/20* | [geos-3.10.6.tar.bz2](https://download.osgeo.org/geos/geos-3.10.6.tar.bz2) | [Changes](https://github.com/libgeos/geos/blob/3.10.6/NEWS)
@@ -23,7 +23,7 @@ Old releases can be downloaded from https://download.osgeo.org/geos/.  Any relea
 
 ### Build Requirements
 
-* [CMake](https://cmake.org/download/) 3.13 or later.
+* [CMake](https://cmake.org/download/) 3.15 or later.
 * C++14 compiler. We regularly test GCC, Clang and Microsoft Visual C++.
 * [Doxygen](https://www.doxygen.nl/) to build the API documentation.
 
