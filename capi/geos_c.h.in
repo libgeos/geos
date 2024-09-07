@@ -284,7 +284,7 @@ typedef int (*GEOSDistanceCallback)(
 /**
 * Callback function for use in GEOSGeom_transformXY.
 * Allows custom function to be applied to x and y values for each coordinate
-* in a geometry.  Z values are unchanged by this function.
+* in a geometry.  Z and M values are unchanged by this function.
 * Extra data for the calculation can be passed via the userdata.
 *
 * \param x coordinate value to be updated
@@ -296,6 +296,26 @@ typedef int (*GEOSDistanceCallback)(
 typedef int (*GEOSTransformXYCallback)(
     double* x,
     double* y,
+    void* userdata);
+
+
+/**
+* Callback function for use in GEOSGeom_transformXYZ.
+* Allows custom function to be applied to x, y and z values for each coordinate
+* in a geometry.  M values are unchanged by this function.
+* Extra data for the calculation can be passed via the userdata.
+*
+* \param x coordinate value to be updated
+* \param y coordinate value to be updated
+* \param z coordinate value to be updated
+* \param userdata extra data for the calculation
+*
+* \return 1 if calculation succeeded, 0 on failure
+*/
+typedef int (*GEOSTransformXYZCallback)(
+    double* x,
+    double* y,
+    double* z,
     void* userdata);
 
 
@@ -1819,6 +1839,13 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_transformXY_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry* g,
     GEOSTransformXYCallback callback,
+    void* userdata);
+
+/** \see GEOSGeom_transformXYZ */
+extern GEOSGeometry GEOS_DLL *GEOSGeom_transformXYZ_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* g,
+    GEOSTransformXYZCallback callback,
     void* userdata);
 
 /* ========= Algorithms ========= */
@@ -4696,7 +4723,7 @@ extern int GEOS_DLL GEOSHilbertCode(
 /**
 * Apply XY coordinate transform callback to all coordinates in a copy of
 * input geometry.  If the callback returns an error, returned geometry will be
-* NULL.  Z values, if present, are not modified by this function.
+* NULL.  Z and M values, if present, are not modified by this function.
 * \param[in] g Input geometry
 * \param[in] callback a function to be executed for each coordinate in the
                 geometry.  The callback takes 3 parameters: x and y coordinate
@@ -4710,6 +4737,25 @@ extern int GEOS_DLL GEOSHilbertCode(
 extern GEOSGeometry GEOS_DLL *GEOSGeom_transformXY(
     const GEOSGeometry* g,
     GEOSTransformXYCallback callback,
+    void* userdata);
+
+/**
+* Apply XYZ coordinate transform callback to all coordinates in a copy of
+* input geometry.  If the callback returns an error, returned geometry will be
+* NULL.  M values, if present, are not modified by this function.
+* \param[in] g Input geometry
+* \param[in] callback a function to be executed for each coordinate in the
+                geometry.  The callback takes 3 parameters: x and y coordinate
+                values to be updated and a void userdata pointer.
+* \param userdata an optional pointer to pe passed to 'callback' as an argument
+* \return a copy of the input geometry with transformed coordinates.
+* Caller must free with GEOSGeom_destroy().
+*
+* \since 3.13
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeom_transformXYZ(
+    const GEOSGeometry* g,
+    GEOSTransformXYZCallback callback,
     void* userdata);
 
 /**
