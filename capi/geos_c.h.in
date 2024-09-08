@@ -4745,7 +4745,7 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_transformXY(
 * NULL.  M values, if present, are not modified by this function.
 * \param[in] g Input geometry
 * \param[in] callback a function to be executed for each coordinate in the
-                geometry.  The callback takes 3 parameters: x and y coordinate
+                geometry.  The callback takes 4 parameters: x, y and z coordinate
                 values to be updated and a void userdata pointer.
 * \param userdata an optional pointer to pe passed to 'callback' as an argument
 * \return a copy of the input geometry with transformed coordinates.
