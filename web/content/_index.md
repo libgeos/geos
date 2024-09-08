@@ -55,7 +55,7 @@ and when they are caused by algorithm (both libraries fail).
 
 To cite GEOS in publications use:
 
-> GEOS contributors (2021). GEOS computational geometry library. Open Source Geospatial Foundation. URL https://libgeos.org/.
+> GEOS contributors (2024). GEOS computational geometry library. Open Source Geospatial Foundation. URL https://libgeos.org/.
 
 A BibTeX entry for LaTeX users is
 ```
@@ -63,7 +63,7 @@ A BibTeX entry for LaTeX users is
   title = {{GEOS} computational geometry library},
   author = {{GEOS contributors}},
   organization = {Open Source Geospatial Foundation},
-  year = {2021},
+  year = {2024},
   url = {https://libgeos.org/},
   doi = {10.5281/zenodo.11396894}
 }
