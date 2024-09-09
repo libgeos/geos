@@ -1,7 +1,10 @@
 /******************************************************
  *   Performance tests for topological predicates
  * 
- * Usage: perf_topo_predicate [ intersects | contains ]
+ * Tests a target geometry against grids of points, lines and polygons covering the target. 
+ * Target is either a geometry from a WKT file or a set of generated sine stars increasing in size.
+ * 
+ * Usage: perf_topo_predicate [WKT file] [ intersects | contains | covers | touches ]
 ******************************************************/
 
 #include <geos/geom/util/SineStarFactory.h>
@@ -9,16 +12,22 @@
 #include <geos/profiler.h>
 #include <geos/geom/IntersectionMatrix.h>
 #include <geos/geom/prep/PreparedGeometryFactory.h>
+#include <geos/operation/relate/RelateOp.h>
 #include <geos/operation/relateng/RelateNG.h>
 #include <geos/operation/relateng/RelatePredicate.h>
+#include <geos/io/WKTReader.h>
 #include <geos/io/WKBWriter.h>
 #include <BenchmarkUtils.h>
 
 #include <iomanip>
+#include <fstream>
+#include <iostream>
+#include <sstream>
 
 using namespace geos::geom;
+using geos::operation::relate::RelateOp;
 
-std::size_t MAX_ITER = 10;
+std::size_t MAX_ITER = 1;
 std::size_t NUM_LINES = 10000;
 std::size_t NUM_LINES_PTS = 100;
 
@@ -27,13 +36,14 @@ std::size_t NUM_LINES_PTS = 100;
 #define COVERS 2
 #define TOUCHES 3
 
+std::string inputFilename{""};
 std::string predicateName{"intersects"};
 int predicateOp = INTERSECTS;
 
 int testRelateOpIntersects(const Geometry& g, const std::vector<std::unique_ptr<Geometry>>& geoms) {
     int count = 0;
     for (const auto& geom : geoms) {
-        auto im = g.relate(geom.get());
+        auto im = RelateOp::relate(&g, geom.get());
         count += im->isIntersects();
     }
     return count;
@@ -42,7 +52,7 @@ int testRelateOpIntersects(const Geometry& g, const std::vector<std::unique_ptr<
 int testRelateOpContains(const Geometry& g, const std::vector<std::unique_ptr<Geometry>>& geoms) {
     int count = 0;
     for (const auto& geom : geoms) {
-        auto im = g.relate(geom.get());
+        auto im = RelateOp::relate(&g, geom.get());
         count += im->isContains();
     }
     return count;
@@ -51,7 +61,7 @@ int testRelateOpContains(const Geometry& g, const std::vector<std::unique_ptr<Ge
 int testRelateOpCovers(const Geometry& g, const std::vector<std::unique_ptr<Geometry>>& geoms) {
     int count = 0;
     for (const auto& geom : geoms) {
-        auto im = g.relate(geom.get());
+        auto im = RelateOp::relate(&g, geom.get());
         count += im->isCovers();
     }
     return count;
@@ -60,7 +70,7 @@ int testRelateOpCovers(const Geometry& g, const std::vector<std::unique_ptr<Geom
 int testRelateOpTouches(const Geometry& g, const std::vector<std::unique_ptr<Geometry>>& geoms) {
     int count = 0;
     for (const auto& geom : geoms) {
-        auto im = g.relate(geom.get());
+        auto im = RelateOp::relate(&g, geom.get());
         count += im->isTouches(g.getDimension(), geom.get()->getDimension());
     }
     return count;
@@ -164,7 +174,7 @@ int testRelateNGPreparedTouches(const Geometry& g, const std::vector<std::unique
 template<typename F>
 double test(const Geometry& g, const std::vector<std::unique_ptr<Geometry>>& geoms, const std::string& method, F&& fun, double baseTime)
 {
-    geos::util::Profile sw("TopologuyPredicatePerf");
+    geos::util::Profile sw("TopologyPredicatePerf");
     sw.start();
 
     int count = 0;
@@ -188,66 +198,102 @@ double test(const Geometry& g, const std::vector<std::unique_ptr<Geometry>>& geo
     return tot;
 }
 
-void test(int dim, std::size_t npts) {
 
-    auto target = geos::benchmark::createSineStar({0, 0}, 100, npts);
+std::unique_ptr<Geometry> 
+loadWKT(std::string& fname) {
+    //std::string fname = "/Users/mdavis/proj/jts/testing/relateng/europe_main.wkt";
+    std::ifstream f(fname);
+    std::string line;
+    std::unique_ptr<Geometry> geom;
+    geos::io::WKTReader r;
+    if (std::getline(f, line)) {
+        if (line != "") {
+            geom = r.read(line.c_str());
+        }
+    }
+    f.close();
+    return geom;
+}
+
+void testTarget(int dim, Geometry& target) {
     std::vector<std::unique_ptr<Geometry>> geoms;
     switch (dim) {
     case 0:
-        geoms = geos::benchmark::createPoints(*target->getEnvelopeInternal(), NUM_LINES);
+        geoms = geos::benchmark::createPoints(*target.getEnvelopeInternal(), NUM_LINES);
         break;
     case 1:
-        geoms = geos::benchmark::createLines(*target->getEnvelopeInternal(), NUM_LINES, 1.0, NUM_LINES_PTS);
+        geoms = geos::benchmark::createLines(*target.getEnvelopeInternal(), NUM_LINES, 1.0, NUM_LINES_PTS);
         break;
     case 2:
-        geoms = geos::benchmark::createPolygons(*target->getEnvelopeInternal(), NUM_LINES, 1.0, NUM_LINES_PTS);
+        geoms = geos::benchmark::createPolygons(*target.getEnvelopeInternal(), NUM_LINES, 1.0, NUM_LINES_PTS);
         break;
     }
     double baseTime;
     switch (predicateOp) {
     case INTERSECTS:
-        baseTime = test(*target, geoms, "RelateOp", testRelateOpIntersects, 0);
-        test(*target, geoms, "Geometry", testGeometryIntersects, baseTime);
-        test(*target, geoms, "PreparedGeom", testPrepGeomIntersects, baseTime);
-        test(*target, geoms, "RelateNGPrepared", testRelateNGPreparedIntersects, baseTime);
+        baseTime = test(target, geoms, "RelateOp", testRelateOpIntersects, 0);
+        test(target, geoms, "Geometry", testGeometryIntersects, baseTime);
+        test(target, geoms, "PreparedGeom", testPrepGeomIntersects, baseTime);
+        test(target, geoms, "RelateNGPrepared", testRelateNGPreparedIntersects, baseTime);
         break;
     case CONTAINS:
-        baseTime = test(*target, geoms, "RelateOp", testRelateOpIntersects, 0);
-        test(*target, geoms, "Geometry", testGeometryIntersects, baseTime);
-        test(*target, geoms, "PreparedGeom", testPrepGeomContains, baseTime);
-        test(*target, geoms, "RelateNGPrepared", testRelateNGPreparedContains, baseTime);
+        baseTime = test(target, geoms, "RelateOp", testRelateOpIntersects, 0);
+        test(target, geoms, "Geometry", testGeometryIntersects, baseTime);
+        test(target, geoms, "PreparedGeom", testPrepGeomContains, baseTime);
+        test(target, geoms, "RelateNGPrepared", testRelateNGPreparedContains, baseTime);
         break;
     case COVERS:
-        baseTime = test(*target, geoms, "RelateOp", testRelateOpCovers, 0);
-        test(*target, geoms, "Geometry", testGeometryCovers, baseTime);
-        test(*target, geoms, "PreparedGeom", testPrepGeomCovers, baseTime);
-        test(*target, geoms, "RelateNGPrepared", testRelateNGPreparedCovers, baseTime);
+        baseTime = test(target, geoms, "RelateOp", testRelateOpCovers, 0);
+        test(target, geoms, "Geometry", testGeometryCovers, baseTime);
+        test(target, geoms, "PreparedGeom", testPrepGeomCovers, baseTime);
+        test(target, geoms, "RelateNGPrepared", testRelateNGPreparedCovers, baseTime);
         break;
     case TOUCHES:
-        baseTime = test(*target, geoms, "RelateOp", testRelateOpTouches, 0);
-        test(*target, geoms, "Geometry", testGeometryTouches, baseTime);
-        test(*target, geoms, "RelateNGPrepared", testRelateNGPreparedTouches, baseTime);
+        baseTime = test(target, geoms, "RelateOp", testRelateOpTouches, 0);
+        test(target, geoms, "Geometry", testGeometryTouches, baseTime);
+        test(target, geoms, "RelateNGPrepared", testRelateNGPreparedTouches, baseTime);
         break;
     }
 }
 
-void testAll(int dim)
-{
-    test(dim, 5);
-    test(dim, 10);
-    test(dim, 500);
-    test(dim, 1000);
-    test(dim, 2000);
-    test(dim, 4000);
-    test(dim, 8000);
-    test(dim, 16000);
+void testStar(int dim, std::size_t npts) {
+    std::unique_ptr<Geometry> star = geos::benchmark::createSineStar({0, 0}, 100, npts);
+    testTarget(dim, *star);
 }
 
-int main(int argc, char** argv) {
-    predicateName = "intersects";
-    if (argc >= 2) {
-        predicateName = argv[1];
+void testStarAll(int dim)
+{
+    testStar(dim, 5);
+    testStar(dim, 10);
+    testStar(dim, 500);
+    testStar(dim, 1000);
+    testStar(dim, 2000);
+    testStar(dim, 4000);
+    testStar(dim, 8000);
+    testStar(dim, 16000);
+}
+
+void parseArgs(int argc, char** argv) {
+    int iPred = -1;
+    int iFile = -1;
+    if (argc == 2) {
+        iPred = 1; 
     }
+    else if (argc >= 3) {
+        iFile = 1;
+        iPred = 2;
+    }
+    //predicateName = "intersects";
+    if (iPred > 0) {
+        predicateName = argv[iPred];
+    }
+    if (iFile > 0) {
+        inputFilename = argv[iFile]; 
+    }
+
+    //------------------
+    //-- interpret args
+    
     predicateOp = INTERSECTS;
     if (predicateName == "contains") {
         predicateOp = CONTAINS;
@@ -258,9 +304,22 @@ int main(int argc, char** argv) {
     else if (predicateName == "touches") {
         predicateOp = TOUCHES;
     }
+}
+
+int main(int argc, char** argv) {
+    parseArgs(argc, argv);
 
     std::cout << "target_points,num_tests,num_hits,test_type,pts_in_test,method,time,factor" << std::endl;
-    testAll(0);
-    testAll(1);
-    testAll(2);
+
+    if (inputFilename.length() == 0) {
+        testStarAll(0);
+        testStarAll(1);
+        testStarAll(2);
+    }
+    else {
+        std::unique_ptr<Geometry> inputGeom = loadWKT(inputFilename);
+        testTarget(0, *inputGeom);
+        testTarget(1, *inputGeom);
+        testTarget(2, *inputGeom);
+    }
 }
