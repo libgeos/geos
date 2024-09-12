@@ -270,8 +270,7 @@ public:
      *
      * @return the ID of the coordinate space in which the Geometry is defined.
      */
-    virtual int
-    getSRID() const
+    int getSRID() const
     {
         return SRID;
     }
@@ -346,7 +345,7 @@ public:
      *
      * @see IsValidOp
      */
-    virtual bool isValid() const;
+    bool isValid() const;
 
     /// Returns whether or not the set of points in this Geometry is empty.
     virtual bool isEmpty() const = 0; //Abstract
@@ -540,7 +539,7 @@ public:
      * Returns true if the DE-9IM intersection matrix for the two
      * Geometrys is T*F**FFF*.
      */
-    virtual bool equals(const Geometry* g) const;
+    bool equals(const Geometry* g) const;
 
     /** \brief
      * Returns <code>true</code> if this geometry covers the
@@ -819,7 +818,7 @@ public:
     virtual void normalize() = 0; //Abstract
 
     /// Comparator for sorting geometry
-    virtual int compareTo(const Geometry* geom) const;
+    int compareTo(const Geometry* geom) const;
 
     /// Returns the area of this Geometry.
     virtual double getArea() const;
@@ -883,7 +882,7 @@ public:
      * Notifies this Geometry that its Coordinates have been changed
      * by an external party (using a CoordinateFilter, for example).
      */
-    virtual void geometryChanged();
+    void geometryChanged();
 
     /**
      * \brief
