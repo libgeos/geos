@@ -4827,7 +4827,7 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_setPrecision(
 ///@{
 
 /**
-* True if no point of either geometry touchess or is within the other.
+* Tests if two geometries have no point in common.
 * \param g1 Input geometry
 * \param g2 Input geometry
 * \returns 1 on true, 0 on false, 2 on exception
@@ -4837,8 +4837,8 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_setPrecision(
 extern char GEOS_DLL GEOSDisjoint(const GEOSGeometry* g1, const GEOSGeometry* g2);
 
 /**
-* True if geometries share boundaries at one or more points, but do
-* not have interior overlaps.
+* Tests if two geometries share boundaries at one or more points, but do
+* not have interior points in common.
 * \param g1 Input geometry
 * \param g2 Input geometry
 * \returns 1 on true, 0 on false, 2 on exception
@@ -4848,7 +4848,7 @@ extern char GEOS_DLL GEOSDisjoint(const GEOSGeometry* g1, const GEOSGeometry* g2
 extern char GEOS_DLL GEOSTouches(const GEOSGeometry* g1, const GEOSGeometry* g2);
 
 /**
-* True if geometries are not disjoint.
+* Tests if two geometries intersect.
 * \param g1 Input geometry
 * \param g2 Input geometry
 * \returns 1 on true, 0 on false, 2 on exception
@@ -4858,7 +4858,7 @@ extern char GEOS_DLL GEOSTouches(const GEOSGeometry* g1, const GEOSGeometry* g2)
 extern char GEOS_DLL GEOSIntersects(const GEOSGeometry* g1, const GEOSGeometry* g2);
 
 /**
-* True if geometries interiors interact but their boundaries do not.
+* Tests if two geometries interiors intersect but their boundaries do not.
 * Most useful for finding line crosses cases.
 * \param g1 Input geometry
 * \param g2 Input geometry
@@ -4869,8 +4869,8 @@ extern char GEOS_DLL GEOSIntersects(const GEOSGeometry* g1, const GEOSGeometry* 
 extern char GEOS_DLL GEOSCrosses(const GEOSGeometry* g1, const GEOSGeometry* g2);
 
 /**
-* True if geometry g1 is completely within g2, and not
-* touching the boundary of g2.
+* Tests if geometry g1 is completely within g2, 
+* but not wholly contained in the boundary of g2.
 * \param g1 Input geometry
 * \param g2 Input geometry
 * \returns 1 on true, 0 on false, 2 on exception
@@ -4880,7 +4880,8 @@ extern char GEOS_DLL GEOSCrosses(const GEOSGeometry* g1, const GEOSGeometry* g2)
 extern char GEOS_DLL GEOSWithin(const GEOSGeometry* g1, const GEOSGeometry* g2);
 
 /**
-* True if geometry g2 is completely within g1.
+* Tests if geometry g2 is completely within g1,
+* but not wholly contained in the boundary of g1.
 * \param g1 Input geometry
 * \param g2 Input geometry
 * \returns 1 on true, 0 on false, 2 on exception
@@ -4890,7 +4891,7 @@ extern char GEOS_DLL GEOSWithin(const GEOSGeometry* g1, const GEOSGeometry* g2);
 extern char GEOS_DLL GEOSContains(const GEOSGeometry* g1, const GEOSGeometry* g2);
 
 /**
-* True if geometries share interiors but are neither
+* Tests if two geometries share interiors but are neither
 * within nor contained.
 * \param g1 Input geometry
 * \param g2 Input geometry
@@ -4901,7 +4902,7 @@ extern char GEOS_DLL GEOSContains(const GEOSGeometry* g1, const GEOSGeometry* g2
 extern char GEOS_DLL GEOSOverlaps(const GEOSGeometry* g1, const GEOSGeometry* g2);
 
 /**
-* True if geometries cover the same space on the plane.
+* Tests if two geometries contain the same set of points in the plane.
 * \param g1 Input geometry
 * \param g2 Input geometry
 * \returns 1 on true, 0 on false, 2 on exception
@@ -4911,8 +4912,8 @@ extern char GEOS_DLL GEOSOverlaps(const GEOSGeometry* g1, const GEOSGeometry* g2
 extern char GEOS_DLL GEOSEquals(const GEOSGeometry* g1, const GEOSGeometry* g2);
 
 /**
-* True if geometry g1 is completely within g2, including possibly
-* touching the boundary of g2.
+* Tests if geometry g1 covers g2, which is the case
+* if every point of g2 lies in g1.
 * \param g1 Input geometry
 * \param g2 Input geometry
 * \returns 1 on true, 0 on false, 2 on exception
@@ -4923,8 +4924,8 @@ extern char GEOS_DLL GEOSEquals(const GEOSGeometry* g1, const GEOSGeometry* g2);
 extern char GEOS_DLL GEOSCovers(const GEOSGeometry* g1, const GEOSGeometry* g2);
 
 /**
-* True if geometry g2 is completely within g1, including possibly
-* touching the boundary of g1.
+* Tests if geometry g1 is covered by g2,
+* which is the case if every point of g1 lies in g2.
 * \param g1 Input geometry
 * \param g2 Input geometry
 * \returns 1 on true, 0 on false, 2 on exception
@@ -4935,7 +4936,7 @@ extern char GEOS_DLL GEOSCovers(const GEOSGeometry* g1, const GEOSGeometry* g2);
 extern char GEOS_DLL GEOSCoveredBy(const GEOSGeometry* g1, const GEOSGeometry* g2);
 
 /**
-* Determine pointwise equivalence of two geometries, by
+* Determine pointwise equality of two geometries, by
 * checking that they have identical structure
 * and that each vertex of g2 is
 * within the distance tolerance of the corresponding vertex in g1.
@@ -4957,7 +4958,7 @@ extern char GEOS_DLL GEOSEqualsExact(
     double tolerance);
 
 /**
- * Determine pointwise equivalence of two geometries by checking
+ * Determine pointwise equality of two geometries by checking
  * that the structure, ordering, and values of all vertices are
  * identical in all dimensions. NaN values are considered to be
  * equal to other NaN values.
@@ -4974,9 +4975,8 @@ extern char GEOS_DLL GEOSEqualsIdentical(
 
 /**
 * Calculate the [DE9IM](https://en.wikipedia.org/wiki/DE-9IM) string for a geometry pair
-* and compare against a DE9IM pattern to check for
-* consistency. 
-* If the result matches the pattern return true.
+* and compare against a DE9IM pattern. 
+* Returns true if the computed matrix matches the pattern.
 * The pattern is a 9-character string 
 * containing symbols in the set "012TF*".
 * "012F" match the corresponding dimension symbol;
