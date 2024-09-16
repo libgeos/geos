@@ -3768,7 +3768,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>True if geometry g2 is completely within g1. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Tests if geometry g2 is completely within g1, but not wholly contained in the boundary of g1. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g1</td><td>Input geometry </td></tr>
     <tr><td class="paramname">g2</td><td>Input geometry </td></tr>
@@ -6226,7 +6226,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>True if geometry g2 is completely within g1, including possibly touching the boundary of g1. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Tests if geometry g1 is covered by g2, which is the case if every point of g1 lies in g2. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g1</td><td>Input geometry </td></tr>
     <tr><td class="paramname">g2</td><td>Input geometry </td></tr>
@@ -6299,7 +6299,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>True if geometry g1 is completely within g2, including possibly touching the boundary of g2. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Tests if geometry g1 covers g2, which is the case if every point of g2 lies in g1. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g1</td><td>Input geometry </td></tr>
     <tr><td class="paramname">g2</td><td>Input geometry </td></tr>
@@ -6372,7 +6372,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>True if geometries interiors interact but their boundaries do not. Most useful for finding line crosses cases. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Tests if two geometries interiors intersect but their boundaries do not. Most useful for finding line crosses cases. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g1</td><td>Input geometry </td></tr>
     <tr><td class="paramname">g2</td><td>Input geometry </td></tr>
@@ -6762,7 +6762,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>True if no point of either geometry touchess or is within the other. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Tests if two geometries have no point in common. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g1</td><td>Input geometry </td></tr>
     <tr><td class="paramname">g2</td><td>Input geometry </td></tr>
@@ -7201,7 +7201,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>True if geometries cover the same space on the plane. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Tests if two geometries contain the same set of points in the plane. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g1</td><td>Input geometry </td></tr>
     <tr><td class="paramname">g2</td><td>Input geometry </td></tr>
@@ -7280,7 +7280,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Determine pointwise equivalence of two geometries, by checking that they have identical structure and that each vertex of g2 is within the distance tolerance of the corresponding vertex in g1. Z and M values are ignored by GEOSEqualsExact, and this function may return true for inputs with different dimensionality. Unlike <a class="el" href="geos__c_8h.html#a45499a7d87851015d36e57d285da9d8e">GEOSEquals()</a>, geometries that are topologically equivalent but have different representations (e.g., LINESTRING (0 0, 1 1) and MULTILINESTRING ((0 0, 1 1)) ) are not considered equal by <a class="el" href="geos__c_8h.html#a23922c100edd72a8d82720213607e7bf">GEOSEqualsExact()</a>. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Determine pointwise equality of two geometries, by checking that they have identical structure and that each vertex of g2 is within the distance tolerance of the corresponding vertex in g1. Z and M values are ignored by GEOSEqualsExact, and this function may return true for inputs with different dimensionality. Unlike <a class="el" href="geos__c_8h.html#a45499a7d87851015d36e57d285da9d8e">GEOSEquals()</a>, geometries that are topologically equivalent but have different representations (e.g., LINESTRING (0 0, 1 1) and MULTILINESTRING ((0 0, 1 1)) ) are not considered equal by <a class="el" href="geos__c_8h.html#a23922c100edd72a8d82720213607e7bf">GEOSEqualsExact()</a>. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g1</td><td>Input geometry </td></tr>
     <tr><td class="paramname">g2</td><td>Input geometry </td></tr>
@@ -7360,7 +7360,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Determine pointwise equivalence of two geometries by checking that the structure, ordering, and values of all vertices are identical in all dimensions. NaN values are considered to be equal to other NaN values.</p>
+<p>Determine pointwise equality of two geometries by checking that the structure, ordering, and values of all vertices are identical in all dimensions. NaN values are considered to be equal to other NaN values.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g1</td><td>Input geometry </td></tr>
@@ -12510,7 +12510,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>True if geometries are not disjoint. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Tests if two geometries intersect. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g1</td><td>Input geometry </td></tr>
     <tr><td class="paramname">g2</td><td>Input geometry </td></tr>
@@ -14653,7 +14653,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
         </tr>
       </table>
 </div><div class="memdoc">
-<p>True if geometries share interiors but are neither within nor contained. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Tests if two geometries share interiors but are neither within nor contained. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g1</td><td>Input geometry </td></tr>
     <tr><td class="paramname">g2</td><td>Input geometry </td></tr>
@@ -17040,7 +17040,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Calculate the <a href="https://en.wikipedia.org/wiki/DE-9IM">DE9IM</a> string for a geometry pair and compare against a DE9IM pattern to check for consistency. If the result matches the pattern return true. The pattern is a 9-character string containing symbols in the set "012TF*". "012F" match the corresponding dimension symbol; "T" matches any non-empty dimension; "*" matches any dimension. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a7f28046f81f65582bebbbbcf5af68aa5" title="Returns true if the elements in the DE-9IM intersection matrix for the two Geometrys match the elemen...">geos::geom::Geometry::relate</a> </dd></dl>
+<p>Calculate the <a href="https://en.wikipedia.org/wiki/DE-9IM">DE9IM</a> string for a geometry pair and compare against a DE9IM pattern. Returns true if the computed matrix matches the pattern. The pattern is a 9-character string containing symbols in the set "012TF*". "012F" match the corresponding dimension symbol; "T" matches any non-empty dimension; "*" matches any dimension. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a7f28046f81f65582bebbbbcf5af68aa5" title="Returns true if the elements in the DE-9IM intersection matrix for the two Geometrys match the elemen...">geos::geom::Geometry::relate</a> </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g1</td><td>First geometry in pair </td></tr>
@@ -18861,7 +18861,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
         </tr>
       </table>
 </div><div class="memdoc">
-<p>True if geometries share boundaries at one or more points, but do not have interior overlaps. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Tests if two geometries share boundaries at one or more points, but do not have interior points in common. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g1</td><td>Input geometry </td></tr>
     <tr><td class="paramname">g2</td><td>Input geometry </td></tr>
@@ -19389,7 +19389,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
         </tr>
       </table>
 </div><div class="memdoc">
-<p>True if geometry g1 is completely within g2, and not touching the boundary of g2. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Tests if geometry g1 is completely within g2, but not wholly contained in the boundary of g2. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g1</td><td>Input geometry </td></tr>
     <tr><td class="paramname">g2</td><td>Input geometry </td></tr>
