@@ -24,6 +24,7 @@
 #include <geos/io/GeoJSONReader.h>
 #include <geos/io/GeoJSONWriter.h>
 #include <geos/operation/buffer/BufferParameters.h>
+#include <geos/operation/cluster/Clusters.h>
 #include <geos/util/Interrupt.h>
 
 #include <stdexcept>
@@ -40,6 +41,7 @@
 // violations.
 #define GEOSGeometry geos::geom::Geometry
 #define GEOSPreparedGeometry geos::geom::prep::PreparedGeometry
+#define GEOSClusterInfo geos::operation::cluster::Clusters
 #define GEOSCoordSequence geos::geom::CoordinateSequence
 #define GEOSBufferParams geos::operation::buffer::BufferParameters
 #define GEOSSTRtree geos::index::strtree::TemplateSTRtree<void*>
@@ -343,34 +345,59 @@ extern "C" {
         return GEOSNearestPoints_r(handle, g1, g2);
     }
 
-    unsigned*
-    GEOSClusterDBSCAN(const GEOSGeometry* g, double eps, unsigned minPoints, unsigned* numClusters)
+    GEOSClusterInfo*
+    GEOSClusterDBSCAN(const GEOSGeometry* g, double eps, unsigned minPoints)
     {
-        return GEOSClusterDBSCAN_r(handle, g, eps, minPoints, numClusters);
+        return GEOSClusterDBSCAN_r(handle, g, eps, minPoints);
     }
 
-    unsigned*
-    GEOSClusterGeometryDistance(const GEOSGeometry* g, double d, unsigned* numClusters)
+    GEOSClusterInfo*
+    GEOSClusterGeometryDistance(const GEOSGeometry* g, double d)
     {
-        return GEOSClusterGeometryDistance_r(handle, g, d, numClusters);
+        return GEOSClusterGeometryDistance_r(handle, g, d);
     }
 
-    unsigned*
-    GEOSClusterGeometryIntersects(const GEOSGeometry* g, unsigned* numClusters)
+    GEOSClusterInfo*
+    GEOSClusterGeometryIntersects(const GEOSGeometry* g)
     {
-        return GEOSClusterGeometryIntersects_r(handle, g, numClusters);
+        return GEOSClusterGeometryIntersects_r(handle, g);
     }
 
-    unsigned*
-    GEOSClusterEnvelopeDistance(const GEOSGeometry* g, double d, unsigned* numClusters)
+    GEOSClusterInfo*
+    GEOSClusterEnvelopeDistance(const GEOSGeometry* g, double d)
     {
-        return GEOSClusterEnvelopeDistance_r(handle, g, d, numClusters);
+        return GEOSClusterEnvelopeDistance_r(handle, g, d);
     }
 
-    unsigned*
-    GEOSClusterEnvelopeIntersects(const GEOSGeometry* g, unsigned* numClusters)
+    GEOSClusterInfo*
+    GEOSClusterEnvelopeIntersects(const GEOSGeometry* g)
     {
-        return GEOSClusterEnvelopeIntersects_r(handle, g, numClusters);
+        return GEOSClusterEnvelopeIntersects_r(handle, g);
+    }
+
+    std::size_t GEOSClusterInfo_getNumClusters(const GEOSClusterInfo* clusters)
+    {
+        return GEOSClusterInfo_getNumClusters_r(handle, clusters);
+    }
+
+    std::size_t GEOSClusterInfo_getClusterSize(const GEOSClusterInfo* clusters, size_t i)
+    {
+        return GEOSClusterInfo_getClusterSize_r(handle, clusters, i);
+    }
+
+    const std::size_t* GEOSClusterInfo_getInputsForClusterN(const GEOSClusterInfo* clusters, size_t i)
+    {
+        return GEOSClusterInfo_getInputsForClusterN_r(handle, clusters, i);
+    }
+
+    std::size_t* GEOSClusterInfo_getClustersForInputs(const GEOSClusterInfo* clusters)
+    {
+        return GEOSClusterInfo_getClustersForInputs_r(handle, clusters);
+    }
+
+    void GEOSClusterInfo_destroy(GEOSClusterInfo* info)
+    {
+        GEOSClusterInfo_destroy_r(handle, info);
     }
 
     Geometry*

@@ -140,6 +140,7 @@
 #define GEOSGeometry geos::geom::Geometry
 #define GEOSPreparedGeometry geos::geom::prep::PreparedGeometry
 #define GEOSCoordSequence geos::geom::CoordinateSequence
+#define GEOSClusterInfo geos::operation::cluster::Clusters
 #define GEOSBufferParams geos::operation::buffer::BufferParameters
 #define GEOSSTRtree geos::index::strtree::TemplateSTRtree<void*>
 #define GEOSWKTReader geos::io::WKTReader
@@ -208,6 +209,7 @@ using geos::algorithm::hull::ConcaveHullOfPolygons;
 using geos::operation::buffer::BufferBuilder;
 using geos::operation::buffer::BufferParameters;
 using geos::operation::buffer::OffsetCurve;
+using geos::operation::cluster::Clusters;
 using geos::operation::distance::IndexedFacetDistance;
 using geos::operation::geounion::CascadedPolygonUnion;
 using geos::operation::overlayng::OverlayNG;
@@ -953,75 +955,97 @@ extern "C" {
         });
     }
 
-    static unsigned* capi_clusters(const Geometry* g,
-                                   geos::operation::cluster::AbstractClusterFinder& finder,
-                                   unsigned* numClusters)
+    static Clusters* capi_clusters(const Geometry* g,
+                                   geos::operation::cluster::AbstractClusterFinder& finder)
     {
         std::vector<const Geometry*> input{g->getNumGeometries()};
         for (std::size_t i = 0; i < input.size(); i++) {
             input[i] = g->getGeometryN(i);
         }
 
-        auto result = finder.cluster(input);
-
-        if (numClusters) {
-            *numClusters = static_cast<unsigned>(result.getNumClusters());
-        }
-
-        auto cluster_ids = result.getClusterIds(GEOS_CLUSTER_NONE);
-        unsigned* ids = (unsigned*) malloc(cluster_ids.size() * sizeof(unsigned));
-        for (std::size_t i = 0; i < cluster_ids.size(); i++) {
-            ids[i] = static_cast<unsigned>(cluster_ids[i]);
-        }
-
-        return ids;
+        return new Clusters(finder.cluster(input));
     }
 
-    unsigned*
-    GEOSClusterDBSCAN_r(GEOSContextHandle_t extHandle, const Geometry* g, double eps, unsigned minPoints,
-                        unsigned* numClusters)
+    Clusters*
+    GEOSClusterDBSCAN_r(GEOSContextHandle_t extHandle, const Geometry* g, double eps, unsigned minPoints)
     {
         return execute(extHandle, [&]() {
             geos::operation::cluster::DBSCANClusterFinder finder(eps, minPoints);
 
-            return capi_clusters(g, finder, numClusters);
+            return capi_clusters(g, finder);
         });
     }
 
-    unsigned*
-    GEOSClusterGeometryIntersects_r(GEOSContextHandle_t extHandle, const Geometry* g, unsigned* numClusters)
+    Clusters*
+    GEOSClusterGeometryIntersects_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
         return execute(extHandle, [&]() {
             geos::operation::cluster::GeometryIntersectsClusterFinder finder;
-            return capi_clusters(g, finder, numClusters);
+            return capi_clusters(g, finder);
         });
     }
 
-    unsigned*
-    GEOSClusterEnvelopeIntersects_r(GEOSContextHandle_t extHandle, const Geometry* g, unsigned* numClusters)
+    Clusters*
+    GEOSClusterEnvelopeIntersects_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
         return execute(extHandle, [&]() {
             geos::operation::cluster::EnvelopeIntersectsClusterFinder finder;
-            return capi_clusters(g, finder, numClusters);
+            return capi_clusters(g, finder);
         });
     }
 
-    unsigned*
-    GEOSClusterEnvelopeDistance_r(GEOSContextHandle_t extHandle, const Geometry* g, double d, unsigned* numClusters)
+    Clusters*
+    GEOSClusterEnvelopeDistance_r(GEOSContextHandle_t extHandle, const Geometry* g, double d)
     {
         return execute(extHandle, [&]() {
             geos::operation::cluster::EnvelopeDistanceClusterFinder finder(d);
-            return capi_clusters(g, finder, numClusters);
+            return capi_clusters(g, finder);
         });
     }
 
-    unsigned*
-    GEOSClusterGeometryDistance_r(GEOSContextHandle_t extHandle, const Geometry* g, double d, unsigned* numClusters)
+    Clusters*
+    GEOSClusterGeometryDistance_r(GEOSContextHandle_t extHandle, const Geometry* g, double d)
     {
         return execute(extHandle, [&]() {
             geos::operation::cluster::GeometryDistanceClusterFinder finder(d);
-            return capi_clusters(g, finder, numClusters);
+            return capi_clusters(g, finder);
         });
+    }
+
+    std::size_t GEOSClusterInfo_getNumClusters_r(GEOSContextHandle_t extHandle, const Clusters* clusters)
+    {
+        return execute(extHandle, 0, [&]() -> std::size_t {
+            return static_cast<unsigned>(clusters->getNumClusters());
+        });
+    }
+
+    std::size_t GEOSClusterInfo_getClusterSize_r(GEOSContextHandle_t extHandle, const Clusters* clusters, std::size_t i)
+    {
+        return execute(extHandle, 0, [&]() {
+            return static_cast<unsigned>(clusters->getSize(i));
+        });
+    }
+
+    const std::size_t* GEOSClusterInfo_getInputsForClusterN_r(GEOSContextHandle_t extHandle, const Clusters* clusters, std::size_t i)
+    {
+        return execute(extHandle, [&]() {
+            return &*clusters->begin(i);
+        });
+    }
+
+    std::size_t* GEOSClusterInfo_getClustersForInputs_r(GEOSContextHandle_t extHandle, const Clusters* clusters)
+    {
+        return execute(extHandle, [&]() {
+            auto ids = clusters->getClusterIds(GEOS_CLUSTER_NONE);
+            std::size_t* ids_buf = (size_t*) malloc(ids.size() * sizeof(std::size_t));
+            std::copy(ids.begin(), ids.end(), ids_buf);
+            return ids_buf;
+        });
+    }
+
+    void GEOSClusterInfo_destroy_r(GEOSContextHandle_t, Clusters* clusters)
+    {
+        delete clusters;
     }
 
     Geometry*
