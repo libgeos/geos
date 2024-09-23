@@ -763,9 +763,9 @@ void object::test<22>()
     geom = wktreader.read("CIRCULARSTRING (0 0, 1 1, 2 0)");
     ensure_equals(wktwriter.writeFormatted(geom.get()), "CIRCULARSTRING (0 0, 1 1, 2 0)");
 
-    geom = wktreader.read("COMPOUNDCURVE((0 10, 0 5), CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 3 0))");
+    geom = wktreader.read("COMPOUNDCURVE((0 10, 0 5), CIRCULARSTRING (0 5, 1 1, 2 0), (2 0, 3 0))");
     ensure_equals(wktwriter.writeFormatted(geom.get()), "COMPOUNDCURVE ((0 10, 0 5), \n"
-                                                        "  CIRCULARSTRING (0 0, 1 1, 2 0), \n"
+                                                        "  CIRCULARSTRING (0 5, 1 1, 2 0), \n"
                                                         "  (2 0, 3 0))");
 
     geom = wktreader.read("POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1), (3 3, 3 4, 4 4, 4 3, 3 3))");
@@ -786,9 +786,9 @@ void object::test<22>()
                                                         "  (2 2, 3 3), \n"
                                                         "  (4 4, 5 5))");
 
-    geom = wktreader.read("MULTICURVE ((0 0, 1 1), COMPOUNDCURVE ((2 2, 3 3), CIRCULARSTRING (4 4, 5 5, 6 4), (6 4, 7 4)), (100 100, 200 200))");
+    geom = wktreader.read("MULTICURVE ((0 0, 1 1), COMPOUNDCURVE ((2 2, 4 4), CIRCULARSTRING (4 4, 5 5, 6 4), (6 4, 7 4)), (100 100, 200 200))");
     ensure_equals(wktwriter.writeFormatted(geom.get()), "MULTICURVE ((0 0, 1 1), \n"
-                                                        "  COMPOUNDCURVE ((2 2, 3 3), \n"
+                                                        "  COMPOUNDCURVE ((2 2, 4 4), \n"
                                                         "    CIRCULARSTRING (4 4, 5 5, 6 4), \n"
                                                         "    (6 4, 7 4)), \n"
                                                         "  (100 100, 200 200))");

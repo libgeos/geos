@@ -86,6 +86,8 @@ public:
 
     std::unique_ptr<CompoundCurve> reverse() const;
 
+    void validateConstruction() const;
+
 protected:
     /// Construct a CompoundCurve, taking ownership of the
     /// provided CoordinateSequence
