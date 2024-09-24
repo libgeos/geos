@@ -124,6 +124,8 @@ It can be used to:
 * `--srid s` sets SRID to s, for WKB output
 * Execute a GEOS operation on each geometry for a list of different arguments
 
+### Examples
+
 * Compute the buffer of a WKT literal for multiple distances
 
     `geosop -a "MULTIPOINT ( (0 0), (10 10) )" buffer 1,2,3,4`
