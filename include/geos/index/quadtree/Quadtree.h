@@ -188,6 +188,31 @@ public:
     Quadtree(const Quadtree&) = delete;
     Quadtree& operator=(const Quadtree&) = delete;
 
+
+    // Move constructor
+    Quadtree(Quadtree&& other) noexcept :
+        newEnvelopes(std::move(other.newEnvelopes)),
+        root(other.root),
+        minExtent(other.minExtent)
+    {
+        // The contents of 'other' are moved to 'this'
+        // 'other' will be empty after the move
+    };
+
+    // Move assignment operator
+    Quadtree& operator=(Quadtree&& other) noexcept
+    {
+        if (this != &other) {
+            // Move the vector from 'other' to 'this'
+            // 'newEnvelopes.data' will be empty after this operation
+            newEnvelopes.clear();
+            newEnvelopes = std::move(other.newEnvelopes);
+            minExtent = other.minExtent;
+            root = other.root;
+        }
+        return *this;
+    };
+
 };
 
 } // namespace geos::index::quadtree
