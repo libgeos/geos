@@ -78,7 +78,11 @@ It can be used to:
 * Compute the buffer with distance 10 of WKB geometries and output as WKT
 
     `geosop -a geoms.wkb -f wkt buffer 10`
+  
+* To get around cmdline parset limitation for parsing negative numbers, you must replace '-' by 'N'. Same as previous, but compute the buffer with distance -10
 
+    `geosop -a geoms.wkb -f wkt buffer N10`
+  
 * Compute the unary union of a set of WKT geometries and output as WKB
   * `unaryUnion` is an aggregate operation, so automatically collects all input geometries
 
