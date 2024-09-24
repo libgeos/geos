@@ -18,7 +18,6 @@ It can be used to:
 * Apply a limit and offset (TBD) to the input geometries
 * collect input geometries into a GeometryCollection (for aggregate operations)
 * Execute a GEOS operation on each geometry
-* TBD: Execute a GEOS operation on each geometry for a list of different arguments
 * Explode result collections into individual geometries
 * Output result as text, WKT or WKB
 * Time the overall and individual performance of each operation
@@ -40,6 +39,8 @@ It can be used to:
   -p, --precision arg  Set number of decimal places in output coordinates
   -q, --quiet          Disable result output
   -r, --repeat arg     Repeat operation N times
+      --select         Select geometries where op result is true
+      --selectNot      Select geometries where op result is false
   -t, --time           Print execution time
   -v, --verbose        Verbose output
   -h, --help           Print help
@@ -59,7 +60,7 @@ It can be used to:
 
     `geosop -a geoms.wkt -f wkb`
 
-* Compute the area of geometries in a WKT file and output them as text
+* Compute the areas of geometries in a WKT file and output them as text
 
     `geosop -a geoms.wkt area`
 
@@ -77,11 +78,12 @@ It can be used to:
 
 * Compute the buffer with distance 10 of WKB geometries and output as WKT
 
-    `geosop -a geoms.wkb -f wkt buffer 10`
+    `geosop -a geoms.wkb buffer 10`
   
-* To get around cmdline parset limitation for parsing negative numbers, you must replace '-' by 'N'. Same as previous, but compute the buffer with distance -10
+* To get around cmdline parset limitation for parsing negative numbers, you must replace '-' by 'N'.
+  Same as previous, but compute the buffer with distance -10
 
-    `geosop -a geoms.wkb -f wkt buffer N10`
+    `geosop -a geoms.wkb buffer N10`
   
 * Compute the unary union of a set of WKT geometries and output as WKB
   * `unaryUnion` is an aggregate operation, so automatically collects all input geometries
@@ -112,14 +114,6 @@ It can be used to:
 
     `geosop -a some-geom.wkt -b some-other-geom.wkb union`
 
-* TBD: Compute the buffer of a WKT literal for multiple distances
-
-    `geosop -a "MULTIPOINT ( (0 0), (10 10) )" buffer 1,2,3,4`
-
-* TBD: Compute the buffer of a WKT literal and output as WKB, with SRID set to 4326
-
-    `geosop -a "POINT (10 10)" --srid=4326 -f wkb buffer 10`
-
 
 
 ## Future Ideas
@@ -128,3 +122,12 @@ It can be used to:
 * `--where [eq | gt |ge | lt | le ]:val` filters result geometries by value of operation
 * `--limit N` applies limit to output (used with sorting)
 * `--srid s` sets SRID to s, for WKB output
+* Execute a GEOS operation on each geometry for a list of different arguments
+
+* Compute the buffer of a WKT literal for multiple distances
+
+    `geosop -a "MULTIPOINT ( (0 0), (10 10) )" buffer 1,2,3,4`
+
+* Compute the buffer of a WKT literal and output as WKB, with SRID set to 4326
+
+    `geosop -a "POINT (10 10)" --srid=4326 -f wkb buffer 10`
