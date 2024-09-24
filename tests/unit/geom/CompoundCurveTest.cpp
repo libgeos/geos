@@ -11,8 +11,10 @@
 #include <geos/io/WKTReader.h>
 #include <geos/util.h>
 
+using geos::geom::CompoundCurve;
 using geos::geom::CoordinateXY;
 using geos::geom::CoordinateSequence;
+using geos::geom::SimpleCurve;
 
 namespace tut {
 // Common data used by tests
@@ -21,11 +23,11 @@ struct test_compoundcurve_data {
     geos::geom::GeometryFactory::Ptr factory_ = geos::geom::GeometryFactory::create();
     geos::io::WKTReader wktreader_;
 
-    std::unique_ptr<geos::geom::CompoundCurve> cc_;
+    std::unique_ptr<CompoundCurve> cc_;
 
     test_compoundcurve_data()
     {
-        std::vector<std::unique_ptr<geos::geom::SimpleCurve>> curves;
+        std::vector<std::unique_ptr<SimpleCurve>> curves;
 
         curves.emplace_back(factory_->createCircularString({
             CoordinateXY(0, 0),
@@ -312,6 +314,17 @@ void object::test<8>()
     ensure_equals(tcsf.args[3].second, 0u);
 }
 
+template<>
+template<>
+void object::test<9>()
+{
+    std::vector<std::unique_ptr<SimpleCurve>> curves;
+
+    curves.push_back(wktreader_.read<SimpleCurve>("LINESTRING (0 0, 1 2)"));
+    curves.push_back(wktreader_.read<SimpleCurve>("CIRCULARSTRING (2 1, 3 3, 4 1)"));
+
+    ensure_THROW(factory_->createCompoundCurve(std::move(curves)), geos::util::IllegalArgumentException);
+}
 
 }
 
