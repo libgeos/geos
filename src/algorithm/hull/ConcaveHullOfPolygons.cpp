@@ -13,6 +13,7 @@
  **********************************************************************/
 
 #include <geos/algorithm/hull/ConcaveHullOfPolygons.h>
+#include <geos/algorithm/hull/OuterShellsExtracter.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Geometry.h>
@@ -182,26 +183,11 @@ ConcaveHullOfPolygons::createEmptyHull()
     return geomFactory->createPolygon();
 }
 
-/* private static */
-void
-ConcaveHullOfPolygons::extractShellRings(const Geometry* polygons, std::vector<const LinearRing*>& rings)
-{
-    rings.clear();
-    for (std::size_t i = 0; i < polygons->getNumGeometries(); i++) {
-        const Geometry* consGeom = polygons->getGeometryN(i);
-        const Polygon* consPoly = static_cast<const Polygon*>(consGeom);
-        const LinearRing* lr = consPoly->getExteriorRing();
-        rings.push_back(lr);
-    }
-    return;
-}
-
-
 /* private */
 void
 ConcaveHullOfPolygons::buildHullTris()
 {
-    extractShellRings(inputPolygons, polygonRings);
+    OuterShellsExtracter::extractShells(inputPolygons, polygonRings);
     std::unique_ptr<Polygon> frame = createFrame(inputPolygons->getEnvelopeInternal());
     ConstrainedDelaunayTriangulator::triangulatePolygon(frame.get(), triList);
     //System.out.println(tris);

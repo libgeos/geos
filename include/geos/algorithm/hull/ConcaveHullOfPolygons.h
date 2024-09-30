@@ -124,10 +124,6 @@ private:
 
     std::unique_ptr<Geometry> createEmptyHull();
 
-    static void extractShellRings(
-        const Geometry* polygons,
-        std::vector<const LinearRing*>& rings);
-
     void buildHullTris();
 
     /**
