@@ -2,7 +2,7 @@
 2024-xx-xx
 
 - Fixes/Improvements:
-  -
+  - Fix ConcaveHullOfPolygons nested shell handling (GH-1169, Martin Davis)
 
 
 ## Changes in 3.13.0
