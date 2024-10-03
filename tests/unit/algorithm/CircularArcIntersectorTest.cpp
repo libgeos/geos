@@ -464,4 +464,43 @@ void object::test<35>()
                       {0, 0});
 }
 
+template<>
+template<>
+void object::test<36>()
+{
+    set_test_name("intersection between a segment and a degenerate arc (radius = Infinity)");
+
+    checkIntersection({-5, -5}, {0, 0}, {5, 5 + 1e-14},
+                      {-5, 5}, {5, -5},
+                      CircularArcIntersector::ONE_POINT_INTERSECTION,
+                      CoordinateXY{0, 0});
+}
+
+template<>
+template<>
+void object::test<37>()
+{
+    set_test_name("intersection between a segment and a nearly-degenerate arc (radius ~= 1e5)");
+
+    checkIntersection({-5, -5}, {0, 0}, {5, 5 + 1e-4},
+                      {-5, 5}, {5, -5},
+                      CircularArcIntersector::ONE_POINT_INTERSECTION,
+                      CoordinateXY{0, 0});
+}
+
+#if 0
+// failed assertion: Values are not equal: expected `POINT (0 0)` actual `POINT (-5.4568517953157425e-06 5.4568517953157425e-06)`
+template<>
+template<>
+void object::test<38>()
+{
+    set_test_name("intersection between a segment and a nearly-degenerate arc (radius ~= 2e6)");
+
+    checkIntersection({-5, -5}, {0, 0}, {5, 5 + 1e-9},
+                      {-5, 5}, {5, -5},
+                      CircularArcIntersector::ONE_POINT_INTERSECTION,
+                      CoordinateXY{0, 0});
+}
+#endif
+
 }
