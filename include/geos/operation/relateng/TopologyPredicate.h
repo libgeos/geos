@@ -18,6 +18,7 @@
 #include <geos/geom/Location.h>
 #include <geos/export.h>
 
+#include <ostream> // for operator<<
 
 // Forward declarations
 namespace geos {
