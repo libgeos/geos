@@ -17,6 +17,7 @@
 
 #include <geos/geom/Location.h>
 #include <geos/export.h>
+#include <string>
 
 
 // Forward declarations
