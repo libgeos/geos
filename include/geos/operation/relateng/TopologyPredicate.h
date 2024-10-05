@@ -19,6 +19,7 @@
 #include <geos/export.h>
 
 #include <ostream> // for operator<<
+#include <string>
 
 // Forward declarations
 namespace geos {
