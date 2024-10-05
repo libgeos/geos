@@ -15,15 +15,8 @@
 #pragma once
 
 #include <geos/export.h>
+#include <geos/geom/Coordinate.h>
 #include <iostream>
-
-
-// Forward declarations
-namespace geos {
-namespace geom {
-class Coordinate;
-}
-}
 
 using geos::geom::Coordinate;
 

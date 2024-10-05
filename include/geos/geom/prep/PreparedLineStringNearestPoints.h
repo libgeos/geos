@@ -19,8 +19,15 @@
 
 #pragma once
 
+#include <memory>
+
+#include <geos/geom/prep/PreparedLineString.h>
+
 namespace geos {
 namespace geom { // geos::geom
+
+class CoordinateSequence;
+
 namespace prep { // geos::geom::prep
 
 class PreparedLineStringNearestPoints {

@@ -20,6 +20,8 @@
 
 #pragma once
 
+#include <vector>
+
 #include <geos/export.h>
 
 #include <geos/operation/union/UnionStrategy.h>
