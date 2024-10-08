@@ -21,6 +21,7 @@
 #include <geos/export.h>
 
 #include <cassert>
+#include <cstddef>
 
 // Forward declarations
 namespace geos {
