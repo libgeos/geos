@@ -31,6 +31,7 @@ namespace geom {
 class Envelope;
 class Geometry;
 class LinearRing;
+class Polygon;
 }
 namespace noding {
 }

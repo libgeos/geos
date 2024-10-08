@@ -21,6 +21,7 @@
 #include <geos/export.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Geometry.h>
+#include <geos/linearref/ExtractLineByLocation.h>
 #include <geos/linearref/LinearLocation.h>
 #include <geos/linearref/LocationIndexOfPoint.h>
 #include <geos/linearref/LocationIndexOfLine.h>

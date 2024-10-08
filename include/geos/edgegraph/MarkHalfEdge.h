@@ -16,6 +16,7 @@
 #pragma once
 
 #include <geos/geom/Coordinate.h>
+#include <geos/edgegraph/HalfEdge.h>
 
 #include <geos/export.h>
 #include <string>

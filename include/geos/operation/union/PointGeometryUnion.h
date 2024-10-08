@@ -22,6 +22,7 @@
 
 #include <vector>
 #include <algorithm>
+#include <memory>
 
 // Forward declarations
 namespace geos {

@@ -43,6 +43,7 @@ using geos::geom::Envelope;
 using geos::geom::Geometry;
 using geos::index::strtree::TemplateSTRtree;
 using geos::index::chain::MonotoneChain;
+using geos::noding::SegmentString;
 using geos::operation::relateng::EdgeSegmentIntersector;
 
 

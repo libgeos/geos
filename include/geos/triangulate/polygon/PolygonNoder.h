@@ -18,7 +18,11 @@
 // #include <geos/geom/Coordinate.h>
 //#include <geos/geom/CoordinateSequence.h>
 
+#include <geos/export.h>
+
 #include <map>
+#include <memory>
+#include <vector>
 
 // Forward declarations
 namespace geos {
@@ -28,6 +32,9 @@ class CoordinateSequence;
 }
 namespace noding {
 class NodedSegmentString;
+}
+namespace algorithm {
+class LineIntersector;
 }
 }
 

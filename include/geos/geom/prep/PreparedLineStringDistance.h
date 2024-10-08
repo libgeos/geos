@@ -21,6 +21,9 @@
 
 namespace geos {
 namespace geom { // geos::geom
+
+class Geometry;
+
 namespace prep { // geos::geom::prep
 
 class PreparedLineString;
