@@ -70,51 +70,52 @@ $(function() {
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &lt;geos/export.h&gt;</span></div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160; </div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &lt;cassert&gt;</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="comment">// Forward declarations</span></div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keyword">namespace </span>geom {</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">class </span>CoordinateSequence;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;}</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &lt;cstddef&gt;</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment">// Forward declarations</span></div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">namespace </span>geom {</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">class </span>CoordinateSequence;</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;}</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">namespace </span>geom { <span class="comment">// geos::geom</span></div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1CoordinateSequenceFilter.html">   55</a></span>&#160;<span class="keyword">class </span>GEOS_DLL <a class="code" href="classgeos_1_1geom_1_1CoordinateSequenceFilter.html">CoordinateSequenceFilter</a> {</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keyword">virtual</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    ~<a class="code" href="classgeos_1_1geom_1_1CoordinateSequenceFilter.html">CoordinateSequenceFilter</a>() {}</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1CoordinateSequenceFilter.html#ac91a4237d95ee7f6a336df64269c0f11">   69</a></span>&#160;    <a class="code" href="classgeos_1_1geom_1_1CoordinateSequenceFilter.html#ac91a4237d95ee7f6a336df64269c0f11">filter_rw</a>(<a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>&amp; <span class="comment">/*seq*/</span>, std::size_t <span class="comment">/*i*/</span>)</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    {</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        assert(0);</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    }</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span></div>
-<div class="line"><a name="l00081"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1CoordinateSequenceFilter.html#a8bd15c4f0229d0c4a494bbcdff69452d">   81</a></span>&#160;    <a class="code" href="classgeos_1_1geom_1_1CoordinateSequenceFilter.html#a8bd15c4f0229d0c4a494bbcdff69452d">filter_ro</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>&amp; <span class="comment">/*seq*/</span>, std::size_t <span class="comment">/*i*/</span>)</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;    {</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        assert(0);</div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    }</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160; </div>
-<div class="line"><a name="l00094"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1CoordinateSequenceFilter.html#a42578ad728c920900bebfa865542337d">   94</a></span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequenceFilter.html#a42578ad728c920900bebfa865542337d">isDone</a>() <span class="keyword">const</span> = 0;</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;}</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keyword">namespace </span>geom { <span class="comment">// geos::geom</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1CoordinateSequenceFilter.html">   56</a></span>&#160;<span class="keyword">class </span>GEOS_DLL <a class="code" href="classgeos_1_1geom_1_1CoordinateSequenceFilter.html">CoordinateSequenceFilter</a> {</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keyword">virtual</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    ~<a class="code" href="classgeos_1_1geom_1_1CoordinateSequenceFilter.html">CoordinateSequenceFilter</a>() {}</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1CoordinateSequenceFilter.html#ac91a4237d95ee7f6a336df64269c0f11">   70</a></span>&#160;    <a class="code" href="classgeos_1_1geom_1_1CoordinateSequenceFilter.html#ac91a4237d95ee7f6a336df64269c0f11">filter_rw</a>(<a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>&amp; <span class="comment">/*seq*/</span>, std::size_t <span class="comment">/*i*/</span>)</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    {</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        assert(0);</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    }</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">void</span></div>
+<div class="line"><a name="l00082"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1CoordinateSequenceFilter.html#a8bd15c4f0229d0c4a494bbcdff69452d">   82</a></span>&#160;    <a class="code" href="classgeos_1_1geom_1_1CoordinateSequenceFilter.html#a8bd15c4f0229d0c4a494bbcdff69452d">filter_ro</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>&amp; <span class="comment">/*seq*/</span>, std::size_t <span class="comment">/*i*/</span>)</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;    {</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        assert(0);</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    }</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
+<div class="line"><a name="l00095"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1CoordinateSequenceFilter.html#a42578ad728c920900bebfa865542337d">   95</a></span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequenceFilter.html#a42578ad728c920900bebfa865542337d">isDone</a>() <span class="keyword">const</span> = 0;</div>
 <div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
-<div class="line"><a name="l00109"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1CoordinateSequenceFilter.html#aec7d0010ddc152e08009240a40a59e6d">  109</a></span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequenceFilter.html#aec7d0010ddc152e08009240a40a59e6d">isGeometryChanged</a>() <span class="keyword">const</span> = 0;</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;};</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;} <span class="comment">// namespace geos::geom</span></div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;} <span class="comment">// namespace geos</span></div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
+<div class="line"><a name="l00110"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1CoordinateSequenceFilter.html#aec7d0010ddc152e08009240a40a59e6d">  110</a></span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequenceFilter.html#aec7d0010ddc152e08009240a40a59e6d">isGeometryChanged</a>() <span class="keyword">const</span> = 0;</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;};</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;} <span class="comment">// namespace geos::geom</span></div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;} <span class="comment">// namespace geos</span></div>
 <div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequenceFilter_html"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequenceFilter.html">geos::geom::CoordinateSequenceFilter</a></div><div class="ttdoc">Interface for classes which provide operations that can be applied to the coordinates in a Coordinate...</div><div class="ttdef"><b>Definition:</b> CoordinateSequenceFilter.h:55</div></div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequenceFilter_html"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequenceFilter.html">geos::geom::CoordinateSequenceFilter</a></div><div class="ttdoc">Interface for classes which provide operations that can be applied to the coordinates in a Coordinate...</div><div class="ttdef"><b>Definition:</b> CoordinateSequenceFilter.h:56</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequenceFilter_html_a42578ad728c920900bebfa865542337d"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequenceFilter.html#a42578ad728c920900bebfa865542337d">geos::geom::CoordinateSequenceFilter::isDone</a></div><div class="ttdeci">virtual bool isDone() const =0</div><div class="ttdoc">Reports whether the application of this filter can be terminated.</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequenceFilter_html_a8bd15c4f0229d0c4a494bbcdff69452d"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequenceFilter.html#a8bd15c4f0229d0c4a494bbcdff69452d">geos::geom::CoordinateSequenceFilter::filter_ro</a></div><div class="ttdeci">virtual void filter_ro(const CoordinateSequence &amp;, std::size_t)</div><div class="ttdoc">Performs an operation on a coordinate in a CoordinateSequence.</div><div class="ttdef"><b>Definition:</b> CoordinateSequenceFilter.h:81</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequenceFilter_html_ac91a4237d95ee7f6a336df64269c0f11"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequenceFilter.html#ac91a4237d95ee7f6a336df64269c0f11">geos::geom::CoordinateSequenceFilter::filter_rw</a></div><div class="ttdeci">virtual void filter_rw(CoordinateSequence &amp;, std::size_t)</div><div class="ttdoc">Performs an operation on a coordinate in a CoordinateSequence.</div><div class="ttdef"><b>Definition:</b> CoordinateSequenceFilter.h:69</div></div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequenceFilter_html_a8bd15c4f0229d0c4a494bbcdff69452d"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequenceFilter.html#a8bd15c4f0229d0c4a494bbcdff69452d">geos::geom::CoordinateSequenceFilter::filter_ro</a></div><div class="ttdeci">virtual void filter_ro(const CoordinateSequence &amp;, std::size_t)</div><div class="ttdoc">Performs an operation on a coordinate in a CoordinateSequence.</div><div class="ttdef"><b>Definition:</b> CoordinateSequenceFilter.h:82</div></div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequenceFilter_html_ac91a4237d95ee7f6a336df64269c0f11"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequenceFilter.html#ac91a4237d95ee7f6a336df64269c0f11">geos::geom::CoordinateSequenceFilter::filter_rw</a></div><div class="ttdeci">virtual void filter_rw(CoordinateSequence &amp;, std::size_t)</div><div class="ttdoc">Performs an operation on a coordinate in a CoordinateSequence.</div><div class="ttdef"><b>Definition:</b> CoordinateSequenceFilter.h:70</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequenceFilter_html_aec7d0010ddc152e08009240a40a59e6d"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequenceFilter.html#aec7d0010ddc152e08009240a40a59e6d">geos::geom::CoordinateSequenceFilter::isGeometryChanged</a></div><div class="ttdeci">virtual bool isGeometryChanged() const =0</div><div class="ttdoc">Reports whether the execution of this filter has modified the coordinates of the geometry.</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequence_html"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequence.html">geos::geom::CoordinateSequence</a></div><div class="ttdoc">The internal representation of a list of coordinates inside a Geometry.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:56</div></div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:25</div></div>
