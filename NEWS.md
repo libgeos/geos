@@ -7,6 +7,7 @@
 
 - Fixes/Improvements:
   - Fix ConcaveHullOfPolygons nested shell handling (GH-1169, Martin Davis)
+  - Fix RelateNG for computing IM for empty-nonempty cases (Martin Davis)
 
 ## Changes in 3.13.0
 2024-09-06
