@@ -302,10 +302,16 @@ TopologyComputer::addPointOnPointExterior(bool isGeomA, const CoordinateXY* pt)
 
 /* public */
 void
-TopologyComputer::addPointOnGeometry(bool isA, Location locTarget, int dimTarget, const CoordinateXY* pt)
+TopologyComputer::addPointOnGeometry(bool isPointA, Location locTarget, int dimTarget, const CoordinateXY* pt)
 {
     (void)pt;
-    updateDim(isA, Location::INTERIOR, locTarget, Dimension::P);
+    //-- update entry for Point interior
+    updateDim(isPointA, Location::INTERIOR, locTarget, Dimension::P);
+
+    //-- an empty geometry has no points to infer entries from
+    if (getGeometry(! isPointA).isEmpty())
+      return;
+
     switch (dimTarget) {
     case Dimension::P:
         return;
@@ -323,8 +329,8 @@ TopologyComputer::addPointOnGeometry(bool isA, Location locTarget, int dimTarget
          * If a point intersects an area target, then the area interior and boundary
          * must extend beyond the point and thus interact with its exterior.
          */
-        updateDim(isA, Location::EXTERIOR, Location::INTERIOR, Dimension::A);
-        updateDim(isA, Location::EXTERIOR, Location::BOUNDARY, Dimension::L);
+        updateDim(isPointA, Location::EXTERIOR, Location::INTERIOR, Dimension::A);
+        updateDim(isPointA, Location::EXTERIOR, Location::BOUNDARY, Dimension::L);
         return;
     }
     throw IllegalStateException("Unknown target dimension: " + std::to_string(dimTarget));
@@ -339,6 +345,10 @@ TopologyComputer::addLineEndOnGeometry(bool isLineA, Location locLineEnd, Locati
     //-- record topology at line end point
     updateDim(isLineA, locLineEnd, locTarget, Dimension::P);
 
+    //-- an empty geometry has no points to infer entries from
+    if (getGeometry(! isLineA).isEmpty())
+      return;
+      
     //-- Line and Area targets may have additional topology
     switch (dimTarget) {
     case Dimension::P:

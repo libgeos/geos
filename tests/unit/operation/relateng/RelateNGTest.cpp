@@ -839,20 +839,21 @@ void object::test<60> ()
 
 //================  Empty Geometries  ==============
 
+std::string empties[] = {
+    "POINT EMPTY",
+    "LINESTRING EMPTY",
+    "POLYGON EMPTY",
+    "MULTIPOINT EMPTY",
+    "MULTILINESTRING EMPTY",
+    "MULTIPOLYGON EMPTY",
+    "GEOMETRYCOLLECTION EMPTY"
+};
+
 //-- test equals against all combinations of empty geometries
 template<>
 template<>
 void object::test<61> ()
 {
-    std::string empties[] = {
-        "POINT EMPTY",
-        "LINESTRING EMPTY",
-        "POLYGON EMPTY",
-        "MULTIPOINT EMPTY",
-        "MULTILINESTRING EMPTY",
-        "MULTIPOLYGON EMPTY",
-        "GEOMETRYCOLLECTION EMPTY"
-    };
     int nempty = 7;
     for (int i = 0; i < nempty; i++) {
         for (int j = 0; j < nempty; j++) {
@@ -862,13 +863,51 @@ void object::test<61> ()
             checkEquals(a, b, true);
         }
     }
+}
 
+// testEmptyNonEmpty
+template<>
+template<>
+void object::test<62> ()
+{
+    std::string nonEmptyPoint = "POINT (1 1)";
+    std::string nonEmptyLine = "LINESTRING (1 1, 2 2)";
+    std::string nonEmptyPolygon = "POLYGON ((1 1, 1 2, 2 1, 1 1))";
+
+    for (int i = 0; i < 7; i++) {
+        std::string empty = empties[i];
+        
+        checkRelate(empty, nonEmptyPoint, "FFFFFF0F2");
+        checkRelate(nonEmptyPoint, empty, "FF0FFFFF2");
+        
+        checkRelate(empty, nonEmptyLine, "FFFFFF102");
+        checkRelate(nonEmptyLine, empty, "FF1FF0FF2");
+        
+        checkRelate(empty, nonEmptyPolygon, "FFFFFF212");
+        checkRelate(nonEmptyPolygon, empty, "FF2FF1FF2");
+        
+        checkEquals(empty, nonEmptyPoint, false);
+        checkEquals(empty, nonEmptyLine, false);
+        checkEquals(empty, nonEmptyPolygon, false);
+        
+        checkIntersectsDisjoint(empty, nonEmptyPoint, false);
+        checkIntersectsDisjoint(empty, nonEmptyLine, false);
+        checkIntersectsDisjoint(empty, nonEmptyPolygon, false);
+        
+        checkContainsWithin(empty, nonEmptyPoint, false);
+        checkContainsWithin(empty, nonEmptyLine, false);
+        checkContainsWithin(empty, nonEmptyPolygon, false);
+        
+        checkContainsWithin(nonEmptyPoint, empty, false);
+        checkContainsWithin(nonEmptyLine, empty, false);
+        checkContainsWithin(nonEmptyPolygon, empty, false);
+    }  
 }
 
 // Prepared test
 template<>
 template<>
-void object::test<62> ()
+void object::test<63> ()
 {
     std::string a = "POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))";
     std::string b = "POLYGON((0.5 0.5, 1.5 0.5, 1.5 1.5, 0.5 1.5, 0.5 0.5))";
