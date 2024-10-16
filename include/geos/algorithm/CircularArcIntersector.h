@@ -79,6 +79,9 @@ public:
     /// points and/or arcs, if any.
     void intersects(const CircularArc& arc1, const CircularArc& arc2);
 
+    static int
+    circleIntersects(const CoordinateXY& center, double r, const CoordinateXY& p0, const CoordinateXY& p1, CoordinateXY& isect0, CoordinateXY& isect1);
+
 private:
 
     void intersects(const CoordinateXY& p0, const CoordinateXY& p1, const CoordinateXY& q0, const CoordinateXY& q1);

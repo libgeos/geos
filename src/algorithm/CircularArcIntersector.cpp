@@ -29,23 +29,16 @@ nextAngleCCW(double from, double a, double b)
     }
 }
 
-void
-CircularArcIntersector::intersects(const CircularArc& arc, const CoordinateXY& p0, const CoordinateXY& p1)
+int
+CircularArcIntersector::circleIntersects(const CoordinateXY& center, double r, const CoordinateXY& p0, const CoordinateXY& p1, CoordinateXY& ret0, CoordinateXY& ret1)
 {
-    if (arc.isLinear()) {
-        intersects(arc.p0, arc.p2, p0, p1);
-        return;
-    }
+    const double& x0 = center.x;
+    const double& y0 = center.y;
 
     Envelope segEnv(p0, p1);
 
-    // TODO: envelope check?
-    const CoordinateXY& c = arc.getCenter();
-    const double& x0 = c.x;
-    const double& y0 = c.y;
-    const double r = arc.getRadius();
-
     CoordinateXY isect0, isect1;
+    int n = 0;
 
     if (p1.x == p0.x) {
         // vertical line
@@ -80,11 +73,42 @@ CircularArcIntersector::intersects(const CircularArc& arc, const CoordinateXY& p
         isect1 = {X2, m* X2 + b};
     }
 
-    if (segEnv.contains(isect0) && arc.containsPointOnCircle(isect0)) {
+    if (segEnv.intersects(isect0)) {
+        ret0 = isect0;
+        if (segEnv.intersects(isect1) && !isect1.equals2D(isect0)) {
+            ret1 = isect1;
+            n = 2;
+        } else {
+            n = 1;
+        }
+    } else if (segEnv.intersects(isect1)) {
+        ret0 = isect1;
+        n = 1;
+    }
+
+    return n;
+}
+
+void
+CircularArcIntersector::intersects(const CircularArc& arc, const CoordinateXY& p0, const CoordinateXY& p1)
+{
+    if (arc.isLinear()) {
+        intersects(arc.p0, arc.p2, p0, p1);
+        return;
+    }
+
+    // TODO: envelope check?
+    const CoordinateXY& c = arc.getCenter();
+    const double r = arc.getRadius();
+
+    CoordinateXY isect0, isect1;
+    auto n = circleIntersects(c, r, p0, p1, isect0, isect1);
+
+    if (n > 0 && arc.containsPointOnCircle(isect0)) {
         intPt[nPt++] = isect0;
     }
 
-    if (segEnv.contains(isect1) && arc.containsPointOnCircle(isect1)) {
+    if (n > 1  && arc.containsPointOnCircle(isect1)) {
         intPt[nPt++] = isect1;
     }
 
