@@ -503,4 +503,130 @@ void object::test<38>()
 }
 #endif
 
+template<>
+template<>
+void object::test<38>()
+{
+    set_test_name("arc-segment tests from ILI validator");
+    // https://github.com/claeis/iox-ili/blob/master/jtsext/src/test/java/ch/interlis/iom_j/itf/impl/hrg/ISCILRTest.java
+
+    // test_1a
+    checkIntersection({0, 5}, {5, 0}, {0, -5},
+                      {20, 5}, {20, -5},
+                      CircularArcIntersector::NO_INTERSECTION),
+
+    // test_2a
+    checkIntersection({0, 5}, {5, 0}, {0, -5},
+                      {5, 5}, {5, 0},
+                      CircularArcIntersector::ONE_POINT_INTERSECTION,
+                      {5, 0});
+
+    // test_2b
+    checkIntersection({0, 5}, {5, 0}, {0, -5},
+                      {5, 5}, {5, -5},
+                      CircularArcIntersector::ONE_POINT_INTERSECTION,
+                      {5, 0});
+
+    // test_2c
+    checkIntersection({0, 5}, {4, 3}, {0, -5},
+                      {5, 5}, {5, 0},
+                      CircularArcIntersector::ONE_POINT_INTERSECTION,
+                      {5, 0});
+
+    // test_2d
+    checkIntersection({0, 5}, {4, 3}, {0, -5},
+                      {5, 5}, {5, -5},
+                      CircularArcIntersector::ONE_POINT_INTERSECTION,
+                      {5, 0});
+
+    // test_3a
+    checkIntersection({0, 5}, {5, 0}, {0, -5},
+                      {4, 5}, {4, -5},
+                      CircularArcIntersector::TWO_POINT_INTERSECTION,
+                      {4, 3}, {4, -3});
+
+    // test_3b
+    checkIntersection({0, 5}, {5, 0}, {0, -5},
+                      {-4, 5}, {-4, -5},
+                      CircularArcIntersector::NO_INTERSECTION);
+
+    // test_3c
+    checkIntersection({0, 5}, {5, 0}, {0, -5},
+                      {4, 10}, {4, 5},
+                      CircularArcIntersector::NO_INTERSECTION);
+
+
+    // test_3d
+    checkIntersection({0, 5}, {3, 4}, {5, 0},
+                      {4, 5}, {4, -5},
+                      CircularArcIntersector::ONE_POINT_INTERSECTION,
+                      {4, 3});
+
+    // test_3e
+    checkIntersection({0, 5}, {5, 0}, {0, -5},
+                      {4, 5}, {4, 0},
+                      CircularArcIntersector::ONE_POINT_INTERSECTION,
+                      {4, 3});
+}
+
+template<>
+template<>
+void object::test<39>()
+{
+    set_test_name("arc-arc tests from ILI validator");
+    // https://github.com/claeis/iox-ili/blob/master/jtsext/src/test/java/ch/interlis/iom_j/itf/impl/hrg/ISCICRTest.java
+
+    // test_1: circles do not overlap
+    checkIntersection({0, 5}, {5, 0}, {0, -5},
+                      {20, 5}, {15, 0}, {20, -5},
+                      CircularArcIntersector::NO_INTERSECTION);
+
+    // test_2a: arcs overlap at a point
+    checkIntersection({0, 5}, {5, 0}, {0, -5},
+                      {10, 5}, {5, 0}, {10, -5},
+                      CircularArcIntersector::ONE_POINT_INTERSECTION,
+                      CoordinateXY{5, 0});
+    // test_2b: arcs overlap at a point that is not a definition point of either arc
+    checkIntersection({0, 5}, {4, 3}, {0, -5},
+                      {10, 5}, {6, 3}, {10, -5},
+                      CircularArcIntersector::ONE_POINT_INTERSECTION,
+                      CoordinateXY{5, 0});
+
+    // test_3a: circles overlap at two points that are within both arcs
+    checkIntersection({0, 5}, {5, 0}, {0, -5},
+                      {8, 5}, {3, 0}, {8, -5},
+                      CircularArcIntersector::TWO_POINT_INTERSECTION,
+                      CoordinateXY{4, 3}, CoordinateXY{4, -3});
+
+    // test_3b: circles overlap at two points but neither is on the first arc
+    checkIntersection({0, 5}, {-5, 0}, {0, -5},
+                      {8, 5}, {3, 0}, {8, -5},
+                      CircularArcIntersector::NO_INTERSECTION);
+
+    // test_3c: circles overlap at two points but neither is on the first or second arc
+    checkIntersection({0, 5}, {-5, 0}, {0, -5},
+                      {8, 5}, {13, 0}, {8, -5},
+                      CircularArcIntersector::NO_INTERSECTION);
+
+    // test_3d: circles overlap at two points but one is not on the first arc
+    checkIntersection({5, 0}, {3, -4}, {0, -5},
+                      {8, 5}, {3, 0}, {8, -5},
+                      CircularArcIntersector::ONE_POINT_INTERSECTION,
+                      CoordinateXY{4, -3});
+
+    // test_3e: circles overlap at two points but one is not on the second arc
+    checkIntersection({0, 5}, {5, 0}, {0, -5},
+                      {3, 0}, {5, -4}, {8, -5},
+                      CircularArcIntersector::ONE_POINT_INTERSECTION,
+                      CoordinateXY{4, -3});
+
+    // test_4a: cocircular
+    checkIntersection({0, 5}, {5, 0}, {0, -5},
+                      {4, 3}, {5, 0}, {4, -3},
+                      CircularArcIntersector::COCIRCULAR_INTERSECTION,
+                      Arc{{{4, 3}, {5, 0}, {4, -3}}});
+}
+
+
+
 }
