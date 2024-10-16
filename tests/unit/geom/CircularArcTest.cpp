@@ -104,4 +104,21 @@ void object::test<4>()
     ensure_equals("linear", CircularArc({0, 0}, {1, 1}, {2, 2}).isLinear(), true);
 }
 
+template<>
+template<>
+void object::test<5>()
+{
+    set_test_name("CircularArc::containsPointOnCircle");
+
+    // complete circle
+    CircularArc({5, 0}, {-5, 0}, {5, 0}).containsPointOnCircle({5, 0});
+    CircularArc({5, 0}, {-5, 0}, {5, 0}).containsPointOnCircle({4, 3});
+
+    // lower semi-circle
+    CircularArc({-5, 0}, {0, -5}, {5, 0}).containsPointOnCircle({5, 0});
+
+    // upper semi-circle
+    CircularArc({-5, 0}, {0, 5}, {5, 0}).containsPointOnCircle({5, 0});
+}
+
 }
