@@ -5,6 +5,7 @@
   - Centroid: Fix crash on polygons with empty holes (GH-1075, Dan Baston)
   - MinimumClearance: Fix crash on NaN inputs (GH-1082, Dan Baston)
   - GEOSRelatePatternMatch: Fix crash on invalid DE-9IM pattern (GH-1089, Dan Baston)
+  - Port TopologyPreservingSimplifier fixes (GH-986, GH-1107, GH-857, GH-784, GH-1070, Paul Ramsey)
 
 ## Changes in 3.11.4
 2024-06-05

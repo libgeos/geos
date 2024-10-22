@@ -16,16 +16,16 @@
  *
  **********************************************************************/
 
-#include <geos/simplify/TaggedLineStringSimplifier.h>
-#include <geos/simplify/LineSegmentIndex.h>
 #include <geos/algorithm/LineIntersector.h>
-#include <geos/simplify/TaggedLineString.h>
-#include <geos/simplify/TaggedLineSegment.h>
+#include <geos/algorithm/Orientation.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/LineString.h>
-//#include <geos/geom/Geometry.h> // for std::unique_ptr destructor
-//#include <geos/geom/GeometryFactory.h>
-//#include <geos/geom/CoordinateSequenceFactory.h>
+#include <geos/simplify/ComponentJumpChecker.h>
+#include <geos/simplify/LineSegmentIndex.h>
+#include <geos/simplify/TaggedLineStringSimplifier.h>
+#include <geos/simplify/TaggedLineString.h>
+#include <geos/simplify/TaggedLineSegment.h>
+#include <geos/util.h>
 
 #include <algorithm>
 #include <cassert>
@@ -39,10 +39,11 @@
 #include <iostream>
 #endif
 
-using namespace geos::geom;
-using std::pair;
-using std::unique_ptr;
-using std::vector;
+using geos::geom::LineSegment;
+using geos::geom::Coordinate;
+using geos::geom::LineString;
+using geos::algorithm::LineIntersector;
+using geos::algorithm::Orientation;
 
 namespace geos {
 namespace simplify { // geos::simplify
@@ -50,20 +51,20 @@ namespace simplify { // geos::simplify
 /*public*/
 TaggedLineStringSimplifier::TaggedLineStringSimplifier(
     LineSegmentIndex* nInputIndex,
-    LineSegmentIndex* nOutputIndex)
-    :
-    inputIndex(nInputIndex),
-    outputIndex(nOutputIndex),
-    li(new algorithm::LineIntersector()),
-    line(nullptr),
-    linePts(nullptr),
-    distanceTolerance(0.0)
-{
-}
+    LineSegmentIndex* nOutputIndex,
+    const ComponentJumpChecker* crossChecker)
+    : inputIndex(nInputIndex)
+    , outputIndex(nOutputIndex)
+    , jumpChecker(crossChecker)
+    , li(new LineIntersector())
+    , line(nullptr)
+    , linePts(nullptr)
+{}
+
 
 /*public*/
 void
-TaggedLineStringSimplifier::simplify(TaggedLineString* nLine)
+TaggedLineStringSimplifier::simplify(TaggedLineString* nLine, double distanceTolerance)
 {
     assert(nLine);
     line = nLine;
@@ -81,15 +82,17 @@ TaggedLineStringSimplifier::simplify(TaggedLineString* nLine)
     if(linePts->isEmpty()) {
         return;
     }
-    simplifySection(0, linePts->size() - 1, 0);
+    simplifySection(0, linePts->size() - 1, 0, distanceTolerance);
 
+    if(line->isRing() && linePts->isRing()) {
+        simplifyRingEndpoint(distanceTolerance);
+    }
 }
-
 
 /*private*/
 void
 TaggedLineStringSimplifier::simplifySection(std::size_t i,
-        std::size_t j, std::size_t depth)
+        std::size_t j, std::size_t depth, double distanceTolerance)
 {
     depth += 1;
 
@@ -141,16 +144,26 @@ TaggedLineStringSimplifier::simplifySection(std::size_t i,
               << std::endl;
 #endif
 
+    if (distance < 0) {
+        // negative distance indicates that we could not compute distance to the
+        // farthest point, probably because of infinite or large-magnitude coordinates.
+        // avoid trying to simplify this section.
+        for (std::size_t k = i; k < j; k++) {
+            auto newSeg = detail::make_unique<TaggedLineSegment>(*(line->getSegment(k)));
+            line->addToResult(std::move(newSeg));
+        }
+        return;
+    }
+
     // flattening must be less than distanceTolerance
     if(distance > distanceTolerance) {
         isValidToSimplify = false;
     }
 
-    // test if flattened section would cause intersection
-    LineSegment candidateSeg(linePts->getAt(i), linePts->getAt(j));
-
-    if(hasBadIntersection(line, std::make_pair(i, j), candidateSeg)) {
-        isValidToSimplify = false;
+    if (isValidToSimplify) {
+        // test if flattened section would cause intersection or jump
+        LineSegment flatSeg(linePts->getAt(i), linePts->getAt(j));
+        isValidToSimplify = isTopologyValid(line, i, j, flatSeg);
     }
 
     if(isValidToSimplify) {
@@ -168,11 +181,35 @@ TaggedLineStringSimplifier::simplifySection(std::size_t i,
         return;
     }
 
-    simplifySection(i, furthestPtIndex, depth);
-    simplifySection(furthestPtIndex, j, depth);
-
+    simplifySection(i, furthestPtIndex, depth, distanceTolerance);
+    simplifySection(furthestPtIndex, j, depth, distanceTolerance);
 }
 
+/*private*/
+void
+TaggedLineStringSimplifier::simplifyRingEndpoint(double distanceTolerance)
+{
+    if (line->getResultSize() > line->getMinimumSize()) {
+        const auto* firstSeg = static_cast<LineSegment*>(line->getResultSegments().front());
+        const auto* lastSeg = static_cast<LineSegment*>(line->getResultSegments().back());
+
+        LineSegment simpSeg(lastSeg->p0, firstSeg->p1);
+        const Coordinate& endPt = firstSeg->p0;
+        if (simpSeg.distance(endPt) <= distanceTolerance &&
+            isTopologyValid(line, firstSeg, lastSeg, simpSeg))
+        {
+            //-- don't know if segments are original or new, so remove from all indexes
+            inputIndex->remove(firstSeg);
+            inputIndex->remove(lastSeg);
+            outputIndex->remove(firstSeg);
+            outputIndex->remove(lastSeg);
+
+            const TaggedLineSegment* flatSeg = line->removeRingEndpoint();
+            //-- removed endpoint alters an existing result edge
+            outputIndex->add(flatSeg);
+        }
+    }
+}
 
 /*private*/
 std::unique_ptr<TaggedLineSegment>
@@ -183,93 +220,140 @@ TaggedLineStringSimplifier::flatten(std::size_t start, std::size_t end)
     const Coordinate& p1 = linePts->getAt(end);
     std::unique_ptr<TaggedLineSegment> newSeg(new TaggedLineSegment(p0, p1));
     // update the indexes
-    remove(line, start, end);
     outputIndex->add(newSeg.get());
+    remove(line, start, end);
     return newSeg;
 }
 
 /*private*/
 bool
-TaggedLineStringSimplifier::hasBadIntersection(
-    const TaggedLineString* parentLine,
-    const pair<size_t, size_t>& sectionIndex,
-    const LineSegment& candidateSeg)
+TaggedLineStringSimplifier::isTopologyValid(
+    const TaggedLineString* lineIn,
+    std::size_t sectionStart, std::size_t sectionEnd,
+    const LineSegment& flatSeg)
 {
-    if(hasBadOutputIntersection(candidateSeg)) {
-        return true;
-    }
-
-    if(hasBadInputIntersection(parentLine, sectionIndex, candidateSeg)) {
-        return true;
-    }
-
-    return false;
+    if (hasOutputIntersection(flatSeg))
+        return false;
+    if (hasInputIntersection(lineIn, sectionStart, sectionEnd, flatSeg))
+        return false;
+    if (jumpChecker->hasJump(lineIn, sectionStart, sectionEnd, flatSeg))
+        return false;
+    return true;
 }
 
 /*private*/
 bool
-TaggedLineStringSimplifier::hasBadOutputIntersection(
-    const LineSegment& candidateSeg)
+TaggedLineStringSimplifier::isTopologyValid(
+    const TaggedLineString* lineIn,
+    const LineSegment* seg1, const LineSegment* seg2,
+    const LineSegment& flatSeg)
 {
-    std::unique_ptr< std::vector<LineSegment*> > querySegs =
-        outputIndex->query(&candidateSeg);
+    //-- if segments are already flat, topology is unchanged and so is valid
+    //-- (otherwise, output and/or input intersection test would report false positive)
+    if (isCollinear(seg1->p0, flatSeg))
+         return true;
+    if (hasOutputIntersection(flatSeg))
+        return false;
+    if (hasInputIntersection(flatSeg))
+        return false;
+    if (jumpChecker->hasJump(lineIn, seg1, seg2, flatSeg))
+        return false;
+    return true;
+}
+
+/*private*/
+bool
+TaggedLineStringSimplifier::isCollinear(
+    const Coordinate& pt,
+    const LineSegment& seg) const
+{
+    return Orientation::COLLINEAR == seg.orientationIndex(pt);
+}
+
+/*private*/
+bool
+TaggedLineStringSimplifier::hasOutputIntersection(
+    const LineSegment& flatSeg)
+{
+    //std::unique_ptr<std::vector<LineSegment*>>
+    auto querySegs = outputIndex->query(&flatSeg);
 
     for(const LineSegment* querySeg : *querySegs) {
-        if(hasInteriorIntersection(*querySeg, candidateSeg)) {
+        if(hasInvalidIntersection(*querySeg, flatSeg)) {
             return true;
         }
     }
-
     return false;
 }
 
 /*private*/
 bool
-TaggedLineStringSimplifier::hasInteriorIntersection(
+TaggedLineStringSimplifier::hasInvalidIntersection(
     const LineSegment& seg0,
     const LineSegment& seg1) const
 {
+    if(seg0.equalsTopo(seg1))
+        return true;
     li->computeIntersection(seg0.p0, seg0.p1, seg1.p0, seg1.p1);
     return li->isInteriorIntersection();
 }
 
 /*private*/
 bool
-TaggedLineStringSimplifier::hasBadInputIntersection(
-    const TaggedLineString* parentLine,
-    const pair<std::size_t, std::size_t>& sectionIndex,
-    const LineSegment& candidateSeg)
+TaggedLineStringSimplifier::hasInputIntersection(const LineSegment& flatSeg)
 {
-    std::unique_ptr< std::vector<LineSegment*> > querySegs =
-        inputIndex->query(&candidateSeg);
+    return hasInputIntersection(nullptr, 0, 0, flatSeg);
+}
+
+/*private*/
+bool
+TaggedLineStringSimplifier::hasInputIntersection(
+    const TaggedLineString* parentLine,
+    const std::size_t excludeStart, const std::size_t excludeEnd,
+    const LineSegment& flatSeg)
+{
+    const auto& querySegs = inputIndex->query(&flatSeg);
 
     for(const LineSegment* ls : *querySegs) {
         const TaggedLineSegment* querySeg = static_cast<const TaggedLineSegment*>(ls);
 
-        if(!isInLineSection(parentLine, sectionIndex, querySeg) && hasInteriorIntersection(*querySeg, candidateSeg)) {
-
+        if (hasInvalidIntersection(*ls, flatSeg)) {
+            /**
+             * Ignore the intersection if the intersecting segment is part of the section being collapsed
+             * to the candidate segment
+             */
+            if (parentLine != nullptr &&
+                isInLineSection(line, excludeStart, excludeEnd, querySeg)) {
+                continue;
+            }
             return true;
         }
     }
-
     return false;
 }
 
 /*static private*/
 bool
 TaggedLineStringSimplifier::isInLineSection(
-    const TaggedLineString* line,
-    const pair<size_t, size_t>& sectionIndex,
+    const TaggedLineString* lineIn,
+    const std::size_t excludeStart, const std::size_t excludeEnd,
     const TaggedLineSegment* seg)
 {
     // not in this line
-    if(seg->getParent() != line->getParent()) {
+    if (seg->getParent() != lineIn->getParent()) {
         return false;
     }
 
     std::size_t segIndex = seg->getIndex();
-    if(segIndex >= sectionIndex.first && segIndex < sectionIndex.second) {
-        return true;
+    if (excludeStart <= excludeEnd) {
+        //-- section is contiguous
+        if (segIndex >= excludeStart && segIndex < excludeEnd)
+            return true;
+    }
+    else {
+        //-- section wraps around the end of a ring
+        if (segIndex >= excludeStart || segIndex <= excludeEnd)
+            return true;
     }
 
     return false;
@@ -323,8 +407,8 @@ TaggedLineStringSimplifier::findFurthestPoint(
     }
     maxDistance = maxDist;
     return maxIndex;
-
 }
+
 
 } // namespace geos::simplify
 } // namespace geos

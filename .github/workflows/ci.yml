@@ -121,7 +121,7 @@ jobs:
 
     - name: 'Upload Valgrind Log'
       if: failure()
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: valgrind-log
         path: build.cmake/Testing/Temporary/MemoryChecker.**.log
