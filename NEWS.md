@@ -10,6 +10,7 @@
   - Fix ConcaveHullOfPolygons nested shell handling (GH-1169, Martin Davis)
   - GEOSConcaveHullOfPolygons, avoid crash on zero-area input (GH-1071, Dan Baston)
   - DouglasPeuckerLineSimplifier, avoid crash with Point input and NaN tolerance (GH-1078, Dan Baston)
+  - GEOSLineSubstring, avoid crash with NaN length fraction (GH-1077, Dan Baston)
 
 ## Changes in 3.12.2
 2024-06-05
