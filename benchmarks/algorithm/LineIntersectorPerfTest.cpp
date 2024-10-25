@@ -32,8 +32,8 @@ using geos::algorithm::LineIntersector;
 
 template<typename CoordType>
 static void BM_PointIntersection(benchmark::State& state) {
-    std::size_t n = 1000;
-    std::size_t seed = 12345;
+    unsigned int n = 1000;
+    unsigned int seed = 12345;
 
     std::default_random_engine e(seed);
 

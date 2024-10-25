@@ -16,6 +16,8 @@ target_link_libraries(perf_interiorpoint_area geos)
 add_executable(perf_unaryunion_segments UnaryUnionSegmentsPerfTest.cpp)
 target_link_libraries(perf_unaryunion_segments geos)
 
+if (BUILD_BENCHMARKS)
+
 if (benchmark_FOUND)
     add_executable(perf_orientation OrientationIndexPerfTest.cpp
             ${PROJECT_SOURCE_DIR}/src/algorithm/CGAlgorithmsDD.cpp
@@ -41,6 +43,12 @@ if (benchmark_FOUND)
             $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>)
     target_link_libraries(perf_voronoi PRIVATE
             benchmark::benchmark geos)
+else()
+  MESSAGE(WARNING "Unable to find google benchmarks library!")
+  MESSAGE(WARNING "  Some benchmarks will not be built!")
+  MESSAGE(WARNING "  See https://github.com/google/benchmark")
+endif()
+
 endif()
 
 add_subdirectory(locate)
