@@ -382,9 +382,12 @@ add_subdirectory(capi)
 #-----------------------------------------------------------------------------
 # Tests
 #-----------------------------------------------------------------------------
+
+option(BUILD_TESTING "Build the testing tree." ON)
+
 if(PROJECT_IS_TOP_LEVEL)
-  include(CTest)
   if(BUILD_TESTING)
+    enable_testing()
     add_subdirectory(tests)
   endif()
 endif()
