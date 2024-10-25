@@ -65,9 +65,7 @@ linker flags for building against the C library:
 All functionality of the C API is available through the `geos_c.h` header file.
 
 Documentation for the C API is provided via comments in the `geos_c.h` header
-file. C API usage examples can be found in the GEOS unit tests and in the
-source code of software that uses GEOS, such as PostGIS and the sf package
-for R.
+file. C API usage examples can be found in the [examples](examples/) directory.
 
 ### Using the C++ interface
 
@@ -96,7 +94,7 @@ classes, e.g. `#include <geos/algorithm/distance/DiscreteHausdorffDistance.h>`.
 
     #include <geos.h>
 
-C++ usage examples can be found in [examples](examples/).
+C++ usage examples can be found in the [examples](examples/) directory.
 
 ### Using other languages
 
