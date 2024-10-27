@@ -53,7 +53,7 @@ static void BM_MonotoneChainOverlaps(benchmark::State& state) {
 
     struct EmptyOverlapAction : public MonotoneChainOverlapAction {
         virtual void
-        overlap(const LineSegment& seg1, const LineSegment& seg2) {
+        overlap(const LineSegment& seg1, const LineSegment& seg2) override {
             (void) seg1;
             (void) seg2;
         }
