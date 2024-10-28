@@ -23,7 +23,7 @@
       <pubDate>Mon, 04 Oct 2021 14:21:00 -0700</pubDate>
       
       <guid>https://libgeos.org/project/development/ci_status/</guid>
-      <description>CI main 3.12 3.11 3.10 3.9 3.8     GitHub         GitLab         Debbie         Winnie         Dronie         Bessie         Bessie32         Berrie         Berrie64          Runners      GitHub - Ubuntu various, Windows various, CMake GitLab - Debian 8.</description>
+      <description>CI main 3.13 3.12 3.11 3.10 3.9     GitHub         GitLab         Debbie         Winnie         Dronie         Bessie         Bessie32         Berrie         Berrie64          Runners      GitHub - Ubuntu various, Windows various, MacOS various, CMake GitLab - Debian 8.</description>
     </item>
     
   </channel>
