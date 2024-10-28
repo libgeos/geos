@@ -462,6 +462,11 @@ jobs:
           cxxstd: 20
           build_type: Release
           runs_on: macOS-14
+        - xcode: 16.0
+          cxxstd: 20
+          build_type: Release
+          runs_on: macOS-15
+
 
     runs-on: ${{ matrix.runs_on }}
     steps:
