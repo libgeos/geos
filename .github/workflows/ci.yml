@@ -395,6 +395,7 @@ jobs:
           build_type: Release
           runs_on: macOS-15
 
+    runs-on: ${{ matrix.runs_on }}
     steps:
 
     - name: 'Setup'
@@ -423,19 +424,18 @@ jobs:
         restore-keys: ${{ runner.os }}-${{ matrix.xcode }}-${{ matrix.build_type}}-${{ matrix.cxxstd }}
 
     - name: 'Build'
-      env:
-        BUILD_TYPE: ${{ matrix.build_type }}
-        CXX_STANDARD: ${{ matrix.cxxstd }}
       run: |
         set -e
         mkdir build
         cd build
         cmake --version
         cmake \
-          -DCMAKE_CXX_STANDARD=${CXX_STANDARD} \
-          -DUSE_CCACHE=ON \
-          -DCMAKE_BUILD_TYPE=${BUILD_TYPE} ..
-        cmake --build . --config ${BUILD_TYPE} -j 3
+          -D CMAKE_CXX_STANDARD=${{ matrix.cxxstd }} \
+          -D USE_CCACHE=ON \
+          -D CMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+          ..
+        cmake --build . --config ${{ matrix.build_type }} -j 4
+        ccache --show-stats
 
     - name: Save build cache
       uses: actions/cache/save@v4
@@ -446,7 +446,7 @@ jobs:
     - name: 'Test'
       run: |
         cd build
-        ctest -V --output-on-failure -C ${BUILD_TYPE}
+        ctest -V --output-on-failure -C ${{ matrix.build_type }}
 
 
   code-quality:
