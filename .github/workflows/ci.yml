@@ -377,7 +377,7 @@ jobs:
     name: 'macOS clang'
     strategy:
       matrix:
-        xcode: [11.7, 12.4, 13.2.1]
+        xcode: [12.4, 13.2.1]
         cxxstd: [14]
         build_type: ['ASAN']
         include:
@@ -388,7 +388,7 @@ jobs:
             cxxstd: 20
             build_type: Debug
 
-    runs-on: macos-11
+    runs-on: macos-latest
     steps:
 
     - name: 'Setup'
