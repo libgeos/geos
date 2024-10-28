@@ -377,18 +377,24 @@ jobs:
     name: 'macOS clang'
     strategy:
       matrix:
-        xcode: [12.4, 13.2.1]
-        cxxstd: [14]
-        build_type: ['ASAN']
         include:
-          - xcode: 13.2.1
-            cxxstd: 17
-            build_type: Debug
-          - xcode: 13.2.1
-            cxxstd: 20
-            build_type: Debug
+        - xcode: 13.2.1
+          cxxstd: 14
+          build_type: ASAN
+          runs_on: macos-12
+        - xcode: 14.3.1 
+          cxxstd: 17
+          build_type: ASAN
+          runs_on: macos-13
+        - xcode: 15.4
+          cxxstd: 20
+          build_type: Release
+          runs_on: macOS-14
+        - xcode: 16.0
+          cxxstd: 20
+          build_type: Release
+          runs_on: macOS-15
 
-    runs-on: macos-latest
     steps:
 
     - name: 'Setup'
