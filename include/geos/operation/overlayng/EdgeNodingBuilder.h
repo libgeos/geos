@@ -19,32 +19,20 @@
 #pragma once
 
 #include <geos/algorithm/LineIntersector.h>
-#include <geos/algorithm/Orientation.h>
-#include <geos/geom/Coordinate.h>
-#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/LineString.h>
-#include <geos/geom/MultiLineString.h>
-#include <geos/geom/MultiPolygon.h>
 #include <geos/geom/Polygon.h>
 #include <geos/noding/IntersectionAdder.h>
-#include <geos/noding/MCIndexNoder.h>
 #include <geos/noding/Noder.h>
-#include <geos/noding/NodedSegmentString.h>
 #include <geos/noding/SegmentString.h>
-#include <geos/noding/ValidatingNoder.h>
-#include <geos/noding/snapround/SnapRoundingNoder.h>
 #include <geos/operation/overlayng/Edge.h>
 #include <geos/operation/overlayng/EdgeSourceInfo.h>
-#include <geos/operation/overlayng/InputGeometry.h>
 #include <geos/operation/overlayng/LineLimiter.h>
-#include <geos/operation/overlayng/OverlayUtil.h>
 #include <geos/operation/overlayng/RingClipper.h>
-#include <geos/operation/valid/RepeatedPointRemover.h>
 
 
 #include <geos/export.h>
@@ -54,8 +42,6 @@
 
 using namespace geos::geom;
 using namespace geos::noding;
-using geos::noding::snapround::SnapRoundingNoder;
-using geos::algorithm::LineIntersector;
 
 
 namespace geos {      // geos.
@@ -95,7 +81,7 @@ private:
     std::unique_ptr<LineLimiter> limiter;
 
     // For use in createFloatingPrecisionNoder()
-    LineIntersector lineInt;
+    algorithm::LineIntersector lineInt;
     IntersectionAdder intAdder;
     std::unique_ptr<Noder> internalNoder;
     std::unique_ptr<Noder> spareInternalNoder;
