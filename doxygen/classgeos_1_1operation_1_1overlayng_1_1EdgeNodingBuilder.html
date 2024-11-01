@@ -55,8 +55,8 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ad2a915e91740b782bad3e32caf0fd1b4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder.html#ad2a915e91740b782bad3e32caf0fd1b4">EdgeNodingBuilder</a> (const <a class="el" href="classgeos_1_1geom_1_1PrecisionModel.html">PrecisionModel</a> *p_pm, <a class="el" href="classgeos_1_1noding_1_1Noder.html">Noder</a> *p_customNoder)</td></tr>
-<tr class="separator:ad2a915e91740b782bad3e32caf0fd1b4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeda0bfeceab8927e9b6fd841387c5223"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder.html#aeda0bfeceab8927e9b6fd841387c5223">EdgeNodingBuilder</a> (const <a class="el" href="classgeos_1_1geom_1_1PrecisionModel.html">PrecisionModel</a> *p_pm, <a class="el" href="classgeos_1_1noding_1_1Noder.html">noding::Noder</a> *p_customNoder)</td></tr>
+<tr class="separator:aeda0bfeceab8927e9b6fd841387c5223"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a72461776b6738ed9e5e9a64d2c593f72"><td class="memItemLeft" align="right" valign="top"><a id="a72461776b6738ed9e5e9a64d2c593f72"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setClipEnvelope</b> (const <a class="el" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a> *clipEnv)</td></tr>
 <tr class="separator:a72461776b6738ed9e5e9a64d2c593f72"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -72,14 +72,14 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setClipEnvelope</b> (
 <li>Extracts input edges, and attaches topological information</li>
 <li>if clipping is enabled, handles clipping or limiting input geometry</li>
 <li>chooses a <a class="el" href="classgeos_1_1noding_1_1Noder.html">noding::Noder</a> based on provided precision model, unless a custom one is supplied</li>
-<li>calls the chosen Noder, with precision model</li>
+<li>calls the chosen <a class="el" href="classgeos_1_1noding_1_1Noder.html" title="Computes all intersections between segments in a set of SegmentString.">noding::Noder</a>, with precision model</li>
 <li>removes any fully collapsed noded edges</li>
 <li>builds <a class="el" href="classgeos_1_1operation_1_1overlayng_1_1Edge.html">Edge</a>s and merges them</li>
 </ul>
 <dl class="section author"><dt>Author</dt><dd>mdavis </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="ad2a915e91740b782bad3e32caf0fd1b4"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad2a915e91740b782bad3e32caf0fd1b4">&#9670;&nbsp;</a></span>EdgeNodingBuilder()</h2>
+<a id="aeda0bfeceab8927e9b6fd841387c5223"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeda0bfeceab8927e9b6fd841387c5223">&#9670;&nbsp;</a></span>EdgeNodingBuilder()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -96,7 +96,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setClipEnvelope</b> (
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classgeos_1_1noding_1_1Noder.html">Noder</a> *&#160;</td>
+          <td class="paramtype"><a class="el" href="classgeos_1_1noding_1_1Noder.html">noding::Noder</a> *&#160;</td>
           <td class="paramname"><em>p_customNoder</em>&#160;</td>
         </tr>
         <tr>
