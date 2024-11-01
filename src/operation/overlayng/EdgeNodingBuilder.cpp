@@ -19,7 +19,6 @@
 #include <geos/noding/ValidatingNoder.h>
 #include <geos/noding/NodedSegmentString.h>
 #include <geos/noding/MCIndexNoder.h>
-#include <geos/geom/Coordinate.h>
 #include <geos/algorithm/Orientation.h>
 #include <geos/noding/snapround/SnapRoundingNoder.h>
 #include <geos/operation/overlayng/EdgeNodingBuilder.h>
@@ -28,12 +27,19 @@
 #include <geos/operation/overlayng/OverlayUtil.h>
 #include <geos/util.h>
 
-using geos::operation::valid::RepeatedPointRemover;
-using geos::noding::snapround::SnapRoundingNoder;
 
 namespace geos {      // geos
 namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
+
+using geos::operation::valid::RepeatedPointRemover;
+using geos::noding::snapround::SnapRoundingNoder;
+using geos::noding::Noder;
+using geos::noding::MCIndexNoder;
+using geos::noding::ValidatingNoder;
+using geos::noding::SegmentString;
+using geos::noding::NodedSegmentString;
+
 
 /*private*/
 Noder*

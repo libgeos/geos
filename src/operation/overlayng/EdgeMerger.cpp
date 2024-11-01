@@ -17,7 +17,9 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/util/Assert.h>
-
+#include <geos/operation/overlayng/EdgeKey.h>
+#include <geos/operation/overlayng/Edge.h>
+#include <geos/operation/overlayng/OverlayLabel.h>
 
 namespace geos {      // geos
 namespace operation { // geos.operation

@@ -40,8 +40,6 @@
 #include <memory>
 #include <deque>
 
-using namespace geos::geom;
-using namespace geos::noding;
 
 
 namespace geos {      // geos.
@@ -57,7 +55,7 @@ namespace overlayng { // geos.operation.overlayng
  *  - Extracts input edges, and attaches topological information
  *  - if clipping is enabled, handles clipping or limiting input geometry
  *  - chooses a {@link noding::Noder} based on provided precision model, unless a custom one is supplied
- *  - calls the chosen Noder, with precision model
+ *  - calls the chosen noding::Noder, with precision model
  *  - removes any fully collapsed noded edges
  *  - builds {@link Edge}s and merges them
  *
@@ -73,8 +71,8 @@ private:
 
     // Members
     const PrecisionModel* pm;
-    std::unique_ptr<std::vector<SegmentString*>> inputEdges;
-    Noder* customNoder;
+    std::unique_ptr<std::vector<noding::SegmentString*>> inputEdges;
+    noding::Noder* customNoder;
     std::array<bool, 2> hasEdges;
     const Envelope* clipEnv;
     std::unique_ptr<RingClipper> clipper;
@@ -82,9 +80,9 @@ private:
 
     // For use in createFloatingPrecisionNoder()
     algorithm::LineIntersector lineInt;
-    IntersectionAdder intAdder;
-    std::unique_ptr<Noder> internalNoder;
-    std::unique_ptr<Noder> spareInternalNoder;
+    noding::IntersectionAdder intAdder;
+    std::unique_ptr<noding::Noder> internalNoder;
+    std::unique_ptr<noding::Noder> spareInternalNoder;
     // EdgeSourceInfo*, Edge* owned by EdgeNodingBuilder, stored in deque
     std::deque<EdgeSourceInfo> edgeSourceInfoQue;
     std::deque<Edge> edgeQue;
@@ -99,9 +97,9 @@ private:
     * - Floating precision: a conventional model (which may be non-robust).
     *   In this case, a validation step is applied to the output from the noder.
     */
-    Noder* getNoder();
-    static std::unique_ptr<Noder> createFixedPrecisionNoder(const PrecisionModel* pm);
-    std::unique_ptr<Noder> createFloatingPrecisionNoder(bool doValidation);
+    noding::Noder* getNoder();
+    static std::unique_ptr<noding::Noder> createFixedPrecisionNoder(const PrecisionModel* pm);
+    std::unique_ptr<noding::Noder> createFloatingPrecisionNoder(bool doValidation);
 
 
     void addCollection(const GeometryCollection* gc, uint8_t geomIndex);
@@ -171,8 +169,8 @@ private:
     * which is used to provide source topology info to the constructed Edges
     * (and is then discarded).
     */
-    std::vector<Edge*> node(std::vector<SegmentString*>* segStrings);
-    std::vector<Edge*> createEdges(std::vector<SegmentString*>* segStrings);
+    std::vector<Edge*> node(std::vector<noding::SegmentString*>* segStrings);
+    std::vector<Edge*> createEdges(std::vector<noding::SegmentString*>* segStrings);
 
 
 public:
@@ -182,9 +180,9 @@ public:
     * If the noder is not provided, a suitable one will
     * be used based on the supplied precision model.
     */
-    EdgeNodingBuilder(const PrecisionModel* p_pm, Noder* p_customNoder)
+    EdgeNodingBuilder(const PrecisionModel* p_pm, noding::Noder* p_customNoder)
         : pm(p_pm)
-        , inputEdges(new std::vector<SegmentString*>)
+        , inputEdges(new std::vector<noding::SegmentString*>)
         , customNoder(p_customNoder)
         , hasEdges{{false,false}}
         , clipEnv(nullptr)
@@ -195,7 +193,7 @@ public:
 
     ~EdgeNodingBuilder()
     {
-        for (SegmentString* ss: *inputEdges) {
+        for (noding::SegmentString* ss: *inputEdges) {
             delete ss;
         }
     }
@@ -203,7 +201,7 @@ public:
     void setClipEnvelope(const Envelope* clipEnv);
 
     // returns newly allocated vector and segmentstrings
-    // std::vector<SegmentString*>* node();
+    // std::vector<noding::SegmentString*>* node();
 
     /**
     * Reports whether there are noded edges
