@@ -169,7 +169,7 @@ TaggedLineString::extractCoordinates(
 
     if(size) {
         for(std::size_t i = 0; i < size; i++) {
-            TaggedLineSegment* seg = segs[i];
+                TaggedLineSegment* seg = segs[i];
             assert(seg);
             pts.push_back(seg->p0);
         }
@@ -186,7 +186,6 @@ TaggedLineString::extractCoordinates(
 const Coordinate&
 TaggedLineString::getCoordinate(std::size_t i) const
 {
-
     return parentLine->getCoordinateN(i);
 }
 
@@ -199,6 +198,10 @@ TaggedLineString::size() const
 const Coordinate&
 TaggedLineString::getComponentPoint() const
 {
+    //-- when simplified use a valid coordinate
+    if (resultSegs.size() > 0) {
+        return resultSegs[0]->p0;
+    }
     return getParentCoordinates()->getAt(1);
 }
 
