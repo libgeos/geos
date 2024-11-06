@@ -9,6 +9,7 @@
   - Fix ConcaveHullOfPolygons nested shell handling (GH-1169, Martin Davis)
   - GEOSConcaveHullOfPolygons, avoid crash on zero-area input (GH-1071, Dan Baston)
   - MinimumClearance, avoid crash on NaN inputs (GH-1079, Dan Baston)
+  - Fix TopologyPreservingSimplifier/TaggedLineString to avoid jumping components (JTS-1096, Martin Davis)
 
 ## Changes in 3.11.4
 2024-06-05
