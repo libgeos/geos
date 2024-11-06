@@ -87,4 +87,25 @@ public:
     * It lowers the number of heap allocations, because it allocates larger blocks of space to store multiple `HalfEdge` objects.
     * It handles the lifecycle of the `HalfEdge` objects that make up the `EdgeGraph`, because when the `EdgeGraph` is deallocated, the `std::deque<>` and all its contents are also automatically deallocated.
 
+### Use forward declarations in header files
 
+Where possible, in header files use **forward declarations** rather than header includes.
+This cuts the include dependency chain, which reduces the recompilation required when a low-level class header changes.
+Includes are only needed where the class contents are referred to, not just the class name.
+
+E.g. use this
+```
+namespace geos {
+namespace geom {
+class Geometry;
+}
+}
+```
+rather than:
+```
+#include <geos/geom/Geometry.h>
+```
+
+### Use `pragma once` to limit header inclusion
+
+Use `#pragma once` to limit header inclusion.  It is simpler and faster.
