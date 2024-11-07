@@ -37,16 +37,6 @@ class QuadEdgeSubdivision;
 }
 }
 
-using geos::geom::Coordinate;
-using geos::geom::Geometry;
-using geos::geom::GeometryFactory;
-using geos::geom::Triangle;
-using geos::triangulate::quadedge::QuadEdge;
-using geos::triangulate::quadedge::QuadEdgeSubdivision;
-using geos::triangulate::quadedge::TriangleVisitor;
-using geos::triangulate::tri::Tri;
-using geos::triangulate::tri::TriList;
-
 namespace geos {
 namespace algorithm { // geos::algorithm
 namespace hull {      // geos::algorithm::hull
@@ -93,6 +83,15 @@ typedef std::priority_queue<HullTri*, std::vector<HullTri*>, HullTri::HullTriCom
 * @author mdavis
 */
 class GEOS_DLL ConcaveHull {
+    using Coordinate = geos::geom::Coordinate;
+    using Geometry = geos::geom::Geometry;
+    using GeometryFactory = geos::geom::GeometryFactory;
+    using Triangle = geos::geom::Triangle;
+    using QuadEdge = geos::triangulate::quadedge::QuadEdge;
+    using QuadEdgeSubdivision = geos::triangulate::quadedge::QuadEdgeSubdivision;
+    using Tri = geos::triangulate::tri::Tri;
+    template<typename TriType>
+    using TriList = geos::triangulate::tri::TriList<TriType>;
 
 public:
 

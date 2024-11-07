@@ -26,15 +26,14 @@ class Polygon;
 }
 }
 
-using geos::geom::CoordinateXY;
-using geos::geom::GeometryFactory;
-using geos::geom::LineSegment;
-using geos::geom::Polygon;
-
 namespace geos {
 namespace algorithm {
 
 class GEOS_DLL Rectangle {
+    using CoordinateXY = geos::geom::CoordinateXY;
+    using GeometryFactory = geos::geom::GeometryFactory;
+    using LineSegment = geos::geom::LineSegment;
+    using Polygon = geos::geom::Polygon;
 
 public:
 

@@ -28,11 +28,6 @@ namespace geom {
 }
 }
 
-
-using geos::geom::CoordinateXY;
-using geos::geom::Geometry;
-
-
 namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace relateng { // geos.operation.relateng
@@ -53,6 +48,8 @@ namespace relateng { // geos.operation.relateng
  *
  */
 class GEOS_DLL NodeSection {
+    using CoordinateXY = geos::geom::CoordinateXY;
+    using Geometry = geos::geom::Geometry;
 
 private:
 

@@ -22,6 +22,9 @@ namespace geos {      // geos
 namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
 
+using geos::geom::Geometry;
+using geos::geom::GeometryFactory;
+
 /*public static*/
 std::unique_ptr<Geometry>
 PrecisionReducer::reducePrecision(const Geometry* geom, const PrecisionModel* pm, bool replacePrecisionModel)

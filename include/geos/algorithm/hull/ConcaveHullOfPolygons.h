@@ -15,6 +15,7 @@
 #pragma once
 
 #include <geos/triangulate/tri/TriList.h>
+#include <geos/triangulate/tri/Tri.h>
 
 #include <set>
 #include <deque>
@@ -37,21 +38,6 @@ class Tri;
 }
 }
 }
-
-#include <geos/triangulate/tri/Tri.h>
-
-
-using geos::geom::Coordinate;
-using geos::geom::CoordinateSequence;
-using geos::geom::Envelope;
-using geos::geom::Geometry;
-using geos::geom::GeometryCollection;
-using geos::geom::GeometryFactory;
-using geos::geom::LinearRing;
-using geos::geom::Polygon;
-using geos::triangulate::tri::Tri;
-using geos::triangulate::tri::TriList;
-
 
 namespace geos {
 namespace algorithm { // geos::algorithm
@@ -95,6 +81,17 @@ namespace hull {      // geos::algorithm::hull
  *
  */
 class GEOS_DLL ConcaveHullOfPolygons {
+    using Coordinate = geos::geom::Coordinate;
+    using CoordinateSequence = geos::geom::CoordinateSequence;
+    using Envelope = geos::geom::Envelope;
+    using Geometry = geos::geom::Geometry;
+    using GeometryCollection = geos::geom::GeometryCollection;
+    using GeometryFactory = geos::geom::GeometryFactory;
+    using LinearRing = geos::geom::LinearRing;
+    using Polygon = geos::geom::Polygon;
+    using Tri = geos::triangulate::tri::Tri;
+    template<typename TriType>
+    using TriList = geos::triangulate::tri::TriList<TriType>;
 
 private:
 

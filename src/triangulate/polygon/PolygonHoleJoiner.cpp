@@ -38,6 +38,8 @@ using geos::algorithm::Orientation;
 using geos::algorithm::PolygonNodeTopology;
 using geos::geom::Coordinate;
 using geos::geom::CoordinateSequence;
+using geos::geom::LinearRing;
+using geos::geom::Polygon;
 using geos::noding::BasicSegmentString;
 using geos::noding::SegmentString;
 using geos::noding::NodedSegmentString;

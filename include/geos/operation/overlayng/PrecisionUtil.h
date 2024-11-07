@@ -38,8 +38,6 @@ namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
 
-using namespace geos::geom;
-
 /**
  * Unions a collection of geometries in an
  * efficient way, using {@link OverlayNG}
@@ -47,6 +45,10 @@ using namespace geos::geom;
  * @author Martin Davis
  */
 class GEOS_DLL PrecisionUtil {
+    using Geometry = geos::geom::Geometry;
+    using Envelope = geos::geom::Envelope;
+    using PrecisionModel = geos::geom::PrecisionModel;
+    using CoordinateFilter = geos::geom::CoordinateFilter;
 
 private:
 

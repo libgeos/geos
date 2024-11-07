@@ -35,20 +35,6 @@ class MultiLineString;
 }
 }
 
-
-using geos::coverage::Corner;
-using geos::geom::Coordinate;
-using geos::geom::CoordinateSequence;
-using geos::geom::Envelope;
-using geos::geom::Geometry;
-using geos::geom::GeometryFactory;
-using geos::geom::LineString;
-using geos::geom::MultiLineString;
-using geos::index::VertexSequencePackedRtree;
-using geos::index::strtree::TemplateSTRtree;
-using geos::simplify::LinkedLine;
-
-
 namespace geos {
 namespace coverage { // geos::coverage
 
@@ -73,6 +59,18 @@ namespace coverage { // geos::coverage
  */
 class GEOS_DLL TPVWSimplifier
 {
+    using Corner = geos::coverage::Corner;
+    using Coordinate = geos::geom::Coordinate;
+    using CoordinateSequence = geos::geom::CoordinateSequence;
+    using Envelope = geos::geom::Envelope;
+    using Geometry = geos::geom::Geometry;
+    using GeometryFactory = geos::geom::GeometryFactory;
+    using LineString = geos::geom::LineString;
+    using MultiLineString = geos::geom::MultiLineString;
+    using VertexSequencePackedRtree = geos::index::VertexSequencePackedRtree;
+    template<typename ItemType>
+    using TemplateSTRtree = geos::index::strtree::TemplateSTRtree<ItemType>;
+    using LinkedLine = geos::simplify::LinkedLine;
 
 public:
 

@@ -19,7 +19,7 @@
 #include <geos/operation/overlayng/OverlayLabel.h>
 #include <geos/geom/GeometryFactory.h>
 
-
+using namespace geos::geom;
 
 namespace geos {      // geos
 namespace operation { // geos.operation

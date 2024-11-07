@@ -29,6 +29,7 @@ using geos::geom::Geometry;
 using geos::geom::Dimension;
 using geos::geom::Position;
 using geos::io::WKTWriter;
+using geos::geom::Location;
 
 
 namespace geos {      // geos

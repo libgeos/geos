@@ -26,6 +26,7 @@
 #include <geos/simplify/LinkedLine.h>
 
 using geos::geom::Coordinate;
+using geos::geom::CoordinateSequence;
 using geos::geom::Envelope;
 using geos::geom::Geometry;
 using geos::geom::GeometryFactory;

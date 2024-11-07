@@ -35,12 +35,6 @@ namespace noding {
 }
 }
 
-
-using geos::index::chain::MonotoneChain;
-using geos::index::chain::MonotoneChainOverlapAction;
-using geos::noding::SegmentIntersector;
-
-
 namespace geos {
 namespace operation { // geos::operation
 namespace relateng {  // geos::operation::relateng
@@ -49,7 +43,9 @@ namespace relateng {  // geos::operation::relateng
  * The action for the internal iterator for performing
  * overlap queries on a MonotoneChain.
  */
-class GEOS_DLL EdgeSegmentOverlapAction : public MonotoneChainOverlapAction {
+class GEOS_DLL EdgeSegmentOverlapAction : public geos::index::chain::MonotoneChainOverlapAction {
+    using MonotoneChain = geos::index::chain::MonotoneChain;
+    using SegmentIntersector = geos::noding::SegmentIntersector;
 
 private:
 

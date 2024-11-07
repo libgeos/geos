@@ -48,12 +48,20 @@ namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace relateng { // geos.operation.relateng
 
-using namespace geos::geom;
-using geos::algorithm::BoundaryNodeRule;
-using geos::noding::SegmentString;
-
-
 class GEOS_DLL RelateGeometry {
+    using Coordinate = geos::geom::Coordinate;
+    using CoordinateSequence = geos::geom::CoordinateSequence;
+    using Dimension = geos::geom::Dimension;
+    using Envelope = geos::geom::Envelope;
+    using Geometry = geos::geom::Geometry;
+    using Location = geos::geom::Location;
+    using CoordinateXY = geos::geom::CoordinateXY;
+    using LinearRing = geos::geom::LinearRing;
+    using LineString = geos::geom::LineString;
+    using MultiPolygon = geos::geom::MultiPolygon;
+    using Point = geos::geom::Point;
+    using BoundaryNodeRule = geos::algorithm::BoundaryNodeRule;
+    using SegmentString = geos::noding::SegmentString;
 
 private:
 

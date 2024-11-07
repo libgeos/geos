@@ -37,13 +37,6 @@ class SegmentMCIndex;
 }
 }
 
-using geos::geom::Coordinate;
-using geos::geom::CoordinateSequence;
-using geos::geom::Geometry;
-using geos::geom::GeometryFactory;
-using geos::geom::LineString;
-using geos::geom::Polygon;
-
 namespace geos {
 namespace operation {
 namespace buffer {
@@ -88,7 +81,12 @@ namespace buffer {
  *
  */
 class GEOS_DLL OffsetCurve {
-
+    using Coordinate = geos::geom::Coordinate;
+    using CoordinateSequence = geos::geom::CoordinateSequence;
+    using Geometry = geos::geom::Geometry;
+    using GeometryFactory = geos::geom::GeometryFactory;
+    using LineString = geos::geom::LineString;
+    using Polygon = geos::geom::Polygon;
 
 private:
 

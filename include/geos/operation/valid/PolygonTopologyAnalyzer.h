@@ -35,12 +35,12 @@ namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace valid {     // geos.operation.valid
 
-using geos::geom::CoordinateXY;
-using geos::geom::CoordinateSequence;
-using geos::geom::Geometry;
-using geos::geom::LinearRing;
-
 class GEOS_DLL PolygonTopologyAnalyzer {
+    using CoordinateXY = geos::geom::CoordinateXY;
+    using CoordinateSequence = geos::geom::CoordinateSequence;
+    using Geometry = geos::geom::Geometry;
+    using LinearRing = geos::geom::LinearRing;
+    using SegmentString = geos::noding::SegmentString;
 
 private:
 

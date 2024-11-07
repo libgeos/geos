@@ -36,16 +36,6 @@ namespace geom {
 }
 }
 
-
-using geos::geom::CoordinateXY;
-using geos::geom::CoordinateSequence;
-using geos::geom::Geometry;
-using geos::geom::LinearRing;
-using geos::geom::Polygon;
-using geos::geom::Location;
-
-
-
 namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace relateng {  // geos.operation.relateng
@@ -65,6 +55,12 @@ namespace relateng {  // geos.operation.relateng
  *
  */
 class GEOS_DLL AdjacentEdgeLocator {
+    using CoordinateXY = geos::geom::CoordinateXY;
+    using CoordinateSequence = geos::geom::CoordinateSequence;
+    using Geometry = geos::geom::Geometry;
+    using LinearRing = geos::geom::LinearRing;
+    using Polygon = geos::geom::Polygon;
+    using Location = geos::geom::Location;
 
 public:
 

@@ -32,22 +32,19 @@ namespace relateng {
 }
 }
 
-
-using geos::geom::CoordinateXY;
-using geos::geom::Location;
-using geos::operation::relateng::NodeSection;
-using geos::operation::relateng::NodeSections;
-using geos::operation::relateng::RelateGeometry;
-using geos::operation::relateng::RelateNode;
-using geos::operation::relateng::TopologyPredicate;
-
-
 namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace relateng { // geos.operation.relateng
 
 
 class GEOS_DLL TopologyComputer {
+    using CoordinateXY = geos::geom::CoordinateXY;
+    using Location = geos::geom::Location;
+    using NodeSection = geos::operation::relateng::NodeSection;
+    using NodeSections = geos::operation::relateng::NodeSections;
+    using RelateGeometry = geos::operation::relateng::RelateGeometry;
+    using RelateNode = geos::operation::relateng::RelateNode;
+    using TopologyPredicate = geos::operation::relateng::TopologyPredicate;
 
 private:
 

@@ -40,8 +40,6 @@ class Point;
 }
 }
 
-using geos::operation::distance::IndexedFacetDistance;
-
 namespace geos {
 namespace algorithm { // geos::algorithm
 namespace construct { // geos::algorithm::construct
@@ -75,6 +73,7 @@ namespace construct { // geos::algorithm::construct
 * \author Martin Davis
 */
 class GEOS_DLL LargestEmptyCircle {
+    using IndexedFacetDistance = geos::operation::distance::IndexedFacetDistance;
 
 public:
 

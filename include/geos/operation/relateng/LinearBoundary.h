@@ -32,18 +32,15 @@ namespace geom {
 }
 }
 
-
-using geos::algorithm::BoundaryNodeRule;
-using geos::geom::Coordinate;
-using geos::geom::CoordinateXY;
-using geos::geom::LineString;
-
-
 namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace relateng { // geos.operation.relateng
 
 class GEOS_DLL LinearBoundary {
+    using BoundaryNodeRule = geos::algorithm::BoundaryNodeRule;
+    using Coordinate = geos::geom::Coordinate;
+    using CoordinateXY = geos::geom::CoordinateXY;
+    using LineString = geos::geom::LineString;
 
 private:
 

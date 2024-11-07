@@ -31,6 +31,7 @@ namespace overlayng { // geos.operation.overlayng
 
 using namespace geos::geom;
 using geos::operation::polygonize::EdgeRing;
+using geos::algorithm::locate::PointOnGeometryLocator;
 
 
 

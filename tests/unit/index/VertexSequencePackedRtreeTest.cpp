@@ -15,8 +15,8 @@
 // std
 #include <stdio.h>
 
+using namespace geos::geom;
 using geos::index::VertexSequencePackedRtree;
-using geos::geom::Point;
 
 namespace tut {
 //

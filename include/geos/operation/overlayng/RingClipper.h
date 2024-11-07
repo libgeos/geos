@@ -27,8 +27,6 @@ class CoordinateSequence;
 }
 }
 
-using namespace geos::geom;
-
 namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
@@ -62,6 +60,9 @@ namespace overlayng { // geos.operation.overlayng
  *
  */
 class GEOS_DLL RingClipper {
+    using Coordinate = geos::geom::Coordinate;
+    using CoordinateSequence = geos::geom::CoordinateSequence;
+    using Envelope = geos::geom::Envelope;
 
 private:
 

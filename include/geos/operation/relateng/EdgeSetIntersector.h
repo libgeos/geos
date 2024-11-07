@@ -38,20 +38,18 @@ namespace relateng {
 }
 }
 
-
-using geos::geom::Envelope;
-using geos::geom::Geometry;
-using geos::index::strtree::TemplateSTRtree;
-using geos::index::chain::MonotoneChain;
-using geos::noding::SegmentString;
-using geos::operation::relateng::EdgeSegmentIntersector;
-
-
 namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace relateng { // geos.operation.relateng
 
 class GEOS_DLL EdgeSetIntersector {
+    using Envelope = geos::geom::Envelope;
+    using Geometry = geos::geom::Geometry;
+    template <typename ItemType>
+    using TemplateSTRtree = geos::index::strtree::TemplateSTRtree<ItemType>;
+    using MonotoneChain = geos::index::chain::MonotoneChain;
+    using SegmentString = geos::noding::SegmentString;
+    using EdgeSegmentIntersector = geos::operation::relateng::EdgeSegmentIntersector;
 
 private:
 

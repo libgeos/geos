@@ -28,19 +28,19 @@ namespace geos {
     }
 }
 
-using geos::geom::Geometry;
-using geos::geom::GeometryFactory;
-using geos::geom::Polygon;
-using geos::geom::LineString;
-using geos::geom::LinearRing;
-using geos::geom::LineSegment;
-
-
 namespace geos {
 namespace operation {
 namespace geounion {
 
     class GEOS_DLL CoverageUnion {
+        using Geometry = geos::geom::Geometry;
+        using GeometryFactory = geos::geom::GeometryFactory;
+        using Polygon = geos::geom::Polygon;
+        using LineString = geos::geom::LineString;
+        using LinearRing = geos::geom::LinearRing;
+        using LineSegment = geos::geom::LineSegment;
+
+
     public:
         static std::unique_ptr<Geometry> Union(const Geometry* geom);
 

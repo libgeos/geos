@@ -43,6 +43,7 @@ using geos::geom::util::ComponentCoordinateExtracter;
 using geos::geom::util::GeometryLister;
 using geos::geom::util::PointExtracter;
 using geos::operation::valid::RepeatedPointRemover;
+using geos::noding::SegmentString;
 
 
 namespace geos {      // geos

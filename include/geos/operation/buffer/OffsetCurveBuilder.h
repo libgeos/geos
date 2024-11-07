@@ -40,9 +40,6 @@ class PrecisionModel;
 }
 }
 
-using geos::geom::CoordinateSequence;
-using geos::geom::PrecisionModel;
-
 namespace geos {
 namespace operation { // geos.operation
 namespace buffer { // geos.operation.buffer
@@ -66,6 +63,9 @@ namespace buffer { // geos.operation.buffer
  * See removeRepeatedAndInvalidPoints.
  */
 class GEOS_DLL OffsetCurveBuilder {
+    using CoordinateSequence = geos::geom::CoordinateSequence;
+    using PrecisionModel = geos::geom::PrecisionModel;
+
 public:
 
     /*

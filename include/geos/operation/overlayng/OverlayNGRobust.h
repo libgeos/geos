@@ -62,6 +62,7 @@ namespace overlayng { // geos.operation.overlayng
  * @author Martin Davis
  */
 class GEOS_DLL OverlayNGRobust {
+    using Geometry = geos::geom::Geometry;
 
 private:
 

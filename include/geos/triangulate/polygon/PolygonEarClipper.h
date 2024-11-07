@@ -32,13 +32,6 @@ class Envelope;
 }
 }
 
-using geos::geom::Coordinate;
-using geos::geom::Polygon;
-using geos::geom::Envelope;
-using geos::triangulate::tri::Tri;
-using geos::triangulate::tri::TriList;
-using geos::index::VertexSequencePackedRtree;
-
 namespace geos {
 namespace triangulate {
 namespace polygon {
@@ -65,6 +58,14 @@ namespace polygon {
  *
  */
 class GEOS_DLL PolygonEarClipper {
+    using Coordinate = geos::geom::Coordinate;
+    using CoordinateSequence = geos::geom::CoordinateSequence;
+    using Polygon = geos::geom::Polygon;
+    using Envelope = geos::geom::Envelope;
+    using Tri = geos::triangulate::tri::Tri;
+    template<typename TriType>
+    using TriList = geos::triangulate::tri::TriList<TriType>;
+    using VertexSequencePackedRtree = geos::index::VertexSequencePackedRtree;
 
 private:
 

@@ -43,6 +43,7 @@ using geos::geom::Location;
 using geos::geom::Polygon;
 using geos::geom::util::PolygonExtracter;
 using geos::noding::MCIndexSegmentSetMutualIntersector;
+using geos::noding::SegmentString;
 using geos::operation::valid::RepeatedPointRemover;
 
 namespace geos {     // geos

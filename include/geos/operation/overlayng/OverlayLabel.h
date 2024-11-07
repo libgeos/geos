@@ -20,9 +20,6 @@
 #include <geos/geom/Position.h>
 #include <geos/export.h>
 
-using geos::geom::Location;
-using geos::geom::Position;
-
 namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
@@ -87,6 +84,8 @@ namespace overlayng { // geos.operation.overlayng
 * @author Martin Davis
 */
 class GEOS_DLL OverlayLabel {
+    using Location = geos::geom::Location;
+    using Position = geos::geom::Position;
 
 private:
 

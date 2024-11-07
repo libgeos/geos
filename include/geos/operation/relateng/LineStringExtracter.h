@@ -29,18 +29,14 @@ namespace geom {
 }
 }
 
-
-using geos::geom::LineString;
-using geos::geom::Geometry;
-using geos::geom::GeometryFilter;
-
-
 namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace relateng {  // geos.operation.relateng
 
 
-class GEOS_DLL LineStringExtracter : public GeometryFilter {
+class GEOS_DLL LineStringExtracter : public geos::geom::GeometryFilter {
+    using LineString = geos::geom::LineString;
+    using Geometry = geos::geom::Geometry;
 
 private:
 

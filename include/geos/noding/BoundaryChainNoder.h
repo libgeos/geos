@@ -31,8 +31,6 @@ class NodedSegmentString;
 }
 }
 
-using geos::geom::Coordinate;
-
 namespace geos {   // geos
 namespace noding { // geos::noding
 
@@ -55,6 +53,7 @@ namespace noding { // geos::noding
  *
  */
 class GEOS_DLL BoundaryChainNoder : public Noder {
+    using Coordinate = geos::geom::Coordinate;
 
 private:
 

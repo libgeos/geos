@@ -37,11 +37,6 @@ class MaximalEdgeRing;
 }
 }
 
-using geos::geom::Coordinate;
-using geos::geom::CoordinateXYZM;
-using geos::geom::CoordinateSequence;
-using geos::geom::Location;
-
 namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
@@ -50,6 +45,10 @@ namespace overlayng { // geos.operation.overlayng
 * Creates a single OverlayEdge.
 */
 class GEOS_DLL OverlayEdge : public edgegraph::HalfEdge {
+    using Coordinate = geos::geom::Coordinate;
+    using CoordinateXYZM = geos::geom::CoordinateXYZM;
+    using CoordinateSequence = geos::geom::CoordinateSequence;
+    using Location = geos::geom::Location;
 
 private:
 

@@ -20,6 +20,8 @@
 
 #include <algorithm>
 
+using geos::geom::CoordinateSequence;
+
 namespace geos {      // geos
 namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng

@@ -20,9 +20,6 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/constants.h>
 
-using geos::geom::Coordinate;
-using geos::geom::CoordinateSequence;
-
 namespace geos {
 namespace simplify { // geos::simplify
 
@@ -30,6 +27,9 @@ namespace simplify { // geos::simplify
 
 class LinkedRing
 {
+    using Coordinate = geos::geom::Coordinate;
+    using CoordinateSequence = geos::geom::CoordinateSequence;
+
     private:
 
         const CoordinateSequence& m_coord;

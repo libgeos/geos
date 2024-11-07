@@ -26,20 +26,22 @@ class Envelope;
 }
 }
 
-using geos::geom::CoordinateSequence;
-using geos::geom::Envelope;
-using namespace geos::index;
-
 namespace geos {
 namespace operation {
 namespace buffer {
 
 class GEOS_DLL SegmentMCIndex {
+    using CoordinateSequence = geos::geom::CoordinateSequence;
+    using Envelope = geos::geom::Envelope;
+    using MonotoneChain = geos::index::chain::MonotoneChain;
+    using MonotoneChainSelectAction = geos::index::chain::MonotoneChainSelectAction;
+    template<typename ItemType>
+    using TemplateSTRtree = geos::index::strtree::TemplateSTRtree<ItemType>;
 
 private:
 
-    strtree::TemplateSTRtree<const index::chain::MonotoneChain*> index;
-    std::vector<chain::MonotoneChain> segChains;
+    TemplateSTRtree<const MonotoneChain*> index;
+    std::vector<MonotoneChain> segChains;
 
     void buildIndex(const CoordinateSequence* segs);
 
@@ -47,7 +49,7 @@ public:
 
     SegmentMCIndex(const CoordinateSequence* segs);
 
-    void query(const Envelope* env, chain::MonotoneChainSelectAction& action);
+    void query(const Envelope* env, MonotoneChainSelectAction& action);
 };
 
 

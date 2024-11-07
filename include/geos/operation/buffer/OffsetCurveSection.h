@@ -31,12 +31,6 @@ class LineString;
 }
 }
 
-using geos::geom::Coordinate;
-using geos::geom::CoordinateSequence;
-using geos::geom::Geometry;
-using geos::geom::GeometryFactory;
-using geos::geom::LineString;
-
 namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace buffer {    // geos.operation.buffer
@@ -53,6 +47,11 @@ namespace buffer {    // geos.operation.buffer
  * @author mdavis
  */
 class GEOS_DLL OffsetCurveSection {
+    using Coordinate = geos::geom::Coordinate;
+    using CoordinateSequence = geos::geom::CoordinateSequence;
+    using Geometry = geos::geom::Geometry;
+    using GeometryFactory = geos::geom::GeometryFactory;
+    using LineString = geos::geom::LineString;
 
 private:
 

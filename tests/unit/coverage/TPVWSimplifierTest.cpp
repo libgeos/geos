@@ -7,6 +7,7 @@
 // geos
 #include <geos/coverage/TPVWSimplifier.h>
 
+using namespace geos::geom;
 using geos::coverage::TPVWSimplifier;
 
 namespace tut {

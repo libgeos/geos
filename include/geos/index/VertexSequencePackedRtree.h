@@ -26,11 +26,6 @@ class Envelope;
 }
 }
 
-using geos::geom::Coordinate;
-using geos::geom::CoordinateSequence;
-using geos::geom::Envelope;
-
-
 namespace geos {
 namespace index {
 
@@ -52,6 +47,9 @@ namespace index {
  *
  */
 class GEOS_DLL VertexSequencePackedRtree {
+    using Coordinate = geos::geom::Coordinate;
+    using CoordinateSequence = geos::geom::CoordinateSequence;
+    using Envelope = geos::geom::Envelope;
 
 private:
 

@@ -24,6 +24,8 @@
 #include <geos/triangulate/polygon/PolygonEarClipper.h>
 #include <geos/util/IllegalStateException.h>
 
+using geos::geom::Envelope;
+using geos::geom::Polygon;
 using geos::algorithm::Orientation;
 using geos::algorithm::Angle;
 using geos::triangulate::tri::TriList;

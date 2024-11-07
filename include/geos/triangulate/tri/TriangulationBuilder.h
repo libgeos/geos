@@ -32,8 +32,6 @@ class Tri;
 }
 }
 
-using geos::geom::Coordinate;
-
 namespace geos {        // geos.
 namespace triangulate { // geos.triangulate
 namespace tri {         // geos.triangulate.tri
@@ -47,6 +45,7 @@ namespace tri {         // geos.triangulate.tri
  *
  */
 class GEOS_DLL TriangulationBuilder {
+    using Coordinate = geos::geom::Coordinate;
 
 private:
 

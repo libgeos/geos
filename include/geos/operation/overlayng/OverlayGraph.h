@@ -39,8 +39,6 @@ namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
 
-using namespace geos::geom;
-
 /**
  * A planar graph of {@link OverlayEdge}, representing
  * the topology resulting from an overlay operation.
@@ -52,6 +50,8 @@ using namespace geos::geom;
  *
  */
 class GEOS_DLL OverlayGraph {
+    using Coordinate = geos::geom::Coordinate;
+    using CoordinateSequence = geos::geom::CoordinateSequence;
 
 private:
 

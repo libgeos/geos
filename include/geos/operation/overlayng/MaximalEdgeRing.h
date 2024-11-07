@@ -24,7 +24,6 @@
 namespace geos {
 namespace geom {
 class Coordinate;
-class CoordinateArray;
 class GeometryFactory;
 }
 namespace operation {
@@ -39,9 +38,9 @@ namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
 
-using namespace geos::geom;
-
 class GEOS_DLL MaximalEdgeRing {
+    using Coordinate = geos::geom::Coordinate;
+    using GeometryFactory = geos::geom::GeometryFactory;
 
 private:
 

@@ -25,9 +25,6 @@ class CoordinateXY;
 }
 }
 
-using geos::geom::CoordinateXY;
-
-
 namespace geos {
 namespace algorithm { // geos::algorithm
 
@@ -39,6 +36,7 @@ namespace algorithm { // geos::algorithm
  *
  */
 class GEOS_DLL PolygonNodeTopology {
+    using CoordinateXY = geos::geom::CoordinateXY;
 
 public:
 

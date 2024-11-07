@@ -25,10 +25,6 @@
 #include <geos/algorithm/construct/IndexedPointInPolygonsLocator.h>
 #include <geos/operation/distance/IndexedFacetDistance.h>
 
-using geos::geom::Geometry;
-using geos::geom::Point;
-using geos::operation::distance::IndexedFacetDistance;
-
 namespace geos {
 namespace algorithm { // geos::algorithm
 namespace construct { // geos::algorithm::construct
@@ -43,6 +39,9 @@ namespace construct { // geos::algorithm::construct
  * \author Martin Davis
  */
 class GEOS_DLL IndexedDistanceToPoint {
+    using Geometry = geos::geom::Geometry;
+    using Point = geos::geom::Point;
+    using IndexedFacetDistance = geos::operation::distance::IndexedFacetDistance;
 
 public:
     /** 

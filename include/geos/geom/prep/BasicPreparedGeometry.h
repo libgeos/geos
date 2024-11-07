@@ -38,8 +38,6 @@ namespace geos {
 namespace geom { // geos::geom
 namespace prep { // geos::geom::prep
 
-using geos::operation::relateng::RelateNG;
-
 // * \class BasicPreparedGeometry
 
 /**
@@ -56,6 +54,8 @@ using geos::operation::relateng::RelateNG;
  *
  */
 class BasicPreparedGeometry: public PreparedGeometry {
+    using RelateNG = geos::operation::relateng::RelateNG;
+
 private:
     const geom::Geometry* baseGeom;
     std::vector<const CoordinateXY*> representativePts;

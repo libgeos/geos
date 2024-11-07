@@ -26,13 +26,6 @@ class Polygon;
 }
 }
 
-using geos::geom::Geometry;
-using geos::geom::GeometryFactory;
-using geos::geom::Polygon;
-using geos::triangulate::tri::TriList;
-using geos::triangulate::tri::Tri;
-
-
 namespace geos {
 namespace triangulate {
 namespace polygon {
@@ -48,6 +41,12 @@ namespace polygon {
  * Holes are supported.
  */
 class GEOS_DLL ConstrainedDelaunayTriangulator {
+    using Geometry = geos::geom::Geometry;
+    using GeometryFactory = geos::geom::GeometryFactory;
+    using Polygon = geos::geom::Polygon;
+    template<typename TriType>
+    using TriList = geos::triangulate::tri::TriList<TriType>;
+    using Tri = geos::triangulate::tri::Tri;
 
 private:
 

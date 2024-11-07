@@ -19,6 +19,7 @@
 
 
 using geos::geom::Coordinate;
+using geos::geom::CoordinateSequence;
 
 
 namespace geos {

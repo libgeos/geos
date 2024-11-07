@@ -24,9 +24,6 @@ class Geometry;
 }
 }
 
-using geos::geom::Geometry;
-using geos::index::strtree::TemplateSTRtree;
-
 namespace geos {      // geos
 namespace coverage { // geos::coverage
 
@@ -63,6 +60,9 @@ namespace coverage { // geos::coverage
  *
  */
 class GEOS_DLL CoverageValidator {
+    using Geometry = geos::geom::Geometry;
+    template <typename ItemType>
+    using TemplateSTRtree = geos::index::strtree::TemplateSTRtree<ItemType>;
 
 private:
 

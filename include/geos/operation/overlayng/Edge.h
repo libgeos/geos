@@ -53,6 +53,7 @@ namespace overlayng { // geos.operation.overlayng
  * @author mdavis
  */
 class GEOS_DLL Edge {
+    using Location = geos::geom::Location;
 
 private:
 

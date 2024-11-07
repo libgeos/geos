@@ -21,7 +21,7 @@
 #include <geos/operation/overlayng/OverlayNG.h>
 #include <geos/operation/overlayng/OverlayUtil.h>
 
-
+using namespace geos::geom;
 
 namespace geos {      // geos
 namespace operation { // geos.operation

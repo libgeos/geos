@@ -64,6 +64,7 @@ namespace relateng {  // geos.operation.relateng
  * @see RelateNode
  */
 class GEOS_DLL PolygonNodeConverter {
+    using CoordinateXY = geos::geom::CoordinateXY;
 
 public:
 

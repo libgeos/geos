@@ -14,6 +14,7 @@
 
 #include <geos/operation/overlayng/RingClipper.h>
 
+using geos::geom::CoordinateSequence;
 
 namespace geos {      // geos
 namespace operation { // geos.operation

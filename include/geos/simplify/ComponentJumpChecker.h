@@ -34,15 +34,14 @@ class TaggedLineString;
 }
 }
 
-using geos::geom::Coordinate;
-using geos::geom::Envelope;
-using geos::geom::LineSegment;
-
 namespace geos {
 namespace simplify { // geos::simplify
 
 
 class GEOS_DLL ComponentJumpChecker {
+    using Coordinate = geos::geom::Coordinate;
+    using Envelope = geos::geom::Envelope;
+    using LineSegment = geos::geom::LineSegment;
 
 private:
 

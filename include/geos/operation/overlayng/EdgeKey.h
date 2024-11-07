@@ -26,9 +26,6 @@ namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
 
-
-using geos::geom::Coordinate;
-
 /**
  * A key for sorting and comparing edges in a noded arrangement.
  * Relies on the fact that in a correctly noded arrangement
@@ -39,6 +36,7 @@ using geos::geom::Coordinate;
  *
  */
 class GEOS_DLL EdgeKey {
+    using Coordinate = geos::geom::Coordinate;
 
 private:
 

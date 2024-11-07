@@ -33,20 +33,20 @@ namespace quadedge {
 }
 }
 
-using geos::geom::Coordinate;
-using geos::geom::Triangle;
-using geos::triangulate::tri::Tri;
-using geos::triangulate::tri::TriList;
-
 namespace geos {
 namespace algorithm { // geos::algorithm
 namespace hull {      // geos::algorithm::hull
 
 
 
-class HullTri : public Tri
-{
-    private:
+class HullTri : public geos::triangulate::tri::Tri {
+    using Coordinate = geos::geom::Coordinate;
+    using Triangle = geos::geom::Triangle;
+    using Tri = geos::triangulate::tri::Tri;
+    template<typename TriType>
+    using TriList = geos::triangulate::tri::TriList<TriType>;
+
+private:
 
         double m_size;
         bool m_isMarked = false;

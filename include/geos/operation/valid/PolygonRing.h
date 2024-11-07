@@ -35,11 +35,9 @@ namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace valid {     // geos.operation.valid
 
-using geos::geom::CoordinateXY;
-using geos::geom::LinearRing;
-
-
 class GEOS_DLL PolygonRing {
+    using CoordinateXY = geos::geom::CoordinateXY;
+    using LinearRing = geos::geom::LinearRing;
 
 private:
 

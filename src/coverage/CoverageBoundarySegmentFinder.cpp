@@ -19,6 +19,7 @@
 
 using geos::geom::CoordinateSequence;
 using geos::geom::Geometry;
+using geos::geom::LineSegment;
 
 
 namespace geos {     // geos

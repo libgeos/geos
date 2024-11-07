@@ -20,7 +20,7 @@
 #include <geos/triangulate/polygon/PolygonHoleJoiner.h>
 #include <geos/triangulate/polygon/PolygonEarClipper.h>
 
-
+using geos::geom::Geometry;
 
 namespace geos {
 namespace triangulate {

@@ -37,14 +37,6 @@ namespace noding {
 }
 }
 
-using geos::geom::Coordinate;
-using geos::geom::CoordinateSequence;
-using geos::geom::Polygon;
-using geos::geom::LinearRing;
-using geos::noding::BasicSegmentString;
-using geos::noding::SegmentSetMutualIntersector;
-
-
 namespace geos {
 namespace triangulate {
 namespace polygon {
@@ -68,6 +60,12 @@ namespace polygon {
  * The output ring is always CW.
  */
 class GEOS_DLL PolygonHoleJoiner {
+    using Coordinate = geos::geom::Coordinate;
+    using CoordinateSequence = geos::geom::CoordinateSequence;
+    using Polygon = geos::geom::Polygon;
+    using LinearRing = geos::geom::LinearRing;
+    using BasicSegmentString = geos::noding::BasicSegmentString;
+    using SegmentSetMutualIntersector = geos::noding::SegmentSetMutualIntersector;
 
 private:
 

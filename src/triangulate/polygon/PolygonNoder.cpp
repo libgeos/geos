@@ -24,6 +24,7 @@
 
 using geos::algorithm::LineIntersector;
 using geos::geom::Coordinate;
+using geos::geom::CoordinateSequence;
 using geos::noding::SegmentString;
 using geos::noding::NodedSegmentString;
 using geos::noding::SegmentIntersector;

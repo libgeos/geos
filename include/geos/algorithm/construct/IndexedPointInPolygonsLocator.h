@@ -25,12 +25,6 @@
 #include <geos/index/strtree/TemplateSTRtree.h>
 #include <geos/algorithm/locate/IndexedPointInAreaLocator.h>
 
-using geos::geom::Geometry;
-using geos::geom::CoordinateXY;
-using geos::geom::Location;
-using geos::index::strtree::TemplateSTRtree;
-using geos::algorithm::locate::IndexedPointInAreaLocator;
-
 namespace geos {
 namespace algorithm { // geos::algorithm
 namespace construct { // geos::algorithm::construct
@@ -43,6 +37,12 @@ namespace construct { // geos::algorithm::construct
  * \author Martin Davis
  */
 class GEOS_DLL IndexedPointInPolygonsLocator {
+    using Geometry = geos::geom::Geometry;
+    using CoordinateXY = geos::geom::CoordinateXY;
+    using Location = geos::geom::Location;
+    template<typename ItemType>
+    using TemplateSTRtree = geos::index::strtree::TemplateSTRtree<ItemType>;
+    using IndexedPointInAreaLocator = geos::algorithm::locate::IndexedPointInAreaLocator;
 
 public:
     /** 

@@ -32,15 +32,6 @@ namespace geos {
 	}
 }
 
-using geos::geom::CoordinateSequence;
-using geos::geom::CoordinateXY;
-using geos::geom::Geometry;
-using geos::geom::GeometryFactory;
-using geos::geom::LineSegment;
-using geos::geom::LineString;
-using geos::geom::Polygon;
-
-
 namespace geos {
 namespace algorithm { // geos::algorithm
 
@@ -65,6 +56,13 @@ namespace algorithm { // geos::algorithm
  *
  */
 class GEOS_DLL MinimumAreaRectangle {
+    using CoordinateSequence = geos::geom::CoordinateSequence;
+    using CoordinateXY = geos::geom::CoordinateXY;
+    using Geometry = geos::geom::Geometry;
+    using GeometryFactory = geos::geom::GeometryFactory;
+    using LineSegment = geos::geom::LineSegment;
+    using LineString = geos::geom::LineString;
+    using Polygon = geos::geom::Polygon;
 
 private:
 

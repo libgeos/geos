@@ -21,6 +21,8 @@
 
 #include <algorithm>
 
+using geos::geom::Envelope;
+
 namespace geos {
 namespace index {
 

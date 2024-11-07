@@ -34,18 +34,15 @@ namespace geom {
 }
 }
 
-
-using geos::geom::CoordinateXY;
-using geos::geom::Geometry;
-using geos::geom::Location;
-
-
 namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace relateng { // geos.operation.relateng
 
 
 class GEOS_DLL RelateEdge {
+    using CoordinateXY = geos::geom::CoordinateXY;
+    using Geometry = geos::geom::Geometry;
+    using Location = geos::geom::Location;
 
 private:
 
