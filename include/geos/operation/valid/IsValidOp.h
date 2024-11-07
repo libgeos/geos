@@ -55,6 +55,7 @@ namespace valid {     // geos.operation.valid
  * @version 1.7
  */
 class GEOS_DLL IsValidOp {
+    using CoordinateXY = geos::geom::CoordinateXY;
 
 private:
 

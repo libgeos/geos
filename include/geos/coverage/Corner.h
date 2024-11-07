@@ -32,19 +32,16 @@ class LineString;
 }
 }
 
-
-using geos::geom::Coordinate;
-using geos::geom::Envelope;
-using geos::geom::LineString;
-using geos::simplify::LinkedLine;
-
-
 namespace geos {
 namespace coverage { // geos::coverage
 
 
 class Corner
 {
+    using Coordinate = geos::geom::Coordinate;
+    using Envelope = geos::geom::Envelope;
+    using LineString = geos::geom::LineString;
+    using LinkedLine = geos::simplify::LinkedLine;
 
 public:
 

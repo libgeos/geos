@@ -27,17 +27,14 @@ class Geometry;
 }
 }
 
-using geos::geom::Coordinate;
-using geos::geom::CoordinateSequence;
-using geos::geom::CoordinateSequenceFilter;
-using geos::geom::Geometry;
-
-
 namespace geos {
 namespace coverage { // geos::coverage
 
-class VertexRingCounter : public CoordinateSequenceFilter
+class VertexRingCounter : public geos::geom::CoordinateSequenceFilter
 {
+    using Coordinate = geos::geom::Coordinate;
+    using CoordinateSequence = geos::geom::CoordinateSequence;
+    using Geometry = geos::geom::Geometry;
 
 public:
 

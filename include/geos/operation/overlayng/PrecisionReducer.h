@@ -35,8 +35,6 @@ namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
 
-using namespace geos::geom;
-
 /**
 * Reduces the precision of a geometry by rounding it to the
 * supplied {@link geom::PrecisionModel}.
@@ -50,6 +48,8 @@ using namespace geos::geom;
 * This provides an effective way to node / snap-round a collection of {@link geom::LineString}s.
 */
 class GEOS_DLL PrecisionReducer {
+    using PrecisionModel = geos::geom::PrecisionModel;
+    using Geometry = geos::geom::Geometry;
 
 private:
 

@@ -25,6 +25,7 @@ namespace geos {      // geos
 namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
 
+using namespace geos::geom;
 
 RobustClipEnvelopeComputer::RobustClipEnvelopeComputer(const Envelope* p_targetEnv)
     : targetEnv(p_targetEnv)

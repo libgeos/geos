@@ -30,12 +30,6 @@ class CoverageRing;
 }
 }
 
-
-using geos::noding::SegmentIntersector;
-using geos::noding::SegmentString;
-using geos::geom::Coordinate;
-
-
 namespace geos {      // geos.
 namespace coverage { // geos.coverage
 
@@ -52,7 +46,9 @@ namespace coverage { // geos.coverage
  * @author Martin Davis
  *
  */
-class GEOS_DLL InvalidSegmentDetector : public SegmentIntersector {
+class GEOS_DLL InvalidSegmentDetector : public geos::noding::SegmentIntersector {
+    using SegmentString = geos::noding::SegmentString;
+    using Coordinate = geos::geom::Coordinate;
 
 private:
 

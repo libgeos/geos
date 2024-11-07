@@ -36,10 +36,9 @@ namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace valid {     // geos.operation.valid
 
-using geos::geom::CoordinateXY;
-using geos::noding::SegmentString;
-
 class GEOS_DLL PolygonIntersectionAnalyzer : public noding::SegmentIntersector {
+    using CoordinateXY = geos::geom::CoordinateXY;
+    using SegmentString = geos::noding::SegmentString;
 
 private:
 

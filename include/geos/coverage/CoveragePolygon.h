@@ -25,15 +25,14 @@ class Polygon;
 }
 }
 
-using geos::geom::CoordinateXY;
-using geos::geom::Envelope;
-using geos::geom::Polygon;
-using geos::algorithm::locate::IndexedPointInAreaLocator;
-
 namespace geos {        // geos
 namespace coverage {    // geos::coverage
 
 class GEOS_DLL CoveragePolygon {
+    using CoordinateXY = geos::geom::CoordinateXY;
+    using Envelope = geos::geom::Envelope;
+    using Polygon = geos::geom::Polygon;
+    using IndexedPointInAreaLocator = geos::algorithm::locate::IndexedPointInAreaLocator;
 
     // Members
     const Polygon* m_polygon;

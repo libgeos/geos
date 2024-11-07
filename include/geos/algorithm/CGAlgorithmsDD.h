@@ -29,13 +29,12 @@ class CoordinateSequence;
 }
 }
 
-using namespace geos::math;
-
 namespace geos {
 namespace algorithm { // geos::algorithm
 
 /// Implements basic computational geometry algorithms using extended precision float-point arithmetic.
 class GEOS_DLL CGAlgorithmsDD {
+    using DD = geos::math::DD;
 
 public:
 

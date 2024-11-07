@@ -19,6 +19,7 @@
 //#include <geos/geom/CoordinateSequence.h>
 
 #include <geos/export.h>
+#include <geos/triangulate/tri/Tri.h>
 
 #include <map>
 #include <memory>
@@ -38,12 +39,6 @@ class LineIntersector;
 }
 }
 
-using geos::geom::Coordinate;
-using geos::geom::CoordinateSequence;
-using geos::noding::NodedSegmentString;
-using geos::algorithm::LineIntersector;
-
-
 namespace geos {
 namespace triangulate {
 namespace polygon {
@@ -60,6 +55,13 @@ namespace polygon {
  * and does not trigger an error.
  */
 class GEOS_DLL PolygonNoder {
+    using Coordinate = geos::geom::Coordinate;
+    using CoordinateSequence = geos::geom::CoordinateSequence;
+    using NodedSegmentString = geos::noding::NodedSegmentString;
+    using LineIntersector = geos::algorithm::LineIntersector;
+    using Tri = geos::triangulate::tri::Tri;
+    template<typename TriType>
+    using TriList = geos::triangulate::tri::TriList<TriType>;
 
 public:
 

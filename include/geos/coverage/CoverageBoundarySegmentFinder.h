@@ -28,18 +28,16 @@ class Geometry;
 }
 }
 
-using geos::geom::Coordinate;
-using geos::geom::CoordinateSequence;
-using geos::geom::CoordinateSequenceFilter;
-using geos::geom::Geometry;
-using geos::geom::LineSegment;
-
 namespace geos {
 namespace coverage { // geos::coverage
 
-class CoverageBoundarySegmentFinder : public CoordinateSequenceFilter
+class CoverageBoundarySegmentFinder : public geos::geom::CoordinateSequenceFilter
 {
-
+    using Coordinate = geos::geom::Coordinate;
+    using CoordinateSequence = geos::geom::CoordinateSequence;
+    using CoordinateSequenceFilter = geos::geom::CoordinateSequenceFilter;
+    using Geometry = geos::geom::Geometry;
+    using LineSegment = geos::geom::LineSegment;
 
 public:
 

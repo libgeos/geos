@@ -28,10 +28,6 @@ class Polygon;
 }
 }
 
-using geos::geom::Coordinate;
-using geos::geom::Polygon;
-using geos::geom::GeometryFactory;
-
 namespace geos {        // geos.
 namespace triangulate { // geos.triangulate
 namespace tri {         // geos.triangulate.tri
@@ -47,6 +43,10 @@ namespace tri {         // geos.triangulate.tri
  *
  */
 class GEOS_DLL Tri {
+    using Coordinate = geos::geom::Coordinate;
+    using Polygon = geos::geom::Polygon;
+    using Geometry = geos::geom::Geometry;
+    using GeometryFactory = geos::geom::GeometryFactory;
 
 protected:
 

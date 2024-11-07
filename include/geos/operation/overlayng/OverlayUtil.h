@@ -41,12 +41,9 @@ class OverlayGraph;
 }
 }
 
-
 namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
-
-using namespace geos::geom;
 
 /**
  * Utility methods for overlay processing.
@@ -55,6 +52,15 @@ using namespace geos::geom;
  *
  */
 class GEOS_DLL OverlayUtil {
+    using Geometry = geos::geom::Geometry;
+    using Coordinate = geos::geom::Coordinate;
+    using CoordinateSequence = geos::geom::CoordinateSequence;
+    using Envelope = geos::geom::Envelope;
+    using Point = geos::geom::Point;
+    using LineString = geos::geom::LineString;
+    using Polygon = geos::geom::Polygon;
+    using GeometryFactory = geos::geom::GeometryFactory;
+    using PrecisionModel = geos::geom::PrecisionModel;
 
 private:
 

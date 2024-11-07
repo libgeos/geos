@@ -36,6 +36,8 @@ namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
 
 using namespace geos::geom;
+using geos::algorithm::locate::PointOnGeometryLocator;
+using geos::algorithm::locate::IndexedPointInAreaLocator;
 
 /**
  * @brief Extracts and rounds coordinates from a geometry

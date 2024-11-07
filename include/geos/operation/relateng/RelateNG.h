@@ -48,13 +48,6 @@ namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace relateng { // geos.operation.relateng
 
-
-using geos::geom::CoordinateXY;
-using geos::geom::Geometry;
-using geos::algorithm::BoundaryNodeRule;
-using geos::noding::MCIndexSegmentSetMutualIntersector;
-
-
 /**
  * Computes the value of topological predicates between two geometries based on the
  * Dimensionally-Extended 9-Intersection Model <https://en.wikipedia.org/wiki/DE-9IM> (DE-9IM).
@@ -91,6 +84,14 @@ using geos::noding::MCIndexSegmentSetMutualIntersector;
  * @see PreparedGeometry
  */
 class GEOS_DLL RelateNG {
+    using CoordinateXY = geos::geom::CoordinateXY;
+    using Geometry = geos::geom::Geometry;
+    using BoundaryNodeRule = geos::algorithm::BoundaryNodeRule;
+    using MCIndexSegmentSetMutualIntersector = geos::noding::MCIndexSegmentSetMutualIntersector;
+    using LinearRing = geos::geom::LinearRing;
+    using Envelope = geos::geom::Envelope;
+    using SegmentString = geos::noding::SegmentString;
+    using IntersectionMatrix = geos::geom::IntersectionMatrix;
 
 private:
 

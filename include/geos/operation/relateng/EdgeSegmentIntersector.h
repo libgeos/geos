@@ -34,17 +34,13 @@ namespace relateng {
 }
 }
 
-
-using geos::noding::SegmentIntersector;
-using geos::noding::SegmentString;
-using geos::algorithm::LineIntersector;
-
-
 namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace relateng { // geos.operation.relateng
 
-class GEOS_DLL EdgeSegmentIntersector : public SegmentIntersector {
+class GEOS_DLL EdgeSegmentIntersector : public geos::noding::SegmentIntersector {
+    using SegmentString = geos::noding::SegmentString;
+    using LineIntersector = geos::algorithm::LineIntersector;
 
 private:
 

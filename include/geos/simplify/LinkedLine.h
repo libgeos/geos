@@ -29,15 +29,13 @@ class CoordinateSequence;
 }
 }
 
-using geos::geom::Coordinate;
-using geos::geom::CoordinateSequence;
-
-
 namespace geos {
 namespace simplify { // geos::simplify
 
 class LinkedLine
 {
+    using Coordinate = geos::geom::Coordinate;
+    using CoordinateSequence = geos::geom::CoordinateSequence;
 
 public:
 

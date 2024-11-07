@@ -34,9 +34,8 @@ namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace valid {     // geos.operation.valid
 
-using geos::geom::CoordinateXY;
-
 class GEOS_DLL PolygonRingTouch {
+    using CoordinateXY = geos::geom::CoordinateXY;
 
 private:
 

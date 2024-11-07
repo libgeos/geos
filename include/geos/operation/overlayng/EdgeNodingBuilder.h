@@ -62,6 +62,14 @@ namespace overlayng { // geos.operation.overlayng
  * @author mdavis
  */
 class GEOS_DLL EdgeNodingBuilder {
+    using PrecisionModel = geos::geom::PrecisionModel;
+    using Envelope = geos::geom::Envelope;
+    using GeometryCollection = geos::geom::GeometryCollection;
+    using Polygon = geos::geom::Polygon;
+    using CoordinateSequence = geos::geom::CoordinateSequence;
+    using LinearRing = geos::geom::LinearRing;
+    using LineString = geos::geom::LineString;
+    using Geometry = geos::geom::Geometry;
 
 private:
 

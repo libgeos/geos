@@ -18,19 +18,10 @@
 
 namespace geos {
 namespace geom {
-class Coordinate;
-class CoordinateSequence;
-class Envelope;
 class Geometry;
-class GeometryCollection;
-class GeometryFactory;
 class LinearRing;
-class Polygon;
 }
 }
-
-using geos::geom::Geometry;
-using geos::geom::LinearRing;
 
 namespace geos {
 namespace algorithm { // geos::algorithm
@@ -44,6 +35,9 @@ namespace hull {      // geos::algorithm::hull
  * \author Martin Davis
  */
 class OuterShellsExtracter {
+    using Geometry = geos::geom::Geometry;
+    using LinearRing = geos::geom::LinearRing;
+
 private:
 
     OuterShellsExtracter(const Geometry& g);

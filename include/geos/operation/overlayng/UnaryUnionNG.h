@@ -42,6 +42,8 @@ namespace overlayng { // geos.operation.overlayng
  *
  */
 class GEOS_DLL UnaryUnionNG {
+    using Geometry = geos::geom::Geometry;
+    using PrecisionModel = geos::geom::PrecisionModel;
 
 private:
 

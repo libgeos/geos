@@ -20,6 +20,7 @@
 #include <geos/util/TopologyException.h>
 
 
+using geos::geom::Polygon;
 
 namespace geos {      // geos
 namespace operation { // geos.operation

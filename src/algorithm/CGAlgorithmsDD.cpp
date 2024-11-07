@@ -20,11 +20,11 @@
 #include <geos/algorithm/CGAlgorithmsDD.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/util/IllegalArgumentException.h>
-#include <sstream>
 #include <cmath>
 
 using namespace geos::geom;
 using namespace geos::algorithm;
+using geos::math::DD;
 
 namespace {
 

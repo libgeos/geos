@@ -46,9 +46,6 @@ namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
 
-using namespace geos::geom;
-using algorithm::locate::PointOnGeometryLocator;
-
 /**
  * Computes an overlay where one input is Point(s) and one is not.
  * This class supports overlay being used as an efficient way
@@ -77,6 +74,16 @@ using algorithm::locate::PointOnGeometryLocator;
  * @author Martin Davis
  */
 class GEOS_DLL OverlayMixedPoints {
+    using GeometryFactory = geos::geom::GeometryFactory;
+    using PrecisionModel = geos::geom::PrecisionModel;
+    using Geometry = geos::geom::Geometry;
+    using Coordinate = geos::geom::Coordinate;
+    using CoordinateXY = geos::geom::CoordinateXY;
+    using CoordinateSequence = geos::geom::CoordinateSequence;
+    using Point = geos::geom::Point;
+    using Polygon = geos::geom::Polygon;
+    using LineString = geos::geom::LineString;
+    using PointOnGeometryLocator = algorithm::locate::PointOnGeometryLocator;
 
 private:
 

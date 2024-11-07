@@ -25,7 +25,7 @@
 #include <geos/util/IllegalStateException.h>
 #include <geos/util.h>
 
-
+using namespace geos::geom;
 using geos::util::IllegalArgumentException;
 using geos::algorithm::Orientation;
 using geos::geom::Triangle;

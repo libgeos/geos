@@ -31,20 +31,16 @@ namespace geom {
 }
 }
 
-
-using geos::geom::Envelope;
-using geos::geom::Location;
-using geos::geom::Dimension;
-using geos::geom::IntersectionMatrix;
-
-
 namespace geos {      // geos.
 namespace operation { // geos.operation.
 namespace relateng {  // geos.operation.relateng
 
 
 class GEOS_DLL IMPatternMatcher : public IMPredicate {
-
+    using Envelope = geos::geom::Envelope;
+    using Location = geos::geom::Location;
+    using Dimension = geos::geom::Dimension;
+    using IntersectionMatrix = geos::geom::IntersectionMatrix;
 
 private:
 

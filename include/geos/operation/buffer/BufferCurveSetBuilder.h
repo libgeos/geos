@@ -70,6 +70,7 @@ namespace buffer { // geos.operation.buffer
  *
  */
 class GEOS_DLL BufferCurveSetBuilder {
+    using CoordinateSequence = geos::geom::CoordinateSequence;
 
 private:
 

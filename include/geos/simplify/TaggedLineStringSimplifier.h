@@ -51,11 +51,6 @@ class ComponentJumpChecker;
 }
 }
 
-using geos::geom::CoordinateSequence;
-using geos::geom::Coordinate;
-using geos::geom::LineSegment;
-
-
 namespace geos {
 namespace simplify { // geos::simplify
 
@@ -67,6 +62,9 @@ namespace simplify { // geos::simplify
  *
  */
 class GEOS_DLL TaggedLineStringSimplifier {
+    using CoordinateSequence = geos::geom::CoordinateSequence;
+    using Coordinate = geos::geom::Coordinate;
+    using LineSegment = geos::geom::LineSegment;
 
 public:
 

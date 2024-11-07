@@ -25,9 +25,11 @@
 
 using geos::coverage::Corner;
 using geos::geom::Coordinate;
+using geos::geom::CoordinateSequence;
 using geos::geom::Envelope;
 using geos::geom::GeometryFactory;
 using geos::geom::Triangle;
+using geos::geom::LineString;
 using geos::io::WKTWriter;
 
 namespace geos {

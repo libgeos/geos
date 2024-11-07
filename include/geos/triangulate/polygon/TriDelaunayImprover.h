@@ -26,11 +26,6 @@ class Coordinate;
 }
 }
 
-using geos::geom::Coordinate;
-using geos::triangulate::tri::TriList;
-using geos::triangulate::tri::Tri;
-
-
 namespace geos {
 namespace triangulate {
 namespace polygon {
@@ -46,6 +41,10 @@ namespace polygon {
  *
  */
 class GEOS_DLL TriDelaunayImprover {
+    using Coordinate = geos::geom::Coordinate;
+    using Tri = geos::triangulate::tri::Tri;
+    template<typename TriType>
+    using TriList = geos::triangulate::tri::TriList<TriType>;
 
 private:
 

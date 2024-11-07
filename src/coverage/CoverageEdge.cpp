@@ -26,6 +26,9 @@ using geos::geom::Coordinate;
 using geos::geom::GeometryFactory;
 using geos::geom::LinearRing;
 using geos::geom::LineSegment;
+using geos::geom::MultiLineString;
+using geos::geom::LineString;
+using geos::geom::CoordinateSequence;
 
 
 namespace geos {     // geos

@@ -41,9 +41,6 @@ class Point;
 }
 }
 
-using geos::algorithm::locate::IndexedPointInAreaLocator;
-using geos::operation::distance::IndexedFacetDistance;
-
 namespace geos {
 namespace algorithm { // geos::algorithm
 namespace construct { // geos::algorithm::construct
@@ -54,6 +51,8 @@ namespace construct { // geos::algorithm::construct
  * Also computes two points which are separated by the distance.
  */
 class GEOS_DLL MaximumInscribedCircle {
+    using IndexedPointInAreaLocator = geos::algorithm::locate::IndexedPointInAreaLocator;
+    using IndexedFacetDistance = geos::operation::distance::IndexedFacetDistance;
 
 public:
 

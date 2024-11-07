@@ -15,7 +15,6 @@
 #pragma once
 
 #include <geos/algorithm/hull/HullTri.h>
-#include <geos/triangulate/tri/Tri.h>
 #include <geos/triangulate/tri/TriList.h>
 #include <geos/triangulate/quadedge/TriangleVisitor.h>
 
@@ -34,16 +33,6 @@ class QuadEdgeSubdivision;
 }
 }
 
-using geos::geom::Geometry;
-using geos::geom::GeometryFactory;
-using geos::geom::Coordinate;
-using geos::triangulate::tri::Tri;
-using geos::triangulate::tri::TriList;
-using geos::triangulate::quadedge::QuadEdge;
-using geos::triangulate::quadedge::QuadEdgeSubdivision;
-using geos::triangulate::quadedge::TriangleVisitor;
-
-
 namespace geos {
 namespace algorithm { // geos::algorithm
 namespace hull {      // geos::algorithm::hull
@@ -51,6 +40,14 @@ namespace hull {      // geos::algorithm::hull
 
 class HullTriangulation
 {
+    using Geometry = geos::geom::Geometry;
+    using GeometryFactory = geos::geom::GeometryFactory;
+    using Coordinate = geos::geom::Coordinate;
+    template<typename TriType>
+    using TriList = geos::triangulate::tri::TriList<TriType>;
+    using QuadEdge = geos::triangulate::quadedge::QuadEdge;
+    using QuadEdgeSubdivision = geos::triangulate::quadedge::QuadEdgeSubdivision;
+    using TriangleVisitor = geos::triangulate::quadedge::TriangleVisitor;
 
 private:
 

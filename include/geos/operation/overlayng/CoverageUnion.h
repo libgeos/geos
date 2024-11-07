@@ -24,8 +24,6 @@ class Geometry;
 }
 }
 
-using geos::geom::Geometry;
-
 namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
@@ -67,6 +65,7 @@ namespace overlayng { // geos.operation.overlayng
  *
  */
 class GEOS_DLL CoverageUnion {
+    using Geometry = geos::geom::Geometry;
 
 private:
 

@@ -32,14 +32,6 @@ class GeometryFactory;
 }
 }
 
-using geos::geom::Coordinate;
-using geos::geom::CoordinateSequence;
-using geos::geom::GeometryFactory;
-using geos::geom::LinearRing;
-using geos::geom::LineString;
-using geos::geom::LineSegment;
-using geos::geom::MultiLineString;
-
 namespace geos {      // geos.
 namespace coverage { // geos.coverage
 
@@ -52,6 +44,14 @@ namespace coverage { // geos.coverage
  *
  */
 class GEOS_DLL CoverageEdge {
+    using Coordinate = geos::geom::Coordinate;
+    using CoordinateSequence = geos::geom::CoordinateSequence;
+    using GeometryFactory = geos::geom::GeometryFactory;
+    using LinearRing = geos::geom::LinearRing;
+    using LineString = geos::geom::LineString;
+    using LineSegment = geos::geom::LineSegment;
+    using MultiLineString = geos::geom::MultiLineString;
+
 
 private:
 

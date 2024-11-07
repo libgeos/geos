@@ -18,16 +18,13 @@
 #include <geos/geom/Location.h>
 #include <geos/export.h>
 
-
-using geos::geom::Location;
-
-
 namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace relateng { // geos.operation.relateng
 
 
 class GEOS_DLL DimensionLocation {
+    using Location = geos::geom::Location;
 
 public:
 

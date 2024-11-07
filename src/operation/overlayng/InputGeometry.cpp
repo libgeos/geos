@@ -18,6 +18,11 @@ namespace geos {      // geos
 namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
 
+using geos::geom::Location;
+using geos::geom::Geometry;
+using geos::geom::Envelope;
+using geos::algorithm::locate::IndexedPointInAreaLocator;
+using geos::algorithm::locate::PointOnGeometryLocator;
 
 /*public*/
 InputGeometry::InputGeometry(const Geometry* geomA, const Geometry* geomB)

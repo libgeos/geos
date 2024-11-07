@@ -32,13 +32,6 @@ class CoverageEdge;
 }
 }
 
-
-using geos::coverage::CoverageEdge;
-using geos::geom::Geometry;
-using geos::geom::GeometryFactory;
-using geos::geom::MultiLineString;
-
-
 namespace geos {
 namespace coverage { // geos::coverage
 
@@ -74,7 +67,10 @@ namespace coverage { // geos::coverage
  * @author Martin Davis
  */
 class GEOS_DLL CoverageSimplifier {
-
+    using CoverageEdge = geos::coverage::CoverageEdge;
+    using Geometry = geos::geom::Geometry;
+    using GeometryFactory = geos::geom::GeometryFactory;
+    using MultiLineString = geos::geom::MultiLineString;
 
 public:
 

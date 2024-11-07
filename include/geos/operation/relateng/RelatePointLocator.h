@@ -47,17 +47,6 @@ namespace geom {
 }
 }
 
-
-using geos::algorithm::BoundaryNodeRule;
-using geos::algorithm::locate::PointOnGeometryLocator;
-using geos::geom::Coordinate;
-using geos::geom::CoordinateXY;
-using geos::geom::Geometry;
-using geos::geom::LineString;
-using geos::geom::Point;
-using geos::geom::Location;
-
-
 namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace relateng { // geos.operation.relateng
@@ -84,6 +73,14 @@ namespace relateng { // geos.operation.relateng
  * @author Martin Davis
  */
 class GEOS_DLL RelatePointLocator {
+    using BoundaryNodeRule = geos::algorithm::BoundaryNodeRule;
+    using PointOnGeometryLocator = geos::algorithm::locate::PointOnGeometryLocator;
+    using Coordinate = geos::geom::Coordinate;
+    using CoordinateXY = geos::geom::CoordinateXY;
+    using Geometry = geos::geom::Geometry;
+    using LineString = geos::geom::LineString;
+    using Point = geos::geom::Point;
+    using Location = geos::geom::Location;
 
 private:
 

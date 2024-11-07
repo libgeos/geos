@@ -22,6 +22,7 @@
 #include <geos/triangulate/polygon/PolygonEarClipper.h>
 #include <geos/triangulate/polygon/TriDelaunayImprover.h>
 
+using namespace geos::geom;
 
 namespace geos {
 namespace triangulate {

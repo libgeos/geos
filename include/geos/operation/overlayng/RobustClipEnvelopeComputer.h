@@ -38,8 +38,6 @@ namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
 
-using namespace geos::geom;
-
 /**
  * Computes a robust clipping envelope for a pair of polygonal geometries.
  * The envelope is computed to be large enough to include the full
@@ -50,6 +48,12 @@ using namespace geos::geom;
  * @author mdavis
  */
 class GEOS_DLL RobustClipEnvelopeComputer {
+    using Coordinate = geos::geom::Coordinate;
+    using Geometry = geos::geom::Geometry;
+    using GeometryCollection = geos::geom::GeometryCollection;
+    using Polygon = geos::geom::Polygon;
+    using LinearRing = geos::geom::LinearRing;
+    using Envelope = geos::geom::Envelope;
 
 private:
 

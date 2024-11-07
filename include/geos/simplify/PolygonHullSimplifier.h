@@ -33,15 +33,6 @@ class RingHullIndex;
 }
 }
 
-
-using geos::geom::Envelope;
-using geos::geom::Geometry;
-using geos::geom::GeometryFactory;
-using geos::geom::LinearRing;
-using geos::geom::MultiPolygon;
-using geos::geom::Polygon;
-
-
 namespace geos {
 namespace simplify { // geos::simplify
 
@@ -84,6 +75,12 @@ namespace simplify { // geos::simplify
  */
 class GEOS_DLL PolygonHullSimplifier
 {
+    using Envelope = geos::geom::Envelope;
+    using Geometry = geos::geom::Geometry;
+    using GeometryFactory = geos::geom::GeometryFactory;
+    using LinearRing = geos::geom::LinearRing;
+    using MultiPolygon = geos::geom::MultiPolygon;
+    using Polygon = geos::geom::Polygon;
 
 public:
 

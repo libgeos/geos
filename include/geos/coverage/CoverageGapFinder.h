@@ -27,8 +27,6 @@ class LinearRing;
 }
 }
 
-using geos::geom::Geometry;
-using geos::geom::LinearRing;
 
 
 namespace geos {      // geos
@@ -50,6 +48,8 @@ namespace coverage { // geos::coverage
  *
  */
 class GEOS_DLL CoverageGapFinder {
+    using Geometry = geos::geom::Geometry;
+    using LinearRing = geos::geom::LinearRing;
 
 private:
 

@@ -34,9 +34,6 @@
 #pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
 #endif
 
-using geos::geom::Position;
-using geos::geom::Location;
-
 namespace geos {
 namespace geomgraph { // geos.geomgraph
 
@@ -61,6 +58,8 @@ namespace geomgraph { // geos.geomgraph
  * where j has the values ON, LEFT, RIGHT
  */
 class GEOS_DLL TopologyLocation {
+    using Position = geos::geom::Position;
+    using Location = geos::geom::Location;
 
 public:
 

@@ -44,11 +44,14 @@ namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
 
-using namespace geos::geom;
-using algorithm::locate::PointOnGeometryLocator;
-using algorithm::locate::IndexedPointInAreaLocator;
-
 class GEOS_DLL OverlayEdgeRing {
+    using Coordinate = geos::geom::Coordinate;
+    using CoordinateSequence = geos::geom::CoordinateSequence;
+    using GeometryFactory = geos::geom::GeometryFactory;
+    using LinearRing = geos::geom::LinearRing;
+    using Polygon = geos::geom::Polygon;
+    using PointOnGeometryLocator = algorithm::locate::PointOnGeometryLocator;
+    using IndexedPointInAreaLocator = algorithm::locate::IndexedPointInAreaLocator;
 
 private:
 

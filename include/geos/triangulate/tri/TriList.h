@@ -31,10 +31,6 @@ class Geometry;
 }
 }
 
-using geos::geom::Coordinate;
-using geos::geom::Geometry;
-using geos::geom::GeometryFactory;
-
 typedef int TriIndex;
 
 namespace geos {        // geos.
@@ -52,6 +48,9 @@ namespace tri {         // geos.triangulate.tri
  */
 template<typename TriType>
 class TriList {
+    using Coordinate = geos::geom::Coordinate;
+    using Geometry = geos::geom::Geometry;
+    using GeometryFactory = geos::geom::GeometryFactory;
 
 private:
 

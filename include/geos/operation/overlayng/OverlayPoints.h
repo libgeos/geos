@@ -37,8 +37,6 @@ namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
 
-using namespace geos::geom;
-
 /**
  * Performs an overlay operation on inputs which are both point geometries.
  *
@@ -53,6 +51,13 @@ using namespace geos::geom;
  * @author Martin Davis
  */
 class GEOS_DLL OverlayPoints {
+    using Coordinate = geos::geom::Coordinate;
+    using CoordinateXY = geos::geom::CoordinateXY;
+    using CoordinateSequence = geos::geom::CoordinateSequence;
+    using GeometryFactory = geos::geom::GeometryFactory;
+    using Geometry = geos::geom::Geometry;
+    using Point = geos::geom::Point;
+    using PrecisionModel = geos::geom::PrecisionModel;
 
 private:
 

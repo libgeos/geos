@@ -39,6 +39,7 @@ using geos::geom::Polygon;
 using geos::geom::Triangle;
 using geos::triangulate::DelaunayTriangulationBuilder;
 using geos::triangulate::tri::TriangulationBuilder;
+using geos::triangulate::tri::Tri;
 using geos::operation::overlayng::CoverageUnion;
 
 namespace geos {

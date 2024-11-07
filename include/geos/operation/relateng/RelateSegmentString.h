@@ -38,20 +38,17 @@ namespace relateng {
 }
 }
 
-
-using geos::noding::BasicSegmentString;
-using geos::geom::Geometry;
-using geos::geom::CoordinateXY;
-using geos::geom::CoordinateSequence;
-
-
 namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace relateng { // geos.operation.relateng
 
 
 
-class GEOS_DLL RelateSegmentString : public BasicSegmentString {
+class GEOS_DLL RelateSegmentString : public geos::noding::BasicSegmentString {
+    using BasicSegmentString = geos::noding::BasicSegmentString;
+    using Geometry = geos::geom::Geometry;
+    using CoordinateXY = geos::geom::CoordinateXY;
+    using CoordinateSequence = geos::geom::CoordinateSequence;
 
 private:
 

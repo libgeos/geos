@@ -25,8 +25,6 @@ class Geometry;
 }
 }
 
-using geos::geom::Geometry;
-
 namespace geos {      // geos
 namespace coverage { // geos::coverage
 
@@ -39,6 +37,7 @@ namespace coverage { // geos::coverage
  *
  */
 class GEOS_DLL CoverageUnion {
+    using Geometry = geos::geom::Geometry;
 
 private:
 

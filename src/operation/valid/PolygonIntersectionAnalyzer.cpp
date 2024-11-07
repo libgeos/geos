@@ -21,13 +21,14 @@
 #include <geos/operation/valid/TopologyValidationError.h>
 #include <geos/util/IllegalStateException.h>
 
-using geos::geom::Coordinate;
-using geos::noding::SegmentString;
-
 
 namespace geos {      // geos
 namespace operation { // geos.operation
 namespace valid {     // geos.operation.valid
+
+using geos::geom::Coordinate;
+using geos::geom::CoordinateXY;
+using geos::noding::SegmentString;
 
 /* public */
 void

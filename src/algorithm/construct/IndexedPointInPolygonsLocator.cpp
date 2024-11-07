@@ -24,6 +24,7 @@
 
 using geos::algorithm::locate::IndexedPointInAreaLocator;
 using geos::geom::Envelope;
+using geos::geom::Location;
 using geos::geom::util::PolygonalExtracter;
 
 namespace geos {

@@ -32,6 +32,7 @@ namespace operation { // geos.operation
 namespace valid {     // geos.operation.valid
 
 using namespace geos::geom;
+using geos::algorithm::locate::IndexedPointInAreaLocator;
 
 
 /* public */

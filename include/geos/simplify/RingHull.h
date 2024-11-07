@@ -32,21 +32,20 @@ class RingHullIndex;
 }
 }
 
-
-using geos::geom::Coordinate;
-using geos::geom::Envelope;
-using geos::geom::LinearRing;
-using geos::geom::LineString;
-using geos::geom::Polygon;
-using geos::index::VertexSequencePackedRtree;
-
-
 namespace geos {
 namespace simplify { // geos::simplify
 
 
 class RingHull
 {
+    using Coordinate = geos::geom::Coordinate;
+    using CoordinateSequence = geos::geom::CoordinateSequence;
+    using Envelope = geos::geom::Envelope;
+    using LinearRing = geos::geom::LinearRing;
+    using LineString = geos::geom::LineString;
+    using Polygon = geos::geom::Polygon;
+    using VertexSequencePackedRtree = geos::index::VertexSequencePackedRtree;
+
 
 public:
 

@@ -33,12 +33,6 @@ class GeometryFactory;
 }
 }
 
-using geos::geom::Coordinate;
-using geos::geom::Envelope;
-using geos::geom::Geometry;
-using geos::geom::GeometryFactory;
-using geos::geom::LineSegment;
-using geos::algorithm::locate::IndexedPointInAreaLocator;
 
 namespace geos {      // geos
 namespace coverage { // geos::coverage
@@ -96,6 +90,15 @@ namespace coverage { // geos::coverage
  *
  */
 class GEOS_DLL CoveragePolygonValidator {
+    using Coordinate = geos::geom::Coordinate;
+    using CoordinateSequence = geos::geom::CoordinateSequence;
+    using Envelope = geos::geom::Envelope;
+    using Polygon = geos::geom::Polygon;
+    using LinearRing = geos::geom::LinearRing;
+    using Geometry = geos::geom::Geometry;
+    using GeometryFactory = geos::geom::GeometryFactory;
+    using LineSegment = geos::geom::LineSegment;
+    using IndexedPointInAreaLocator = geos::algorithm::locate::IndexedPointInAreaLocator;
 
 private:
 

@@ -14,6 +14,7 @@
 
 #include <geos/operation/overlayng/OverlayLabel.h>
 
+using geos::geom::Location;
 
 namespace geos {      // geos
 namespace operation { // geos.operation

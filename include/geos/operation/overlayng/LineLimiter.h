@@ -30,8 +30,6 @@ class CoordinateSequence;
 }
 }
 
-using namespace geos::geom;
-
 namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
@@ -54,6 +52,9 @@ namespace overlayng { // geos.operation.overlayng
  * @author Martin Davis
  */
 class GEOS_DLL LineLimiter {
+    using Envelope = geos::geom::Envelope;
+    using Coordinate = geos::geom::Coordinate;
+    using CoordinateSequence = geos::geom::CoordinateSequence;
 
 private:
 

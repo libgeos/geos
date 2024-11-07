@@ -32,6 +32,7 @@ namespace geos {      // geos
 namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
 
+using namespace geos::geom;
 using geos::operation::valid::RepeatedPointRemover;
 using geos::noding::snapround::SnapRoundingNoder;
 using geos::noding::Noder;

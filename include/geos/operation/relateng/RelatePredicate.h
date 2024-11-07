@@ -23,17 +23,14 @@
 #include <geos/geom/Envelope.h>
 #include <geos/export.h>
 
-
-using geos::geom::Envelope;
-using geos::geom::Location;
-
-
 namespace geos {      // geos.
 namespace operation { // geos.operation.
 namespace relateng {  // geos.operation.relateng
 
 
 class GEOS_DLL RelatePredicate {
+    using Envelope = geos::geom::Envelope;
+    using Location = geos::geom::Location;
 
 public:
 

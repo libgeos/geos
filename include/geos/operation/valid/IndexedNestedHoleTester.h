@@ -34,12 +34,10 @@ namespace geos {      // geos.
 namespace operation { // geos.operation
 namespace valid {     // geos.operation.valid
 
-using geos::geom::Polygon;
-using geos::geom::LinearRing;
-using geos::geom::CoordinateXY;
-
-
 class GEOS_DLL IndexedNestedHoleTester {
+    using Polygon = geos::geom::Polygon;
+    using LinearRing = geos::geom::LinearRing;
+    using CoordinateXY = geos::geom::CoordinateXY;
 
 private:
 
