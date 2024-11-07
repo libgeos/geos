@@ -86,71 +86,78 @@ $(function() {
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">namespace </span>operation { <span class="comment">// geos.operation</span></div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">namespace </span>overlayng { <span class="comment">// geos.operation.overlayng</span></div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keyword">using namespace </span><a class="code" href="namespacegeos_1_1geom.html">geos::geom</a>;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1overlayng_1_1OverlayPoints.html">   55</a></span>&#160;<span class="keyword">class </span>GEOS_DLL <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1OverlayPoints.html">OverlayPoints</a> {</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="comment">// Members</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordtype">int</span> opCode;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* geom0;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* geom1;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1PrecisionModel.html">PrecisionModel</a>* pm;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a>* geometryFactory;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    std::vector&lt;std::unique_ptr&lt;Point&gt;&gt; resultList;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keyword">using</span> PointMap = std::map&lt;CoordinateXY, std::unique_ptr&lt;Point&gt;&gt;;</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="comment">// Methods</span></div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keywordtype">void</span></div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;    computeIntersection(PointMap&amp; map0,</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                        PointMap&amp; map1,</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                        std::vector&lt;std::unique_ptr&lt;Point&gt;&gt;&amp; resultList);</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00053"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1overlayng_1_1OverlayPoints.html">   53</a></span>&#160;<span class="keyword">class </span>GEOS_DLL <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1OverlayPoints.html">OverlayPoints</a> {</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keyword">using</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> = <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a>;</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="keyword">using</span> CoordinateXY = geos::geom::CoordinateXY;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keyword">using</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> = <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">geos::geom::CoordinateSequence</a>;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="keyword">using</span> <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a> = <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">geos::geom::GeometryFactory</a>;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keyword">using</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> = <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geos::geom::Geometry</a>;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keyword">using</span> <a class="code" href="classgeos_1_1geom_1_1Point.html">Point</a> = <a class="code" href="classgeos_1_1geom_1_1Point.html">geos::geom::Point</a>;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keyword">using</span> <a class="code" href="classgeos_1_1geom_1_1PrecisionModel.html">PrecisionModel</a> = <a class="code" href="classgeos_1_1geom_1_1PrecisionModel.html">geos::geom::PrecisionModel</a>;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="comment">// Members</span></div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordtype">int</span> opCode;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* geom0;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* geom1;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1PrecisionModel.html">PrecisionModel</a>* pm;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a>* geometryFactory;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    std::vector&lt;std::unique_ptr&lt;Point&gt;&gt; resultList;</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;    <span class="keyword">using</span> PointMap = std::map&lt;CoordinateXY, std::unique_ptr&lt;Point&gt;&gt;;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;    <span class="comment">// Methods</span></div>
 <div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    <span class="keywordtype">void</span></div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    computeDifference(PointMap&amp; map0,</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;                      PointMap&amp; map1,</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;                      std::vector&lt;std::unique_ptr&lt;Point&gt;&gt;&amp; resultList);</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    computeIntersection(PointMap&amp; map0,</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;                        PointMap&amp; map1,</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;                        std::vector&lt;std::unique_ptr&lt;Point&gt;&gt;&amp; resultList);</div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <span class="keywordtype">void</span></div>
-<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    computeUnion(PointMap&amp; map0,</div>
-<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;                 PointMap&amp; map1,</div>
-<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                 std::vector&lt;std::unique_ptr&lt;Point&gt;&gt;&amp; resultList);</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;    computeDifference(PointMap&amp; map0,</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;                      PointMap&amp; map1,</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;                      std::vector&lt;std::unique_ptr&lt;Point&gt;&gt;&amp; resultList);</div>
 <div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    PointMap buildPointMap(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* geom);</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
-<div class="line"><a name="l00092"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1overlayng_1_1OverlayPoints.html#a8cefa7ef921b79c4c6f9836199c1491a">   92</a></span>&#160;    <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1OverlayPoints.html#a8cefa7ef921b79c4c6f9836199c1491a">OverlayPoints</a>(<span class="keywordtype">int</span> p_opCode, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* p_geom0, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* p_geom1, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1PrecisionModel.html">PrecisionModel</a>* p_pm)</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        : opCode(p_opCode)</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        , geom0(p_geom0)</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        , geom1(p_geom1)</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        , pm(p_pm)</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        , geometryFactory(p_geom0-&gt;getFactory()) {}</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1OverlayPoints.html">OverlayPoints</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1OverlayPoints.html">OverlayPoints</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1OverlayPoints.html">OverlayPoints</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1OverlayPoints.html">OverlayPoints</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
-<div class="line"><a name="l00105"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1overlayng_1_1OverlayPoints.html#a13a365751a9dec31c5c422164805f0a1">  105</a></span>&#160;    <span class="keyword">static</span> std::unique_ptr&lt;Geometry&gt; <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1OverlayPoints.html#a13a365751a9dec31c5c422164805f0a1">overlay</a>(<span class="keywordtype">int</span> opCode, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* geom0, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* geom1, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1PrecisionModel.html">PrecisionModel</a>* pm);</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keywordtype">void</span></div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    computeUnion(PointMap&amp; map0,</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;                 PointMap&amp; map1,</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;                 std::vector&lt;std::unique_ptr&lt;Point&gt;&gt;&amp; resultList);</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    PointMap buildPointMap(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* geom);</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
+<div class="line"><a name="l00097"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1overlayng_1_1OverlayPoints.html#a8cefa7ef921b79c4c6f9836199c1491a">   97</a></span>&#160;    <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1OverlayPoints.html#a8cefa7ef921b79c4c6f9836199c1491a">OverlayPoints</a>(<span class="keywordtype">int</span> p_opCode, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* p_geom0, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* p_geom1, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1PrecisionModel.html">PrecisionModel</a>* p_pm)</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        : opCode(p_opCode)</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        , geom0(p_geom0)</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        , geom1(p_geom1)</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        , pm(p_pm)</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        , geometryFactory(p_geom0-&gt;getFactory()) {}</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1OverlayPoints.html">OverlayPoints</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1OverlayPoints.html">OverlayPoints</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1OverlayPoints.html">OverlayPoints</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1OverlayPoints.html">OverlayPoints</a>&amp;) = <span class="keyword">delete</span>;</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
-<div class="line"><a name="l00112"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1overlayng_1_1OverlayPoints.html#a88f46e42a792ca9805f7693c76d05d0b">  112</a></span>&#160;    std::unique_ptr&lt;Geometry&gt; <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1OverlayPoints.html#a88f46e42a792ca9805f7693c76d05d0b">getResult</a>();</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;};</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
-<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;} <span class="comment">// namespace geos.operation.overlayng</span></div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;} <span class="comment">// namespace geos.operation</span></div>
-<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;} <span class="comment">// namespace geos</span></div>
+<div class="line"><a name="l00110"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1overlayng_1_1OverlayPoints.html#a13a365751a9dec31c5c422164805f0a1">  110</a></span>&#160;    <span class="keyword">static</span> std::unique_ptr&lt;Geometry&gt; <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1OverlayPoints.html#a13a365751a9dec31c5c422164805f0a1">overlay</a>(<span class="keywordtype">int</span> opCode, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* geom0, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* geom1, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1PrecisionModel.html">PrecisionModel</a>* pm);</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
+<div class="line"><a name="l00117"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1overlayng_1_1OverlayPoints.html#a88f46e42a792ca9805f7693c76d05d0b">  117</a></span>&#160;    std::unique_ptr&lt;Geometry&gt; <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1OverlayPoints.html#a88f46e42a792ca9805f7693c76d05d0b">getResult</a>();</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;};</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;} <span class="comment">// namespace geos.operation.overlayng</span></div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;} <span class="comment">// namespace geos.operation</span></div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;} <span class="comment">// namespace geos</span></div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequence_html"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequence.html">geos::geom::CoordinateSequence</a></div><div class="ttdoc">The internal representation of a list of coordinates inside a Geometry.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:56</div></div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a></div><div class="ttdoc">Coordinate is the lightweight class used to store coordinates.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:217</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1GeometryFactory_html"><div class="ttname"><a href="classgeos_1_1geom_1_1GeometryFactory.html">geos::geom::GeometryFactory</a></div><div class="ttdoc">Supplies a set of utility methods for building Geometry objects from CoordinateSequence or other Geom...</div><div class="ttdef"><b>Definition:</b> GeometryFactory.h:70</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Geometry_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Geometry.html">geos::geom::Geometry</a></div><div class="ttdoc">Basic implementation of Geometry, constructed and destructed by GeometryFactory.</div><div class="ttdef"><b>Definition:</b> Geometry.h:197</div></div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1Point_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Point.html">geos::geom::Point</a></div><div class="ttdef"><b>Definition:</b> Point.h:61</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1PrecisionModel_html"><div class="ttname"><a href="classgeos_1_1geom_1_1PrecisionModel.html">geos::geom::PrecisionModel</a></div><div class="ttdoc">Specifies the precision model of the Coordinate in a Geometry.</div><div class="ttdef"><b>Definition:</b> PrecisionModel.h:88</div></div>
-<div class="ttc" id="aclassgeos_1_1operation_1_1overlayng_1_1OverlayPoints_html"><div class="ttname"><a href="classgeos_1_1operation_1_1overlayng_1_1OverlayPoints.html">geos::operation::overlayng::OverlayPoints</a></div><div class="ttdef"><b>Definition:</b> OverlayPoints.h:55</div></div>
+<div class="ttc" id="aclassgeos_1_1operation_1_1overlayng_1_1OverlayPoints_html"><div class="ttname"><a href="classgeos_1_1operation_1_1overlayng_1_1OverlayPoints.html">geos::operation::overlayng::OverlayPoints</a></div><div class="ttdef"><b>Definition:</b> OverlayPoints.h:53</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1overlayng_1_1OverlayPoints_html_a13a365751a9dec31c5c422164805f0a1"><div class="ttname"><a href="classgeos_1_1operation_1_1overlayng_1_1OverlayPoints.html#a13a365751a9dec31c5c422164805f0a1">geos::operation::overlayng::OverlayPoints::overlay</a></div><div class="ttdeci">static std::unique_ptr&lt; Geometry &gt; overlay(int opCode, const Geometry *geom0, const Geometry *geom1, const PrecisionModel *pm)</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1overlayng_1_1OverlayPoints_html_a88f46e42a792ca9805f7693c76d05d0b"><div class="ttname"><a href="classgeos_1_1operation_1_1overlayng_1_1OverlayPoints.html#a88f46e42a792ca9805f7693c76d05d0b">geos::operation::overlayng::OverlayPoints::getResult</a></div><div class="ttdeci">std::unique_ptr&lt; Geometry &gt; getResult()</div></div>
-<div class="ttc" id="aclassgeos_1_1operation_1_1overlayng_1_1OverlayPoints_html_a8cefa7ef921b79c4c6f9836199c1491a"><div class="ttname"><a href="classgeos_1_1operation_1_1overlayng_1_1OverlayPoints.html#a8cefa7ef921b79c4c6f9836199c1491a">geos::operation::overlayng::OverlayPoints::OverlayPoints</a></div><div class="ttdeci">OverlayPoints(int p_opCode, const Geometry *p_geom0, const Geometry *p_geom1, const PrecisionModel *p_pm)</div><div class="ttdef"><b>Definition:</b> OverlayPoints.h:92</div></div>
-<div class="ttc" id="anamespacegeos_1_1geom_html"><div class="ttname"><a href="namespacegeos_1_1geom.html">geos::geom</a></div><div class="ttdef"><b>Definition:</b> Angle.h:26</div></div>
+<div class="ttc" id="aclassgeos_1_1operation_1_1overlayng_1_1OverlayPoints_html_a8cefa7ef921b79c4c6f9836199c1491a"><div class="ttname"><a href="classgeos_1_1operation_1_1overlayng_1_1OverlayPoints.html#a8cefa7ef921b79c4c6f9836199c1491a">geos::operation::overlayng::OverlayPoints::OverlayPoints</a></div><div class="ttdeci">OverlayPoints(int p_opCode, const Geometry *p_geom0, const Geometry *p_geom1, const PrecisionModel *p_pm)</div><div class="ttdef"><b>Definition:</b> OverlayPoints.h:97</div></div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:25</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->

@@ -73,7 +73,7 @@ $(function() {
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">// Forward declarations</span></div>
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">namespace </span>noding {</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="keyword">class </span><a class="code" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a>;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="keyword">class </span>SegmentString;</div>
 <div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;}</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">namespace </span>operation {</div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">namespace </span>relateng {</div>
@@ -83,50 +83,46 @@ $(function() {
 <div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;}</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;}</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">using</span> <a class="code" href="classgeos_1_1noding_1_1SegmentIntersector.html">geos::noding::SegmentIntersector</a>;</div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keyword">using</span> <a class="code" href="classgeos_1_1noding_1_1SegmentString.html">geos::noding::SegmentString</a>;</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keyword">using</span> <a class="code" href="classgeos_1_1algorithm_1_1LineIntersector.html">geos::algorithm::LineIntersector</a>;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {      <span class="comment">// geos.</span></div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="keyword">namespace </span>operation { <span class="comment">// geos.operation</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keyword">namespace </span>relateng { <span class="comment">// geos.operation.relateng</span></div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {      <span class="comment">// geos.</span></div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">namespace </span>operation { <span class="comment">// geos.operation</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keyword">namespace </span>relateng { <span class="comment">// geos.operation.relateng</span></div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="keyword">class </span>GEOS_DLL EdgeSegmentIntersector : <span class="keyword">public</span> <a class="code" href="classgeos_1_1noding_1_1SegmentIntersector.html">geos::noding::SegmentIntersector</a> {</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keyword">using</span> SegmentString = <a class="code" href="classgeos_1_1noding_1_1SegmentString.html">geos::noding::SegmentString</a>;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="keyword">using</span> LineIntersector = <a class="code" href="classgeos_1_1algorithm_1_1LineIntersector.html">geos::algorithm::LineIntersector</a>;</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keyword">private</span>:</div>
 <div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="keyword">class </span>GEOS_DLL EdgeSegmentIntersector : <span class="keyword">public</span> <a class="code" href="classgeos_1_1noding_1_1SegmentIntersector.html">SegmentIntersector</a> {</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="comment">// Members</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    LineIntersector li;</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    TopologyComputer&amp; topoComputer;</div>
 <div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="comment">// Members</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <a class="code" href="classgeos_1_1algorithm_1_1LineIntersector.html">LineIntersector</a> li;</div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    TopologyComputer&amp; topoComputer;</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="comment">// Methods</span></div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="comment">// Methods</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keywordtype">void</span> addIntersections(</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        RelateSegmentString* ssA, std::size_t segIndexA,</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;        RelateSegmentString* ssB, std::size_t segIndexB);</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="keywordtype">void</span> addIntersections(</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        RelateSegmentString* ssA, std::size_t segIndexA,</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        RelateSegmentString* ssB, std::size_t segIndexB);</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    EdgeSegmentIntersector(TopologyComputer&amp; p_topoComputer)</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        : topoComputer(p_topoComputer)</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        {};</div>
 <div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    EdgeSegmentIntersector(TopologyComputer&amp; p_topoComputer)</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        : topoComputer(p_topoComputer)</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        {};</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordtype">void</span> processIntersections(</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        SegmentString* ss0, std::size_t segIndex0,</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        SegmentString* ss1, std::size_t segIndex1) <span class="keyword">override</span>;</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordtype">void</span> processIntersections(</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <a class="code" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a>* ss0, std::size_t segIndex0,</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <a class="code" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a>* ss1, std::size_t segIndex1) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="keywordtype">bool</span> isDone() <span class="keyword">const override</span>;</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;};</div>
 <div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;    <span class="keywordtype">bool</span> isDone() <span class="keyword">const override</span>;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;};</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;} <span class="comment">// namespace geos.operation.relateng</span></div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;} <span class="comment">// namespace geos.operation</span></div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;} <span class="comment">// namespace geos</span></div>
 <div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;} <span class="comment">// namespace geos.operation.relateng</span></div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;} <span class="comment">// namespace geos.operation</span></div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;} <span class="comment">// namespace geos</span></div>
-<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
 <div class="ttc" id="aclassgeos_1_1algorithm_1_1LineIntersector_html"><div class="ttname"><a href="classgeos_1_1algorithm_1_1LineIntersector.html">geos::algorithm::LineIntersector</a></div><div class="ttdoc">A LineIntersector is an algorithm that can both test whether two line segments intersect and compute ...</div><div class="ttdef"><b>Definition:</b> LineIntersector.h:53</div></div>
 <div class="ttc" id="aclassgeos_1_1noding_1_1SegmentIntersector_html"><div class="ttname"><a href="classgeos_1_1noding_1_1SegmentIntersector.html">geos::noding::SegmentIntersector</a></div><div class="ttdoc">Processes possible intersections detected by a Noder.</div><div class="ttdef"><b>Definition:</b> noding/SegmentIntersector.h:45</div></div>
 <div class="ttc" id="aclassgeos_1_1noding_1_1SegmentString_html"><div class="ttname"><a href="classgeos_1_1noding_1_1SegmentString.html">geos::noding::SegmentString</a></div><div class="ttdoc">An interface for classes which represent a sequence of contiguous line segments.</div><div class="ttdef"><b>Definition:</b> SegmentString.h:47</div></div>

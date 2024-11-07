@@ -69,7 +69,7 @@ $(function() {
 <div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="comment">// Forward declarations</span></div>
 <div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
 <div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">namespace </span>geom {</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">class </span><a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">class </span>Coordinate;</div>
 <div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;}</div>
 <div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="namespacegeos_1_1noding.html">   25</a></span>&#160;<span class="keyword">namespace </span>noding {</div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">class </span><a class="code" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a>;</div>
@@ -79,76 +79,72 @@ $(function() {
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;}</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;}</div>
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keyword">using</span> <a class="code" href="classgeos_1_1noding_1_1SegmentIntersector.html">geos::noding::SegmentIntersector</a>;</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">using</span> <a class="code" href="classgeos_1_1noding_1_1SegmentString.html">geos::noding::SegmentString</a>;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="keyword">using</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a>;</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {      <span class="comment">// geos.</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keyword">namespace </span>coverage { <span class="comment">// geos.coverage</span></div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="classgeos_1_1coverage_1_1InvalidSegmentDetector.html">   55</a></span>&#160;<span class="keyword">class </span>GEOS_DLL <a class="code" href="classgeos_1_1coverage_1_1InvalidSegmentDetector.html">InvalidSegmentDetector</a> : <span class="keyword">public</span> <a class="code" href="classgeos_1_1noding_1_1SegmentIntersector.html">SegmentIntersector</a> {</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="comment">// Members</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordtype">double</span> distanceTol;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="comment">// Methods</span></div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordtype">bool</span> isInvalid(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; tgt0, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; tgt1,</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; adj0, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; adj1,</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        CoverageRing* adj, std::size_t indexAdj);</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {      <span class="comment">// geos.</span></div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keyword">namespace </span>coverage { <span class="comment">// geos.coverage</span></div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno"><a class="line" href="classgeos_1_1coverage_1_1InvalidSegmentDetector.html">   49</a></span>&#160;<span class="keyword">class </span>GEOS_DLL <a class="code" href="classgeos_1_1coverage_1_1InvalidSegmentDetector.html">InvalidSegmentDetector</a> : <span class="keyword">public</span> <a class="code" href="classgeos_1_1noding_1_1SegmentIntersector.html">geos::noding::SegmentIntersector</a> {</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keyword">using</span> <a class="code" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> = <a class="code" href="classgeos_1_1noding_1_1SegmentString.html">geos::noding::SegmentString</a>;</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="keyword">using</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> = <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a>;</div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    <span class="comment">// Members</span></div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keywordtype">double</span> distanceTol;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    <span class="comment">// Methods</span></div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="keywordtype">bool</span> isInvalid(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; tgt0, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; tgt1,</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; adj0, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; adj1,</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        CoverageRing* adj, std::size_t indexAdj);</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordtype">bool</span> isEqual(</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; t0, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; t1,</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; adj0, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; adj1);</div>
 <div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keywordtype">bool</span> isEqual(</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; t0, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; t1,</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; adj0, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; adj1);</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
-<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <span class="keywordtype">bool</span> isCollinearOrInterior(</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; tgt0, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; tgt1,</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; adj0, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; adj1,</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        CoverageRing* adj, std::size_t indexAdj);</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="keywordtype">bool</span> isInteriorSegment(</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; intVertex,</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; tgt0, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; tgt1,</div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        CoverageRing* adj, std::size_t indexAdj);</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> isNearlyParallel(</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; p00, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; p01,</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; p10, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; p11,</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <span class="keywordtype">double</span> distanceTol);</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
-<div class="line"><a name="l00105"></a><span class="lineno"><a class="line" href="classgeos_1_1coverage_1_1InvalidSegmentDetector.html#ac47708e314a017802d24b5d6be901b1c">  105</a></span>&#160;    <a class="code" href="classgeos_1_1coverage_1_1InvalidSegmentDetector.html#ac47708e314a017802d24b5d6be901b1c">InvalidSegmentDetector</a>() {};</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160;    <span class="keywordtype">bool</span> isCollinearOrInterior(</div>
+<div class="line"><a name="l00081"></a><span class="lineno">   81</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; tgt0, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; tgt1,</div>
+<div class="line"><a name="l00082"></a><span class="lineno">   82</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; adj0, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; adj1,</div>
+<div class="line"><a name="l00083"></a><span class="lineno">   83</span>&#160;        CoverageRing* adj, std::size_t indexAdj);</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160; </div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keywordtype">bool</span> isInteriorSegment(</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; intVertex,</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; tgt0, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; tgt1,</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        CoverageRing* adj, std::size_t indexAdj);</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> isNearlyParallel(</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; p00, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; p01,</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; p10, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; p11,</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        <span class="keywordtype">double</span> distanceTol);</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
+<div class="line"><a name="l00101"></a><span class="lineno"><a class="line" href="classgeos_1_1coverage_1_1InvalidSegmentDetector.html#ac47708e314a017802d24b5d6be901b1c">  101</a></span>&#160;    <a class="code" href="classgeos_1_1coverage_1_1InvalidSegmentDetector.html#ac47708e314a017802d24b5d6be901b1c">InvalidSegmentDetector</a>() {};</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <a class="code" href="classgeos_1_1coverage_1_1InvalidSegmentDetector.html">InvalidSegmentDetector</a>(<span class="keywordtype">double</span> p_distanceTol)</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        : distanceTol(p_distanceTol) {};</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <a class="code" href="classgeos_1_1coverage_1_1InvalidSegmentDetector.html">InvalidSegmentDetector</a>(<span class="keywordtype">double</span> p_distanceTol)</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        : distanceTol(p_distanceTol) {};</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
-<div class="line"><a name="l00111"></a><span class="lineno"><a class="line" href="classgeos_1_1coverage_1_1InvalidSegmentDetector.html#a6aee069f38ca9d117a3ab27ced46116e">  111</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classgeos_1_1coverage_1_1InvalidSegmentDetector.html#a6aee069f38ca9d117a3ab27ced46116e">isDone</a>()<span class="keyword"> const override </span>{</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        <span class="comment">// process all intersections</span></div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    };</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
-<div class="line"><a name="l00122"></a><span class="lineno"><a class="line" href="classgeos_1_1coverage_1_1InvalidSegmentDetector.html#a56c91cdf6386d1118f3a5b091f79a5e0">  122</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1coverage_1_1InvalidSegmentDetector.html#a56c91cdf6386d1118f3a5b091f79a5e0">processIntersections</a>(</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        <a class="code" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a>* ssAdj,    std::size_t iAdj,</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        <a class="code" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a>* ssTarget, std::size_t iTarget) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00107"></a><span class="lineno"><a class="line" href="classgeos_1_1coverage_1_1InvalidSegmentDetector.html#a6aee069f38ca9d117a3ab27ced46116e">  107</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classgeos_1_1coverage_1_1InvalidSegmentDetector.html#a6aee069f38ca9d117a3ab27ced46116e">isDone</a>()<span class="keyword"> const override </span>{</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        <span class="comment">// process all intersections</span></div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    };</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160; </div>
+<div class="line"><a name="l00118"></a><span class="lineno"><a class="line" href="classgeos_1_1coverage_1_1InvalidSegmentDetector.html#a56c91cdf6386d1118f3a5b091f79a5e0">  118</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1coverage_1_1InvalidSegmentDetector.html#a56c91cdf6386d1118f3a5b091f79a5e0">processIntersections</a>(</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160;        <a class="code" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a>* ssAdj,    std::size_t iAdj,</div>
+<div class="line"><a name="l00120"></a><span class="lineno">  120</span>&#160;        <a class="code" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a>* ssTarget, std::size_t iTarget) <span class="keyword">override</span>;</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160; </div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160; </div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160; </div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;};</div>
 <div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;};</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;} <span class="comment">// namespace geos.coverage</span></div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;} <span class="comment">// namespace geos</span></div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160; </div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;} <span class="comment">// namespace geos.coverage</span></div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;} <span class="comment">// namespace geos</span></div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160; </div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160; </div>
-<div class="ttc" id="aclassgeos_1_1coverage_1_1InvalidSegmentDetector_html"><div class="ttname"><a href="classgeos_1_1coverage_1_1InvalidSegmentDetector.html">geos::coverage::InvalidSegmentDetector</a></div><div class="ttdef"><b>Definition:</b> InvalidSegmentDetector.h:55</div></div>
+<div class="ttc" id="aclassgeos_1_1coverage_1_1InvalidSegmentDetector_html"><div class="ttname"><a href="classgeos_1_1coverage_1_1InvalidSegmentDetector.html">geos::coverage::InvalidSegmentDetector</a></div><div class="ttdef"><b>Definition:</b> InvalidSegmentDetector.h:49</div></div>
 <div class="ttc" id="aclassgeos_1_1coverage_1_1InvalidSegmentDetector_html_a56c91cdf6386d1118f3a5b091f79a5e0"><div class="ttname"><a href="classgeos_1_1coverage_1_1InvalidSegmentDetector.html#a56c91cdf6386d1118f3a5b091f79a5e0">geos::coverage::InvalidSegmentDetector::processIntersections</a></div><div class="ttdeci">void processIntersections(SegmentString *ssAdj, std::size_t iAdj, SegmentString *ssTarget, std::size_t iTarget) override</div></div>
-<div class="ttc" id="aclassgeos_1_1coverage_1_1InvalidSegmentDetector_html_a6aee069f38ca9d117a3ab27ced46116e"><div class="ttname"><a href="classgeos_1_1coverage_1_1InvalidSegmentDetector.html#a6aee069f38ca9d117a3ab27ced46116e">geos::coverage::InvalidSegmentDetector::isDone</a></div><div class="ttdeci">bool isDone() const override</div><div class="ttdoc">Reports whether the client of this class needs to continue testing all intersections in an arrangemen...</div><div class="ttdef"><b>Definition:</b> InvalidSegmentDetector.h:111</div></div>
-<div class="ttc" id="aclassgeos_1_1coverage_1_1InvalidSegmentDetector_html_ac47708e314a017802d24b5d6be901b1c"><div class="ttname"><a href="classgeos_1_1coverage_1_1InvalidSegmentDetector.html#ac47708e314a017802d24b5d6be901b1c">geos::coverage::InvalidSegmentDetector::InvalidSegmentDetector</a></div><div class="ttdeci">InvalidSegmentDetector()</div><div class="ttdef"><b>Definition:</b> InvalidSegmentDetector.h:105</div></div>
+<div class="ttc" id="aclassgeos_1_1coverage_1_1InvalidSegmentDetector_html_a6aee069f38ca9d117a3ab27ced46116e"><div class="ttname"><a href="classgeos_1_1coverage_1_1InvalidSegmentDetector.html#a6aee069f38ca9d117a3ab27ced46116e">geos::coverage::InvalidSegmentDetector::isDone</a></div><div class="ttdeci">bool isDone() const override</div><div class="ttdoc">Reports whether the client of this class needs to continue testing all intersections in an arrangemen...</div><div class="ttdef"><b>Definition:</b> InvalidSegmentDetector.h:107</div></div>
+<div class="ttc" id="aclassgeos_1_1coverage_1_1InvalidSegmentDetector_html_ac47708e314a017802d24b5d6be901b1c"><div class="ttname"><a href="classgeos_1_1coverage_1_1InvalidSegmentDetector.html#ac47708e314a017802d24b5d6be901b1c">geos::coverage::InvalidSegmentDetector::InvalidSegmentDetector</a></div><div class="ttdeci">InvalidSegmentDetector()</div><div class="ttdef"><b>Definition:</b> InvalidSegmentDetector.h:101</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a></div><div class="ttdoc">Coordinate is the lightweight class used to store coordinates.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:217</div></div>
 <div class="ttc" id="aclassgeos_1_1noding_1_1SegmentIntersector_html"><div class="ttname"><a href="classgeos_1_1noding_1_1SegmentIntersector.html">geos::noding::SegmentIntersector</a></div><div class="ttdoc">Processes possible intersections detected by a Noder.</div><div class="ttdef"><b>Definition:</b> noding/SegmentIntersector.h:45</div></div>
 <div class="ttc" id="aclassgeos_1_1noding_1_1SegmentString_html"><div class="ttname"><a href="classgeos_1_1noding_1_1SegmentString.html">geos::noding::SegmentString</a></div><div class="ttdoc">An interface for classes which represent a sequence of contiguous line segments.</div><div class="ttdef"><b>Definition:</b> SegmentString.h:47</div></div>

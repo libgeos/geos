@@ -81,277 +81,276 @@ $(function() {
 <div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">namespace </span>overlayng { <span class="comment">// geos.operation.overlayng</span></div>
 <div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
 <div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1overlayng_1_1Edge.html">   55</a></span>&#160;<span class="keyword">class </span>GEOS_DLL <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1Edge.html">Edge</a> {</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    <span class="comment">// Members</span></div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="keywordtype">int</span> aDim = OverlayLabel::DIM_UNKNOWN;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordtype">int</span> aDepthDelta = 0;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keywordtype">bool</span> aIsHole = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordtype">int</span> bDim = OverlayLabel::DIM_UNKNOWN;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keywordtype">int</span> bDepthDelta = 0;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordtype">bool</span> bIsHole = <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    std::unique_ptr&lt;geom::CoordinateSequence&gt; pts;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="comment">// Methods</span></div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">void</span> initLabel(<a class="code" href="classgeos_1_1operation_1_1overlayng_1_1OverlayLabel.html">OverlayLabel</a>&amp; lbl, uint8_t geomIndex, <span class="keywordtype">int</span> dim, <span class="keywordtype">int</span> depthDelta, <span class="keywordtype">bool</span> p_isHole);</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">int</span> labelDim(<span class="keywordtype">int</span> dim, <span class="keywordtype">int</span> depthDelta)</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    {</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        <span class="keywordflow">if</span> (dim == <a class="code" href="classgeos_1_1geom_1_1Dimension.html#af46f1c0c325eb685fcf32987748d04cfa5055f3028cec299275cd330122f086e2">geom::Dimension::False</a>)</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;            <span class="keywordflow">return</span> OverlayLabel::DIM_NOT_PART;</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        <span class="keywordflow">if</span> (dim == <a class="code" href="classgeos_1_1geom_1_1Dimension.html#af46f1c0c325eb685fcf32987748d04cfa4647a7b91baa6f91d523f9293100789d">geom::Dimension::L</a>)</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;            <span class="keywordflow">return</span> OverlayLabel::DIM_LINE;</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        <span class="comment">// assert: dim is A</span></div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <span class="keywordtype">bool</span> isCollapse = (depthDelta == 0);</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <span class="keywordflow">if</span> (isCollapse)</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;            <span class="keywordflow">return</span> OverlayLabel::DIM_COLLAPSE;</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        <span class="keywordflow">return</span> OverlayLabel::DIM_BOUNDARY;</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    };</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="keywordtype">bool</span> isHole(<span class="keywordtype">int</span> index)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;        <span class="keywordflow">if</span> (index == 0)</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;            <span class="keywordflow">return</span> aIsHole;</div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        <span class="keywordflow">return</span> bIsHole;</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    };</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;    <span class="keywordtype">bool</span> isBoundary(<span class="keywordtype">int</span> geomIndex)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        <span class="keywordflow">if</span> (geomIndex == 0)</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;            <span class="keywordflow">return</span> aDim == OverlayLabel::DIM_BOUNDARY;</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;        <span class="keywordflow">return</span> bDim == OverlayLabel::DIM_BOUNDARY;</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;    };</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
-<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;    <span class="keywordtype">bool</span> isShell(<span class="keywordtype">int</span> geomIndex)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        <span class="keywordflow">if</span> (geomIndex == 0) {</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;            <span class="keywordflow">return</span> (aDim == OverlayLabel::DIM_BOUNDARY &amp;&amp; ! aIsHole);</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;        }</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        <span class="keywordflow">return</span> (bDim == OverlayLabel::DIM_BOUNDARY &amp;&amp; ! bIsHole);</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    };</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    <span class="keyword">static</span> <a class="code" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8">Location</a> locationRight(<span class="keywordtype">int</span> depthDelta)</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    {</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;        <span class="keywordtype">int</span> sgn = delSign(depthDelta);</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        <span class="keywordflow">switch</span> (sgn) {</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;            <span class="keywordflow">case</span> 0: <span class="keywordflow">return</span> <a class="code" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8ab50339a10e1de285ac99d4c3990b8693">Location::NONE</a>;</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;            <span class="keywordflow">case</span> 1: <span class="keywordflow">return</span> Location::INTERIOR;</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;            <span class="keywordflow">case</span> -1: <span class="keywordflow">return</span> <a class="code" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8a275ff52c0d43ea11e057b037be21d30e">Location::EXTERIOR</a>;</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;        }</div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8ab50339a10e1de285ac99d4c3990b8693">Location::NONE</a>;</div>
-<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;    };</div>
-<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160; </div>
-<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;    <span class="keyword">static</span> <a class="code" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8">Location</a> locationLeft(<span class="keywordtype">int</span> depthDelta)</div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;    {</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;        <span class="comment">// TODO: is it always safe to ignore larger depth deltas?</span></div>
-<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;        <span class="keywordtype">int</span> sgn = delSign(depthDelta);</div>
-<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;        <span class="keywordflow">switch</span> (sgn) {</div>
-<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;            <span class="keywordflow">case</span> 0: <span class="keywordflow">return</span> <a class="code" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8ab50339a10e1de285ac99d4c3990b8693">Location::NONE</a>;</div>
-<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;            <span class="keywordflow">case</span> 1: <span class="keywordflow">return</span> <a class="code" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8a275ff52c0d43ea11e057b037be21d30e">Location::EXTERIOR</a>;</div>
-<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;            <span class="keywordflow">case</span> -1: <span class="keywordflow">return</span> Location::INTERIOR;</div>
-<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;        }</div>
-<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;        <span class="keywordflow">return</span> <a class="code" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8ab50339a10e1de285ac99d4c3990b8693">Location::NONE</a>;</div>
-<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;    };</div>
-<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160; </div>
-<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">int</span> delSign(<span class="keywordtype">int</span> depthDel)</div>
-<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    {</div>
-<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;        <span class="keywordflow">if</span> (depthDel &gt; 0) <span class="keywordflow">return</span> 1;</div>
-<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        <span class="keywordflow">if</span> (depthDel &lt; 0) <span class="keywordflow">return</span> -1;</div>
-<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;    };</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160; </div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;    <span class="keywordtype">void</span> copyInfo(<span class="keyword">const</span> <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1EdgeSourceInfo.html">EdgeSourceInfo</a>* info)</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;    {</div>
-<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;        <span class="keywordflow">if</span> (info-&gt;getIndex() == 0) {</div>
-<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;            aDim = info-&gt;getDimension();</div>
-<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;            aIsHole = info-&gt;isHole();</div>
-<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;            aDepthDelta = info-&gt;getDepthDelta();</div>
-<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;        }</div>
-<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;        <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;            bDim = info-&gt;getDimension();</div>
-<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;            bIsHole = info-&gt;isHole();</div>
-<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;            bDepthDelta = info-&gt;getDepthDelta();</div>
-<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;        }</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;    };</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160; </div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> isHoleMerged(<span class="keywordtype">int</span> geomIndex, <span class="keyword">const</span> <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1Edge.html">Edge</a>* edge1, <span class="keyword">const</span> <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1Edge.html">Edge</a>* edge2)</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;    {</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;        <span class="comment">// TOD: this might be clearer with tri-state logic for isHole?</span></div>
-<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;        <span class="keywordtype">bool</span> isShell1 = edge1-&gt;isShell(geomIndex);</div>
-<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;        <span class="keywordtype">bool</span> isShell2 = edge2-&gt;isShell(geomIndex);</div>
-<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        <span class="keywordtype">bool</span> isShellMerged = isShell1 || isShell2;</div>
-<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;        <span class="comment">// flip since isHole is stored</span></div>
-<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;        <span class="keywordflow">return</span> !isShellMerged;</div>
-<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;    };</div>
-<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="keyword">using</span> <a class="code" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8">Location</a> = <a class="code" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8">geos::geom::Location</a>;</div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    <span class="comment">// Members</span></div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <span class="keywordtype">int</span> aDim = OverlayLabel::DIM_UNKNOWN;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <span class="keywordtype">int</span> aDepthDelta = 0;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    <span class="keywordtype">bool</span> aIsHole = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <span class="keywordtype">int</span> bDim = OverlayLabel::DIM_UNKNOWN;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordtype">int</span> bDepthDelta = 0;</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    <span class="keywordtype">bool</span> bIsHole = <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    std::unique_ptr&lt;geom::CoordinateSequence&gt; pts;</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;    <span class="comment">// Methods</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160; </div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">void</span> initLabel(<a class="code" href="classgeos_1_1operation_1_1overlayng_1_1OverlayLabel.html">OverlayLabel</a>&amp; lbl, uint8_t geomIndex, <span class="keywordtype">int</span> dim, <span class="keywordtype">int</span> depthDelta, <span class="keywordtype">bool</span> p_isHole);</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">int</span> labelDim(<span class="keywordtype">int</span> dim, <span class="keywordtype">int</span> depthDelta)</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    {</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        <span class="keywordflow">if</span> (dim == <a class="code" href="classgeos_1_1geom_1_1Dimension.html#af46f1c0c325eb685fcf32987748d04cfa5055f3028cec299275cd330122f086e2">geom::Dimension::False</a>)</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;            <span class="keywordflow">return</span> OverlayLabel::DIM_NOT_PART;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160; </div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        <span class="keywordflow">if</span> (dim == <a class="code" href="classgeos_1_1geom_1_1Dimension.html#af46f1c0c325eb685fcf32987748d04cfa4647a7b91baa6f91d523f9293100789d">geom::Dimension::L</a>)</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;            <span class="keywordflow">return</span> OverlayLabel::DIM_LINE;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <span class="comment">// assert: dim is A</span></div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <span class="keywordtype">bool</span> isCollapse = (depthDelta == 0);</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        <span class="keywordflow">if</span> (isCollapse)</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;            <span class="keywordflow">return</span> OverlayLabel::DIM_COLLAPSE;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;        <span class="keywordflow">return</span> OverlayLabel::DIM_BOUNDARY;</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    };</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <span class="keywordtype">bool</span> isHole(<span class="keywordtype">int</span> index)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;        <span class="keywordflow">if</span> (index == 0)</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;            <span class="keywordflow">return</span> aIsHole;</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        <span class="keywordflow">return</span> bIsHole;</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;    };</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160; </div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <span class="keywordtype">bool</span> isBoundary(<span class="keywordtype">int</span> geomIndex)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;        <span class="keywordflow">if</span> (geomIndex == 0)</div>
+<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;            <span class="keywordflow">return</span> aDim == OverlayLabel::DIM_BOUNDARY;</div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;        <span class="keywordflow">return</span> bDim == OverlayLabel::DIM_BOUNDARY;</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160;    };</div>
+<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160; </div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;    <span class="keywordtype">bool</span> isShell(<span class="keywordtype">int</span> geomIndex)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        <span class="keywordflow">if</span> (geomIndex == 0) {</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;            <span class="keywordflow">return</span> (aDim == OverlayLabel::DIM_BOUNDARY &amp;&amp; ! aIsHole);</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        }</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;        <span class="keywordflow">return</span> (bDim == OverlayLabel::DIM_BOUNDARY &amp;&amp; ! bIsHole);</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    };</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160; </div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    <span class="keyword">static</span> <a class="code" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8">Location</a> locationRight(<span class="keywordtype">int</span> depthDelta)</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;    {</div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;        <span class="keywordtype">int</span> sgn = delSign(depthDelta);</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;        <span class="keywordflow">switch</span> (sgn) {</div>
+<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;            <span class="keywordflow">case</span> 0: <span class="keywordflow">return</span> Location::NONE;</div>
+<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;            <span class="keywordflow">case</span> 1: <span class="keywordflow">return</span> Location::INTERIOR;</div>
+<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;            <span class="keywordflow">case</span> -1: <span class="keywordflow">return</span> Location::EXTERIOR;</div>
+<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;        }</div>
+<div class="line"><a name="l00138"></a><span class="lineno">  138</span>&#160;        <span class="keywordflow">return</span> Location::NONE;</div>
+<div class="line"><a name="l00139"></a><span class="lineno">  139</span>&#160;    };</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160; </div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;    <span class="keyword">static</span> <a class="code" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8">Location</a> locationLeft(<span class="keywordtype">int</span> depthDelta)</div>
+<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160;    {</div>
+<div class="line"><a name="l00143"></a><span class="lineno">  143</span>&#160;        <span class="comment">// TODO: is it always safe to ignore larger depth deltas?</span></div>
+<div class="line"><a name="l00144"></a><span class="lineno">  144</span>&#160;        <span class="keywordtype">int</span> sgn = delSign(depthDelta);</div>
+<div class="line"><a name="l00145"></a><span class="lineno">  145</span>&#160;        <span class="keywordflow">switch</span> (sgn) {</div>
+<div class="line"><a name="l00146"></a><span class="lineno">  146</span>&#160;            <span class="keywordflow">case</span> 0: <span class="keywordflow">return</span> Location::NONE;</div>
+<div class="line"><a name="l00147"></a><span class="lineno">  147</span>&#160;            <span class="keywordflow">case</span> 1: <span class="keywordflow">return</span> Location::EXTERIOR;</div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;            <span class="keywordflow">case</span> -1: <span class="keywordflow">return</span> Location::INTERIOR;</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160;        }</div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160;        <span class="keywordflow">return</span> Location::NONE;</div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160;    };</div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160; </div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">int</span> delSign(<span class="keywordtype">int</span> depthDel)</div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;    {</div>
+<div class="line"><a name="l00155"></a><span class="lineno">  155</span>&#160;        <span class="keywordflow">if</span> (depthDel &gt; 0) <span class="keywordflow">return</span> 1;</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        <span class="keywordflow">if</span> (depthDel &lt; 0) <span class="keywordflow">return</span> -1;</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;    };</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160; </div>
+<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160;    <span class="keywordtype">void</span> copyInfo(<span class="keyword">const</span> <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1EdgeSourceInfo.html">EdgeSourceInfo</a>* info)</div>
+<div class="line"><a name="l00161"></a><span class="lineno">  161</span>&#160;    {</div>
+<div class="line"><a name="l00162"></a><span class="lineno">  162</span>&#160;        <span class="keywordflow">if</span> (info-&gt;getIndex() == 0) {</div>
+<div class="line"><a name="l00163"></a><span class="lineno">  163</span>&#160;            aDim = info-&gt;getDimension();</div>
+<div class="line"><a name="l00164"></a><span class="lineno">  164</span>&#160;            aIsHole = info-&gt;isHole();</div>
+<div class="line"><a name="l00165"></a><span class="lineno">  165</span>&#160;            aDepthDelta = info-&gt;getDepthDelta();</div>
+<div class="line"><a name="l00166"></a><span class="lineno">  166</span>&#160;        }</div>
+<div class="line"><a name="l00167"></a><span class="lineno">  167</span>&#160;        <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00168"></a><span class="lineno">  168</span>&#160;            bDim = info-&gt;getDimension();</div>
+<div class="line"><a name="l00169"></a><span class="lineno">  169</span>&#160;            bIsHole = info-&gt;isHole();</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;            bDepthDelta = info-&gt;getDepthDelta();</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;        }</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;    };</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160; </div>
+<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> isHoleMerged(<span class="keywordtype">int</span> geomIndex, <span class="keyword">const</span> <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1Edge.html">Edge</a>* edge1, <span class="keyword">const</span> <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1Edge.html">Edge</a>* edge2)</div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;    {</div>
+<div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160;        <span class="comment">// TOD: this might be clearer with tri-state logic for isHole?</span></div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;        <span class="keywordtype">bool</span> isShell1 = edge1-&gt;isShell(geomIndex);</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160;        <span class="keywordtype">bool</span> isShell2 = edge2-&gt;isShell(geomIndex);</div>
+<div class="line"><a name="l00179"></a><span class="lineno">  179</span>&#160;        <span class="keywordtype">bool</span> isShellMerged = isShell1 || isShell2;</div>
+<div class="line"><a name="l00180"></a><span class="lineno">  180</span>&#160;        <span class="comment">// flip since isHole is stored</span></div>
+<div class="line"><a name="l00181"></a><span class="lineno">  181</span>&#160;        <span class="keywordflow">return</span> !isShellMerged;</div>
+<div class="line"><a name="l00182"></a><span class="lineno">  182</span>&#160;    };</div>
 <div class="line"><a name="l00183"></a><span class="lineno">  183</span>&#160; </div>
-<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160; </div>
-<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160;    <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1Edge.html">Edge</a>()</div>
-<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;        : aDim(OverlayLabel::DIM_UNKNOWN)</div>
-<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        , aDepthDelta(0)</div>
-<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;        , aIsHole(<span class="keyword">false</span>)</div>
-<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;        , bDim(OverlayLabel::DIM_UNKNOWN)</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;        , bDepthDelta(0)</div>
-<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;        , bIsHole(<span class="keyword">false</span>)</div>
-<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        , pts(<span class="keyword">nullptr</span>)</div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;        {};</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160; </div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;    <span class="keyword">friend</span> std::ostream&amp; operator&lt;&lt;(std::ostream&amp; os, <span class="keyword">const</span> <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1Edge.html">Edge</a>&amp; e);</div>
-<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160; </div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> isCollapsed(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a>* pts);</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160; </div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;    <span class="comment">// takes ownership of pts from caller</span></div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;    <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1Edge.html">Edge</a>(std::unique_ptr&lt;geom::CoordinateSequence&gt;&amp;&amp; p_pts, <span class="keyword">const</span> <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1EdgeSourceInfo.html">EdgeSourceInfo</a>* info);</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160; </div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;    <span class="comment">// return a clone of the underlying points</span></div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;    std::unique_ptr&lt;geom::CoordinateSequence&gt; getCoordinates()</div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;    {</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;        <span class="keywordflow">return</span> pts-&gt;clone();</div>
-<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;    };</div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160; </div>
-<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160;    <span class="comment">// return a read-only pointer to the underlying points</span></div>
-<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a>* getCoordinatesRO()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;        <span class="keywordflow">return</span> pts.get();</div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;    };</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160; </div>
-<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160;    <span class="comment">// release the underlying points to the caller</span></div>
-<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a>* releaseCoordinates()</div>
-<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;    {</div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;        <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a>* cs = pts.release();</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;        pts.reset(<span class="keyword">nullptr</span>);</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;        <span class="keywordflow">return</span> cs;</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;    };</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160; </div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; getCoordinate(std::size_t index)<span class="keyword">  const</span></div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;        <span class="keywordflow">return</span> pts-&gt;getAt(index);</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;    };</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160; </div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;    std::size_t size()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;        <span class="keywordflow">return</span> pts-&gt;size();</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;    };</div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160; </div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;    <span class="keywordtype">bool</span> direction()<span class="keyword"> const</span></div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;        <span class="keywordflow">if</span> (pts-&gt;size() &lt; 2) {</div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;            <span class="keywordflow">throw</span> <a class="code" href="classgeos_1_1util_1_1GEOSException.html">util::GEOSException</a>(<span class="stringliteral">&quot;Edge must have &gt;= 2 points&quot;</span>);</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;        }</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160; </div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p0 = pts-&gt;getAt(0);</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p1 = pts-&gt;getAt(1);</div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; pn0 = pts-&gt;getAt(pts-&gt;size() - 1);</div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; pn1 = pts-&gt;getAt(pts-&gt;size() - 2);</div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160; </div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;        <span class="keywordtype">int</span> cmp = 0;</div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        <span class="keywordtype">int</span> cmp0 = p0.compareTo(pn0);</div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;        <span class="keywordflow">if</span> (cmp0 != 0) cmp = cmp0;</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160; </div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;        <span class="keywordflow">if</span> (cmp == 0) {</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;            <span class="keywordtype">int</span> cmp1 = p1.compareTo(pn1);</div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;            <span class="keywordflow">if</span> (cmp1 != 0) cmp = cmp1;</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;        }</div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160; </div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160;        <span class="keywordflow">if</span> (cmp == 0) {</div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;            <span class="keywordflow">throw</span> <a class="code" href="classgeos_1_1util_1_1GEOSException.html">util::GEOSException</a>(<span class="stringliteral">&quot;Edge direction cannot be determined because endpoints are equal&quot;</span>);</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;        }</div>
-<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160; </div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;        <span class="keywordflow">return</span> cmp == -1;</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;    };</div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160; </div>
-<div class="line"><a name="l00264"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1overlayng_1_1Edge.html#a779e4a3fd936a3c7a4e6b0b50bcf3b17">  264</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1Edge.html#a779e4a3fd936a3c7a4e6b0b50bcf3b17">relativeDirection</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1Edge.html">Edge</a>* edge2)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;        <span class="comment">// assert: the edges match (have the same coordinates up to direction)</span></div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;        <span class="keywordflow">if</span> (!getCoordinate(0).equals2D(edge2-&gt;getCoordinate(0))) {</div>
-<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;        }</div>
-<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;        <span class="keywordflow">if</span> (!getCoordinate(1).equals2D(edge2-&gt;getCoordinate(1))) {</div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;        }</div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;    };</div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160; </div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;    <span class="keywordtype">int</span> dimension(<span class="keywordtype">int</span> geomIndex)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;        <span class="keywordflow">if</span> (geomIndex == 0) <span class="keywordflow">return</span> aDim;</div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;        <span class="keywordflow">return</span> bDim;</div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;    };</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160; </div>
-<div class="line"><a name="l00286"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1overlayng_1_1Edge.html#aaac55255b58dab6f49d474f8d01c4dce">  286</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1Edge.html#aaac55255b58dab6f49d474f8d01c4dce">merge</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1Edge.html">Edge</a>* edge)</div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;    {</div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;        aIsHole = isHoleMerged(0, <span class="keyword">this</span>, edge);</div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;        bIsHole = isHoleMerged(1, <span class="keyword">this</span>, edge);</div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160; </div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;        <span class="keywordflow">if</span> (edge-&gt;aDim &gt; aDim) aDim = edge-&gt;aDim;</div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;        <span class="keywordflow">if</span> (edge-&gt;bDim &gt; bDim) bDim = edge-&gt;bDim;</div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160; </div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;        <span class="keywordtype">bool</span> relDir = relativeDirection(edge);</div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;        <span class="keywordtype">int</span> flipFactor = relDir ? 1 : -1;</div>
-<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;        aDepthDelta += flipFactor * edge-&gt;aDepthDelta;</div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;        bDepthDelta += flipFactor * edge-&gt;bDepthDelta;</div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;    };</div>
-<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160; </div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;    <span class="keywordtype">void</span> populateLabel(<a class="code" href="classgeos_1_1operation_1_1overlayng_1_1OverlayLabel.html">OverlayLabel</a> &amp;lbl)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;        initLabel(lbl, 0, aDim, aDepthDelta, aIsHole);</div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;        initLabel(lbl, 1, bDim, bDepthDelta, bIsHole);</div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;    };</div>
-<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160; </div>
-<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160;    <span class="keywordtype">bool</span> compareTo(<span class="keyword">const</span> Edge&amp; e)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; ca = getCoordinate(0);</div>
-<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; cb = e.getCoordinate(0);</div>
-<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;        <span class="keywordflow">if</span>(ca.compareTo(cb) &lt; 0) {</div>
-<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;        }</div>
-<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (ca.compareTo(cb) &gt; 0) {</div>
-<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;        }</div>
-<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;        <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;            <span class="keyword">const</span> geom::Coordinate&amp; cca = getCoordinate(1);</div>
-<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;            <span class="keyword">const</span> geom::Coordinate&amp; ccb = e.getCoordinate(1);</div>
-<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;            <span class="keywordflow">if</span>(cca.compareTo(ccb) &lt; 0) {</div>
-<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
-<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;            }</div>
-<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;            <span class="keywordflow">else</span> <span class="keywordflow">if</span> (cca.compareTo(ccb) &gt; 0) {</div>
-<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;            }</div>
-<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;            <span class="keywordflow">else</span> {</div>
-<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
-<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;            }</div>
-<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;        }</div>
-<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;    }</div>
-<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160; </div>
-<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160;};</div>
-<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160; </div>
-<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160;<span class="keywordtype">bool</span> EdgeComparator(<span class="keyword">const</span> Edge* a, <span class="keyword">const</span> Edge* b);</div>
-<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160; </div>
+<div class="line"><a name="l00184"></a><span class="lineno">  184</span>&#160; </div>
+<div class="line"><a name="l00185"></a><span class="lineno">  185</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00186"></a><span class="lineno">  186</span>&#160; </div>
+<div class="line"><a name="l00187"></a><span class="lineno">  187</span>&#160;    <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1Edge.html">Edge</a>()</div>
+<div class="line"><a name="l00188"></a><span class="lineno">  188</span>&#160;        : aDim(OverlayLabel::DIM_UNKNOWN)</div>
+<div class="line"><a name="l00189"></a><span class="lineno">  189</span>&#160;        , aDepthDelta(0)</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160;        , aIsHole(<span class="keyword">false</span>)</div>
+<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160;        , bDim(OverlayLabel::DIM_UNKNOWN)</div>
+<div class="line"><a name="l00192"></a><span class="lineno">  192</span>&#160;        , bDepthDelta(0)</div>
+<div class="line"><a name="l00193"></a><span class="lineno">  193</span>&#160;        , bIsHole(<span class="keyword">false</span>)</div>
+<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;        , pts(<span class="keyword">nullptr</span>)</div>
+<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;        {};</div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160; </div>
+<div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160;    <span class="keyword">friend</span> std::ostream&amp; operator&lt;&lt;(std::ostream&amp; os, <span class="keyword">const</span> <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1Edge.html">Edge</a>&amp; e);</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160; </div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">bool</span> isCollapsed(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a>* pts);</div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160; </div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;    <span class="comment">// takes ownership of pts from caller</span></div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;    <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1Edge.html">Edge</a>(std::unique_ptr&lt;geom::CoordinateSequence&gt;&amp;&amp; p_pts, <span class="keyword">const</span> <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1EdgeSourceInfo.html">EdgeSourceInfo</a>* info);</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160; </div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;    <span class="comment">// return a clone of the underlying points</span></div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;    std::unique_ptr&lt;geom::CoordinateSequence&gt; getCoordinates()</div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;    {</div>
+<div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160;        <span class="keywordflow">return</span> pts-&gt;clone();</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;    };</div>
+<div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160; </div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;    <span class="comment">// return a read-only pointer to the underlying points</span></div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a>* getCoordinatesRO()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;        <span class="keywordflow">return</span> pts.get();</div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;    };</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160; </div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;    <span class="comment">// release the underlying points to the caller</span></div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160;    <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a>* releaseCoordinates()</div>
+<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;    {</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160;        <a class="code" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a>* cs = pts.release();</div>
+<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;        pts.reset(<span class="keyword">nullptr</span>);</div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;        <span class="keywordflow">return</span> cs;</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;    };</div>
+<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160; </div>
+<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; getCoordinate(std::size_t index)<span class="keyword">  const</span></div>
+<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;        <span class="keywordflow">return</span> pts-&gt;getAt(index);</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;    };</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160; </div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;    std::size_t size()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;        <span class="keywordflow">return</span> pts-&gt;size();</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;    };</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160; </div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;    <span class="keywordtype">bool</span> direction()<span class="keyword"> const</span></div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;        <span class="keywordflow">if</span> (pts-&gt;size() &lt; 2) {</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;            <span class="keywordflow">throw</span> <a class="code" href="classgeos_1_1util_1_1GEOSException.html">util::GEOSException</a>(<span class="stringliteral">&quot;Edge must have &gt;= 2 points&quot;</span>);</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;        }</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160; </div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p0 = pts-&gt;getAt(0);</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p1 = pts-&gt;getAt(1);</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; pn0 = pts-&gt;getAt(pts-&gt;size() - 1);</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; pn1 = pts-&gt;getAt(pts-&gt;size() - 2);</div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160; </div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        <span class="keywordtype">int</span> cmp = 0;</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;        <span class="keywordtype">int</span> cmp0 = p0.compareTo(pn0);</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;        <span class="keywordflow">if</span> (cmp0 != 0) cmp = cmp0;</div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160; </div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;        <span class="keywordflow">if</span> (cmp == 0) {</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;            <span class="keywordtype">int</span> cmp1 = p1.compareTo(pn1);</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;            <span class="keywordflow">if</span> (cmp1 != 0) cmp = cmp1;</div>
+<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;        }</div>
+<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160; </div>
+<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;        <span class="keywordflow">if</span> (cmp == 0) {</div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;            <span class="keywordflow">throw</span> <a class="code" href="classgeos_1_1util_1_1GEOSException.html">util::GEOSException</a>(<span class="stringliteral">&quot;Edge direction cannot be determined because endpoints are equal&quot;</span>);</div>
+<div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160;        }</div>
+<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160; </div>
+<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;        <span class="keywordflow">return</span> cmp == -1;</div>
+<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160;    };</div>
+<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160; </div>
+<div class="line"><a name="l00265"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1overlayng_1_1Edge.html#a779e4a3fd936a3c7a4e6b0b50bcf3b17">  265</a></span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1Edge.html#a779e4a3fd936a3c7a4e6b0b50bcf3b17">relativeDirection</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1Edge.html">Edge</a>* edge2)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;        <span class="comment">// assert: the edges match (have the same coordinates up to direction)</span></div>
+<div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160;        <span class="keywordflow">if</span> (!getCoordinate(0).equals2D(edge2-&gt;getCoordinate(0))) {</div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160;        }</div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;        <span class="keywordflow">if</span> (!getCoordinate(1).equals2D(edge2-&gt;getCoordinate(1))) {</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;        }</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;    };</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160; </div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;    <span class="keywordtype">int</span> dimension(<span class="keywordtype">int</span> geomIndex)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;        <span class="keywordflow">if</span> (geomIndex == 0) <span class="keywordflow">return</span> aDim;</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;        <span class="keywordflow">return</span> bDim;</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;    };</div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160; </div>
+<div class="line"><a name="l00287"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1overlayng_1_1Edge.html#aaac55255b58dab6f49d474f8d01c4dce">  287</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1Edge.html#aaac55255b58dab6f49d474f8d01c4dce">merge</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1operation_1_1overlayng_1_1Edge.html">Edge</a>* edge)</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160;    {</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;        aIsHole = isHoleMerged(0, <span class="keyword">this</span>, edge);</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;        bIsHole = isHoleMerged(1, <span class="keyword">this</span>, edge);</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160; </div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;        <span class="keywordflow">if</span> (edge-&gt;aDim &gt; aDim) aDim = edge-&gt;aDim;</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;        <span class="keywordflow">if</span> (edge-&gt;bDim &gt; bDim) bDim = edge-&gt;bDim;</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160; </div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;        <span class="keywordtype">bool</span> relDir = relativeDirection(edge);</div>
+<div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160;        <span class="keywordtype">int</span> flipFactor = relDir ? 1 : -1;</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;        aDepthDelta += flipFactor * edge-&gt;aDepthDelta;</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;        bDepthDelta += flipFactor * edge-&gt;bDepthDelta;</div>
+<div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160;    };</div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160; </div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;    <span class="keywordtype">void</span> populateLabel(<a class="code" href="classgeos_1_1operation_1_1overlayng_1_1OverlayLabel.html">OverlayLabel</a> &amp;lbl)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;        initLabel(lbl, 0, aDim, aDepthDelta, aIsHole);</div>
+<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160;        initLabel(lbl, 1, bDim, bDepthDelta, bIsHole);</div>
+<div class="line"><a name="l00310"></a><span class="lineno">  310</span>&#160;    };</div>
+<div class="line"><a name="l00311"></a><span class="lineno">  311</span>&#160; </div>
+<div class="line"><a name="l00312"></a><span class="lineno">  312</span>&#160;    <span class="keywordtype">bool</span> compareTo(<span class="keyword">const</span> Edge&amp; e)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00313"></a><span class="lineno">  313</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00314"></a><span class="lineno">  314</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; ca = getCoordinate(0);</div>
+<div class="line"><a name="l00315"></a><span class="lineno">  315</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; cb = e.getCoordinate(0);</div>
+<div class="line"><a name="l00316"></a><span class="lineno">  316</span>&#160;        <span class="keywordflow">if</span>(ca.compareTo(cb) &lt; 0) {</div>
+<div class="line"><a name="l00317"></a><span class="lineno">  317</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00318"></a><span class="lineno">  318</span>&#160;        }</div>
+<div class="line"><a name="l00319"></a><span class="lineno">  319</span>&#160;        <span class="keywordflow">else</span> <span class="keywordflow">if</span> (ca.compareTo(cb) &gt; 0) {</div>
+<div class="line"><a name="l00320"></a><span class="lineno">  320</span>&#160;            <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00321"></a><span class="lineno">  321</span>&#160;        }</div>
+<div class="line"><a name="l00322"></a><span class="lineno">  322</span>&#160;        <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00323"></a><span class="lineno">  323</span>&#160;            <span class="keyword">const</span> geom::Coordinate&amp; cca = getCoordinate(1);</div>
+<div class="line"><a name="l00324"></a><span class="lineno">  324</span>&#160;            <span class="keyword">const</span> geom::Coordinate&amp; ccb = e.getCoordinate(1);</div>
+<div class="line"><a name="l00325"></a><span class="lineno">  325</span>&#160;            <span class="keywordflow">if</span>(cca.compareTo(ccb) &lt; 0) {</div>
+<div class="line"><a name="l00326"></a><span class="lineno">  326</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">true</span>;</div>
+<div class="line"><a name="l00327"></a><span class="lineno">  327</span>&#160;            }</div>
+<div class="line"><a name="l00328"></a><span class="lineno">  328</span>&#160;            <span class="keywordflow">else</span> <span class="keywordflow">if</span> (cca.compareTo(ccb) &gt; 0) {</div>
+<div class="line"><a name="l00329"></a><span class="lineno">  329</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00330"></a><span class="lineno">  330</span>&#160;            }</div>
+<div class="line"><a name="l00331"></a><span class="lineno">  331</span>&#160;            <span class="keywordflow">else</span> {</div>
+<div class="line"><a name="l00332"></a><span class="lineno">  332</span>&#160;                <span class="keywordflow">return</span> <span class="keyword">false</span>;</div>
+<div class="line"><a name="l00333"></a><span class="lineno">  333</span>&#160;            }</div>
+<div class="line"><a name="l00334"></a><span class="lineno">  334</span>&#160;        }</div>
+<div class="line"><a name="l00335"></a><span class="lineno">  335</span>&#160;    }</div>
+<div class="line"><a name="l00336"></a><span class="lineno">  336</span>&#160; </div>
+<div class="line"><a name="l00337"></a><span class="lineno">  337</span>&#160;};</div>
+<div class="line"><a name="l00338"></a><span class="lineno">  338</span>&#160; </div>
+<div class="line"><a name="l00339"></a><span class="lineno">  339</span>&#160;<span class="keywordtype">bool</span> EdgeComparator(<span class="keyword">const</span> Edge* a, <span class="keyword">const</span> Edge* b);</div>
 <div class="line"><a name="l00340"></a><span class="lineno">  340</span>&#160; </div>
 <div class="line"><a name="l00341"></a><span class="lineno">  341</span>&#160; </div>
-<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160;} <span class="comment">// namespace geos.operation.overlayng</span></div>
-<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;} <span class="comment">// namespace geos.operation</span></div>
-<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;} <span class="comment">// namespace geos</span></div>
-<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160; </div>
+<div class="line"><a name="l00342"></a><span class="lineno">  342</span>&#160; </div>
+<div class="line"><a name="l00343"></a><span class="lineno">  343</span>&#160;} <span class="comment">// namespace geos.operation.overlayng</span></div>
+<div class="line"><a name="l00344"></a><span class="lineno">  344</span>&#160;} <span class="comment">// namespace geos.operation</span></div>
+<div class="line"><a name="l00345"></a><span class="lineno">  345</span>&#160;} <span class="comment">// namespace geos</span></div>
+<div class="line"><a name="l00346"></a><span class="lineno">  346</span>&#160; </div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequence_html"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequence.html">geos::geom::CoordinateSequence</a></div><div class="ttdoc">The internal representation of a list of coordinates inside a Geometry.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:56</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a></div><div class="ttdoc">Coordinate is the lightweight class used to store coordinates.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:217</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Dimension_html_af46f1c0c325eb685fcf32987748d04cfa4647a7b91baa6f91d523f9293100789d"><div class="ttname"><a href="classgeos_1_1geom_1_1Dimension.html#af46f1c0c325eb685fcf32987748d04cfa4647a7b91baa6f91d523f9293100789d">geos::geom::Dimension::L</a></div><div class="ttdeci">@ L</div><div class="ttdoc">Dimension value of a curve (1).</div><div class="ttdef"><b>Definition:</b> Dimension.h:43</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Dimension_html_af46f1c0c325eb685fcf32987748d04cfa5055f3028cec299275cd330122f086e2"><div class="ttname"><a href="classgeos_1_1geom_1_1Dimension.html#af46f1c0c325eb685fcf32987748d04cfa5055f3028cec299275cd330122f086e2">geos::geom::Dimension::False</a></div><div class="ttdeci">@ False</div><div class="ttdoc">Dimension value of the empty geometry (-1).</div><div class="ttdef"><b>Definition:</b> Dimension.h:37</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1overlayng_1_1EdgeSourceInfo_html"><div class="ttname"><a href="classgeos_1_1operation_1_1overlayng_1_1EdgeSourceInfo.html">geos::operation::overlayng::EdgeSourceInfo</a></div><div class="ttdef"><b>Definition:</b> EdgeSourceInfo.h:38</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1overlayng_1_1Edge_html"><div class="ttname"><a href="classgeos_1_1operation_1_1overlayng_1_1Edge.html">geos::operation::overlayng::Edge</a></div><div class="ttdef"><b>Definition:</b> operation/overlayng/Edge.h:55</div></div>
-<div class="ttc" id="aclassgeos_1_1operation_1_1overlayng_1_1Edge_html_a779e4a3fd936a3c7a4e6b0b50bcf3b17"><div class="ttname"><a href="classgeos_1_1operation_1_1overlayng_1_1Edge.html#a779e4a3fd936a3c7a4e6b0b50bcf3b17">geos::operation::overlayng::Edge::relativeDirection</a></div><div class="ttdeci">bool relativeDirection(const Edge *edge2) const</div><div class="ttdef"><b>Definition:</b> operation/overlayng/Edge.h:264</div></div>
-<div class="ttc" id="aclassgeos_1_1operation_1_1overlayng_1_1Edge_html_aaac55255b58dab6f49d474f8d01c4dce"><div class="ttname"><a href="classgeos_1_1operation_1_1overlayng_1_1Edge.html#aaac55255b58dab6f49d474f8d01c4dce">geos::operation::overlayng::Edge::merge</a></div><div class="ttdeci">void merge(const Edge *edge)</div><div class="ttdef"><b>Definition:</b> operation/overlayng/Edge.h:286</div></div>
-<div class="ttc" id="aclassgeos_1_1operation_1_1overlayng_1_1OverlayLabel_html"><div class="ttname"><a href="classgeos_1_1operation_1_1overlayng_1_1OverlayLabel.html">geos::operation::overlayng::OverlayLabel</a></div><div class="ttdef"><b>Definition:</b> OverlayLabel.h:89</div></div>
+<div class="ttc" id="aclassgeos_1_1operation_1_1overlayng_1_1Edge_html_a779e4a3fd936a3c7a4e6b0b50bcf3b17"><div class="ttname"><a href="classgeos_1_1operation_1_1overlayng_1_1Edge.html#a779e4a3fd936a3c7a4e6b0b50bcf3b17">geos::operation::overlayng::Edge::relativeDirection</a></div><div class="ttdeci">bool relativeDirection(const Edge *edge2) const</div><div class="ttdef"><b>Definition:</b> operation/overlayng/Edge.h:265</div></div>
+<div class="ttc" id="aclassgeos_1_1operation_1_1overlayng_1_1Edge_html_aaac55255b58dab6f49d474f8d01c4dce"><div class="ttname"><a href="classgeos_1_1operation_1_1overlayng_1_1Edge.html#aaac55255b58dab6f49d474f8d01c4dce">geos::operation::overlayng::Edge::merge</a></div><div class="ttdeci">void merge(const Edge *edge)</div><div class="ttdef"><b>Definition:</b> operation/overlayng/Edge.h:287</div></div>
+<div class="ttc" id="aclassgeos_1_1operation_1_1overlayng_1_1OverlayLabel_html"><div class="ttname"><a href="classgeos_1_1operation_1_1overlayng_1_1OverlayLabel.html">geos::operation::overlayng::OverlayLabel</a></div><div class="ttdef"><b>Definition:</b> OverlayLabel.h:86</div></div>
 <div class="ttc" id="aclassgeos_1_1util_1_1GEOSException_html"><div class="ttname"><a href="classgeos_1_1util_1_1GEOSException.html">geos::util::GEOSException</a></div><div class="ttdoc">Base class for all GEOS exceptions.</div><div class="ttdef"><b>Definition:</b> GEOSException.h:37</div></div>
 <div class="ttc" id="anamespacegeos_1_1geom_html_ae55a225cd843a6b153a7b6ca5a4707c8"><div class="ttname"><a href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8">geos::geom::Location</a></div><div class="ttdeci">Location</div><div class="ttdoc">Constants representing the location of a point relative to a geometry.</div><div class="ttdef"><b>Definition:</b> Location.h:32</div></div>
-<div class="ttc" id="anamespacegeos_1_1geom_html_ae55a225cd843a6b153a7b6ca5a4707c8a275ff52c0d43ea11e057b037be21d30e"><div class="ttname"><a href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8a275ff52c0d43ea11e057b037be21d30e">geos::geom::Location::EXTERIOR</a></div><div class="ttdeci">@ EXTERIOR</div></div>
-<div class="ttc" id="anamespacegeos_1_1geom_html_ae55a225cd843a6b153a7b6ca5a4707c8ab50339a10e1de285ac99d4c3990b8693"><div class="ttname"><a href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8ab50339a10e1de285ac99d4c3990b8693">geos::geom::Location::NONE</a></div><div class="ttdeci">@ NONE</div></div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:25</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->

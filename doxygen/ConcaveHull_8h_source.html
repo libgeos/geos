@@ -74,9 +74,9 @@ $(function() {
 <div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
 <div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
 <div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keyword">namespace </span>geom {</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">class </span><a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>;</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">class </span><a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">class </span><a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a>;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">class </span>Coordinate;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">class </span>Geometry;</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">class </span>GeometryFactory;</div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;}</div>
 <div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="namespacegeos_1_1triangulate.html">   32</a></span>&#160;<span class="keyword">namespace </span>triangulate {</div>
 <div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="namespacegeos_1_1triangulate_1_1quadedge.html">   33</a></span>&#160;<span class="keyword">namespace </span>quadedge {</div>
@@ -86,115 +86,114 @@ $(function() {
 <div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;}</div>
 <div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;}</div>
 <div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160; </div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keyword">using</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a>;</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="keyword">using</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geos::geom::Geometry</a>;</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="keyword">using</span> <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">geos::geom::GeometryFactory</a>;</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="keyword">using</span> <a class="code" href="classgeos_1_1geom_1_1Triangle.html">geos::geom::Triangle</a>;</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;<span class="keyword">using</span> <a class="code" href="classgeos_1_1triangulate_1_1quadedge_1_1QuadEdge.html">geos::triangulate::quadedge::QuadEdge</a>;</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keyword">using</span> <a class="code" href="classgeos_1_1triangulate_1_1quadedge_1_1QuadEdgeSubdivision.html">geos::triangulate::quadedge::QuadEdgeSubdivision</a>;</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;<span class="keyword">using</span> <a class="code" href="classgeos_1_1triangulate_1_1quadedge_1_1TriangleVisitor.html">geos::triangulate::quadedge::TriangleVisitor</a>;</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="keyword">using</span> <a class="code" href="classgeos_1_1triangulate_1_1tri_1_1Tri.html">geos::triangulate::tri::Tri</a>;</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;<span class="keyword">using</span> <a class="code" href="classgeos_1_1triangulate_1_1tri_1_1TriList.html">geos::triangulate::tri::TriList</a>;</div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;<span class="keyword">namespace </span>algorithm { <span class="comment">// geos::algorithm</span></div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;<span class="keyword">namespace </span>hull {      <span class="comment">// geos::algorithm::hull</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160; </div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;<span class="keyword">typedef</span> std::priority_queue&lt;HullTri*, std::vector&lt;HullTri*&gt;, HullTri::HullTriCompare&gt; HullTriQueue;</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00095"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html">   95</a></span>&#160;<span class="keyword">class </span>GEOS_DLL <a class="code" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html">ConcaveHull</a> {</div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160; </div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;    <a class="code" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html">ConcaveHull</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* geom);</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160; </div>
-<div class="line"><a name="l00113"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#aa44e33216f0c2a168ce88864b4edf227">  113</a></span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> <a class="code" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#aa44e33216f0c2a168ce88864b4edf227">uniformEdgeLength</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* geom);</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
-<div class="line"><a name="l00123"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#ada45f68340212afa6984e310f7a560a9">  123</a></span>&#160;    <span class="keyword">static</span> std::unique_ptr&lt;Geometry&gt; <a class="code" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#ada45f68340212afa6984e310f7a560a9">concaveHullByLength</a>(</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* geom, <span class="keywordtype">double</span> maxLength);</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;    <span class="keyword">static</span> std::unique_ptr&lt;Geometry&gt; concaveHullByLength(</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* geom, <span class="keywordtype">double</span> maxLength, <span class="keywordtype">bool</span> isHolesAllowed);</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
-<div class="line"><a name="l00140"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#a4e860cafd3b3ff5873d20e89fcfca7ea">  140</a></span>&#160;    <span class="keyword">static</span> std::unique_ptr&lt;Geometry&gt; <a class="code" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#a4e860cafd3b3ff5873d20e89fcfca7ea">concaveHullByLengthRatio</a>(</div>
-<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* geom, <span class="keywordtype">double</span> lengthRatio);</div>
-<div class="line"><a name="l00142"></a><span class="lineno">  142</span>&#160; </div>
-<div class="line"><a name="l00156"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#a12a269099b0f13deece4cda1fe5706fd">  156</a></span>&#160;    <span class="keyword">static</span> std::unique_ptr&lt;Geometry&gt; <a class="code" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#a12a269099b0f13deece4cda1fe5706fd">concaveHullByLengthRatio</a>(</div>
-<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* geom,</div>
-<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        <span class="keywordtype">double</span> lengthRatio,</div>
-<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160;        <span class="keywordtype">bool</span> isHolesAllowed);</div>
-<div class="line"><a name="l00160"></a><span class="lineno">  160</span>&#160; </div>
-<div class="line"><a name="l00170"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#ab04c3a7a3600a8493787e07a723b91cf">  170</a></span>&#160;    <span class="keyword">static</span> std::unique_ptr&lt;Geometry&gt; <a class="code" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#ab04c3a7a3600a8493787e07a723b91cf">alphaShape</a>(</div>
-<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* geom,</div>
-<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;        <span class="keywordtype">double</span> alpha,</div>
-<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160;        <span class="keywordtype">bool</span> isHolesAllowed);</div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160; </div>
-<div class="line"><a name="l00190"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#ac538494a91f09abfa7e776f7142635db">  190</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#ac538494a91f09abfa7e776f7142635db">setMaximumEdgeLength</a>(<span class="keywordtype">double</span> edgeLength);</div>
-<div class="line"><a name="l00191"></a><span class="lineno">  191</span>&#160; </div>
-<div class="line"><a name="l00203"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#adf9d635b3617a54e6e06da6ec74a538c">  203</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#adf9d635b3617a54e6e06da6ec74a538c">setMaximumEdgeLengthRatio</a>(<span class="keywordtype">double</span> edgeLengthRatio);</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160; </div>
-<div class="line"><a name="l00210"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#a68167a701f4e4859e920b205b2818f00">  210</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#a68167a701f4e4859e920b205b2818f00">setHolesAllowed</a>(<span class="keywordtype">bool</span> holesAllowed);</div>
-<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160; </div>
-<div class="line"><a name="l00219"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#a9df1c1c860a5dfd9c42bd3dec88160c4">  219</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#a9df1c1c860a5dfd9c42bd3dec88160c4">setAlpha</a>(<span class="keywordtype">double</span> newAlpha);</div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160; </div>
-<div class="line"><a name="l00226"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#a11fbc932ba38b2261873e464858f6ec6">  226</a></span>&#160;    std::unique_ptr&lt;Geometry&gt; <a class="code" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#a11fbc932ba38b2261873e464858f6ec6">getHull</a>();</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="keyword">namespace </span>algorithm { <span class="comment">// geos::algorithm</span></div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;<span class="keyword">namespace </span>hull {      <span class="comment">// geos::algorithm::hull</span></div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160; </div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keyword">typedef</span> std::priority_queue&lt;HullTri*, std::vector&lt;HullTri*&gt;, HullTri::HullTriCompare&gt; HullTriQueue;</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
+<div class="line"><a name="l00085"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html">   85</a></span>&#160;<span class="keyword">class </span>GEOS_DLL <a class="code" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html">ConcaveHull</a> {</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;    <span class="keyword">using</span> <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> = <a class="code" href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a>;</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;    <span class="keyword">using</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> = <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geos::geom::Geometry</a>;</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;    <span class="keyword">using</span> <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a> = <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">geos::geom::GeometryFactory</a>;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;    <span class="keyword">using</span> <a class="code" href="classgeos_1_1geom_1_1Triangle.html">Triangle</a> = <a class="code" href="classgeos_1_1geom_1_1Triangle.html">geos::geom::Triangle</a>;</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;    <span class="keyword">using</span> <a class="code" href="classgeos_1_1triangulate_1_1quadedge_1_1QuadEdge.html">QuadEdge</a> = <a class="code" href="classgeos_1_1triangulate_1_1quadedge_1_1QuadEdge.html">geos::triangulate::quadedge::QuadEdge</a>;</div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;    <span class="keyword">using</span> <a class="code" href="classgeos_1_1triangulate_1_1quadedge_1_1QuadEdgeSubdivision.html">QuadEdgeSubdivision</a> = <a class="code" href="classgeos_1_1triangulate_1_1quadedge_1_1QuadEdgeSubdivision.html">geos::triangulate::quadedge::QuadEdgeSubdivision</a>;</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;    <span class="keyword">using</span> <a class="code" href="classgeos_1_1triangulate_1_1tri_1_1Tri.html">Tri</a> = <a class="code" href="classgeos_1_1triangulate_1_1tri_1_1Tri.html">geos::triangulate::tri::Tri</a>;</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> TriType&gt;</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    <span class="keyword">using</span> <a class="code" href="classgeos_1_1triangulate_1_1tri_1_1TriList.html">TriList</a> = <a class="code" href="classgeos_1_1triangulate_1_1tri_1_1TriList.html">geos::triangulate::tri::TriList&lt;TriType&gt;</a>;</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;    <a class="code" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html">ConcaveHull</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* geom);</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
+<div class="line"><a name="l00112"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#aa44e33216f0c2a168ce88864b4edf227">  112</a></span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> <a class="code" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#aa44e33216f0c2a168ce88864b4edf227">uniformEdgeLength</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* geom);</div>
+<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
+<div class="line"><a name="l00122"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#ada45f68340212afa6984e310f7a560a9">  122</a></span>&#160;    <span class="keyword">static</span> std::unique_ptr&lt;Geometry&gt; <a class="code" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#ada45f68340212afa6984e310f7a560a9">concaveHullByLength</a>(</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* geom, <span class="keywordtype">double</span> maxLength);</div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160; </div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    <span class="keyword">static</span> std::unique_ptr&lt;Geometry&gt; concaveHullByLength(</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* geom, <span class="keywordtype">double</span> maxLength, <span class="keywordtype">bool</span> isHolesAllowed);</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
+<div class="line"><a name="l00139"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#a4e860cafd3b3ff5873d20e89fcfca7ea">  139</a></span>&#160;    <span class="keyword">static</span> std::unique_ptr&lt;Geometry&gt; <a class="code" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#a4e860cafd3b3ff5873d20e89fcfca7ea">concaveHullByLengthRatio</a>(</div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* geom, <span class="keywordtype">double</span> lengthRatio);</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160; </div>
+<div class="line"><a name="l00155"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#a12a269099b0f13deece4cda1fe5706fd">  155</a></span>&#160;    <span class="keyword">static</span> std::unique_ptr&lt;Geometry&gt; <a class="code" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#a12a269099b0f13deece4cda1fe5706fd">concaveHullByLengthRatio</a>(</div>
+<div class="line"><a name="l00156"></a><span class="lineno">  156</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* geom,</div>
+<div class="line"><a name="l00157"></a><span class="lineno">  157</span>&#160;        <span class="keywordtype">double</span> lengthRatio,</div>
+<div class="line"><a name="l00158"></a><span class="lineno">  158</span>&#160;        <span class="keywordtype">bool</span> isHolesAllowed);</div>
+<div class="line"><a name="l00159"></a><span class="lineno">  159</span>&#160; </div>
+<div class="line"><a name="l00169"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#ab04c3a7a3600a8493787e07a723b91cf">  169</a></span>&#160;    <span class="keyword">static</span> std::unique_ptr&lt;Geometry&gt; <a class="code" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#ab04c3a7a3600a8493787e07a723b91cf">alphaShape</a>(</div>
+<div class="line"><a name="l00170"></a><span class="lineno">  170</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* geom,</div>
+<div class="line"><a name="l00171"></a><span class="lineno">  171</span>&#160;        <span class="keywordtype">double</span> alpha,</div>
+<div class="line"><a name="l00172"></a><span class="lineno">  172</span>&#160;        <span class="keywordtype">bool</span> isHolesAllowed);</div>
+<div class="line"><a name="l00173"></a><span class="lineno">  173</span>&#160; </div>
+<div class="line"><a name="l00189"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#ac538494a91f09abfa7e776f7142635db">  189</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#ac538494a91f09abfa7e776f7142635db">setMaximumEdgeLength</a>(<span class="keywordtype">double</span> edgeLength);</div>
+<div class="line"><a name="l00190"></a><span class="lineno">  190</span>&#160; </div>
+<div class="line"><a name="l00202"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#adf9d635b3617a54e6e06da6ec74a538c">  202</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#adf9d635b3617a54e6e06da6ec74a538c">setMaximumEdgeLengthRatio</a>(<span class="keywordtype">double</span> edgeLengthRatio);</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160; </div>
+<div class="line"><a name="l00209"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#a68167a701f4e4859e920b205b2818f00">  209</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#a68167a701f4e4859e920b205b2818f00">setHolesAllowed</a>(<span class="keywordtype">bool</span> holesAllowed);</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160; </div>
+<div class="line"><a name="l00218"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#a9df1c1c860a5dfd9c42bd3dec88160c4">  218</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#a9df1c1c860a5dfd9c42bd3dec88160c4">setAlpha</a>(<span class="keywordtype">double</span> newAlpha);</div>
+<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160; </div>
+<div class="line"><a name="l00225"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#a11fbc932ba38b2261873e464858f6ec6">  225</a></span>&#160;    std::unique_ptr&lt;Geometry&gt; <a class="code" href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#a11fbc932ba38b2261873e464858f6ec6">getHull</a>();</div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160; </div>
 <div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160; </div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160; </div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160; </div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;    <span class="comment">// Constants</span></div>
-<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;    <span class="keyword">static</span> constexpr <span class="keywordtype">int</span> PARAM_EDGE_LENGTH = 1;</div>
-<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160;    <span class="keyword">static</span> constexpr <span class="keywordtype">int</span> PARAM_ALPHA = 2;</div>
-<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160; </div>
-<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;    <span class="comment">// Members</span></div>
-<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* inputGeometry;</div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;    <span class="keywordtype">double</span> maxEdgeLengthRatio;</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;    <span class="keywordtype">double</span> alpha;</div>
-<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;    <span class="keywordtype">bool</span> isHolesAllowed;</div>
-<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;    <span class="keywordtype">int</span> criteriaType;</div>
-<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;    <span class="keywordtype">double</span> maxSizeInHull;</div>
-<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a>* geomFactory;</div>
-<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160; </div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;    <span class="comment">// Methods</span></div>
-<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> computeTargetEdgeLength(</div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;        <a class="code" href="classgeos_1_1triangulate_1_1tri_1_1TriList.html">TriList&lt;HullTri&gt;</a>&amp; triList,</div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;        <span class="keywordtype">double</span> edgeLengthFactor);</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160; </div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;    <span class="keywordtype">void</span> computeHull(<a class="code" href="classgeos_1_1triangulate_1_1tri_1_1TriList.html">TriList&lt;HullTri&gt;</a>&amp; triList);</div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;    <span class="keywordtype">void</span> computeHullBorder(<a class="code" href="classgeos_1_1triangulate_1_1tri_1_1TriList.html">TriList&lt;HullTri&gt;</a>&amp; triList);</div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;    <span class="keywordtype">void</span> createBorderQueue(HullTriQueue&amp; queue, <a class="code" href="classgeos_1_1triangulate_1_1tri_1_1TriList.html">TriList&lt;HullTri&gt;</a>&amp; triList);</div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160; </div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;    <span class="keywordtype">void</span> addBorderTri(HullTri* tri, HullTriQueue&amp; queue);</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;    <span class="keywordtype">void</span> computeHullHoles(<a class="code" href="classgeos_1_1triangulate_1_1tri_1_1TriList.html">TriList&lt;HullTri&gt;</a>&amp; triList);</div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;    <span class="keywordtype">void</span> setSize(HullTri* tri);</div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160; </div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;    <span class="comment">// Constants</span></div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;    <span class="keyword">static</span> constexpr <span class="keywordtype">int</span> PARAM_EDGE_LENGTH = 1;</div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;    <span class="keyword">static</span> constexpr <span class="keywordtype">int</span> PARAM_ALPHA = 2;</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160; </div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;    <span class="comment">// Members</span></div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* inputGeometry;</div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;    <span class="keywordtype">double</span> maxEdgeLengthRatio;</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;    <span class="keywordtype">double</span> alpha;</div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;    <span class="keywordtype">bool</span> isHolesAllowed;</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160;    <span class="keywordtype">int</span> criteriaType;</div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;    <span class="keywordtype">double</span> maxSizeInHull;</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160;    <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a>* geomFactory;</div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160; </div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160;    <span class="comment">// Methods</span></div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;    <span class="keyword">static</span> <span class="keywordtype">double</span> computeTargetEdgeLength(</div>
+<div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160;        <a class="code" href="classgeos_1_1triangulate_1_1tri_1_1TriList.html">TriList&lt;HullTri&gt;</a>&amp; triList,</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;        <span class="keywordtype">double</span> edgeLengthFactor);</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160; </div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;    <span class="keywordtype">void</span> computeHull(<a class="code" href="classgeos_1_1triangulate_1_1tri_1_1TriList.html">TriList&lt;HullTri&gt;</a>&amp; triList);</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;    <span class="keywordtype">void</span> computeHullBorder(<a class="code" href="classgeos_1_1triangulate_1_1tri_1_1TriList.html">TriList&lt;HullTri&gt;</a>&amp; triList);</div>
+<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160;    <span class="keywordtype">void</span> createBorderQueue(HullTriQueue&amp; queue, <a class="code" href="classgeos_1_1triangulate_1_1tri_1_1TriList.html">TriList&lt;HullTri&gt;</a>&amp; triList);</div>
+<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160; </div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;    <span class="keywordtype">void</span> addBorderTri(HullTri* tri, HullTriQueue&amp; queue);</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;    <span class="keywordtype">void</span> computeHullHoles(<a class="code" href="classgeos_1_1triangulate_1_1tri_1_1TriList.html">TriList&lt;HullTri&gt;</a>&amp; triList);</div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;    <span class="keywordtype">void</span> setSize(HullTri* tri);</div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160; </div>
 <div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160; </div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160; </div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;    <span class="keyword">static</span> std::vector&lt;HullTri*&gt; findCandidateHoles(</div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;        <a class="code" href="classgeos_1_1triangulate_1_1tri_1_1TriList.html">TriList&lt;HullTri&gt;</a>&amp; triList, <span class="keywordtype">double</span> maxSizeInHull);</div>
-<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160; </div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;    <span class="keywordtype">void</span> removeHole(<a class="code" href="classgeos_1_1triangulate_1_1tri_1_1TriList.html">TriList&lt;HullTri&gt;</a>&amp; triList, HullTri* triHole);</div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;    <span class="keywordtype">void</span> setSize(<a class="code" href="classgeos_1_1triangulate_1_1tri_1_1TriList.html">TriList&lt;HullTri&gt;</a>&amp; triList);</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160; </div>
-<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;    <span class="keywordtype">bool</span> isInHull(<span class="keyword">const</span> HullTri* tri) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160; </div>
-<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;    <span class="keywordtype">bool</span> isRemovableBorder(<span class="keyword">const</span> HullTri* tri) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;    <span class="keywordtype">bool</span> isRemovableHole(<span class="keyword">const</span> HullTri* tri) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160; </div>
-<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;    std::unique_ptr&lt;Geometry&gt; toGeometry(</div>
-<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;        <a class="code" href="classgeos_1_1triangulate_1_1tri_1_1TriList.html">TriList&lt;HullTri&gt;</a>&amp; triList,</div>
-<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a>* factory);</div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;    <span class="keyword">static</span> std::vector&lt;HullTri*&gt; findCandidateHoles(</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;        <a class="code" href="classgeos_1_1triangulate_1_1tri_1_1TriList.html">TriList&lt;HullTri&gt;</a>&amp; triList, <span class="keywordtype">double</span> maxSizeInHull);</div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160; </div>
+<div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160;    <span class="keywordtype">void</span> removeHole(<a class="code" href="classgeos_1_1triangulate_1_1tri_1_1TriList.html">TriList&lt;HullTri&gt;</a>&amp; triList, HullTri* triHole);</div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;    <span class="keywordtype">void</span> setSize(<a class="code" href="classgeos_1_1triangulate_1_1tri_1_1TriList.html">TriList&lt;HullTri&gt;</a>&amp; triList);</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160; </div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160;    <span class="keywordtype">bool</span> isInHull(<span class="keyword">const</span> HullTri* tri) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160; </div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160;    <span class="keywordtype">bool</span> isRemovableBorder(<span class="keyword">const</span> HullTri* tri) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;    <span class="keywordtype">bool</span> isRemovableHole(<span class="keyword">const</span> HullTri* tri) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160; </div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;    std::unique_ptr&lt;Geometry&gt; toGeometry(</div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160;        <a class="code" href="classgeos_1_1triangulate_1_1tri_1_1TriList.html">TriList&lt;HullTri&gt;</a>&amp; triList,</div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;        <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a>* factory);</div>
+<div class="line"><a name="l00300"></a><span class="lineno">  300</span>&#160; </div>
 <div class="line"><a name="l00301"></a><span class="lineno">  301</span>&#160; </div>
-<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160; </div>
-<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160;};</div>
+<div class="line"><a name="l00302"></a><span class="lineno">  302</span>&#160;};</div>
+<div class="line"><a name="l00303"></a><span class="lineno">  303</span>&#160; </div>
 <div class="line"><a name="l00304"></a><span class="lineno">  304</span>&#160; </div>
-<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160; </div>
-<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;} <span class="comment">// geos::algorithm::hull</span></div>
-<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;} <span class="comment">// geos::algorithm</span></div>
-<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160;} <span class="comment">// geos</span></div>
-<div class="line"><a name="l00309"></a><span class="lineno">  309</span>&#160; </div>
-<div class="ttc" id="aclassgeos_1_1algorithm_1_1hull_1_1ConcaveHull_html"><div class="ttname"><a href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html">geos::algorithm::hull::ConcaveHull</a></div><div class="ttdef"><b>Definition:</b> ConcaveHull.h:95</div></div>
+<div class="line"><a name="l00305"></a><span class="lineno">  305</span>&#160;} <span class="comment">// geos::algorithm::hull</span></div>
+<div class="line"><a name="l00306"></a><span class="lineno">  306</span>&#160;} <span class="comment">// geos::algorithm</span></div>
+<div class="line"><a name="l00307"></a><span class="lineno">  307</span>&#160;} <span class="comment">// geos</span></div>
+<div class="line"><a name="l00308"></a><span class="lineno">  308</span>&#160; </div>
+<div class="ttc" id="aclassgeos_1_1algorithm_1_1hull_1_1ConcaveHull_html"><div class="ttname"><a href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html">geos::algorithm::hull::ConcaveHull</a></div><div class="ttdef"><b>Definition:</b> ConcaveHull.h:85</div></div>
 <div class="ttc" id="aclassgeos_1_1algorithm_1_1hull_1_1ConcaveHull_html_a11fbc932ba38b2261873e464858f6ec6"><div class="ttname"><a href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#a11fbc932ba38b2261873e464858f6ec6">geos::algorithm::hull::ConcaveHull::getHull</a></div><div class="ttdeci">std::unique_ptr&lt; Geometry &gt; getHull()</div></div>
 <div class="ttc" id="aclassgeos_1_1algorithm_1_1hull_1_1ConcaveHull_html_a12a269099b0f13deece4cda1fe5706fd"><div class="ttname"><a href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#a12a269099b0f13deece4cda1fe5706fd">geos::algorithm::hull::ConcaveHull::concaveHullByLengthRatio</a></div><div class="ttdeci">static std::unique_ptr&lt; Geometry &gt; concaveHullByLengthRatio(const Geometry *geom, double lengthRatio, bool isHolesAllowed)</div></div>
 <div class="ttc" id="aclassgeos_1_1algorithm_1_1hull_1_1ConcaveHull_html_a4e860cafd3b3ff5873d20e89fcfca7ea"><div class="ttname"><a href="classgeos_1_1algorithm_1_1hull_1_1ConcaveHull.html#a4e860cafd3b3ff5873d20e89fcfca7ea">geos::algorithm::hull::ConcaveHull::concaveHullByLengthRatio</a></div><div class="ttdeci">static std::unique_ptr&lt; Geometry &gt; concaveHullByLengthRatio(const Geometry *geom, double lengthRatio)</div></div>
@@ -211,9 +210,8 @@ $(function() {
 <div class="ttc" id="aclassgeos_1_1geom_1_1Triangle_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Triangle.html">geos::geom::Triangle</a></div><div class="ttdoc">Represents a planar triangle, and provides methods for calculating various properties of triangles.</div><div class="ttdef"><b>Definition:</b> Triangle.h:28</div></div>
 <div class="ttc" id="aclassgeos_1_1triangulate_1_1quadedge_1_1QuadEdgeSubdivision_html"><div class="ttname"><a href="classgeos_1_1triangulate_1_1quadedge_1_1QuadEdgeSubdivision.html">geos::triangulate::quadedge::QuadEdgeSubdivision</a></div><div class="ttdoc">A class that contains the QuadEdges representing a planar subdivision that models a triangulation.</div><div class="ttdef"><b>Definition:</b> QuadEdgeSubdivision.h:78</div></div>
 <div class="ttc" id="aclassgeos_1_1triangulate_1_1quadedge_1_1QuadEdge_html"><div class="ttname"><a href="classgeos_1_1triangulate_1_1quadedge_1_1QuadEdge.html">geos::triangulate::quadedge::QuadEdge</a></div><div class="ttdoc">A class that represents the edge data structure which implements the quadedge algebra.</div><div class="ttdef"><b>Definition:</b> QuadEdge.h:53</div></div>
-<div class="ttc" id="aclassgeos_1_1triangulate_1_1quadedge_1_1TriangleVisitor_html"><div class="ttname"><a href="classgeos_1_1triangulate_1_1quadedge_1_1TriangleVisitor.html">geos::triangulate::quadedge::TriangleVisitor</a></div><div class="ttdoc">An interface for algorithms which process the triangles in a QuadEdgeSubdivision.</div><div class="ttdef"><b>Definition:</b> TriangleVisitor.h:33</div></div>
-<div class="ttc" id="aclassgeos_1_1triangulate_1_1tri_1_1TriList_html"><div class="ttname"><a href="classgeos_1_1triangulate_1_1tri_1_1TriList.html">geos::triangulate::tri::TriList</a></div><div class="ttdef"><b>Definition:</b> TriList.h:54</div></div>
-<div class="ttc" id="aclassgeos_1_1triangulate_1_1tri_1_1Tri_html"><div class="ttname"><a href="classgeos_1_1triangulate_1_1tri_1_1Tri.html">geos::triangulate::tri::Tri</a></div><div class="ttdef"><b>Definition:</b> Tri.h:49</div></div>
+<div class="ttc" id="aclassgeos_1_1triangulate_1_1tri_1_1TriList_html"><div class="ttname"><a href="classgeos_1_1triangulate_1_1tri_1_1TriList.html">geos::triangulate::tri::TriList</a></div><div class="ttdef"><b>Definition:</b> TriList.h:50</div></div>
+<div class="ttc" id="aclassgeos_1_1triangulate_1_1tri_1_1Tri_html"><div class="ttname"><a href="classgeos_1_1triangulate_1_1tri_1_1Tri.html">geos::triangulate::tri::Tri</a></div><div class="ttdef"><b>Definition:</b> Tri.h:45</div></div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:25</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
