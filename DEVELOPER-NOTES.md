@@ -109,3 +109,25 @@ rather than:
 ### Use `pragma once` to limit header inclusion
 
 Use `#pragma once` to limit header inclusion.  It is simpler and faster.
+
+### Use `using` to reduce namespace qualifiers
+
+GEOS is organized into many nested namespaces to reflect the JTS package structure.
+Namespace qualification of class references can be shortened
+with the `using` keyword in two different ways:
+
+In **header files**, `using` [type aliases](https://en.cppreference.com/w/cpp/language/type_alias) can be defined **inside class definitions**: 
+
+```
+class OffsetCurve {
+  using Geometry = geom::Geometry;
+  ...
+}
+```
+
+In **implementation files**, `using` [declarations](https://en.cppreference.com/w/cpp/language/using_declaration) can be defined for classes or entire namespaces:
+
+```
+using geos::algorithm::Distance;
+using namespace geos::geom;
+```
