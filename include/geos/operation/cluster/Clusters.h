@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OPERATION_CLUSTER_CLUSTERS
-#define GEOS_OPERATION_CLUSTER_CLUSTERS
+#pragma once
 
 #include <geos/export.h>
 #include <limits>
@@ -68,5 +67,3 @@ public:
 }
 }
 }
-
-#endif

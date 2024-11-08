@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OPERATION_CLUSTER_DBSCANCLUSTERFINDER
-#define GEOS_OPERATION_CLUSTER_DBSCANCLUSTERFINDER
+#pragma once
 
 #include <geos/operation/cluster/AbstractClusterFinder.h>
 #include <geos/geom/Geometry.h>
@@ -55,5 +54,3 @@ private:
 }
 }
 }
-
-#endif

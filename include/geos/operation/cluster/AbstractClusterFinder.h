@@ -12,10 +12,8 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OPERATION_CLUSTER_ABSTRACTCLUSTERFINDER
-#define GEOS_OPERATION_CLUSTER_ABSTRACTCLUSTERFINDER
+#pragma once
 
-#include <functional>
 #include <memory>
 #include <vector>
 
@@ -132,5 +130,3 @@ private:
 }
 }
 }
-
-#endif

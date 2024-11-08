@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OPERATION_CLUSTER_ENVELOPEINTERSECTSCLUSTERFINDER
-#define GEOS_OPERATION_CLUSTER_ENVELOPEINTERSECTSCLUSTERFINDER
+#pragma once
 
 #include <geos/operation/cluster/AbstractClusterFinder.h>
 
@@ -40,5 +39,3 @@ protected:
 }
 }
 }
-
-#endif

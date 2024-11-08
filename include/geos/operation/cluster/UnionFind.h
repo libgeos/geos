@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OPERATION_CLUSTER_UNIONFIND
-#define GEOS_OPERATION_CLUSTER_UNIONFIND
+#pragma once
 
 #include <algorithm>
 #include <numeric>
@@ -133,5 +132,3 @@ private:
 }
 }
 }
-
-#endif

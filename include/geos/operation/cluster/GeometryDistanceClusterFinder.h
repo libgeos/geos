@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OPERATION_CLUSTER_GEOMETRYDISTANCECLUSTERFINDER
-#define GEOS_OPERATION_CLUSTER_GEOMETRYDISTANCECLUSTERFINDER
+#pragma once
 
 #include <geos/operation/cluster/AbstractClusterFinder.h>
 #include <geos/geom/prep/PreparedGeometry.h>
@@ -55,5 +54,3 @@ private:
 }
 }
 }
-
-#endif

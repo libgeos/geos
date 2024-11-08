@@ -12,8 +12,7 @@
  *
  **********************************************************************/
 
-#ifndef GEOS_OPERATION_CLUSTER_ENVELOPEDISTANCECLUSTERFINDER
-#define GEOS_OPERATION_CLUSTER_ENVELOPEDISTANCECLUSTERFINDER
+#pragma once
 
 #include <geos/operation/cluster/AbstractClusterFinder.h>
 #include <geos/geom/Envelope.h>
@@ -49,5 +48,3 @@ private:
 }
 }
 }
-
-#endif
