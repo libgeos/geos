@@ -87,6 +87,10 @@ public:
     * It lowers the number of heap allocations, because it allocates larger blocks of space to store multiple `HalfEdge` objects.
     * It handles the lifecycle of the `HalfEdge` objects that make up the `EdgeGraph`, because when the `EdgeGraph` is deallocated, the `std::deque<>` and all its contents are also automatically deallocated.
 
+### Use `pragma once` to limit header inclusion
+
+Use `#pragma once` to limit header inclusion.  It is simpler and faster.
+
 ### Use forward declarations in header files
 
 Where possible, in header files use **forward declarations** rather than header includes.
@@ -105,10 +109,6 @@ rather than:
 ```
 #include <geos/geom/Geometry.h>
 ```
-
-### Use `pragma once` to limit header inclusion
-
-Use `#pragma once` to limit header inclusion.  It is simpler and faster.
 
 ### Use `using` to reduce namespace qualifiers
 

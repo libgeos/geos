@@ -25,7 +25,6 @@ When submitting bugs caused by particular geometries, you must
 [WKB]({{< ref "../../specifications/wkb" >}}), so that we can re-produce
 the failure cases.
 
-
 ## Contributing
 
 To contribute fixes to outstanding issues, enhancements, and other smaller
@@ -37,3 +36,7 @@ is not a "smaller" change, please join the
 [**geos-devel** mailing list](https://lists.osgeo.org/mailman/listinfo/geos-devel)
 and describe your plans. **Join the list!** It is a great way to get
 acquainted with what the development community is working on.
+
+## Coding Style
+
+For guidance on the coding style used in GEOS see the [**Developer Notes**](https://github.com/libgeos/geos/blob/main/DEVELOPER-NOTES.md).
