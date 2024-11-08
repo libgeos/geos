@@ -61,108 +61,105 @@ $(function() {
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"> *</span></div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"> **********************************************************************/</span></div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#ifndef GEOS_OPERATION_CLUSTER_UNIONFIND</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#define GEOS_OPERATION_CLUSTER_UNIONFIND</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;algorithm&gt;</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &lt;numeric&gt;</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &lt;geos/export.h&gt;</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &lt;geos/operation/cluster/Clusters.h&gt;</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">namespace </span>operation {</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keyword">namespace </span>cluster {</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160; </div>
-<div class="line"><a name="l00033"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html">   33</a></span>&#160;<span class="keyword">class </span>GEOS_DLL <a class="code" href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html">UnionFind</a> {</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00040"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html#a1b12606341757c2b40d61f1f196540a9">   40</a></span>&#160;    <span class="keyword">explicit</span> <a class="code" href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html#a1b12606341757c2b40d61f1f196540a9">UnionFind</a>(<span class="keywordtype">size_t</span> n) :</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;            clusters(n),</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;            sizes(n),</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;            num_clusters(n) {</div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        std::iota(clusters.begin(), clusters.end(), 0);</div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        std::fill(sizes.begin(), sizes.end(), 1);</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    }</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="comment">// Are two elements in the same cluster?</span></div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="keywordtype">bool</span> same(<span class="keywordtype">size_t</span> i, <span class="keywordtype">size_t</span> j) {</div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <span class="keywordflow">return</span> i == j || (find(i) == find(j));</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    }</div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160; </div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="comment">// Are two elements in a different cluster?</span></div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    <span class="keywordtype">bool</span> different(<span class="keywordtype">size_t</span> i, <span class="keywordtype">size_t</span> j) {</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;        <span class="keywordflow">return</span> !same(i, j);</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    }</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00063"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html#a8210a45d362b551976c4762fa49f8964">   63</a></span>&#160;    <span class="keywordtype">size_t</span> <a class="code" href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html#a8210a45d362b551976c4762fa49f8964">find</a>(<span class="keywordtype">size_t</span> i) {</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        <span class="keywordtype">size_t</span> root = i;</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <span class="keywordflow">while</span>(clusters[root] != root) {</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;            root = clusters[root];</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        }</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        <span class="keywordflow">while</span> (i != root) {</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;            <span class="keywordtype">size_t</span> next = clusters[i];</div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            clusters[i] = root;</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;            i = next;</div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        }</div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
-<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;        <span class="keywordflow">return</span> i;</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;    }</div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
-<div class="line"><a name="l00084"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html#ab2ae59b94126f650be4086ef7d9a504f">   84</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html#ab2ae59b94126f650be4086ef7d9a504f">join</a>(<span class="keywordtype">size_t</span> i, <span class="keywordtype">size_t</span> j) {</div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        <span class="keyword">auto</span> a = find(i);</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <span class="keyword">auto</span> b = find(j);</div>
-<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160; </div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;        <span class="keywordflow">if</span> (a == b) {</div>
-<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;            <span class="keywordflow">return</span>;</div>
-<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160;        }</div>
-<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160; </div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        <span class="keywordflow">if</span> ((sizes[b] &gt; sizes[a]) || (sizes[a] == sizes[b] &amp;&amp; b &lt;= a)) {</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;            std::swap(a, b);</div>
-<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;        }</div>
-<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
-<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        clusters[a] = clusters[b];</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        sizes[b] += sizes[a];</div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        sizes[a] = 0;</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        num_clusters--;</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    }</div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160; </div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;    <span class="keywordtype">size_t</span> getNumClusters()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        <span class="keywordflow">return</span> num_clusters;</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;    }</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;    <span class="keywordtype">void</span> sortByCluster(T begin, T end) {</div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        std::sort(begin, end, [<span class="keyword">this</span>](<span class="keywordtype">size_t</span> a, <span class="keywordtype">size_t</span> b) {</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;            <span class="keywordflow">return</span> find(a) &lt; find(b);</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        });</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;    }</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160; </div>
-<div class="line"><a name="l00118"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html#a6d6efdc66753453dec297a9d4f615f40">  118</a></span>&#160;    Clusters <a class="code" href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html#a6d6efdc66753453dec297a9d4f615f40">getClusters</a>();</div>
-<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
-<div class="line"><a name="l00125"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html#a0ac1e510672bfe73a64d3120f0fb89ad">  125</a></span>&#160;    Clusters <a class="code" href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html#a0ac1e510672bfe73a64d3120f0fb89ad">getClusters</a>(std::vector&lt;size_t&gt; elems);</div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    std::vector&lt;size_t&gt; clusters;</div>
-<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    std::vector&lt;size_t&gt; sizes;</div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;    <span class="keywordtype">size_t</span> num_clusters;</div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;};</div>
-<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &lt;algorithm&gt;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;numeric&gt;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &lt;geos/export.h&gt;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &lt;geos/operation/cluster/Clusters.h&gt;</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">namespace </span>operation {</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">namespace </span>cluster {</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
+<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html">   32</a></span>&#160;<span class="keyword">class </span>GEOS_DLL <a class="code" href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html">UnionFind</a> {</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00039"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html#a1b12606341757c2b40d61f1f196540a9">   39</a></span>&#160;    <span class="keyword">explicit</span> <a class="code" href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html#a1b12606341757c2b40d61f1f196540a9">UnionFind</a>(<span class="keywordtype">size_t</span> n) :</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;            clusters(n),</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;            sizes(n),</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;            num_clusters(n) {</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;        std::iota(clusters.begin(), clusters.end(), 0);</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        std::fill(sizes.begin(), sizes.end(), 1);</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    }</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    <span class="comment">// Are two elements in the same cluster?</span></div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="keywordtype">bool</span> same(<span class="keywordtype">size_t</span> i, <span class="keywordtype">size_t</span> j) {</div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;        <span class="keywordflow">return</span> i == j || (find(i) == find(j));</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    }</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="comment">// Are two elements in a different cluster?</span></div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    <span class="keywordtype">bool</span> different(<span class="keywordtype">size_t</span> i, <span class="keywordtype">size_t</span> j) {</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <span class="keywordflow">return</span> !same(i, j);</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    }</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
+<div class="line"><a name="l00062"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html#a8210a45d362b551976c4762fa49f8964">   62</a></span>&#160;    <span class="keywordtype">size_t</span> <a class="code" href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html#a8210a45d362b551976c4762fa49f8964">find</a>(<span class="keywordtype">size_t</span> i) {</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="keywordtype">size_t</span> root = i;</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;        <span class="keywordflow">while</span>(clusters[root] != root) {</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;            root = clusters[root];</div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        }</div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;        <span class="keywordflow">while</span> (i != root) {</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;            <span class="keywordtype">size_t</span> next = clusters[i];</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;            clusters[i] = root;</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;            i = next;</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;        }</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;        <span class="keywordflow">return</span> i;</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160;    }</div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
+<div class="line"><a name="l00083"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html#ab2ae59b94126f650be4086ef7d9a504f">   83</a></span>&#160;    <span class="keywordtype">void</span> <a class="code" href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html#ab2ae59b94126f650be4086ef7d9a504f">join</a>(<span class="keywordtype">size_t</span> i, <span class="keywordtype">size_t</span> j) {</div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;        <span class="keyword">auto</span> a = find(i);</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        <span class="keyword">auto</span> b = find(j);</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        <span class="keywordflow">if</span> (a == b) {</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;            <span class="keywordflow">return</span>;</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160;        }</div>
+<div class="line"><a name="l00090"></a><span class="lineno">   90</span>&#160; </div>
+<div class="line"><a name="l00091"></a><span class="lineno">   91</span>&#160;        <span class="keywordflow">if</span> ((sizes[b] &gt; sizes[a]) || (sizes[a] == sizes[b] &amp;&amp; b &lt;= a)) {</div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;            std::swap(a, b);</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        }</div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160; </div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160;        clusters[a] = clusters[b];</div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        sizes[b] += sizes[a];</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        sizes[a] = 0;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;        num_clusters--;</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    }</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;    <span class="keywordtype">size_t</span> getNumClusters()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        <span class="keywordflow">return</span> num_clusters;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    }</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
+<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;    <span class="keywordtype">void</span> sortByCluster(T begin, T end) {</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;        std::sort(begin, end, [<span class="keyword">this</span>](<span class="keywordtype">size_t</span> a, <span class="keywordtype">size_t</span> b) {</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;            <span class="keywordflow">return</span> find(a) &lt; find(b);</div>
+<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        });</div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    }</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
+<div class="line"><a name="l00117"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html#a6d6efdc66753453dec297a9d4f615f40">  117</a></span>&#160;    Clusters <a class="code" href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html#a6d6efdc66753453dec297a9d4f615f40">getClusters</a>();</div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160; </div>
+<div class="line"><a name="l00124"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html#a0ac1e510672bfe73a64d3120f0fb89ad">  124</a></span>&#160;    Clusters <a class="code" href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html#a0ac1e510672bfe73a64d3120f0fb89ad">getClusters</a>(std::vector&lt;size_t&gt; elems);</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    std::vector&lt;size_t&gt; clusters;</div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;    std::vector&lt;size_t&gt; sizes;</div>
+<div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160;    <span class="keywordtype">size_t</span> num_clusters;</div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;};</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160; </div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;}</div>
 <div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;}</div>
 <div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;}</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160;}</div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160; </div>
-<div class="line"><a name="l00137"></a><span class="lineno">  137</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="ttc" id="aclassgeos_1_1operation_1_1cluster_1_1UnionFind_html"><div class="ttname"><a href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html">geos::operation::cluster::UnionFind</a></div><div class="ttdef"><b>Definition:</b> UnionFind.h:33</div></div>
+<div class="ttc" id="aclassgeos_1_1operation_1_1cluster_1_1UnionFind_html"><div class="ttname"><a href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html">geos::operation::cluster::UnionFind</a></div><div class="ttdef"><b>Definition:</b> UnionFind.h:32</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1cluster_1_1UnionFind_html_a0ac1e510672bfe73a64d3120f0fb89ad"><div class="ttname"><a href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html#a0ac1e510672bfe73a64d3120f0fb89ad">geos::operation::cluster::UnionFind::getClusters</a></div><div class="ttdeci">Clusters getClusters(std::vector&lt; size_t &gt; elems)</div></div>
-<div class="ttc" id="aclassgeos_1_1operation_1_1cluster_1_1UnionFind_html_a1b12606341757c2b40d61f1f196540a9"><div class="ttname"><a href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html#a1b12606341757c2b40d61f1f196540a9">geos::operation::cluster::UnionFind::UnionFind</a></div><div class="ttdeci">UnionFind(size_t n)</div><div class="ttdef"><b>Definition:</b> UnionFind.h:40</div></div>
+<div class="ttc" id="aclassgeos_1_1operation_1_1cluster_1_1UnionFind_html_a1b12606341757c2b40d61f1f196540a9"><div class="ttname"><a href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html#a1b12606341757c2b40d61f1f196540a9">geos::operation::cluster::UnionFind::UnionFind</a></div><div class="ttdeci">UnionFind(size_t n)</div><div class="ttdef"><b>Definition:</b> UnionFind.h:39</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1cluster_1_1UnionFind_html_a6d6efdc66753453dec297a9d4f615f40"><div class="ttname"><a href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html#a6d6efdc66753453dec297a9d4f615f40">geos::operation::cluster::UnionFind::getClusters</a></div><div class="ttdeci">Clusters getClusters()</div></div>
-<div class="ttc" id="aclassgeos_1_1operation_1_1cluster_1_1UnionFind_html_a8210a45d362b551976c4762fa49f8964"><div class="ttname"><a href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html#a8210a45d362b551976c4762fa49f8964">geos::operation::cluster::UnionFind::find</a></div><div class="ttdeci">size_t find(size_t i)</div><div class="ttdef"><b>Definition:</b> UnionFind.h:63</div></div>
-<div class="ttc" id="aclassgeos_1_1operation_1_1cluster_1_1UnionFind_html_ab2ae59b94126f650be4086ef7d9a504f"><div class="ttname"><a href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html#ab2ae59b94126f650be4086ef7d9a504f">geos::operation::cluster::UnionFind::join</a></div><div class="ttdeci">void join(size_t i, size_t j)</div><div class="ttdef"><b>Definition:</b> UnionFind.h:84</div></div>
+<div class="ttc" id="aclassgeos_1_1operation_1_1cluster_1_1UnionFind_html_a8210a45d362b551976c4762fa49f8964"><div class="ttname"><a href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html#a8210a45d362b551976c4762fa49f8964">geos::operation::cluster::UnionFind::find</a></div><div class="ttdeci">size_t find(size_t i)</div><div class="ttdef"><b>Definition:</b> UnionFind.h:62</div></div>
+<div class="ttc" id="aclassgeos_1_1operation_1_1cluster_1_1UnionFind_html_ab2ae59b94126f650be4086ef7d9a504f"><div class="ttname"><a href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html#ab2ae59b94126f650be4086ef7d9a504f">geos::operation::cluster::UnionFind::join</a></div><div class="ttdeci">void join(size_t i, size_t j)</div><div class="ttdef"><b>Definition:</b> UnionFind.h:83</div></div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:25</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->

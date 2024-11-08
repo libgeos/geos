@@ -61,70 +61,66 @@ $(function() {
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"> *</span></div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"> **********************************************************************/</span></div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#ifndef GEOS_OPERATION_CLUSTER_ABSTRACTCLUSTERFINDER</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#define GEOS_OPERATION_CLUSTER_ABSTRACTCLUSTERFINDER</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;functional&gt;</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &lt;memory&gt;</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &lt;geos/export.h&gt;</span></div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="preprocessor">#include &lt;geos/index/strtree/TemplateSTRtree.h&gt;</span></div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="preprocessor">#include &lt;geos/operation/cluster/Clusters.h&gt;</span></div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="comment">// Forward declarations</span></div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">namespace </span>geom {</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    <span class="keyword">class </span>Envelope;</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keyword">class </span>Geometry;</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;}</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keyword">namespace </span>operation {</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">namespace </span>cluster {</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keyword">class </span>UnionFind;</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &lt;memory&gt;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &lt;geos/export.h&gt;</span></div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="preprocessor">#include &lt;geos/index/strtree/TemplateSTRtree.h&gt;</span></div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="preprocessor">#include &lt;geos/operation/cluster/Clusters.h&gt;</span></div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="comment">// Forward declarations</span></div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">namespace </span>geom {</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="keyword">class </span>Envelope;</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <span class="keyword">class </span>Geometry;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;}</div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="keyword">namespace </span>operation {</div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;<span class="keyword">namespace </span>cluster {</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    <span class="keyword">class </span>UnionFind;</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;}</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;}</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;}</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;}</div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;}</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;<span class="keyword">namespace </span>operation {</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<span class="keyword">namespace </span>cluster {</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
-<div class="line"><a name="l00047"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html">   47</a></span>&#160;<span class="keyword">class </span>GEOS_DLL <a class="code" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html">AbstractClusterFinder</a> {</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00056"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#a8f86ab2b123be021d93bad0cbfbe53b5">   56</a></span>&#160;    Clusters <a class="code" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#a8f86ab2b123be021d93bad0cbfbe53b5">cluster</a>(<span class="keyword">const</span> std::vector&lt;const geom::Geometry*&gt;&amp; g);</div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00067"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#a7062887bed04a6f2195b79db70350f66">   67</a></span>&#160;    std::vector&lt;std::unique_ptr&lt;geom::Geometry&gt;&gt; <a class="code" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#a7062887bed04a6f2195b79db70350f66">clusterToVector</a>(std::unique_ptr&lt;geom::Geometry&gt; &amp;&amp; g);</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
-<div class="line"><a name="l00076"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#ac0fcc1974d2ac794fc0840f06ea46c4c">   76</a></span>&#160;    std::vector&lt;std::unique_ptr&lt;geom::Geometry&gt;&gt; <a class="code" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#ac0fcc1974d2ac794fc0840f06ea46c4c">clusterToVector</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>&amp; g);</div>
-<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160; </div>
-<div class="line"><a name="l00087"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#ac3cb2e648430d2418cee785753d771db">   87</a></span>&#160;    std::unique_ptr&lt;geom::Geometry&gt; <a class="code" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#ac3cb2e648430d2418cee785753d771db">clusterToCollection</a>(std::unique_ptr&lt;geom::Geometry&gt; &amp;&amp; g);</div>
-<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160; </div>
-<div class="line"><a name="l00096"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#a24f22e51b8068b1566d610f75e82d6b6">   96</a></span>&#160;    std::unique_ptr&lt;geom::Geometry&gt; <a class="code" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#a24f22e51b8068b1566d610f75e82d6b6">clusterToCollection</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &amp; g);</div>
-<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160; </div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="keyword">protected</span>:</div>
-<div class="line"><a name="l00105"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#a4f79df3f6e572135f205a32ca9feaf4e">  105</a></span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#a4f79df3f6e572135f205a32ca9feaf4e">shouldJoin</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* a, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* b) = 0;</div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160; </div>
-<div class="line"><a name="l00113"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#afd821cd22c64652a0c241a77a7bcd422">  113</a></span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Envelope.html">geom::Envelope</a>&amp; <a class="code" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#afd821cd22c64652a0c241a77a7bcd422">queryEnvelope</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* a) = 0;</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160; </div>
-<div class="line"><a name="l00122"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#a2747eafe5b90f67b37df2b091b1ff826">  122</a></span>&#160;    <span class="keyword">virtual</span> Clusters <a class="code" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#a2747eafe5b90f67b37df2b091b1ff826">process</a>(<span class="keyword">const</span> std::vector&lt;const geom::Geometry*&gt; &amp; components,</div>
-<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160;                 index::strtree::TemplateSTRtree&lt;std::size_t&gt; &amp; index,</div>
-<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;                 <a class="code" href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html">UnionFind</a> &amp; uf);</div>
-<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160; </div>
-<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160;    <span class="keyword">static</span> std::vector&lt;std::unique_ptr&lt;geom::Geometry&gt;&gt; getComponents(std::unique_ptr&lt;geom::Geometry&gt;&amp;&amp; g);</div>
-<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160;};</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keyword">namespace </span>operation {</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keyword">namespace </span>cluster {</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00045"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html">   45</a></span>&#160;<span class="keyword">class </span>GEOS_DLL <a class="code" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html">AbstractClusterFinder</a> {</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160; </div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00054"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#a8f86ab2b123be021d93bad0cbfbe53b5">   54</a></span>&#160;    Clusters <a class="code" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#a8f86ab2b123be021d93bad0cbfbe53b5">cluster</a>(<span class="keyword">const</span> std::vector&lt;const geom::Geometry*&gt;&amp; g);</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00065"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#a7062887bed04a6f2195b79db70350f66">   65</a></span>&#160;    std::vector&lt;std::unique_ptr&lt;geom::Geometry&gt;&gt; <a class="code" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#a7062887bed04a6f2195b79db70350f66">clusterToVector</a>(std::unique_ptr&lt;geom::Geometry&gt; &amp;&amp; g);</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#ac0fcc1974d2ac794fc0840f06ea46c4c">   74</a></span>&#160;    std::vector&lt;std::unique_ptr&lt;geom::Geometry&gt;&gt; <a class="code" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#ac0fcc1974d2ac794fc0840f06ea46c4c">clusterToVector</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>&amp; g);</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160; </div>
+<div class="line"><a name="l00085"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#ac3cb2e648430d2418cee785753d771db">   85</a></span>&#160;    std::unique_ptr&lt;geom::Geometry&gt; <a class="code" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#ac3cb2e648430d2418cee785753d771db">clusterToCollection</a>(std::unique_ptr&lt;geom::Geometry&gt; &amp;&amp; g);</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
+<div class="line"><a name="l00094"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#a24f22e51b8068b1566d610f75e82d6b6">   94</a></span>&#160;    std::unique_ptr&lt;geom::Geometry&gt; <a class="code" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#a24f22e51b8068b1566d610f75e82d6b6">clusterToCollection</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &amp; g);</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;<span class="keyword">protected</span>:</div>
+<div class="line"><a name="l00103"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#a4f79df3f6e572135f205a32ca9feaf4e">  103</a></span>&#160;    <span class="keyword">virtual</span> <span class="keywordtype">bool</span> <a class="code" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#a4f79df3f6e572135f205a32ca9feaf4e">shouldJoin</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* a, <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* b) = 0;</div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160; </div>
+<div class="line"><a name="l00111"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#afd821cd22c64652a0c241a77a7bcd422">  111</a></span>&#160;    <span class="keyword">virtual</span> <span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Envelope.html">geom::Envelope</a>&amp; <a class="code" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#afd821cd22c64652a0c241a77a7bcd422">queryEnvelope</a>(<span class="keyword">const</span> <a class="code" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* a) = 0;</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
+<div class="line"><a name="l00120"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#a2747eafe5b90f67b37df2b091b1ff826">  120</a></span>&#160;    <span class="keyword">virtual</span> Clusters <a class="code" href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#a2747eafe5b90f67b37df2b091b1ff826">process</a>(<span class="keyword">const</span> std::vector&lt;const geom::Geometry*&gt; &amp; components,</div>
+<div class="line"><a name="l00121"></a><span class="lineno">  121</span>&#160;                 index::strtree::TemplateSTRtree&lt;std::size_t&gt; &amp; index,</div>
+<div class="line"><a name="l00122"></a><span class="lineno">  122</span>&#160;                 <a class="code" href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html">UnionFind</a> &amp; uf);</div>
+<div class="line"><a name="l00123"></a><span class="lineno">  123</span>&#160; </div>
+<div class="line"><a name="l00124"></a><span class="lineno">  124</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    <span class="keyword">static</span> std::vector&lt;std::unique_ptr&lt;geom::Geometry&gt;&gt; getComponents(std::unique_ptr&lt;geom::Geometry&gt;&amp;&amp; g);</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160;};</div>
+<div class="line"><a name="l00127"></a><span class="lineno">  127</span>&#160; </div>
+<div class="line"><a name="l00128"></a><span class="lineno">  128</span>&#160; </div>
 <div class="line"><a name="l00129"></a><span class="lineno">  129</span>&#160; </div>
-<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160; </div>
-<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160; </div>
+<div class="line"><a name="l00130"></a><span class="lineno">  130</span>&#160;}</div>
+<div class="line"><a name="l00131"></a><span class="lineno">  131</span>&#160;}</div>
 <div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;}</div>
-<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160;}</div>
-<div class="line"><a name="l00134"></a><span class="lineno">  134</span>&#160;}</div>
-<div class="line"><a name="l00135"></a><span class="lineno">  135</span>&#160; </div>
-<div class="line"><a name="l00136"></a><span class="lineno">  136</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Envelope_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Envelope.html">geos::geom::Envelope</a></div><div class="ttdoc">An Envelope defines a rectangulare region of the 2D coordinate plane.</div><div class="ttdef"><b>Definition:</b> Envelope.h:59</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Geometry_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Geometry.html">geos::geom::Geometry</a></div><div class="ttdoc">Basic implementation of Geometry, constructed and destructed by GeometryFactory.</div><div class="ttdef"><b>Definition:</b> Geometry.h:197</div></div>
-<div class="ttc" id="aclassgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder_html"><div class="ttname"><a href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html">geos::operation::cluster::AbstractClusterFinder</a></div><div class="ttdef"><b>Definition:</b> AbstractClusterFinder.h:47</div></div>
+<div class="ttc" id="aclassgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder_html"><div class="ttname"><a href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html">geos::operation::cluster::AbstractClusterFinder</a></div><div class="ttdef"><b>Definition:</b> AbstractClusterFinder.h:45</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder_html_a24f22e51b8068b1566d610f75e82d6b6"><div class="ttname"><a href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#a24f22e51b8068b1566d610f75e82d6b6">geos::operation::cluster::AbstractClusterFinder::clusterToCollection</a></div><div class="ttdeci">std::unique_ptr&lt; geom::Geometry &gt; clusterToCollection(const geom::Geometry &amp;g)</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder_html_a2747eafe5b90f67b37df2b091b1ff826"><div class="ttname"><a href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#a2747eafe5b90f67b37df2b091b1ff826">geos::operation::cluster::AbstractClusterFinder::process</a></div><div class="ttdeci">virtual Clusters process(const std::vector&lt; const geom::Geometry * &gt; &amp;components, index::strtree::TemplateSTRtree&lt; std::size_t &gt; &amp;index, UnionFind &amp;uf)</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder_html_a4f79df3f6e572135f205a32ca9feaf4e"><div class="ttname"><a href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#a4f79df3f6e572135f205a32ca9feaf4e">geos::operation::cluster::AbstractClusterFinder::shouldJoin</a></div><div class="ttdeci">virtual bool shouldJoin(const geom::Geometry *a, const geom::Geometry *b)=0</div></div>
@@ -133,7 +129,7 @@ $(function() {
 <div class="ttc" id="aclassgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder_html_ac0fcc1974d2ac794fc0840f06ea46c4c"><div class="ttname"><a href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#ac0fcc1974d2ac794fc0840f06ea46c4c">geos::operation::cluster::AbstractClusterFinder::clusterToVector</a></div><div class="ttdeci">std::vector&lt; std::unique_ptr&lt; geom::Geometry &gt; &gt; clusterToVector(const geom::Geometry &amp;g)</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder_html_ac3cb2e648430d2418cee785753d771db"><div class="ttname"><a href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#ac3cb2e648430d2418cee785753d771db">geos::operation::cluster::AbstractClusterFinder::clusterToCollection</a></div><div class="ttdeci">std::unique_ptr&lt; geom::Geometry &gt; clusterToCollection(std::unique_ptr&lt; geom::Geometry &gt; &amp;&amp;g)</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder_html_afd821cd22c64652a0c241a77a7bcd422"><div class="ttname"><a href="classgeos_1_1operation_1_1cluster_1_1AbstractClusterFinder.html#afd821cd22c64652a0c241a77a7bcd422">geos::operation::cluster::AbstractClusterFinder::queryEnvelope</a></div><div class="ttdeci">virtual const geom::Envelope &amp; queryEnvelope(const geom::Geometry *a)=0</div></div>
-<div class="ttc" id="aclassgeos_1_1operation_1_1cluster_1_1UnionFind_html"><div class="ttname"><a href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html">geos::operation::cluster::UnionFind</a></div><div class="ttdef"><b>Definition:</b> UnionFind.h:33</div></div>
+<div class="ttc" id="aclassgeos_1_1operation_1_1cluster_1_1UnionFind_html"><div class="ttname"><a href="classgeos_1_1operation_1_1cluster_1_1UnionFind.html">geos::operation::cluster::UnionFind</a></div><div class="ttdef"><b>Definition:</b> UnionFind.h:32</div></div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:25</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->

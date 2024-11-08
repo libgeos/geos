@@ -61,64 +61,61 @@ $(function() {
 <div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="comment"> *</span></div>
 <div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="comment"> **********************************************************************/</span></div>
 <div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#ifndef GEOS_OPERATION_CLUSTER_CLUSTERS</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#define GEOS_OPERATION_CLUSTER_CLUSTERS</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;geos/export.h&gt;</span></div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &lt;limits&gt;</span></div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
-<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">namespace </span>operation {</div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160;<span class="keyword">namespace </span>cluster {</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;<span class="keyword">class </span>UnionFind;</div>
-<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160; </div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">class </span>GEOS_DLL Clusters {</div>
-<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    std::vector&lt;std::size_t&gt; m_elemsInCluster; <span class="comment">// The IDs of elements that are included in a cluster</span></div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    std::vector&lt;std::size_t&gt; m_starts; <span class="comment">// Start position of each cluster in m_elemsInCluster</span></div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;    std::size_t m_numElems; <span class="comment">// The number of elements from which clusters were generated</span></div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    <span class="keyword">using</span> const_iterator = decltype(m_elemsInCluster)::const_iterator;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160; </div>
-<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;    <span class="keyword">explicit</span> Clusters(UnionFind &amp; uf, std::vector&lt;std::size_t&gt; elemsInCluster, std::size_t numElems);</div>
-<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160; </div>
-<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <span class="comment">// Get the number of clusters available</span></div>
-<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    std::size_t getNumClusters()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;        <span class="keywordflow">return</span> m_starts.size();</div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    }</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    <span class="comment">// Get the size of a given cluster</span></div>
-<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;    std::size_t getSize(std::size_t cluster)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">static_cast&lt;</span>std::size_t<span class="keyword">&gt;</span>(std::distance(begin(cluster), end(cluster)));</div>
-<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;    }</div>
-<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160; </div>
-<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <span class="comment">// Get a vector containing the cluster ID for each item in `elems`</span></div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    std::vector&lt;std::size_t&gt; getClusterIds(std::size_t noClusterValue = std::numeric_limits&lt;std::size_t&gt;::max()) <span class="keyword">const</span>;</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="comment">// Get an iterator to the first element in a given cluster</span></div>
-<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;    const_iterator begin(std::size_t cluster)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;        <span class="keywordflow">return</span> std::next(m_elemsInCluster.begin(), <span class="keyword">static_cast&lt;</span>std::ptrdiff_t<span class="keyword">&gt;</span>(m_starts[cluster]));</div>
-<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160;    }</div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
-<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <span class="comment">// Get an iterator beyond the last element in a given cluster</span></div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    const_iterator end(std::size_t cluster)<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;        <span class="keywordflow">if</span> (cluster == <span class="keyword">static_cast&lt;</span>std::size_t<span class="keyword">&gt;</span>(m_starts.size() - 1)) {</div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;            <span class="keywordflow">return</span> m_elemsInCluster.end();</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;        }</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <span class="keywordflow">return</span> begin(cluster + 1);</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    }</div>
-<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;};</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#pragma once</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#include &lt;geos/export.h&gt;</span></div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#include &lt;limits&gt;</span></div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;<span class="keyword">namespace </span><a class="code" href="namespacegeos.html">geos</a> {</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;<span class="keyword">namespace </span>operation {</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160;<span class="keyword">namespace </span>cluster {</div>
+<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
+<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="keyword">class </span>UnionFind;</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160; </div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;<span class="keyword">class </span>GEOS_DLL Clusters {</div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;    std::vector&lt;std::size_t&gt; m_elemsInCluster; <span class="comment">// The IDs of elements that are included in a cluster</span></div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    std::vector&lt;std::size_t&gt; m_starts; <span class="comment">// Start position of each cluster in m_elemsInCluster</span></div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    std::size_t m_numElems; <span class="comment">// The number of elements from which clusters were generated</span></div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    <span class="keyword">using</span> const_iterator = decltype(m_elemsInCluster)::const_iterator;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;    <span class="keyword">explicit</span> Clusters(UnionFind &amp; uf, std::vector&lt;std::size_t&gt; elemsInCluster, std::size_t numElems);</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;    <span class="comment">// Get the number of clusters available</span></div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    std::size_t getNumClusters()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;        <span class="keywordflow">return</span> m_starts.size();</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;    }</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160; </div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;    <span class="comment">// Get the size of a given cluster</span></div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;    std::size_t getSize(std::size_t cluster)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;        <span class="keywordflow">return</span> <span class="keyword">static_cast&lt;</span>std::size_t<span class="keyword">&gt;</span>(std::distance(begin(cluster), end(cluster)));</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;    }</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160; </div>
+<div class="line"><a name="l00048"></a><span class="lineno">   48</span>&#160;    <span class="comment">// Get a vector containing the cluster ID for each item in `elems`</span></div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    std::vector&lt;std::size_t&gt; getClusterIds(std::size_t noClusterValue = std::numeric_limits&lt;std::size_t&gt;::max()) <span class="keyword">const</span>;</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160;    <span class="comment">// Get an iterator to the first element in a given cluster</span></div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    const_iterator begin(std::size_t cluster)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160;        <span class="keywordflow">return</span> std::next(m_elemsInCluster.begin(), <span class="keyword">static_cast&lt;</span>std::ptrdiff_t<span class="keyword">&gt;</span>(m_starts[cluster]));</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    }</div>
+<div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    <span class="comment">// Get an iterator beyond the last element in a given cluster</span></div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    const_iterator end(std::size_t cluster)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <span class="keywordflow">if</span> (cluster == <span class="keyword">static_cast&lt;</span>std::size_t<span class="keyword">&gt;</span>(m_starts.size() - 1)) {</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;            <span class="keywordflow">return</span> m_elemsInCluster.end();</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        }</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <span class="keywordflow">return</span> begin(cluster + 1);</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;    }</div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;};</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;}</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;}</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;}</div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;}</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition:</b> Angle.h:25</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
