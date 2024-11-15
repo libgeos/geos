@@ -13,6 +13,7 @@
   - GEOSLineSubstring, avoid crash with NaN length fraction (GH-1077, Dan Baston)
   - MinimumClearance, avoid crash on NaN inputs (GH-1079, Dan Baston)
   - Fix LineString->getPoint(n) for M geometries (GH-1191, @hsieyuan)
+  - Fix TopologyPreservingSimplifier/TaggedLineString to avoid jumping components (JTS-1096, Martin Davis)
 
 
 ## Changes in 3.12.2
