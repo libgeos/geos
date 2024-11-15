@@ -252,7 +252,6 @@ SimpleCurve::getPointN(std::size_t n) const
     assert(getFactory());
     assert(points.get());
 
-    std::unique_ptr<Point> point;
     if (hasM() || hasZ()) {
         CoordinateXYZM c;
         points->getAt(n, c);
