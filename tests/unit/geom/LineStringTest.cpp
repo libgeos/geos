@@ -13,6 +13,7 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/io/WKTReader.h>
+#include <geos/io/WKTWriter.h>
 #include <geos/util/GEOSException.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/constants.h>
@@ -35,6 +36,7 @@ struct test_linestring_data {
     geos::geom::PrecisionModel pm_;
     geos::geom::GeometryFactory::Ptr factory_;
     geos::io::WKTReader reader_;
+    geos::io::WKTWriter writer_;
 
     std::unique_ptr<geos::geom::LineString> empty_line_;
     std::unique_ptr<geos::geom::LineString> line_;
@@ -587,6 +589,24 @@ void object::test<32>
     ensure(line_->hasDimension(geos::geom::Dimension::L));
     ensure(!line_->hasDimension(geos::geom::Dimension::A));
 }
+
+
+// https://github.com/libgeos/geos/issues/1191
+// line->getPoint(n) loses M dimension
+template<>
+template<>
+void object::test<33>
+()
+{
+    auto geom = reader_.read("LINESTRING M (0 1 2, 10 11 12, 20 21 22)");
+    ensure(geom != nullptr);
+    geos::geom::LineString *line = static_cast<LineString*>(geom.get());
+    ensure_equals(line->getCoordinateDimension(), 3);
+    auto pt = line->getPointN(2);
+    auto out = writer_.write(*pt);
+    ensure_equals(out, "POINT M (20 21 22)");
+}
+
 
 } // namespace tut
 
