@@ -181,7 +181,12 @@ LineString::getPointN(std::size_t n) const
 {
     assert(getFactory());
     assert(points.get());
-    return std::unique_ptr<Point>(getFactory()->createPoint(points->getAt(n)));
+    if (hasM())
+        return std::unique_ptr<Point>(getFactory()->createPoint(points->getAt<CoordinateXYZM>(n)));
+    else if (hasZ())
+        return std::unique_ptr<Point>(getFactory()->createPoint(points->getAt<Coordinate>(n)));
+    else
+        return std::unique_ptr<Point>(getFactory()->createPoint(points->getAt<CoordinateXY>(n)));
 }
 
 std::unique_ptr<Point>
