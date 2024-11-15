@@ -5,6 +5,8 @@
   - Fix ConcaveHullOfPolygons nested shell handling (GH-1169, Martin Davis)
   - Fix RelateNG for computing IM for empty-nonempty cases (Martin Davis)
   - Fix LineString->getPoint(n) for M geometries (GH-1191, @hsieyuan)
+  - Fix TopologyPreservingSimplifier/TaggedLineString to avoid jumping components (JTS-1096, Martin Davis)
+
 
 ## Changes in 3.13.0
 2024-09-06

@@ -31,7 +31,7 @@ foreach(file ${files})
   endif()
 
   execute_process(
-    COMMAND "@CMAKE_COMMAND@" -E remove \"$ENV{DESTDIR}${file}\"
+    COMMAND "@CMAKE_COMMAND@" -E remove "$ENV{DESTDIR}${file}"
     OUTPUT_VARIABLE rm_out
     RESULT_VARIABLE rm_retval)
 
@@ -43,7 +43,7 @@ endforeach()
 
 message(STATUS "Deleting ${GEOS_INCLUDE_DIR} directory")
 execute_process(
-  COMMAND "@CMAKE_COMMAND@" -E remove_directory \"${GEOS_INCLUDE_DIR}\"
+  COMMAND "@CMAKE_COMMAND@" -E remove_directory "${GEOS_INCLUDE_DIR}"
   OUTPUT_VARIABLE rm_out
   RESULT_VARIABLE rm_retval)
 
