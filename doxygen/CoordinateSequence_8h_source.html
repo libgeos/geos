@@ -480,130 +480,140 @@ $(function() {
 <div class="line"><a name="l00680"></a><span class="lineno">  680</span>&#160;    }</div>
 <div class="line"><a name="l00681"></a><span class="lineno">  681</span>&#160; </div>
 <div class="line"><a name="l00682"></a><span class="lineno">  682</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> F&gt;</div>
-<div class="line"><a name="l00683"></a><span class="lineno">  683</span>&#160;    <span class="keywordtype">void</span> forEach(F&amp;&amp; fun)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00683"></a><span class="lineno">  683</span>&#160;    <span class="keyword">auto</span> applyAt(<span class="keywordtype">size_t</span> i, F&amp;&amp; fun)<span class="keyword"> const </span>{</div>
 <div class="line"><a name="l00684"></a><span class="lineno">  684</span>&#160;        <span class="keywordflow">switch</span>(getCoordinateType()) {</div>
-<div class="line"><a name="l00685"></a><span class="lineno">  685</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XY:    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; c : items&lt;CoordinateXY&gt;())   { fun(c); } <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00686"></a><span class="lineno">  686</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYZ:   <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; c : items&lt;Coordinate&gt;())     { fun(c); } <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00687"></a><span class="lineno">  687</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYM:   <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; c : items&lt;CoordinateXYM&gt;())  { fun(c); } <span class="keywordflow">break</span>;</div>
-<div class="line"><a name="l00688"></a><span class="lineno">  688</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYZM:  <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; c : items&lt;CoordinateXYZM&gt;()) { fun(c); } <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00685"></a><span class="lineno">  685</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYZ:   <span class="keywordflow">return</span> fun(getAt&lt;Coordinate&gt;(i));</div>
+<div class="line"><a name="l00686"></a><span class="lineno">  686</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYM:   <span class="keywordflow">return</span> fun(getAt&lt;CoordinateXYM&gt;(i));</div>
+<div class="line"><a name="l00687"></a><span class="lineno">  687</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYZM:  <span class="keywordflow">return</span> fun(getAt&lt;CoordinateXYZM&gt;(i));</div>
+<div class="line"><a name="l00688"></a><span class="lineno">  688</span>&#160;            <span class="keywordflow">default</span>:                    <span class="keywordflow">return</span> fun(getAt&lt;CoordinateXY&gt;(i));</div>
 <div class="line"><a name="l00689"></a><span class="lineno">  689</span>&#160;        }</div>
 <div class="line"><a name="l00690"></a><span class="lineno">  690</span>&#160;    }</div>
 <div class="line"><a name="l00691"></a><span class="lineno">  691</span>&#160; </div>
-<div class="line"><a name="l00692"></a><span class="lineno">  692</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> F&gt;</div>
-<div class="line"><a name="l00693"></a><span class="lineno">  693</span>&#160;    <span class="keywordtype">void</span> forEach(F&amp;&amp; fun)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00694"></a><span class="lineno">  694</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00695"></a><span class="lineno">  695</span>&#160;        <span class="keywordflow">for</span> (std::size_t i = 0; i &lt; size(); i++) {</div>
-<div class="line"><a name="l00696"></a><span class="lineno">  696</span>&#160;            fun(getAt&lt;T&gt;(i));</div>
-<div class="line"><a name="l00697"></a><span class="lineno">  697</span>&#160;        }</div>
-<div class="line"><a name="l00698"></a><span class="lineno">  698</span>&#160;    }</div>
-<div class="line"><a name="l00699"></a><span class="lineno">  699</span>&#160; </div>
-<div class="line"><a name="l00700"></a><span class="lineno">  700</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> F&gt;</div>
-<div class="line"><a name="l00701"></a><span class="lineno">  701</span>&#160;    <span class="keywordtype">void</span> forEach(std::size_t from, std::size_t to, F&amp;&amp; fun)<span class="keyword"> const</span></div>
-<div class="line"><a name="l00702"></a><span class="lineno">  702</span>&#160;<span class="keyword">    </span>{</div>
-<div class="line"><a name="l00703"></a><span class="lineno">  703</span>&#160;        <span class="keywordflow">for</span> (std::size_t i = from; i &lt;= to; i++) {</div>
-<div class="line"><a name="l00704"></a><span class="lineno">  704</span>&#160;            fun(getAt&lt;T&gt;(i));</div>
-<div class="line"><a name="l00705"></a><span class="lineno">  705</span>&#160;        }</div>
-<div class="line"><a name="l00706"></a><span class="lineno">  706</span>&#160;    }</div>
-<div class="line"><a name="l00707"></a><span class="lineno">  707</span>&#160; </div>
-<div class="line"><a name="l00708"></a><span class="lineno">  708</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00709"></a><span class="lineno">  709</span>&#160;    <span class="keyword">class </span>Coordinates {</div>
-<div class="line"><a name="l00710"></a><span class="lineno">  710</span>&#160;    <span class="keyword">public</span>:</div>
-<div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160;        <span class="keyword">using</span> SequenceType = <span class="keyword">typename</span> std::conditional&lt;std::is_const&lt;T&gt;::value, <span class="keyword">const</span> CoordinateSequence, CoordinateSequence&gt;::type;</div>
-<div class="line"><a name="l00712"></a><span class="lineno">  712</span>&#160; </div>
-<div class="line"><a name="l00713"></a><span class="lineno">  713</span>&#160;        <span class="keyword">explicit</span> Coordinates(SequenceType* seq) : m_seq(seq) {}</div>
-<div class="line"><a name="l00714"></a><span class="lineno">  714</span>&#160; </div>
-<div class="line"><a name="l00715"></a><span class="lineno">  715</span>&#160;        CoordinateSequenceIterator&lt;SequenceType, T&gt; begin() {</div>
-<div class="line"><a name="l00716"></a><span class="lineno">  716</span>&#160;            <span class="keywordflow">return</span> {m_seq};</div>
-<div class="line"><a name="l00717"></a><span class="lineno">  717</span>&#160;        }</div>
-<div class="line"><a name="l00718"></a><span class="lineno">  718</span>&#160; </div>
-<div class="line"><a name="l00719"></a><span class="lineno">  719</span>&#160;        CoordinateSequenceIterator&lt;SequenceType, T&gt; end() {</div>
-<div class="line"><a name="l00720"></a><span class="lineno">  720</span>&#160;            <span class="keywordflow">return</span> {m_seq, m_seq-&gt;getSize()};</div>
-<div class="line"><a name="l00721"></a><span class="lineno">  721</span>&#160;        }</div>
+<div class="line"><a name="l00692"></a><span class="lineno">  692</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> F&gt;</div>
+<div class="line"><a name="l00693"></a><span class="lineno">  693</span>&#160;    <span class="keywordtype">void</span> forEach(F&amp;&amp; fun)<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00694"></a><span class="lineno">  694</span>&#160;        <span class="keywordflow">switch</span>(getCoordinateType()) {</div>
+<div class="line"><a name="l00695"></a><span class="lineno">  695</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XY:    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; c : items&lt;CoordinateXY&gt;())   { fun(c); } <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00696"></a><span class="lineno">  696</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYZ:   <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; c : items&lt;Coordinate&gt;())     { fun(c); } <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00697"></a><span class="lineno">  697</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYM:   <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; c : items&lt;CoordinateXYM&gt;())  { fun(c); } <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00698"></a><span class="lineno">  698</span>&#160;            <span class="keywordflow">case</span> CoordinateType::XYZM:  <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; c : items&lt;CoordinateXYZM&gt;()) { fun(c); } <span class="keywordflow">break</span>;</div>
+<div class="line"><a name="l00699"></a><span class="lineno">  699</span>&#160;        }</div>
+<div class="line"><a name="l00700"></a><span class="lineno">  700</span>&#160;    }</div>
+<div class="line"><a name="l00701"></a><span class="lineno">  701</span>&#160; </div>
+<div class="line"><a name="l00702"></a><span class="lineno">  702</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> F&gt;</div>
+<div class="line"><a name="l00703"></a><span class="lineno">  703</span>&#160;    <span class="keywordtype">void</span> forEach(F&amp;&amp; fun)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00704"></a><span class="lineno">  704</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00705"></a><span class="lineno">  705</span>&#160;        <span class="keywordflow">for</span> (std::size_t i = 0; i &lt; size(); i++) {</div>
+<div class="line"><a name="l00706"></a><span class="lineno">  706</span>&#160;            fun(getAt&lt;T&gt;(i));</div>
+<div class="line"><a name="l00707"></a><span class="lineno">  707</span>&#160;        }</div>
+<div class="line"><a name="l00708"></a><span class="lineno">  708</span>&#160;    }</div>
+<div class="line"><a name="l00709"></a><span class="lineno">  709</span>&#160; </div>
+<div class="line"><a name="l00710"></a><span class="lineno">  710</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T, <span class="keyword">typename</span> F&gt;</div>
+<div class="line"><a name="l00711"></a><span class="lineno">  711</span>&#160;    <span class="keywordtype">void</span> forEach(std::size_t from, std::size_t to, F&amp;&amp; fun)<span class="keyword"> const</span></div>
+<div class="line"><a name="l00712"></a><span class="lineno">  712</span>&#160;<span class="keyword">    </span>{</div>
+<div class="line"><a name="l00713"></a><span class="lineno">  713</span>&#160;        <span class="keywordflow">for</span> (std::size_t i = from; i &lt;= to; i++) {</div>
+<div class="line"><a name="l00714"></a><span class="lineno">  714</span>&#160;            fun(getAt&lt;T&gt;(i));</div>
+<div class="line"><a name="l00715"></a><span class="lineno">  715</span>&#160;        }</div>
+<div class="line"><a name="l00716"></a><span class="lineno">  716</span>&#160;    }</div>
+<div class="line"><a name="l00717"></a><span class="lineno">  717</span>&#160; </div>
+<div class="line"><a name="l00718"></a><span class="lineno">  718</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00719"></a><span class="lineno">  719</span>&#160;    <span class="keyword">class </span>Coordinates {</div>
+<div class="line"><a name="l00720"></a><span class="lineno">  720</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00721"></a><span class="lineno">  721</span>&#160;        <span class="keyword">using</span> SequenceType = <span class="keyword">typename</span> std::conditional&lt;std::is_const&lt;T&gt;::value, <span class="keyword">const</span> CoordinateSequence, CoordinateSequence&gt;::type;</div>
 <div class="line"><a name="l00722"></a><span class="lineno">  722</span>&#160; </div>
-<div class="line"><a name="l00723"></a><span class="lineno">  723</span>&#160;        CoordinateSequenceIterator&lt;const SequenceType, typename std::add_const&lt;T&gt;::type&gt;</div>
-<div class="line"><a name="l00724"></a><span class="lineno">  724</span>&#160;        begin()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00725"></a><span class="lineno">  725</span>&#160;            <span class="keywordflow">return</span> CoordinateSequenceIterator&lt;const SequenceType, typename std::add_const&lt;T&gt;::type&gt;{m_seq};</div>
-<div class="line"><a name="l00726"></a><span class="lineno">  726</span>&#160;        }</div>
-<div class="line"><a name="l00727"></a><span class="lineno">  727</span>&#160; </div>
-<div class="line"><a name="l00728"></a><span class="lineno">  728</span>&#160;        CoordinateSequenceIterator&lt;const SequenceType, typename std::add_const&lt;T&gt;::type&gt;</div>
-<div class="line"><a name="l00729"></a><span class="lineno">  729</span>&#160;        end()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00730"></a><span class="lineno">  730</span>&#160;            <span class="keywordflow">return</span> CoordinateSequenceIterator&lt;const SequenceType, typename std::add_const&lt;T&gt;::type&gt;{m_seq, m_seq-&gt;getSize()};</div>
+<div class="line"><a name="l00723"></a><span class="lineno">  723</span>&#160;        <span class="keyword">explicit</span> Coordinates(SequenceType* seq) : m_seq(seq) {}</div>
+<div class="line"><a name="l00724"></a><span class="lineno">  724</span>&#160; </div>
+<div class="line"><a name="l00725"></a><span class="lineno">  725</span>&#160;        CoordinateSequenceIterator&lt;SequenceType, T&gt; begin() {</div>
+<div class="line"><a name="l00726"></a><span class="lineno">  726</span>&#160;            <span class="keywordflow">return</span> {m_seq};</div>
+<div class="line"><a name="l00727"></a><span class="lineno">  727</span>&#160;        }</div>
+<div class="line"><a name="l00728"></a><span class="lineno">  728</span>&#160; </div>
+<div class="line"><a name="l00729"></a><span class="lineno">  729</span>&#160;        CoordinateSequenceIterator&lt;SequenceType, T&gt; end() {</div>
+<div class="line"><a name="l00730"></a><span class="lineno">  730</span>&#160;            <span class="keywordflow">return</span> {m_seq, m_seq-&gt;getSize()};</div>
 <div class="line"><a name="l00731"></a><span class="lineno">  731</span>&#160;        }</div>
 <div class="line"><a name="l00732"></a><span class="lineno">  732</span>&#160; </div>
 <div class="line"><a name="l00733"></a><span class="lineno">  733</span>&#160;        CoordinateSequenceIterator&lt;const SequenceType, typename std::add_const&lt;T&gt;::type&gt;</div>
-<div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160;        cbegin()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00734"></a><span class="lineno">  734</span>&#160;        begin()<span class="keyword"> const </span>{</div>
 <div class="line"><a name="l00735"></a><span class="lineno">  735</span>&#160;            <span class="keywordflow">return</span> CoordinateSequenceIterator&lt;const SequenceType, typename std::add_const&lt;T&gt;::type&gt;{m_seq};</div>
 <div class="line"><a name="l00736"></a><span class="lineno">  736</span>&#160;        }</div>
 <div class="line"><a name="l00737"></a><span class="lineno">  737</span>&#160; </div>
 <div class="line"><a name="l00738"></a><span class="lineno">  738</span>&#160;        CoordinateSequenceIterator&lt;const SequenceType, typename std::add_const&lt;T&gt;::type&gt;</div>
-<div class="line"><a name="l00739"></a><span class="lineno">  739</span>&#160;        cend()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00739"></a><span class="lineno">  739</span>&#160;        end()<span class="keyword"> const </span>{</div>
 <div class="line"><a name="l00740"></a><span class="lineno">  740</span>&#160;            <span class="keywordflow">return</span> CoordinateSequenceIterator&lt;const SequenceType, typename std::add_const&lt;T&gt;::type&gt;{m_seq, m_seq-&gt;getSize()};</div>
 <div class="line"><a name="l00741"></a><span class="lineno">  741</span>&#160;        }</div>
 <div class="line"><a name="l00742"></a><span class="lineno">  742</span>&#160; </div>
-<div class="line"><a name="l00743"></a><span class="lineno">  743</span>&#160;    <span class="keyword">private</span>:</div>
-<div class="line"><a name="l00744"></a><span class="lineno">  744</span>&#160;        SequenceType* m_seq;</div>
-<div class="line"><a name="l00745"></a><span class="lineno">  745</span>&#160;    };</div>
-<div class="line"><a name="l00746"></a><span class="lineno">  746</span>&#160; </div>
-<div class="line"><a name="l00747"></a><span class="lineno">  747</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00748"></a><span class="lineno">  748</span>&#160;    Coordinates&lt;typename std::add_const&lt;T&gt;::type&gt; items()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00749"></a><span class="lineno">  749</span>&#160;        <span class="keywordflow">return</span> Coordinates&lt;typename std::add_const&lt;T&gt;::type&gt;(<span class="keyword">this</span>);</div>
-<div class="line"><a name="l00750"></a><span class="lineno">  750</span>&#160;    }</div>
-<div class="line"><a name="l00751"></a><span class="lineno">  751</span>&#160; </div>
-<div class="line"><a name="l00752"></a><span class="lineno">  752</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
-<div class="line"><a name="l00753"></a><span class="lineno">  753</span>&#160;    Coordinates&lt;T&gt; items() {</div>
-<div class="line"><a name="l00754"></a><span class="lineno">  754</span>&#160;        <span class="keywordflow">return</span> Coordinates&lt;T&gt;(<span class="keyword">this</span>);</div>
-<div class="line"><a name="l00755"></a><span class="lineno">  755</span>&#160;    }</div>
+<div class="line"><a name="l00743"></a><span class="lineno">  743</span>&#160;        CoordinateSequenceIterator&lt;const SequenceType, typename std::add_const&lt;T&gt;::type&gt;</div>
+<div class="line"><a name="l00744"></a><span class="lineno">  744</span>&#160;        cbegin()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00745"></a><span class="lineno">  745</span>&#160;            <span class="keywordflow">return</span> CoordinateSequenceIterator&lt;const SequenceType, typename std::add_const&lt;T&gt;::type&gt;{m_seq};</div>
+<div class="line"><a name="l00746"></a><span class="lineno">  746</span>&#160;        }</div>
+<div class="line"><a name="l00747"></a><span class="lineno">  747</span>&#160; </div>
+<div class="line"><a name="l00748"></a><span class="lineno">  748</span>&#160;        CoordinateSequenceIterator&lt;const SequenceType, typename std::add_const&lt;T&gt;::type&gt;</div>
+<div class="line"><a name="l00749"></a><span class="lineno">  749</span>&#160;        cend()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00750"></a><span class="lineno">  750</span>&#160;            <span class="keywordflow">return</span> CoordinateSequenceIterator&lt;const SequenceType, typename std::add_const&lt;T&gt;::type&gt;{m_seq, m_seq-&gt;getSize()};</div>
+<div class="line"><a name="l00751"></a><span class="lineno">  751</span>&#160;        }</div>
+<div class="line"><a name="l00752"></a><span class="lineno">  752</span>&#160; </div>
+<div class="line"><a name="l00753"></a><span class="lineno">  753</span>&#160;    <span class="keyword">private</span>:</div>
+<div class="line"><a name="l00754"></a><span class="lineno">  754</span>&#160;        SequenceType* m_seq;</div>
+<div class="line"><a name="l00755"></a><span class="lineno">  755</span>&#160;    };</div>
 <div class="line"><a name="l00756"></a><span class="lineno">  756</span>&#160; </div>
-<div class="line"><a name="l00757"></a><span class="lineno">  757</span>&#160; </div>
-<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160; </div>
-<div class="line"><a name="l00760"></a><span class="lineno">  760</span>&#160;    <span class="keywordtype">double</span>* data() {</div>
-<div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160;        <span class="keywordflow">return</span> m_vect.data();</div>
-<div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160;    }</div>
-<div class="line"><a name="l00763"></a><span class="lineno">  763</span>&#160; </div>
-<div class="line"><a name="l00764"></a><span class="lineno">  764</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">double</span>* data()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00765"></a><span class="lineno">  765</span>&#160;        <span class="keywordflow">return</span> m_vect.data();</div>
-<div class="line"><a name="l00766"></a><span class="lineno">  766</span>&#160;    }</div>
+<div class="line"><a name="l00757"></a><span class="lineno">  757</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00758"></a><span class="lineno">  758</span>&#160;    Coordinates&lt;typename std::add_const&lt;T&gt;::type&gt; items()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00759"></a><span class="lineno">  759</span>&#160;        <span class="keywordflow">return</span> Coordinates&lt;typename std::add_const&lt;T&gt;::type&gt;(<span class="keyword">this</span>);</div>
+<div class="line"><a name="l00760"></a><span class="lineno">  760</span>&#160;    }</div>
+<div class="line"><a name="l00761"></a><span class="lineno">  761</span>&#160; </div>
+<div class="line"><a name="l00762"></a><span class="lineno">  762</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</div>
+<div class="line"><a name="l00763"></a><span class="lineno">  763</span>&#160;    Coordinates&lt;T&gt; items() {</div>
+<div class="line"><a name="l00764"></a><span class="lineno">  764</span>&#160;        <span class="keywordflow">return</span> Coordinates&lt;T&gt;(<span class="keyword">this</span>);</div>
+<div class="line"><a name="l00765"></a><span class="lineno">  765</span>&#160;    }</div>
+<div class="line"><a name="l00766"></a><span class="lineno">  766</span>&#160; </div>
 <div class="line"><a name="l00767"></a><span class="lineno">  767</span>&#160; </div>
-<div class="line"><a name="l00768"></a><span class="lineno">  768</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00769"></a><span class="lineno">  769</span>&#160;    std::vector&lt;double&gt; m_vect; <span class="comment">// Vector to store values</span></div>
-<div class="line"><a name="l00770"></a><span class="lineno">  770</span>&#160; </div>
-<div class="line"><a name="l00771"></a><span class="lineno">  771</span>&#160;    uint8_t m_stride;           <span class="comment">// Stride of stored values, corresponding to underlying type</span></div>
-<div class="line"><a name="l00772"></a><span class="lineno">  772</span>&#160; </div>
-<div class="line"><a name="l00773"></a><span class="lineno">  773</span>&#160;    <span class="keyword">mutable</span> <span class="keywordtype">bool</span> m_hasdim;      <span class="comment">// Has the dimension of this sequence been determined? Or was it created with no</span></div>
-<div class="line"><a name="l00774"></a><span class="lineno">  774</span>&#160;                                <span class="comment">// explicit dimensionality, and we&#39;re waiting for getDimension() to be called</span></div>
-<div class="line"><a name="l00775"></a><span class="lineno">  775</span>&#160;                                <span class="comment">// after some coordinates have been added?</span></div>
-<div class="line"><a name="l00776"></a><span class="lineno">  776</span>&#160;    <span class="keyword">mutable</span> <span class="keywordtype">bool</span> m_hasz;</div>
-<div class="line"><a name="l00777"></a><span class="lineno">  777</span>&#160;    <span class="keywordtype">bool</span> m_hasm;</div>
-<div class="line"><a name="l00778"></a><span class="lineno">  778</span>&#160; </div>
-<div class="line"><a name="l00779"></a><span class="lineno">  779</span>&#160;    <span class="keywordtype">void</span> initialize();</div>
+<div class="line"><a name="l00769"></a><span class="lineno">  769</span>&#160; </div>
+<div class="line"><a name="l00770"></a><span class="lineno">  770</span>&#160;    <span class="keywordtype">double</span>* data() {</div>
+<div class="line"><a name="l00771"></a><span class="lineno">  771</span>&#160;        <span class="keywordflow">return</span> m_vect.data();</div>
+<div class="line"><a name="l00772"></a><span class="lineno">  772</span>&#160;    }</div>
+<div class="line"><a name="l00773"></a><span class="lineno">  773</span>&#160; </div>
+<div class="line"><a name="l00774"></a><span class="lineno">  774</span>&#160;    <span class="keyword">const</span> <span class="keywordtype">double</span>* data()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00775"></a><span class="lineno">  775</span>&#160;        <span class="keywordflow">return</span> m_vect.data();</div>
+<div class="line"><a name="l00776"></a><span class="lineno">  776</span>&#160;    }</div>
+<div class="line"><a name="l00777"></a><span class="lineno">  777</span>&#160; </div>
+<div class="line"><a name="l00778"></a><span class="lineno">  778</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00779"></a><span class="lineno">  779</span>&#160;    std::vector&lt;double&gt; m_vect; <span class="comment">// Vector to store values</span></div>
 <div class="line"><a name="l00780"></a><span class="lineno">  780</span>&#160; </div>
-<div class="line"><a name="l00781"></a><span class="lineno">  781</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T1, <span class="keyword">typename</span> T2&gt;</div>
-<div class="line"><a name="l00782"></a><span class="lineno">  782</span>&#160;    <span class="keywordtype">void</span> setAtImpl(<span class="keyword">const</span> T2&amp; c, std::size_t pos) {</div>
-<div class="line"><a name="l00783"></a><span class="lineno">  783</span>&#160;        <span class="keyword">auto</span>&amp; orig = getAt&lt;T1&gt;(pos);</div>
-<div class="line"><a name="l00784"></a><span class="lineno">  784</span>&#160;        orig = c;</div>
-<div class="line"><a name="l00785"></a><span class="lineno">  785</span>&#160;    }</div>
-<div class="line"><a name="l00786"></a><span class="lineno">  786</span>&#160; </div>
-<div class="line"><a name="l00787"></a><span class="lineno">  787</span>&#160;    <span class="keywordtype">void</span> make_space(std::size_t pos, std::size_t n) {</div>
-<div class="line"><a name="l00788"></a><span class="lineno">  788</span>&#160;        m_vect.insert(std::next(m_vect.begin(), <span class="keyword">static_cast&lt;</span>std::ptrdiff_t<span class="keyword">&gt;</span>(pos * stride())),</div>
-<div class="line"><a name="l00789"></a><span class="lineno">  789</span>&#160;                      m_stride * n,</div>
-<div class="line"><a name="l00790"></a><span class="lineno">  790</span>&#160;                      DoubleNotANumber);</div>
-<div class="line"><a name="l00791"></a><span class="lineno">  791</span>&#160;    }</div>
-<div class="line"><a name="l00792"></a><span class="lineno">  792</span>&#160; </div>
-<div class="line"><a name="l00793"></a><span class="lineno">  793</span>&#160;    std::uint8_t stride()<span class="keyword"> const </span>{</div>
-<div class="line"><a name="l00794"></a><span class="lineno">  794</span>&#160;        <span class="keywordflow">return</span> m_stride;</div>
+<div class="line"><a name="l00781"></a><span class="lineno">  781</span>&#160;    uint8_t m_stride;           <span class="comment">// Stride of stored values, corresponding to underlying type</span></div>
+<div class="line"><a name="l00782"></a><span class="lineno">  782</span>&#160; </div>
+<div class="line"><a name="l00783"></a><span class="lineno">  783</span>&#160;    <span class="keyword">mutable</span> <span class="keywordtype">bool</span> m_hasdim;      <span class="comment">// Has the dimension of this sequence been determined? Or was it created with no</span></div>
+<div class="line"><a name="l00784"></a><span class="lineno">  784</span>&#160;                                <span class="comment">// explicit dimensionality, and we&#39;re waiting for getDimension() to be called</span></div>
+<div class="line"><a name="l00785"></a><span class="lineno">  785</span>&#160;                                <span class="comment">// after some coordinates have been added?</span></div>
+<div class="line"><a name="l00786"></a><span class="lineno">  786</span>&#160;    <span class="keyword">mutable</span> <span class="keywordtype">bool</span> m_hasz;</div>
+<div class="line"><a name="l00787"></a><span class="lineno">  787</span>&#160;    <span class="keywordtype">bool</span> m_hasm;</div>
+<div class="line"><a name="l00788"></a><span class="lineno">  788</span>&#160; </div>
+<div class="line"><a name="l00789"></a><span class="lineno">  789</span>&#160;    <span class="keywordtype">void</span> initialize();</div>
+<div class="line"><a name="l00790"></a><span class="lineno">  790</span>&#160; </div>
+<div class="line"><a name="l00791"></a><span class="lineno">  791</span>&#160;    <span class="keyword">template</span>&lt;<span class="keyword">typename</span> T1, <span class="keyword">typename</span> T2&gt;</div>
+<div class="line"><a name="l00792"></a><span class="lineno">  792</span>&#160;    <span class="keywordtype">void</span> setAtImpl(<span class="keyword">const</span> T2&amp; c, std::size_t pos) {</div>
+<div class="line"><a name="l00793"></a><span class="lineno">  793</span>&#160;        <span class="keyword">auto</span>&amp; orig = getAt&lt;T1&gt;(pos);</div>
+<div class="line"><a name="l00794"></a><span class="lineno">  794</span>&#160;        orig = c;</div>
 <div class="line"><a name="l00795"></a><span class="lineno">  795</span>&#160;    }</div>
 <div class="line"><a name="l00796"></a><span class="lineno">  796</span>&#160; </div>
-<div class="line"><a name="l00797"></a><span class="lineno">  797</span>&#160;};</div>
-<div class="line"><a name="l00798"></a><span class="lineno">  798</span>&#160; </div>
-<div class="line"><a name="l00799"></a><span class="lineno">  799</span>&#160;GEOS_DLL std::ostream&amp; operator&lt;&lt; (std::ostream&amp; os, <span class="keyword">const</span> CoordinateSequence&amp; cs);</div>
-<div class="line"><a name="l00800"></a><span class="lineno">  800</span>&#160; </div>
-<div class="line"><a name="l00801"></a><span class="lineno">  801</span>&#160;GEOS_DLL <span class="keywordtype">bool</span> operator== (<span class="keyword">const</span> CoordinateSequence&amp; s1, <span class="keyword">const</span> CoordinateSequence&amp; s2);</div>
+<div class="line"><a name="l00797"></a><span class="lineno">  797</span>&#160;    <span class="keywordtype">void</span> make_space(std::size_t pos, std::size_t n) {</div>
+<div class="line"><a name="l00798"></a><span class="lineno">  798</span>&#160;        m_vect.insert(std::next(m_vect.begin(), <span class="keyword">static_cast&lt;</span>std::ptrdiff_t<span class="keyword">&gt;</span>(pos * stride())),</div>
+<div class="line"><a name="l00799"></a><span class="lineno">  799</span>&#160;                      m_stride * n,</div>
+<div class="line"><a name="l00800"></a><span class="lineno">  800</span>&#160;                      DoubleNotANumber);</div>
+<div class="line"><a name="l00801"></a><span class="lineno">  801</span>&#160;    }</div>
 <div class="line"><a name="l00802"></a><span class="lineno">  802</span>&#160; </div>
-<div class="line"><a name="l00803"></a><span class="lineno">  803</span>&#160;GEOS_DLL <span class="keywordtype">bool</span> operator!= (<span class="keyword">const</span> CoordinateSequence&amp; s1, <span class="keyword">const</span> CoordinateSequence&amp; s2);</div>
-<div class="line"><a name="l00804"></a><span class="lineno">  804</span>&#160; </div>
-<div class="line"><a name="l00805"></a><span class="lineno">  805</span>&#160;} <span class="comment">// namespace geos::geom</span></div>
-<div class="line"><a name="l00806"></a><span class="lineno">  806</span>&#160;} <span class="comment">// namespace geos</span></div>
-<div class="line"><a name="l00807"></a><span class="lineno">  807</span>&#160; </div>
+<div class="line"><a name="l00803"></a><span class="lineno">  803</span>&#160;    std::uint8_t stride()<span class="keyword"> const </span>{</div>
+<div class="line"><a name="l00804"></a><span class="lineno">  804</span>&#160;        <span class="keywordflow">return</span> m_stride;</div>
+<div class="line"><a name="l00805"></a><span class="lineno">  805</span>&#160;    }</div>
+<div class="line"><a name="l00806"></a><span class="lineno">  806</span>&#160; </div>
+<div class="line"><a name="l00807"></a><span class="lineno">  807</span>&#160;};</div>
+<div class="line"><a name="l00808"></a><span class="lineno">  808</span>&#160; </div>
+<div class="line"><a name="l00809"></a><span class="lineno">  809</span>&#160;GEOS_DLL std::ostream&amp; operator&lt;&lt; (std::ostream&amp; os, <span class="keyword">const</span> CoordinateSequence&amp; cs);</div>
+<div class="line"><a name="l00810"></a><span class="lineno">  810</span>&#160; </div>
+<div class="line"><a name="l00811"></a><span class="lineno">  811</span>&#160;GEOS_DLL <span class="keywordtype">bool</span> operator== (<span class="keyword">const</span> CoordinateSequence&amp; s1, <span class="keyword">const</span> CoordinateSequence&amp; s2);</div>
+<div class="line"><a name="l00812"></a><span class="lineno">  812</span>&#160; </div>
+<div class="line"><a name="l00813"></a><span class="lineno">  813</span>&#160;GEOS_DLL <span class="keywordtype">bool</span> operator!= (<span class="keyword">const</span> CoordinateSequence&amp; s1, <span class="keyword">const</span> CoordinateSequence&amp; s2);</div>
+<div class="line"><a name="l00814"></a><span class="lineno">  814</span>&#160; </div>
+<div class="line"><a name="l00815"></a><span class="lineno">  815</span>&#160;} <span class="comment">// namespace geos::geom</span></div>
+<div class="line"><a name="l00816"></a><span class="lineno">  816</span>&#160;} <span class="comment">// namespace geos</span></div>
+<div class="line"><a name="l00817"></a><span class="lineno">  817</span>&#160; </div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequence_html"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequence.html">geos::geom::CoordinateSequence</a></div><div class="ttdoc">The internal representation of a list of coordinates inside a Geometry.</div><div class="ttdef"><b>Definition:</b> CoordinateSequence.h:56</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a></div><div class="ttdoc">Coordinate is the lightweight class used to store coordinates.</div><div class="ttdef"><b>Definition:</b> Coordinate.h:217</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Envelope_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Envelope.html">geos::geom::Envelope</a></div><div class="ttdoc">An Envelope defines a rectangulare region of the 2D coordinate plane.</div><div class="ttdef"><b>Definition:</b> Envelope.h:59</div></div>
