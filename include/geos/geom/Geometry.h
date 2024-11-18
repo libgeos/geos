@@ -719,7 +719,7 @@ public:
      *   and dissolving the linework.
      * - Unioning a set of [Polygons](@ref Polygon) will always
      *   return a polygonal geometry (unlike Geometry::Union(const Geometry* other) const),
-     *   which may return geometrys of lower dimension if a topology collapse
+     *   which may return geometries of lower dimension if a topology collapse
      *   occurred.
      *
      * @return the union geometry

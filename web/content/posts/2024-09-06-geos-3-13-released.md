@@ -51,7 +51,7 @@ The full list of changes is as follows:
 
 - **Breaking Changes:**
   - Zero-length linestrings (eg LINESTRING(1 1, 1 1)) are now treated as equivalent to points (POINT(1 1)) in boolean predicates
-  - CMake 3.15 or later is requried ([GH-1143](https://github.com/libgeos/geos/issues/1143), Mike Taves)
+  - CMake 3.15 or later is required ([GH-1143](https://github.com/libgeos/geos/issues/1143), Mike Taves)
 
 - **Fixes/Improvements:**
   - Add Angle::sinCosSnap to avoid small errors, e.g. with buffer operations ([GH-978](https://github.com/libgeos/geos/issues/978), Mike Taves)

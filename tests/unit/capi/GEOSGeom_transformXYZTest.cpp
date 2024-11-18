@@ -312,7 +312,7 @@ void object::test<14>() {
     ensure_equals(toWKT(result_), "CIRCULARSTRING Z (0 0 0, 2 3 4, 4 3 0)");
 }
 
-// callback should succed on 2D geometry
+// callback should succeed on 2D geometry
 template <>
 template <>
 void object::test<15>() {

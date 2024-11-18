@@ -31,7 +31,7 @@
 
 - Breaking Changes:
   - Zero-length linestrings (eg LINESTRING(1 1, 1 1)) are now treated as equivalent to points (POINT(1 1)) in boolean predicates
-  - CMake 3.15 or later is requried (GH-1143, Mike Taves)
+  - CMake 3.15 or later is required (GH-1143, Mike Taves)
 
 - Fixes/Improvements:
   - WKTReader: Points with all-NaN coordinates are not considered empty anymore (GH-927, Casper van der Wel)
@@ -935,7 +935,7 @@ See 3.7.0 notes
 - Added Polygonizer and LineMerger classes.
 - python wrapper examples
 - General cleanup / warnings removal
-- cleaner win32 / older copilers builds
+- cleaner win32 / older compilers builds
 - Reduced heap allocations
 - debian package builder scripts
 - reduction of standard C lib headers dependency

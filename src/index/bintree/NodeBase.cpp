@@ -26,7 +26,7 @@ namespace index { // geos.index
 namespace bintree { // geos.index.bintree
 
 /**
- * Returns the index of the subnode that wholely contains the given interval.
+ * Returns the index of the subnode that wholly contains the given interval.
  * If none does, returns -1.
  */
 int

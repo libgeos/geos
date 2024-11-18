@@ -11,7 +11,7 @@ weight: 100
 `geosop` is a CLI (command-line interface) for GEOS. It can be used to:
 
 * Run GEOS operations on one or many geometries
-* Output geometry resuls in various formats (WKT and WKB)
+* Output geometry results in various formats (WKT and WKB)
 * Convert between WKT and WKB
 * Time the performance of operations
 * Check for memory leaks in operations

@@ -84,7 +84,7 @@ public:
      * to the given parentEdges vector.
      *
      * @note Parents are pushed to the parentEdges vector, make sure
-     * it is empty if index-based corrispondence is important.
+     * it is empty if index-based correspondence is important.
      */
     static void toEdges(std::vector<DirectedEdge*>& dirEdges,
                         std::vector<Edge*>& parentEdges);

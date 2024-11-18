@@ -55,7 +55,7 @@ using namespace geos::algorithm;
 
 /**
  * Updates an IM from the label for an edge.
- * Handles edges from both L and A geometrys.
+ * Handles edges from both L and A geometries.
  */
 void
 Edge::updateIM(const Label& lbl, IntersectionMatrix& im)

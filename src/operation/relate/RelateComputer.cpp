@@ -181,7 +181,7 @@ RelateComputer::computeIM()
 
     /*
      * Now process improper intersections
-     * (eg where one or other of the geometrys has a vertex at the
+     * (eg where one or other of the geometries has a vertex at the
      * intersection point)
      * We need to compute the edge graph at all nodes to determine
      * the IM.

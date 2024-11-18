@@ -231,7 +231,7 @@ TopologyComputer::addIntersection(NodeSection* a, NodeSection* b)
     // we run this first (unlike JTS) in case the subsequent test throws
     // an exception and the NodeSection pointers are not correctly
     // saved in the memory managed store on the NodeSections, causing
-    // a small memeory leak
+    // a small memory leak
     addNodeSections(a, b);
 
     if (! a->isSameGeometry(b)) {
