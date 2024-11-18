@@ -450,10 +450,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - xcode: 13.2.1
-          cxxstd: 14
-          build_type: ASAN
-          runs_on: macos-12
         - xcode: 14.3.1
           cxxstd: 17
           build_type: ASAN
@@ -462,6 +458,10 @@ jobs:
           cxxstd: 20
           build_type: Release
           runs_on: macOS-14
+        - xcode: 16.0
+          cxxstd: 23
+          build_type: ASAN
+          runs_on: macos-15
 
     runs-on: ${{ matrix.runs_on }}
     steps:
