@@ -680,6 +680,16 @@ public:
     }
 
     template<typename F>
+    auto applyAt(size_t i, F&& fun) const {
+        switch(getCoordinateType()) {
+            case CoordinateType::XYZ:   return fun(getAt<Coordinate>(i));
+            case CoordinateType::XYM:   return fun(getAt<CoordinateXYM>(i));
+            case CoordinateType::XYZM:  return fun(getAt<CoordinateXYZM>(i));
+            default:                    return fun(getAt<CoordinateXY>(i));
+        }
+    }
+
+    template<typename F>
     void forEach(F&& fun) const {
         switch(getCoordinateType()) {
             case CoordinateType::XY:    for (const auto& c : items<CoordinateXY>())   { fun(c); } break;
