@@ -41,5 +41,27 @@ void object::test<2>()
     ensure(result_ == nullptr);
 }
 
+template<>
+template<>
+void object::test<3>()
+{
+    input_ = fromWKT("MULTILINESTRING M ((10 11 3, 20 21 4), (20 21 4, 32 21 3))");
+    result_ = GEOSBoundary(input_);
+    expected_ = fromWKT("MULTIPOINT M ((10 11 3), (32 21 3))");
+
+    ensure_geometry_equals_identical(result_, expected_);
+}
+
+template<>
+template<>
+void object::test<4>()
+{
+    input_ = fromWKT("POLYGON M ((0 0 0, 1 0 1, 1 1 2, 0 1 3, 0 0 4))");
+    result_ = GEOSBoundary(input_);
+    expected_ = fromWKT("LINESTRING M (0 0 0, 1 0 1, 1 1 2, 0 1 3, 0 0 4)");
+
+    ensure_geometry_equals_identical(result_, expected_);
+}
+
 } // namespace tut
 

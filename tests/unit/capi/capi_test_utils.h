@@ -72,7 +72,10 @@ namespace capitest {
         fromWKT(const char* wkt)
         {
             GEOSGeometry* g = GEOSGeomFromWKT(wkt);
-            tut::ensure(g != nullptr);
+            if (g == nullptr) {
+                std::string message = "WKT is invalid: " + std::string(wkt);
+                tut::ensure(message, g != nullptr);
+            }
             return g;
         }
 
