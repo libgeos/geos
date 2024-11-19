@@ -1457,7 +1457,7 @@ next lower dimension."</p>
 <p>The result obeys the following contract:</p>
 <ul>
 <li>Unioning a set of <a class="el" href="classgeos_1_1geom_1_1LineString.html">LineStrings</a> has the effect of fully noding and dissolving the linework.</li>
-<li>Unioning a set of <a class="el" href="classgeos_1_1geom_1_1Polygon.html">Polygons</a> will always return a polygonal geometry (unlike <a class="el" href="classgeos_1_1geom_1_1Geometry.html#a95a7ac364afd12ba5d31facf35741d53" title="Returns a Geometry representing all the points in this Geometry and other.">Geometry::Union(const Geometry* other) const</a>), which may return geometrys of lower dimension if a topology collapse occurred.</li>
+<li>Unioning a set of <a class="el" href="classgeos_1_1geom_1_1Polygon.html">Polygons</a> will always return a polygonal geometry (unlike <a class="el" href="classgeos_1_1geom_1_1Geometry.html#a95a7ac364afd12ba5d31facf35741d53" title="Returns a Geometry representing all the points in this Geometry and other.">Geometry::Union(const Geometry* other) const</a>), which may return geometries of lower dimension if a topology collapse occurred.</li>
 </ul>
 <dl class="section return"><dt>Returns</dt><dd>the union geometry</dd></dl>
 <dl class="section see"><dt>See also</dt><dd>UnaryUnionOp </dd></dl>

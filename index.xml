@@ -106,7 +106,7 @@ You can explore the C++ model via the Doxygen reference.</description>
       
       <guid>https://libgeos.org/usage/tools/</guid>
       <description>GeosOp  Usage   JTS TestBuilder    GeosOp     geosop is a CLI (command-line interface) for GEOS. It can be used to:
- Run GEOS operations on one or many geometries Output geometry resuls in various formats (WKT and WKB) Convert between WKT and WKB Time the performance of operations Check for memory leaks in operations Check the semantics of GEOS operations  For more information see the README.</description>
+ Run GEOS operations on one or many geometries Output geometry results in various formats (WKT and WKB) Convert between WKT and WKB Time the performance of operations Check for memory leaks in operations Check the semantics of GEOS operations  For more information see the README.</description>
     </item>
     
     <item>
