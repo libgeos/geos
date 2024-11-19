@@ -100,7 +100,7 @@ protected:
     int
     compareToSameClass(const Geometry* g) const override;
 
-    // Helper method allowing PolygonImpl to use GeometryFactory without cirular imports
+    // Helper method allowing PolygonImpl to use GeometryFactory without circular imports
     static std::unique_ptr<Geometry> createEmptyRing(const GeometryFactory&);
 
     virtual Curve* getExteriorRing() = 0;

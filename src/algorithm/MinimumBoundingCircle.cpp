@@ -45,7 +45,7 @@ namespace algorithm { // geos.algorithm
 std::unique_ptr<Geometry>
 MinimumBoundingCircle::getCircle()
 {
-    //TODO: ensure the output circle contains the extermal points.
+    //TODO: ensure the output circle contains the extremal points.
     //TODO: or maybe even ensure that the returned geometry contains ALL the input points?
 
     compute();

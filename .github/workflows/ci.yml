@@ -524,6 +524,7 @@ jobs:
         set -e
         sudo -E apt-get update
         sudo -E apt-get -yq --no-install-suggests --no-install-recommends install cppcheck
+        python3 -m pip install --disable-pip-version-check --user codespell
 
     - name: 'Check Out'
       uses: actions/checkout@v4
@@ -531,6 +532,9 @@ jobs:
     - name: 'cppcheck'
       run: ./tools/cppcheck.sh
 
+    - name: codespell
+      run: codespell
+      # false-positives can be added to tools/codespell.ignore
 
   cmake-subproject:
     name: 'CMake Subproject'

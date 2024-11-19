@@ -38,7 +38,7 @@ using namespace geos::geom;
 namespace geos {
 namespace algorithm { // geos.algorithm
 
-// file statics
+// file statistics
 namespace {
 
 double

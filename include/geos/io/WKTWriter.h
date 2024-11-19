@@ -107,7 +107,7 @@ public:
     /**
      * Generates the WKT for a N-point <code>LineString</code>.
      *
-     * @param seq the sequence to outpout
+     * @param seq the sequence to output
      *
      * @return the WKT
      */
