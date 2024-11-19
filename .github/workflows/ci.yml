@@ -534,6 +534,7 @@ jobs:
 
     - name: codespell
       run: codespell
+      # false-positives can be added to tools/codespell.ignore
 
   cmake-subproject:
     name: 'CMake Subproject'
