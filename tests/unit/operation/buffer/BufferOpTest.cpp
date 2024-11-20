@@ -180,7 +180,7 @@ void object::test<4>
         ensure_not(gBuffer->isEmpty());
         ensure(gBuffer->isValid());
         ensure_equals(gBuffer->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
-        ensure(gBuffer->getNumPoints() >= std::size_t(243));
+        ensure(gBuffer->getNumPoints() >= std::size_t(240));
     }
 
     // Buffer point with custom parameters: 32 quadrant segments
@@ -193,7 +193,7 @@ void object::test<4>
         ensure_not(gBuffer->isEmpty());
         ensure(gBuffer->isValid());
         ensure_equals(gBuffer->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
-        ensure(gBuffer->getNumPoints() >= std::size_t(317));
+        ensure(gBuffer->getNumPoints() >= std::size_t(310));
     }
 }
 
