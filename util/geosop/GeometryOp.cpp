@@ -296,6 +296,13 @@ std::vector<GeometryOpCreator> opRegistry {
         return new Result( geom->buffer( d ) );
     });
     }},
+{"bufferQuadSegs", [](std::string name) { return GeometryOp::create(name,
+    catConst,
+    "compute the buffer of geometry by a distance with quadrant segments",
+    [](const std::unique_ptr<Geometry>& geom, double d, int quadrantSegments) {
+        return new Result( geom->buffer( d, quadrantSegments ) );
+    });
+    }},
 {"offsetCurve", [](std::string name) { return GeometryOp::create(name,
     catConst,
     "compute the offset curve of geometry by a distance",
