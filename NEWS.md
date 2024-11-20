@@ -10,6 +10,7 @@
   - Fix RelateNG for computing IM for empty-nonempty cases (Martin Davis)
   - Fix TopologyPreservingSimplifier/TaggedLineString to avoid jumping components (JTS-1096, Martin Davis)
   - Fix WKTWriter for small precisions and with trim enabled (GH-1199, Mike Taves)
+  - Fix BufferOp to increase length of segments removed by heuristic (GH-1200, Martin Davis)
 
 ## Changes in 3.13.0
 2024-09-06
