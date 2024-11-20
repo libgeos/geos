@@ -460,7 +460,10 @@ WKTWriter::writeTrimmedNumber(double d, uint32_t precision, char* buf)
         // most real-world coordinates, use positional notation
         if ( (precision < 4) && (da < 1.0) ) {
             // adjust precision to avoid rounding to zero
-            precision = static_cast<std::uint32_t>(-floor(log10(da)));
+            const auto higher_prec = static_cast<std::uint32_t>(-floor(log10(da)));
+            if (higher_prec > precision) {
+                precision = higher_prec;
+            }
         }
         return geos_d2sfixed_buffered_n(d, precision, buf);
     }
