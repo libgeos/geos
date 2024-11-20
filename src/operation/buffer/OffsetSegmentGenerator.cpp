@@ -44,7 +44,7 @@ namespace operation { // geos.operation
 namespace buffer { // geos.operation.buffer
 
 /*private data*/
-const double OffsetSegmentGenerator::CURVE_VERTEX_SNAP_DISTANCE_FACTOR = 1.0E-6;
+const double OffsetSegmentGenerator::CURVE_VERTEX_SNAP_DISTANCE_FACTOR = 1.0E-4;
 const double OffsetSegmentGenerator::OFFSET_SEGMENT_SEPARATION_FACTOR = 1.0E-3;
 const double OffsetSegmentGenerator::INSIDE_TURN_VERTEX_SNAP_DISTANCE_FACTOR = 1.0E-3;
 const double OffsetSegmentGenerator::SIMPLIFY_FACTOR = 100.0;
