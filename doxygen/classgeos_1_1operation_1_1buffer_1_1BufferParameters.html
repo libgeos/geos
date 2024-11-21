@@ -91,7 +91,7 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad9e1b5c1ee47cd1b747000015e8911ab"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#ad9e1b5c1ee47cd1b747000015e8911ab">getQuadrantSegments</a> () const</td></tr>
 <tr class="separator:ad9e1b5c1ee47cd1b747000015e8911ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adc5559aa27d60c7b40aba6d5c13c0c45"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#adc5559aa27d60c7b40aba6d5c13c0c45">setQuadrantSegments</a> (int quadSegs)</td></tr>
-<tr class="memdesc:adc5559aa27d60c7b40aba6d5c13c0c45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the number of line segments used to approximate an angle fillet.  <a href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#adc5559aa27d60c7b40aba6d5c13c0c45">More...</a><br /></td></tr>
+<tr class="memdesc:adc5559aa27d60c7b40aba6d5c13c0c45"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the number of line segments used to approximate an angle fillet in round joins.  <a href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#adc5559aa27d60c7b40aba6d5c13c0c45">More...</a><br /></td></tr>
 <tr class="separator:adc5559aa27d60c7b40aba6d5c13c0c45"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a38e6a5bbdba68052332f2831df279ee8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#a4712bec3a5a2bb5c28ab43b3fe327950">EndCapStyle</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html#a38e6a5bbdba68052332f2831df279ee8">getEndCapStyle</a> () const</td></tr>
 <tr class="separator:a38e6a5bbdba68052332f2831df279ee8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -593,16 +593,8 @@ Static Public Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Sets the number of line segments used to approximate an angle fillet. </p>
-<ul>
-<li>If <code>quadSegs</code> &gt;= 1, joins are round, and <code>quadSegs</code> indicates the number of segments to use to approximate a quarter-circle.</li>
-<li>If <code>quadSegs</code> = 0, joins are bevelled (flat)</li>
-<li>If <code>quadSegs</code> &lt; 0, joins are mitred, and the value of qs indicates the mitre ration limit as <pre>
-   mitreLimit = |<code>quadSegs</code>|
-   </pre></li>
-</ul>
-<p>For round joins, <code>quadSegs</code> determines the maximum error in the approximation to the true buffer curve.</p>
-<p>The default value of 8 gives less than 2% max error in the buffer distance.</p>
+<p>Sets the number of line segments used to approximate an angle fillet in round joins. </p>
+<p><code>quadSegs</code> determines the maximum error in the approximation to the true buffer curve. The default value of 8 gives less than 2% max error in the buffer distance.</p>
 <p>For a max error of &lt; 1%, use QS = 12. For a max error of &lt; 0.1%, use QS = 18. The error is always less than the buffer distance (in other words, the computed buffer curve is always inside the true curve).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
