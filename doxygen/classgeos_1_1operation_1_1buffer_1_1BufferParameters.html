@@ -594,8 +594,7 @@ Static Public Attributes</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Sets the number of line segments used to approximate an angle fillet in round joins. </p>
-<p><code>quadSegs</code> determines the maximum error in the approximation to the true buffer curve. The default value of 8 gives less than 2% max error in the buffer distance.</p>
-<p>For a max error of &lt; 1%, use QS = 12. For a max error of &lt; 0.1%, use QS = 18. The error is always less than the buffer distance (in other words, the computed buffer curve is always inside the true curve).</p>
+<p><code>quadSegs</code> determines the maximum error in the approximation to the true buffer curve. The default value of 8 gives less than 2% max error in the buffer distance. For a max error of &lt; 1%, use QS = 12. For a max error of &lt; 0.1%, use QS = 18. The error is always less than the buffer distance (in other words, the computed buffer curve is always inside the true curve).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">quadSegs</td><td>the number of segments in a fillet for a quadrant </td></tr>
