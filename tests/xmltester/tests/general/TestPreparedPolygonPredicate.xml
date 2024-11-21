@@ -132,7 +132,7 @@
 <case>
   <desc>mA/L
   	A has 2 shells touching at one vertex and one non-vertex.
-  	B passes between the shells, but is wholely contained
+  	B passes between the shells, but is wholly contained
   </desc>
   <a>
     MULTIPOLYGON (((100 30, 30 110, 150 110, 100 30)), 
@@ -204,7 +204,7 @@
 </case>
 
 <case>
-  <desc>A/L - wholely contained
+  <desc>A/L - wholly contained
   </desc>
   <a> POLYGON ((10 10, 60 100, 110 10, 10 10)) 
     </a>

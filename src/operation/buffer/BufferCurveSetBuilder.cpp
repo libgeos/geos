@@ -117,7 +117,7 @@ BufferCurveSetBuilder::addCurve(CoordinateSequence* coord,
     // coord ownership transferred to SegmentString
     SegmentString* e = new NodedSegmentString(coord, coord->hasZ(), coord->hasM(), newlabel);
 
-    // SegmentString doesnt own the sequence, so we need to delete in
+    // SegmentString doesn't own the sequence, so we need to delete in
     // the destructor
     newLabels.push_back(newlabel);
     curveList.push_back(e);

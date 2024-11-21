@@ -69,7 +69,7 @@ private:
     * are:
     *
     * - INTERSECTION: result envelope is the intersection of the input envelopes
-    * - DIFERENCE: result envelope is the envelope of the A input geometry
+    * - DIFFERENCE: result envelope is the envelope of the A input geometry
     *
     * Otherwise, <code>null</code> is returned to indicate full extent.
     */

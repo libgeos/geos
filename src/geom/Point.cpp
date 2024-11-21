@@ -318,4 +318,4 @@ Point::getCoordinatesRO() const
 }
 
 } // namespace geos::geom
-} // namesapce geos
+} // namespace geos

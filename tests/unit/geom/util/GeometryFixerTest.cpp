@@ -70,8 +70,8 @@ struct test_geometryfixer_data {
 
         std::unique_ptr<Geometry> expected = wktreader_.read(wktExpected);
 
-        // std::cout << "Reslt: " << wktwriter_.write(actual.get()) << std::endl;
-        // std::cout << "Expct: " << wktwriter_.write(expected.get()) << std::endl;
+        // std::cout << "Result: " << wktwriter_.write(actual.get()) << std::endl;
+        // std::cout << "Expect: " << wktwriter_.write(expected.get()) << std::endl;
 
         ensure("Result is invalid", actual->isValid());
         ensure_equals_geometry(expected.get(), actual.get());

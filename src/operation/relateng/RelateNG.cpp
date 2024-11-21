@@ -534,7 +534,7 @@ RelateNG::computeLineEnds(
                 continue;
 
             const LineString* line = static_cast<const LineString*>(elem);
-            //TODO: add optimzation to skip disjoint elements once exterior point found
+            //TODO: add optimization to skip disjoint elements once exterior point found
             const CoordinateXY& e0 = line->getCoordinatesRO()->getAt(0);
             hasExteriorIntersection |= computeLineEnd(geom, isA, &e0, geomTarget, topoComputer);
             if (topoComputer.isResultKnown()) {
