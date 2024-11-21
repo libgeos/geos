@@ -147,7 +147,6 @@ public:
     /// error in the approximation to the true buffer curve.
     /// The default value of 8 gives less than 2% max error in the
     /// buffer distance.
-    ///
     /// For a max error of < 1%, use QS = 12.
     /// For a max error of < 0.1%, use QS = 18.
     /// The error is always less than the buffer distance
