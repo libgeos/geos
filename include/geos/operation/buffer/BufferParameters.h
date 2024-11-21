@@ -141,21 +141,10 @@ public:
 
     /// \brief
     /// Sets the number of line segments used to approximate
-    /// an angle fillet.
+    /// an angle fillet in round joins.
     ///
-    /// - If <tt>quadSegs</tt> >= 1, joins are round,
-    ///   and <tt>quadSegs</tt> indicates the number of
-    ///   segments to use to approximate a quarter-circle.
-    /// - If <tt>quadSegs</tt> = 0, joins are bevelled (flat)
-    /// - If <tt>quadSegs</tt> < 0, joins are mitred, and the value of qs
-    ///   indicates the mitre ration limit as
-    ///   <pre>
-    ///    mitreLimit = |<tt>quadSegs</tt>|
-    ///    </pre>
-    ///
-    /// For round joins, <tt>quadSegs</tt> determines the maximum
+    /// <tt>quadSegs</tt> determines the maximum
     /// error in the approximation to the true buffer curve.
-    ///
     /// The default value of 8 gives less than 2% max error in the
     /// buffer distance.
     ///
