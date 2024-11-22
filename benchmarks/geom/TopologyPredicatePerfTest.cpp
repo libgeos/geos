@@ -201,7 +201,6 @@ double test(const Geometry& g, const std::vector<std::unique_ptr<Geometry>>& geo
 
 std::unique_ptr<Geometry> 
 loadWKT(std::string& fname) {
-    //std::string fname = "/Users/mdavis/proj/jts/testing/relateng/europe_main.wkt";
     std::ifstream f(fname);
     std::string line;
     std::unique_ptr<Geometry> geom;
