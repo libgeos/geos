@@ -4,7 +4,7 @@
  * Tests a target geometry against grids of points, lines and polygons covering the target. 
  * Target is either a geometry from a WKT file or a set of generated sine stars increasing in size.
  * 
- * Usage: perf_topo_predicate [WKT file] [ intersects | contains | covers | touches ]
+ * Usage: perf_topo_predicate [WKT file] [ intersects | contains | covers | touches ] [num target geoms]
 ******************************************************/
 
 #include <geos/geom/util/SineStarFactory.h>
@@ -28,8 +28,8 @@ using namespace geos::geom;
 using geos::operation::relate::RelateOp;
 
 std::size_t MAX_ITER = 1;
-std::size_t NUM_LINES = 10000;
-std::size_t NUM_LINES_PTS = 100;
+std::size_t NUM_GEOM = 1000; 
+std::size_t NUM_PTS = 100;
 
 #define INTERSECTS 0
 #define CONTAINS 1
@@ -39,6 +39,7 @@ std::size_t NUM_LINES_PTS = 100;
 std::string inputFilename{""};
 std::string predicateName{"intersects"};
 int predicateOp = INTERSECTS;
+std::size_t numTestGeometries = NUM_GEOM;
 
 int testRelateOpIntersects(const Geometry& g, const std::vector<std::unique_ptr<Geometry>>& geoms) {
     int count = 0;
@@ -218,13 +219,16 @@ void testTarget(int dim, Geometry& target) {
     std::vector<std::unique_ptr<Geometry>> geoms;
     switch (dim) {
     case 0:
-        geoms = geos::benchmark::createPoints(*target.getEnvelopeInternal(), NUM_LINES);
+        geoms = geos::benchmark::createPoints(*target.getEnvelopeInternal(), 
+            numTestGeometries);
         break;
     case 1:
-        geoms = geos::benchmark::createLines(*target.getEnvelopeInternal(), NUM_LINES, 1.0, NUM_LINES_PTS);
+        geoms = geos::benchmark::createLines(*target.getEnvelopeInternal(), 
+            numTestGeometries, 1.0, NUM_PTS);
         break;
     case 2:
-        geoms = geos::benchmark::createPolygons(*target.getEnvelopeInternal(), NUM_LINES, 1.0, NUM_LINES_PTS);
+        geoms = geos::benchmark::createPolygons(*target.getEnvelopeInternal(), 
+            numTestGeometries, 1.0, NUM_PTS);
         break;
     }
     double baseTime;
@@ -275,14 +279,22 @@ void testStarAll(int dim)
 void parseArgs(int argc, char** argv) {
     int iPred = -1;
     int iFile = -1;
-    if (argc == 2) {
-        iPred = 1; 
+    //-- parse filename, predicate, num geoms, if present
+    for (int i = 1; i < argc; i++) {
+        std::string arg = argv[i];
+        if (arg.find(".") != std::string::npos)
+            iFile = i;
+        else {
+            bool isInt = (arg.find_first_not_of( "0123456789" ) == std::string::npos);
+            if (isInt) {
+                numTestGeometries = (size_t) std::stoi(arg);
+            }
+            else {
+                iPred = i;
+            }
+        }
     }
-    else if (argc >= 3) {
-        iFile = 1;
-        iPred = 2;
-    }
-    //predicateName = "intersects";
+
     if (iPred > 0) {
         predicateName = argv[iPred];
     }
