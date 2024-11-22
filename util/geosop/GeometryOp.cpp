@@ -734,28 +734,28 @@ std::vector<GeometryOpCreator> opRegistry {
 
 
 { "containsPrep", [](std::string name) { return GeometryOp::create(name,
-    catRel, "test if geometry A contains geometry B, using PreparedGeometry",
+    catRel, "test if geometry A contains geometry B, with A prepared",
     Result::typeBool,
     [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB) {
         return new Result( prepGeomCache.get(geom.get())->contains( geomB.get() ) );
     });
 }},
 { "containsProperlyPrep", [](std::string name) { return GeometryOp::create(name,
-    catRel, "test if geometry A properly contains geometry B, using PreparedGeometry",
+    catRel, "test if geometry A properly contains geometry B, with A prepared",
     Result::typeBool,
     [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB) {
         return new Result( prepGeomCache.get(geom.get())->containsProperly( geomB.get() ) );
     });
 }},
 { "coversPrep", [](std::string name) { return GeometryOp::create(name,
-    catRel, "test if geometry A covers geometry B, using PreparedGeometry",
+    catRel, "test if geometry A covers geometry B, with A prepared",
     Result::typeBool,
     [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB) {
         return new Result( prepGeomCache.get(geom.get())->covers( geomB.get() ) );
     });
 }},
 { "intersectsPrep", [](std::string name) { return GeometryOp::create(name,
-    catRel, "test if geometry A intersects geometry B, using PreparedGeometry",
+    catRel, "test if geometry A intersects geometry B, with A prepared",
     Result::typeBool,
     [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB) {
         return new Result( prepGeomCache.get(geom.get())->intersects( geomB.get() ) );
