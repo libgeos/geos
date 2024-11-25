@@ -132,11 +132,16 @@ TopologyComputer::getDimension(bool isA) const
 bool
 TopologyComputer::isSelfNodingRequired() const
 {
-    if (predicate.requireSelfNoding()) {
-        if (geomA.isSelfNodingRequired() ||
-            geomB.isSelfNodingRequired())
-        return true;
-    }
+    if (! predicate.requireSelfNoding())
+      return false;
+    
+    if (geomA.isSelfNodingRequired()) 
+      return true;
+    
+    //-- if B is a mixed GC with A and L require full noding
+    if (geomB.hasAreaAndLine())
+      return true;
+
     return false;
 }
 
