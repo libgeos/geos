@@ -179,6 +179,10 @@ public:
             case Dimension::A: return hasAreas;
         }
         return false;
+    }    
+    
+    bool hasAreaAndLine() const {
+        return hasAreas && hasLines;
     }
 
     /**

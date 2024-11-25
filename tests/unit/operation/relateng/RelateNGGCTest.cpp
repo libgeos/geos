@@ -320,6 +320,10 @@ void object::test<23> ()
     std::string a = "POLYGON ((0 0, 0 10, 10 10, 10 0, 0 0))";
     std::string b = "GEOMETRYCOLLECTION (POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0)), MULTIPOINT ((0 2), (0 5)))";
     checkEquals(a, b, true);
+    checkContainsWithin(a, b, true);
+    checkCoversCoveredBy(a, b, true);
+    checkContainsWithin(b, a, true);
+    checkCoversCoveredBy(b, a, true);
 }
 
 
@@ -331,6 +335,10 @@ void object::test<24> ()
     std::string a = "POLYGON ((0 0, 0 10, 10 10, 10 0, 0 0))";
     std::string b = "GEOMETRYCOLLECTION (POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0)), LINESTRING (0 2, 0 5))";
     checkEquals(a, b, true);
+    checkContainsWithin(a, b, true);
+    checkCoversCoveredBy(a, b, true);
+    checkContainsWithin(b, a, true);
+    checkCoversCoveredBy(b, a, true);
 }
 
 
@@ -341,7 +349,10 @@ void object::test<25> ()
     std::string a = "POLYGON ((0 0, 0 10, 10 10, 10 0, 0 0))";
     std::string b = "GEOMETRYCOLLECTION (POLYGON((0 0, 10 0, 10 10, 0 10, 0 0)),LINESTRING(0 2, 0 5, 5 5))";
     checkEquals(a, b, true);
-}
+    checkContainsWithin(a, b, true);
+    checkCoversCoveredBy(a, b, true);
+    checkContainsWithin(b, a, true);
+    checkCoversCoveredBy(b, a, true);}
 
 
 
