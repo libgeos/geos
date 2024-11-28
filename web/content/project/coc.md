@@ -79,4 +79,4 @@ To privately email the code of conduct committee leadership use conduct-report@o
 
 ## Credits
 
-GEOS re-uses the [OSGeo Code of Conduct](https://www.osgeo.org/resources/osgeo-code-of-conduct/)
+GEOS reuses the [OSGeo Code of Conduct](https://www.osgeo.org/resources/osgeo-code-of-conduct/)
