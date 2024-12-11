@@ -198,6 +198,16 @@ public:
 
 protected:
 
+    struct CollectionFlags {
+        bool flagsCalculated;
+        bool hasPoints;
+        bool hasLines;
+        bool hasPolygons;
+        bool hasM;
+        bool hasZ;
+        bool hasCurves;
+    };
+
     GeometryCollection(const GeometryCollection& gc);
     GeometryCollection& operator=(const GeometryCollection& gc);
 
@@ -236,6 +246,7 @@ protected:
     };
 
     std::vector<std::unique_ptr<Geometry>> geometries;
+    mutable CollectionFlags flags;
     mutable Envelope envelope;
 
     Envelope computeEnvelopeInternal() const;
@@ -248,6 +259,7 @@ protected:
 
     bool hasCurvedComponents() const override;
 
+    void setFlags() const;
 
 };
 

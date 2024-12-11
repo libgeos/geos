@@ -39,6 +39,7 @@ GeometryCollection::GeometryCollection(const GeometryCollection& gc)
     :
     Geometry(gc),
     geometries(gc.geometries.size()),
+    flags{}, // set all flags to zero
     envelope(gc.envelope)
 {
     for(std::size_t i = 0; i < geometries.size(); ++i) {
@@ -51,6 +52,7 @@ GeometryCollection::operator=(const GeometryCollection& gc)
 {
     geometries.resize(gc.geometries.size());
     envelope = gc.envelope;
+    flags = gc.flags;
 
     for (std::size_t i = 0; i < geometries.size(); i++) {
         geometries[i] = gc.geometries[i]->clone();
@@ -62,7 +64,9 @@ GeometryCollection::operator=(const GeometryCollection& gc)
 GeometryCollection::GeometryCollection(std::vector<std::unique_ptr<Geometry>> && newGeoms, const GeometryFactory& factory) :
     Geometry(&factory),
     geometries(std::move(newGeoms)),
-    envelope(computeEnvelopeInternal()) {
+    flags{}, // set all flags to zero
+    envelope(computeEnvelopeInternal())
+{
 
     if (hasNullElements(&geometries)) {
         throw util::IllegalArgumentException("geometries must not contain null elements\n");
@@ -114,31 +118,69 @@ GeometryCollection::isEmpty() const
     return true;
 }
 
+void
+GeometryCollection::setFlags() const {
+    if (flags.flagsCalculated) {
+        return;
+    }
+
+    for (const auto& geom : geometries) {
+        flags.hasPoints |= geom->hasDimension(Dimension::P);
+        flags.hasLines |= geom->hasDimension(Dimension::L);
+        flags.hasPolygons |= geom->hasDimension(Dimension::A);
+        flags.hasM |= geom->hasM();
+        flags.hasZ |= geom->hasZ();
+        flags.hasCurves |= geom->hasCurvedComponents();
+    }
+
+    flags.flagsCalculated = true;
+}
+
 Dimension::DimensionType
 GeometryCollection::getDimension() const
 {
-    Dimension::DimensionType dimension = Dimension::False;
-    for(const auto& g : geometries) {
-        dimension = std::max(dimension, g->getDimension());
+    setFlags();
+
+    if (flags.hasPolygons) {
+        return Dimension::A;
     }
-    return dimension;
+    if (flags.hasLines) {
+        return Dimension::L;
+    }
+    if (flags.hasPoints) {
+        return Dimension::P;
+    }
+    return Dimension::False;
 }
 
 bool
 GeometryCollection::isDimensionStrict(Dimension::DimensionType d) const {
-    return std::all_of(geometries.begin(), geometries.end(),
-            [&d](const std::unique_ptr<Geometry> & g) {
-                return g->getDimension() == d;
-            });
+    setFlags();
+
+    if (isEmpty()) {
+        return true;
+    }
+
+    switch(d) {
+        case Dimension::A: return flags.hasPolygons && !flags.hasLines && !flags.hasPoints;
+        case Dimension::L: return !flags.hasPolygons && flags.hasLines && !flags.hasPoints;
+        case Dimension::P: return !flags.hasPolygons && !flags.hasLines && flags.hasPoints;
+        default:
+            return false;
+    }
 }
 
 bool
 GeometryCollection::hasDimension(Dimension::DimensionType d) const {
-    return std::any_of(geometries.begin(),
-                       geometries.end(),
-                       [&d](const std::unique_ptr<Geometry>& g) {
-        return g->hasDimension(d);
-    });
+    setFlags();
+
+    switch (d) {
+        case Dimension:: A: return flags.hasPolygons;
+        case Dimension:: L: return flags.hasLines;
+        case Dimension:: P: return flags.hasPoints;
+        default:
+            return false;
+    }
 }
 
 int
@@ -165,23 +207,15 @@ GeometryCollection::getCoordinateDimension() const
 bool
 GeometryCollection::hasM() const
 {
-    for (const auto& g : geometries) {
-        if (g->hasM()) {
-            return true;
-        }
-    }
-    return false;
+    setFlags();
+    return flags.hasM;
 }
 
 bool
 GeometryCollection::hasZ() const
 {
-    for (const auto& g : geometries) {
-        if (g->hasZ()) {
-            return true;
-        }
-    }
-    return false;
+    setFlags();
+    return flags.hasZ;
 }
 
 size_t
@@ -201,6 +235,7 @@ GeometryCollection::releaseGeometries()
 {
     auto ret = std::move(geometries);
     geometryChanged();
+    flags.flagsCalculated = false;
     return ret;
 }
 
@@ -334,12 +369,8 @@ GeometryCollection::compareToSameClass(const Geometry* g) const
 }
 
 bool GeometryCollection::hasCurvedComponents() const {
-    for (const auto& g : geometries) {
-        if (g->hasCurvedComponents()) {
-            return true;
-        }
-    }
-    return false;
+    setFlags();
+    return flags.hasCurves;
 }
 
 const CoordinateXY*
