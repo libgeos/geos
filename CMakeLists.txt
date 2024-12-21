@@ -428,7 +428,7 @@ write_basic_package_version_file(
   VERSION ${GEOS_VERSION}
   COMPATIBILITY AnyNewerVersion)
 
-configure_file(cmake/geos-config.cmake
+configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cmake/geos-config.cmake"
   "${CMAKE_CURRENT_BINARY_DIR}/geos-config.cmake"
   COPYONLY)
 
