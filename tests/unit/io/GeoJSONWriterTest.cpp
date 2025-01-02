@@ -419,10 +419,30 @@ void object::test<28>
     ensure_equals(result, "{\"type\":\"Point\",\"coordinates\":[-117.0,33.0]}");
 }
 
-// GeoJSONWriter Write a feature with properties "array": [{"key": "value_1"}, {"key": "value_2"}]
+// GeoJSONWriter Write a feature with properties "matrix": [ [1, 2, 3], [4, 5, 6] ]
 template<>
 template<>
 void object::test<29>
+()
+{
+    geos::io::GeoJSONValue row1(std::vector<geos::io::GeoJSONValue>({1.0, 2.0, 3.0}));
+    geos::io::GeoJSONValue row2(std::vector<geos::io::GeoJSONValue>({4.0, 5.0, 6.0}));
+    std::vector<geos::io::GeoJSONValue> obj_array = {row1, row2};
+    geos::io::GeoJSONFeatureCollection features {{
+        geos::io::GeoJSONFeature { wktreader.read("POINT(0 0)"), std::map<std::string, geos::io::GeoJSONValue> {
+            {"id",     geos::io::GeoJSONValue("id_123")},
+            {"name",   geos::io::GeoJSONValue(std::string{"Kunlin Yu"})},
+            {"matrix", geos::io::GeoJSONValue(obj_array)}
+        }}
+    }};
+    std::string result = geojsonwriter.write(features);
+    ensure_equals(result, "{}");
+}
+
+// GeoJSONWriter Write a feature with properties "array": [{"key": "value_1"}, {"key": "value_2"}]
+template<>
+template<>
+void object::test<30>
 ()
 {
     geos::io::GeoJSONValue obj1(std::map<std::string, geos::io::GeoJSONValue>({{"key", std::string("value_1")}}));
@@ -430,9 +450,9 @@ void object::test<29>
     std::vector<geos::io::GeoJSONValue> obj_array = {obj1, obj2};
     geos::io::GeoJSONFeatureCollection features {{
         geos::io::GeoJSONFeature { wktreader.read("POINT(0 0)"), std::map<std::string, geos::io::GeoJSONValue> {
-            {"id",   geos::io::GeoJSONValue("id_123")},
-            {"name", geos::io::GeoJSONValue(std::string{"Kunlin Yu"})},
-            {"array",  geos::io::GeoJSONValue(obj_array)}
+            {"id",    geos::io::GeoJSONValue("id_123")},
+            {"name",  geos::io::GeoJSONValue(std::string{"Kunlin Yu"})},
+            {"array", geos::io::GeoJSONValue(obj_array)}
         }}
     }};
     std::string result = geojsonwriter.write(features);
