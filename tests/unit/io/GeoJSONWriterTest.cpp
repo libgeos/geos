@@ -428,15 +428,12 @@ void object::test<29>
     geos::io::GeoJSONValue row1(std::vector<geos::io::GeoJSONValue>({1.0, 2.0, 3.0}));
     geos::io::GeoJSONValue row2(std::vector<geos::io::GeoJSONValue>({4.0, 5.0, 6.0}));
     std::vector<geos::io::GeoJSONValue> obj_array = {row1, row2};
-    geos::io::GeoJSONFeatureCollection features {{
-        geos::io::GeoJSONFeature { wktreader.read("POINT(0 0)"), std::map<std::string, geos::io::GeoJSONValue> {
-            {"id",     geos::io::GeoJSONValue("id_123")},
-            {"name",   geos::io::GeoJSONValue(std::string{"Kunlin Yu"})},
-            {"matrix", geos::io::GeoJSONValue(obj_array)}
-        }}
-    }};
-    std::string result = geojsonwriter.write(features);
-    ensure_equals(result, "{}");
+    geos::io::GeoJSONFeature feature = {
+        wktreader.read("POINT(0 0)"),
+        std::map<std::string, geos::io::GeoJSONValue> {{"matrix", geos::io::GeoJSONValue(obj_array)}}
+    };
+    std::string result = geojsonwriter.write(feature);
+    ensure_equals(result, "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[0.0,0.0]},\"properties\":{\"matrix\":[[1.0,2.0,3.0],[4.0,5.0,6.0]]}}");
 }
 
 // GeoJSONWriter Write a feature with properties "array": [{"key": "value_1"}, {"key": "value_2"}]
@@ -448,15 +445,12 @@ void object::test<30>
     geos::io::GeoJSONValue obj1(std::map<std::string, geos::io::GeoJSONValue>({{"key", std::string("value_1")}}));
     geos::io::GeoJSONValue obj2(std::map<std::string, geos::io::GeoJSONValue>({{"key", std::string("value_2")}}));
     std::vector<geos::io::GeoJSONValue> obj_array = {obj1, obj2};
-    geos::io::GeoJSONFeatureCollection features {{
-        geos::io::GeoJSONFeature { wktreader.read("POINT(0 0)"), std::map<std::string, geos::io::GeoJSONValue> {
-            {"id",    geos::io::GeoJSONValue("id_123")},
-            {"name",  geos::io::GeoJSONValue(std::string{"Kunlin Yu"})},
-            {"array", geos::io::GeoJSONValue(obj_array)}
-        }}
-    }};
-    std::string result = geojsonwriter.write(features);
-    ensure_equals(result, "{}");
+    geos::io::GeoJSONFeature feature = {
+      wktreader.read("POINT(0 0)"),
+      std::map<std::string, geos::io::GeoJSONValue> {{"array", geos::io::GeoJSONValue(obj_array)}}
+    };
+    std::string result = geojsonwriter.write(feature);
+    ensure_equals(result, "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[0.0,0.0]},\"properties\":{\"array\":[{\"key\":\"value_1\"},{\"key\":\"value_2\"}]}}");
 }
 
 }
