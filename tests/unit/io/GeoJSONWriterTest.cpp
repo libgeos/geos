@@ -372,7 +372,6 @@ void object::test<25>
     std::string result = geojsonwriter.write(geom.get());
     ensure_equals(result, "{\"type\":\"LineString\",\"coordinates\":[[102.0,0.0,2.0],[103.0,1.0,4.0],[104.0,0.0,8.0],[105.0,1.0,16.0]]}");
 }
-
 // Write a LineString Z with some NaN Z to GeoJSON
 template<>
 template<>
@@ -418,6 +417,26 @@ void object::test<28>
     geojsonwriter.setOutputDimension(2);
     std::string result = geojsonwriter.write(geom.get());
     ensure_equals(result, "{\"type\":\"Point\",\"coordinates\":[-117.0,33.0]}");
+}
+
+// GeoJSONWriter Write a feature with properties "array": [{"key": "value_1"}, {"key": "value_2"}]
+template<>
+template<>
+void object::test<29>
+()
+{
+    geos::io::GeoJSONValue obj1(std::map<std::string, geos::io::GeoJSONValue>({{"key", std::string("value_1")}}));
+    geos::io::GeoJSONValue obj2(std::map<std::string, geos::io::GeoJSONValue>({{"key", std::string("value_2")}}));
+    std::vector<geos::io::GeoJSONValue> obj_array = {obj1, obj2};
+    geos::io::GeoJSONFeatureCollection features {{
+        geos::io::GeoJSONFeature { wktreader.read("POINT(0 0)"), std::map<std::string, geos::io::GeoJSONValue> {
+            {"id",   geos::io::GeoJSONValue("id_123")},
+            {"name", geos::io::GeoJSONValue(std::string{"Kunlin Yu"})},
+            {"array",  geos::io::GeoJSONValue(obj_array)}
+        }}
+    }};
+    std::string result = geojsonwriter.write(features);
+    ensure_equals(result, "{}");
 }
 
 }
