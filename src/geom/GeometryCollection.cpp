@@ -39,7 +39,7 @@ GeometryCollection::GeometryCollection(const GeometryCollection& gc)
     :
     Geometry(gc),
     geometries(gc.geometries.size()),
-    flags{}, // set all flags to zero
+    flags(gc.flags),
     envelope(gc.envelope)
 {
     for(std::size_t i = 0; i < geometries.size(); ++i) {
