@@ -66,15 +66,7 @@ OffsetCurve::getCurve()
 
         if (geom.getGeometryTypeId() == GEOS_POINT) return nullptr;
         if (geom.getGeometryTypeId() == GEOS_POLYGON) {
-            auto boundary = geom.buffer(distance)->getBoundary();
-
-            if (boundary->getGeometryTypeId() == GEOS_LINEARRING) {
-                const LinearRing& ring = static_cast<const LinearRing&>(geom);
-                auto ringCs = ring.getCoordinatesRO();
-                std::unique_ptr<Geometry> ls(geom.getFactory()->createLineString(*ringCs));
-                return ls;
-            }
-            return boundary;
+            return computePolygonCurve(static_cast<const Polygon&>(geom), distance);
         }
         return computeCurve(static_cast<const LineString&>(geom), distance);
     };
@@ -139,6 +131,22 @@ OffsetCurve::rawOffset(const LineString& line, double dist)
 {
     BufferParameters bufParams;
     return rawOffsetCurve(line, dist, bufParams);
+}
+
+/* private */
+std::unique_ptr<Geometry>
+OffsetCurve::computePolygonCurve(const Polygon& polyGeom, double dist)
+{
+    auto buffer = BufferOp::bufferOp(&polyGeom, dist, bufferParams);
+    std::unique_ptr<Geometry> boundary = buffer->getBoundary();
+    //-- convert LinearRing to LineString if needed
+    if (boundary->getGeometryTypeId() == GEOS_LINEARRING) {
+        const LinearRing& ring = static_cast<LinearRing&>(*boundary);
+        auto ringCs = ring.getCoordinatesRO();
+        std::unique_ptr<Geometry> ls(polyGeom.getFactory()->createLineString(*ringCs));
+        return ls;
+    }
+    return boundary;
 }
 
 /* private */
