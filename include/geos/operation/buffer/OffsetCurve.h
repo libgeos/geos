@@ -101,6 +101,9 @@ private:
 
     // Methods
 
+    std::unique_ptr<Geometry> computePolygonCurve(
+        const Polygon& polyGeom, double distance);
+
     std::unique_ptr<Geometry> computeCurve(
         const LineString& lineGeom, double distance);
 
