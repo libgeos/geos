@@ -9,7 +9,8 @@
   - Fix WKTWriter for small precisions and with trim enabled (GH-1199, Mike Taves)
   - Fix BufferOp to increase length of segments removed by heuristic (GH-1200, Martin Davis)
   - Improve RelateNG performance for A/L cases in prepared predicates (GH-1201, Martin Davis)
-
+  - Improve OffsetCurve to handle mitre joins for polygons (Martin Davis)
+  
 ## Changes in 3.13.0
 2024-09-06
 
