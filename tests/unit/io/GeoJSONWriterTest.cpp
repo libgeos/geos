@@ -372,7 +372,6 @@ void object::test<25>
     std::string result = geojsonwriter.write(geom.get());
     ensure_equals(result, "{\"type\":\"LineString\",\"coordinates\":[[102.0,0.0,2.0],[103.0,1.0,4.0],[104.0,0.0,8.0],[105.0,1.0,16.0]]}");
 }
-
 // Write a LineString Z with some NaN Z to GeoJSON
 template<>
 template<>
@@ -418,6 +417,40 @@ void object::test<28>
     geojsonwriter.setOutputDimension(2);
     std::string result = geojsonwriter.write(geom.get());
     ensure_equals(result, "{\"type\":\"Point\",\"coordinates\":[-117.0,33.0]}");
+}
+
+// GeoJSONWriter Write a feature with properties "matrix": [ [1, 2, 3], [4, 5, 6] ]
+template<>
+template<>
+void object::test<29>
+()
+{
+    geos::io::GeoJSONValue row1(std::vector<geos::io::GeoJSONValue>({1.0, 2.0, 3.0}));
+    geos::io::GeoJSONValue row2(std::vector<geos::io::GeoJSONValue>({4.0, 5.0, 6.0}));
+    std::vector<geos::io::GeoJSONValue> obj_array = {row1, row2};
+    geos::io::GeoJSONFeature feature = {
+        wktreader.read("POINT(0 0)"),
+        std::map<std::string, geos::io::GeoJSONValue> {{"matrix", geos::io::GeoJSONValue(obj_array)}}
+    };
+    std::string result = geojsonwriter.write(feature);
+    ensure_equals(result, "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[0.0,0.0]},\"properties\":{\"matrix\":[[1.0,2.0,3.0],[4.0,5.0,6.0]]}}");
+}
+
+// GeoJSONWriter Write a feature with properties "array": [{"key": "value_1"}, {"key": "value_2"}]
+template<>
+template<>
+void object::test<30>
+()
+{
+    geos::io::GeoJSONValue obj1(std::map<std::string, geos::io::GeoJSONValue>({{"key", std::string("value_1")}}));
+    geos::io::GeoJSONValue obj2(std::map<std::string, geos::io::GeoJSONValue>({{"key", std::string("value_2")}}));
+    std::vector<geos::io::GeoJSONValue> obj_array = {obj1, obj2};
+    geos::io::GeoJSONFeature feature = {
+      wktreader.read("POINT(0 0)"),
+      std::map<std::string, geos::io::GeoJSONValue> {{"array", geos::io::GeoJSONValue(obj_array)}}
+    };
+    std::string result = geojsonwriter.write(feature);
+    ensure_equals(result, "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[0.0,0.0]},\"properties\":{\"array\":[{\"key\":\"value_1\"},{\"key\":\"value_2\"}]}}");
 }
 
 }

@@ -109,15 +109,33 @@ void GeoJSONWriter::encodeGeoJSONValue(const std::string& key, const GeoJSONValu
         }
     }
     else if (value.isArray()) {
-        j[key] = json::array();
-        for (const GeoJSONValue& v : value.getArray()) {
-            encodeGeoJSONValue("", v, j[key]);
+        if (j.is_object()) {
+          j[key] = json::array();
+          for (const GeoJSONValue& v : value.getArray()) {
+              encodeGeoJSONValue("", v, j[key]);
+          }
+        }
+        else {
+          json sub_array = json::array();
+          for (const GeoJSONValue& v : value.getArray()) {
+              encodeGeoJSONValue("", v, sub_array);
+          }
+          j.push_back(sub_array);
         }
     }
     else if (value.isObject()) {
-        j[key] = json::object();
-        for (const auto& entry : value.getObject()) {
-            encodeGeoJSONValue(entry.first, entry.second, j[key]);
+        if (j.is_object()) {
+          j[key] = json::object();
+          for (const auto& entry : value.getObject()) {
+              encodeGeoJSONValue(entry.first, entry.second, j[key]);
+          }
+        }
+        else {
+          json sub_obj = json::object();
+          for (const auto& entry : value.getObject()) {
+              encodeGeoJSONValue(entry.first, entry.second, sub_obj);
+          }
+          j.push_back(sub_obj);
         }
     }
 }
