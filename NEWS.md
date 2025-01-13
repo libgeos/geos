@@ -16,6 +16,7 @@
   - Fix TopologyPreservingSimplifier/TaggedLineString to avoid jumping components (JTS-1096, Martin Davis)
   - Fix BufferOp to increase length of segments removed by heuristic (GH-1200, Martin Davis)
   - Improve OffsetCurve to handle mitre joins for polygons (Martin Davis)
+  - Fix inscribed circle initialization (GH-1225, Benoit Maurin)
 
 ## Changes in 3.12.2
 2024-06-05
