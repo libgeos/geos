@@ -164,8 +164,8 @@ MaximumInscribedCircle::distanceToBoundary(double x, double y)
 MaximumInscribedCircle::Cell
 MaximumInscribedCircle::createInteriorPointCell(const Geometry* geom)
 {
-    Coordinate c;
     std::unique_ptr<Point> p = geom->getInteriorPoint();
+    Coordinate c(p->getX(), p->getY());
     Cell cell(p->getX(), p->getY(), 0, distanceToBoundary(c));
     return cell;
 }
