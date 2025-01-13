@@ -249,5 +249,17 @@ void object::test<10>
        0.01 );
 }
 
+//
+// https://github.com/libgeos/geos/pull/1225
+//
+template<>
+template<>
+void object::test<11>
+()
+{
+    checkCircle("POLYGON((0 -10,-7.07107 -7.07107,-10 0,-7.07107 7.07107,0 10,7.07107 7.07107,10 0,7.07107 -7.07107,0 -10))",
+        0.1, 0, 0, 9.2387);
+}
+
 
 } // namespace tut
