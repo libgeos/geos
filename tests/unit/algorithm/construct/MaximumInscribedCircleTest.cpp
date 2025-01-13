@@ -172,7 +172,7 @@ void object::test<5>
 ()
 {
     checkCircle("POLYGON ((100 100, 200 200, 100 100, 100 100))",
-       0.01, 150, 150, 0 );
+       0.01, 100, 100, 0 );
 }
 
 
@@ -197,7 +197,7 @@ void object::test<7>
 ()
 {
      checkCircle("POLYGON((1 2, 1 2, 1 2, 1 2, 3 2, 1 2))",
-       0.01, 2, 2, 0 );
+       0.01, 1, 2, 0 );
 }
 
 // Exception thrown to avoid infinite loop with infinite envelope
