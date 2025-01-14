@@ -137,7 +137,7 @@ private:
     geom::CoordinateXY radiusPt;
 
     /* private methods */
-    double distanceToBoundary(geom::Point& pt);
+    double distanceToBoundary(const geom::Point& pt);
     double distanceToBoundary(double x, double y);
     void compute();
 
