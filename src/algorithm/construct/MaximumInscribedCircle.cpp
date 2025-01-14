@@ -24,6 +24,7 @@
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LineString.h>
+#include <geos/geom/Point.h>
 #include <geos/geom/Polygon.h>
 #include <geos/geom/MultiPolygon.h>
 #include <geos/algorithm/locate/IndexedPointInAreaLocator.h>
@@ -142,22 +143,22 @@ MaximumInscribedCircle::createInitialGrid(const Envelope* env, Cell::CellQueue& 
 
 /* private */
 double
-MaximumInscribedCircle::distanceToBoundary(const Coordinate& c)
+MaximumInscribedCircle::distanceToBoundary(double x, double y)
 {
-    std::unique_ptr<Point> pt(factory->createPoint(c));
-    double dist = indexedDistance.distance(pt.get());
-    // double dist = inputGeomBoundary->distance(pt.get());
-    bool isOutside = (Location::EXTERIOR == ptLocator.locate(&c));
-    if (isOutside) return -dist;
-    return dist;
+    Coordinate coord(x, y);
+    std::unique_ptr<Point> pt(factory->createPoint(coord));
+    return distanceToBoundary(*pt.get());
 }
 
 /* private */
 double
-MaximumInscribedCircle::distanceToBoundary(double x, double y)
+MaximumInscribedCircle::distanceToBoundary(Point& pt)
 {
-    Coordinate coord(x, y);
-    return distanceToBoundary(coord);
+    double dist = indexedDistance.distance(&pt);
+    // double dist = inputGeomBoundary->distance(pt.get());
+    bool isOutside = (Location::EXTERIOR == ptLocator.locate(pt.getCoordinate()));
+    if (isOutside) return -dist;
+    return dist;
 }
 
 /* private */
@@ -165,8 +166,7 @@ MaximumInscribedCircle::Cell
 MaximumInscribedCircle::createInteriorPointCell(const Geometry* geom)
 {
     std::unique_ptr<Point> p = geom->getInteriorPoint();
-    Coordinate c(p->getX(), p->getY());
-    Cell cell(p->getX(), p->getY(), 0, distanceToBoundary(c));
+    Cell cell(p->getX(), p->getY(), 0, distanceToBoundary(*p.get()));
     return cell;
 }
 
