@@ -152,7 +152,7 @@ MaximumInscribedCircle::distanceToBoundary(double x, double y)
 
 /* private */
 double
-MaximumInscribedCircle::distanceToBoundary(Point& pt)
+MaximumInscribedCircle::distanceToBoundary(const Point& pt)
 {
     double dist = indexedDistance.distance(&pt);
     // double dist = inputGeomBoundary->distance(pt.get());
