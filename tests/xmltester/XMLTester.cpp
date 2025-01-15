@@ -300,9 +300,6 @@ checkSingleSidedBufferSuccess(geom::Geometry& gRes,
     return success;
 }
 
-const std::string ARG_A = "A";
-const std::string ARG_B = "B";
-
 XMLTester::XMLTester()
     :
     gA(nullptr),
