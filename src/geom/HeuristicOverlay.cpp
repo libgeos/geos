@@ -40,31 +40,63 @@ namespace geom { // geos::geom
 using operation::overlayng::OverlayNG;
 using operation::overlayng::OverlayNGRobust;
 
+bool isDisjointNonEmpty(const Geometry* g0, const Geometry* g1)
+{
+    if (g0->isEmpty() && g1->isEmpty())
+        return false;
+    return ! g0->getEnvelopeInternal()->intersects(g1->getEnvelopeInternal());
+}
+
+void 
+extractELements(const Geometry* g, std::vector<std::unique_ptr<Geometry>>& v)
+{
+    const GeometryCollection* coll;
+    if (nullptr != (coll = dynamic_cast<const GeometryCollection*>(g))) {
+        //-- buffer num geoms, since can be expensive for nested collections
+        std::size_t numGeoms = g->getNumGeometries();
+        for(std::size_t i = 0; i < numGeoms; ++i) {
+            //-- recurse to handle nested GCs
+            extractELements(coll->getGeometryN(i), v);
+        }
+    }
+    else if (g->isEmpty()) {
+        return;
+    }
+    else {
+        v.push_back(g->clone());
+    }
+}
+
+std::unique_ptr<Geometry>
+reduceCombine(const Geometry* g0, const Geometry* g1)
+{
+    // Allocated for ownership transfer
+    std::vector<std::unique_ptr<Geometry>> v;
+    v.reserve(g0->getNumGeometries() + g1->getNumGeometries());
+    extractELements(g0, v);
+    extractELements(g1, v);
+    return g0->getFactory()->buildGeometry(std::move(v));
+}
+
 std::unique_ptr<Geometry>
 HeuristicOverlay(const Geometry* g0, const Geometry* g1, int opCode)
 {
-    std::unique_ptr<Geometry> ret;
+    //-- if both are empty use OverlayNG return-type logic
+    if ( ( opCode == OverlayNG::UNION 
+        || opCode == OverlayNG::SYMDIFFERENCE)
+            && isDisjointNonEmpty(g0, g1)) {
+        return reduceCombine(g0, g1);
+    }
 
     /*
     * overlayng::OverlayNGRobust does not currently handle
     * GeometryCollection (collections of mixed dimension)
     * so we handle that case here.
     */
-    if ((g0->isMixedDimension() && !g0->isEmpty()) ||
-        (g1->isMixedDimension() && !g1->isEmpty()))
+    if ((g0->isMixedDimension() && ! g0->isEmpty()) ||
+        (g1->isMixedDimension() && ! g1->isEmpty()))
     {
-        StructuredCollection s0(g0);
-        StructuredCollection s1(g1);
-        switch (opCode) {
-        case OverlayNG::UNION:
-            return s0.doUnion(s1);
-        case OverlayNG::DIFFERENCE:
-            return s0.doDifference(s1);
-        case OverlayNG::SYMDIFFERENCE:
-            return s0.doSymDifference(s1);
-        case OverlayNG::INTERSECTION:
-            return s0.doIntersection(s1);
-        }
+        return StructuredCollection::overlay(g0, g1, opCode);
     }
 
     /*
@@ -86,6 +118,7 @@ HeuristicOverlay(const Geometry* g0, const Geometry* g1, int opCode)
     * Running overlayng::OverlayNGRobust at this stage should guarantee
     * that none of the other heuristics are ever needed.
     */
+    std::unique_ptr<Geometry> ret;
     if (g0 == nullptr && g1 == nullptr) {
         return std::unique_ptr<Geometry>(nullptr);
     }
@@ -106,6 +139,24 @@ HeuristicOverlay(const Geometry* g0, const Geometry* g1, int opCode)
     }
 
     return ret;
+}
+
+/* public static */
+std::unique_ptr<Geometry>
+StructuredCollection::overlay(const Geometry* g0, const Geometry* g1, int opCode)
+{
+    StructuredCollection s0(g0);
+    StructuredCollection s1(g1);
+    switch (opCode) {
+    case OverlayNG::UNION:
+        return s0.doUnion(s1);
+    case OverlayNG::DIFFERENCE:
+        return s0.doDifference(s1);
+    case OverlayNG::SYMDIFFERENCE:
+        return s0.doSymDifference(s1);
+    default: // only OverlayNG::INTERSECTION
+        return s0.doIntersection(s1);
+    }
 }
 
 /* public */

@@ -63,6 +63,8 @@ public:
         , poly_union(nullptr)
     {};
 
+    static std::unique_ptr<Geometry> overlay(const Geometry* g0, const Geometry* g1, int opCode);
+
     void readCollection(const Geometry* g);
     const Geometry* getPolyUnion()  const { return poly_union.get(); }
     const Geometry* getLineUnion()  const { return line_union.get(); }
