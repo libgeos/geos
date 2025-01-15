@@ -20,6 +20,13 @@
  * This file provides a single function, taking two
  * const Geometry pointers, applying a binary operator to them
  * and returning a result Geometry in an unique_ptr<>.
+ * 
+ * It implements a "combine-disjoint" heuristic for optimizing some overlay cases.
+ * It also implements overlay for GeometryCollections, which is not (yet)
+ * provided by OverlayNG.
+ * Internal overlay usage should call OverlayNG directly 
+ * if this behaviour is not needed (i.e. when the inputs are known to be simple
+ * or when full overlay is desired to be computed.)
  *
  **********************************************************************/
 
