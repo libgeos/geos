@@ -8,6 +8,7 @@
 #include <geos/operation/overlayng/CoverageUnion.h>
 
 // std
+#include <cfenv>
 #include <memory>
 
 using namespace geos::geom;
@@ -31,7 +32,9 @@ struct test_coverageunionng_data {
     {
         std::unique_ptr<Geometry> geom = r.read(wkt);
         std::unique_ptr<Geometry> expected = r.read(wktExpected);
+        std::feclearexcept(FE_ALL_EXCEPT);
         std::unique_ptr<Geometry> result = CoverageUnion::geomunion(geom.get());
+        ensure("FE_INVALID raised", !std::fetestexcept(FE_INVALID));
 
         try {
             ensure_equals_geometry_xyzm(result.get(), expected.get());
@@ -218,6 +221,33 @@ void object::test<17>()
 {
     checkUnion("GEOMETRYCOLLECTION( POLYGON M ((0 0 0, 1 0 1, 1 1 2, 0 0 0)), POLYGON M ((0 0 0, 1 1 2, 0 1 3, 0 0 0)) )",
                "POLYGON M ((0 0 0, 1 0 1, 1 1 2, 0 1 3, 0 0 0))");
+}
+
+// Check empty polygon
+template<>
+template<>
+void object::test<18>()
+{
+    checkUnion("POLYGON EMPTY",
+               "POLYGON EMPTY");
+}
+
+// Check empty GeometryCollection, with M dimension
+template<>
+template<>
+void object::test<19>()
+{
+    checkUnion("GEOMETRYCOLLECTION M EMPTY",
+               "GEOMETRYCOLLECTION M EMPTY");
+}
+
+// Check GeometryCollection of empty polygon
+template<>
+template<>
+void object::test<20>()
+{
+    checkUnion("GEOMETRYCOLLECTION( POLYGON EMPTY )",
+               "POLYGON EMPTY");
 }
 
 } // namespace tut
