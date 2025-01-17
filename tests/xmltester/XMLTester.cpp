@@ -877,13 +877,13 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
     tmp = opel->Attribute("arg1");
     if(tmp) {
         opArg1 = tmp;
-        toUpper(opArg1);
+        geos::util::toUpper(opArg1);
     }
 
     tmp = opel->Attribute("arg2");
     if(tmp) {
         opArg2 = tmp;
-        toUpper(opArg2);
+        geos::util::toUpper(opArg2);
     }
 
     tmp = opel->Attribute("arg3");
