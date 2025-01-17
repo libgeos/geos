@@ -13,6 +13,7 @@
   - Fix BufferOp to increase length of segments removed by heuristic (GH-1200, Martin Davis)
   - Improve RelateNG performance for A/L cases in prepared predicates (GH-1201, Martin Davis)
   - Improve OffsetCurve to handle mitre joins for polygons (Martin Davis)
+  - Fix overlay heuristic for GeometryCollections with empty elements (GH-1229, Martin Davis)
 
 ## Changes in 3.13.0
 2024-09-06
