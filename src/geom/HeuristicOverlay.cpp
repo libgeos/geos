@@ -32,6 +32,7 @@
 
 #include <geos/geom/HeuristicOverlay.h>
 #include <geos/operation/overlayng/OverlayNGRobust.h>
+#include <geos/operation/overlayng/OverlayUtil.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/geom/Dimension.h>
 #include <geos/geom/MultiPoint.h>
@@ -46,24 +47,53 @@ namespace geom { // geos::geom
 
 using operation::overlayng::OverlayNG;
 using operation::overlayng::OverlayNGRobust;
+using operation::overlayng::OverlayUtil;
 
-bool isDisjointNonEmpty(const Geometry* g0, const Geometry* g1)
+bool
+hasSingleNonEmptyElement(const Geometry* geom) {
+    if (geom->getGeometryTypeId() != GEOS_GEOMETRYCOLLECTION) {
+        //-- is a non-empty element 
+        return ! geom->isEmpty();
+    }
+    //-- iterate over GC elements and determine if a single non-empty is present
+    //-- buffer num geoms, since can be expensive for nested collections
+    bool foundNonEmptyElement = false;
+    std::size_t numGeoms = geom->getNumGeometries();
+    for(std::size_t i = 0; i < numGeoms; ++i) {
+        if (hasSingleNonEmptyElement(geom->getGeometryN(i))) {
+            //-- already found an element, so more than one present
+            if (foundNonEmptyElement) {
+                return false;
+            }
+            foundNonEmptyElement = true;
+        }
+    }
+    return foundNonEmptyElement;
+}
+
+bool isCombinable(const Geometry* g0, const Geometry* g1)
 {
+    //-- if both empty use OverlayNG return-type logic
     if (g0->isEmpty() && g1->isEmpty())
         return false;
-    return ! g0->getEnvelopeInternal()->intersects(g1->getEnvelopeInternal());
+    
+    //-- not disjoint
+    if (g0->getEnvelopeInternal()->intersects(g1->getEnvelopeInternal()))
+        return false;
+
+    return hasSingleNonEmptyElement(g0) 
+        && hasSingleNonEmptyElement(g1);
 }
 
 void 
-extractELements(const Geometry* g, std::vector<std::unique_ptr<Geometry>>& v)
+extractElements(const Geometry* g, std::vector<std::unique_ptr<Geometry>>& v)
 {
-    const GeometryCollection* coll;
-    if (nullptr != (coll = dynamic_cast<const GeometryCollection*>(g))) {
+    if (const auto* coll = dynamic_cast<const GeometryCollection*>(g)) {
         //-- buffer num geoms, since can be expensive for nested collections
         std::size_t numGeoms = g->getNumGeometries();
         for(std::size_t i = 0; i < numGeoms; ++i) {
             //-- recurse to handle nested GCs
-            extractELements(coll->getGeometryN(i), v);
+            extractElements(coll->getGeometryN(i), v);
         }
     }
     else if (g->isEmpty()) {
@@ -75,33 +105,49 @@ extractELements(const Geometry* g, std::vector<std::unique_ptr<Geometry>>& v)
 }
 
 std::unique_ptr<Geometry>
-reduceCombine(const Geometry* g0, const Geometry* g1)
+combineReduced(const Geometry* g0, const Geometry* g1)
 {
     // Allocated for ownership transfer
     std::vector<std::unique_ptr<Geometry>> v;
     v.reserve(g0->getNumGeometries() + g1->getNumGeometries());
-    extractELements(g0, v);
-    extractELements(g1, v);
+    extractElements(g0, v);
+    extractElements(g1, v);
     return g0->getFactory()->buildGeometry(std::move(v));
+}
+
+bool isHandledByOverlayNG(const Geometry* geom) {
+    if (geom->isMixedDimension() && ! geom->isEmpty())
+        return false;
+    //-- GCs with polygonals must be unioned 
+    if (geom->getGeometryTypeId() == GEOS_GEOMETRYCOLLECTION 
+        && geom->getDimension() == 2)
+        return false;
+    return true;
 }
 
 std::unique_ptr<Geometry>
 HeuristicOverlay(const Geometry* g0, const Geometry* g1, int opCode)
 {
-    //-- if both are empty use OverlayNG return-type logic
+    /**
+     * If feasible, do fast combine instead of full overlay 
+     * 
+     * NOTE: does not node LineStrings, or merge elements of arg geoms.
+     * This is different behaviour to full overlay.
+     */
+    //TODO: could also handle difference and intersection?
     if ( ( opCode == OverlayNG::UNION 
         || opCode == OverlayNG::SYMDIFFERENCE)
-            && isDisjointNonEmpty(g0, g1)) {
-        return reduceCombine(g0, g1);
+            && isCombinable(g0, g1)) {
+        return combineReduced(g0, g1);
     }
 
     /*
     * overlayng::OverlayNGRobust does not currently handle
-    * GeometryCollection (collections of mixed dimension)
+    * non-empty GeometryCollections
     * so we handle that case here.
     */
-    if ((g0->isMixedDimension() && ! g0->isEmpty()) ||
-        (g1->isMixedDimension() && ! g1->isEmpty()))
+    if (! isHandledByOverlayNG(g0) ||
+        ! isHandledByOverlayNG(g1))
     {
         return StructuredCollection::overlay(g0, g1, opCode);
     }
@@ -161,9 +207,19 @@ StructuredCollection::overlay(const Geometry* g0, const Geometry* g1, int opCode
         return s0.doDifference(s1);
     case OverlayNG::SYMDIFFERENCE:
         return s0.doSymDifference(s1);
-    default: // only OverlayNG::INTERSECTION
-        return s0.doIntersection(s1);
+    case OverlayNG::INTERSECTION:
+        return s0.doIntersection(s1);    
+    default:
+        throw util::IllegalArgumentException("Invalid overlay opcode");
     }
+}
+
+/* private */
+void 
+StructuredCollection::addDimension(Dimension::DimensionType dim)
+{
+    if (dimension < dim)
+        dimension = dim;
 }
 
 /* public */
@@ -181,12 +237,15 @@ StructuredCollection::readCollection(const Geometry* g)
         switch (g->getGeometryTypeId()) {
             case GEOS_POINT:
                 pts.push_back(g);
+                addDimension(Dimension::P);
                 break;
             case GEOS_LINESTRING:
                 lines.push_back(g);
+                addDimension(Dimension::L);
                 break;
             case GEOS_POLYGON:
                 polys.push_back(g);
+                addDimension(Dimension::A);
                 break;
             default:
                 throw util::IllegalArgumentException("cannot process unexpected collection");
@@ -239,7 +298,9 @@ StructuredCollection::unionByDimension(void)
 
     // io::WKTWriter w;
     // std::cout << "line_col " << w.write(*line_col) << std::endl;
-    // std::cout << "line_union " << w.write(*line_union) << std::endl;
+    // std::cout << "pt_union: " << w.write(*pt_union) << std::endl;
+    // std::cout << "line_union: " << w.write(*line_union) << std::endl;
+    // std::cout << "poly_union: " << w.write(*poly_union) << std::endl;
 
     if (! pt_union->isPuntal())
         throw util::IllegalArgumentException("union of points not puntal");
@@ -251,7 +312,7 @@ StructuredCollection::unionByDimension(void)
 
 /* public */
 std::unique_ptr<Geometry>
-StructuredCollection::doUnaryUnion() const
+StructuredCollection::doUnaryUnion(int resultDim) const
 {
     /*
     * Before output, we clean up the components to remove spatial
@@ -279,15 +340,27 @@ StructuredCollection::doUnaryUnion() const
     toVector(lines_less_polys.get(), geoms);
     toVector(poly_union.get(), geoms);
 
+    if (geoms.size() == 0) {
+        return OverlayUtil::createEmptyResult(
+            resultDim, factory);
+    }
     return factory->buildGeometry(geoms.begin(), geoms.end());
 }
 
+/* public */
+std::unique_ptr<Geometry>
+StructuredCollection::computeResult(StructuredCollection& coll, int opCode,
+    Dimension::DimensionType dimA, Dimension::DimensionType dimB) const
+{
+    coll.unionByDimension();
+    int resultDim = OverlayUtil::resultDimension(opCode, dimA, dimB);
+    return coll.doUnaryUnion(resultDim);
+}
 
 /* public */
 std::unique_ptr<Geometry>
 StructuredCollection::doUnion(const StructuredCollection& a) const
 {
-
     auto poly_union_poly = OverlayNGRobust::Overlay(
         a.getPolyUnion(),
         poly_union.get(),
@@ -307,8 +380,7 @@ StructuredCollection::doUnion(const StructuredCollection& a) const
     c.readCollection(poly_union_poly.get());
     c.readCollection(line_union_line.get());
     c.readCollection(pt_union_pt.get());
-    c.unionByDimension();
-    return c.doUnaryUnion();
+    return computeResult(c, OverlayNG::UNION, getDimension(), a.getDimension());
 }
 
 
@@ -380,8 +452,7 @@ StructuredCollection::doIntersection(const StructuredCollection& a) const
     c.readCollection(pt_inter_poly.get());
     c.readCollection(pt_inter_line.get());
     c.readCollection(pt_inter_pt.get());
-    c.unionByDimension();
-    return c.doUnaryUnion();
+    return computeResult(c, OverlayNG::INTERSECTION, getDimension(), a.getDimension());
 }
 
 
@@ -422,8 +493,7 @@ StructuredCollection::doDifference(const StructuredCollection& a) const
     c.readCollection(poly_diff_poly.get());
     c.readCollection(line_diff_poly_line.get());
     c.readCollection(pt_diff_poly_line_pt.get());
-    c.unionByDimension();
-    return c.doUnaryUnion();
+    return computeResult(c, OverlayNG::DIFFERENCE, getDimension(), a.getDimension());
 }
 
 std::unique_ptr<Geometry>
@@ -448,8 +518,7 @@ StructuredCollection::doSymDifference(const StructuredCollection& a) const
     c.readCollection(poly_symdiff_poly.get());
     c.readCollection(line_symdiff_line.get());
     c.readCollection(pt_symdiff_pt.get());
-    c.unionByDimension();
-    return c.doUnaryUnion();
+    return computeResult(c, OverlayNG::SYMDIFFERENCE, getDimension(), a.getDimension());
 }
 
 

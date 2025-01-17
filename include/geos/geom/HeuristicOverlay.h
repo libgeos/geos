@@ -51,6 +51,7 @@ public:
         , pt_union(nullptr)
         , line_union(nullptr)
         , poly_union(nullptr)
+        , dimension(Dimension::DONTCARE)
     {
         readCollection(g);
         unionByDimension();
@@ -61,9 +62,15 @@ public:
         , pt_union(nullptr)
         , line_union(nullptr)
         , poly_union(nullptr)
+        , dimension(Dimension::DONTCARE)
     {};
 
     static std::unique_ptr<Geometry> overlay(const Geometry* g0, const Geometry* g1, int opCode);
+
+    Dimension::DimensionType getDimension() const
+    {
+        return dimension;
+    };
 
     void readCollection(const Geometry* g);
     const Geometry* getPolyUnion()  const { return poly_union.get(); }
@@ -74,7 +81,6 @@ public:
     std::unique_ptr<Geometry> doIntersection(const StructuredCollection& a) const;
     std::unique_ptr<Geometry> doSymDifference(const StructuredCollection& a) const;
     std::unique_ptr<Geometry> doDifference(const StructuredCollection& a) const;
-    std::unique_ptr<Geometry> doUnaryUnion() const;
 
     static void toVector(const Geometry* g, std::vector<const Geometry*>& v);
     void unionByDimension(void);
@@ -90,6 +96,12 @@ private:
     std::unique_ptr<Geometry> line_union;
     std::unique_ptr<Geometry> poly_union;
 
+    Dimension::DimensionType dimension;
+
+    void addDimension(Dimension::DimensionType dim);
+    std::unique_ptr<Geometry> doUnaryUnion(int resultDim) const;
+    std::unique_ptr<Geometry> computeResult(StructuredCollection& coll, int opCode,
+                Dimension::DimensionType dimA, Dimension::DimensionType dimB) const;
 };
 
 
