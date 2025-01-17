@@ -543,43 +543,6 @@ Geometry::intersection(const Geometry* other) const
 std::unique_ptr<Geometry>
 Geometry::Union(const Geometry* other) const
 {
-#ifdef SHORTCIRCUIT_PREDICATES
-    // if envelopes are disjoint return a MULTI geom or
-    // a geometrycollection
-    if(! getEnvelopeInternal()->intersects(other->getEnvelopeInternal())) {
-//cerr<<"SHORTCIRCUITED-UNION engaged"<<endl;
-        const GeometryCollection* coll;
-
-        std::size_t ngeomsThis = getNumGeometries();
-        std::size_t ngeomsOther = other->getNumGeometries();
-
-        // Allocated for ownership transfer
-        std::vector<std::unique_ptr<Geometry>> v;
-        v.reserve(ngeomsThis + ngeomsOther);
-
-
-        if(nullptr != (coll = dynamic_cast<const GeometryCollection*>(this))) {
-            for(std::size_t i = 0; i < ngeomsThis; ++i) {
-                v.push_back(coll->getGeometryN(i)->clone());
-            }
-        }
-        else {
-            v.push_back(this->clone());
-        }
-
-        if(nullptr != (coll = dynamic_cast<const GeometryCollection*>(other))) {
-            for(std::size_t i = 0; i < ngeomsOther; ++i) {
-                v.push_back(coll->getGeometryN(i)->clone());
-            }
-        }
-        else {
-            v.push_back(other->clone());
-        }
-
-        return _factory->buildGeometry(std::move(v));
-    }
-#endif
-
     return HeuristicOverlay(this, other, OverlayNG::UNION);
 }
 
@@ -600,40 +563,6 @@ Geometry::difference(const Geometry* other) const
 std::unique_ptr<Geometry>
 Geometry::symDifference(const Geometry* other) const
 {
-    // if envelopes are disjoint return a MULTI geom or
-    // a geometrycollection
-    if(! getEnvelopeInternal()->intersects(other->getEnvelopeInternal()) && !(isEmpty() && other->isEmpty())) {
-        const GeometryCollection* coll;
-
-        std::size_t ngeomsThis = getNumGeometries();
-        std::size_t ngeomsOther = other->getNumGeometries();
-
-        // Allocated for ownership transfer
-        std::vector<std::unique_ptr<Geometry>> v;
-        v.reserve(ngeomsThis + ngeomsOther);
-
-
-        if(nullptr != (coll = dynamic_cast<const GeometryCollection*>(this))) {
-            for(std::size_t i = 0; i < ngeomsThis; ++i) {
-                v.push_back(coll->getGeometryN(i)->clone());
-            }
-        }
-        else {
-            v.push_back(this->clone());
-        }
-
-        if(nullptr != (coll = dynamic_cast<const GeometryCollection*>(other))) {
-            for(std::size_t i = 0; i < ngeomsOther; ++i) {
-                v.push_back(coll->getGeometryN(i)->clone());
-            }
-        }
-        else {
-            v.push_back(other->clone());
-        }
-
-        return _factory->buildGeometry(std::move(v));
-    }
-
     return HeuristicOverlay(this, other, OverlayNG::SYMDIFFERENCE);
 }
 

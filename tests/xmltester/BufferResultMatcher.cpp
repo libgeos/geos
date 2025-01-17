@@ -19,7 +19,6 @@
 #include "BufferResultMatcher.h"
 
 #include <geos/geom/Geometry.h>
-#include <geos/geom/HeuristicOverlay.h>
 #include <geos/operation/overlayng/OverlayNG.h>
 #include <geos/algorithm/distance/DiscreteHausdorffDistance.h>
 
@@ -65,15 +64,8 @@ BufferResultMatcher::isSymDiffAreaInTolerance(
     const geom::Geometry& actualBuffer,
     const geom::Geometry& expectedBuffer)
 {
-    typedef std::unique_ptr<geom::Geometry> GeomPtr;
-
-    using geos::geom::HeuristicOverlay;
-
     double area = expectedBuffer.getArea();
-    GeomPtr diff = HeuristicOverlay(&actualBuffer, &expectedBuffer,
-                            operation::overlayng::OverlayNG::SYMDIFFERENCE);
-
-    double areaDiff = diff->getArea();
+    double areaDiff = actualBuffer.symDifference(&expectedBuffer)->getArea();
 
     // can't get closer than difference area = 0 !
     // This also handles case when symDiff is empty
