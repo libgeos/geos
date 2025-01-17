@@ -163,7 +163,7 @@ void object::test<8> ()
         "GEOMETRYCOLLECTION(POLYGON((0 0, 10 0, 10 10, 0 10, 0 0)))",
         "GEOMETRYCOLLECTION(POLYGON((0 0, 10 0, 10 10, 0 10, 0 0)), POINT(20 20))",
         OverlayNG::DIFFERENCE,
-        "GEOMETRYCOLLECTION EMPTY"
+        "POLYGON EMPTY"
         );
 }
 
@@ -201,6 +201,18 @@ void object::test<11> ()
         "GEOMETRYCOLLECTION(POLYGON((2 2, 12 2, 12 12, 2 12, 2 2)), LINESTRING EMPTY, MULTIPOINT(4 4, 11 11), LINESTRING(5 6, 6 5))",
         OverlayNG::UNION,
         "POLYGON ((2 12, 12 12, 12 2, 10 2, 10 0, 0 0, 0 10, 2 10, 2 12))"
+        );
+}
+
+template<>
+template<>
+void object::test<12> ()
+{
+    checkOverlay(
+        "GEOMETRYCOLLECTION (POLYGON ((1 5, 5 5, 5 1, 1 1, 1 5)), POLYGON ((9 5, 9 1, 5 1, 5 5, 9 5)))",
+        "POLYGON ((1 5, 9 5, 9 1, 1 1, 1 5))",
+        OverlayNG::DIFFERENCE,
+        "POLYGON EMPTY"
         );
 }
 

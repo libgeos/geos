@@ -1016,6 +1016,55 @@
 <test> <op name='symDifference' arg1='A' arg2='B'>  POLYGON EMPTY   </op> </test>
 </case>
 
+<case>
+  <desc>PC - point and disjoint GC with empty elements</desc>
+  <a>
+POINT (1 1)
+  </a>
+  <b>
+GEOMETRYCOLLECTION (POLYGON EMPTY, POINT EMPTY, LINESTRING (2 2, 3 3))
+  </b>
+<test>  <op name="intersection" arg1="A" arg2="B">
+POINT EMPTY
+  </op></test>
+<test>  <op name="union" arg1="A" arg2="B">
+GEOMETRYCOLLECTION (LINESTRING (2 2, 3 3), POINT (1 1))
+  </op></test>
+<test>  <op name="difference" arg1="A" arg2="B">
+POINT (1 1)
+  </op></test>
+<test>  <op name="difference" arg1="B" arg2="A">
+LINESTRING (2 2, 3 3)
+  </op></test>
+<test>  <op name="symdifference" arg1="A" arg2="B">
+GEOMETRYCOLLECTION (LINESTRING (2 2, 3 3), POINT (1 1))
+  </op></test>
+</case>
+
+<case>
+  <desc>PC - point and disjoint GC with nested empty elements</desc>
+  <a>
+POINT (1 1)
+  </a>
+  <b>
+GEOMETRYCOLLECTION (GEOMETRYCOLLECTION (POLYGON EMPTY, POINT EMPTY), GEOMETRYCOLLECTION(POLYGON EMPTY, LINESTRING (2 2, 3 3)))
+  </b>
+<test>  <op name="intersection" arg1="A" arg2="B">
+POINT EMPTY
+  </op></test>
+<test>  <op name="union" arg1="A" arg2="B">
+GEOMETRYCOLLECTION (LINESTRING (2 2, 3 3), POINT (1 1))
+  </op></test>
+<test>  <op name="difference" arg1="A" arg2="B">
+POINT (1 1)
+  </op></test>
+<test>  <op name="difference" arg1="B" arg2="A">
+LINESTRING (2 2, 3 3)
+  </op></test>
+<test>  <op name="symdifference" arg1="A" arg2="B">
+GEOMETRYCOLLECTION (LINESTRING (2 2, 3 3), POINT (1 1))
+  </op></test>
+</case>
 
 </run>
 
