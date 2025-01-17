@@ -299,17 +299,17 @@ std::vector<GeometryOpCreator> opRegistry {
 {"bufferQuadSegs", [](std::string name) { return GeometryOp::create(name,
     catConst,
     "compute the buffer of geometry by a distance with quadrant segments",
-    [](const std::unique_ptr<Geometry>& geom, double d, int quadrantSegments) {
-        return new Result( geom->buffer( d, quadrantSegments ) );
+    [](const std::unique_ptr<Geometry>& geom, double d, double quadrantSegments) {
+        return new Result( geom->buffer( d, (int) quadrantSegments ) );
     });
     }},
 {"bufferJoin", [](std::string name) { return GeometryOp::create(name,
     catConst,
     "compute the buffer of geometry by a distance, with join >0 = QS, 0 = Bevel, <0 = Mitre limit",
-    [](const std::unique_ptr<Geometry>& geom, double d, int join) {
+    [](const std::unique_ptr<Geometry>& geom, double d, double join) {
         geos::operation::buffer::BufferParameters param;
         if (join > 0) {
-            param.setQuadrantSegments( join );
+            param.setQuadrantSegments( (int) join );
             param.setJoinStyle(geos::operation::buffer::BufferParameters::JOIN_ROUND);
         }
         else if (join == 0) {
@@ -317,7 +317,7 @@ std::vector<GeometryOpCreator> opRegistry {
         }
         else if (join < 0) {
             param.setJoinStyle(geos::operation::buffer::BufferParameters::JOIN_MITRE);
-            param.setMitreLimit( -join );
+            param.setMitreLimit( (int) -join );
         }
         std::unique_ptr<Geometry> g3 = geos::operation::buffer::BufferOp::bufferOp(geom.get(), d, param);
         return new Result( g3.release() );
@@ -335,19 +335,19 @@ std::vector<GeometryOpCreator> opRegistry {
 {"offsetCurveJoin", [](std::string name) { return GeometryOp::create(name,
     catConst,
     "compute the offset curve of geometry by a distance, with join >0 = QS, 0 = Bevel, <0 = Mitre limit",
-    [](const std::unique_ptr<Geometry>& geom, double d, int join) {
+    [](const std::unique_ptr<Geometry>& geom, double d, double join) {
         int quadSegs = 0;
         geos::operation::buffer::BufferParameters::JoinStyle joinStyle = geos::operation::buffer::BufferParameters::JOIN_ROUND;
         double miterLimit = 0;
         if (join > 0) {
-            quadSegs = join;
+            quadSegs = (int) join;
         }
         else if (join == 0) {
             joinStyle = geos::operation::buffer::BufferParameters::JOIN_BEVEL;
         }
         else if (join < 0) {
             joinStyle = geos::operation::buffer::BufferParameters::JOIN_MITRE;
-            miterLimit = -join;
+            miterLimit = (int) -join;
         }
         std::unique_ptr<Geometry> g3 = geos::operation::buffer::OffsetCurve::getCurve(*geom, d, quadSegs, joinStyle, miterLimit);
         return new Result( g3.release() );
