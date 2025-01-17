@@ -46,6 +46,19 @@ class StructuredCollection {
 
 public:
 
+    static std::unique_ptr<Geometry> overlay(const Geometry* g0, const Geometry* g1, int opCode);
+
+private:
+
+    const GeometryFactory* factory;
+    std::vector<const Geometry*> pts;
+    std::vector<const Geometry*> lines;
+    std::vector<const Geometry*> polys;
+    std::unique_ptr<Geometry> pt_union;
+    std::unique_ptr<Geometry> line_union;
+    std::unique_ptr<Geometry> poly_union;
+    Dimension::DimensionType dimension;
+
     StructuredCollection(const Geometry* g)
         : factory(g->getFactory())
         , pt_union(nullptr)
@@ -65,12 +78,15 @@ public:
         , dimension(Dimension::DONTCARE)
     {};
 
-    static std::unique_ptr<Geometry> overlay(const Geometry* g0, const Geometry* g1, int opCode);
-
     Dimension::DimensionType getDimension() const
     {
         return dimension;
     };
+
+    void addDimension(Dimension::DimensionType dim);
+    std::unique_ptr<Geometry> doUnaryUnion(int resultDim) const;
+    std::unique_ptr<Geometry> computeResult(StructuredCollection& coll, int opCode,
+                Dimension::DimensionType dimA, Dimension::DimensionType dimB) const;
 
     void readCollection(const Geometry* g);
     const Geometry* getPolyUnion()  const { return poly_union.get(); }
@@ -84,24 +100,6 @@ public:
 
     static void toVector(const Geometry* g, std::vector<const Geometry*>& v);
     void unionByDimension(void);
-
-
-private:
-
-    const GeometryFactory* factory;
-    std::vector<const Geometry*> pts;
-    std::vector<const Geometry*> lines;
-    std::vector<const Geometry*> polys;
-    std::unique_ptr<Geometry> pt_union;
-    std::unique_ptr<Geometry> line_union;
-    std::unique_ptr<Geometry> poly_union;
-
-    Dimension::DimensionType dimension;
-
-    void addDimension(Dimension::DimensionType dim);
-    std::unique_ptr<Geometry> doUnaryUnion(int resultDim) const;
-    std::unique_ptr<Geometry> computeResult(StructuredCollection& coll, int opCode,
-                Dimension::DimensionType dimA, Dimension::DimensionType dimB) const;
 };
 
 
