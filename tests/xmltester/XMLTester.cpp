@@ -180,7 +180,9 @@ tolower(std::string& str)
 
 void toupper(std::string& s)
 {
-    std::transform(s.begin(), s.end(), s.begin(), ::toupper);
+    std::transform(s.begin(), s.end(), s.begin(), 
+        [](char c){ return (char)std::toupper(c); }
+    );
 }
 
 std::string
