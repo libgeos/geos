@@ -48,6 +48,7 @@
 #include <geos/simplify/TopologyPreservingSimplifier.h>
 #include <geos/simplify/DouglasPeuckerSimplifier.h>
 #include <geos/util.h>
+#include <geos/util/string.h>
 #include <geos/util/Interrupt.h>
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKBWriter.h>
@@ -175,17 +176,6 @@ tolower(std::string& str)
         str.end(),
         str.begin(),
         [](char c){ return (char)std::tolower(c); }
-        );
-}
-
-void
-toupper(std::string& str)
-{
-    std::transform(
-        str.begin(),
-        str.end(),
-        str.begin(),
-        [](char c){ return (char)std::toupper(c); }
         );
 }
 
@@ -886,13 +876,13 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
     tmp = opel->Attribute("arg1");
     if(tmp) {
         opArg1 = tmp;
-        toupper(opArg1);
+        geos::util::toUpper(opArg1);
     }
 
     tmp = opel->Attribute("arg2");
     if(tmp) {
         opArg2 = tmp;
-        toupper(opArg2);
+        geos::util::toUpper(opArg2);
     }
 
     tmp = opel->Attribute("arg3");
