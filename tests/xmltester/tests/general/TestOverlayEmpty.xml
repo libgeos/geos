@@ -1025,7 +1025,7 @@ POINT (1 1)
 GEOMETRYCOLLECTION (POLYGON EMPTY, POINT EMPTY, LINESTRING (2 2, 3 3))
   </b>
 <test>  <op name="intersection" arg1="A" arg2="B">
-GEOMETRYCOLLECTION EMPTY
+POINT EMPTY
   </op></test>
 <test>  <op name="union" arg1="A" arg2="B">
 GEOMETRYCOLLECTION (LINESTRING (2 2, 3 3), POINT (1 1))
@@ -1050,7 +1050,7 @@ POINT (1 1)
 GEOMETRYCOLLECTION (GEOMETRYCOLLECTION (POLYGON EMPTY, POINT EMPTY), GEOMETRYCOLLECTION(POLYGON EMPTY, LINESTRING (2 2, 3 3)))
   </b>
 <test>  <op name="intersection" arg1="A" arg2="B">
-GEOMETRYCOLLECTION EMPTY
+POINT EMPTY
   </op></test>
 <test>  <op name="union" arg1="A" arg2="B">
 GEOMETRYCOLLECTION (LINESTRING (2 2, 3 3), POINT (1 1))
