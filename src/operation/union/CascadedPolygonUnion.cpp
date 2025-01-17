@@ -20,11 +20,11 @@
 
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
-#include <geos/geom/HeuristicOverlay.h>
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/Polygon.h>
 #include <geos/index/strtree/TemplateSTRtree.h>
 #include <geos/operation/overlayng/OverlayNG.h>
+#include <geos/operation/overlayng/OverlayNGRobust.h>
 #include <geos/operation/union/CascadedPolygonUnion.h>
 #include <geos/operation/valid/IsValidOp.h>
 #include <geos/operation/valid/IsSimpleOp.h>
@@ -201,10 +201,8 @@ CascadedPolygonUnion::restrictToPolygons(std::unique_ptr<geom::Geometry> g)
 std::unique_ptr<geom::Geometry>
 ClassicUnionStrategy::Union(const geom::Geometry* g0, const geom::Geometry* g1)
 {
-    // TODO make an rvalue overload for this that can consume its inputs.
-    // At a minimum, a copy in the buffer fallback can be eliminated.
     try {
-        return geom::HeuristicOverlay(g0, g1, operation::overlayng::OverlayNG::UNION);
+        return operation::overlayng::OverlayNGRobust::Overlay(g0, g1, operation::overlayng::OverlayNG::UNION);
     }
     catch (const util::TopologyException &ex) {
         ::geos::ignore_unused_variable_warning(ex);

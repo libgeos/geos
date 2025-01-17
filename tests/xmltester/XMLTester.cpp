@@ -178,6 +178,13 @@ tolower(std::string& str)
         );
 }
 
+void toupper(std::string& s)
+{
+    std::transform(s.begin(), s.end(), s.begin(), 
+        [](char c){ return (char)std::toupper(c); }
+    );
+}
+
 std::string
 normalize_filename(const std::string& str)
 {
@@ -875,11 +882,13 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
     tmp = opel->Attribute("arg1");
     if(tmp) {
         opArg1 = tmp;
+        toupper(opArg1);
     }
 
     tmp = opel->Attribute("arg2");
     if(tmp) {
         opArg2 = tmp;
+        toupper(opArg2);
     }
 
     tmp = opel->Attribute("arg3");
@@ -988,13 +997,15 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
         }
 
         else if(opName == "intersection") {
+            geom::Geometry* g1 = opArg1 == "B" ? gB : gA;
+            geom::Geometry* g2 = opArg2 == "B" ? gB : gA;
 
             GeomPtr gRes(parseGeometry(opRes, "expected"));
             gRes->normalize();
 
             profile.start();
 
-            GeomPtr gRealRes(gA->intersection(gB));
+            GeomPtr gRealRes(g1->intersection(g2));
 
             profile.stop();
 
@@ -1312,6 +1323,9 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
 
 
         else if(opName == "union") {
+            geom::Geometry* g1 = opArg1 == "B" ? gB : gA;
+            geom::Geometry* g2 = opArg2 == "B" ? gB : gA;
+
             GeomPtr gRes(parseGeometry(opRes, "expected"));
             gRes->normalize();
 
@@ -1319,10 +1333,10 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
 
             GeomPtr gRealRes;
             if(gB) {
-                gRealRes = gA->Union(gB);
+                gRealRes = g1->Union(g2);
             }
             else {
-                gRealRes = gA->Union();
+                gRealRes = g1->Union();
             }
 
             profile.stop();
@@ -1339,11 +1353,13 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
         }
 
         else if(opName == "difference") {
+            geom::Geometry* g1 = opArg1 == "B" ? gB : gA;
+            geom::Geometry* g2 = opArg2 == "B" ? gB : gA;
 
             GeomPtr gRes(parseGeometry(opRes, "expected"));
             gRes->normalize();
 
-            GeomPtr gRealRes(gA->difference(gB));
+            GeomPtr gRealRes(g1->difference(g2));
 
             gRealRes->normalize();
 
@@ -1360,10 +1376,13 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
         }
 
         else if(opName == "symdifference") {
+            geom::Geometry* g1 = opArg1 == "B" ? gB : gA;
+            geom::Geometry* g2 = opArg2 == "B" ? gB : gA;
+
             GeomPtr gRes(parseGeometry(opRes, "expected"));
             gRes->normalize();
 
-            GeomPtr gRealRes(gA->symDifference(gB));
+            GeomPtr gRealRes(g1->symDifference(g2));
 
             gRealRes->normalize();
 
