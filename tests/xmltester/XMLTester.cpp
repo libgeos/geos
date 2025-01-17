@@ -48,7 +48,6 @@
 #include <geos/simplify/TopologyPreservingSimplifier.h>
 #include <geos/simplify/DouglasPeuckerSimplifier.h>
 #include <geos/util.h>
-#include <geos/util/string.h>
 #include <geos/util/Interrupt.h>
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKBWriter.h>
@@ -92,7 +91,6 @@ using namespace geos::operation::polygonize;
 using namespace geos::operation::linemerge;
 using namespace geos::geom::prep;
 using std::runtime_error;
-using geos::util::toUpper;
 using geos::operation::overlayng::OverlayNG;
 using geos::operation::overlayng::UnaryUnionNG;
 using geos::operation::overlayng::OverlayNGRobust;
@@ -178,6 +176,11 @@ tolower(std::string& str)
         str.begin(),
         [](char c){ return (char)std::tolower(c); }
         );
+}
+
+void toUpper(std::string& s)
+{
+    std::transform(s.begin(), s.end(), s.begin(), ::toupper);
 }
 
 std::string
@@ -877,13 +880,13 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
     tmp = opel->Attribute("arg1");
     if(tmp) {
         opArg1 = tmp;
-        util::toUpper(opArg1);
+        toUpper(opArg1);
     }
 
     tmp = opel->Attribute("arg2");
     if(tmp) {
         opArg2 = tmp;
-        util::toUpper(opArg2);
+        toUpper(opArg2);
     }
 
     tmp = opel->Attribute("arg3");
