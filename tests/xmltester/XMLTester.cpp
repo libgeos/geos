@@ -92,6 +92,7 @@ using namespace geos::operation::polygonize;
 using namespace geos::operation::linemerge;
 using namespace geos::geom::prep;
 using std::runtime_error;
+using geos::util::toUpper;
 using geos::operation::overlayng::OverlayNG;
 using geos::operation::overlayng::UnaryUnionNG;
 using geos::operation::overlayng::OverlayNGRobust;
@@ -876,13 +877,13 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
     tmp = opel->Attribute("arg1");
     if(tmp) {
         opArg1 = tmp;
-        geos::util::toUpper(opArg1);
+        toUpper(opArg1);
     }
 
     tmp = opel->Attribute("arg2");
     if(tmp) {
         opArg2 = tmp;
-        geos::util::toUpper(opArg2);
+        toUpper(opArg2);
     }
 
     tmp = opel->Attribute("arg3");
