@@ -178,7 +178,7 @@ tolower(std::string& str)
         );
 }
 
-void toUpper(std::string& s)
+void toupper(std::string& s)
 {
     std::transform(s.begin(), s.end(), s.begin(), ::toupper);
 }
@@ -880,13 +880,13 @@ XMLTester::parseTest(const tinyxml2::XMLNode* node)
     tmp = opel->Attribute("arg1");
     if(tmp) {
         opArg1 = tmp;
-        toUpper(opArg1);
+        toupper(opArg1);
     }
 
     tmp = opel->Attribute("arg2");
     if(tmp) {
         opArg2 = tmp;
-        toUpper(opArg2);
+        toupper(opArg2);
     }
 
     tmp = opel->Attribute("arg3");
