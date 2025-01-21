@@ -56,7 +56,7 @@
 
 <case>
   <desc>L - elongated horseshoe</desc>
-  <a>    LINESTRING (80 0, 80 120, 120 120, 120 0))
+  <a>    LINESTRING (80 0, 80 120, 120 120, 120 0)
 	</a>
 <test><op name="getCentroid" arg1="A" >    POINT (100 68.57142857142857)   </op></test>
 </case>
