@@ -20,6 +20,7 @@
 #include <tinyxml2.h>
 
 using namespace geos;
+using geos::geom::Geometry;
 
 class XMLTester {
 
@@ -37,19 +38,12 @@ private:
     void parsePrecisionModel(const tinyxml2::XMLElement* el);
     void parseRun(const tinyxml2::XMLNode* node);
     void parseCase(const tinyxml2::XMLNode* node);
-    void parseTest(const tinyxml2::XMLNode* node);
     void runPredicates(const geom::Geometry* a, const geom::Geometry* b);
-    geom::Geometry* parseGeometry(const std::string& in, const char* label = "parsed");
-    static std::string trimBlanks(const std::string& in);
-    void printGeom(std::ostream& os, const geom::Geometry* g);
-    double areaDelta(const geom::Geometry* a, const geom::Geometry* b, std::string& rsltMaxDiffOp, double maxDiff, std::stringstream& ss);
 
-    std::string printGeom(const geom::Geometry* g);
-    void printTest(bool success, const std::string& expected_result, const std::string& actual_result,
-                   const util::Profile&);
+    void runTest(const tinyxml2::XMLNode* node);
 
-    geom::Geometry* gA;
-    geom::Geometry* gB;
+    Geometry* gA;
+    Geometry* gB;
 
     bool usePrepared;
     std::unique_ptr<geom::PrecisionModel> pm;
@@ -61,12 +55,12 @@ private:
     tinyxml2::XMLDocument xml;
 
     int verbose;
-    int test_predicates;
 
     int failed;
     int succeeded;
     int caseCount;
     int testCount;
+    int testLineNum;
     std::string opSignature;
 
     int testFileCount;
@@ -80,7 +74,6 @@ private:
     bool sqlOutput;
     bool HEXWKB_output;
 
-    bool testValid(const geom::Geometry* g, const std::string& label);
 
 public:
     XMLTester();
@@ -89,6 +82,12 @@ public:
     void resultSummary(std::ostream& os) const;
     void resetCounters();
 
+    Geometry* parseGeometry(const std::string& in, const char* label = "parsed");
+    std::string printGeom(const geom::Geometry* g);
+    void printTest(bool success, const std::string& expected_result, const std::string& actual_result);
+    bool testValid(const geom::Geometry* g, const std::string& label);
+    std::string testcaseRef();
+    
     /*
      * Values:
      *	0: Show case description, run tests, show result
@@ -98,6 +97,14 @@ public:
      * Return previously set verbosity level
      */
     int setVerbosityLevel(int val);
+
+    int isVerbose() { return verbose; }
+
+    bool isTestValidOutput() { return testValidOutput; }
+
+    bool isUsePrepared() { return usePrepared; }
+
+    geom::GeometryFactory* getFactory() { return factory.get(); }
 
     int
     getFailuresCount()
@@ -125,6 +132,72 @@ public:
     {
         HEXWKB_output = val;
     }
+
+};
+
+class Test {
+private:
+    XMLTester& tester;
+
+    //int success = 0; // no success by default
+    std::string opName;
+    std::string opArg1;
+    std::string opArg2;
+    std::string opArg3;
+    std::string opArg4;
+    std::string opRes;
+    std::string opSignature;
+
+    //TODO: make these functions on XMLTester?
+    int verbose;
+    bool testValidOutput;
+    bool isSuccess;
+
+    std::string actual_result;
+    std::string expected_result;
+
+    void parse(const tinyxml2::XMLNode* node);
+    void execute(Geometry* geomA, Geometry* geomB);
+    void executeOp(Geometry* geomA, Geometry* geomB);
+    void checkResult( Geometry * res );
+    void checkUnionResult( Geometry * res );
+    void checkResult( double res );
+    void checkResult( bool res );
+
+    // TODO: temporary delegators
+    Geometry* parseGeometry(const std::string& in, const char* label = "parsed")
+    {
+        return tester.parseGeometry(in, label);
+    }
+    std::string printGeom(const geom::Geometry* g)
+    {
+        return tester.printGeom(g);
+    }
+    void printTest(bool success, const std::string& expected, const std::string& actual)
+    {
+        tester.printTest(success, expected, actual);
+    }
+    bool testValid(const geom::Geometry* g, const std::string& label)
+    {
+        return tester.testValid(g, label);
+    }
+
+    static int checkBufferSuccess(Geometry const& gRes, Geometry const& gRealRes, double dist);
+    static int checkSingleSidedBufferSuccess(Geometry& gRes, Geometry& gRealRes, double dist);
+
+public:
+    Test(XMLTester& xmlTester) 
+        : tester(xmlTester),
+        isSuccess(false),
+        actual_result("NONE")
+    {
+        verbose = tester.isVerbose();
+        testValidOutput = tester.isTestValidOutput();
+        //usePrepared = tester.isUsePrepared();
+    }
+    bool run(const tinyxml2::XMLNode* node, Geometry* geomA, Geometry* geomB);
+
+    static double areaDelta(const geom::Geometry* a, const geom::Geometry* b, std::string& rsltMaxDiffOp, double maxDiff, std::stringstream& ss);
 
 };
 
