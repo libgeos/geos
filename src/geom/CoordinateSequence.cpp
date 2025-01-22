@@ -588,9 +588,23 @@ CoordinateSequence::setPoints(const std::vector<Coordinate>& v)
     m_hasz = false;
     m_hasm = false;
 
-    m_vect.resize(3 * v.size());
+    m_vect.resize(m_stride * v.size());
     const double* cbuf = reinterpret_cast<const double*>(v.data());
     m_vect.assign(cbuf, cbuf + m_vect.size());
+}
+
+void
+CoordinateSequence::setPoints(const std::vector<CoordinateXY>& v)
+{
+    m_stride = 3;
+    m_hasdim = false;
+    m_hasz = false;
+    m_hasm = false;
+
+    m_vect.resize(m_stride * v.size());
+    for (std::size_t i = 0; i < v.size(); i++) {
+        setAt(v[i], i);
+    }
 }
 
 void

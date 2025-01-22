@@ -400,6 +400,9 @@ public:
     /// Substitute Coordinate list with a copy of the given vector
     void setPoints(const std::vector<Coordinate>& v);
 
+    /// Substitute Coordinate list with a copy of the given vector
+    void setPoints(const std::vector<CoordinateXY>& v);
+
     /// @}
     /// \defgroup add Adding methods
     /// @{
