@@ -819,7 +819,6 @@ Test::areaDelta(const geom::Geometry* a, const geom::Geometry* b, std::string& r
 
     // normalize the area delta value
     double diffScore = maxDelta / (areaA + areaB);
-
     if (diffScore > maxDiff) {
         ss << std::endl << "A" << std::endl;
         ss << *a;
@@ -837,31 +836,17 @@ Test::areaDelta(const geom::Geometry* a, const geom::Geometry* b, std::string& r
         ss << *geomSD;
         ss << std::endl;
     }
-
     return diffScore;
 }
 
 void
-Test::checkResult( const std::unique_ptr<Geometry>& res ) 
+Test::checkResult( const std::unique_ptr<Geometry>& result ) 
 {
-    std::string expectedRes = opRes;
-    std::unique_ptr<Geometry> gExpectedRes(tester.parseGeometry(expectedRes, "expected"));
-    gExpectedRes->normalize();
-
-    std::unique_ptr<Geometry> gActualRes(res->clone());
-    gActualRes->normalize();
-
-    isSuccess = false;
-    //TODO: change to equalsExact, since compareTo doesn't check empty type
-    if (gExpectedRes->compareTo(gActualRes.get()) == 0) {
-        isSuccess = true;
-    }
-
-    if (testValidOutput) {
-        isSuccess &= tester.testValid(gActualRes.get(), "result");
-    }
-
-    actual_result = tester.printGeom(gActualRes.get());
+    checkResult( result, 
+    [](std::unique_ptr<Geometry>& expected, std::unique_ptr<Geometry>& actual) -> bool {
+        //TODO: change to equalsExact, since compareTo doesn't check empty type
+        return expected->compareTo(actual.get()) == 0;
+    });
 }
 
 void
