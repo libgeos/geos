@@ -309,7 +309,7 @@ XMLTester::testcaseRef()
 
 /*private*/
 void
-XMLTester::printTestSQL(bool success, const std::string& op, const std::string& expected_result, const std::string& actual_result)
+XMLTester::printTestSQL(bool success, const std::string& expected_result, const std::string& actual_result)
 {
     std::cout << "INSERT INTO \"" << normalize_filename(*curr_file) << "\" VALUES ("
                 << caseCount << ", "
@@ -347,7 +347,7 @@ void
 XMLTester::printTest(bool success, const std::string& op, const std::string& expected_result, const std::string& actual_result)
 {
     if(sqlOutput) {
-        printTestSQL(success, op, expected_result, actual_result);
+        printTestSQL(success, expected_result, actual_result);
         return;
     }
     //-- no output for quiet success

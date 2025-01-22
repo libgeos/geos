@@ -85,7 +85,7 @@ public:
     Geometry* parseGeometry(const std::string& in, const char* label = "parsed");
     std::string printGeom(const geom::Geometry* g);
     void printTest(bool success, const std::string& op, const std::string& expected_result, const std::string& actual_result);
-    void printTestSQL(bool success, const std::string& op, const std::string& expected_result, const std::string& actual_result);
+    void printTestSQL(bool success, const std::string& expected_result, const std::string& actual_result);
     bool testValid(const geom::Geometry* g, const std::string& label);
     std::string testcaseRef();
     
