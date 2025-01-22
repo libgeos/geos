@@ -1819,6 +1819,20 @@ extern "C" {
         });
     }
 
+    Geometry*
+    GEOSSubdivideByGrid_r(GEOSContextHandle_t extHandle, const Geometry* g, double xmin, double ymin,
+                          double xmax, double ymax, unsigned nx, unsigned ny, int include_exterior)
+    {
+        return execute(extHandle, [&]() {
+            Envelope env(xmin, xmax, ymin, ymax);
+            double dx = env.getWidth() / static_cast<double>(nx);
+            double dy = env.getHeight() / static_cast<double>(ny);
+            geos::operation::grid::Grid<geos::operation::grid::bounded_extent> grid(env, dx, dy);
+
+            return geos::operation::grid::GridIntersection::subdividePolygon(grid, *g, include_exterior).release();
+        });
+    }
+
     int
     GEOSGridIntersectionFractions_r(GEOSContextHandle_t extHandle, const Geometry* g, double xmin, double ymin,
                                     double xmax, double ymax, unsigned nx, unsigned ny, float* buf)
