@@ -1120,76 +1120,40 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         checkResult( den.getResultGeometry() );
     }
     else if(opName == "intersects") {
-        if (tester.isPrepared()) {
-            checkResult( prepare(gA)->intersects(gB));
-        }
-        else {
-            checkResult( gA->intersects(gB) );
-        }
+        bool res = tester.isPrepared() ? prepare(gA)->intersects(gB) : gA->intersects(gB);
+        checkResult( res );
     }
     else if(opName == "contains") {
-        if (tester.isPrepared()) {
-            checkResult( prepare(gA)->contains(gB));
-        }
-        else {
-            checkResult( gA->contains(gB) );
-        }
+        bool res = tester.isPrepared() ? prepare(gA)->contains(gB) : gA->contains(gB);
+        checkResult( res );
     }
     else if(opName == "overlaps") {
-        if (tester.isPrepared()) {
-            checkResult( prepare(gA)->overlaps(gB));
-        }
-        else {
-            checkResult( gA->overlaps(gB) );
-        }
+        bool res = tester.isPrepared() ? prepare(gA)->overlaps(gB) : gA->overlaps(gB);
+        checkResult( res );
     }
     else if(opName == "within") {
-        if (tester.isPrepared()) {
-            checkResult( prepare(gA)->within(gB));
-        }
-        else {
-            checkResult( gA->within(gB) );
-        }
+        bool res = tester.isPrepared() ? prepare(gA)->within(gB) : gA->within(gB);
+        checkResult( res );
     }
     else if(opName == "touches") {
-        if (tester.isPrepared()) {
-            checkResult( prepare(gA)->touches(gB));
-        }
-        else {
-            checkResult( gA->touches(gB) );
-        }
+        bool res = tester.isPrepared() ? prepare(gA)->touches(gB) : gA->touches(gB);
+        checkResult( res );
     }
     else if(opName == "crosses") {
-        if (tester.isPrepared()) {
-            checkResult( prepare(gA)->crosses(gB));
-        }
-        else {
-            checkResult( gA->crosses(gB) );
-        }
+        bool res = tester.isPrepared() ? prepare(gA)->crosses(gB) : gA->crosses(gB);
+        checkResult( res );
     }
     else if(opName == "disjoint") {
-        if (tester.isPrepared()) {
-            checkResult( prepare(gA)->disjoint(gB));
-        }
-        else {
-            checkResult( gA->disjoint(gB) );
-        }
+        bool res = tester.isPrepared() ? prepare(gA)->disjoint(gB) : gA->disjoint(gB);
+        checkResult( res );
     }
     else if(opName == "covers") {
-        if (tester.isPrepared()) {
-            checkResult( prepare(gA)->covers(gB));
-        }
-        else {
-            checkResult( gA->covers(gB) );
-        }
+        bool res = tester.isPrepared() ? prepare(gA)->covers(gB) : gA->covers(gB);
+        checkResult( res );
     }
     else if(opName == "coveredby") {
-        if (tester.isPrepared()) {
-            checkResult( prepare(gA)->coveredBy(gB));
-        }
-        else {
-            checkResult( gA->coveredBy(gB) );
-        }
+        bool res = tester.isPrepared() ? prepare(gA)->coveredBy(gB) : gA->coveredBy(gB);
+        checkResult( res );
     }
     else if(opName == "equalstopo") {
         // equalsTopo() is synonym for equals() in JTS
