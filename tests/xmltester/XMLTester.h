@@ -139,7 +139,6 @@ class Test {
 private:
     XMLTester& tester;
 
-    //int success = 0; // no success by default
     std::string opName;
     std::string opArg1;
     std::string opArg2;
@@ -151,6 +150,7 @@ private:
     //TODO: make these functions on XMLTester?
     int verbose;
     bool testValidOutput;
+
     bool isSuccess;
 
     std::string actual_result;
@@ -164,22 +164,9 @@ private:
     void checkResult( double res );
     void checkResult( bool res );
 
-    // TODO: temporary delegators
-    Geometry* parseGeometry(const std::string& in, const char* label = "parsed")
-    {
-        return tester.parseGeometry(in, label);
-    }
-    std::string printGeom(const geom::Geometry* g)
-    {
-        return tester.printGeom(g);
-    }
-    bool testValid(const geom::Geometry* g, const std::string& label)
-    {
-        return tester.testValid(g, label);
-    }
-
     static int checkBufferSuccess(Geometry const& gRes, Geometry const& gRealRes, double dist);
     static int checkSingleSidedBufferSuccess(Geometry& gRes, Geometry& gRealRes, double dist);
+    static double areaDelta(const geom::Geometry* a, const geom::Geometry* b, std::string& rsltMaxDiffOp, double maxDiff, std::stringstream& ss);
 
 public:
     Test(XMLTester& xmlTester) 
@@ -193,7 +180,6 @@ public:
     }
     bool run(const tinyxml2::XMLNode* node, Geometry* geomA, Geometry* geomB);
 
-    static double areaDelta(const geom::Geometry* a, const geom::Geometry* b, std::string& rsltMaxDiffOp, double maxDiff, std::stringstream& ss);
 
 };
 

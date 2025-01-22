@@ -1226,7 +1226,7 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
     else if(opName == "buffer") {
         using namespace operation::buffer;
 
-        std::unique_ptr<Geometry> gRes(parseGeometry(opRes, "expected"));
+        std::unique_ptr<Geometry> gRes(tester.parseGeometry(opRes, "expected"));
         gRes->normalize();
 
         std::unique_ptr<Geometry> gRealRes;
@@ -1236,8 +1236,6 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         if(opArg3 != "") {
             params.setQuadrantSegments(std::atoi(opArg3.c_str()));
         }
-
-
         BufferOp op(gA, params);
         gRealRes = op.getResultGeometry(dist);
 
@@ -1246,18 +1244,17 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         // Validate the buffer operation
         success = checkBufferSuccess(*gRes, *gRealRes, dist);
 
-        actual_result = printGeom(gRealRes.get());
-        expected_result = printGeom(gRes.get());
+        actual_result = tester.printGeom(gRealRes.get());
+        expected_result = tester.printGeom(gRes.get());
 
         if(testValidOutput) {
-            success &= int(testValid(gRealRes.get(), "result"));
+            success &= int(tester.testValid(gRealRes.get(), "result"));
         }
     }
-
     else if(opName == "buffersinglesided") {
         using namespace operation::buffer;
 
-        std::unique_ptr<Geometry> gRes(parseGeometry(opRes, "expected"));
+        std::unique_ptr<Geometry> gRes(tester.parseGeometry(opRes, "expected"));
         gRes->normalize();
 
         std::unique_ptr<Geometry> gRealRes;
@@ -1283,18 +1280,17 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         success = checkSingleSidedBufferSuccess(*gRes,
                                                 *gRealRes, dist);
 
-        actual_result = printGeom(gRealRes.get());
-        expected_result = printGeom(gRes.get());
+        actual_result = tester.printGeom(gRealRes.get());
+        expected_result = tester.printGeom(gRes.get());
 
         if(testValidOutput) {
-            success &= int(testValid(gRealRes.get(), "result"));
+            success &= int(tester.testValid(gRealRes.get(), "result"));
         }
     }
-
     else if(opName == "buffermitredjoin") {
         using namespace operation::buffer;
 
-        std::unique_ptr<Geometry> gRes(parseGeometry(opRes, "expected"));
+        std::unique_ptr<Geometry> gRes(tester.parseGeometry(opRes, "expected"));
         gRes->normalize();
 
         std::unique_ptr<Geometry> gRealRes;
@@ -1315,11 +1311,11 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         // Validate the buffer operation
         success = checkBufferSuccess(*gRes, *gRealRes, dist);
 
-        actual_result = printGeom(gRealRes.get());
-        expected_result = printGeom(gRes.get());
+        actual_result = tester.printGeom(gRealRes.get());
+        expected_result = tester.printGeom(gRes.get());
 
         if(testValidOutput) {
-            success &= int(testValid(gRealRes.get(), "result"));
+            success &= int(tester.testValid(gRealRes.get(), "result"));
         }
     }
     else if(opName == "getinteriorpoint") {
@@ -1380,7 +1376,7 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         std::unique_ptr<Geometry> gI(gA->intersection(gB));
 
         if(testValidOutput) {
-            validOut &= int(testValid(gI.get(), "areatest intersection"));
+            validOut &= int(tester.testValid(gI.get(), "areatest intersection"));
         }
 
         if(verbose > 1) {
@@ -1390,7 +1386,7 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         std::unique_ptr<Geometry> gDab(gA->difference(gB));
 
         if(testValidOutput) {
-            validOut &= int(testValid(gI.get(), "areatest difference(a,b)"));
+            validOut &= int(tester.testValid(gI.get(), "areatest difference(a,b)"));
         }
 
         if(verbose > 1) {
@@ -1400,7 +1396,7 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         std::unique_ptr<Geometry> gDba(gB->difference(gA));
 
         if(testValidOutput) {
-            validOut &= int(testValid(gI.get(), "areatest difference(b,a)"));
+            validOut &= int(tester.testValid(gI.get(), "areatest difference(b,a)"));
         }
 
         if(verbose > 1) {
@@ -1410,7 +1406,7 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         std::unique_ptr<Geometry> gSD(gA->symDifference(gB));
 
         if(testValidOutput) {
-            validOut &= int(testValid(gI.get(), "areatest symdifference"));
+            validOut &= int(tester.testValid(gI.get(), "areatest symdifference"));
         }
 
         if(verbose > 1) {
@@ -1508,6 +1504,7 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         checkResult( geos::simplify::TopologyPreservingSimplifier::simplify(gA, tolerance).get() );
     }
     else {
+        //TODO: error out here?
         std::cerr << tester.testcaseRef() << " - " << opName;
         std::cerr << ": skipped (unrecognized)." << std::endl;
     }
