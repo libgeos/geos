@@ -309,39 +309,45 @@ XMLTester::testcaseRef()
 
 /*private*/
 void
+XMLTester::printTestSQL(bool success, const std::string& op, const std::string& expected_result, const std::string& actual_result)
+{
+    std::cout << "INSERT INTO \"" << normalize_filename(*curr_file) << "\" VALUES ("
+                << caseCount << ", "
+                << testCount << ", "
+                //<< "'" << opSignature << "', "
+                << "'" << curr_case_desc << "', ";
+
+    std::string geomOut;
+
+    if(gA) {
+        std::cout << "'" << printGeom(gA) << "', ";
+    }
+    else {
+        std::cout << "NULL, ";
+    }
+    if(gB) {
+        std::cout << "'" << printGeom(gB) << "', ";
+    }
+    else {
+        std::cout << "NULL, ";
+    }
+    std::cout << "'" << expected_result << "', "
+                << "'" << actual_result << "', ";
+
+    if(success) {
+        std::cout << "'t'";
+    }
+    else {
+        std::cout << "'f'";
+    }
+    std::cout << ");" << std::endl;
+}
+
+void
 XMLTester::printTest(bool success, const std::string& op, const std::string& expected_result, const std::string& actual_result)
 {
     if(sqlOutput) {
-        std::cout << "INSERT INTO \"" << normalize_filename(*curr_file) << "\" VALUES ("
-                  << caseCount << ", "
-                  << testCount << ", "
-                  //<< "'" << opSignature << "', "
-                  << "'" << curr_case_desc << "', ";
-
-        std::string geomOut;
-
-        if(gA) {
-            std::cout << "'" << printGeom(gA) << "', ";
-        }
-        else {
-            std::cout << "NULL, ";
-        }
-        if(gB) {
-            std::cout << "'" << printGeom(gB) << "', ";
-        }
-        else {
-            std::cout << "NULL, ";
-        }
-        std::cout << "'" << expected_result << "', "
-                  << "'" << actual_result << "', ";
-
-        if(success) {
-            std::cout << "'t'";
-        }
-        else {
-            std::cout << "'f'";
-        }
-        std::cout << ");" << std::endl;
+        printTestSQL(success, op, expected_result, actual_result);
         return;
     }
     //-- no output for quiet success
@@ -352,18 +358,15 @@ XMLTester::printTest(bool success, const std::string& op, const std::string& exp
     std::cout << op << " " << (success ? "ok." : "failed.");
 
     // print geometry on failure for -v
-    // print geometry no matter what for -v -v and above
+    // print geometry always for -v -v and above
     if (verbose > 1 || (verbose == 1 && !success)) {
         std::cout << "\tDescription: " << curr_case_desc << std::endl;
-
         if(gA) {
             std::cout << "\tGeometry A: " << printGeom(gA) << std::endl;
         }
-
         if(gB) {
             std::cout << "\tGeometry B: " << printGeom(gB) << std::endl;
         }
-
         std::cout << "\tExpected: " << expected_result << std::endl;
         std::cout << "\tActual:   " << actual_result << std::endl;
     }
@@ -412,7 +415,6 @@ XMLTester::run(const std::string& source)
     }
 
     parseRun(node);
-
 }
 
 void
