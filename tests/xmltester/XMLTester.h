@@ -25,19 +25,11 @@ using geos::geom::Geometry;
 class XMLTester {
 
 private:
-    enum {
-        SHOW_RUN_INFO = 1,
-        SHOW_CASE,
-        SHOW_TEST,
-        SHOW_RESULT,
-        SHOW_GEOMS,
-        SHOW_GEOMS_FULL,
-        PRED
-    };
 
     void parsePrecisionModel(const tinyxml2::XMLElement* el);
     void parseRun(const tinyxml2::XMLNode* node);
     void parseCase(const tinyxml2::XMLNode* node);
+
     void runPredicates(const geom::Geometry* a, const geom::Geometry* b);
 
     void runTest(const tinyxml2::XMLNode* node);
@@ -56,13 +48,11 @@ private:
 
     int verbose;
 
-    int failed;
-    int succeeded;
+    int failedCount;
+    int succeededCount;
     int caseCount;
     int testCount;
     int testLineNum;
-    std::string opSignature;
-
     int testFileCount;
     int totalTestCount;
 
@@ -99,6 +89,23 @@ public:
      */
     int setVerbosityLevel(int val);
 
+    void setTestOutputValidity(bool val)
+    {
+        testValidOutput = val;
+    }
+    void setTestInputValidity(bool val)
+    {
+        testValidInput = val;
+    }
+    void setSQLOutput(bool val)
+    {
+        sqlOutput = val;
+    }
+    void setHEXWKBOutput(bool val)
+    {
+        HEXWKB_output = val;
+    }
+
     int isVerbose() { return verbose; }
 
     bool isTestValidOutput() { return testValidOutput; }
@@ -107,33 +114,7 @@ public:
 
     geom::GeometryFactory* getFactory() { return factory.get(); }
 
-    int
-    getFailuresCount()
-    {
-        return failed;
-    }
-
-    void
-    testOutputValidity(bool val)
-    {
-        testValidOutput = val;
-    }
-    void
-    testInputValidity(bool val)
-    {
-        testValidInput = val;
-    }
-    void
-    setSQLOutput(bool val)
-    {
-        sqlOutput = val;
-    }
-    void
-    setHEXWKBOutput(bool val)
-    {
-        HEXWKB_output = val;
-    }
-
+    int getFailuresCount() { return failedCount;  }
 };
 
 /*

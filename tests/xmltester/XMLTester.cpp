@@ -205,8 +205,8 @@ XMLTester::XMLTester()
     wktwriter(nullptr),
     wkbreader(nullptr),
     wkbwriter(nullptr),
-    failed(0),
-    succeeded(0),
+    failedCount(0),
+    succeededCount(0),
     caseCount(0),
     testCount(0),
     testLineNum(0),
@@ -356,14 +356,14 @@ XMLTester::resultSummary(std::ostream& os) const
 {
     os << "Files: " << testFileCount << std::endl;
     os << "Tests: " << totalTestCount << std::endl;
-    os << "Failed: " << failed << std::endl;
-    os << "Succeeded: " << succeeded << std::endl;
+    os << "Failed: " << failedCount << std::endl;
+    os << "Succeeded: " << succeededCount << std::endl;
 }
 
 void
 XMLTester::resetCounters()
 {
-    testFileCount = totalTestCount = failed = succeeded = 0;
+    testFileCount = totalTestCount = failedCount = succeededCount = 0;
 }
 
 void
@@ -637,10 +637,10 @@ XMLTester::runTest(const tinyxml2::XMLNode* node)
     bool success = test.run(node, gA, gB);
 
     if(success) {
-        ++succeeded;
+        ++succeededCount;
     }
     else {
-        ++failed;
+        ++failedCount;
     }
 }
 
@@ -1455,7 +1455,7 @@ main(int argC, char* argV[])
                 continue;
             }
             if(! std::strcmp(argV[i], "--test-valid-output")) {
-                tester.testOutputValidity(true);
+                tester.setTestOutputValidity(true);
                 continue;
             }
             if(! std::strcmp(argV[i], "--sql-output")) {
@@ -1469,7 +1469,7 @@ main(int argC, char* argV[])
                 continue;
             }
             if(! std::strcmp(argV[i], "--test-valid-input")) {
-                tester.testInputValidity(true);
+                tester.setTestInputValidity(true);
                 continue;
             }
 
