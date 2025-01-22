@@ -842,7 +842,7 @@ Test::areaDelta(const geom::Geometry* a, const geom::Geometry* b, std::string& r
 }
 
 void
-Test::checkResult( Geometry* res ) 
+Test::checkResult( const std::unique_ptr<Geometry>& res ) 
 {
     std::string expectedRes = opRes;
     std::unique_ptr<Geometry> gExpectedRes(tester.parseGeometry(expectedRes, "expected"));
@@ -852,6 +852,7 @@ Test::checkResult( Geometry* res )
     gActualRes->normalize();
 
     isSuccess = false;
+    //TODO: change to equalsExact, since compareTo doesn't check empty type
     if (gExpectedRes->compareTo(gActualRes.get()) == 0) {
         isSuccess = true;
     }
@@ -861,12 +862,30 @@ Test::checkResult( Geometry* res )
     }
 
     actual_result = tester.printGeom(gActualRes.get());
-    tester.printTest(isSuccess, opSignature, expectedRes, actual_result);
+}
+
+void
+Test::checkResult( const std::unique_ptr<Geometry>& res, 
+    std::function<bool(std::unique_ptr<Geometry>& expected, std::unique_ptr<Geometry>& actual)> isMatch ) 
+{
+    std::string expectedRes = opRes;
+    std::unique_ptr<Geometry> gExpectedRes(tester.parseGeometry(expectedRes, "expected"));
+    gExpectedRes->normalize();
+
+    std::unique_ptr<Geometry> gActualRes(res->clone());
+    gActualRes->normalize();
+
+    isSuccess = isMatch(gExpectedRes, gActualRes);
+
+    if (testValidOutput) {
+        isSuccess &= tester.testValid(gActualRes.get(), "result");
+    }
+    actual_result = tester.printGeom(gActualRes.get());
 }
 
 //TODO: fix this hack.  Only used for union now, and has a bug where empties test equal
 void
-Test::checkUnionResult( Geometry* res ) 
+Test::checkUnionResult( const std::unique_ptr<Geometry>& res ) 
 {
     std::string expectedRes = opRes;
     std::unique_ptr<Geometry> gExpectedRes(tester.parseGeometry(expectedRes, "expected"));
@@ -881,7 +900,6 @@ Test::checkUnionResult( Geometry* res )
         isSuccess &= tester.testValid(gActualRes.get(), "result");
     }
     actual_result = tester.printGeom(gActualRes.get());
-    tester.printTest(isSuccess, opSignature, expectedRes, actual_result);
 }
 
 void
@@ -891,7 +909,6 @@ Test::checkResult( bool res )
     if (actual_result == opRes) {
         isSuccess = true;
     }
-    tester.printTest(isSuccess, opSignature, opRes, actual_result);
 }
 
 void
@@ -913,10 +930,8 @@ Test::checkResult( double res)
         }
     }
     std::stringstream ss;
-    ss << expectedRes;
+    ss << res;
     actual_result = ss.str();
-
-    tester.printTest(isSuccess, opSignature, opRes, actual_result);
 }
 
 void Test::parse(const tinyxml2::XMLNode* node) {
@@ -992,7 +1007,6 @@ void Test::parse(const tinyxml2::XMLNode* node) {
         }
         opSig += opArg4;
     }
-
     opSignature = opName + "(" + opSig + ")";
 }
 
@@ -1007,6 +1021,7 @@ bool Test::run(const tinyxml2::XMLNode* node, Geometry* geomA, Geometry* geomB)
         argB = geomA;
     }
     execute(argA, argB);
+    tester.printTest(isSuccess, opSignature, opRes, actual_result);
     return isSuccess;
 }
 
@@ -1035,7 +1050,9 @@ void Test::execute(Geometry* geomA, Geometry* geomB)
 }
 
 void Test::executeOp(Geometry* gA, Geometry* gB)
-{
+{        
+    using namespace operation::buffer;
+
     int success = 0;
     if(opName == "relate") {
         std::unique_ptr<geom::IntersectionMatrix> im(gA->relate(gB));
@@ -1047,22 +1064,22 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
     else if(opName == "intersection" || opName == "intersectionng"
             //TODO: remove this opname by fixing test
             || opName == "intersectionsin") {
-        checkResult( gA->intersection(gB).get() );
+        checkResult( gA->intersection(gB) );
     }
     //-- in current GEOS all overlay is OverlayNG
     else if(opName == "union"|| opName == "unionng") {
         if (gB) {
-            checkUnionResult( gA->Union(gB).get() );
+            checkUnionResult( gA->Union(gB) );
         }
         else {
-            checkUnionResult( gA->Union().get() );
+            checkUnionResult( gA->Union() );
         }
     }
     else if(opName == "difference" || opName == "differenceng") {
-        checkResult( gA->difference(gB).get() );
+        checkResult( gA->difference(gB) );
     }
     else if(opName == "symdifference" || opName == "symdifferenceng") {
-        checkResult( gA->symDifference(gB).get() );
+        checkResult( gA->symDifference(gB) );
     }
     else if(opName == "intersectionsr") {
         double precision = 1.0;
@@ -1071,7 +1088,7 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         }
         geom::PrecisionModel precMod(precision);
         std::unique_ptr<Geometry> res = OverlayNG::overlay(gA, gB, OverlayNG::INTERSECTION, &precMod);
-        checkResult( res.get() );
+        checkResult( res );
     }
     else if(opName == "unionsr") {
         double precision = 1.0;
@@ -1091,7 +1108,7 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
             // gRealRes = OverlayNG::geomunion(gA, &precMod);
             res = UnaryUnionNG::Union(gA, precMod);
         }
-        checkResult( res.get() );
+        checkResult( res );
     }
     else if(opName == "differencesr") {
         double precision = 1.0;
@@ -1100,7 +1117,7 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         }
         geom::PrecisionModel precMod(precision);
         std::unique_ptr<Geometry> res = OverlayNG::overlay(gA, gB, OverlayNG::DIFFERENCE, &precMod);
-        checkResult( res.get() );
+        checkResult( res );
     }
     else if(opName == "symdifferencesr") {
         double precision = 1.0;
@@ -1109,13 +1126,13 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         }
         geom::PrecisionModel precMod(precision);
         std::unique_ptr<Geometry> res = OverlayNG::overlay(gA, gB, OverlayNG::SYMDIFFERENCE, &precMod);
-        checkResult( res.get() );
+        checkResult( res );
     }
     else if(opName == "densify") {
         double distanceTolerance = std::atof(opArg2.c_str());
         geom::util::Densifier den(gA);
         den.setDistanceTolerance(distanceTolerance);
-        checkResult( den.getResultGeometry().get() );
+        checkResult( den.getResultGeometry() );
     }
     else if(opName == "intersects") {
         if (tester.isPrepared()) {
@@ -1181,6 +1198,14 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
             checkResult( gA->covers(gB) );
         }
     }
+    else if(opName == "coveredby") {
+        if (tester.isPrepared()) {
+            checkResult( prepare(gA)->coveredBy(gB));
+        }
+        else {
+            checkResult( gA->coveredBy(gB) );
+        }
+    }
     else if(opName == "equalstopo") {
         // equalsTopo() is synonym for equals() in JTS
         checkResult( gA->equals(gB));
@@ -1196,33 +1221,19 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         gB->normalize();
         checkResult( gA->equalsExact(gB));
     }
-    else if(opName == "coveredby") {
-        if (tester.isPrepared()) {
-            checkResult( prepare(gA)->coveredBy(gB));
-        }
-        else {
-            checkResult( gA->coveredBy(gB) );
-        }
-    }
     else if(opName == "getboundary") {
-        checkResult( gA->getBoundary().get() );
+        checkResult( gA->getBoundary() );
     }
     else if(opName == "getcentroid") {
-        checkResult( gA->getCentroid().get() );
+        checkResult( gA->getCentroid() );
     }
     else if(opName == "issimple") {
         checkResult( gA->isSimple() );
    }
     else if(opName == "convexhull") {
-        checkResult( gA->convexHull().get() );
+        checkResult( gA->convexHull() );
     }
     else if(opName == "buffer") {
-        using namespace operation::buffer;
-
-        std::unique_ptr<Geometry> gRes(tester.parseGeometry(opRes, "expected"));
-        gRes->normalize();
-
-        std::unique_ptr<Geometry> gRealRes;
         double dist = std::atof(opArg2.c_str());
 
         BufferParameters params;
@@ -1230,90 +1241,53 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
             params.setQuadrantSegments(std::atoi(opArg3.c_str()));
         }
         BufferOp op(gA, params);
-        gRealRes = op.getResultGeometry(dist);
-        gRealRes->normalize();
-
-        // Validate the buffer operation
-        isSuccess = checkBufferSuccess(*gRes, *gRealRes, dist);
-
-        if(testValidOutput) {
-            isSuccess &= tester.testValid(gRealRes.get(), "result");
-        }
-        actual_result = tester.printGeom(gRealRes.get());
-        expected_result = tester.printGeom(gRes.get());
-    }
-    else if(opName == "buffersinglesided") {
-        using namespace operation::buffer;
-
-        std::unique_ptr<Geometry> gRes(tester.parseGeometry(opRes, "expected"));
-        gRes->normalize();
-
-        std::unique_ptr<Geometry> gRealRes;
-        double dist = std::atof(opArg2.c_str());
-
-        BufferParameters params ;
-        params.setJoinStyle(BufferParameters::JOIN_ROUND) ;
-        if(opArg3 != "") {
-            params.setQuadrantSegments(std::atoi(opArg3.c_str()));
-        }
-
-        bool leftSide = true ;
-        if(opArg4 == "right") {
-            leftSide = false ;
-        }
-
-        BufferBuilder bufBuilder(params) ;
-        gRealRes = bufBuilder.bufferLineSingleSided(gA, dist, leftSide);
-
-        gRealRes->normalize();
-
-        // Validate the single sided buffer operation
-        isSuccess = checkSingleSidedBufferSuccess(*gRes,
-                                                *gRealRes, dist);
-
-        if(testValidOutput) {
-            isSuccess &= tester.testValid(gRealRes.get(), "result");
-        }        
-        actual_result = tester.printGeom(gRealRes.get());
-        expected_result = tester.printGeom(gRes.get());
+        std::unique_ptr<Geometry> result = op.getResultGeometry(dist);
+        checkResult( result, 
+            [dist](std::unique_ptr<Geometry>& expected, std::unique_ptr<Geometry>& actual) -> bool {
+                return checkBufferSuccess(*expected, *actual, dist);
+            });
     }
     else if(opName == "buffermitredjoin") {
-        using namespace operation::buffer;
-
-        std::unique_ptr<Geometry> gRes(tester.parseGeometry(opRes, "expected"));
-        gRes->normalize();
-
-        std::unique_ptr<Geometry> gRealRes;
         double dist = std::atof(opArg2.c_str());
 
         BufferParameters params;
         params.setJoinStyle(BufferParameters::JOIN_MITRE);
-
         if(opArg3 != "") {
             params.setQuadrantSegments(std::atoi(opArg3.c_str()));
         }
-
         BufferOp op(gA, params);
-        gRealRes = op.getResultGeometry(dist);
+        std::unique_ptr<Geometry> result = op.getResultGeometry(dist);
 
-        gRealRes->normalize();
+        checkResult( result, 
+            [dist](std::unique_ptr<Geometry>& expected, std::unique_ptr<Geometry>& actual) -> bool {
+                return checkBufferSuccess(*expected, *actual, dist);
+            });
+    }
+    else if(opName == "buffersinglesided") {
+        double dist = std::atof(opArg2.c_str());
 
-        // Validate the buffer operation
-        isSuccess = checkBufferSuccess(*gRes, *gRealRes, dist);
-
-        actual_result = tester.printGeom(gRealRes.get());
-        expected_result = tester.printGeom(gRes.get());
-
-        if(testValidOutput) {
-            isSuccess &= tester.testValid(gRealRes.get(), "result");
+        BufferParameters params;
+        params.setJoinStyle(BufferParameters::JOIN_ROUND);
+        if(opArg3 != "") {
+            params.setQuadrantSegments(std::atoi(opArg3.c_str()));
         }
+        bool leftSide = true ;
+        if(opArg4 == "right") {
+            leftSide = false ;
+        }
+        BufferBuilder bufBuilder(params) ;
+        std::unique_ptr<Geometry> result = bufBuilder.bufferLineSingleSided(gA, dist, leftSide);
+        checkResult( result, 
+            [dist](std::unique_ptr<Geometry>& expected, std::unique_ptr<Geometry>& actual) -> bool {
+                return checkSingleSidedBufferSuccess(*expected, *actual, dist);
+            });
     }
     else if(opName == "getinteriorpoint") {
         std::unique_ptr<Geometry> res(gA->getInteriorPoint());
         if (! res.get()) {
             res = tester.getFactory()->createPoint();
         }
-        checkResult( res.get() );
+        checkResult( res );
     }
     else if(opName == "iswithindistance") {
         double dist = std::atof(opArg3.c_str());
@@ -1324,14 +1298,14 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         plgnzr.add(gA);
         auto polys = plgnzr.getPolygons();
         std::unique_ptr<Geometry> res(tester.getFactory()->createGeometryCollection(std::move(polys)));
-        checkResult( res.get() );
+        checkResult( res );
     }
     else if(opName == "linemerge") {
         LineMerger merger;
         merger.add(gA);
         auto lines = merger.getMergedLineStrings();
         std::unique_ptr<Geometry> res(tester.getFactory()->createGeometryCollection(std::move(lines)));
-        checkResult( res.get() );
+        checkResult( res );
     }
     else if(opName == "overlayareatest") {
         std::string maxDiffOp;
@@ -1450,25 +1424,25 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
     else if(opName == "minclearanceline") {
         precision::MinimumClearance mc(gA);
         //TODO: could use a checkResult with a tolerance?
-        checkResult( mc.getLine().get() );
+        checkResult( mc.getLine() );
     }
     else if (opName == "buildarea")
     {
-        checkResult( BuildArea().build(gA).get() );
+        checkResult( BuildArea().build(gA) );
     }
     else if (opName == "makevalid")
     {
-        checkResult( geos::operation::valid::MakeValid().build(gA).get() );
+        checkResult( geos::operation::valid::MakeValid().build(gA) );
     }
     else if(opName == "simplifydp")
     {
         double tolerance = std::atof(opArg2.c_str());
-        checkResult( geos::simplify::DouglasPeuckerSimplifier::simplify(gA, tolerance).get() );
+        checkResult( geos::simplify::DouglasPeuckerSimplifier::simplify(gA, tolerance) );
     }
     else if(opName == "simplifytp")
     {
         double tolerance = std::atof(opArg2.c_str());
-        checkResult( geos::simplify::TopologyPreservingSimplifier::simplify(gA, tolerance).get() );
+        checkResult( geos::simplify::TopologyPreservingSimplifier::simplify(gA, tolerance) );
     }
     else {
         //TODO: error out here?

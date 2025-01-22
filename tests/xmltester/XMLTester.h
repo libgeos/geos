@@ -161,8 +161,10 @@ private:
     void parse(const tinyxml2::XMLNode* node);
     void execute(Geometry* geomA, Geometry* geomB);
     void executeOp(Geometry* geomA, Geometry* geomB);
-    void checkResult( Geometry * res );
-    void checkUnionResult( Geometry * res );
+    void checkResult( const std::unique_ptr<Geometry>& res );
+    void checkResult( const std::unique_ptr<Geometry>& res, 
+        std::function<bool(std::unique_ptr<Geometry>& expected, std::unique_ptr<Geometry>& actual)> isMatch );
+    void checkUnionResult( const std::unique_ptr<Geometry>& res );
     void checkResult( double res );
     void checkResult( bool res );
 
