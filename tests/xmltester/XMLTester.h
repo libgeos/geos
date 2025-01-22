@@ -148,36 +148,35 @@ private:
     std::string opArg2;
     std::string opArg3;
     std::string opArg4;
-    std::string opRes;
+    std::string opResult;
     std::string opSignature;
 
     //TODO: make these functions on XMLTester?
     bool testValidOutput;
 
     bool isSuccess;
-
-    std::string actual_result;
-    std::string expected_result;
+    std::string actualResultStr;
 
     void parse(const tinyxml2::XMLNode* node);
     void execute(Geometry* geomA, Geometry* geomB);
     void executeOp(Geometry* geomA, Geometry* geomB);
-    void checkResult( const std::unique_ptr<Geometry>& res );
-    void checkResult( const std::unique_ptr<Geometry>& res, 
+    void checkResult( const std::unique_ptr<Geometry>& result );
+    void checkResult( const std::unique_ptr<Geometry>& result, 
         std::function<bool(std::unique_ptr<Geometry>& expected, std::unique_ptr<Geometry>& actual)> isMatch );
-    void checkUnionResult( const std::unique_ptr<Geometry>& res );
-    void checkResult( double res );
-    void checkResult( bool res );
+    void checkUnionResult( const std::unique_ptr<Geometry>& result );
+    void checkResult( double result );
+    void checkResult( bool result );
 
-    static bool checkBufferSuccess(Geometry const& gRes, Geometry const& gRealRes, double dist);
-    static bool checkSingleSidedBufferSuccess(Geometry& gRes, Geometry& gRealRes, double dist);
+    static bool checkBufferSuccess(Geometry const& gExpected, Geometry const& gActual, double dist);
+    static bool checkSingleSidedBufferSuccess(Geometry& gExpected, Geometry& gActual, double dist);
+    static bool checkOverlaySuccess(Geometry const& gExpected, Geometry const& gActual);
     static double areaDelta(const geom::Geometry* a, const geom::Geometry* b, std::string& rsltMaxDiffOp, double maxDiff, std::stringstream& ss);
 
 public:
     Test(XMLTester& xmlTester) 
         : tester(xmlTester),
         isSuccess(false),
-        actual_result("NONE")
+        actualResultStr("NONE")
     {
         testValidOutput = tester.isTestValidOutput();
     }

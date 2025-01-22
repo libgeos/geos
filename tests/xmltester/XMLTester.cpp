@@ -195,72 +195,6 @@ normalize_filename(const std::string& str)
     return newstring;
 }
 
-static int
-checkOverlaySuccess(geom::Geometry const& gRes, geom::Geometry const& gRealRes)
-{
-    double tol = operation::overlay::snap::GeometrySnapper::computeSizeBasedSnapTolerance(gRes);
-    if(gRes.equals(&gRealRes)) {
-        return 1;
-    }
-    std::cerr << "Using an overlay tolerance of " << tol << std::endl;
-    if(gRes.equalsExact(&gRealRes, tol)) {
-        return 1;
-    }
-    return 0;
-}
-
-/* static */
-bool
-Test::checkBufferSuccess(Geometry const& gRes, Geometry const& gRealRes, double dist)
-{
-    using geos::xmltester::BufferResultMatcher;
-
-    if(gRes.getGeometryTypeId() != gRealRes.getGeometryTypeId()) {
-        std::cerr << "Expected result is of type "
-                    << gRes.getGeometryType()
-                    << "; obtained result is of type "
-                    << gRealRes.getGeometryType()
-                    << std::endl;
-        return false;
-    }
-    // Is a buffer always an area ?
-    if(gRes.getDimension() != 2) {
-        std::cerr << "Don't know how to validate "
-                    << "result of buffer operation "
-                    << "when expected result is not an "
-                    << "areal type."
-                    << std::endl;
-    }
-    if(!BufferResultMatcher::isBufferResultMatch(gRealRes, gRes, dist)) {
-        std::cerr << "BufferResultMatcher FAILED" << std::endl;
-        return false;
-    }
-    return true;
-}
-
-/* static */
-bool
-Test::checkSingleSidedBufferSuccess(geom::Geometry& gRes,
-                              geom::Geometry& gRealRes, double dist)
-{
-    if(gRes.getGeometryTypeId() != gRealRes.getGeometryTypeId()) {
-        std::cerr << "Expected result is of type "
-                    << gRes.getGeometryType()
-                    << "; obtained result is of type "
-                    << gRealRes.getGeometryType()
-                    << std::endl;
-        return false;
-    }
-    geos::xmltester::SingleSidedBufferResultMatcher matcher;
-    if(! matcher.isBufferResultMatch(gRealRes,
-                                        gRes,
-                                        dist)) {
-        std::cerr << "SingleSidedBufferResultMatcher FAILED" << std::endl;
-        return false;
-    }
-    return true;
-}
-
 XMLTester::XMLTester()
     :
     gA(nullptr),
@@ -751,6 +685,73 @@ XMLTester::~XMLTester()
 }
 //============================================================================
 
+/* static */
+bool
+Test::checkOverlaySuccess(Geometry const& gExpected, Geometry const& gActual)
+{
+    double tol = operation::overlay::snap::GeometrySnapper::computeSizeBasedSnapTolerance(gExpected);
+    if(gExpected.equals(&gActual)) {
+        return 1;
+    }
+    std::cerr << "Using an overlay tolerance of " << tol << std::endl;
+    if(gExpected.equalsExact(&gActual, tol)) {
+        return 1;
+    }
+    return 0;
+}
+
+/* static */
+bool
+Test::checkBufferSuccess(Geometry const& gExpected, Geometry const& gActual, double dist)
+{
+    using geos::xmltester::BufferResultMatcher;
+
+    if(gExpected.getGeometryTypeId() != gActual.getGeometryTypeId()) {
+        std::cerr << "Expected result is of type "
+                    << gExpected.getGeometryType()
+                    << "; obtained result is of type "
+                    << gActual.getGeometryType()
+                    << std::endl;
+        return false;
+    }
+    // Is a buffer always an area ?
+    if(gExpected.getDimension() != 2) {
+        std::cerr << "Don't know how to validate "
+                    << "result of buffer operation "
+                    << "when expected result is not an "
+                    << "areal type."
+                    << std::endl;
+    }
+    if(!BufferResultMatcher::isBufferResultMatch(gActual, gExpected, dist)) {
+        std::cerr << "BufferResultMatcher FAILED" << std::endl;
+        return false;
+    }
+    return true;
+}
+
+/* static */
+bool
+Test::checkSingleSidedBufferSuccess(geom::Geometry& gExpected,
+                              geom::Geometry& gActual, double dist)
+{
+    if(gExpected.getGeometryTypeId() != gActual.getGeometryTypeId()) {
+        std::cerr << "Expected result is of type "
+                    << gExpected.getGeometryType()
+                    << "; obtained result is of type "
+                    << gActual.getGeometryType()
+                    << std::endl;
+        return false;
+    }
+    geos::xmltester::SingleSidedBufferResultMatcher matcher;
+    if(! matcher.isBufferResultMatch(gActual,
+                                        gExpected,
+                                        dist)) {
+        std::cerr << "SingleSidedBufferResultMatcher FAILED" << std::endl;
+        return false;
+    }
+    return true;
+}
+
 /**
 * Computes the maximum area delta value
 * resulting from identity equations over the overlay operations.
@@ -852,14 +853,14 @@ Test::checkResult( const std::unique_ptr<Geometry>& result )
 }
 
 void
-Test::checkResult( const std::unique_ptr<Geometry>& res, 
+Test::checkResult( const std::unique_ptr<Geometry>& result, 
     std::function<bool(std::unique_ptr<Geometry>& expected, std::unique_ptr<Geometry>& actual)> isMatch ) 
 {
-    std::string expectedRes = opRes;
+    std::string expectedRes = opResult;
     std::unique_ptr<Geometry> gExpectedRes(tester.parseGeometry(expectedRes, "expected"));
     gExpectedRes->normalize();
 
-    std::unique_ptr<Geometry> gActualRes(res->clone());
+    std::unique_ptr<Geometry> gActualRes(result->clone());
     gActualRes->normalize();
 
     isSuccess = isMatch(gExpectedRes, gActualRes);
@@ -867,58 +868,58 @@ Test::checkResult( const std::unique_ptr<Geometry>& res,
     if (testValidOutput) {
         isSuccess &= tester.testValid(gActualRes.get(), "result");
     }
-    actual_result = tester.printGeom(gActualRes.get());
+    actualResultStr = tester.printGeom(gActualRes.get());
 }
 
 //TODO: fix this hack.  Only used for union now, and has a bug where empties test equal
 void
-Test::checkUnionResult( const std::unique_ptr<Geometry>& res ) 
+Test::checkUnionResult( const std::unique_ptr<Geometry>& result ) 
 {
-    std::string expectedRes = opRes;
-    std::unique_ptr<Geometry> gExpectedRes(tester.parseGeometry(expectedRes, "expected"));
-    gExpectedRes->normalize();
+    std::string sExpected = opResult;
+    std::unique_ptr<Geometry> gExpected(tester.parseGeometry(sExpected, "expected"));
+    gExpected->normalize();
 
-    std::unique_ptr<Geometry> gActualRes(res->clone());
-    gActualRes->normalize();
+    std::unique_ptr<Geometry> gActual(result->clone());
+    gActual->normalize();
 
-    isSuccess = checkOverlaySuccess(*gExpectedRes.get(), *gActualRes.get());
+    isSuccess = checkOverlaySuccess(*gExpected.get(), *gActual.get());
 
     if(testValidOutput) {
-        isSuccess &= tester.testValid(gActualRes.get(), "result");
+        isSuccess &= tester.testValid(gActual.get(), "result");
     }
-    actual_result = tester.printGeom(gActualRes.get());
+    actualResultStr = tester.printGeom(gActual.get());
 }
 
 void
-Test::checkResult( bool res ) 
+Test::checkResult( bool result ) 
 {
-    actual_result = res ? "true" : "false";
-    if (actual_result == opRes) {
+    actualResultStr = result ? "true" : "false";
+    if (actualResultStr == opResult) {
         isSuccess = true;
     }
 }
 
 void
-Test::checkResult( double res) 
+Test::checkResult( double result) 
 {
     char* rest;
-    double expectedRes = std::strtod(opRes.c_str(), &rest);
-    if(rest == opRes.c_str()) {
+    double expectedRes = std::strtod(opResult.c_str(), &rest);
+    if(rest == opResult.c_str()) {
         throw std::runtime_error("malformed testcase: missing expected double value");
     }
     if (expectedRes == 0.0) {
-        if (res == 0.0) {
+        if (result == 0.0) {
             isSuccess = true;
         }
     }
     else {
-        if (std::abs(expectedRes - res) / expectedRes < 1e-3) {
+        if (std::abs(expectedRes - result) / expectedRes < 1e-3) {
             isSuccess = true;
         }
     }
     std::stringstream ss;
-    ss << res;
-    actual_result = ss.str();
+    ss << result;
+    actualResultStr = ss.str();
 }
 
 void Test::parse(const tinyxml2::XMLNode* node) {
@@ -964,10 +965,10 @@ void Test::parse(const tinyxml2::XMLNode* node) {
         p_tmp << tester.testcaseRef() << ": op has no expected result child";
         throw(runtime_error(p_tmp.str()));
     }
-    opRes = resnode->Value();
+    opResult = resnode->Value();
 
     // trim blanks
-    opRes = trimBlanks(opRes);
+    opResult = trimBlanks(opResult);
     opName = trimBlanks(opName);
     tolower(opName);
 
@@ -1008,7 +1009,7 @@ bool Test::run(const tinyxml2::XMLNode* node, Geometry* geomA, Geometry* geomB)
         argB = geomA;
     }
     execute(argA, argB);
-    tester.printTest(isSuccess, opSignature, opRes, actual_result);
+    tester.printTest(isSuccess, opSignature, opResult, actualResultStr);
     return isSuccess;
 }
 
@@ -1018,21 +1019,21 @@ void Test::execute(Geometry* geomA, Geometry* geomB)
         executeOp(geomA, geomB);
     }
     catch(const std::exception& e) {
-        if (opRes == "exception") {
+        if (opResult == "exception") {
             isSuccess = true;
-            actual_result = "exception";
+            actualResultStr = "exception";
         }
         else {
             std::cerr << "EXCEPTION in " << tester.testcaseRef() << ": " << e.what()
                       << std::endl;
-            actual_result = e.what();
+            actualResultStr = e.what();
         }
     }
     catch(...) {
         std::cerr << "Unknown EXCEPTION in "
                   << tester.testcaseRef()
                   << std::endl;
-        actual_result = "Unknown exception thrown";
+        actualResultStr = "Unknown exception thrown";
     }
 }
 
@@ -1278,10 +1279,10 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
     }
     else if(opName == "areatest") {
         char* rest;
-        double toleratedDiff = std::strtod(opRes.c_str(), &rest);
+        double toleratedDiff = std::strtod(opResult.c_str(), &rest);
         bool validOut = true;
 
-        if(rest == opRes.c_str()) {
+        if(rest == opResult.c_str()) {
             throw std::runtime_error("malformed testcase: missing tolerated area difference in 'areatest' op");
         }
 
@@ -1357,8 +1358,7 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
 
         std::stringstream p_tmp;
         p_tmp << maxdiffop << ": " << maxdiff;
-        actual_result = p_tmp.str();
-        expected_result = opRes;
+        actualResultStr = p_tmp.str();
     }
     else if(opName == "distance") {
         checkResult( gA->distance(gB) );
@@ -1404,6 +1404,7 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
     if (success > 0) isSuccess = true;
 }
 
+//==================================================================================
 
 static void
 usage(char* me, int exitcode, std::ostream& os)
