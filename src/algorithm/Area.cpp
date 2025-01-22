@@ -30,23 +30,8 @@ using geos::geom::CoordinateXY;
 namespace geos {
 namespace algorithm { // geos.algorithm
 
-/* public static */
-double
-Area::ofRing(const std::vector<geom::Coordinate>& ring)
-{
-    return std::abs(ofRingSigned(ring));
-}
-
-/* public static */
-double
-Area::ofRing(const geom::CoordinateSequence* ring)
-{
-    return std::abs(ofRingSigned(ring));
-}
-
-/* public static */
-double
-Area::ofRingSigned(const std::vector<geom::Coordinate>& ring)
+template<typename T>
+double signedRingArea(const T& ring)
 {
     std::size_t rlen = ring.size();
     if(rlen < 3) {
@@ -66,6 +51,34 @@ Area::ofRingSigned(const std::vector<geom::Coordinate>& ring)
         sum += x * (y2 - y1);
     }
     return sum / 2.0;
+
+}
+
+/* public static */
+double
+Area::ofRing(const std::vector<geom::Coordinate>& ring)
+{
+    return std::abs(ofRingSigned(ring));
+}
+
+double
+Area::ofRing(const std::vector<geom::CoordinateXY>& ring)
+{
+    return std::abs(signedRingArea(ring));
+}
+
+/* public static */
+double
+Area::ofRing(const geom::CoordinateSequence* ring)
+{
+    return std::abs(ofRingSigned(ring));
+}
+
+/* public static */
+double
+Area::ofRingSigned(const std::vector<geom::Coordinate>& ring)
+{
+    return signedRingArea(ring);
 }
 
 /* public static */

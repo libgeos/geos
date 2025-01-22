@@ -50,6 +50,14 @@ public:
     * @param ring the coordinates forming the ring
     * @return the area of the ring
     */
+    static double ofRing(const std::vector<geom::CoordinateXY>& ring);
+
+    /**
+    * Computes the area for a ring.
+    *
+    * @param ring the coordinates forming the ring
+    * @return the area of the ring
+    */
     static double ofRing(const geom::CoordinateSequence* ring);
 
     /**
