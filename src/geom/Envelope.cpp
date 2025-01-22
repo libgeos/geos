@@ -203,6 +203,24 @@ Envelope::intersection(const Envelope& env, Envelope& result) const
 }
 
 /*public*/
+Envelope
+Envelope::intersection(const Envelope& env) const
+{
+    Envelope ret;
+
+    if(isNull() || env.isNull() || ! intersects(env)) {
+        return ret;
+    }
+
+    double intMinX = minx > env.minx ? minx : env.minx;
+    double intMinY = miny > env.miny ? miny : env.miny;
+    double intMaxX = maxx < env.maxx ? maxx : env.maxx;
+    double intMaxY = maxy < env.maxy ? maxy : env.maxy;
+    ret.init(intMinX, intMaxX, intMinY, intMaxY);
+    return ret;
+}
+
+/*public*/
 void
 Envelope::translate(double transX, double transY)
 {

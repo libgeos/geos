@@ -293,6 +293,18 @@ public:
     }
 
     /** \brief
+     * Gets the perimeter of this envelope.
+     *
+     * @return the perimeter of the envelope
+     * @return 0.0 if the envelope is null
+     */
+    double
+    getPerimeter() const
+    {
+        return 2*getWidth() + 2*getHeight();
+    }
+
+    /** \brief
      * Returns true if this Envelope covers a finite region
      */
     bool
@@ -375,6 +387,16 @@ public:
      * @return false if no intersection is found
      */
     bool intersection(const Envelope& env, Envelope& result) const;
+
+    /** \brief
+     * Computes the intersection of two [Envelopes](@ref Envelope).
+     *
+     * @param env the envelope to intersect with
+     * @return     the envelope representing the intersection of
+     *             the envelopes (this will be the null envelope
+     *             if either argument is null, or they do not intersect)
+     */
+    Envelope intersection(const Envelope& env) const;
 
     /** \brief
      * Translates this envelope by given amounts in the X and Y direction.
