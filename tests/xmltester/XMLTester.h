@@ -164,8 +164,8 @@ private:
     void checkResult( double res );
     void checkResult( bool res );
 
-    static int checkBufferSuccess(Geometry const& gRes, Geometry const& gRealRes, double dist);
-    static int checkSingleSidedBufferSuccess(Geometry& gRes, Geometry& gRealRes, double dist);
+    static bool checkBufferSuccess(Geometry const& gRes, Geometry const& gRealRes, double dist);
+    static bool checkSingleSidedBufferSuccess(Geometry& gRes, Geometry& gRealRes, double dist);
     static double areaDelta(const geom::Geometry* a, const geom::Geometry* b, std::string& rsltMaxDiffOp, double maxDiff, std::stringstream& ss);
 
 public:

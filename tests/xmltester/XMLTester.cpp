@@ -210,7 +210,7 @@ checkOverlaySuccess(geom::Geometry const& gRes, geom::Geometry const& gRealRes)
 }
 
 /* static */
-int
+bool
 Test::checkBufferSuccess(Geometry const& gRes, Geometry const& gRealRes, double dist)
 {
     using geos::xmltester::BufferResultMatcher;
@@ -221,7 +221,7 @@ Test::checkBufferSuccess(Geometry const& gRes, Geometry const& gRealRes, double 
                     << "; obtained result is of type "
                     << gRealRes.getGeometryType()
                     << std::endl;
-        return 0;
+        return false;
     }
     // Is a buffer always an area ?
     if(gRes.getDimension() != 2) {
@@ -233,13 +233,13 @@ Test::checkBufferSuccess(Geometry const& gRes, Geometry const& gRealRes, double 
     }
     if(!BufferResultMatcher::isBufferResultMatch(gRealRes, gRes, dist)) {
         std::cerr << "BufferResultMatcher FAILED" << std::endl;
-        return 0;
+        return false;
     }
-    return 1;
+    return true;
 }
 
 /* static */
-int
+bool
 Test::checkSingleSidedBufferSuccess(geom::Geometry& gRes,
                               geom::Geometry& gRealRes, double dist)
 {
@@ -249,16 +249,16 @@ Test::checkSingleSidedBufferSuccess(geom::Geometry& gRes,
                     << "; obtained result is of type "
                     << gRealRes.getGeometryType()
                     << std::endl;
-        return 0;
+        return false;
     }
     geos::xmltester::SingleSidedBufferResultMatcher matcher;
     if(! matcher.isBufferResultMatch(gRealRes,
                                         gRes,
                                         dist)) {
         std::cerr << "SingleSidedBufferResultMatcher FAILED" << std::endl;
-        return 0;
+        return false;
     }
-    return 1;
+    return true;
 }
 
 XMLTester::XMLTester()
@@ -1238,18 +1238,16 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         }
         BufferOp op(gA, params);
         gRealRes = op.getResultGeometry(dist);
-
         gRealRes->normalize();
 
         // Validate the buffer operation
-        success = checkBufferSuccess(*gRes, *gRealRes, dist);
-
-        actual_result = tester.printGeom(gRealRes.get());
-        expected_result = tester.printGeom(gRes.get());
+        isSuccess = checkBufferSuccess(*gRes, *gRealRes, dist);
 
         if(testValidOutput) {
-            success &= int(tester.testValid(gRealRes.get(), "result"));
+            isSuccess &= tester.testValid(gRealRes.get(), "result");
         }
+        actual_result = tester.printGeom(gRealRes.get());
+        expected_result = tester.printGeom(gRes.get());
     }
     else if(opName == "buffersinglesided") {
         using namespace operation::buffer;
@@ -1277,15 +1275,14 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         gRealRes->normalize();
 
         // Validate the single sided buffer operation
-        success = checkSingleSidedBufferSuccess(*gRes,
+        isSuccess = checkSingleSidedBufferSuccess(*gRes,
                                                 *gRealRes, dist);
 
+        if(testValidOutput) {
+            isSuccess &= tester.testValid(gRealRes.get(), "result");
+        }        
         actual_result = tester.printGeom(gRealRes.get());
         expected_result = tester.printGeom(gRes.get());
-
-        if(testValidOutput) {
-            success &= int(tester.testValid(gRealRes.get(), "result"));
-        }
     }
     else if(opName == "buffermitredjoin") {
         using namespace operation::buffer;
@@ -1309,13 +1306,13 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         gRealRes->normalize();
 
         // Validate the buffer operation
-        success = checkBufferSuccess(*gRes, *gRealRes, dist);
+        isSuccess = checkBufferSuccess(*gRes, *gRealRes, dist);
 
         actual_result = tester.printGeom(gRealRes.get());
         expected_result = tester.printGeom(gRes.get());
 
         if(testValidOutput) {
-            success &= int(tester.testValid(gRealRes.get(), "result"));
+            isSuccess &= tester.testValid(gRealRes.get(), "result");
         }
     }
     else if(opName == "getinteriorpoint") {
@@ -1364,7 +1361,7 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
     else if(opName == "areatest") {
         char* rest;
         double toleratedDiff = std::strtod(opRes.c_str(), &rest);
-        int validOut = 1;
+        bool validOut = true;
 
         if(rest == opRes.c_str()) {
             throw std::runtime_error("malformed testcase: missing tolerated area difference in 'areatest' op");
@@ -1376,7 +1373,7 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         std::unique_ptr<Geometry> gI(gA->intersection(gB));
 
         if(testValidOutput) {
-            validOut &= int(tester.testValid(gI.get(), "areatest intersection"));
+            validOut &= tester.testValid(gI.get(), "areatest intersection");
         }
 
         if(verbose > 1) {
@@ -1386,7 +1383,7 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         std::unique_ptr<Geometry> gDab(gA->difference(gB));
 
         if(testValidOutput) {
-            validOut &= int(tester.testValid(gI.get(), "areatest difference(a,b)"));
+            validOut &= tester.testValid(gI.get(), "areatest difference(a,b)");
         }
 
         if(verbose > 1) {
@@ -1396,7 +1393,7 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         std::unique_ptr<Geometry> gDba(gB->difference(gA));
 
         if(testValidOutput) {
-            validOut &= int(tester.testValid(gI.get(), "areatest difference(b,a)"));
+            validOut &= tester.testValid(gI.get(), "areatest difference(b,a)");
         }
 
         if(verbose > 1) {
@@ -1406,7 +1403,7 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         std::unique_ptr<Geometry> gSD(gA->symDifference(gB));
 
         if(testValidOutput) {
-            validOut &= int(tester.testValid(gI.get(), "areatest symdifference"));
+            validOut &= tester.testValid(gI.get(), "areatest symdifference");
         }
 
         if(verbose > 1) {
