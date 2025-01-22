@@ -690,9 +690,11 @@ bool
 Test::checkOverlaySuccess(Geometry const& gExpected, Geometry const& gActual)
 {
     double tol = operation::overlay::snap::GeometrySnapper::computeSizeBasedSnapTolerance(gExpected);
+    //-- BUG: this allows all empties to test equal
     if(gExpected.equals(&gActual)) {
         return 1;
     }
+    //TODO: is this needed by any tests?
     std::cerr << "Using an overlay tolerance of " << tol << std::endl;
     if(gExpected.equalsExact(&gActual, tol)) {
         return 1;
@@ -871,23 +873,14 @@ Test::checkResult( const std::unique_ptr<Geometry>& result,
     actualResultStr = tester.printGeom(gActualRes.get());
 }
 
-//TODO: fix this hack.  Only used for union now, and has a bug where empties test equal
+//TODO: remove this hack when tests are fixed.  Only used for union, and has a bug where empties test equal
 void
 Test::checkUnionResult( const std::unique_ptr<Geometry>& result ) 
 {
-    std::string sExpected = opResult;
-    std::unique_ptr<Geometry> gExpected(tester.parseGeometry(sExpected, "expected"));
-    gExpected->normalize();
-
-    std::unique_ptr<Geometry> gActual(result->clone());
-    gActual->normalize();
-
-    isSuccess = checkOverlaySuccess(*gExpected.get(), *gActual.get());
-
-    if(testValidOutput) {
-        isSuccess &= tester.testValid(gActual.get(), "result");
-    }
-    actualResultStr = tester.printGeom(gActual.get());
+    checkResult( result, 
+        [](std::unique_ptr<Geometry>& expected, std::unique_ptr<Geometry>& actual) -> bool {
+            return checkOverlaySuccess(*expected.get(), *actual.get());
+    });
 }
 
 void
