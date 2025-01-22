@@ -619,9 +619,6 @@ XMLTester::parseCase(const tinyxml2::XMLNode* node)
     gA = nullptr;
     gB = nullptr;
 
-
-    //dump_to_stdout(node);
-
     curr_case_desc.clear();
     const tinyxml2::XMLNode* txt = node->FirstChildElement("desc");
     if(txt) {
@@ -630,10 +627,6 @@ XMLTester::parseCase(const tinyxml2::XMLNode* node)
             curr_case_desc = trimBlanks(txt->Value());
         }
     }
-
-    //std::cerr << "Desc: " << curr_case_desc << std::endl;
-
-
     try {
         const tinyxml2::XMLNode* el = node->FirstChildElement("a");
         geomAin = el->FirstChild()->Value();
@@ -1125,7 +1118,7 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         checkResult( den.getResultGeometry().get() );
     }
     else if(opName == "intersects") {
-        if (tester.isUsePrepared()) {
+        if (tester.isPrepared()) {
             checkResult( prepare(gA)->intersects(gB));
         }
         else {
@@ -1133,7 +1126,7 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         }
     }
     else if(opName == "contains") {
-        if (tester.isUsePrepared()) {
+        if (tester.isPrepared()) {
             checkResult( prepare(gA)->contains(gB));
         }
         else {
@@ -1141,7 +1134,7 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         }
     }
     else if(opName == "overlaps") {
-        if (tester.isUsePrepared()) {
+        if (tester.isPrepared()) {
             checkResult( prepare(gA)->overlaps(gB));
         }
         else {
@@ -1149,7 +1142,7 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         }
     }
     else if(opName == "within") {
-        if (tester.isUsePrepared()) {
+        if (tester.isPrepared()) {
             checkResult( prepare(gA)->within(gB));
         }
         else {
@@ -1157,7 +1150,7 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         }
     }
     else if(opName == "touches") {
-        if (tester.isUsePrepared()) {
+        if (tester.isPrepared()) {
             checkResult( prepare(gA)->touches(gB));
         }
         else {
@@ -1165,7 +1158,7 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         }
     }
     else if(opName == "crosses") {
-        if (tester.isUsePrepared()) {
+        if (tester.isPrepared()) {
             checkResult( prepare(gA)->crosses(gB));
         }
         else {
@@ -1173,7 +1166,7 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         }
     }
     else if(opName == "disjoint") {
-        if (tester.isUsePrepared()) {
+        if (tester.isPrepared()) {
             checkResult( prepare(gA)->disjoint(gB));
         }
         else {
@@ -1181,7 +1174,7 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         }
     }
     else if(opName == "covers") {
-        if (tester.isUsePrepared()) {
+        if (tester.isPrepared()) {
             checkResult( prepare(gA)->covers(gB));
         }
         else {
@@ -1204,7 +1197,7 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         checkResult( gA->equalsExact(gB));
     }
     else if(opName == "coveredby") {
-        if (tester.isUsePrepared()) {
+        if (tester.isPrepared()) {
             checkResult( prepare(gA)->coveredBy(gB));
         }
         else {
@@ -1367,47 +1360,24 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
             throw std::runtime_error("malformed testcase: missing tolerated area difference in 'areatest' op");
         }
 
-        if(verbose > 1) {
-            std::cerr << "Running intersection for areatest" << std::endl;
-        }
         std::unique_ptr<Geometry> gI(gA->intersection(gB));
-
         if(testValidOutput) {
             validOut &= tester.testValid(gI.get(), "areatest intersection");
         }
 
-        if(verbose > 1) {
-            std::cerr << "Running difference(A,B) for areatest" << std::endl;
-        }
-
         std::unique_ptr<Geometry> gDab(gA->difference(gB));
-
         if(testValidOutput) {
             validOut &= tester.testValid(gI.get(), "areatest difference(a,b)");
         }
 
-        if(verbose > 1) {
-            std::cerr << "Running difference(B,A) for areatest" << std::endl;
-        }
-
         std::unique_ptr<Geometry> gDba(gB->difference(gA));
-
         if(testValidOutput) {
             validOut &= tester.testValid(gI.get(), "areatest difference(b,a)");
         }
 
-        if(verbose > 1) {
-            std::cerr << "Running symdifference for areatest" << std::endl;
-        }
-
         std::unique_ptr<Geometry> gSD(gA->symDifference(gB));
-
         if(testValidOutput) {
             validOut &= tester.testValid(gI.get(), "areatest symdifference");
-        }
-
-        if(verbose > 1) {
-            std::cerr << "Running union for areatest" << std::endl;
         }
 
         std::unique_ptr<Geometry> gU(gA->Union(gB));

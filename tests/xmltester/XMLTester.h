@@ -102,7 +102,7 @@ public:
 
     bool isTestValidOutput() { return testValidOutput; }
 
-    bool isUsePrepared() { return usePrepared; }
+    bool isPrepared() { return usePrepared; }
 
     geom::GeometryFactory* getFactory() { return factory.get(); }
 
@@ -135,6 +135,9 @@ public:
 
 };
 
+/*
+  Executes a single test in a XML test file.
+*/
 class Test {
 private:
     XMLTester& tester;
@@ -148,7 +151,6 @@ private:
     std::string opSignature;
 
     //TODO: make these functions on XMLTester?
-    int verbose;
     bool testValidOutput;
 
     bool isSuccess;
@@ -174,9 +176,7 @@ public:
         isSuccess(false),
         actual_result("NONE")
     {
-        verbose = tester.isVerbose();
         testValidOutput = tester.isTestValidOutput();
-        //usePrepared = tester.isUsePrepared();
     }
     bool run(const tinyxml2::XMLNode* node, Geometry* geomA, Geometry* geomB);
 
