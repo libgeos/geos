@@ -301,15 +301,15 @@ std::string
 XMLTester::testcaseRef()
 {
     std::stringstream ref;
+    ref << *curr_file << " (" << testLineNum << "): ";
     ref << "case " << caseCount;
     ref << ", test " << testCount;
-    ref << " (" << testLineNum << ")";
     return ref.str();
 }
 
 /*private*/
 void
-XMLTester::printTest(bool success, const std::string& expected_result, const std::string& actual_result)
+XMLTester::printTest(bool success, const std::string& op, const std::string& expected_result, const std::string& actual_result)
 {
     if(sqlOutput) {
         std::cout << "INSERT INTO \"" << normalize_filename(*curr_file) << "\" VALUES ("
@@ -326,14 +326,12 @@ XMLTester::printTest(bool success, const std::string& expected_result, const std
         else {
             std::cout << "NULL, ";
         }
-
         if(gB) {
             std::cout << "'" << printGeom(gB) << "', ";
         }
         else {
             std::cout << "NULL, ";
         }
-
         std::cout << "'" << expected_result << "', "
                   << "'" << actual_result << "', ";
 
@@ -343,33 +341,33 @@ XMLTester::printTest(bool success, const std::string& expected_result, const std
         else {
             std::cout << "'f'";
         }
-
         std::cout << ");" << std::endl;
+        return;
     }
+    //-- no output for quiet success
+    if (success && verbose == 0)
+        return;
 
-    else {
-        std::cout << *curr_file << ": ";
-        std::cout << testcaseRef() << opSignature;
-        std::cout << ": " << (success ? "ok." : "failed.");
-    
-        // print geometry on failure for -v
-        // print geometry no matter what for -v -v and above
-        if (verbose > 1 || (verbose == 1 && !success)) {
-            std::cout << "\tDescription: " << curr_case_desc << std::endl;
+    std::cout << testcaseRef() << ": " ;
+    std::cout << op << " " << (success ? "ok." : "failed.");
 
-            if(gA) {
-                std::cout << "\tGeometry A: " << printGeom(gA) << std::endl;
-            }
+    // print geometry on failure for -v
+    // print geometry no matter what for -v -v and above
+    if (verbose > 1 || (verbose == 1 && !success)) {
+        std::cout << "\tDescription: " << curr_case_desc << std::endl;
 
-            if(gB) {
-                std::cout << "\tGeometry B: " << printGeom(gB) << std::endl;
-            }
-
-            std::cout << "\tExpected: " << expected_result << std::endl;
-            std::cout << "\tActual:   " << actual_result << std::endl;
+        if(gA) {
+            std::cout << "\tGeometry A: " << printGeom(gA) << std::endl;
         }
-        std::cout << std::endl;
+
+        if(gB) {
+            std::cout << "\tGeometry B: " << printGeom(gB) << std::endl;
+        }
+
+        std::cout << "\tExpected: " << expected_result << std::endl;
+        std::cout << "\tActual:   " << actual_result << std::endl;
     }
+    std::cout << std::endl;
 }
 
 void
@@ -869,10 +867,8 @@ Test::checkResult( Geometry* res )
         isSuccess &= tester.testValid(gActualRes.get(), "result");
     }
 
-    if ((!isSuccess && verbose) || verbose > 0) {
-        actual_result = tester.printGeom(gActualRes.get());
-        tester.printTest(isSuccess, expectedRes, actual_result);
-    }
+    actual_result = tester.printGeom(gActualRes.get());
+    tester.printTest(isSuccess, opSignature, expectedRes, actual_result);
 }
 
 //TODO: fix this hack.  Only used for union now, and has a bug where empties test equal
@@ -891,10 +887,8 @@ Test::checkUnionResult( Geometry* res )
     if(testValidOutput) {
         isSuccess &= tester.testValid(gActualRes.get(), "result");
     }
-    if((!isSuccess && verbose) || verbose > 0) {
-        actual_result = tester.printGeom(gActualRes.get());
-        tester.printTest(isSuccess, expectedRes, actual_result);
-    }
+    actual_result = tester.printGeom(gActualRes.get());
+    tester.printTest(isSuccess, opSignature, expectedRes, actual_result);
 }
 
 void
@@ -904,9 +898,7 @@ Test::checkResult( bool res )
     if (actual_result == opRes) {
         isSuccess = true;
     }
-    if((!isSuccess && verbose) || verbose > 0) {
-        tester.printTest(isSuccess, opRes, actual_result);
-    }
+    tester.printTest(isSuccess, opSignature, opRes, actual_result);
 }
 
 void
@@ -931,9 +923,7 @@ Test::checkResult( double res)
     ss << expectedRes;
     actual_result = ss.str();
 
-    if((!isSuccess && verbose) || verbose > 0) {
-        tester.printTest(isSuccess, opRes, actual_result);
-    }
+    tester.printTest(isSuccess, opSignature, opRes, actual_result);
 }
 
 void Test::parse(const tinyxml2::XMLNode* node) {
