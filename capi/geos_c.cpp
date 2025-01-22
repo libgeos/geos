@@ -727,6 +727,13 @@ extern "C" {
         return GEOSClipByRect_r(handle, g, xmin, ymin, xmax, ymax);
     }
 
+    Geometry*
+    GEOSSubdivideByGrid(const Geometry* g, double xmin, double ymin, double xmax, double ymax,
+                        unsigned nx, unsigned ny, int include_exterior)
+    {
+        return GEOSSubdivideByGrid_r(handle, g, xmin, ymin, xmax, ymax, nx, ny, include_exterior);
+    }
+
     int
     GEOSGridIntersectionFractions(const Geometry* g, double xmin, double ymin, double xmax, double ymax,
                                   unsigned nx, unsigned ny, float* buf)
