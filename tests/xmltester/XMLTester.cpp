@@ -1041,7 +1041,6 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
 {        
     using namespace operation::buffer;
 
-    int success = 0;
     if(opName == "relate") {
         std::unique_ptr<geom::IntersectionMatrix> im(gA->relate(gB));
         checkResult( im->matches(opArg3) );
@@ -1235,6 +1234,7 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
             });
     }
     else if(opName == "getinteriorpoint") {
+        //-- may return null
         std::unique_ptr<Geometry> res(gA->getInteriorPoint());
         if (! res.get()) {
             res = tester.getFactory()->createPoint();
@@ -1353,7 +1353,7 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         }
 
         if(maxdiff <= toleratedDiff) {
-            success = 1 && validOut;
+            isSuccess = validOut;
         }
 
         std::stringstream p_tmp;
@@ -1400,8 +1400,6 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         std::cerr << tester.testcaseRef() << " - " << opName;
         std::cerr << ": skipped (unrecognized)." << std::endl;
     }
-    //-- for ops which set success local var
-    if (success > 0) isSuccess = true;
 }
 
 //==================================================================================
