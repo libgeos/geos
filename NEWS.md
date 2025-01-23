@@ -2,6 +2,7 @@
 2025-xx-xx
 
 - New things:
+  - Add clustering functions to C API (GH-1154, Dan Baston) 
 
 - Breaking Changes:
 
