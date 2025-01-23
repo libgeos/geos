@@ -288,7 +288,7 @@ jobs:
       if: matrix.ci.build_type == 'Coverage'
       run: |
         cd build
-        lcov --capture --directory CMakeFiles --output-file coverage.info
+        lcov --ignore-errors=gcov --capture --directory CMakeFiles --output-file coverage.info
 
     - name: Upload Coverage to Codecov
       if: ${{ matrix.ci.build_type == 'Coverage' && !cancelled() }}
