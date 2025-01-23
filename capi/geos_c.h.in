@@ -3879,10 +3879,10 @@ extern GEOSClusterInfo GEOS_DLL* GEOSClusterEnvelopeIntersects(const GEOSGeometr
 /**
  * @brief GEOSClusterInfo_getNumClusters
  *
- * Get the number of clusters identifed by a clustering operation
+ * Get the number of clusters identified by a clustering operation
  *
  * @param clusters cluster information object
- * @return number of clusters identifed
+ * @return number of clusters identified
  */
 extern size_t GEOS_DLL GEOSClusterInfo_getNumClusters(const GEOSClusterInfo* clusters);
 
