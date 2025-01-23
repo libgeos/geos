@@ -285,11 +285,11 @@ jobs:
         retention-days: 1
 
     - name: Upload Coverage to Codecov
-      if: matrix.ci.build_type == 'Coverage'
-      run: |
-        curl -o codecov.sh https://codecov.io/bash
-        bash codecov.sh
-      shell: bash
+      if: ${{ matrix.ci.build_type == 'Coverage' && !cancelled() }}
+      uses: codecov/codecov-action@v5
+      with:
+        fail_ci_if_error: false
+        token: ${{ secrets.CODECOV_TOKEN }}
 
   windows-mingw:
     name: 'Windows (mingw-w64, x86_64, windows-2019)'
