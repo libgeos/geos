@@ -78,6 +78,8 @@ Typedefs</h2></td></tr>
 <tr class="separator:ac2b4dad07a3457748e88459f3eeef1b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac946f544f45cb387b16cb9deedbb738d" id="r_ac946f544f45cb387b16cb9deedbb738d"><td class="memItemLeft" align="right" valign="top">typedef struct GEOSMakeValidParams_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#ac946f544f45cb387b16cb9deedbb738d">GEOSMakeValidParams</a></td></tr>
 <tr class="separator:ac946f544f45cb387b16cb9deedbb738d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab41b5f06e26ec612a7638c91dcb278b7" id="r_ab41b5f06e26ec612a7638c91dcb278b7"><td class="memItemLeft" align="right" valign="top">typedef struct GEOSClusterInfo_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a></td></tr>
+<tr class="separator:ab41b5f06e26ec612a7638c91dcb278b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2ab5a825d72dc424872fdc8549ace85d" id="r_a2ab5a825d72dc424872fdc8549ace85d"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a2ab5a825d72dc424872fdc8549ace85d">GEOSQueryCallback</a>) (void *item, void *userdata)</td></tr>
 <tr class="separator:a2ab5a825d72dc424872fdc8549ace85d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a131618ec3c617e1ac7467864f6f261" id="r_a1a131618ec3c617e1ac7467864f6f261"><td class="memItemLeft" align="right" valign="top">typedef int(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a1a131618ec3c617e1ac7467864f6f261">GEOSDistanceCallback</a>) (const void *item1, const void *item2, double *distance, void *userdata)</td></tr>
@@ -614,6 +616,26 @@ Functions</h2></td></tr>
 <tr class="separator:a5f8b7324972d0d9e618187e007fb5656"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5f561b2e3066e509666c0597fe385a75" id="r_a5f561b2e3066e509666c0597fe385a75"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a5f561b2e3066e509666c0597fe385a75">GEOSGeom_transformXYZ_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle, const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g, <a class="el" href="geos__c_8h.html#afe3be045b5b09017536673c015d331ba">GEOSTransformXYZCallback</a> callback, void *userdata)</td></tr>
 <tr class="separator:a5f561b2e3066e509666c0597fe385a75"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7819afaa3f105f46ebd0923666c6e621" id="r_a7819afaa3f105f46ebd0923666c6e621"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a7819afaa3f105f46ebd0923666c6e621">GEOSClusterDBSCAN_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle, const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g, double eps, unsigned minPoints)</td></tr>
+<tr class="separator:a7819afaa3f105f46ebd0923666c6e621"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa008c1ed503f5e0c377c7d1b6d118040" id="r_aa008c1ed503f5e0c377c7d1b6d118040"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#aa008c1ed503f5e0c377c7d1b6d118040">GEOSClusterGeometryDistance_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle, const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g, double d)</td></tr>
+<tr class="separator:aa008c1ed503f5e0c377c7d1b6d118040"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a62d230972926ee5ff16ef5a0e6aab930" id="r_a62d230972926ee5ff16ef5a0e6aab930"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a62d230972926ee5ff16ef5a0e6aab930">GEOSClusterGeometryIntersects_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle, const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g)</td></tr>
+<tr class="separator:a62d230972926ee5ff16ef5a0e6aab930"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5fef55eaa1d51ec9f94511cb116dfe62" id="r_a5fef55eaa1d51ec9f94511cb116dfe62"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a5fef55eaa1d51ec9f94511cb116dfe62">GEOSClusterEnvelopeDistance_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle, const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g, double d)</td></tr>
+<tr class="separator:a5fef55eaa1d51ec9f94511cb116dfe62"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0c7e5cd482b3cefa40e50d74ee8ebdb" id="r_ad0c7e5cd482b3cefa40e50d74ee8ebdb"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#ad0c7e5cd482b3cefa40e50d74ee8ebdb">GEOSClusterEnvelopeIntersects_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle, const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g)</td></tr>
+<tr class="separator:ad0c7e5cd482b3cefa40e50d74ee8ebdb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4fea7a48fbf7279bb6fec265146d1a31" id="r_a4fea7a48fbf7279bb6fec265146d1a31"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a4fea7a48fbf7279bb6fec265146d1a31">GEOSClusterInfo_getNumClusters_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>, const <a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> *clusters)</td></tr>
+<tr class="separator:a4fea7a48fbf7279bb6fec265146d1a31"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa5efc2ee1c292e0de22068d77ca94fc" id="r_afa5efc2ee1c292e0de22068d77ca94fc"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#afa5efc2ee1c292e0de22068d77ca94fc">GEOSClusterInfo_getClusterSize_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>, const <a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> *clusters, size_t i)</td></tr>
+<tr class="separator:afa5efc2ee1c292e0de22068d77ca94fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b54084801f64da4253adbd20682c71c" id="r_a4b54084801f64da4253adbd20682c71c"><td class="memItemLeft" align="right" valign="top">size_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a4b54084801f64da4253adbd20682c71c">GEOSClusterInfo_getClustersForInputs_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>, const <a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> *clusters)</td></tr>
+<tr class="separator:a4b54084801f64da4253adbd20682c71c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a210452d3b2848bc087015ab649c4bfdc" id="r_a210452d3b2848bc087015ab649c4bfdc"><td class="memItemLeft" align="right" valign="top">const size_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a210452d3b2848bc087015ab649c4bfdc">GEOSClusterInfo_getInputsForClusterN_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>, const <a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> *clusters, size_t i)</td></tr>
+<tr class="separator:a210452d3b2848bc087015ab649c4bfdc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c9e3e4bfd46253fd788dc1173955cc4" id="r_a4c9e3e4bfd46253fd788dc1173955cc4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a4c9e3e4bfd46253fd788dc1173955cc4">GEOSClusterInfo_destroy_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>, <a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> *info)</td></tr>
+<tr class="separator:a4c9e3e4bfd46253fd788dc1173955cc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac558f0f96c637ddf9fa1f130bed247f6" id="r_ac558f0f96c637ddf9fa1f130bed247f6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#ac558f0f96c637ddf9fa1f130bed247f6">GEOSOrientationIndex_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle, double Ax, double Ay, double Bx, double By, double Px, double Py)</td></tr>
 <tr class="separator:ac558f0f96c637ddf9fa1f130bed247f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a655cba8d5197ed3b0508237c844c9a0b" id="r_a655cba8d5197ed3b0508237c844c9a0b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a794f6ee9f228cd05dcb9e8b57c61ff56">GEOSWKTReader</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a655cba8d5197ed3b0508237c844c9a0b">GEOSWKTReader_create_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle)</td></tr>
@@ -1331,6 +1353,40 @@ Functions</h2></td></tr>
 <tr class="separator:a782cd48cde34f5371c5972b419aec052"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7c1e67a623c1b57e7ccafe792bc7e8cf" id="r_a7c1e67a623c1b57e7ccafe792bc7e8cf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a7c1e67a623c1b57e7ccafe792bc7e8cf">GEOSVoronoiDiagram</a> (const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g, const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *env, double tolerance, int flags)</td></tr>
 <tr class="separator:a7c1e67a623c1b57e7ccafe792bc7e8cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader">Clustering</h2></td></tr>
+<tr><td class="ititle" colspan="2"><p>Functions for clustering geometries </p>
+</td></tr>
+<tr class="memitem:ac120f078bc24210944894640481ea0c5" id="r_ac120f078bc24210944894640481ea0c5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#ac120f078bc24210944894640481ea0c5">GEOSClusterDBSCAN</a> (const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g, double eps, unsigned minPoints)</td></tr>
+<tr class="memdesc:ac120f078bc24210944894640481ea0c5"><td class="mdescLeft">&#160;</td><td class="mdescRight">GEOSClusterDBSCAN.  <br /></td></tr>
+<tr class="separator:ac120f078bc24210944894640481ea0c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad0c29603f8514b8e5778231809c24371" id="r_ad0c29603f8514b8e5778231809c24371"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#ad0c29603f8514b8e5778231809c24371">GEOSClusterGeometryDistance</a> (const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g, double d)</td></tr>
+<tr class="memdesc:ad0c29603f8514b8e5778231809c24371"><td class="mdescLeft">&#160;</td><td class="mdescRight">GEOSClusterGeometryDistance.  <br /></td></tr>
+<tr class="separator:ad0c29603f8514b8e5778231809c24371"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a982b032bffdafb7cbc597672c3cd6804" id="r_a982b032bffdafb7cbc597672c3cd6804"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a982b032bffdafb7cbc597672c3cd6804">GEOSClusterGeometryIntersects</a> (const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g)</td></tr>
+<tr class="memdesc:a982b032bffdafb7cbc597672c3cd6804"><td class="mdescLeft">&#160;</td><td class="mdescRight">GEOSClusterGeometryIntersects.  <br /></td></tr>
+<tr class="separator:a982b032bffdafb7cbc597672c3cd6804"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a151360986722ec05053e6a8f041c9ee9" id="r_a151360986722ec05053e6a8f041c9ee9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a151360986722ec05053e6a8f041c9ee9">GEOSClusterEnvelopeDistance</a> (const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g, double d)</td></tr>
+<tr class="memdesc:a151360986722ec05053e6a8f041c9ee9"><td class="mdescLeft">&#160;</td><td class="mdescRight">GEOSClusterEnvelopeDistance.  <br /></td></tr>
+<tr class="separator:a151360986722ec05053e6a8f041c9ee9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0bc66198fc461da47599802f0ad6b5ba" id="r_a0bc66198fc461da47599802f0ad6b5ba"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a0bc66198fc461da47599802f0ad6b5ba">GEOSClusterEnvelopeIntersects</a> (const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g)</td></tr>
+<tr class="memdesc:a0bc66198fc461da47599802f0ad6b5ba"><td class="mdescLeft">&#160;</td><td class="mdescRight">GEOSClusterEnvelopeIntersects.  <br /></td></tr>
+<tr class="separator:a0bc66198fc461da47599802f0ad6b5ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abd4f14ce0d7d89625be93401d2a4d5ab" id="r_abd4f14ce0d7d89625be93401d2a4d5ab"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#abd4f14ce0d7d89625be93401d2a4d5ab">GEOSClusterInfo_getNumClusters</a> (const <a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> *clusters)</td></tr>
+<tr class="memdesc:abd4f14ce0d7d89625be93401d2a4d5ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">GEOSClusterInfo_getNumClusters.  <br /></td></tr>
+<tr class="separator:abd4f14ce0d7d89625be93401d2a4d5ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3e367da0b90e9e912c09727be615387" id="r_ab3e367da0b90e9e912c09727be615387"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#ab3e367da0b90e9e912c09727be615387">GEOSClusterInfo_getClusterSize</a> (const <a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> *clusters, size_t i)</td></tr>
+<tr class="memdesc:ab3e367da0b90e9e912c09727be615387"><td class="mdescLeft">&#160;</td><td class="mdescRight">GEOSClusterInfo_getSize.  <br /></td></tr>
+<tr class="separator:ab3e367da0b90e9e912c09727be615387"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab773e51a5e7a62e3e64b9d154b36df96" id="r_ab773e51a5e7a62e3e64b9d154b36df96"><td class="memItemLeft" align="right" valign="top">size_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#ab773e51a5e7a62e3e64b9d154b36df96">GEOSClusterInfo_getClustersForInputs</a> (const <a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> *clusters)</td></tr>
+<tr class="memdesc:ab773e51a5e7a62e3e64b9d154b36df96"><td class="mdescLeft">&#160;</td><td class="mdescRight">GEOSClusterInfo_getClustersForInputs.  <br /></td></tr>
+<tr class="separator:ab773e51a5e7a62e3e64b9d154b36df96"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a80f223142f8bf2113646a74bbe57f7d4" id="r_a80f223142f8bf2113646a74bbe57f7d4"><td class="memItemLeft" align="right" valign="top">const size_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a80f223142f8bf2113646a74bbe57f7d4">GEOSClusterInfo_getInputsForClusterN</a> (const <a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> *clusters, size_t i)</td></tr>
+<tr class="memdesc:a80f223142f8bf2113646a74bbe57f7d4"><td class="mdescLeft">&#160;</td><td class="mdescRight">GEOSClusterInfo_getInputsForClusterN.  <br /></td></tr>
+<tr class="separator:a80f223142f8bf2113646a74bbe57f7d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb03b8204fbef91642f9af0d39d33b6d" id="r_afb03b8204fbef91642f9af0d39d33b6d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#afb03b8204fbef91642f9af0d39d33b6d">GEOSClusterInfo_destroy</a> (<a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> *clusters)</td></tr>
+<tr class="memdesc:afb03b8204fbef91642f9af0d39d33b6d"><td class="mdescLeft">&#160;</td><td class="mdescRight">GEOSClusterInfo_destroy.  <br /></td></tr>
+<tr class="separator:afb03b8204fbef91642f9af0d39d33b6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>C API for the GEOS geometry algorithms library. </p>
@@ -1357,6 +1413,21 @@ Functions</h2></td></tr>
 <p>Parameter object for buffering. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#a626c1f877f6cfe37c4b8b84cc367f820">GEOSBufferParams_create()</a> </dd>
 <dd>
 <a class="el" href="geos__c_8h.html#a20dcbc861188f4876ffb476227b9cc5e">GEOSBufferParams_destroy()</a> </dd></dl>
+
+</div>
+</div>
+<a id="ab41b5f06e26ec612a7638c91dcb278b7" name="ab41b5f06e26ec612a7638c91dcb278b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab41b5f06e26ec612a7638c91dcb278b7">&#9670;&#160;</a></span>GEOSClusterInfo</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef struct GEOSClusterInfo_t <a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Object containing information about cluster of geometries. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#afb03b8204fbef91642f9af0d39d33b6d" title="GEOSClusterInfo_destroy.">GEOSClusterInfo_destroy()</a> </dd></dl>
 
 </div>
 </div>
@@ -3737,6 +3808,832 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </table>
 </div><div class="memdoc">
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#a1d125eecf18fc21cb366696b4758ee4d">GEOSClipByRect</a> </dd></dl>
+
+</div>
+</div>
+<a id="ac120f078bc24210944894640481ea0c5" name="ac120f078bc24210944894640481ea0c5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac120f078bc24210944894640481ea0c5">&#9670;&#160;</a></span>GEOSClusterDBSCAN()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> * GEOSClusterDBSCAN </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td>
+          <td class="paramname"><em>g</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>eps</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned&#160;</td>
+          <td class="paramname"><em>minPoints</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>GEOSClusterDBSCAN. </p>
+<p>Cluster geometries using the DBSCAN algorithm</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">g</td><td>a collection of geometries to be clustered </td></tr>
+    <tr><td class="paramname">eps</td><td>distance parameter for clustering </td></tr>
+    <tr><td class="paramname">minPoints</td><td>density parameter for clustering </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>cluster information object </dd></dl>
+
+</div>
+</div>
+<a id="a7819afaa3f105f46ebd0923666c6e621" name="a7819afaa3f105f46ebd0923666c6e621"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7819afaa3f105f46ebd0923666c6e621">&#9670;&#160;</a></span>GEOSClusterDBSCAN_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> * GEOSClusterDBSCAN_r </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>&#160;</td>
+          <td class="paramname"><em>handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td>
+          <td class="paramname"><em>g</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>eps</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">unsigned&#160;</td>
+          <td class="paramname"><em>minPoints</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#ac120f078bc24210944894640481ea0c5" title="GEOSClusterDBSCAN.">GEOSClusterDBSCAN</a> </dd></dl>
+
+</div>
+</div>
+<a id="a151360986722ec05053e6a8f041c9ee9" name="a151360986722ec05053e6a8f041c9ee9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a151360986722ec05053e6a8f041c9ee9">&#9670;&#160;</a></span>GEOSClusterEnvelopeDistance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> * GEOSClusterEnvelopeDistance </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td>
+          <td class="paramname"><em>g</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>d</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>GEOSClusterEnvelopeDistance. </p>
+<p>Cluster geometries according to an envelope distance threshold</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">g</td><td>a collection of geometries to be clustered </td></tr>
+    <tr><td class="paramname">d</td><td>minimum envelope distance between geometries in the same cluster </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>cluster information object </dd></dl>
+
+</div>
+</div>
+<a id="a5fef55eaa1d51ec9f94511cb116dfe62" name="a5fef55eaa1d51ec9f94511cb116dfe62"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5fef55eaa1d51ec9f94511cb116dfe62">&#9670;&#160;</a></span>GEOSClusterEnvelopeDistance_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> * GEOSClusterEnvelopeDistance_r </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>&#160;</td>
+          <td class="paramname"><em>handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td>
+          <td class="paramname"><em>g</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>d</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#a151360986722ec05053e6a8f041c9ee9" title="GEOSClusterEnvelopeDistance.">GEOSClusterEnvelopeDistance</a> </dd></dl>
+
+</div>
+</div>
+<a id="a0bc66198fc461da47599802f0ad6b5ba" name="a0bc66198fc461da47599802f0ad6b5ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0bc66198fc461da47599802f0ad6b5ba">&#9670;&#160;</a></span>GEOSClusterEnvelopeIntersects()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> * GEOSClusterEnvelopeIntersects </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td>
+          <td class="paramname"><em>g</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>GEOSClusterEnvelopeIntersects. </p>
+<p>Cluster geometries whose envelopes intersect</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">g</td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>cluster information object </dd></dl>
+
+</div>
+</div>
+<a id="ad0c7e5cd482b3cefa40e50d74ee8ebdb" name="ad0c7e5cd482b3cefa40e50d74ee8ebdb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0c7e5cd482b3cefa40e50d74ee8ebdb">&#9670;&#160;</a></span>GEOSClusterEnvelopeIntersects_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> * GEOSClusterEnvelopeIntersects_r </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>&#160;</td>
+          <td class="paramname"><em>handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td>
+          <td class="paramname"><em>g</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#a0bc66198fc461da47599802f0ad6b5ba" title="GEOSClusterEnvelopeIntersects.">GEOSClusterEnvelopeIntersects</a> </dd></dl>
+
+</div>
+</div>
+<a id="ad0c29603f8514b8e5778231809c24371" name="ad0c29603f8514b8e5778231809c24371"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad0c29603f8514b8e5778231809c24371">&#9670;&#160;</a></span>GEOSClusterGeometryDistance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> * GEOSClusterGeometryDistance </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td>
+          <td class="paramname"><em>g</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>d</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>GEOSClusterGeometryDistance. </p>
+<p>Cluster geometries according to a distance threshold</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">g</td><td>a collection of geometries to be clustered </td></tr>
+    <tr><td class="paramname">d</td><td>minimum distance between geometries in the same cluster </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>cluster information object </dd></dl>
+
+</div>
+</div>
+<a id="aa008c1ed503f5e0c377c7d1b6d118040" name="aa008c1ed503f5e0c377c7d1b6d118040"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa008c1ed503f5e0c377c7d1b6d118040">&#9670;&#160;</a></span>GEOSClusterGeometryDistance_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> * GEOSClusterGeometryDistance_r </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>&#160;</td>
+          <td class="paramname"><em>handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td>
+          <td class="paramname"><em>g</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>d</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#ad0c29603f8514b8e5778231809c24371" title="GEOSClusterGeometryDistance.">GEOSClusterGeometryDistance</a> </dd></dl>
+
+</div>
+</div>
+<a id="a982b032bffdafb7cbc597672c3cd6804" name="a982b032bffdafb7cbc597672c3cd6804"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a982b032bffdafb7cbc597672c3cd6804">&#9670;&#160;</a></span>GEOSClusterGeometryIntersects()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> * GEOSClusterGeometryIntersects </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td>
+          <td class="paramname"><em>g</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>GEOSClusterGeometryIntersects. </p>
+<p>Cluster geometries that intersect</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">g</td><td>a collection of geometries to be clustered </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>cluster information object </dd></dl>
+
+</div>
+</div>
+<a id="a62d230972926ee5ff16ef5a0e6aab930" name="a62d230972926ee5ff16ef5a0e6aab930"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a62d230972926ee5ff16ef5a0e6aab930">&#9670;&#160;</a></span>GEOSClusterGeometryIntersects_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> * GEOSClusterGeometryIntersects_r </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>&#160;</td>
+          <td class="paramname"><em>handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td>
+          <td class="paramname"><em>g</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#a982b032bffdafb7cbc597672c3cd6804" title="GEOSClusterGeometryIntersects.">GEOSClusterGeometryIntersects</a> </dd></dl>
+
+</div>
+</div>
+<a id="afb03b8204fbef91642f9af0d39d33b6d" name="afb03b8204fbef91642f9af0d39d33b6d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afb03b8204fbef91642f9af0d39d33b6d">&#9670;&#160;</a></span>GEOSClusterInfo_destroy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void GEOSClusterInfo_destroy </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> *&#160;</td>
+          <td class="paramname"><em>clusters</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>GEOSClusterInfo_destroy. </p>
+<p>Destroy a cluster information object.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">clusters</td><td>cluster information object </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a4c9e3e4bfd46253fd788dc1173955cc4" name="a4c9e3e4bfd46253fd788dc1173955cc4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4c9e3e4bfd46253fd788dc1173955cc4">&#9670;&#160;</a></span>GEOSClusterInfo_destroy_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void GEOSClusterInfo_destroy_r </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> *&#160;</td>
+          <td class="paramname"><em>info</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#afb03b8204fbef91642f9af0d39d33b6d" title="GEOSClusterInfo_destroy.">GEOSClusterInfo_destroy</a> </dd></dl>
+
+</div>
+</div>
+<a id="ab773e51a5e7a62e3e64b9d154b36df96" name="ab773e51a5e7a62e3e64b9d154b36df96"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab773e51a5e7a62e3e64b9d154b36df96">&#9670;&#160;</a></span>GEOSClusterInfo_getClustersForInputs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t * GEOSClusterInfo_getClustersForInputs </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> *&#160;</td>
+          <td class="paramname"><em>clusters</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>GEOSClusterInfo_getClustersForInputs. </p>
+<p>Get the cluster index associated with each input to the clustering operation. Inputs that do are not associated with any cluster will have an index of GEOS_CLUSTER_NONE.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">clusters</td><td>cluster information object </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>an array of cluster indices, to be freed by the caller. </dd></dl>
+
+</div>
+</div>
+<a id="a4b54084801f64da4253adbd20682c71c" name="a4b54084801f64da4253adbd20682c71c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b54084801f64da4253adbd20682c71c">&#9670;&#160;</a></span>GEOSClusterInfo_getClustersForInputs_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t * GEOSClusterInfo_getClustersForInputs_r </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> *&#160;</td>
+          <td class="paramname"><em>clusters</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#ab773e51a5e7a62e3e64b9d154b36df96" title="GEOSClusterInfo_getClustersForInputs.">GEOSClusterInfo_getClustersForInputs</a> </dd></dl>
+
+</div>
+</div>
+<a id="ab3e367da0b90e9e912c09727be615387" name="ab3e367da0b90e9e912c09727be615387"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab3e367da0b90e9e912c09727be615387">&#9670;&#160;</a></span>GEOSClusterInfo_getClusterSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t GEOSClusterInfo_getClusterSize </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> *&#160;</td>
+          <td class="paramname"><em>clusters</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>i</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>GEOSClusterInfo_getSize. </p>
+<p>Get the number of elements in the ith cluster (0-indexed)</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">clusters</td><td>cluster information object </td></tr>
+    <tr><td class="paramname">i</td><td>cluster for which a size will be returned </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>number of elements in the cluster </dd></dl>
+
+</div>
+</div>
+<a id="afa5efc2ee1c292e0de22068d77ca94fc" name="afa5efc2ee1c292e0de22068d77ca94fc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afa5efc2ee1c292e0de22068d77ca94fc">&#9670;&#160;</a></span>GEOSClusterInfo_getClusterSize_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t GEOSClusterInfo_getClusterSize_r </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> *&#160;</td>
+          <td class="paramname"><em>clusters</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>i</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#ab3e367da0b90e9e912c09727be615387" title="GEOSClusterInfo_getSize.">GEOSClusterInfo_getClusterSize</a> </dd></dl>
+
+</div>
+</div>
+<a id="a80f223142f8bf2113646a74bbe57f7d4" name="a80f223142f8bf2113646a74bbe57f7d4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a80f223142f8bf2113646a74bbe57f7d4">&#9670;&#160;</a></span>GEOSClusterInfo_getInputsForClusterN()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const size_t * GEOSClusterInfo_getInputsForClusterN </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> *&#160;</td>
+          <td class="paramname"><em>clusters</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>i</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>GEOSClusterInfo_getInputsForClusterN. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">clusters</td><td>cluster information object </td></tr>
+    <tr><td class="paramname">i</td><td>index of the cluster for which indices should be retrieved </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a pointer to an array of cluster indices. Size of the array is indicated by GEOSClusterInfo_getNumElements. The array is owner by the cluster information object and should not be modified or freed by the caller. </dd></dl>
+
+</div>
+</div>
+<a id="a210452d3b2848bc087015ab649c4bfdc" name="a210452d3b2848bc087015ab649c4bfdc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a210452d3b2848bc087015ab649c4bfdc">&#9670;&#160;</a></span>GEOSClusterInfo_getInputsForClusterN_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const size_t * GEOSClusterInfo_getInputsForClusterN_r </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> *&#160;</td>
+          <td class="paramname"><em>clusters</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>i</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#a80f223142f8bf2113646a74bbe57f7d4" title="GEOSClusterInfo_getInputsForClusterN.">GEOSClusterInfo_getInputsForClusterN</a> </dd></dl>
+
+</div>
+</div>
+<a id="abd4f14ce0d7d89625be93401d2a4d5ab" name="abd4f14ce0d7d89625be93401d2a4d5ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abd4f14ce0d7d89625be93401d2a4d5ab">&#9670;&#160;</a></span>GEOSClusterInfo_getNumClusters()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t GEOSClusterInfo_getNumClusters </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> *&#160;</td>
+          <td class="paramname"><em>clusters</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>GEOSClusterInfo_getNumClusters. </p>
+<p>Get the number of clusters identifed by a clustering operation</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">clusters</td><td>cluster information object </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>number of clusters identifed </dd></dl>
+
+</div>
+</div>
+<a id="a4fea7a48fbf7279bb6fec265146d1a31" name="a4fea7a48fbf7279bb6fec265146d1a31"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4fea7a48fbf7279bb6fec265146d1a31">&#9670;&#160;</a></span>GEOSClusterInfo_getNumClusters_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t GEOSClusterInfo_getNumClusters_r </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>&#160;</td>
+          <td class="paramname">, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a> *&#160;</td>
+          <td class="paramname"><em>clusters</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#abd4f14ce0d7d89625be93401d2a4d5ab" title="GEOSClusterInfo_getNumClusters.">GEOSClusterInfo_getNumClusters</a> </dd></dl>
 
 </div>
 </div>
