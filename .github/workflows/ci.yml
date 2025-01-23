@@ -219,7 +219,7 @@ jobs:
         uname -a
         sudo -E apt-get update
         sudo -E apt-get autopurge -y needrestart
-        sudo -E apt-get -yq --no-install-suggests --no-install-recommends install make doxygen python3-pip ccache valgrind ${{ matrix.ci.packages }}
+        sudo -E apt-get -yq --no-install-suggests --no-install-recommends install make doxygen lcov python3-pip ccache valgrind ${{ matrix.ci.packages }}
         python3 -m pip install --disable-pip-version-check --user cmake==${{ matrix.ci.cmake }}
         echo "$(python3 -m site --user-base)/bin" >> $GITHUB_PATH
 
@@ -284,12 +284,19 @@ jobs:
         path: build/Testing/Temporary/MemoryChecker.**.log
         retention-days: 1
 
-    - name: Upload Coverage to Codecov
+    - name: Generate coverage report
       if: matrix.ci.build_type == 'Coverage'
       run: |
-        curl -o codecov.sh https://codecov.io/bash
-        bash codecov.sh
-      shell: bash
+        cd build
+        lcov --ignore-errors=gcov,negative --capture --directory CMakeFiles --output-file coverage.info
+
+    - name: Upload Coverage to Codecov
+      if: ${{ matrix.ci.build_type == 'Coverage' && !cancelled() }}
+      uses: codecov/codecov-action@v5
+      with:
+        fail_ci_if_error: false
+        files: build/coverage.info
+        token: ${{ secrets.CODECOV_TOKEN }}
 
   windows-mingw:
     name: 'Windows (mingw-w64, x86_64, windows-2019)'
