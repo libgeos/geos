@@ -284,11 +284,18 @@ jobs:
         path: build/Testing/Temporary/MemoryChecker.**.log
         retention-days: 1
 
+    - name: Generate coverage report
+      if: matrix.ci.build_type == 'Coverage'
+      run: |
+        cd build
+        lcov --capture --directory CMakeFiles --output-file coverage.info
+
     - name: Upload Coverage to Codecov
       if: ${{ matrix.ci.build_type == 'Coverage' && !cancelled() }}
       uses: codecov/codecov-action@v5
       with:
         fail_ci_if_error: false
+        files: build/coverage.info
         token: ${{ secrets.CODECOV_TOKEN }}
 
   windows-mingw:
