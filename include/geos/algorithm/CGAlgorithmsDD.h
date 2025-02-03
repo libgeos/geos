@@ -20,6 +20,7 @@
 
 #include <geos/export.h>
 #include <geos/math/DD.h>
+#include <cmath>
 
 // Forward declarations
 namespace geos {
@@ -76,56 +77,36 @@ public:
      * A filter for computing the orientation index of three coordinates.
      *
      * If the orientation can be computed safely using standard DP arithmetic,
-     * this routine returns the orientation index. Otherwise, a value `i > 1` is
-     * returned. In this case the orientation index must be computed using some
-     * other more robust method.
+     * this routine returns the orientation index.
      *
      * The filter is fast to compute, so can be used to avoid the use of slower
      * robust methods except when they are really needed, thus providing better
      * average performance.
      *
-     * Uses an approach due to Jonathan Shewchuk, which is in the public domain.
+     * Jonathan Shewchuk
+     * Robust Adaptive Floating-Point Geometric Predicates
+     * Proceedings of the Twelfth Annual Symposium on Computational Geometry, ACM,
+     * May 1996
+     *
+     * Ozaki, K., Bünger, F., Ogita, T. et al.
+     * Simple floating-point filters for the two-dimensional orientation problem.
+     * Bit Numer Math 56, 729–749 (2016).
+     * https://doi.org/10.1007/s10543-015-0574-9
+     *
      */
     static inline int orientationIndexFilter(
         double pax, double pay,
         double pbx, double pby,
         double pcx, double pcy)
     {
-        /**
-         * A value which is safely greater than the relative round-off
-         * error in double-precision numbers
-         */
-        double constexpr DP_SAFE_EPSILON =  1e-15;
-
-        double detsum;
         double const detleft = (pax - pcx) * (pby - pcy);
         double const detright = (pay - pcy) * (pbx - pcx);
         double const det = detleft - detright;
-
-        if(detleft > 0.0) {
-            if(detright <= 0.0) {
-                return orientation(det);
-            }
-            else {
-                detsum = detleft + detright;
-            }
-        }
-        else if(detleft < 0.0) {
-            if(detright >= 0.0) {
-                return orientation(det);
-            }
-            else {
-                detsum = -detleft - detright;
-            }
-        }
-        else {
-            return orientation(det);
-        }
-
-        double const errbound = DP_SAFE_EPSILON * detsum;
-        if((det >= errbound) || (-det >= errbound)) {
-            return orientation(det);
-        }
+        // Coefficient as per Ozaki et al
+        double const error = std::abs(detleft + detright)
+                             * 3.3306690621773724e-16;
+        if (std::abs(det) >= error)
+            return (det > 0) - (det < 0);
         return CGAlgorithmsDD::FAILURE;
     };
 
@@ -187,6 +168,3 @@ protected:
 
 } // namespace geos::algorithm
 } // namespace geos
-
-
-
