@@ -77,15 +77,22 @@ public:
      * A filter for computing the orientation index of three coordinates.
      *
      * If the orientation can be computed safely using standard DP arithmetic,
-     * this routine returns the orientation index. Otherwise, a value `i > 1` is
-     * returned. In this case the orientation index must be computed using some
-     * other more robust method.
+     * this routine returns the orientation index.
      *
      * The filter is fast to compute, so can be used to avoid the use of slower
      * robust methods except when they are really needed, thus providing better
      * average performance.
      *
-     * Uses an approach due to Jonathan Shewchuk, which is in the public domain.
+     * Jonathan Shewchuk
+     * Robust Adaptive Floating-Point Geometric Predicates
+     * Proceedings of the Twelfth Annual Symposium on Computational Geometry, ACM,
+     * May 1996
+     *
+     * Ozaki, K., Bünger, F., Ogita, T. et al.
+     * Simple floating-point filters for the two-dimensional orientation problem.
+     * Bit Numer Math 56, 729–749 (2016).
+     * https://doi.org/10.1007/s10543-015-0574-9
+     *
      */
     static inline int orientationIndexFilter(
         double pax, double pay,
@@ -95,7 +102,7 @@ public:
         double const detleft = (pax - pcx) * (pby - pcy);
         double const detright = (pay - pcy) * (pbx - pcx);
         double const det = detleft - detright;
-        // Coefficient due to https://doi.org/10.1007/s10543-015-0574-9
+        // Coefficient as per Ozaki et al
         double const error = std::abs(detleft + detright)
                              * 3.3306690621773724e-16;
         if (std::abs(det) >= error)
