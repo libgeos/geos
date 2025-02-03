@@ -90,7 +90,7 @@ public:
      *
      * Ozaki, K., Bünger, F., Ogita, T. et al.
      * Simple floating-point filters for the two-dimensional orientation problem.
-     * Bit Numer Math 56, 729–749 (2016).
+     * BitNumer Math 56, 729–749 (2016).
      * https://doi.org/10.1007/s10543-015-0574-9
      *
      */
