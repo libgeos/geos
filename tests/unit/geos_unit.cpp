@@ -15,6 +15,8 @@
 #include <iomanip>
 #include <iostream>
 
+std::string RESOURCE_DIR;
+
 namespace tut {
 test_runner_singleton runner;
 }
@@ -39,6 +41,7 @@ usage()
          << "  --list                          list all registered test groups\n"
 //         << "  --verbose                       run unit tests verbosely; displays non-error information\n"
 //         << "  --version                       print version information and exit\n"
+         << "  --data                          specify a directory containing test data files\n"
          << "  --help                          print this message and exit\n"
          << endl
          << "Examples:\n"
@@ -51,19 +54,31 @@ usage()
 }
 
 int
-main(int argc, const char* argv[])
-{
+main(int argc, const char* argv[]) {
     tut::reporter visi;
 
-    if((argc == 2 && std::string(argv[1]) == "--help") || argc > 3) {
-        usage();
-        return 0;
-    }
-    //-- check options valid
-    if (argc >= 2 && argv[1][0] == '-') {
-        bool isValidOpt = std::string(argv[1]) == "--list";
-        if (! isValidOpt) {
-            std::cerr << "Invalid option: " << argv[1] << std::endl;
+    bool listOnly = false;
+    std::string grpname;
+    std::string testName;
+
+    for (std::size_t i = 1; i < static_cast<std::size_t>(argc); i++) {
+        std::string arg = argv[i];
+        if (arg == "--help") {
+            usage();
+            return EXIT_SUCCESS;
+        } else if (arg == "--list") {
+            listOnly = true;
+        } else if (arg == "--data" && (i + 1) < static_cast<std::size_t>(argc)) {
+            RESOURCE_DIR = argv[++i];
+        } else if (arg[0] == '-') {
+            std::cerr << "Invalid option: " << argv << std::endl;
+            return EXIT_FAILURE;
+        } else if (grpname.empty()) {
+            grpname = arg;
+        } else if (testName.empty()) {
+            testName = arg;
+        } else {
+            std::cerr << "Unexpected positional argument: " << arg << std::endl;
             return EXIT_FAILURE;
         }
     }
@@ -75,10 +90,7 @@ main(int argc, const char* argv[])
     tut::runner.get().set_callback(&visi);
 
     try {
-        if (argc == 1) {
-            tut::runner.get().run_tests();
-        }
-        else if (argc == 2 && std::string(argv[1]) == "--list") {
+        if (listOnly) {
             tut::groupnames gl = tut::runner.get().list_groups();
             tut::groupnames::const_iterator b = gl.begin();
             tut::groupnames::const_iterator e = gl.end();
@@ -92,20 +104,15 @@ main(int argc, const char* argv[])
                 ++b;
             }
             return EXIT_SUCCESS;
-        }
-        else if (argc == 2) {
-            tut::runner.get().run_tests(argv[1]);
-        }
-        else if(argc == 3) {
-            // TODO - mloskot - check if test group with given name exists
-            // TODO - mloskot - check if test case with given number exists
-            std::string grpname(argv[1]);
-            if(grpname.empty()) {
-                throw std::runtime_error("missing test group name");
+        } else {
+            if (!testName.empty()) {
+                tut::test_result result;
+                tut::runner.get().run_test(grpname, std::atoi(testName.c_str()), result);
+            } else if (!grpname.empty()) {
+                tut::runner.get().run_tests(grpname);
+            } else {
+                tut::runner.get().run_tests();
             }
-
-            tut::test_result result;
-            tut::runner.get().run_test(grpname, std::atoi(argv[2]), result);
         }
     }
     catch(const tut::no_such_group& ex) {
