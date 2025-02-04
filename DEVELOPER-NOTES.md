@@ -70,10 +70,12 @@ public:
 * [A raw pointer (a T*) is non-owning](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rr-ptr)
 * [A raw reference (a T&) is non-owning](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rr-ref)
   
-### Function calling conventions
+### Function Parameter calling convention
 
-
-* Prefer T* over T& when “no argument” is a valid option
+* Prefer passing values by reference (`Geometry&`) instead of pointer (`Geometry*`),
+  particularly for API (public) functions
+  * Note: many GEOS API functions use pass-by-pointer instead - this is deprecated
+* Pass-by-pointer can be used if the argument may be NULL (this is rare for API functions)
 
 ### Avoid Many Small Heap Allocations
 
