@@ -24,6 +24,7 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/prep/PreparedGeometry.h>
 #include <geos/geom/prep/PreparedGeometryFactory.h>
+#include <geos/algorithm/Orientation.h>
 #include <geos/algorithm/construct/LargestEmptyCircle.h>
 #include <geos/algorithm/construct/MaximumInscribedCircle.h>
 #include <geos/algorithm/BoundaryNodeRule.h>
@@ -800,6 +801,18 @@ std::vector<GeometryOpCreator> opRegistry {
     Result::typeBool,
     [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB) {
         return new Result( prepGeomCache.get(geom.get())->intersects( geomB.get() ) );
+    });
+}},
+{ "orientationIndex", [](std::string name) { return GeometryOp::create(name,
+    catRel, "orientation index for a line segment and a point",
+    Result::typeInt,
+    [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB) {
+        std::unique_ptr<CoordinateSequence> seqA = geom->getCoordinates();
+        Coordinate p0 = seqA->getAt(0);
+        Coordinate p1 = seqA->getAt(1);
+        std::unique_ptr<CoordinateSequence> seqB = geomB->getCoordinates();
+        Coordinate q = seqB->getAt(0);
+        return new Result( algorithm::Orientation::index(p0, p1, q) );
     });
 }},
 
