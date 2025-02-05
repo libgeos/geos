@@ -21,6 +21,8 @@
 #include <string>
 #include <vector>
 
+using namespace geos::operation::buffer;
+
 namespace tut {
 //
 // Test Group
@@ -39,9 +41,23 @@ struct test_bufferop_data {
     test_bufferop_data()
         : gf(*geos::geom::GeometryFactory::getDefaultInstance())
         , wktreader(&gf)
-        , default_quadrant_segments(geos::operation::buffer::BufferParameters::DEFAULT_QUADRANT_SEGMENTS)
+        , default_quadrant_segments(BufferParameters::DEFAULT_QUADRANT_SEGMENTS)
     {
         ensure_equals(default_quadrant_segments, int(8));
+    }
+
+    std::unique_ptr<Geometry>
+    buffer(const std::string& wkt, double dist) {
+        std::unique_ptr<Geometry> geom = wktreader.read(wkt);
+        return BufferOp::bufferOp(geom.get(), dist);
+    }
+
+    void checkNumHoles(Geometry& geom, int nHoles) {
+        ensure_equals("Num Holes", dynamic_cast<const Polygon*>( &geom )->getNumInteriorRing(), std::size_t(nHoles));
+    }
+
+    void checkArea(Geometry& geom, double expectedArea, double tolerance) {
+        ensure_equals("Area", geom.getArea(), expectedArea, tolerance);
     }
 
     void checkBufferEmpty(const std::string& wkt, double dist, bool isEmpty)
@@ -594,6 +610,32 @@ void object::test<24>
     checkValidPolygon(*result);
     ensure_equals(result->getNumGeometries(), 1u);
     ensure_equals( (dynamic_cast<const Polygon*>( result.get() )->getNumInteriorRing()), 3u);
+}
+
+// testRingHoleEroded
+// See https://github.com/libgeos/geos/issues/1223
+template<>
+template<>
+void object::test<25>
+()
+{
+    std::string wkt("LINESTRING (25 44, 31 44, 32 38, 29 37, 25 37, 25 38, 24 40, 24 44, 25 44)");
+
+    std::unique_ptr<Geometry> result100 = buffer(wkt, 100);
+    checkValidPolygon(*result100);
+    checkNumHoles(*result100, 0);
+    checkArea(*result100, 34002, 100);
+
+    std::unique_ptr<Geometry> result10 = buffer(wkt, 10);
+    checkValidPolygon(*result10);
+    checkNumHoles(*result10, 0);
+    checkArea(*result10, 635.9, 1);
+
+    std::unique_ptr<Geometry> result2 = buffer(wkt, 2);
+    checkValidPolygon(*result2);
+    checkNumHoles(*result2, 1);
+    checkArea(*result2, 107, 1);
+
 }
 
 } // namespace tut

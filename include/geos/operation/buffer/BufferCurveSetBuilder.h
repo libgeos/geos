@@ -71,6 +71,7 @@ namespace buffer { // geos.operation.buffer
  */
 class GEOS_DLL BufferCurveSetBuilder {
     using CoordinateSequence = geos::geom::CoordinateSequence;
+    using Envelope = geos::geom::Envelope;
 
 private:
 
@@ -193,7 +194,10 @@ private:
      * @param bufferDistance
      * @return
      */
-    bool isErodedCompletely(const geom::LinearRing* ringCoord,
+    bool isRingFullyEroded(const geom::LinearRing* ring, bool isHole,
+                            double bufferDistance);
+
+    bool isRingFullyEroded(const CoordinateSequence* ringCoord, const Envelope* env, bool isHole,
                             double bufferDistance);
 
     /**
