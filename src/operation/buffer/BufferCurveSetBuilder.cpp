@@ -235,7 +235,7 @@ BufferCurveSetBuilder::addPolygon(const Polygon* p)
 
     // optimization - don't bother computing buffer
     // if the polygon would be completely eroded
-    if(distance < 0.0 && isErodedCompletely(shell, distance)) {
+    if(distance < 0.0 && isRingFullyEroded(shell, false, distance)) {
 #if GEOS_DEBUG
         std::cerr << __FUNCTION__ << ": polygon is eroded completely " << std::endl;
 #endif
@@ -264,7 +264,7 @@ BufferCurveSetBuilder::addPolygon(const Polygon* p)
 
         // optimization - don't bother computing buffer for this hole
         // if the hole would be completely covered
-        if(distance > 0.0 && isErodedCompletely(hole, -distance)) {
+        if(distance > 0.0 && isRingFullyEroded(hole, true, distance)) {
             continue;
         }
 
@@ -286,14 +286,30 @@ BufferCurveSetBuilder::addPolygon(const Polygon* p)
 void
 BufferCurveSetBuilder::addRingBothSides(const CoordinateSequence* coord, double p_distance)
 {
-    addRingSide(coord, p_distance,
-                Position::LEFT,
-                Location::EXTERIOR, Location::INTERIOR);
-    /* Add the opposite side of the ring
-    */
-    addRingSide(coord, p_distance,
-                Position::RIGHT,
-                Location::INTERIOR, Location::EXTERIOR);
+    /*
+     * (f "hole" side will be eroded completely, avoid generating it.
+     * This prevents hole artifacts (e.g. https://github.com/libgeos/geos/issues/1223)
+     */
+    //-- distance is assumed positive, due to previous checks
+    Envelope env;
+    coord->expandEnvelope(env);
+    bool isHoleComputed = ! isRingFullyEroded(coord, &env, true, distance);
+
+    bool isCCW = isRingCCW(coord);
+
+    bool isShellLeft = ! isCCW;
+    if (isShellLeft || isHoleComputed) {
+        addRingSide(coord, p_distance,
+                    Position::LEFT,
+                    Location::EXTERIOR, Location::INTERIOR);
+    }
+
+    bool isShellRight = isCCW;
+    if (isShellRight || isHoleComputed) {
+        addRingSide(coord, p_distance,
+                    Position::RIGHT,
+                    Location::INTERIOR, Location::EXTERIOR);
+    }
 }
 
 
@@ -407,14 +423,22 @@ BufferCurveSetBuilder::maxDistance(const CoordinateSequence*  pts, const Coordin
 
 /*private*/
 bool
-BufferCurveSetBuilder::isErodedCompletely(const LinearRing* ring,
+BufferCurveSetBuilder::isRingFullyEroded(const LinearRing* ring, bool isHole,
         double bufferDistance)
 {
     const CoordinateSequence* ringCoord = ring->getCoordinatesRO();
+    const Envelope* env = ring->getEnvelopeInternal();
+    return isRingFullyEroded(ringCoord, env, isHole, bufferDistance);
+}
 
+/*private*/
+bool
+BufferCurveSetBuilder::isRingFullyEroded(const CoordinateSequence* ringCoord, const Envelope* env, bool isHole,
+        double bufferDistance)
+{
     // degenerate ring has no area
     if(ringCoord->getSize() < 4) {
-        return bufferDistance < 0;
+        return true;
     }
 
     // important test to eliminate inverted triangle bug
@@ -423,10 +447,16 @@ BufferCurveSetBuilder::isErodedCompletely(const LinearRing* ring,
         return isTriangleErodedCompletely(ringCoord, bufferDistance);
     }
 
-    const Envelope* env = ring->getEnvelopeInternal();
-    double envMinDimension = std::min(env->getHeight(), env->getWidth());
-    if(bufferDistance < 0.0 && 2 * std::abs(bufferDistance) > envMinDimension) {
-        return true;
+    bool isErodable = 
+        (  isHole && bufferDistance > 0) ||
+        (! isHole && bufferDistance < 0);
+
+    if (isErodable) {
+      //-- if envelope is narrower than twice the buffer distance, ring is eroded
+        double envMinDimension = std::min(env->getHeight(), env->getWidth());
+        if (2 * std::abs(bufferDistance) > envMinDimension) {
+            return true;
+        }
     }
     return false;
 }
