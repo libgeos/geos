@@ -600,7 +600,6 @@ void object::test<23>
 }
 */
 
-/* MD - not fixed in this ver
 // Test that hole is not removed
 // See https://github.com/libgeos/geos/issues/1125
 template<>
@@ -621,7 +620,6 @@ void object::test<24>
     ensure_equals(result->getNumGeometries(), 1u);
     ensure_equals( (dynamic_cast<const Polygon*>( result.get() )->getNumInteriorRing()), 3u);
 }
-*/
 
 // testRingHoleEroded
 // See https://github.com/libgeos/geos/issues/1223

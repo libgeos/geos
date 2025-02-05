@@ -10,6 +10,7 @@
   - GEOSConcaveHullOfPolygons, avoid crash on zero-area input (GH-1071, Dan Baston)
   - MinimumClearance, avoid crash on NaN inputs (GH-1079, Dan Baston)
   - Fix TopologyPreservingSimplifier/TaggedLineString to avoid jumping components (JTS-1096, Martin Davis)
+  - Fix BufferOp to increase length of segments removed by heuristic (GH-1200, Martin Davis)
   - Add ring buffer hole removal heuristic (GH-1233, Martin Davis)
 
 ## Changes in 3.11.4
