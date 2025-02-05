@@ -12,6 +12,7 @@
   - Improve OffsetCurve to handle mitre joins for polygons (Martin Davis)
   - Fix inscribed circle initialization (GH-1225, Benoit Maurin)
   - Fix overlay heuristic for GeometryCollections with empty elements (GH-1229, Martin Davis)
+  - Add ring buffer hole removal heuristic (GH-1233, Martin Davis)
 
 ## Changes in 3.13.0
 2024-09-06
