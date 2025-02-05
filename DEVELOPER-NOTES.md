@@ -72,9 +72,12 @@ public:
   
 ### Function Parameter calling conventions
 
-* Prefer passing values by reference (`Geometry&`) instead of pointer (`Geometry*`),
-  particularly for API (public) functions
-  * Note: many GEOS API functions use pass-by-pointer, but this is just historical baggage
+* Objects which are passed as read-only with no transfer of ownership 
+  should be passed as `const` references (`const Geometry&`).
+  * in particular, this applies to Geometry objects passed to API operations
+  (in static functions, class constructors, or initialization methods) 
+  * NOTE: many GEOS API functions use pass-by-pointer (`Geometry*`), but this is historical baggage
+  * for the common case of passing a `std::unique_ptr<Geometry> foo` the argument will be `*foo` 
 * Pass-by-pointer can be used if the argument may be NULL (this is rare for API functions)
 
 ### Avoid Many Small Heap Allocations
