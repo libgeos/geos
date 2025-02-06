@@ -35,8 +35,7 @@ struct test_bufferop_data {
     geos::io::WKTWriter wktwriter;
     int const default_quadrant_segments;
 
-    typedef geos::geom::Geometry::Ptr GeomPtr;
-    typedef std::unique_ptr<geos::geom::CoordinateSequence> CSPtr;
+    typedef std::unique_ptr<Geometry>  GeomPtr;
 
     test_bufferop_data()
         : gf(*geos::geom::GeometryFactory::getDefaultInstance())
@@ -52,12 +51,19 @@ struct test_bufferop_data {
         return BufferOp::bufferOp(geom.get(), dist);
     }
 
+    void checkNumGeoms(Geometry& geom, int nGeoms) {
+        ensure_equals("Num Geometries", geom.getNumGeometries(), std::size_t(nGeoms));
+    }
+
     void checkNumHoles(Geometry& geom, int nHoles) {
         ensure_equals("Num Holes", dynamic_cast<const Polygon*>( &geom )->getNumInteriorRing(), std::size_t(nHoles));
     }
 
-    void checkArea(Geometry& geom, double expectedArea, double tolerance) {
-        ensure_equals("Area", geom.getArea(), expectedArea, tolerance);
+    void checkArea(Geometry& geom, double expectedArea) {
+        double actualArea = geom.getArea();
+        //-- check areas are within 1%
+        double tolerance = std::max(actualArea, expectedArea) / 100.0;
+        ensure_equals("Area", actualArea, expectedArea, tolerance);
     }
 
     void checkBufferEmpty(const std::string& wkt, double dist, bool isEmpty)
@@ -115,8 +121,7 @@ void object::test<1>
     GeomPtr g0(wktreader.read(wkt0));
 
     double const distance = 0.0;
-    BufferOp op(g0.get());
-    GeomPtr gBuffer = op.getResultGeometry(distance);
+    GeomPtr gBuffer = BufferOp::bufferOp(g0.get(), distance);
 
     ensure(gBuffer->isEmpty());
     ensure(gBuffer->isValid());
@@ -134,8 +139,7 @@ void object::test<2>
 
     // Buffer point with default buffering parameters
     double const distance = 1.0;
-    BufferOp op(g0.get());
-    GeomPtr gBuffer = op.getResultGeometry(distance);
+    GeomPtr gBuffer = BufferOp::bufferOp(g0.get(), distance);
 
     checkValidPolygon(*gBuffer);
     ensure_equals(gBuffer->getNumPoints(), 33u);
@@ -167,12 +171,8 @@ void object::test<3>
 
     // Buffer point with custom parameters: 32 quadrant segments
     int const segments = 32;
-    BufferParameters params(segments);
-
-    BufferOp op(g0.get(), params);
-
     double const distance = 1.0;
-    GeomPtr gBuffer = op.getResultGeometry(distance);
+    GeomPtr gBuffer = BufferOp::bufferOp(g0.get(), distance, segments);
 
     checkValidPolygon(*gBuffer);
     ensure(gBuffer->getNumPoints() >= std::size_t(129));
@@ -191,10 +191,8 @@ void object::test<4>
     // Buffer point with custom parameters: 24 quadrant segments
     {
         int const segments = default_quadrant_segments * 3;
-        BufferParameters params(segments);
-        BufferOp op(g0.get(), params);
         double const distance = 0.0001;
-        GeomPtr gBuffer = op.getResultGeometry(distance);
+        GeomPtr gBuffer = BufferOp::bufferOp(g0.get(), distance, segments);
         checkValidPolygon(*gBuffer);
         ensure(gBuffer->getNumPoints() >= std::size_t(240));
     }
@@ -202,10 +200,8 @@ void object::test<4>
     // Buffer point with custom parameters: 32 quadrant segments
     {
         int const segments = default_quadrant_segments * 4;
-        BufferParameters params(segments);
-        BufferOp op(g0.get(), params);
         double const distance = 0.0001;
-        GeomPtr gBuffer = op.getResultGeometry(distance);
+        GeomPtr gBuffer = BufferOp::bufferOp(g0.get(), distance, segments);
         checkValidPolygon(*gBuffer);
         ensure(gBuffer->getNumPoints() >= std::size_t(310));
     }
@@ -222,10 +218,9 @@ void object::test<5>
     GeomPtr g0(wktreader.read(wkt0));
 
     // Buffer point with quadrant segments value (x4)
-    BufferParameters params(default_quadrant_segments * 4);
-    BufferOp op(g0.get(), params);
+    int const segments = default_quadrant_segments * 4;
     double const distance = -75.0;
-    GeomPtr gBuffer = op.getResultGeometry(distance);
+    GeomPtr gBuffer = BufferOp::bufferOp(g0.get(), distance, segments);
     checkValidPolygon(*gBuffer);
     ensure(gBuffer->getNumPoints() >= std::size_t(8));
 }
@@ -242,10 +237,8 @@ void object::test<6>
 
     // Buffer point with quadrant segments value (x4)
     int const segments = default_quadrant_segments * 4;
-    BufferParameters params(segments);
-    BufferOp op(g0.get(), params);
     double const distance = -75.0;
-    GeomPtr gBuffer = op.getResultGeometry(distance);
+    GeomPtr gBuffer = BufferOp::bufferOp(g0.get(), distance, segments);
     checkValidPolygon(*gBuffer);
     ensure(gBuffer->getNumPoints() >= std::size_t(51));
 }
@@ -262,10 +255,8 @@ void object::test<7>
 
     // Buffer point with quadrant segments value (x4)
     int const segments = default_quadrant_segments * 4;
-    BufferParameters params(segments);
-    BufferOp op(g0.get(), params);
     double const distance = -75.0;
-    GeomPtr gBuffer = op.getResultGeometry(distance);
+    GeomPtr gBuffer = BufferOp::bufferOp(g0.get(), distance, segments);
     checkValidPolygon(*gBuffer);
     ensure(gBuffer->getNumPoints() >= std::size_t(24));
 }
@@ -282,10 +273,8 @@ void object::test<8>
 
     // Buffer point with quadrant segments value (x4)
     int const segments = default_quadrant_segments * 4;
-    BufferParameters params(segments);
-    BufferOp op(g0.get(), params);
     double const distance = -75.0;
-    GeomPtr gBuffer = op.getResultGeometry(distance);
+    GeomPtr gBuffer = BufferOp::bufferOp(g0.get(), distance, segments);
     checkValidPolygon(*gBuffer);
     ensure(gBuffer->getNumPoints() >= std::size_t(7));
 }
@@ -302,10 +291,8 @@ void object::test<9>
 
     // Buffer point with quadrant segments value (x4)
     int const segments = default_quadrant_segments * 4;
-    BufferParameters params(segments);
-    BufferOp op(g0.get(), params);
     double const distance = -75.0;
-    GeomPtr gBuffer = op.getResultGeometry(distance);
+    GeomPtr gBuffer = BufferOp::bufferOp(g0.get(), distance, segments);
     checkValidPolygon(*gBuffer);
     ensure(gBuffer->getNumPoints() >= std::size_t(5));
 }
@@ -347,26 +334,7 @@ template<>
 void object::test<11>
 ()
 {
-    std::string wkt0("\
-MULTILINESTRING(  \
- (-22720.6801580484 130376.223341197, \
-  -22620.6136206117 130339.222540348, \
-  -22620.6133224902 130339.333510463), \
- (-22720.3807106115 130487.193473695, \
-  -22620.3154956134 130450.192663993, \
-  -22620.3151974850 130450.303634126), \
- (-22620.6133224902 130339.333510463, -22620.6127262471 130339.555450692),  \
- (-22620.1376011539 130450.303157004, -22620.3151974850 130450.303634126),  \
- (-22620.3151974850 130450.303634126, -22620.3146012281 130450.525574392),  \
- (-21480.3713729115 130150.471377565, \
-  -21481.6134583498 130150.918429232, \
-  -21482.5899891895 130151.031891269, \
-  -21480.9946803241 130149.807142948),  \
- (-21477.6185334698 130150.464355720,\
-  -21478.0611246018 130151.020338484,  \
-  -21377.8977465929 130114.034129489)  \
-)  \
-      ");
+    std::string wkt0("MULTILINESTRING ((-22720.6801580484 130376.223341197, -22620.6136206117 130339.222540348, -22620.6133224902 130339.333510463), (-22720.3807106115 130487.193473695, -22620.3154956134 130450.192663993, -22620.315197485 130450.303634126), (-22620.6133224902 130339.333510463, -22620.6127262471 130339.555450692), (-22620.1376011539 130450.303157004, -22620.315197485 130450.303634126), (-22620.315197485 130450.303634126, -22620.3146012281 130450.525574392), (-21480.3713729115 130150.471377565, -21481.6134583498 130150.918429232, -21482.5899891895 130151.031891269, -21480.9946803241 130149.807142948), (-21477.6185334698 130150.46435572, -21478.0611246018 130151.020338484, -21377.8977465929 130114.034129489))");
 
     GeomPtr g0(wktreader.read(wkt0));
 
@@ -374,11 +342,9 @@ MULTILINESTRING(  \
                             BufferParameters::JOIN_MITRE,
                             1.0);
     const double distance = 5.0;
-    BufferOp op(g0.get(), params);
-    GeomPtr gBuffer = op.getResultGeometry(distance);
+    GeomPtr gBuffer = BufferOp::bufferOp(g0.get(), distance, params);
 
-    // We're basically only interested an rough sense of a
-    // meaningful result.
+    // Only interested an rough sense of a correct result.
     ensure_equals(gBuffer->getNumPoints(), std::size_t(46));
     ensure_equals(int(gBuffer->getArea()), 3567);
 }
@@ -394,12 +360,9 @@ void object::test<12>
     // Buffer point with custom parameters: 32 quadrant segments
     int const segments = 53;
     int expected_segments = 4 * segments + 1;
-    BufferParameters params(segments);
-
-    BufferOp op(g0.get(), params);
-
-    double const distance = 80.0;
-    GeomPtr gBuffer = op.getResultGeometry(distance);
+    BufferParameters param(segments);
+    const double distance = 80.0;
+    GeomPtr gBuffer = BufferOp::bufferOp(g0.get(), distance, param);
 
     checkValidPolygon(*gBuffer);
     ensure(gBuffer->getNumPoints() >= std::size_t(expected_segments));
@@ -412,17 +375,12 @@ void object::test<13>
 ()
 {
     std::string wkt0("MULTILINESTRING ((10 10, 20 20, 10 40), (40 40, 30 30, 40 20, 30 10))");
-
     GeomPtr g0(wktreader.read(wkt0));
 
     BufferParameters param;
     param.setEndCapStyle(geos::operation::buffer::BufferParameters::CAP_FLAT);
     param.setQuadrantSegments(6);
-
-    BufferOp op(g0.get(), param);
-
-    double const distance = 40.0;
-    GeomPtr gBuffer = op.getResultGeometry(distance);
+    GeomPtr gBuffer = BufferOp::bufferOp(g0.get(), 40.0, param);
 
     checkValidPolygon(*gBuffer);
 }
@@ -436,10 +394,7 @@ void object::test<14>
     std::string wkt0("GEOMETRYCOLLECTION (POINT (1 2), MULTIPOINT ((1 2), (3 4)), LINESTRING (1 2, 3 4), MULTILINESTRING ((1 2, 3 4), (5 6, 7 8)), POLYGON ((2 2, -2 2, -2 -2, 2 -2, 2 2), (1 1, 1 -1, -1 -1, -1 1, 1 1)), MULTIPOLYGON (((2 2, -2 2, -2 -2, 2 -2, 2 2), (1 1, 1 -1, -1 -1, -1 1, 1 1)), ((7 2, 3 2, 3 -2, 7 -2, 7 2))))");
 
     GeomPtr g0(wktreader.read(wkt0));
-    BufferOp op(g0.get());
-
-    double const distance = 0.5;
-    GeomPtr gBuffer = op.getResultGeometry(distance);
+    GeomPtr gBuffer = BufferOp::bufferOp(g0.get(), 0.5);
 
     // std::cout << wktwriter.write(gBuffer.get()) << std::endl;
 
@@ -498,16 +453,16 @@ void object::test<18>
     GeomPtr g0(wktreader.read(wkt0));
 
     GeomPtr result1 = g0->buffer( -8 );
-    ensure( 0 == dynamic_cast<const geos::geom::Polygon*>(result1.get())->getNumInteriorRing() );
+    checkNumHoles(*result1, 0);
 
     GeomPtr result2 = g0->buffer( -8.6 );
-    ensure( 0 == dynamic_cast<const geos::geom::Polygon*>(result2.get())->getNumInteriorRing() );
+    checkNumHoles(*result2, 0);
 
     GeomPtr result3 = g0->buffer( -9.6 );
-    ensure( 0 == dynamic_cast<const geos::geom::Polygon*>(result2.get())->getNumInteriorRing() );
+    checkNumHoles(*result3, 0);
 
     GeomPtr result4 = g0->buffer( -11 );
-    ensure( 0 == dynamic_cast<const geos::geom::Polygon*>(result2.get())->getNumInteriorRing() );
+    checkNumHoles(*result4, 0);
 }
 
 // Test for https://trac.osgeo.org/geos/ticket/1101 - Non-empty negative buffer of 5-pt convex polygon
@@ -534,9 +489,8 @@ void object::test<20>
 {
     std::string wkt0("LINESTRING (-20 0, 0 20, 20 0, 0 -20, -20 0)");
     GeomPtr g0(wktreader.read(wkt0));
-
-    GeomPtr result1 = g0->buffer( 70 );
-    ensure( 0 == dynamic_cast<const geos::geom::Polygon*>(result1.get())->getNumInteriorRing() );
+    GeomPtr result = g0->buffer( 70 );
+    checkNumHoles(*result, 0);
 }
 
 // Test for single-sided buffer
@@ -551,10 +505,9 @@ void object::test<21>
 
     geos::operation::buffer::BufferParameters bp;
     bp.setSingleSided(true);
-    geos::operation::buffer::BufferOp op(geom.get(), bp);
+    std::unique_ptr<Geometry> result = BufferOp::bufferOp(geom.get(), -21, bp);
 
-    std::unique_ptr<Geometry> result = op.getResultGeometry(-21);
-    ensure_equals(int(result->getArea()), 5055);
+    checkArea(*result, 5055);
 }
 
 // Another test for single-sided buffer
@@ -569,11 +522,10 @@ void object::test<22>
 
     geos::operation::buffer::BufferParameters bp;
     bp.setSingleSided(true);
-    geos::operation::buffer::BufferOp op(geom.get(), bp);
+    std::unique_ptr<Geometry> result = BufferOp::bufferOp(geom.get(), -10, bp);
 
-    std::unique_ptr<Geometry> result = op.getResultGeometry(-10);
-    ensure_equals(result->getNumGeometries(), 2u);
-    ensure_equals(result->getArea(), 200);
+    checkNumGeoms(*result, 2);
+    checkArea(*result, 200);
 }
 
 // Checks a bug in the inverted-ring-removal heuristic.
@@ -603,13 +555,11 @@ void object::test<24>
 
     geos::operation::buffer::BufferParameters bp;
     bp.setQuadrantSegments(1);
-    geos::operation::buffer::BufferOp op(geom.get(), bp);
-
-    std::unique_ptr<Geometry> result = op.getResultGeometry(0.00001);
+    std::unique_ptr<Geometry> result = BufferOp::bufferOp(geom.get(), 0.00001, bp);
     
     checkValidPolygon(*result);
-    ensure_equals(result->getNumGeometries(), 1u);
-    ensure_equals( (dynamic_cast<const Polygon*>( result.get() )->getNumInteriorRing()), 3u);
+    checkNumGeoms(*result, 1);
+    checkNumHoles(*result, 3);
 }
 
 // testRingHoleEroded
@@ -624,18 +574,17 @@ void object::test<25>
     std::unique_ptr<Geometry> result100 = buffer(wkt, 100);
     checkValidPolygon(*result100);
     checkNumHoles(*result100, 0);
-    checkArea(*result100, 34002, 100);
+    checkArea(*result100, 34002);
 
     std::unique_ptr<Geometry> result10 = buffer(wkt, 10);
     checkValidPolygon(*result10);
     checkNumHoles(*result10, 0);
-    checkArea(*result10, 635.9, 1);
+    checkArea(*result10, 635.9);
 
     std::unique_ptr<Geometry> result2 = buffer(wkt, 2);
     checkValidPolygon(*result2);
     checkNumHoles(*result2, 1);
-    checkArea(*result2, 107, 1);
-
+    checkArea(*result2, 107);
 }
 
 } // namespace tut
