@@ -472,10 +472,10 @@ void object::test<19>
     std::string wkt0("MULTIPOLYGON (((30 18, 14 0, 0 13, 16 30, 30 18)), ((180 210, 60 50, 154 6, 270 40, 290 130, 250 190, 180 210)))");
     auto g0(wktreader.read(wkt0));
 
-    ensure( 2 == g0->buffer( -9 )->getNumGeometries() );
-    ensure( 1 == g0->buffer( -10 )->getNumGeometries() );
-    ensure( 1 == g0->buffer( -15 )->getNumGeometries() );
-    ensure( 1 == g0->buffer( -18 )->getNumGeometries() );
+    checkNumGeoms( *g0->buffer( -9 ), 2 );
+    checkNumGeoms( *g0->buffer( -10 ), 1 );
+    checkNumGeoms( *g0->buffer( -15 ), 1 );
+    checkNumGeoms( *g0->buffer( -18 ), 1 );
 }
 
 // Test for buffer inverted ring check optimization
