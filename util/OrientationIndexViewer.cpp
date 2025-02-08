@@ -139,7 +139,7 @@ void computeGrid(double x0, double y0, double x1, double y1, double xp, double y
     Coordinate p0(x0, y0);
     Coordinate p1(x1, y1);
 
-    std::cout << "LINESTRING ( " << x0 << " " << y0 << ", " << x1 << " " << y1 << " )" << std::endl;
+    std::cout << std::setprecision(20) << "LINESTRING ( " << x0 << " " << y0 << ", " << x1 << " " << y1 << " )" << std::endl;
     computePoint(0, 0, xp, yp, p0, p1, false, true);
     computePoint(0, 0, xp, yp, p0, p1, true, true);
     std::cout << std::endl;
