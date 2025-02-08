@@ -13,5 +13,13 @@ option(BUILD_GEOSOP "Build geosop command-line interface" ON)
 message(STATUS "GEOS: Build geosop ${BUILD_GEOSOP}")
 
 if(BUILD_GEOSOP)
-  add_subdirectory(geosop)
+
+add_executable(orientview
+  OrientationIndexViewer.cpp
+  )
+
+target_link_libraries(orientview PRIVATE geos geos_c)
+
+add_subdirectory(geosop)
+
 endif()
