@@ -16,16 +16,19 @@
 Stress test for the Orientation Index implementation.
 
 Usage: stress_orientation [ -v ]
+    -v - displays the input and results from each test
 
-A robust orientation index implementation should be consistent
+A robust orientation index implementation should be internally consistent
 - i.e. it should produce the same result for the 3 possible 
 permutations of the input coordinates which have the same orientation:
 
 p0-p1 / p2    p1-p2 / p0    p2-p0 / p1     
 
+Also, the reverse orientations should themselves be consistent, 
+and be opposite in sign to the forward orientation.
+
 The robust implementation uses DoubleDouble arithmetic and a filter to improve computation time. 
-It is compared to 
-the simple floating-point orientation computation, which is not consistent.
+It is compared to the simple Floating-Point orientation computation, which is not robust.
 --------------------------------------------------------------*/
 
 #include <geos/algorithm/Orientation.h>
@@ -78,39 +81,49 @@ char orientSym(int orientationIndex) {
     return '0';
 }
 
-void report(std::string name, int orient0, int orient1,
-    int orient2) {
-
-    std::string consistentInd = (orient0 == orient1 && orient0 == orient2) ? "  " : "<!";
-    std::cout << name << ": "
-    << orientSym(orient0) << "  "  
-    << orientSym(orient1) << "  " 
-    << orientSym(orient2) << "  "
-    << consistentInd << "  ";
-}
-
-bool isAllOrientationsEqualDD(Coordinate p0, Coordinate p1, Coordinate p2)
+bool isConsistent(std::string tag, Coordinate p0, Coordinate p1, Coordinate p2, 
+        std::function<int(Coordinate p0, Coordinate p1, Coordinate p2)> orientFunc )
 {
-    int orient0 = Orientation::index(p0, p1, p2);
-    int orient1 = Orientation::index(p1, p2, p0);
-    int orient2 = Orientation::index(p2, p0, p1);
+    int orient0 = orientFunc(p0, p1, p2);
+    int orient1 = orientFunc(p1, p2, p0);
+    int orient2 = orientFunc(p2, p0, p1);
+    bool isConsistentForward = orient0 == orient1 && orient0 == orient2;
 
-    if (isVerbose) {
-        report("DD", orient0, orient1, orient2);
+    int orientRev0 = orientFunc(p1, p0, p2);
+    int orientRev1 = orientFunc(p0, p2, p1);
+    int orientRev2 = orientFunc(p2, p1, p0);
+    bool isConsistentRev = orientRev0 == orientRev1 && orientRev0 == orientRev2;
+
+    bool isConsistent = isConsistentForward && isConsistentRev;
+    if (isConsistent) {
+        bool isOpposite = orient0 == -orientRev0;
+        isConsistent &= isOpposite;
     }
 
-    return orient0 == orient1 && orient0 == orient2;
+    if (isVerbose) {
+        std::string consistentInd = isConsistent ? "  " : "<!";
+        std::cout << tag << ": " 
+            << orientSym(orient0) << orientSym(orient1) << orientSym(orient2) << " "
+            << orientSym(orientRev0) << orientSym(orientRev1) << orientSym(orientRev2) << " "
+            << " " << consistentInd << "  ";
+    }
+    return isConsistent;
 }
 
-bool isAllOrientationsEqualFP(Coordinate p0, Coordinate p1, Coordinate p2)
+bool isConsistentDD(Coordinate p0, Coordinate p1, Coordinate p2)
 {
-    int orient0 = orientationIndexFP(p0, p1, p2);
-    int orient1 = orientationIndexFP(p1, p2, p0);
-    int orient2 = orientationIndexFP(p2, p0, p1);
-    if (isVerbose) {
-        report("FP", orient0, orient1, orient2);
-    }
-    return orient0 == orient1 && orient0 == orient2;
+    return isConsistent("FP", p0, p1, p2, 
+    [](Coordinate p0, Coordinate p1, Coordinate p2) -> int {
+        return Orientation::index(p0, p1, p2);
+    });
+}
+
+bool isConsistentFP(Coordinate p0, Coordinate p1, Coordinate p2)
+{
+    return isConsistent("FP", p0, p1, p2, 
+        [](Coordinate p0, Coordinate p1, Coordinate p2) -> int {
+            return orientationIndexFP(p0, p1, p2);
+        });
 }
 
 Coordinate randomCoord() {
@@ -126,8 +139,8 @@ void runTest()
 
     Coordinate p2 = Coordinate(LineSegment::midPoint(p0, p1));
 
-    bool isCorrectDD = isAllOrientationsEqualDD(p0, p1, p2);
-    bool isCorrectFP = isAllOrientationsEqualFP(p0, p1, p2);
+    bool isCorrectDD = isConsistentDD(p0, p1, p2);
+    bool isCorrectFP = isConsistentFP(p0, p1, p2);
 
     if (isVerbose) {
         std::cout << "   " << WKTWriter::toLineString(p0, p1) << " - " << WKTWriter::toPoint(p2)
