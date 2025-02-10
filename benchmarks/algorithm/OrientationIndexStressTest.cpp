@@ -36,6 +36,8 @@ It is compared to the simple Floating-Point orientation computation, which is no
 #include <geos/geom/LineSegment.h>
 #include <geos/io/WKTWriter.h>
 
+#include <iomanip>
+
 using namespace geos::algorithm;
 using namespace geos::geom;
 using namespace geos::io;
@@ -143,7 +145,9 @@ void runTest()
     bool isCorrectFP = isConsistentFP(p0, p1, p2);
 
     if (isVerbose) {
-        std::cout << "   " << WKTWriter::toLineString(p0, p1) << " - " << WKTWriter::toPoint(p2)
+        std::cout << std::setprecision(20) << "   " 
+            << "LINESTRING ( " << p0.x << " " << p0.y << ", " << p1.x << " " << p1.y << " )"
+            << "  - " << "POINT ( " << p2.x << " " << p2.y << " )"
             << std::endl;
     }
 
