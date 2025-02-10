@@ -112,7 +112,7 @@ bool isConsistent(std::string tag, Coordinate p0, Coordinate p1, Coordinate p2,
 
 bool isConsistentDD(Coordinate p0, Coordinate p1, Coordinate p2)
 {
-    return isConsistent("FP", p0, p1, p2, 
+    return isConsistent("DD", p0, p1, p2, 
     [](Coordinate p0, Coordinate p1, Coordinate p2) -> int {
         return Orientation::index(p0, p1, p2);
     });
