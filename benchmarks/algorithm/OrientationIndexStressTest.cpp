@@ -15,7 +15,8 @@
 /*--------------------------------------------------------------
 Stress test for the Orientation Index implementation.
 
-Usage: stress_orientation [ -v ]
+Usage: stress_orientation [ -v ] [ -d ]
+    -d - run diagonal line segment tests
     -v - displays the input and results from each test
 
 A robust orientation index implementation should be internally consistent
@@ -29,6 +30,10 @@ and be opposite in sign to the forward orientation.
 
 The robust implementation uses DoubleDouble arithmetic and a filter to improve computation time. 
 It is compared to the simple Floating-Point orientation computation, which is not robust.
+
+Two kinds of test generators are provided:
+- random line segments with midpoints
+- points at increasing decimal intervals along a diagonal line segment LINESTRING(2 0, 0 2)
 --------------------------------------------------------------*/
 
 #include <geos/algorithm/Orientation.h>
@@ -55,7 +60,9 @@ orientationIndexFP(const Coordinate& p1, const Coordinate& p2,const Coordinate& 
 }
 
 bool isVerbose = false;
+bool isDiagonalTest = false;
 
+std::size_t count;
 std::size_t failDD;
 std::size_t failFP;
 
@@ -64,6 +71,8 @@ void parseFlag(char* arg) {
     switch (flag) {
     case 'v': 
         isVerbose = true; break;
+    case 'd': 
+        isDiagonalTest = true; break;
     }
 }
 
@@ -134,13 +143,8 @@ Coordinate randomCoord() {
     return Coordinate(x, y);
 }
 
-void runTest()
+void checkTest(Coordinate p0, Coordinate p1, Coordinate p2)
 {
-    Coordinate p0 = randomCoord();
-    Coordinate p1 = randomCoord();
-
-    Coordinate p2 = Coordinate(LineSegment::midPoint(p0, p1));
-
     bool isCorrectDD = isConsistentDD(p0, p1, p2);
     bool isCorrectFP = isConsistentFP(p0, p1, p2);
 
@@ -151,27 +155,67 @@ void runTest()
             << std::endl;
     }
 
+    count++;
     if (! isCorrectDD) failDD++;
     if (! isCorrectFP) failFP++;
+}
+
+void reportStats(std::string tag = "") {
+    std::cout << tag << "Num tests: " <<  count 
+        << "  DD fail = " << failDD << " (" << round((100.0 * failDD / (double) count)) << "%)"
+        << "  FP fail = " << failFP << " (" << round((100.0 * failFP / (double) count)) << "%)"
+        << std::endl;
+}
+
+void runDiagonalTests()
+{
+    const int DIAG_SIZE = 2;
+    Coordinate p0 = Coordinate(DIAG_SIZE, 0);
+    Coordinate p1 = Coordinate(0, DIAG_SIZE);
+
+    const int MAX_PRECISION = 3;
+    int d = 10;
+    for (int i = 0; i < MAX_PRECISION; i++) {
+        int num_points = DIAG_SIZE * d;
+        for (int ix = 0; ix <= num_points; ix++) {
+            int iy = num_points - ix;
+            double x = ix / (double) d;
+            double y = iy / (double) d;
+            Coordinate p2 = Coordinate(x, y);
+            checkTest(p0, p1, p2);
+        }
+        d *= 10;
+        reportStats();
+    }
+}
+
+void runRandomTests()
+{
+    srand (static_cast <unsigned> (time(0)));
+
+    const size_t MAX_ITER = 10'000'000;
+
+    for (size_t i = 1 ; i <= MAX_ITER; i++) {
+        Coordinate p0 = randomCoord();
+        Coordinate p1 = randomCoord();
+        Coordinate p2 = Coordinate(LineSegment::midPoint(p0, p1));
+        checkTest(p0, p1, p2);
+        
+        if (i % 10'000 == 0) {
+            reportStats();
+        }
+    }
 }
 
 int main(int argc, char** argv) {
     if (argc > 1) {
         parseArgs(argc, argv);
     }
-
-    srand (static_cast <unsigned> (time(0)));
-
-    int i = 0;
-    while (true) {
-        runTest();
-        i++;
-        
-        if (i % 1000 == 0) {
-            std::cout << "Num tests: " <<  i 
-                << "  DD fail = " << failDD << " (" << (100.0 * failDD / (double) i) << "%)"
-                << "  FP fail = " << failFP << " (" << (100.0 * failFP / (double) i) << "%)"
-                << std::endl;
-        }
+    if (isDiagonalTest) {
+        runDiagonalTests();
     }
+    else {
+        runRandomTests();
+    }
+    reportStats("Final: ");
 }
