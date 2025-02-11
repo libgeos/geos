@@ -124,22 +124,22 @@ bool isConsistent(std::string tag, Coordinate p0, Coordinate p1, Coordinate p2,
 bool isConsistentDD(Coordinate p0, Coordinate p1, Coordinate p2)
 {
     return isConsistent("DD", p0, p1, p2, 
-    [](Coordinate p0, Coordinate p1, Coordinate p2) -> int {
-        return Orientation::index(p0, p1, p2);
+    [](Coordinate pt0, Coordinate pt1, Coordinate pt2) -> int {
+        return Orientation::index(pt0, pt1, pt2);
     });
 }
 
 bool isConsistentFP(Coordinate p0, Coordinate p1, Coordinate p2)
 {
     return isConsistent("FP", p0, p1, p2, 
-        [](Coordinate p0, Coordinate p1, Coordinate p2) -> int {
-            return orientationIndexFP(p0, p1, p2);
+        [](Coordinate pt0, Coordinate pt1, Coordinate pt2) -> int {
+            return orientationIndexFP(pt0, pt1, pt2);
         });
 }
 
 Coordinate randomCoord() {
-    double x = (10.0 * random()) / RAND_MAX;
-    double y = (10.0 * random()) / RAND_MAX;
+    double x = (10.0 * (double) random()) / RAND_MAX;
+    double y = (10.0 * (double) random()) / RAND_MAX;
     return Coordinate(x, y);
 }
 
@@ -162,8 +162,8 @@ void checkTest(Coordinate p0, Coordinate p1, Coordinate p2)
 
 void reportStats(std::string tag = "") {
     std::cout << tag << "Num tests: " <<  count 
-        << "  DD fail = " << failDD << " (" << round((100.0 * failDD / (double) count)) << "%)"
-        << "  FP fail = " << failFP << " (" << round((100.0 * failFP / (double) count)) << "%)"
+        << "  DD fail = " << failDD << " (" << round((100.0 * (double) failDD / (double) count)) << "%)"
+        << "  FP fail = " << failFP << " (" << round((100.0 * (double) failFP / (double) count)) << "%)"
         << std::endl;
 }
 
