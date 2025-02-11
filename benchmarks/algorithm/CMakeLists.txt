@@ -18,6 +18,9 @@ target_link_libraries(perf_unaryunion_segments geos)
 
 if (BUILD_BENCHMARKS)
 
+add_executable(stress_orientation OrientationIndexStressTest.cpp)
+target_link_libraries(stress_orientation geos)
+
 if (benchmark_FOUND)
     add_executable(perf_orientation OrientationIndexPerfTest.cpp
             ${PROJECT_SOURCE_DIR}/src/algorithm/CGAlgorithmsDD.cpp
