@@ -210,16 +210,44 @@ BufferCurveSetBuilder::addLineString(const LineString* line)
      * Singled-sided buffers currently treat rings as if they are lines.
      */
     if (coord->isRing() && ! curveBuilder.getBufferParameters().isSingleSided()) {
-        addRingBothSides(coord.get(), distance);
+        addLinearRingSides(coord.get(), distance);
     }
     else {
         std::vector<CoordinateSequence*> lineList;
         curveBuilder.getLineCurve(coord.get(), distance, lineList);
         addCurves(lineList, Location::EXTERIOR, Location::INTERIOR);
     }
-
 }
 
+/* private */
+void
+BufferCurveSetBuilder::addLinearRingSides(const CoordinateSequence* coord, double p_distance)
+{
+    /*
+     * (f "hole" side will be eroded completely, avoid generating it.
+     * This prevents hole artifacts (e.g. https://github.com/libgeos/geos/issues/1223)
+     */
+    //-- distance is assumed positive, due to previous checks
+    Envelope env;
+    coord->expandEnvelope(env);
+    bool isHoleComputed = ! isRingFullyEroded(coord, &env, true, distance);
+
+    bool isCCW = isRingCCW(coord);
+
+    bool isShellLeft = ! isCCW;
+    if (isShellLeft || isHoleComputed) {
+        addRingSide(coord, p_distance,
+                    Position::LEFT,
+                    Location::EXTERIOR, Location::INTERIOR);
+    }
+
+    bool isShellRight = isCCW;
+    if (isShellRight || isHoleComputed) {
+        addRingSide(coord, p_distance,
+                    Position::RIGHT,
+                    Location::INTERIOR, Location::EXTERIOR);
+    }
+}
 
 /*private*/
 void
@@ -257,7 +285,7 @@ BufferCurveSetBuilder::addPolygon(const Polygon* p)
         return;
     }
 
-    addRingSide(
+    addPolygonRingSide(
         shellCoord.get(),
         offsetDistance,
         offsetSide,
@@ -279,7 +307,7 @@ BufferCurveSetBuilder::addPolygon(const Polygon* p)
         // Holes are topologically labelled opposite to the shell,
         // since the interior of the polygon lies on their opposite
         // side (on the left, if the hole is oriented CCW)
-        addRingSide(
+        addPolygonRingSide(
             holeCoord.get(),
             offsetDistance,
             Position::opposite(offsetSide),
@@ -290,38 +318,7 @@ BufferCurveSetBuilder::addPolygon(const Polygon* p)
 
 /* private */
 void
-BufferCurveSetBuilder::addRingBothSides(const CoordinateSequence* coord, double p_distance)
-{
-    /*
-     * (f "hole" side will be eroded completely, avoid generating it.
-     * This prevents hole artifacts (e.g. https://github.com/libgeos/geos/issues/1223)
-     */
-    //-- distance is assumed positive, due to previous checks
-    Envelope env;
-    coord->expandEnvelope(env);
-    bool isHoleComputed = ! isRingFullyEroded(coord, &env, true, distance);
-
-    bool isCCW = isRingCCW(coord);
-
-    bool isShellLeft = ! isCCW;
-    if (isShellLeft || isHoleComputed) {
-        addRingSide(coord, p_distance,
-                    Position::LEFT,
-                    Location::EXTERIOR, Location::INTERIOR);
-    }
-
-    bool isShellRight = isCCW;
-    if (isShellRight || isHoleComputed) {
-        addRingSide(coord, p_distance,
-                    Position::RIGHT,
-                    Location::INTERIOR, Location::EXTERIOR);
-    }
-}
-
-
-/* private */
-void
-BufferCurveSetBuilder::addRingSide(const CoordinateSequence* coord,
+BufferCurveSetBuilder::addPolygonRingSide(const CoordinateSequence* coord,
                                       double offsetDistance, int side, geom::Location cwLeftLoc, geom::Location cwRightLoc)
 {
 
@@ -353,6 +350,14 @@ BufferCurveSetBuilder::addRingSide(const CoordinateSequence* coord,
 #endif
         side = Position::opposite(side);
     }
+    addRingSide(coord, offsetDistance, side, leftLoc, rightLoc);
+}
+
+/* private */
+void
+BufferCurveSetBuilder::addRingSide(const CoordinateSequence* coord,
+                                      double offsetDistance, int side, geom::Location leftLoc, geom::Location rightLoc)
+{
     std::vector<CoordinateSequence*> lineList;
     curveBuilder.getRingCurve(coord, side, offsetDistance, lineList);
     // ASSERT: lineList contains exactly 1 curve (this is the JTS semantics)
