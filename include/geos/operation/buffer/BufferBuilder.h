@@ -56,10 +56,9 @@ class PlanarGraph;
 namespace operation {
 namespace buffer {
 class BufferSubgraph;
-}
-namespace overlay {
 class PolygonBuilder;
 }
+
 }
 }
 
@@ -233,7 +232,7 @@ private:
      *        the final polygons
      */
     void buildSubgraphs(const std::vector<BufferSubgraph*>& subgraphList,
-                        overlay::PolygonBuilder& polyBuilder);
+                        PolygonBuilder& polyBuilder);
 
     /// \brief
     /// Return the externally-set noding::Noder OR a newly created
