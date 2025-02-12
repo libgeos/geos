@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=11"/>
 <meta name="generator" content="Doxygen 1.9.8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>GEOS: geos::operation::overlay::MinimalEdgeRing Class Reference</title>
+<title>GEOS: geos::operation::buffer::MaximalEdgeRing Class Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -39,40 +39,54 @@ $(function() {
 <div id="main-nav"></div>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="namespacegeos.html">geos</a></li><li class="navelem"><a class="el" href="namespacegeos_1_1operation.html">operation</a></li><li class="navelem"><a class="el" href="namespacegeos_1_1operation_1_1overlay.html">overlay</a></li><li class="navelem"><a class="el" href="classgeos_1_1operation_1_1overlay_1_1MinimalEdgeRing.html">MinimalEdgeRing</a></li>  </ul>
+<li class="navelem"><a class="el" href="namespacegeos.html">geos</a></li><li class="navelem"><a class="el" href="namespacegeos_1_1operation.html">operation</a></li><li class="navelem"><a class="el" href="namespacegeos_1_1operation_1_1buffer.html">buffer</a></li><li class="navelem"><a class="el" href="classgeos_1_1operation_1_1buffer_1_1MaximalEdgeRing.html">MaximalEdgeRing</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="classgeos_1_1operation_1_1overlay_1_1MinimalEdgeRing-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">geos::operation::overlay::MinimalEdgeRing Class Reference</div></div>
+<a href="classgeos_1_1operation_1_1buffer_1_1MaximalEdgeRing-members.html">List of all members</a>  </div>
+  <div class="headertitle"><div class="title">geos::operation::buffer::MaximalEdgeRing Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>A ring of <a class="el" href="classgeos_1_1geomgraph_1_1Edge.html">Edges</a> with the property that no node has degree greater than 2.  
- <a href="classgeos_1_1operation_1_1overlay_1_1MinimalEdgeRing.html#details">More...</a></p>
+<p>A ring of <a class="el" href="classgeos_1_1geomgraph_1_1DirectedEdge.html">DirectedEdges</a> which may contain nodes of degree &gt; 2.  
+ <a href="classgeos_1_1operation_1_1buffer_1_1MaximalEdgeRing.html#details">More...</a></p>
 
-<p><code>#include &lt;<a class="el" href="overlay_2MinimalEdgeRing_8h_source.html">MinimalEdgeRing.h</a>&gt;</code></p>
+<p><code>#include &lt;<a class="el" href="buffer_2MaximalEdgeRing_8h_source.html">MaximalEdgeRing.h</a>&gt;</code></p>
 <div class="dynheader">
-Inheritance diagram for geos::operation::overlay::MinimalEdgeRing:</div>
+Inheritance diagram for geos::operation::buffer::MaximalEdgeRing:</div>
 <div class="dyncontent">
  <div class="center">
-  <img src="classgeos_1_1operation_1_1overlay_1_1MinimalEdgeRing.png" usemap="#geos::operation::overlay::MinimalEdgeRing_map" alt=""/>
-  <map id="geos::operation::overlay::MinimalEdgeRing_map" name="geos::operation::overlay::MinimalEdgeRing_map">
-<area href="classgeos_1_1geomgraph_1_1EdgeRing.html" alt="geos::geomgraph::EdgeRing" shape="rect" coords="0,0,250,24"/>
+  <img src="classgeos_1_1operation_1_1buffer_1_1MaximalEdgeRing.png" usemap="#geos::operation::buffer::MaximalEdgeRing_map" alt=""/>
+  <map id="geos::operation::buffer::MaximalEdgeRing_map" name="geos::operation::buffer::MaximalEdgeRing_map">
+<area href="classgeos_1_1geomgraph_1_1EdgeRing.html" alt="geos::geomgraph::EdgeRing" shape="rect" coords="0,0,244,24"/>
   </map>
 </div></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a4726ad47a9952f1f89c56f49e520c529" id="r_a4726ad47a9952f1f89c56f49e520c529"><td class="memItemLeft" align="right" valign="top"><a id="a4726ad47a9952f1f89c56f49e520c529" name="a4726ad47a9952f1f89c56f49e520c529"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>MinimalEdgeRing</b> (<a class="el" href="classgeos_1_1geomgraph_1_1DirectedEdge.html">geomgraph::DirectedEdge</a> *start, const <a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html">geom::GeometryFactory</a> *geometryFactory)</td></tr>
-<tr class="separator:a4726ad47a9952f1f89c56f49e520c529"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aea5f733a10a4348f115e41bce016203b" id="r_aea5f733a10a4348f115e41bce016203b"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgeos_1_1geomgraph_1_1DirectedEdge.html">geomgraph::DirectedEdge</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1overlay_1_1MinimalEdgeRing.html#aea5f733a10a4348f115e41bce016203b">getNext</a> (<a class="el" href="classgeos_1_1geomgraph_1_1DirectedEdge.html">geomgraph::DirectedEdge</a> *de) override</td></tr>
-<tr class="separator:aea5f733a10a4348f115e41bce016203b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6be978e9f8da6af0bd4210760f55810a" id="r_a6be978e9f8da6af0bd4210760f55810a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1overlay_1_1MinimalEdgeRing.html#a6be978e9f8da6af0bd4210760f55810a">setEdgeRing</a> (<a class="el" href="classgeos_1_1geomgraph_1_1DirectedEdge.html">geomgraph::DirectedEdge</a> *de, <a class="el" href="classgeos_1_1geomgraph_1_1EdgeRing.html">geomgraph::EdgeRing</a> *er) override</td></tr>
-<tr class="separator:a6be978e9f8da6af0bd4210760f55810a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6ff882b5caa14b2c1498402c4a2f504f" id="r_a6ff882b5caa14b2c1498402c4a2f504f"><td class="memItemLeft" align="right" valign="top"><a id="a6ff882b5caa14b2c1498402c4a2f504f" name="a6ff882b5caa14b2c1498402c4a2f504f"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>MaximalEdgeRing</b> (<a class="el" href="classgeos_1_1geomgraph_1_1DirectedEdge.html">geomgraph::DirectedEdge</a> *start, const <a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html">geom::GeometryFactory</a> *geometryFactory)</td></tr>
+<tr class="separator:a6ff882b5caa14b2c1498402c4a2f504f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae1e44f31e325bb699fceb87338c27338" id="r_ae1e44f31e325bb699fceb87338c27338"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgeos_1_1geomgraph_1_1DirectedEdge.html">geomgraph::DirectedEdge</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1buffer_1_1MaximalEdgeRing.html#ae1e44f31e325bb699fceb87338c27338">getNext</a> (<a class="el" href="classgeos_1_1geomgraph_1_1DirectedEdge.html">geomgraph::DirectedEdge</a> *de) override</td></tr>
+<tr class="separator:ae1e44f31e325bb699fceb87338c27338"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af74940f19d4b5644c5d37c7adc54fb17" id="r_af74940f19d4b5644c5d37c7adc54fb17"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1buffer_1_1MaximalEdgeRing.html#af74940f19d4b5644c5d37c7adc54fb17">setEdgeRing</a> (<a class="el" href="classgeos_1_1geomgraph_1_1DirectedEdge.html">geomgraph::DirectedEdge</a> *de, <a class="el" href="classgeos_1_1geomgraph_1_1EdgeRing.html">geomgraph::EdgeRing</a> *er) override</td></tr>
+<tr class="separator:af74940f19d4b5644c5d37c7adc54fb17"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95cf7f709c5cd9f1be381dad1b50125f" id="r_a95cf7f709c5cd9f1be381dad1b50125f"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classgeos_1_1operation_1_1buffer_1_1MinimalEdgeRing.html">MinimalEdgeRing</a> * &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1buffer_1_1MaximalEdgeRing.html#a95cf7f709c5cd9f1be381dad1b50125f">buildMinimalRings</a> ()</td></tr>
+<tr class="memdesc:a95cf7f709c5cd9f1be381dad1b50125f"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function returns a newly allocated vector of pointers to newly allocated <a class="el" href="classgeos_1_1operation_1_1buffer_1_1MinimalEdgeRing.html" title="A ring of Edges with the property that no node has degree greater than 2.">MinimalEdgeRing</a> objects.  <br /></td></tr>
+<tr class="separator:a95cf7f709c5cd9f1be381dad1b50125f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a525087bf5d55fdece2fe010257cfc7b6" id="r_a525087bf5d55fdece2fe010257cfc7b6"><td class="memItemLeft" align="right" valign="top"><a id="a525087bf5d55fdece2fe010257cfc7b6" name="a525087bf5d55fdece2fe010257cfc7b6"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>buildMinimalRings</b> (std::vector&lt; <a class="el" href="classgeos_1_1operation_1_1buffer_1_1MinimalEdgeRing.html">MinimalEdgeRing</a> * &gt; &amp;minEdgeRings)</td></tr>
+<tr class="memdesc:a525087bf5d55fdece2fe010257cfc7b6"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function pushes pointers to newly allocated <a class="el" href="classgeos_1_1operation_1_1buffer_1_1MinimalEdgeRing.html" title="A ring of Edges with the property that no node has degree greater than 2.">MinimalEdgeRing</a> objects to the provided vector. <br /></td></tr>
+<tr class="separator:a525087bf5d55fdece2fe010257cfc7b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae4ad881e4d296bc381194e2c8ff776ef" id="r_ae4ad881e4d296bc381194e2c8ff776ef"><td class="memItemLeft" align="right" valign="top"><a id="ae4ad881e4d296bc381194e2c8ff776ef" name="ae4ad881e4d296bc381194e2c8ff776ef"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>buildMinimalRings</b> (std::vector&lt; EdgeRing * &gt; &amp;minEdgeRings)</td></tr>
+<tr class="separator:ae4ad881e4d296bc381194e2c8ff776ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a81bbf7bdcc2b2c352705d79cde275c0d" id="r_a81bbf7bdcc2b2c352705d79cde275c0d"><td class="memItemLeft" align="right" valign="top"><a id="a81bbf7bdcc2b2c352705d79cde275c0d" name="a81bbf7bdcc2b2c352705d79cde275c0d"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>linkDirectedEdgesForMinimalEdgeRings</b> ()</td></tr>
+<tr class="memdesc:a81bbf7bdcc2b2c352705d79cde275c0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">For all nodes in this EdgeRing, link the DirectedEdges at the node to form minimalEdgeRings. <br /></td></tr>
+<tr class="separator:a81bbf7bdcc2b2c352705d79cde275c0d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classgeos_1_1geomgraph_1_1EdgeRing"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classgeos_1_1geomgraph_1_1EdgeRing')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classgeos_1_1geomgraph_1_1EdgeRing.html">geos::geomgraph::EdgeRing</a></td></tr>
 <tr class="memitem:a602139cc991a9e9b928afccdbed9254a inherit pub_methods_classgeos_1_1geomgraph_1_1EdgeRing" id="r_a602139cc991a9e9b928afccdbed9254a"><td class="memItemLeft" align="right" valign="top">
 &#160;</td><td class="memItemRight" valign="bottom"><b>EdgeRing</b> (<a class="el" href="classgeos_1_1geomgraph_1_1DirectedEdge.html">DirectedEdge</a> *newStart, const <a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html">geom::GeometryFactory</a> *newGeometryFactory)</td></tr>
@@ -145,12 +159,38 @@ std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geomgraph_1
 <tr class="separator:a220550825d8c0a03be020dc905228a1a inherit pro_attribs_classgeos_1_1geomgraph_1_1EdgeRing"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>A ring of <a class="el" href="classgeos_1_1geomgraph_1_1Edge.html">Edges</a> with the property that no node has degree greater than 2. </p>
-<p>These are the form of rings required to represent polygons under the OGC SFS spatial data model.</p>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1operation_1_1overlay_1_1MaximalEdgeRing.html" title="A ring of DirectedEdges which may contain nodes of degree &gt; 2.">operation::overlay::MaximalEdgeRing</a> </dd></dl>
+<div class="textblock"><p>A ring of <a class="el" href="classgeos_1_1geomgraph_1_1DirectedEdge.html">DirectedEdges</a> which may contain nodes of degree &gt; 2. </p>
+<p>A <a class="el" href="classgeos_1_1operation_1_1buffer_1_1MaximalEdgeRing.html" title="A ring of DirectedEdges which may contain nodes of degree &gt; 2.">MaximalEdgeRing</a> may represent two different spatial entities:</p>
+<ul>
+<li>a single polygon possibly containing inversions (if the ring is oriented CW)</li>
+<li>a single hole possibly containing exversions (if the ring is oriented CCW)</li>
+</ul>
+<p>If the <a class="el" href="classgeos_1_1operation_1_1buffer_1_1MaximalEdgeRing.html" title="A ring of DirectedEdges which may contain nodes of degree &gt; 2.">MaximalEdgeRing</a> represents a polygon, the interior of the polygon is strongly connected.</p>
+<p>These are the form of rings used to define polygons under some spatial data models. However, under the OGC SFS model, <a class="el" href="classgeos_1_1operation_1_1buffer_1_1MinimalEdgeRing.html">MinimalEdgeRings</a> are required. A <a class="el" href="classgeos_1_1operation_1_1buffer_1_1MaximalEdgeRing.html" title="A ring of DirectedEdges which may contain nodes of degree &gt; 2.">MaximalEdgeRing</a> can be converted to a list of MinimalEdgeRings using the <code><a class="el" href="classgeos_1_1operation_1_1buffer_1_1MaximalEdgeRing.html#a95cf7f709c5cd9f1be381dad1b50125f">buildMinimalRings()</a></code> method.</p>
+<dl class="section see"><dt>See also</dt><dd>com.vividsolutions.jts.operation.overlay.MinimalEdgeRing </dd></dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="aea5f733a10a4348f115e41bce016203b" name="aea5f733a10a4348f115e41bce016203b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aea5f733a10a4348f115e41bce016203b">&#9670;&#160;</a></span>getNext()</h2>
+<a id="a95cf7f709c5cd9f1be381dad1b50125f" name="a95cf7f709c5cd9f1be381dad1b50125f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95cf7f709c5cd9f1be381dad1b50125f">&#9670;&#160;</a></span>buildMinimalRings()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; <a class="el" href="classgeos_1_1operation_1_1buffer_1_1MinimalEdgeRing.html">MinimalEdgeRing</a> * &gt; * geos::operation::buffer::MaximalEdgeRing::buildMinimalRings </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This function returns a newly allocated vector of pointers to newly allocated <a class="el" href="classgeos_1_1operation_1_1buffer_1_1MinimalEdgeRing.html" title="A ring of Edges with the property that no node has degree greater than 2.">MinimalEdgeRing</a> objects. </p>
+<dl class="deprecated"><dt><b><a class="el" href="deprecated.html#_deprecated000008">Deprecated:</a></b></dt><dd>pass the vector yourself instead </dd></dl>
+
+</div>
+</div>
+<a id="ae1e44f31e325bb699fceb87338c27338" name="ae1e44f31e325bb699fceb87338c27338"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae1e44f31e325bb699fceb87338c27338">&#9670;&#160;</a></span>getNext()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -159,7 +199,7 @@ std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geomgraph_1
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classgeos_1_1geomgraph_1_1DirectedEdge.html">geomgraph::DirectedEdge</a> * geos::operation::overlay::MinimalEdgeRing::getNext </td>
+          <td class="memname"><a class="el" href="classgeos_1_1geomgraph_1_1DirectedEdge.html">geomgraph::DirectedEdge</a> * geos::operation::buffer::MaximalEdgeRing::getNext </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classgeos_1_1geomgraph_1_1DirectedEdge.html">geomgraph::DirectedEdge</a> *&#160;</td>
           <td class="paramname"><em>de</em></td><td>)</td>
@@ -168,7 +208,7 @@ std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geomgraph_1
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -177,8 +217,8 @@ std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geomgraph_1
 
 </div>
 </div>
-<a id="a6be978e9f8da6af0bd4210760f55810a" name="a6be978e9f8da6af0bd4210760f55810a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6be978e9f8da6af0bd4210760f55810a">&#9670;&#160;</a></span>setEdgeRing()</h2>
+<a id="af74940f19d4b5644c5d37c7adc54fb17" name="af74940f19d4b5644c5d37c7adc54fb17"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af74940f19d4b5644c5d37c7adc54fb17">&#9670;&#160;</a></span>setEdgeRing()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -187,7 +227,7 @@ std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geomgraph_1
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">void geos::operation::overlay::MinimalEdgeRing::setEdgeRing </td>
+          <td class="memname">void geos::operation::buffer::MaximalEdgeRing::setEdgeRing </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classgeos_1_1geomgraph_1_1DirectedEdge.html">geomgraph::DirectedEdge</a> *&#160;</td>
           <td class="paramname"><em>de</em>, </td>
@@ -206,7 +246,7 @@ std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geomgraph_1
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
@@ -216,7 +256,7 @@ std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geomgraph_1
 </div>
 </div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li><a class="el" href="overlay_2MinimalEdgeRing_8h_source.html">overlay/MinimalEdgeRing.h</a></li>
+<li><a class="el" href="buffer_2MaximalEdgeRing_8h_source.html">buffer/MaximalEdgeRing.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

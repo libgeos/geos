@@ -44,11 +44,11 @@ $(document).ready(function() { init_codefold(0); });
 </script>
 <div id="nav-path" class="navpath">
   <ul>
-<li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_0bc14b2fb119a11b6a0f32f4d350db61.html">geos</a></li><li class="navelem"><a class="el" href="dir_cc91dd2a378845bf7e3e6edb554afff8.html">operation</a></li><li class="navelem"><a class="el" href="dir_96d0e52ddb95397c192e273e98580ca1.html">overlay</a></li>  </ul>
+<li class="navelem"><a class="el" href="dir_d44c64559bbebec7f509842c48db8b23.html">include</a></li><li class="navelem"><a class="el" href="dir_0bc14b2fb119a11b6a0f32f4d350db61.html">geos</a></li><li class="navelem"><a class="el" href="dir_cc91dd2a378845bf7e3e6edb554afff8.html">operation</a></li><li class="navelem"><a class="el" href="dir_2f5cc8550fac9323e9b033a7d7316722.html">buffer</a></li>  </ul>
 </div>
 </div><!-- top -->
 <div class="header">
-  <div class="headertitle"><div class="title">MinimalEdgeRing.h</div></div>
+  <div class="headertitle"><div class="title">buffer/MinimalEdgeRing.h</div></div>
 </div><!--header-->
 <div class="contents">
 <div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="comment">/**********************************************************************</span></div>
@@ -92,17 +92,17 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
 <div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacegeos.html">geos</a> {</div>
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="keyword">namespace </span>operation { <span class="comment">// geos::operation</span></div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="keyword">namespace </span>overlay { <span class="comment">// geos::operation::overlay</span></div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="keyword">namespace </span>buffer { <span class="comment">// geos::operation::buffer</span></div>
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
 <div class="foldopen" id="foldopen00054" data-start="{" data-end="};">
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1overlay_1_1MinimalEdgeRing.html">   54</a></span><span class="keyword">class </span>GEOS_DLL <a class="code hl_class" href="classgeos_1_1operation_1_1overlay_1_1MinimalEdgeRing.html">MinimalEdgeRing</a>: <span class="keyword">public</span> <a class="code hl_class" href="classgeos_1_1geomgraph_1_1EdgeRing.html">geomgraph::EdgeRing</a> {</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1buffer_1_1MinimalEdgeRing.html">   54</a></span><span class="keyword">class </span>GEOS_DLL <a class="code hl_class" href="classgeos_1_1operation_1_1buffer_1_1MinimalEdgeRing.html">MinimalEdgeRing</a>: <span class="keyword">public</span> <a class="code hl_class" href="classgeos_1_1geomgraph_1_1EdgeRing.html">geomgraph::EdgeRing</a> {</div>
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span><span class="keyword">public</span>:</div>
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    <a class="code hl_class" href="classgeos_1_1operation_1_1overlay_1_1MinimalEdgeRing.html">MinimalEdgeRing</a>(<a class="code hl_class" href="classgeos_1_1geomgraph_1_1DirectedEdge.html">geomgraph::DirectedEdge</a>* start,</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    <a class="code hl_class" href="classgeos_1_1operation_1_1buffer_1_1MinimalEdgeRing.html">MinimalEdgeRing</a>(<a class="code hl_class" href="classgeos_1_1geomgraph_1_1DirectedEdge.html">geomgraph::DirectedEdge</a>* start,</div>
 <div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>                    <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1GeometryFactory.html">geom::GeometryFactory</a>* geometryFactory);</div>
 <div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    <a class="code hl_class" href="classgeos_1_1operation_1_1overlay_1_1MinimalEdgeRing.html">~MinimalEdgeRing</a>()<span class="keyword"> override </span>{};</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    <a class="code hl_class" href="classgeos_1_1operation_1_1buffer_1_1MinimalEdgeRing.html">~MinimalEdgeRing</a>()<span class="keyword"> override </span>{};</div>
 <div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
 <div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    <a class="code hl_class" href="classgeos_1_1geomgraph_1_1DirectedEdge.html">geomgraph::DirectedEdge</a>* getNext(<a class="code hl_class" href="classgeos_1_1geomgraph_1_1DirectedEdge.html">geomgraph::DirectedEdge</a>* de)<span class="keyword"> override</span></div>
 <div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span><span class="keyword">    </span>{</div>
@@ -119,14 +119,14 @@ $(document).ready(function() { init_codefold(0); });
 </div>
 <div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
 <div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span> </div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>} <span class="comment">// namespace geos::operation::overlay</span></div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>} <span class="comment">// namespace geos::operation::buffer</span></div>
 <div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>} <span class="comment">// namespace geos::operation</span></div>
 <div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>} <span class="comment">// namespace geos</span></div>
 <div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span> </div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1GeometryFactory_html"><div class="ttname"><a href="classgeos_1_1geom_1_1GeometryFactory.html">geos::geom::GeometryFactory</a></div><div class="ttdoc">Supplies a set of utility methods for building Geometry objects from CoordinateSequence or other Geom...</div><div class="ttdef"><b>Definition</b> GeometryFactory.h:70</div></div>
 <div class="ttc" id="aclassgeos_1_1geomgraph_1_1DirectedEdge_html"><div class="ttname"><a href="classgeos_1_1geomgraph_1_1DirectedEdge.html">geos::geomgraph::DirectedEdge</a></div><div class="ttdoc">A directed EdgeEnd.</div><div class="ttdef"><b>Definition</b> geomgraph/DirectedEdge.h:42</div></div>
 <div class="ttc" id="aclassgeos_1_1geomgraph_1_1EdgeRing_html"><div class="ttname"><a href="classgeos_1_1geomgraph_1_1EdgeRing.html">geos::geomgraph::EdgeRing</a></div><div class="ttdef"><b>Definition</b> geomgraph/EdgeRing.h:57</div></div>
-<div class="ttc" id="aclassgeos_1_1operation_1_1overlay_1_1MinimalEdgeRing_html"><div class="ttname"><a href="classgeos_1_1operation_1_1overlay_1_1MinimalEdgeRing.html">geos::operation::overlay::MinimalEdgeRing</a></div><div class="ttdoc">A ring of Edges with the property that no node has degree greater than 2.</div><div class="ttdef"><b>Definition</b> MinimalEdgeRing.h:54</div></div>
+<div class="ttc" id="aclassgeos_1_1operation_1_1buffer_1_1MinimalEdgeRing_html"><div class="ttname"><a href="classgeos_1_1operation_1_1buffer_1_1MinimalEdgeRing.html">geos::operation::buffer::MinimalEdgeRing</a></div><div class="ttdoc">A ring of Edges with the property that no node has degree greater than 2.</div><div class="ttdef"><b>Definition</b> buffer/MinimalEdgeRing.h:54</div></div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition</b> geos.h:39</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
