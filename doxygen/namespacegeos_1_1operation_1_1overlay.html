@@ -43,30 +43,12 @@ $(function() {
 </div>
 </div><!-- top -->
 <div class="header">
-  <div class="summary">
-<a href="#nested-classes">Classes</a>  </div>
   <div class="headertitle"><div class="title">geos::operation::overlay Namespace Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
 <p>Contains classes that perform a topological overlay to compute boolean spatial functions.  
 <a href="namespacegeos_1_1operation_1_1overlay.html#details">More...</a></p>
-<table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
-Classes</h2></td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1overlay_1_1MaximalEdgeRing.html">MaximalEdgeRing</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A ring of <a class="el" href="classgeos_1_1geomgraph_1_1DirectedEdge.html">DirectedEdges</a> which may contain nodes of degree &gt; 2.  <a href="classgeos_1_1operation_1_1overlay_1_1MaximalEdgeRing.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1overlay_1_1MinimalEdgeRing.html">MinimalEdgeRing</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A ring of <a class="el" href="classgeos_1_1geomgraph_1_1Edge.html">Edges</a> with the property that no node has degree greater than 2.  <a href="classgeos_1_1operation_1_1overlay_1_1MinimalEdgeRing.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1overlay_1_1OverlayNodeFactory.html">OverlayNodeFactory</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates nodes for use in the <a class="el" href="classgeos_1_1geomgraph_1_1PlanarGraph.html" title="Represents a directed graph which is embeddable in a planar surface.">geomgraph::PlanarGraph</a> constructed during overlay operations. NOTE: also used by <a class="el" href="namespacegeos_1_1operation_1_1valid.html" title="Provides classes for testing the validity of geometries.">operation::valid</a>.  <a href="classgeos_1_1operation_1_1overlay_1_1OverlayNodeFactory.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1overlay_1_1PolygonBuilder.html">PolygonBuilder</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Forms Polygon out of a graph of <a class="el" href="classgeos_1_1geomgraph_1_1DirectedEdge.html" title="A directed EdgeEnd.">geomgraph::DirectedEdge</a>.  <a href="classgeos_1_1operation_1_1overlay_1_1PolygonBuilder.html#details">More...</a><br /></td></tr>
-<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Contains classes that perform a topological overlay to compute boolean spatial functions. </p>
 <p>The Overlay Algorithm is used in spatial analysis methods for computing set-theoretic operations (boolean combinations) of input <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometrys</a>. The algorithm for computing the overlay uses the intersection operations supported by topology graphs. To compute an overlay it is necessary to explicitly compute the resultant graph formed by the computed intersections.</p>
