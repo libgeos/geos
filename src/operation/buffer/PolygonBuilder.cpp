@@ -295,6 +295,9 @@ PolygonBuilder::placeFreeHoles(std::vector<FastPIPRing>& newShellList,
             if(shell != nullptr) {
                 hole->setShell(shell);
             }
+            else {
+                delete hole;
+            }
 
         }
     }
