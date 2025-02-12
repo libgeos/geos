@@ -29,16 +29,33 @@ namespace quadedge {
 
 geom::Location
 TrianglePredicate::isInCircleNonRobust(
-    const CoordinateXY& a, const CoordinateXY& b, const CoordinateXY& c,
-    const CoordinateXY& p)
+    const CoordinateXY& p, const CoordinateXY& q, const CoordinateXY& r,
+    const CoordinateXY& t)
 {
-    auto det =
-        (a.x * a.x + a.y * a.y) * triArea(b, c, p)
-        - (b.x * b.x + b.y * b.y) * triArea(a, c, p)
-        + (c.x * c.x + c.y * c.y) * triArea(a, b, p)
-        - (p.x * p.x + p.y * p.y) * triArea(a, b, c);
-
-    return det > 0 ? geom::Location::EXTERIOR : (det < 0 ? geom::Location::INTERIOR : geom::Location::BOUNDARY);
+    // The following expression is based on a simplification of the more
+    // well-known det(ax-cx, ay-cy, (ax-cx)^2 + (ay-cy)^2, ...) found in
+    // https://github.com/CGAL/cgal/blob/e871025f364360a15671f6e825127df6207afa16/Cartesian_kernel/include/CGAL/predicates/kernel_ftC2.h#L495
+    auto qpx = q.x - p.x;
+    auto qpy = q.y - p.y;
+    auto rpx = r.x - p.x;
+    auto rpy = r.y - p.y;
+    auto tpx = t.x - p.x;
+    auto tpy = t.y - p.y;
+    auto tqx = t.x - q.x;
+    auto tqy = t.y - q.y;
+    auto rqx = r.x - q.x;
+    auto rqy = r.y - q.y;
+    auto qpxtpy = qpx * tpy;
+    auto qpytpx = qpy * tpx;
+    auto tpxtqx = tpx * tqx;
+    auto tpytqy = tpy * tqy;
+    auto qpxrpy = qpx * rpy;
+    auto qpyrpx = qpy * rpx;
+    auto rpxrqx = rpx * rqx;
+    auto rpyrqy = rpy * rqy;
+    auto det = (qpxtpy - qpytpx) * (rpxrqx + rpyrqy)
+               - (qpxrpy - qpyrpx) * (tpxtqx + tpytqy);
+    return static_cast<geom::Location>( (det > 0) - (det < 0) + 1 );
 }
 
 geom::Location
@@ -91,11 +108,45 @@ TrianglePredicate::triArea(const CoordinateXY& a,
 
 geom::Location
 TrianglePredicate::isInCircleRobust(
-    const CoordinateXY& a, const CoordinateXY& b, const CoordinateXY& c,
-    const CoordinateXY& p)
+    const CoordinateXY& q, const CoordinateXY& p, const CoordinateXY& r,
+    const CoordinateXY& t)
 {
-    // This implementation is not robust, name is ported from JTS.
-    return isInCircleNormalized(a, b, c, p);
+    // This implementation is not robust and defaults to BOUNDARY in case of
+    // uncertainty arising from floating-point round-off errors or overflow.
+    // There merits of this approach are discussed in
+    // https://github.com/libgeos/geos/pull/1162
+    // The source for the below expression is given in isInCircleNonRobust(...)
+    auto qpx = q.x - p.x;
+    auto qpy = q.y - p.y;
+    auto rpx = r.x - p.x;
+    auto rpy = r.y - p.y;
+    auto tpx = t.x - p.x;
+    auto tpy = t.y - p.y;
+    auto tqx = t.x - q.x;
+    auto tqy = t.y - q.y;
+    auto rqx = r.x - q.x;
+    auto rqy = r.y - q.y;
+    auto qpxtpy = qpx * tpy;
+    auto qpytpx = qpy * tpx;
+    auto tpxtqx = tpx * tqx;
+    auto tpytqy = tpy * tqy;
+    auto qpxrpy = qpx * rpy;
+    auto qpyrpx = qpy * rpx;
+    auto rpxrqx = rpx * rqx;
+    auto rpyrqy = rpy * rqy;
+    auto det = (qpxtpy - qpytpx) * (rpxrqx + rpyrqy)
+               - (qpxrpy - qpyrpx) * (tpxtqx + tpytqy);
+    // The following error bound computation is based on the publication
+    // https://doi.org/10.1007/s10543-023-00975-x
+    // It can be replicated by modifying the example given in the accompanying
+    // repository's https://zenodo.org/records/7539355 incircle.ipynb to render
+    // the error bound for the above incircle expression.
+    auto deterror = ((std::abs(qpxtpy) + std::abs(qpytpx))
+                    * (std::abs(rpxrqx) + std::abs(rpyrqy))
+                    + (std::abs(qpxrpy) + std::abs(qpyrpx))
+                    * (std::abs(tpxtqx) + std::abs(tpytqy)))
+                    * 9.99200719823023e-16;
+    return static_cast<geom::Location>( (det > deterror) - (det < -deterror) + 1 );
 }
 
 } // namespace geos.triangulate.quadedge
