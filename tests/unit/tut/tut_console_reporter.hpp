@@ -149,8 +149,8 @@ public:
                 assert( (tr.result != tut::test_result::dummy) && "Should never be called");
         } // switch
 
-        if ( (tr.result != tut::test_result::ok) &&
-             (tr.result != tut::test_result::skipped) )
+        if ( (tr.result != tut::test_result::ok) /*&&
+             (tr.result != tut::test_result::skipped) */)
         {
             not_passed.push_back(tr);
         }
@@ -258,7 +258,7 @@ public:
 
     bool all_ok() const override
     {
-        return not_passed.empty();
+        return not_passed.size() == static_cast<std::vector<test_result>::size_type>(skipped_count);
     }
 
 private:

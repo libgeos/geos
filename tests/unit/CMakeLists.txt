@@ -29,7 +29,7 @@ foreach(_testfile ${_testfiles})
     if (NOT ${_testname} MATCHES "^capi::")
       string(CONCAT _testname "geos::" ${_testname})
     endif()
-    add_test(NAME unit-${_cmake_testname} COMMAND test_geos_unit ${_testname})
+    add_test(NAME unit-${_cmake_testname} COMMAND test_geos_unit ${_testname} "--data" "${CMAKE_CURRENT_LIST_DIR}/../resources")
 endforeach()
 
 # Run all the unit tests in one go, for faster memory checking
