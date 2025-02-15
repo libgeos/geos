@@ -33,6 +33,19 @@ struct test_wktreader_data {
 
     typedef std::unique_ptr<geos::geom::Geometry> GeomPtr;
 
+    struct test_wktreader_strict_mode {
+        test_wktreader_data         *data;
+        test_wktreader_strict_mode(test_wktreader_data *p):data(p)
+        {
+          data->wktreader.setStrictMode(true);
+        }
+
+        ~test_wktreader_strict_mode()
+        {
+          data->wktreader.setStrictMode(false);
+        }
+    };
+
     test_wktreader_data()
         :
         pm(1.0),
@@ -471,6 +484,31 @@ void object::test<24>
     GeomPtr geom(wktreader.read("MULTIPOINT( EMPTY, (10 10), (20 20))"));
 
     ensure_equals(geom->getNumGeometries(), 3u);
+}
+
+// Raise exception on strict mode
+template<>
+template<>
+void object::test<25>
+()
+{
+    struct test_wktreader_strict_mode mode(this);
+    ensure_parseexception("POIN(1 1)");
+    ensure_parseexception("POINTx(1 1)");
+    ensure_parseexception("POINTxy(1 1)");
+    ensure_parseexception("POINTabc(1 1)");
+    ensure_parseexception("POINTZMc(1 1)");
+    ensure_parseexception("POINTaZM(1 1)");
+    ensure_parseexception("POINT Z M EMPTY");
+}
+
+// To make sure that strict mode has been restored no matter any previous test case has been failed or not
+template<>
+template<>
+void object::test<26>
+()
+{
+    ensure_dimension("POINT Z M EMPTY", 4);
 }
 
 } // namespace tut

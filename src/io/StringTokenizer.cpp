@@ -30,11 +30,12 @@ namespace geos {
 namespace io { // geos.io
 
 /*public*/
-StringTokenizer::StringTokenizer(const string& txt)
+StringTokenizer::StringTokenizer(const string& txt, bool doStrictMode)
     :
     str(txt),
     stok(""),
-    ntok(0.0)
+    ntok(0.0),
+    strictMode(doStrictMode)
 {
     iter = str.begin();
 }
@@ -195,6 +196,13 @@ string
 StringTokenizer::getSVal() const
 {
     return stok;
+}
+
+/*public*/
+bool
+StringTokenizer::getStrictMode() const
+{
+    return strictMode;
 }
 
 } // namespace geos.io

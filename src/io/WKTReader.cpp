@@ -53,7 +53,7 @@ std::unique_ptr<Geometry>
 WKTReader::read(const std::string& wellKnownText) const
 {
     CLocalizer clocale;
-    StringTokenizer tokenizer(wellKnownText);
+    StringTokenizer tokenizer(wellKnownText, strictMode);
     OrdinateSet ordinateFlags = OrdinateSet::createXY();
     auto ret = readGeometryTaggedText(&tokenizer, ordinateFlags);
 
@@ -156,7 +156,18 @@ WKTReader::getNextNumber(StringTokenizer* tokenizer)
 }
 
 bool
-WKTReader::isTypeName(const std::string & type, const std::string & typeName) {
+WKTReader::isTypeName(const std::string & type, const std::string & typeName, bool doStrictMode) {
+    if (doStrictMode) {
+        auto l = type.size();
+        auto r = typeName.size();
+        if (l == r && type == typeName) return true;
+        if (l == r + 1 && (type == typeName + 'Z' || type == typeName + 'M')) return true;
+        if (l == r + 2 && type == typeName + "ZM") return true;
+
+        // take `POINT` as example:
+        // POIN, POINTa, POINTZMx are all invalid
+        return false;
+    }
     return util::startsWith(type, typeName);
 }
 
@@ -178,24 +189,35 @@ WKTReader::readOrdinateFlags(const std::string & s, OrdinateSet& ordinateFlags) 
 std::string
 WKTReader::getNextEmptyOrOpener(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags)
 {
+    const bool strictMode = tokenizer->getStrictMode();
+    const bool changesAllowed = ordinateFlags.changesAllowed();
     std::string nextWord = getNextWord(tokenizer);
 
     bool flagsModified = false;
 
     // Skip the Z, M or ZM of an SF1.2 3/4 dim coordinate.
     if (nextWord == "ZM") {
+        if (strictMode && !changesAllowed) {
+          throw ParseException("'ZM' found but 'ZM' or 'Z' or 'M' has been specified in previous type");
+        }
         ordinateFlags.setZ(true);
         ordinateFlags.setM(true);
         flagsModified = true;
         nextWord = getNextWord(tokenizer);
     } else {
         if (nextWord == "Z") {
+            if (strictMode && !changesAllowed) {
+              throw ParseException("'Z' found but 'ZM' or 'Z' or 'M' has been specified in previous type");
+            }
             ordinateFlags.setZ(true);
             flagsModified = true;
             nextWord = getNextWord(tokenizer);
         }
 
         if (nextWord == "M") {
+            if (strictMode && (!changesAllowed || flagsModified)) {
+              throw ParseException("'M' found but 'ZM' or 'Z' or 'M' has been specified previously");
+            }
             ordinateFlags.setM(true);
             flagsModified = true;
             nextWord = getNextWord(tokenizer);
@@ -267,6 +289,7 @@ WKTReader::getNextWord(StringTokenizer* tokenizer)
 std::unique_ptr<Geometry>
 WKTReader::readGeometryTaggedText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags, const GeometryTypeId* emptyType) const
 {
+    const bool doStrictMode = tokenizer->getStrictMode();
     std::string type = getNextWord(tokenizer);
 
     std::unique_ptr<Geometry> geom;
@@ -279,43 +302,43 @@ WKTReader::readGeometryTaggedText(StringTokenizer* tokenizer, OrdinateSet& ordin
         readOrdinateFlags(type, newFlags);
     }
 
-    if(isTypeName(type, "POINT")) {
+    if(isTypeName(type, "POINT", doStrictMode)) {
         geom = readPointText(tokenizer, newFlags);
     }
-    else if(isTypeName(type, "LINESTRING")) {
+    else if(isTypeName(type, "LINESTRING", doStrictMode)) {
         geom = readLineStringText(tokenizer, newFlags);
     }
-    else if(isTypeName(type, "LINEARRING")) {
+    else if(isTypeName(type, "LINEARRING", doStrictMode)) {
         geom = readLinearRingText(tokenizer, newFlags);
     }
-    else if(isTypeName(type, "CIRCULARSTRING")) {
+    else if(isTypeName(type, "CIRCULARSTRING", doStrictMode)) {
         geom = readCircularStringText(tokenizer, newFlags);
     }
-    else if(isTypeName(type, "COMPOUNDCURVE")) {
+    else if(isTypeName(type, "COMPOUNDCURVE", doStrictMode)) {
         geom = readCompoundCurveText(tokenizer, newFlags);
     }
-    else if(isTypeName(type, "POLYGON")) {
+    else if(isTypeName(type, "POLYGON", doStrictMode)) {
         geom = readPolygonText(tokenizer, newFlags);
     }
-    else if(isTypeName(type, "CURVEPOLYGON")) {
+    else if(isTypeName(type, "CURVEPOLYGON", doStrictMode)) {
         geom = readCurvePolygonText(tokenizer, newFlags);
     }
-    else if(isTypeName(type,  "MULTIPOINT")) {
+    else if(isTypeName(type,  "MULTIPOINT", doStrictMode)) {
         geom = readMultiPointText(tokenizer, newFlags);
     }
-    else if(isTypeName(type, "MULTILINESTRING")) {
+    else if(isTypeName(type, "MULTILINESTRING", doStrictMode)) {
         geom = readMultiLineStringText(tokenizer, newFlags);
     }
-    else if(isTypeName(type, "MULTICURVE")) {
+    else if(isTypeName(type, "MULTICURVE", doStrictMode)) {
         geom = readMultiCurveText(tokenizer, newFlags);
     }
-    else if(isTypeName(type, "MULTIPOLYGON")) {
+    else if(isTypeName(type, "MULTIPOLYGON", doStrictMode)) {
         geom = readMultiPolygonText(tokenizer, newFlags);
     }
-    else if(isTypeName(type, "MULTISURFACE")) {
+    else if(isTypeName(type, "MULTISURFACE", doStrictMode)) {
         geom = readMultiSurfaceText(tokenizer, newFlags);
     }
-    else if(isTypeName(type, "GEOMETRYCOLLECTION")) {
+    else if(isTypeName(type, "GEOMETRYCOLLECTION", doStrictMode)) {
         geom = readGeometryCollectionText(tokenizer, newFlags);
     } else if (type == "EMPTY" && emptyType != nullptr) {
         return geometryFactory->createEmptyGeometry(*emptyType, newFlags.hasZ(), newFlags.hasM());

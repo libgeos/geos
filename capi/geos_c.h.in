@@ -436,6 +436,20 @@ extern GEOSMessageHandler_r GEOS_DLL GEOSContext_setErrorMessageHandler_r(
     GEOSMessageHandler_r ef,
     void *userData);
 
+/**
+* Sets strict mode on the given GEOS context.
+*
+* \param extHandle the GEOS context
+* \param doStrictMode use strict mode or not for the later usage
+*
+* \return void
+*
+* \since 3.14.0dev (git commit: 0989e2dbbfef206928bd1849be5118022febc2f7)
+*/
+extern void GEOS_DLL GEOSContext_setStrictMode_r(
+    GEOSContextHandle_t extHandle,
+    bool doStrictMode);
+
 /* ========== Coordinate Sequence functions ========== */
 
 /** \see GEOSCoordSeq_create */

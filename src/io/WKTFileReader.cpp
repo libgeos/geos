@@ -27,7 +27,8 @@ using namespace geos::geom;
 namespace geos {
 namespace io {
 
-WKTFileReader::WKTFileReader()
+WKTFileReader::WKTFileReader(bool doStrictMode)
+: strictMode(doStrictMode)
 {
 
 }
@@ -42,7 +43,7 @@ WKTFileReader::read(std::string fname)
 {
     std::ifstream f( fname );
     std::vector<std::unique_ptr<Geometry>> geoms;
-    geos::io::WKTReader rdr;
+    geos::io::WKTReader rdr(strictMode);
 
     while (true) {
         auto g = readGeom( f, rdr );
