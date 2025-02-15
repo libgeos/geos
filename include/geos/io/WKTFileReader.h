@@ -33,13 +33,15 @@ namespace io {
 class GEOS_DLL WKTFileReader {
 
 public:
-    WKTFileReader();
+    WKTFileReader(bool doStrictMode = false);
     ~WKTFileReader();
 
     std::vector<std::unique_ptr<geom::Geometry>> read(std::string fname);
 
 private:
     std::unique_ptr<geos::geom::Geometry> readGeom(std::ifstream& f, geos::io::WKTReader& rdr);
+
+    const bool strictMode;
 };
 
 }

@@ -52,6 +52,7 @@ public:
     bool isExplode = false;
     bool isSelect = false;
     bool isSelectNot = false;
+    bool isStrictMode = false;
 
     std::string srcB;
 
@@ -79,8 +80,8 @@ private:
 
     std::vector<std::unique_ptr<Geometry>> geomB;
 
-    std::vector<std::unique_ptr<Geometry>> readInput(std::string name, std::string src, int limit, int offset);
-    std::vector<std::unique_ptr<Geometry>> loadInput(std::string name, std::string src, int limit, int offset);
+    std::vector<std::unique_ptr<Geometry>> readInput(std::string name, std::string src, int limit, int offset, bool doStrictMode);
+    std::vector<std::unique_ptr<Geometry>> loadInput(std::string name, std::string src, int limit, int offset, bool doStrictMode);
     GeometryOp* getOp();
     void execute(GeometryOp * op, OpArguments& opArgs);
     void executeUnary(GeometryOp * op, OpArguments& opArgs);

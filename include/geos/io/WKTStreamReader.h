@@ -33,7 +33,7 @@ namespace io {
 class GEOS_DLL WKTStreamReader {
 
 public:
-    WKTStreamReader(std::istream& instr);
+    WKTStreamReader(std::istream& instr, bool doStrictMode = false);
     ~WKTStreamReader();
 
     std::unique_ptr<geos::geom::Geometry> next();
