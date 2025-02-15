@@ -565,14 +565,14 @@ extern "C" {
     }
 
     void
-    GEOSContext_setStrictMode_r(GEOSContextHandle_t extHandle, bool doStrictMode)
+    GEOSContext_setStrictMode_r(GEOSContextHandle_t extHandle, int doStrictMode)
     {
         GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
         if(0 == handle->initialized) {
             return;
         }
 
-        return handle->setStrictMode(doStrictMode);
+        return handle->setStrictMode(!!doStrictMode);
     }
 
     void

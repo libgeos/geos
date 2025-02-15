@@ -448,7 +448,7 @@ extern GEOSMessageHandler_r GEOS_DLL GEOSContext_setErrorMessageHandler_r(
 */
 extern void GEOS_DLL GEOSContext_setStrictMode_r(
     GEOSContextHandle_t extHandle,
-    bool doStrictMode);
+    int doStrictMode);
 
 /* ========== Coordinate Sequence functions ========== */
 
