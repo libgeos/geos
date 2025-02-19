@@ -165,7 +165,7 @@ WKTReader::isTypeName(const std::string & type, const std::string & typeName, bo
         if (l == r + 2 && type == typeName + "ZM") return true;
 
         // take `POINT` as example:
-        // POIN, POINTa, POINTZMx are all invalid
+        // POI, POINTa, POINTZMx are all invalid
         return false;
     }
     return util::startsWith(type, typeName);
