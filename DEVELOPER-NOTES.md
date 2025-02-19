@@ -73,7 +73,8 @@ public:
 ### Function Parameter calling conventions
 
 * Objects which are passed as read-only with no transfer of ownership 
-  should be passed as `const` references (`const Geometry&`).
+  should be passed as `const` [references](https://en.wikipedia.org/wiki/Reference_%28C++%29#) (e.g. `const Geometry&`).
+  References are simpler and safer to use than pointers.
   * in particular, this applies to Geometry objects passed to API operations
   (in static functions, class constructors, or initialization methods) 
   * NOTE: many GEOS API functions use pass-by-pointer (`Geometry*`), but this is historical baggage
