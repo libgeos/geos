@@ -493,11 +493,17 @@ void object::test<25>
 ()
 {
     struct test_wktreader_strict_mode mode(this);
+    // codespell:ignore POIN
     ensure_parseexception("POIN(1 1)");
+    // codespell:ignore POINTx
     ensure_parseexception("POINTx(1 1)");
+    // codespell:ignore POINTxy
     ensure_parseexception("POINTxy(1 1)");
+    // codespell:ignore POINTabc
     ensure_parseexception("POINTabc(1 1)");
+    // codespell:ignore POINTZMc
     ensure_parseexception("POINTZMc(1 1)");
+    // codespell:ignore POINTaZM
     ensure_parseexception("POINTaZM(1 1)");
     ensure_parseexception("POINT Z M EMPTY");
 }

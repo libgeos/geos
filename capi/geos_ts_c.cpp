@@ -235,7 +235,6 @@ typedef struct GEOSContextHandle_HS {
     void* errorData;
     uint8_t WKBOutputDims;
     int WKBByteOrder;
-    bool strictMode;
     int initialized;
     std::unique_ptr<Point> point2d;
 
@@ -248,7 +247,6 @@ typedef struct GEOSContextHandle_HS {
         errorMessageOld(nullptr),
         errorMessageNew(nullptr),
         errorData(nullptr),
-        strictMode(false),
         point2d(nullptr)
     {
         memset(msgBuffer, 0, sizeof(msgBuffer));
@@ -303,12 +301,6 @@ typedef struct GEOSContextHandle_HS {
         errorData = userData;
 
         return f;
-    }
-
-    void
-    setStrictMode(bool doStrictMode)
-    {
-        strictMode = doStrictMode;
     }
 
     void
@@ -562,17 +554,6 @@ extern "C" {
         }
 
         return handle->setErrorHandler(ef, userData);
-    }
-
-    void
-    GEOSContext_setStrictMode_r(GEOSContextHandle_t extHandle, int doStrictMode)
-    {
-        GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
-        if(0 == handle->initialized) {
-            return;
-        }
-
-        return handle->setStrictMode(!!doStrictMode);
     }
 
     void
@@ -3429,7 +3410,7 @@ extern "C" {
     {
         return execute(extHandle, [&]() {
             GEOSContextHandleInternal_t *handle = reinterpret_cast<GEOSContextHandleInternal_t *>(extHandle);
-            return new WKTReader((GeometryFactory *) handle->geomFactory, handle->strictMode);
+            return new WKTReader((GeometryFactory *) handle->geomFactory);
         });
     }
 
@@ -3448,6 +3429,15 @@ extern "C" {
             return reader->setFixStructure(doFix);
         });
     }
+
+    void
+    GEOSWKTReader_setStrictMode_r(GEOSContextHandle_t extHandle, WKTReader* reader, int doStrictMode)
+    {
+        return execute(extHandle, [&]() {
+            return reader->setStrictMode(doStrictMode);
+        });
+    }
+
 
     Geometry*
     GEOSWKTReader_read_r(GEOSContextHandle_t extHandle, WKTReader* reader, const char* wkt)

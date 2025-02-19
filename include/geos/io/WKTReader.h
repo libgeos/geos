@@ -72,30 +72,30 @@ public:
      * so be sure you'll keep the factory alive for the
      * whole WKTReader and created Geometry life.
      */
-    explicit WKTReader(const geom::GeometryFactory& gf, bool doStrictMode = false)
+    explicit WKTReader(const geom::GeometryFactory& gf)
         : geometryFactory(&gf)
         , precisionModel(gf.getPrecisionModel())
         , fixStructure(false)
-        , strictMode(doStrictMode)
+        , strictMode(false)
         {};
 
         /** @deprecated in 3.4.0 */
-    explicit WKTReader(const geom::GeometryFactory* gf, bool doStrictMode = false)
+    explicit WKTReader(const geom::GeometryFactory* gf)
         : geometryFactory(gf)
         , precisionModel(gf->getPrecisionModel())
         , fixStructure(false)
-        , strictMode(doStrictMode)
+        , strictMode(false)
         {};
 
     /**
      * \brief Initialize parser with default GeometryFactory.
      *
      */
-    WKTReader(bool doStrictMode = false)
+    WKTReader()
         : geometryFactory(geom::GeometryFactory::getDefaultInstance())
         , precisionModel(geometryFactory->getPrecisionModel())
         , fixStructure(false)
-        , strictMode(doStrictMode)
+        , strictMode(false)
         {};
 
     ~WKTReader() {};

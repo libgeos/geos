@@ -27,9 +27,8 @@ using namespace geos::geom;
 namespace geos {
 namespace io {
 
-WKTStreamReader::WKTStreamReader(std::istream& p_instr, bool doStrictMode)
+WKTStreamReader::WKTStreamReader(std::istream& p_instr)
     : instr(p_instr)
-    , rdr(doStrictMode)
 {
 }
 
@@ -38,6 +37,11 @@ WKTStreamReader::~WKTStreamReader() {
 }
 
 /*public*/
+void
+WKTStreamReader::setStrictMode(bool doStrictMode)
+{
+  rdr.setStrictMode(doStrictMode);
+}
 
 
 /*

@@ -239,7 +239,8 @@ bool isWKBLiteral(std::string s) {
 std::vector<std::unique_ptr<Geometry>>
 readWKTFile(std::istream& in, int limit, int offset, bool doStrictMode) {
 
-    WKTStreamReader rdr( in, doStrictMode );
+    WKTStreamReader rdr( in );
+    rdr.setStrictMode( doStrictMode );
     std::vector<std::unique_ptr<Geometry>> geoms;
     int count = 0;
     while (limit < 0 || (int) geoms.size() < limit) {
@@ -307,7 +308,8 @@ GeosOp::readInput(std::string name, std::string src, int limit, int offset, bool
     if ( isWKTLiteral(src) ) {
         log(srcDesc + "WKT literal");
 
-        geos::io::WKTReader rdr(doStrictMode);
+        geos::io::WKTReader rdr;
+        rdr.setStrictMode(doStrictMode);
         auto geom = rdr.read( src );
         geoms.push_back( std::move(geom) );
     }
