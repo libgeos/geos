@@ -500,6 +500,8 @@ void object::test<25>
     ensure_parseexception("POINTZMc(1 1)");
     ensure_parseexception("POINTaZM(1 1)");
     ensure_parseexception("POINT Z M EMPTY");
+    ensure_parseexception("POINTZ Z EMPTY");
+    ensure_parseexception("POINTZ ZM EMPTY");
 }
 
 // To make sure that strict mode has been restored no matter any previous test case has been failed or not
