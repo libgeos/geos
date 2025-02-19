@@ -19,6 +19,13 @@ draft: false
 * MULTILINESTRING ((0 0, 1 1), (2 2, 3 3))
 * MULTIPOLYGON (((1 1, 1 3, 3 3, 3 1, 1 1)), ((4 3, 6 3, 6 1, 4 1, 4 3)))
 * GEOMETRYCOLLECTION (MULTIPOINT((0 0), (1 1)), POINT(3 4), LINESTRING(2 3, 3 4))
+* POINTZ (0 0 0)
+* POINT Z (0 0 0)
+* POINT Z EMPTY
+* POINTM (0 0 0)
+* POINT M (0 0 0)
+* POINTZM (0 0 0 0)
+* POINT ZM (0 0 0 0)
 
 ## WKT BNF
 
