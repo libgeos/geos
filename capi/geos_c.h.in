@@ -2230,16 +2230,6 @@ extern void GEOS_DLL initGEOS(
 extern void GEOS_DLL finishGEOS(void);
 
 /**
-* Sets strict mode
-*
-* \param doStrictMode use strict mode or not for the later usage
-*
-* \since 3.14.0dev (git commit: 81cb98974388808f517963127c82dc1b790d417e)
-*/
-extern void GEOS_DLL GEOS_setStrictMode(
-    int doStrictMode);
-
-/**
 * Free strings and byte buffers returned by functions such
 * as GEOSWKBWriter_write(),
 * GEOSWKBWriter_writeHEX() and GEOSWKTWriter_write(), etc.
