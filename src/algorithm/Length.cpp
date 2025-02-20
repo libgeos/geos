@@ -55,6 +55,32 @@ Length::ofLine(const geom::CoordinateSequence* pts)
     return len;
 }
 
+double
+Length::ofLine(const std::vector<geom::CoordinateXY>& pts)
+{
+    if (pts.size() < 2) {
+        return 0;
+    }
+
+    double len = 0;
+    double x0 = pts[0].x;
+    double y0 = pts[0].y;
+
+    for(std::size_t i = 1; i < pts.size(); i++) {
+        const geom::CoordinateXY& pi = pts[i];
+        double x1 = pi.x;
+        double y1 = pi.y;
+        double dx = x1 - x0;
+        double dy = y1 - y0;
+
+        len += std::sqrt(dx * dx + dy * dy);
+
+        x0 = x1;
+        y0 = y1;
+    }
+
+    return len;
+}
 
 } // namespace geos.algorithm
 } //namespace geos

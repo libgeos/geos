@@ -1035,6 +1035,24 @@ extern GEOSGeometry GEOS_DLL *GEOSClipByRect_r(
     double xmin, double ymin,
     double xmax, double ymax);
 
+/** \see GEOSSubdivideByGrid */
+extern GEOSGeometry GEOS_DLL *GEOSSubdivideByGrid_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* g,
+    double xmin, double ymin,
+    double xmax, double ymax,
+    unsigned nx, unsigned ny,
+    int include_exterior);
+
+/** \see GEOSGridIntersectionFractions */
+extern int GEOS_DLL GEOSGridIntersectionFractions_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* g,
+    double xmin, double ymin,
+    double xmax, double ymax,
+    unsigned nx, unsigned ny,
+    float* buf);
+
 /** \see GEOSPolygonize */
 extern GEOSGeometry GEOS_DLL *GEOSPolygonize_r(
     GEOSContextHandle_t handle,
@@ -3787,6 +3805,56 @@ extern GEOSGeometry GEOS_DLL *GEOSClipByRect(
     const GEOSGeometry* g,
     double xmin, double ymin,
     double xmax, double ymax);
+
+/**
+* Compute the intersection of a geometry with each polygon in
+* a rectangular grid.
+* \param g The input geometry to be clipped
+* \param xmin Left bound of grd
+* \param ymin Lower bound of grid
+* \param xmax Right bound of grid
+* \param ymax Upper bound of grid
+* \param nx number of columns in grid
+* \param ny number of rows in grid
+* \param include_exterior whether to include portions of the
+         input geometry that do not intersect the grid in
+         the returned result.
+* \return A geometry collection whose components represent the
+*         intersection with each cell in the grid.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+* \see GEOSGetGridIntersectionFractions
+*
+* \since 3.14.0
+*/
+extern GEOSGeometry GEOS_DLL *GEOSSubdivideByGrid(
+    const GEOSGeometry* g,
+    double xmin, double ymin,
+    double xmax, double ymax,
+    unsigned nx, unsigned ny,
+    int include_exterior);
+
+/**
+* Determine the fraction of each cell in a rectangular grid
+* that is covered by a polygon.
+* \param g The input geometry
+* \param xmin Left bound of grd
+* \param ymin Lower bound of grid
+* \param xmax Right bound of grid
+* \param ymax Upper bound of grid
+* \param nx number of columns in grid
+* \param ny number of rows in grid
+* \param buf a buffer of size nx*ny to which the grid cell
+*        coverage fractions will be written in row-major order
+* \return 1 if the operation was successful, 0 on exception
+*
+* \since 3.14.0
+*/
+extern int GEOS_DLL GEOSGridIntersectionFractions(
+    const GEOSGeometry* g,
+    double xmin, double ymin,
+    double xmax, double ymax,
+    unsigned nx, unsigned ny,
+    float* buf);
 
 /**
 * Find paths shared between the two given lineal geometries.
