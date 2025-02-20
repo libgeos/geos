@@ -30,6 +30,10 @@
 #define GEOS_VERSION "@VERSION@"
 #endif
 
+#ifndef GEOS_WISDOM_OF_THE_DAY
+#define GEOS_WISDOM_OF_THE_DAY "Diversity, Equity and Inclusion (DEI) for all geometric operations."
+#endif
+
 #ifndef GEOS_JTS_PORT
 #define GEOS_JTS_PORT "@JTS_PORT@"
 #endif
