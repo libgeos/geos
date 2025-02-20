@@ -28,7 +28,6 @@ namespace geos {
 namespace io {
 
 WKTFileReader::WKTFileReader()
-: strictMode(false)
 {
 
 }
@@ -38,20 +37,12 @@ WKTFileReader::~WKTFileReader() {
 }
 
 /*public*/
-void
-WKTFileReader::setStrictMode(bool doStrictMode)
-{
-  strictMode = doStrictMode;
-}
-
-/*public*/
 std::vector<std::unique_ptr<Geometry>>
 WKTFileReader::read(std::string fname)
 {
     std::ifstream f( fname );
     std::vector<std::unique_ptr<Geometry>> geoms;
     geos::io::WKTReader rdr;
-    rdr.setStrictMode(strictMode);
 
     while (true) {
         auto g = readGeom( f, rdr );

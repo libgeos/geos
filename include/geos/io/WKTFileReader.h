@@ -38,12 +38,8 @@ public:
 
     std::vector<std::unique_ptr<geom::Geometry>> read(std::string fname);
 
-    void setStrictMode(bool doStrictMode);
-
 private:
     std::unique_ptr<geos::geom::Geometry> readGeom(std::ifstream& f, geos::io::WKTReader& rdr);
-
-    bool strictMode;
 };
 
 }

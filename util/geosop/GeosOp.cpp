@@ -93,7 +93,6 @@ int main(int argc, char** argv) {
         ("select", "Select geometries where op result is true", cxxopts::value<bool>( cmdArgs.isSelect ) )
         ("selectNot", "Select geometries where op result is false", cxxopts::value<bool>( cmdArgs.isSelectNot ) )
         ("t,time", "Print execution time", cxxopts::value<bool>( cmdArgs.isShowTime ) )
-        ("x,strictMode", "Select strict mode", cxxopts::value<bool>( cmdArgs.isStrictMode) )
         ("v,verbose", "Verbose output", cxxopts::value<bool>( cmdArgs.isVerbose )->default_value("false"))
         ("h,help", "Print help")
 
@@ -237,10 +236,9 @@ bool isWKBLiteral(std::string s) {
 }
 
 std::vector<std::unique_ptr<Geometry>>
-readWKTFile(std::istream& in, int limit, int offset, bool doStrictMode) {
+readWKTFile(std::istream& in, int limit, int offset) {
 
     WKTStreamReader rdr( in );
-    rdr.setStrictMode( doStrictMode );
     std::vector<std::unique_ptr<Geometry>> geoms;
     int count = 0;
     while (limit < 0 || (int) geoms.size() < limit) {
@@ -256,12 +254,12 @@ readWKTFile(std::istream& in, int limit, int offset, bool doStrictMode) {
 }
 
 std::vector<std::unique_ptr<Geometry>>
-readWKTFile(std::string src, int limit, int offset, bool doStrictMode) {
+readWKTFile(std::string src, int limit, int offset) {
     if (src == "-" || src == "-.wkt" || src == "stdin" || src == "stdin.wkt") {
-        return readWKTFile( std::cin, limit, offset, doStrictMode );
+        return readWKTFile( std::cin, limit, offset );
     }
     std::ifstream f( src );
-    auto geoms = readWKTFile( f, limit, offset, doStrictMode );
+    auto geoms = readWKTFile( f, limit, offset );
     f.close();
     return geoms;
 }
@@ -302,14 +300,13 @@ void GeosOp::log(std::string s) {
 }
 
 std::vector<std::unique_ptr<Geometry>>
-GeosOp::readInput(std::string name, std::string src, int limit, int offset, bool doStrictMode) {
+GeosOp::readInput(std::string name, std::string src, int limit, int offset) {
     std::vector<std::unique_ptr<Geometry>> geoms;
     std::string srcDesc = "Input " + name + ": ";
     if ( isWKTLiteral(src) ) {
         log(srcDesc + "WKT literal");
 
         geos::io::WKTReader rdr;
-        rdr.setStrictMode(doStrictMode);
         auto geom = rdr.read( src );
         geoms.push_back( std::move(geom) );
     }
@@ -327,7 +324,7 @@ GeosOp::readInput(std::string name, std::string src, int limit, int offset, bool
     }
     else {
         log(srcDesc + "WKT file " + src);
-        geoms = readWKTFile( src, limit, offset, doStrictMode );
+        geoms = readWKTFile( src, limit, offset );
     }
     return geoms;
 }
@@ -348,7 +345,7 @@ std::string summaryStats(std::vector<std::unique_ptr<Geometry>>& geoms) {
 }
 
 std::vector<std::unique_ptr<Geometry>>
-GeosOp::loadInput(std::string name, std::string src, int limit, int offset, bool doStrictMode) {
+GeosOp::loadInput(std::string name, std::string src, int limit, int offset) {
     if (src.length() == 0) {
         std::vector<std::unique_ptr<Geometry>> geoms;
         return geoms;
@@ -358,7 +355,7 @@ GeosOp::loadInput(std::string name, std::string src, int limit, int offset, bool
 
     std::vector<std::unique_ptr<Geometry>> geoms;
     try {
-      geoms = readInput( name, src, limit, offset, doStrictMode );
+      geoms = readInput( name, src, limit, offset );
     } catch (geos::util::GEOSException & e) {
       std::cout << e.what() << std::endl;
       exit(1);
@@ -381,7 +378,7 @@ void GeosOp::run(OpArguments& opArgs) {
     // ensure at least one op processed
     if (args.repeatNum < 1) args.repeatNum = 1;
 
-    auto geomsLoadA = loadInput("A", args.srcA, args.limitA, args.offsetA, args.isStrictMode);
+    auto geomsLoadA = loadInput("A", args.srcA, args.limitA, args.offsetA);
 
     //--- collect input into single geometry collection if required
     bool doCollect = args.isCollect || op->isAggregate();
@@ -392,7 +389,7 @@ void GeosOp::run(OpArguments& opArgs) {
         geomA = std::move(geomsLoadA);
     }
 
-    geomB = loadInput("B", args.srcB, -1, -1, args.isStrictMode);
+    geomB = loadInput("B", args.srcB, -1, -1);
 
     //------------------------
 

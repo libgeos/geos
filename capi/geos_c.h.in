@@ -1978,12 +1978,6 @@ extern void GEOS_DLL GEOSWKTReader_setFixStructure_r(
     GEOSWKTReader *reader,
     char doFix);
 
-/** \see GEOSWKTReader_setStrictMode */
-extern void GEOS_DLL GEOSWKTReader_setStrictMode_r(
-    GEOSContextHandle_t handle,
-    GEOSWKTReader *reader,
-    int doStrictMode);
-
 
 /* ========== WKT Writer ========== */
 
@@ -5781,17 +5775,6 @@ extern GEOSGeometry GEOS_DLL *GEOSWKTReader_read(
 extern void GEOS_DLL GEOSWKTReader_setFixStructure(
     GEOSWKTReader *reader,
     char doFix);
-
-/**
-* Set the reader to use strict mode or NOT to parse WKT
-* \param reader A WKT reader object, caller retains ownership
-* \param doStrictMode use strict mode or not for the later usage
-*
-* \since 3.14.0dev (git commit: 81cb98974388808f517963127c82dc1b790d417e)
-*/
-extern void GEOS_DLL GEOSWKTReader_setStrictMode(
-    GEOSWKTReader *reader,
-    int doStrictMode);
 
 /* ========= WKT Writer ========= */
 
