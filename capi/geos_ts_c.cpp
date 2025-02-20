@@ -3430,6 +3430,15 @@ extern "C" {
         });
     }
 
+    void
+    GEOSWKTReader_setStrictMode_r(GEOSContextHandle_t extHandle, WKTReader* reader, int doStrictMode)
+    {
+        return execute(extHandle, [&]() {
+            return reader->setStrictMode(doStrictMode);
+        });
+    }
+
+
     Geometry*
     GEOSWKTReader_read_r(GEOSContextHandle_t extHandle, WKTReader* reader, const char* wkt)
     {

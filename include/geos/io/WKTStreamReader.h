@@ -38,6 +38,8 @@ public:
 
     std::unique_ptr<geos::geom::Geometry> next();
 
+    void setStrictMode(bool doStrictMode);
+
 private:
 
     std::istream& instr;

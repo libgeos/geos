@@ -37,6 +37,11 @@ WKTStreamReader::~WKTStreamReader() {
 }
 
 /*public*/
+void
+WKTStreamReader::setStrictMode(bool doStrictMode)
+{
+  rdr.setStrictMode(doStrictMode);
+}
 
 
 /*

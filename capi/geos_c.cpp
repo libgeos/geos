@@ -1372,6 +1372,12 @@ extern "C" {
         GEOSWKTReader_setFixStructure_r(handle, reader, doFix);
     }
 
+    void
+    GEOSWKTReader_setStrictMode(WKTReader* reader, int doStrictMode)
+    {
+        GEOSWKTReader_setStrictMode_r(handle, reader, doStrictMode);
+    }
+
     Geometry*
     GEOSWKTReader_read(WKTReader* reader, const char* wkt)
     {

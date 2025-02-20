@@ -40,17 +40,19 @@ public:
         TT_WORD
     };
     //StringTokenizer();
-    explicit StringTokenizer(const std::string& txt);
+    explicit StringTokenizer(const std::string& txt, bool doStrictMode);
     ~StringTokenizer() {}
     int nextToken();
     int peekNextToken();
     double getNVal() const;
     std::string getSVal() const;
+    bool getStrictMode() const;
 private:
     const std::string& str;
     std::string stok;
     double ntok;
     std::string::const_iterator iter;
+    const bool strictMode;
 
     // Declare type as noncopyable
     StringTokenizer(const StringTokenizer& other) = delete;

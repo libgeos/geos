@@ -76,6 +76,7 @@ public:
         : geometryFactory(&gf)
         , precisionModel(gf.getPrecisionModel())
         , fixStructure(false)
+        , strictMode(false)
         {};
 
         /** @deprecated in 3.4.0 */
@@ -83,6 +84,7 @@ public:
         : geometryFactory(gf)
         , precisionModel(gf->getPrecisionModel())
         , fixStructure(false)
+        , strictMode(false)
         {};
 
     /**
@@ -93,6 +95,7 @@ public:
         : geometryFactory(geom::GeometryFactory::getDefaultInstance())
         , precisionModel(geometryFactory->getPrecisionModel())
         , fixStructure(false)
+        , strictMode(false)
         {};
 
     ~WKTReader() {};
@@ -100,6 +103,11 @@ public:
     void
     setFixStructure(bool doFixStructure) {
         fixStructure = doFixStructure;
+    }
+
+    void
+    setStrictMode(bool doStrictMode) {
+        strictMode = doStrictMode;
     }
 
     /// Parse a WKT string returning a Geometry
@@ -148,6 +156,7 @@ private:
     const geom::GeometryFactory* geometryFactory;
     const geom::PrecisionModel* precisionModel;
     bool fixStructure;
+    bool strictMode;
 
     void getPreciseCoordinate(io::StringTokenizer* tokenizer, OrdinateSet& ordinateFlags, geom::CoordinateXYZM&) const;
 
@@ -155,7 +164,7 @@ private:
     static bool isOpenerNext(io::StringTokenizer* tokenizer);
 
     static void readOrdinateFlags(const std::string & s, OrdinateSet& ordinateFlags);
-    static bool isTypeName(const std::string & type, const std::string & typeName);
+    static bool isTypeName(const std::string & type, const std::string & typeName, bool doStrictMode);
 };
 
 } // namespace io
