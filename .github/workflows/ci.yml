@@ -13,6 +13,7 @@ jobs:
   linux:
     name: 'Linux'
     strategy:
+      fail-fast: false
       matrix:
         ci:
         - {
@@ -24,59 +25,32 @@ jobs:
           cmake: 3.15.*,
           os: ubuntu-latest
         }
-        # - {
-        #   compiler: g++,
-        #   build_type: Release,
-        #   cxxstd: 11,
-        #   arch: 32,
-        #   packages: 'g++-4.8-multilib gcc-4.8-multilib g++-multilib gcc-multilib',
-        #   cmake: 3.13.*,
-        #   os: ubuntu-18.04
-        # }
         - {
-          compiler: clang++,
-          build_type: Release,
-          cxxstd: 11,
-          arch: 64,
-          packages: 'clang',
-          cmake: 3.17.*,
-          os: ubuntu-latest
-        }
-        - {
-          compiler: clang++,
-          build_type: Release,
-          cxxstd: 11,
-          arch: 64,
-          packages: 'clang',
-          cmake: 3.17.*,
-          os: ubuntu-latest
-        }
-        - {
-          compiler: clang++,
-          build_type: Release,
-          cxxstd: 11,
-          arch: 64,
-          packages: 'g++',
-          cmake: 3.17.*,
-          cmake_extra: '-DDISABLE_GEOS_INLINE=ON',
-          os: ubuntu-latest
-        }
-        - {
-          compiler: clang++,
+          compiler: g++,
           build_type: Debug,
           cxxstd: 11,
           arch: 64,
-          packages: 'clang',
-          cmake: 3.17.*,
-          os: ubuntu-20.04,
+          packages: 'g++',
+          cmake: 3.15.*,
+          os: ubuntu-latest
         }
         - {
           compiler: clang++,
           build_type: Release,
-          cxxstd: 14,
+          cxxstd: 11,
           arch: 64,
           packages: 'clang',
           cmake: 3.17.*,
+          os: ubuntu-latest
+        }
+        - {
+          compiler: clang++,
+          build_type: Release,
+          cxxstd: 11,
+          arch: 64,
+          packages: 'clang',
+          cmake: 3.17.*,
+          cmake_extra: '-DDISABLE_GEOS_INLINE=ON',
           os: ubuntu-latest
         }
 
@@ -128,7 +102,7 @@ jobs:
 
     - name: 'Upload Valgrind Log'
       if: failure()
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: valgrind-log
         path: build.cmake/Testing/Temporary/MemoryChecker.**.log

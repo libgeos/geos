@@ -271,7 +271,7 @@ public:
     * the result of overlaying the geometries using
     * a given overlay operation.
     *
-    * The method handles arguments of {@link Location#NONE} correctly
+    * The method handles arguments of Location#NONE correctly
     */
     static bool isResultOfOpPoint(const OverlayLabel* label, int opCode);
 
@@ -284,7 +284,7 @@ public:
     * computed during the overlay process should be
     * included in the result geometry.
     *
-    * The method handles arguments of {@link Location#NONE} correctly.
+    * The method handles arguments of Location#NONE correctly.
     */
     static bool isResultOfOp(int overlayOpCode, Location loc0, Location loc1);
 

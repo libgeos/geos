@@ -134,8 +134,7 @@ public:
      * the circumcentre of an obtuse isosceles triangle lies outside the triangle.
      *
      * This method uses @ref geos::math::DD extended-precision arithmetic to provide more accurate
-     * results than [circumcentre(Coordinate, Coordinate, Coordinate)]
-     * (@ref geos::geom::Triangle::circumcentre(const Coordinate& p0, const Coordinate& p1, const Coordinate& p2)).
+     * results than circumcentre(Coordinate, Coordinate, Coordinate)
      *
      * @param a
      *          a vertex of the triangle
