@@ -42,8 +42,7 @@ struct test_isccw_data {
     void
     checkCCW(bool expectedCCW, const std::string& wkt)
     {
-        GeometryPtr geom(reader_.read(wkt));
-        geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(geom.get());
+        auto poly = reader_.read<geos::geom::Polygon>(wkt);
         ensure("WKT must be POLYGON)", poly != nullptr);
         const geos::geom::CoordinateSequence* cs = poly->getExteriorRing()->getCoordinatesRO();
         bool actualCCW = Orientation::isCCW(cs);
@@ -53,8 +52,7 @@ struct test_isccw_data {
     void
     checkCCWArea(bool expectedCCWArea, const std::string& wkt)
     {
-        GeometryPtr geom(reader_.read(wkt));
-        geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(geom.get());
+        auto poly = reader_.read<geos::geom::Polygon>(wkt);
         ensure("WKT must be POLYGON)", poly != nullptr);
         const geos::geom::CoordinateSequence* cs = poly->getExteriorRing()->getCoordinatesRO();
         bool actualCCWArea = Orientation::isCCWArea(cs);

@@ -32,13 +32,12 @@ struct test_polygonholejoiner_data {
     // test_polygonholejoiner_data() {}
 
     void checkJoin(const std::string& wkt, const std::string& wktExpected) {
-        std::unique_ptr<Geometry> geom = r.read(wkt);
-        Polygon* polyPtr = dynamic_cast<Polygon*>(geom.get());
-        ensure(polyPtr);
-        std::unique_ptr<Polygon> actual = PolygonHoleJoiner::joinAsPolygon(polyPtr);
-        std::unique_ptr<Geometry> expected = r.read(wktExpected);
-        Geometry* actualPtr = dynamic_cast<Geometry*>(actual.get());
-        ensure(actualPtr);
+
+        auto poly = r.read<Polygon>(wkt);
+
+        std::unique_ptr<Polygon> actual = PolygonHoleJoiner::joinAsPolygon(poly.get());
+        auto actualPtr = dynamic_cast<const Geometry*>(actual.get());
+        std::unique_ptr<Geometry> expected = r.read<Geometry>(wktExpected);
 
         // std::cout << std::endl << "geom" << std::endl << *geom << std::endl;
         // std::cout << std::endl << "actual" << std::endl << *actual << std::endl;

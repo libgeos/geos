@@ -21,10 +21,9 @@ struct test_edgegraph_data {
     }
 
     std::unique_ptr<EdgeGraph> build(std::string wkt) {
-        auto geo = reader_.read(wkt);
-        auto geocol = dynamic_cast<const GeometryCollection *>(geo.get());
-        ensure("could not cast input geometry to collection", geocol);
-        return EdgeGraphBuilder::build(geocol);
+        auto geocol = reader_.read<GeometryCollection>(wkt);
+        ensure("could not cast input geometry to collection", geocol.get());
+        return EdgeGraphBuilder::build(geocol.get());
     }
 
     void checkNodeValid(HalfEdge* e) {

@@ -59,7 +59,7 @@ struct test_locatepointinring_data {
         }
 
         if (checkReverse) {
-            runPtLocator(expected, pt, geom->reverse()->toString(), false);
+            runPtLocator(expected, pt, poly->reverse()->toString(), false);
         }
     }
 };

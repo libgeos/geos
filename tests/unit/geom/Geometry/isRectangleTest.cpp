@@ -38,9 +38,7 @@ void object::test<1>
 ()
 {
     const std::string wkt("POLYGON ((0 0, 0 100, 100 100, 100 0, 0 0))");
-    auto g = reader.read(wkt);
-
-    geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g.get());
+    auto poly = reader.read<geos::geom::Polygon>(wkt);
     ensure("Geometry is not a Polygon: " + wkt, poly != nullptr);
     ensure(poly->isRectangle());
 }
@@ -52,9 +50,7 @@ void object::test<2>
 ()
 {
     const std::string wkt("POLYGON ((0 0, 0 200, 100 200, 100 0, 0 0))");
-    auto g = reader.read(wkt);
-
-    geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g.get());
+    auto poly = reader.read<geos::geom::Polygon>(wkt);
     ensure("Geometry is not a Polygon: " + wkt, poly != nullptr);
     ensure(poly->isRectangle());
 }
@@ -67,9 +63,7 @@ void object::test<3>
 {
     const std::string wkt("POLYGON ((0 0, 0 100, 100 100, 100 0, 0 0), \
                               (10 10, 10 90, 90 90, 90 10, 10 10))");
-    auto g = reader.read(wkt);
-
-    geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g.get());
+    auto poly = reader.read<geos::geom::Polygon>(wkt);
     ensure("Geometry is not a Polygon: " + wkt, poly != nullptr);
     ensure(!poly->isRectangle());
 }
@@ -81,9 +75,7 @@ void object::test<4>
 ()
 {
     const std::string wkt("POLYGON ((0 0, 0 100, 99 100, 100 0, 0 0))");
-    auto g = reader.read(wkt);
-
-    geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g.get());
+    auto poly = reader.read<geos::geom::Polygon>(wkt);
     ensure("Geometry is not a Polygon: " + wkt, poly != nullptr);
     ensure(!poly->isRectangle());
 }
@@ -95,9 +87,7 @@ void object::test<5>
 ()
 {
     const std::string wkt("POLYGON ((0 0, 0 100, 100 50, 100 100, 100 0, 0 0))");
-    auto g = reader.read(wkt);
-
-    geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g.get());
+    auto poly = reader.read<geos::geom::Polygon>(wkt);
     ensure("Geometry is not a Polygon: " + wkt, poly != nullptr);
     ensure(!poly->isRectangle());
 }
@@ -109,9 +99,7 @@ void object::test<6>
 ()
 {
     const std::string wkt("POLYGON ((0 0, 0 100, 100 0, 0 0))");
-    auto g = reader.read(wkt);
-
-    geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g.get());
+    auto poly = reader.read<geos::geom::Polygon>(wkt);
     ensure("Geometry is not a Polygon: " + wkt, poly != nullptr);
     ensure(!poly->isRectangle());
 }
@@ -123,9 +111,7 @@ void object::test<7>
 ()
 {
     const std::string wkt("POLYGON ((0 0, 0 100, 100 0, 100 100, 0 0))");
-    auto g = reader.read(wkt);
-
-    geos::geom::Polygon* poly = dynamic_cast<geos::geom::Polygon*>(g.get());
+    auto poly = reader.read<geos::geom::Polygon>(wkt);
     ensure("Geometry is not a Polygon: " + wkt, poly != nullptr);
     ensure(!poly->isRectangle());
 }

@@ -596,9 +596,7 @@ template<>
 void object::test<33>
 ()
 {
-    auto geom = reader_.read("LINESTRING M (0 1 2, 10 11 12, 20 21 22)");
-    ensure(geom != nullptr);
-    geos::geom::LineString *line = static_cast<LineString*>(geom.get());
+    auto line = reader_.read<LineString>("LINESTRING M (0 1 2, 10 11 12, 20 21 22)");
     ensure_equals(line->getCoordinateDimension(), 3);
     auto pt = line->getPointN(2);
     auto out = writer_.write(*pt);
@@ -610,9 +608,7 @@ template<>
 void object::test<34>
 ()
 {
-    auto geom = reader_.read("LINESTRING Z (0 1 2, 10 11 12, 20 21 22)");
-    ensure(geom != nullptr);
-    geos::geom::LineString *line = static_cast<LineString*>(geom.get());
+    auto line = reader_.read<LineString>("LINESTRING Z (0 1 2, 10 11 12, 20 21 22)");
     ensure_equals(line->getCoordinateDimension(), 3);
     auto pt = line->getPointN(2);
     auto out = writer_.write(*pt);
@@ -624,9 +620,7 @@ template<>
 void object::test<35>
 ()
 {
-    auto geom = reader_.read("LINESTRING ZM (0 1 2 3, 10 11 12 13, 20 21 22 23)");
-    ensure(geom != nullptr);
-    geos::geom::LineString *line = static_cast<LineString*>(geom.get());
+    auto line = reader_.read<LineString>("LINESTRING ZM (0 1 2 3, 10 11 12 13, 20 21 22 23)");
     ensure_equals(line->getCoordinateDimension(), 4);
     auto pt = line->getPointN(2);
     auto out = writer_.write(*pt);

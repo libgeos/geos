@@ -116,11 +116,8 @@ struct test_robustlineintersection_data {
                       double distanceTolerance)
     //throws ParseException
     {
-        GeomPtr g1(reader.read(wkt1));
-        GeomPtr g2(reader.read(wkt2));
-
-        LineString* l1ptr = dynamic_cast<LineString*>(g1.get());
-        LineString* l2ptr = dynamic_cast<LineString*>(g2.get());
+        auto l1ptr = reader.read<LineString>(wkt1);
+        auto l2ptr = reader.read<LineString>(wkt2);
 
         ensure(nullptr != l1ptr);
         ensure(nullptr != l2ptr);
@@ -155,11 +152,8 @@ struct test_robustlineintersection_data {
                       double distanceTolerance)
     // throws ParseException
     {
-        GeomPtr g1(reader.read(wkt1));
-        GeomPtr g2(reader.read(wkt2));
-
-        LineString* l1ptr = dynamic_cast<LineString*>(g1.get());
-        LineString* l2ptr = dynamic_cast<LineString*>(g2.get());
+        auto l1ptr = reader.read<LineString>(wkt1);
+        auto l2ptr = reader.read<LineString>(wkt2);
 
         ensure(nullptr != l1ptr);
         ensure(nullptr != l2ptr);
@@ -182,11 +176,8 @@ struct test_robustlineintersection_data {
                           const std::string& wkt2)
     // throws ParseException
     {
-        GeomPtr g1(reader.read(wkt1));
-        GeomPtr g2(reader.read(wkt2));
-
-        LineString* l1ptr = dynamic_cast<LineString*>(g1.get());
-        LineString* l2ptr = dynamic_cast<LineString*>(g2.get());
+        auto l1ptr = reader.read<LineString>(wkt1);
+        auto l2ptr = reader.read<LineString>(wkt2);
 
         ensure(nullptr != l1ptr);
         ensure(nullptr != l2ptr);
@@ -207,11 +198,8 @@ struct test_robustlineintersection_data {
     void
     checkInputNotAltered(const std::string& wkt1, const std::string& wkt2, int scaleFactor)
     {
-        GeomPtr g1(reader.read(wkt1));
-        GeomPtr g2(reader.read(wkt2));
-
-        LineString* l1ptr = dynamic_cast<LineString*>(g1.get());
-        LineString* l2ptr = dynamic_cast<LineString*>(g2.get());
+        auto l1ptr = reader.read<LineString>(wkt1);
+        auto l2ptr = reader.read<LineString>(wkt2);
 
         ensure(nullptr != l1ptr);
         ensure(nullptr != l2ptr);

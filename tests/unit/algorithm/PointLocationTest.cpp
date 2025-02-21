@@ -49,8 +49,7 @@ struct test_PointLocation_data {
     std::unique_ptr<CoordinateSequence>
     readPts(const std::string& wkt)
     {
-        std::unique_ptr<Geometry> geom = r_.read(wkt);
-        const LineString* line = dynamic_cast<LineString*>(geom.get());
+        auto line = r_.read<LineString>(wkt);
         if (line)
             return line->getCoordinatesRO()->clone();
         else

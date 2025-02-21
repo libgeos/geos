@@ -46,10 +46,9 @@ struct test_overlaygraph_data {
     }
 
     void
-    addEdge(OverlayGraph* graph, const char* wktLine)
+    addEdge(OverlayGraph* graph, const std::string& wktLine)
     {
-        std::unique_ptr<Geometry> geom = r.read(std::string(wktLine));
-        LineString* line = dynamic_cast<LineString*>(geom.get());
+        auto line = r.read<LineString>(wktLine);
         std::unique_ptr<CoordinateSequence> cs = line->getCoordinates();
 
         EdgeSourceInfo esi(0);

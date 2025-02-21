@@ -29,25 +29,20 @@ struct test_multipoint_data {
     geos::geom::GeometryFactory::Ptr factory_;
     geos::io::WKTReader reader_;
 
-    MultiPointAutoPtr empty_mp_;
-    MultiPointPtr mp_;
+    std::unique_ptr<geos::geom::MultiPoint> empty_mp_;
+    std::unique_ptr<geos::geom::MultiPoint> mp_;
     const std::size_t mp_size_;
 
     test_multipoint_data()
-        :
-        pm_(1.0), factory_(GeometryFactory::create(&pm_, 0))
+        : pm_(1.0)
+        , factory_(GeometryFactory::create(&pm_, 0))
         , reader_(factory_.get())
-        , empty_mp_(factory_->createMultiPoint()), mp_size_(5)
-    {
-        // Create non-empty MultiPoint
-        auto geo = reader_.read("MULTIPOINT((0 0), (5 5), (10 10), (15 15), (20 20))");
-        mp_ = dynamic_cast<MultiPointPtr>(geo.release());
-    }
+        , empty_mp_(factory_->createMultiPoint())
+        , mp_(reader_.read<geos::geom::MultiPoint>("MULTIPOINT((0 0), (5 5), (10 10), (15 15), (20 20))"))
+        , mp_size_(5)
+        {};
 
-    ~test_multipoint_data()
-    {
-        factory_->destroyGeometry(mp_);
-    }
+    ~test_multipoint_data() {};
 
 private:
     // Declare type as noncopyable

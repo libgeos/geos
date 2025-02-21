@@ -42,22 +42,18 @@ struct test_point_data {
     geos::geom::PrecisionModel pm_;
     GeometryFactory::Ptr factory_;
     geos::io::WKTReader reader_;
-    PointAutoPtr empty_point_;
-    PointPtr point_;
+    std::unique_ptr<geos::geom::Point> empty_point_;
+    std::unique_ptr<geos::geom::Point> point_;
 
     test_point_data()
-        : pm_(1000), factory_(GeometryFactory::create(&pm_, 0))
-        , reader_(factory_.get()), empty_point_(factory_->createPoint())
-    {
-        // Create non-empty Point
-        auto geo = reader_.read("POINT(1.234 5.678)");
-        point_ = dynamic_cast<PointPtr>(geo.release());
-    }
+        : pm_(1000)
+        , factory_(GeometryFactory::create(&pm_, 0))
+        , reader_(factory_.get())
+        , empty_point_(factory_->createPoint())
+        , point_(reader_.read<geos::geom::Point>("POINT(1.234 5.678)"))
+        {};
 
-    ~test_point_data()
-    {
-        factory_->destroyGeometry(point_);
-    }
+    ~test_point_data() {};
 };
 
 typedef test_group<test_point_data, MAX_TESTS> group;

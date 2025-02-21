@@ -48,8 +48,7 @@ struct test_length_data {
     void
     checkLengthOfLine(std::string wkt, double expectedLength)
     {
-        std::unique_ptr<Geometry> lineGeom(reader_.read(wkt));
-        std::unique_ptr<LineString> line(dynamic_cast<LineString*>(lineGeom.release()));
+        auto line = reader_.read<LineString>(wkt);
         ensure(nullptr != line.get());
         const CoordinateSequence* lineSeq = line->getCoordinatesRO();
         double actual = algorithm::Length::ofLine(lineSeq);

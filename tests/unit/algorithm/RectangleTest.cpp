@@ -35,9 +35,7 @@ struct test_rectangle_data {
     void
     checkRectangle(const std::string& wkt, const std::string& wktExpected)
     {
-
-        std::unique_ptr<Geometry> geom = reader_.read(wkt);
-        const LineString *line = static_cast<LineString*>(geom.get());
+        auto line = reader_.read<LineString>(wkt);
 
         const Coordinate& baseRightPt = line->getCoordinateN(0);
         const Coordinate& baseLeftPt = line->getCoordinateN(1);
