@@ -375,10 +375,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - xcode: 13.2.1
-          cxxstd: 14
-          build_type: ASAN
-          runs_on: macos-12
+#        - xcode: 13.2.1
+#          cxxstd: 14
+#          build_type: ASAN
+#          runs_on: macos-12
         - xcode: 14.3.1
           cxxstd: 17
           build_type: ASAN
