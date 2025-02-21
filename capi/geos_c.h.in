@@ -1978,6 +1978,7 @@ extern void GEOS_DLL GEOSWKTReader_setFixStructure_r(
     GEOSWKTReader *reader,
     char doFix);
 
+
 /* ========== WKT Writer ========== */
 
 /** \see GEOSWKTReader_create */

@@ -157,7 +157,15 @@ WKTReader::getNextNumber(StringTokenizer* tokenizer)
 
 bool
 WKTReader::isTypeName(const std::string & type, const std::string & typeName) {
-    return util::startsWith(type, typeName);
+    auto l = type.size();
+    auto r = typeName.size();
+    if (l == r && type == typeName) return true;
+    if (l == r + 1 && (type == typeName + 'Z' || type == typeName + 'M')) return true;
+    if (l == r + 2 && type == typeName + "ZM") return true;
+
+    // take `POINT` as example:
+    // POI, POINTa, POINTZMx are all invalid
+    return false;
 }
 
 void
@@ -178,24 +186,34 @@ WKTReader::readOrdinateFlags(const std::string & s, OrdinateSet& ordinateFlags) 
 std::string
 WKTReader::getNextEmptyOrOpener(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags)
 {
+    const bool changesAllowed = ordinateFlags.changesAllowed();
     std::string nextWord = getNextWord(tokenizer);
 
     bool flagsModified = false;
 
     // Skip the Z, M or ZM of an SF1.2 3/4 dim coordinate.
     if (nextWord == "ZM") {
+        if (!changesAllowed) {
+          throw ParseException("'ZM' found but 'ZM' or 'Z' or 'M' has been specified in previous type");
+        }
         ordinateFlags.setZ(true);
         ordinateFlags.setM(true);
         flagsModified = true;
         nextWord = getNextWord(tokenizer);
     } else {
         if (nextWord == "Z") {
+            if (!changesAllowed) {
+              throw ParseException("'Z' found but 'ZM' or 'Z' or 'M' has been specified in previous type");
+            }
             ordinateFlags.setZ(true);
             flagsModified = true;
             nextWord = getNextWord(tokenizer);
         }
 
         if (nextWord == "M") {
+            if (!changesAllowed || flagsModified) {
+              throw ParseException("'M' found but 'ZM' or 'Z' or 'M' has been specified previously");
+            }
             ordinateFlags.setM(true);
             flagsModified = true;
             nextWord = getNextWord(tokenizer);

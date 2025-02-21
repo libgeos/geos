@@ -244,7 +244,6 @@ void object::test<9>
     ensure_dimension("POINT Z EMPTY", 3);
     ensure_dimension("POINTZM EMPTY", 4);
     ensure_dimension("POINT ZM EMPTY", 4);
-    ensure_dimension("POINT Z M EMPTY", 4);
 
     ensure_dimension("LINESTRING EMPTY", 2);
     ensure_dimension("LINESTRINGM EMPTY", 3);
@@ -253,7 +252,6 @@ void object::test<9>
     ensure_dimension("LINESTRING Z EMPTY", 3);
     ensure_dimension("LINESTRINGZM EMPTY", 4);
     ensure_dimension("LINESTRING ZM EMPTY", 4);
-    ensure_dimension("LINESTRING Z M EMPTY", 4);
 
     ensure_dimension("POLYGON EMPTY", 2);
     ensure_dimension("POLYGONM EMPTY", 3);
@@ -262,7 +260,6 @@ void object::test<9>
     ensure_dimension("POLYGON Z EMPTY", 3);
     ensure_dimension("POLYGONZM EMPTY", 4);
     ensure_dimension("POLYGON ZM EMPTY", 4);
-    ensure_dimension("POLYGON Z M EMPTY", 4);
 }
 
 
@@ -471,6 +468,35 @@ void object::test<24>
     GeomPtr geom(wktreader.read("MULTIPOINT( EMPTY, (10 10), (20 20))"));
 
     ensure_equals(geom->getNumGeometries(), 3u);
+}
+
+// Raise exception strictly on invalid WKT
+template<>
+template<>
+void object::test<25>
+()
+{
+    ensure_parseexception("POI(1 1)");
+    ensure_parseexception("POINTx(1 1)");
+    ensure_parseexception("POINTxy(1 1)");
+    ensure_parseexception("POINTabc(1 1)");
+    ensure_parseexception("POINTZMc(1 1)");
+    ensure_parseexception("POINTaZM(1 1)");
+    ensure_parseexception("POINT Z M EMPTY");
+    ensure_parseexception("POINTZ Z EMPTY");
+    ensure_parseexception("POINTZ ZM EMPTY");
+    ensure_parseexception("POINT ZZ EMPTY");
+    ensure_parseexception("POINT ZZM EMPTY");
+    ensure_parseexception("POINT XY EMPTY");
+    ensure_parseexception("POINT MZ EMPTY");
+    ensure_parseexception("POINT ZMc EMPTY");
+    ensure_parseexception("POINT XY EMPT");
+    ensure_parseexception("POINT XY EMPT Y");
+    ensure_parseexception("POINT EMPTYY");
+
+    ensure_parseexception("POINT Z M EMPTY");
+    ensure_parseexception("LINESTRING Z M EMPTY");
+    ensure_parseexception("POLYGON Z M EMPTY");
 }
 
 } // namespace tut
