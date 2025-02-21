@@ -377,7 +377,7 @@ BufferBuilder::buffer(const Geometry* g, double distance)
         std::vector< std::unique_ptr<Geometry> > geoms_to_delete;
         for ( size_t i=0, n=g->getNumGeometries(); i<n; ++i )
         {
-            // BufferBuilder class cannot be re-used, so
+            // BufferBuilder class cannot be reused, so
             // we create a new one for each subgeom
             BufferBuilder subbuilder(bufParams);
             const Geometry *subgeom = g->getGeometryN(i);

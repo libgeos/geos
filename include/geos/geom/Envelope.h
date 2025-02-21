@@ -590,7 +590,7 @@ public:
     * Tests if the region defined by other
     * is disjoint from the region of this Envelope
     *
-    * @param other  the Envelope being checked for disjointness
+    * @param other  the Envelope being checked for disjointedness
     * @return true if the Envelopes are disjoint
     */
     bool disjoint(const Envelope& other) const
