@@ -11,13 +11,9 @@
  * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
- **********************************************************************
- *
- * Last port: operation/overlay/OverlayNodeFactory.java rev. 1.11 (JTS-1.10)
- *
  **********************************************************************/
 
-#include <geos/operation/overlay/OverlayNodeFactory.h>
+#include <geos/operation/buffer/BufferNodeFactory.h>
 #include <geos/geomgraph/Node.h>
 #include <geos/geomgraph/DirectedEdgeStar.h>
 
@@ -25,22 +21,22 @@ using namespace geos::geomgraph;
 
 namespace geos {
 namespace operation { // geos.operation
-namespace overlay { // geos.operation.overlay
+namespace buffer { // geos.operation.buffer
 
 Node*
-OverlayNodeFactory::createNode(const geom::Coordinate& coord) const
+BufferNodeFactory::createNode(const geom::Coordinate& coord) const
 {
     return new Node(coord, new DirectedEdgeStar());
 }
 
 const NodeFactory&
-OverlayNodeFactory::instance()
+BufferNodeFactory::instance()
 {
-    static OverlayNodeFactory onf;
+    static BufferNodeFactory onf;
     return onf;
 }
 
-} // namespace geos.operation.overlay
+} // namespace geos.operation.buffer
 } // namespace geos.operation
 } // namespace geos
 

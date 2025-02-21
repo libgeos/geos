@@ -11,19 +11,16 @@
  * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
- **********************************************************************
- *
- * Last port: operation/overlay/MinimalEdgeRing.java rev. 1.13 (JTS-1.10)
  *
  **********************************************************************/
 
-#include <geos/operation/overlay/MinimalEdgeRing.h>
+#include <geos/operation/buffer/MinimalEdgeRing.h>
 #include <geos/geomgraph/EdgeRing.h>
 
 
 namespace geos {
 namespace operation { // geos.operation
-namespace overlay { // geos.operation.overlay
+namespace buffer { // geos.operation.buffer
 
 
 MinimalEdgeRing::MinimalEdgeRing(geomgraph::DirectedEdge* start,
@@ -36,7 +33,7 @@ MinimalEdgeRing::MinimalEdgeRing(geomgraph::DirectedEdge* start,
 }
 
 
-} // namespace geos.operation.overlay
+} // namespace geos.operation.buffer
 } // namespace geos.operation
 } // namespace geos
 

@@ -17,9 +17,9 @@
  *
  **********************************************************************/
 
-#include <geos/operation/overlay/PolygonBuilder.h>
-#include <geos/operation/overlay/MaximalEdgeRing.h>
-#include <geos/operation/overlay/MinimalEdgeRing.h>
+#include <geos/operation/buffer/PolygonBuilder.h>
+#include <geos/operation/buffer/MaximalEdgeRing.h>
+#include <geos/operation/buffer/MinimalEdgeRing.h>
 #include <geos/operation/polygonize/EdgeRing.h>
 #include <geos/geomgraph/Node.h>
 #include <geos/geomgraph/NodeMap.h>
@@ -51,7 +51,7 @@ using namespace geos::geom;
 
 namespace geos {
 namespace operation { // geos.operation
-namespace overlay { // geos.operation.overlay
+namespace buffer { // geos.operation.buffer
 
 PolygonBuilder::PolygonBuilder(const GeometryFactory* newGeometryFactory)
     :
@@ -289,27 +289,16 @@ PolygonBuilder::placeFreeHoles(std::vector<FastPIPRing>& newShellList,
         // only place this hole if it doesn't yet have a shell
         if(hole->getShell() == nullptr) {
             EdgeRing* shell = findEdgeRingContaining(hole, newShellList);
-            if(shell == nullptr) {
-#if GEOS_DEBUG
-                std::cerr << "CREATE TABLE shells (g geometry);" << std::endl;
-                std::cerr << "CREATE TABLE hole (g geometry);" << std::endl;
-                for(std::vector<FastPIPRing>::iterator rIt = newShellList.begin(),
-                        rEnd = newShellList.end(); rIt != rEnd; rIt++) {
-                    std::unique_ptr<Geometry> geom = (*rIt).edgeRing->toPolygon(geometryFactory);
-                    std::cerr << "INSERT INTO shells VALUES ('"
-                              << *geom
-                              << "');" << std::endl;
-                }
-                std::unique_ptr<Geometry> geom = hole->toPolygon(geometryFactory);
-                std::cerr << "INSERT INTO hole VALUES ('"
-                          << *geom
-                          << "');" << std::endl;
-#endif
-                //assert(shell!=NULL); // unable to assign hole to a shell
-                throw util::TopologyException("unable to assign hole to a shell");
+            /**
+             * If hole lies outside shell, discard it.
+             */
+            if(shell != nullptr) {
+                hole->setShell(shell);
+            }
+            else {
+                delete hole;
             }
 
-            hole->setShell(shell);
         }
     }
 }
@@ -377,7 +366,7 @@ PolygonBuilder::computePolygons(std::vector<EdgeRing*>& newShellList)
 }
 
 
-} // namespace geos.operation.overlay
+} // namespace geos.operation.buffer
 } // namespace geos.operation
 } // namespace geos
 

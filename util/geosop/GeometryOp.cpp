@@ -24,6 +24,7 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/prep/PreparedGeometry.h>
 #include <geos/geom/prep/PreparedGeometryFactory.h>
+#include <geos/algorithm/Orientation.h>
 #include <geos/algorithm/construct/LargestEmptyCircle.h>
 #include <geos/algorithm/construct/MaximumInscribedCircle.h>
 #include <geos/algorithm/BoundaryNodeRule.h>
@@ -117,10 +118,10 @@ struct GeometryOpCreator {
     std::function<GeometryOp *( std::string name )> create;
 } ;
 
-std::vector<const Geometry*> toList(const std::unique_ptr<Geometry>& geom) {
+std::vector<const Geometry*> toList(const Geometry& geom) {
     std::vector<const Geometry*> geomList;
-    for (std::size_t i = 0; i < geom->getNumGeometries(); i++) {
-        geomList.emplace_back( geom->getGeometryN(i));
+    for (std::size_t i = 0; i < geom.getNumGeometries(); i++) {
+        geomList.emplace_back( geom.getGeometryN(i));
     }
     return geomList;
 }
@@ -143,45 +144,45 @@ std::vector<GeometryOpCreator> opRegistry {
 
 { "copy", [](std::string name) { return GeometryOp::create(name,
     catGeom, "copy geometry",
-    [](const std::unique_ptr<Geometry>& geom) {
-        return new Result( geom->clone() );
+    [](const Geometry& geom) {
+        return new Result( geom.clone() );
     });
 }},
 { "envelope", [](std::string name) { return GeometryOp::create(name,
     catGeom, "envelope of geometry",
-    [](const std::unique_ptr<Geometry>& geom) {
-        return new Result( geom->getEnvelope() );
+    [](const Geometry& geom) {
+        return new Result( geom.getEnvelope() );
     });
 }},
 {"hasZ", [](std::string name) { return GeometryOp::create(name,
     catGeom,
     "test if geometry has Z ordinate",
     Result::typeBool,
-    [](const std::unique_ptr<Geometry>& geom) {
-        return new Result( geom->hasZ() );
+    [](const Geometry& geom) {
+        return new Result( geom.hasZ() );
     });
 }},
 {"hasM", [](std::string name) { return GeometryOp::create(name,
     catGeom,
     "test if geometry has M ordinate",
     Result::typeBool,
-    [](const std::unique_ptr<Geometry>& geom) {
-        return new Result( geom->hasM() );
+    [](const Geometry& geom) {
+        return new Result( geom.hasM() );
     });
 }},
 {"isEmpty", [](std::string name) { return GeometryOp::create(name,
     catGeom, "test if geometry is empty",
     Result::typeBool,
-    [](const std::unique_ptr<Geometry>& geom) {
-        return new Result( geom->isEmpty() );
+    [](const Geometry& geom) {
+        return new Result( geom.isEmpty() );
     });
 }},
 {"lineMerge",  [](std::string name) { return GeometryOp::create(name,
     catGeom,
     "merge the lines of geometry",
-        [](const std::unique_ptr<Geometry>& geom) {
+        [](const Geometry& geom) {
             geos::operation::linemerge::LineMerger lmrgr;
-            lmrgr.add(geom.get());
+            lmrgr.add(&geom);
 
             std::vector<std::unique_ptr<LineString>> lines = lmrgr.getMergedLineStrings();
 
@@ -194,8 +195,8 @@ std::vector<GeometryOpCreator> opRegistry {
 }},
 {"normalize", [](std::string name) { return GeometryOp::create(name,
     catGeom, "normalize geometry",
-    [](const std::unique_ptr<Geometry>& geom) {
-        auto res = geom->clone();
+    [](const Geometry& geom) {
+        auto res = geom.clone();
         res->normalize();
         return new Result( std::move(res) );
     });
@@ -203,47 +204,47 @@ std::vector<GeometryOpCreator> opRegistry {
 {"reducePrecision", [](std::string name) { return GeometryOp::create(name,
     catGeom,
     "reduce precision of geometry to a precision scale factor",
-    [](const std::unique_ptr<Geometry>& geom, double d) {
+    [](const Geometry& geom, double d) {
         PrecisionModel pm(d);
-        return new Result( geos::precision::GeometryPrecisionReducer::reduce( *geom, pm ) );
+        return new Result( geos::precision::GeometryPrecisionReducer::reduce( geom, pm ) );
     });
 }},
 {"reducePrecisionKeepCollapsed", [](std::string name) { return GeometryOp::create(name,
     catGeom,
     "reduce precision of geometry to a precision scale factor",
-    [](const std::unique_ptr<Geometry>& geom, double d) {
+    [](const Geometry& geom, double d) {
         PrecisionModel pm(d);
-        return new Result( geos::precision::GeometryPrecisionReducer::reduceKeepCollapsed( *geom, pm ) );
+        return new Result( geos::precision::GeometryPrecisionReducer::reduceKeepCollapsed( geom, pm ) );
     });
 }},
 {"reducePrecisionPointwise", [](std::string name) { return GeometryOp::create(name,
     catGeom,
     "reduce precision of geometry to a precision scale factor",
-    [](const std::unique_ptr<Geometry>& geom, double d) {
+    [](const Geometry& geom, double d) {
         PrecisionModel pm(d);
-        return new Result( geos::precision::GeometryPrecisionReducer::reducePointwise( *geom, pm ) );
+        return new Result( geos::precision::GeometryPrecisionReducer::reducePointwise( geom, pm ) );
     });
 }},
 {"reverse", [](std::string name) { return GeometryOp::create(name,
     catGeom,
     "reverse geometry",
-    [](const std::unique_ptr<Geometry>& geom) {
-        return new Result( geom->reverse() );
+    [](const Geometry& geom) {
+        return new Result( geom.reverse() );
     });
 }},
 //=============  category: Metric  ==================
 {"area", [](std::string name) { return GeometryOp::create(name,
     catMetric, "area of geometry",
     Result::typeDouble,
-    [](const std::unique_ptr<Geometry>& geom) {
-        return new Result( geom->getArea() );
+    [](const Geometry& geom) {
+        return new Result( geom.convexHull() );
     });
 }},
 {"length", [](std::string name) { return GeometryOp::create(name,
     catMetric, "length or perimeter of geometry",
     Result::typeDouble,
-    [](const std::unique_ptr<Geometry>& geom) {
-        return new Result( geom->getLength() );
+    [](const Geometry& geom) {
+        return new Result( geom.getLength() );
     });
 }},
 
@@ -253,30 +254,30 @@ std::vector<GeometryOpCreator> opRegistry {
     catValid,
     "test if geometry is simple",
     Result::typeBool,
-    [](const std::unique_ptr<Geometry>& geom) {
-        return new Result( geom->isSimple() );
+    [](const Geometry& geom) {
+        return new Result( geom.isSimple() );
     });
 }},
 {"isValid", [](std::string name) { return GeometryOp::create(name,
     catValid,
     "test if geometry is valid",
     Result::typeBool,
-    [](const std::unique_ptr<Geometry>& geom) {
-        return new Result( geom->isValid() );
+    [](const Geometry& geom) {
+        return new Result( geom.isValid() );
     });
 }},
 {"fixInvalid", [](std::string name) { return GeometryOp::create(name,
     catValid,
     "fix invalid geometry to be valid",
-    [](const std::unique_ptr<Geometry>& geom) {
-        return new Result( geos::geom::util::GeometryFixer::fix( geom.get() ) );
+    [](const Geometry& geom) {
+        return new Result( geos::geom::util::GeometryFixer::fix( &geom ) );
     });
 }},
 {"makeValid", [](std::string name) { return GeometryOp::create(name,
     catValid,
     "make geometry valid (original algorithm)",
-    [](const std::unique_ptr<Geometry>& geom) {
-        return new Result( geos::operation::valid::MakeValid().build( geom.get() ) );
+    [](const Geometry& geom) {
+        return new Result( geos::operation::valid::MakeValid().build( &geom ) );
     });
 }},
 
@@ -285,30 +286,78 @@ std::vector<GeometryOpCreator> opRegistry {
 {"boundary", [](std::string name) { return GeometryOp::create(name,
     catConst,
     "compute geometry boundary",
-    [](const std::unique_ptr<Geometry>& geom) {
-        return new Result( geom->getBoundary() );
+    [](const Geometry& geom) {
+        return new Result( geom.convexHull() );
     });
     }},
 {"buffer", [](std::string name) { return GeometryOp::create(name,
     catConst,
     "compute the buffer of geometry by a distance",
-    [](const std::unique_ptr<Geometry>& geom, double d) {
-        return new Result( geom->buffer( d ) );
+    [](const Geometry& geom, double d) {
+        return new Result( geom.buffer( d ) );
+    });
+    }},
+{"bufferQuadSegs", [](std::string name) { return GeometryOp::create(name,
+    catConst,
+    "compute the buffer of geometry by a distance with quadrant segments",
+    [](const Geometry& geom, double d, double quadrantSegments) {
+        return new Result( geom.buffer( d, (int) quadrantSegments ) );
+    });
+    }},
+{"bufferJoin", [](std::string name) { return GeometryOp::create(name,
+    catConst,
+    "compute the buffer of geometry by a distance, with join >0 = QS, 0 = Bevel, <0 = Mitre limit",
+    [](const Geometry& geom, double d, double join) {
+        geos::operation::buffer::BufferParameters param;
+        if (join > 0) {
+            param.setQuadrantSegments( (int) join );
+            param.setJoinStyle(geos::operation::buffer::BufferParameters::JOIN_ROUND);
+        }
+        else if (join == 0) {
+            param.setJoinStyle(geos::operation::buffer::BufferParameters::JOIN_BEVEL);
+        }
+        else if (join < 0) {
+            param.setJoinStyle(geos::operation::buffer::BufferParameters::JOIN_MITRE);
+            param.setMitreLimit( (int) -join );
+        }
+        std::unique_ptr<Geometry> g3 = geos::operation::buffer::BufferOp::bufferOp(&geom, d, param);
+        return new Result( g3.release() );
     });
     }},
 {"offsetCurve", [](std::string name) { return GeometryOp::create(name,
     catConst,
     "compute the offset curve of geometry by a distance",
-    [](const std::unique_ptr<Geometry>& geom, double d) {
-        geos::operation::buffer::OffsetCurve oc(*geom, d);
+    [](const Geometry& geom, double d) {
+        geos::operation::buffer::OffsetCurve oc(geom, d);
         std::unique_ptr<Geometry> g3 = oc.getCurve();
+        return new Result( g3.release() );
+    });
+    }},
+{"offsetCurveJoin", [](std::string name) { return GeometryOp::create(name,
+    catConst,
+    "compute the offset curve of geometry by a distance, with join >0 = QS, 0 = Bevel, <0 = Mitre limit",
+    [](const Geometry& geom, double d, double join) {
+        int quadSegs = 0;
+        geos::operation::buffer::BufferParameters::JoinStyle joinStyle = geos::operation::buffer::BufferParameters::JOIN_ROUND;
+        double miterLimit = 0;
+        if (join > 0) {
+            quadSegs = (int) join;
+        }
+        else if (join == 0) {
+            joinStyle = geos::operation::buffer::BufferParameters::JOIN_BEVEL;
+        }
+        else if (join < 0) {
+            joinStyle = geos::operation::buffer::BufferParameters::JOIN_MITRE;
+            miterLimit = (int) -join;
+        }
+        std::unique_ptr<Geometry> g3 = geos::operation::buffer::OffsetCurve::getCurve(geom, d, quadSegs, joinStyle, miterLimit);
         return new Result( g3.release() );
     });
     }},
 {"OLDoffsetCurve", [](std::string name) { return GeometryOp::create(name,
     catConst,
     "compute the offset curve of geometry by a distance",
-    [](const std::unique_ptr<Geometry>& geom, double d) {
+    [](const Geometry& geom, double d) {
         geos::operation::buffer::BufferParameters bp;
 
         bool isLeftSide = true;
@@ -317,28 +366,28 @@ std::vector<GeometryOpCreator> opRegistry {
             d = -d;
         }
         geos::operation::buffer::BufferBuilder bufBuilder(bp);
-        return new Result( bufBuilder.bufferLineSingleSided(geom.get(), d, isLeftSide) );
+        return new Result( bufBuilder.bufferLineSingleSided(&geom, d, isLeftSide) );
     });
     }},
 {"centroid", [](std::string name) { return GeometryOp::create(name,
     catConst,
     "compute geometry centroid",
-    [](const std::unique_ptr<Geometry>& geom) {
-        return new Result( geom->getCentroid() );
+    [](const Geometry& geom) {
+        return new Result( geom.getCentroid() );
     });
     }},
 {"convexHull", [](std::string name) { return GeometryOp::create(name,
     catConst,
     "compute geometry convex hull",
-    [](const std::unique_ptr<Geometry>& geom) {
-        return new Result( geom->convexHull() );
+    [](const Geometry& geom) {
+        return new Result( geom.convexHull() );
     });
     }},
 {"concaveHull", [](std::string name) { return GeometryOp::create(name,
     catConst,
     "compute geometry concave hull for Edge Length Ratio",
-    [](const std::unique_ptr<Geometry>& geom, double d) {
-        geos::algorithm::hull::ConcaveHull hull(geom.get());
+    [](const Geometry& geom, double d) {
+        geos::algorithm::hull::ConcaveHull hull(&geom);
         hull.setMaximumEdgeLengthRatio( d );
         return new Result( hull.getHull() );
     });
@@ -346,8 +395,8 @@ std::vector<GeometryOpCreator> opRegistry {
 {"concaveHullByLength", [](std::string name) { return GeometryOp::create(name,
     catConst,
     "compute geometry concave hull for Edge Length",
-    [](const std::unique_ptr<Geometry>& geom, double d) {
-        geos::algorithm::hull::ConcaveHull hull(geom.get());
+    [](const Geometry& geom, double d) {
+        geos::algorithm::hull::ConcaveHull hull(&geom);
         hull.setMaximumEdgeLength( d );
         return new Result( hull.getHull() );
     });
@@ -355,8 +404,8 @@ std::vector<GeometryOpCreator> opRegistry {
 {"concaveHullHoles", [](std::string name) { return GeometryOp::create(name,
     catConst,
     "compute geometry concave hull allowing holes for Edge Length Ratio",
-    [](const std::unique_ptr<Geometry>& geom, double d) {
-        geos::algorithm::hull::ConcaveHull hull(geom.get());
+    [](const Geometry& geom, double d) {
+        geos::algorithm::hull::ConcaveHull hull(&geom);
         hull.setMaximumEdgeLengthRatio( d );
         hull.setHolesAllowed(true);
         return new Result( hull.getHull() );
@@ -365,8 +414,8 @@ std::vector<GeometryOpCreator> opRegistry {
 {"densify", [](std::string name) { return GeometryOp::create(name,
     catConst,
     "densify geometry to a segment length ",
-    [](const std::unique_ptr<Geometry>& geom, double d) {
-        geos::geom::util::Densifier densifier( geom.get() );
+    [](const Geometry& geom, double d) {
+        geos::geom::util::Densifier densifier( &geom );
         densifier.setDistanceTolerance( d );
         return new Result( densifier.getResultGeometry() );
     });
@@ -374,15 +423,15 @@ std::vector<GeometryOpCreator> opRegistry {
 {"interiorPoint", [](std::string name) { return GeometryOp::create(name,
     catConst,
     "compute interior point of geometry",
-    [](const std::unique_ptr<Geometry>& geom) {
-        return new Result( geom->getInteriorPoint() );
+    [](const Geometry& geom) {
+        return new Result( geom.getInteriorPoint() );
     });
 }},
 {"largestEmptyCircle", [](std::string name) { return GeometryOp::create(name,
     catConst,
     "compute radius line of largest empty circle between obstacles, up to a distance tolerance",
-    [](const std::unique_ptr<Geometry>& geom, double d) {
-        geos::algorithm::construct::LargestEmptyCircle lec( geom.get(), d );
+    [](const Geometry& geom, double d) {
+        geos::algorithm::construct::LargestEmptyCircle lec( &geom, d );
         std::unique_ptr<Geometry> res = lec.getRadiusLine();
         return new Result( std::move(res) );
     });
@@ -390,8 +439,8 @@ std::vector<GeometryOpCreator> opRegistry {
 {"largestEmptyCircleBdy", [](std::string name) { return GeometryOp::create(name,
     catConst,
     "compute radius line of largest empty circle between obstacles with center in a boundary, up to a distance tolerance",
-    [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geom2, double d) {
-        geos::algorithm::construct::LargestEmptyCircle lec( geom.get(), geom2.get(), d );
+    [](const Geometry& geom, const Geometry& geomB, double d) {
+        geos::algorithm::construct::LargestEmptyCircle lec( &geom, &geomB, d );
         std::unique_ptr<Geometry> res = lec.getRadiusLine();
         return new Result( std::move(res) );
     });
@@ -399,8 +448,8 @@ std::vector<GeometryOpCreator> opRegistry {
 {"maxInscribedCircle", [](std::string name) { return GeometryOp::create(name,
     catConst,
     "compute maximum inscribed circle radius of Polygon up to a distance tolerance",
-    [](const std::unique_ptr<Geometry>& geom, double d) {
-        geos::algorithm::construct::MaximumInscribedCircle mc( geom.get(), d );
+    [](const Geometry& geom, double d) {
+        geos::algorithm::construct::MaximumInscribedCircle mc( &geom, d );
         std::unique_ptr<Geometry> res = mc.getRadiusLine();
         return new Result( std::move(res) );
     });
@@ -408,16 +457,16 @@ std::vector<GeometryOpCreator> opRegistry {
 {"minAreaRectangle", [](std::string name) { return GeometryOp::create(name,
     catConst,
     "compute minimum-area rectangle enclosing geometry",
-    [](const std::unique_ptr<Geometry>& geom) {
-        std::unique_ptr<Geometry> res = geos::algorithm::MinimumAreaRectangle::getMinimumRectangle(geom.get());
+    [](const Geometry& geom) {
+        std::unique_ptr<Geometry> res = geos::algorithm::MinimumAreaRectangle::getMinimumRectangle(&geom);
         return new Result( std::move(res) );
     });
     }},
 {"minBoundingCircle", [](std::string name) { return GeometryOp::create(name,
     catConst,
     "compute minimum bounding circle of geometry",
-    [](const std::unique_ptr<Geometry>& geom) {
-        geos::algorithm::MinimumBoundingCircle mc( geom.get() );
+    [](const Geometry& geom) {
+        geos::algorithm::MinimumBoundingCircle mc( &geom );
         std::unique_ptr<Geometry> res = mc.getCircle();
         return new Result( std::move(res) );
     });
@@ -425,8 +474,8 @@ std::vector<GeometryOpCreator> opRegistry {
 {"maxDiameter", [](std::string name) { return GeometryOp::create(name,
    catConst,
     "compute maximum diameter line of geometry",
-    [](const std::unique_ptr<Geometry>& geom) {
-        geos::algorithm::MinimumBoundingCircle mc( geom.get() );
+    [](const Geometry& geom) {
+        geos::algorithm::MinimumBoundingCircle mc( &geom );
         std::unique_ptr<Geometry> res = mc.getMaximumDiameter();
         return new Result( std::move(res) );
     });
@@ -434,8 +483,8 @@ std::vector<GeometryOpCreator> opRegistry {
 {"minDiameter", [](std::string name) { return GeometryOp::create(name,
     catConst,
     "compute minimum diameter line of geometry",
-    [](const std::unique_ptr<Geometry>& geom) {
-        geos::algorithm::MinimumDiameter md( geom.get() );
+    [](const Geometry& geom) {
+        geos::algorithm::MinimumDiameter md( &geom );
         std::unique_ptr<Geometry> res = md.getDiameter();
         return new Result( std::move(res) );
     });
@@ -444,12 +493,12 @@ std::vector<GeometryOpCreator> opRegistry {
 {"delaunay", [](std::string name) { return GeometryOp::create(name,
     catConst,
     "compute the Delaunay Triangulation of geometry vertices",
-    [](const std::unique_ptr<Geometry>& geom) {
+    [](const Geometry& geom) {
         geos::triangulate::DelaunayTriangulationBuilder builder;
         builder.setTolerance(0);
-        builder.setSites( *geom );
+        builder.setSites( geom );
 
-        Geometry* out = builder.getTriangles(*(geom->getFactory())).release();
+        Geometry* out = builder.getTriangles(*(geom.getFactory())).release();
 
         std::vector<std::unique_ptr<const Geometry>> geoms;
         for(unsigned int i = 0; i < out->getNumGeometries(); i++) {
@@ -461,19 +510,19 @@ std::vector<GeometryOpCreator> opRegistry {
 {"constrainedDelaunay", [](std::string name) { return GeometryOp::create(name,
     catConst,
     "constrained Delauanay triangulation of polygonal geometries",
-    [](const std::unique_ptr<Geometry>& geom) {
-        return new Result( geos::triangulate::polygon::ConstrainedDelaunayTriangulator::triangulate(geom.get()) );
+    [](const Geometry& geom) {
+        return new Result( geos::triangulate::polygon::ConstrainedDelaunayTriangulator::triangulate(&geom) );
         });
 }},
 {"voronoi", [](std::string name) { return GeometryOp::create(name,
     catConst,
     "Voronoi Diagram of geometry vertices",
-    [](const std::unique_ptr<Geometry>& geom) {
+    [](const Geometry& geom) {
         geos::triangulate::VoronoiDiagramBuilder builder;
         builder.setTolerance(0);
-        builder.setSites( *geom );
+        builder.setSites( geom );
 
-        Geometry* out = builder.getDiagram(*(geom->getFactory())).release();
+        Geometry* out = builder.getDiagram(*(geom.getFactory())).release();
 
         std::vector<std::unique_ptr<const Geometry>> geoms;
         for(unsigned int i = 0; i < out->getNumGeometries(); i++) {
@@ -485,9 +534,9 @@ std::vector<GeometryOpCreator> opRegistry {
 {"polygonize", [](std::string name) { return GeometryOp::create(name,
     catConst,
     "polygonize lines",
-    [](const std::unique_ptr<Geometry>& geom) {
+    [](const Geometry& geom) {
         geos::operation::polygonize::Polygonizer p;
-        p.add(geom.get());
+        p.add(&geom);
 
         std::vector<std::unique_ptr<Polygon>> polys = p.getPolygons();
         std::vector<std::unique_ptr<const Geometry>> geoms;
@@ -500,9 +549,9 @@ std::vector<GeometryOpCreator> opRegistry {
 {"polygonizeValid", [](std::string name) { return GeometryOp::create(name,
     catConst,
     "polygonize lines into a valid polygonal geometry",
-    [](const std::unique_ptr<Geometry>& geom) {
+    [](const Geometry& geom) {
         geos::operation::polygonize::Polygonizer p(true);
-        p.add(geom.get());
+        p.add(&geom);
 
         std::vector<std::unique_ptr<Polygon>> polys = p.getPolygons();
         std::vector<std::unique_ptr<const Geometry>> geoms;
@@ -515,24 +564,24 @@ std::vector<GeometryOpCreator> opRegistry {
 {"buildArea", [](std::string name) { return GeometryOp::create(name,
     catConst,
     "build area from lines",
-    [](const std::unique_ptr<Geometry>& geom) {
+    [](const Geometry& geom) {
         geos::operation::polygonize::BuildArea builder;
-        auto result = builder.build(geom.get());
+        auto result = builder.build(&geom);
         return new Result( std::move(result) ) ;
     });
     }},
 {"simplifyDP", [](std::string name) { return GeometryOp::create(name,
     catConst,
     "simplify geometry using Douglas-Peucker by a distance tolerance",
-    [](const std::unique_ptr<Geometry>& geom, double d) {
-        return new Result( geos::simplify::DouglasPeuckerSimplifier::simplify(geom.get(), d) );
+    [](const Geometry& geom, double d) {
+        return new Result( geos::simplify::DouglasPeuckerSimplifier::simplify(&geom, d) );
         });
         }},
 {"simplifyTP", [](std::string name) { return GeometryOp::create(name,
     catConst,
     "simplify geometry using Douglas-Peucker with a distance tolerance, preserving topology",
-    [](const std::unique_ptr<Geometry>& geom, double d) {
-        return new Result( geos::simplify::TopologyPreservingSimplifier::simplify(geom.get(), d) );
+    [](const Geometry& geom, double d) {
+        return new Result( geos::simplify::TopologyPreservingSimplifier::simplify(&geom, d) );
         });
 }},
 //=============  category: Distance  ==================
@@ -541,16 +590,16 @@ std::vector<GeometryOpCreator> opRegistry {
     catDist,
     "compute distance between geometry A and B",
     Result::typeDouble,
-    [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB) {
-        return new Result( geom->distance( geomB.get() ) );
+    [](const Geometry& geom, const Geometry& geomB) {
+        return new Result( geom.distance( &geomB) );
     });
     }},
 {"nearestPoints", [](std::string name) { return GeometryOp::create(name,
     catDist,
     "compute a line containing the nearest points of geometry A and B",
-    [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB) {
-        std::unique_ptr<CoordinateSequence> cs = geos::operation::distance::DistanceOp::nearestPoints(geom.get(), geomB.get());
-        auto factory = geom->getFactory();
+    [](const Geometry& geom, const Geometry& geomB) {
+        std::unique_ptr<CoordinateSequence> cs = geos::operation::distance::DistanceOp::nearestPoints(&geom, &geomB);
+        auto factory = geom.getFactory();
         auto res = factory->createLineString( std::move(cs) );
         return new Result( std::move(res) );
     });
@@ -559,23 +608,23 @@ std::vector<GeometryOpCreator> opRegistry {
     catDist,
     "compute discrete Frechet distance between geometry A and B",
     Result::typeDouble,
-    [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB) {
-       return new Result( geos::algorithm::distance::DiscreteFrechetDistance::distance(*geom, *geomB ) );
+    [](const Geometry& geom, const Geometry& geomB) {
+       return new Result( geos::algorithm::distance::DiscreteFrechetDistance::distance(geom, geomB ) );
     });
     }},
 {"hausdorffDistance", [](std::string name) { return GeometryOp::create(name,
     catDist,
     "compute discrete Hausdorff distance between geometry A and B",
     Result::typeDouble,
-    [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB) {
-        return new Result( geos::algorithm::distance::DiscreteHausdorffDistance::distance(*geom, *geomB ) );
+    [](const Geometry& geom, const Geometry& geomB) {
+        return new Result( geos::algorithm::distance::DiscreteHausdorffDistance::distance(geom, geomB ) );
     });
     }},
     /*
     // MD - can't get this to work for now
     add("frechetDistanceLine", 2, 0, Result::typeGeometry, catDist,
     "computes a line indicating the discrete Frechet distance between geometry A and B",
-    [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d) {
+    [](const Geometry& geom, const Geometry& geomB, double d) {
         (void)d;  // prevent unused variable warning
         DiscreteFrechetDistance dist(*geom, *geomB);
         //--- not supported for now
@@ -598,16 +647,16 @@ std::vector<GeometryOpCreator> opRegistry {
     catDist,
     "compute distance between geometry A and B using PreparedGeometry",
     Result::typeDouble,
-    [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB) {
-        return new Result( prepGeomCache.get(geom.get())->distance( geomB.get() ) );
+    [](const Geometry& geom, const Geometry& geomB) {
+        return new Result( prepGeomCache.get(&geom)->distance( &geomB ) );
     });
     }},
 {"nearestPointsPrep", [](std::string name) { return GeometryOp::create(name,
     catDist,
     "compute a line containing the nearest points of geometry A and B using PreparedGeometry",
-    [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB) {
-        auto cs = prepGeomCache.get(geom.get())->nearestPoints( geomB.get() );
-        auto factory = geom->getFactory();
+    [](const Geometry& geom, const Geometry& geomB) {
+        auto cs = prepGeomCache.get(&geom)->nearestPoints( &geomB );
+        auto factory = geom.getFactory();
         auto res = factory->createLineString( std::move(cs) );
         return new Result( std::move(res) );
     });
@@ -618,102 +667,102 @@ std::vector<GeometryOpCreator> opRegistry {
 { "contains", [](std::string name) { return GeometryOp::create(name,
     catRel, "test if geometry A contains geometry B",
     Result::typeBool,
-    [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB) {
-        return new Result( geom->contains( geomB.get() ) );
+    [](const Geometry& geom, const Geometry& geomB) {
+        return new Result( geom.contains( &geomB ) );
     });
 }},
 { "coveredBy", [](std::string name) { return GeometryOp::create(name,
     catRel, "test if geometry A is covered by geometry B",
     Result::typeBool,
-    [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB) {
-        return new Result( geom->coveredBy( geomB.get() ) );
+    [](const Geometry& geom, const Geometry& geomB) {
+        return new Result( geom.coveredBy( &geomB ) );
     });
 }},
 { "covers", [](std::string name) { return GeometryOp::create(name,
     catRel, "test if geometry A covers geometry B",
     Result::typeBool,
-    [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB) {
-        return new Result( geom->covers( geomB.get() ) );
+    [](const Geometry& geom, const Geometry& geomB) {
+        return new Result( geom.covers( &geomB ) );
     });
 }},
 { "crosses", [](std::string name) { return GeometryOp::create(name,
     catRel, "test if geometry A crosses geometry B",
     Result::typeBool,
-    [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB) {
-        return new Result( geom->crosses( geomB.get() ) );
+    [](const Geometry& geom, const Geometry& geomB) {
+        return new Result( geom.crosses( &geomB ) );
     });
 }},
 { "disjoint", [](std::string name) { return GeometryOp::create(name,
     catRel, "test if geometry A is disjoint from geometry B",
     Result::typeBool,
-    [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB) {
-        return new Result( geom->disjoint( geomB.get() ) );
+    [](const Geometry& geom, const Geometry& geomB) {
+        return new Result( geom.disjoint( &geomB ) );
     });
 }},
 { "equals", [](std::string name) { return GeometryOp::create(name,
     catRel, "test if geometry A equals geometry B",
     Result::typeBool,
-    [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB) {
-        return new Result( geom->equals( geomB.get() ) );
+    [](const Geometry& geom, const Geometry& geomB) {
+        return new Result( geom.equals( &geomB ) );
     });
 }},
 { "intersects", [](std::string name) { return GeometryOp::create(name,
     catRel, "test if geometry A intersects geometry B",
     Result::typeBool,
-    [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB) {
-        return new Result( geom->intersects( geomB.get() ) );
+    [](const Geometry& geom, const Geometry& geomB) {
+        return new Result( geom.intersects( &geomB ) );
     });
 }},
 { "overlaps", [](std::string name) { return GeometryOp::create(name,
     catRel, "test if geometry A overlaps geometry B",
     Result::typeBool,
-    [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB) {
-        return new Result( geom->overlaps( geomB.get() ) );
+    [](const Geometry& geom, const Geometry& geomB) {
+        return new Result( geom.overlaps( &geomB ) );
     });
 }},
 { "touches", [](std::string name) { return GeometryOp::create(name,
     catRel, "test if geometry A touches geometry B",
     Result::typeBool,
-    [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB) {
-        return new Result( geom->touches( geomB.get() ) );
+    [](const Geometry& geom, const Geometry& geomB) {
+        return new Result( geom.touches( &geomB ) );
     });
 }},
 { "within", [](std::string name) { return GeometryOp::create(name,
     catRel, "test if geometry A is within geometry B",
     Result::typeBool,
-    [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB) {
-        return new Result( geom->within( geomB.get() ) );
+    [](const Geometry& geom, const Geometry& geomB) {
+        return new Result( geom.within( &geomB ) );
     });
 }},
 { "relate", [](std::string name) { return GeometryOp::create(name,
     catRel, "compute DE-9IM matrix for geometry A and B",
     Result::typeString,
-    [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB) {
-        std::unique_ptr<geom::IntersectionMatrix> im(geom->relate( geomB.get() ));
+    [](const Geometry& geom, const Geometry& geomB) {
+        std::unique_ptr<geom::IntersectionMatrix> im(geom.relate( &geomB ));
         return new Result( im->toString() );
     });
 }},
 { "relateBNR", [](std::string name) { return GeometryOp::create(name,
     catRel, "compute DE-9IM matrix for geometry A and B with a Boundary Node Rule (1=Mod2,2=Endpt,3=Multivalent,4=Monovalent)",
     Result::typeString,
-    [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d) {
+    [](const Geometry& geom, const Geometry& geomB, double d) {
             int bnr = (int) d;
             std::unique_ptr<IntersectionMatrix> im;
             switch (bnr) {
                 case 1: /* same as OGC */
-                    im = RelateOp::relate(geom.get(), geomB.get(),
+                    im = RelateOp::relate(&geom, &geomB,
                                           BoundaryNodeRule::getBoundaryRuleMod2());
                     break;
                 case 2:
-                    im = RelateOp::relate(geom.get(), geomB.get(),
+                    im = RelateOp::relate(&geom, &geomB,
                                           BoundaryNodeRule::getBoundaryEndPoint());
                     break;
                 case 3:
-                    im = RelateOp::relate(geom.get(), geomB.get(),
+                    im = RelateOp::relate(&geom, &geomB,
                                           BoundaryNodeRule::getBoundaryMultivalentEndPoint());
                     break;
                 case 4:
-                    im = RelateOp::relate(geom.get(), geomB.get(),
+                    im = RelateOp::relate(&geom, &geomB,
                                           BoundaryNodeRule::getBoundaryMonovalentEndPoint());
                     break;
                 default:
@@ -727,31 +776,43 @@ std::vector<GeometryOpCreator> opRegistry {
 
 
 { "containsPrep", [](std::string name) { return GeometryOp::create(name,
-    catRel, "test if geometry A contains geometry B, using PreparedGeometry",
+    catRel, "test if geometry A contains geometry B, with A prepared",
     Result::typeBool,
-    [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB) {
-        return new Result( prepGeomCache.get(geom.get())->contains( geomB.get() ) );
+    [](const Geometry& geom, const Geometry& geomB) {
+        return new Result( prepGeomCache.get(&geom)->contains( &geomB ) );
     });
 }},
 { "containsProperlyPrep", [](std::string name) { return GeometryOp::create(name,
-    catRel, "test if geometry A properly contains geometry B, using PreparedGeometry",
+    catRel, "test if geometry A properly contains geometry B, with A prepared",
     Result::typeBool,
-    [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB) {
-        return new Result( prepGeomCache.get(geom.get())->containsProperly( geomB.get() ) );
+    [](const Geometry& geom, const Geometry& geomB) {
+        return new Result( prepGeomCache.get(&geom)->containsProperly( &geomB ) );
     });
 }},
 { "coversPrep", [](std::string name) { return GeometryOp::create(name,
-    catRel, "test if geometry A covers geometry B, using PreparedGeometry",
+    catRel, "test if geometry A covers geometry B, with A prepared",
     Result::typeBool,
-    [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB) {
-        return new Result( prepGeomCache.get(geom.get())->covers( geomB.get() ) );
+    [](const Geometry& geom, const Geometry& geomB) {
+        return new Result( prepGeomCache.get(&geom)->covers( &geomB ) );
     });
 }},
 { "intersectsPrep", [](std::string name) { return GeometryOp::create(name,
-    catRel, "test if geometry A intersects geometry B, using PreparedGeometry",
+    catRel, "test if geometry A intersects geometry B, with A prepared",
     Result::typeBool,
-    [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB) {
-        return new Result( prepGeomCache.get(geom.get())->intersects( geomB.get() ) );
+    [](const Geometry& geom, const Geometry& geomB) {
+        return new Result( prepGeomCache.get(&geom)->intersects( &geomB ) );
+    });
+}},
+{ "orientationIndex", [](std::string name) { return GeometryOp::create(name,
+    catRel, "orientation index for a line segment and a point",
+    Result::typeInt,
+    [](const Geometry& geom, const Geometry& geomB) {
+        std::unique_ptr<CoordinateSequence> seqA = geom.getCoordinates();
+        Coordinate p0 = seqA->getAt(0);
+        Coordinate p1 = seqA->getAt(1);
+        std::unique_ptr<CoordinateSequence> seqB = geomB.getCoordinates();
+        Coordinate q = seqB->getAt(0);
+        return new Result( algorithm::Orientation::index(p0, p1, q) );
     });
 }},
 
@@ -760,94 +821,94 @@ std::vector<GeometryOpCreator> opRegistry {
 {"difference", [](std::string name) { return GeometryOp::create(name,
     catOverlay,
     "compute difference of geometry A from B",
-    [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB) {
-       return new Result( geom->difference( geomB.get() ) );
+    [](const Geometry& geom, const Geometry& geomB) {
+       return new Result( geom.difference( &geomB ) );
     });
 }},
 {"intersection", [](std::string name) { return GeometryOp::create(name,
     catOverlay,
     "compute intersection of geometry A and B",
-    [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB) {
-       return new Result( geom->intersection( geomB.get() ) );
+    [](const Geometry& geom, const Geometry& geomB) {
+       return new Result( geom.intersection( &geomB ) );
     });
 }},
 {"symDifference", [](std::string name) { return GeometryOp::create(name,
     catOverlay,
     "compute symmetric difference of geometry A and B",
-    [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB) {
-        return new Result( geom->symDifference( geomB.get() ) );
+    [](const Geometry& geom, const Geometry& geomB) {
+        return new Result( geom.symDifference( &geomB ) );
     });
 }},
 {"unaryUnion", [](std::string name) { return GeometryOp::createAgg(name,
     catOverlay,
     "compute aggregate union",
-    [](const std::unique_ptr<Geometry>& geom) {
-        return new Result( geom->Union() );
+    [](const Geometry& geom) {
+        return new Result( geom.Union() );
     });
 }},
 {"union", [](std::string name) { return GeometryOp::create(name,
     catOverlay,
     "compute union of geometry A and B",
-    [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB) {
-        return new Result( geom->Union( geomB.get() ) );
+    [](const Geometry& geom, const Geometry& geomB) {
+        return new Result( geom.Union( &geomB ) );
 });
 }},
 {"differenceSR", [](std::string name) { return GeometryOp::create(name,
     catOverlay,
     "compute difference of geometry A from B, snap-rounding to a precision scale factor",
-    [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d) {
+    [](const Geometry& geom, const Geometry& geomB, double d) {
         geos::geom::PrecisionModel pm(d);
-        return new Result( OverlayNG::overlay(geom.get(), geomB.get(), OverlayNG::DIFFERENCE, &pm) );
+        return new Result( OverlayNG::overlay(&geom, &geomB, OverlayNG::DIFFERENCE, &pm) );
     });
 }},
 {"intersectionSR", [](std::string name) { return GeometryOp::create(name,
     catOverlay,
     "compute intersection of geometry A and B, snap-rounding to a precision scale factor",
-    [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d) {
+    [](const Geometry& geom, const Geometry& geomB, double d) {
         geos::geom::PrecisionModel pm(d);
-        return new Result( OverlayNG::overlay(geom.get(), geomB.get(), OverlayNG::INTERSECTION, &pm) );
+        return new Result( OverlayNG::overlay(&geom, &geomB, OverlayNG::INTERSECTION, &pm) );
     });
 }},
 {"symDifferenceSR", [](std::string name) { return GeometryOp::create(name,
     catOverlay,
     "compute symmetric difference of geometry A and B, snap-rounding to a precision scale factor",
-   [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d) {
+   [](const Geometry& geom, const Geometry& geomB, double d) {
         geos::geom::PrecisionModel pm(d);
-        return new Result( OverlayNG::overlay(geom.get(), geomB.get(), OverlayNG::SYMDIFFERENCE, &pm) );
+        return new Result( OverlayNG::overlay(&geom, &geomB, OverlayNG::SYMDIFFERENCE, &pm) );
     });
 }},
 {"unionSR", [](std::string name) { return GeometryOp::create(name,
     catOverlay,
     "compute union of geometry A and B, snap-rounding to a precision scale factor",
-    [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB, double d) {
+    [](const Geometry& geom, const Geometry& geomB, double d) {
         geos::geom::PrecisionModel pm(d);
-        return new Result( OverlayNG::overlay(geom.get(), geomB.get(), OverlayNG::UNION, &pm) );
+        return new Result( OverlayNG::overlay(&geom, &geomB, OverlayNG::UNION, &pm) );
     });
 }},
 {"unaryUnionSR", [](std::string name) { return GeometryOp::createAgg(name,
     catOverlay,
     "compute aggregate union",
-    [](const std::unique_ptr<Geometry>& geom, double d) {
+    [](const Geometry& geom, double d) {
         geos::geom::PrecisionModel pm(d);
-        return new Result( geos::operation::overlayng::UnaryUnionNG::Union(geom.get(), pm ));
+        return new Result( geos::operation::overlayng::UnaryUnionNG::Union(&geom, pm ));
     });
 }},
 {"node", [](std::string name) { return GeometryOp::create(name,
     catOverlay,
     "compute fully noded geometry",
-    [](const std::unique_ptr<Geometry>& geom) {
-        return new Result( geos::noding::GeometryNoder::node( *geom ) );
+    [](const Geometry& geom) {
+        return new Result( geos::noding::GeometryNoder::node( geom ) );
 });
 }},
 {"clipRect", [](std::string name) { return GeometryOp::create(name,
     catOverlay,
     "clip geometry A to envelope of B",
-    [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB) {
+    [](const Geometry& geom, const Geometry& geomB) {
         using geos::operation::intersection::Rectangle;
         using geos::operation::intersection::RectangleIntersection;
-        const Envelope* env = geomB->getEnvelopeInternal();
+        const Envelope* env = geomB.getEnvelopeInternal();
         Rectangle rect(env->getMinX(), env->getMinY(), env->getMaxX(), env->getMaxY());
-        return new Result( RectangleIntersection::clip( *geom, rect) );
+        return new Result( RectangleIntersection::clip( geom, rect) );
     });
 }},
 
@@ -856,8 +917,8 @@ std::vector<GeometryOpCreator> opRegistry {
 {"extractLine", [](std::string name) { return GeometryOp::create(name,
     catLinearref,
     "compute the line between two distances along linear geometry A",
-    [](const std::unique_ptr<Geometry>& geom, double d, double d2) {
-        auto lil = geos::linearref::LengthIndexedLine( geom.get() );
+    [](const Geometry& geom, double d, double d2) {
+        auto lil = geos::linearref::LengthIndexedLine( &geom );
         auto res = lil.extractLine(d, d2);
         return new Result( std::move(res) );
     });
@@ -865,10 +926,10 @@ std::vector<GeometryOpCreator> opRegistry {
 {"interpolate", [](std::string name) { return GeometryOp::create(name,
     catLinearref,
     "compute a point interpolated along a distance from the start of geometry A",
-    [](const std::unique_ptr<Geometry>& geom, double d) {
-        auto lil = geos::linearref::LengthIndexedLine( geom.get() );
+    [](const Geometry& geom, double d) {
+        auto lil = geos::linearref::LengthIndexedLine( &geom );
         auto coord = geos::geom::Coordinate( lil.extractPoint(d) );
-        auto factory = geom->getFactory();
+        auto factory = geom.getFactory();
         auto res = factory->createPoint( std::move(coord) );
         return new Result( std::move(res) );
     });
@@ -877,9 +938,9 @@ std::vector<GeometryOpCreator> opRegistry {
     catLinearref,
     "compute the distance of point B projected onto line A from the start of the line",
     Result::typeDouble,
-    [](const std::unique_ptr<Geometry>& geom, const std::unique_ptr<Geometry>& geomB) {
-        auto inputPt = geos::geom::Coordinate( *geomB->getCoordinate() );
-        return new Result( geos::linearref::LengthIndexedLine( geom.get() ).project( inputPt ) );
+    [](const Geometry& geom, const Geometry& geomB) {
+        auto inputPt = geos::geom::Coordinate( *geomB.getCoordinate() );
+        return new Result( geos::linearref::LengthIndexedLine( &geom ).project( inputPt ) );
     });
 }},
 
@@ -887,16 +948,16 @@ std::vector<GeometryOpCreator> opRegistry {
 
 {"clusterIntersecting", [](std::string name) { return GeometryOp::createAgg(name,
     catCluster, "cluster geometries based on intersection",
-    [](const std::unique_ptr<Geometry>& geom) {
+    [](const Geometry& geom) {
         geos::operation::cluster::GeometryIntersectsClusterFinder f;
-        return new Result(f.clusterToCollection(*geom));
+        return new Result(f.clusterToCollection(geom));
     });
 }},
 {"clusterWithin", [](std::string name) { return GeometryOp::createAgg(name,
     catCluster, "cluster geometries based on distance",
-    [](const std::unique_ptr<Geometry>& geom, double d) {
+    [](const Geometry& geom, double d) {
         geos::operation::cluster::GeometryDistanceClusterFinder f(d);
-        return new Result(f.clusterToCollection(*geom));
+        return new Result(f.clusterToCollection(geom));
     });
 }},
 
@@ -904,7 +965,7 @@ std::vector<GeometryOpCreator> opRegistry {
 
 {"coverageSimplify", [](std::string name) { return GeometryOp::createAgg(name,
     catCoverage, "simplify a polygonal coverage by a distance tolerance",
-    [](const std::unique_ptr<Geometry>& geom, double d) {
+    [](const Geometry& geom, double d) {
         std::vector<const Geometry*> coverage = toList(geom);
         std::vector<std::unique_ptr<Geometry>> result
             = geos::coverage::CoverageSimplifier::simplify(coverage, d);
@@ -918,19 +979,19 @@ std::vector<GeometryOpCreator> opRegistry {
 }},
 {"coverageUnionNG", [](std::string name) { return GeometryOp::createAgg(name,
     catCoverage, "union a polygonal coverage",
-    [](const std::unique_ptr<Geometry>& geom) {
-        return new Result( geos::operation::overlayng::CoverageUnion::geomunion(geom.get()) );
+    [](const Geometry& geom) {
+        return new Result( geos::operation::overlayng::CoverageUnion::geomunion(&geom) );
     });
 }},
 {"coverageUnion", [](std::string name) { return GeometryOp::createAgg(name,
     catCoverage, "union a polygonal coverage",
-    [](const std::unique_ptr<Geometry>& geom) {
-        return new Result( geos::operation::geounion::CoverageUnion::Union(geom.get()) );
+    [](const Geometry& geom) {
+        return new Result( geos::operation::geounion::CoverageUnion::Union(&geom) );
 });
 }},
 {"coverageValidate", [](std::string name) { return GeometryOp::createAgg(name,
     catCoverage, "validate a polygonal coverage",
-    [](const std::unique_ptr<Geometry>& geom) {
+    [](const Geometry& geom) {
         std::vector<const Geometry*> coverage = toList(geom);
         std::vector<std::unique_ptr<Geometry>> invalidList
             = geos::coverage::CoverageValidator::validate(coverage);
@@ -1014,7 +1075,7 @@ std::string GeometryOp::signature() {
     return sig;
 }
 
-Result * GeometryOp::execute( const std::unique_ptr<Geometry>& geomA, const std::unique_ptr<Geometry>& geomB, double d, double d2 )
+Result * GeometryOp::execute( const Geometry& geomA, const Geometry& geomB, double d, double d2 )
 {
     if (numGeomParam == 1) {
         if (numParam == 0) return geomfun_G(geomA);

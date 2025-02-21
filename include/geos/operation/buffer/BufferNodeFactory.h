@@ -10,10 +10,6 @@
  * by the Free Software Foundation.
  * See the COPYING file for more information.
  *
- **********************************************************************
- *
- * Last port: operation/overlay/OverlayNodeFactory.java rev. 1.11 (JTS-1.10)
- *
  **********************************************************************/
 
 #pragma once
@@ -36,21 +32,21 @@ class Node;
 
 namespace geos {
 namespace operation { // geos::operation
-namespace overlay { // geos::operation::overlay
+namespace buffer { // geos::operation::buffer
 
 /** \brief
  * Creates nodes for use in the geomgraph::PlanarGraph constructed during
- * overlay operations. NOTE: also used by operation::valid
+ * buffer operations. NOTE: also used by operation::valid
  */
-class GEOS_DLL OverlayNodeFactory: public geomgraph::NodeFactory {
+class GEOS_DLL BufferNodeFactory: public geomgraph::NodeFactory {
 public:
-    OverlayNodeFactory(): geomgraph::NodeFactory() {}
+    BufferNodeFactory(): geomgraph::NodeFactory() {}
     geomgraph::Node* createNode(const geom::Coordinate& coord) const override;
     static const geomgraph::NodeFactory& instance();
 };
 
 
-} // namespace geos::operation::overlay
+} // namespace geos::operation::buffer
 } // namespace geos::operation
 } // namespace geos
 

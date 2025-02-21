@@ -42,7 +42,7 @@ class PlanarGraph;
 class DirectedEdge;
 }
 namespace operation {
-namespace overlay {
+namespace buffer {
 class MaximalEdgeRing;
 class MinimalEdgeRing;
 }
@@ -51,7 +51,7 @@ class MinimalEdgeRing;
 
 namespace geos {
 namespace operation { // geos::operation
-namespace overlay { // geos::operation::overlay
+namespace buffer { // geos::operation::buffer
 
 /** \brief
  * Forms Polygon out of a graph of geomgraph::DirectedEdge.
@@ -155,19 +155,11 @@ private:
      * This method determines finds a containing shell for all holes
      * which have not yet been assigned to a shell.
      *
-     * These "free" holes should all be <b>properly</b> contained in
-     * their parent shells, so it is safe to use the
-     * <code>findEdgeRingContaining</code> method.
-     * This is the case because any holes which are NOT
-     * properly contained (i.e. are connected to their
-     * parent shell) would have formed part of a MaximalEdgeRing
-     * and been handled in a previous step.
-     *
-     * @throws TopologyException if a hole cannot be assigned to a shell
+     * Holes which do not lie in any shell are (probably) an eroded element,
+     * so are simply discarded.
      */
     void placeFreeHoles(std::vector<FastPIPRing>& newShellList,
                         std::vector<geomgraph::EdgeRing*>& freeHoleList);
-    // throw(const TopologyException&)
 
     /** \brief
      * Find the innermost enclosing shell geomgraph::EdgeRing containing the
@@ -200,7 +192,7 @@ private:
 
 };
 
-} // namespace geos::operation::overlay
+} // namespace geos::operation::buffer
 } // namespace geos::operation
 } // namespace geos
 

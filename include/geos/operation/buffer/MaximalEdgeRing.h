@@ -31,10 +31,9 @@ class GeometryFactory;
 }
 namespace geomgraph {
 class DirectedEdge;
-//class EdgeRing;
 }
 namespace operation {
-namespace overlay {
+namespace buffer {
 class MinimalEdgeRing;
 }
 }
@@ -42,7 +41,7 @@ class MinimalEdgeRing;
 
 namespace geos {
 namespace operation { // geos::operation
-namespace overlay { // geos::operation::overlay
+namespace buffer { // geos::operation::buffer
 
 /** \brief
  * A ring of [DirectedEdges](@ref geomgraph::DirectedEdge) which may contain nodes of degree > 2.
@@ -99,7 +98,7 @@ public:
 };
 
 
-} // namespace geos::operation::overlay
+} // namespace geos::operation::buffer
 } // namespace geos::operation
 } // namespace geos
 

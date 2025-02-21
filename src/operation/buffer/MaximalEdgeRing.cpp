@@ -17,8 +17,8 @@
  *
  **********************************************************************/
 
-#include <geos/operation/overlay/MaximalEdgeRing.h>
-#include <geos/operation/overlay/MinimalEdgeRing.h>
+#include <geos/operation/buffer/MaximalEdgeRing.h>
+#include <geos/operation/buffer/MinimalEdgeRing.h>
 #include <geos/geomgraph/EdgeRing.h>
 #include <geos/geomgraph/DirectedEdge.h>
 #include <geos/geomgraph/Node.h>
@@ -43,7 +43,7 @@ using namespace geos::geom;
 
 namespace geos {
 namespace operation { // geos.operation
-namespace overlay { // geos.operation.overlay
+namespace buffer { // geos.operation.buffer
 
 /*public*/
 MaximalEdgeRing::MaximalEdgeRing(DirectedEdge* start,

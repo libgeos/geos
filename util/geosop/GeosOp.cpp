@@ -494,7 +494,7 @@ Result* GeosOp::executeOp(GeometryOp * op,
     geos::util::Profile sw( "op" );
     sw.start();
 
-    Result* result = op->execute( gA, gB, opArgs.arg1, opArgs.arg2  );
+    Result* result = op->execute( *gA, *gB, opArgs.arg1, opArgs.arg2  );
     sw.stop();
     double time = sw.getTot();
     totalTime += time;

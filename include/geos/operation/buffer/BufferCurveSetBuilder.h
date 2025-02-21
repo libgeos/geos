@@ -70,6 +70,8 @@ namespace buffer { // geos.operation.buffer
  *
  */
 class GEOS_DLL BufferCurveSetBuilder {
+    using CoordinateSequence = geos::geom::CoordinateSequence;
+    using Envelope = geos::geom::Envelope;
 
 private:
 
@@ -118,7 +120,7 @@ private:
 
     void addPolygon(const geom::Polygon* p);
 
-    void addRingBothSides(const geom::CoordinateSequence* coord, double p_distance);
+    void addLinearRingSides(const geom::CoordinateSequence* coord, double p_distance);
 
     /**
      * Add an offset curve for a polygon ring.
@@ -138,9 +140,13 @@ private:
      * @param cwRightLoc the location on the R side of the ring
      *                   (if it is CW)
      */
-    void addRingSide(const geom::CoordinateSequence* coord,
+    void addPolygonRingSide(const geom::CoordinateSequence* coord,
                      double offsetDistance, int side, geom::Location cwLeftLoc,
                      geom::Location cwRightLoc);
+
+    void addRingSide(const geom::CoordinateSequence* coord,
+                     double offsetDistance, int side, geom::Location leftLoc,
+                     geom::Location rightLoc);
 
     /**
      * Tests whether the offset curve for a ring is fully inverted.
@@ -192,7 +198,10 @@ private:
      * @param bufferDistance
      * @return
      */
-    bool isErodedCompletely(const geom::LinearRing* ringCoord,
+    bool isRingFullyEroded(const geom::LinearRing* ring, bool isHole,
+                            double bufferDistance);
+
+    bool isRingFullyEroded(const CoordinateSequence* ringCoord, const Envelope* env, bool isHole,
                             double bufferDistance);
 
     /**

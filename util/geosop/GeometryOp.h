@@ -59,19 +59,19 @@ public:
     } typeCode;
 };
 
-typedef std::function<Result *( const std::unique_ptr<Geometry>& )>
+typedef std::function<Result *( const Geometry& )>
     geomFunSig_G;
 
-typedef std::function<Result *( const std::unique_ptr<Geometry>&, double d )>
+typedef std::function<Result *( const Geometry&, double d )>
     geomFunSig_GD;
 
-typedef std::function<Result *( const std::unique_ptr<Geometry>&, double d, double d2 )>
+typedef std::function<Result *( const Geometry&, double d, double d2 )>
     geomFunSig_GDD;
 
-typedef std::function<Result *( const std::unique_ptr<Geometry>&, const std::unique_ptr<Geometry>& )>
+typedef std::function<Result *( const Geometry&, const Geometry& )>
     geomFunSig_GG;
 
-typedef std::function<Result *( const std::unique_ptr<Geometry>&, const std::unique_ptr<Geometry>&, double d )>
+typedef std::function<Result *( const Geometry&, const Geometry&, double d )>
     geomFunSig_GGD;
 
 class GeometryOp {
@@ -255,8 +255,8 @@ public:
     int nParam();
     std::string signature();
 
-    Result * execute( const std::unique_ptr<Geometry>& geomA,
-        const std::unique_ptr<Geometry>& geomB,
+    Result * execute( const Geometry& geomA,
+        const Geometry& geomB,
         double d, double d2 );
 
 private:

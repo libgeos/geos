@@ -39,7 +39,7 @@ class EdgeRing;
 
 namespace geos {
 namespace operation { // geos::operation
-namespace overlay { // geos::operation::overlay
+namespace buffer { // geos::operation::buffer
 
 /** \brief
  * A ring of [Edges](@ref geomgraph::Edge) with the property that no node
@@ -48,7 +48,7 @@ namespace overlay { // geos::operation::overlay
  * These are the form of rings required to represent polygons
  * under the OGC SFS spatial data model.
  *
- * @see operation::overlay::MaximalEdgeRing
+ * @see operation::buffer::MaximalEdgeRing
  *
  */
 class GEOS_DLL MinimalEdgeRing: public geomgraph::EdgeRing {
@@ -74,7 +74,7 @@ public:
 };
 
 
-} // namespace geos::operation::overlay
+} // namespace geos::operation::buffer
 } // namespace geos::operation
 } // namespace geos
 
