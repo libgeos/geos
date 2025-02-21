@@ -31,15 +31,6 @@ jobs:
           cxxstd: 11,
           arch: 64,
           packages: 'g++',
-          cmake: 3.15.*,
-          os: ubuntu-latest
-        }
-        - {
-          compiler: clang++,
-          build_type: Release,
-          cxxstd: 11,
-          arch: 64,
-          packages: 'clang',
           cmake: 3.17.*,
           os: ubuntu-latest
         }
@@ -51,6 +42,15 @@ jobs:
           packages: 'clang',
           cmake: 3.17.*,
           cmake_extra: '-DDISABLE_GEOS_INLINE=ON',
+          os: ubuntu-latest
+        }
+        - {
+          compiler: clang++,
+          build_type: Debug,
+          cxxstd: 11,
+          arch: 64,
+          packages: 'clang',
+          cmake: 3.15.*,
           os: ubuntu-latest
         }
 
