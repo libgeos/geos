@@ -36,56 +36,17 @@ jobs:
           cmake_extra: '-DBUILD_BENCHMARKS=ON'
           os: ubuntu-latest
 
-          # gcc 6 and lower are not supported
-          # in ubuntu 20.04 and higher
-
-        - cxx_compiler: g++-7
-          c_compiler: gcc-7
-          build_type: Release
-          cxxstd: 14
-          arch: 64
-          packages: 'g++-7-multilib gcc-7-multilib'
-          cmake: 3.13.*
-          os: ubuntu-20.04
-
-        - cxx_compiler: g++-7
-          c_compiler: gcc-7
-          build_type: Release
-          cxxstd: 14
-          arch: 32
-          packages: 'g++-7-multilib gcc-7-multilib g++-multilib gcc-multilib'
-          cmake: 3.13.*
-          os: ubuntu-20.04
-
-        - cxx_compiler: g++-8
-          c_compiler: gcc-8
-          build_type: Release
-          cxxstd: 14
-          arch: 64
-          packages: 'g++-8-multilib gcc-8-multilib'
-          cmake: 3.13.*
-          os: ubuntu-20.04
-
-        - cxx_compiler: g++-9
-          c_compiler: gcc-9
-          build_type: Release
-          cxxstd: 14
-          arch: 64
-          packages: 'g++-9-multilib gcc-9-multilib'
-          cmake: 3.13.*
-          os: ubuntu-20.04
+          # gcc 9 and lower are not supported
+          # in ubuntu 22.04 and higher
 
         - cxx_compiler: g++-10
           c_compiler: gcc-10
           build_type: Release
-          cxxstd: 14
+          cxxstd: 17
           arch: 64
           packages: 'g++-10-multilib gcc-10-multilib'
-          cmake: 3.13.*
-          os: ubuntu-20.04
-
-          # gcc 10 and lower are not supported
-          # in ubuntu 22.04 and higher
+          cmake: 3.15.*
+          os: ubuntu-22.04
 
         - cxx_compiler: g++-11
           c_compiler: gcc-11
@@ -105,44 +66,26 @@ jobs:
           cmake: 3.22.*
           os: ubuntu-22.04
 
-          # clang 6 and lower are not supported
-          # in ubuntu 20.04 and higher
+          # gcc 12 and lower are not supported
+          # in ubuntu 24.04 and higher
 
-        - cxx_compiler: clang++-7
-          c_compiler: clang-7
+        - cxx_compiler: g++-13
+          c_compiler: gcc-13
           build_type: Release
-          cxxstd: 14
+          cxxstd: 20
           arch: 64
-          packages: 'clang-7'
-          cmake: 3.13.*
-          os: ubuntu-20.04
+          packages: 'g++-13-multilib gcc-13-multilib'
+          cmake: 3.25.*
+          os: ubuntu-24.04
 
-        - cxx_compiler: clang++-8
-          c_compiler: clang-8
+        - cxx_compiler: g++-14
+          c_compiler: gcc-14
           build_type: Release
-          cxxstd: 14
+          cxxstd: 20
           arch: 64
-          packages: 'clang-8'
-          cmake: 3.13.*
-          os: ubuntu-20.04
-
-        - cxx_compiler: clang++-9
-          c_compiler: clang-9
-          build_type: Release
-          cxxstd: 14
-          arch: 64
-          packages: 'clang-9'
-          cmake: 3.13.*
-          os: ubuntu-20.04
-
-        - cxx_compiler: clang++-10
-          c_compiler: clang-10
-          build_type: Release
-          cxxstd: 14
-          arch: 64
-          packages: 'clang-10'
-          cmake: 3.17.*
-          os: ubuntu-20.04
+          packages: 'g++-14-multilib gcc-14-multilib'
+          cmake: 3.31.*
+          os: ubuntu-24.04
 
           # clang 10 and lower are not supported
           # in ubuntu 22.04 and higher
@@ -181,6 +124,15 @@ jobs:
           arch: 64
           packages: 'clang-14'
           cmake: 3.25.*
+          os: ubuntu-22.04
+
+        - cxx_compiler: clang++-15
+          c_compiler: clang-15
+          build_type: ASAN
+          cxxstd: 20
+          arch: 64
+          packages: 'clang-15'
+          cmake: 3.24.*
           os: ubuntu-22.04
 
     runs-on: ${{ matrix.ci.os }}
@@ -457,32 +409,3 @@ jobs:
       run: |
         ./tools/cppcheck.sh
 
-
-  cmake-subproject:
-    name: 'CMake Subproject'
-    runs-on: ubuntu-20.04
-    steps:
-    - name: 'Install'
-      run: |
-        set -e
-        uname -a
-        sudo -E apt-get update
-        sudo -E apt-get -yq --no-install-suggests --no-install-recommends install make python3-pip g++
-        python3 -m pip install --disable-pip-version-check --user cmake==3.13.*
-        echo "$(python3 -m site --user-base)/bin" >> $GITHUB_PATH
-
-    - name: 'Check Out'
-      uses: actions/checkout@v4
-      with:
-        path: geos
-
-    - name: 'CMake Superbuild'
-      run: |
-        set -e
-        cp geos/tests/superbuild.CMakeLists.txt ./CMakeLists.txt
-        cp geos/examples/capi_read.c .
-        cmake --version
-        cmake -S . -B build
-        cmake --build build -j 2
-        build/capi_read
-        test ! -f build/geos/bin/test_geos_unit || { echo "Error: GEOS tests were built" 1>&2 ; exit 1; }
