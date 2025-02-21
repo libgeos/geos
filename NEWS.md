@@ -5,6 +5,7 @@
   - Add clustering functions to C API (GH-1154, Dan Baston) 
 
 - Breaking Changes:
+  - Stricter WKT parsing (GH-1241, @freemine)
 
 - Fixes/Improvements:
   - Fix ConcaveHullOfPolygons nested shell handling (GH-1169, Martin Davis)
