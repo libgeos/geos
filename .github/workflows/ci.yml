@@ -15,63 +15,66 @@ jobs:
   linux:
     name: 'Linux'
     strategy:
+      fail-fast: false
       matrix:
         ci:
-        - {
-          compiler: g++,
-          build_type: Coverage,
-          cxxstd: 11,
-          arch: 64,
-          packages: 'g++',
-          cmake: 3.15.*,
-          cmake_extra: '-DBUILD_BENCHMARKS=ON',
-          os: ubuntu-20.04
-        }
-        # - {
-        #   compiler: g++,
-        #   build_type: Release,
-        #   cxxstd: 11,
-        #   arch: 32,
-        #   packages: 'g++-4.8-multilib gcc-4.8-multilib g++-multilib gcc-multilib',
-        #   cmake: 3.13.*,
-        #   os: ubuntu-20.04
-        # }
-        - {
-          compiler: clang++,
-          build_type: Release,
-          cxxstd: 11,
-          arch: 64,
-          packages: 'clang',
-          cmake: 3.13.*,
-          os: ubuntu-20.04
-        }
-        - {
-          compiler: clang++,
-          build_type: Debug,
-          cxxstd: 11,
-          arch: 64,
-          packages: 'clang',
-          cmake: 3.17.*,
-          os: ubuntu-20.04,
-        }
-        - {
-          compiler: clang++,
-          build_type: Release,
-          cxxstd: 14,
-          arch: 64,
-          packages: 'clang',
-          cmake: 3.17.*,
-          os: ubuntu-20.04
-        }
-        - {
-          compiler: g++,
-          build_type: Release,
-          cxxstd: 11,
-          arch: 64,
-          packages: 'g++',
-          cmake: 3.22.*,
+        - compiler: g++
+          build_type: Coverage
+          cxxstd: 11
+          arch: 64
+          packages: 'g++'
+          cmake: 3.15.*
+          cmake_extra: '-DBUILD_BENCHMARKS=ON'
+          os: ubuntu-latest
+
+        - compiler: g++
+          build_type: Debug
+          cxxstd: 11
+          arch: 64
+          packages: 'g++'
+          cmake: 3.15.*
+          os: ubuntu-latest
+
+        - compiler: g++-10
+          build_type: Release
+          cxxstd: 17
+          arch: 64
+          packages: 'g++-10-multilib gcc-10-multilib'
+          cmake: 3.15.*
           os: ubuntu-22.04
-        }
+
+        - compiler: g++-11
+          build_type: Release
+          cxxstd: 17
+          arch: 64
+          packages: 'g++-11-multilib gcc-11-multilib'
+          cmake: 3.17.*
+          os: ubuntu-22.04
+
+        - compiler: clang++
+          build_type: Release
+          cxxstd: 11
+          arch: 64
+          packages: 'clang'
+          cmake: 3.15.*
+          os: ubuntu-22.04
+
+        - compiler: clang++
+          build_type: Release
+          cxxstd: 14
+          arch: 64
+          packages: 'clang'
+          cmake: 3.17.*
+          os: ubuntu-22.04
+
+        - compiler: g++
+          build_type: Release
+          cxxstd: 17
+          arch: 64
+          packages: 'g++'
+          cmake: 3.22.*
+          os: ubuntu-22.04
+
 
     runs-on: ${{ matrix.ci.os }}
     steps:
@@ -232,51 +235,3 @@ jobs:
        cd build
        ctest --output-on-failure -C Release
 
-  # windows-msvc-17:
-  #   name: 'Windows (Visual Studio 2017, Release, windows-2016)'
-  #   runs-on: windows-2016
-  #   steps:
-  #   - name: 'Check Out'
-  #     uses: actions/checkout@v4
-
-  #   - name: 'Build'
-  #     run: |
-  #      mkdir build
-  #      cd build
-  #      cmake --version
-  #      cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=11 -DBUILD_SHARED_LIBS=ON ..
-  #      cmake --build . --config Release -j 2
-
-  #   - name: 'Test'
-  #     run: |
-  #      cd build
-  #      ctest --output-on-failure -C Release
-
-  cmake-subproject:
-    name: 'CMake Subproject'
-    runs-on: ubuntu-20.04
-    steps:
-    - name: 'Install'
-      run: |
-        set -e
-        uname -a
-        sudo -E apt-get update
-        sudo -E apt-get -yq --no-install-suggests --no-install-recommends install make python3-pip g++
-        python3 -m pip install --disable-pip-version-check --user cmake==3.13.*
-        echo "$(python3 -m site --user-base)/bin" >> $GITHUB_PATH
-
-    - name: 'Check Out'
-      uses: actions/checkout@v4
-      with:
-        path: geos
-
-    - name: 'CMake Superbuild'
-      run: |
-        set -e
-        cp geos/tests/superbuild.CMakeLists.txt ./CMakeLists.txt
-        cp geos/examples/capi_read.c .
-        cmake --version
-        cmake -S . -B build
-        cmake --build build -j 2
-        build/capi_read
-        test ! -f build/geos/bin/test_geos_unit || { echo "Error: GEOS tests were built" 1>&2 ; exit 1; }
