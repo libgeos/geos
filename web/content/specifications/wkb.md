@@ -75,7 +75,7 @@ LinearRing {
 
 ### Empty Geometries
 
-For most geometry types, empty geometries are indicated naturally by having `numPoints` = 0.
+For most geometry types, empty geometries are indicated naturally by having `numPoints`, `numRings, or `numGeometries` = 0.
 Points do not have a `numPoints` field, so `POINT EMPTY` is represented by a `Point` 
 with each ordinate value set to an IEEE-754 quiet NaN value
 (big endian 0x7ff8000000000000 or little endian 0x000000000000f87f).
