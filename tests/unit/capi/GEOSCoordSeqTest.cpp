@@ -766,4 +766,90 @@ void object::test<21>()
     GEOS_finish_r(handle);
 }
 
+template<>
+template<>
+void object::test<22>()
+{
+    set_test_name("setOrdinate on XYZM coordinate");
+
+    cs_ = GEOSCoordSeq_create(1, 4);
+
+    ensure("setX", GEOSCoordSeq_setOrdinate(cs_, 0, 0, 1));
+    ensure("setY", GEOSCoordSeq_setOrdinate(cs_, 0, 1, 2));
+    ensure("setZ", GEOSCoordSeq_setOrdinate(cs_, 0, 2, 3));
+    ensure("setM", GEOSCoordSeq_setOrdinate(cs_, 0, 3, 4));
+
+    double x, y, z, m;
+    ensure(GEOSCoordSeq_copyToArrays(cs_, &x, &y, &z, &m));
+
+    ensure_equals("X", x, 1);
+    ensure_equals("Y", y, 2);
+    ensure_equals("Z", z, 3);
+    ensure_equals("M", m, 4);
+}
+
+template<>
+template<>
+void object::test<23>()
+{
+    set_test_name("setOrdinate on XYZ coordinate");
+
+    cs_ = GEOSCoordSeq_create(1, 3);
+
+    ensure("setX", GEOSCoordSeq_setOrdinate(cs_, 0, 0, 1));
+    ensure("setY", GEOSCoordSeq_setOrdinate(cs_, 0, 1, 2));
+    ensure("setZ", GEOSCoordSeq_setOrdinate(cs_, 0, 2, 3));
+    ensure("setM", !GEOSCoordSeq_setOrdinate(cs_, 0, 3, 4));
+
+    double x, y, z;
+    ensure(GEOSCoordSeq_copyToArrays(cs_, &x, &y, &z, nullptr));
+
+    ensure_equals("X", x, 1);
+    ensure_equals("Y", y, 2);
+    ensure_equals("Z", z, 3);
+}
+
+template<>
+template<>
+void object::test<24>()
+{
+    set_test_name("setOrdinate on XY coordinate");
+
+    cs_ = GEOSCoordSeq_create(1, 2);
+
+    ensure("setX", GEOSCoordSeq_setOrdinate(cs_, 0, 0, 1));
+    ensure("setY", GEOSCoordSeq_setOrdinate(cs_, 0, 1, 2));
+    ensure("setZ", !GEOSCoordSeq_setOrdinate(cs_, 0, 2, 3));
+    ensure("setM", !GEOSCoordSeq_setOrdinate(cs_, 0, 3, 4));
+
+    double x, y;
+    ensure(GEOSCoordSeq_copyToArrays(cs_, &x, &y, nullptr, nullptr));
+
+    ensure_equals("X", x, 1);
+    ensure_equals("Y", y, 2);
+}
+
+template<>
+template<>
+void object::test<25>()
+{
+    set_test_name("setOrdinate on XYM coordinate");
+
+    /* TODO: use GEOSCoordSeq_createWithDimensions() instead */
+    double buffer[3];
+    cs_ = GEOSCoordSeq_copyFromBuffer(buffer, 1, 0, 1);
+
+    ensure("setX", GEOSCoordSeq_setOrdinate(cs_, 0, 0, 1));
+    ensure("setY", GEOSCoordSeq_setOrdinate(cs_, 0, 1, 2));
+    ensure("setZ", !GEOSCoordSeq_setOrdinate(cs_, 0, 2, 3));
+    ensure("setM", GEOSCoordSeq_setOrdinate(cs_, 0, 3, 4));
+
+    double x, y, m;
+    ensure(GEOSCoordSeq_copyToArrays(cs_, &x, &y, nullptr, &m));
+
+    ensure_equals("X", x, 1);
+    ensure_equals("Y", y, 2);
+    ensure_equals("M", m, 4);
+}
+
 } // namespace tut
