@@ -547,10 +547,18 @@ CoordinateSequence::setOrdinate(std::size_t index, std::size_t ordinateIndex, do
         getAt<CoordinateXY>(index).y = value;
         break;
         case CoordinateSequence::Z:
-        getAt<Coordinate>(index).z = value;
+        {
+            if (!hasZ()) {
+                throw util::IllegalArgumentException("Coordinate type is not XYZ or XYZM");
+            }
+            getAt<Coordinate>(index).z = value;
+        }
         break;
         case CoordinateSequence::M:
         {
+            if (!hasM()) {
+                throw util::IllegalArgumentException("Coordinate type is not XYM or XYZM.");
+            }
             if (getCoordinateType() == CoordinateType::XYZM) {
                 getAt<CoordinateXYZM>(index).m = value;
             } else {

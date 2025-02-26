@@ -6,6 +6,7 @@
 
 - Breaking Changes:
   - Stricter WKT parsing (GH-1241, @freemine)
+  - GEOSCoordSeq_setOrdinate returns an error if the sequence does not have the specified ordinate (GH-1245, Dan Baston)
 
 - Fixes/Improvements:
   - Fix ConcaveHullOfPolygons nested shell handling (GH-1169, Martin Davis)
