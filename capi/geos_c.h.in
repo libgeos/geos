@@ -444,6 +444,13 @@ extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_create_r(
     unsigned int size,
     unsigned int dims);
 
+/** \see GEOSCoordSeq_createWithDimensions */
+extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_createWithDimensions_r(
+    GEOSContextHandle_t handle,
+    unsigned int size,
+    int hasZ,
+    int hasM);
+
 /** \see GEOSCoordSeq_copyFromBuffer */
 extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_copyFromBuffer_r(
         GEOSContextHandle_t handle,
@@ -2263,6 +2270,16 @@ extern void GEOS_DLL GEOSFree(void *buffer);
 * \since 2.2
 */
 extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_create(unsigned int size, unsigned int dims);
+
+/**
+* Create a coordinate sequence.
+* \param size number of coordinates in the sequence
+* \param hasZ whether the sequence should store Z values
+* \param hasM whether the sequence should store M values
+* \return the sequence or NULL on exception
+* \since 3.14
+*/
+extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_createWithDimensions(unsigned int size, int hasZ, int hasM);
 
 /**
 * Create a coordinate sequence by copying from an interleaved buffer of doubles (e.g., XYXY or XYZXYZ)

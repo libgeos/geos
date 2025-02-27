@@ -835,9 +835,7 @@ void object::test<25>()
 {
     set_test_name("setOrdinate on XYM coordinate");
 
-    /* TODO: use GEOSCoordSeq_createWithDimensions() instead */
-    double buffer[3];
-    cs_ = GEOSCoordSeq_copyFromBuffer(buffer, 1, 0, 1);
+    cs_ = GEOSCoordSeq_createWithDimensions(1, 0, 1);
 
     ensure("setX", GEOSCoordSeq_setOrdinate(cs_, 0, 0, 1));
     ensure("setY", GEOSCoordSeq_setOrdinate(cs_, 0, 1, 2));
