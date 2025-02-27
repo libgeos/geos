@@ -506,6 +506,12 @@ extern int GEOS_DLL GEOSCoordSeq_setZ_r(
     GEOSCoordSequence* s, unsigned int idx,
     double val);
 
+/** \see GEOSCoordSeq_setM */
+extern int GEOS_DLL GEOSCoordSeq_setM_r(
+    GEOSContextHandle_t handle,
+    GEOSCoordSequence* s, unsigned int idx,
+    double val);
+
 /** \see GEOSCoordSeq_setXY */
 extern int GEOS_DLL GEOSCoordSeq_setXY_r(
     GEOSContextHandle_t handle,
@@ -539,6 +545,12 @@ extern int GEOS_DLL GEOSCoordSeq_getY_r(
 
 /** \see GEOSCoordSeq_getZ */
 extern int GEOS_DLL GEOSCoordSeq_getZ_r(
+    GEOSContextHandle_t handle,
+    const GEOSCoordSequence* s,
+    unsigned int idx, double *val);
+
+/** \see GEOSCoordSeq_getM */
+extern int GEOS_DLL GEOSCoordSeq_getM_r(
     GEOSContextHandle_t handle,
     const GEOSCoordSequence* s,
     unsigned int idx, double *val);
@@ -2347,6 +2359,18 @@ extern int GEOS_DLL GEOSCoordSeq_setY(GEOSCoordSequence* s,
 */
 extern int GEOS_DLL GEOSCoordSeq_setZ(GEOSCoordSequence* s,
     unsigned int idx, double val);
+
+/**
+* Set M ordinate values in a coordinate sequence.
+* \param s the coordinate sequence
+* \param idx the index of the coordinate to alter, zero based
+* \param val the value to set the ordinate to
+* \return 0 on exception
+* \since 3.14
+*/
+extern int GEOS_DLL GEOSCoordSeq_setM(GEOSCoordSequence* s,
+    unsigned int idx, double val);
+
 /**
 * Set X and Y ordinate values in a coordinate sequence simultaneously.
 * \param s the coordinate sequence
@@ -2405,6 +2429,7 @@ extern int GEOS_DLL GEOSCoordSeq_getX(const GEOSCoordSequence* s,
 */
 extern int GEOS_DLL GEOSCoordSeq_getY(const GEOSCoordSequence* s,
     unsigned int idx, double *val);
+
 /**
 * Read Z ordinate values from a coordinate sequence.
 * \param s the coordinate sequence
@@ -2415,6 +2440,18 @@ extern int GEOS_DLL GEOSCoordSeq_getY(const GEOSCoordSequence* s,
 */
 extern int GEOS_DLL GEOSCoordSeq_getZ(const GEOSCoordSequence* s,
     unsigned int idx, double *val);
+
+/**
+* Read M ordinate values from a coordinate sequence.
+* \param s the coordinate sequence
+* \param idx the index of the coordinate to alter, zero based
+* \param val pointer where ordinate value will be placed
+* \return 0 on exception
+* \since 3.14
+*/
+extern int GEOS_DLL GEOSCoordSeq_getM(const GEOSCoordSequence* s,
+    unsigned int idx, double *val);
+
 /**
 * Read X and Y ordinate values from a coordinate sequence.
 * \param s the coordinate sequence

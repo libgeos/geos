@@ -2848,19 +2848,25 @@ extern "C" {
     int
     GEOSCoordSeq_setX_r(GEOSContextHandle_t extHandle, CoordinateSequence* s, unsigned int idx, double val)
     {
-        return GEOSCoordSeq_setOrdinate_r(extHandle, s, idx, 0, val);
+        return GEOSCoordSeq_setOrdinate_r(extHandle, s, idx, CoordinateSequence::X, val);
     }
 
     int
     GEOSCoordSeq_setY_r(GEOSContextHandle_t extHandle, CoordinateSequence* s, unsigned int idx, double val)
     {
-        return GEOSCoordSeq_setOrdinate_r(extHandle, s, idx, 1, val);
+        return GEOSCoordSeq_setOrdinate_r(extHandle, s, idx, CoordinateSequence::Y, val);
     }
 
     int
     GEOSCoordSeq_setZ_r(GEOSContextHandle_t extHandle, CoordinateSequence* s, unsigned int idx, double val)
     {
-        return GEOSCoordSeq_setOrdinate_r(extHandle, s, idx, 2, val);
+        return GEOSCoordSeq_setOrdinate_r(extHandle, s, idx, CoordinateSequence::Z, val);
+    }
+
+    int
+    GEOSCoordSeq_setM_r(GEOSContextHandle_t extHandle, CoordinateSequence* s, unsigned int idx, double val)
+    {
+        return GEOSCoordSeq_setOrdinate_r(extHandle, s, idx, CoordinateSequence::M, val);
     }
 
     int
@@ -2902,19 +2908,25 @@ extern "C" {
     int
     GEOSCoordSeq_getX_r(GEOSContextHandle_t extHandle, const CoordinateSequence* s, unsigned int idx, double* val)
     {
-        return GEOSCoordSeq_getOrdinate_r(extHandle, s, idx, 0, val);
+        return GEOSCoordSeq_getOrdinate_r(extHandle, s, idx, CoordinateSequence::X, val);
     }
 
     int
     GEOSCoordSeq_getY_r(GEOSContextHandle_t extHandle, const CoordinateSequence* s, unsigned int idx, double* val)
     {
-        return GEOSCoordSeq_getOrdinate_r(extHandle, s, idx, 1, val);
+        return GEOSCoordSeq_getOrdinate_r(extHandle, s, idx, CoordinateSequence::Y, val);
     }
 
     int
     GEOSCoordSeq_getZ_r(GEOSContextHandle_t extHandle, const CoordinateSequence* s, unsigned int idx, double* val)
     {
-        return GEOSCoordSeq_getOrdinate_r(extHandle, s, idx, 2, val);
+        return GEOSCoordSeq_getOrdinate_r(extHandle, s, idx, CoordinateSequence::Z, val);
+    }
+
+    int
+    GEOSCoordSeq_getM_r(GEOSContextHandle_t extHandle, const CoordinateSequence* s, unsigned int idx, double* val)
+    {
+        return GEOSCoordSeq_getOrdinate_r(extHandle, s, idx, CoordinateSequence::M, val);
     }
 
     int
