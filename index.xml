@@ -132,6 +132,50 @@ Databases PostGIS INGRES MonetDB SpatiaLite CockroachDB DuckDB Applications GDAL
     </item>
     
     <item>
+      <title>Download and Build</title>
+      <link>https://libgeos.org/usage/download/</link>
+      <pubDate>Mon, 03 Mar 2025 00:00:00 +0000</pubDate>
+      
+      <guid>https://libgeos.org/usage/download/</guid>
+      <description>Download Project Release Release Date First Release Final Release Download Link Changes 3.13.1 2025/03/03 2024/09/06 2028/10/01 geos-3.13.1.tar.bz2 Changes 3.12.3 2025/03/03 2023/06/27 2027/07/01 geos-3.12.3.tar.bz2 Changes 3.11.5 2025/03/03 2022/07/01 2026/07/01 geos-3.11.5.tar.bz2 Changes 3.10.7 2025/03/03 2021/10/20 2025/10/20 geos-3.10.7.tar.bz2 Changes 3.9.6 2025/03/03 2020/12/09 2024/12/09 geos-3.9.6.tar.bz2 Changes 3.8.4 EOL 2023/11/12 2019/10/10 2023/11/12 geos-3.8.4.tar.bz2 Changes Old releases can be downloaded from https://download.osgeo.org/geos/. Any releases not in this list are end-of-life (EOL). Refer to our EOL policy for details.</description>
+    </item>
+    
+    <item>
+      <title>GEOS 2025 Patch Releases</title>
+      <link>https://libgeos.org/posts/2025-03-03-patch-releases/</link>
+      <pubDate>Mon, 03 Mar 2025 00:00:00 +0000</pubDate>
+      
+      <guid>https://libgeos.org/posts/2025-03-03-patch-releases/</guid>
+      <description>&lt;p&gt;All the stable branches have had some maintenance work over the past year, and this release catches all branches up to the current state of development.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a
+  class=&#34;gdoc-markdown__link&#34;
+  href=&#34;https://github.com/libgeos/geos/blob/3.13.1/NEWS.md&#34;
+&gt;3.13.1 Release Notes&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a
+  class=&#34;gdoc-markdown__link&#34;
+  href=&#34;https://github.com/libgeos/geos/blob/3.12.3/NEWS.md&#34;
+&gt;3.12.3 Release Notes&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a
+  class=&#34;gdoc-markdown__link&#34;
+  href=&#34;https://github.com/libgeos/geos/blob/3.11.5/NEWS.md&#34;
+&gt;3.11.5 Release Notes&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a
+  class=&#34;gdoc-markdown__link&#34;
+  href=&#34;https://github.com/libgeos/geos/blob/3.10.7/NEWS&#34;
+&gt;3.10.7 Release Notes&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a
+  class=&#34;gdoc-markdown__link&#34;
+  href=&#34;https://github.com/libgeos/geos/blob/3.9.6/NEWS&#34;
+&gt;3.9.6 Release Notes&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Source downloads &lt;a
+  class=&#34;gdoc-markdown__link&#34;
+  href=&#34;https://libgeos.org/usage/download/&#34;
+&gt;are available&lt;/a&gt; now, and distributions should be updating their builds over the next several weeks.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>Version 3.13.0</title>
       <link>https://libgeos.org/posts/2024-09-06-geos-3-13-released/</link>
       <pubDate>Fri, 06 Sep 2024 00:00:00 +0000</pubDate>
@@ -281,15 +325,6 @@ Release notes for 3.8.4 and 3.9.5 are below: 3.8.4, 3.9.5,</description>
   href=&#34;https://github.com/libgeos/geos/blob/3.11.2/NEWS&#34;
 &gt;3.11.2&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;The 3.11.2 release is a bug fix release.&lt;/p&gt;</description>
-    </item>
-    
-    <item>
-      <title>Download and Build</title>
-      <link>https://libgeos.org/usage/download/</link>
-      <pubDate>Mon, 14 Nov 2022 00:00:00 +0000</pubDate>
-      
-      <guid>https://libgeos.org/usage/download/</guid>
-      <description>Download Project Release Release Date First Release Final Release Download Link Changes 3.13.0 2024/09/06 2024/09/06 2028/10/01 geos-3.13.0.tar.bz2 Changes 3.12.2 2024/06/05 2023/06/27 2027/07/01 geos-3.12.2.tar.bz2 Changes 3.11.4 2024/06/05 2022/07/01 2026/07/01 geos-3.11.4.tar.bz2 Changes 3.10.6 2023/11/11 2021/10/20 2025/10/20 geos-3.10.6.tar.bz2 Changes 3.9.5 2023/11/12 2020/12/09 2024/12/09 geos-3.9.5.tar.bz2 Changes 3.8.4 EOL 2023/11/12 2019/10/10 2023/11/12 geos-3.8.4.tar.bz2 Changes Old releases can be downloaded from https://download.osgeo.org/geos/. Any releases not in this list are end-of-life (EOL). Refer to our EOL policy for details.</description>
     </item>
     
     <item>

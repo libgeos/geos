@@ -6,7 +6,42 @@
     <description>Recent content in News on GEOS</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 06 Sep 2024 00:00:00 +0000</lastBuildDate><atom:link href="https://libgeos.org/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 03 Mar 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://libgeos.org/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>GEOS 2025 Patch Releases</title>
+      <link>https://libgeos.org/posts/2025-03-03-patch-releases/</link>
+      <pubDate>Mon, 03 Mar 2025 00:00:00 +0000</pubDate>
+      
+      <guid>https://libgeos.org/posts/2025-03-03-patch-releases/</guid>
+      <description>&lt;p&gt;All the stable branches have had some maintenance work over the past year, and this release catches all branches up to the current state of development.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a
+  class=&#34;gdoc-markdown__link&#34;
+  href=&#34;https://github.com/libgeos/geos/blob/3.13.1/NEWS.md&#34;
+&gt;3.13.1 Release Notes&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a
+  class=&#34;gdoc-markdown__link&#34;
+  href=&#34;https://github.com/libgeos/geos/blob/3.12.3/NEWS.md&#34;
+&gt;3.12.3 Release Notes&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a
+  class=&#34;gdoc-markdown__link&#34;
+  href=&#34;https://github.com/libgeos/geos/blob/3.11.5/NEWS.md&#34;
+&gt;3.11.5 Release Notes&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a
+  class=&#34;gdoc-markdown__link&#34;
+  href=&#34;https://github.com/libgeos/geos/blob/3.10.7/NEWS&#34;
+&gt;3.10.7 Release Notes&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a
+  class=&#34;gdoc-markdown__link&#34;
+  href=&#34;https://github.com/libgeos/geos/blob/3.9.6/NEWS&#34;
+&gt;3.9.6 Release Notes&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Source downloads &lt;a
+  class=&#34;gdoc-markdown__link&#34;
+  href=&#34;https://libgeos.org/usage/download/&#34;
+&gt;are available&lt;/a&gt; now, and distributions should be updating their builds over the next several weeks.&lt;/p&gt;</description>
+    </item>
+    
     <item>
       <title>Version 3.13.0</title>
       <link>https://libgeos.org/posts/2024-09-06-geos-3-13-released/</link>
