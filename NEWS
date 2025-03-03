@@ -1,5 +1,5 @@
 ## Changes in 3.10.7
-20xx-xx-xx
+2025-03-03
 
 - Fixes/Improvements:
   - Intersection: change to using DoubleDouble computation to improve robustness (GH-937, Martin Davis)
