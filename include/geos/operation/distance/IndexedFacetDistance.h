@@ -39,7 +39,7 @@ namespace distance {
 ///   an repeated query situation.
 ///
 /// Using this technique is usually much more performant than using the
-/// brute-force \ref geom::Geometry::distance(const Geometry* g) const when one
+/// brute-force Geometry::distance(const Geometry* g) const when one
 /// or both input geometries are large, or when evaluating many distance
 /// computations against a single geometry.
 ///

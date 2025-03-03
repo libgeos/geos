@@ -301,7 +301,7 @@ WKBWriter::writeCoordinateSequence(const CoordinateSequence& cs,
 }
 
 void
-WKBWriter::writeCoordinate(const CoordinateSequence& cs, size_t idx,
+WKBWriter::writeCoordinate(const CoordinateSequence& cs, std::size_t idx,
                            bool is3d)
 {
 #if DEBUG_WKB_WRITER

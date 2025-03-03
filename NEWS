@@ -1,5 +1,5 @@
 ## Changes in 3.9.6
-xxxx-xx-xx
+2025-03-03
 
 - Bug fixes / improvements:
   - Intersection: change to using DoubleDouble computation to improve robustness (GH-937, Martin Davis)

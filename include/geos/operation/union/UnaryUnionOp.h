@@ -73,7 +73,7 @@ namespace geounion {  // geos::operation::geounion
  *   or portions of line segments will be reduced to a single line segment
  *   in the output.
  *   This is consistent with the semantics of the
- *   [Geometry::Union(Geometry* )](@ref geom::Geometry::Union(const Geometry* other) const)
+ *   Geometry::Union(const Geometry* other)
  *   operation. If **merged** linework is required, the
  *   [LineMerger](@ref operation::linemerge::LineMerger) class
  *   can be used.
