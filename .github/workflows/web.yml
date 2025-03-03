@@ -31,7 +31,7 @@ jobs:
 
     - name: 'Hugo Build 🛠'
       # ...or replace 'master' with a full version tag, such as: v0.64.1
-      uses: jakejarvis/hugo-build-action@master
+      uses: jakejarvis/hugo-build-action@0.111.3
       with:
         args: --source web --destination public --verbose
 
