@@ -1,5 +1,5 @@
 ## Changes in 3.12.3
-20xx-xx-xx
+2025-03-03
 
 - Fixes:
   - TopologyPreservingSimplifier: fix to remove ring endpoints safely (GH-1110, Martin Davis)
