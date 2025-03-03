@@ -1,5 +1,5 @@
 {{- $format := default "html" (.Get "format") }}
-{{- $tocLevels := default (default 6 .Site.Params.GeekdocToC) .Page.Params.GeekdocToC }}
+{{- $tocLevels := default (default 6 .Site.Params.geekdocToC) .Page.Params.geekdocToC }}
 
 {{- if and $tocLevels .Page.TableOfContents -}}
   {{- if not (eq ($format | lower) "raw") -}}

@@ -1,7 +1,7 @@
-{{ $geekdocRepo := default (default false .Site.Params.GeekdocRepo) .Page.Params.GeekdocRepo }}
-{{ $geekdocEditPath := default (default false .Site.Params.GeekdocEditPath) .Page.Params.GeekdocEditPath }}
+{{ $geekdocRepo := default (default false .Site.Params.geekdocRepo) .Page.Params.geekdocRepo }}
+{{ $geekdocEditPath := default (default false .Site.Params.geekdocEditPath) .Page.Params.geekdocEditPath }}
 {{ if .File }}
-  {{ $.Scratch.Set "geekdocFilePath" (default (path.Join (default "content" .Site.Params.contentDir) .File.Path) .Page.Params.GeekdocFilePath) }}
+  {{ $.Scratch.Set "geekdocFilePath" (default (strings.TrimPrefix hugo.WorkingDir .File.Filename) .Page.Params.geekdocFilePath) }}
 {{ else }}
   {{ $.Scratch.Set "geekdocFilePath" false }}
 {{ end }}
@@ -18,7 +18,7 @@
   {{ end }}
 {{ end }}
 
-{{ $showBreadcrumb := (and (default true .Page.Params.GeekdocBreadcrumb) (default true .Site.Params.GeekdocBreadcrumb)) }}
+{{ $showBreadcrumb := (and (default true .Page.Params.geekdocBreadcrumb) (default true .Site.Params.geekdocBreadcrumb)) }}
 {{ $showEdit := (and ($.Scratch.Get "geekdocFilePath") $geekdocRepo $geekdocEditPath) }}
 <div
   class="gdoc-page__header flex flex-wrap

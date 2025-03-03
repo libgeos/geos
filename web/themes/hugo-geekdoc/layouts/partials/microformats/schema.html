@@ -5,14 +5,14 @@
       "@context": "http://schema.org",
       "@type": "WebSite",
       "name": {{ .Site.Title }},
-      "url": {{ .Site.BaseURL }},
+      "url": {{ .Site.Home.Permalink }},
       {{- with partial "utils/description" . }}
       "description": "{{ . | plainify | htmlUnescape | chomp }}",
       {{- end }}
       {{- with partial "utils/featured" . }}
       "thumbnailUrl": {{ . }},
       {{- end }}
-      {{- with .Site.Params.GeekdocContentLicense }}
+      {{- with .Site.Params.geekdocContentLicense }}
       "license": "{{ .name }}",
       {{- end }}
       "inLanguage": {{ .Lang }}
@@ -37,7 +37,7 @@
       "thumbnailUrl": {{ . }},
       {{- end }}
       "wordCount" : "{{ .WordCount }}",
-      {{- with .Site.Params.GeekdocContentLicense }}
+      {{- with .Site.Params.geekdocContentLicense }}
       "license": "{{ .name }}",
       {{- end }}
       "inLanguage": {{ .Lang }},
@@ -57,7 +57,7 @@
       "publisher":{
           "@type":"Organization",
           "name": {{ .Site.Title }},
-          "url": {{ .Site.BaseURL }},
+          "url": {{ .Site.Home.Permalink }},
           "logo": {
               "@type": "ImageObject",
               "url": {{ (default "brand.svg" .Site.Params.logo) | absURL }},

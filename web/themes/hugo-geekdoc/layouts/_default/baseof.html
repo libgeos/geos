@@ -2,7 +2,7 @@
 <html
   lang="{{ .Site.Language.Lang }}"
   class="color-toggle-hidden"
-  {{ if default false .Site.Params.GeekdocDarkModeCode }}code-theme="dark"{{ end }}
+  {{ if default false .Site.Params.geekdocDarkModeCode }}code-theme="dark"{{ end }}
 >
   <head>
     {{ partial "head/meta" . }}
@@ -22,15 +22,19 @@
   </head>
 
   <body itemscope itemtype="https://schema.org/WebPage">
+    <div class="w-full flex justify-center">
+      <a href="#main-content" id="gdoc-to-main" class="gdoc-markdown__link">Skip to main content</a>
+    </div>
+
     {{ partial "svg-icon-symbols" . }}
 
 
     <div
-      class="wrapper {{ if default false .Site.Params.GeekdocDarkModeDim }}dark-mode-dim{{ end }}"
+      class="wrapper {{ if default false .Site.Params.geekdocDarkModeDim }}dark-mode-dim{{ end }}"
     >
       <input type="checkbox" class="hidden" id="menu-control" />
       <input type="checkbox" class="hidden" id="menu-header-control" />
-      {{ $navEnabled := default true .Page.Params.GeekdocNav }}
+      {{ $navEnabled := default true .Page.Params.geekdocNav }}
       {{ partial "site-header" (dict "Root" . "MenuEnabled" $navEnabled) }}
 
 
@@ -46,9 +50,16 @@
           {{ template "main" . }}
 
 
+          {{ $showPrevNext := (default true .Site.Params.geekdocNextPrev) }}
+          {{ if $showPrevNext }}
           <div class="gdoc-page__footer flex flex-wrap justify-between">
-            {{ partial "menu-nextprev" . }}
+            {{ if .Site.Params.geekdocMenuBundle }}
+              {{ partial "menu-bundle-np" . }}
+            {{ else }}
+              {{ partial "menu-filetree-np" . }}
+            {{ end }}
           </div>
+          {{ end }}
         </div>
       </main>
 

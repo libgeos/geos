@@ -4,14 +4,14 @@
 
   <section class="gdoc-nav--main">
     <h2>{{ i18n "nav_navigation" }}</h2>
-    {{ if .Site.Params.GeekdocMenuBundle }}
+    {{ if .Site.Params.geekdocMenuBundle }}
       {{ partial "menu-bundle" (dict "current" . "source" .Site.Data.menu.main.main) }}
     {{ else }}
       {{ partial "menu-filetree" . }}
     {{ end }}
   </section>
 
-  {{ if and (in (slice "posts" "tags") .Section) (default false .Site.Params.GeekdocTagsToMenu) }}
+  {{ if and (in (slice "posts" "tags") .Section) (default false .Site.Params.geekdocTagsToMenu) }}
     <section class="gdoc-nav--tags">
       <h2>{{ i18n "nav_tags" }}</h2>
       <ul class="gdoc-nav__list">

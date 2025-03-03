@@ -1,6 +1,6 @@
 ---
 title: "Download and Build"
-date: 2022-11-14T00:00-07:00
+date: 2022-11-14
 draft: false
 ---
 
