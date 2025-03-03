@@ -1,5 +1,5 @@
 ## Changes in 3.11.5
-20xx-xx-xx
+2025-03-03
 
 - Fixes/Improvements:
   - Centroid: Fix crash on polygons with empty holes (GH-1075, Dan Baston)
