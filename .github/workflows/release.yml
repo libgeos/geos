@@ -46,14 +46,14 @@ jobs:
         source Version.txt
         GEOS_FULL_VERSION=${GEOS_VERSION_MAJOR}.${GEOS_VERSION_MINOR}.${GEOS_VERSION_PATCH}${GEOS_PATCH_WORD}
         echo GEOS_FULL_VERSION $GEOS_FULL_VERSION
-        echo "::set-output name=geosversion::${GEOS_FULL_VERSION}"
+        echo "geosversion=${GEOS_FULL_VERSION}" >> $GITHUB_STATE
 
     - name: 'Create Release Notes'
       id: notes
       run: |
         pwd
         perl tools/ci/releasenotes.pl NEWS.md > release.md
-        echo "::set-output name=geosnotes::./release.md"
+        echo "geosnotes=./release.md" >> $GITHUB_STATE
 
     - name: 'Bundle & Check Package'
       id: bundle
