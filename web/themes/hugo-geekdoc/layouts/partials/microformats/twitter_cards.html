@@ -10,6 +10,6 @@
 {{- with partial "utils/description" . }}
   <meta name="twitter:description" content="{{ . | plainify | htmlUnescape | chomp }}" />
 {{- end }}
-{{- with .Site.Params.twitter -}}
+{{- with .Site.Social.twitter -}}
   <meta name="twitter:site" content="@{{ . }}" />
 {{- end }}
