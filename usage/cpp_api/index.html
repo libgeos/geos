@@ -9,7 +9,7 @@
 <meta name="referrer" content="no-referrer" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="color-scheme" content="light dark" />
-<meta name="generator" content="Hugo 0.88.1" />
+<meta name="generator" content="Hugo 0.111.3">
 
 
   <meta name="description" content="The GEOS C&#43;&#43; API is included in the collection of header files installed in include/geos which is a very large collection. Effectively it includes both &ldquo;public&rdquo; headers that a user might be expected to make use of and &ldquo;private&rdquo; headers that are mostly only used by internal algorithms. Currently, the two kinds of headers are not marked in any way, nor is there an easy way to disentagle them.
@@ -70,7 +70,7 @@ You can explore the C&#43;&#43; model via the Doxygen reference." />
       "url" : "https://libgeos.org/usage/cpp_api/",
       "headline": "C++ API Programming",
       "description": "The GEOS C\u002b\u002b API is included in the collection of header files installed in include\/geos which is a very large collection. Effectively it includes both “public” headers that a user might be expected to make use of and “private” headers that are mostly only used by internal algorithms. Currently, the two kinds of headers are not marked in any way, nor is there an easy way to disentagle them.\nYou can explore the C\u002b\u002b model via the Doxygen reference.",
-      "wordCount" : "456",
+      "wordCount" : "458",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1501,67 +1501,67 @@ You can explore the C&#43;&#43; model via the Doxygen reference." />
     </h2>
 </div>
 <p>The simplest GEOS C++ API application needs to include the <code>geom::Geometry.h</code> header and <code>geom::GeometryFactory.h</code> header, to construct new geometries. To read geometries from input formats, a reader such as <code>geom::WKTReader.h</code> will also be required.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="cm">/*
-</span><span class="cm">* # GEOS C++ example 1
-</span><span class="cm">*
-</span><span class="cm">* Reads two WKT representations and calculates the
-</span><span class="cm">* intersection, prints it out, and cleans up.
-</span><span class="cm">*
-</span><span class="cm">* In general, to avoid API changes, stick to operations
-</span><span class="cm">* on Geometry. The more esoteric APIs are more likely
-</span><span class="cm">* to change between versions.
-</span><span class="cm">*/</span>
-
-<span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
-</span><span class="cp"></span>
-<span class="cm">/* For geometry operations */</span>
-<span class="cp">#include</span> <span class="cpf">&lt;geos/geom/GeometryFactory.h&gt;</span><span class="cp">
-</span><span class="cp">#include</span> <span class="cpf">&lt;geos/geom/Geometry.h&gt;</span><span class="cp">
-</span><span class="cp"></span>
-<span class="cm">/* For WKT read/write */</span>
-<span class="cp">#include</span> <span class="cpf">&lt;geos/io/WKTReader.h&gt;</span><span class="cp">
-</span><span class="cp">#include</span> <span class="cpf">&lt;geos/io/WKTWriter.h&gt;</span><span class="cp">
-</span><span class="cp"></span>
-<span class="cm">/* Geometry/GeometryFactory */</span>
-<span class="k">using</span> <span class="k">namespace</span> <span class="n">geos</span><span class="o">::</span><span class="n">geom</span><span class="p">;</span>
-
-<span class="cm">/* WKTReader/WKTWriter */</span>
-<span class="k">using</span> <span class="k">namespace</span> <span class="n">geos</span><span class="o">::</span><span class="n">io</span><span class="p">;</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="cm">/* New factory with default (float) precision model */</span>
-    <span class="n">GeometryFactory</span><span class="o">::</span><span class="n">Ptr</span> <span class="n">factory</span> <span class="o">=</span> <span class="n">GeometryFactory</span><span class="o">::</span><span class="n">create</span><span class="p">();</span>
-
-    <span class="cm">/*
-</span><span class="cm">    * Reader requires a factory to bind the geometry to
-</span><span class="cm">    * for shared resources like the PrecisionModel
-</span><span class="cm">    */</span>
-    <span class="n">WKTReader</span> <span class="n">reader</span><span class="p">(</span><span class="o">*</span><span class="n">factory</span><span class="p">);</span>
-
-    <span class="cm">/* Input WKT strings */</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">wkt_a</span><span class="p">(</span><span class="s">&#34;POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))&#34;</span><span class="p">);</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">wkt_b</span><span class="p">(</span><span class="s">&#34;POLYGON((5 5, 15 5, 15 15, 5 15, 5 5))&#34;</span><span class="p">);</span>
-
-    <span class="cm">/* Convert WKT to Geometry */</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Geometry</span><span class="o">&gt;</span> <span class="n">geom_a</span><span class="p">(</span><span class="n">reader</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="n">wkt_a</span><span class="p">));</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Geometry</span><span class="o">&gt;</span> <span class="n">geom_b</span><span class="p">(</span><span class="n">reader</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="n">wkt_b</span><span class="p">));</span>
-
-    <span class="cm">/* Calculate intersection */</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Geometry</span><span class="o">&gt;</span> <span class="n">inter</span> <span class="o">=</span> <span class="n">geom_a</span><span class="o">-&gt;</span><span class="n">intersection</span><span class="p">(</span><span class="n">geom_b</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
-
-    <span class="cm">/* Convert Geometry to WKT */</span>
-    <span class="n">WKTWriter</span> <span class="n">writer</span><span class="p">;</span>
-    <span class="n">writer</span><span class="p">.</span><span class="n">setTrim</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span> <span class="cm">/* Only needed before GEOS 3.12 */</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">inter_wkt</span> <span class="o">=</span> <span class="n">writer</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">inter</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
-
-    <span class="cm">/* Print out results */</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Geometry A:         &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">wkt_a</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Geometry B:         &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">wkt_b</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Intersection(A, B): &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">inter_wkt</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
-
-<span class="p">}</span>
-</code></pre></div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">* # GEOS C++ example 1
+</span></span></span><span class="line"><span class="cl"><span class="cm">*
+</span></span></span><span class="line"><span class="cl"><span class="cm">* Reads two WKT representations and calculates the
+</span></span></span><span class="line"><span class="cl"><span class="cm">* intersection, prints it out, and cleans up.
+</span></span></span><span class="line"><span class="cl"><span class="cm">*
+</span></span></span><span class="line"><span class="cl"><span class="cm">* In general, to avoid API changes, stick to operations
+</span></span></span><span class="line"><span class="cl"><span class="cm">* on Geometry. The more esoteric APIs are more likely
+</span></span></span><span class="line"><span class="cl"><span class="cm">* to change between versions.
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;iostream&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="cm">/* For geometry operations */</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;geos/geom/GeometryFactory.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;geos/geom/Geometry.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="cm">/* For WKT read/write */</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;geos/io/WKTReader.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;geos/io/WKTWriter.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="cm">/* Geometry/GeometryFactory */</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="k">namespace</span> <span class="n">geos</span><span class="o">::</span><span class="n">geom</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* WKTReader/WKTWriter */</span>
+</span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="k">namespace</span> <span class="n">geos</span><span class="o">::</span><span class="n">io</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/* New factory with default (float) precision model */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">GeometryFactory</span><span class="o">::</span><span class="n">Ptr</span> <span class="n">factory</span> <span class="o">=</span> <span class="n">GeometryFactory</span><span class="o">::</span><span class="n">create</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">    * Reader requires a factory to bind the geometry to
+</span></span></span><span class="line"><span class="cl"><span class="cm">    * for shared resources like the PrecisionModel
+</span></span></span><span class="line"><span class="cl"><span class="cm">    */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">WKTReader</span> <span class="n">reader</span><span class="p">(</span><span class="o">*</span><span class="n">factory</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/* Input WKT strings */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">wkt_a</span><span class="p">(</span><span class="s">&#34;POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">wkt_b</span><span class="p">(</span><span class="s">&#34;POLYGON((5 5, 15 5, 15 15, 5 15, 5 5))&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/* Convert WKT to Geometry */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Geometry</span><span class="o">&gt;</span> <span class="n">geom_a</span><span class="p">(</span><span class="n">reader</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="n">wkt_a</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Geometry</span><span class="o">&gt;</span> <span class="n">geom_b</span><span class="p">(</span><span class="n">reader</span><span class="p">.</span><span class="n">read</span><span class="p">(</span><span class="n">wkt_b</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/* Calculate intersection */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">unique_ptr</span><span class="o">&lt;</span><span class="n">Geometry</span><span class="o">&gt;</span> <span class="n">inter</span> <span class="o">=</span> <span class="n">geom_a</span><span class="o">-&gt;</span><span class="n">intersection</span><span class="p">(</span><span class="n">geom_b</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/* Convert Geometry to WKT */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">WKTWriter</span> <span class="n">writer</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">writer</span><span class="p">.</span><span class="n">setTrim</span><span class="p">(</span><span class="nb">true</span><span class="p">);</span> <span class="cm">/* Only needed before GEOS 3.12 */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">string</span> <span class="n">inter_wkt</span> <span class="o">=</span> <span class="n">writer</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">inter</span><span class="p">.</span><span class="n">get</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/* Print out results */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Geometry A:         &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">wkt_a</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Geometry B:         &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">wkt_b</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;Intersection(A, B): &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">inter_wkt</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div>
   </article>
 
 

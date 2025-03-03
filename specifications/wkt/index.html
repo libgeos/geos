@@ -9,11 +9,11 @@
 <meta name="referrer" content="no-referrer" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="color-scheme" content="light dark" />
-<meta name="generator" content="Hugo 0.88.1" />
+<meta name="generator" content="Hugo 0.111.3">
 
 
   <meta name="description" content="&ldquo;Well-known text&rdquo; is a scheme for writing a simple features geometry into a standard text string.
-Examples      POINT (0 0) POINT EMPTY LINESTRING (0 0, 0 1, 1 2) LINESTRING EMPTY POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0)) POLYGON ((0 0, 4 0, 4 4, 0 4, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1)) POLYGON EMPTY MULTIPOINT ((0 0), (1 1)) MULTILINESTRING ((0 0, 1 1), (2 2, 3 3)) MULTIPOLYGON (((1 1, 1 3, 3 3, 3 1, 1 1)), ((4 3, 6 3, 6 1, 4 1, 4 3))) GEOMETRYCOLLECTION (MULTIPOINT((0 0), (1 1)), POINT(3 4), LINESTRING(2 3, 3 4)) POINTZ (0 0 0) POINT Z (0 0 0) POINT Z EMPTY POINTM (0 0 0) POINT M (0 0 0) POINTZM (0 0 0 0) POINT ZM (0 0 0 0)  WKT BNF     &lt;x&gt; ::= &lt;number&gt; &lt;y&gt; ::= &lt;number&gt; &lt;z&gt; ::= &lt;number&gt; &lt;m&gt; ::= &lt;number&gt; &lt;empty set&gt; ::= EMPTY &lt;zm&gt; ::= ZM | Z | M &lt;comma&gt; ::= , &lt;left paren&gt; ::= ( &lt;right paren&gt; ::= ) &lt;point&gt; ::= &lt;x&gt; &lt;y&gt; [ &lt;z&gt; ] [ &lt;m&gt; ] &lt;point text&gt; ::= &lt;empty set&gt; | &lt;left paren&gt; &lt;point&gt; &lt;right paren&gt; &lt;linestring text&gt; ::= &lt;empty set&gt; | &lt;left paren&gt; &lt;point&gt; {&lt;comma&gt; &lt;point&gt;} ." />
+Examples POINT (0 0) POINT EMPTY LINESTRING (0 0, 0 1, 1 2) LINESTRING EMPTY POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0)) POLYGON ((0 0, 4 0, 4 4, 0 4, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1)) POLYGON EMPTY MULTIPOINT ((0 0), (1 1)) MULTILINESTRING ((0 0, 1 1), (2 2, 3 3)) MULTIPOLYGON (((1 1, 1 3, 3 3, 3 1, 1 1)), ((4 3, 6 3, 6 1, 4 1, 4 3))) GEOMETRYCOLLECTION (MULTIPOINT((0 0), (1 1)), POINT(3 4), LINESTRING(2 3, 3 4)) POINTZ (0 0 0) POINT Z (0 0 0) POINT Z EMPTY POINTM (0 0 0) POINT M (0 0 0) POINTZM (0 0 0 0) POINT ZM (0 0 0 0) WKT BNF &lt;x&gt; ::= &lt;number&gt; &lt;y&gt; ::= &lt;number&gt; &lt;z&gt; ::= &lt;number&gt; &lt;m&gt; ::= &lt;number&gt; &lt;empty set&gt; ::= EMPTY &lt;zm&gt; ::= ZM | Z | M &lt;comma&gt; ::= , &lt;left paren&gt; ::= ( &lt;right paren&gt; ::= ) &lt;point&gt; ::= &lt;x&gt; &lt;y&gt; [ &lt;z&gt; ] [ &lt;m&gt; ] &lt;point text&gt; ::= &lt;empty set&gt; | &lt;left paren&gt; &lt;point&gt; &lt;right paren&gt; &lt;linestring text&gt; ::= &lt;empty set&gt; | &lt;left paren&gt; &lt;point&gt; {&lt;comma&gt; &lt;point&gt;} ." />
 
     <title>Well-Known Text (WKT) | GEOS</title>
 
@@ -40,7 +40,7 @@ Examples      POINT (0 0) POINT EMPTY LINESTRING (0 0, 0 1, 1 2) LINESTRING EMPT
   />
   <meta property="og:site_name" content="GEOS" />
   <meta property="og:description" content="“Well-known text” is a scheme for writing a simple features geometry into a standard text string.
-Examples      POINT (0 0) POINT EMPTY LINESTRING (0 0, 0 1, 1 2) LINESTRING EMPTY POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0)) POLYGON ((0 0, 4 0, 4 4, 0 4, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1)) POLYGON EMPTY MULTIPOINT ((0 0), (1 1)) MULTILINESTRING ((0 0, 1 1), (2 2, 3 3)) MULTIPOLYGON (((1 1, 1 3, 3 3, 3 1, 1 1)), ((4 3, 6 3, 6 1, 4 1, 4 3))) GEOMETRYCOLLECTION (MULTIPOINT((0 0), (1 1)), POINT(3 4), LINESTRING(2 3, 3 4)) POINTZ (0 0 0) POINT Z (0 0 0) POINT Z EMPTY POINTM (0 0 0) POINT M (0 0 0) POINTZM (0 0 0 0) POINT ZM (0 0 0 0)  WKT BNF     &lt;x&gt; ::= &lt;number&gt; &lt;y&gt; ::= &lt;number&gt; &lt;z&gt; ::= &lt;number&gt; &lt;m&gt; ::= &lt;number&gt; &lt;empty set&gt; ::= EMPTY &lt;zm&gt; ::= ZM | Z | M &lt;comma&gt; ::= , &lt;left paren&gt; ::= ( &lt;right paren&gt; ::= ) &lt;point&gt; ::= &lt;x&gt; &lt;y&gt; [ &lt;z&gt; ] [ &lt;m&gt; ] &lt;point text&gt; ::= &lt;empty set&gt; | &lt;left paren&gt; &lt;point&gt; &lt;right paren&gt; &lt;linestring text&gt; ::= &lt;empty set&gt; | &lt;left paren&gt; &lt;point&gt; {&lt;comma&gt; &lt;point&gt;} ." />
+Examples POINT (0 0) POINT EMPTY LINESTRING (0 0, 0 1, 1 2) LINESTRING EMPTY POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0)) POLYGON ((0 0, 4 0, 4 4, 0 4, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1)) POLYGON EMPTY MULTIPOINT ((0 0), (1 1)) MULTILINESTRING ((0 0, 1 1), (2 2, 3 3)) MULTIPOLYGON (((1 1, 1 3, 3 3, 3 1, 1 1)), ((4 3, 6 3, 6 1, 4 1, 4 3))) GEOMETRYCOLLECTION (MULTIPOINT((0 0), (1 1)), POINT(3 4), LINESTRING(2 3, 3 4)) POINTZ (0 0 0) POINT Z (0 0 0) POINT Z EMPTY POINTM (0 0 0) POINT M (0 0 0) POINTZM (0 0 0 0) POINT ZM (0 0 0 0) WKT BNF &lt;x&gt; ::= &lt;number&gt; &lt;y&gt; ::= &lt;number&gt; &lt;z&gt; ::= &lt;number&gt; &lt;m&gt; ::= &lt;number&gt; &lt;empty set&gt; ::= EMPTY &lt;zm&gt; ::= ZM | Z | M &lt;comma&gt; ::= , &lt;left paren&gt; ::= ( &lt;right paren&gt; ::= ) &lt;point&gt; ::= &lt;x&gt; &lt;y&gt; [ &lt;z&gt; ] [ &lt;m&gt; ] &lt;point text&gt; ::= &lt;empty set&gt; | &lt;left paren&gt; &lt;point&gt; &lt;right paren&gt; &lt;linestring text&gt; ::= &lt;empty set&gt; | &lt;left paren&gt; &lt;point&gt; {&lt;comma&gt; &lt;point&gt;} ." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://libgeos.org/specifications/wkt/" />
 
@@ -58,7 +58,7 @@ Examples      POINT (0 0) POINT EMPTY LINESTRING (0 0, 0 1, 1 2) LINESTRING EMPT
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Well-Known Text (WKT)" />
   <meta name="twitter:description" content="“Well-known text” is a scheme for writing a simple features geometry into a standard text string.
-Examples      POINT (0 0) POINT EMPTY LINESTRING (0 0, 0 1, 1 2) LINESTRING EMPTY POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0)) POLYGON ((0 0, 4 0, 4 4, 0 4, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1)) POLYGON EMPTY MULTIPOINT ((0 0), (1 1)) MULTILINESTRING ((0 0, 1 1), (2 2, 3 3)) MULTIPOLYGON (((1 1, 1 3, 3 3, 3 1, 1 1)), ((4 3, 6 3, 6 1, 4 1, 4 3))) GEOMETRYCOLLECTION (MULTIPOINT((0 0), (1 1)), POINT(3 4), LINESTRING(2 3, 3 4)) POINTZ (0 0 0) POINT Z (0 0 0) POINT Z EMPTY POINTM (0 0 0) POINT M (0 0 0) POINTZM (0 0 0 0) POINT ZM (0 0 0 0)  WKT BNF     &lt;x&gt; ::= &lt;number&gt; &lt;y&gt; ::= &lt;number&gt; &lt;z&gt; ::= &lt;number&gt; &lt;m&gt; ::= &lt;number&gt; &lt;empty set&gt; ::= EMPTY &lt;zm&gt; ::= ZM | Z | M &lt;comma&gt; ::= , &lt;left paren&gt; ::= ( &lt;right paren&gt; ::= ) &lt;point&gt; ::= &lt;x&gt; &lt;y&gt; [ &lt;z&gt; ] [ &lt;m&gt; ] &lt;point text&gt; ::= &lt;empty set&gt; | &lt;left paren&gt; &lt;point&gt; &lt;right paren&gt; &lt;linestring text&gt; ::= &lt;empty set&gt; | &lt;left paren&gt; &lt;point&gt; {&lt;comma&gt; &lt;point&gt;} ." />
+Examples POINT (0 0) POINT EMPTY LINESTRING (0 0, 0 1, 1 2) LINESTRING EMPTY POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0)) POLYGON ((0 0, 4 0, 4 4, 0 4, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1)) POLYGON EMPTY MULTIPOINT ((0 0), (1 1)) MULTILINESTRING ((0 0, 1 1), (2 2, 3 3)) MULTIPOLYGON (((1 1, 1 3, 3 3, 3 1, 1 1)), ((4 3, 6 3, 6 1, 4 1, 4 3))) GEOMETRYCOLLECTION (MULTIPOINT((0 0), (1 1)), POINT(3 4), LINESTRING(2 3, 3 4)) POINTZ (0 0 0) POINT Z (0 0 0) POINT Z EMPTY POINTM (0 0 0) POINT M (0 0 0) POINTZM (0 0 0 0) POINT ZM (0 0 0 0) WKT BNF &lt;x&gt; ::= &lt;number&gt; &lt;y&gt; ::= &lt;number&gt; &lt;z&gt; ::= &lt;number&gt; &lt;m&gt; ::= &lt;number&gt; &lt;empty set&gt; ::= EMPTY &lt;zm&gt; ::= ZM | Z | M &lt;comma&gt; ::= , &lt;left paren&gt; ::= ( &lt;right paren&gt; ::= ) &lt;point&gt; ::= &lt;x&gt; &lt;y&gt; [ &lt;z&gt; ] [ &lt;m&gt; ] &lt;point text&gt; ::= &lt;empty set&gt; | &lt;left paren&gt; &lt;point&gt; &lt;right paren&gt; &lt;linestring text&gt; ::= &lt;empty set&gt; | &lt;left paren&gt; &lt;point&gt; {&lt;comma&gt; &lt;point&gt;} ." />
 
 
   <script type="application/ld+json">
@@ -69,7 +69,7 @@ Examples      POINT (0 0) POINT EMPTY LINESTRING (0 0, 0 1, 1 2) LINESTRING EMPT
       "name": "Well-Known Text (WKT)",
       "url" : "https://libgeos.org/specifications/wkt/",
       "headline": "Well-Known Text (WKT)",
-      "description": "“Well-known text” is a scheme for writing a simple features geometry into a standard text string.\nExamples      POINT (0 0) POINT EMPTY LINESTRING (0 0, 0 1, 1 2) LINESTRING EMPTY POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0)) POLYGON ((0 0, 4 0, 4 4, 0 4, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1)) POLYGON EMPTY MULTIPOINT ((0 0), (1 1)) MULTILINESTRING ((0 0, 1 1), (2 2, 3 3)) MULTIPOLYGON (((1 1, 1 3, 3 3, 3 1, 1 1)), ((4 3, 6 3, 6 1, 4 1, 4 3))) GEOMETRYCOLLECTION (MULTIPOINT((0 0), (1 1)), POINT(3 4), LINESTRING(2 3, 3 4)) POINTZ (0 0 0) POINT Z (0 0 0) POINT Z EMPTY POINTM (0 0 0) POINT M (0 0 0) POINTZM (0 0 0 0) POINT ZM (0 0 0 0)  WKT BNF     \u003cx\u003e ::= \u003cnumber\u003e \u003cy\u003e ::= \u003cnumber\u003e \u003cz\u003e ::= \u003cnumber\u003e \u003cm\u003e ::= \u003cnumber\u003e \u003cempty set\u003e ::= EMPTY \u003czm\u003e ::= ZM | Z | M \u003ccomma\u003e ::= , \u003cleft paren\u003e ::= ( \u003cright paren\u003e ::= ) \u003cpoint\u003e ::= \u003cx\u003e \u003cy\u003e [ \u003cz\u003e ] [ \u003cm\u003e ] \u003cpoint text\u003e ::= \u003cempty set\u003e | \u003cleft paren\u003e \u003cpoint\u003e \u003cright paren\u003e \u003clinestring text\u003e ::= \u003cempty set\u003e | \u003cleft paren\u003e \u003cpoint\u003e {\u003ccomma\u003e \u003cpoint\u003e} .",
+      "description": "“Well-known text” is a scheme for writing a simple features geometry into a standard text string.\nExamples POINT (0 0) POINT EMPTY LINESTRING (0 0, 0 1, 1 2) LINESTRING EMPTY POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0)) POLYGON ((0 0, 4 0, 4 4, 0 4, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1)) POLYGON EMPTY MULTIPOINT ((0 0), (1 1)) MULTILINESTRING ((0 0, 1 1), (2 2, 3 3)) MULTIPOLYGON (((1 1, 1 3, 3 3, 3 1, 1 1)), ((4 3, 6 3, 6 1, 4 1, 4 3))) GEOMETRYCOLLECTION (MULTIPOINT((0 0), (1 1)), POINT(3 4), LINESTRING(2 3, 3 4)) POINTZ (0 0 0) POINT Z (0 0 0) POINT Z EMPTY POINTM (0 0 0) POINT M (0 0 0) POINTZM (0 0 0 0) POINT ZM (0 0 0 0) WKT BNF \u003cx\u003e ::= \u003cnumber\u003e \u003cy\u003e ::= \u003cnumber\u003e \u003cz\u003e ::= \u003cnumber\u003e \u003cm\u003e ::= \u003cnumber\u003e \u003cempty set\u003e ::= EMPTY \u003czm\u003e ::= ZM | Z | M \u003ccomma\u003e ::= , \u003cleft paren\u003e ::= ( \u003cright paren\u003e ::= ) \u003cpoint\u003e ::= \u003cx\u003e \u003cy\u003e [ \u003cz\u003e ] [ \u003cm\u003e ] \u003cpoint text\u003e ::= \u003cempty set\u003e | \u003cleft paren\u003e \u003cpoint\u003e \u003cright paren\u003e \u003clinestring text\u003e ::= \u003cempty set\u003e | \u003cleft paren\u003e \u003cpoint\u003e {\u003ccomma\u003e \u003cpoint\u003e} .",
       "wordCount" : "615",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
@@ -1596,40 +1596,40 @@ Examples      POINT (0 0) POINT EMPTY LINESTRING (0 0, 0 1, 1 2) LINESTRING EMPT
 </div>
 <p>Because WKT is a decimal text output, it will never be able to exactly represent the underlying machine representation of the coordinates. In general, WKT is used for display to humans, or for transport when exact coordinate representation is not required (some web applications).</p>
 <p>Accordingly, the GEOS well-known text writer allows you to customize the coordinate precision and rounding behaviour, as well as the dimensionality of outputs.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cm">/* Read a linestring */</span>
-<span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">linestring</span> <span class="o">=</span> <span class="s">&#34;LINESTRING(0 0 1, 1 1 1, 2 1 2)&#34;</span><span class="p">;</span>
-<span class="n">GEOSWKTReader</span><span class="o">*</span> <span class="n">reader</span> <span class="o">=</span> <span class="n">GEOSWKTReader_create</span><span class="p">();</span>
-<span class="n">GEOSGeom</span><span class="o">*</span> <span class="n">geom</span> <span class="o">=</span> <span class="n">GEOSWKTReader_read</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="n">linestring</span><span class="p">);</span>
-
-<span class="cm">/* Get a WKT writer */</span>
-<span class="n">GEOSWKTWriter</span><span class="o">*</span> <span class="n">writer</span> <span class="o">=</span> <span class="n">GEOSWKTWriter_create</span><span class="p">();</span>
-
-<span class="cm">/* Preserve the Z dimension -- only needed before GEOS 3.12 */</span>
-<span class="n">GEOSWKTWriter_setOutputDimension</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
-
-<span class="cm">/* Sets the number places after the decimal to output in WKT. Default 16. */</span>
-<span class="n">GEOSWKTWriter_setRoundingPrecision</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="mi">4</span><span class="p">);</span>
-
-<span class="cm">/*
-</span><span class="cm"> * Sets the number trimming option on a \ref GEOSWKTWriter.
-</span><span class="cm"> * With trim set to 1, the writer will strip trailing 0&#39;s from
-</span><span class="cm"> * the output coordinates. With 0, all coordinates will be
-</span><span class="cm"> * padded with 0&#39;s out to the rounding precision.
-</span><span class="cm"> * This is generally only needed before GEOS 3.12.
-</span><span class="cm"> */</span>
-<span class="n">GEOSWKTWriter_setTrim</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-
-<span class="cm">/* Generate the WKT */</span>
-<span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">wkt</span> <span class="o">=</span> <span class="n">GEOSWKTWriter_write</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">geom</span><span class="p">);</span>
-
-<span class="cm">/* do something ... */</span>
-
-<span class="cm">/* Free the WKT */</span>
-<span class="n">GEOSFree</span><span class="p">(</span><span class="n">wkt</span><span class="p">);</span>
-<span class="n">GEOSGeom_destroy</span><span class="p">(</span><span class="n">geom</span><span class="p">);</span>
-<span class="n">GEOSWKTWriter_destroy</span><span class="p">(</span><span class="n">writer</span><span class="p">);</span>
-<span class="n">GEOSWKTReader_destroy</span><span class="p">(</span><span class="n">reader</span><span class="p">);</span>
-</code></pre></div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cm">/* Read a linestring */</span>
+</span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">linestring</span> <span class="o">=</span> <span class="s">&#34;LINESTRING(0 0 1, 1 1 1, 2 1 2)&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">GEOSWKTReader</span><span class="o">*</span> <span class="n">reader</span> <span class="o">=</span> <span class="nf">GEOSWKTReader_create</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="n">GEOSGeom</span><span class="o">*</span> <span class="n">geom</span> <span class="o">=</span> <span class="nf">GEOSWKTReader_read</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="n">linestring</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* Get a WKT writer */</span>
+</span></span><span class="line"><span class="cl"><span class="n">GEOSWKTWriter</span><span class="o">*</span> <span class="n">writer</span> <span class="o">=</span> <span class="nf">GEOSWKTWriter_create</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* Preserve the Z dimension -- only needed before GEOS 3.12 */</span>
+</span></span><span class="line"><span class="cl"><span class="nf">GEOSWKTWriter_setOutputDimension</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* Sets the number places after the decimal to output in WKT. Default 16. */</span>
+</span></span><span class="line"><span class="cl"><span class="nf">GEOSWKTWriter_setRoundingPrecision</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="mi">4</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Sets the number trimming option on a \ref GEOSWKTWriter.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * With trim set to 1, the writer will strip trailing 0&#39;s from
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * the output coordinates. With 0, all coordinates will be
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * padded with 0&#39;s out to the rounding precision.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * This is generally only needed before GEOS 3.12.
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="nf">GEOSWKTWriter_setTrim</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* Generate the WKT */</span>
+</span></span><span class="line"><span class="cl"><span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">wkt</span> <span class="o">=</span> <span class="nf">GEOSWKTWriter_write</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">geom</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* do something ... */</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* Free the WKT */</span>
+</span></span><span class="line"><span class="cl"><span class="nf">GEOSFree</span><span class="p">(</span><span class="n">wkt</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">GEOSGeom_destroy</span><span class="p">(</span><span class="n">geom</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">GEOSWKTWriter_destroy</span><span class="p">(</span><span class="n">writer</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">GEOSWKTReader_destroy</span><span class="p">(</span><span class="n">reader</span><span class="p">);</span>
+</span></span></code></pre></div>
   </article>
 
 

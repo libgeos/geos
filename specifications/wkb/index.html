@@ -9,12 +9,12 @@
 <meta name="referrer" content="no-referrer" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="color-scheme" content="light dark" />
-<meta name="generator" content="Hugo 0.88.1" />
+<meta name="generator" content="Hugo 0.111.3">
 
 
   <meta name="description" content="&ldquo;Well-known binary&rdquo; is a scheme for writing a simple features geometry into a platform-independent array of bytes, usually for transport between systems or between programs. By using WKB, systems can avoid exposing their particular internal implementation of geometry storage, for greater overall interoperability.
 GEOS can read and write three &ldquo;flavours&rdquo; of WKB:
- Standard WKB Extended WKB ISO WKB  When reading WKB, GEOS will transparently detect the flavour of WKB and automatically read it." />
+Standard WKB Extended WKB ISO WKB When reading WKB, GEOS will transparently detect the flavour of WKB and automatically read it." />
 
     <title>Well-Known Binary (WKB) | GEOS</title>
 
@@ -42,7 +42,7 @@ GEOS can read and write three &ldquo;flavours&rdquo; of WKB:
   <meta property="og:site_name" content="GEOS" />
   <meta property="og:description" content="“Well-known binary” is a scheme for writing a simple features geometry into a platform-independent array of bytes, usually for transport between systems or between programs. By using WKB, systems can avoid exposing their particular internal implementation of geometry storage, for greater overall interoperability.
 GEOS can read and write three “flavours” of WKB:
- Standard WKB Extended WKB ISO WKB  When reading WKB, GEOS will transparently detect the flavour of WKB and automatically read it." />
+Standard WKB Extended WKB ISO WKB When reading WKB, GEOS will transparently detect the flavour of WKB and automatically read it." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://libgeos.org/specifications/wkb/" />
 
@@ -61,7 +61,7 @@ GEOS can read and write three “flavours” of WKB:
 <meta name="twitter:title" content="Well-Known Binary (WKB)" />
   <meta name="twitter:description" content="“Well-known binary” is a scheme for writing a simple features geometry into a platform-independent array of bytes, usually for transport between systems or between programs. By using WKB, systems can avoid exposing their particular internal implementation of geometry storage, for greater overall interoperability.
 GEOS can read and write three “flavours” of WKB:
- Standard WKB Extended WKB ISO WKB  When reading WKB, GEOS will transparently detect the flavour of WKB and automatically read it." />
+Standard WKB Extended WKB ISO WKB When reading WKB, GEOS will transparently detect the flavour of WKB and automatically read it." />
 
 
   <script type="application/ld+json">
@@ -72,7 +72,7 @@ GEOS can read and write three “flavours” of WKB:
       "name": "Well-Known Binary (WKB)",
       "url" : "https://libgeos.org/specifications/wkb/",
       "headline": "Well-Known Binary (WKB)",
-      "description": "“Well-known binary” is a scheme for writing a simple features geometry into a platform-independent array of bytes, usually for transport between systems or between programs. By using WKB, systems can avoid exposing their particular internal implementation of geometry storage, for greater overall interoperability.\nGEOS can read and write three “flavours” of WKB:\n Standard WKB Extended WKB ISO WKB  When reading WKB, GEOS will transparently detect the flavour of WKB and automatically read it.",
+      "description": "“Well-known binary” is a scheme for writing a simple features geometry into a platform-independent array of bytes, usually for transport between systems or between programs. By using WKB, systems can avoid exposing their particular internal implementation of geometry storage, for greater overall interoperability.\nGEOS can read and write three “flavours” of WKB:\nStandard WKB Extended WKB ISO WKB When reading WKB, GEOS will transparently detect the flavour of WKB and automatically read it.",
       "wordCount" : "1188",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
@@ -1761,29 +1761,29 @@ WKBPointZ {
         </a>
     </h3>
 </div>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cm">/* Read a linestring */</span>
-<span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">linestring</span> <span class="o">=</span> <span class="s">&#34;LINESTRING(0 0 1, 1 1 1, 2 1 2)&#34;</span><span class="p">;</span>
-<span class="n">GEOSWKBReader</span><span class="o">*</span> <span class="n">reader</span> <span class="o">=</span> <span class="n">GEOSWKBReader_create</span><span class="p">();</span>
-<span class="n">GEOSGeom</span><span class="o">*</span> <span class="n">geom</span> <span class="o">=</span> <span class="n">GEOSWKTReader_read</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="n">linestring</span><span class="p">);</span>
-<span class="n">GEOSSetSRID</span><span class="p">(</span><span class="n">geom</span><span class="p">,</span> <span class="mi">4326</span><span class="p">);</span>
-
-<span class="cm">/* Write it out as Extended WKB */</span>
-<span class="n">GEOSWKBWriter</span><span class="o">*</span> <span class="n">writer</span> <span class="o">=</span> <span class="n">GEOSWKBWriter_create</span><span class="p">();</span>
-<span class="cm">/* Next line only needed before GEOS 3.12 */</span>
-<span class="n">GEOSWKBWriter_setOutputDimension</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
-<span class="n">GEOSWKBWriter_setFlavor</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">GEOS_WKB_EXTENDED</span><span class="p">);</span>
-<span class="n">GEOSWKBWriter_setIncludeSRID</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-
-<span class="cm">/* Generate the WKB , and store the output length */</span>
-<span class="n">size_t</span> <span class="n">wkb_size</span><span class="p">;</span>
-<span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">wkb</span> <span class="o">=</span> <span class="n">GEOSWKBWriter_write</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">geom</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">wkb_size</span><span class="p">);</span>
-
-<span class="cm">/* do something ... */</span>
-
-<span class="cm">/* Free the WKB */</span>
-<span class="n">GEOSFree</span><span class="p">(</span><span class="n">wkb</span><span class="p">);</span>
-<span class="n">GEOSGeom_destroy</span><span class="p">(</span><span class="n">geom</span><span class="p">);</span>
-</code></pre></div><div class="gdoc-page__anchorwrap">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cm">/* Read a linestring */</span>
+</span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">linestring</span> <span class="o">=</span> <span class="s">&#34;LINESTRING(0 0 1, 1 1 1, 2 1 2)&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">GEOSWKBReader</span><span class="o">*</span> <span class="n">reader</span> <span class="o">=</span> <span class="nf">GEOSWKBReader_create</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="n">GEOSGeom</span><span class="o">*</span> <span class="n">geom</span> <span class="o">=</span> <span class="nf">GEOSWKTReader_read</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="n">linestring</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">GEOSSetSRID</span><span class="p">(</span><span class="n">geom</span><span class="p">,</span> <span class="mi">4326</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* Write it out as Extended WKB */</span>
+</span></span><span class="line"><span class="cl"><span class="n">GEOSWKBWriter</span><span class="o">*</span> <span class="n">writer</span> <span class="o">=</span> <span class="nf">GEOSWKBWriter_create</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="cm">/* Next line only needed before GEOS 3.12 */</span>
+</span></span><span class="line"><span class="cl"><span class="nf">GEOSWKBWriter_setOutputDimension</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">GEOSWKBWriter_setFlavor</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">GEOS_WKB_EXTENDED</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">GEOSWKBWriter_setIncludeSRID</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* Generate the WKB , and store the output length */</span>
+</span></span><span class="line"><span class="cl"><span class="kt">size_t</span> <span class="n">wkb_size</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">wkb</span> <span class="o">=</span> <span class="nf">GEOSWKBWriter_write</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">geom</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">wkb_size</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* do something ... */</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* Free the WKB */</span>
+</span></span><span class="line"><span class="cl"><span class="nf">GEOSFree</span><span class="p">(</span><span class="n">wkb</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">GEOSGeom_destroy</span><span class="p">(</span><span class="n">geom</span><span class="p">);</span>
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h2 id="iso-wkb"
     >
         ISO WKB
@@ -1823,29 +1823,29 @@ WKBPointZ {
         </a>
     </h3>
 </div>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cm">/* Read a linestring */</span>
-<span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">linestring</span> <span class="o">=</span> <span class="s">&#34;LINESTRING(0 0 1, 1 1 1, 2 1 2)&#34;</span><span class="p">;</span>
-<span class="n">GEOSWKTReader</span><span class="o">*</span> <span class="n">reader</span> <span class="o">=</span> <span class="n">GEOSWKTReader_create</span><span class="p">();</span>
-<span class="n">GEOSGeom</span><span class="o">*</span> <span class="n">geom</span> <span class="o">=</span> <span class="n">GEOSWKTReader_read</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="n">linestring</span><span class="p">);</span>
-
-<span class="cm">/* Write it out as ISO WKB */</span>
-<span class="n">GEOSWKBWriter</span><span class="o">*</span> <span class="n">writer</span> <span class="o">=</span> <span class="n">GEOSWKBWriter_create</span><span class="p">();</span>
-<span class="cm">/* Next line only needed before GEOS 3.12 */</span>
-<span class="n">GEOSWKBWriter_setOutputDimension</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
-<span class="n">GEOSWKBWriter_setFlavor</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">GEOS_WKB_ISO</span><span class="p">);</span>
-
-<span class="cm">/* Generate the WKB , and store the output length */</span>
-<span class="n">size_t</span> <span class="n">wkb_size</span><span class="p">;</span>
-<span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">wkb</span> <span class="o">=</span> <span class="n">GEOSWKBWriter_write</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">geom</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">wkb_size</span><span class="p">);</span>
-
-<span class="cm">/* do something ... */</span>
-
-<span class="cm">/* Free the WKB */</span>
-<span class="n">GEOSFree</span><span class="p">(</span><span class="n">wkb</span><span class="p">);</span>
-<span class="n">GEOSGeom_destroy</span><span class="p">(</span><span class="n">geom</span><span class="p">);</span>
-<span class="n">GEOSWKBWriter_destroy</span><span class="p">(</span><span class="n">writer</span><span class="p">);</span>
-<span class="n">GEOSWKTReader_destroy</span><span class="p">(</span><span class="n">reader</span><span class="p">);</span>
-</code></pre></div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cm">/* Read a linestring */</span>
+</span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">linestring</span> <span class="o">=</span> <span class="s">&#34;LINESTRING(0 0 1, 1 1 1, 2 1 2)&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">GEOSWKTReader</span><span class="o">*</span> <span class="n">reader</span> <span class="o">=</span> <span class="nf">GEOSWKTReader_create</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="n">GEOSGeom</span><span class="o">*</span> <span class="n">geom</span> <span class="o">=</span> <span class="nf">GEOSWKTReader_read</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="n">linestring</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* Write it out as ISO WKB */</span>
+</span></span><span class="line"><span class="cl"><span class="n">GEOSWKBWriter</span><span class="o">*</span> <span class="n">writer</span> <span class="o">=</span> <span class="nf">GEOSWKBWriter_create</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="cm">/* Next line only needed before GEOS 3.12 */</span>
+</span></span><span class="line"><span class="cl"><span class="nf">GEOSWKBWriter_setOutputDimension</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="mi">3</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">GEOSWKBWriter_setFlavor</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">GEOS_WKB_ISO</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* Generate the WKB , and store the output length */</span>
+</span></span><span class="line"><span class="cl"><span class="kt">size_t</span> <span class="n">wkb_size</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">unsigned</span> <span class="kt">char</span><span class="o">*</span> <span class="n">wkb</span> <span class="o">=</span> <span class="nf">GEOSWKBWriter_write</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">geom</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">wkb_size</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* do something ... */</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* Free the WKB */</span>
+</span></span><span class="line"><span class="cl"><span class="nf">GEOSFree</span><span class="p">(</span><span class="n">wkb</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">GEOSGeom_destroy</span><span class="p">(</span><span class="n">geom</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">GEOSWKBWriter_destroy</span><span class="p">(</span><span class="n">writer</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">GEOSWKTReader_destroy</span><span class="p">(</span><span class="n">reader</span><span class="p">);</span>
+</span></span></code></pre></div>
   </article>
 
 

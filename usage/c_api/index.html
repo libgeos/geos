@@ -9,11 +9,11 @@
 <meta name="referrer" content="no-referrer" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="color-scheme" content="light dark" />
-<meta name="generator" content="Hugo 0.88.1" />
+<meta name="generator" content="Hugo 0.111.3">
 
 
   <meta name="description" content="Most programs using GEOS use the C API, rather than building against the C&#43;&#43; headers. The C API offers several benefits:
- Stable API, that preserves behaviour and function naming over multiple releases. Stable ABI, allowing new binaries to be dropped into place without requiring a rebuild of dependent applications. Simple access pattern, using the simple features model as the basis for most operations.  In exchange for this simplicity and stability, the C API has a few requirements from application authors:" />
+Stable API, that preserves behaviour and function naming over multiple releases. Stable ABI, allowing new binaries to be dropped into place without requiring a rebuild of dependent applications. Simple access pattern, using the simple features model as the basis for most operations. In exchange for this simplicity and stability, the C API has a few requirements from application authors:" />
 
     <title>C API Programming | GEOS</title>
 
@@ -40,7 +40,7 @@
   />
   <meta property="og:site_name" content="GEOS" />
   <meta property="og:description" content="Most programs using GEOS use the C API, rather than building against the C&#43;&#43; headers. The C API offers several benefits:
- Stable API, that preserves behaviour and function naming over multiple releases. Stable ABI, allowing new binaries to be dropped into place without requiring a rebuild of dependent applications. Simple access pattern, using the simple features model as the basis for most operations.  In exchange for this simplicity and stability, the C API has a few requirements from application authors:" />
+Stable API, that preserves behaviour and function naming over multiple releases. Stable ABI, allowing new binaries to be dropped into place without requiring a rebuild of dependent applications. Simple access pattern, using the simple features model as the basis for most operations. In exchange for this simplicity and stability, the C API has a few requirements from application authors:" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://libgeos.org/usage/c_api/" />
 
@@ -58,7 +58,7 @@
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="C API Programming" />
   <meta name="twitter:description" content="Most programs using GEOS use the C API, rather than building against the C&#43;&#43; headers. The C API offers several benefits:
- Stable API, that preserves behaviour and function naming over multiple releases. Stable ABI, allowing new binaries to be dropped into place without requiring a rebuild of dependent applications. Simple access pattern, using the simple features model as the basis for most operations.  In exchange for this simplicity and stability, the C API has a few requirements from application authors:" />
+Stable API, that preserves behaviour and function naming over multiple releases. Stable ABI, allowing new binaries to be dropped into place without requiring a rebuild of dependent applications. Simple access pattern, using the simple features model as the basis for most operations. In exchange for this simplicity and stability, the C API has a few requirements from application authors:" />
 
 
   <script type="application/ld+json">
@@ -69,8 +69,8 @@
       "name": "C API Programming",
       "url" : "https://libgeos.org/usage/c_api/",
       "headline": "C API Programming",
-      "description": "Most programs using GEOS use the C API, rather than building against the C\u002b\u002b headers. The C API offers several benefits:\n Stable API, that preserves behaviour and function naming over multiple releases. Stable ABI, allowing new binaries to be dropped into place without requiring a rebuild of dependent applications. Simple access pattern, using the simple features model as the basis for most operations.  In exchange for this simplicity and stability, the C API has a few requirements from application authors:",
-      "wordCount" : "2297",
+      "description": "Most programs using GEOS use the C API, rather than building against the C\u002b\u002b headers. The C API offers several benefits:\nStable API, that preserves behaviour and function naming over multiple releases. Stable ABI, allowing new binaries to be dropped into place without requiring a rebuild of dependent applications. Simple access pattern, using the simple features model as the basis for most operations. In exchange for this simplicity and stability, the C API has a few requirements from application authors:",
+      "wordCount" : "2299",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1500,59 +1500,59 @@
     </h2>
 </div>
 <p>The simplest GEOS C API application needs to include the API header, declare a message handler, initialize the GEOS globals, and link to the GEOS C library when built.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cm">/* geos_hello_world.c */</span>
-
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;  /* for printf */</span><span class="cp">
-</span><span class="cp">#include</span> <span class="cpf">&lt;stdarg.h&gt; /* for va_list */</span><span class="cp">
-</span><span class="cp"></span>
-<span class="cm">/* Only the CAPI header is required */</span>
-<span class="cp">#include</span> <span class="cpf">&lt;geos_c.h&gt;</span><span class="cp">
-</span><span class="cp"></span>
-<span class="cm">/*
-</span><span class="cm">* GEOS requires two message handlers to return
-</span><span class="cm">* error and notice message to the calling program.
-</span><span class="cm">*
-</span><span class="cm">*   typedef void(* GEOSMessageHandler) (const char *fmt,...)
-</span><span class="cm">*
-</span><span class="cm">* Here we stub out an example that just prints the
-</span><span class="cm">* messages to stdout.
-</span><span class="cm">*/</span>
-<span class="k">static</span> <span class="kt">void</span>
-<span class="nf">geos_msg_handler</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">fmt</span><span class="p">,</span> <span class="p">...)</span>
-<span class="p">{</span>
-    <span class="n">va_list</span> <span class="n">ap</span><span class="p">;</span>
-    <span class="n">va_start</span><span class="p">(</span><span class="n">ap</span><span class="p">,</span> <span class="n">fmt</span><span class="p">);</span>
-    <span class="n">vprintf</span> <span class="p">(</span><span class="n">fmt</span><span class="p">,</span> <span class="n">ap</span><span class="p">);</span>
-    <span class="n">va_end</span><span class="p">(</span><span class="n">ap</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="cm">/* Send notice and error messages to the terminal */</span>
-    <span class="n">initGEOS</span><span class="p">(</span><span class="n">geos_msg_handler</span><span class="p">,</span> <span class="n">geos_msg_handler</span><span class="p">);</span>
-
-    <span class="cm">/* Read WKT into geometry object */</span>
-    <span class="n">GEOSWKTReader</span><span class="o">*</span> <span class="n">reader</span> <span class="o">=</span> <span class="n">GEOSWKTReader_create</span><span class="p">();</span>
-    <span class="n">GEOSGeometry</span><span class="o">*</span> <span class="n">geom_a</span> <span class="o">=</span> <span class="n">GEOSWKTReader_read</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="s">&#34;POINT(1 1)&#34;</span><span class="p">);</span>
-
-    <span class="cm">/* Convert result to WKT */</span>
-    <span class="n">GEOSWKTWriter</span><span class="o">*</span> <span class="n">writer</span> <span class="o">=</span> <span class="n">GEOSWKTWriter_create</span><span class="p">();</span>
-    <span class="kt">char</span><span class="o">*</span> <span class="n">wkt</span> <span class="o">=</span> <span class="n">GEOSWKTWriter_write</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">geom_a</span><span class="p">);</span>
-    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Geometry: %s</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">wkt</span><span class="p">);</span>
-
-    <span class="cm">/* Clean up allocated objects */</span>
-    <span class="n">GEOSWKTReader_destroy</span><span class="p">(</span><span class="n">reader</span><span class="p">);</span>
-    <span class="n">GEOSWKTWriter_destroy</span><span class="p">(</span><span class="n">writer</span><span class="p">);</span>
-    <span class="n">GEOSGeom_destroy</span><span class="p">(</span><span class="n">geom_a</span><span class="p">);</span>
-    <span class="n">GEOSFree</span><span class="p">(</span><span class="n">wkt</span><span class="p">);</span>
-
-    <span class="cm">/* Clean up the global context */</span>
-    <span class="n">finishGEOS</span><span class="p">();</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div><p>When compiling the program, remember to link in the GEOS C library.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">cc geos_hello_world.c -o geos_hello_world -l geos_c
-</code></pre></div><div class="gdoc-page__anchorwrap">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cm">/* geos_hello_world.c */</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;  /* for printf */</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdarg.h&gt; /* for va_list */</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="cm">/* Only the CAPI header is required */</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;geos_c.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">* GEOS requires two message handlers to return
+</span></span></span><span class="line"><span class="cl"><span class="cm">* error and notice message to the calling program.
+</span></span></span><span class="line"><span class="cl"><span class="cm">*
+</span></span></span><span class="line"><span class="cl"><span class="cm">*   typedef void(* GEOSMessageHandler) (const char *fmt,...)
+</span></span></span><span class="line"><span class="cl"><span class="cm">*
+</span></span></span><span class="line"><span class="cl"><span class="cm">* Here we stub out an example that just prints the
+</span></span></span><span class="line"><span class="cl"><span class="cm">* messages to stdout.
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">void</span>
+</span></span><span class="line"><span class="cl"><span class="nf">geos_msg_handler</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">fmt</span><span class="p">,</span> <span class="p">...)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">va_list</span> <span class="n">ap</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">va_start</span><span class="p">(</span><span class="n">ap</span><span class="p">,</span> <span class="n">fmt</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">vprintf</span> <span class="p">(</span><span class="n">fmt</span><span class="p">,</span> <span class="n">ap</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">va_end</span><span class="p">(</span><span class="n">ap</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/* Send notice and error messages to the terminal */</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">initGEOS</span><span class="p">(</span><span class="n">geos_msg_handler</span><span class="p">,</span> <span class="n">geos_msg_handler</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/* Read WKT into geometry object */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">GEOSWKTReader</span><span class="o">*</span> <span class="n">reader</span> <span class="o">=</span> <span class="nf">GEOSWKTReader_create</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">GEOSGeometry</span><span class="o">*</span> <span class="n">geom_a</span> <span class="o">=</span> <span class="nf">GEOSWKTReader_read</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="s">&#34;POINT(1 1)&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/* Convert result to WKT */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">GEOSWKTWriter</span><span class="o">*</span> <span class="n">writer</span> <span class="o">=</span> <span class="nf">GEOSWKTWriter_create</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span><span class="o">*</span> <span class="n">wkt</span> <span class="o">=</span> <span class="nf">GEOSWKTWriter_write</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">geom_a</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Geometry: %s</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">wkt</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/* Clean up allocated objects */</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">GEOSWKTReader_destroy</span><span class="p">(</span><span class="n">reader</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">GEOSWKTWriter_destroy</span><span class="p">(</span><span class="n">writer</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">GEOSGeom_destroy</span><span class="p">(</span><span class="n">geom_a</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">GEOSFree</span><span class="p">(</span><span class="n">wkt</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/* Clean up the global context */</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">finishGEOS</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>When compiling the program, remember to link in the GEOS C library.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cc geos_hello_world.c -o geos_hello_world -l geos_c
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h2 id="reentrantthreadsafe-api"
     >
         Reentrant/Threadsafe API
@@ -1565,50 +1565,50 @@
 <p>The <code>GEOSContextHandle_t</code> carries a thread-local state that is equivalent to the state initialized by the <code>initGEOS()</code> call in the simple example above.</p>
 <p>To use the reentrant API, call <code>GEOS_init_r()</code> instead of <code>initGEOS()</code> to create a context local to your thread. Each thread that will be running GEOS operations should create its own context prior to working with the GEOS API.</p>
 <p>In this example the overall structure of the code is identical, but the reentrant variants are used, and the preamble and cleanup are slightly different.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cm">/* geos_hello_world.c */</span>
-
-<span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;  /* for printf */</span><span class="cp">
-</span><span class="cp">#include</span> <span class="cpf">&lt;stdarg.h&gt; /* for va_list */</span><span class="cp">
-</span><span class="cp"></span>
-<span class="cm">/* Only the CAPI header is required */</span>
-<span class="cp">#include</span> <span class="cpf">&lt;geos_c.h&gt;</span><span class="cp">
-</span><span class="cp"></span>
-<span class="k">static</span> <span class="kt">void</span>
-<span class="nf">geos_msg_handler</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">fmt</span><span class="p">,</span> <span class="p">...)</span>
-<span class="p">{</span>
-    <span class="n">va_list</span> <span class="n">ap</span><span class="p">;</span>
-    <span class="n">va_start</span><span class="p">(</span><span class="n">ap</span><span class="p">,</span> <span class="n">fmt</span><span class="p">);</span>
-    <span class="n">vprintf</span> <span class="p">(</span><span class="n">fmt</span><span class="p">,</span> <span class="n">ap</span><span class="p">);</span>
-    <span class="n">va_end</span><span class="p">(</span><span class="n">ap</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
-<span class="p">{</span>
-    <span class="cm">/* Send notice and error messages to the terminal */</span>
-    <span class="n">GEOSContextHandle_t</span> <span class="n">ctx</span> <span class="o">=</span> <span class="n">GEOS_init_r</span> <span class="p">();</span>
-    <span class="n">GEOSContext_setNoticeHandler_r</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">geos_msg_handler</span><span class="p">);</span>
-    <span class="n">GEOSContext_setErrorHandler_r</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">geos_msg_handler</span><span class="p">);</span>
-
-    <span class="cm">/* Read WKT into geometry object */</span>
-    <span class="n">GEOSWKTReader</span><span class="o">*</span> <span class="n">reader</span> <span class="o">=</span> <span class="n">GEOSWKTReader_create_r</span><span class="p">(</span><span class="n">ctx</span><span class="p">);</span>
-    <span class="n">GEOSGeometry</span><span class="o">*</span> <span class="n">geom_a</span> <span class="o">=</span> <span class="n">GEOSWKTReader_read_r</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">reader</span><span class="p">,</span> <span class="s">&#34;POINT(1 1)&#34;</span><span class="p">);</span>
-
-    <span class="cm">/* Convert result to WKT */</span>
-    <span class="n">GEOSWKTWriter</span><span class="o">*</span> <span class="n">writer</span> <span class="o">=</span> <span class="n">GEOSWKTWriter_create_r</span><span class="p">(</span><span class="n">ctx</span><span class="p">);</span>
-    <span class="kt">char</span><span class="o">*</span> <span class="n">wkt</span> <span class="o">=</span> <span class="n">GEOSWKTWriter_write_r</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">writer</span><span class="p">,</span> <span class="n">geom_a</span><span class="p">);</span>
-    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Geometry: %s</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">wkt</span><span class="p">);</span>
-
-    <span class="cm">/* Clean up allocated objects */</span>
-    <span class="n">GEOSWKTReader_destroy_r</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">reader</span><span class="p">);</span>
-    <span class="n">GEOSWKTWriter_destroy_r</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">writer</span><span class="p">);</span>
-    <span class="n">GEOSGeom_destroy_r</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">geom_a</span><span class="p">);</span>
-    <span class="n">GEOSFree_r</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">wkt</span><span class="p">);</span>
-
-    <span class="cm">/* Clean up the global context */</span>
-    <span class="n">GEOS_finish_r</span><span class="p">(</span><span class="n">ctx</span><span class="p">);</span>
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></div><div class="gdoc-page__anchorwrap">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cm">/* geos_hello_world.c */</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;  /* for printf */</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdarg.h&gt; /* for va_list */</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="cm">/* Only the CAPI header is required */</span>
+</span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;geos_c.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">void</span>
+</span></span><span class="line"><span class="cl"><span class="nf">geos_msg_handler</span><span class="p">(</span><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">fmt</span><span class="p">,</span> <span class="p">...)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">va_list</span> <span class="n">ap</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">va_start</span><span class="p">(</span><span class="n">ap</span><span class="p">,</span> <span class="n">fmt</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">vprintf</span> <span class="p">(</span><span class="n">fmt</span><span class="p">,</span> <span class="n">ap</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">va_end</span><span class="p">(</span><span class="n">ap</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/* Send notice and error messages to the terminal */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">GEOSContextHandle_t</span> <span class="n">ctx</span> <span class="o">=</span> <span class="nf">GEOS_init_r</span> <span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">GEOSContext_setNoticeHandler_r</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">geos_msg_handler</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">GEOSContext_setErrorHandler_r</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">geos_msg_handler</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/* Read WKT into geometry object */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">GEOSWKTReader</span><span class="o">*</span> <span class="n">reader</span> <span class="o">=</span> <span class="nf">GEOSWKTReader_create_r</span><span class="p">(</span><span class="n">ctx</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">GEOSGeometry</span><span class="o">*</span> <span class="n">geom_a</span> <span class="o">=</span> <span class="nf">GEOSWKTReader_read_r</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">reader</span><span class="p">,</span> <span class="s">&#34;POINT(1 1)&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/* Convert result to WKT */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">GEOSWKTWriter</span><span class="o">*</span> <span class="n">writer</span> <span class="o">=</span> <span class="nf">GEOSWKTWriter_create_r</span><span class="p">(</span><span class="n">ctx</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span><span class="o">*</span> <span class="n">wkt</span> <span class="o">=</span> <span class="nf">GEOSWKTWriter_write_r</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">writer</span><span class="p">,</span> <span class="n">geom_a</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Geometry: %s</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">wkt</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/* Clean up allocated objects */</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">GEOSWKTReader_destroy_r</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">reader</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">GEOSWKTWriter_destroy_r</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">writer</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">GEOSGeom_destroy_r</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">geom_a</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">GEOSFree_r</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">wkt</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="cm">/* Clean up the global context */</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">GEOS_finish_r</span><span class="p">(</span><span class="n">ctx</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h2 id="object-model"
     >
         Object Model
@@ -1630,44 +1630,44 @@
 <p><code>GEOSCoordSequence</code> is an ordered list of coordinates.
 Coordinates are 2 (XY) or 3 (XYZ) dimensional.</p>
 <p>There are a number of ways to make a <code>GEOSCoordSequence</code>.  You can create a <code>GEOSCoordSequence</code> by creating a blank one and then setting the coordinate values.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="kt">double</span> <span class="n">xList</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">};</span>
-<span class="kt">double</span> <span class="n">yList</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">};</span>
-<span class="n">size_t</span> <span class="n">seqSize</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
-<span class="n">size_t</span> <span class="n">seqDims</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-
-<span class="n">GEOSCoordSequence</span><span class="o">*</span> <span class="n">seq</span> <span class="o">=</span> <span class="n">GEOSCoordSeq_create</span><span class="p">(</span><span class="n">seqSize</span><span class="p">,</span> <span class="n">seqDims</span><span class="p">);</span>
-
-<span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">seqSize</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">seq</span><span class="o">-&gt;</span><span class="n">setXY</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">xList</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">yList</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
-<span class="p">}</span>
-<span class="n">GEOSCoordSeq_destroy</span><span class="p">(</span><span class="n">seq</span><span class="p">);</span>
-</code></pre></div><p>You can also create a <code>GEOSCoordSequence</code> and initialize it from coordinate arrays.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="kt">double</span> <span class="n">xList</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">};</span>
-<span class="kt">double</span> <span class="n">yList</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">};</span>
-<span class="n">size_t</span> <span class="n">seqSize</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
-
-<span class="n">GEOSCoordSequence</span><span class="o">*</span> <span class="n">seq</span> <span class="o">=</span> <span class="n">GEOSCoordSeq_copyFromArrays</span><span class="p">(</span>
-    <span class="n">xList</span><span class="p">,</span>
-    <span class="n">yList</span><span class="p">,</span>
-    <span class="nb">NULL</span><span class="p">,</span>  <span class="cm">/* Zs */</span>
-    <span class="nb">NULL</span><span class="p">,</span>  <span class="cm">/* Ms */</span>
-    <span class="n">seqSize</span><span class="p">);</span>
-
-<span class="n">GEOSCoordSeq_destroy</span><span class="p">(</span><span class="n">seq</span><span class="p">);</span>
-</code></pre></div><p>Finally, you can create a <code>GEOSCoordSequence</code> and initialize it from a coordinate buffer (an array of double in coordinate order, eg: <code>XYXYXY</code>).</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cm">/* Coordinates in a buffer (X,Y, X,Y, X,Y) */</span>
-<span class="kt">double</span> <span class="n">coordBuf</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">};</span>
-<span class="n">size_t</span> <span class="n">seqSize</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
-
-<span class="n">GEOSCoordSequence</span><span class="o">*</span> <span class="n">seq</span> <span class="o">=</span> <span class="n">GEOSCoordSeq_copyFromBuffer</span><span class="p">(</span>
-    <span class="n">coordBuf</span><span class="p">,</span>
-    <span class="n">seqSize</span><span class="p">,</span>
-    <span class="mi">0</span><span class="p">,</span> <span class="cm">/* hasZ */</span>
-    <span class="mi">0</span>  <span class="cm">/* hasM */</span>
-    <span class="p">);</span>
-
-<span class="n">GEOSCoordSeq_destroy</span><span class="p">(</span><span class="n">seq</span><span class="p">);</span>
-</code></pre></div><p>Note that while you can reclaim the memory for a <code>GEOSCoordSequence</code> directly using <code>GEOSCoordSeq_destroy()</code>, you usually <strong>will not have to</strong> since creating a <code>GEOSGeometry</code> with a <code>GEOSCoordSequence</code> hands ownership of the sequence to the new geometry.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">double</span> <span class="n">xList</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="kt">double</span> <span class="n">yList</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="kt">size_t</span> <span class="n">seqSize</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">size_t</span> <span class="n">seqDims</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">GEOSCoordSequence</span><span class="o">*</span> <span class="n">seq</span> <span class="o">=</span> <span class="nf">GEOSCoordSeq_create</span><span class="p">(</span><span class="n">seqSize</span><span class="p">,</span> <span class="n">seqDims</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">seqSize</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">seq</span><span class="o">-&gt;</span><span class="nf">setXY</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">xList</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">yList</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="nf">GEOSCoordSeq_destroy</span><span class="p">(</span><span class="n">seq</span><span class="p">);</span>
+</span></span></code></pre></div><p>You can also create a <code>GEOSCoordSequence</code> and initialize it from coordinate arrays.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">double</span> <span class="n">xList</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="kt">double</span> <span class="n">yList</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="kt">size_t</span> <span class="n">seqSize</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">GEOSCoordSequence</span><span class="o">*</span> <span class="n">seq</span> <span class="o">=</span> <span class="nf">GEOSCoordSeq_copyFromArrays</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">xList</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">yList</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">NULL</span><span class="p">,</span>  <span class="cm">/* Zs */</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">NULL</span><span class="p">,</span>  <span class="cm">/* Ms */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">seqSize</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">GEOSCoordSeq_destroy</span><span class="p">(</span><span class="n">seq</span><span class="p">);</span>
+</span></span></code></pre></div><p>Finally, you can create a <code>GEOSCoordSequence</code> and initialize it from a coordinate buffer (an array of double in coordinate order, eg: <code>XYXYXY</code>).</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cm">/* Coordinates in a buffer (X,Y, X,Y, X,Y) */</span>
+</span></span><span class="line"><span class="cl"><span class="kt">double</span> <span class="n">coordBuf</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="kt">size_t</span> <span class="n">seqSize</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">GEOSCoordSequence</span><span class="o">*</span> <span class="n">seq</span> <span class="o">=</span> <span class="nf">GEOSCoordSeq_copyFromBuffer</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">coordBuf</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">seqSize</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="mi">0</span><span class="p">,</span> <span class="cm">/* hasZ */</span>
+</span></span><span class="line"><span class="cl">    <span class="mi">0</span>  <span class="cm">/* hasM */</span>
+</span></span><span class="line"><span class="cl">    <span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nf">GEOSCoordSeq_destroy</span><span class="p">(</span><span class="n">seq</span><span class="p">);</span>
+</span></span></code></pre></div><p>Note that while you can reclaim the memory for a <code>GEOSCoordSequence</code> directly using <code>GEOSCoordSeq_destroy()</code>, you usually <strong>will not have to</strong> since creating a <code>GEOSGeometry</code> with a <code>GEOSCoordSequence</code> hands ownership of the sequence to the new geometry.</p>
 <p>When writing data back from GEOS to whatever application you are using, you have the option of using a standard serialization format like WKB (see below) or by writing back to arrays or buffers.</p>
 <ul>
 <li><code>GEOSCoordSeq_copyToArrays()</code></li>
@@ -1705,41 +1705,41 @@ Empty geometries represent a (typed) empty set of space.
 For example, the intersection of two <strong>disjoint polygons</strong> is a &ldquo;empty polygon&rdquo;.</p>
 <p>The <code>GEOSGeom_createPoint()</code>, <code>GEOSGeom_createLinearRing()</code> and <code>GEOSGeom_createLineString()</code> functions accept a single <code>GEOSCoordSequence</code> and take ownership of that sequence,
 so freeing the geometry with <code>GEOSGeom_destroy()</code> frees all the allocated memory.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="kt">double</span> <span class="n">coordBuf</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">};</span>
-<span class="n">size_t</span> <span class="n">seqSize</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
-<span class="n">GEOSCoordSequence</span><span class="o">*</span> <span class="n">seq</span> <span class="o">=</span> <span class="n">GEOSCoordSeq_copyFromBuffer</span><span class="p">(</span>
-    <span class="n">coordBuf</span><span class="p">,</span> <span class="n">seqSize</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-
-<span class="cm">/* Takes ownership of sequence */</span>
-<span class="n">GEOSGeometry</span><span class="o">*</span> <span class="n">geom</span> <span class="o">=</span> <span class="n">GEOSGeom_createLineString</span><span class="p">(</span><span class="n">seq</span><span class="p">);</span>
-
-<span class="cm">/* Frees all memory */</span>
-<span class="n">GEOSGeom_destroy</span><span class="p">(</span><span class="n">geom</span><span class="p">);</span>
-</code></pre></div><p>The <code>GEOSGeom_createPolygon()</code> and <code>GEOSGeom_createCollection()</code> functions both require an array of inputs:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">double</span> <span class="n">coordBuf</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span><span class="mf">1.0</span><span class="p">,</span><span class="mf">3.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="kt">size_t</span> <span class="n">seqSize</span> <span class="o">=</span> <span class="mi">3</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">GEOSCoordSequence</span><span class="o">*</span> <span class="n">seq</span> <span class="o">=</span> <span class="nf">GEOSCoordSeq_copyFromBuffer</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">coordBuf</span><span class="p">,</span> <span class="n">seqSize</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* Takes ownership of sequence */</span>
+</span></span><span class="line"><span class="cl"><span class="n">GEOSGeometry</span><span class="o">*</span> <span class="n">geom</span> <span class="o">=</span> <span class="nf">GEOSGeom_createLineString</span><span class="p">(</span><span class="n">seq</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* Frees all memory */</span>
+</span></span><span class="line"><span class="cl"><span class="nf">GEOSGeom_destroy</span><span class="p">(</span><span class="n">geom</span><span class="p">);</span>
+</span></span></code></pre></div><p>The <code>GEOSGeom_createPolygon()</code> and <code>GEOSGeom_createCollection()</code> functions both require an array of inputs:</p>
 <ul>
 <li>an array of inner ring <code>GEOSCoordSequence</code> to create polygons; and,</li>
 <li>an array of <code>GEOSGeometry</code> to create collections.</li>
 </ul>
 <p>As in the other creation functions, ownership of the contained objects is transferred to the new geometry. However, ownership of the array that <strong>holds</strong> the contained objects is not transferred.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cm">/* Two points in an array */</span>
-<span class="n">size_t</span> <span class="n">npoints</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
-<span class="n">GEOSGeometry</span><span class="o">**</span> <span class="n">points</span> <span class="o">=</span> <span class="n">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">GEOSGeometry</span><span class="o">*</span><span class="p">)</span> <span class="o">*</span> <span class="n">npoints</span><span class="p">);</span>
-<span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">GEOSGeom_createPointFromXY</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">);</span>
-<span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">GEOSGeom_createPointFromXY</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">);</span>
-
-<span class="cm">/* takes ownership of the points in the array */</span>
-<span class="cm">/* but not the array itself */</span>
-<span class="n">GEOSGeometry</span><span class="o">*</span> <span class="n">collection</span> <span class="o">=</span> <span class="n">GEOSGeom_createCollection</span><span class="p">(</span>
-    <span class="n">GEOS_MULTIPOINT</span><span class="p">,</span>  <span class="cm">/* collection type */</span>
-    <span class="n">points</span><span class="p">,</span>           <span class="cm">/* geometry array */</span>
-    <span class="n">npoints</span><span class="p">);</span>
-
-<span class="cm">/* frees collection and contained points */</span>
-<span class="n">GEOSGeom_destroy</span><span class="p">(</span><span class="n">collection</span><span class="p">);</span>
-
-<span class="cm">/* frees the containing array */</span>
-<span class="n">free</span><span class="p">(</span><span class="n">points</span><span class="p">);</span>
-</code></pre></div><div class="gdoc-page__anchorwrap">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cm">/* Two points in an array */</span>
+</span></span><span class="line"><span class="cl"><span class="kt">size_t</span> <span class="n">npoints</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">GEOSGeometry</span><span class="o">**</span> <span class="n">points</span> <span class="o">=</span> <span class="nf">malloc</span><span class="p">(</span><span class="k">sizeof</span><span class="p">(</span><span class="n">GEOSGeometry</span><span class="o">*</span><span class="p">)</span> <span class="o">*</span> <span class="n">npoints</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">points</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nf">GEOSGeom_createPointFromXY</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="n">points</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nf">GEOSGeom_createPointFromXY</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* takes ownership of the points in the array */</span>
+</span></span><span class="line"><span class="cl"><span class="cm">/* but not the array itself */</span>
+</span></span><span class="line"><span class="cl"><span class="n">GEOSGeometry</span><span class="o">*</span> <span class="n">collection</span> <span class="o">=</span> <span class="nf">GEOSGeom_createCollection</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">GEOS_MULTIPOINT</span><span class="p">,</span>  <span class="cm">/* collection type */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">points</span><span class="p">,</span>           <span class="cm">/* geometry array */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">npoints</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* frees collection and contained points */</span>
+</span></span><span class="line"><span class="cl"><span class="nf">GEOSGeom_destroy</span><span class="p">(</span><span class="n">collection</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* frees the containing array */</span>
+</span></span><span class="line"><span class="cl"><span class="nf">free</span><span class="p">(</span><span class="n">points</span><span class="p">);</span>
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h3 id="readers-and-writers"
     >
         Readers and Writers
@@ -1764,24 +1764,24 @@ so freeing the geometry with <code>GEOSGeom_destroy()</code> frees all the alloc
 >GeoJSON</a></li>
 </ul>
 <p>For example, reading and writing WKT:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">wkt_in</span> <span class="o">=</span> <span class="s">&#34;POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))&#34;</span><span class="p">;</span>
-
-<span class="cm">/* Read the WKT into geometry object */</span>
-<span class="n">GEOSWKTReader</span><span class="o">*</span> <span class="n">reader</span> <span class="o">=</span> <span class="n">GEOSWKTReader_create</span><span class="p">();</span>
-<span class="n">GEOSGeometry</span><span class="o">*</span> <span class="n">geom</span> <span class="o">=</span> <span class="n">GEOSWKTReader_read</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="n">wkt_in</span><span class="p">);</span>
-
-<span class="cm">/* Convert geometry back to WKT */</span>
-<span class="n">GEOSWKTWriter</span><span class="o">*</span> <span class="n">writer</span> <span class="o">=</span> <span class="n">GEOSWKTWriter_create</span><span class="p">();</span>
-<span class="cm">/* Trim trailing zeros off output; only needed before GEOS 3.12 */</span>
-<span class="n">GEOSWKTWriter_setTrim</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-<span class="kt">char</span><span class="o">*</span> <span class="n">wkt_out</span> <span class="o">=</span> <span class="n">GEOSWKTWriter_write</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">geom</span><span class="p">);</span>
-
-<span class="cm">/* Clean up everything we allocated */</span>
-<span class="n">GEOSWKTReader_destroy</span><span class="p">(</span><span class="n">reader</span><span class="p">);</span>
-<span class="n">GEOSGeom_destroy</span><span class="p">(</span><span class="n">geom</span><span class="p">);</span>
-<span class="cm">/* Use GEOSFree() to free memory allocated inside GEOS~ */</span>
-<span class="n">GEOSFree</span><span class="p">(</span><span class="n">wkt_out</span><span class="p">);</span>
-</code></pre></div><p>Note that the output WKT string is freed using <code>GEOSFree()</code>, not the system <code>free()</code>. This ensures that the same library that allocates the memory also frees it, which is important for some platforms (Windows primarily).</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">wkt_in</span> <span class="o">=</span> <span class="s">&#34;POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* Read the WKT into geometry object */</span>
+</span></span><span class="line"><span class="cl"><span class="n">GEOSWKTReader</span><span class="o">*</span> <span class="n">reader</span> <span class="o">=</span> <span class="nf">GEOSWKTReader_create</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="n">GEOSGeometry</span><span class="o">*</span> <span class="n">geom</span> <span class="o">=</span> <span class="nf">GEOSWKTReader_read</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="n">wkt_in</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* Convert geometry back to WKT */</span>
+</span></span><span class="line"><span class="cl"><span class="n">GEOSWKTWriter</span><span class="o">*</span> <span class="n">writer</span> <span class="o">=</span> <span class="nf">GEOSWKTWriter_create</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="cm">/* Trim trailing zeros off output; only needed before GEOS 3.12 */</span>
+</span></span><span class="line"><span class="cl"><span class="nf">GEOSWKTWriter_setTrim</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="kt">char</span><span class="o">*</span> <span class="n">wkt_out</span> <span class="o">=</span> <span class="nf">GEOSWKTWriter_write</span><span class="p">(</span><span class="n">writer</span><span class="p">,</span> <span class="n">geom</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* Clean up everything we allocated */</span>
+</span></span><span class="line"><span class="cl"><span class="nf">GEOSWKTReader_destroy</span><span class="p">(</span><span class="n">reader</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">GEOSGeom_destroy</span><span class="p">(</span><span class="n">geom</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="cm">/* Use GEOSFree() to free memory allocated inside GEOS~ */</span>
+</span></span><span class="line"><span class="cl"><span class="nf">GEOSFree</span><span class="p">(</span><span class="n">wkt_out</span><span class="p">);</span>
+</span></span></code></pre></div><p>Note that the output WKT string is freed using <code>GEOSFree()</code>, not the system <code>free()</code>. This ensures that the same library that allocates the memory also frees it, which is important for some platforms (Windows primarily).</p>
 <p>For more information about the specific options available for each format, see the documentation for the various readers and writers.</p>
 <ul>
 <li><code>GEOSWKTReader</code> / <code>GEOSWKTWriter</code></li>
@@ -1804,30 +1804,30 @@ so freeing the geometry with <code>GEOSGeom_destroy()</code> frees all the alloc
 <p>The GEOS &ldquo;prepared geometry&rdquo; is conceptually similar to a database &ldquo;prepared statement&rdquo;: by doing up-front work to create an optimized object, you reap a performance benefit when executing repeated function calls on that object.</p>
 <p>Prepared geometries contain internal indexes that make calls to the &ldquo;spatial predicate&rdquo; functions like <code>GEOSPreparedIntersects()</code> and <code>GEOSPreparedContains()</code> much much faster. These are functions that take in two geometries and return true or false.</p>
 <p>If you are going to be making repeated calls to predicates on the same geometry, using a prepared geometry could be a big performance boost, at the cost of a little extra complexity.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cm">/* One concave polygon */</span>
-<span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">wkt</span> <span class="o">=</span> <span class="s">&#34;POLYGON ((189 115, 200 170, 130 170, 35 242, 156 215, 210 290, 274 256, 360 190, 267 215, 300 50, 200 60, 189 115))&#34;</span><span class="p">;</span>
-
-<span class="cm">/* Read the WKT into geometry objects */</span>
-<span class="n">GEOSWKTReader</span><span class="o">*</span> <span class="n">reader</span> <span class="o">=</span> <span class="n">GEOSWKTReader_create</span><span class="p">();</span>
-<span class="n">GEOSGeometry</span><span class="o">*</span> <span class="n">geom</span> <span class="o">=</span> <span class="n">GEOSWKTReader_read</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="n">wkt</span><span class="p">);</span>
-<span class="n">GEOSWKTReader_destroy</span><span class="p">(</span><span class="n">reader</span><span class="p">);</span>
-
-<span class="cm">/* Prepare the geometry */</span>
-<span class="k">const</span> <span class="n">GEOSPreparedGeometry</span><span class="o">*</span> <span class="n">prep_geom</span> <span class="o">=</span> <span class="n">GEOSPrepare</span><span class="p">(</span><span class="n">geom</span><span class="p">);</span>
-
-<span class="cm">/* Make a point to test */</span>
-<span class="n">GEOSGeometry</span><span class="o">*</span> <span class="n">pt</span> <span class="o">=</span> <span class="n">GEOSGeom_createPointFromXY</span><span class="p">(</span><span class="mi">190</span><span class="p">,</span> <span class="mi">200</span><span class="p">);</span>
-
-<span class="cm">/* Check if the point and polygon intersect */</span>
-<span class="k">if</span> <span class="p">(</span><span class="n">GEOSPreparedIntersects</span><span class="p">(</span><span class="n">prep_geom</span><span class="p">,</span> <span class="n">pt</span><span class="p">))</span> <span class="p">{</span>
-    <span class="cm">/* done something ... */</span>
-<span class="p">}</span>
-
-<span class="cm">/* Note that both prepared and original geometry are destroyed */</span>
-<span class="n">GEOSPreparedGeom_destroy</span><span class="p">(</span><span class="n">prep_geom</span><span class="p">);</span>
-<span class="n">GEOSGeom_destroy</span><span class="p">(</span><span class="n">geom</span><span class="p">);</span>
-<span class="n">GEOSGeom_destroy</span><span class="p">(</span><span class="n">pt</span><span class="p">);</span>
-</code></pre></div><p>For a complete example of using prepared geometry to accelerate multiple predicate tests, see the <a
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cm">/* One concave polygon */</span>
+</span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">wkt</span> <span class="o">=</span> <span class="s">&#34;POLYGON ((189 115, 200 170, 130 170, 35 242, 156 215, 210 290, 274 256, 360 190, 267 215, 300 50, 200 60, 189 115))&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* Read the WKT into geometry objects */</span>
+</span></span><span class="line"><span class="cl"><span class="n">GEOSWKTReader</span><span class="o">*</span> <span class="n">reader</span> <span class="o">=</span> <span class="nf">GEOSWKTReader_create</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="n">GEOSGeometry</span><span class="o">*</span> <span class="n">geom</span> <span class="o">=</span> <span class="nf">GEOSWKTReader_read</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="n">wkt</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">GEOSWKTReader_destroy</span><span class="p">(</span><span class="n">reader</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* Prepare the geometry */</span>
+</span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="n">GEOSPreparedGeometry</span><span class="o">*</span> <span class="n">prep_geom</span> <span class="o">=</span> <span class="nf">GEOSPrepare</span><span class="p">(</span><span class="n">geom</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* Make a point to test */</span>
+</span></span><span class="line"><span class="cl"><span class="n">GEOSGeometry</span><span class="o">*</span> <span class="n">pt</span> <span class="o">=</span> <span class="nf">GEOSGeom_createPointFromXY</span><span class="p">(</span><span class="mi">190</span><span class="p">,</span> <span class="mi">200</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* Check if the point and polygon intersect */</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="nf">GEOSPreparedIntersects</span><span class="p">(</span><span class="n">prep_geom</span><span class="p">,</span> <span class="n">pt</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/* done something ... */</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* Note that both prepared and original geometry are destroyed */</span>
+</span></span><span class="line"><span class="cl"><span class="nf">GEOSPreparedGeom_destroy</span><span class="p">(</span><span class="n">prep_geom</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">GEOSGeom_destroy</span><span class="p">(</span><span class="n">geom</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nf">GEOSGeom_destroy</span><span class="p">(</span><span class="n">pt</span><span class="p">);</span>
+</span></span></code></pre></div><p>For a complete example of using prepared geometry to accelerate multiple predicate tests, see the <a
   class="gdoc-markdown__link"
   href="https://github.com/libgeos/geos/blob/main/examples/capi_prepared.c"
 >capi_prepared.c</a> example.</p>
@@ -1854,88 +1854,88 @@ so freeing the geometry with <code>GEOSGeom_destroy()</code> frees all the alloc
 <li>Find all the <strong>items that intersect</strong> with a query rectangle, using <code>GEOSSTRtree_query()</code></li>
 </ul>
 <p>Build the tree by creating it, then inserting items.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cm">/*
-</span><span class="cm">* An application will want to index items, which have
-</span><span class="cm">* some attributes and a geometry part.
-</span><span class="cm">*/</span>
-<span class="k">typedef</span> <span class="k">struct</span>
-<span class="p">{</span>
-    <span class="n">GEOSGeometry</span><span class="o">*</span> <span class="n">geom</span><span class="p">;</span>
-    <span class="n">size_t</span> <span class="n">id</span><span class="p">;</span>
-<span class="p">}</span> <span class="n">item</span><span class="p">;</span>
-
-<span class="cm">/*
-</span><span class="cm">* The tree doesn&#39;t take ownership of inputs just
-</span><span class="cm">* holds references, so we keep our point field
-</span><span class="cm">* handy in an array
-</span><span class="cm">*/</span>
-<span class="n">item</span><span class="o">*</span> <span class="n">items</span><span class="p">[</span><span class="n">nItems</span><span class="p">];</span>
-
-<span class="cm">/*
-</span><span class="cm">* The create parameter for the tree is not the
-</span><span class="cm">* number of inputs, it is the number of entries
-</span><span class="cm">* per node. 10 is a good default number to use.
-</span><span class="cm">*/</span>
-<span class="n">GEOSSTRtree</span><span class="o">*</span> <span class="n">tree</span> <span class="o">=</span> <span class="n">GEOSSTRtree_create</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
-
-<span class="k">for</span> <span class="p">(</span><span class="n">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nItems</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-    <span class="cm">/* Make a random point */</span>
-    <span class="n">item</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">random_item</span><span class="p">(</span><span class="n">range</span><span class="p">);</span>
-    <span class="cm">/* Store away a reference so we can free it after */</span>
-    <span class="n">items</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span><span class="p">;</span>
-    <span class="cm">/* Add an entry for it to the tree */</span>
-    <span class="n">GEOSSTRtree_insert</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">obj</span><span class="o">-&gt;</span><span class="n">geom</span><span class="p">,</span> <span class="n">obj</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div><p>Note that the index does <strong>not take ownership</strong> of the inserted <code>GEOSGeometry</code> or the item, it just stores pointers. So remember to keep a list of the items you create in order to free them at the end of your process.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">* An application will want to index items, which have
+</span></span></span><span class="line"><span class="cl"><span class="cm">* some attributes and a geometry part.
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">GEOSGeometry</span><span class="o">*</span> <span class="n">geom</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">size_t</span> <span class="n">id</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">item</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">* The tree doesn&#39;t take ownership of inputs just
+</span></span></span><span class="line"><span class="cl"><span class="cm">* holds references, so we keep our point field
+</span></span></span><span class="line"><span class="cl"><span class="cm">* handy in an array
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span><span class="line"><span class="cl"><span class="n">item</span><span class="o">*</span> <span class="n">items</span><span class="p">[</span><span class="n">nItems</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">* The create parameter for the tree is not the
+</span></span></span><span class="line"><span class="cl"><span class="cm">* number of inputs, it is the number of entries
+</span></span></span><span class="line"><span class="cl"><span class="cm">* per node. 10 is a good default number to use.
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span><span class="line"><span class="cl"><span class="n">GEOSSTRtree</span><span class="o">*</span> <span class="n">tree</span> <span class="o">=</span> <span class="nf">GEOSSTRtree_create</span><span class="p">(</span><span class="mi">10</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="kt">size_t</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nItems</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/* Make a random point */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">item</span><span class="o">*</span> <span class="n">obj</span> <span class="o">=</span> <span class="nf">random_item</span><span class="p">(</span><span class="n">range</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/* Store away a reference so we can free it after */</span>
+</span></span><span class="line"><span class="cl">    <span class="n">items</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">obj</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/* Add an entry for it to the tree */</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">GEOSSTRtree_insert</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">obj</span><span class="o">-&gt;</span><span class="n">geom</span><span class="p">,</span> <span class="n">obj</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>Note that the index does <strong>not take ownership</strong> of the inserted <code>GEOSGeometry</code> or the item, it just stores pointers. So remember to keep a list of the items you create in order to free them at the end of your process.</p>
 <p>Once the tree is built, you can query it.</p>
 <p>The generic <strong>nearest-neighbor query</strong> uses a callback to check the actual distance between the search item and the indexed item. In this way it can filter through the many candidate nearest nodes in the index to find the <strong>actual</strong> nearest node.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cm">/*
-</span><span class="cm">* Item distance callback for GEOSSTRtree_nearest_generic()
-</span><span class="cm">*/</span>
-<span class="kt">int</span>
-<span class="nf">itemDistanceCallback</span><span class="p">(</span><span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">item1</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">item2</span><span class="p">,</span> <span class="kt">double</span><span class="o">*</span> <span class="n">distance</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">userdata</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="n">item_t</span><span class="o">*</span> <span class="n">obj1</span> <span class="o">=</span> <span class="p">(</span><span class="n">item_t</span><span class="o">*</span><span class="p">)</span><span class="n">item1</span><span class="p">;</span>
-    <span class="n">item_t</span><span class="o">*</span> <span class="n">obj2</span> <span class="o">=</span> <span class="p">(</span><span class="n">item_t</span><span class="o">*</span><span class="p">)</span><span class="n">item2</span><span class="p">;</span>
-    <span class="k">return</span> <span class="n">GEOSDistance</span><span class="p">(</span><span class="n">obj1</span><span class="o">-&gt;</span><span class="n">geom</span><span class="p">,</span> <span class="n">obj2</span><span class="o">-&gt;</span><span class="n">geom</span><span class="p">,</span> <span class="n">distance</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div><p>The query call requires the tree, the item driving the search (so it can be fed into the callback), the geometry driving the search (because the library doesn&rsquo;t know how to extract the geometry from the item <em>a priori</em>), the callback, and whatever extra information want sent into the callback.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cm">/* Random item to query the index with */</span>
-<span class="n">item_t</span><span class="o">*</span> <span class="n">item_random</span> <span class="o">=</span> <span class="n">random_item</span><span class="p">(</span><span class="n">range</span><span class="p">);</span>
-
-<span class="cm">/* Nearest item in the index to our random item */</span>
-<span class="k">const</span> <span class="n">item_t</span><span class="o">*</span> <span class="n">item_nearest</span> <span class="o">=</span> <span class="n">GEOSSTRtree_nearest_generic</span><span class="p">(</span>
-    <span class="n">tree</span><span class="p">,</span>                 <span class="c1">// STRTree to query
-</span><span class="c1"></span>    <span class="n">item_random</span><span class="p">,</span>          <span class="c1">// Item to use in search
-</span><span class="c1"></span>    <span class="n">item_random</span><span class="o">-&gt;</span><span class="n">geom</span><span class="p">,</span>    <span class="c1">// Geometry to seed search
-</span><span class="c1"></span>    <span class="n">itemDistanceCallback</span><span class="p">,</span> <span class="c1">// Callback to process nearest object
-</span><span class="c1"></span>    <span class="nb">NULL</span><span class="p">);</span>                <span class="c1">// Userdata to hand to the callback
-</span></code></pre></div><p>The <strong>query by rectangle</strong> function also uses a callback, which could be used to exactly test for a spatial relationship (intersects, contains, etc), for all the index nodes that meet the rough &ldquo;bounds interact&rdquo; filter the index applies.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cm">/*
-</span><span class="cm">* Item query callback for GEOSSTRtree_query()
-</span><span class="cm">*/</span>
-<span class="kt">void</span>
-<span class="nf">itemQueryCallback</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">item</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">userdata</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
-    <span class="n">item_t</span><span class="o">*</span> <span class="n">i</span> <span class="o">=</span> <span class="p">(</span><span class="n">item_t</span><span class="o">*</span><span class="p">)</span><span class="n">item</span><span class="p">;</span>
-    <span class="n">GEOSGeomGetX</span><span class="p">(</span><span class="n">i</span><span class="o">-&gt;</span><span class="n">geom</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">);</span>
-    <span class="n">GEOSGeomGetY</span><span class="p">(</span><span class="n">i</span><span class="o">-&gt;</span><span class="n">geom</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">y</span><span class="p">);</span>
-    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Found item %10zu at (%g, %g)</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">i</span><span class="o">-&gt;</span><span class="n">id</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></div><p>This example just prints out every candidate that passes the index filter.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cm">/* Set up a query rectangle for index query */</span>
-<span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">wkt_bounds</span> <span class="o">=</span> <span class="s">&#34;POLYGON((20 20, 22 20, 22 22, 20 22, 20 20))&#34;</span><span class="p">;</span>
-<span class="n">GEOSGeometry</span><span class="o">*</span> <span class="n">geom_query</span> <span class="o">=</span> <span class="n">GEOSWKTReader_read</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="n">wkt_bounds</span><span class="p">);</span>
-
-<span class="cm">/* Find all items that touch the bounds */</span>
-<span class="cm">/* For non-rectangular query geometry, this will be an over-determined set */</span>
-<span class="n">GEOSSTRtree_query</span><span class="p">(</span>
-    <span class="n">tree</span><span class="p">,</span>              <span class="c1">// STRTree to query
-</span><span class="c1"></span>    <span class="n">geom_query</span><span class="p">,</span>        <span class="c1">// GEOSGeometry query bounds
-</span><span class="c1"></span>    <span class="n">itemQueryCallback</span><span class="p">,</span> <span class="c1">// Callback to process index entries that pass query
-</span><span class="c1"></span>    <span class="nb">NULL</span><span class="p">);</span>             <span class="c1">// Userdata to hand to the callback
-</span></code></pre></div><p>The query itself just uses the tree, the query bounds geometry, the callback, and optional user data. You could use the user data to pass in an array to write results out to, or a prepared geometry to use for exact tests.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">* Item distance callback for GEOSSTRtree_nearest_generic()
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span>
+</span></span><span class="line"><span class="cl"><span class="nf">itemDistanceCallback</span><span class="p">(</span><span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">item1</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span><span class="o">*</span> <span class="n">item2</span><span class="p">,</span> <span class="kt">double</span><span class="o">*</span> <span class="n">distance</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">userdata</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">item_t</span><span class="o">*</span> <span class="n">obj1</span> <span class="o">=</span> <span class="p">(</span><span class="kt">item_t</span><span class="o">*</span><span class="p">)</span><span class="n">item1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">item_t</span><span class="o">*</span> <span class="n">obj2</span> <span class="o">=</span> <span class="p">(</span><span class="kt">item_t</span><span class="o">*</span><span class="p">)</span><span class="n">item2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nf">GEOSDistance</span><span class="p">(</span><span class="n">obj1</span><span class="o">-&gt;</span><span class="n">geom</span><span class="p">,</span> <span class="n">obj2</span><span class="o">-&gt;</span><span class="n">geom</span><span class="p">,</span> <span class="n">distance</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>The query call requires the tree, the item driving the search (so it can be fed into the callback), the geometry driving the search (because the library doesn&rsquo;t know how to extract the geometry from the item <em>a priori</em>), the callback, and whatever extra information want sent into the callback.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cm">/* Random item to query the index with */</span>
+</span></span><span class="line"><span class="cl"><span class="kt">item_t</span><span class="o">*</span> <span class="n">item_random</span> <span class="o">=</span> <span class="nf">random_item</span><span class="p">(</span><span class="n">range</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* Nearest item in the index to our random item */</span>
+</span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="kt">item_t</span><span class="o">*</span> <span class="n">item_nearest</span> <span class="o">=</span> <span class="nf">GEOSSTRtree_nearest_generic</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">tree</span><span class="p">,</span>                 <span class="c1">// STRTree to query
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">item_random</span><span class="p">,</span>          <span class="c1">// Item to use in search
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">item_random</span><span class="o">-&gt;</span><span class="n">geom</span><span class="p">,</span>    <span class="c1">// Geometry to seed search
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">itemDistanceCallback</span><span class="p">,</span> <span class="c1">// Callback to process nearest object
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nb">NULL</span><span class="p">);</span>                <span class="c1">// Userdata to hand to the callback
+</span></span></span></code></pre></div><p>The <strong>query by rectangle</strong> function also uses a callback, which could be used to exactly test for a spatial relationship (intersects, contains, etc), for all the index nodes that meet the rough &ldquo;bounds interact&rdquo; filter the index applies.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm">* Item query callback for GEOSSTRtree_query()
+</span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
+</span></span><span class="line"><span class="cl"><span class="kt">void</span>
+</span></span><span class="line"><span class="cl"><span class="nf">itemQueryCallback</span><span class="p">(</span><span class="kt">void</span><span class="o">*</span> <span class="n">item</span><span class="p">,</span> <span class="kt">void</span><span class="o">*</span> <span class="n">userdata</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">double</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">item_t</span><span class="o">*</span> <span class="n">i</span> <span class="o">=</span> <span class="p">(</span><span class="kt">item_t</span><span class="o">*</span><span class="p">)</span><span class="n">item</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">GEOSGeomGetX</span><span class="p">(</span><span class="n">i</span><span class="o">-&gt;</span><span class="n">geom</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">GEOSGeomGetY</span><span class="p">(</span><span class="n">i</span><span class="o">-&gt;</span><span class="n">geom</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">y</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Found item %10zu at (%g, %g)</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">i</span><span class="o">-&gt;</span><span class="n">id</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>This example just prints out every candidate that passes the index filter.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cm">/* Set up a query rectangle for index query */</span>
+</span></span><span class="line"><span class="cl"><span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">wkt_bounds</span> <span class="o">=</span> <span class="s">&#34;POLYGON((20 20, 22 20, 22 22, 20 22, 20 20))&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">GEOSGeometry</span><span class="o">*</span> <span class="n">geom_query</span> <span class="o">=</span> <span class="nf">GEOSWKTReader_read</span><span class="p">(</span><span class="n">reader</span><span class="p">,</span> <span class="n">wkt_bounds</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* Find all items that touch the bounds */</span>
+</span></span><span class="line"><span class="cl"><span class="cm">/* For non-rectangular query geometry, this will be an over-determined set */</span>
+</span></span><span class="line"><span class="cl"><span class="nf">GEOSSTRtree_query</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">    <span class="n">tree</span><span class="p">,</span>              <span class="c1">// STRTree to query
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">geom_query</span><span class="p">,</span>        <span class="c1">// GEOSGeometry query bounds
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">itemQueryCallback</span><span class="p">,</span> <span class="c1">// Callback to process index entries that pass query
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nb">NULL</span><span class="p">);</span>             <span class="c1">// Userdata to hand to the callback
+</span></span></span></code></pre></div><p>The query itself just uses the tree, the query bounds geometry, the callback, and optional user data. You could use the user data to pass in an array to write results out to, or a prepared geometry to use for exact tests.</p>
 
   </article>
 

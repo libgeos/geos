@@ -13,7 +13,7 @@
       <pubDate>Wed, 16 Feb 2022 00:00:00 -0700</pubDate>
       
       <guid>https://libgeos.org/project/coc/</guid>
-      <description>Introduction     This code of conduct governs how we behave in any GEOS forum or event and whenever we will be judged by our actions. We expect it to be honored by everyone who participates in the GEOS community formally or informally, or claims any affiliation with the GEOS project.
+      <description>Introduction This code of conduct governs how we behave in any GEOS forum or event and whenever we will be judged by our actions. We expect it to be honored by everyone who participates in the GEOS community formally or informally, or claims any affiliation with the GEOS project.
 It applies to in-person events (such as conferences and related social events), IRC, public and private mailing lists, the issue tracker, the wiki, blogs, Twitter, and any other forums which the community uses for communication and interactions.</description>
     </item>
     
@@ -25,7 +25,7 @@ It applies to in-person events (such as conferences and related social events), 
       <guid>https://libgeos.org/project/psc/</guid>
       <description>The GEOS project is run by a Project Steering Committee made up of developers and contributors to the project and is a project of OSGeo. Major project decisions are made via a Request for Comments (RFC) process, where proposals are first documented and then voted on by the steering committee.
 This PSC list is valid as of February 18th, 2022.
- Dan Baston Howard Butler Martin Davis Regina Obe Paul Ramsey (chair) Sandro Santilli  The PSC approves major changes and RFC documents.</description>
+Dan Baston Howard Butler Martin Davis Regina Obe Paul Ramsey (chair) Sandro Santilli The PSC approves major changes and RFC documents.</description>
     </item>
     
   </channel>

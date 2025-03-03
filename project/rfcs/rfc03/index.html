@@ -9,13 +9,13 @@
 <meta name="referrer" content="no-referrer" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="color-scheme" content="light dark" />
-<meta name="generator" content="Hugo 0.88.1" />
+<meta name="generator" content="Hugo 0.111.3">
 
 
-  <meta name="description" content="Summary     The current CAPI in GEOS is not thread safe. The error handling and initialization/finalization process specifically can cause problems.
-Definitions     (As defined by Frank Warmerdam in http://trac.osgeo.org/gdal/wiki/rfc16_ogr_reentrancy)
+  <meta name="description" content="Summary The current CAPI in GEOS is not thread safe. The error handling and initialization/finalization process specifically can cause problems.
+Definitions (As defined by Frank Warmerdam in http://trac.osgeo.org/gdal/wiki/rfc16_ogr_reentrancy)
 Reentrant: A reentrant function can be called simultaneously by multiple threads provided that each invocation of the function references unique data.
-Thread-safe: A thread-safe function can be called simultaneously by multiple threads when each invocation references shared data." />
+Thread-safe: A thread-safe function can be called simultaneously by multiple threads when each invocation references shared data. All access to the shared data is serialized." />
 
     <title>GEOS RFC 3 - Thread Safe CAPI  | GEOS</title>
 
@@ -41,10 +41,10 @@ Thread-safe: A thread-safe function can be called simultaneously by multiple thr
     content="GEOS RFC 3 - Thread Safe CAPI "
   />
   <meta property="og:site_name" content="GEOS" />
-  <meta property="og:description" content="Summary     The current CAPI in GEOS is not thread safe. The error handling and initialization/finalization process specifically can cause problems.
-Definitions     (As defined by Frank Warmerdam in http://trac.osgeo.org/gdal/wiki/rfc16_ogr_reentrancy)
+  <meta property="og:description" content="Summary The current CAPI in GEOS is not thread safe. The error handling and initialization/finalization process specifically can cause problems.
+Definitions (As defined by Frank Warmerdam in http://trac.osgeo.org/gdal/wiki/rfc16_ogr_reentrancy)
 Reentrant: A reentrant function can be called simultaneously by multiple threads provided that each invocation of the function references unique data.
-Thread-safe: A thread-safe function can be called simultaneously by multiple threads when each invocation references shared data." />
+Thread-safe: A thread-safe function can be called simultaneously by multiple threads when each invocation references shared data. All access to the shared data is serialized." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://libgeos.org/project/rfcs/rfc03/" />
 
@@ -61,10 +61,10 @@ Thread-safe: A thread-safe function can be called simultaneously by multiple thr
 
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="GEOS RFC 3 - Thread Safe CAPI " />
-  <meta name="twitter:description" content="Summary     The current CAPI in GEOS is not thread safe. The error handling and initialization/finalization process specifically can cause problems.
-Definitions     (As defined by Frank Warmerdam in http://trac.osgeo.org/gdal/wiki/rfc16_ogr_reentrancy)
+  <meta name="twitter:description" content="Summary The current CAPI in GEOS is not thread safe. The error handling and initialization/finalization process specifically can cause problems.
+Definitions (As defined by Frank Warmerdam in http://trac.osgeo.org/gdal/wiki/rfc16_ogr_reentrancy)
 Reentrant: A reentrant function can be called simultaneously by multiple threads provided that each invocation of the function references unique data.
-Thread-safe: A thread-safe function can be called simultaneously by multiple threads when each invocation references shared data." />
+Thread-safe: A thread-safe function can be called simultaneously by multiple threads when each invocation references shared data. All access to the shared data is serialized." />
 
 
   <script type="application/ld+json">
@@ -75,7 +75,7 @@ Thread-safe: A thread-safe function can be called simultaneously by multiple thr
       "name": "GEOS RFC 3 - Thread Safe CAPI ",
       "url" : "https://libgeos.org/project/rfcs/rfc03/",
       "headline": "GEOS RFC 3 - Thread Safe CAPI ",
-      "description": "Summary     The current CAPI in GEOS is not thread safe. The error handling and initialization\/finalization process specifically can cause problems.\nDefinitions     (As defined by Frank Warmerdam in http:\/\/trac.osgeo.org\/gdal\/wiki\/rfc16_ogr_reentrancy)\nReentrant: A reentrant function can be called simultaneously by multiple threads provided that each invocation of the function references unique data.\nThread-safe: A thread-safe function can be called simultaneously by multiple threads when each invocation references shared data.",
+      "description": "Summary The current CAPI in GEOS is not thread safe. The error handling and initialization\/finalization process specifically can cause problems.\nDefinitions (As defined by Frank Warmerdam in http:\/\/trac.osgeo.org\/gdal\/wiki\/rfc16_ogr_reentrancy)\nReentrant: A reentrant function can be called simultaneously by multiple threads provided that each invocation of the function references unique data.\nThread-safe: A thread-safe function can be called simultaneously by multiple threads when each invocation references shared data. All access to the shared data is serialized.",
       "wordCount" : "505",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
@@ -1543,18 +1543,18 @@ Thread-safe: A thread-safe function can be called simultaneously by multiple thr
     </h3>
 </div>
 <p>Here are the internals of the handle and how the application visual handle will look.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">GEOSContextHandleInternal</span>
-<span class="p">{</span>
-    <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">geomFactory</span><span class="p">;</span>
-    <span class="n">GEOSMessageHandler</span> <span class="n">NOTICE_MESSAGE</span><span class="p">;</span>
-    <span class="n">GEOSMessageHandler</span> <span class="n">ERROR_MESSAGE</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">WKBOutputDims</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">WKBByteOrder</span><span class="p">;</span>
-    <span class="kt">int</span> <span class="n">initialized</span><span class="p">;</span>
-<span class="p">}</span> <span class="n">GEOSConextHandleInternal_t</span><span class="p">;</span>
-
-<span class="k">typedef</span> <span class="k">struct</span> <span class="n">GEOSContextHandle_HS</span> <span class="o">*</span><span class="n">GEOSContextHandle_t</span><span class="p">;</span>
-</code></pre></div><p>The typedef for GEOSContextHandle_t will make it easier for the compiler to help detect an incorrect pointer being passed to the functions.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">GEOSContextHandleInternal</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">geomFactory</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">GEOSMessageHandler</span> <span class="n">NOTICE_MESSAGE</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">GEOSMessageHandler</span> <span class="n">ERROR_MESSAGE</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">WKBOutputDims</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">WKBByteOrder</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">initialized</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="n">GEOSConextHandleInternal_t</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">GEOSContextHandle_HS</span> <span class="o">*</span><span class="n">GEOSContextHandle_t</span><span class="p">;</span>
+</span></span></code></pre></div><p>The typedef for GEOSContextHandle_t will make it easier for the compiler to help detect an incorrect pointer being passed to the functions.</p>
 <div class="gdoc-page__anchorwrap">
     <h3 id="example-prototypes"
     >
@@ -1565,26 +1565,26 @@ Thread-safe: A thread-safe function can be called simultaneously by multiple thr
     </h3>
 </div>
 <p>Here are examples of what some of the new function prototypes would be.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="n">GEOSContextHandle_t</span> <span class="n">GEOS_DLL</span> <span class="nf">initGEOS_r</span><span class="p">(</span> <span class="n">GEOSMessageHandler</span> <span class="n">notice_function</span><span class="p">,</span>
-                                         <span class="n">GEOSMessageHandler</span> <span class="n">error_function</span><span class="p">);</span>
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">GEOS_DLL</span> <span class="nf">finishGEOS_r</span><span class="p">(</span><span class="n">GEOSContextHandle_t</span> <span class="n">handle</span><span class="p">);</span>
-
-
-<span class="k">extern</span> <span class="n">GEOSGeometry</span> <span class="n">GEOS_DLL</span> <span class="o">*</span><span class="nf">GEOSGeom_createPoint_r</span><span class="p">(</span><span class="n">GEOSContextHandle_t</span> <span class="n">handle</span><span class="p">,</span>
-                                                      <span class="n">GEOSCoordSequence</span><span class="o">*</span> <span class="n">s</span><span class="p">);</span>
-<span class="k">extern</span> <span class="n">GEOSGeometry</span> <span class="n">GEOS_DLL</span> <span class="o">*</span><span class="nf">GEOSGeom_createLinearRing_r</span><span class="p">(</span><span class="n">GEOSContextHandle_t</span> <span class="n">handle</span><span class="p">,</span>
-                                                      <span class="n">GEOSCoordSequence</span><span class="o">*</span> <span class="n">s</span><span class="p">);</span>
-<span class="k">extern</span> <span class="n">GEOSGeometry</span> <span class="n">GEOS_DLL</span> <span class="o">*</span><span class="nf">GEOSGeom_createLineString_r</span><span class="p">(</span><span class="n">GEOSContextHandle_t</span> <span class="n">handle</span><span class="p">,</span>
-                                                      <span class="n">GEOSCoordSequence</span><span class="o">*</span> <span class="n">s</span><span class="p">);</span>
-</code></pre></div><p>For comparison, here are the same functions as they exist now.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="k">extern</span> <span class="kt">void</span> <span class="n">GEOS_DLL</span> <span class="nf">initGEOS</span><span class="p">(</span><span class="n">GEOSMessageHandler</span> <span class="n">notice_function</span><span class="p">,</span>
-        <span class="n">GEOSMessageHandler</span> <span class="n">error_function</span><span class="p">);</span>
-<span class="k">extern</span> <span class="kt">void</span> <span class="n">GEOS_DLL</span> <span class="nf">finishGEOS</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
-
-<span class="k">extern</span> <span class="n">GEOSGeometry</span> <span class="n">GEOS_DLL</span> <span class="o">*</span><span class="nf">GEOSGeom_createPoint</span><span class="p">(</span><span class="n">GEOSCoordSequence</span><span class="o">*</span> <span class="n">s</span><span class="p">);</span>
-<span class="k">extern</span> <span class="n">GEOSGeometry</span> <span class="n">GEOS_DLL</span> <span class="o">*</span><span class="nf">GEOSGeom_createLinearRing</span><span class="p">(</span><span class="n">GEOSCoordSequence</span><span class="o">*</span> <span class="n">s</span><span class="p">);</span>
-<span class="k">extern</span> <span class="n">GEOSGeometry</span> <span class="n">GEOS_DLL</span> <span class="o">*</span><span class="nf">GEOSGeom_createLineString</span><span class="p">(</span><span class="n">GEOSCoordSequence</span><span class="o">*</span> <span class="n">s</span><span class="p">);</span>
-</code></pre></div><div class="gdoc-page__anchorwrap">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">GEOSContextHandle_t</span> <span class="n">GEOS_DLL</span> <span class="nf">initGEOS_r</span><span class="p">(</span> <span class="n">GEOSMessageHandler</span> <span class="n">notice_function</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                                         <span class="n">GEOSMessageHandler</span> <span class="n">error_function</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">extern</span> <span class="kt">void</span> <span class="n">GEOS_DLL</span> <span class="nf">finishGEOS_r</span><span class="p">(</span><span class="n">GEOSContextHandle_t</span> <span class="n">handle</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">extern</span> <span class="n">GEOSGeometry</span> <span class="n">GEOS_DLL</span> <span class="o">*</span><span class="nf">GEOSGeom_createPoint_r</span><span class="p">(</span><span class="n">GEOSContextHandle_t</span> <span class="n">handle</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                                                      <span class="n">GEOSCoordSequence</span><span class="o">*</span> <span class="n">s</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">extern</span> <span class="n">GEOSGeometry</span> <span class="n">GEOS_DLL</span> <span class="o">*</span><span class="nf">GEOSGeom_createLinearRing_r</span><span class="p">(</span><span class="n">GEOSContextHandle_t</span> <span class="n">handle</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                                                      <span class="n">GEOSCoordSequence</span><span class="o">*</span> <span class="n">s</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">extern</span> <span class="n">GEOSGeometry</span> <span class="n">GEOS_DLL</span> <span class="o">*</span><span class="nf">GEOSGeom_createLineString_r</span><span class="p">(</span><span class="n">GEOSContextHandle_t</span> <span class="n">handle</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                                                      <span class="n">GEOSCoordSequence</span><span class="o">*</span> <span class="n">s</span><span class="p">);</span>
+</span></span></code></pre></div><p>For comparison, here are the same functions as they exist now.</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">extern</span> <span class="kt">void</span> <span class="n">GEOS_DLL</span> <span class="nf">initGEOS</span><span class="p">(</span><span class="n">GEOSMessageHandler</span> <span class="n">notice_function</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="n">GEOSMessageHandler</span> <span class="n">error_function</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">extern</span> <span class="kt">void</span> <span class="n">GEOS_DLL</span> <span class="nf">finishGEOS</span><span class="p">(</span><span class="kt">void</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">extern</span> <span class="n">GEOSGeometry</span> <span class="n">GEOS_DLL</span> <span class="o">*</span><span class="nf">GEOSGeom_createPoint</span><span class="p">(</span><span class="n">GEOSCoordSequence</span><span class="o">*</span> <span class="n">s</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">extern</span> <span class="n">GEOSGeometry</span> <span class="n">GEOS_DLL</span> <span class="o">*</span><span class="nf">GEOSGeom_createLinearRing</span><span class="p">(</span><span class="n">GEOSCoordSequence</span><span class="o">*</span> <span class="n">s</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">extern</span> <span class="n">GEOSGeometry</span> <span class="n">GEOS_DLL</span> <span class="o">*</span><span class="nf">GEOSGeom_createLineString</span><span class="p">(</span><span class="n">GEOSCoordSequence</span><span class="o">*</span> <span class="n">s</span><span class="p">);</span>
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h2 id="limitations"
     >
         Limitations

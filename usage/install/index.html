@@ -9,11 +9,12 @@
 <meta name="referrer" content="no-referrer" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="color-scheme" content="light dark" />
-<meta name="generator" content="Hugo 0.88.1" />
+<meta name="generator" content="Hugo 0.111.3">
 
 
-  <meta name="description" content="Red Hat Ubuntu Debian Amazon Linux Homebrew Macports      Red Hat     There is a GEOS package in the EPEL (Extra Packages for Enterprise Linux) repository.
-# Add the EPEL repository yum -y install epel-release # Install the GEOS runtime and development packages rpm -Uvh geos geos-devel Ubuntu     The Ubuntu GIS project maintains a collection of repositories with builds of common open source geospatial projects, including GEOS." />
+  <meta name="description" content="Red Hat Ubuntu Debian Amazon Linux Homebrew Macports Red Hat There is a GEOS package in the EPEL (Extra Packages for Enterprise Linux) repository.
+# Add the EPEL repository yum -y install epel-release # Install the GEOS runtime and development packages rpm -Uvh geos geos-devel Ubuntu The Ubuntu GIS project maintains a collection of repositories with builds of common open source geospatial projects, including GEOS.
+# Add the Ubuntu GIS PPA sudo apt-get install software-properties-common sudo add-apt-repository ppa:ubuntugis/ppa # Install the packages sudo apt-get install geos Debian The Debian GIS project maintains GEOS packages and pushes them into the appropriate Debian repositories." />
 
     <title>Install Packages | GEOS</title>
 
@@ -39,8 +40,9 @@
     content="Install Packages"
   />
   <meta property="og:site_name" content="GEOS" />
-  <meta property="og:description" content="Red Hat Ubuntu Debian Amazon Linux Homebrew Macports      Red Hat     There is a GEOS package in the EPEL (Extra Packages for Enterprise Linux) repository.
-# Add the EPEL repository yum -y install epel-release # Install the GEOS runtime and development packages rpm -Uvh geos geos-devel Ubuntu     The Ubuntu GIS project maintains a collection of repositories with builds of common open source geospatial projects, including GEOS." />
+  <meta property="og:description" content="Red Hat Ubuntu Debian Amazon Linux Homebrew Macports Red Hat There is a GEOS package in the EPEL (Extra Packages for Enterprise Linux) repository.
+# Add the EPEL repository yum -y install epel-release # Install the GEOS runtime and development packages rpm -Uvh geos geos-devel Ubuntu The Ubuntu GIS project maintains a collection of repositories with builds of common open source geospatial projects, including GEOS.
+# Add the Ubuntu GIS PPA sudo apt-get install software-properties-common sudo add-apt-repository ppa:ubuntugis/ppa # Install the packages sudo apt-get install geos Debian The Debian GIS project maintains GEOS packages and pushes them into the appropriate Debian repositories." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://libgeos.org/usage/install/" />
 
@@ -57,8 +59,9 @@
 
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="Install Packages" />
-  <meta name="twitter:description" content="Red Hat Ubuntu Debian Amazon Linux Homebrew Macports      Red Hat     There is a GEOS package in the EPEL (Extra Packages for Enterprise Linux) repository.
-# Add the EPEL repository yum -y install epel-release # Install the GEOS runtime and development packages rpm -Uvh geos geos-devel Ubuntu     The Ubuntu GIS project maintains a collection of repositories with builds of common open source geospatial projects, including GEOS." />
+  <meta name="twitter:description" content="Red Hat Ubuntu Debian Amazon Linux Homebrew Macports Red Hat There is a GEOS package in the EPEL (Extra Packages for Enterprise Linux) repository.
+# Add the EPEL repository yum -y install epel-release # Install the GEOS runtime and development packages rpm -Uvh geos geos-devel Ubuntu The Ubuntu GIS project maintains a collection of repositories with builds of common open source geospatial projects, including GEOS.
+# Add the Ubuntu GIS PPA sudo apt-get install software-properties-common sudo add-apt-repository ppa:ubuntugis/ppa # Install the packages sudo apt-get install geos Debian The Debian GIS project maintains GEOS packages and pushes them into the appropriate Debian repositories." />
 
 
   <script type="application/ld+json">
@@ -69,7 +72,7 @@
       "name": "Install Packages",
       "url" : "https://libgeos.org/usage/install/",
       "headline": "Install Packages",
-      "description": "Red Hat Ubuntu Debian Amazon Linux Homebrew Macports      Red Hat     There is a GEOS package in the EPEL (Extra Packages for Enterprise Linux) repository.\n# Add the EPEL repository yum -y install epel-release # Install the GEOS runtime and development packages rpm -Uvh geos geos-devel Ubuntu     The Ubuntu GIS project maintains a collection of repositories with builds of common open source geospatial projects, including GEOS.",
+      "description": "Red Hat Ubuntu Debian Amazon Linux Homebrew Macports Red Hat There is a GEOS package in the EPEL (Extra Packages for Enterprise Linux) repository.\n# Add the EPEL repository yum -y install epel-release # Install the GEOS runtime and development packages rpm -Uvh geos geos-devel Ubuntu The Ubuntu GIS project maintains a collection of repositories with builds of common open source geospatial projects, including GEOS.\n# Add the Ubuntu GIS PPA sudo apt-get install software-properties-common sudo add-apt-repository ppa:ubuntugis\/ppa # Install the packages sudo apt-get install geos Debian The Debian GIS project maintains GEOS packages and pushes them into the appropriate Debian repositories.",
       "wordCount" : "228",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
@@ -1494,13 +1497,12 @@
     </h3>
 </div>
 <p>There is a GEOS package in the EPEL (Extra Packages for Enterprise Linux) repository.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># Add the EPEL repository</span>
-yum -y install epel-release
-
-<span class="c1"># Install the GEOS runtime and development packages</span>
-rpm -Uvh geos geos-devel
-
-</code></pre></div><div class="gdoc-page__anchorwrap">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Add the EPEL repository</span>
+</span></span><span class="line"><span class="cl">yum -y install epel-release
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Install the GEOS runtime and development packages</span>
+</span></span><span class="line"><span class="cl">rpm -Uvh geos geos-devel
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h3 id="ubuntu"
     >
         Ubuntu
@@ -1513,13 +1515,13 @@ rpm -Uvh geos geos-devel
   class="gdoc-markdown__link"
   href="https://wiki.ubuntu.com/UbuntuGIS"
 >Ubuntu GIS</a> project maintains a collection of repositories with builds of common open source geospatial projects, including GEOS.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># Add the Ubuntu GIS PPA</span>
-sudo apt-get install software-properties-common
-sudo add-apt-repository ppa:ubuntugis/ppa
-
-<span class="c1"># Install the packages</span>
-sudo apt-get install geos
-</code></pre></div><div class="gdoc-page__anchorwrap">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># Add the Ubuntu GIS PPA</span>
+</span></span><span class="line"><span class="cl">sudo apt-get install software-properties-common
+</span></span><span class="line"><span class="cl">sudo add-apt-repository ppa:ubuntugis/ppa
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Install the packages</span>
+</span></span><span class="line"><span class="cl">sudo apt-get install geos
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h3 id="debian"
     >
         Debian
@@ -1535,8 +1537,8 @@ sudo apt-get install geos
   class="gdoc-markdown__link"
   href="https://tracker.debian.org/pkg/geos"
 >GEOS packages</a> and pushes them into the appropriate Debian repositories.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">sudo apt-get install geos
-</code></pre></div><div class="gdoc-page__anchorwrap">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo apt-get install geos
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h3 id="amazon-linux"
     >
         Amazon Linux
@@ -1546,11 +1548,11 @@ sudo apt-get install geos
     </h3>
 </div>
 <p>Amazon Linux is based on RH7, and can read from the EPEL repository. To enable using Amazon tools, use the <code>amazon-linux-extras</code> utility.</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">sudo yum install -y amazon-linux-extras
-sudo amazon-linux-extras <span class="nb">enable</span> epel
-sudo yum search geos
-sudo yum install geos geos-devel
-</code></pre></div><div class="gdoc-page__anchorwrap">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo yum install -y amazon-linux-extras
+</span></span><span class="line"><span class="cl">sudo amazon-linux-extras <span class="nb">enable</span> epel
+</span></span><span class="line"><span class="cl">sudo yum search geos
+</span></span><span class="line"><span class="cl">sudo yum install geos geos-devel
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h3 id="homebrew"
     >
         Homebrew
@@ -1567,8 +1569,8 @@ sudo yum install geos geos-devel
   class="gdoc-markdown__link"
   href="https://brew.sh/"
 >install Homebrew</a>. Then:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">brew install geos
-</code></pre></div><div class="gdoc-page__anchorwrap">
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">brew install geos
+</span></span></code></pre></div><div class="gdoc-page__anchorwrap">
     <h3 id="macports"
     >
         Macports
@@ -1585,8 +1587,8 @@ sudo yum install geos geos-devel
   class="gdoc-markdown__link"
   href="https://www.macports.org/install.php"
 >install MacPorts</a>. Then:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">port install geos
-</code></pre></div>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">port install geos
+</span></span></code></pre></div>
   </article>
 
 
