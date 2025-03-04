@@ -31,6 +31,28 @@ namespace tut {
 // Common data used by all tests
 struct test_polygonnodeconverter_data {
 
+    std::deque<std::unique_ptr<Coordinate>> coordQue;
+    std::deque<std::unique_ptr<NodeSection>> nsQue;
+
+    Coordinate* newCoordinate(double x, double y)
+    {
+        coordQue.emplace_back(new Coordinate(x, y));
+        return coordQue.back().get();
+    }
+
+    NodeSection* section(int ringId, double v0x, double v0y, double nx, double ny, double v1x, double v1y)
+    {
+        NodeSection *ns = new NodeSection(
+            true, Dimension::A, 1, ringId,
+            nullptr, false,
+            newCoordinate(v0x, v0y),
+            Coordinate(nx, ny),
+            newCoordinate(v1x, v1y)
+            );
+        nsQue.emplace_back(ns);
+        return nsQue.back().get();
+    }
+
     NodeSection* sectionShell(double v0x, double v0y, double nx, double ny, double v1x, double v1y) {
         return section(0, v0x, v0y, nx, ny, v1x, v1y);
     }
@@ -39,17 +61,12 @@ struct test_polygonnodeconverter_data {
         return section(1, v0x, v0y, nx, ny, v1x, v1y);
     }
 
-    NodeSection* section(int ringId, double v0x, double v0y, double nx, double ny, double v1x, double v1y) {
-        return new NodeSection(true, Dimension::A, 1, ringId, nullptr, false, 
-            new Coordinate(v0x, v0y), Coordinate(nx, ny), new Coordinate(v1x, v1y));
-    }
-
     std::vector<const NodeSection*> 
     toPtrVector(const std::vector<std::unique_ptr<NodeSection>>& input)
     {
         std::vector<const NodeSection*> vec;
         for(std::size_t i = 0, n = input.size(); i < n; ++i) {
-            vec.emplace_back(input[i].get());
+            vec.push_back(input[i].get());
         }
         return vec;
     }
@@ -67,6 +84,7 @@ struct test_polygonnodeconverter_data {
         }
         return true;
     }
+
     void sort(std::vector<const NodeSection*>& ns) {
 
         // Comparator lambda for sort support
@@ -80,15 +98,6 @@ struct test_polygonnodeconverter_data {
         std::sort(ns.begin(), ns.end(), comparator);
     }
 
-    void 
-    freeNodeSections(std::vector<const NodeSection*>& ns) {
-        for (std::size_t i = 0; i < ns.size(); i++) {
-            delete ns[i]->getVertex(0);
-            delete ns[i]->getVertex(1);
-            delete ns[i];
-        }
-    }
-
     void
     checkConversion(std::vector<const NodeSection *>& input, 
                     std::vector<const NodeSection *>& expected)
@@ -96,14 +105,6 @@ struct test_polygonnodeconverter_data {
         auto actual = PolygonNodeConverter::convert( input );
         auto actualPtr = toPtrVector(actual);
         bool isEqual = checkSectionsEqual(actualPtr, expected);
-        freeNodeSections(input);
-        freeNodeSections(expected);
-        /*
-        if (! isEqual) {
-            System.out.println("Expected:" + formatSections(expected));
-            System.out.println("Actual:" + formatSections(actual));      
-        }
-        */
         ensure("checkConversion", isEqual);
     }
 
