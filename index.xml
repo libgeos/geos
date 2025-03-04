@@ -96,7 +96,7 @@ You can explore the C++ model via the Doxygen reference.</description>
       <pubDate>Mon, 04 Oct 2021 14:21:00 -0700</pubDate>
       
       <guid>https://libgeos.org/project/development/ci_status/</guid>
-      <description>CI main 3.13 3.12 3.11 3.10 3.9 GitHub Debbie Winnie Dronie Bessie Bessie32 Berrie Berrie64 Runners GitHub - Ubuntu various, Windows various, MacOS various, CMake Debbie - Debian sid (bullseye), GNU/Linux 64bit, GCC Debian 10.2.1, cmake (3.18.4) &amp;gt;= 3.9, autotools &amp;lt; 3.8 Winnie - Windows Mingw64, 32bit GCC 8.1.0, 64bit GCC 8.1.0, MSys CMake (3.21.3), 64-bit GCC 12.1 (cmake 3.23.2 ninja) Dronie - Alpine Linux 3.14 (alpine.latest), 64bit, GCC 10.</description>
+      <description>CI main 3.13 3.12 3.11 3.10 3.9 GitHub Debbie Winnie Dronie Bessie Berrie Berrie64 Runners GitHub - Ubuntu various, Windows various, MacOS various, CMake Debbie - Debian sid (bullseye), GNU/Linux 64bit, GCC Debian 10.2.1, cmake (3.18.4) &amp;gt;= 3.9, autotools &amp;lt; 3.8 Winnie - Windows Mingw64, 32bit GCC 8.1.0, 64bit GCC 8.1.0, MSys CMake (3.21.3), 64-bit GCC 12.1 (cmake 3.23.2 ninja) Dronie - Alpine Linux 3.14 (alpine.latest), 64bit, GCC 10.3.1, CMake (3.</description>
     </item>
     
     <item>
