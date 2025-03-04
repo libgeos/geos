@@ -15,9 +15,6 @@ More information is available the [project homepage](https://libgeos.org/).
 | CI  | Status |
 |:--- |:------ |
 | GitHub | [![github](https://github.com/libgeos/geos/workflows/CI/badge.svg?branch=3.9)](https://github.com/libgeos/geos/actions?query=workflow:CI+branch:3.9) |
-| Azure | [![Build Status](https://dev.azure.com/libgeos/geos/_apis/build/status/libgeos.geos?branchName=3.9)](https://dev.azure.com/libgeos/geos/_build/latest?definitionId=2&branchName=3.9) |
-| GitLab | [![gitlab-ci](https://gitlab.com/geos/libgeos/badges/3.9/pipeline.svg)](https://gitlab.com/geos/libgeos/commits/3.9) |
-| Appveyor | [![appveyor](https://ci.appveyor.com/api/projects/status/62aplwst722b89au/branch/3.9?svg=true)](https://ci.appveyor.com/project/dbaston/geos/branch/3.9) |
 | Debbie | [![debbie](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Branch_3.9)](https://debbie.postgis.net/view/GEOS/job/GEOS_Branch_3.9/) |
 | Winnie | [![winnie](https://winnie.postgis.net:444/view/GEOS/job/GEOS_Branch_3.9/badge/icon)](https://winnie.postgis.net:444/view/GEOS/job/GEOS_Branch_3.9/) |
 | Dronie | [![dronie](https://dronie.osgeo.org/api/badges/geos/geos/status.svg?branch=3.9)](https://dronie.osgeo.org/geos/geos?branch=3.9) |
