@@ -89,7 +89,7 @@ jobs:
 
         - cxx_compiler: g++-14
           c_compiler: gcc-14
-          build_type: Release
+          build_type: Debug
           cxxstd: 20
           arch: 64
           packages: 'g++-14-multilib gcc-14-multilib'
