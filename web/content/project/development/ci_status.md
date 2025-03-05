@@ -23,6 +23,6 @@ weight: 50
 * **Debbie** - Debian sid (bullseye), GNU/Linux 64bit, GCC Debian 10.2.1, cmake (3.18.4) >= 3.9, autotools < 3.8
 * **Winnie** - Windows Mingw64, 32bit GCC 8.1.0, 64bit GCC 8.1.0, MSys CMake (3.21.3), 64-bit GCC 12.1 (cmake 3.23.2 ninja)
 * **Dronie** - Alpine Linux 3.14 (alpine.latest), 64bit, GCC 10.3.1, CMake (3.20.3) ,  automake < 3.10
-* **Bessie** - FreeBSD 14.1, 64-bit clang 10.0.1, CMake (3.30.5) >=3.8, clang version 18.1.5
+* **Bessie** - FreeBSD 14.1, 64-bit  CMake (3.30.5) >=3.9, clang version 18.1.5
 * **Berrie** - Raspberry Pi (debian bullseye (11)), 32-bit gcc 10.2.1,  CMake (3.18.4)
 * **Berrie64** - Raspberry Pi Arm (debian bookworm (12)), 64-bit gcc 10.2.1,  CMake (3.18.4)
