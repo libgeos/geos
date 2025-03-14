@@ -1,5 +1,12 @@
+
+## Changes in 3.13.2
+2025-xx-xx
+
+- Fixes/Improvements:
+  - Fix GeometryCollections in coverageSimplify cause segfault (GH-1250, Paul Ramsey)
+
 ## Changes in 3.13.1
-2024-03-03
+2025-03-03
 
 - Fixes/Improvements:
   - Fix ConcaveHullOfPolygons nested shell handling (GH-1169, Martin Davis)
