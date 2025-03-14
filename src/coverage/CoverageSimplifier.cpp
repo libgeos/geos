@@ -86,7 +86,8 @@ CoverageSimplifier::CoverageSimplifier(const std::vector<const Geometry*>& cover
     , m_geomFactory(coverage.empty() ? nullptr : coverage[0]->getFactory())
     {
         for (const Geometry* g: m_input) {
-            if (!g->isPolygonal())
+            auto typeId = g->getGeometryTypeId();
+            if (typeId != geom::GEOS_POLYGON && typeId != geom::GEOS_MULTIPOLYGON)
                 throw util::IllegalArgumentException("Argument is non-polygonal");
         }
     }
