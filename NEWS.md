@@ -1,3 +1,9 @@
+## Changes in 3.11.6
+2025-xx-xx
+
+- Fixes/Improvements:
+  -
+
 ## Changes in 3.11.5
 2025-03-03
 
