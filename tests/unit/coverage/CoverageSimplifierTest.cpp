@@ -483,4 +483,24 @@ void object::test<30> ()
 }
 
 
+// Test non-polygon inputs (GH-1250)
+template<>
+template<>
+void object::test<31> ()
+{
+    auto input = readArray({
+        "GEOMETRYCOLLECTION (POLYGON ((0 10, 10 10, 10 7, 10 3, 10 0, 0 0, 0 10)), GEOMETRYCOLLECTION (POLYGON ((10 10, 20 10, 20 0, 10 0, 10 3, 10 7, 10 10))))"
+        });
+    try {
+        std::vector<std::unique_ptr<Geometry>> result =
+        CoverageSimplifier::simplify(input, 10);
+    }
+    catch (geos::util::IllegalArgumentException&) {
+        ensure("caught IllegalArgumentException", true);
+        return;
+    }
+    ensure("did not throw IllegalArgumentException", false);
+}
+
+
 } // namespace tut
