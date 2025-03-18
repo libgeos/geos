@@ -152,4 +152,17 @@ void object::test<7> ()
         "POLYGON ((1 1, 1 5, 2 5, 2 8, 5 8, 5 9, 9 9, 9 5, 8 5, 8 2, 5 2, 5 1, 1 1))");
 }
 
+//
+// Confirm that intersection works against linearrings
+//
+template<>
+template<>
+void object::test<9> ()
+{
+    std::string a = "LINEARRING (2 8, 8 8, 8 2, 2 2, 2 8)";
+    std::string b = "GEOMETRYCOLLECTION (LINESTRING (0 0, 10 10))";
+    testIntersection(a, b,
+        "MULTIPOINT ((2 2), (8 8))");
+}
+
 } // namespace tut
