@@ -2179,6 +2179,12 @@ extern "C" {
             case GEOS_MULTIPOLYGON:
                 g = gf->createMultiPolygon();
                 break;
+            case GEOS_MULTICURVE:
+                g = gf->createMultiCurve();
+                break;
+            case GEOS_MULTISURFACE:
+                g = gf->createMultiSurface();
+                break;
             default:
                 throw IllegalArgumentException("Unsupported type request for GEOSGeom_createEmptyCollection_r");
             }
