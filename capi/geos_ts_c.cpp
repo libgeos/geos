@@ -1912,9 +1912,9 @@ extern "C" {
     GEOSGeomGetPointN_r(GEOSContextHandle_t extHandle, const Geometry* g1, int n)
     {
         return execute(extHandle, [&]() {
-            const LineString* ls = dynamic_cast<const LineString*>(g1);
+            const SimpleCurve* ls = dynamic_cast<const SimpleCurve*>(g1);
             if(!ls) {
-                throw IllegalArgumentException("Argument is not a LineString");
+                throw IllegalArgumentException("Argument is not a SimpleCurve");
             }
             if(n < 0) {
                 throw IllegalArgumentException("Index must be non-negative.");
