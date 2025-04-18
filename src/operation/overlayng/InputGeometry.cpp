@@ -47,6 +47,15 @@ InputGeometry::getDimension(uint8_t index) const
 }
 
 /*public*/
+int
+InputGeometry::getCoordinateDimension(uint8_t index) const
+{
+    if (geom[index] == nullptr)
+        return -1;
+    return geom[index]->getCoordinateDimension();
+}
+
+/*public*/
 const Geometry*
 InputGeometry::getGeometry(uint8_t geomIndex) const
 {

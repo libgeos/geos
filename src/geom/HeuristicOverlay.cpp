@@ -342,7 +342,7 @@ StructuredCollection::doUnaryUnion(int resultDim) const
 
     if (geoms.size() == 0) {
         return OverlayUtil::createEmptyResult(
-            resultDim, factory);
+            resultDim, 2, factory);
     }
     return factory->buildGeometry(geoms.begin(), geoms.end());
 }

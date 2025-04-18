@@ -138,13 +138,13 @@ public:
     static bool isEnvDisjoint(const Geometry* a, const Geometry* b, const PrecisionModel* pm);
 
     /**
-    * Creates an empty result geometry of the appropriate dimension,
+    * Creates an empty result geometry of the appropriate dimension and coordinate dimension,
     * based on the given overlay operation and the dimensions of the inputs.
     * The created geometry is an atomic geometry,
     * not a collection (unless the dimension is -1,
     * in which case a GEOMETRYCOLLECTION EMPTY is created.)
     */
-    static std::unique_ptr<Geometry> createEmptyResult(int dim, const GeometryFactory* geomFact);
+    static std::unique_ptr<Geometry> createEmptyResult(int dim, size_t coordDim, const GeometryFactory* geomFact);
 
     /**
     * Computes the dimension of the result of
@@ -160,6 +160,13 @@ public:
     * (since the Symmetric Difference is the Union of the Differences).
     */
     static int resultDimension(int opCode, int dim0, int dim1);
+
+    /**
+     * Computes the coordinate dimension of overlaying two geometries.
+     * This is the smallest of the two coordinate dimensions 
+     * (to avoid having to populate Z and M with unknown values).
+     */
+    static uint8_t resultCoordinateDimension(int coordDim0, int coordDim1);
 
     /**
     * Creates an overlay result geometry for homogeneous or mixed components.
