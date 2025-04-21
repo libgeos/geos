@@ -106,31 +106,32 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
 <div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    <span class="keywordtype">bool</span> isSingle() <span class="keyword">const</span>;</div>
 <div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    <span class="keywordtype">int</span> getDimension(uint8_t index) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* getGeometry(uint8_t geomIndex) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a>* getEnvelope(uint8_t geomIndex) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    <span class="keywordtype">bool</span> isEmpty(uint8_t geomIndex) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    <span class="keywordtype">bool</span> isArea(uint8_t geomIndex) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    <span class="keywordtype">int</span> getAreaIndex() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    <span class="keywordtype">bool</span> isLine(uint8_t geomIndex) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    <span class="keywordtype">bool</span> isAllPoints() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    <span class="keywordtype">bool</span> hasPoints() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span> </div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1overlayng_1_1InputGeometry.html#a99d605f56218566fae8ff6b3e7e22136">   80</a></span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classgeos_1_1operation_1_1overlayng_1_1InputGeometry.html#a99d605f56218566fae8ff6b3e7e22136">hasEdges</a>(uint8_t geomIndex) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span> </div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1overlayng_1_1InputGeometry.html#ad7c9ec7dd8a50295e2c7b55c820ff516">   93</a></span>    <a class="code hl_enumeration" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8">Location</a> <a class="code hl_function" href="classgeos_1_1operation_1_1overlayng_1_1InputGeometry.html#ad7c9ec7dd8a50295e2c7b55c820ff516">locatePointInArea</a>(uint8_t geomIndex, <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; pt);</div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span> </div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>    <a class="code hl_class" href="classgeos_1_1algorithm_1_1locate_1_1PointOnGeometryLocator.html">PointOnGeometryLocator</a>* getLocator(uint8_t geomIndex);</div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    <span class="keywordtype">void</span> setCollapsed(uint8_t geomIndex, <span class="keywordtype">bool</span> isGeomCollapsed);</div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span> </div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    uint8_t getCoordinateDimension(uint8_t index) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* getGeometry(uint8_t geomIndex) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a>* getEnvelope(uint8_t geomIndex) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    <span class="keywordtype">bool</span> isEmpty(uint8_t geomIndex) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    <span class="keywordtype">bool</span> isArea(uint8_t geomIndex) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    <span class="keywordtype">int</span> getAreaIndex() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    <span class="keywordtype">bool</span> isLine(uint8_t geomIndex) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    <span class="keywordtype">bool</span> isAllPoints() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <span class="keywordtype">bool</span> hasPoints() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1overlayng_1_1InputGeometry.html#a99d605f56218566fae8ff6b3e7e22136">   81</a></span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classgeos_1_1operation_1_1overlayng_1_1InputGeometry.html#a99d605f56218566fae8ff6b3e7e22136">hasEdges</a>(uint8_t geomIndex) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span> </div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1overlayng_1_1InputGeometry.html#ad7c9ec7dd8a50295e2c7b55c820ff516">   94</a></span>    <a class="code hl_enumeration" href="namespacegeos_1_1geom.html#ae55a225cd843a6b153a7b6ca5a4707c8">Location</a> <a class="code hl_function" href="classgeos_1_1operation_1_1overlayng_1_1InputGeometry.html#ad7c9ec7dd8a50295e2c7b55c820ff516">locatePointInArea</a>(uint8_t geomIndex, <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a>&amp; pt);</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span> </div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    <a class="code hl_class" href="classgeos_1_1algorithm_1_1locate_1_1PointOnGeometryLocator.html">PointOnGeometryLocator</a>* getLocator(uint8_t geomIndex);</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>    <span class="keywordtype">void</span> setCollapsed(uint8_t geomIndex, <span class="keywordtype">bool</span> isGeomCollapsed);</div>
 <div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span> </div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>};</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span> </div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>};</div>
 </div>
-<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span> </div>
 <div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span> </div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>} <span class="comment">// namespace geos.operation.overlayng</span></div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>} <span class="comment">// namespace geos.operation</span></div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>} <span class="comment">// namespace geos</span></div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span> </div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span> </div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>} <span class="comment">// namespace geos.operation.overlayng</span></div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>} <span class="comment">// namespace geos.operation</span></div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>} <span class="comment">// namespace geos</span></div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span> </div>
 <div class="ttc" id="aclassgeos_1_1algorithm_1_1locate_1_1PointOnGeometryLocator_html"><div class="ttname"><a href="classgeos_1_1algorithm_1_1locate_1_1PointOnGeometryLocator.html">geos::algorithm::locate::PointOnGeometryLocator</a></div><div class="ttdoc">An interface for classes which determine the Location of points in Polygon or MultiPolygon geometries...</div><div class="ttdef"><b>Definition</b> PointOnGeometryLocator.h:36</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a></div><div class="ttdoc">Coordinate is the lightweight class used to store coordinates.</div><div class="ttdef"><b>Definition</b> Coordinate.h:217</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Envelope_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Envelope.html">geos::geom::Envelope</a></div><div class="ttdoc">An Envelope defines a rectangulare region of the 2D coordinate plane.</div><div class="ttdef"><b>Definition</b> Envelope.h:59</div></div>
