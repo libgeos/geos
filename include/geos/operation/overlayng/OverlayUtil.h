@@ -166,7 +166,7 @@ public:
      * This is the smallest of the two coordinate dimensions 
      * (to avoid having to populate Z and M with unknown values).
      */
-    static uint8_t resultCoordinateDimension(int coordDim0, int coordDim1);
+    static uint8_t resultCoordinateDimension(uint8_t coordDim0, uint8_t coordDim1);
 
     /**
     * Creates an overlay result geometry for homogeneous or mixed components.

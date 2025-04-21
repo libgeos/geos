@@ -226,21 +226,18 @@ OverlayUtil::resultDimension(int opCode, int dim0, int dim1)
 
 /* public static */
 uint8_t
-OverlayUtil::resultCoordinateDimension(int coordDim0, int coordDim1)
+OverlayUtil::resultCoordinateDimension(uint8_t coordDim0, uint8_t coordDim1)
 {
-    int resultCoordDim = coordDim0;
+    uint8_t resultCoordDim = 4;
     //-- handle cases where only one geometry provided
-    if (coordDim0 < 0) {
-        resultCoordDim = coordDim1;
-    }
-    else if (coordDim1 < 0) {
+    if (coordDim0 >= 2 && coordDim0 < resultCoordDim) {
         resultCoordDim = coordDim0;
     }
-    else {
-        resultCoordDim = std::min(coordDim0, coordDim1);
+    if (coordDim1 >= 2 && coordDim1 < resultCoordDim) {
+        resultCoordDim = coordDim1;
     }
     //-- return value must be 2, 3 or 4
-    return (uint8_t) resultCoordDim;
+    return resultCoordDim;
 }
 
 /* public static */

@@ -341,8 +341,14 @@ StructuredCollection::doUnaryUnion(int resultDim) const
     toVector(poly_union.get(), geoms);
 
     if (geoms.size() == 0) {
+        uint8_t resultCoordDim2 = OverlayUtil::resultCoordinateDimension(
+            pts_less_polys_lines->getCoordinateDimension(), 
+            lines_less_polys->getCoordinateDimension());
+        uint8_t resultCoordDim = OverlayUtil::resultCoordinateDimension(
+            resultCoordDim2, 
+            poly_union->getCoordinateDimension());
         return OverlayUtil::createEmptyResult(
-            resultDim, 2, factory);
+            resultDim, resultCoordDim, factory);
     }
     return factory->buildGeometry(geoms.begin(), geoms.end());
 }
