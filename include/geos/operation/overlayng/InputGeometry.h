@@ -61,6 +61,7 @@ public:
 
     bool isSingle() const;
     int getDimension(uint8_t index) const;
+    uint8_t getCoordinateDimension(uint8_t index) const;
     const Geometry* getGeometry(uint8_t geomIndex) const;
     const Envelope* getEnvelope(uint8_t geomIndex) const;
     bool isEmpty(uint8_t geomIndex) const;
