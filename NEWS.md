@@ -2,7 +2,7 @@
 2025-xx-xx
 
 - Fixes:
-  - 
+  - Fix OverlayNG coordinate dimemsion handling for EMPTY geometries (GH-1258, Martin Davis)
 
 
 ## Changes in 3.12.3
