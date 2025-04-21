@@ -357,11 +357,15 @@ OverlayNG::extractResult(int p_opCode, OverlayGraph* graph)
 std::unique_ptr<Geometry>
 OverlayNG::createEmptyResult()
 {
+    uint8_t coordDim = OverlayUtil::resultCoordinateDimension(
+                            inputGeom.getCoordinateDimension(0), 
+                            inputGeom.getCoordinateDimension(1));
     return OverlayUtil::createEmptyResult(
                 OverlayUtil::resultDimension(opCode,
                     inputGeom.getDimension(0),
                     inputGeom.getDimension(1)),
-                geomFact);
+                    coordDim,
+                    geomFact);
 }
 
 

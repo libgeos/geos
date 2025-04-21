@@ -173,18 +173,18 @@ OverlayUtil::isDisjoint(const Envelope* envA, const Envelope* envB, const Precis
 
 /*public static*/
 std::unique_ptr<Geometry>
-OverlayUtil::createEmptyResult(int dim, const GeometryFactory* geomFact)
+OverlayUtil::createEmptyResult(int dim, size_t coordDim, const GeometryFactory* geomFact)
 {
     std::unique_ptr<Geometry> result(nullptr);
     switch (dim) {
     case 0:
-        result = geomFact->createPoint();
+        result = geomFact->createPoint(coordDim);
         break;
     case 1:
-        result = geomFact->createLineString();
+        result = geomFact->createLineString(coordDim);
         break;
     case 2:
-        result = geomFact->createPolygon();
+        result = geomFact->createPolygon(coordDim);
         break;
     case -1:
         result = geomFact->createGeometryCollection();
@@ -222,6 +222,22 @@ OverlayUtil::resultDimension(int opCode, int dim0, int dim1)
         break;
     }
     return resultDimension;
+}
+
+/* public static */
+uint8_t
+OverlayUtil::resultCoordinateDimension(uint8_t coordDim0, uint8_t coordDim1)
+{
+    uint8_t resultCoordDim = 4;
+    //-- handle cases where only one geometry provided
+    if (coordDim0 >= 2 && coordDim0 < resultCoordDim) {
+        resultCoordDim = coordDim0;
+    }
+    if (coordDim1 >= 2 && coordDim1 < resultCoordDim) {
+        resultCoordDim = coordDim1;
+    }
+    //-- return value must be 2, 3 or 4
+    return resultCoordDim;
 }
 
 /* public static */
