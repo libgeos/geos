@@ -2,7 +2,7 @@
 2025-xx-xx
 
 - New things:
-  - Add clustering functions to C API (GH-1154, Dan Baston) 
+  - Add clustering functions to C API (GH-1154, Dan Baston)
 
 - Breaking Changes:
   - Stricter WKT parsing (GH-1241, @freemine)
@@ -20,7 +20,7 @@
   - Fix overlay heuristic for GeometryCollections with empty elements (GH-1229, Martin Davis)
   - Add ring buffer hole removal heuristic (GH-1233, Martin Davis)
   - Fix buffer element erosion for negative distance and remove overlay deps (GH-1239, Martin Davis)
-  - Fix OverlayNG coordinate dimemsion handling for EMPTY geometries (GH-1258, Martin Davis)
+  - Fix OverlayNG coordinate dimension handling for EMPTY geometries (GH-1258, Martin Davis)
 
 ## Changes in 3.13.0
 2024-09-06
@@ -35,11 +35,11 @@
     - Rewrite of boolean predicates and relate matrix calculations
     - "Prepared" mode now available for all predicates and relate matrix
     - CAPI functions GEOSPreparedRelate and GEOSPreparedRelatePattern expose new functionality
-    - CAPI implementations of GEOSPreparedTouches, etc, that were previously defaulting 
+    - CAPI implementations of GEOSPreparedTouches, etc, that were previously defaulting
       into non-prepared implementations now default into the RelateNG prepared implementation
     - Prepared implementations for Intersects, Covers, still use the older implementations
     - https://lin-ear-th-inking.blogspot.com/2024/05/jts-topological-relationships-next.html
-    - https://lin-ear-th-inking.blogspot.com/2024/05/relateng-performance.html 
+    - https://lin-ear-th-inking.blogspot.com/2024/05/relateng-performance.html
 
 - Breaking Changes:
   - Zero-length linestrings (eg LINESTRING(1 1, 1 1)) are now treated as equivalent to points (POINT(1 1)) in boolean predicates
@@ -76,7 +76,7 @@
   - TopologyPreservingSimplifier: fix to remove ring endpoints safely (GH-1110, Martin Davis)
   - TopologyPreservingSimplifier: fix stack overflow on degenerate inputs (GH-1113, Dan Baston)
   - DouglasPeuckerSimplifier: fix stack overflow on NaN tolerance (GH-1114, Dan Baston)
-  - GEOSConcaveHullOfPolygons: Avoid crash on zero-area input (GH-1076, Dan Baston) 
+  - GEOSConcaveHullOfPolygons: Avoid crash on zero-area input (GH-1076, Dan Baston)
 
 ## Changes in 3.12.0
 2023-06-27
