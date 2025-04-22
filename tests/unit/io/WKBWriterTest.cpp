@@ -48,6 +48,7 @@ struct test_wkbwriter_data {
     void checkHexOutput(const std::string& wkt, const std::string& hex) {
         std::stringstream out;
         auto geom = wktreader.read(wkt);
+        wkbwriter.setByteOrder(1);
         wkbwriter.writeHEX(*geom, out);
         ensure_equals(wkt, out.str(), hex );
     }
@@ -56,6 +57,7 @@ struct test_wkbwriter_data {
         std::stringstream out;
         auto geom = wktreader.read(wkt);
         geom->setSRID(srid);
+        wkbwriter.setByteOrder(1);
         wkbwriter.setIncludeSRID(true);
         wkbwriter.writeHEX(*geom, out);
         ensure_equals(wkt, out.str(), hex );
