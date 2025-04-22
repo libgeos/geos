@@ -10,7 +10,7 @@
 * Ideally, new algorithms are implemented in JTS and then ported to GEOS.
   * Sometimes GEOS gains new functionality; ideally this is backported to JTS
 * Performance optimizations in GEOS can backport to JTS.
-  * Short circuits, indexes, other non-language optimizations, should be ticketed in JTS when they are added to GEOS.
+  * Short circuits, indexes, and other non-language optimizations should be ticketed in JTS when they are added to GEOS.
 
 ### Follow JTS as Much as Possible
 
@@ -69,21 +69,21 @@ public:
 [Guidelines](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#r-resource-management).
 * [A raw pointer (a T*) is non-owning](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rr-ptr)
 * [A raw reference (a T&) is non-owning](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Rr-ref)
-  
+
 ### Function Parameter calling conventions
 
-* Objects which are passed as read-only with no transfer of ownership 
+* Objects which are passed as read-only with no transfer of ownership
   should be passed as `const` [references](https://en.wikipedia.org/wiki/Reference_%28C++%29#) (e.g. `const Geometry&`).
   References are simpler and safer to use than pointers.
   * in particular, this applies to Geometry objects passed to API operations
-  (in static functions, class constructors, or initialization methods) 
+  (in static functions, class constructors, or initialization methods)
   * NOTE: many GEOS API functions use pass-by-pointer (`Geometry*`), but this is historical baggage
-  * for the common case of passing a `std::unique_ptr<Geometry> foo` the argument will be `*foo` 
+  * for the common case of passing a `std::unique_ptr<Geometry> foo` the argument will be `*foo`
 * Pass-by-pointer can be used if the argument may be NULL (this is rare for API functions)
 
 ### Avoid Many Small Heap Allocations
 
-* Heap allocations (objects created using `new`) are more expensive than stack allocations, but they can show up in batchs in JTS in places where structures are built, like index trees, or graphs.
+* Heap allocations (objects created using `new`) are more expensive than stack allocations, but they can show up in batches in JTS in places where structures are built, like index trees or graphs.
 * To both lower the overhead of heap allocations, and to manage the life-cycle of the objects, we recommend storing small objects in an appropriate "double-ended queue", like [std::deque<>](https://en.cppreference.com/w/cpp/container/deque).
 * The implementation of `edgegraph` is an example.
 
@@ -122,7 +122,7 @@ GEOS is organized into many nested namespaces to reflect the JTS package structu
 Namespace qualification of class references can be shortened
 with the `using` keyword in two different ways:
 
-In **header files**, `using` [type aliases](https://en.cppreference.com/w/cpp/language/type_alias) can be defined **inside class definitions**: 
+In **header files**, `using` [type aliases](https://en.cppreference.com/w/cpp/language/type_alias) can be defined **inside class definitions**:
 
 ```
 class OffsetCurve {
