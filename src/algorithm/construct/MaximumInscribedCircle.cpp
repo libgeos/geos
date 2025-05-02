@@ -55,11 +55,11 @@ MaximumInscribedCircle::MaximumInscribedCircle(const Geometry* polygonal, double
 {
     if (!(typeid(*polygonal) == typeid(Polygon) ||
           typeid(*polygonal) == typeid(MultiPolygon))) {
-        throw util::IllegalArgumentException("Input geometry must be a Polygon or MultiPolygon");
+        throw util::IllegalArgumentException("Input must be a Polygon or MultiPolygon");
     }
 
     if (polygonal->isEmpty()) {
-        throw util::IllegalArgumentException("Empty input geometry is not supported");
+        throw util::IllegalArgumentException("Empty input is not supported");
     }
 }
 
@@ -192,6 +192,16 @@ MaximumInscribedCircle::isRadiusWithin(double maxRadius)
         return false;
     }
     maximumRadius = maxRadius;
+
+    /**
+     * Check if envelope dimension is smaller than diameter
+     */
+    const Envelope* env = inputGeom->getEnvelopeInternal();
+    double maxDiam = 2 * maximumRadius;
+    if (env->getWidth() < maxDiam || env->getHeight() < maxDiam) {
+        return true;
+    }
+
     tolerance = maxRadius * MAX_RADIUS_FRACTION;
     compute();
     double radius = centerPt.distance(radiusPt);
@@ -207,7 +217,7 @@ MaximumInscribedCircle::compute()
     if (done) return;
 
     /**
-     * Handle empty or flat geometries.
+     * Handle flat geometries.
      */
     if (inputGeom->getArea() == 0.0) {
         const CoordinateXY* c = inputGeom->getCoordinate();
