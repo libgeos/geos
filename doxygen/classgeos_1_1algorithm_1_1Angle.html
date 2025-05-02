@@ -76,6 +76,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a3c4a567ff3e8688d299df4fcd5aeb607"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afc0e4fc2a6d7e1bed6c1955400821ab0" id="r_afc0e4fc2a6d7e1bed6c1955400821ab0"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1Angle.html#afc0e4fc2a6d7e1bed6c1955400821ab0">angleBetweenOriented</a> (const geom::CoordinateXY &amp;tip1, const geom::CoordinateXY &amp;tail, const geom::CoordinateXY &amp;tip2)</td></tr>
 <tr class="separator:afc0e4fc2a6d7e1bed6c1955400821ab0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a186cd7ecb5e30bf3dcc24c2c8146888a" id="r_a186cd7ecb5e30bf3dcc24c2c8146888a"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1Angle.html#a186cd7ecb5e30bf3dcc24c2c8146888a">bisector</a> (const geom::CoordinateXY &amp;tip1, const geom::CoordinateXY &amp;tail, const geom::CoordinateXY &amp;tip2)</td></tr>
+<tr class="separator:a186cd7ecb5e30bf3dcc24c2c8146888a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a70da495e1f8afb9d1dc1de9519db456d" id="r_a70da495e1f8afb9d1dc1de9519db456d"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1Angle.html#a70da495e1f8afb9d1dc1de9519db456d">interiorAngle</a> (const geom::CoordinateXY &amp;p0, const geom::CoordinateXY &amp;p1, const geom::CoordinateXY &amp;p2)</td></tr>
 <tr class="separator:a70da495e1f8afb9d1dc1de9519db456d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4e25f61567be2ab03f92d36c775a9b9b" id="r_a4e25f61567be2ab03f92d36c775a9b9b"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1Angle.html#a4e25f61567be2ab03f92d36c775a9b9b">getTurn</a> (double ang1, double ang2)</td></tr>
@@ -92,6 +94,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a187158d7ff569463500ceb1d9cbcb0fc" id="r_a187158d7ff569463500ceb1d9cbcb0fc"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1Angle.html#a187158d7ff569463500ceb1d9cbcb0fc">sinCosSnap</a> (const double ang, double &amp;rSin, double &amp;rCos)</td></tr>
 <tr class="memdesc:a187158d7ff569463500ceb1d9cbcb0fc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes both sin and cos of an angle, snapping near-zero values to zero.  <br /></td></tr>
 <tr class="separator:a187158d7ff569463500ceb1d9cbcb0fc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8bb4b89f9aeae8a30d03091561adb945" id="r_a8bb4b89f9aeae8a30d03091561adb945"><td class="memItemLeft" align="right" valign="top">static geom::CoordinateXY&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1Angle.html#a8bb4b89f9aeae8a30d03091561adb945">project</a> (const geom::CoordinateXY &amp;p, double <a class="el" href="classgeos_1_1algorithm_1_1Angle.html#aa9a42c5eb2211b3f8d04fc672991576b">angle</a>, double dist)</td></tr>
+<tr class="separator:a8bb4b89f9aeae8a30d03091561adb945"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-attribs" name="pub-static-attribs"></a>
 Static Public Attributes</h2></td></tr>
@@ -294,6 +298,58 @@ static const int&#160;</td><td class="memItemRight" valign="bottom"><b>NONE</b> 
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the angle between v1 and v2, relative to v1 </dd></dl>
+
+</div>
+</div>
+<a id="a186cd7ecb5e30bf3dcc24c2c8146888a" name="a186cd7ecb5e30bf3dcc24c2c8146888a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a186cd7ecb5e30bf3dcc24c2c8146888a">&#9670;&#160;</a></span>bisector()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static double geos::algorithm::Angle::bisector </td>
+          <td>(</td>
+          <td class="paramtype">const geom::CoordinateXY &amp;&#160;</td>
+          <td class="paramname"><em>tip1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const geom::CoordinateXY &amp;&#160;</td>
+          <td class="paramname"><em>tail</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const geom::CoordinateXY &amp;&#160;</td>
+          <td class="paramname"><em>tip2</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Computes the angle of the unoriented bisector of the smallest angle between two vectors. The computed angle will be in the range (-Pi, Pi].</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">tip1</td><td>the tip of v1 </td></tr>
+    <tr><td class="paramname">tail</td><td>the tail of each vector </td></tr>
+    <tr><td class="paramname">tip2</td><td>the tip of v2 </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the angle of the bisector between v1 and v2 </dd></dl>
 
 </div>
 </div>
@@ -626,6 +682,58 @@ static const int&#160;</td><td class="memItemRight" valign="bottom"><b>NONE</b> 
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>an equivalent positive angle </dd></dl>
+
+</div>
+</div>
+<a id="a8bb4b89f9aeae8a30d03091561adb945" name="a8bb4b89f9aeae8a30d03091561adb945"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8bb4b89f9aeae8a30d03091561adb945">&#9670;&#160;</a></span>project()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static geom::CoordinateXY geos::algorithm::Angle::project </td>
+          <td>(</td>
+          <td class="paramtype">const geom::CoordinateXY &amp;&#160;</td>
+          <td class="paramname"><em>p</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>angle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>dist</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Projects a point by a given angle and distance.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p</td><td>the point to project </td></tr>
+    <tr><td class="paramname">angle</td><td>the angle at which to project </td></tr>
+    <tr><td class="paramname">dist</td><td>the distance to project </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the projected point </dd></dl>
 
 </div>
 </div>
