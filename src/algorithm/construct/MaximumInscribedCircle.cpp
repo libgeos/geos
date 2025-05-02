@@ -13,7 +13,7 @@
  **********************************************************************
  *
  * Last port: algorithm/construct/MaximumInscribedCircle.java
- * https://github.com/locationtech/jts/commit/98274a7ea9b40651e9de6323dc10fb2cac17a245
+ * https://github.com/locationtech/jts/commit/f0b9a808bdf8a973de435f737e37b7a221e231cb
  *
  **********************************************************************/
 
@@ -78,6 +78,14 @@ MaximumInscribedCircle::getRadiusLine(const Geometry* polygonal, double toleranc
 {
     MaximumInscribedCircle mic(polygonal, tolerance);
     return mic.getRadiusLine();
+}
+
+/* public static */
+bool
+MaximumInscribedCircle::isRadiusWithin(const Geometry* polygonal, double maxRadius)
+{
+    MaximumInscribedCircle mic(polygonal, -1);
+    return mic.isRadiusWithin(maxRadius);
 }
 
 /* public static */
@@ -171,6 +179,26 @@ MaximumInscribedCircle::createInteriorPointCell(const Geometry* geom)
     return cell;
 }
 
+
+/* public */
+bool
+MaximumInscribedCircle::isRadiusWithin(double maxRadius)
+{
+    if (maxRadius < 0) {
+        throw util::IllegalArgumentException("Radius length must be non-negative");
+    }
+    //-- handle 0 corner case, to provide maximum domain
+    if (maxRadius == 0) {
+        return false;
+    }
+    maximumRadius = maxRadius;
+    tolerance = maxRadius * MAX_RADIUS_FRACTION;
+    compute();
+    double radius = centerPt.distance(radiusPt);
+    return radius <= maximumRadius;
+}
+
+
 /* private */
 void
 MaximumInscribedCircle::compute()
@@ -195,6 +223,11 @@ MaximumInscribedCircle::compute()
         std::pair<CoordinateXY, CoordinateXY> centreRadius = ExactMaxInscribedCircle::computeRadius(polygonal);
         createResult(centreRadius.first, centreRadius.second);
         return;
+    }
+
+    //-- only needed for approximation
+    if (tolerance <= 0) {
+        throw util::IllegalArgumentException("Tolerance must be positive");
     }
 
     computeApproximation();
@@ -238,7 +271,7 @@ MaximumInscribedCircle::computeApproximation()
             GEOS_CHECK_FOR_INTERRUPTS();
         }
 
-        //-- if cell must be closer than furthest, terminate since all remaining cells in queue are even closer.
+        //-- if cell must be closer than farthest, terminate since all remaining cells in queue are even closer.
         if (cell.getMaxDistance() < farthestCell.getDistance())
             break;
 
@@ -246,6 +279,17 @@ MaximumInscribedCircle::computeApproximation()
         if (cell.getDistance() > farthestCell.getDistance()) {
             farthestCell = cell;
         }
+
+        //-- search termination when checking max radius predicate
+        if (maximumRadius >= 0) {
+            //-- found a inside point further than max radius
+            if (farthestCell.getDistance() > maximumRadius)
+                break;
+        //-- no cells can have larger radius
+        if (cell.getMaxDistance() < maximumRadius)
+            break;
+        }
+
         /**
         * Refine this cell if the potential distance improvement
         * is greater than the required tolerance.

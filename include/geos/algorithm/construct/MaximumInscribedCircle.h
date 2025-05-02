@@ -3,6 +3,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
  *
+ * Copyright (c) 2020 Martin Davis
  * Copyright (C) 2020 Paul Ramsey <pramsey@cleverelephant.ca>
  *
  * This is free software; you can redistribute and/or modify it under
@@ -13,7 +14,7 @@
  **********************************************************************
  *
  * Last port: algorithm/construct/MaximumInscribedCircle.java
- * https://github.com/locationtech/jts/commit/98274a7ea9b40651e9de6323dc10fb2cac17a245
+ * https://github.com/locationtech/jts/commit/f0b9a808bdf8a973de435f737e37b7a221e231cb
  *
  **********************************************************************/
 
@@ -46,11 +47,48 @@ namespace algorithm { // geos::algorithm
 namespace construct { // geos::algorithm::construct
 
 /**
- * Computes the Euclidean distance (L2 metric) from a Point to a Geometry.
+ * Constructs the Maximum Inscribed Circle for a
+ * polygonal Geometry, up to a specified tolerance.
+ * The Maximum Inscribed Circle is determined by a point in the interior of the area
+ * which has the farthest distance from the area boundary,
+ * along with a boundary point at that distance.
  *
- * Also computes two points which are separated by the distance.
+ * In the context of geography the center of the Maximum Inscribed Circle
+ * is known as the **Pole of Inaccessibility**.
+ * A cartographic use case is to determine a suitable point
+ * to place a map label within a polygon.
+ *
+ * The radius length of the Maximum Inscribed Circle is a
+ * measure of how "narrow" a polygon is. It is the
+ * distance at which the negative buffer becomes empty.
+ *
+ * The class supports testing whether a polygon is "narrower"
+ * than a specified distance via
+ * isRadiusWithin(Geometry, double) or
+ * isRadiusWithin(double).
+ * Testing for the maximum radius is generally much faster
+ * than computing the actual radius value, since short-circuiting
+ * is used to limit the approximation iterations.
+ *
+ * The class supports polygons with holes and multipolygons.
+ *
+ * The implementation uses a successive-approximation technique
+ * over a grid of square cells covering the area geometry.
+ * The grid is refined using a branch-and-bound algorithm.
+ * Point containment and distance are computed in a performant
+ * way by using spatial indexes.
+ *
+ * Future Enhancements
+ *
+ *   * Support a polygonal constraint on placement of center point,
+ *     for example to produce circle-packing constructions,
+ *     or support multiple labels.
+ *
+ * @author Martin Davis
+ *
  */
 class GEOS_DLL MaximumInscribedCircle {
+
     using IndexedPointInAreaLocator = geos::algorithm::locate::IndexedPointInAreaLocator;
     using IndexedFacetDistance = geos::operation::distance::IndexedFacetDistance;
 
@@ -82,9 +120,23 @@ public:
     /**
     * Gets a line representing a radius of the Largest Empty Circle.
     *
-    * @return a line from the center of the circle to a point on the edge
+    * @return a 2-point line from the center of the circle to a point on the edge
     */
     std::unique_ptr<geom::LineString> getRadiusLine();
+
+    /**
+    * Tests if the radius of the maximum inscribed circle
+    * is no longer than the specified distance.
+    * This method determines the distance tolerance automatically
+    * as a fraction of the maxRadius value.
+    * After this method is called the center and radius
+    * points provide locations demonstrating where
+    * the radius exceeds the specified maximum.
+    *
+    * @param maxRadius the (non-negative) radius value to test
+    * @return true if the max in-circle radius is no longer than the max radius
+    */
+    bool isRadiusWithin(double maxRadius);
 
     /**
     * Computes the center point of the Maximum Inscribed Circle
@@ -105,6 +157,18 @@ public:
     * @return a line from the center to a point on the circle
     */
     static std::unique_ptr<geom::LineString> getRadiusLine(const geom::Geometry* polygonal, double tolerance);
+
+    /**
+    * Tests if the radius of the maximum inscribed circle
+    * is no longer than the specified distance.
+    * This method determines the distance tolerance automatically
+    * as a fraction of the maxRadius value.
+    *
+    * @param polygonal a polygonal geometry
+    * @param maxRadius the radius value to test
+    * @return true if the max in-circle radius is no longer than the max radius
+    */
+    static bool isRadiusWithin(const geom::Geometry* polygonal, double maxRadius);
 
     /**
      * Computes the maximum number of iterations allowed.
@@ -134,6 +198,10 @@ private:
     bool done;
     geom::CoordinateXY centerPt;
     geom::CoordinateXY radiusPt;
+    double maximumRadius = -1;
+
+    /* private constant */
+    static constexpr double MAX_RADIUS_FRACTION = 0.0001;
 
     /* private methods */
     double distanceToBoundary(const geom::Point& pt);
