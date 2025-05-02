@@ -115,9 +115,11 @@ ExactMaxInscribedCircle::computeConvexQuadrilateral(const CoordinateSequence* ri
     }
 
     double diameter = ringCW->getEnvelope().getDiameter();
+    //-- expand diameter for robustness
+    double diamWithTolerance = 2 * diameter;
 
     //-- compute corner bisectors
-    std::array<LineSegment, 4> bisector = computeBisectors(ringCW, diameter);
+    std::array<LineSegment, 4> bisector = computeBisectors(ringCW, diamWithTolerance);
     //-- compute nodes and find interior one farthest from sides
     double maxDist = -1;
     CoordinateXY center;
@@ -128,6 +130,10 @@ ExactMaxInscribedCircle::computeConvexQuadrilateral(const CoordinateSequence* ri
         LineSegment& b2 = bisector[i2];
 
         CoordinateXY nodePt = b1.intersection(b2);
+
+        if (nodePt.isNull()) {
+            continue;
+        }
 
         //-- only interior nodes are considered
         if (! isPointInConvexRing(ringCW, nodePt)) {
