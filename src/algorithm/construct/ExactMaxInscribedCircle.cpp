@@ -29,6 +29,7 @@
 #include <geos/geom/Polygon.h>
 #include <geos/geom/Triangle.h>
 #include <geos/util/IllegalArgumentException.h>
+#include <geos/util/IllegalStateException.h>
 
 #include <typeinfo> // for dynamic_cast
 
@@ -197,8 +198,8 @@ ExactMaxInscribedCircle::computeConvexBisector(
     std::size_t iNext = index >= pts->size() ? 0 : index + 1;
     const CoordinateXY& pPrev = pts->getAt(iPrev);
     const CoordinateXY& pNext = pts->getAt(iNext);
-    if (! isConvex(pPrev, basePt, pNext))
-        throw util::IllegalArgumentException("Input is not convex");
+    if (isConcave(pPrev, basePt, pNext))
+        throw util::IllegalStateException("Input is not convex");
     double bisectAng = Angle::bisector(pPrev, basePt, pNext);
     CoordinateXY endPt = Angle::project(basePt, bisectAng, len);
     return LineSegment(basePt.x, basePt.y, endPt.x, endPt.y);
@@ -245,11 +246,11 @@ ExactMaxInscribedCircle::isConvex(const CoordinateSequence* ring)
 
 /* private static */
 bool
-ExactMaxInscribedCircle::isConvex(const CoordinateXY& p0,
-                                  const CoordinateXY& p1,
-                                  const CoordinateXY& p2)
+ExactMaxInscribedCircle::isConcave(const CoordinateXY& p0,
+                                   const CoordinateXY& p1,
+                                   const CoordinateXY& p2)
 {
-    return Orientation::CLOCKWISE == Orientation::index(p0, p1, p2);
+     return Orientation::COUNTERCLOCKWISE == Orientation::index(p0, p1, p2);
 }
 
 /* private static */

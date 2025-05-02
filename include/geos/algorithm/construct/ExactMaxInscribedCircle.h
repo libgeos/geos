@@ -107,9 +107,9 @@ private:
 
     static bool isConvex(const CoordinateSequence* ring);
 
-    static bool isConvex(const CoordinateXY& p0,
-                         const CoordinateXY& p1,
-                         const CoordinateXY& p2);
+    static bool isConcave(const CoordinateXY& p0,
+                          const CoordinateXY& p1,
+                          const CoordinateXY& p2);
 
     static bool isPointInConvexRing(const CoordinateSequence* ringCW,
                                 const CoordinateXY& p);

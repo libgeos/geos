@@ -296,5 +296,15 @@ void object::test<16> ()
         0.001, 4.7545, 3.0809, 2.081 );
 }
 
+/* testQuadWithCollinearVertex */
+template<>
+template<>
+void object::test<17> ()
+{
+    checkCircle("POLYGON ((1 5, 5 5, 9 5, 5 1, 1 5))",
+        0.001, 5.0, 3.3431,  1.65685 );
+}
+
+
 
 } // namespace tut
