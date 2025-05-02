@@ -64,6 +64,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aaa4691c3e96d041e3e6bcd3db0c39780"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7c092c11698a3b95a78d566db3cd9c83" id="r_a7c092c11698a3b95a78d566db3cd9c83"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1LineString.html">geom::LineString</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1construct_1_1MaximumInscribedCircle.html#a7c092c11698a3b95a78d566db3cd9c83">getRadiusLine</a> ()</td></tr>
 <tr class="separator:a7c092c11698a3b95a78d566db3cd9c83"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab82065372ac8a34a4576f8cf0e04cb9d" id="r_ab82065372ac8a34a4576f8cf0e04cb9d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1construct_1_1MaximumInscribedCircle.html#ab82065372ac8a34a4576f8cf0e04cb9d">isRadiusWithin</a> (double maxRadius)</td></tr>
+<tr class="separator:ab82065372ac8a34a4576f8cf0e04cb9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -71,12 +73,23 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a521bf08acc3508f066f60ce57140b6a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afb7b85a9916af5aa1abad1c8931439ef" id="r_afb7b85a9916af5aa1abad1c8931439ef"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1LineString.html">geom::LineString</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1construct_1_1MaximumInscribedCircle.html#afb7b85a9916af5aa1abad1c8931439ef">getRadiusLine</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *polygonal, double tolerance)</td></tr>
 <tr class="separator:afb7b85a9916af5aa1abad1c8931439ef"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95cba55c37f25d453e7280e30d3b19f6" id="r_a95cba55c37f25d453e7280e30d3b19f6"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1construct_1_1MaximumInscribedCircle.html#a95cba55c37f25d453e7280e30d3b19f6">isRadiusWithin</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *polygonal, double maxRadius)</td></tr>
+<tr class="separator:a95cba55c37f25d453e7280e30d3b19f6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aaa1f20f7005d0071c7449778d162d0bb" id="r_aaa1f20f7005d0071c7449778d162d0bb"><td class="memItemLeft" align="right" valign="top">static std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1construct_1_1MaximumInscribedCircle.html#aaa1f20f7005d0071c7449778d162d0bb">computeMaximumIterations</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *geom, double toleranceDist)</td></tr>
 <tr class="separator:aaa1f20f7005d0071c7449778d162d0bb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Computes the Euclidean distance (L2 metric) from a Point to a Geometry.</p>
-<p>Also computes two points which are separated by the distance. </p>
+<div class="textblock"><p>Constructs the Maximum Inscribed Circle for a polygonal Geometry, up to a specified tolerance. The Maximum Inscribed Circle is determined by a point in the interior of the area which has the farthest distance from the area boundary, along with a boundary point at that distance.</p>
+<p>In the context of geography the center of the Maximum Inscribed Circle is known as the <b>Pole of Inaccessibility</b>. A cartographic use case is to determine a suitable point to place a map label within a polygon.</p>
+<p>The radius length of the Maximum Inscribed Circle is a measure of how "narrow" a polygon is. It is the distance at which the negative buffer becomes empty.</p>
+<p>The class supports testing whether a polygon is "narrower" than a specified distance via isRadiusWithin(Geometry, double) or <a class="el" href="classgeos_1_1algorithm_1_1construct_1_1MaximumInscribedCircle.html#ab82065372ac8a34a4576f8cf0e04cb9d">isRadiusWithin(double)</a>. Testing for the maximum radius is generally much faster than computing the actual radius value, since short-circuiting is used to limit the approximation iterations.</p>
+<p>The class supports polygons with holes and multipolygons.</p>
+<p>The implementation uses a successive-approximation technique over a grid of square cells covering the area geometry. The grid is refined using a branch-and-bound algorithm. Point containment and distance are computed in a performant way by using spatial indexes.</p>
+<p>Future Enhancements</p>
+<ul>
+<li>Support a polygonal constraint on placement of center point, for example to produce circle-packing constructions, or support multiple labels.</li>
+</ul>
+<dl class="section author"><dt>Author</dt><dd>Martin Davis </dd></dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="aaa1f20f7005d0071c7449778d162d0bb" name="aaa1f20f7005d0071c7449778d162d0bb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aaa1f20f7005d0071c7449778d162d0bb">&#9670;&#160;</a></span>computeMaximumIterations()</h2>
@@ -202,7 +215,7 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 <p>Gets a line representing a radius of the Largest Empty Circle.</p>
-<dl class="section return"><dt>Returns</dt><dd>a line from the center of the circle to a point on the edge </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>a 2-point line from the center of the circle to a point on the edge </dd></dl>
 
 </div>
 </div>
@@ -267,6 +280,77 @@ Static Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <p>Gets a point defining the radius of the Maximum Inscribed Circle. This is a point on the boundary which is nearest to the computed center of the Maximum Inscribed Circle. The line segment from the center to this point is a radius of the constructed circle, and this point lies on the boundary of the circle.</p>
 <dl class="section return"><dt>Returns</dt><dd>a point defining the radius of the Maximum Inscribed Circle </dd></dl>
+
+</div>
+</div>
+<a id="a95cba55c37f25d453e7280e30d3b19f6" name="a95cba55c37f25d453e7280e30d3b19f6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95cba55c37f25d453e7280e30d3b19f6">&#9670;&#160;</a></span>isRadiusWithin() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool geos::algorithm::construct::MaximumInscribedCircle::isRadiusWithin </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *&#160;</td>
+          <td class="paramname"><em>polygonal</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>maxRadius</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Tests if the radius of the maximum inscribed circle is no longer than the specified distance. This method determines the distance tolerance automatically as a fraction of the maxRadius value.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">polygonal</td><td>a polygonal geometry </td></tr>
+    <tr><td class="paramname">maxRadius</td><td>the radius value to test </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the max in-circle radius is no longer than the max radius </dd></dl>
+
+</div>
+</div>
+<a id="ab82065372ac8a34a4576f8cf0e04cb9d" name="ab82065372ac8a34a4576f8cf0e04cb9d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab82065372ac8a34a4576f8cf0e04cb9d">&#9670;&#160;</a></span>isRadiusWithin() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool geos::algorithm::construct::MaximumInscribedCircle::isRadiusWithin </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>maxRadius</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Tests if the radius of the maximum inscribed circle is no longer than the specified distance. This method determines the distance tolerance automatically as a fraction of the maxRadius value. After this method is called the center and radius points provide locations demonstrating where the radius exceeds the specified maximum.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">maxRadius</td><td>the (non-negative) radius value to test </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the max in-circle radius is no longer than the max radius </dd></dl>
 
 </div>
 </div>
