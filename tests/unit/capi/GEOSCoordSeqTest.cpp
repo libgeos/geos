@@ -834,9 +834,7 @@ void object::test<25>()
 {
     set_test_name("setOrdinate on XYM coordinate");
 
-    /* TODO: use GEOSCoordSeq_createWithDimensions() instead */
-    double buffer[3];
-    cs_ = GEOSCoordSeq_copyFromBuffer(buffer, 1, 0, 1);
+    cs_ = GEOSCoordSeq_createWithDimensions(1, 0, 1);
 
     ensure("setX", GEOSCoordSeq_setOrdinate(cs_, 0, 0, 1));
     ensure("setY", GEOSCoordSeq_setOrdinate(cs_, 0, 1, 2));
@@ -849,6 +847,38 @@ void object::test<25>()
     ensure_equals("X", x, 1);
     ensure_equals("Y", y, 2);
     ensure_equals("M", m, 4);
+}
+
+template<>
+template<>
+void object::test<26>()
+{
+    set_test_name("getM and setM on XYZ sequence");
+
+    cs_ = GEOSCoordSeq_create(1, 3);
+
+    // setM fails
+    ensure("setM", !GEOSCoordSeq_setM(cs_, 0, 4));
+
+    // getM succeeds but sets value to NaN
+    double m = 0;
+    ensure("getM", GEOSCoordSeq_getM(cs_, 0, &m));
+    ensure(std::isnan(m));
+}
+
+template<>
+template<>
+void object::test<27>()
+{
+    set_test_name("getM and setM on XYZM sequence");
+
+    cs_ = GEOSCoordSeq_create(1, 4);
+
+    ensure("setM", GEOSCoordSeq_setM(cs_, 0, 4));
+
+    double m;
+    ensure(GEOSCoordSeq_getM(cs_, 0, &m));
+    ensure_equals(m, 4);
 }
 
 } // namespace tut
