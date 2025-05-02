@@ -45,6 +45,11 @@ public:
      */
     void inCentre(CoordinateXY& resultPoint);
 
+    static CoordinateXY inCentre(
+        const CoordinateXY& p0,
+        const CoordinateXY& p1,
+        const CoordinateXY& p2);
+
     /** \brief
      * Computes the circumcentre of a triangle.
      *

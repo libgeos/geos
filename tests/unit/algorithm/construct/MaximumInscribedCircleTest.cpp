@@ -119,8 +119,7 @@ group test_mic_group("geos::algorithm::construct::MaximumInscribedCircle");
 //
 template<>
 template<>
-void object::test<1>
-()
+void object::test<1> ()
 {
     checkCircle("POLYGON ((100 200, 200 200, 200 100, 100 100, 100 200))",
                 0.001, 150, 150, 50);
@@ -131,8 +130,7 @@ void object::test<1>
 //
 template<>
 template<>
-void object::test<2>
-()
+void object::test<2> ()
 {
     checkCircle("POLYGON ((150 250, 50 150, 150 50, 250 150, 150 250))",
                 0.001, 150, 150, 70.71 );
@@ -143,8 +141,7 @@ void object::test<2>
 //
 template<>
 template<>
-void object::test<3>
-()
+void object::test<3> ()
 {
     std::unique_ptr<Geometry> geom(reader_.read("POINT (100 100)"));
     std::unique_ptr<Geometry> circle(geom->buffer(100, 20));
@@ -157,8 +154,7 @@ void object::test<3>
 //
 template<>
 template<>
-void object::test<4>
-()
+void object::test<4> ()
 {
     checkCircle("MULTIPOLYGON (((150 200, 100 150, 150 100, 250 150, 150 200)), ((400 250, 300 150, 400 50, 560 150, 400 250)))",
        0.001, 411.38877, 149.9996185, 78.7634662 );
@@ -169,8 +165,7 @@ void object::test<4>
 //
 template<>
 template<>
-void object::test<5>
-()
+void object::test<5> ()
 {
     checkCircle("POLYGON ((100 100, 200 200, 100 100, 100 100))",
        0.01, 100, 100, 0 );
@@ -182,8 +177,7 @@ void object::test<5>
 // //
 template<>
 template<>
-void object::test<6>
-()
+void object::test<6> ()
 {
      checkCircle("POLYGON ((100 100, 100 100, 100 100, 100 100))",
        0.01, 100, 100, 0 );
@@ -194,8 +188,7 @@ void object::test<6>
 // //
 template<>
 template<>
-void object::test<7>
-()
+void object::test<7> ()
 {
      checkCircle("POLYGON((1 2, 1 2, 1 2, 1 2, 3 2, 1 2))",
        0.01, 1, 2, 0 );
@@ -204,8 +197,7 @@ void object::test<7>
 // Exception thrown to avoid infinite loop with infinite envelope
 template<>
 template<>
-void object::test<8>
-()
+void object::test<8> ()
 {
     auto g1 = reader_.read("POLYGON ((0 0, 1 0, 1 1, 0 Inf, 0 0))");
     try {
@@ -232,8 +224,7 @@ void object::test<8>
 // testNearlyFlat
 template<>
 template<>
-void object::test<9>
-()
+void object::test<9> ()
 {
     checkCircle("POLYGON ((59.3 100.00000000000001, 99.7 100.00000000000001, 99.7 100, 59.3 100, 59.3 100.00000000000001))",
        0.01 );
@@ -242,8 +233,7 @@ void object::test<9>
 // testVeryThin
 template<>
 template<>
-void object::test<10>
-()
+void object::test<10> ()
 {
     checkCircle("POLYGON ((100 100, 200 300, 300 100, 450 250, 300 99.999999, 200 299.99999, 100 100))",
        0.01 );
@@ -254,11 +244,56 @@ void object::test<10>
 //
 template<>
 template<>
-void object::test<11>
-()
+void object::test<11> ()
 {
     checkCircle("POLYGON((0 -10,-7.07107 -7.07107,-10 0,-7.07107 7.07107,0 10,7.07107 7.07107,10 0,7.07107 -7.07107,0 -10))",
         0.1, 0, 0, 9.2387);
+}
+
+
+/* testTriangleRight() */
+template<>
+template<>
+void object::test<12> ()
+{
+    checkCircle("POLYGON ((1 1, 1 9, 9 1, 1 1))",
+        0.001, 3.343, 3.343, 2.343 );
+}
+
+/* testTriangleObtuse */
+template<>
+template<>
+void object::test<13> ()
+{
+    checkCircle("POLYGON ((1 1, 1 9, 2 2, 1 1))",
+        0.01, 1.485, 2.173, 0.485 );
+}
+
+/* testThinQuad */
+template<>
+template<>
+void object::test<14> ()
+{
+    checkCircle("POLYGON ((1 2, 9 3, 9 1, 1 1, 1 2))",
+        0.001, 8.0623, 1.9377, 0.93774 );
+}
+
+/* testChevron */
+template<>
+template<>
+void object::test<15> ()
+{
+    checkCircle("POLYGON ((1 1, 6 9, 3.7 2.5, 9 1, 1 1))",
+        0.001, 2.82, 2.008, 1.008 );
+}
+
+/* testChevronFat */
+template<>
+template<>
+void object::test<16> ()
+{
+    checkCircle("POLYGON ((1 1, 6 9, 5.9 5, 9 1, 1 1))",
+        0.001, 4.7545, 3.0809, 2.081 );
 }
 
 

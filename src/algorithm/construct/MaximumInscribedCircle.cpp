@@ -18,6 +18,7 @@
  **********************************************************************/
 
 #include <geos/algorithm/construct/MaximumInscribedCircle.h>
+#include <geos/algorithm/construct/ExactMaxInscribedCircle.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Envelope.h>
@@ -174,10 +175,45 @@ MaximumInscribedCircle::createInteriorPointCell(const Geometry* geom)
 void
 MaximumInscribedCircle::compute()
 {
-
     // check if already computed
     if (done) return;
 
+    /**
+     * Handle empty or flat geometries.
+     */
+    if (inputGeom->getArea() == 0.0) {
+        const CoordinateXY* c = inputGeom->getCoordinate();
+        createResult(*c, *c);
+        return;
+    }
+
+    /**
+     * Optimization for small simple convex polygons
+     */
+    if (ExactMaxInscribedCircle::isSupported(inputGeom)) {
+        auto polygonal = static_cast<const Polygon*>(inputGeom);
+        std::pair<CoordinateXY, CoordinateXY> centreRadius = ExactMaxInscribedCircle::computeRadius(polygonal);
+        createResult(centreRadius.first, centreRadius.second);
+        return;
+    }
+
+    computeApproximation();
+}
+
+
+/* private */
+void MaximumInscribedCircle::createResult(
+    const CoordinateXY& c, const CoordinateXY& r)
+{
+    centerPt = c;
+    radiusPt = r;
+}
+
+
+/* private */
+void
+MaximumInscribedCircle::computeApproximation()
+{
     // Priority queue of cells, ordered by maximum distance from boundary
     Cell::CellQueue cellQueue;
 

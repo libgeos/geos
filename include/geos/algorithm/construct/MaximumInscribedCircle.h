@@ -139,6 +139,8 @@ private:
     double distanceToBoundary(const geom::Point& pt);
     double distanceToBoundary(double x, double y);
     void compute();
+    void computeApproximation();
+    void createResult(const geom::CoordinateXY& c, const geom::CoordinateXY& r);
 
     /* private class */
     class Cell {

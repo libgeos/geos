@@ -118,6 +118,19 @@ Angle::angleBetweenOriented(const geom::CoordinateXY& tip1,
     return angDel;
 }
 
+
+/* public static */
+double
+Angle::bisector(const geom::CoordinateXY& tip1,
+                const geom::CoordinateXY& tail,
+                const geom::CoordinateXY& tip2)
+{
+    double angDel = angleBetweenOriented(tip1, tail, tip2);
+    double angBi = angle(tail, tip1) + angDel / 2;
+    return normalize(angBi);
+}
+
+
 /* public static */
 double
 Angle::interiorAngle(const geom::CoordinateXY& p0, const geom::CoordinateXY& p1,
@@ -187,19 +200,31 @@ Angle::diff(double ang1, double ang2)
 {
     double delAngle;
 
-    if(ang1 < ang2) {
+    if (ang1 < ang2) {
         delAngle = ang2 - ang1;
     }
     else {
         delAngle = ang1 - ang2;
     }
 
-    if(delAngle > MATH_PI) {
+    if (delAngle > MATH_PI) {
         delAngle = PI_TIMES_2 - delAngle;
     }
 
     return delAngle;
 }
+
+/* public static */
+geom::CoordinateXY
+Angle::project(const geom::CoordinateXY& p, double angle, double dist)
+{
+    double cosSnap, sinSnap;
+    sinCosSnap(angle, sinSnap, cosSnap);
+    double x = p.x + dist * cosSnap;
+    double y = p.y + dist * sinSnap;
+    return geom::CoordinateXY(x, y);
+}
+
 
 } // namespace geos.algorithm
 } //namespace geos

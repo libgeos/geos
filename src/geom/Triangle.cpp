@@ -51,6 +51,19 @@ Triangle::inCentre(CoordinateXY& result)
     result = CoordinateXY(inCentreX, inCentreY);
 }
 
+
+CoordinateXY
+Triangle::inCentre(const CoordinateXY& p0,
+        const CoordinateXY& p1,
+        const CoordinateXY& p2)
+{
+    Triangle tri(p0, p1, p2);
+    CoordinateXY result;
+    tri.inCentre(result);
+    return result;
+}
+
+
 void
 Triangle::circumcentre(CoordinateXY& result)
 {
