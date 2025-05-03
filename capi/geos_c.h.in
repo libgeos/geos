@@ -2172,6 +2172,17 @@ extern char GEOS_DLL *GEOSGeoJSONWriter_writeGeometry_r(
     const GEOSGeometry* g,
     int indent);
 
+/** \see GEOSGeoJSONWriter_setOutputDimension */
+extern void GEOS_DLL GEOSGeoJSONWriter_setOutputDimension_r(
+    GEOSContextHandle_t handle,
+    GEOSGeoJSONWriter *writer,
+    int dim);
+
+/** \see GEOSGeoJSONWriter_getOutputDimension */
+extern int  GEOS_DLL GEOSGeoJSONWriter_getOutputDimension_r(
+    GEOSContextHandle_t handle,
+    GEOSGeoJSONWriter *writer);
+
 /** \see GEOSFree */
 extern void GEOS_DLL GEOSFree_r(
     GEOSContextHandle_t handle,
@@ -6140,6 +6151,27 @@ extern char GEOS_DLL *GEOSGeoJSONWriter_writeGeometry(
     GEOSGeoJSONWriter* writer,
     const GEOSGeometry* g,
     int indent);
+
+/**
+* Set the output dimensionality of the writer. Either
+* 2 or 3 dimensions.
+* \param writer A \ref GEOSGeoJSONWriter.
+* \param dim The dimensionality desired.
+*
+* \since 3.14
+*/
+extern void GEOS_DLL GEOSGeoJSONWriter_setOutputDimension(
+    GEOSGeoJSONWriter *writer,
+    int dim);
+
+/**
+* Reads the current output dimension from a \ref GEOSGeoJSONWriter.
+* \param writer A \ref GEOSGeoJSONWriter.
+* \return The current dimension.
+*
+* \since 3.14
+*/
+extern int  GEOS_DLL GEOSGeoJSONWriter_getOutputDimension(GEOSGeoJSONWriter *writer);
 
 ///@}
 
