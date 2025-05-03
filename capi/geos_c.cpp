@@ -1135,6 +1135,18 @@ extern "C" {
         return GEOSCoordSeq_copyToArrays_r(handle, s, x, y, z, m);
     }
 
+    char
+    GEOSCoordSeq_hasZ(CoordinateSequence* s)
+    {
+        return GEOSCoordSeq_hasZ_r(handle, s);
+    }
+
+    char
+    GEOSCoordSeq_hasM(CoordinateSequence* s)
+    {
+        return GEOSCoordSeq_hasM_r(handle, s);
+    }
+
     int
     GEOSCoordSeq_setOrdinate(CoordinateSequence* s, unsigned int idx, unsigned int dim, double val)
     {

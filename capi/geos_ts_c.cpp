@@ -2849,6 +2849,22 @@ extern "C" {
         });
     }
 
+    char
+    GEOSCoordSeq_hasZ_r(GEOSContextHandle_t extHandle, CoordinateSequence* cs)
+    {
+        return execute(extHandle, 2, [&]() {
+            return cs->hasZ();
+        });
+    }
+
+    char
+    GEOSCoordSeq_hasM_r(GEOSContextHandle_t extHandle, CoordinateSequence* cs)
+    {
+        return execute(extHandle, 2, [&]() {
+            return cs->hasM();
+        });
+    }
+
     int
     GEOSCoordSeq_setOrdinate_r(GEOSContextHandle_t extHandle, CoordinateSequence* cs,
                                unsigned int idx, unsigned int dim, double val)
