@@ -495,6 +495,16 @@ extern void GEOS_DLL GEOSCoordSeq_destroy_r(
     GEOSContextHandle_t handle,
     GEOSCoordSequence* s);
 
+/** \see GEOSCoordSeq_hasZ */
+extern char GEOS_DLL GEOSCoordSeq_hasZ_r(
+    GEOSContextHandle_t handle,
+    GEOSCoordSequence* s);
+
+/** \see GEOSCoordSeq_hasM */
+extern char GEOS_DLL GEOSCoordSeq_hasM_r(
+    GEOSContextHandle_t handle,
+    GEOSCoordSequence* s);
+
 /** \see GEOSCoordSeq_setX */
 extern int GEOS_DLL GEOSCoordSeq_setX_r(
     GEOSContextHandle_t handle,
@@ -2345,6 +2355,24 @@ extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_clone(const GEOSCoordSequence* s
 * \since 2.2
 */
 extern void GEOS_DLL GEOSCoordSeq_destroy(GEOSCoordSequence* s);
+
+/**
+* Tests whether the input coordinate sequence has Z coordinates.
+* \param s the coordinate sequence to test
+* \return 1 on true, 0 on false, 2 on exception
+*
+* \since 3.14
+*/
+extern char GEOS_DLL GEOSCoordSeq_hasZ(GEOSCoordSequence* s);
+
+/**
+* Tests whether the input coordinate sequence has M coordinates.
+* \param s the coordinate sequence to test
+* \return 1 on true, 0 on false, 2 on exception
+*
+* \since 3.14
+*/
+extern char GEOS_DLL GEOSCoordSeq_hasM(GEOSCoordSequence* s);
 
 /**
 * Set X ordinate values in a coordinate sequence.

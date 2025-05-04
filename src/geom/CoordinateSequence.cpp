@@ -68,8 +68,13 @@ CoordinateSequence::CoordinateSequence(std::size_t sz, bool hasz, bool hasm, boo
 }
 
 CoordinateSequence::CoordinateSequence(std::size_t sz, std::size_t dim) :
+#ifdef GEOS_COORDSEQ_PADZ
     m_vect(sz * std::max(static_cast<std::uint8_t>(dim), static_cast<std::uint8_t>(3))),
     m_stride(std::max(static_cast<std::uint8_t>(dim), static_cast<std::uint8_t>(3))),
+#else
+    m_vect(sz * static_cast<std::uint8_t>(dim)),
+    m_stride(static_cast<std::uint8_t>(dim)),
+#endif
     m_hasdim(dim > 0),
     m_hasz(dim >= 3),
     m_hasm(dim == 4)

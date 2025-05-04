@@ -881,4 +881,52 @@ void object::test<27>()
     ensure_equals(m, 4);
 }
 
+template<>
+template<>
+void object::test<28>()
+{
+    set_test_name("hasZ, hasM, getCoordinateType on XY sequence");
+
+    cs_ = GEOSCoordSeq_createWithDimensions(2, 0, 0);
+
+    ensure_not("hasZ", GEOSCoordSeq_hasZ(cs_));
+    ensure_not("hasM", GEOSCoordSeq_hasM(cs_));
+}
+
+template<>
+template<>
+void object::test<29>()
+{
+    set_test_name("hasZ, hasM, getCoordinateType on XYZ sequence");
+
+    cs_ = GEOSCoordSeq_createWithDimensions(2, 1, 0);
+
+    ensure("hasZ", GEOSCoordSeq_hasZ(cs_));
+    ensure_not("hasM", GEOSCoordSeq_hasM(cs_));
+}
+
+template<>
+template<>
+void object::test<30>()
+{
+    set_test_name("hasZ, hasM, getCoordinateType on XYM sequence");
+
+    cs_ = GEOSCoordSeq_createWithDimensions(2, 0, 1);
+
+    ensure_not("hasZ", GEOSCoordSeq_hasZ(cs_));
+    ensure("hasM", GEOSCoordSeq_hasM(cs_));
+}
+
+template<>
+template<>
+void object::test<31>()
+{
+    set_test_name("hasZ, hasM, getCoordinateType on XYZM sequence");
+
+    cs_ = GEOSCoordSeq_createWithDimensions(2, 1, 1);
+
+    ensure("hasZ", GEOSCoordSeq_hasZ(cs_));
+    ensure("hasM", GEOSCoordSeq_hasM(cs_));
+}
+
 } // namespace tut
