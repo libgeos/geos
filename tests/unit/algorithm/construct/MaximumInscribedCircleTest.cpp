@@ -304,6 +304,18 @@ void object::test<17> ()
         0.001, 5.0, 3.3431,  1.65685 );
 }
 
+/* postgis mic-box test */
+template<>
+template<>
+void object::test<18> ()
+{
+    checkCircle("Polygon((0 0, 100 0, 99 98, 0 100, 0 0))",
+        0.1, 49.5117, 49.5117, 49.47799 );
+}
+
+//-mic-box|POINT(49.5117 49.5117)|POINT(50.5111 98.9796)|49.4779
+//+mic-box|POINT(49.495 49.495)|POINT(50.4947 98.9799)|49.4950
+
 
 
 } // namespace tut

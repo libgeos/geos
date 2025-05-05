@@ -47,10 +47,9 @@ bool
 ExactMaxInscribedCircle::isSupported(const Geometry* geom)
 {
     /* isSimplePolygon() */
-    /* TODO replace with geometryid test */
-    const Polygon* polygon = dynamic_cast<const Polygon*>(geom);
-    if (polygon == nullptr)
+    if (geom->getGeometryTypeId() != GEOS_POLYGON)
         return false;
+    const Polygon* polygon = static_cast<const Polygon*>(geom);
     if (polygon->getNumInteriorRing() > 0)
         return false;
 
@@ -226,8 +225,8 @@ ExactMaxInscribedCircle::isConvex(const CoordinateSequence* ring)
         return false;
     int ringOrient = 0;
     for (std::size_t i = 0; i < n - 1; i++) {
-        std::size_t i1 = i + 1;
-        std::size_t i2 = (i1 >= n - 1) ? 1 : i1 + 1;
+        std::size_t i1 = (i + 1) % (n - 1);
+        std::size_t i2 = (i + 2) % (n - 1);
         int orient = Orientation::index(
             ring->getAt(i),
             ring->getAt(i1),
