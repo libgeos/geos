@@ -1607,6 +1607,18 @@ extern "C" {
         return GEOSGeoJSONWriter_writeGeometry_r(handle, writer, g, indent);
     }
 
+    void
+    GEOSGeoJSONWriter_setOutputDimension(GeoJSONWriter* writer, int dim)
+    {
+        GEOSGeoJSONWriter_setOutputDimension_r(handle, writer, dim);
+    }
+
+    int
+    GEOSGeoJSONWriter_getOutputDimension(GeoJSONWriter* writer)
+    {
+        return GEOSGeoJSONWriter_getOutputDimension_r(handle, writer);
+    }
+
 
 //-----------------------------------------------------------------
 // Prepared Geometry

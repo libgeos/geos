@@ -3781,6 +3781,22 @@ extern "C" {
         });
     }
 
+    void
+    GEOSGeoJSONWriter_setOutputDimension_r(GEOSContextHandle_t extHandle, GeoJSONWriter* writer, int dim)
+    {
+        execute(extHandle, [&]() {
+            writer->setOutputDimension(static_cast<uint8_t>(dim));
+        });
+    }
+
+    int
+    GEOSGeoJSONWriter_getOutputDimension_r(GEOSContextHandle_t extHandle, GeoJSONWriter* writer)
+    {
+        return execute(extHandle, -1, [&]() {
+            return writer->getOutputDimension();
+        });
+    }
+
 
 //-----------------------------------------------------------------
 // Prepared Geometry
