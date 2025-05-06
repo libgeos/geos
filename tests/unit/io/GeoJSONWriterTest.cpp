@@ -453,4 +453,40 @@ void object::test<30>
     ensure_equals(result, "{\"type\":\"Feature\",\"geometry\":{\"type\":\"Point\",\"coordinates\":[0.0,0.0]},\"properties\":{\"array\":[{\"key\":\"value_1\"},{\"key\":\"value_2\"}]}}");
 }
 
+// Test Polygon right-hand rule
+template<>
+template<>
+void object::test<31>
+()
+{
+    geojsonwriter.setForceCCW(true);
+    GeomPtr geom(wktreader.read("POLYGON ((0 0, 0 1, 1 1, 1 0, 0 0))"));
+    std::string result = geojsonwriter.write(geom.get());
+    ensure_equals(result, "{\"type\":\"Polygon\",\"coordinates\":[[[0.0,0.0],[1.0,0.0],[1.0,1.0],[0.0,1.0],[0.0,0.0]]]}");
+}
+
+// Test Polygon with hole right-hand rule
+template<>
+template<>
+void object::test<32>
+()
+{
+    geojsonwriter.setForceCCW(true);
+    GeomPtr geom(wktreader.read("POLYGON ((0 0, 0 20, 20 20, 20 0, 0 0), (1 1, 10 1, 10 10, 1 10, 1 1) )"));
+    std::string result = geojsonwriter.write(geom.get());
+    ensure_equals(result, "{\"type\":\"Polygon\",\"coordinates\":[[[0.0,0.0],[20.0,0.0],[20.0,20.0],[0.0,20.0],[0.0,0.0]],[[1.0,1.0],[1.0,10.0],[10.0,10.0],[10.0,1.0],[1.0,1.0]]]}");
+}
+
+// Test MultiPolygon right-hand rule
+template<>
+template<>
+void object::test<33>
+()
+{
+    geojsonwriter.setForceCCW(true);
+    GeomPtr geom(wktreader.read("MULTIPOLYGON (((0 0, 0 1, 1 1, 1 0, 0 0)), ((2 2, 2 3, 3 3, 3 2, 2 2)))"));
+    std::string result = geojsonwriter.write(geom.get());
+    ensure_equals(result, "{\"type\":\"MultiPolygon\",\"coordinates\":[[[[0.0,0.0],[1.0,0.0],[1.0,1.0],[0.0,1.0],[0.0,0.0]]],[[[2.0,2.0],[3.0,2.0],[3.0,3.0],[2.0,3.0],[2.0,2.0]]]]}");
+}
+
 }
