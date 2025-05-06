@@ -52,6 +52,10 @@ GeoJSONWriter::setOutputDimension(uint8_t dims)
     defaultOutputDimension = dims;
 }
 
+void GeoJSONWriter::setForceCCW(bool newIsForceCCW) {
+    isForceCCW = newIsForceCCW;
+}
+
 std::string GeoJSONWriter::write(const geom::Geometry* geometry, GeoJSONType type)
 {
     json j;
@@ -223,7 +227,13 @@ void GeoJSONWriter::encodeGeometry(const geom::Geometry* geometry, geos_nlohmann
     }
     else if (type == GEOS_POLYGON) {
         auto poly = static_cast<const geom::Polygon*>(geometry);
-        encodePolygon(poly, j);
+        if (isForceCCW) {
+            auto ccwPoly = poly->clone();
+            ccwPoly->orientRings(false);
+            encodePolygon(ccwPoly.get(), j);
+        } else {
+            encodePolygon(poly, j);
+        }
     }
     else if (type == GEOS_MULTIPOINT) {
         auto multiPoint = static_cast<const geom::MultiPoint*>(geometry);
@@ -264,14 +274,7 @@ void GeoJSONWriter::encodeLineString(const geom::LineString* line, geos_nlohmann
 void GeoJSONWriter::encodePolygon(const geom::Polygon* poly, geos_nlohmann::ordered_json& j)
 {
     j["type"] = "Polygon";
-    std::vector<std::vector<std::vector<double>>> rings;
-    auto ring = poly->getExteriorRing();
-    rings.reserve(poly->getNumInteriorRing()+1);
-    rings.push_back(convertCoordinateSequence(ring->getCoordinates().get()));
-    for (size_t i = 0; i < poly->getNumInteriorRing(); i++) {
-        rings.push_back(convertCoordinateSequence(poly->getInteriorRingN(i)->getCoordinates().get()));
-    }
-    j["coordinates"] = rings;
+    j["coordinates"] = convertLinearRings(poly);
 }
 
 void GeoJSONWriter::encodeMultiPoint(const geom::MultiPoint* multiPoint, geos_nlohmann::ordered_json& j)
@@ -298,14 +301,13 @@ void GeoJSONWriter::encodeMultiPolygon(const geom::MultiPolygon* multiPolygon, g
     polygons.reserve(multiPolygon->getNumGeometries());
     for (size_t i = 0; i < multiPolygon->getNumGeometries(); i++) {
         const Polygon* polygon = multiPolygon->getGeometryN(i);
-        std::vector<std::vector<std::vector<double>>> rings;
-        auto ring = polygon->getExteriorRing();
-        rings.reserve(polygon->getNumInteriorRing() + 1);
-        rings.push_back(convertCoordinateSequence(ring->getCoordinates().get()));
-        for (size_t j = 0; j < polygon->getNumInteriorRing(); j++) {
-            rings.push_back(convertCoordinateSequence(polygon->getInteriorRingN(j)->getCoordinates().get()));
+        if (isForceCCW) {
+            auto ccwPolygon = polygon->clone();
+            ccwPolygon->orientRings(false);
+            polygons.push_back(convertLinearRings(ccwPolygon.get()));
+        } else {
+            polygons.push_back(convertLinearRings(polygon));
         }
-        polygons.push_back(rings);
     }
     json["coordinates"] = polygons;
 }
@@ -340,6 +342,18 @@ std::vector<std::vector<double>> GeoJSONWriter::convertCoordinateSequence(const 
         coordinates.push_back(convertCoordinate(&c));
     }
     return coordinates;
+}
+
+std::vector<std::vector<std::vector<double>>> GeoJSONWriter::convertLinearRings(const geom::Polygon* poly)
+{
+    std::vector<std::vector<std::vector<double>>> rings;
+    auto ring = poly->getExteriorRing();
+    rings.reserve(poly->getNumInteriorRing() + 1);
+    rings.push_back(convertCoordinateSequence(ring->getCoordinates().get()));
+    for (size_t i = 0; i < poly->getNumInteriorRing(); i++) {
+        rings.push_back(convertCoordinateSequence(poly->getInteriorRingN(i)->getCoordinates().get()));
+    }
+    return rings;
 }
 
 } // namespace geos.io
