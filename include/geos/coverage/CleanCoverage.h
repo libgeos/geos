@@ -15,9 +15,8 @@
 
 #pragma once
 
-#include <geos/noding/BasicSegmentString.h>
+// #include <geos/noding/BasicSegmentString.h>
 
-#include <deque>
 
 // Forward declarations
 namespace geos {
@@ -45,12 +44,6 @@ class GEOS_DLL CleanCoverage {
     using LineString = geos::geom::LineString;
     using LinearRing = geos::geom::LinearRing;
 
-private:
-
-    // Members
-
-
-
 
 
 public:
@@ -59,28 +52,132 @@ public:
 
 
     class CleanArea {
-    public:
+
     private:
 
-    }
+        // Members
+        std::vector<const Polygon*> polys;
+        Envelope env;
+
+    public:
+
+        // Methods
+        void add(const Polygon* poly);
+        const Envelope* getEnvelope();
+        double getBorderLength(const Polygon* adjPoly);
+        double getArea();
+        bool isAdjacent(RelateNG& rel);
+        std::unique_ptr<Geometry> union();
+
+    }; // CleanArea
+
 
     class MergeStrategy {
+
     public:
+
+        virtual std::size_t getTarget() const = 0;
+
+        virtual void checkMergeTarget(
+            std::size_t areaIndex,
+            CleanArea* cleanArea,
+            const Polygon* poly) = 0;
+
+    }; // MergeStrategy
+
+
+    class BorderMergeStrategy : public MergeStrategy {
+
     private:
 
-    }
+        std::size_t m_targetIndex = INDEX_UNKNOWN;
+        double m_targetBorderLen;
+
+    public:
+
+        std::size_t getTarget()  const override {
+            return m_targetIndex;
+        }
+
+        void checkMergeTarget(std::size_t areaIndex, CleanArea* area, const Polygon* poly) override {
+            double borderLen = area == nullptr ? 0.0 : area->getBorderLength(poly);
+            if (m_targetIndex == INDEX_UNKNOWN || borderLen > m_targetBorderLen) {
+                m_targetIndex = areaIndex;
+                m_targetBorderLen = borderLen;
+            }
+        }
+
+    }; // BorderStrategy
+
 
     class AreaMergeStrategy : public MergeStrategy {
-    public:
+
     private:
 
-    }
+        std::size_t m_targetIndex = INDEX_UNKNOWN;
+        double m_targetArea;
+        bool m_isMax;
+
+    public:
+
+        AreaMergeStrategy(bool isMax) : m_isMax(isMax) {};
+
+        std::size_t getTarget()  const override {
+            return m_targetIndex;
+        }
+
+        void checkMergeTarget(std::size_t areaIndex, CleanArea* area, const Polygon* poly) override {
+            double areaVal = area == nullptr ? 0.0 : area->getArea();
+            bool isBetter = m_isMax
+                ? areaVal > m_targetArea
+                : areaVal < m_targetArea;
+            if (m_targetIndex == INDEX_UNKNOWN || isBetter) {
+                m_targetIndex = areaIndex;
+                m_targetArea = areaVal;
+            }
+        }
+
+    }; // AreaMergeStrategy
+
 
     class IndexMergeStrategy : public MergeStrategy {
-    public:
+
     private:
 
-    }
+        std::size_t m_targetIndex = INDEX_UNKNOWN;
+        bool m_isMax;
+
+    public:
+
+        IndexMergeStrategy(bool isMax) : m_isMax(isMax) {};
+
+        std::size_t getTarget()  const override {
+            return m_targetIndex;
+        }
+
+        void checkMergeTarget(std::size_t areaIndex, CleanArea* area, const Polygon* poly) override {
+            bool isBetter = m_isMax
+                ? areaIndex > m_targetIndex
+                : areaIndex < m_targetIndex;
+            if (m_targetIndex < 0 || isBetter) {
+                m_targetIndex = areaIndex;
+            }
+        }
+    }; // MergeStrategy
+
+
+private:
+
+    // Members
+
+    /**
+     * The areas in the clean coverage.
+     * Entries may be null, if no resultant corresponded to the input area.
+     */
+    std::vector<str::unique_ptr<CleanArea>> cov;
+    //-- used for finding areas to merge gaps
+    std::unique_ptr<Quadtree> covIndex = nullptr;
+
 
 };
 
