@@ -21,35 +21,44 @@
 // Forward declarations
 namespace geos {
 namespace geom {
-class Coordinate;
-class CoordinateSequence;
+class Envelope;
 class Geometry;
 class GeometryFactory;
 class LineString;
 class LinearRing;
 class Polygon;
 }
+namespace operation {
+namespace relateng {
+class RelateNG;
 }
+}
+namespace index {
+namespace quadtree {
+class Quadtree;
+}
+}
+}
+
 
 namespace geos {     // geos.
 namespace coverage { // geos.coverage
 
 class GEOS_DLL CleanCoverage {
 
-    using Coordinate = geos::geom::Coordinate;
-    using CoordinateSequence = geos::geom::CoordinateSequence;
+    using Envelope = geos::geom::Envelope;
     using Geometry = geos::geom::Geometry;
     using GeometryFactory = geos::geom::GeometryFactory;
-    using Polygon = geos::geom::Polygon;
     using LineString = geos::geom::LineString;
     using LinearRing = geos::geom::LinearRing;
-
+    using Polygon = geos::geom::Polygon;
+    using RelateNG = geos::operation::relateng::RelateNG;
+    using Quadtree = geos::index::quadtree::Quadtree;
 
 
 public:
 
-    CleanCoverage();
-
+    // Classes
 
     class CleanArea {
 
@@ -177,6 +186,37 @@ private:
     std::vector<str::unique_ptr<CleanArea>> cov;
     //-- used for finding areas to merge gaps
     std::unique_ptr<Quadtree> covIndex = nullptr;
+
+    void mergeGap(const Polygon* gap);
+
+    CleanArea* indMaxBorderLength(const Polygon* poly, std::vector<CleanArea*>& areas);
+
+    std::vector<CleanArea*> findAdjacentAreas(const Geometry* poly);
+
+    void createIndex();
+
+
+public:
+
+    // Methods
+
+    CleanCoverage(std::size_t size);
+
+    void add(std::size_t i, const Polygon* poly);
+
+    void mergeOverlap(const Polygon* overlap,
+        MergeStrategy& mergeStrategy,
+        std::vector<std::size_t>& parentIndexes);
+
+    static std::size_t findMergeTarget(const Polygon* poly,
+        MergeStrategy& strat,
+        std::vector<std::size_t>& parentIndexes,
+        std::vector<std::unique_ptr<CleanArea>>& cov);
+
+    void mergeGaps(std::vector<const Polygon*>& gaps);
+
+    std::vector<std::unique_ptr<Geometry>> toCoverage(const GeometryFactory* geomFactory);
+
 
 
 };

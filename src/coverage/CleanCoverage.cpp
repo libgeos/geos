@@ -178,7 +178,7 @@ CleanCoverage::createIndex()
 
 /* public */
 std::vector<std::unique_ptr<Geometry>>
-CleanCoverage::toCoverage(GeometryFactory* geomFactory)
+CleanCoverage::toCoverage(const GeometryFactory* geomFactory)
 {
     std::vector<std::unique_ptr<Geometry>> cleanCov;
     cleanCov.resize(cov.size());
