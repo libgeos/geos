@@ -53,6 +53,8 @@ $(function() {
 <div class="contents">
 
 <p><code>#include &lt;<a class="el" href="EdgeGraph_8h_source.html">EdgeGraph.h</a>&gt;</code></p>
+
+<p>Inherited by geos::dissolve::DissolveEdgeGraph.</p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -73,14 +75,14 @@ Static Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-methods" name="pro-methods"></a>
 Protected Member Functions</h2></td></tr>
-<tr class="memitem:abb0ce7c04133bcb84850e22cf8bd148e" id="r_abb0ce7c04133bcb84850e22cf8bd148e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgeos_1_1edgegraph_1_1HalfEdge.html">HalfEdge</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1edgegraph_1_1EdgeGraph.html#abb0ce7c04133bcb84850e22cf8bd148e">createEdge</a> (const geom::CoordinateXYZM &amp;orig)</td></tr>
-<tr class="separator:abb0ce7c04133bcb84850e22cf8bd148e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa6c4f85e1894efab369de6b31009beb6" id="r_aa6c4f85e1894efab369de6b31009beb6"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="classgeos_1_1edgegraph_1_1HalfEdge.html">HalfEdge</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1edgegraph_1_1EdgeGraph.html#aa6c4f85e1894efab369de6b31009beb6">createEdge</a> (const geom::CoordinateXYZM &amp;orig)</td></tr>
+<tr class="separator:aa6c4f85e1894efab369de6b31009beb6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a64623eafc73d63499b7974e3d83686d8" id="r_a64623eafc73d63499b7974e3d83686d8"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgeos_1_1edgegraph_1_1HalfEdge.html">HalfEdge</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1edgegraph_1_1EdgeGraph.html#a64623eafc73d63499b7974e3d83686d8">insert</a> (const geom::CoordinateXYZM &amp;orig, const geom::CoordinateXYZM &amp;dest, <a class="el" href="classgeos_1_1edgegraph_1_1HalfEdge.html">HalfEdge</a> *eAdj)</td></tr>
 <tr class="separator:a64623eafc73d63499b7974e3d83686d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A graph comprised of <code><a class="el" href="classgeos_1_1edgegraph_1_1HalfEdge.html">HalfEdge</a></code>s. It supports tracking the vertices in the graph via edges incident on them, to allow efficient lookup of edges and vertices.</p>
-<p>This class may be subclassed to use a different subclass of <a class="el" href="classgeos_1_1edgegraph_1_1HalfEdge.html">HalfEdge</a>, by overriding <code><a class="el" href="classgeos_1_1edgegraph_1_1EdgeGraph.html#abb0ce7c04133bcb84850e22cf8bd148e">createEdge</a></code>. If additional logic is required to initialize edges then <code><a class="el" href="classgeos_1_1edgegraph_1_1EdgeGraph.html#a956834d1779d8e3232febff4e6a77d9d">addEdge</a></code> can be overridden as well.</p>
+<p>This class may be subclassed to use a different subclass of <a class="el" href="classgeos_1_1edgegraph_1_1HalfEdge.html">HalfEdge</a>, by overriding <code><a class="el" href="classgeos_1_1edgegraph_1_1EdgeGraph.html#aa6c4f85e1894efab369de6b31009beb6">createEdge</a></code>. If additional logic is required to initialize edges then <code><a class="el" href="classgeos_1_1edgegraph_1_1EdgeGraph.html#a956834d1779d8e3232febff4e6a77d9d">addEdge</a></code> can be overridden as well.</p>
 <dl class="section author"><dt>Author</dt><dd>Martin Davis </dd></dl>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aece096b9aa6ef1fe085261e7ec24f884" name="aece096b9aa6ef1fe085261e7ec24f884"></a>
@@ -150,8 +152,8 @@ null if the edge was invalid and not added</dd></dl>
 
 </div>
 </div>
-<a id="abb0ce7c04133bcb84850e22cf8bd148e" name="abb0ce7c04133bcb84850e22cf8bd148e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abb0ce7c04133bcb84850e22cf8bd148e">&#9670;&#160;</a></span>createEdge()</h2>
+<a id="aa6c4f85e1894efab369de6b31009beb6" name="aa6c4f85e1894efab369de6b31009beb6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa6c4f85e1894efab369de6b31009beb6">&#9670;&#160;</a></span>createEdge()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -160,7 +162,7 @@ null if the edge was invalid and not added</dd></dl>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classgeos_1_1edgegraph_1_1HalfEdge.html">HalfEdge</a> * geos::edgegraph::EdgeGraph::createEdge </td>
+          <td class="memname">virtual <a class="el" href="classgeos_1_1edgegraph_1_1HalfEdge.html">HalfEdge</a> * geos::edgegraph::EdgeGraph::createEdge </td>
           <td>(</td>
           <td class="paramtype">const geom::CoordinateXYZM &amp;&#160;</td>
           <td class="paramname"><em>orig</em></td><td>)</td>
@@ -169,7 +171,7 @@ null if the edge was invalid and not added</dd></dl>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">protected</span></span>  </td>
+<span class="mlabels"><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
