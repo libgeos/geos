@@ -67,7 +67,7 @@ protected:
     * @param orig the origin location
     * @return a new HalfEdge with the given origin
     */
-    HalfEdge* createEdge(const geom::CoordinateXYZM& orig);
+    virtual HalfEdge* createEdge(const geom::CoordinateXYZM& orig);
 
     /**
     * Inserts an edge not already present into the graph.
@@ -86,6 +86,7 @@ public:
     * Initialized
     */
     EdgeGraph() {};
+    virtual ~EdgeGraph() = default;
 
     /**
     * Adds an edge between the coordinates orig and dest

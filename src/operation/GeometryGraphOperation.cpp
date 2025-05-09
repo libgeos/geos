@@ -54,9 +54,9 @@ GeometryGraphOperation::GeometryGraphOperation(const Geometry* g0,
         setComputationPrecision(pm1);
     }
 
-    arg[0] = std::make_unique<GeometryGraph>(0, g0,
+    arg[0] = std::make_unique<GeometryGraph>((uint8_t)0, g0,
                                algorithm::BoundaryNodeRule::getBoundaryOGCSFS());
-    arg[1] = std::make_unique<GeometryGraph>(1, g1,
+    arg[1] = std::make_unique<GeometryGraph>((uint8_t)1, g1,
                                algorithm::BoundaryNodeRule::getBoundaryOGCSFS());
 }
 
