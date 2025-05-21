@@ -147,12 +147,10 @@ CleanCoverage::findAdjacentAreas(const Geometry* poly)
     auto rel = RelateNG::prepare(poly);
     const Envelope* queryEnv = poly->getEnvelopeInternal();
 
-    std::vector<CleanArea*> candidateAdjIndex = covIndex->query(queryEnv);
+    std::vector<void*> candidateAdjIndex;
+    covIndex->query(queryEnv, candidateAdjIndex);
 
-    std::vector<void*> queryResult;
-    query(queryEnv, queryResult);
-
-    for (void* ptr : queryResult) {
+    for (void* ptr : candidateAdjIndex) {
         CleanArea* area = static_cast<CleanArea*>(ptr);
         if (area != nullptr && area->isAdjacent(*rel)) {
             adjacents.push_back(area);
@@ -185,12 +183,11 @@ CleanCoverage::toCoverage(const GeometryFactory* geomFactory)
     for (std::size_t i = 0; i < cov.size(); i++) {
         std::unique_ptr<Geometry> merged;
         if (cov[i] == nullptr) {
-            merged = geomFactory->createEmpty(2);
+            cleanCov[i] = geomFactory->createEmpty(2);
         }
         else {
-            merged = cov[i]->union();
+            cleanCov[i] = cov[i]->union();
         }
-        cleanCov[i] = std::move(merged);
     }
     return cleanCov;
 }

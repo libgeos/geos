@@ -124,11 +124,11 @@ public:
     /** Merge strategy that chooses polygon with longest common border */
     static constexpr int MERGE_LONGEST_BORDER = 0;
     /** Merge strategy that chooses polygon with maximum area */
-    static constexpr int MERGE_MAX_AREA             = 1;
+    static constexpr int MERGE_MAX_AREA       = 1;
     /** Merge strategy that chooses polygon with minimum area */
-    static constexpr int MERGE_MIN_AREA             = 2;
+    static constexpr int MERGE_MIN_AREA       = 2;
     /** Merge strategy that chooses polygon with smallest input index */
-    static constexpr int MERGE_MIN_INDEX            = 3;
+    static constexpr int MERGE_MIN_INDEX      = 3;
 
 private:
 
@@ -142,9 +142,9 @@ private:
     std::vector<std::unique_ptr<Polygon>> resultants;
     std::unique_ptr<CleanCoverage> cleanCov;
     std::map<std::size_t, std::vector<std::size_t>> overlapParentMap;
-    std::unique_ptr<const Polygon*> overlaps;
-    std::unique_ptr<const Polygon*> gaps;
-    std::unique_ptr<const Polygon*> mergableGaps;
+    std::vector<const Polygon*> overlaps;
+    std::vector<const Polygon*> gaps;
+    std::vector<const Polygon*> mergableGaps;
 
     static constexpr double DEFAULT_SNAPPING_FACTOR = 1.0e8;
 

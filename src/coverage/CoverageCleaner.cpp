@@ -205,30 +205,36 @@ CoverageCleaner::extent(std::vector<const Geometry*>& geoms)
 
 /* private */
 void
-CoverageCleaner::mergeOverlaps(std::map<std::size_t, std::vector<std::size_t>>& overlapParentMap)
+CoverageCleaner::mergeOverlaps(
+    std::map<std::size_t, std::vector<std::size_t>>& overlapParentMap)
 {
     for (const auto& [resIndex, _] : overlapParentMap) {
+        auto ms = mergeStrategy(overlapMergeStrategy);
         cleanCov->mergeOverlap(
-            resultants[resIndex],
-            mergeStrategy(overlapMergeStrategy),
+            resultants[resIndex].get(),
+            *ms,
             overlapParentMap[resIndex]);
     }
 }
 
+
 /* private */
-//xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-// yucks! xxxxxxxx
-CleanCoverage.MergeStrategy
+std::unique_ptr<CleanCoverage::MergeStrategy>
 CoverageCleaner::mergeStrategy(int mergeStrategyId)
 {
     switch (mergeStrategyId) {
-    case MERGE_LONGEST_BORDER: return new CleanCoverage.MergeStrategy.BorderMergeStrategy();
-    case MERGE_MAX_AREA: return new CleanCoverage.MergeStrategy.AreaMergeStrategy(true);
-    case MERGE_MIN_AREA: return new CleanCoverage.MergeStrategy.AreaMergeStrategy(false);
-    case MERGE_MIN_INDEX: return new CleanCoverage.MergeStrategy.IndexMergeStrategy(false);
+        case MERGE_LONGEST_BORDER:
+            return std::make_unique<CleanCoverage::BorderMergeStrategy>();
+        case MERGE_MAX_AREA:
+            return std::make_unique<CleanCoverage::AreaMergeStrategy>(true);
+        case MERGE_MIN_AREA:
+            return std::make_unique<CleanCoverage::AreaMergeStrategy>(false);
+        case MERGE_MIN_INDEX:
+            return std::make_unique<CleanCoverage::IndexMergeStrategy>(false);
     }
     throw IllegalArgumentException("Unknown merge strategy: " + mergeStrategyId);
 }
+
 
 /* private */
 void
@@ -247,7 +253,7 @@ CoverageCleaner::computeResultants(double tolerance)
     //System.out.println("Dissolve: " + sw.getTimeString());
 
     //sw.reset();
-    resultants = polygonize(cleanEdges);
+    resultants = polygonize(cleanEdges.get());
     //System.out.println("Polygonize: " + sw.getTimeString());
 
     cleanCov = std::make_unique<CleanCoverage>(coverage.size());
@@ -264,7 +270,7 @@ CoverageCleaner::computeResultants(double tolerance)
 void
 CoverageCleaner::createCoverageIndex()
 {
-    covIndex = std::made_unique<STRtree>();
+    covIndex = std::make_unique<STRtree>();
     for (std::size_t i = 0; i < coverage.size(); i++) {
         covIndex->insert(coverage[i]->getEnvelopeInternal(), i);
     }
@@ -272,11 +278,10 @@ CoverageCleaner::createCoverageIndex()
 
 /* private */
 void
-CoverageCleaner::classifyResult(std::vector<const Polygon*>& resultants)
+CoverageCleaner::classifyResult(std::vector<std::unique_ptr<Polygon>>& rs)
 {
-    for (std::size_t i = 0; i < resultants.size(); i++) {
-        const Polygon* res = resultants[i];
-        classifyResultant(i, res);
+    for (std::size_t i = 0; i < rs.size(); i++) {
+        classifyResultant(i, rs[i].get());
     }
 }
 
@@ -288,8 +293,8 @@ CoverageCleaner::classifyResultant(std::size_t resultIndex, const Polygon* resPo
     std::size_t parentIndex = INDEX_UNKNOWN;
     std::vector<std::size_t> overlapIndexes;
 
-//xxxxxxx
-    std::vector<std::size_t> candidateParentIndex = covIndex.query(intPt.getEnvelopeInternal());
+    std::vector<std::size_t> candidateParentIndex;
+    covIndex->query(intPt->getEnvelopeInternal(), candidateParentIndex);
 
     for (std::size_t i : candidateParentIndex) {
         const Geometry* parent = coverage[i];
@@ -323,14 +328,16 @@ CoverageCleaner::classifyResultant(std::size_t resultIndex, const Polygon* resPo
     }
 }
 
+
 /* private static */
 bool
 CoverageCleaner::covers(const Geometry* poly, const Point* intPt)
 {
     return SimplePointInAreaLocator::isContained(
-        intPt.getCoordinate(),
+        *(intPt->getCoordinate()),
         poly);
 }
+
 
 /* private */
 std::vector<const Polygon*>
@@ -348,6 +355,7 @@ CoverageCleaner::findMergableGaps(std::vector<const Polygon*> gaps)
     // return gaps.stream().filter(gap -> isMergableGap(gap)).collect(Collectors.toList());
 }
 
+
 /* private */
 bool
 CoverageCleaner::isMergableGap(const Polygon* gap)
@@ -357,6 +365,7 @@ CoverageCleaner::isMergableGap(const Polygon* gap)
     }
     return MaximumInscribedCircle::isRadiusWithin(gap, gapMaximumWidth / 2.0);
 }
+
 
 /* private static */
 std::vector<std::unique_ptr<geom::Polygon>>
@@ -417,7 +426,7 @@ CoverageCleaner::node(std::vector<const Geometry*>& coverage, double snapDistanc
 
 /* private static */
 bool
-CoverageCleaner::isPolygonal(Geometry geom)
+CoverageCleaner::isPolygonal(const Geometry* geom)
 {
     return geom->getGeometryTypeId() == GEOS_POLYGON ||
            geom->getGeometryTypeId() == GEOS_MULTIPOLYGON;
@@ -425,7 +434,7 @@ CoverageCleaner::isPolygonal(Geometry geom)
 
 
 /* private static */
-std::unique_ptr<const Polygon*>
+std::vector<const Polygon*>
 CoverageCleaner::toPolygonArray(const Geometry* geom)
 {
     std::size_t sz = geom->getNumGeometries();
