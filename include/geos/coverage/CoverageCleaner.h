@@ -15,19 +15,30 @@
 
 #pragma once
 
-// #include <geos/noding/BasicSegmentString.h>
+#include <geos/index/strtree/TemplateSTRtree.h>
+#include <geos/constants.h>
+#include <geos/export.h>
+
+#include <vector>
+#include <memory>
+#include <map>
 
 
 // Forward declarations
 namespace geos {
 namespace geom {
-class Coordinate;
-class CoordinateSequence;
-class Geometry;
-class GeometryFactory;
-class LineString;
-class LinearRing;
-class Polygon;
+    class Coordinate;
+    class CoordinateSequence;
+    class Geometry;
+    class GeometryFactory;
+    class LineString;
+    class LinearRing;
+    class Polygon;
+}
+namespace index {
+}
+namespace coverage {
+    class CleanCoverage;
 }
 }
 
@@ -138,7 +149,7 @@ private:
     int overlapMergeStrategy = MERGE_LONGEST_BORDER;
 
     const GeometryFactory* geomFactory;
-    std::unique_ptr<STRtree> covIndex;
+    std::unique_ptr<index::strtree::TemplateSTRtree<std::size_t>> covIndex;
     std::vector<std::unique_ptr<Polygon>> resultants;
     std::unique_ptr<CleanCoverage> cleanCov;
     std::map<std::size_t, std::vector<std::size_t>> overlapParentMap;
@@ -150,6 +161,12 @@ private:
 
 public:
 
+    /**
+     * Disable copy construction and assignment. Apparently needed to make this
+     * class compile under MSVC. (See https://stackoverflow.com/q/29565299)
+     */
+    CoverageCleaner(const CoverageCleaner&) = delete;
+    CoverageCleaner& operator=(const CoverageCleaner&) = delete;
 
 
 

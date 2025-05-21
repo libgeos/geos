@@ -15,6 +15,7 @@
 
 #include <geos/coverage/CleanCoverage.h>
 
+#include <geos/coverage/CoverageUnion.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
@@ -25,6 +26,7 @@
 #include <geos/operation/relateng/IntersectionMatrixPattern.h>
 #include <geos/operation/relateng/RelateNG.h>
 
+#include <algorithm>
 
 using geos::geom::Envelope;
 using geos::geom::Geometry;
@@ -40,6 +42,7 @@ using geos::operation::relateng::RelateNG;
 namespace geos {     // geos
 namespace coverage { // geos.coverage
 
+using CleanArea = geos::coverage::CleanCoverage::CleanArea;
 
 /* public */
 CleanCoverage::CleanCoverage(std::size_t size)
@@ -79,7 +82,7 @@ CleanCoverage::findMergeTarget(const Polygon* poly,
 {
     //-- sort parent indexes ascending, so that overlaps merge to first parent by default
     std::vector<size_t> indexesAsc;
-    indexesAsc.copy(parentIndexes.begin(), parentIndexes.end(), back_inserter(indexesAsc));
+    std::copy(parentIndexes.begin(), parentIndexes.end(), back_inserter(indexesAsc));
     std::sort(indexesAsc.begin(), indexesAsc.end());
 
     for (std::size_t index : indexesAsc) {
@@ -186,7 +189,7 @@ CleanCoverage::toCoverage(const GeometryFactory* geomFactory)
             cleanCov[i] = geomFactory->createEmpty(2);
         }
         else {
-            cleanCov[i] = cov[i]->union();
+            cleanCov[i] = cov[i]->getUnion();
         }
     }
     return cleanCov;
@@ -224,7 +227,7 @@ CleanCoverage::CleanArea::getBorderLength(const Polygon* adjPoly)
     double len = 0.0;
     for (const Polygon* poly : polys) {
         //TODO: find longest connected border len
-        auto border = OverlayNGRobust::overlay(
+        auto border = OverlayNGRobust::Overlay(
             static_cast<const Geometry*>(poly),
             static_cast<const Geometry*>(adjPoly),
             OverlayNG::INTERSECTION);
@@ -265,13 +268,13 @@ CleanCoverage::CleanArea::isAdjacent(RelateNG& rel)
 
 /* public */
 std::unique_ptr<Geometry>
-CleanCoverage::CleanArea::union()
+CleanCoverage::CleanArea::getUnion()
 {
     std::vector<const Geometry*> geoms;
     for (const Polygon* poly : polys) {
         geoms.push_back(static_cast<const Geometry*>(poly));
     }
-    return CoverageUnion::union(geoms);
+    return CoverageUnion::Union(geoms);
 }
 
 

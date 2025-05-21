@@ -15,27 +15,29 @@
 
 #pragma once
 
-// #include <geos/noding/BasicSegmentString.h>
+#include <geos/geom/Envelope.h>
+#include <geos/constants.h>
 
+#include <vector>
+#include <memory>
 
 // Forward declarations
 namespace geos {
 namespace geom {
-class Envelope;
-class Geometry;
-class GeometryFactory;
-class LineString;
-class LinearRing;
-class Polygon;
+    class Geometry;
+    class GeometryFactory;
+    class LineString;
+    class LinearRing;
+    class Polygon;
 }
 namespace operation {
 namespace relateng {
-class RelateNG;
+    class RelateNG;
 }
 }
 namespace index {
 namespace quadtree {
-class Quadtree;
+    class Quadtree;
 }
 }
 }
@@ -44,7 +46,7 @@ class Quadtree;
 namespace geos {     // geos.
 namespace coverage { // geos.coverage
 
-class GEOS_DLL CleanCoverage {
+class CleanCoverage {
 
     using Envelope = geos::geom::Envelope;
     using Geometry = geos::geom::Geometry;
@@ -76,7 +78,7 @@ public:
         double getBorderLength(const Polygon* adjPoly);
         double getArea();
         bool isAdjacent(RelateNG& rel);
-        std::unique_ptr<Geometry> union();
+        std::unique_ptr<Geometry> getUnion();
 
     }; // CleanArea
 
@@ -136,6 +138,7 @@ public:
         }
 
         void checkMergeTarget(std::size_t areaIndex, CleanArea* area, const Polygon* poly) override {
+            (void)poly;
             double areaVal = area == nullptr ? 0.0 : area->getArea();
             bool isBetter = m_isMax
                 ? areaVal > m_targetArea
@@ -165,6 +168,8 @@ public:
         }
 
         void checkMergeTarget(std::size_t areaIndex, CleanArea* area, const Polygon* poly) override {
+            (void)area;
+            (void)poly;
             bool isBetter = m_isMax
                 ? areaIndex > m_targetIndex
                 : areaIndex < m_targetIndex;
@@ -183,13 +188,13 @@ private:
      * The areas in the clean coverage.
      * Entries may be null, if no resultant corresponded to the input area.
      */
-    std::vector<str::unique_ptr<CleanArea>> cov;
+    std::vector<std::unique_ptr<CleanArea>> cov;
     //-- used for finding areas to merge gaps
     std::unique_ptr<Quadtree> covIndex = nullptr;
 
     void mergeGap(const Polygon* gap);
 
-    CleanArea* indMaxBorderLength(const Polygon* poly, std::vector<CleanArea*>& areas);
+    CleanArea* findMaxBorderLength(const Polygon* poly, std::vector<CleanArea*>& areas);
 
     std::vector<CleanArea*> findAdjacentAreas(const Geometry* poly);
 
@@ -217,6 +222,12 @@ public:
 
     std::vector<std::unique_ptr<Geometry>> toCoverage(const GeometryFactory* geomFactory);
 
+    /**
+     * Disable copy construction and assignment. Apparently needed to make this
+     * class compile under MSVC. (See https://stackoverflow.com/q/29565299)
+     */
+    CleanCoverage(const CleanCoverage&) = delete;
+    CleanCoverage& operator=(const CleanCoverage&) = delete;
 
 
 };
