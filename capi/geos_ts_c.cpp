@@ -2690,6 +2690,14 @@ extern "C" {
     }
 
     CoordinateSequence*
+    GEOSCoordSeq_createWithDimensions_r(GEOSContextHandle_t extHandle, unsigned int size, int hasZ, int hasM)
+    {
+        return execute(extHandle, [&]() {
+            return new CoordinateSequence(size, hasZ, hasM);
+        });
+    }
+
+    CoordinateSequence*
     GEOSCoordSeq_copyFromBuffer_r(GEOSContextHandle_t extHandle, const double* buf, unsigned int size, int hasZ, int hasM)
     {
         return execute(extHandle, [&]() {
@@ -2841,6 +2849,22 @@ extern "C" {
         });
     }
 
+    char
+    GEOSCoordSeq_hasZ_r(GEOSContextHandle_t extHandle, CoordinateSequence* cs)
+    {
+        return execute(extHandle, 2, [&]() {
+            return cs->hasZ();
+        });
+    }
+
+    char
+    GEOSCoordSeq_hasM_r(GEOSContextHandle_t extHandle, CoordinateSequence* cs)
+    {
+        return execute(extHandle, 2, [&]() {
+            return cs->hasM();
+        });
+    }
+
     int
     GEOSCoordSeq_setOrdinate_r(GEOSContextHandle_t extHandle, CoordinateSequence* cs,
                                unsigned int idx, unsigned int dim, double val)
@@ -2854,19 +2878,25 @@ extern "C" {
     int
     GEOSCoordSeq_setX_r(GEOSContextHandle_t extHandle, CoordinateSequence* s, unsigned int idx, double val)
     {
-        return GEOSCoordSeq_setOrdinate_r(extHandle, s, idx, 0, val);
+        return GEOSCoordSeq_setOrdinate_r(extHandle, s, idx, CoordinateSequence::X, val);
     }
 
     int
     GEOSCoordSeq_setY_r(GEOSContextHandle_t extHandle, CoordinateSequence* s, unsigned int idx, double val)
     {
-        return GEOSCoordSeq_setOrdinate_r(extHandle, s, idx, 1, val);
+        return GEOSCoordSeq_setOrdinate_r(extHandle, s, idx, CoordinateSequence::Y, val);
     }
 
     int
     GEOSCoordSeq_setZ_r(GEOSContextHandle_t extHandle, CoordinateSequence* s, unsigned int idx, double val)
     {
-        return GEOSCoordSeq_setOrdinate_r(extHandle, s, idx, 2, val);
+        return GEOSCoordSeq_setOrdinate_r(extHandle, s, idx, CoordinateSequence::Z, val);
+    }
+
+    int
+    GEOSCoordSeq_setM_r(GEOSContextHandle_t extHandle, CoordinateSequence* s, unsigned int idx, double val)
+    {
+        return GEOSCoordSeq_setOrdinate_r(extHandle, s, idx, CoordinateSequence::M, val);
     }
 
     int
@@ -2908,19 +2938,25 @@ extern "C" {
     int
     GEOSCoordSeq_getX_r(GEOSContextHandle_t extHandle, const CoordinateSequence* s, unsigned int idx, double* val)
     {
-        return GEOSCoordSeq_getOrdinate_r(extHandle, s, idx, 0, val);
+        return GEOSCoordSeq_getOrdinate_r(extHandle, s, idx, CoordinateSequence::X, val);
     }
 
     int
     GEOSCoordSeq_getY_r(GEOSContextHandle_t extHandle, const CoordinateSequence* s, unsigned int idx, double* val)
     {
-        return GEOSCoordSeq_getOrdinate_r(extHandle, s, idx, 1, val);
+        return GEOSCoordSeq_getOrdinate_r(extHandle, s, idx, CoordinateSequence::Y, val);
     }
 
     int
     GEOSCoordSeq_getZ_r(GEOSContextHandle_t extHandle, const CoordinateSequence* s, unsigned int idx, double* val)
     {
-        return GEOSCoordSeq_getOrdinate_r(extHandle, s, idx, 2, val);
+        return GEOSCoordSeq_getOrdinate_r(extHandle, s, idx, CoordinateSequence::Z, val);
+    }
+
+    int
+    GEOSCoordSeq_getM_r(GEOSContextHandle_t extHandle, const CoordinateSequence* s, unsigned int idx, double* val)
+    {
+        return GEOSCoordSeq_getOrdinate_r(extHandle, s, idx, CoordinateSequence::M, val);
     }
 
     int
@@ -3742,6 +3778,22 @@ extern "C" {
             }
             char* result = gstrdup(geojson);
             return result;
+        });
+    }
+
+    void
+    GEOSGeoJSONWriter_setOutputDimension_r(GEOSContextHandle_t extHandle, GeoJSONWriter* writer, int dim)
+    {
+        execute(extHandle, [&]() {
+            writer->setOutputDimension(static_cast<uint8_t>(dim));
+        });
+    }
+
+    int
+    GEOSGeoJSONWriter_getOutputDimension_r(GEOSContextHandle_t extHandle, GeoJSONWriter* writer)
+    {
+        return execute(extHandle, -1, [&]() {
+            return writer->getOutputDimension();
         });
     }
 

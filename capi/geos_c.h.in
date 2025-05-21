@@ -444,6 +444,13 @@ extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_create_r(
     unsigned int size,
     unsigned int dims);
 
+/** \see GEOSCoordSeq_createWithDimensions */
+extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_createWithDimensions_r(
+    GEOSContextHandle_t handle,
+    unsigned int size,
+    int hasZ,
+    int hasM);
+
 /** \see GEOSCoordSeq_copyFromBuffer */
 extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_copyFromBuffer_r(
         GEOSContextHandle_t handle,
@@ -488,6 +495,16 @@ extern void GEOS_DLL GEOSCoordSeq_destroy_r(
     GEOSContextHandle_t handle,
     GEOSCoordSequence* s);
 
+/** \see GEOSCoordSeq_hasZ */
+extern char GEOS_DLL GEOSCoordSeq_hasZ_r(
+    GEOSContextHandle_t handle,
+    GEOSCoordSequence* s);
+
+/** \see GEOSCoordSeq_hasM */
+extern char GEOS_DLL GEOSCoordSeq_hasM_r(
+    GEOSContextHandle_t handle,
+    GEOSCoordSequence* s);
+
 /** \see GEOSCoordSeq_setX */
 extern int GEOS_DLL GEOSCoordSeq_setX_r(
     GEOSContextHandle_t handle,
@@ -502,6 +519,12 @@ extern int GEOS_DLL GEOSCoordSeq_setY_r(
 
 /** \see GEOSCoordSeq_setZ */
 extern int GEOS_DLL GEOSCoordSeq_setZ_r(
+    GEOSContextHandle_t handle,
+    GEOSCoordSequence* s, unsigned int idx,
+    double val);
+
+/** \see GEOSCoordSeq_setM */
+extern int GEOS_DLL GEOSCoordSeq_setM_r(
     GEOSContextHandle_t handle,
     GEOSCoordSequence* s, unsigned int idx,
     double val);
@@ -539,6 +562,12 @@ extern int GEOS_DLL GEOSCoordSeq_getY_r(
 
 /** \see GEOSCoordSeq_getZ */
 extern int GEOS_DLL GEOSCoordSeq_getZ_r(
+    GEOSContextHandle_t handle,
+    const GEOSCoordSequence* s,
+    unsigned int idx, double *val);
+
+/** \see GEOSCoordSeq_getM */
+extern int GEOS_DLL GEOSCoordSeq_getM_r(
     GEOSContextHandle_t handle,
     const GEOSCoordSequence* s,
     unsigned int idx, double *val);
@@ -2172,6 +2201,17 @@ extern char GEOS_DLL *GEOSGeoJSONWriter_writeGeometry_r(
     const GEOSGeometry* g,
     int indent);
 
+/** \see GEOSGeoJSONWriter_setOutputDimension */
+extern void GEOS_DLL GEOSGeoJSONWriter_setOutputDimension_r(
+    GEOSContextHandle_t handle,
+    GEOSGeoJSONWriter *writer,
+    int dim);
+
+/** \see GEOSGeoJSONWriter_getOutputDimension */
+extern int  GEOS_DLL GEOSGeoJSONWriter_getOutputDimension_r(
+    GEOSContextHandle_t handle,
+    GEOSGeoJSONWriter *writer);
+
 /** \see GEOSFree */
 extern void GEOS_DLL GEOSFree_r(
     GEOSContextHandle_t handle,
@@ -2253,6 +2293,16 @@ extern void GEOS_DLL GEOSFree(void *buffer);
 extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_create(unsigned int size, unsigned int dims);
 
 /**
+* Create a coordinate sequence.
+* \param size number of coordinates in the sequence
+* \param hasZ whether the sequence should store Z values
+* \param hasM whether the sequence should store M values
+* \return the sequence or NULL on exception
+* \since 3.14
+*/
+extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_createWithDimensions(unsigned int size, int hasZ, int hasM);
+
+/**
 * Create a coordinate sequence by copying from an interleaved buffer of doubles (e.g., XYXY or XYZXYZ)
 * \param buf pointer to buffer
 * \param size number of coordinates in the sequence
@@ -2318,6 +2368,24 @@ extern GEOSCoordSequence GEOS_DLL *GEOSCoordSeq_clone(const GEOSCoordSequence* s
 extern void GEOS_DLL GEOSCoordSeq_destroy(GEOSCoordSequence* s);
 
 /**
+* Tests whether the input coordinate sequence has Z coordinates.
+* \param s the coordinate sequence to test
+* \return 1 on true, 0 on false, 2 on exception
+*
+* \since 3.14
+*/
+extern char GEOS_DLL GEOSCoordSeq_hasZ(GEOSCoordSequence* s);
+
+/**
+* Tests whether the input coordinate sequence has M coordinates.
+* \param s the coordinate sequence to test
+* \return 1 on true, 0 on false, 2 on exception
+*
+* \since 3.14
+*/
+extern char GEOS_DLL GEOSCoordSeq_hasM(GEOSCoordSequence* s);
+
+/**
 * Set X ordinate values in a coordinate sequence.
 * \param s the coordinate sequence
 * \param idx the index of the coordinate to alter, zero based
@@ -2347,6 +2415,18 @@ extern int GEOS_DLL GEOSCoordSeq_setY(GEOSCoordSequence* s,
 */
 extern int GEOS_DLL GEOSCoordSeq_setZ(GEOSCoordSequence* s,
     unsigned int idx, double val);
+
+/**
+* Set M ordinate values in a coordinate sequence.
+* \param s the coordinate sequence
+* \param idx the index of the coordinate to alter, zero based
+* \param val the value to set the ordinate to
+* \return 0 on exception
+* \since 3.14
+*/
+extern int GEOS_DLL GEOSCoordSeq_setM(GEOSCoordSequence* s,
+    unsigned int idx, double val);
+
 /**
 * Set X and Y ordinate values in a coordinate sequence simultaneously.
 * \param s the coordinate sequence
@@ -2405,6 +2485,7 @@ extern int GEOS_DLL GEOSCoordSeq_getX(const GEOSCoordSequence* s,
 */
 extern int GEOS_DLL GEOSCoordSeq_getY(const GEOSCoordSequence* s,
     unsigned int idx, double *val);
+
 /**
 * Read Z ordinate values from a coordinate sequence.
 * \param s the coordinate sequence
@@ -2415,6 +2496,18 @@ extern int GEOS_DLL GEOSCoordSeq_getY(const GEOSCoordSequence* s,
 */
 extern int GEOS_DLL GEOSCoordSeq_getZ(const GEOSCoordSequence* s,
     unsigned int idx, double *val);
+
+/**
+* Read M ordinate values from a coordinate sequence.
+* \param s the coordinate sequence
+* \param idx the index of the coordinate to alter, zero based
+* \param val pointer where ordinate value will be placed
+* \return 0 on exception
+* \since 3.14
+*/
+extern int GEOS_DLL GEOSCoordSeq_getM(const GEOSCoordSequence* s,
+    unsigned int idx, double *val);
+
 /**
 * Read X and Y ordinate values from a coordinate sequence.
 * \param s the coordinate sequence
@@ -6140,6 +6233,27 @@ extern char GEOS_DLL *GEOSGeoJSONWriter_writeGeometry(
     GEOSGeoJSONWriter* writer,
     const GEOSGeometry* g,
     int indent);
+
+/**
+* Set the output dimensionality of the writer. Either
+* 2 or 3 dimensions.
+* \param writer A \ref GEOSGeoJSONWriter.
+* \param dim The dimensionality desired.
+*
+* \since 3.14
+*/
+extern void GEOS_DLL GEOSGeoJSONWriter_setOutputDimension(
+    GEOSGeoJSONWriter *writer,
+    int dim);
+
+/**
+* Reads the current output dimension from a \ref GEOSGeoJSONWriter.
+* \param writer A \ref GEOSGeoJSONWriter.
+* \return The current dimension.
+*
+* \since 3.14
+*/
+extern int  GEOS_DLL GEOSGeoJSONWriter_getOutputDimension(GEOSGeoJSONWriter *writer);
 
 ///@}
 

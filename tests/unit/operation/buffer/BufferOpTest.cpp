@@ -19,7 +19,6 @@
 // std
 #include <memory>
 #include <string>
-#include <vector>
 
 using namespace geos::operation::buffer;
 

@@ -1106,6 +1106,12 @@ extern "C" {
     }
 
     CoordinateSequence*
+    GEOSCoordSeq_createWithDimensions(unsigned int size, int hasZ, int hasM)
+    {
+        return GEOSCoordSeq_createWithDimensions_r(handle, size, hasZ, hasM);
+    }
+
+    CoordinateSequence*
     GEOSCoordSeq_copyFromBuffer(const double* buf, unsigned int size, int hasZ, int hasM)
     {
         return GEOSCoordSeq_copyFromBuffer_r(handle, buf, size, hasZ, hasM);
@@ -1129,6 +1135,18 @@ extern "C" {
         return GEOSCoordSeq_copyToArrays_r(handle, s, x, y, z, m);
     }
 
+    char
+    GEOSCoordSeq_hasZ(CoordinateSequence* s)
+    {
+        return GEOSCoordSeq_hasZ_r(handle, s);
+    }
+
+    char
+    GEOSCoordSeq_hasM(CoordinateSequence* s)
+    {
+        return GEOSCoordSeq_hasM_r(handle, s);
+    }
+
     int
     GEOSCoordSeq_setOrdinate(CoordinateSequence* s, unsigned int idx, unsigned int dim, double val)
     {
@@ -1138,19 +1156,25 @@ extern "C" {
     int
     GEOSCoordSeq_setX(CoordinateSequence* s, unsigned int idx, double val)
     {
-        return GEOSCoordSeq_setOrdinate(s, idx, 0, val);
+        return GEOSCoordSeq_setOrdinate(s, idx, CoordinateSequence::X, val);
     }
 
     int
     GEOSCoordSeq_setY(CoordinateSequence* s, unsigned int idx, double val)
     {
-        return GEOSCoordSeq_setOrdinate(s, idx, 1, val);
+        return GEOSCoordSeq_setOrdinate(s, idx, CoordinateSequence::Y, val);
     }
 
     int
     GEOSCoordSeq_setZ(CoordinateSequence* s, unsigned int idx, double val)
     {
-        return GEOSCoordSeq_setOrdinate(s, idx, 2, val);
+        return GEOSCoordSeq_setOrdinate(s, idx, CoordinateSequence::Z, val);
+    }
+
+    int
+    GEOSCoordSeq_setM(CoordinateSequence* s, unsigned int idx, double val)
+    {
+        return GEOSCoordSeq_setOrdinate(s, idx, CoordinateSequence::M, val);
     }
 
     int
@@ -1180,19 +1204,25 @@ extern "C" {
     int
     GEOSCoordSeq_getX(const CoordinateSequence* s, unsigned int idx, double* val)
     {
-        return GEOSCoordSeq_getOrdinate(s, idx, 0, val);
+        return GEOSCoordSeq_getOrdinate(s, idx, CoordinateSequence::X, val);
     }
 
     int
     GEOSCoordSeq_getY(const CoordinateSequence* s, unsigned int idx, double* val)
     {
-        return GEOSCoordSeq_getOrdinate(s, idx, 1, val);
+        return GEOSCoordSeq_getOrdinate(s, idx, CoordinateSequence::Y, val);
     }
 
     int
     GEOSCoordSeq_getZ(const CoordinateSequence* s, unsigned int idx, double* val)
     {
-        return GEOSCoordSeq_getOrdinate(s, idx, 2, val);
+        return GEOSCoordSeq_getOrdinate(s, idx, CoordinateSequence::Z, val);
+    }
+
+    int
+    GEOSCoordSeq_getM(const CoordinateSequence* s, unsigned int idx, double* val)
+    {
+        return GEOSCoordSeq_getOrdinate(s, idx, CoordinateSequence::M, val);
     }
 
     int
@@ -1575,6 +1605,18 @@ extern "C" {
     GEOSGeoJSONWriter_writeGeometry(GEOSGeoJSONWriter* writer, const GEOSGeometry* g, int indent)
     {
         return GEOSGeoJSONWriter_writeGeometry_r(handle, writer, g, indent);
+    }
+
+    void
+    GEOSGeoJSONWriter_setOutputDimension(GeoJSONWriter* writer, int dim)
+    {
+        GEOSGeoJSONWriter_setOutputDimension_r(handle, writer, dim);
+    }
+
+    int
+    GEOSGeoJSONWriter_getOutputDimension(GeoJSONWriter* writer)
+    {
+        return GEOSGeoJSONWriter_getOutputDimension_r(handle, writer);
     }
 
 
