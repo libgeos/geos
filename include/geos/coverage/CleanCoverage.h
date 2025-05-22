@@ -87,6 +87,8 @@ public:
 
     public:
 
+        virtual ~MergeStrategy() = default;
+
         virtual std::size_t getTarget() const = 0;
 
         virtual void checkMergeTarget(
@@ -106,9 +108,11 @@ public:
 
     public:
 
+        BorderMergeStrategy() {};
+
         std::size_t getTarget()  const override {
             return m_targetIndex;
-        }
+        };
 
         void checkMergeTarget(std::size_t areaIndex, CleanArea* area, const Polygon* poly) override {
             double borderLen = area == nullptr ? 0.0 : area->getBorderLength(poly);
@@ -116,7 +120,7 @@ public:
                 m_targetIndex = areaIndex;
                 m_targetBorderLen = borderLen;
             }
-        }
+        };
 
     }; // BorderStrategy
 

@@ -16,6 +16,8 @@
 #pragma once
 
 #include <geos/index/strtree/TemplateSTRtree.h>
+#include <geos/coverage/CleanCoverage.h>
+#include <geos/geom/Envelope.h>
 #include <geos/constants.h>
 #include <geos/export.h>
 
@@ -36,6 +38,9 @@ namespace geom {
     class Polygon;
 }
 namespace index {
+}
+namespace noding {
+    class SegmentString;
 }
 namespace coverage {
     class CleanCoverage;
@@ -126,9 +131,12 @@ class GEOS_DLL CoverageCleaner {
     using CoordinateSequence = geos::geom::CoordinateSequence;
     using Geometry = geos::geom::Geometry;
     using GeometryFactory = geos::geom::GeometryFactory;
+    using Point = geos::geom::Point;
     using Polygon = geos::geom::Polygon;
     using LineString = geos::geom::LineString;
     using LinearRing = geos::geom::LinearRing;
+    using Envelope = geos::geom::Envelope;
+    using SegmentString = geos::noding::SegmentString;
 
 public:
 
@@ -144,11 +152,11 @@ public:
 private:
 
     std::vector<const Geometry*> coverage;
-    double snappingDistance;    // set to compute default
+    const GeometryFactory* geomFactory;
+    double snappingDistance;
+
     double gapMaximumWidth = 0.0;
     int overlapMergeStrategy = MERGE_LONGEST_BORDER;
-
-    const GeometryFactory* geomFactory;
     std::unique_ptr<index::strtree::TemplateSTRtree<std::size_t>> covIndex;
     std::vector<std::unique_ptr<Polygon>> resultants;
     std::unique_ptr<CleanCoverage> cleanCov;
@@ -159,7 +167,107 @@ private:
 
     static constexpr double DEFAULT_SNAPPING_FACTOR = 1.0e8;
 
+
+    static double computeDefaultSnappingDistance(
+        std::vector<const Geometry*>& geoms);
+
+    static Envelope extent(std::vector<const Geometry*>& geoms);
+
+    void mergeOverlaps(
+        std::map<std::size_t, std::vector<std::size_t>>& overlapParentMap_p);
+
+    std::unique_ptr<CleanCoverage::MergeStrategy> mergeStrategy(
+        int mergeStrategyId);
+
+    void computeResultants(double tolerance);
+
+    void createCoverageIndex();
+
+    void classifyResult(std::vector<std::unique_ptr<Polygon>>& rs);
+
+    void classifyResultant(std::size_t resultIndex, const Polygon* resPoly);
+
+    static bool covers(const Geometry* poly, const Point* intPt);
+
+    std::vector<const Polygon*> findMergableGaps(
+        std::vector<const Polygon*> gaps);
+
+    bool isMergableGap(const Polygon* gap);
+
+    static std::vector<std::unique_ptr<geom::Polygon>> polygonize(
+        const Geometry* cleanEdges);
+
+    static bool isPolygonal(const Geometry* geom);
+
+    static std::vector<const Polygon*> toPolygonArray(
+        const Geometry* geom);
+
+
 public:
+
+    CoverageCleaner(std::vector<const Geometry*>& p_coverage);
+
+    /**
+     * Sets the snapping distance tolerance.
+     * The default is to use a small fraction of the input extent diameter.
+     * A distance of zero prevents snapping from being used.
+     *
+     * @param snappingDistance the snapping distance tolerance
+     */
+    void setSnappingDistance(double p_snappingDistance);
+
+    /**
+     * Sets the overlap merge strategy to use.
+     * The default is {@link #MERGE_LONGEST_BORDER}.
+     *
+     * @param mergeStrategy the merge strategy code
+     */
+    void setOverlapMergeStrategy(int mergeStrategy);
+
+    /**
+     * Sets the maximum width of the gaps that will be filled and merged.
+     * The width of a gap is twice the radius of the Maximum Inscribed Circle in the gap polygon,
+     * A width of zero prevents gaps from being merged.
+     *
+     * @param maxWidth the maximum gap width to merge
+     */
+    void setGapMaximumWidth(double maxWidth);
+
+    /**
+     * Cleans the coverage.
+     */
+    void clean();
+
+    /**
+     * Gets the cleaned coverage.
+     *
+     * @return the clean coverage
+     */
+    std::vector<std::unique_ptr<Geometry>> getResult();
+
+    /**
+     * Gets polygons representing the overlaps in the input,
+     * which have been merged.
+     *
+     * @return a list of overlap polygons
+     */
+    std::vector<const Polygon*> getOverlaps();
+
+    /**
+     * Gets polygons representing the gaps in the input
+     * which have been merged.
+     *
+     * @return a list of gap polygons
+     */
+    std::vector<const Polygon*> getMergedGaps();
+
+    std::unique_ptr<Geometry> toGeometry(
+        std::vector<SegmentString*>& segStrings,
+        const GeometryFactory* geomFact);
+
+    std::unique_ptr<Geometry> node(
+        std::vector<const Geometry*>& coverage,
+        double snapDistance);
 
     /**
      * Disable copy construction and assignment. Apparently needed to make this
@@ -167,9 +275,6 @@ public:
      */
     CoverageCleaner(const CoverageCleaner&) = delete;
     CoverageCleaner& operator=(const CoverageCleaner&) = delete;
-
-
-
 
 };
 

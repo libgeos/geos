@@ -25,6 +25,7 @@
 #include <geos/geom/Point.h>
 #include <geos/geom/Polygon.h>
 #include <geos/index/strtree/STRtree.h>
+#include <geos/index/quadtree/Quadtree.h>
 #include <geos/noding/NodedSegmentString.h>
 #include <geos/noding/Noder.h>
 #include <geos/noding/SegmentStringUtil.h>
@@ -32,6 +33,8 @@
 #include <geos/operation/polygonize/Polygonizer.h>
 #include <geos/operation/relateng/RelateNG.h>
 #include <geos/operation/relateng/RelatePredicate.h>
+#include <geos/util/IllegalArgumentException.h>
+
 
 using geos::algorithm::construct::MaximumInscribedCircle;
 using geos::algorithm::locate::SimplePointInAreaLocator;
@@ -43,6 +46,7 @@ using geos::geom::MultiPolygon;
 using geos::geom::Point;
 using geos::geom::Polygon;
 using geos::index::strtree::STRtree;
+using geos::index::quadtree::Quadtree;
 using geos::noding::NodedSegmentString;
 using geos::noding::Noder;
 using geos::noding::SegmentStringUtil;
@@ -50,7 +54,6 @@ using geos::noding::snap::SnappingNoder;
 using geos::operation::polygonize::Polygonizer;
 using geos::operation::relateng::RelateNG;
 using geos::operation::relateng::RelatePredicate;
-
 
 
 namespace geos {     // geos
@@ -66,7 +69,7 @@ namespace coverage { // geos.coverage
 CoverageCleaner::CoverageCleaner(std::vector<const Geometry*>& p_coverage)
     : coverage(p_coverage)
     , geomFactory(p_coverage.empty() ? nullptr : coverage[0]->getFactory())
-    , computeDefaultSnappingDistance(p_coverage)
+    , snappingDistance(computeDefaultSnappingDistance(p_coverage))
 {}
 
 /**
@@ -98,7 +101,7 @@ CoverageCleaner::setOverlapMergeStrategy(int mergeStrategy)
 {
     if (mergeStrategy < MERGE_LONGEST_BORDER ||
         mergeStrategy > MERGE_MIN_INDEX)
-        throw IllegalArgumentException("Invalid merge strategy code");
+        throw util::IllegalArgumentException("Invalid merge strategy code");
 
     overlapMergeStrategy = mergeStrategy;
 }
@@ -119,8 +122,6 @@ CoverageCleaner::setGapMaximumWidth(double maxWidth)
     gapMaximumWidth = maxWidth;
 }
 
-//TODO: support snap-rounding noder for precision reduction
-//TODO: add merge gaps by: area?
 
 /**
  * Cleans the coverage.
@@ -206,14 +207,14 @@ CoverageCleaner::extent(std::vector<const Geometry*>& geoms)
 /* private */
 void
 CoverageCleaner::mergeOverlaps(
-    std::map<std::size_t, std::vector<std::size_t>>& overlapParentMap)
+    std::map<std::size_t, std::vector<std::size_t>>& overlapParentMap_p)
 {
-    for (const auto& [resIndex, _] : overlapParentMap) {
+    for (const auto& [resIndex, _] : overlapParentMap_p) {
         auto ms = mergeStrategy(overlapMergeStrategy);
         cleanCov->mergeOverlap(
             resultants[resIndex].get(),
             *ms,
-            overlapParentMap[resIndex]);
+            overlapParentMap_p[resIndex]);
     }
 }
 
@@ -232,7 +233,7 @@ CoverageCleaner::mergeStrategy(int mergeStrategyId)
         case MERGE_MIN_INDEX:
             return std::make_unique<CleanCoverage::IndexMergeStrategy>(false);
     }
-    throw IllegalArgumentException("Unknown merge strategy: " + mergeStrategyId);
+    throw util::IllegalArgumentException("CoverageCleaner::mergeStrategy - Unknown merge strategy");
 }
 
 
@@ -249,7 +250,7 @@ CoverageCleaner::computeResultants(double tolerance)
     //System.out.println("Noding: " + sw.getTimeString());
 
     //sw.reset();
-    std::unique_ptr<Geometry> cleanEdges = LineDissolver::dissolve(nodedEdges);
+    std::unique_ptr<Geometry> cleanEdges = LineDissolver::dissolve(nodedEdges.get());
     //System.out.println("Dissolve: " + sw.getTimeString());
 
     //sw.reset();
@@ -270,9 +271,9 @@ CoverageCleaner::computeResultants(double tolerance)
 void
 CoverageCleaner::createCoverageIndex()
 {
-    covIndex = std::make_unique<STRtree>();
+    covIndex = std::make_unique<index::strtree::TemplateSTRtree<std::size_t>>();
     for (std::size_t i = 0; i < coverage.size(); i++) {
-        covIndex->insert(coverage[i]->getEnvelopeInternal(), i);
+        covIndex->insert(*(coverage[i]->getEnvelopeInternal()), i);
     }
 }
 
@@ -294,7 +295,7 @@ CoverageCleaner::classifyResultant(std::size_t resultIndex, const Polygon* resPo
     std::vector<std::size_t> overlapIndexes;
 
     std::vector<std::size_t> candidateParentIndex;
-    covIndex->query(intPt->getEnvelopeInternal(), candidateParentIndex);
+    covIndex->query(*(intPt->getEnvelopeInternal()), candidateParentIndex);
 
     for (std::size_t i : candidateParentIndex) {
         const Geometry* parent = coverage[i];
@@ -341,13 +342,13 @@ CoverageCleaner::covers(const Geometry* poly, const Point* intPt)
 
 /* private */
 std::vector<const Polygon*>
-CoverageCleaner::findMergableGaps(std::vector<const Polygon*> gaps)
+CoverageCleaner::findMergableGaps(std::vector<const Polygon*> p_gaps)
 {
     std::vector<const Polygon*> filtered;
 
-    std::copy_if(gaps.begin(), gaps.end(),
+    std::copy_if(p_gaps.begin(), p_gaps.end(),
                  std::back_inserter(filtered),
-                 [](const Polygon* xgap) { return isMergableGap(gap); }
+                 [this](const Polygon* gap) { return isMergableGap(gap); }
                  );
 
     return filtered;
@@ -389,30 +390,35 @@ CoverageCleaner::toGeometry(
         std::unique_ptr<LineString> line = geomFact->createLineString(std::move(cs));
         lines.emplace_back(line.release());
     }
-    if (lines.size() == 1) return lines[0];
+    if (lines.size() == 1) return lines[0]->clone();
     return geomFact->createMultiLineString(std::move(lines));
 }
 
 
 /* public static */
 std::unique_ptr<Geometry>
-CoverageCleaner::node(std::vector<const Geometry*>& coverage, double snapDistance)
+CoverageCleaner::node(std::vector<const Geometry*>& p_coverage, double p_snapDistance)
 {
-    std::vector<SegmentString*> segs;
+    std::vector<const SegmentString*> csegs;
 
-    for (const Geometry* geom : coverage) {
+    for (const Geometry* geom : p_coverage) {
         //-- skip non-polygonal and empty elements
         if (! isPolygonal(geom))
             continue;
         if (geom->isEmpty())
             continue;
-        SegmentStringUtil::extractSegmentStrings(geom, segs);
+        SegmentStringUtil::extractSegmentStrings(geom, csegs);
     }
 
-    SnappingNoder noder(snapDistance);
+    std::vector<SegmentString*> segs;
+    for (auto* css : csegs) {
+        segs.push_back(const_cast<SegmentString*>(css));
+    }
+
+    SnappingNoder noder(p_snapDistance);
     noder.computeNodes(&segs);
     std::unique_ptr<std::vector<SegmentString*>> nodedSegStrings(noder.getNodedSubstrings());
-    for (SegmentString* ss : *segs) {
+    for (auto* ss : segs) {
         delete ss;
     }
 
@@ -428,8 +434,8 @@ CoverageCleaner::node(std::vector<const Geometry*>& coverage, double snapDistanc
 bool
 CoverageCleaner::isPolygonal(const Geometry* geom)
 {
-    return geom->getGeometryTypeId() == GEOS_POLYGON ||
-           geom->getGeometryTypeId() == GEOS_MULTIPOLYGON;
+    return geom->getGeometryTypeId() == geom::GEOS_POLYGON ||
+           geom->getGeometryTypeId() == geom::GEOS_MULTIPOLYGON;
 }
 
 
