@@ -137,7 +137,7 @@ public:
 
         AreaMergeStrategy(bool isMax) : m_isMax(isMax) {};
 
-        std::size_t getTarget()  const override {
+        std::size_t getTarget() const override {
             return m_targetIndex;
         }
 
@@ -177,7 +177,7 @@ public:
             bool isBetter = m_isMax
                 ? areaIndex > m_targetIndex
                 : areaIndex < m_targetIndex;
-            if (m_targetIndex < 0 || isBetter) {
+            if (isBetter) {
                 m_targetIndex = areaIndex;
             }
         }
