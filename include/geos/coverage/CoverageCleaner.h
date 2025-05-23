@@ -212,9 +212,9 @@ public:
      * The default is to use a small fraction of the input extent diameter.
      * A distance of zero prevents snapping from being used.
      *
-     * @param snappingDistance the snapping distance tolerance
+     * @param snapDistance the snapping distance tolerance
      */
-    void setSnappingDistance(double p_snappingDistance);
+    void setSnappingDistance(double snapDistance);
 
     /**
      * Sets the overlap merge strategy to use.
