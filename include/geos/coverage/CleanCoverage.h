@@ -218,7 +218,7 @@ public:
         std::vector<std::size_t>& parentIndexes);
 
     static std::size_t findMergeTarget(const Polygon* poly,
-        MergeStrategy& strat,
+        MergeStrategy& strategy,
         std::vector<std::size_t>& parentIndexes,
         std::vector<std::unique_ptr<CleanArea>>& cov);
 

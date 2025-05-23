@@ -76,7 +76,7 @@ CleanCoverage::mergeOverlap(const Polygon* overlap,
 /* public static */
 std::size_t
 CleanCoverage::findMergeTarget(const Polygon* poly,
-    MergeStrategy& strat,
+    MergeStrategy& strategy,
     std::vector<std::size_t>& parentIndexes,
     std::vector<std::unique_ptr<CleanArea>>& cov)
 {
@@ -86,9 +86,9 @@ CleanCoverage::findMergeTarget(const Polygon* poly,
     std::sort(indexesAsc.begin(), indexesAsc.end());
 
     for (std::size_t index : indexesAsc) {
-        strat.checkMergeTarget(index, cov[index].get(), poly);
+        strategy.checkMergeTarget(index, cov[index].get(), poly);
     }
-    return strat.getTarget();
+    return strategy.getTarget();
 }
 
 
