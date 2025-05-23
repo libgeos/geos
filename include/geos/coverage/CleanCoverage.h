@@ -17,6 +17,7 @@
 
 #include <geos/geom/Envelope.h>
 #include <geos/constants.h>
+#include <geos/index/quadtree/Quadtree.h>
 
 #include <vector>
 #include <memory>
@@ -37,7 +38,6 @@ namespace relateng {
 }
 namespace index {
 namespace quadtree {
-    class Quadtree;
 }
 }
 }
