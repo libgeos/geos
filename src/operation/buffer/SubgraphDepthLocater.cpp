@@ -111,7 +111,6 @@ public:
     int
     compareTo(const DepthSegment& other) const
     {
-      
         /**
          * If segments are disjoint in X, X values provides ordering.
          * This is the most common case.
@@ -166,7 +165,8 @@ public:
         }
         
         // assert: segments are equal
-        return 0;    }
+        return 0;    
+    }
 };
 
 struct DepthSegmentLessThan {
