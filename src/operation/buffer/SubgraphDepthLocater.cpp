@@ -70,8 +70,35 @@ public:
     }
 
     /**
-     * Defines a comparison operation on DepthSegments
-     * which orders them left to right
+     * Compares a point to a segment for left/right position, 
+     * as long as the point lies within the segment Y extent.
+     * Otherwise the point is not comparable.
+     * If the point is not comparable or it lies on the segment
+     * returns 0.
+     */
+    int 
+    comparePointInYExtent(const Coordinate& p, const LineSegment& seg) const
+    {
+        //-- if point is comparable to segment
+        if (p.y >= seg.minY() && p.y <= seg.maxY()) {
+          //-- flip sign, since orientation and order relation are opposite
+          int orient = seg.orientationIndex(p);
+          switch (orient) {
+          case Orientation::LEFT: return -1;
+          case Orientation::RIGHT: return 1;
+          }
+          //-- collinear, so indeterminate
+        }
+        //-- not computable
+        return 0;
+    }
+
+    /**
+     * A comparison operation which orders segments left to right
+     * along some horizontal line.
+     * If segments don't touch the same line, 
+     * or touch at the same point,
+     * they are compared in their Y extent.
      *
      * <pre>
      * DS1 < DS2   if   DS1.seg is left of DS2.seg
@@ -84,47 +111,62 @@ public:
     int
     compareTo(const DepthSegment& other) const
     {
+      
         /**
-         * If segment envelopes do not overlap, then
-         * can use standard segment lexicographic ordering.
+         * If segments are disjoint in X, X values provides ordering.
+         * This is the most common case.
          */
-        if (upwardSeg.minX() >= other.upwardSeg.maxX()
-            || upwardSeg.maxX() <= other.upwardSeg.minX()
-            || upwardSeg.minY() >= other.upwardSeg.maxY()
-            || upwardSeg.maxY() <= other.upwardSeg.minY()) {
-            return upwardSeg.compareTo(other.upwardSeg);
-        };
-
+        if (upwardSeg.minX() > other.upwardSeg.maxX())
+            return 1;
+        if (upwardSeg.maxX() < other.upwardSeg.minX())
+            return -1;
         /**
-         * Otherwise if envelopes overlap, use relative segment orientation.
-         *
-         * Collinear segments should be evaluated by previous logic
+         * The segments Y ranges should intersect since they lie on same stabbing line.
+         * But check for this and provide a result based on Y ordering
          */
-        int orientIndex = upwardSeg.orientationIndex(&(other.upwardSeg));
-
-        /*
-         * If comparison between this and other is indeterminate,
-         * try the opposite call order.
-         * orientationIndex value is 1 if this is left of other,
-         * so have to flip sign to get proper comparison value of
-         * -1 if this is leftmost
+        if (upwardSeg.minY() > other.upwardSeg.maxY())
+            return 1;
+        if (upwardSeg.maxY() < other.upwardSeg.minY())
+            return -1;
+        
+        /**
+         * Check if some segment point is left or right
+         * of the other segment in its Y extent.
          */
-        if(orientIndex == 0) {
-            orientIndex = -1 * other.upwardSeg.orientationIndex(&upwardSeg);
+        int comp00 = comparePointInYExtent(upwardSeg.p0, other.upwardSeg);
+        if (comp00 != 0) return comp00;
+        int comp01 = comparePointInYExtent(upwardSeg.p1, other.upwardSeg);
+        if (comp01 != 0) return comp01;
+        //-- negate orientation for other/this checks
+        int comp10 = -comparePointInYExtent(other.upwardSeg.p0, upwardSeg);
+        if (comp10 != 0) return comp10;
+        int comp11 = -comparePointInYExtent(other.upwardSeg.p1, upwardSeg);
+        if (comp11 != 0) return comp11;
+        
+        /**
+         * If point checks in Y range are indeterminate,
+         * segments touch at a point
+         * and lie above and below that point, or are horizontal.
+         * Order according to their Y values.
+         * (The ordering in this case doesn't matter, it just has to be consistent)
+         */
+        if (upwardSeg.maxY() > other.upwardSeg.maxY())
+            return 1;
+        if (upwardSeg.maxY() < other.upwardSeg.maxY())
+            return -1;
+        
+        /**
+         * If both are horizontal order by X
+         */
+        if (upwardSeg.isHorizontal() && other.upwardSeg.isHorizontal()) {
+            if (upwardSeg.minX() < other.upwardSeg.minX())
+                return -1;
+            if (upwardSeg.minX() > other.upwardSeg.minX())
+                return 1;
         }
-
-        // if orientation is determinate, return it
-        if(orientIndex != 0) {
-            return orientIndex;
-        }
-
-        /**
-         * If segment envelopes overlap and they are collinear,
-         * since segments do not cross they must be equal.
-         */
+        
         // assert: segments are equal
-        return 0;
-    }
+        return 0;    }
 };
 
 struct DepthSegmentLessThan {
