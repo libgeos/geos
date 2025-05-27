@@ -217,57 +217,57 @@ public:
      * allowing all cleaning parameters to be specified.
      *
      * @param coverage an array of polygonal geometries to clean
-     * @param snappingDistance the distance tolerance for snapping
-     * @param overlapMergeStrategy the strategy to use for merging overlaps
-     * @param maxGapWidth the maximum width of gaps to merge
+     * @param snapDistance the distance tolerance for snapping
+     * @param mergeStrategy the strategy to use for merging overlaps
+     * @param maxWidth the maximum width of gaps to merge
      * @return the clean coverage
      */
     static std::vector<std::unique_ptr<Geometry>> clean(
-        std::vector<const Geometry*>& p_coverage,
-        double p_snappingDistance,
-        int p_overlapMergeStrategy,
-        double p_maxGapWidth);
+        std::vector<const Geometry*>& coverage,
+        double snapDistance,
+        int mergeStrategy,
+        double maxWidth);
 
     /**
      * Cleans a set of polygonal geometries to form a valid coverage,
      * using the default overlap merge strategy {@link #MERGE_LONGEST_BORDER}.
      *
      * @param coverage an array of polygonal geometries to clean
-     * @param snappingDistance the distance tolerance for snapping
-     * @param maxGapWidth the maximum width of gaps to merge
+     * @param snapDistance the distance tolerance for snapping
+     * @param maxWidth the maximum width of gaps to merge
      * @return the clean coverage
      */
     static std::vector<std::unique_ptr<Geometry>> clean(
-        std::vector<const Geometry*>& p_coverage,
-        double p_snappingDistance,
-        double p_maxGapWidth);
+        std::vector<const Geometry*>& coverage,
+        double snapDistance,
+        double maxWidth);
 
     /**
      * Cleans a set of polygonal geometries to form a valid coverage,
      * using the default snapping distance tolerance.
      *
      * @param coverage an array of polygonal geometries to clean
-     * @param overlapMergeStrategy the strategy to use for merging overlaps
-     * @param maxGapWidth the maximum width of gaps to merge
+     * @param mergeStrategy the strategy to use for merging overlaps
+     * @param maxWidth the maximum width of gaps to merge
      * @return the clean coverage
      */
     static std::vector<std::unique_ptr<Geometry>> cleanOverlapGap(
-        std::vector<const Geometry*>& p_coverage,
-        int p_overlapMergeStrategy,
-        double p_maxGapWidth);
+        std::vector<const Geometry*>& coverage,
+        int mergeStrategy,
+        double maxWidth);
 
     /**
      * Cleans a set of polygonal geometries to form a valid coverage,
      * with default snapping tolerance and overlap merging,
      * and merging gaps which are narrower than a specified width.
      *
-     * @param coverage an array of polygonal geometries to clean
-     * @param maxGapWidth the maximum width of gaps to merge
+     * @param p_coverage an array of polygonal geometries to clean
+     * @param coverage the maximum width of gaps to merge
      * @return the clean coverage
      */
     static std::vector<std::unique_ptr<Geometry>> cleanGapWidth(
-        std::vector<const Geometry*>& p_coverage,
-        double p_maxGapWidth);
+        std::vector<const Geometry*>& coverage,
+        double maxWidth);
 
     /**
      * Sets the snapping distance tolerance.
