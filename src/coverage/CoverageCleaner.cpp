@@ -60,11 +60,55 @@ namespace geos {     // geos
 namespace coverage { // geos.coverage
 
 
-/**
- * Create a new cleaner instance for a set of polygonal geometries.
- *
- * @param coverage an array of polygonal geometries to clean
- */
+/* public static */
+std::vector<std::unique_ptr<Geometry>>
+CoverageCleaner::clean(std::vector<const Geometry*>& p_coverage,
+    double p_snappingDistance,
+    int p_overlapMergeStrategy,
+    double p_maxGapWidth)
+{
+    CoverageCleaner cc(p_coverage);
+    cc.setSnappingDistance(p_snappingDistance);
+    cc.setGapMaximumWidth(p_maxGapWidth);
+    cc.setOverlapMergeStrategy(p_overlapMergeStrategy);
+    cc.clean();
+    return cc.getResult();
+}
+
+
+/* public static */
+std::vector<std::unique_ptr<Geometry>>
+CoverageCleaner::clean(std::vector<const Geometry*>& p_coverage,
+    double p_snappingDistance,
+    double p_maxGapWidth)
+{
+    CoverageCleaner cc(p_coverage);
+    cc.setSnappingDistance(p_snappingDistance);
+    cc.setGapMaximumWidth(p_maxGapWidth);
+    cc.clean();
+    return cc.getResult();
+}
+
+
+/* public static */
+std::vector<std::unique_ptr<Geometry>>
+CoverageCleaner::cleanOverlapGap(std::vector<const Geometry*>& p_coverage,
+      int p_overlapMergeStrategy,
+      double p_maxGapWidth)
+{
+    return clean(p_coverage, -1, p_overlapMergeStrategy, p_maxGapWidth);
+}
+
+
+/* public static */
+std::vector<std::unique_ptr<Geometry>>
+CoverageCleaner::cleanGapWidth(std::vector<const Geometry*>& p_coverage,
+    double p_maxGapWidth)
+{
+    return clean(p_coverage, -1, p_maxGapWidth);
+}
+
+
 /* public */
 CoverageCleaner::CoverageCleaner(std::vector<const Geometry*>& p_coverage)
     : coverage(p_coverage)
