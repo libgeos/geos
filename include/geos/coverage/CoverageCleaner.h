@@ -174,7 +174,7 @@ private:
     static Envelope extent(std::vector<const Geometry*>& geoms);
 
     void mergeOverlaps(
-        std::map<std::size_t, std::vector<std::size_t>>& overlapParentMap_p);
+        std::map<std::size_t, std::vector<std::size_t>>& overlapMap);
 
     std::unique_ptr<CleanCoverage::MergeStrategy> mergeStrategy(
         int mergeStrategyId);
@@ -210,7 +210,7 @@ public:
      *
      * @param coverage an array of polygonal geometries to clean
      */
-    CoverageCleaner(std::vector<const Geometry*>& p_coverage);
+    CoverageCleaner(std::vector<const Geometry*>& coverage);
 
     /**
      * Cleans a set of polygonal geometries to form a valid coverage,
@@ -261,7 +261,7 @@ public:
      * with default snapping tolerance and overlap merging,
      * and merging gaps which are narrower than a specified width.
      *
-     * @param p_coverage an array of polygonal geometries to clean
+     * @param coverage an array of polygonal geometries to clean
      * @param coverage the maximum width of gaps to merge
      * @return the clean coverage
      */
