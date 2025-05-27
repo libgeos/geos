@@ -262,7 +262,7 @@ public:
      * and merging gaps which are narrower than a specified width.
      *
      * @param coverage an array of polygonal geometries to clean
-     * @param coverage the maximum width of gaps to merge
+     * @param maxWidth the maximum width of gaps to merge
      * @return the clean coverage
      */
     static std::vector<std::unique_ptr<Geometry>> cleanGapWidth(
