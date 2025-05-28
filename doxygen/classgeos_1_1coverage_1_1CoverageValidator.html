@@ -67,6 +67,8 @@ Public Member Functions</h2></td></tr>
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:ae83e88118dc5b5be037449f5ed36de50" id="r_ae83e88118dc5b5be037449f5ed36de50"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1coverage_1_1CoverageValidator.html#ae83e88118dc5b5be037449f5ed36de50">isValid</a> (std::vector&lt; const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> * &gt; &amp;coverage)</td></tr>
 <tr class="separator:ae83e88118dc5b5be037449f5ed36de50"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8253bf3cef49445bd413bbb685781b8" id="r_aa8253bf3cef49445bd413bbb685781b8"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1coverage_1_1CoverageValidator.html#aa8253bf3cef49445bd413bbb685781b8">isValid</a> (std::vector&lt; const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> * &gt; &amp;coverage, double gapWidth)</td></tr>
+<tr class="separator:aa8253bf3cef49445bd413bbb685781b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2d93456296e960f1e0898045cec8d4c5" id="r_a2d93456296e960f1e0898045cec8d4c5"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1coverage_1_1CoverageValidator.html#a2d93456296e960f1e0898045cec8d4c5">hasInvalidResult</a> (const std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt; &gt; &amp;validateResult)</td></tr>
 <tr class="separator:a2d93456296e960f1e0898045cec8d4c5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abc7f8a2a40031a5a5975a520a3cc679e" id="r_abc7f8a2a40031a5a5975a520a3cc679e"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1coverage_1_1CoverageValidator.html#abc7f8a2a40031a5a5975a520a3cc679e">validate</a> (std::vector&lt; const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> * &gt; &amp;coverage)</td></tr>
@@ -119,7 +121,7 @@ Static Public Member Functions</h2></td></tr>
 </div>
 </div>
 <a id="ae83e88118dc5b5be037449f5ed36de50" name="ae83e88118dc5b5be037449f5ed36de50"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae83e88118dc5b5be037449f5ed36de50">&#9670;&#160;</a></span>isValid()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ae83e88118dc5b5be037449f5ed36de50">&#9670;&#160;</a></span>isValid() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -149,6 +151,51 @@ Static Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if the coverage is valid </dd></dl>
+
+</div>
+</div>
+<a id="aa8253bf3cef49445bd413bbb685781b8" name="aa8253bf3cef49445bd413bbb685781b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa8253bf3cef49445bd413bbb685781b8">&#9670;&#160;</a></span>isValid() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool geos::coverage::CoverageValidator::isValid </td>
+          <td>(</td>
+          <td class="paramtype">std::vector&lt; const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>coverage</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>gapWidth</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Tests whether a polygonal coverage is valid and contains no gaps narrower than a specified width.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">coverage</td><td>an array of polygons forming a coverage </td></tr>
+    <tr><td class="paramname">gapWidth</td><td>the maximum width of invalid gaps </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the coverage is valid with no narrow gaps </dd></dl>
 
 </div>
 </div>
