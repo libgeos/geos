@@ -22,6 +22,7 @@
   - Add ring buffer hole removal heuristic (GH-1233, Martin Davis)
   - Fix buffer element erosion for negative distance and remove overlay deps (GH-1239, Martin Davis)
   - Fix OverlayNG coordinate dimension handling for EMPTY geometries (GH-1258, Martin Davis)
+  - Fix DepthSegment comparison logic (really this time) (GH-1266, Martin Davis)
 
 ## Changes in 3.13.0
 2024-09-06
