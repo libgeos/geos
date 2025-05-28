@@ -116,6 +116,18 @@ public:
         std::vector<const Geometry*>& coverage);
 
     /**
+    * Tests whether a polygonal coverage is valid
+    * and contains no gaps narrower than a specified width.
+    *
+    * @param coverage an array of polygons forming a coverage
+    * @param gapWidth the maximum width of invalid gaps
+    * @return true if the coverage is valid with no narrow gaps
+    */
+    static bool isValid(
+        std::vector<const Geometry*>& coverage,
+        double gapWidth);
+
+    /**
     * Tests if some element of an array of geometries is a coverage invalidity
     * indicator.
     *

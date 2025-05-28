@@ -38,6 +38,15 @@ CoverageValidator::isValid(std::vector<const Geometry*>& coverage)
 
 /* public static */
 bool
+CoverageValidator::isValid(std::vector<const Geometry*>& coverage, double p_gapWidth)
+{
+    CoverageValidator v(coverage);
+    v.setGapWidth(p_gapWidth);
+    return ! hasInvalidResult(v.validate());
+}
+
+/* public static */
+bool
 CoverageValidator::hasInvalidResult(const std::vector<std::unique_ptr<Geometry>>& validateResult)
 {
     for (const auto& geom : validateResult) {
