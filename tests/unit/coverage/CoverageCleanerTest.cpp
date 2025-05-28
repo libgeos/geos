@@ -128,14 +128,10 @@ struct test_coveragecleaner_data {
     }
 
     void
-    checkCleanSnap(std::vector<const Geometry*> cov, double snapDist)
-    {
-        std::vector<std::unique_ptr<Geometry>> covClean = CoverageCleaner::clean(cov, snapDist, 0);
-        checkValidCoverage(toArray(covClean), snapDist);
-    }
-
-    void
-    checkCleanSnap(std::vector<const Geometry*> cov, double snapDist, std::vector<const Geometry*> expected)
+    checkCleanSnap(
+        std::vector<const Geometry*> cov,
+        double snapDist,
+        std::vector<const Geometry*> expected)
     {
         std::vector<std::unique_ptr<Geometry>> actualPtr = CoverageCleaner::clean(cov, snapDist, 0);
         std::vector<const Geometry*> actual = toArray(actualPtr);
@@ -144,12 +140,42 @@ struct test_coveragecleaner_data {
     }
 
     void
-    checkCleanSnap(const std::string& wkt, double snapDist)
+    checkCleanSnap(
+        std::vector<const Geometry*> cov,
+        double snapDist)
     {
-        std::vector<std::unique_ptr<Geometry>> cov = readArray(wkt);
-        auto covArr = toArray(cov);
+        std::vector<std::unique_ptr<Geometry>> covClean = CoverageCleaner::clean(cov, snapDist, 0);
+        checkValidCoverage(toArray(covClean), snapDist);
+    }
+
+    void
+    checkCleanSnap(const std::vector<std::string>& covStrs, double snapDist)
+    {
+        std::vector<std::unique_ptr<Geometry>> cov = readArray(covStrs);
+        std::vector<const Geometry*> covArr = toArray(cov);
         checkCleanSnap(covArr, snapDist);
     }
+
+    void
+    checkCleanSnap(
+        const std::vector<std::string>& covStrs,
+        double snapDist,
+        const std::vector<std::string>& expStrs)
+    {
+        std::vector<std::unique_ptr<Geometry>> cov = readArray(covStrs);
+        std::vector<const Geometry*> covArr = toArray(cov);
+        std::vector<std::unique_ptr<Geometry>> exp = readArray(expStrs);
+        std::vector<const Geometry*> expArr = toArray(exp);
+        checkCleanSnap(covArr, snapDist, expArr);
+    }
+
+    // void
+    // checkCleanSnap(const std::string& wkt, double snapDist)
+    // {
+    //     std::unique_ptr<Geometry> covGeom = r.read(wkt);
+    //     auto covArr = toArray(covGeom);
+    //     checkCleanSnap(covArr, snapDist);
+    // }
 
     void
     checkValidCoverage(std::vector<const Geometry*> coverage, double tolerance)
@@ -162,10 +188,10 @@ struct test_coveragecleaner_data {
     }
 
     std::vector<std::unique_ptr<Geometry>>
-    readArray(std::vector<std::string>& wkts)
+    readArray(const std::vector<std::string>& wkts)
     {
         std::vector<std::unique_ptr<Geometry>> geometries;
-        for (std::string& wkt : wkts) {
+        for (const std::string& wkt : wkts) {
             auto geom = r.read(wkt);
             if (geom != nullptr) {
                 geometries.push_back(std::move(geom));
@@ -174,16 +200,16 @@ struct test_coveragecleaner_data {
         return geometries;
     }
 
-    std::vector<std::unique_ptr<Geometry>>
-    readArray(const std::string& wkt)
-    {
-        auto geom = r.read(wkt);
-        std::vector<std::unique_ptr<Geometry>> geoms;
-        for (std::size_t i = 0; i < geom->getNumGeometries(); i++) {
-            geoms.emplace_back(geom->getGeometryN(i)->clone().release());
-        }
-        return geoms;
-    }
+    // std::vector<std::unique_ptr<Geometry>>
+    // readArray(const std::string& wkt)
+    // {
+    //     auto geom = r.read(wkt);
+    //     std::vector<std::unique_ptr<Geometry>> geoms;
+    //     for (std::size_t i = 0; i < geom->getNumGeometries(); i++) {
+    //         geoms.emplace_back(geom->getGeometryN(i)->clone().release());
+    //     }
+    //     return geoms;
+    // }
 
 };
 
@@ -207,7 +233,211 @@ void object::test<1> ()
 }
 
 
+// testSingleNearMatch
+template<>
+template<>
+void object::test<2>()
+{
+    checkCleanSnap(
+        {
+            "POLYGON ((1 9, 9 9, 9 4.99, 1 5, 1 9))",
+            "POLYGON ((1 1, 1 5, 9 5, 9 1, 1 1))"
+        },
+        0.1);
+}
 
+// testManyNearMatches
+template<>
+template<>
+void object::test<3>()
+{
+    checkCleanSnap(
+        {
+            "POLYGON ((1 9, 9 9, 9 5, 8 5, 7 5, 4 5.5, 3 5, 2 5, 1 5, 1 9))",
+            "POLYGON ((1 1, 1 4.99, 2 5.01, 3.01 4.989, 5 3, 6.99 4.99, 7.98 4.98, 9 5, 9 1, 1 1))"
+        },
+        0.1);
+}
+
+// testPolygonSnappedPreserved
+// Tests that if interior point lies in a spike that is snapped away, polygon is still in result
+template<>
+template<>
+void object::test<4>()
+{
+    checkCleanSnap(
+        {"POLYGON ((90 0, 10 0, 89.99 30, 90 100, 90 0))"},
+        0.1,
+        {"POLYGON ((90 0, 10 0, 89.99 30, 90 0))"}
+        );
+}
+
+// testPolygonsSnappedPreserved
+// Tests that if interior point lies in a spike that is snapped away, polygon is still in result
+template<>
+template<>
+void object::test<5>()
+{
+    checkCleanSnap(
+        {
+            "POLYGON ((0 0, 0 2, 5 2, 5 8, 5.01 0, 0 0))",
+            "POLYGON ((0 8, 5 8, 5 2, 0 2, 0 8))"
+        },
+        0.02,
+        {
+            "POLYGON ((0 0, 0 2, 5 2, 5.01 0, 0 0))",
+            "POLYGON ((0 8, 5 8, 5 2, 0 2, 0 8))"
+        });
+}
+
+// testMergeGapToLongestBorder
+template<>
+template<>
+void object::test<6>()
+{
+    checkCleanGapWidth(
+        "GEOMETRYCOLLECTION (POLYGON ((1 9, 9 9, 9 5, 1 5, 1 9)), POLYGON ((5 1, 5 5, 1 5, 5 1)), POLYGON ((5 1, 5.1 5, 9 5, 5 1)))",
+        1,
+        "GEOMETRYCOLLECTION (POLYGON ((5.1 5, 5 5, 1 5, 1 9, 9 9, 9 5, 5.1 5)), POLYGON ((5 1, 1 5, 5 5, 5 1)), POLYGON ((5 1, 5 5, 5.1 5, 9 5, 5 1)))"
+        );
+}
+
+std::string covWithGaps = "GEOMETRYCOLLECTION (POLYGON ((1 3, 9 3, 9 1, 1 1, 1 3)), POLYGON ((1 3, 1 9, 4 9, 4 3, 3 4, 1 3)), POLYGON ((4 9, 7 9, 7 3, 6 5, 5 5, 4 3, 4 9)), POLYGON ((7 9, 9 9, 9 3, 8 3.1, 7 3, 7 9)))";
+
+// testMergeGapWidth_0
+template<>
+template<>
+void object::test<7>()
+{
+    checkCleanGapWidth(covWithGaps,
+        0,
+        "GEOMETRYCOLLECTION (POLYGON ((9 3, 9 1, 1 1, 1 3, 4 3, 7 3, 9 3)), POLYGON ((1 9, 4 9, 4 3, 3 4, 1 3, 1 9)), POLYGON ((6 5, 5 5, 4 3, 4 9, 7 9, 7 3, 6 5)), POLYGON ((7 9, 9 9, 9 3, 8 3.1, 7 3, 7 9)))"
+        );
+}
+
+// testMergeGapWidth_1
+template<>
+template<>
+void object::test<8>()
+{
+    checkCleanGapWidth(covWithGaps,
+        1,
+        "GEOMETRYCOLLECTION (POLYGON ((7 3, 9 3, 9 1, 1 1, 1 3, 4 3, 7 3)), POLYGON ((1 9, 4 9, 4 3, 1 3, 1 9)), POLYGON ((7 3, 6 5, 5 5, 4 3, 4 9, 7 9, 7 3)), POLYGON ((7 9, 9 9, 9 3, 7 3, 7 9)))"
+        );
+}
+
+// testMergeGapWidth_2
+template<>
+template<>
+void object::test<9>()
+{
+    checkCleanGapWidth(covWithGaps,
+        2,
+        "GEOMETRYCOLLECTION (POLYGON ((9 3, 9 1, 1 1, 1 3, 4 3, 7 3, 9 3)), POLYGON ((1 9, 4 9, 4 3, 1 3, 1 9)), POLYGON ((7 3, 4 3, 4 9, 7 9, 7 3)), POLYGON ((9 9, 9 3, 7 3, 7 9, 9 9)))"
+        );
+}
+
+std::string covWithOverlap = "GEOMETRYCOLLECTION (POLYGON ((1 3, 5 3, 4 1, 1 1, 1 3)), POLYGON ((1 3, 1 9, 4 9, 4 3, 3 1.9, 1 3)))";
+
+// testMergeOverlapMinArea
+template<>
+template<>
+void object::test<10>()
+{
+    checkCleanOverlapMerge(covWithOverlap,
+        CoverageCleaner::MERGE_MIN_AREA,
+        "GEOMETRYCOLLECTION (POLYGON ((5 3, 4 1, 1 1, 1 3, 4 3, 5 3)), POLYGON ((1 9, 4 9, 4 3, 1 3, 1 9)))"
+        );
+}
+
+// testMergeOverlapMaxArea
+template<>
+template<>
+void object::test<11>()
+{
+    checkCleanOverlapMerge(covWithOverlap,
+        CoverageCleaner::MERGE_MAX_AREA,
+        "GEOMETRYCOLLECTION (POLYGON ((1 1, 1 3, 3 1.9, 4 3, 5 3, 4 1, 1 1)), POLYGON ((1 3, 1 9, 4 9, 4 3, 3 1.9, 1 3)))"
+        );
+}
+
+// testMergeOverlapMinId
+template<>
+template<>
+void object::test<12>()
+{
+    checkCleanOverlapMerge(covWithOverlap,
+        CoverageCleaner::MERGE_MIN_INDEX,
+        "GEOMETRYCOLLECTION (POLYGON ((5 3, 4 1, 1 1, 1 3, 4 3, 5 3)), POLYGON ((1 9, 4 9, 4 3, 1 3, 1 9)))"
+        );
+}
+
+// testMergeOverlap2
+template<>
+template<>
+void object::test<13>()
+{
+    checkCleanSnap(
+        {
+            "POLYGON ((5 9, 9 9, 9 1, 5 1, 5 9))",
+            "POLYGON ((1 5, 5 5, 5 2, 1 2, 1 5))",
+            "POLYGON ((2 7, 5 7, 5 4, 2 4, 2 7))"
+        },
+        0.1,
+        {
+            "POLYGON ((5 1, 5 2, 5 4, 5 5, 5 7, 5 9, 9 9, 9 1, 5 1))",
+            "POLYGON ((5 2, 1 2, 1 5, 2 5, 5 5, 5 4, 5 2))",
+            "POLYGON ((5 5, 2 5, 2 7, 5 7, 5 5))"
+        });
+}
+
+// testMergeOverlap
+template<>
+template<>
+void object::test<14>()
+{
+    checkCleanOverlapMerge(
+        "GEOMETRYCOLLECTION (POLYGON ((5 9, 9 9, 9 1, 5 1, 5 9)), POLYGON ((1 5, 5 5, 5 2, 1 2, 1 5)), POLYGON ((2 7, 5 7, 5 4, 2 4, 2 7)))",
+        CoverageCleaner::MERGE_LONGEST_BORDER,
+        "GEOMETRYCOLLECTION (POLYGON ((5 7, 5 9, 9 9, 9 1, 5 1, 5 2, 5 4, 5 5, 5 7)), POLYGON ((5 2, 1 2, 1 5, 2 5, 5 5, 5 4, 5 2)), POLYGON ((2 5, 2 7, 5 7, 5 5, 2 5)))"
+        );
+}
+
+//-------------------------------------------
+
+//-- a duplicate coverage element is assigned to the lowest result index
+// testDuplicateItems
+template<>
+template<>
+void object::test<15>()
+{
+    checkClean(
+        "GEOMETRYCOLLECTION (POLYGON ((1 9, 9 1, 1 1, 1 9)), POLYGON ((1 9, 9 1, 1 1, 1 9)))",
+        "GEOMETRYCOLLECTION (POLYGON ((1 9, 9 1, 1 1, 1 9)), POLYGON EMPTY)"
+        );
+}
+
+// testCoveredItem
+template<>
+template<>
+void object::test<16>()
+{
+    checkClean(
+        "GEOMETRYCOLLECTION (POLYGON ((1 9, 9 9, 9 4, 1 4, 1 9)), POLYGON ((2 5, 2 8, 8 8, 8 5, 2 5)))",
+        "GEOMETRYCOLLECTION (POLYGON ((9 9, 9 4, 1 4, 1 9, 9 9)), POLYGON EMPTY)"
+        );
+}
+
+// testCoveredItemMultiPolygon
+template<>
+template<>
+void object::test<17>()
+{
+    checkClean(
+        "GEOMETRYCOLLECTION (MULTIPOLYGON (((1 1, 1 5, 5 5, 5 1, 1 1)), ((6 5, 6 1, 9 1, 6 5))), POLYGON ((6 1, 6 5, 9 1, 6 1)))",
+        "GEOMETRYCOLLECTION (MULTIPOLYGON (((1 5, 5 5, 5 1, 1 1, 1 5)), ((6 5, 9 1, 6 1, 6 5))), POLYGON EMPTY)"
+        );
+}
 
 
 
