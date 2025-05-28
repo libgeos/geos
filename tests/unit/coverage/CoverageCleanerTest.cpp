@@ -169,14 +169,6 @@ struct test_coveragecleaner_data {
         checkCleanSnapInt(covArr, snapDist, expArr);
     }
 
-    // void
-    // checkCleanSnap(const std::string& wkt, double snapDist)
-    // {
-    //     std::unique_ptr<Geometry> covGeom = r.read(wkt);
-    //     auto covArr = toArray(covGeom);
-    //     checkCleanSnap(covArr, snapDist);
-    // }
-
     void
     checkValidCoverage(std::vector<const Geometry*> coverage, double tolerance)
     {
@@ -199,17 +191,6 @@ struct test_coveragecleaner_data {
         }
         return geometries;
     }
-
-    // std::vector<std::unique_ptr<Geometry>>
-    // readArray(const std::string& wkt)
-    // {
-    //     auto geom = r.read(wkt);
-    //     std::vector<std::unique_ptr<Geometry>> geoms;
-    //     for (std::size_t i = 0; i < geom->getNumGeometries(); i++) {
-    //         geoms.emplace_back(geom->getGeometryN(i)->clone().release());
-    //     }
-    //     return geoms;
-    // }
 
 };
 

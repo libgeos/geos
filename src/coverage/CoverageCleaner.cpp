@@ -24,15 +24,11 @@
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/Polygon.h>
-#include <geos/index/strtree/STRtree.h>
-#include <geos/index/quadtree/Quadtree.h>
-#include <geos/noding/NodedSegmentString.h>
 #include <geos/noding/Noder.h>
 #include <geos/noding/SegmentStringUtil.h>
 #include <geos/noding/snap/SnappingNoder.h>
 #include <geos/operation/polygonize/Polygonizer.h>
 #include <geos/operation/relateng/RelateNG.h>
-#include <geos/operation/relateng/RelatePredicate.h>
 #include <geos/util/IllegalArgumentException.h>
 
 
@@ -45,15 +41,11 @@ using geos::geom::GeometryFactory;
 using geos::geom::MultiPolygon;
 using geos::geom::Point;
 using geos::geom::Polygon;
-using geos::index::strtree::STRtree;
-using geos::index::quadtree::Quadtree;
-using geos::noding::NodedSegmentString;
 using geos::noding::Noder;
 using geos::noding::SegmentStringUtil;
 using geos::noding::snap::SnappingNoder;
 using geos::operation::polygonize::Polygonizer;
 using geos::operation::relateng::RelateNG;
-using geos::operation::relateng::RelatePredicate;
 
 
 namespace geos {     // geos
@@ -116,13 +108,7 @@ CoverageCleaner::CoverageCleaner(std::vector<const Geometry*>& p_coverage)
     , snappingDistance(computeDefaultSnappingDistance(p_coverage))
 {}
 
-/**
- * Sets the snapping distance tolerance.
- * The default is to use a small fraction of the input extent diameter.
- * A distance of zero prevents snapping from being used.
- *
- * @param snappingDistance the snapping distance tolerance
- */
+
 /* public */
 void
 CoverageCleaner::setSnappingDistance(double p_snappingDistance)
@@ -133,12 +119,7 @@ CoverageCleaner::setSnappingDistance(double p_snappingDistance)
     snappingDistance = p_snappingDistance;
 }
 
-/**
- * Sets the overlap merge strategy to use.
- * The default is {@link #MERGE_LONGEST_BORDER}.
- *
- * @param mergeStrategy the merge strategy code
- */
+
 /* public */
 void
 CoverageCleaner::setOverlapMergeStrategy(int mergeStrategy)
@@ -150,13 +131,7 @@ CoverageCleaner::setOverlapMergeStrategy(int mergeStrategy)
     overlapMergeStrategy = mergeStrategy;
 }
 
-/**
- * Sets the maximum width of the gaps that will be filled and merged.
- * The width of a gap is twice the radius of the Maximum Inscribed Circle in the gap polygon,
- * A width of zero prevents gaps from being merged.
- *
- * @param maxWidth the maximum gap width to merge
- */
+
 /* public */
 void
 CoverageCleaner::setGapMaximumWidth(double maxWidth)
@@ -167,10 +142,6 @@ CoverageCleaner::setGapMaximumWidth(double maxWidth)
 }
 
 
-/**
- * Cleans the coverage.
- *
- */
 /* public */
 void
 CoverageCleaner::clean()
@@ -186,11 +157,7 @@ CoverageCleaner::clean()
     //System.out.println("Merge Gaps: " + sw.getTimeString());
 }
 
-/**
- * Gets the cleaned coverage.
- *
- * @return the clean coverage
- */
+
 /* public */
 std::vector<std::unique_ptr<Geometry>>
 CoverageCleaner::getResult()
@@ -198,12 +165,7 @@ CoverageCleaner::getResult()
     return cleanCov->toCoverage(geomFactory);
 }
 
-/**
- * Gets polygons representing the overlaps in the input,
- * which have been merged.
- *
- * @return a list of overlap polygons
- */
+
 /* public */
 std::vector<const Polygon*>
 CoverageCleaner::getOverlaps()
@@ -211,12 +173,7 @@ CoverageCleaner::getOverlaps()
     return overlaps;
 }
 
-/**
- * Gets polygons representing the gaps in the input
- * which have been merged.
- *
- * @return a list of gap polygons
- */
+
 /* public */
 std::vector<const Polygon*>
 CoverageCleaner::getMergedGaps()
@@ -225,7 +182,6 @@ CoverageCleaner::getMergedGaps()
 }
 
 //-------------------------------------------------
-
 
 /* private static */
 double
@@ -311,6 +267,7 @@ CoverageCleaner::computeResultants(double tolerance)
     mergableGaps = findMergableGaps(gaps);
  }
 
+
 /* private */
 void
 CoverageCleaner::createCoverageIndex()
@@ -321,6 +278,7 @@ CoverageCleaner::createCoverageIndex()
     }
 }
 
+
 /* private */
 void
 CoverageCleaner::classifyResult(std::vector<std::unique_ptr<Polygon>>& rs)
@@ -329,6 +287,7 @@ CoverageCleaner::classifyResult(std::vector<std::unique_ptr<Polygon>>& rs)
         classifyResultant(i, rs[i].get());
     }
 }
+
 
 /* private */
 void
@@ -496,9 +455,6 @@ CoverageCleaner::toPolygonArray(const Geometry* geom)
     }
     return geoms;
 }
-
-
-
 
 
 } // namespace geos.coverage
