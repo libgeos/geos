@@ -128,7 +128,7 @@ struct test_coveragecleaner_data {
     }
 
     void
-    checkCleanSnap(
+    checkCleanSnapInt(
         std::vector<const Geometry*> cov,
         double snapDist,
         std::vector<const Geometry*> expected)
@@ -140,7 +140,7 @@ struct test_coveragecleaner_data {
     }
 
     void
-    checkCleanSnap(
+    checkCleanSnapInt(
         std::vector<const Geometry*> cov,
         double snapDist)
     {
@@ -153,7 +153,7 @@ struct test_coveragecleaner_data {
     {
         std::vector<std::unique_ptr<Geometry>> cov = readArray(covStrs);
         std::vector<const Geometry*> covArr = toArray(cov);
-        checkCleanSnap(covArr, snapDist);
+        checkCleanSnapInt(covArr, snapDist);
     }
 
     void
@@ -166,7 +166,7 @@ struct test_coveragecleaner_data {
         std::vector<const Geometry*> covArr = toArray(cov);
         std::vector<std::unique_ptr<Geometry>> exp = readArray(expStrs);
         std::vector<const Geometry*> expArr = toArray(exp);
-        checkCleanSnap(covArr, snapDist, expArr);
+        checkCleanSnapInt(covArr, snapDist, expArr);
     }
 
     // void
