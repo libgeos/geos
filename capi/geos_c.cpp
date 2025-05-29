@@ -52,11 +52,19 @@
 #define GEOSGeoJSONReader geos::io::GeoJSONReader
 #define GEOSGeoJSONWriter geos::io::GeoJSONWriter
 
+// Implementation struct for the GEOSCoverageCleanParams object
+typedef struct {
+    double snappingDistance;
+    int    overlapMergeStrategy;
+    double gapMaximumWidth;
+} GEOSCoverageCleanParams;
+
 // Implementation struct for the GEOSMakeValidParams object
 typedef struct {
     int method;
     int keepCollapsed;
 } GEOSMakeValidParams;
+
 
 #include "geos_c.h"
 
@@ -1005,6 +1013,60 @@ extern "C" {
         const GEOSMakeValidParams* params)
     {
         return GEOSMakeValidWithParams_r(handle, g, params);
+    }
+
+    GEOSCoverageCleanParams*
+    GEOSCoverageCleanParams_create()
+    {
+        return GEOSCoverageCleanParams_create_r(handle);
+    }
+
+    void
+    GEOSCoverageCleanParams_destroy(
+        GEOSCoverageCleanParams* params)
+    {
+        return GEOSCoverageCleanParams_destroy_r(handle, params);
+    }
+
+    int
+    GEOSCoverageCleanParams_setSnappingDistance(
+        GEOSCoverageCleanParams* params, double snappingDistance)
+    {
+        return GEOSCoverageCleanParams_setSnappingDistance_r(
+            handle, params, snappingDistance);
+    }
+
+    int
+    GEOSCoverageCleanParams_setGapMaximumWidth(
+        GEOSCoverageCleanParams* params, double gapMaximumWidth)
+    {
+        return GEOSCoverageCleanParams_setGapMaximumWidth_r(
+            handle, params, gapMaximumWidth);
+    }
+
+    int
+    GEOSCoverageCleanParams_setOverlapMergeStrategy(
+        GEOSCoverageCleanParams* params, int overlapMergeStrategy)
+    {
+        return GEOSCoverageCleanParams_setOverlapMergeStrategy_r(
+            handle, params, overlapMergeStrategy);
+    }
+
+    GEOSGeometry *
+    GEOSCoverageCleanWithParams(
+        const GEOSGeometry* input,
+        const GEOSCoverageCleanParams* params)
+    {
+        return GEOSCoverageCleanWithParams_r(
+            handle, input, params);
+    }
+
+    GEOSGeometry *
+    GEOSCoverageClean(
+        const GEOSGeometry * input)
+    {
+        return GEOSCoverageClean_r(
+            handle, input);
     }
 
     Geometry*

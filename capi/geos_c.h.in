@@ -169,6 +169,13 @@ typedef struct GEOSSTRtree_t GEOSSTRtree;
 typedef struct GEOSBufParams_t GEOSBufferParams;
 
 /**
+* Parameter object for coverage cleaning options.
+* \see GEOSCoverageCleanParams_create()
+* \see GEOSCoverageCleanParams_destroy()
+*/
+typedef struct GEOSCoverageCleanParams_t GEOSCoverageCleanParams;
+
+/**
 * Parameter object for validity enforcement.
 * \see GEOSMakeValidParams_create()
 * \see GEOSMakeValidParams_destroy()
@@ -878,6 +885,51 @@ GEOSCoverageSimplifyVW_r(
     const GEOSGeometry* input,
     double tolerance,
     int preserveBoundary);
+
+/** \see GEOSCoverageCleanParams_create */
+extern GEOSCoverageCleanParams GEOS_DLL *
+GEOSCoverageCleanParams_create_r(
+    GEOSContextHandle_t extHandle);
+
+/** \see GEOSCoverageCleanParams_destroy */
+extern void GEOS_DLL
+GEOSCoverageCleanParams_destroy_r(
+    GEOSContextHandle_t extHandle,
+    GEOSCoverageCleanParams* params);
+
+/** \see GEOSCoverageCleanParams_setSnappingDistance */
+extern int GEOS_DLL
+GEOSCoverageCleanParams_setSnappingDistance_r(
+    GEOSContextHandle_t extHandle,
+    GEOSCoverageCleanParams* params,
+    double snappingDistance);
+
+/** \see GEOSCoverageCleanParams_setGapMaximumWidth */
+extern int GEOS_DLL
+GEOSCoverageCleanParams_setGapMaximumWidth_r(
+    GEOSContextHandle_t extHandle,
+    GEOSCoverageCleanParams* params,
+    double gapMaximumWidth);
+
+/** \see GEOSCoverageCleanParams_setOverlapMergeStrategy */
+extern int GEOS_DLL
+GEOSCoverageCleanParams_setOverlapMergeStrategy_r(
+    GEOSContextHandle_t extHandle,
+    GEOSCoverageCleanParams* params,
+    int overlapMergeStrategy);
+
+/** \see GEOSCoverageCleanWithParams */
+extern GEOSGeometry GEOS_DLL *
+GEOSCoverageCleanWithParams_r(
+    GEOSContextHandle_t extHandle,
+    const GEOSGeometry* input,
+    const GEOSCoverageCleanParams* params);
+
+/** \see GEOSCoverageClean */
+extern GEOSGeometry GEOS_DLL *
+GEOSCoverageClean_r(
+    GEOSContextHandle_t extHandle,
+    const GEOSGeometry* input);
 
 /* ========= Topology Operations ========= */
 
@@ -4269,7 +4321,153 @@ extern GEOSGeometry GEOS_DLL * GEOSCoverageSimplifyVW(
     double tolerance,
     int preserveBoundary);
 
+/**
+* Create a default GEOSCoverageCleanParams object for controlling
+* the way invalid polygon interactions are repaird by \ref GEOSCoverageCleanWithParams.
+* \return A newly allocated GEOSCoverageCleanParams. NULL on exception.
+* Caller is responsible for freeing with GEOSCoverageCleanParams_destroy().
+*
+* \since 3.14
+*/
+extern GEOSCoverageCleanParams GEOS_DLL *
+GEOSCoverageCleanParams_create();
+
+/**
+* Destroy a GEOSCoverageCleanParams and free all associated memory.
+* \param params The object to destroy.
+*
+* \since 3.14
+*/
+extern void GEOS_DLL
+GEOSCoverageCleanParams_destroy(
+    GEOSCoverageCleanParams* params);
+
+/**
+* Snapping to nearby vertices and line segment snapping
+* is used to improve noding robustness
+* and eliminate small errors in an efficient way,
+* By default this uses a very small snapping distance
+* based on the extent of the input data.
+* The snapping distance may be specified explicitly.
+* This can reduce the number of overlaps and gaps that need to be merged,
+* and reduce the risk of spikes formed by merging gaps.
+* However, a large snapping distance may introduce undesirable
+* data alteration.
+*
+* A distance of zero prevents snapping from being used.
+* \see geos::coverage::CoverageCleaner::setSnappingDistance
+* \param params The GEOSCoverageCleanParams to operate on
+* \param snappingDistance Set to 0.0 for no snapping.
+* \return 0 on exception, 1 on success.
+*
+* \since 3.14
+*/
+extern int GEOS_DLL
+GEOSCoverageCleanParams_setSnappingDistance(
+    GEOSCoverageCleanParams *params,
+    double snappingDistance);
+
+/**
+* Gaps which are wider than a given distance are merged with an adjacent polygon.
+* Polygon width is determined as twice the radius of the MaximumInscribedCircle
+* of the gap polygon.
+* Gaps are merged with the adjacent polygon with longest shared border.
+* Empty holes in input polygons are treated as gaps, and may be filled in.
+* Gaps which are not fully enclosed ("inlets") are not removed.
+*
+* The width of a gap is twice the radius of the Maximum Inscribed Circle in the gap polygon,
+* A width of zero prevents gaps from being merged.
+*
+* \see geos::coverage::CoverageCleaner::setGapMaximumWidth
+* \param params The GEOSCoverageCleanParams to operate on
+* \param gapMaximumWidth Set to 0.0 for no snapping.
+* \return 0 on exception, 1 on success.
+*
+* \since 3.14
+*/
+extern int GEOS_DLL
+GEOSCoverageCleanParams_setGapMaximumWidth(
+    GEOSCoverageCleanParams* params,
+    double gapMaximumWidth);
+
+/**
+* Overlap repair strategies.
+* \see GEOSCoverageCleanParams_setOverlapMergeStrategy
+*/
+enum GEOSOverlapMerge {
+    /** Merge strategy that chooses polygon with longest common border */
+    GEOS_MERGE_LONGEST_BORDER = 0,
+    /** Merge strategy that chooses polygon with maximum area */
+    GEOS_MERGE_MAX_AREA       = 1,
+    /** Merge strategy that chooses polygon with minimum area */
+    GEOS_MERGE_MIN_AREA       = 2,
+    /** Merge strategy that chooses polygon with smallest input index */
+    GEOS_MERGE_MIN_INDEX      = 3
+};
+
+/*
+* Sets the overlap merge strategy to use, using one from \ref GEOSOverlapMerge.
+* Overlaps are merged with an adjacent polygon chosen according to a specified merge strategy.
+* The supported strategies are:
+*
+*   * **Longest Border**: (default) merge with the polygon with longest shared border (GEOS_MERGE_LONGEST_BORDER.)
+*   * **Maximum/Minimum Area**: merge with the polygon with largest or smallest area (GEOS_MERGE_MAX_AREA, GEOS_MERGE_MIN_AREA.)
+*   * **Minimum Index**: merge with the polygon with the lowest index in the input array (GEOS_MERGE_MIN_INDEX.)
+*
+* This allows sorting the input according to some criteria to provide a priority
+* for merging gaps.
+*
+* The default is GEOS_MERGE_LONGEST_BORDER.
+*
+* \see geos::coverage::CoverageCleaner::setGapMaximumWidth
+* \param params The GEOSCoverageCleanParams to operate on
+* \param overlapMergeStrategy One of \ref GEOSOverlapMerge strategies
+* \return 0 on exception, 1 on success.
+*
+* \since 3.14
+*/
+extern int GEOS_DLL
+GEOSCoverageCleanParams_setOverlapMergeStrategy(
+    GEOSCoverageCleanParams* params,
+    int overlapMergeStrategy);
+
+/**
+* Operates on a list of polygonal geometry with "exactly matching"
+* edge geometry, to fix cases where the geometry does not in fact
+* exactly match.
+*
+* The input is a collection of polygons, and the output is a collection
+* with the same number of cleaned polygons, in the same order as
+* the input. Polygons that have collapsed during cleaning will be returned
+* as empties.
+*
+* \param input The dirty polygonal coverage,
+*        stored in a geometry collection. All members must be POLYGON
+*        or MULTIPOLYGON.
+* \param params A GEOSCoverageCleanParams to control the options
+*        used in cleaning the coverage.
+* \return A collection containing the cleaned geometries, or null
+*         on error. Where cleaning has resulted in polygon collapse,
+*         an EMPTY geometry will be returned as part of the collection.
+*
+* \since 3.14
+*/
+extern GEOSGeometry GEOS_DLL *
+GEOSCoverageCleanWithParams(
+    const GEOSGeometry* input,
+    const GEOSCoverageCleanParams* params
+);
+
+/** \see GEOSCoverageCleanWithParams */
+extern GEOSGeometry GEOS_DLL *
+GEOSCoverageClean(
+    const GEOSGeometry* input);
+
+
+
+
 ///@}
+
 
 /* ========== Construction Operations ========== */
 /** @name Geometric Constructions
