@@ -28,9 +28,10 @@
 #include <geos/algorithm/distance/DiscreteFrechetDistance.h>
 #include <geos/algorithm/hull/ConcaveHull.h>
 #include <geos/algorithm/hull/ConcaveHullOfPolygons.h>
-#include <geos/coverage/CoverageValidator.h>
+#include <geos/coverage/CoverageCleaner.h>
 #include <geos/coverage/CoverageSimplifier.h>
 #include <geos/coverage/CoverageUnion.h>
+#include <geos/coverage/CoverageValidator.h>
 #include <geos/geom/CircularString.h>
 #include <geos/geom/CompoundCurve.h>
 #include <geos/geom/Coordinate.h>
@@ -139,8 +140,8 @@
 // violations.
 #define GEOSGeometry geos::geom::Geometry
 #define GEOSPreparedGeometry geos::geom::prep::PreparedGeometry
-#define GEOSCoordSequence geos::geom::CoordinateSequence
 #define GEOSClusterInfo geos::operation::cluster::Clusters
+#define GEOSCoordSequence geos::geom::CoordinateSequence
 #define GEOSBufferParams geos::operation::buffer::BufferParameters
 #define GEOSSTRtree geos::index::strtree::TemplateSTRtree<void*>
 #define GEOSWKTReader geos::io::WKTReader
@@ -149,6 +150,13 @@
 #define GEOSWKBWriter geos::io::WKBWriter
 #define GEOSGeoJSONReader geos::io::GeoJSONReader
 #define GEOSGeoJSONWriter geos::io::GeoJSONWriter
+
+// Implementation struct for the GEOSCoverageCleanParams object
+typedef struct {
+    double snappingDistance;
+    int    overlapMergeStrategy;
+    double gapMaximumWidth;
+} GEOSCoverageCleanParams;
 
 // Implementation struct for the GEOSMakeValidParams object
 typedef struct {
@@ -2330,6 +2338,10 @@ extern "C" {
             return out.release();
         });
     }
+
+/************************************************************************
+ * Make Valid
+ */
 
     Geometry*
     GEOSMakeValid_r(GEOSContextHandle_t extHandle, const Geometry* g)
@@ -4538,6 +4550,105 @@ extern "C" {
     }
 
 
+/************************************************************************
+ * Coverage Cleaner
+ */
+
+    GEOSCoverageCleanParams*
+    GEOSCoverageCleanParams_create_r(GEOSContextHandle_t extHandle)
+    {
+        return execute(extHandle, [&]() {
+            GEOSCoverageCleanParams* p = new GEOSCoverageCleanParams();
+            p->overlapMergeStrategy = geos::coverage::CoverageCleaner::MERGE_LONGEST_BORDER;
+            p->snappingDistance = -1.0;
+            p->gapMaximumWidth = 0.0;
+            return p;
+        });
+    }
+
+    void
+    GEOSCoverageCleanParams_destroy_r(GEOSContextHandle_t extHandle,
+        GEOSCoverageCleanParams* params)
+    {
+        (void)extHandle;
+        delete params;
+    }
+
+    int
+    GEOSCoverageCleanParams_setSnappingDistance_r(GEOSContextHandle_t extHandle,
+        GEOSCoverageCleanParams* params, double snappingDistance)
+    {
+        return execute(extHandle, 0, [&]() {
+            params->snappingDistance = snappingDistance;
+            return 1;
+        });
+    }
+
+    int
+    GEOSCoverageCleanParams_setGapMaximumWidth_r(GEOSContextHandle_t extHandle,
+        GEOSCoverageCleanParams* params, double gapMaximumWidth)
+    {
+        return execute(extHandle, 0, [&]() {
+            params->gapMaximumWidth = gapMaximumWidth;
+            return 1;
+        });
+    }
+
+    int
+    GEOSCoverageCleanParams_setOverlapMergeStrategy_r(GEOSContextHandle_t extHandle,
+        GEOSCoverageCleanParams* params, int overlapMergeStrategy)
+    {
+        return execute(extHandle, 0, [&]() {
+            if (   overlapMergeStrategy != geos::coverage::CoverageCleaner::MERGE_LONGEST_BORDER
+                && overlapMergeStrategy != geos::coverage::CoverageCleaner::MERGE_MAX_AREA
+                && overlapMergeStrategy != geos::coverage::CoverageCleaner::MERGE_MIN_AREA
+                && overlapMergeStrategy != geos::coverage::CoverageCleaner::MERGE_MIN_INDEX)
+            {
+                extHandle->ERROR_MESSAGE("GEOSCoverageCleanParams_setOverlapMergeStrategy: Invalid overlapMergeStrategy");
+                return 0;
+            }
+            params->overlapMergeStrategy = overlapMergeStrategy;
+            return 1;
+        });
+    }
+
+    GEOSGeometry *
+    GEOSCoverageCleanWithParams_r(GEOSContextHandle_t extHandle,
+        const GEOSGeometry* input,
+        const GEOSCoverageCleanParams* params)
+    {
+        using geos::coverage::CoverageCleaner;
+
+        return execute(extHandle, [&]() -> Geometry* {
+            const GeometryCollection* col = dynamic_cast<const GeometryCollection*>(input);
+            if (!col)
+                return nullptr;
+
+            std::vector<const Geometry*> coverage;
+            for (const auto& g : *col) {
+                coverage.push_back(g.get());
+            }
+            geos::coverage::CoverageCleaner c(coverage);
+            if (params) {
+                c.setSnappingDistance(params->snappingDistance);
+                c.setGapMaximumWidth(params->gapMaximumWidth);
+                c.setOverlapMergeStrategy(params->overlapMergeStrategy);
+            }
+            c.clean();
+
+            auto cleanCov = c.getResult();
+            const GeometryFactory* gf = input->getFactory();
+            std::unique_ptr<Geometry> r = gf->createGeometryCollection(std::move(cleanCov));
+            return r.release();
+        });
+    }
+
+    GEOSGeometry *
+    GEOSCoverageClean_r(GEOSContextHandle_t extHandle,
+        const GEOSGeometry* input)
+    {
+        return GEOSCoverageCleanWithParams_r(extHandle, input, nullptr);
+    }
 
 
 } /* extern "C" */
