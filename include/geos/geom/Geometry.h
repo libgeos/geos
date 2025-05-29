@@ -829,7 +829,7 @@ public:
     /** Returns the minimum distance between this Geometry and the Geometry g
      *
      * @param g the Geometry to calculate distance to
-     * @return the distance in cartesian units
+     * @return the distance in Cartesian units
      */
     virtual double distance(const Geometry* g) const;
 

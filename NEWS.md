@@ -3,6 +3,8 @@
 
 - New things:
   - Add clustering functions to C API (GH-1154, Dan Baston)
+  - Ported LineDissolver (Paul Ramsey)
+  - Ported CoverageCleaner (Paul Ramsey)
 
 - Breaking Changes:
   - Stricter WKT parsing (GH-1241, @freemine)
