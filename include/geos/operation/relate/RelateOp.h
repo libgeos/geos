@@ -65,7 +65,7 @@ public:
      * @param a a Geometry to test. Ownership left to caller.
      * @param b a Geometry to test. Ownership left to caller.
      *
-     * @return the IntersectonMatrix for the spatial relationship
+     * @return the IntersectionMatrix for the spatial relationship
      *         between the geometries. Ownership transferred.
      */
     static std::unique_ptr<geom::IntersectionMatrix> relate(
@@ -81,7 +81,7 @@ public:
      * @param b a Geometry to test. Ownership left to caller.
      * @param boundaryNodeRule the Boundary Node Rule to use.
      *
-     * @return the IntersectonMatrix for the spatial relationship
+     * @return the IntersectionMatrix for the spatial relationship
      *         between the geometries. Ownership transferred.
      */
     static std::unique_ptr<geom::IntersectionMatrix> relate(

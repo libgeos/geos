@@ -126,7 +126,7 @@ public:
     virtual ~HalfEdge() {};
 
     /**
-    * Creates a HalfEge pair, using the HalfEdge type of the graph subclass.
+    * Creates a HalfEdge pair, using the HalfEdge type of the graph subclass.
     *
     * @param p0 a vertex coordinate
     * @param p1 a vertex coordinate

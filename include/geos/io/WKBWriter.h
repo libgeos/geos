@@ -88,7 +88,7 @@ public:
      * for 2D geometries. Default since GEOS 3.12 is 4.
      * @param bo output byte order - default to native machine byte order.
      * Legal values include 0 (big endian/xdr) and 1 (little endian/ndr).
-     * @param incudeSRID true if SRID should be included in WKB (an
+     * @param includeSRID true if SRID should be included in WKB (an
      * extension).
      */
     WKBWriter(
