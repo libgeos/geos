@@ -420,6 +420,27 @@ void object::test<17>()
         );
 }
 
+// Tests that a collapsed polygon due to snapping is returned as EMPTY
+template<>
+template<>
+void object::test<18>()
+{
+    checkCleanSnap({
+        "POLYGON ((1 1, 1 9, 6 5, 9 1, 1 1))",
+        "POLYGON ((9 1, 6 5.1, 1 9, 9 9, 9 1))",
+        "POLYGON ((9 1, 6 5, 1 9, 6 5.1, 9 1))"},
+        1,
+        {
+        "POLYGON ((6 5, 9 1, 1 1, 1 9, 6 5))",
+        "POLYGON ((9 9, 9 1, 6 5, 1 9, 9 9))",
+        "POLYGON EMPTY"
+        });
+}
+
+
+
+
+
 
 
 } // namespace tut
