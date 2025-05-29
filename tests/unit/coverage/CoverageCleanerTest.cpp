@@ -437,7 +437,25 @@ void object::test<18>()
         });
 }
 
+// testCoverageWithNonPolygon
+template<>
+template<>
+void object::test<19> ()
+{
+    checkClean(
+        "GEOMETRYCOLLECTION (LINESTRING EMPTY, POLYGON EMPTY, LINESTRING (2 1, 2 5, 8 5, 8 1, 2 1))",
+        "GEOMETRYCOLLECTION (POLYGON EMPTY, POLYGON EMPTY, POLYGON EMPTY)");
+}
 
+// testCoverageWithNonPolygon
+template<>
+template<>
+void object::test<20> ()
+{
+    checkClean(
+        "GEOMETRYCOLLECTION (POLYGON ((1 9, 9 9, 9 4, 1 4, 1 9)), LINESTRING EMPTY)",
+        "GEOMETRYCOLLECTION (POLYGON ((1 9, 9 9, 9 4, 1 4, 1 9)), POLYGON EMPTY)");
+}
 
 
 
