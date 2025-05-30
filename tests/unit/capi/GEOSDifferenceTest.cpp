@@ -78,5 +78,31 @@ void object::test<3>()
     ensure_geometry_equals(result_, expected_, 1e-8);
 }
 
+template<>
+template<>
+void object::test<4>()
+{
+    set_test_name("progress reporting");
+    // GEOSDifference does not actually implement progress reporting, but our callback will automatically be
+    // called at 100% by the C API "DefaultProgress" handler.
+
+    useContext();
+
+    geom1_ = fromWKT("POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0))");
+    geom2_ = fromWKT("POLYGON ((5 5, 5 7, 7 7, 7 5, 5 5))");
+
+    std::vector<double> fracs;
+
+    auto progress = [](double f, const char*, void* userData) {
+        static_cast<std::vector<double>*>(userData)->push_back(f);
+    };
+
+    GEOSContext_setProgressCallback_r(ctxt_, progress, &fracs);
+    result_ = GEOSDifference_r(ctxt_, geom1_, geom2_);
+
+    ensure_equals(fracs.size(), 1u);
+    ensure_equals(fracs[0], 1.0);
+}
+
 } // namespace tut
 

@@ -76,7 +76,8 @@ OverlayNGRobust::Union(const Geometry* a)
     geounion::UnaryUnionOp op(*a);
     SRUnionStrategy unionSRFun;
     op.setUnionFunction(&unionSRFun);
-    return op.Union();
+    geos::util::ProgressFunction* progressFunction = nullptr;
+    return op.Union(progressFunction);
 }
 
 /*public static*/
