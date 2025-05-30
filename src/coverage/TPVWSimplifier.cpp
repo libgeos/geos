@@ -47,10 +47,11 @@ typedef TPVWSimplifier::EdgeIndex EdgeIndex;
 std::unique_ptr<MultiLineString>
 TPVWSimplifier::simplify(
     const MultiLineString* lines,
-    double distanceTolerance)
+    double distanceTolerance,
+    geos::util::ProgressFunction* progressFunction)
 {
     TPVWSimplifier simp(lines, distanceTolerance);
-    std::unique_ptr<MultiLineString> result = simp.simplify();
+    std::unique_ptr<MultiLineString> result = simp.simplify(progressFunction);
     return result;
 }
 
@@ -61,12 +62,13 @@ TPVWSimplifier::simplify(
     const MultiLineString* p_lines,
     std::vector<bool>& p_freeRings,
     const MultiLineString* p_constraintLines,
-    double distanceTolerance)
+    double distanceTolerance,
+    geos::util::ProgressFunction* progressFunction)
 {
     TPVWSimplifier simp(p_lines, distanceTolerance);
     simp.setFreeRingIndices(p_freeRings);
     simp.setConstraints(p_constraintLines);
-    std::unique_ptr<MultiLineString> result = simp.simplify();
+    std::unique_ptr<MultiLineString> result = simp.simplify(progressFunction);
     return result;
 }
 
@@ -99,7 +101,7 @@ TPVWSimplifier::setFreeRingIndices(std::vector<bool>& freeRing)
 
 /* private */
 std::unique_ptr<MultiLineString>
-TPVWSimplifier::simplify()
+TPVWSimplifier::simplify(geos::util::ProgressFunction* progressFunction)
 {
     std::vector<bool> emptyList;
     std::vector<Edge> edges = createEdges(inputLines, isFreeRing);
@@ -110,10 +112,19 @@ TPVWSimplifier::simplify()
     edgeIndex.add(constraintEdges);
 
     std::vector<std::unique_ptr<LineString>> result;
-    for (auto& edge : edges) {
+    const size_t iterCount = edges.size();
+    const size_t notificationInterval = std::max<size_t>(1, iterCount / 100);
+    for (size_t i = 0, iNotify = 0; i < iterCount; ++i) {
+        auto& edge = edges[i];
         std::unique_ptr<CoordinateSequence> ptsSimp = edge.simplify(edgeIndex);
         auto ls = geomFactory->createLineString(std::move(ptsSimp));
         result.emplace_back(ls.release());
+        if (progressFunction) {
+            geos::util::ProgressFunctionIteration(*progressFunction, i, iterCount, iNotify, notificationInterval);
+        }
+    }
+    if (progressFunction) {
+        (*progressFunction)(1.0, nullptr);
     }
     return geomFactory->createMultiLineString(std::move(result));
 }

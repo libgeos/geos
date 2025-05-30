@@ -968,7 +968,7 @@ std::vector<GeometryOpCreator> opRegistry {
     [](const Geometry& geom, double d) {
         std::vector<const Geometry*> coverage = toList(geom);
         std::vector<std::unique_ptr<Geometry>> result
-            = geos::coverage::CoverageSimplifier::simplify(coverage, d);
+            = geos::coverage::CoverageSimplifier::simplify(coverage, d, nullptr);
         //-- convert list type (be nice to avoid this)
         std::vector<std::unique_ptr<const Geometry>> resultList;
         for (std::size_t i = 0; i < result.size(); i++) {

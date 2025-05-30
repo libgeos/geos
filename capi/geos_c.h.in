@@ -117,6 +117,23 @@ typedef void (*GEOSMessageHandler)(GEOS_PRINTF_FORMAT const char *fmt, ...)
 */
 typedef void (*GEOSMessageHandler_r)(const char *message, void *userdata);
 
+
+/**
+ * A GEOS progression and cancel function.
+ *
+ * Such function takes a progression ratio, and an optional
+ * message, and returns true if computation must continue, or false if it
+ * must be interrupted.
+ *
+ * \param progressRatio Progression ratio (between 0 and 1)
+ * \param message Information message (can be NULL)
+ * \param userdata the user data pointer that was passed to GEOS together with
+ * this callback.
+ * \return TRUE if processing must continue, or FALSE to interrupt it.
+ */
+typedef int (*GEOSProgressCallback_r)(double progressRatio, const char* message, void* userdata);
+
+
 /*
 * When we're included by geos_c.cpp, these types are #defined to the
 * C++ definitions via preprocessor. We don't touch them to allow the
@@ -885,6 +902,16 @@ GEOSCoverageSimplifyVW_r(
     const GEOSGeometry* input,
     double tolerance,
     int preserveBoundary);
+
+/** \see GEOSCoverageSimplifyVWWithProgress */
+extern GEOSGeometry GEOS_DLL *
+GEOSCoverageSimplifyVWWithProgress_r(
+    GEOSContextHandle_t extHandle,
+    const GEOSGeometry* input,
+    double tolerance,
+    int preserveBoundary,
+    GEOSProgressCallback_r progressFunc,
+    void* progressUserData);
 
 /** \see GEOSCoverageCleanParams_create */
 extern GEOSCoverageCleanParams GEOS_DLL *
@@ -4322,6 +4349,40 @@ extern GEOSGeometry GEOS_DLL * GEOSCoverageSimplifyVW(
     int preserveBoundary);
 
 /**
+* Operates on a coverage (represented as a list of polygonal geometry
+* with exactly matching edge geometry) to apply a Visvalingam–Whyatt
+* simplification to the edges, reducing complexity in proportion with
+* the provided tolerance, while retaining a valid coverage (no edges
+* will cross or touch after the simplification).
+* Geometries never disappear, but they may be simplified down to just
+* a triangle. Also, some invalid geoms (such as Polygons which have too
+* few non-repeated points) will be returned unchanged.
+* If the input dataset is not a valid coverage due to overlaps,
+* it will still be simplified, but invalid topology such as crossing
+* edges will still be invalid.
+*
+* \param input The polygonal coverage to access,
+*        stored in a geometry collection. All members must be POLYGON
+*        or MULTIPOLYGON.
+* \param tolerance A tolerance parameter in linear units.
+* \param preserveBoundary Use 1 to preserve the outside edges
+*        of the coverage without simplification,
+*        0 to allow them to be simplified.
+* \param progressFunc Progress callback (or null)
+* \param progressUserData User data passed to progress callback (can be null)
+* \return A collection containing the simplified geometries, or null
+*         on error.
+*
+* \since 3.14
+*/
+extern GEOSGeometry GEOS_DLL * GEOSCoverageSimplifyVWWithProgress(
+    const GEOSGeometry* input,
+    double tolerance,
+    int preserveBoundary,
+    GEOSProgressCallback_r progressFunc,
+    void* progressUserData);
+
+/**
 * Create a default GEOSCoverageCleanParams object for controlling
 * the way invalid polygon interactions are repaird by \ref GEOSCoverageCleanWithParams.
 * \return A newly allocated GEOSCoverageCleanParams. NULL on exception.
@@ -5328,7 +5389,7 @@ extern char GEOS_DLL GEOSIntersects(const GEOSGeometry* g1, const GEOSGeometry* 
 extern char GEOS_DLL GEOSCrosses(const GEOSGeometry* g1, const GEOSGeometry* g2);
 
 /**
-* Tests if geometry g1 is completely within g2, 
+* Tests if geometry g1 is completely within g2,
 * but not wholly contained in the boundary of g2.
 * \param g1 Input geometry
 * \param g2 Input geometry

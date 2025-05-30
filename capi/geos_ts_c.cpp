@@ -114,6 +114,7 @@
 #include <geos/util/Interrupt.h>
 #include <geos/util/UniqueCoordinateArrayFilter.h>
 #include <geos/util/Machine.h>
+#include <geos/util/Progress.h>
 #include <geos/version.h>
 
 // This should go away
@@ -4522,6 +4523,25 @@ extern "C" {
         double tolerance,
         int preserveBoundary)
     {
+        return GEOSCoverageSimplifyVWWithProgress_r(extHandle, input, tolerance,
+                                                    preserveBoundary,
+                                                    nullptr, nullptr);
+    }
+
+    Geometry*
+    GEOSCoverageSimplifyVWWithProgress_r(GEOSContextHandle_t extHandle,
+        const Geometry* input,
+        double tolerance,
+        int preserveBoundary,
+        GEOSProgressCallback_r progressFunc,
+        void* progressUserData)
+    {
+        geos::util::ProgressFunction progressFunction =
+            [progressFunc, progressUserData](double progress, const char* message)
+        {
+            return progressFunc(progress, message, progressUserData);
+        };
+
         using geos::coverage::CoverageSimplifier;
 
         return execute(extHandle, [&]() -> Geometry* {
@@ -4536,10 +4556,10 @@ extern "C" {
             CoverageSimplifier cov(coverage);
             std::vector<std::unique_ptr<Geometry>> simple;
             if (preserveBoundary == 1) {
-                simple = cov.simplifyInner(tolerance);
+                simple = cov.simplifyInner(tolerance, progressFunc ? &progressFunction : nullptr);
             }
             else if (preserveBoundary == 0) {
-                simple = cov.simplify(tolerance);
+                simple = cov.simplify(tolerance, progressFunc ? &progressFunction : nullptr);
             }
             else return nullptr;
 
