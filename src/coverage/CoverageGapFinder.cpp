@@ -47,7 +47,6 @@ CoverageGapFinder::findGaps(std::vector<const Geometry*>& coverage, double gapWi
     return finder.findGaps(gapWidth);
 }
 
-
 /* public */
 std::unique_ptr<Geometry>
 CoverageGapFinder::findGaps(double gapWidth)
@@ -56,20 +55,20 @@ CoverageGapFinder::findGaps(double gapWidth)
     std::vector<const Polygon*> polygons;
     PolygonExtracter::getPolygons(*geomUnion, polygons);
 
-    std::vector<std::unique_ptr<LineString>> gapLines;
+    std::vector<std::unique_ptr<Geometry>> gapLines;
     for (const Polygon* poly : polygons) {
         for (std::size_t i = 0; i < poly->getNumInteriorRing(); i++) {
             const LinearRing* hole = poly->getInteriorRingN(i);
             if (isGap(hole, gapWidth)) {
-                auto pts = hole->getCoordinatesRO()->clone();
-                auto ls = geomUnion->getFactory()->createLineString(std::move(pts));
-                gapLines.emplace_back(ls.release());
+                //auto pts = hole->getCoordinatesRO()->clone();
+                //auto ls = geomUnion->getFactory()->createLineString(std::move(pts));
+                auto polygon = geomUnion->getFactory()->createPolygon(hole->clone());
+                gapLines.emplace_back(polygon.release());
             }
         }
     }
     return geomUnion->getFactory()->buildGeometry(std::move(gapLines));
 }
-
 
 /* private */
 bool
