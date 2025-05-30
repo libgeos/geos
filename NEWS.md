@@ -4,6 +4,7 @@
 - Fixes:
   - Fix OverlayNG coordinate dimemsion handling for EMPTY geometries (GH-1258, Martin Davis)
   - Fix DepthSegment comparison logic (really this time) (GH-1266, Martin Davis)
+  - Change CoverageGapFinder to return polygons (Martin Davis)
 
 ## Changes in 3.12.3
 2025-03-03
