@@ -4539,7 +4539,7 @@ extern "C" {
         geos::util::ProgressFunction progressFunction =
             [progressFunc, progressUserData](double progress, const char* message)
         {
-            return progressFunc(progress, message, progressUserData);
+            progressFunc(progress, message, progressUserData);
         };
 
         using geos::coverage::CoverageSimplifier;

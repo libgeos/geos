@@ -21,13 +21,12 @@
 namespace geos {
 namespace util { // geos::util
 
-/** Signature of a progression and cancel function.
+/** Signature of a progression function.
  *
  * Such function takes a progression ratio (between 0 and 1), and an optional
- * message, and returns true if computation must continue, or false if it
- * must be interrupted.
+ * message.
  */
-typedef std::function<bool(double, const char*)> ProgressFunction;
+typedef std::function<void(double, const char*)> ProgressFunction;
 
 /** Do progress function related processing for an iteration loop of iterCount iterations.
  *

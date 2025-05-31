@@ -119,19 +119,17 @@ typedef void (*GEOSMessageHandler_r)(const char *message, void *userdata);
 
 
 /**
- * A GEOS progression and cancel function.
+ * A GEOS progression callback function.
  *
- * Such function takes a progression ratio, and an optional
- * message, and returns true if computation must continue, or false if it
- * must be interrupted.
+ * Such function takes a progression ratio, and an optional message.
  *
  * \param progressRatio Progression ratio (between 0 and 1)
  * \param message Information message (can be NULL)
  * \param userdata the user data pointer that was passed to GEOS together with
  * this callback.
- * \return TRUE if processing must continue, or FALSE to interrupt it.
  */
-typedef int (*GEOSProgressCallback_r)(double progressRatio, const char* message, void* userdata);
+typedef void (*GEOSProgressCallback_r)(double progressRatio,
+                                       const char* message, void* userdata);
 
 
 /*

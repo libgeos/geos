@@ -12,7 +12,6 @@
  *
  **********************************************************************/
 
-#include <geos/util/Interrupt.h>
 #include <geos/util/Progress.h>
 
 namespace geos {
@@ -22,9 +21,7 @@ void ProgressFunctionIteration(ProgressFunction& progressFunction, size_t i,
                                size_t iterCount, size_t& iNotify,
                                size_t notificationInterval) {
     if (iNotify + 1 == notificationInterval) {
-        if (!progressFunction(static_cast<double>(i + 1)/static_cast<double>(iterCount), nullptr)) {
-            geos::util::Interrupt();
-        }
+        progressFunction(static_cast<double>(i + 1)/static_cast<double>(iterCount), nullptr);
         iNotify = 0;
     }
     else {

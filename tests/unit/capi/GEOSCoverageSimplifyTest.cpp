@@ -89,11 +89,10 @@ template<> void object::test<3>
     {
         double lastRatio = 0;
 
-        static int Func(double progressRatio, const char* /* msg */, void* userdata)
+        static void Func(double progressRatio, const char* /* msg */, void* userdata)
         {
             Cbk* self = static_cast<Cbk*>(userdata);
             self->lastRatio = progressRatio;
-            return true;
         }
     };
 
