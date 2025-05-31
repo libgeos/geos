@@ -21,6 +21,7 @@
 #include <geos/simplify/LinkedLine.h>
 #include <geos/coverage/Corner.h>
 #include <geos/export.h>
+#include <geos/util/Progress.h>
 
 
 namespace geos {
@@ -164,11 +165,13 @@ public:
     *
     * @param lines the lines to simplify
     * @param distanceTolerance the simplification tolerance
+    * @param progressFunction Progress function, or nullptr.
     * @return the simplified lines
     */
     static std::unique_ptr<MultiLineString> simplify(
         const MultiLineString* lines,
-        double distanceTolerance);
+        double distanceTolerance,
+        geos::util::ProgressFunction* progressFunction);
 
     /**
     * Simplifies a set of lines, preserving the topology of the lines between
@@ -181,13 +184,15 @@ public:
     * @param freeRings flags indicating which ring edges do not have node endpoints
     * @param constraintLines the linear constraints
     * @param distanceTolerance the simplification tolerance
+    * @param progressFunction Progress function, or nullptr.
     * @return the simplified lines
     */
     static std::unique_ptr<MultiLineString> simplify(
         const MultiLineString* lines,
         std::vector<bool>& freeRings,
         const MultiLineString* constraintLines,
-        double distanceTolerance);
+        double distanceTolerance,
+        geos::util::ProgressFunction* progressFunction);
 
     // Constructor
     TPVWSimplifier(const MultiLineString* lines,
@@ -209,7 +214,7 @@ private:
 
     void setConstraints(const MultiLineString* constraints);
 
-    std::unique_ptr<MultiLineString> simplify();
+    std::unique_ptr<MultiLineString> simplify(geos::util::ProgressFunction* progressFunction);
 
     std::vector<Edge> createEdges(
         const MultiLineString* lines,
