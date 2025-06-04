@@ -278,25 +278,10 @@ CoverageRingEdges::findMultiRingNodes(const std::vector<const Geometry*>& covera
 Coordinate::UnorderedSet
 CoverageRingEdges::findBoundaryNodes(LineSegment::UnorderedSet& boundarySegments)
 {
-    std::map<Coordinate, std::size_t> counter;
+    std::unordered_map<Coordinate, std::size_t, Coordinate::HashCode> counter;
     for (const LineSegment& seg : boundarySegments) {
-        // counter.put(line.p0, counter.getOrDefault(line.p0, 0) + 1);
-        // counter.put(line.p1, counter.getOrDefault(line.p1, 0) + 1);
-        auto search0 = counter.find(seg.p0);
-        if (search0 != counter.end()) {
-            counter[seg.p0] = search0->second + 1;
-        }
-        else {
-            counter[seg.p0] = 0;
-        }
-
-        auto search1 = counter.find(seg.p1);
-        if (search1 != counter.end()) {
-            counter[seg.p1] = search1->second + 1;
-        }
-        else {
-            counter[seg.p1] = 0;
-        }
+        counter[seg.p0] += 1;
+        counter[seg.p1] += 1;
     }
 
     Coordinate::UnorderedSet nodes;
@@ -307,10 +292,6 @@ CoverageRingEdges::findBoundaryNodes(LineSegment::UnorderedSet& boundarySegments
             nodes.insert(v);
     }
     return nodes;
-
-    // return counter.entrySet().stream()
-    //     .filter(e->e.getValue()>2)
-    //     .map(Map.Entry::getKey).collect(Collectors.toSet());
 }
 
 
