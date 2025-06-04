@@ -61,15 +61,47 @@ CoverageRingEdges::selectEdges(std::size_t ringCount) const
 
 /* private */
 void
-CoverageRingEdges::build()
+CoverageRingEdges::build(geos::util::ProgressFunction* progressFunction)
 {
-    Coordinate::UnorderedSet nodes = findMultiRingNodes(m_coverage);
-    LineSegment::UnorderedSet boundarySegs = CoverageBoundarySegmentFinder::findBoundarySegments(m_coverage);
-    Coordinate::UnorderedSet boundaryNodes = findBoundaryNodes(boundarySegs);
+    constexpr double RATIO_FIRST_PASS = 0.1;
+    constexpr double RATIO_SECOND_PASS = 0.2;
+    constexpr double RATIO_THIRD_PASS = 0.9;
+    constexpr double RATIO_FOURTH_PASS = 1.0;
+    geos::util::ProgressFunction subProgress;
+    if (progressFunction)
+    {
+        subProgress = geos::util::CreateScaledProgressFunction(
+            0, RATIO_FIRST_PASS, *progressFunction);
+    }
+    Coordinate::UnorderedSet nodes = findMultiRingNodes(m_coverage, progressFunction ? &subProgress : nullptr);
+
+    if (progressFunction)
+    {
+        subProgress = geos::util::CreateScaledProgressFunction(
+            RATIO_FIRST_PASS, RATIO_SECOND_PASS, *progressFunction);
+    }
+    LineSegment::UnorderedSet boundarySegs = CoverageBoundarySegmentFinder::findBoundarySegments(
+        m_coverage, progressFunction ? &subProgress : nullptr);
+
+    if (progressFunction)
+    {
+        subProgress = geos::util::CreateScaledProgressFunction(
+            RATIO_SECOND_PASS, RATIO_THIRD_PASS, *progressFunction);
+    }
+    Coordinate::UnorderedSet boundaryNodes = findBoundaryNodes(
+        boundarySegs, progressFunction ? &subProgress : nullptr);
     nodes.insert(boundaryNodes.begin(), boundaryNodes.end());
 
+    if (progressFunction)
+    {
+        subProgress = geos::util::CreateScaledProgressFunction(
+            RATIO_THIRD_PASS, RATIO_FOURTH_PASS, *progressFunction);
+    }
     std::map<LineSegment, CoverageEdge*> uniqueEdgeMap;
-    for (const Geometry* geom : m_coverage) {
+    const size_t iterCount = m_coverage.size();
+    const size_t notificationInterval = std::max<size_t>(1, iterCount / 100);
+    for (size_t i = 0, iNotify = 0; i < iterCount; ++i) {
+        const Geometry* geom = m_coverage[i];
         for (std::size_t ipoly = 0; ipoly < geom->getNumGeometries(); ipoly++) {
             util::ensureNoCurvedComponents(geom->getGeometryN(ipoly));
 
@@ -91,6 +123,13 @@ CoverageRingEdges::build()
                 addRingEdges(hole, nodes, boundarySegs, uniqueEdgeMap);
             }
         }
+
+        if (progressFunction) {
+            geos::util::ProgressFunctionIteration(subProgress, i, iterCount, iNotify, notificationInterval);
+        }
+    }
+    if (progressFunction) {
+        (*progressFunction)(1.0, nullptr);
     }
 }
 
@@ -254,21 +293,44 @@ CoverageRingEdges::next(std::size_t index, const CoordinateSequence& ring)
 
 /* private */
 Coordinate::UnorderedSet
-CoverageRingEdges::findMultiRingNodes(const std::vector<const Geometry*>& coverage)
+CoverageRingEdges::findMultiRingNodes(const std::vector<const Geometry*>& coverage,
+                                      geos::util::ProgressFunction* progressFunction)
 {
     std::map<Coordinate, std::size_t> vertexRingCount;
-    VertexRingCounter::count(coverage, vertexRingCount);
+    geos::util::ProgressFunction subProgress;
+    if (progressFunction)
+    {
+        subProgress = geos::util::CreateScaledProgressFunction(
+            0, 0.5, *progressFunction);
+    }
+
+    VertexRingCounter::count(coverage, vertexRingCount, progressFunction ? &subProgress : nullptr);
     Coordinate::UnorderedSet nodes;
     // for (Coordinate v : vertexCount.keySet()) {
     //     if (vertexCount.get(v) > 2) {
     //         nodes.add(v);
     //     }
     // }
+    const size_t iterCount = vertexRingCount.size();
+    const size_t notificationInterval = std::max<size_t>(1, iterCount / 100);
+    size_t i = 0, iNotify = 0;
+    if (progressFunction)
+    {
+        subProgress = geos::util::CreateScaledProgressFunction(
+            0.5, 1.0, *progressFunction);
+    }
     for (const auto &mapPair : vertexRingCount) {
         const Coordinate& v = mapPair.first;
         std::size_t count = mapPair.second;
         if (count > 2)
             nodes.insert(v);
+        if (progressFunction) {
+            geos::util::ProgressFunctionIteration(subProgress, i, iterCount, iNotify, notificationInterval);
+        }
+        ++i;
+    }
+    if (progressFunction) {
+        (*progressFunction)(1.0, nullptr);
     }
     return nodes;
 }
@@ -276,20 +338,51 @@ CoverageRingEdges::findMultiRingNodes(const std::vector<const Geometry*>& covera
 
 /* private */
 Coordinate::UnorderedSet
-CoverageRingEdges::findBoundaryNodes(LineSegment::UnorderedSet& boundarySegments)
+CoverageRingEdges::findBoundaryNodes(LineSegment::UnorderedSet& boundarySegments,
+                                     geos::util::ProgressFunction* progressFunction)
 {
     std::unordered_map<Coordinate, std::size_t, Coordinate::HashCode> counter;
-    for (const LineSegment& seg : boundarySegments) {
-        counter[seg.p0] += 1;
-        counter[seg.p1] += 1;
+    geos::util::ProgressFunction subProgress;
+    if (progressFunction)
+    {
+        subProgress = geos::util::CreateScaledProgressFunction(
+            0, 0.5, *progressFunction);
+    }
+    {
+        const size_t iterCount = boundarySegments.size();
+        const size_t notificationInterval = std::max<size_t>(1, iterCount / 100);
+        size_t i = 0, iNotify = 0;
+        for (const LineSegment& seg : boundarySegments) {
+            counter[seg.p0] += 1;
+            counter[seg.p1] += 1;
+            if (progressFunction) {
+                geos::util::ProgressFunctionIteration(subProgress, i, iterCount, iNotify, notificationInterval);
+            }
+            ++i;
+        }
     }
 
+    if (progressFunction)
+    {
+        subProgress = geos::util::CreateScaledProgressFunction(
+            0.5, 1.0, *progressFunction);
+    }
     Coordinate::UnorderedSet nodes;
+    const size_t iterCount = counter.size();
+    const size_t notificationInterval = std::max<size_t>(1, iterCount / 100);
+    size_t i = 0, iNotify = 0;
     for (const auto& c : counter) {
         const Coordinate& v = c.first;
         std::size_t count = c.second;
         if (count > 2)
             nodes.insert(v);
+        if (progressFunction) {
+            geos::util::ProgressFunctionIteration(subProgress, i, iterCount, iNotify, notificationInterval);
+        }
+        ++i;
+    }
+    if (progressFunction) {
+        (*progressFunction)(1.0, nullptr);
     }
     return nodes;
 }
@@ -297,11 +390,20 @@ CoverageRingEdges::findBoundaryNodes(LineSegment::UnorderedSet& boundarySegments
 
 /* public */
 std::vector<std::unique_ptr<Geometry>>
-CoverageRingEdges::buildCoverage() const
+CoverageRingEdges::buildCoverage(geos::util::ProgressFunction* progressFunction) const
 {
     std::vector<std::unique_ptr<Geometry>> result;
-    for (const Geometry* geom : m_coverage) {
+    const size_t iterCount = m_coverage.size();
+    const size_t notificationInterval = std::max<size_t>(1, iterCount / 100);
+    for (size_t i = 0, iNotify = 0; i < iterCount; ++i) {
+        const Geometry* geom = m_coverage[i];
         result.push_back(buildPolygonal(geom));
+        if (progressFunction) {
+            geos::util::ProgressFunctionIteration(*progressFunction, i, iterCount, iNotify, notificationInterval);
+        }
+    }
+    if (progressFunction) {
+        (*progressFunction)(1.0, nullptr);
     }
     return result;
 }

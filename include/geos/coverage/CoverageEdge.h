@@ -20,6 +20,7 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/LineSegment.h>
 #include <geos/util.h>
+#include <geos/util/Progress.h>
 
 // Forward declarations
 namespace geos {
@@ -116,7 +117,8 @@ public:
 
     static std::unique_ptr<MultiLineString> createLines(
         const std::vector<CoverageEdge*>& edges,
-        const GeometryFactory* geomFactory);
+        const GeometryFactory* geomFactory,
+        geos::util::ProgressFunction* progressFunction);
 
     std::unique_ptr<LineString> toLineString(
         const GeometryFactory* geomFactory);

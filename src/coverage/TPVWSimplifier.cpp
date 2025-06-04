@@ -106,7 +106,7 @@ TPVWSimplifier::simplify(geos::util::ProgressFunction* progressFunction)
     std::vector<bool> emptyList;
     geos::util::ProgressFunction subProgress;
 
-    constexpr double RATIO_FIRST_PASS = 0.4;
+    constexpr double RATIO_FIRST_PASS = 0.8;
 
     const double ratioInputLinesOverInputAndConstraint =
         RATIO_FIRST_PASS *

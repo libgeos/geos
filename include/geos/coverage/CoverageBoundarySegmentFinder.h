@@ -20,6 +20,7 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/LineSegment.h>
 #include <geos/export.h>
+#include <geos/util/Progress.h>
 
 namespace geos {
 namespace geom {
@@ -57,7 +58,8 @@ public:
 
 
     static LineSegment::UnorderedSet
-        findBoundarySegments(const std::vector<const Geometry*>& geoms);
+        findBoundarySegments(const std::vector<const Geometry*>& geoms,
+                             geos::util::ProgressFunction* progressFunction);
 
     static bool isBoundarySegment(
         const LineSegment::UnorderedSet& boundarySegs,
