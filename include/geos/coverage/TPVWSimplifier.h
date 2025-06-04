@@ -218,7 +218,8 @@ private:
 
     std::vector<Edge> createEdges(
         const MultiLineString* lines,
-        std::vector<bool>& freeRing);
+        std::vector<bool>& freeRing,
+        geos::util::ProgressFunction* progressFunction);
 
 
 }; // TPVWSimplifier

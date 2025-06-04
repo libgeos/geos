@@ -29,6 +29,15 @@ void ProgressFunctionIteration(ProgressFunction& progressFunction, size_t i,
     }
 }
 
+ProgressFunction CreateScaledProgressFunction(double ratioMin, double ratioMax,
+                                              ProgressFunction& progressFunction)
+{
+    return [ratioMin, ratioMax, &progressFunction](double ratio, const char* msg)
+    {
+        progressFunction(ratioMin + (ratioMax - ratioMin) * ratio, msg);
+    };
+}
+
 } // namespace geos::util
 } // namespace geos
 
