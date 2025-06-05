@@ -420,6 +420,14 @@ if(PROJECT_IS_TOP_LEVEL AND BUILD_WEBSITE)
 endif()
 
 #-----------------------------------------------------------------------------
+# Generate targets file for importing directly from GEOS build tree
+#-----------------------------------------------------------------------------
+
+export(TARGETS geos geos_c geos_cxx_flags geos_developer_cxx_flags
+       NAMESPACE GEOS::
+       FILE "geos-targets.cmake")
+
+#-----------------------------------------------------------------------------
 # Install and export targets - support 'make install' or equivalent
 #-----------------------------------------------------------------------------
 

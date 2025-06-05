@@ -5,6 +5,8 @@
   - Add clustering functions to C API (GH-1154, Dan Baston)
   - Ported LineDissolver (Paul Ramsey)
   - Ported CoverageCleaner (Paul Ramsey)
+  - Add "geos-targets.cmake" to build tree to allow building other software against
+    GEOS build without installing first (GH-1269, Dan Baston)
 
 - Breaking Changes:
   - Stricter WKT parsing (GH-1241, @freemine)
