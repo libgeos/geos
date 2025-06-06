@@ -44,6 +44,7 @@
 #include <geos/operation/buffer/OffsetCurve.h>
 #include <geos/operation/cluster/GeometryDistanceClusterFinder.h>
 #include <geos/operation/cluster/GeometryIntersectsClusterFinder.h>
+#include <geos/coverage/CoverageCleaner.h>
 #include <geos/coverage/CoverageSimplifier.h>
 #include <geos/coverage/CoverageValidator.h>
 #include <geos/operation/linemerge/LineMerger.h>
@@ -963,6 +964,20 @@ std::vector<GeometryOpCreator> opRegistry {
 
 //=============  category: Polygonal Coverage  ==================
 
+{"coverageClean", [](std::string name) { return GeometryOp::createAgg(name,
+    catCoverage, "cleans a coverage, merging gaps narrower than a given width",
+    [](const Geometry& geom, double gapWidth) {
+        std::vector<const Geometry*> coverage = toList(geom);
+        std::vector<std::unique_ptr<Geometry>> result
+            = geos::coverage::CoverageCleaner::cleanGapWidth(coverage, gapWidth);;
+        //-- convert list type (be nice to avoid this)
+        std::vector<std::unique_ptr<const Geometry>> resultList;
+        for (std::size_t i = 0; i < result.size(); i++) {
+            resultList.emplace_back( std::move(result[i]) );
+        }
+        return new Result( std::move(resultList) );
+    });
+}},
 {"coverageSimplify", [](std::string name) { return GeometryOp::createAgg(name,
     catCoverage, "simplify a polygonal coverage by a distance tolerance",
     [](const Geometry& geom, double d) {
