@@ -37,7 +37,8 @@ UnaryUnionNG::Union(const Geometry* geom, const PrecisionModel& pm)
     NGUnionStrategy ngUnionStrat(pm);
     geounion::UnaryUnionOp op(*geom);
     op.setUnionFunction(&ngUnionStrat);
-    return op.Union();
+    geos::util::ProgressFunction* progressFunction = nullptr;
+    return op.Union(progressFunction);
 }
 
 /*public static*/

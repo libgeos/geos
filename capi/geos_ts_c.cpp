@@ -1668,6 +1668,24 @@ extern "C" {
     }
 
     Geometry*
+    GEOSUnaryUnionWithProgress_r(GEOSContextHandle_t extHandle, const Geometry* g,
+                                 GEOSProgressCallback_r progressFunc,
+                                 void* progressUserData)
+    {
+        geos::util::ProgressFunction progressFunction =
+            [progressFunc, progressUserData](double progress, const char* message)
+        {
+            progressFunc(progress, message, progressUserData);
+        };
+
+        return execute(extHandle, [&]() {
+            std::unique_ptr<Geometry> g3(g->Union(&progressFunction));
+            g3->setSRID(g->getSRID());
+            return g3.release();
+        });
+    }
+
+    Geometry*
     GEOSUnaryUnionPrec_r(GEOSContextHandle_t extHandle, const Geometry* g1, double gridSize)
     {
         return execute(extHandle, [&]() {

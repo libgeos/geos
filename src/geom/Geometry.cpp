@@ -624,10 +624,10 @@ Geometry::Union(const Geometry* other) const
 
 /* public */
 Geometry::Ptr
-Geometry::Union() const
+Geometry::Union(geos::util::ProgressFunction* progressFunction) const
 {
     using geos::operation::geounion::UnaryUnionOp;
-    return UnaryUnionOp::Union(*this);
+    return UnaryUnionOp::Union(*this, progressFunction);
 }
 
 std::unique_ptr<Geometry>

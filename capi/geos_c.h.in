@@ -1101,6 +1101,13 @@ extern GEOSGeometry GEOS_DLL *GEOSUnaryUnion_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry* g);
 
+/** \see GEOSUnaryUnion */
+extern GEOSGeometry GEOS_DLL *GEOSUnaryUnionWithProgress_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* g,
+    GEOSProgressCallback_r progressFunc,
+    void* progressUserData);
+
 /** \see GEOSUnaryUnionPrec */
 extern GEOSGeometry GEOS_DLL *GEOSUnaryUnionPrec_r(
     GEOSContextHandle_t handle,
