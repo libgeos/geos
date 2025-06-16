@@ -325,6 +325,16 @@ std::vector<GeometryOpCreator> opRegistry {
         return new Result( g3.release() );
     });
     }},
+{"bufferSingleSided", [](std::string name) { return GeometryOp::create(name,
+    catConst,
+    "compute the buffer of geometry by a distance with the single-sided option",
+    [](const Geometry& geom, double d) {
+        geos::operation::buffer::BufferParameters param;
+        param.setSingleSided( true );
+        std::unique_ptr<Geometry> g3 = geos::operation::buffer::BufferOp::bufferOp(&geom, d, param);
+        return new Result( g3.release() );
+    });
+    }},
 {"offsetCurve", [](std::string name) { return GeometryOp::create(name,
     catConst,
     "compute the offset curve of geometry by a distance",
