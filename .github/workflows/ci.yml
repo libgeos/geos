@@ -218,8 +218,8 @@ jobs:
       shell: bash
 
   windows-mingw:
-    name: 'Windows (mingw-w64, x86_64, windows-2019)'
-    runs-on: windows-2019
+    name: 'Windows (mingw-w64, x86_64, windows-2022)'
+    runs-on: windows-2022
     defaults:
       run:
         shell: msys2 {0}
@@ -274,12 +274,12 @@ jobs:
       matrix:
         ci:
           - build_type: Debug
-            cxxstd: 14
-            os: windows-2022
+            cxxstd: 20
+            os: windows-2025
 
           - build_type: Release
             cxxstd: 14
-            os: windows-2019
+            os: windows-2022
 
     runs-on: ${{ matrix.ci.os }}
     steps:
