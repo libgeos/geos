@@ -64,7 +64,7 @@ UnaryUnionOp::unionWithNull(std::unique_ptr<geom::Geometry> g0,
 
 /*public*/
 std::unique_ptr<geom::Geometry>
-UnaryUnionOp::Union()
+UnaryUnionOp::Union(geos::util::ProgressFunction* progressFunction)
 {
     typedef std::unique_ptr<geom::Geometry> GeomPtr;
 
@@ -95,7 +95,7 @@ UnaryUnionOp::Union()
 
     GeomPtr unionPolygons;
     if(!polygons.empty()) {
-        unionPolygons = CascadedPolygonUnion::Union(polygons.begin(), polygons.end(), unionFunction);
+        unionPolygons = CascadedPolygonUnion::Union(polygons.begin(), polygons.end(), unionFunction, progressFunction);
     }
 
     /*

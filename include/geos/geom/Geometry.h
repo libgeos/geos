@@ -35,6 +35,7 @@
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
 #include <geos/geom/GeometryComponentFilter.h> // for inheritance
 #include <geos/geom/CoordinateSequence.h> // to materialize CoordinateSequence
+#include <geos/util/Progress.h>
 
 #include <algorithm>
 #include <string>
@@ -726,8 +727,14 @@ public:
      *
      * @see UnaryUnionOp
      */
-    Ptr Union() const;
+    Ptr Union(geos::util::ProgressFunction* progressFunction) const;
     // throw(IllegalArgumentException *, TopologyException *);
+
+    Ptr Union() const
+    {
+        geos::util::ProgressFunction* progressFunction = nullptr;
+        return Union(progressFunction);
+    }
 
     /**
      * \brief

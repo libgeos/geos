@@ -31,7 +31,7 @@ struct test_tpvwsimplifier_data {
     {
         std::unique_ptr<Geometry> geom = r.read(wkt);
         const MultiLineString* mls = static_cast<const MultiLineString*>(geom.get());
-        std::unique_ptr<Geometry> actual = TPVWSimplifier::simplify(mls, tolerance);
+        std::unique_ptr<Geometry> actual = TPVWSimplifier::simplify(mls, tolerance, nullptr);
         ensure_equals_geometry(actual.get(), geom.get());
     }
 
@@ -42,7 +42,7 @@ struct test_tpvwsimplifier_data {
         const std::string& wktExpected)
     {
         auto mls = r.read<MultiLineString>(wkt);
-        std::unique_ptr<Geometry> actual = TPVWSimplifier::simplify(mls.get(), tolerance);
+        std::unique_ptr<Geometry> actual = TPVWSimplifier::simplify(mls.get(), tolerance, nullptr);
         std::unique_ptr<Geometry> expected = r.read(wktExpected);
         ensure_equals_geometry(actual.get(), expected.get());
     }
@@ -76,7 +76,7 @@ struct test_tpvwsimplifier_data {
             constraints = r.read<MultiLineString>(wktConstraints);
         }
 
-        std::unique_ptr<Geometry> actual = TPVWSimplifier::simplify(lines.get(), freeRings, constraints.get(), tolerance);
+        std::unique_ptr<Geometry> actual = TPVWSimplifier::simplify(lines.get(), freeRings, constraints.get(), tolerance, nullptr);
         std::unique_ptr<Geometry> expected = r.read(wktExpected);
 
         // std::cout << "-- actual" << std::endl;
