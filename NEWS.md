@@ -2,7 +2,7 @@
 2025-xx-xx
 
 - Fixes/Improvements:
-  -
+  - Fix DepthSegment comparison logic (really this time) (GH-1266, Martin Davis)
 
 ## Changes in 3.11.5
 2025-03-03
