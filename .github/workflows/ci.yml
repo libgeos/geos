@@ -138,8 +138,8 @@ jobs:
       shell: bash
 
   windows-mingw:
-    name: 'Windows (mingw-w64, Debug, 11, x86_64, windows-2019)'
-    runs-on: windows-2019
+    name: 'Windows (mingw-w64, Debug, 11, x86_64, windows-2022)'
+    runs-on: windows-2022
     defaults:
       run:
         shell: msys2 {0}
@@ -167,8 +167,8 @@ jobs:
        ctest --output-on-failure .
 
   windows-mingw-release:
-    name: 'Windows (mingw-w64, Release, 11, x86_64, windows-2019)'
-    runs-on: windows-2019
+    name: 'Windows (mingw-w64, Release, 11, x86_64, windows-2022)'
+    runs-on: windows-2022
     defaults:
       run:
         shell: msys2 {0}
@@ -215,9 +215,9 @@ jobs:
        cd build
        ctest --output-on-failure -C Debug
 
-  windows-msvc-19:
-    name: 'Windows (Visual Studio 2019, Release, windows-2019)'
-    runs-on: windows-2019
+  windows-msvc-25:
+    name: 'Windows (Visual Studio 2025 Release, windows-2025)'
+    runs-on: windows-2025
     steps:
     - name: 'Check Out'
       uses: actions/checkout@v4
@@ -227,7 +227,7 @@ jobs:
        mkdir build
        cd build
        cmake --version
-       cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=14 -DBUILD_SHARED_LIBS=ON ..
+       cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_STANDARD=20 -DBUILD_SHARED_LIBS=ON ..
        cmake --build . --config Release -j 2
 
     - name: 'Test'
