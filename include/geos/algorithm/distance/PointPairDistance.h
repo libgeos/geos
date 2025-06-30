@@ -120,8 +120,6 @@ public:
         return isNull;
     }
 
-private:
-
     /**
      * Initializes the points, avoiding recomputing the distance.
      * @param p0
@@ -138,14 +136,14 @@ private:
         isNull = false;
     }
 
+private:
+
     std::array<geom::CoordinateXY, 2> pt;
-
     double distanceSquared;
-
     bool isNull;
+
 };
 
 } // geos::algorithm::distance
 } // geos::algorithm
 } // geos
-
