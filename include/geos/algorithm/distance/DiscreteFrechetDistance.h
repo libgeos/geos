@@ -28,6 +28,7 @@
 #include <unordered_map>
 #include <array>
 #include <vector>
+#include <memory>
 
 // Forward declarations
 namespace geos {
@@ -465,6 +466,9 @@ private:
      */
     static std::vector<std::size_t> bresenhamDiagonal(
         std::size_t numCols, std::size_t numRows);
+
+
+
 
 
 }; // DiscreteFrechetDistance
