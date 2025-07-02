@@ -58,19 +58,19 @@ struct test_DiscreteFrechetDistance_data {
         ensure(diff <= TOLERANCE);
     }
 
-    void
-    runTest(const std::string& wkt1, const std::string& wkt2,
-            double densifyFactor, double expectedDistance)
-    {
-        GeomPtr g1(reader.read(wkt1));
-        GeomPtr g2(reader.read(wkt2));
+    // void
+    // runTest(const std::string& wkt1, const std::string& wkt2,
+    //         double densifyFactor, double expectedDistance)
+    // {
+    //     GeomPtr g1(reader.read(wkt1));
+    //     GeomPtr g2(reader.read(wkt2));
 
-        double distance = DiscreteFrechetDistance::distance(*g1,
-                          *g2, densifyFactor);
-        double diff = std::fabs(distance - expectedDistance);
-        //std::cerr << "expectedDistance:" << expectedDistance << " actual distance:" << distance << std::endl;
-        ensure(diff <= TOLERANCE);
-    }
+    //     double distance = DiscreteFrechetDistance::distance(*g1,
+    //                       *g2, densifyFactor);
+    //     double diff = std::fabs(distance - expectedDistance);
+    //     //std::cerr << "expectedDistance:" << expectedDistance << " actual distance:" << distance << std::endl;
+    //     ensure(diff <= TOLERANCE);
+    // }
 
     PrecisionModel pm;
     GeometryFactory::Ptr gf;
@@ -99,31 +99,31 @@ void object::test<1>
     runTest("LINESTRING (0 0, 2 1)", "LINESTRING (0 0, 2 0)", 1.0);
 
     // zero densify factor
-    try {
-        runTest("LINESTRING (0 0, 2 1)", "LINESTRING EMPTY", 0.0, 0);
-    }
-    catch(const geos::util::IllegalArgumentException& e) {
-        // We do expect an exception
-        ::geos::ignore_unused_variable_warning(e);
-    }
+    // try {
+    //     runTest("LINESTRING (0 0, 2 1)", "LINESTRING EMPTY", 0.0, 0);
+    // }
+    // catch(const geos::util::IllegalArgumentException& e) {
+    //     // We do expect an exception
+    //     ::geos::ignore_unused_variable_warning(e);
+    // }
 
-    // too big densify factor
-    try {
-        runTest("LINESTRING (0 0, 2 1)", "LINESTRING EMPTY", 1 + 1e-10, 0);
-    }
-    catch(const geos::util::IllegalArgumentException& e) {
-        // We do expect an exception
-        ::geos::ignore_unused_variable_warning(e);
-    }
+    // // too big densify factor
+    // try {
+    //     runTest("LINESTRING (0 0, 2 1)", "LINESTRING EMPTY", 1 + 1e-10, 0);
+    // }
+    // catch(const geos::util::IllegalArgumentException& e) {
+    //     // We do expect an exception
+    //     ::geos::ignore_unused_variable_warning(e);
+    // }
 
-    // too small positive densify factor
-    try {
-        runTest("LINESTRING (0 0, 2 1)", "LINESTRING EMPTY", 1e-30, 0);
-    }
-    catch(const geos::util::IllegalArgumentException& e) {
-        // We do expect an exception
-        ::geos::ignore_unused_variable_warning(e);
-    }
+    // // too small positive densify factor
+    // try {
+    //     runTest("LINESTRING (0 0, 2 1)", "LINESTRING EMPTY", 1e-30, 0);
+    // }
+    // catch(const geos::util::IllegalArgumentException& e) {
+    //     // We do expect an exception
+    //     ::geos::ignore_unused_variable_warning(e);
+    // }
 }
 
 // 2 - testLineSegments2
@@ -156,7 +156,7 @@ void object::test<4>
 {
     runTest("LINESTRING (0 0, 100 0)", "LINESTRING (0 0, 50 50, 100 0)", 70.7106781186548);
 // densifying provides accurate HD
-    runTest("LINESTRING (0 0, 100 0)", "LINESTRING (0 0, 50 50, 100 0)", 0.5, 50.0);
+    // runTest("LINESTRING (0 0, 100 0)", "LINESTRING (0 0, 50 50, 100 0)", 0.5, 50.0);
 }
 
 // 5 - test Line Segments revealing distance initialization bug

@@ -96,7 +96,7 @@ public:
     /**
     * Abstract base class for storing 2d matrix data
     */
-    class MatrixStorage {
+    class GEOS_DLL MatrixStorage {
 
         public:
 
@@ -115,13 +115,15 @@ public:
                 , m_numCols(numCols)
                 , m_defaultValue(defaultValue) {};
 
+            virtual ~MatrixStorage() = 0;
+
             /**
              * Gets the matrix value at i, j
              * @param i the row index
              * @param j the column index
              * @return The matrix value at i, j
              */
-            virtual double get(std::size_t i, std::size_t j);
+            virtual double get(std::size_t i, std::size_t j) const = 0;
 
             /**
              * Sets the matrix value at i, j
@@ -129,7 +131,7 @@ public:
              * @param j the column index
              * @param value The matrix value to set at i, j
              */
-            virtual void set(std::size_t i, std::size_t j, double value);
+            virtual void set(std::size_t i, std::size_t j, double value) = 0;
 
             /**
              * Gets a flag indicating if the matrix has a set value, e.g. one that is different
@@ -138,7 +140,7 @@ public:
              * @param j the column index
              * @return a flag indicating if the matrix has a set value
              */
-            virtual bool isValueSet(std::size_t i, std::size_t j);
+            virtual bool isValueSet(std::size_t i, std::size_t j) const = 0;
     };
 
 
@@ -166,7 +168,7 @@ public:
                 m_matrix.resize(numRows * numCols, defaultValue);
             };
 
-            double get(std::size_t i, std::size_t j) override {
+            double get(std::size_t i, std::size_t j) const override {
                 return m_matrix[i * m_numCols + j];
             };
 
@@ -174,7 +176,7 @@ public:
                 m_matrix[i * m_numCols + j] = value;
             };
 
-            bool isValueSet(std::size_t i, std::size_t j) override {
+            bool isValueSet(std::size_t i, std::size_t j) const override {
                 return get(i, j) != m_defaultValue;
             };
     };
@@ -219,20 +221,20 @@ public:
             };
 
             std::pair<bool, std::size_t>
-            cppBinarySearch(std::vector<std::size_t>& vec, std::size_t fromIndex, std::size_t toIndex, std::size_t key) {
+            cppBinarySearch(const std::vector<std::size_t>& vec, std::size_t fromIndex, std::size_t toIndex, std::size_t key) const {
                 // Check for invalid range to match Java's behavior for such cases
                 if (fromIndex > toIndex || fromIndex < 0 || toIndex > vec.size())
                     return {false, 0};
 
                 // Define the iterators for the sub-range
-                auto first_it = vec.begin() + fromIndex;
-                auto last_it = vec.begin() + toIndex;
+                auto first_it = vec.begin() + static_cast<std::ptrdiff_t>(fromIndex);
+                auto last_it = vec.begin() + static_cast<std::ptrdiff_t>(toIndex);
 
                 // Perform the binary search using std::lower_bound
                 auto it = std::lower_bound(first_it, last_it, key);
 
                 // Calculate the index relative to the *beginning of the original vector*
-                std::size_t result_index = std::distance(vec.begin(), it);
+                auto result_index = std::distance(vec.begin(), it);
 
                 // Determine if the element was found and return the appropriate value
                 if (it != last_it && *it == key) {
@@ -244,14 +246,14 @@ public:
                 }
             };
 
-            std::pair<bool, std::size_t> indexOf(std::size_t i, std::size_t j) {
+            std::pair<bool, std::size_t> indexOf(std::size_t i, std::size_t j) const {
                 std::size_t cLow = m_ri[i];
                 std::size_t cHigh = m_ri[i+1];
                 if (cHigh <= cLow) return {false, 0};
                 return cppBinarySearch(m_ci, cLow, cHigh, j);
             };
 
-            double get(std::size_t i, std::size_t j) override {
+            double get(std::size_t i, std::size_t j) const override {
                 // get the index in the vector
                 std::pair<bool, std::size_t> vi = indexOf(i, j);
                 // if the vector index is negative, return default value
@@ -291,7 +293,7 @@ public:
                 m_v[vi.second] = value;
             };
 
-            bool isValueSet(std::size_t i, std::size_t j) override {
+            bool isValueSet(std::size_t i, std::size_t j) const override {
                 auto r = indexOf(i, j);
                 return r.first;
             };
@@ -331,7 +333,7 @@ public:
             : MatrixStorage(numRows, numCols, defaultValue)
             {};
 
-        double get(std::size_t i, std::size_t j) override {
+        double get(std::size_t i, std::size_t j) const override {
             std::size_t key = i << 32 | j;
             auto it_found = m_matrix.find(key);
             if (it_found != m_matrix.end()) {
@@ -342,12 +344,12 @@ public:
             }
         };
 
-        void set(std::size_t i, std::size_t j, double value) {
+        void set(std::size_t i, std::size_t j, double value) override {
             std::size_t key = i << 32 | j;
             m_matrix[key] = value;
         };
 
-        bool isValueSet(std::size_t i, std::size_t j) {
+        bool isValueSet(std::size_t i, std::size_t j) const override {
             std::size_t key = i << 32 | j;
             auto it_found = m_matrix.find(key);
             return it_found != m_matrix.end();
@@ -372,6 +374,7 @@ public:
      */
     std::array<geom::CoordinateXY, 2> getCoordinates();
 
+    void setDensifyFraction(double dFrac);
 
 
 private:
@@ -380,6 +383,7 @@ private:
     const geom::Geometry& g0;
     const geom::Geometry& g1;
     std::unique_ptr<PointPairDistance> ptDist;
+    double densifyFraction = -1.0;
 
     /**
      * Computes the {@code Discrete Fréchet Distance} between the input geometries

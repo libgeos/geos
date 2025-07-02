@@ -18,7 +18,9 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Geometry.h>
 #include <geos/util/IllegalStateException.h>
-// #include <geos/util.h>
+#include <geos/util/IllegalArgumentException.h>
+#include <geos/util.h>
+#include <geos/util/math.h>
 
 #include <unordered_map>
 
@@ -56,12 +58,11 @@ DiscreteFrechetDistance::distance(const Geometry& geom0, const Geometry& geom1)
 double
 DiscreteFrechetDistance::distance()
 {
-    auto coords0 = g0.getCoordinates();
-    auto coords1 = g1.getCoordinates();
+    std::unique_ptr<CoordinateSequence> coords0 = g0.getCoordinates();
+    std::unique_ptr<CoordinateSequence> coords1 = g1.getCoordinates();
 
     std::unique_ptr<MatrixStorage> distances = createMatrixStorage(coords0->size(), coords1->size());
     std::vector<std::size_t> diagonal = bresenhamDiagonal(coords0->size(), coords1->size());
-
     MapDoubleToIndexPair distanceToPair;
     computeCoordinateDistances(*coords0, *coords1, diagonal, *distances, distanceToPair);
     ptDist = computeFrechet(*coords0, *coords1, diagonal, *distances, distanceToPair);
@@ -69,9 +70,25 @@ DiscreteFrechetDistance::distance()
     return ptDist->getDistance();
 }
 
+/* public */
+void
+DiscreteFrechetDistance::setDensifyFraction(double dFrac)
+{
+    // !(dFrac > 0) written that way to catch NaN
+    // and test on 1.0/dFrac to avoid a potential later undefined behaviour
+    // when casting to std::size_t
+    bool isUnusableFraction = util::round(1.0 / dFrac) > static_cast<double>(std::numeric_limits<std::size_t>::max());
+    if (std::isnan(dFrac) || dFrac > 1.0 || dFrac < 0.0 || isUnusableFraction) {
+        throw util::IllegalArgumentException(
+            "Fraction is not in range (0.0 - 1.0]");
+    }
+
+    densifyFraction = dFrac;
+}
+
 void
 DiscreteFrechetDistance::putIfAbsent(
-    std::unordered_map<double, std::array<std::size_t, 2>>& distanceToPair,
+    MapDoubleToIndexPair& distanceToPair,
     double key, std::array<std::size_t, 2> val)
 {
     auto it = distanceToPair.find(key);
@@ -91,11 +108,12 @@ std::unique_ptr<DiscreteFrechetDistance::MatrixStorage>
 DiscreteFrechetDistance::createMatrixStorage(std::size_t rows, std::size_t cols)
 {
     std::size_t max = std::max(rows, cols);
+    double inf = std::numeric_limits<double>::infinity();
     // NOTE: these constraints need to be verified
     if (max < 1024)
-        return std::make_unique<RectMatrix>(rows, cols, std::numeric_limits<double>::infinity);
+        return std::make_unique<RectMatrix>(rows, cols, inf);
 
-    return std::make_unique<CsrMatrix>(rows, cols, std::numeric_limits<double>::infinity);
+    return std::make_unique<CsrMatrix>(rows, cols, inf);
 }
 
 /**
@@ -337,6 +355,8 @@ DiscreteFrechetDistance::bresenhamDiagonal(std::size_t numCols, std::size_t numR
     return diagXY;
 }
 
+/* Implementation of pure virtual destructor for C++ */
+DiscreteFrechetDistance::MatrixStorage::~MatrixStorage() {};
 
 }
 }
