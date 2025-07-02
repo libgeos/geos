@@ -325,13 +325,12 @@ DiscreteFrechetDistance::bresenhamDiagonal(std::size_t numCols, std::size_t numR
     int64_t dx = static_cast<int64_t>(numCols) - 1;
     int64_t dy = static_cast<int64_t>(numRows) - 1;
     int64_t err;
-    std::size_t i = 0;
     if (numCols > numRows) {
         std::size_t y = 0;
         err = 2 * dy - dx;
         for (std::size_t x = 0; x < numCols; x++) {
-            diagXY[i++] = x;
-            diagXY[i++] = y;
+            diagXY.push_back(x);
+            diagXY.push_back(y);
             if (err > 0) {
                 y += 1;
                 err -= 2 * dx;
@@ -343,8 +342,8 @@ DiscreteFrechetDistance::bresenhamDiagonal(std::size_t numCols, std::size_t numR
         std::size_t x = 0;
         err = 2 * dx - dy;
         for (std::size_t y = 0; y < numRows; y++) {
-            diagXY[i++] = x;
-            diagXY[i++] = y;
+            diagXY.push_back(x);
+            diagXY.push_back(y);
             if (err > 0) {
                 x += 1;
                 err -= 2 * dy;
