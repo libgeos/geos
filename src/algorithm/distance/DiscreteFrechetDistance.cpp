@@ -63,6 +63,9 @@ DiscreteFrechetDistance::distance()
             "DiscreteFrechetDistance called with empty inputs.");
     }
 
+    util::ensureNoCurvedComponents(g0);
+    util::ensureNoCurvedComponents(g1);
+
     std::unique_ptr<CoordinateSequence> coords0 = g0.getCoordinates();
     std::unique_ptr<CoordinateSequence> coords1 = g1.getCoordinates();
 
