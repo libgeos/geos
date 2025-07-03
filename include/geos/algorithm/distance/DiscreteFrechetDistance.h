@@ -364,7 +364,7 @@ public:
      *
      * @param geom0 the 1st geometry
      * @param geom1 the 2nd geometry
-     * @return the cartesian distance between {#g0} and {#g1}
+     * @return the cartesian distance between geom0 and geom1
      */
     static double  distance(const geom::Geometry& geom0, const geom::Geometry& geom1);
 
