@@ -136,7 +136,7 @@ public:
 
             /**
              * Gets a flag indicating if the matrix has a set value, e.g. one that is different
-             * than {@link MatrixStorage#defaultValue}.
+             * than MatrixStorage defaultValue.
              * @param i the row index
              * @param j the column index
              * @return a flag indicating if the matrix has a set value
@@ -315,7 +315,7 @@ public:
 
 
     /**
-     * A sparse matrix based on java's {@link HashMap}.
+     * A sparse matrix based on java's HashMap.
      */
     class HashMapMatrix : public MatrixStorage {
 
@@ -369,7 +369,7 @@ public:
     static double  distance(const geom::Geometry& geom0, const geom::Geometry& geom1);
 
     /**
-     * Gets the pair of {@link Coordinate}s at which the distance is obtained.
+     * Gets the pair of {@link geom::Coordinate}s at which the distance is obtained.
      *
      * @return the pair of Coordinates at which the distance is obtained
      */
