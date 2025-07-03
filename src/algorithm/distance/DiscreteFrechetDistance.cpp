@@ -58,6 +58,11 @@ DiscreteFrechetDistance::distance(const Geometry& geom0, const Geometry& geom1)
 double
 DiscreteFrechetDistance::distance()
 {
+    if (g0.isEmpty() || g1.isEmpty()) {
+        throw util::IllegalArgumentException(
+            "DiscreteFrechetDistance called with empty inputs.");
+    }
+
     std::unique_ptr<CoordinateSequence> coords0 = g0.getCoordinates();
     std::unique_ptr<CoordinateSequence> coords1 = g1.getCoordinates();
 
