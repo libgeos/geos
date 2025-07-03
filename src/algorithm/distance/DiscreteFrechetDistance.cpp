@@ -86,7 +86,7 @@ DiscreteFrechetDistance::setDensifyFraction(double dFrac)
     // and test on 1.0/dFrac to avoid a potential later undefined behaviour
     // when casting to std::size_t
     bool isUnusableFraction = util::round(1.0 / dFrac) > static_cast<double>(std::numeric_limits<std::size_t>::max());
-    if (std::isnan(dFrac) || dFrac > 1.0 || dFrac < 0.0 || isUnusableFraction) {
+    if (std::isnan(dFrac) || dFrac > 1.0 || dFrac <= 0.0 || isUnusableFraction) {
         throw util::IllegalArgumentException(
             "Fraction is not in range (0.0 - 1.0]");
     }

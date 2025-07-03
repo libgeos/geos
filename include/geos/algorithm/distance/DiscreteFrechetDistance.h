@@ -17,12 +17,6 @@
 
 #include <geos/export.h>
 #include <geos/algorithm/distance/PointPairDistance.h>
-// #include <geos/algorithm/distance/DistanceToPoint.h> // for composition
-//#include <geos/util/IllegalArgumentException.h> // for inlines
-//#include <geos/geom/Geometry.h> // for inlines
-//#include <geos/util/math.h> // for inlines
-//#include <geos/geom/CoordinateFilter.h> // for inheritance
-//#include <geos/geom/CoordinateSequenceFilter.h> // for inheritance
 
 #include <cstdint>
 #include <unordered_map>
@@ -201,9 +195,9 @@ public:
             CsrMatrix(std::size_t numRows, std::size_t numCols, double defaultValue, std::size_t expectedValues)
                 : MatrixStorage(numRows, numCols, defaultValue)
             {
-                m_v.reserve(expectedValues);
-                m_ci.reserve(expectedValues);
-                m_ri.reserve(numRows + 1);
+                m_v.resize(expectedValues);
+                m_ci.resize(expectedValues);
+                m_ri.resize(numRows + 1);
             };
 
             CsrMatrix(std::size_t numRows, std::size_t numCols, double defaultValue)
@@ -224,7 +218,7 @@ public:
             std::pair<bool, std::size_t>
             cppBinarySearch(const std::vector<std::size_t>& vec, std::size_t fromIndex, std::size_t toIndex, std::size_t key) const {
                 // Check for invalid range to match Java's behavior for such cases
-                if (fromIndex > toIndex || fromIndex < 0 || toIndex > vec.size())
+                if (fromIndex > toIndex || toIndex > vec.size())
                     return {false, 0};
 
                 // Define the iterators for the sub-range
@@ -243,14 +237,14 @@ public:
                     return {true, result_index};
                 } else {
                     // Element not found, return -(insertion point) - 1
-                    return {false, 0};
+                    return {false, result_index};
                 }
             };
 
             std::pair<bool, std::size_t> indexOf(std::size_t i, std::size_t j) const {
                 std::size_t cLow = m_ri[i];
                 std::size_t cHigh = m_ri[i+1];
-                if (cHigh <= cLow) return {false, 0};
+                if (cHigh <= cLow) return {false, cLow};
                 return cppBinarySearch(m_ci, cLow, cHigh, j);
             };
 
@@ -280,7 +274,7 @@ public:
                         m_ri[ii] += 1;
 
                     // move and update column indices, move values
-                    std::size_t viv = ~(vi.second);
+                    std::size_t viv = vi.second;
                     for (std::size_t ii = m_ri[m_numRows]; ii > viv; ii--) {
                         m_ci[ii] = m_ci[ii - 1];
                         m_v[ii] = m_v[ii - 1];

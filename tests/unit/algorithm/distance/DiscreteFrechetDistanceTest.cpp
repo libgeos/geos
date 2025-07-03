@@ -32,11 +32,11 @@ namespace tut {
 //
 
 // Test data, not used
-struct test_DiscreteFrechetDistance_data {
+struct test_frechetdistance_data {
 
     typedef std::unique_ptr<Geometry> GeomPtr;
 
-    test_DiscreteFrechetDistance_data()
+    test_frechetdistance_data()
         :
         pm(),
         gf(GeometryFactory::create(&pm)),
@@ -77,12 +77,12 @@ struct test_DiscreteFrechetDistance_data {
     geos::io::WKTReader reader;
 
 };
-const double test_DiscreteFrechetDistance_data::TOLERANCE = 0.00001;
+const double test_frechetdistance_data::TOLERANCE = 0.00001;
 
-typedef test_group<test_DiscreteFrechetDistance_data> group;
+typedef test_group<test_frechetdistance_data> group;
 typedef group::object object;
 
-group test_DiscreteFrechetDistance_group("geos::algorithm::distance::DiscreteFrechetDistance");
+group test_frechetdistance_group("geos::algorithm::distance::DiscreteFrechetDistance");
 
 
 
