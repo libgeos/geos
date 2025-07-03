@@ -17,6 +17,8 @@
 
 #include <geos/export.h>
 #include <geos/algorithm/distance/PointPairDistance.h>
+#include <geos/geom/CoordinateSequenceFilter.h>
+#include <geos/util/math.h>
 
 #include <cstdint>
 #include <unordered_map>
@@ -180,8 +182,8 @@ public:
     /**
      * A matrix implementation that adheres to the
      * <a href="https://en.wikipedia.org/wiki/Sparse_matrix#Compressed_sparse_row_(CSR,_CRS_or_Yale_format)">
-     *   Compressed sparse row format</a>.<br/>
-     * Note: Unfortunately not as fast as expected.
+     *   Compressed sparse row format</a>.
+     * Note: Unfortunately not as fast as hoped.
      */
     class CsrMatrix : public MatrixStorage {
 
@@ -215,9 +217,22 @@ public:
                 return max * max / 10;
             };
 
+            /**
+             * A work-alike for Java Arrays.binarySearch(), used
+             * for searching ordered arrays. This variant searches
+             * for the key value within a bounded subset of the array.
+             * @param vec the vector to search
+             * @param fromIndex the lower bound index for the search
+             * @param toIndex the upper bound index for the search
+             * @param key the value to hunt for
+             * @return a pair with the first item being true if the key
+             *         was found and false otherwise, and the second being the
+             *         index of the key found, or the insertion point of the
+             *         key if not found
+             */
             std::pair<bool, std::size_t>
             cppBinarySearch(const std::vector<std::size_t>& vec, std::size_t fromIndex, std::size_t toIndex, std::size_t key) const {
-                // Check for invalid range to match Java's behavior for such cases
+                // Return not found on invalid input
                 if (fromIndex > toIndex || toIndex > vec.size())
                     return {false, 0};
 
@@ -236,7 +251,7 @@ public:
                     // Element found, return its index
                     return {true, result_index};
                 } else {
-                    // Element not found, return -(insertion point) - 1
+                    // Element not found, return the insertion point
                     return {false, result_index};
                 }
             };
@@ -461,7 +476,43 @@ private:
     static std::vector<std::size_t> bresenhamDiagonal(
         std::size_t numCols, std::size_t numRows);
 
+    /**
+     * @param geom the geometry to densify
+     * @param densifyFrac the amount to split up edges
+     * @return a coordinate sequence of every vertex and all introduced
+     * densified vertices for the geometry
+     */
+    static std::unique_ptr<geom::CoordinateSequence> getDensifiedCoordinates(
+        const geom::Geometry& geom, double densifyFrac);
 
+
+    class DensifiedCoordinatesFilter : public geom::CoordinateSequenceFilter {
+
+        public:
+
+            DensifiedCoordinatesFilter(double fraction, geom::CoordinateSequence& coords)
+                : m_numSubSegs(static_cast<uint32_t>(util::round(1.0 / fraction)))
+                , m_coords(coords)
+            {};
+
+            void filter_ro(
+                const geom::CoordinateSequence& seq,
+                std::size_t index) override;
+
+            bool isGeometryChanged() const override {
+                return false;
+            }
+
+            bool isDone() const override {
+                return false;
+            }
+
+        private:
+
+            uint32_t m_numSubSegs;
+            geom::CoordinateSequence& m_coords;
+
+    };
 
 
 

@@ -66,8 +66,16 @@ DiscreteFrechetDistance::distance()
     util::ensureNoCurvedComponents(g0);
     util::ensureNoCurvedComponents(g1);
 
-    std::unique_ptr<CoordinateSequence> coords0 = g0.getCoordinates();
-    std::unique_ptr<CoordinateSequence> coords1 = g1.getCoordinates();
+    std::unique_ptr<CoordinateSequence> coords0;
+    std::unique_ptr<CoordinateSequence> coords1;
+    if (densifyFraction < 0) {
+        coords0 = g0.getCoordinates();
+        coords1 = g1.getCoordinates();
+    }
+    else {
+        coords0 = getDensifiedCoordinates(g0, densifyFraction);
+        coords1 = getDensifiedCoordinates(g1, densifyFraction);
+    }
 
     std::unique_ptr<MatrixStorage> distances = createMatrixStorage(coords0->size(), coords1->size());
     std::vector<std::size_t> diagonal = bresenhamDiagonal(coords0->size(), coords1->size());
@@ -361,6 +369,43 @@ DiscreteFrechetDistance::bresenhamDiagonal(std::size_t numCols, std::size_t numR
     }
     return diagXY;
 }
+
+/* private static */
+std::unique_ptr<CoordinateSequence>
+DiscreteFrechetDistance::getDensifiedCoordinates(const Geometry& geom, double densifyFrac)
+{
+    auto coords = std::make_unique<CoordinateSequence>();
+    DensifiedCoordinatesFilter dcf(densifyFrac, *coords);
+    geom.apply_ro(dcf);
+
+    return coords;
+}
+
+void
+DiscreteFrechetDistance::DensifiedCoordinatesFilter::filter_ro(
+    const geom::CoordinateSequence& seq, std::size_t index)
+{
+    // Skip the first coordinate so we can operate an edge
+    // at a time
+    if (index == 0)
+        return;
+
+    const geom::Coordinate& p0 = seq.getAt(index - 1);
+    const geom::Coordinate& p1 = seq.getAt(index);
+
+    double dx = (p1.x - p0.x) / m_numSubSegs;
+    double dy = (p1.y - p0.y) / m_numSubSegs;
+
+    for(uint32_t i = 0; i < m_numSubSegs; i++) {
+        geom::CoordinateXY pt(p0.x + i * dx, p0.y + i * dy);
+        m_coords.add(pt, true); // allowRepeated
+    }
+
+    // Include the final point in the sequence
+    if (index == seq.size() - 1)
+        m_coords.add(p1, true); // allowRepeated
+}
+
 
 /* Implementation of pure virtual destructor for C++ */
 DiscreteFrechetDistance::MatrixStorage::~MatrixStorage() {};
