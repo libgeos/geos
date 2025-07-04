@@ -153,4 +153,18 @@ void object::test<6> ()
     }
 }
 
+// Large test data set caused stack overflow in old 
+// recursive version of the algorithm
+
+#include "DiscreteFrechetDistanceData.h"
+
+template<>
+template<>
+void object::test<7> ()
+{
+    checkDiscreteFrechet(LS1, LS2, 2.49903e-04);
+}
+
+
+
 } // namespace tut
