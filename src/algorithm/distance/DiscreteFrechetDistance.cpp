@@ -21,6 +21,7 @@
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/util.h>
 #include <geos/util/math.h>
+#include <geos/util/Interrupt.h>
 
 #include <unordered_map>
 
@@ -147,6 +148,7 @@ DiscreteFrechetDistance::computeFrechet(
         std::size_t i0 = diagonal[d];
         std::size_t j0 = diagonal[d + 1];
 
+        GEOS_CHECK_FOR_INTERRUPTS();
         for (std::size_t i = i0; i < coords0.size(); i++) {
             if (distances.isValueSet(i, j0)) {
                 double dist = getMinDistanceAtCorner(distances, i, j0);
@@ -157,6 +159,7 @@ DiscreteFrechetDistance::computeFrechet(
                 break;
             }
         }
+        GEOS_CHECK_FOR_INTERRUPTS();
         for (std::size_t j = j0 + 1; j < coords1.size(); j++) {
             if (distances.isValueSet(i0, j)) {
                 double dist = getMinDistanceAtCorner(distances, i0, j);
@@ -258,6 +261,7 @@ DiscreteFrechetDistance::computeCoordinateDistances(
             }
         }
         imin = i;
+        GEOS_CHECK_FOR_INTERRUPTS();
 
         // Check for shorter distances in this column
         std::size_t j = j0 + 1;
@@ -277,6 +281,7 @@ DiscreteFrechetDistance::computeCoordinateDistances(
             }
         }
         jmin = j;
+        GEOS_CHECK_FOR_INTERRUPTS();
     }
 }
 
