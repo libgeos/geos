@@ -33,13 +33,7 @@ namespace tut {
 
 struct test_frechetdistance_data {
 
-    test_frechetdistance_data()
-        :
-        pm(),
-        gf(GeometryFactory::create(&pm)),
-        reader(gf.get())
-    {}
-
+    geos::io::WKTReader reader;
     static constexpr double TOLERANCE = 0.00001;
 
     void
@@ -50,7 +44,7 @@ struct test_frechetdistance_data {
         std::unique_ptr<Geometry> g2(reader.read(wkt2));
 
         double distance = DiscreteFrechetDistance::distance(*g1, *g2);
-        ensure_equals("", distance, expectedDistance, TOLERANCE);
+        ensure_equals("checkDiscreteFrechet", distance, expectedDistance, TOLERANCE);
     }
 
     void
@@ -61,12 +55,8 @@ struct test_frechetdistance_data {
         std::unique_ptr<Geometry> g2(reader.read(wkt2));
 
         double distance = DiscreteFrechetDistance::distance(*g1, *g2, densifyFactor);
-        ensure_equals("", distance, expectedDistance, TOLERANCE);
+        ensure_equals("checkDensifiedFrechet", distance, expectedDistance, TOLERANCE);
     }
-
-    PrecisionModel pm;
-    GeometryFactory::Ptr gf;
-    geos::io::WKTReader reader;
 
 };
 
@@ -75,17 +65,10 @@ typedef group::object object;
 
 group test_frechetdistance_group("geos::algorithm::distance::DiscreteFrechetDistance");
 
-
-
-//
-// Test Cases
-//
-
 // 1 - testLineSegments
 template<>
 template<>
-void object::test<1>
-()
+void object::test<1> ()
 {
     checkDiscreteFrechet("LINESTRING (0 0, 2 1)", "LINESTRING (0 0, 2 0)", 1.0);
 
@@ -120,8 +103,7 @@ void object::test<1>
 // 2 - testLineSegments2
 template<>
 template<>
-void object::test<2>
-()
+void object::test<2> ()
 {
     checkDiscreteFrechet("LINESTRING (0 0, 2 0)", "LINESTRING (0 1, 1 2, 2 1)", 2.23606797749979);
 }
@@ -129,8 +111,7 @@ void object::test<2>
 // 3 - testLinePoints
 template<>
 template<>
-void object::test<3>
-()
+void object::test<3> ()
 {
     checkDiscreteFrechet("LINESTRING (0 0, 2 0)", "MULTIPOINT ((0 1), (1 0), (2 1))", 1.0);
 }
@@ -142,8 +123,7 @@ void object::test<3>
 //
 template<>
 template<>
-void object::test<4>
-()
+void object::test<4> ()
 {
     checkDiscreteFrechet("LINESTRING (0 0, 100 0)", "LINESTRING (0 0, 50 50, 100 0)", 70.7106781186548);
     // densifying provides accurate HD
@@ -153,8 +133,7 @@ void object::test<4>
 // 5 - test Line Segments revealing distance initialization bug
 template<>
 template<>
-void object::test<5>
-()
+void object::test<5> ()
 {
     checkDiscreteFrechet("LINESTRING (1 1, 2 2)", "LINESTRING (1 4, 2 3)", 3);
 }
@@ -162,8 +141,7 @@ void object::test<5>
 // Empty arguments should throw error
 template<>
 template<>
-void object::test<6>
-()
+void object::test<6> ()
 {
     auto g1 = reader.read("LINESTRING EMPTY");
     auto g2 = reader.read("POLYGON EMPTY");
