@@ -27,6 +27,7 @@
   - Fix OverlayNG coordinate dimension handling for EMPTY geometries (GH-1258, Martin Davis)
   - Fix DepthSegment comparison logic (really this time) (GH-1266, Martin Davis)
   - Change CoverageGapFinder to return polygons (Martin Davis)
+  - Update DiscreteFrechetDistance to new algorithm (GH-1274, Paul Ramsey)
 
 ## Changes in 3.13.0
 2024-09-06
