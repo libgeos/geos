@@ -933,8 +933,7 @@ extern "C" {
         /* No longer supporting densify as of GEOS 3.14 */
         (void)densifyFrac;
         return execute(extHandle, 0, [&]() {
-            *dist = DiscreteFrechetDistance::distance(*g1, *g2);
-            // *dist = DiscreteFrechetDistance::distance(*g1, *g2, densifyFrac);
+            *dist = DiscreteFrechetDistance::distance(*g1, *g2, densifyFrac);
             return 1;
         });
     }

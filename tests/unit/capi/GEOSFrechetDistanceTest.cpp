@@ -26,8 +26,7 @@ group test_capigeosfrechetdistance_group("capi::GEOSFrechetDistance");
 
 template<>
 template<>
-void object::test<1>
-()
+void object::test<1>()
 {
     geom1_ = fromWKT("LINESTRING (0 0, 100 0)");
     geom2_ = fromWKT("LINESTRING (0 0, 50 50, 100 0)");
@@ -41,8 +40,7 @@ void object::test<1>
 
 template<>
 template<>
-void object::test<2>
-()
+void object::test<2>()
 {
     geom1_ = fromWKT("LINESTRING (0 0, 100 0)");
     geom2_ = fromWKT("LINESTRING (0 0, 50 50, 100 0)");
@@ -58,33 +56,15 @@ void object::test<2>
 // https://trac.osgeo.org/geos/ticket/1086
 template<>
 template<>
-void object::test<3>
-()
+void object::test<3>()
 {
+    double dist = 0;
     geom1_ = fromWKT("LINESTRING (0 0, 3 7, 5 5)");
     geom2_ = fromWKT("LINESTRING (0 0, 9 1, 2 2)");
-
-    double dist = 0;
-    GEOSFrechetDistanceDensify(geom1_, geom2_, 1e-40, &dist);
-
-    ensure(dist >= 0); // no crash
+    int ret = GEOSFrechetDistanceDensify(geom1_, geom2_, 1e-40, &dist);
+    ensure_equals(ret, 0);
 }
 
-// No crash with tiny densify fraction
-// https://trac.osgeo.org/geos/ticket/1086
-template<>
-template<>
-void object::test<4>
-()
-{
-    geom1_ = fromWKT("LINESTRING (0 0, 3 7, 5 5)");
-    geom2_ = fromWKT("LINESTRING (0 0, 9 1, 2 2)");
-
-    double dist = 0;
-    GEOSFrechetDistanceDensify(geom1_, geom2_, 1e-19, &dist);
-
-    ensure(dist >= 0); // no crash
-}
 
 template<>
 template<>

@@ -88,13 +88,12 @@ DiscreteFrechetDistance::distance()
 void
 DiscreteFrechetDistance::setDensifyFraction(double dFrac)
 {
-    // !(dFrac > 0) written that way to catch NaN
-    // and test on 1.0/dFrac to avoid a potential later undefined behaviour
-    // when casting to std::size_t
-    bool isUnusableFraction = util::round(1.0 / dFrac) > static_cast<double>(std::numeric_limits<std::size_t>::max());
-    if (std::isnan(dFrac) || dFrac > 1.0 || dFrac <= 0.0 || isUnusableFraction) {
+    // Densifying too far is too CPU intensive, and
+    // we also want to catching NaN and other out-of-range
+    // values here.
+    if (std::isnan(dFrac) || dFrac > 1.0 || dFrac <= 0.001) {
         throw util::IllegalArgumentException(
-            "Fraction is not in range (0.0 - 1.0]");
+            "Fraction is not in range (0.001 - 1.0]");
     }
 
     densifyFraction = dFrac;
