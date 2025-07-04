@@ -75,7 +75,7 @@ struct test_matrixstorage_data {
 typedef test_group<test_matrixstorage_data> group;
 typedef group::object object;
 
-group test_matrixstorage_group("geos::algorithm::distance::DiscreteFrechetDistance::MatrixStorage");
+group test_matrixstorage_group("geos::algorithm::distance::MatrixStorage");
 
 //
 // Test Cases
