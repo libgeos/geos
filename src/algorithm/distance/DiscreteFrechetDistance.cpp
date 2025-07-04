@@ -359,7 +359,7 @@ DiscreteFrechetDistance::DensifiedCoordinatesFilter::filter_ro(
 
 
 /* Implementation of pure virtual destructor for C++ */
-DiscreteFrechetDistance::MatrixStorage::~MatrixStorage() {};
+DiscreteFrechetDistance::MatrixStorage::~MatrixStorage() {}
 
 }
 }
