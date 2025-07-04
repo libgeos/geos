@@ -77,7 +77,7 @@ DiscreteFrechetDistance::distance()
 
     std::unique_ptr<MatrixStorage> distances = createMatrixStorage(coords0->size(), coords1->size());
     std::vector<std::size_t> diagonal = bresenhamDiagonal(coords0->size(), coords1->size());
-    MapDoubleToIndexPair distanceToPair;
+    DistanceToPairMap distanceToPair;
     computeCoordinateDistances(*coords0, *coords1, diagonal, *distances, distanceToPair);
     ptDist = computeFrechet(*coords0, *coords1, diagonal, *distances, distanceToPair);
 
@@ -101,7 +101,7 @@ DiscreteFrechetDistance::setDensifyFraction(double dFrac)
 
 void
 DiscreteFrechetDistance::putIfAbsent(
-    MapDoubleToIndexPair& distanceToPair,
+    DistanceToPairMap& distanceToPair,
     double key, std::array<std::size_t, 2> val)
 {
     auto it = distanceToPair.find(key);
@@ -141,7 +141,7 @@ DiscreteFrechetDistance::computeFrechet(
     const CoordinateSequence& coords0, const CoordinateSequence& coords1,
     std::vector<std::size_t>& diagonal,
     MatrixStorage& distances,
-    MapDoubleToIndexPair& distanceToPair)
+    DistanceToPairMap& distanceToPair)
 {
     for (std::size_t d = 0; d < diagonal.size(); d += 2) {
         std::size_t i0 = diagonal[d];
@@ -209,7 +209,7 @@ void
 DiscreteFrechetDistance::computeCoordinateDistances(
     const CoordinateSequence& coords0, const CoordinateSequence& coords1,
     std::vector<std::size_t>& diagonal,
-    MatrixStorage& distances, MapDoubleToIndexPair& distanceToPair)
+    MatrixStorage& distances, DistanceToPairMap& distanceToPair)
 {
     std::size_t numDiag = diagonal.size();
     double maxDistOnDiag = 0.0;

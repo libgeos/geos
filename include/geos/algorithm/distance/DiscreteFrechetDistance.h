@@ -39,9 +39,6 @@ namespace geos {
 namespace algorithm { // geos::algorithm
 namespace distance {  // geos::algorithm::distance
 
-typedef std::unordered_map<double, std::array<std::size_t, 2>> MapDoubleToIndexPair;
-
-
 /**
  * The Fréchet distance is a measure of similarity between curves. Thus, it can
  * be used like the Hausdorff distance.
@@ -76,6 +73,8 @@ typedef std::unordered_map<double, std::array<std::size_t, 2>> MapDoubleToIndexP
  * @see DiscreteHausdorffDistance
  */
 class GEOS_DLL DiscreteFrechetDistance {
+
+    using DistanceToPairMap = std::unordered_map<double, std::array<std::size_t, 2>>;
 
 public:
 
@@ -419,7 +418,7 @@ private:
      * Utility method to ape Java behaviour
      */
     void putIfAbsent(
-        MapDoubleToIndexPair& distanceToPair,
+        DistanceToPairMap& distanceToPair,
         double key, std::array<std::size_t, 2> val);
 
     /**
@@ -447,7 +446,7 @@ private:
         const geom::CoordinateSequence& coords1,
         std::vector<std::size_t>& diagonal,
         MatrixStorage& distances,
-        MapDoubleToIndexPair& distanceToPair);
+        DistanceToPairMap& distanceToPair);
 
     /**
      * Returns the minimum distance at the corner ({@code i, j}).
@@ -474,7 +473,7 @@ private:
     void computeCoordinateDistances(
         const geom::CoordinateSequence& coords0, const geom::CoordinateSequence& coords1,
         std::vector<std::size_t>& diagonal,
-        MatrixStorage& distances, MapDoubleToIndexPair& distanceToPair);
+        MatrixStorage& distances, DistanceToPairMap& distanceToPair);
 
     /**
      * Computes the indices for the diagonal of a {@code numCols x numRows} grid

@@ -4,24 +4,13 @@
 
 #include <tut/tut.hpp>
 // geos
-//#include <geos/constants.h>
 #include <geos/algorithm/distance/DiscreteFrechetDistance.h>
 #include <geos/util.h>
 
-// std
-// #include <cmath>
-// #include <string>
-// #include <memory>
-
 using geos::algorithm::distance::DiscreteFrechetDistance;
 
-
 namespace tut {
-//
-// Test Group
-//
 
-// Test data, not used
 struct test_matrixstorage_data {
 
     test_matrixstorage_data() {};
