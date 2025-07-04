@@ -39,18 +39,17 @@ namespace geos {
 namespace algorithm { // geos::algorithm
 namespace distance {  // geos::algorithm::distance
 
-/**
+/** \brief
  * The Fréchet distance is a measure of similarity between curves. Thus, it can
  * be used like the Hausdorff distance.
  *
  * An analogy for the Fréchet distance taken from
  * <a href="http://www.kr.tuwien.ac.at/staff/eiter/et-archive/cdtr9464.pdf">
  *   Computing Discrete Fréchet Distance</a>
- * <pre>
- * A man is walking a dog on a leash: the man can move
+ *
+ * <blockquote>A man is walking a dog on a leash: the man can move
  * on one curve, the dog on the other; both may vary their
- * speed, but backtracking is not allowed.
- * </pre>
+ * speed, but backtracking is not allowed. </blockquote>
  *
  * Its metric is better than the Hausdorff distance
  * because it takes the directions of the curves into account.
