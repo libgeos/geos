@@ -155,6 +155,7 @@ void object::test<6> ()
 
 // Large test data set caused stack overflow in old 
 // recursive version of the algorithm
+// https://github.com/libgeos/geos/issues/516
 
 #include "DiscreteFrechetDistanceData.h"
 
@@ -165,6 +166,12 @@ void object::test<7> ()
     checkDiscreteFrechet(LS1, LS2, 2.49903e-04);
 }
 
+template<>
+template<>
+void object::test<8> ()
+{
+    checkDensifiedFrechet("LINESTRING(1 0, 2 0)", "LINESTRING(-1 0, 0 0, 7 8)", 0.002, 9.43398);
+}
 
 
 } // namespace tut
