@@ -32,14 +32,7 @@ namespace geos {
 namespace algorithm { // geos.algorithm
 namespace distance {  // geos.algorithm.distance
 
-/**
- * Computes the Discrete Fréchet Distance between two {@link Geometry}s
- * using a {@code Cartesian} distance computation function.
- *
- * @param geom0 the 1st geometry
- * @param geom1 the 2nd geometry
- * @return the cartesian distance between {#g0} and {#g1}
- */
+
 /* public static */
 double
 DiscreteFrechetDistance::distance(const Geometry& geom0, const Geometry& geom1)
@@ -49,11 +42,16 @@ DiscreteFrechetDistance::distance(const Geometry& geom0, const Geometry& geom1)
 }
 
 
-/**
- * Computes the {@code Discrete Fréchet Distance} between the input geometries
- *
- * @return the Discrete Fréchet Distance
- */
+/* public static */
+double
+DiscreteFrechetDistance::distance(const Geometry& geom0, const Geometry& geom1, double densityFrac)
+{
+    DiscreteFrechetDistance dist(geom0, geom1);
+    dist.setDensifyFraction(densityFrac);
+    return dist.distance();
+}
+
+
 /* private */
 double
 DiscreteFrechetDistance::distance()
@@ -112,13 +110,7 @@ DiscreteFrechetDistance::putIfAbsent(
         distanceToPair[key] = val;
 }
 
-/**
- * Creates a matrix to store the computed distances.
- *
- * @param rows the number of rows
- * @param cols the number of columns
- * @return a matrix storage
- */
+
 /* private static */
 std::unique_ptr<DiscreteFrechetDistance::MatrixStorage>
 DiscreteFrechetDistance::createMatrixStorage(std::size_t rows, std::size_t cols)
@@ -132,11 +124,7 @@ DiscreteFrechetDistance::createMatrixStorage(std::size_t rows, std::size_t cols)
     return std::make_unique<CsrMatrix>(rows, cols, inf);
 }
 
-/**
- * Gets the pair of {@link Coordinate}s at which the distance is obtained.
- *
- * @return the pair of Coordinates at which the distance is obtained
- */
+
 /* public */
 std::array<CoordinateXY, 2>
 DiscreteFrechetDistance::getCoordinates()
@@ -147,16 +135,7 @@ DiscreteFrechetDistance::getCoordinates()
     return ptDist->getCoordinates();
 }
 
-/**
- * Computes the Fréchet Distance for the given distance matrix.
- *
- * @param coords0 an array of {@code Coordinate}s.
- * @param coords1 an array of {@code Coordinate}s.
- * @param diagonal an array of alternating col/row index values for the diagonal of the distance matrix
- * @param distances the distance matrix
- * @param distanceToPair a lookup for coordinate pairs based on a distance
- *
- */
+
 /* private static */
 std::unique_ptr<PointPairDistance>
 DiscreteFrechetDistance::computeFrechet(
@@ -204,14 +183,7 @@ DiscreteFrechetDistance::computeFrechet(
     return result;
 }
 
-/**
- * Returns the minimum distance at the corner ({@code i, j}).
- *
- * @param matrix A sparse matrix
- * @param i the column index
- * @param j the row index
- * @return the minimum distance
- */
+
 /* private static */
 double
 DiscreteFrechetDistance::getMinDistanceAtCorner(MatrixStorage& matrix, std::size_t i, std::size_t j)
@@ -233,16 +205,6 @@ DiscreteFrechetDistance::getMinDistanceAtCorner(MatrixStorage& matrix, std::size
 }
 
 
-/**
- * Computes relevant distances between pairs of {@link Coordinate}s for the
- * computation of the {@code Discrete Fréchet Distance}.
- *
- * @param coords0 an array of {@code Coordinate}s.
- * @param coords1 an array of {@code Coordinate}s.
- * @param diagonal an array of alternating col/row index values for the diagonal of the distance matrix
- * @param distances the distance matrix
- * @param distanceToPair a lookup for coordinate pairs based on a distance
- */
 /* private */
 void
 DiscreteFrechetDistance::computeCoordinateDistances(
@@ -317,19 +279,9 @@ DiscreteFrechetDistance::computeCoordinateDistances(
         }
         jmin = j;
     }
-
-    //System.out.println(distances.toString());
 }
 
-/**
- * Computes the indices for the diagonal of a {@code numCols x numRows} grid
- * using the <a href=https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm>
- * Bresenham line algorithm</a>.
- *
- * @param numCols the number of columns
- * @param numRows the number of rows
- * @return a packed array of column and row indices
- */
+
 /* static */
 std::vector<std::size_t>
 DiscreteFrechetDistance::bresenhamDiagonal(std::size_t numCols, std::size_t numRows)
