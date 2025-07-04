@@ -120,13 +120,11 @@ public:
         return isNull;
     }
 
-private:
-
     /**
      * Initializes the points, avoiding recomputing the distance.
      * @param p0
      * @param p1
-     * @param dist the distance between p0 and p1
+     * @param distSquared the squared distance between p0 and p1
      */
     void
     initialize(const geom::CoordinateXY& p0, const geom::CoordinateXY& p1,
@@ -138,14 +136,14 @@ private:
         isNull = false;
     }
 
+private:
+
     std::array<geom::CoordinateXY, 2> pt;
-
     double distanceSquared;
-
     bool isNull;
+
 };
 
 } // geos::algorithm::distance
 } // geos::algorithm
 } // geos
-
