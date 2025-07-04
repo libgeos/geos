@@ -363,4 +363,4 @@ DiscreteFrechetDistance::MatrixStorage::~MatrixStorage() {}
 
 }
 }
-};
+}
