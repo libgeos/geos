@@ -423,7 +423,7 @@ endif()
 # Generate targets file for importing directly from GEOS build tree
 #-----------------------------------------------------------------------------
 
-export(TARGETS geos geos_c geos_cxx_flags geos_developer_cxx_flags
+export(TARGETS ryu geos geos_c geos_cxx_flags geos_developer_cxx_flags
        NAMESPACE GEOS::
        FILE "geos-targets.cmake")
 
