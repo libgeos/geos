@@ -38,4 +38,3 @@ BasicSegmentString::print(std::ostream& os) const
 
 } // namespace geos.noding
 } // namespace geos
-
