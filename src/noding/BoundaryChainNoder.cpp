@@ -79,7 +79,7 @@ BoundaryChainNoder::nodeChains(
 {
     std::vector<SegmentString*>* nodedChains = new std::vector<SegmentString*>();
     for (SegmentString* chain : *chains) {
-        nodeChain(chain, nodePts, *nodedChains);
+        nodeChain(chain, nodePts, nodedChains);
     }
     return nodedChains;
 }
@@ -90,17 +90,17 @@ void
 BoundaryChainNoder::nodeChain(
     SegmentString* chain,
     const Coordinate::UnorderedSet& nodePts,
-    std::vector<SegmentString*>& nodedChains)
+    std::vector<SegmentString*>* nodedChains)
 {
     std::size_t start = 0;
     while (start < chain->size() - 1) {
         std::size_t end = findNodeIndex(chain, start, nodePts);
         //-- if no interior nodes found, keep original chain
         if (start == 0 && end == chain->size() - 1) {
-            nodedChains.push_back(chain);
+            nodedChains->push_back(chain);
             return;
         }
-        nodedChains.push_back(substring(chain, start, end));
+        nodedChains->push_back(substring(chain, start, end));
         start = end;
     }
     // We replaced this SegmentString with substrings,
@@ -113,10 +113,11 @@ BoundaryChainNoder::nodeChain(
 BasicSegmentString*
 BoundaryChainNoder::substring(const SegmentString* segString, std::size_t start, std::size_t end)
 {
-    m_substrings.emplace_back(new CoordinateSequence());
-    CoordinateSequence* pts = m_substrings.back().get();
+    // m_substrings.emplace_back(new CoordinateSequence());
+    // CoordinateSequence* pts = m_substrings.back().get();
+    CoordinateSequence* pts = new CoordinateSequence();
     for (std::size_t i = start; i < end + 1; i++) {
-      pts->add(segString->getCoordinate(i));
+        pts->add(segString->getCoordinate(i));
     }
     return new BasicSegmentString(pts, segString->getData());
 }

@@ -181,7 +181,7 @@ private:
     void nodeChain(
         SegmentString* chain,
         const Coordinate::UnorderedSet& nodePts,
-        std::vector<SegmentString*>& nodedChains);
+        std::vector<SegmentString*>* nodedChains);
 
     std::size_t findNodeIndex(
         const SegmentString* chain,

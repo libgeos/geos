@@ -111,15 +111,6 @@ void object::test<5> ()
         "MULTIPOLYGON (((1 9, 6 9, 9 9, 9 1, 6 1, 1 1, 1 9), (2 8, 2 2, 6 2, 8 2, 8 8, 6 8, 2 8)), ((5 3, 3 3, 3 7, 5 7, 7 7, 7 3, 5 3), (5 4, 6 4, 6 6, 5 6, 4 6, 4 4, 5 4)))");
 }
 
-// testPolygonsNested
-template<>
-template<>
-void object::test<6> ()
-{
-    checkUnion(
-        "GEOMETRYCOLLECTION (POLYGON ((1 9, 9 9, 9 1, 1 1, 1 9), (3 7, 3 3, 7 3, 7 7, 3 7)), POLYGON ((3 7, 7 7, 7 3, 3 3, 3 7)))",
-        "POLYGON ((1 1, 1 9, 9 9, 9 1, 1 1))");
-}
 
 // testPolygonsFormingHole
 template<>
@@ -139,6 +130,16 @@ void object::test<8> ()
     checkUnion(
         "MULTIPOLYGON (((0 0, 0 25, 25 25, 25 0, 0 0)), ((0 25, 0 50, 25 50, 25 25, 0 25)), ((0 50, 0 75, 25 75, 25 50, 0 50)), ((0 75, 0 100, 25 100, 25 75, 0 75)), ((25 0, 25 25, 50 25, 50 0, 25 0)), ((25 25, 25 50, 50 50, 50 25, 25 25)), ((25 50, 25 75, 50 75, 50 50, 25 50)), ((25 75, 25 100, 50 100, 50 75, 25 75)), ((50 0, 50 25, 75 25, 75 0, 50 0)), ((50 25, 50 50, 75 50, 75 25, 50 25)), ((50 50, 50 75, 75 75, 75 50, 50 50)), ((50 75, 50 100, 75 100, 75 75, 50 75)), ((75 0, 75 25, 100 25, 100 0, 75 0)), ((75 25, 75 50, 100 50, 100 25, 75 25)), ((75 50, 75 75, 100 75, 100 50, 75 50)), ((75 75, 75 100, 100 100, 100 75, 75 75)))",
         "POLYGON ((0 25, 0 50, 0 75, 0 100, 25 100, 50 100, 75 100, 100 100, 100 75, 100 50, 100 25, 100 0, 75 0, 50 0, 25 0, 0 0, 0 25))");
+}
+
+// testPolygonsNested
+template<>
+template<>
+void object::test<6> ()
+{
+    checkUnion(
+        "GEOMETRYCOLLECTION (POLYGON ((1 9, 9 9, 9 1, 1 1, 1 9), (3 7, 3 3, 7 3, 7 7, 3 7)), POLYGON ((3 7, 7 7, 7 3, 3 3, 3 7)))",
+        "POLYGON ((1 1, 1 9, 9 9, 9 1, 1 1))");
 }
 
 /**
@@ -251,5 +252,40 @@ void object::test<20>()
     checkUnion("GEOMETRYCOLLECTION( POLYGON EMPTY )",
                "POLYGON EMPTY");
 }
+
+// testHoleTouchingSide
+template<>
+template<>
+void object::test<21> ()
+{
+    checkUnion(
+        "GEOMETRYCOLLECTION (POLYGON ((1 9, 9 9, 9 6, 2 6, 1 9)), POLYGON ((1 1, 1 9, 2 6, 5 3, 9 6, 9 1, 1 1)))",
+        "POLYGON ((9 6, 9 1, 1 1, 1 9, 9 9, 9 6), (9 6, 2 6, 5 3, 9 6))"
+    );
+}
+
+// testHolesTouchingSide
+template<>
+template<>
+void object::test<22> ()
+{
+    checkUnion(
+        "GEOMETRYCOLLECTION (POLYGON ((1 9, 9 9, 9 6, 5 7, 2 6, 1 9)), POLYGON ((1 1, 1 9, 2 6, 4 3, 5 7, 7 3, 9 6, 9 1, 1 1)))",
+        "POLYGON ((9 9, 9 6, 9 1, 1 1, 1 9, 9 9), (5 7, 7 3, 9 6, 5 7), (2 6, 4 3, 5 7, 2 6))"
+    );
+}
+
+// testHolesTouching
+template<>
+template<>
+void object::test<23> ()
+{
+    checkUnion(
+        "GEOMETRYCOLLECTION (POLYGON ((1 9, 9 9, 9 6, 7 7, 5 7, 2 6, 1 9)), POLYGON ((1 1, 1 9, 2 6, 4 3, 5 7, 7 3, 7 7, 9 6, 9 1, 1 1)))",
+        "POLYGON ((9 9, 9 6, 9 1, 1 1, 1 9, 9 9), (5 7, 7 3, 7 7, 5 7), (2 6, 4 3, 5 7, 2 6))"
+    );
+}
+
+
 
 } // namespace tut
