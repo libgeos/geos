@@ -18,7 +18,6 @@
  **********************************************************************/
 
 #include <geos/precision/GeometryPrecisionReducer.h>
-#include <geos/precision/PrecisionReducerCoordinateOperation.h>
 #include <geos/geom/util/GeometryEditor.h>
 #include <geos/geom/util/NoOpGeometryOperation.h>
 #include <geos/geom/Coordinate.h>
