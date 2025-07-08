@@ -18,44 +18,54 @@
 
 #include <geos/export.h>
 
-namespace geos {
-namespace util { // geos::util
+namespace geos::util {
 
-/** Signature of a progression function.
+/** Signature of a progress function.
  *
- * Such function takes a progression ratio (between 0 and 1), and an optional
+ * Such function takes a progress ratio (between 0 and 1), and an optional
  * message.
  */
-typedef std::function<void(double, const char*)> ProgressFunction;
+using ProgressFunction = std::function<void(double, const char*)>;
 
-/** Do progress function related processing for an iteration loop of iterCount iterations.
- *
- * This function will invoke (*progressFunction) every notificationInterval
- *iteration.
- *
- * This function will return, or throw a geos::util::InterruptedException.
- *
- * A typical use is:
- * \code
- * const size_t notificationInterval = std::max<size_t>(1, iterCount / 100);
- * for (size_t i = 0, iNotify = 0; i < iterCount; ++i) {
- *     // do something useful
- *     if (progressFunction) {
- *         geos::util::ProgressFunctionIteration(*progressFunction, i, iterCount, iNotify, notificationInterval);
- *     }
- * }
- * if (progressFunction) {
- *   (*progressFunction)(1.0, nullptr);
- * }
- * \endcode
- *
- * @param progressFunction Progress function
- * @param i Current index of loop iteration.
- * @param iterCount Total number of loop iteration.
- * @param iNotify Notification counter, updated by this function. Must be set by the caller (before the loop) to 0.
- * @param notificationInterval Notification interval (e.g. iterCount / 100).
- */
-void ProgressFunctionIteration(ProgressFunction& progressFunction, size_t i, size_t iterCount, size_t& iNotify, size_t notificationInterval);
+class GEOS_DLL Progress {
+
+public:
+    Progress(const ProgressFunction* pCallback, size_t pIterCount) :
+        callback(pCallback),
+        i(0),
+        iterCount(pIterCount),
+        notificationInterval(std::max<size_t>(1, iterCount / 100)),
+        iNotify(0) {}
+
+    void setResolution(double res) {
+        notificationInterval = std::max<size_t>(1, static_cast<std::size_t>(static_cast<double>(iterCount) * res));
+    }
+
+    void update() {
+        if (callback) {
+            if (iNotify + 1 == notificationInterval) {
+                (*callback)(static_cast<double>(i + 1)/static_cast<double>(iterCount), nullptr);
+                iNotify = 0;
+            }
+            else {
+                ++iNotify;
+            }
+        }
+    }
+
+    void finish() const {
+        if (callback) {
+            (*callback)(1.0, nullptr);
+        }
+    }
+
+private:
+    const ProgressFunction* callback;
+    std::size_t i;
+    std::size_t iterCount;
+    std::size_t notificationInterval;
+    std::size_t iNotify;
+};
 
 /** Create a scaled progress function.
  *
@@ -80,5 +90,4 @@ ProgressFunction CreateScaledProgressFunction(double ratioMin, double ratioMax,
 
 
 } // namespace geos::util
-} // namespace geos
 

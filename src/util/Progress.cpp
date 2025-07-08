@@ -14,20 +14,7 @@
 
 #include <geos/util/Progress.h>
 
-namespace geos {
-namespace util { // geos::util
-
-void ProgressFunctionIteration(ProgressFunction& progressFunction, size_t i,
-                               size_t iterCount, size_t& iNotify,
-                               size_t notificationInterval) {
-    if (iNotify + 1 == notificationInterval) {
-        progressFunction(static_cast<double>(i + 1)/static_cast<double>(iterCount), nullptr);
-        iNotify = 0;
-    }
-    else {
-        ++iNotify;
-    }
-}
+namespace geos::util {
 
 ProgressFunction CreateScaledProgressFunction(double ratioMin, double ratioMax,
                                               ProgressFunction& progressFunction)
@@ -39,5 +26,3 @@ ProgressFunction CreateScaledProgressFunction(double ratioMin, double ratioMax,
 }
 
 } // namespace geos::util
-} // namespace geos
-

@@ -56,23 +56,21 @@ std::unique_ptr<MultiLineString>
 CoverageEdge::createLines(
     const std::vector<CoverageEdge*>& edges,
     const GeometryFactory* geomFactory,
-    geos::util::ProgressFunction* progressFunction)
+    util::ProgressFunction* progressFunction)
 {
     std::vector<std::unique_ptr<LineString>> lines;
-    const size_t iterCount = edges.size();
-    const size_t notificationInterval = std::max<size_t>(1, iterCount / 100);
-    for (size_t i = 0, iNotify = 0; i < iterCount; ++i) {
-        const CoverageEdge* edge = edges[i];
+
+    util::Progress progress(progressFunction, edges.size());
+
+    for (const CoverageEdge* edge : edges) {
         auto cs = edge->getCoordinates()->clone();
         auto ls = geomFactory->createLineString(std::move(cs));
         lines.push_back(std::move(ls));
-        if (progressFunction) {
-            geos::util::ProgressFunctionIteration(*progressFunction, i, iterCount, iNotify, notificationInterval);
-        }
+        progress.update();
     }
-    if (progressFunction) {
-        (*progressFunction)(1.0, nullptr);
-    }
+
+    progress.finish();
+
     return geomFactory->createMultiLineString(std::move(lines));
 }
 

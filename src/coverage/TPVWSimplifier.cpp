@@ -104,7 +104,7 @@ std::unique_ptr<MultiLineString>
 TPVWSimplifier::simplify(geos::util::ProgressFunction* progressFunction)
 {
     std::vector<bool> emptyList;
-    geos::util::ProgressFunction subProgress;
+    util::ProgressFunction subProgress;
 
     constexpr double RATIO_FIRST_PASS = 0.8;
 
@@ -117,7 +117,7 @@ TPVWSimplifier::simplify(geos::util::ProgressFunction* progressFunction)
 
     if (progressFunction)
     {
-        subProgress = geos::util::CreateScaledProgressFunction(
+        subProgress = util::CreateScaledProgressFunction(
             0, ratioInputLinesOverInputAndConstraint, *progressFunction);
     }
     std::vector<Edge> edges = createEdges(inputLines, isFreeRing,
@@ -125,7 +125,7 @@ TPVWSimplifier::simplify(geos::util::ProgressFunction* progressFunction)
 
     if (progressFunction)
     {
-        subProgress = geos::util::CreateScaledProgressFunction(
+        subProgress = util::CreateScaledProgressFunction(
             ratioInputLinesOverInputAndConstraint, RATIO_FIRST_PASS, *progressFunction);
     }
     std::vector<Edge> constraintEdges = createEdges(
@@ -137,25 +137,22 @@ TPVWSimplifier::simplify(geos::util::ProgressFunction* progressFunction)
     edgeIndex.add(constraintEdges);
 
     std::vector<std::unique_ptr<LineString>> result;
-    const size_t iterCount = edges.size();
-    const size_t notificationInterval = std::max<size_t>(1, iterCount / 100);
     if (progressFunction)
     {
-        subProgress = geos::util::CreateScaledProgressFunction(
+        subProgress = util::CreateScaledProgressFunction(
                         RATIO_FIRST_PASS, 1.0, *progressFunction);
     }
-    for (size_t i = 0, iNotify = 0; i < iterCount; ++i) {
-        auto& edge = edges[i];
+
+    util::Progress progress(progressFunction ? &subProgress : nullptr, edges.size());
+
+    for (auto& edge : edges) {
         std::unique_ptr<CoordinateSequence> ptsSimp = edge.simplify(edgeIndex);
         auto ls = geomFactory->createLineString(std::move(ptsSimp));
         result.emplace_back(ls.release());
-        if (progressFunction) {
-            geos::util::ProgressFunctionIteration(subProgress, i, iterCount, iNotify, notificationInterval);
-        }
+        progress.update();
     }
-    if (progressFunction) {
-        (*progressFunction)(1.0, nullptr);
-    }
+
+    progress.finish();
     return geomFactory->createMultiLineString(std::move(result));
 }
 
@@ -164,25 +161,23 @@ std::vector<Edge>
 TPVWSimplifier::createEdges(
     const MultiLineString* lines,
     std::vector<bool>& freeRing,
-    geos::util::ProgressFunction* progressFunction)
+    util::ProgressFunction* progressFunction)
 {
     std::vector<Edge> edges;
 
     if (lines == nullptr)
         return edges;
     const size_t iterCount = lines->getNumGeometries();
-    const size_t notificationInterval = std::max<size_t>(1, iterCount / 100);
-    for (size_t i = 0, iNotify = 0; i < iterCount; ++i) {
+
+    util::Progress progress(progressFunction, lines->getNumGeometries());
+
+    for (size_t i = 0; i < iterCount; ++i) {
         const LineString* line = lines->getGeometryN(i);
         bool isFree = freeRing.empty() ? false : freeRing[i];
         edges.emplace_back(line, isFree, areaTolerance);
-        if (progressFunction) {
-            geos::util::ProgressFunctionIteration(*progressFunction, i, iterCount, iNotify, notificationInterval);
-        }
+        progress.update();
     }
-    if (progressFunction) {
-        (*progressFunction)(1.0, nullptr);
-    }
+    progress.finish();
     return edges;
 }
 

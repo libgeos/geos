@@ -35,21 +35,18 @@ void
 VertexRingCounter::count(
     const std::vector<const Geometry*>& geoms,
     std::map<Coordinate, std::size_t>& counts,
-    geos::util::ProgressFunction* progressFunction)
+    util::ProgressFunction* progressFunction)
 {
     VertexRingCounter vertextCounter(counts);
-    const size_t iterCount = geoms.size();
-    const size_t notificationInterval = std::max<size_t>(1, iterCount / 100);
-    for (size_t i = 0, iNotify = 0; i < iterCount; ++i) {
-        const Geometry* geom = geoms[i];
+
+    util::Progress progress(progressFunction, geoms.size());
+
+    for (const Geometry* geom : geoms) {
         geom->apply_ro(vertextCounter);
-        if (progressFunction) {
-            geos::util::ProgressFunctionIteration(*progressFunction, i, iterCount, iNotify, notificationInterval);
-        }
+        progress.update();
     }
-    if (progressFunction) {
-        (*progressFunction)(1.0, nullptr);
-    }
+
+    progress.finish();
 }
 
 
