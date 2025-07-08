@@ -404,6 +404,45 @@ void object::test<13>
     checkBinomial2(5e14, 345291.0);
 }
 
+template<>
+template<>
+void object::test<14> ()
+{
+    DD a(1.0);
+    double b = 1.0;
+    DD c = a + b;
+    double e = 2.0;
+    double f = 0.0;
+    ensure_equals(e, c.doubleValue());
+    ensure_equals((int)e, c.intValue());
+    c = a - b;
+    ensure_equals(f, c.doubleValue());
+    c = a * e;
+    ensure_equals(e, c.doubleValue());
+    c = a / b;
+    ensure_equals(b, c.doubleValue());
+}
+
+template<>
+template<>
+void object::test<15> ()
+{
+    DD nan = DD(1.0) / DD(0.0);
+    DD r = nan.negate();
+    ensure(r.isNaN());
+}
+
+
+template<>
+template<>
+void object::test<16> ()
+{
+    DD result = DD::pow(DD(2.0), 0);
+    ensure_equals(result.doubleValue(), 1.0);
+
+    result = DD::pow(DD(2.0), 1);
+    ensure_equals(result.doubleValue(), 2.0);
+}
 
 
 } // namespace tut
