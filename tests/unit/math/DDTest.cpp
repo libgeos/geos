@@ -408,19 +408,19 @@ template<>
 template<>
 void object::test<14> ()
 {
-    DD a(1.0);
-    double b = 1.0;
-    DD c = a + b;
-    double e = 2.0;
-    double f = 0.0;
-    ensure_equals(e, c.doubleValue());
-    ensure_equals((int)e, c.intValue());
-    c = a - b;
-    ensure_equals(f, c.doubleValue());
-    c = a * e;
-    ensure_equals(e, c.doubleValue());
-    c = a / b;
-    ensure_equals(b, c.doubleValue());
+    DD dd_one(1.0);
+    double zero = 0.0;
+    double one = 1.0;
+    double two = 2.0;
+    DD c = dd_one + one;
+    ensure_equals(two, c.doubleValue());
+    ensure_equals((int)two, c.intValue());
+    c = dd_one - one;
+    ensure_equals(zero, c.doubleValue());
+    c = dd_one * two;
+    ensure_equals(two, c.doubleValue());
+    c = dd_one / one;
+    ensure_equals(one, c.doubleValue());
 }
 
 template<>
