@@ -37,3 +37,4 @@ capi/geos_c.h
 .project
 .ccache/
 web/public/
+*.code-workspace
