@@ -17,6 +17,7 @@
 #include <geos/noding/Noder.h>     // for composition
 #include <geos/noding/SegmentString.h>     // for composition
 #include <geos/geom/LineSegment.h> // for composition
+#include <geos/noding/BasicSegmentString.h>
 
 #include <unordered_set>
 
@@ -57,7 +58,7 @@ class GEOS_DLL BoundaryChainNoder : public Noder {
 
 private:
 
-    class BoundarySegmentMap {
+    class BoundaryChainMap {
 
         private:
 
@@ -77,19 +78,19 @@ private:
 
         public:
 
-            BoundarySegmentMap(SegmentString* ss)
+            BoundaryChainMap(SegmentString* ss)
                 : segString(ss) {
                     isBoundary.resize(ss->size()-1, false);
                 };
 
             void setBoundarySegment(std::size_t index);
-            void createChains(std::vector<SegmentString*>& chainList, bool constructZ, bool constructM);
+            void createChains(std::vector<SegmentString*>& chains, bool constructZ, bool constructM);
     };
 
     class Segment {
     public:
         Segment(const geom::CoordinateSequence& seq,
-            BoundarySegmentMap& segMap,
+            BoundaryChainMap& segMap,
             std::size_t index)
             : m_seq(seq)
             , m_segMap(segMap)
@@ -105,7 +106,7 @@ private:
             return m_seq.getAt<geom::CoordinateXY>(m_flip ? m_index + 1 : m_index);
         }
 
-        void markInBoundary() const {
+        void markBoundary() const {
             m_segMap.setBoundarySegment(m_index);
         };
 
@@ -125,15 +126,21 @@ private:
 
     private:
         const geom::CoordinateSequence& m_seq;
-        BoundarySegmentMap& m_segMap;
+        BoundaryChainMap& m_segMap;
         std::size_t m_index;
         bool m_flip;
     };
 
+
 public:
+
     using SegmentSet = std::unordered_set<Segment, Segment::HashCode>;
 
-    BoundaryChainNoder() : chainList(nullptr), m_constructZ(false), m_constructM(false) {};
+    BoundaryChainNoder()
+        : m_chainList(nullptr)
+        , m_constructZ(false)
+        , m_constructM(false)
+        {};
 
     // Noder virtual methods
     std::vector<SegmentString*>* getNodedSubstrings() const override;
@@ -143,28 +150,53 @@ public:
 private:
 
     // Members
-    std::vector<SegmentString*>* chainList;
+    std::vector<SegmentString*>* m_chainList;
+    std::vector<std::unique_ptr<geom::CoordinateSequence>> m_substrings;
     bool m_constructZ;
     bool m_constructM;
 
     // Methods
     void addSegments(std::vector<SegmentString*>* segStrings,
         SegmentSet& segSet,
-        std::vector<BoundarySegmentMap>& includedSegs);
+        std::vector<BoundaryChainMap>& includedSegs);
 
     static void addSegments(SegmentString* segString,
-        BoundarySegmentMap& segInclude,
+        BoundaryChainMap& segInclude,
         SegmentSet& segSet);
+
+    static bool segSetContains(
+        SegmentSet& segSet, Segment& seg);
 
     static void markBoundarySegments(SegmentSet& segSet);
 
-    std::vector<SegmentString*>* extractChains(std::vector<BoundarySegmentMap>& sections) const;
+    std::vector<SegmentString*>* extractChains(std::vector<BoundaryChainMap>& sections) const;
 
-    static bool segSetContains(SegmentSet& segSet, Segment& seg);
+    Coordinate::UnorderedSet findNodePts(
+        const std::vector<SegmentString*>* segStrings) const;
+
+    std::vector<SegmentString*>* nodeChains(
+        const std::vector<SegmentString*>* chains,
+        const Coordinate::UnorderedSet& nodePts);
+
+    void nodeChain(
+        SegmentString* chain,
+        const Coordinate::UnorderedSet& nodePts,
+        std::vector<SegmentString*>* nodedChains);
+
+    std::size_t findNodeIndex(
+        const SegmentString* chain,
+        std::size_t start,
+        const Coordinate::UnorderedSet& nodePts) const;
+
+    noding::BasicSegmentString* substring(
+        const SegmentString* segString,
+        std::size_t start, std::size_t end);
+
+    // Declared as non-copyable
+    BoundaryChainNoder(const BoundaryChainNoder& other);
+    BoundaryChainNoder& operator=(const BoundaryChainNoder& rhs);
 
 };
 
 } // namespace geos::noding
 } // namespace geos
-
-
