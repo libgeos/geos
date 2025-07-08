@@ -90,7 +90,7 @@ DistanceOp::DistanceOp(const Geometry& g0, const Geometry& g1):
 DistanceOp::DistanceOp(const Geometry& g0, const Geometry& g1, double tdist)
     :
     geom{{&g0, &g1}},
-    terminateDistance(tdist),
+    terminateDistance(tdist < 0.0 ? 0.0 : tdist),
     minDistance(DoubleInfinity)
 {}
 

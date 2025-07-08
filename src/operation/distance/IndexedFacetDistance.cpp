@@ -59,6 +59,7 @@ IndexedFacetDistance::distance(const Geometry* g) const
 bool
 IndexedFacetDistance::isWithinDistance(const Geometry* g, double maxDistance) const
 {
+    if (maxDistance < 0.0) maxDistance = 0.0;
     // short-circuit check
     double envDist = baseGeometry.getEnvelopeInternal()->distance(*g->getEnvelopeInternal());
     if (envDist > maxDistance) {
