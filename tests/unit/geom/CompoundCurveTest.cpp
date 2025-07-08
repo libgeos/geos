@@ -322,11 +322,12 @@ void object::test<9>()
 
     curves.push_back(wktreader_.read<SimpleCurve>("LINESTRING (0 0, 1 2)"));
     curves.push_back(wktreader_.read<SimpleCurve>("CIRCULARSTRING (2 1, 3 3, 4 1)"));
+    ensure_THROW(factory_->createCompoundCurve(std::move(curves)), geos::util::IllegalArgumentException);
 
+    curves.clear();
+    curves.push_back(wktreader_.read<SimpleCurve>("LINESTRING (0 0, 1 2)"));
+    curves.push_back(wktreader_.read<SimpleCurve>("CIRCULARSTRING EMPTY"));
     ensure_THROW(factory_->createCompoundCurve(std::move(curves)), geos::util::IllegalArgumentException);
 }
 
 }
-
-
-
