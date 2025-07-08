@@ -343,8 +343,12 @@ DiscreteFrechetDistance::DensifiedCoordinatesFilter::filter_ro(
 {
     // Skip the first coordinate so we can operate an edge
     // at a time
-    if (index == 0)
+    if (index == 0) {
+        // Preserve one coordinate for points
+        if (seq.size() == 1)
+            m_coords.add(seq.getAt(index), true);
         return;
+    }
 
     const geom::Coordinate& p0 = seq.getAt(index - 1);
     const geom::Coordinate& p1 = seq.getAt(index);
