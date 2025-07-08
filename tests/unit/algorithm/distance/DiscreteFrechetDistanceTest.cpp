@@ -153,7 +153,7 @@ void object::test<6> ()
     }
 }
 
-// Large test data set caused stack overflow in old 
+// Large test data set caused stack overflow in old
 // recursive version of the algorithm
 // https://github.com/libgeos/geos/issues/516
 
@@ -173,5 +173,11 @@ void object::test<8> ()
     checkDensifiedFrechet("LINESTRING(1 0, 2 0)", "LINESTRING(-1 0, 0 0, 7 8)", 0.002, 9.43398);
 }
 
+template<>
+template<>
+void object::test<9> ()
+{
+    checkDensifiedFrechet("POINT(-11.1111111 40)", "POINT(-11.1111111 40)", 0.8, 0);
+}
 
 } // namespace tut
