@@ -314,13 +314,19 @@ CompoundCurve::reverseImpl() const
 void
 CompoundCurve::validateConstruction() const
 {
+    for (std::size_t i = 0; i < curves.size(); i++) {
+        if (curves[i]->isEmpty()) {
+            std::ostringstream ss;
+            ss << "Section " << i << " of CompoundCurve is empty";
+            throw util::IllegalArgumentException(ss.str());
+        }
+    }
     for (std::size_t i = 1; i < curves.size(); i++) {
         const CoordinateXY& end = curves[i-1]->getCoordinatesRO()->back<CoordinateXY>();
         const CoordinateXY& start = curves[i]->getCoordinatesRO()->front<CoordinateXY>();
 
         if (start != end) {
             std::ostringstream ss;
-
             ss << "Sections of CompoundCurve are not contiguous: " <<
                    "curve " << (i-1) << " ends at " << end <<
                    " ; curve " << i << " begins at " << start;
