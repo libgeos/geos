@@ -77,7 +77,7 @@ void object::test<2>
         ensure( GEOSEquals(input, result) );
         GEOSGeom_destroy(result);
     }
-    catch(std::exception e) {
+    catch(std::exception& e) {
         (void)0;
     }
 
