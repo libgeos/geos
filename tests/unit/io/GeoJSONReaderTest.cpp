@@ -33,7 +33,7 @@ struct test_geojsonreader_data {
         :
         pm(1000.0),
         gf(geos::geom::GeometryFactory::create(&pm)),
-        geojsonreader(*(gf.get()))
+        geojsonreader(*gf)
     {}
 
 };

@@ -171,7 +171,7 @@ LargestEmptyCircle::distanceToConstraints(const Coordinate& c)
         return -boundaryDist;
 
     }
-    double dist = obstacleDistance.distance(*(pt.get()));
+    double dist = obstacleDistance.distance(*pt);
     return dist;
 }
 
@@ -200,7 +200,7 @@ LargestEmptyCircle::initBoundary()
     gridEnv = *(boundary->getEnvelopeInternal());
     // if boundary does not enclose an area cannot create a ptLocator
     if (boundary->getDimension() >= 2) {
-        boundaryPtLocater = detail::make_unique<algorithm::locate::IndexedPointInAreaLocator>(*(boundary.get()));
+        boundaryPtLocater = detail::make_unique<algorithm::locate::IndexedPointInAreaLocator>(*boundary);
         boundaryDistance = detail::make_unique<operation::distance::IndexedFacetDistance>(boundary.get());
     }
 }
@@ -273,7 +273,7 @@ LargestEmptyCircle::compute()
 
     // compute radius point
     std::unique_ptr<Point> centerPoint(factory->createPoint(centerPt));
-    const auto& nearestPts = obstacleDistance.nearestPoints(*(centerPoint.get()));
+    const auto& nearestPts = obstacleDistance.nearestPoints(*centerPoint);
     radiusPt = nearestPts->getAt(0);
 
     // flag computation

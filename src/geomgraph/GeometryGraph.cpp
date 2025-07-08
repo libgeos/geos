@@ -113,7 +113,7 @@ GeometryGraph::getBoundaryNodes()
 {
     if(! boundaryNodes.get()) {
         boundaryNodes.reset(new std::vector<Node*>());
-        getBoundaryNodes(*(boundaryNodes.get()));
+        getBoundaryNodes(*boundaryNodes);
     }
     return boundaryNodes.get();
 }

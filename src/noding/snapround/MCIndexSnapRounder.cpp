@@ -120,7 +120,7 @@ MCIndexSnapRounder::checkCorrectness(
         NodedSegmentString::getNodedSubstrings(inputSegmentStrings)
     );
 
-    NodingValidator nv(*(resultSegStrings.get()));
+    NodingValidator nv(*resultSegStrings);
     try {
         nv.checkValid();
     }
