@@ -29,12 +29,12 @@ namespace coverage { // geos.coverage
 LineSegment::UnorderedSet
 CoverageBoundarySegmentFinder::findBoundarySegments(
     const std::vector<const Geometry*>& geoms,
-    util::ProgressFunction* progressFunction)
+    const util::ProgressFunction& progressFunction)
 {
     LineSegment::UnorderedSet segs;
     CoverageBoundarySegmentFinder finder(segs);
 
-    util::Progress progress(progressFunction, geoms.size());
+    util::ProgressContext progress(progressFunction, geoms.size());
 
     for (const auto& geom : geoms) {
         geom->apply_ro(finder);

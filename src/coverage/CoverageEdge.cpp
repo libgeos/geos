@@ -56,11 +56,11 @@ std::unique_ptr<MultiLineString>
 CoverageEdge::createLines(
     const std::vector<CoverageEdge*>& edges,
     const GeometryFactory* geomFactory,
-    util::ProgressFunction* progressFunction)
+    const util::ProgressFunction& progressFunction)
 {
     std::vector<std::unique_ptr<LineString>> lines;
 
-    util::Progress progress(progressFunction, edges.size());
+    util::ProgressContext progress(progressFunction, edges.size());
 
     for (const CoverageEdge* edge : edges) {
         auto cs = edge->getCoordinates()->clone();

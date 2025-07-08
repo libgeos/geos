@@ -59,7 +59,8 @@ public:
 
     static LineSegment::UnorderedSet
         findBoundarySegments(const std::vector<const Geometry*>& geoms,
-                             geos::util::ProgressFunction* progressFunction);
+                             const util::ProgressFunction& progressFunction = util::defaultProgress);
+
 
     static bool isBoundarySegment(
         const LineSegment::UnorderedSet& boundarySegs,

@@ -27,7 +27,7 @@ struct test_coveragesimplifier_data {
     void checkNoop(
         const std::vector<std::unique_ptr<Geometry>>& input)
     {
-        std::vector<std::unique_ptr<Geometry>> actual = CoverageSimplifier::simplify(input, 0, nullptr);
+        std::vector<std::unique_ptr<Geometry>> actual = CoverageSimplifier::simplify(input, 0);
 
         // std::cout << w.write(*input[0]) << std::endl;
         // std::cout << w.write(*input[1]) << std::endl;
@@ -44,13 +44,12 @@ struct test_coveragesimplifier_data {
         const std::vector<std::unique_ptr<Geometry>>& expected)
     {
         double lastRatio = 0.0;
-        geos::util::ProgressFunction myProgress = [&lastRatio](double ratio, const char*)
+        geos::util::ProgressFunction myProgress([&lastRatio](double ratio, const char*)
         {
             ensure("ratio >= lastRatio", ratio >= lastRatio);
             lastRatio = ratio;
-            return true;
-        };
-        std::vector<std::unique_ptr<Geometry>> actual = CoverageSimplifier::simplify(input, tolerance, &myProgress);
+        });
+        std::vector<std::unique_ptr<Geometry>> actual = CoverageSimplifier::simplify(input, tolerance, myProgress);
         checkArrayEqual(expected, actual);
         ensure("lastRatio == 1.0", lastRatio == 1.0);
     }
@@ -60,7 +59,7 @@ struct test_coveragesimplifier_data {
         double tolerance,
         const std::vector<std::unique_ptr<Geometry>>& expected)
     {
-        std::vector<std::unique_ptr<Geometry>> actual = CoverageSimplifier::simplifyInner(input, tolerance, nullptr);
+        std::vector<std::unique_ptr<Geometry>> actual = CoverageSimplifier::simplifyInner(input, tolerance);
         checkArrayEqual(expected, actual);
     }
 
@@ -481,7 +480,7 @@ void object::test<30> ()
         });
     try {
         std::vector<std::unique_ptr<Geometry>> result =
-        CoverageSimplifier::simplify(input, 10, nullptr);
+        CoverageSimplifier::simplify(input, 10);
     }
     catch (geos::util::IllegalArgumentException&) {
         ensure("caught IllegalArgumentException", true);
@@ -501,7 +500,7 @@ void object::test<31> ()
         });
     try {
         std::vector<std::unique_ptr<Geometry>> result =
-        CoverageSimplifier::simplify(input, 10, nullptr);
+        CoverageSimplifier::simplify(input, 10);
     }
     catch (geos::util::IllegalArgumentException&) {
         ensure("caught IllegalArgumentException", true);

@@ -48,7 +48,7 @@ std::unique_ptr<MultiLineString>
 TPVWSimplifier::simplify(
     const MultiLineString* lines,
     double distanceTolerance,
-    geos::util::ProgressFunction* progressFunction)
+    const util::ProgressFunction& progressFunction)
 {
     TPVWSimplifier simp(lines, distanceTolerance);
     std::unique_ptr<MultiLineString> result = simp.simplify(progressFunction);
@@ -63,7 +63,7 @@ TPVWSimplifier::simplify(
     std::vector<bool>& p_freeRings,
     const MultiLineString* p_constraintLines,
     double distanceTolerance,
-    geos::util::ProgressFunction* progressFunction)
+    const util::ProgressFunction& progressFunction)
 {
     TPVWSimplifier simp(p_lines, distanceTolerance);
     simp.setFreeRingIndices(p_freeRings);
@@ -101,10 +101,9 @@ TPVWSimplifier::setFreeRingIndices(std::vector<bool>& freeRing)
 
 /* private */
 std::unique_ptr<MultiLineString>
-TPVWSimplifier::simplify(geos::util::ProgressFunction* progressFunction)
+TPVWSimplifier::simplify(const util::ProgressFunction& progressFunction)
 {
     std::vector<bool> emptyList;
-    util::ProgressFunction subProgress;
 
     constexpr double RATIO_FIRST_PASS = 0.8;
 
@@ -115,35 +114,20 @@ TPVWSimplifier::simplify(geos::util::ProgressFunction* progressFunction)
             (inputLines ? inputLines->getNumGeometries() : 0) +
             (constraintLines ? constraintLines->getNumGeometries() : 0)));
 
-    if (progressFunction)
-    {
-        subProgress = util::CreateScaledProgressFunction(
-            0, ratioInputLinesOverInputAndConstraint, *progressFunction);
-    }
     std::vector<Edge> edges = createEdges(inputLines, isFreeRing,
-        progressFunction ? &subProgress : nullptr);
+        progressFunction.subProgress(0, ratioInputLinesOverInputAndConstraint));
 
-    if (progressFunction)
-    {
-        subProgress = util::CreateScaledProgressFunction(
-            ratioInputLinesOverInputAndConstraint, RATIO_FIRST_PASS, *progressFunction);
-    }
     std::vector<Edge> constraintEdges = createEdges(
         constraintLines, emptyList,
-        progressFunction ? &subProgress : nullptr);
+        progressFunction.subProgress(ratioInputLinesOverInputAndConstraint, RATIO_FIRST_PASS));
 
     EdgeIndex edgeIndex;
     edgeIndex.add(edges);
     edgeIndex.add(constraintEdges);
 
     std::vector<std::unique_ptr<LineString>> result;
-    if (progressFunction)
-    {
-        subProgress = util::CreateScaledProgressFunction(
-                        RATIO_FIRST_PASS, 1.0, *progressFunction);
-    }
 
-    util::Progress progress(progressFunction ? &subProgress : nullptr, edges.size());
+    util::ProgressContext progress(progressFunction.subProgress(RATIO_FIRST_PASS, 1.0), edges.size());
 
     for (auto& edge : edges) {
         std::unique_ptr<CoordinateSequence> ptsSimp = edge.simplify(edgeIndex);
@@ -161,7 +145,7 @@ std::vector<Edge>
 TPVWSimplifier::createEdges(
     const MultiLineString* lines,
     std::vector<bool>& freeRing,
-    util::ProgressFunction* progressFunction)
+    const util::ProgressFunction& progressFunction)
 {
     std::vector<Edge> edges;
 
@@ -169,7 +153,7 @@ TPVWSimplifier::createEdges(
         return edges;
     const size_t iterCount = lines->getNumGeometries();
 
-    util::Progress progress(progressFunction, lines->getNumGeometries());
+    util::ProgressContext progress(progressFunction, lines->getNumGeometries());
 
     for (size_t i = 0; i < iterCount; ++i) {
         const LineString* line = lines->getGeometryN(i);

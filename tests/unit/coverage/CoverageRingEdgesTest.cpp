@@ -32,7 +32,7 @@ struct test_coverageringedges_data
     {
         std::unique_ptr<Geometry> geom = r.read(wkt);
         std::vector<const Geometry*> polygons = toArray(*geom);
-        CoverageRingEdges cov(polygons, nullptr);
+        CoverageRingEdges cov(polygons);
         std::vector<CoverageEdge*>& edges = cov.getEdges();
         std::unique_ptr<Geometry> edgeLines = toArray(edges, geom->getFactory());
         std::unique_ptr<Geometry> expected = r.read(wktExpected);
@@ -44,7 +44,7 @@ struct test_coverageringedges_data
     {
         std::unique_ptr<Geometry> geom = r.read(wkt);
         auto polygons = toArray(*geom);
-        CoverageRingEdges covEdges(polygons, nullptr);
+        CoverageRingEdges covEdges(polygons);
         auto edges = covEdges.selectEdges(ringCount);
         auto edgeLines = toArray(edges, geom->getFactory());
         std::unique_ptr<Geometry> expected = r.read(wktExpected);

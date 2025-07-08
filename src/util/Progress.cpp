@@ -16,13 +16,16 @@
 
 namespace geos::util {
 
-ProgressFunction CreateScaledProgressFunction(double ratioMin, double ratioMax,
-                                              ProgressFunction& progressFunction)
-{
-    return [ratioMin, ratioMax, &progressFunction](double ratio, const char* msg)
-    {
-        progressFunction(ratioMin + (ratioMax - ratioMin) * ratio, msg);
-    };
+ProgressFunction
+ProgressFunction::subProgress(double from, double to) const {
+    if (m_function.has_value()) {
+        return ProgressFunction([from, to, this](double ratio, const char* msg)
+        {
+            m_function.value()(from + (to - from) * ratio, msg);
+        });
+    }
+
+    return ProgressFunction();
 }
 
-} // namespace geos::util
+}

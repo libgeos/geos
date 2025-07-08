@@ -118,7 +118,7 @@ public:
     static std::unique_ptr<MultiLineString> createLines(
         const std::vector<CoverageEdge*>& edges,
         const GeometryFactory* geomFactory,
-        geos::util::ProgressFunction* progressFunction);
+        const util::ProgressFunction& progressFunction = util::defaultProgress);
 
     std::unique_ptr<LineString> toLineString(
         const GeometryFactory* geomFactory);

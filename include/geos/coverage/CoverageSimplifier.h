@@ -88,18 +88,18 @@ public:
     *
     * @param coverage a set of polygonal geometries forming a coverage
     * @param tolerance the simplification tolerance
-    * @param progressFunction Progress function, or nullptr.
+    * @param progressFunction Progress function
     * @return the simplified polygons
     */
     static std::vector<std::unique_ptr<Geometry>> simplify(
         std::vector<const Geometry*>& coverage,
         double tolerance,
-        geos::util::ProgressFunction* progressFunction);
+        const util::ProgressFunction& progressFunction = util::defaultProgress);
 
     static std::vector<std::unique_ptr<Geometry>> simplify(
         const std::vector<std::unique_ptr<Geometry>>& coverage,
         double tolerance,
-        geos::util::ProgressFunction* progressFunction);
+        const util::ProgressFunction& progressFunction = util::defaultProgress);
 
     /**
     * Simplifies the inner boundaries of a set of polygonal geometries forming a coverage,
@@ -108,28 +108,28 @@ public:
     *
     * @param coverage a set of polygonal geometries forming a coverage
     * @param tolerance the simplification tolerance
-    * @param progressFunction Progress function, or nullptr.
+    * @param progressFunction Progress function
     * @return the simplified polygons
     */
     static std::vector<std::unique_ptr<Geometry>> simplifyInner(
         std::vector<const Geometry*>& coverage,
         double tolerance,
-        geos::util::ProgressFunction* progressFunction);
+        const util::ProgressFunction& progressFunction = util::defaultProgress);
 
     static std::vector<std::unique_ptr<Geometry>> simplifyInner(
         const std::vector<std::unique_ptr<Geometry>>& coverage,
         double tolerance,
-        geos::util::ProgressFunction* progressFunction);
+        const util::ProgressFunction& progressFunction = util::defaultProgress);
 
     /**
     * Computes the simplified coverage, preserving the coverage topology.
     *
     * @param tolerance the simplification tolerance
-    * @param progressFunction Progress function, or nullptr.
+    * @param progressFunction Progress function
     * @return the simplified polygons
     */
     std::vector<std::unique_ptr<Geometry>> simplify(
-        double tolerance, geos::util::ProgressFunction* progressFunction);
+        double tolerance, const util::ProgressFunction& progressFunction = util::defaultProgress);
 
     /**
     * Computes the inner-boundary simplified coverage,
@@ -137,11 +137,11 @@ public:
     * and leaving outer boundary edges unchanged.
     *
     * @param tolerance the simplification tolerance
-    * @param progressFunction Progress function, or nullptr.
+    * @param progressFunction Progress function
     * @return the simplified polygons
     */
     std::vector<std::unique_ptr<Geometry>> simplifyInner(
-        double tolerance, geos::util::ProgressFunction* progressFunction);
+        double tolerance, const util::ProgressFunction& progressFunction = util::defaultProgress);
 
 
 private:
@@ -155,7 +155,7 @@ private:
         std::vector<CoverageEdge*> edges,
         const MultiLineString* constraints,
         double tolerance,
-        geos::util::ProgressFunction* progressFunction);
+        const util::ProgressFunction& progressFunction);
 
     void setCoordinates(
         std::vector<CoverageEdge*>& edges,

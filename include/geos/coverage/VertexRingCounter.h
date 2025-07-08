@@ -56,7 +56,7 @@ public:
     static void count(
         const std::vector<const Geometry*>& geoms,
         std::map<Coordinate, std::size_t>& counts,
-        geos::util::ProgressFunction* progressFunction);
+        const util::ProgressFunction& progressFunction = util::defaultProgress);
 
 private:
 

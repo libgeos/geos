@@ -36,7 +36,7 @@ std::vector<std::unique_ptr<Geometry>>
 CoverageSimplifier::simplify(
     std::vector<const Geometry*>& coverage,
     double tolerance,
-    ProgressFunction* progressFunction)
+    const ProgressFunction& progressFunction)
 {
     CoverageSimplifier simplifier(coverage);
     return simplifier.simplify(tolerance, progressFunction);
@@ -47,7 +47,7 @@ std::vector<std::unique_ptr<Geometry>>
 CoverageSimplifier::simplify(
     const std::vector<std::unique_ptr<Geometry>>& coverage,
     double tolerance,
-    ProgressFunction* progressFunction)
+    const ProgressFunction& progressFunction)
 {
     std::vector<const Geometry*> geoms;
     for (auto& geom : coverage) {
@@ -62,7 +62,7 @@ std::vector<std::unique_ptr<Geometry>>
 CoverageSimplifier::simplifyInner(
     std::vector<const Geometry*>& coverage,
     double tolerance,
-    ProgressFunction* progressFunction)
+    const ProgressFunction& progressFunction)
 {
     CoverageSimplifier simplifier(coverage);
     return simplifier.simplifyInner(tolerance, progressFunction);
@@ -74,7 +74,7 @@ std::vector<std::unique_ptr<Geometry>>
 CoverageSimplifier::simplifyInner(
     const std::vector<std::unique_ptr<Geometry>>& coverage,
     double tolerance,
-    ProgressFunction* progressFunction)
+    const ProgressFunction& progressFunction)
 {
     std::vector<const Geometry*> geoms;
     for (auto& geom : coverage) {
@@ -99,63 +99,27 @@ CoverageSimplifier::CoverageSimplifier(const std::vector<const Geometry*>& cover
 /* public */
 std::vector<std::unique_ptr<Geometry>>
 CoverageSimplifier::simplify(double tolerance,
-                             ProgressFunction* progressFunction)
+                             const ProgressFunction& progressFunction)
 {
-    geos::util::ProgressFunction subProgress;
-    if (progressFunction)
-    {
-        subProgress = geos::util::CreateScaledProgressFunction(
-            0, 0.8, *progressFunction);
-    }
-    CoverageRingEdges cov(m_input, progressFunction ? &subProgress : nullptr);
-    if (progressFunction)
-    {
-        subProgress = geos::util::CreateScaledProgressFunction(
-            0.8, 0.9, *progressFunction);
-    }
-    simplifyEdges(cov.getEdges(), nullptr, tolerance, progressFunction ? &subProgress : nullptr);
-    if (progressFunction)
-    {
-        subProgress = geos::util::CreateScaledProgressFunction(
-            0.9, 1.0, *progressFunction);
-    }
-    return cov.buildCoverage(progressFunction ? &subProgress : nullptr);
+    CoverageRingEdges cov(m_input, progressFunction.subProgress(0, 0.8));
+    simplifyEdges(cov.getEdges(), nullptr, tolerance, progressFunction.subProgress(0.8, 0.9));
+    return cov.buildCoverage(progressFunction.subProgress(0.9, 1.0));
 }
 
 /* public */
 std::vector<std::unique_ptr<Geometry>>
 CoverageSimplifier::simplifyInner(double tolerance,
-                                  ProgressFunction* progressFunction)
+                                  const ProgressFunction& progressFunction)
 {
-    geos::util::ProgressFunction subProgress;
-    if (progressFunction)
-    {
-        subProgress = geos::util::CreateScaledProgressFunction(
-            0, 0.7, *progressFunction);
-    }
-    CoverageRingEdges cov(m_input, progressFunction ? &subProgress : nullptr);
+    CoverageRingEdges cov(m_input, progressFunction.subProgress(0, 0.7));
     std::vector<CoverageEdge*> innerEdges = cov.selectEdges(2);
     std::vector<CoverageEdge*> outerEdges = cov.selectEdges(1);
-    if (progressFunction)
-    {
-        subProgress = geos::util::CreateScaledProgressFunction(
-            0.7, 0.8, *progressFunction);
-    }
-    std::unique_ptr<MultiLineString> constraintEdges = CoverageEdge::createLines(
-        outerEdges, m_geomFactory, progressFunction ? &subProgress : nullptr);
 
-    if (progressFunction)
-    {
-        subProgress = geos::util::CreateScaledProgressFunction(
-            0.8, 0.9, *progressFunction);
-    }
-    simplifyEdges(innerEdges, constraintEdges.get(), tolerance, progressFunction ? &subProgress : nullptr);
-    if (progressFunction)
-    {
-        subProgress = geos::util::CreateScaledProgressFunction(
-            0.9, 1.0, *progressFunction);
-    }
-    return cov.buildCoverage(progressFunction ? &subProgress : nullptr);
+    std::unique_ptr<MultiLineString> constraintEdges = CoverageEdge::createLines(
+        outerEdges, m_geomFactory, progressFunction.subProgress(0.7, 0.8));
+
+    simplifyEdges(innerEdges, constraintEdges.get(), tolerance, progressFunction.subProgress(0.8, 0.9));
+    return cov.buildCoverage(progressFunction.subProgress(0.9, 1.0));
 }
 
 /* private */
@@ -164,26 +128,16 @@ CoverageSimplifier::simplifyEdges(
     std::vector<CoverageEdge*> edges,
     const MultiLineString* constraints,
     double tolerance,
-    ProgressFunction* progressFunction)
+    const ProgressFunction& progressFunction)
 {
     constexpr double RATIO_FIRST_PASS = 0.5;
-    geos::util::ProgressFunction subProgress;
-    if (progressFunction)
-    {
-        subProgress = geos::util::CreateScaledProgressFunction(
-            0, RATIO_FIRST_PASS, *progressFunction);
-    }
+
     std::unique_ptr<MultiLineString> lines = CoverageEdge::createLines(
-        edges, m_geomFactory, progressFunction ? &subProgress : nullptr);
+        edges, m_geomFactory, progressFunction.subProgress(0, RATIO_FIRST_PASS));
     std::vector<bool> freeRings = getFreeRings(edges);
-    if (progressFunction)
-    {
-        subProgress = geos::util::CreateScaledProgressFunction(
-            RATIO_FIRST_PASS, 1, *progressFunction);
-    }
     std::unique_ptr<MultiLineString> linesSimp = TPVWSimplifier::simplify(
         lines.get(), freeRings, constraints, tolerance,
-        progressFunction ? &subProgress : nullptr);
+        progressFunction.subProgress(RATIO_FIRST_PASS, 1.0));
     //Assert: mlsSimp.getNumGeometries = edges.length
 
     setCoordinates(edges, linesSimp.get());

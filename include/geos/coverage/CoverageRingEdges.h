@@ -74,7 +74,7 @@ private:
 public:
 
     CoverageRingEdges(const std::vector<const Geometry*>& coverage,
-                      geos::util::ProgressFunction* progressFunction)
+                      const util::ProgressFunction& progressFunction = util::defaultProgress)
         : m_coverage(coverage)
     {
         build(progressFunction);
@@ -101,12 +101,12 @@ public:
     * @param progressFunction Progress function or null
     * @return an array of polygonal geometries representing the coverage
     */
-    std::vector<std::unique_ptr<Geometry>> buildCoverage(geos::util::ProgressFunction* progressFunction) const;
+    std::vector<std::unique_ptr<Geometry>> buildCoverage(const util::ProgressFunction& progressFunction = util::defaultProgress) const;
 
 
 private:
 
-    void build(geos::util::ProgressFunction* progressFunction);
+    void build(const util::ProgressFunction& progressFunction = util::defaultProgress);
 
     void addRingEdges(
         const LinearRing* ring,
@@ -144,11 +144,11 @@ private:
 
     Coordinate::UnorderedSet findMultiRingNodes(
         const std::vector<const Geometry*>& coverage,
-        geos::util::ProgressFunction* progressFunction);
+        const util::ProgressFunction& progressFunction = util::defaultProgress);
 
     Coordinate::UnorderedSet findBoundaryNodes(
         LineSegment::UnorderedSet& lineSegments,
-        geos::util::ProgressFunction* progressFunction);
+        const util::ProgressFunction& progressFunction = util::defaultProgress);
 
     std::unique_ptr<Geometry> buildPolygonal(
         const Geometry* geom) const;

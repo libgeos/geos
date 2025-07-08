@@ -61,45 +61,25 @@ CoverageRingEdges::selectEdges(std::size_t ringCount) const
 
 /* private */
 void
-CoverageRingEdges::build(util::ProgressFunction* progressFunction)
+CoverageRingEdges::build(const util::ProgressFunction& progressFunction)
 {
     constexpr double RATIO_FIRST_PASS = 0.1;
     constexpr double RATIO_SECOND_PASS = 0.2;
     constexpr double RATIO_THIRD_PASS = 0.9;
     constexpr double RATIO_FOURTH_PASS = 1.0;
-    util::ProgressFunction subProgress;
-    if (progressFunction)
-    {
-        subProgress = util::CreateScaledProgressFunction(
-            0, RATIO_FIRST_PASS, *progressFunction);
-    }
-    Coordinate::UnorderedSet nodes = findMultiRingNodes(m_coverage, progressFunction ? &subProgress : nullptr);
 
-    if (progressFunction)
-    {
-        subProgress = util::CreateScaledProgressFunction(
-            RATIO_FIRST_PASS, RATIO_SECOND_PASS, *progressFunction);
-    }
+    Coordinate::UnorderedSet nodes = findMultiRingNodes(m_coverage, progressFunction.subProgress(0, RATIO_FIRST_PASS));
+
     LineSegment::UnorderedSet boundarySegs = CoverageBoundarySegmentFinder::findBoundarySegments(
-        m_coverage, progressFunction ? &subProgress : nullptr);
+        m_coverage, progressFunction.subProgress(RATIO_FIRST_PASS, RATIO_SECOND_PASS));
 
-    if (progressFunction)
-    {
-        subProgress = util::CreateScaledProgressFunction(
-            RATIO_SECOND_PASS, RATIO_THIRD_PASS, *progressFunction);
-    }
     Coordinate::UnorderedSet boundaryNodes = findBoundaryNodes(
-        boundarySegs, progressFunction ? &subProgress : nullptr);
+        boundarySegs, progressFunction.subProgress(RATIO_SECOND_PASS, RATIO_THIRD_PASS));
     nodes.insert(boundaryNodes.begin(), boundaryNodes.end());
 
-    if (progressFunction)
-    {
-        subProgress = util::CreateScaledProgressFunction(
-            RATIO_THIRD_PASS, RATIO_FOURTH_PASS, *progressFunction);
-    }
     std::map<LineSegment, CoverageEdge*> uniqueEdgeMap;
 
-    util::Progress progress(progressFunction ? &subProgress : nullptr, m_coverage.size());
+    util::ProgressContext progress(progressFunction.subProgress(RATIO_THIRD_PASS, RATIO_FOURTH_PASS), m_coverage.size());
 
     for (const Geometry* geom : m_coverage) {
         for (std::size_t ipoly = 0; ipoly < geom->getNumGeometries(); ipoly++) {
@@ -291,30 +271,19 @@ CoverageRingEdges::next(std::size_t index, const CoordinateSequence& ring)
 /* private */
 Coordinate::UnorderedSet
 CoverageRingEdges::findMultiRingNodes(const std::vector<const Geometry*>& coverage,
-                                      geos::util::ProgressFunction* progressFunction)
+                                      const util::ProgressFunction& progressFunction)
 {
     std::map<Coordinate, std::size_t> vertexRingCount;
-    util::ProgressFunction subProgress;
-    if (progressFunction)
-    {
-        subProgress = util::CreateScaledProgressFunction(
-            0, 0.5, *progressFunction);
-    }
 
-    VertexRingCounter::count(coverage, vertexRingCount, progressFunction ? &subProgress : nullptr);
+    VertexRingCounter::count(coverage, vertexRingCount, progressFunction.subProgress(0, 0.5));
     Coordinate::UnorderedSet nodes;
     // for (Coordinate v : vertexCount.keySet()) {
     //     if (vertexCount.get(v) > 2) {
     //         nodes.add(v);
     //     }
     // }
-    if (progressFunction)
-    {
-        subProgress = util::CreateScaledProgressFunction(
-            0.5, 1.0, *progressFunction);
-    }
 
-    util::Progress progress(progressFunction ? &subProgress : nullptr, vertexRingCount.size());
+    util::ProgressContext progress(progressFunction.subProgress(0.5, 1.0), vertexRingCount.size());
 
     for (const auto &mapPair : vertexRingCount) {
         const Coordinate& v = mapPair.first;
@@ -332,32 +301,22 @@ CoverageRingEdges::findMultiRingNodes(const std::vector<const Geometry*>& covera
 /* private */
 Coordinate::UnorderedSet
 CoverageRingEdges::findBoundaryNodes(LineSegment::UnorderedSet& boundarySegments,
-                                     util::ProgressFunction* progressFunction)
+                                     const util::ProgressFunction& progressFunction)
 {
     std::unordered_map<Coordinate, std::size_t, Coordinate::HashCode> counter;
-    util::ProgressFunction subProgress;
-    if (progressFunction)
-    {
-        subProgress = geos::util::CreateScaledProgressFunction(
-            0, 0.5, *progressFunction);
-    }
 
-    util::Progress progress(progressFunction ? &subProgress : nullptr, boundarySegments.size());
+    util::ProgressContext progress1(progressFunction.subProgress(0, 0.5), boundarySegments.size());
 
     {
         for (const LineSegment& seg : boundarySegments) {
             counter[seg.p0] += 1;
             counter[seg.p1] += 1;
-            progress.update();
+            progress1.update();
         }
     }
 
-    if (progressFunction)
-    {
-        subProgress = geos::util::CreateScaledProgressFunction(
-            0.5, 1.0, *progressFunction);
-        progress = util::Progress(&subProgress, counter.size());
-    }
+    util::ProgressContext progress2(progressFunction.subProgress(0.5, 1.0), counter.size());
+
     Coordinate::UnorderedSet nodes;
     for (const auto& c : counter) {
         const Coordinate& v = c.first;
@@ -365,10 +324,10 @@ CoverageRingEdges::findBoundaryNodes(LineSegment::UnorderedSet& boundarySegments
         if (count > 2)
             nodes.insert(v);
 
-        progress.update();
+        progress2.update();
     }
 
-    progress.finish();
+    progress2.finish();
 
     return nodes;
 }
@@ -376,11 +335,11 @@ CoverageRingEdges::findBoundaryNodes(LineSegment::UnorderedSet& boundarySegments
 
 /* public */
 std::vector<std::unique_ptr<Geometry>>
-CoverageRingEdges::buildCoverage(util::ProgressFunction* progressFunction) const
+CoverageRingEdges::buildCoverage(const util::ProgressFunction& progressFunction) const
 {
     std::vector<std::unique_ptr<Geometry>> result;
 
-    util::Progress progress(progressFunction, m_coverage.size());
+    util::ProgressContext progress(progressFunction, m_coverage.size());
 
     for (const Geometry* geom : m_coverage) {
         result.push_back(buildPolygonal(geom));

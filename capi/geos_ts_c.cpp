@@ -1672,11 +1672,11 @@ extern "C" {
                                  GEOSProgressCallback_r progressFunc,
                                  void* progressUserData)
     {
-        geos::util::ProgressFunction progressFunction =
+        geos::util::ProgressFunction progressFunction(
             [progressFunc, progressUserData](double progress, const char* message)
         {
             progressFunc(progress, message, progressUserData);
-        };
+        });
 
         return execute(extHandle, [&]() {
             std::unique_ptr<Geometry> g3(g->Union(&progressFunction));
@@ -4554,11 +4554,11 @@ extern "C" {
         GEOSProgressCallback_r progressFunc,
         void* progressUserData)
     {
-        geos::util::ProgressFunction progressFunction =
+        geos::util::ProgressFunction progressFunction(
             [progressFunc, progressUserData](double progress, const char* message)
         {
             progressFunc(progress, message, progressUserData);
-        };
+        });
 
         using geos::coverage::CoverageSimplifier;
 
@@ -4574,10 +4574,10 @@ extern "C" {
             CoverageSimplifier cov(coverage);
             std::vector<std::unique_ptr<Geometry>> simple;
             if (preserveBoundary == 1) {
-                simple = cov.simplifyInner(tolerance, progressFunc ? &progressFunction : nullptr);
+                simple = cov.simplifyInner(tolerance, progressFunc ? progressFunction : geos::util::defaultProgress);
             }
             else if (preserveBoundary == 0) {
-                simple = cov.simplify(tolerance, progressFunc ? &progressFunction : nullptr);
+                simple = cov.simplify(tolerance, progressFunc ? progressFunction : geos::util::defaultProgress);
             }
             else return nullptr;
 
