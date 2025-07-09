@@ -342,7 +342,8 @@ public:
             {};
 
         double get(std::size_t i, std::size_t j) const override {
-            std::size_t key = i << 32 | j;
+            static constexpr std::size_t halfsz = sizeof(std::size_t) * 4;
+            std::size_t key = i << halfsz | j;
             auto it_found = m_matrix.find(key);
             if (it_found != m_matrix.end()) {
                 return (*it_found).second;
@@ -353,12 +354,14 @@ public:
         };
 
         void set(std::size_t i, std::size_t j, double value) override {
-            std::size_t key = i << 32 | j;
+            static constexpr std::size_t halfsz = sizeof(std::size_t) * 4;
+            std::size_t key = i << halfsz | j;
             m_matrix[key] = value;
         };
 
         bool isValueSet(std::size_t i, std::size_t j) const override {
-            std::size_t key = i << 32 | j;
+            static constexpr std::size_t halfsz = sizeof(std::size_t) * 4;
+            std::size_t key = i << halfsz | j;
             auto it_found = m_matrix.find(key);
             return it_found != m_matrix.end();
         };
