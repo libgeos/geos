@@ -57,7 +57,6 @@
 #include <geos/operation/polygonize/Polygonizer.h>
 #include <geos/operation/linemerge/LineMerger.h>
 #include <geos/profiler.h>
-#include <geos/unload.h>
 #include <geos/operation/valid/IsValidOp.h>
 #include "XMLTester.h"
 #include "BufferResultMatcher.h"
@@ -151,7 +150,7 @@ tolower(std::string& str)
 
 void toupper(std::string& s)
 {
-    std::transform(s.begin(), s.end(), s.begin(), 
+    std::transform(s.begin(), s.end(), s.begin(),
         [](char c){ return (char)std::toupper(c); }
     );
 }
@@ -231,7 +230,7 @@ XMLTester::setVerbosityLevel(int value)
     return old_value;
 }
 
-std::string 
+std::string
 XMLTester::testcaseRef()
 {
     std::stringstream ref;
@@ -630,7 +629,7 @@ XMLTester::printGeom(const geom::Geometry* g)
 void
 XMLTester::runTest(const tinyxml2::XMLNode* node)
 {
-    Test test(*this); 
+    Test test(*this);
     ++testCount;
     testLineNum = node->GetLineNum();
 
@@ -845,9 +844,9 @@ Test::areaDelta(const geom::Geometry* a, const geom::Geometry* b, std::string& r
 }
 
 void
-Test::checkResult( const Geometry& result ) 
+Test::checkResult( const Geometry& result )
 {
-    checkResult( result, 
+    checkResult( result,
     [](Geometry& expected, Geometry& actual) -> bool {
         //TODO: change to equalsExact, since compareTo doesn't check empty type
         return expected.compareTo(&actual) == 0;
@@ -855,8 +854,8 @@ Test::checkResult( const Geometry& result )
 }
 
 void
-Test::checkResult( const Geometry& result, 
-    std::function<bool(Geometry& expected, Geometry& actual)> isMatch ) 
+Test::checkResult( const Geometry& result,
+    std::function<bool(Geometry& expected, Geometry& actual)> isMatch )
 {
     std::string expectedRes = opResult;
     std::unique_ptr<Geometry> gExpectedRes(tester.parseGeometry(expectedRes, "expected"));
@@ -875,16 +874,16 @@ Test::checkResult( const Geometry& result,
 
 //TODO: remove this hack when tests are fixed.  Only used for union, and has a bug where empties test equal
 void
-Test::checkUnionResult( const Geometry& result ) 
+Test::checkUnionResult( const Geometry& result )
 {
-    checkResult( result, 
+    checkResult( result,
         [](Geometry& expected, Geometry& actual) -> bool {
             return checkOverlaySuccess(expected, actual);
     });
 }
 
 void
-Test::checkResult( bool result ) 
+Test::checkResult( bool result )
 {
     actualResultStr = result ? "true" : "false";
     if (actualResultStr == opResult) {
@@ -893,7 +892,7 @@ Test::checkResult( bool result )
 }
 
 void
-Test::checkResult( double result) 
+Test::checkResult( double result)
 {
     char* rest;
     double expectedRes = std::strtod(opResult.c_str(), &rest);
@@ -1031,7 +1030,7 @@ void Test::execute(Geometry* geomA, Geometry* geomB)
 }
 
 void Test::executeOp(Geometry* gA, Geometry* gB)
-{        
+{
     if(opName == "relate") {
         std::unique_ptr<geom::IntersectionMatrix> im(gA->relate(gB));
         checkResult( im->matches(opArg3) );
@@ -1184,7 +1183,7 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         }
         operation::buffer::BufferOp op(gA, params);
         std::unique_ptr<Geometry> result = op.getResultGeometry(dist);
-        checkResult( *result, 
+        checkResult( *result,
             [dist](Geometry& expected, Geometry& actual) -> bool {
                 return checkBufferSuccess(expected, actual, dist);
             });
@@ -1200,7 +1199,7 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         operation::buffer::BufferOp op(gA, params);
         std::unique_ptr<Geometry> result = op.getResultGeometry(dist);
 
-        checkResult( *result, 
+        checkResult( *result,
             [dist](Geometry& expected, Geometry& actual) -> bool {
                 return checkBufferSuccess(expected, actual, dist);
             });
@@ -1219,7 +1218,7 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         }
         operation::buffer::BufferBuilder bufBuilder(params) ;
         std::unique_ptr<Geometry> result = bufBuilder.bufferLineSingleSided(gA, dist, leftSide);
-        checkResult( *result, 
+        checkResult( *result,
             [dist](Geometry& expected, Geometry& actual) -> bool {
                 return checkSingleSidedBufferSuccess(expected, actual, dist);
             });
@@ -1255,7 +1254,7 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
         std::stringstream p_tmp;
         double maxDiff = 1e-6;
         double areaDiff = areaDelta(gA, gB, maxDiffOp, maxDiff, p_tmp);
-        
+
         // Debug output of actual geometries returned
         if (areaDiff < maxDiff && false) {
             std::cout << p_tmp.str();
@@ -1479,8 +1478,6 @@ main(int argC, char* argV[])
             tester.resultSummary(std::cerr);
         }
 
-        io::Unload::Release();
-
         return tester.getFailuresCount();
 
 #if defined(_MSC_VER) && defined(GEOS_TEST_USE_STACKWALKER)
@@ -1488,4 +1485,3 @@ main(int argC, char* argV[])
     DeInitAllocCheck();
 #endif
 }
-

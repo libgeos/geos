@@ -10,8 +10,6 @@
 // tut
 #include <tut/tut.hpp>
 #include <tut/tut_reporter.hpp>
-// geos
-#include <geos/unload.h>
 // std
 #include <cstdlib>
 #include <iomanip>
@@ -118,9 +116,6 @@ main(int argc, const char* argv[])
         std::cerr << "!!! GEOS Test Suite raised exception: " << ex.what() << std::endl;
         return EXIT_FAILURE;
     }
-
-    // XXX - mloskot - this should be removed in future!
-    geos::io::Unload::Release();
 
     return (visi.all_ok() ? EXIT_SUCCESS : EXIT_FAILURE);
 }

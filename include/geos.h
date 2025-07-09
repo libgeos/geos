@@ -33,7 +33,6 @@
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKTWriter.h>
 #include <geos/io/CLocalizer.h>
-#include <geos/unload.h>
 
 /// Basic namespace for all GEOS functionalities.
 namespace geos {

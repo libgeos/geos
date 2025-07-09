@@ -46,7 +46,6 @@ namespace quadtree { // geos::index::quadtree
  * and does not have a defined extent.
  */
 class GEOS_DLL Root: public NodeBase {
-//friend class Unload;
 
 private:
 
@@ -84,4 +83,3 @@ protected:
 } // namespace geos::index::quadtree
 } // namespace geos::index
 } // namespace geos
-

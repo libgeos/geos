@@ -28,7 +28,6 @@
 // Forward declarations
 namespace geos {
 namespace io {
-class Unload;
 }
 namespace geom {
 class Coordinate;
@@ -86,7 +85,6 @@ namespace geom { // geos::geom
  *
  */
 class GEOS_DLL PrecisionModel {
-    friend class io::Unload;
 
 public:
 

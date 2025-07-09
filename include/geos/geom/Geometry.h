@@ -63,7 +63,6 @@ class Point;
 class IntersectionMatrix;
 }
 namespace io { // geos.io
-class Unload;
 } // namespace geos.io
 }
 
@@ -1047,4 +1046,3 @@ struct GeomPtrPair {
 #ifdef _MSC_VER
 #pragma warning(pop)
 #endif
-
