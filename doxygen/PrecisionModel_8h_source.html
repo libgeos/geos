@@ -81,189 +81,187 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="comment">// Forward declarations</span></div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacegeos.html">geos</a> {</div>
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="keyword">namespace </span>io {</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="keyword">class </span>Unload;</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>}</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="keyword">namespace </span>geom {</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="keyword">class </span>Coordinate;</div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>}</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="keyword">namespace </span>geom {</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="keyword">class </span>Coordinate;</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>}</div>
 <div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>}</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>}</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacegeos.html">geos</a> {</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="keyword">namespace </span>geom { <span class="comment">// geos::geom</span></div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
-<div class="foldopen" id="foldopen00088" data-start="{" data-end="};">
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html">   88</a></span><span class="keyword">class </span>GEOS_DLL <a class="code hl_class" href="classgeos_1_1geom_1_1PrecisionModel.html">PrecisionModel</a> {</div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    <span class="keyword">friend</span> <span class="keyword">class </span>io::Unload;</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacegeos.html">geos</a> {</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="keyword">namespace </span>geom { <span class="comment">// geos::geom</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
+<div class="foldopen" id="foldopen00087" data-start="{" data-end="};">
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html">   87</a></span><span class="keyword">class </span>GEOS_DLL <a class="code hl_class" href="classgeos_1_1geom_1_1PrecisionModel.html">PrecisionModel</a> {</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span> </div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span><span class="keyword">public</span>:</div>
 <div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span> </div>
-<div class="foldopen" id="foldopen00094" data-start="{" data-end="};">
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#aa32be4a02d1faf45306fee75d68a2e12">   94</a></span>    <span class="keyword">typedef</span> <span class="keyword">enum</span> {</div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span> </div>
-<div class="line"><a id="l00102" name="l00102"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#aa32be4a02d1faf45306fee75d68a2e12a702c5051872b1eae28e5f8d3c0f2e8af">  102</a></span>        <a class="code hl_enumvalue" href="classgeos_1_1geom_1_1PrecisionModel.html#aa32be4a02d1faf45306fee75d68a2e12a702c5051872b1eae28e5f8d3c0f2e8af">FIXED</a>,</div>
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span> </div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#aa32be4a02d1faf45306fee75d68a2e12a871d90e033044acdd1db738dc2934aaf">  109</a></span>        <a class="code hl_enumvalue" href="classgeos_1_1geom_1_1PrecisionModel.html#aa32be4a02d1faf45306fee75d68a2e12a871d90e033044acdd1db738dc2934aaf">FLOATING</a>,</div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span> </div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>        FLOATING_SINGLE</div>
+<div class="foldopen" id="foldopen00092" data-start="{" data-end="};">
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#aa32be4a02d1faf45306fee75d68a2e12">   92</a></span>    <span class="keyword">typedef</span> <span class="keyword">enum</span> {</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#aa32be4a02d1faf45306fee75d68a2e12a702c5051872b1eae28e5f8d3c0f2e8af">  100</a></span>        <a class="code hl_enumvalue" href="classgeos_1_1geom_1_1PrecisionModel.html#aa32be4a02d1faf45306fee75d68a2e12a702c5051872b1eae28e5f8d3c0f2e8af">FIXED</a>,</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span> </div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#aa32be4a02d1faf45306fee75d68a2e12a871d90e033044acdd1db738dc2934aaf">  107</a></span>        <a class="code hl_enumvalue" href="classgeos_1_1geom_1_1PrecisionModel.html#aa32be4a02d1faf45306fee75d68a2e12a871d90e033044acdd1db738dc2934aaf">FLOATING</a>,</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span> </div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>        FLOATING_SINGLE</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span> </div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#aa32be4a02d1faf45306fee75d68a2e12aec6ecfa3e6b4087810606e2a41111035">  116</a></span>    } Type;</div>
+</div>
 <div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span> </div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#aa32be4a02d1faf45306fee75d68a2e12aec6ecfa3e6b4087810606e2a41111035">  118</a></span>    } Type;</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#a9f4af835c0ca26c06fe20d03dac79322">  119</a></span>    <a class="code hl_function" href="classgeos_1_1geom_1_1PrecisionModel.html#a9f4af835c0ca26c06fe20d03dac79322">PrecisionModel</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span> </div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#ac6bb03bcd215e6d42406e3c8fbaaae1e">  127</a></span>    <a class="code hl_function" href="classgeos_1_1geom_1_1PrecisionModel.html#ac6bb03bcd215e6d42406e3c8fbaaae1e">PrecisionModel</a>(<a class="code hl_enumeration" href="classgeos_1_1geom_1_1PrecisionModel.html#aa32be4a02d1faf45306fee75d68a2e12">Type</a> nModelType);</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span> </div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#a5c68e7a03195a03d2a89fe24b9aa346a">  144</a></span>    <a class="code hl_function" href="classgeos_1_1geom_1_1PrecisionModel.html#a5c68e7a03195a03d2a89fe24b9aa346a">PrecisionModel</a>(<span class="keywordtype">double</span> newScale, <span class="keywordtype">double</span> newOffsetX, <span class="keywordtype">double</span> newOffsetY);</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span> </div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#ab7b6f3c8fc62bb29bb7eb665c969486a">  159</a></span>    <a class="code hl_function" href="classgeos_1_1geom_1_1PrecisionModel.html#ab7b6f3c8fc62bb29bb7eb665c969486a">PrecisionModel</a>(<span class="keywordtype">double</span> newScale);</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span> </div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#a92ff29ac9cd8f93f1ab9283788313a5e">  167</a></span>    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">double</span> <a class="code hl_variable" href="classgeos_1_1geom_1_1PrecisionModel.html#a92ff29ac9cd8f93f1ab9283788313a5e">maximumPreciseValue</a>;</div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span> </div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#ad68fcab9d5840860f51672d43752f1c0">  179</a></span>    <span class="keywordtype">double</span> <a class="code hl_function" href="classgeos_1_1geom_1_1PrecisionModel.html#ad68fcab9d5840860f51672d43752f1c0">makePrecise</a>(<span class="keywordtype">double</span> val) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span> </div>
+<div class="foldopen" id="foldopen00182" data-start="{" data-end="}">
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#aa5624ee86d4806db5b808c479c78144c">  182</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classgeos_1_1geom_1_1PrecisionModel.html#aa5624ee86d4806db5b808c479c78144c">makePrecise</a>(CoordinateXY&amp; coord)<span class="keyword"> const</span></div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>        <span class="comment">// optimization for full precision</span></div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>        <span class="keywordflow">if</span>(modelType == FLOATING) {</div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>            <span class="keywordflow">return</span>;</div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>        }</div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span> </div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>        coord.x = makePrecise(coord.x);</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>        coord.y = makePrecise(coord.y);</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>    };</div>
 </div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span> </div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#a9f4af835c0ca26c06fe20d03dac79322">  121</a></span>    <a class="code hl_function" href="classgeos_1_1geom_1_1PrecisionModel.html#a9f4af835c0ca26c06fe20d03dac79322">PrecisionModel</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span> </div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#ac6bb03bcd215e6d42406e3c8fbaaae1e">  129</a></span>    <a class="code hl_function" href="classgeos_1_1geom_1_1PrecisionModel.html#ac6bb03bcd215e6d42406e3c8fbaaae1e">PrecisionModel</a>(<a class="code hl_enumeration" href="classgeos_1_1geom_1_1PrecisionModel.html#aa32be4a02d1faf45306fee75d68a2e12">Type</a> nModelType);</div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span> </div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#a5c68e7a03195a03d2a89fe24b9aa346a">  146</a></span>    <a class="code hl_function" href="classgeos_1_1geom_1_1PrecisionModel.html#a5c68e7a03195a03d2a89fe24b9aa346a">PrecisionModel</a>(<span class="keywordtype">double</span> newScale, <span class="keywordtype">double</span> newOffsetX, <span class="keywordtype">double</span> newOffsetY);</div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span> </div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#ab7b6f3c8fc62bb29bb7eb665c969486a">  161</a></span>    <a class="code hl_function" href="classgeos_1_1geom_1_1PrecisionModel.html#ab7b6f3c8fc62bb29bb7eb665c969486a">PrecisionModel</a>(<span class="keywordtype">double</span> newScale);</div>
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span> </div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#a92ff29ac9cd8f93f1ab9283788313a5e">  169</a></span>    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">double</span> <a class="code hl_variable" href="classgeos_1_1geom_1_1PrecisionModel.html#a92ff29ac9cd8f93f1ab9283788313a5e">maximumPreciseValue</a>;</div>
-<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span> </div>
-<div class="line"><a id="l00181" name="l00181"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#ad68fcab9d5840860f51672d43752f1c0">  181</a></span>    <span class="keywordtype">double</span> <a class="code hl_function" href="classgeos_1_1geom_1_1PrecisionModel.html#ad68fcab9d5840860f51672d43752f1c0">makePrecise</a>(<span class="keywordtype">double</span> val) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span> </div>
-<div class="foldopen" id="foldopen00184" data-start="{" data-end="}">
-<div class="line"><a id="l00184" name="l00184"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#aa5624ee86d4806db5b808c479c78144c">  184</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classgeos_1_1geom_1_1PrecisionModel.html#aa5624ee86d4806db5b808c479c78144c">makePrecise</a>(CoordinateXY&amp; coord)<span class="keyword"> const</span></div>
-<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span><span class="keyword">    </span>{</div>
-<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>        <span class="comment">// optimization for full precision</span></div>
-<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>        <span class="keywordflow">if</span>(modelType == FLOATING) {</div>
-<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>            <span class="keywordflow">return</span>;</div>
-<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>        }</div>
-<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span> </div>
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>        coord.x = makePrecise(coord.x);</div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>        coord.y = makePrecise(coord.y);</div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>    };</div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span> </div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>    <span class="keywordtype">void</span> makePrecise(CoordinateXY* coord)<span class="keyword"> const</span></div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>        assert(coord);</div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>        <span class="keywordflow">return</span> makePrecise(*coord);</div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>    };</div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span> </div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#af783d0e68fd62f7d84d0911dfcf09e21">  204</a></span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classgeos_1_1geom_1_1PrecisionModel.html#af783d0e68fd62f7d84d0911dfcf09e21">isFloating</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span> </div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#a7a055163236e4d5c2efe309820778575">  216</a></span>    <span class="keywordtype">int</span> <a class="code hl_function" href="classgeos_1_1geom_1_1PrecisionModel.html#a7a055163236e4d5c2efe309820778575">getMaximumSignificantDigits</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span> </div>
+<div class="foldopen" id="foldopen00222" data-start="{" data-end="}">
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#afd66670f549cc0d8e9570e1bf26229fd">  222</a></span>    <a class="code hl_enumeration" href="classgeos_1_1geom_1_1PrecisionModel.html#aa32be4a02d1faf45306fee75d68a2e12">Type</a> <a class="code hl_function" href="classgeos_1_1geom_1_1PrecisionModel.html#afd66670f549cc0d8e9570e1bf26229fd">getType</a>()<span class="keyword"> const</span></div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>        <span class="keywordflow">return</span> modelType;</div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>    };</div>
 </div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span> </div>
-<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>    <span class="keywordtype">void</span> makePrecise(CoordinateXY* coord)<span class="keyword"> const</span></div>
-<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span><span class="keyword">    </span>{</div>
-<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>        assert(coord);</div>
-<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>        <span class="keywordflow">return</span> makePrecise(*coord);</div>
-<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>    };</div>
-<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span> </div>
-<div class="line"><a id="l00206" name="l00206"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#af783d0e68fd62f7d84d0911dfcf09e21">  206</a></span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classgeos_1_1geom_1_1PrecisionModel.html#af783d0e68fd62f7d84d0911dfcf09e21">isFloating</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span> </div>
-<div class="line"><a id="l00218" name="l00218"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#a7a055163236e4d5c2efe309820778575">  218</a></span>    <span class="keywordtype">int</span> <a class="code hl_function" href="classgeos_1_1geom_1_1PrecisionModel.html#a7a055163236e4d5c2efe309820778575">getMaximumSignificantDigits</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span> </div>
-<div class="foldopen" id="foldopen00224" data-start="{" data-end="}">
-<div class="line"><a id="l00224" name="l00224"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#afd66670f549cc0d8e9570e1bf26229fd">  224</a></span>    <a class="code hl_enumeration" href="classgeos_1_1geom_1_1PrecisionModel.html#aa32be4a02d1faf45306fee75d68a2e12">Type</a> <a class="code hl_function" href="classgeos_1_1geom_1_1PrecisionModel.html#afd66670f549cc0d8e9570e1bf26229fd">getType</a>()<span class="keyword"> const</span></div>
-<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span><span class="keyword">    </span>{</div>
-<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span>        <span class="keywordflow">return</span> modelType;</div>
-<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>    };</div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span> </div>
+<div class="foldopen" id="foldopen00228" data-start="{" data-end="}">
+<div class="line"><a id="l00228" name="l00228"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#a78f9501b307abf44085b9d60a99e352f">  228</a></span>    <span class="keywordtype">double</span> <a class="code hl_function" href="classgeos_1_1geom_1_1PrecisionModel.html#a78f9501b307abf44085b9d60a99e352f">getScale</a>()<span class="keyword"> const</span></div>
+<div class="line"><a id="l00229" name="l00229"></a><span class="lineno">  229</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span>        assert(!(scale &lt; 0));</div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>        <span class="keywordflow">return</span> scale;</div>
+<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>    };</div>
 </div>
-<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span> </div>
-<div class="foldopen" id="foldopen00230" data-start="{" data-end="}">
-<div class="line"><a id="l00230" name="l00230"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#a78f9501b307abf44085b9d60a99e352f">  230</a></span>    <span class="keywordtype">double</span> <a class="code hl_function" href="classgeos_1_1geom_1_1PrecisionModel.html#a78f9501b307abf44085b9d60a99e352f">getScale</a>()<span class="keyword"> const</span></div>
-<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span><span class="keyword">    </span>{</div>
-<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>        assert(!(scale &lt; 0));</div>
-<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>        <span class="keywordflow">return</span> scale;</div>
-<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>    };</div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span> </div>
+<div class="foldopen" id="foldopen00242" data-start="{" data-end="}">
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#a0357f01d06a727dd44ade8ca808847b3">  242</a></span>    <span class="keywordtype">double</span> <a class="code hl_function" href="classgeos_1_1geom_1_1PrecisionModel.html#a0357f01d06a727dd44ade8ca808847b3">getGridSize</a>()<span class="keyword"> const</span></div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>        <span class="keywordflow">if</span> (isFloating())</div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>           <span class="keywordflow">return</span> DoubleNotANumber;</div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span> </div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>        <span class="keywordflow">if</span> (gridSize != 0)</div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>            <span class="keywordflow">return</span> gridSize;</div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span> </div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>        <span class="keywordflow">return</span> 1.0 / scale;</div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>    };</div>
 </div>
-<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span> </div>
-<div class="foldopen" id="foldopen00244" data-start="{" data-end="}">
-<div class="line"><a id="l00244" name="l00244"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#a0357f01d06a727dd44ade8ca808847b3">  244</a></span>    <span class="keywordtype">double</span> <a class="code hl_function" href="classgeos_1_1geom_1_1PrecisionModel.html#a0357f01d06a727dd44ade8ca808847b3">getGridSize</a>()<span class="keyword"> const</span></div>
-<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span><span class="keyword">    </span>{</div>
-<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>        <span class="keywordflow">if</span> (isFloating())</div>
-<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>           <span class="keywordflow">return</span> DoubleNotANumber;</div>
-<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span> </div>
-<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>        <span class="keywordflow">if</span> (gridSize != 0)</div>
-<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>            <span class="keywordflow">return</span> gridSize;</div>
-<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span> </div>
-<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>        <span class="keywordflow">return</span> 1.0 / scale;</div>
-<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>    };</div>
-</div>
-<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span> </div>
-<div class="line"><a id="l00261" name="l00261"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#a7a0e0af0b2097cb72082c7d10abf368a">  261</a></span>    <span class="keywordtype">double</span> <a class="code hl_function" href="classgeos_1_1geom_1_1PrecisionModel.html#a7a0e0af0b2097cb72082c7d10abf368a">getOffsetX</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00262" name="l00262"></a><span class="lineno">  262</span> </div>
-<div class="line"><a id="l00269" name="l00269"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#a349d9bf69485902cb0fa88eee9132abc">  269</a></span>    <span class="keywordtype">double</span> <a class="code hl_function" href="classgeos_1_1geom_1_1PrecisionModel.html#a349d9bf69485902cb0fa88eee9132abc">getOffsetY</a>() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span> </div>
-<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span>    <span class="comment">/*</span></div>
-<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span><span class="comment">     *  Sets ´internal` to the precise representation of `external`.</span></div>
-<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span><span class="comment">     *</span></div>
-<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span><span class="comment">     * @param external the original coordinate</span></div>
-<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span><span class="comment">     * @param internal the coordinate whose values will be changed to the</span></div>
-<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span><span class="comment">     *                 precise representation of &lt;code&gt;external&lt;/code&gt;</span></div>
-<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span><span class="comment">     * @deprecated use makePrecise instead</span></div>
-<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>    <span class="comment">//void toInternal(const Coordinate&amp; external, Coordinate* internal) const;</span></div>
-<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span> </div>
-<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span>    <span class="comment">/*</span></div>
-<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span><span class="comment">     *  Returns the precise representation of &lt;code&gt;external&lt;/code&gt;.</span></div>
-<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span><span class="comment">     *</span></div>
-<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span><span class="comment">     *@param  external  the original coordinate</span></div>
-<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span><span class="comment">     *@return</span></div>
-<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span><span class="comment">     *  the coordinate whose values will be changed to the precise</span></div>
-<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span><span class="comment">     *  representation of &lt;code&gt;external&lt;/code&gt;</span></div>
-<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span><span class="comment">     * @deprecated use makePrecise instead</span></div>
-<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>    <span class="comment">//Coordinate* toInternal(const Coordinate&amp; external) const;</span></div>
-<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span> </div>
-<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span>    <span class="comment">/*</span></div>
-<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span><span class="comment">     *  Returns the external representation of &lt;code&gt;internal&lt;/code&gt;.</span></div>
-<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span><span class="comment">     *</span></div>
-<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span><span class="comment">     *@param  internal  the original coordinate</span></div>
-<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span><span class="comment">     *@return           the coordinate whose values will be changed to the</span></div>
-<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span><span class="comment">     *      external representation of &lt;code&gt;internal&lt;/code&gt;</span></div>
-<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span><span class="comment">     * @deprecated no longer needed, since internal representation is same as external representation</span></div>
-<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>    <span class="comment">//Coordinate* toExternal(const Coordinate&amp; internal) const;</span></div>
-<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span> </div>
-<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span>    <span class="comment">/*</span></div>
-<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span><span class="comment">     *  Sets &lt;code&gt;external&lt;/code&gt; to the external representation of</span></div>
-<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span><span class="comment">     *  &lt;code&gt;internal&lt;/code&gt;.</span></div>
-<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span><span class="comment">     *</span></div>
-<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span><span class="comment">     * @param  internal  the original coordinate</span></div>
-<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span><span class="comment">     * @param  external</span></div>
-<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span><span class="comment">     *  the coordinate whose values will be changed to the</span></div>
-<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span><span class="comment">     *  external representation of &lt;code&gt;internal&lt;/code&gt;</span></div>
-<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span><span class="comment">     * @deprecated no longer needed, since internal representation is same as external representation</span></div>
-<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span><span class="comment">     */</span></div>
-<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>    <span class="comment">//void toExternal(const Coordinate&amp; internal, Coordinate* external) const;</span></div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span> </div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#a7a0e0af0b2097cb72082c7d10abf368a">  259</a></span>    <span class="keywordtype">double</span> <a class="code hl_function" href="classgeos_1_1geom_1_1PrecisionModel.html#a7a0e0af0b2097cb72082c7d10abf368a">getOffsetX</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span> </div>
+<div class="line"><a id="l00267" name="l00267"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#a349d9bf69485902cb0fa88eee9132abc">  267</a></span>    <span class="keywordtype">double</span> <a class="code hl_function" href="classgeos_1_1geom_1_1PrecisionModel.html#a349d9bf69485902cb0fa88eee9132abc">getOffsetY</a>() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span> </div>
+<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>    <span class="comment">/*</span></div>
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span><span class="comment">     *  Sets ´internal` to the precise representation of `external`.</span></div>
+<div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span><span class="comment">     *</span></div>
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span><span class="comment">     * @param external the original coordinate</span></div>
+<div class="line"><a id="l00273" name="l00273"></a><span class="lineno">  273</span><span class="comment">     * @param internal the coordinate whose values will be changed to the</span></div>
+<div class="line"><a id="l00274" name="l00274"></a><span class="lineno">  274</span><span class="comment">     *                 precise representation of &lt;code&gt;external&lt;/code&gt;</span></div>
+<div class="line"><a id="l00275" name="l00275"></a><span class="lineno">  275</span><span class="comment">     * @deprecated use makePrecise instead</span></div>
+<div class="line"><a id="l00276" name="l00276"></a><span class="lineno">  276</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00277" name="l00277"></a><span class="lineno">  277</span>    <span class="comment">//void toInternal(const Coordinate&amp; external, Coordinate* internal) const;</span></div>
+<div class="line"><a id="l00278" name="l00278"></a><span class="lineno">  278</span> </div>
+<div class="line"><a id="l00279" name="l00279"></a><span class="lineno">  279</span>    <span class="comment">/*</span></div>
+<div class="line"><a id="l00280" name="l00280"></a><span class="lineno">  280</span><span class="comment">     *  Returns the precise representation of &lt;code&gt;external&lt;/code&gt;.</span></div>
+<div class="line"><a id="l00281" name="l00281"></a><span class="lineno">  281</span><span class="comment">     *</span></div>
+<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span><span class="comment">     *@param  external  the original coordinate</span></div>
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span><span class="comment">     *@return</span></div>
+<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span><span class="comment">     *  the coordinate whose values will be changed to the precise</span></div>
+<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span><span class="comment">     *  representation of &lt;code&gt;external&lt;/code&gt;</span></div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span><span class="comment">     * @deprecated use makePrecise instead</span></div>
+<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span>    <span class="comment">//Coordinate* toInternal(const Coordinate&amp; external) const;</span></div>
+<div class="line"><a id="l00289" name="l00289"></a><span class="lineno">  289</span> </div>
+<div class="line"><a id="l00290" name="l00290"></a><span class="lineno">  290</span>    <span class="comment">/*</span></div>
+<div class="line"><a id="l00291" name="l00291"></a><span class="lineno">  291</span><span class="comment">     *  Returns the external representation of &lt;code&gt;internal&lt;/code&gt;.</span></div>
+<div class="line"><a id="l00292" name="l00292"></a><span class="lineno">  292</span><span class="comment">     *</span></div>
+<div class="line"><a id="l00293" name="l00293"></a><span class="lineno">  293</span><span class="comment">     *@param  internal  the original coordinate</span></div>
+<div class="line"><a id="l00294" name="l00294"></a><span class="lineno">  294</span><span class="comment">     *@return           the coordinate whose values will be changed to the</span></div>
+<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span><span class="comment">     *      external representation of &lt;code&gt;internal&lt;/code&gt;</span></div>
+<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span><span class="comment">     * @deprecated no longer needed, since internal representation is same as external representation</span></div>
+<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00298" name="l00298"></a><span class="lineno">  298</span>    <span class="comment">//Coordinate* toExternal(const Coordinate&amp; internal) const;</span></div>
+<div class="line"><a id="l00299" name="l00299"></a><span class="lineno">  299</span> </div>
+<div class="line"><a id="l00300" name="l00300"></a><span class="lineno">  300</span>    <span class="comment">/*</span></div>
+<div class="line"><a id="l00301" name="l00301"></a><span class="lineno">  301</span><span class="comment">     *  Sets &lt;code&gt;external&lt;/code&gt; to the external representation of</span></div>
+<div class="line"><a id="l00302" name="l00302"></a><span class="lineno">  302</span><span class="comment">     *  &lt;code&gt;internal&lt;/code&gt;.</span></div>
+<div class="line"><a id="l00303" name="l00303"></a><span class="lineno">  303</span><span class="comment">     *</span></div>
+<div class="line"><a id="l00304" name="l00304"></a><span class="lineno">  304</span><span class="comment">     * @param  internal  the original coordinate</span></div>
+<div class="line"><a id="l00305" name="l00305"></a><span class="lineno">  305</span><span class="comment">     * @param  external</span></div>
+<div class="line"><a id="l00306" name="l00306"></a><span class="lineno">  306</span><span class="comment">     *  the coordinate whose values will be changed to the</span></div>
+<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span><span class="comment">     *  external representation of &lt;code&gt;internal&lt;/code&gt;</span></div>
+<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span><span class="comment">     * @deprecated no longer needed, since internal representation is same as external representation</span></div>
+<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span><span class="comment">     */</span></div>
+<div class="line"><a id="l00310" name="l00310"></a><span class="lineno">  310</span>    <span class="comment">//void toExternal(const Coordinate&amp; internal, Coordinate* external) const;</span></div>
+<div class="line"><a id="l00311" name="l00311"></a><span class="lineno">  311</span> </div>
+<div class="line"><a id="l00312" name="l00312"></a><span class="lineno">  312</span>    std::string toString() <span class="keyword">const</span>;</div>
 <div class="line"><a id="l00313" name="l00313"></a><span class="lineno">  313</span> </div>
-<div class="line"><a id="l00314" name="l00314"></a><span class="lineno">  314</span>    std::string toString() <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00315" name="l00315"></a><span class="lineno">  315</span> </div>
-<div class="line"><a id="l00335" name="l00335"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#a4abe4fbe02b759c654a7219c6cd969bd">  335</a></span>    <span class="keywordtype">int</span> <a class="code hl_function" href="classgeos_1_1geom_1_1PrecisionModel.html#a4abe4fbe02b759c654a7219c6cd969bd">compareTo</a>(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1PrecisionModel.html">PrecisionModel</a>* other) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00333" name="l00333"></a><span class="lineno"><a class="line" href="classgeos_1_1geom_1_1PrecisionModel.html#a4abe4fbe02b759c654a7219c6cd969bd">  333</a></span>    <span class="keywordtype">int</span> <a class="code hl_function" href="classgeos_1_1geom_1_1PrecisionModel.html#a4abe4fbe02b759c654a7219c6cd969bd">compareTo</a>(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1PrecisionModel.html">PrecisionModel</a>* other) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span> </div>
+<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span><span class="keyword">private</span>:</div>
 <div class="line"><a id="l00336" name="l00336"></a><span class="lineno">  336</span> </div>
-<div class="line"><a id="l00337" name="l00337"></a><span class="lineno">  337</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00338" name="l00338"></a><span class="lineno">  338</span> </div>
-<div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span>    <span class="keywordtype">void</span> setScale(<span class="keywordtype">double</span> newScale);</div>
-<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span>    <span class="comment">// throw IllegalArgumentException</span></div>
-<div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span> </div>
-<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span>    <span class="keyword">static</span> <span class="keywordtype">double</span> snapToInt(<span class="keywordtype">double</span> val, <span class="keywordtype">double</span> tolerance);</div>
+<div class="line"><a id="l00344" name="l00344"></a><span class="lineno">  344</span>    <span class="keywordtype">void</span> setScale(<span class="keywordtype">double</span> newScale);</div>
+<div class="line"><a id="l00345" name="l00345"></a><span class="lineno">  345</span>    <span class="comment">// throw IllegalArgumentException</span></div>
+<div class="line"><a id="l00346" name="l00346"></a><span class="lineno">  346</span> </div>
+<div class="line"><a id="l00350" name="l00350"></a><span class="lineno">  350</span>    <span class="keyword">static</span> <span class="keywordtype">double</span> snapToInt(<span class="keywordtype">double</span> val, <span class="keywordtype">double</span> tolerance);</div>
+<div class="line"><a id="l00351" name="l00351"></a><span class="lineno">  351</span> </div>
+<div class="line"><a id="l00352" name="l00352"></a><span class="lineno">  352</span>    <a class="code hl_enumeration" href="classgeos_1_1geom_1_1PrecisionModel.html#aa32be4a02d1faf45306fee75d68a2e12">Type</a> modelType;</div>
 <div class="line"><a id="l00353" name="l00353"></a><span class="lineno">  353</span> </div>
-<div class="line"><a id="l00354" name="l00354"></a><span class="lineno">  354</span>    <a class="code hl_enumeration" href="classgeos_1_1geom_1_1PrecisionModel.html#aa32be4a02d1faf45306fee75d68a2e12">Type</a> modelType;</div>
-<div class="line"><a id="l00355" name="l00355"></a><span class="lineno">  355</span> </div>
-<div class="line"><a id="l00359" name="l00359"></a><span class="lineno">  359</span>    <span class="keywordtype">double</span> scale;</div>
-<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span> </div>
-<div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span>    <span class="keywordtype">double</span> gridSize = 0.0;</div>
-<div class="line"><a id="l00367" name="l00367"></a><span class="lineno">  367</span> </div>
-<div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span>};</div>
+<div class="line"><a id="l00357" name="l00357"></a><span class="lineno">  357</span>    <span class="keywordtype">double</span> scale;</div>
+<div class="line"><a id="l00358" name="l00358"></a><span class="lineno">  358</span> </div>
+<div class="line"><a id="l00364" name="l00364"></a><span class="lineno">  364</span>    <span class="keywordtype">double</span> gridSize = 0.0;</div>
+<div class="line"><a id="l00365" name="l00365"></a><span class="lineno">  365</span> </div>
+<div class="line"><a id="l00366" name="l00366"></a><span class="lineno">  366</span>};</div>
 </div>
-<div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span> </div>
-<div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span><span class="comment">// Equality operator for PrecisionModel, deprecate it ?</span></div>
-<div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span><span class="comment">//inline bool operator==(const PrecisionModel&amp; a, const PrecisionModel&amp; b);</span></div>
-<div class="line"><a id="l00372" name="l00372"></a><span class="lineno">  372</span> </div>
-<div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span>} <span class="comment">// namespace geos::geom</span></div>
-<div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span>} <span class="comment">// namespace geos</span></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1PrecisionModel_html"><div class="ttname"><a href="classgeos_1_1geom_1_1PrecisionModel.html">geos::geom::PrecisionModel</a></div><div class="ttdoc">Specifies the precision model of the Coordinate in a Geometry.</div><div class="ttdef"><b>Definition</b> PrecisionModel.h:88</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1PrecisionModel_html_a0357f01d06a727dd44ade8ca808847b3"><div class="ttname"><a href="classgeos_1_1geom_1_1PrecisionModel.html#a0357f01d06a727dd44ade8ca808847b3">geos::geom::PrecisionModel::getGridSize</a></div><div class="ttdeci">double getGridSize() const</div><div class="ttdef"><b>Definition</b> PrecisionModel.h:244</div></div>
+<div class="line"><a id="l00367" name="l00367"></a><span class="lineno">  367</span> </div>
+<div class="line"><a id="l00368" name="l00368"></a><span class="lineno">  368</span><span class="comment">// Equality operator for PrecisionModel, deprecate it ?</span></div>
+<div class="line"><a id="l00369" name="l00369"></a><span class="lineno">  369</span><span class="comment">//inline bool operator==(const PrecisionModel&amp; a, const PrecisionModel&amp; b);</span></div>
+<div class="line"><a id="l00370" name="l00370"></a><span class="lineno">  370</span> </div>
+<div class="line"><a id="l00371" name="l00371"></a><span class="lineno">  371</span>} <span class="comment">// namespace geos::geom</span></div>
+<div class="line"><a id="l00372" name="l00372"></a><span class="lineno">  372</span>} <span class="comment">// namespace geos</span></div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1PrecisionModel_html"><div class="ttname"><a href="classgeos_1_1geom_1_1PrecisionModel.html">geos::geom::PrecisionModel</a></div><div class="ttdoc">Specifies the precision model of the Coordinate in a Geometry.</div><div class="ttdef"><b>Definition</b> PrecisionModel.h:87</div></div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1PrecisionModel_html_a0357f01d06a727dd44ade8ca808847b3"><div class="ttname"><a href="classgeos_1_1geom_1_1PrecisionModel.html#a0357f01d06a727dd44ade8ca808847b3">geos::geom::PrecisionModel::getGridSize</a></div><div class="ttdeci">double getGridSize() const</div><div class="ttdef"><b>Definition</b> PrecisionModel.h:242</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1PrecisionModel_html_a349d9bf69485902cb0fa88eee9132abc"><div class="ttname"><a href="classgeos_1_1geom_1_1PrecisionModel.html#a349d9bf69485902cb0fa88eee9132abc">geos::geom::PrecisionModel::getOffsetY</a></div><div class="ttdeci">double getOffsetY() const</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1PrecisionModel_html_a4abe4fbe02b759c654a7219c6cd969bd"><div class="ttname"><a href="classgeos_1_1geom_1_1PrecisionModel.html#a4abe4fbe02b759c654a7219c6cd969bd">geos::geom::PrecisionModel::compareTo</a></div><div class="ttdeci">int compareTo(const PrecisionModel *other) const</div><div class="ttdoc">Compares this PrecisionModel object with the specified object for order.</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1PrecisionModel_html_a5c68e7a03195a03d2a89fe24b9aa346a"><div class="ttname"><a href="classgeos_1_1geom_1_1PrecisionModel.html#a5c68e7a03195a03d2a89fe24b9aa346a">geos::geom::PrecisionModel::PrecisionModel</a></div><div class="ttdeci">PrecisionModel(double newScale, double newOffsetX, double newOffsetY)</div><div class="ttdoc">Creates a PrecisionModel with Fixed precision.</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1PrecisionModel_html_a78f9501b307abf44085b9d60a99e352f"><div class="ttname"><a href="classgeos_1_1geom_1_1PrecisionModel.html#a78f9501b307abf44085b9d60a99e352f">geos::geom::PrecisionModel::getScale</a></div><div class="ttdeci">double getScale() const</div><div class="ttdoc">Returns the multiplying factor used to obtain a precise coordinate.</div><div class="ttdef"><b>Definition</b> PrecisionModel.h:230</div></div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1PrecisionModel_html_a78f9501b307abf44085b9d60a99e352f"><div class="ttname"><a href="classgeos_1_1geom_1_1PrecisionModel.html#a78f9501b307abf44085b9d60a99e352f">geos::geom::PrecisionModel::getScale</a></div><div class="ttdeci">double getScale() const</div><div class="ttdoc">Returns the multiplying factor used to obtain a precise coordinate.</div><div class="ttdef"><b>Definition</b> PrecisionModel.h:228</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1PrecisionModel_html_a7a055163236e4d5c2efe309820778575"><div class="ttname"><a href="classgeos_1_1geom_1_1PrecisionModel.html#a7a055163236e4d5c2efe309820778575">geos::geom::PrecisionModel::getMaximumSignificantDigits</a></div><div class="ttdeci">int getMaximumSignificantDigits() const</div><div class="ttdoc">Returns the maximum number of significant digits provided by this precision model.</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1PrecisionModel_html_a7a0e0af0b2097cb72082c7d10abf368a"><div class="ttname"><a href="classgeos_1_1geom_1_1PrecisionModel.html#a7a0e0af0b2097cb72082c7d10abf368a">geos::geom::PrecisionModel::getOffsetX</a></div><div class="ttdeci">double getOffsetX() const</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1PrecisionModel_html_a92ff29ac9cd8f93f1ab9283788313a5e"><div class="ttname"><a href="classgeos_1_1geom_1_1PrecisionModel.html#a92ff29ac9cd8f93f1ab9283788313a5e">geos::geom::PrecisionModel::maximumPreciseValue</a></div><div class="ttdeci">static const double maximumPreciseValue</div><div class="ttdef"><b>Definition</b> PrecisionModel.h:169</div></div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1PrecisionModel_html_a92ff29ac9cd8f93f1ab9283788313a5e"><div class="ttname"><a href="classgeos_1_1geom_1_1PrecisionModel.html#a92ff29ac9cd8f93f1ab9283788313a5e">geos::geom::PrecisionModel::maximumPreciseValue</a></div><div class="ttdeci">static const double maximumPreciseValue</div><div class="ttdef"><b>Definition</b> PrecisionModel.h:167</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1PrecisionModel_html_a9f4af835c0ca26c06fe20d03dac79322"><div class="ttname"><a href="classgeos_1_1geom_1_1PrecisionModel.html#a9f4af835c0ca26c06fe20d03dac79322">geos::geom::PrecisionModel::PrecisionModel</a></div><div class="ttdeci">PrecisionModel(void)</div><div class="ttdoc">Creates a PrecisionModel with a default precision of FLOATING.</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1PrecisionModel_html_aa32be4a02d1faf45306fee75d68a2e12"><div class="ttname"><a href="classgeos_1_1geom_1_1PrecisionModel.html#aa32be4a02d1faf45306fee75d68a2e12">geos::geom::PrecisionModel::Type</a></div><div class="ttdeci">Type</div><div class="ttdoc">The types of Precision Model which GEOS supports.</div><div class="ttdef"><b>Definition</b> PrecisionModel.h:94</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1PrecisionModel_html_aa32be4a02d1faf45306fee75d68a2e12a702c5051872b1eae28e5f8d3c0f2e8af"><div class="ttname"><a href="classgeos_1_1geom_1_1PrecisionModel.html#aa32be4a02d1faf45306fee75d68a2e12a702c5051872b1eae28e5f8d3c0f2e8af">geos::geom::PrecisionModel::FIXED</a></div><div class="ttdeci">@ FIXED</div><div class="ttdef"><b>Definition</b> PrecisionModel.h:102</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1PrecisionModel_html_aa32be4a02d1faf45306fee75d68a2e12a871d90e033044acdd1db738dc2934aaf"><div class="ttname"><a href="classgeos_1_1geom_1_1PrecisionModel.html#aa32be4a02d1faf45306fee75d68a2e12a871d90e033044acdd1db738dc2934aaf">geos::geom::PrecisionModel::FLOATING</a></div><div class="ttdeci">@ FLOATING</div><div class="ttdef"><b>Definition</b> PrecisionModel.h:109</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1PrecisionModel_html_aa5624ee86d4806db5b808c479c78144c"><div class="ttname"><a href="classgeos_1_1geom_1_1PrecisionModel.html#aa5624ee86d4806db5b808c479c78144c">geos::geom::PrecisionModel::makePrecise</a></div><div class="ttdeci">void makePrecise(CoordinateXY &amp;coord) const</div><div class="ttdoc">Rounds the given Coordinate to the PrecisionModel grid.</div><div class="ttdef"><b>Definition</b> PrecisionModel.h:184</div></div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1PrecisionModel_html_aa32be4a02d1faf45306fee75d68a2e12"><div class="ttname"><a href="classgeos_1_1geom_1_1PrecisionModel.html#aa32be4a02d1faf45306fee75d68a2e12">geos::geom::PrecisionModel::Type</a></div><div class="ttdeci">Type</div><div class="ttdoc">The types of Precision Model which GEOS supports.</div><div class="ttdef"><b>Definition</b> PrecisionModel.h:92</div></div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1PrecisionModel_html_aa32be4a02d1faf45306fee75d68a2e12a702c5051872b1eae28e5f8d3c0f2e8af"><div class="ttname"><a href="classgeos_1_1geom_1_1PrecisionModel.html#aa32be4a02d1faf45306fee75d68a2e12a702c5051872b1eae28e5f8d3c0f2e8af">geos::geom::PrecisionModel::FIXED</a></div><div class="ttdeci">@ FIXED</div><div class="ttdef"><b>Definition</b> PrecisionModel.h:100</div></div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1PrecisionModel_html_aa32be4a02d1faf45306fee75d68a2e12a871d90e033044acdd1db738dc2934aaf"><div class="ttname"><a href="classgeos_1_1geom_1_1PrecisionModel.html#aa32be4a02d1faf45306fee75d68a2e12a871d90e033044acdd1db738dc2934aaf">geos::geom::PrecisionModel::FLOATING</a></div><div class="ttdeci">@ FLOATING</div><div class="ttdef"><b>Definition</b> PrecisionModel.h:107</div></div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1PrecisionModel_html_aa5624ee86d4806db5b808c479c78144c"><div class="ttname"><a href="classgeos_1_1geom_1_1PrecisionModel.html#aa5624ee86d4806db5b808c479c78144c">geos::geom::PrecisionModel::makePrecise</a></div><div class="ttdeci">void makePrecise(CoordinateXY &amp;coord) const</div><div class="ttdoc">Rounds the given Coordinate to the PrecisionModel grid.</div><div class="ttdef"><b>Definition</b> PrecisionModel.h:182</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1PrecisionModel_html_ab7b6f3c8fc62bb29bb7eb665c969486a"><div class="ttname"><a href="classgeos_1_1geom_1_1PrecisionModel.html#ab7b6f3c8fc62bb29bb7eb665c969486a">geos::geom::PrecisionModel::PrecisionModel</a></div><div class="ttdeci">PrecisionModel(double newScale)</div><div class="ttdoc">Creates a PrecisionModel with Fixed precision.</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1PrecisionModel_html_ac6bb03bcd215e6d42406e3c8fbaaae1e"><div class="ttname"><a href="classgeos_1_1geom_1_1PrecisionModel.html#ac6bb03bcd215e6d42406e3c8fbaaae1e">geos::geom::PrecisionModel::PrecisionModel</a></div><div class="ttdeci">PrecisionModel(Type nModelType)</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1PrecisionModel_html_ad68fcab9d5840860f51672d43752f1c0"><div class="ttname"><a href="classgeos_1_1geom_1_1PrecisionModel.html#ad68fcab9d5840860f51672d43752f1c0">geos::geom::PrecisionModel::makePrecise</a></div><div class="ttdeci">double makePrecise(double val) const</div><div class="ttdoc">Rounds a numeric value to the PrecisionModel grid.</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1PrecisionModel_html_af783d0e68fd62f7d84d0911dfcf09e21"><div class="ttname"><a href="classgeos_1_1geom_1_1PrecisionModel.html#af783d0e68fd62f7d84d0911dfcf09e21">geos::geom::PrecisionModel::isFloating</a></div><div class="ttdeci">bool isFloating() const</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1PrecisionModel_html_afd66670f549cc0d8e9570e1bf26229fd"><div class="ttname"><a href="classgeos_1_1geom_1_1PrecisionModel.html#afd66670f549cc0d8e9570e1bf26229fd">geos::geom::PrecisionModel::getType</a></div><div class="ttdeci">Type getType() const</div><div class="ttdef"><b>Definition</b> PrecisionModel.h:224</div></div>
-<div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition</b> geos.h:39</div></div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1PrecisionModel_html_afd66670f549cc0d8e9570e1bf26229fd"><div class="ttname"><a href="classgeos_1_1geom_1_1PrecisionModel.html#afd66670f549cc0d8e9570e1bf26229fd">geos::geom::PrecisionModel::getType</a></div><div class="ttdeci">Type getType() const</div><div class="ttdef"><b>Definition</b> PrecisionModel.h:222</div></div>
+<div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition</b> geos.h:38</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
