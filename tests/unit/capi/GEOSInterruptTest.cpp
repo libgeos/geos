@@ -35,12 +35,10 @@ struct test_capiinterrupt_data : public capitest::utility {
         }
     }
 
-    static void
+    static int
     interruptAfterMaxCalls(void* data)
     {
-        if (++*static_cast<int*>(data) >= maxcalls) {
-            GEOS_interruptThread();
-        }
+        return ++*static_cast<int*>(data) >= maxcalls;
     }
 
 };
@@ -78,7 +76,7 @@ void object::test<1>
 
     GEOSGeometry* geom2 = GEOSBuffer(geom1, 1, 8);
 
-    ensure("GEOSBufferWithStyle failed", nullptr != geom2);
+    ensure("GEOSBuffer failed", nullptr != geom2);
 
     ensure("interrupt callback never called", numcalls > 0);
 
@@ -215,7 +213,7 @@ template<>
 void object::test<6>
 ()
 {
-    using geos::util::Interrupt;
+    using geos::util::CurrentThreadInterrupt;
 
     maxcalls = 3;
     int calls_1 = 0;
@@ -228,7 +226,8 @@ void object::test<6>
     GEOSContext_setInterruptCallback_r(h2, interruptAfterMaxCalls, &calls_2);
 
     // get previously registered callback and verify there was none
-    ensure(Interrupt::registerThreadCallback(nullptr, nullptr) == nullptr);
+    // (the context registered its callback only when invoking a function)
+    ensure(CurrentThreadInterrupt::registerCallback(nullptr, nullptr) == nullptr);
 
     auto buffer = [](GEOSContextHandle_t handle) {
         GEOSWKTReader* reader = GEOSWKTReader_create_r(handle);
@@ -250,7 +249,8 @@ void object::test<6>
     ensure_equals(calls_2, maxcalls);
 
     // get previously registered callback and verify there was none
-    ensure(Interrupt::registerThreadCallback(nullptr, nullptr) == nullptr);
+    // (context unregistered its callback after completing GEOSBuffer)
+    ensure(CurrentThreadInterrupt::registerCallback(nullptr, nullptr) == nullptr);
 
     finishGEOS_r(h1);
     finishGEOS_r(h2);

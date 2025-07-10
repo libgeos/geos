@@ -242,7 +242,7 @@ typedef struct GEOSContextHandle_HS {
     void* noticeData;
     GEOSMessageHandler errorMessageOld;
     GEOSMessageHandler_r errorMessageNew;
-    GEOSInterruptThreadCallback* interrupt_cb;
+    GEOSContextInterruptCallback* interrupt_cb;
     void* interrupt_cb_data;
     void* errorData;
     uint8_t WKBOutputDims;
@@ -317,8 +317,8 @@ typedef struct GEOSContextHandle_HS {
         return f;
     }
 
-    GEOSInterruptThreadCallback*
-    setInterruptHandler(GEOSInterruptThreadCallback* cb, void* userData)
+    GEOSContextInterruptCallback*
+    setInterruptHandler(GEOSContextInterruptCallback* cb, void* userData)
     {
         auto old = interrupt_cb;
         interrupt_cb = cb;
@@ -445,17 +445,17 @@ struct InterruptManager {
         cb(handle->interrupt_cb),
         cb_data(handle->interrupt_cb_data) {
         if (cb) {
-            geos::util::Interrupt::registerThreadCallback(cb, cb_data);
+            geos::util::CurrentThreadInterrupt::registerCallback(cb, cb_data);
         }
     }
 
     ~InterruptManager() {
         if (cb != nullptr) {
-            geos::util::Interrupt::registerThreadCallback(nullptr, nullptr);
+            geos::util::CurrentThreadInterrupt::registerCallback(nullptr, nullptr);
         }
     }
 
-    GEOSInterruptThreadCallback* cb;
+    GEOSContextInterruptCallback* cb;
     void* cb_data;
 };
 
@@ -613,8 +613,8 @@ extern "C" {
         return handle->setErrorHandler(ef, userData);
     }
 
-    GEOSInterruptThreadCallback*
-    GEOSContext_setInterruptCallback_r(GEOSContextHandle_t extHandle, GEOSInterruptThreadCallback* cb, void* userData)
+    GEOSContextInterruptCallback*
+    GEOSContext_setInterruptCallback_r(GEOSContextHandle_t extHandle, GEOSContextInterruptCallback* cb, void* userData)
     {
         GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
         if(0 == handle->initialized) {

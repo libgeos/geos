@@ -18,12 +18,11 @@
 namespace {
 
 // Callback and request status for interruption of any single thread
-bool requested = false;
-thread_local bool requested_for_thread = false;
-
-// Callback and request status for interruption of a the current thread
 geos::util::Interrupt::Callback* callback = nullptr;
-thread_local geos::util::Interrupt::ThreadCallback* callback_thread = nullptr;
+bool requested = false;
+
+// Callback for interruption of the current thread
+thread_local geos::util::CurrentThreadInterrupt::ThreadCallback* callback_thread = nullptr;
 thread_local void* callback_thread_data = nullptr;
 
 }
@@ -44,22 +43,15 @@ Interrupt::request()
 }
 
 void
-Interrupt::requestForCurrentThread()
-{
-    requested_for_thread = true;
-}
-
-void
 Interrupt::cancel()
 {
     requested = false;
-    requested_for_thread = false;
 }
 
 bool
 Interrupt::check()
 {
-    return requested || requested_for_thread;
+    return requested;
 }
 
 Interrupt::Callback*
@@ -70,23 +62,11 @@ Interrupt::registerCallback(Interrupt::Callback* cb)
     return prev;
 }
 
-Interrupt::ThreadCallback*
-Interrupt::registerThreadCallback(ThreadCallback* cb, void* data)
-{
-    ThreadCallback* prev = callback_thread;
-    callback_thread = cb;
-    callback_thread_data = data;
-    return prev;
-}
-
 void
 Interrupt::process()
 {
     if(callback) {
         (*callback)();
-    }
-    if(callback_thread) {
-        (*callback_thread)(callback_thread_data);
     }
     if(check()) {
         interrupt();
@@ -98,10 +78,28 @@ void
 Interrupt::interrupt()
 {
     requested = false;
-    requested_for_thread = false;
     throw InterruptedException();
 }
 
+CurrentThreadInterrupt::ThreadCallback*
+CurrentThreadInterrupt::registerCallback(ThreadCallback *cb, void *data) {
+    auto* prev = callback_thread;
+    callback_thread = cb;
+    callback_thread_data = data;
+    return prev;
+}
+
+void
+CurrentThreadInterrupt::process() {
+    if (callback_thread && (*callback_thread)(callback_thread_data)) {
+        interrupt();
+    }
+}
+
+void
+CurrentThreadInterrupt::interrupt() {
+    throw InterruptedException();
+}
 
 } // namespace geos::util
 } // namespace geos

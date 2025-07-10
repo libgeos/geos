@@ -19,15 +19,12 @@
 namespace geos {
 namespace util { // geos::util
 
-#define GEOS_CHECK_FOR_INTERRUPTS() geos::util::Interrupt::process()
-
 /** \brief Used to manage interruption requests and callbacks. */
 class GEOS_DLL Interrupt {
 
 public:
 
     typedef void (Callback)(void);
-    typedef void (ThreadCallback)(void*);
 
     /**
      * Request interruption of operations
@@ -37,14 +34,6 @@ public:
      * to check for an interrupt request.
      */
     static void request();
-
-    /**
-     * Request interruption of operations in the current thread
-     *
-     * Operations in the current thread will be terminated by
-     * a GEOSInterrupt at first occasion.
-     */
-    static void requestForCurrentThread();
 
     /** Cancel a pending interruption request */
     static void cancel();
@@ -64,18 +53,6 @@ public:
      */
     static Callback* registerCallback(Callback* cb);
 
-    /** \brief
-     * Register a callback that will be invoked the current thread
-     * before checking for interruption requests.
-     *
-     * NOTE that interruption request checking may happen
-     * frequently so the callback should execute quickly.
-     *
-     * The callback can be used to call Interrupt::request()
-     * or Interrupt::requestForCurrentThread().
-     */
-    static ThreadCallback* registerThreadCallback(ThreadCallback* cb, void* data);
-
     /**
      * Invoke the callback, if any. Process pending interruption, if any.
      *
@@ -87,7 +64,26 @@ public:
 
 };
 
+class GEOS_DLL CurrentThreadInterrupt {
+public:
+    typedef int (ThreadCallback)(void*);
+
+    /** \brief
+     * Register a callback that will be invoked by the current thread
+     * to check if it should be interrupted. If the callback returns
+     * True, the thread will be interrupted. The previously registered
+     * callback, if any, will be returned.
+     */
+    static ThreadCallback* registerCallback(ThreadCallback* cb, void* data);
+
+    static void process();
+
+    static void interrupt();
+};
+
 
 } // namespace geos::util
 } // namespace geos
 
+
+inline void GEOS_CHECK_FOR_INTERRUPTS() { geos::util::Interrupt::process(); geos::util::CurrentThreadInterrupt::process(); }

@@ -8,6 +8,7 @@
 #include <thread>
 
 using geos::util::Interrupt;
+using geos::util::CurrentThreadInterrupt;
 
 namespace tut {
 //
@@ -42,8 +43,22 @@ struct test_interrupt_data {
         auto it = toInterrupt->find(std::this_thread::get_id());
         if (it != toInterrupt->end() && it->second) {
             it->second = false;
-            Interrupt::requestForCurrentThread();
+            CurrentThreadInterrupt::interrupt();
         }
+    }
+
+    static bool interruptCurrentThreadIfRequested() {
+        if (toInterrupt == nullptr) {
+            return false;
+        }
+
+        auto it = toInterrupt->find(std::this_thread::get_id());
+        if (it != toInterrupt->end() && it->second) {
+            it->second = false;
+            return true;
+        }
+
+        return false;
     }
 };
 
@@ -59,7 +74,7 @@ group test_interrupt_group("geos::util::Interrupt");
 //
 
 
-// Interrupt worker thread via global request from from main thead
+// Interrupt worker thread via global request from main thead
 template<>
 template<>
 void object::test<1>
@@ -108,25 +123,21 @@ void object::test<3>
     bool interrupt1 = false;
     int numCalls2 = 0;
 
-    auto cb1 = ([](void* data) {
-        if (*static_cast<bool*>(data)) {
-            Interrupt::requestForCurrentThread();
-        }
+    auto cb1 = ([](void* data) -> int {
+        return *static_cast<bool*>(data);
     });
 
-    auto cb2 = ([](void* data) {
-        if (++*static_cast<int*>(data) > 5) {
-            Interrupt::requestForCurrentThread();
-        }
+    auto cb2 = ([](void* data) -> int {
+        return ++*static_cast<int*>(data) > 5;
     });
 
 
     std::thread t1([&cb1, &interrupt1]() {
-        Interrupt::registerThreadCallback(cb1, &interrupt1);
+        CurrentThreadInterrupt::registerCallback(cb1, &interrupt1);
     });
 
     std::thread t2([&cb2, &numCalls2]() {
-        Interrupt::registerThreadCallback(cb2, &numCalls2);
+        CurrentThreadInterrupt::registerCallback(cb2, &numCalls2);
     });
 
     t2.join();
