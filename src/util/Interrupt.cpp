@@ -16,10 +16,15 @@
 #include <geos/util/GEOSException.h> // for inheritance
 
 namespace {
-/* Could these be portably stored in thread-specific space ? */
+
+// Callback and request status for interruption of any single thread
+geos::util::Interrupt::Callback* callback = nullptr;
 bool requested = false;
 
-geos::util::Interrupt::Callback* callback = nullptr;
+// Callback for interruption of the current thread
+thread_local geos::util::CurrentThreadInterrupt::ThreadCallback* callback_thread = nullptr;
+thread_local void* callback_thread_data = nullptr;
+
 }
 
 namespace geos {
@@ -63,8 +68,7 @@ Interrupt::process()
     if(callback) {
         (*callback)();
     }
-    if(requested) {
-        requested = false;
+    if(check()) {
         interrupt();
     }
 }
@@ -77,6 +81,25 @@ Interrupt::interrupt()
     throw InterruptedException();
 }
 
+CurrentThreadInterrupt::ThreadCallback*
+CurrentThreadInterrupt::registerCallback(ThreadCallback *cb, void *data) {
+    auto* prev = callback_thread;
+    callback_thread = cb;
+    callback_thread_data = data;
+    return prev;
+}
+
+void
+CurrentThreadInterrupt::process() {
+    if (callback_thread && (*callback_thread)(callback_thread_data)) {
+        interrupt();
+    }
+}
+
+void
+CurrentThreadInterrupt::interrupt() {
+    throw InterruptedException();
+}
 
 } // namespace geos::util
 } // namespace geos

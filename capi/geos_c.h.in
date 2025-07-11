@@ -333,10 +333,9 @@ typedef int (*GEOSTransformXYZCallback)(
 
 
 /* ========== Interruption ========== */
-
 /**
-* Callback function for use in interruption. The callback will be invoked _before_ checking for
-* interruption, so can be used to request it.
+* Callback function for use in interruption. The callback will be invoked at each
+* possible interruption point and can be used to request interruption.
 *
 * \see GEOS_interruptRegisterCallback
 * \see GEOS_interruptRequest
@@ -345,20 +344,58 @@ typedef int (*GEOSTransformXYZCallback)(
 typedef void (GEOSInterruptCallback)(void);
 
 /**
-* Register a function to be called when processing is interrupted.
+* Callback function for use in interruption. The callback will be invoked at each
+* possible interruption point and can be used to request interruption by returning
+* a non-zero value.
+*
+* \see GEOSContext_setInterruptCallback_r
+* \since 3.14
+*/
+typedef int (GEOSContextInterruptCallback)(void*);
+
+/**
+* Register a function to be called when a possible interruption point is reached
+* on any thread. The function may be used to request interruption.
+*
 * \param cb Callback function to invoke
-* \return the previously configured callback
+* \return the previously registered callback, or NULL
 * \see GEOSInterruptCallback
+* \see GEOSContext_setInterruptCallback_r
 * \since 3.4
 */
 extern GEOSInterruptCallback GEOS_DLL *GEOS_interruptRegisterCallback(
     GEOSInterruptCallback* cb);
 
 /**
-* Request safe interruption of operations
+* Register a function to be called when a possible interruption point is reached
+* in code executed in the specified context. The function can interrupt the
+* thread if desired by returning True.
+*
+* \param extHandle the context returned by \ref GEOS_init_r.
+* \param cb Callback function to invoke
+* \param userData optional data to be pe provided as argument to callback
+* \return the previously registered callback, or NULL
+* \see GEOSContextInterruptCallback
+* \since 3.14
+*/
+extern GEOSContextInterruptCallback GEOS_DLL *GEOSContext_setInterruptCallback_r(
+        GEOSContextHandle_t extHandle,
+        GEOSContextInterruptCallback* cb,
+        void* userData);
+
+/**
+* Request safe interruption of operations. The next thread to check for an
+* interrupt will be interrupted. To request interruption of a specific thread,
+* instead call GEOS_interruptThread() from a callback executed by that thread.
 * \since 3.4
 */
 extern void GEOS_DLL GEOS_interruptRequest(void);
+
+/**
+* Interrupt the current thread.
+* \since 3.14
+*/
+extern void GEOS_DLL GEOS_interruptThread(void);
 
 /**
 * Cancel a pending interruption request
