@@ -92,6 +92,8 @@ Typedefs</h2></td></tr>
 <tr class="separator:afe3be045b5b09017536673c015d331ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aec502e984cff878b9a7d7416c03315a0" id="r_aec502e984cff878b9a7d7416c03315a0"><td class="memItemLeft" align="right" valign="top">typedef void()&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#aec502e984cff878b9a7d7416c03315a0">GEOSInterruptCallback</a>(void)</td></tr>
 <tr class="separator:aec502e984cff878b9a7d7416c03315a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8321cf3fc9ead719a589f4ae7292e5f5" id="r_a8321cf3fc9ead719a589f4ae7292e5f5"><td class="memItemLeft" align="right" valign="top">typedef int()&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a8321cf3fc9ead719a589f4ae7292e5f5">GEOSContextInterruptCallback</a>(void *)</td></tr>
+<tr class="separator:a8321cf3fc9ead719a589f4ae7292e5f5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a794f6ee9f228cd05dcb9e8b57c61ff56" id="r_a794f6ee9f228cd05dcb9e8b57c61ff56"><td class="memItemLeft" align="right" valign="top">typedef struct GEOSWKTReader_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a794f6ee9f228cd05dcb9e8b57c61ff56">GEOSWKTReader</a></td></tr>
 <tr class="separator:a794f6ee9f228cd05dcb9e8b57c61ff56"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a664daad6642852a44dac7a51320f8b66" id="r_a664daad6642852a44dac7a51320f8b66"><td class="memItemLeft" align="right" valign="top">typedef struct GEOSWKTWriter_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a664daad6642852a44dac7a51320f8b66">GEOSWKTWriter</a></td></tr>
@@ -172,8 +174,12 @@ Enumerations</h2></td></tr>
 Functions</h2></td></tr>
 <tr class="memitem:a711de5bf279890aac64ebda35c946cd7" id="r_a711de5bf279890aac64ebda35c946cd7"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#aec502e984cff878b9a7d7416c03315a0">GEOSInterruptCallback</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a711de5bf279890aac64ebda35c946cd7">GEOS_interruptRegisterCallback</a> (<a class="el" href="geos__c_8h.html#aec502e984cff878b9a7d7416c03315a0">GEOSInterruptCallback</a> *cb)</td></tr>
 <tr class="separator:a711de5bf279890aac64ebda35c946cd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb13efade416e581cefd1061430bb463" id="r_aeb13efade416e581cefd1061430bb463"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a8321cf3fc9ead719a589f4ae7292e5f5">GEOSContextInterruptCallback</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#aeb13efade416e581cefd1061430bb463">GEOSContext_setInterruptCallback_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> extHandle, <a class="el" href="geos__c_8h.html#a8321cf3fc9ead719a589f4ae7292e5f5">GEOSContextInterruptCallback</a> *cb, void *userData)</td></tr>
+<tr class="separator:aeb13efade416e581cefd1061430bb463"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad9878b3096d557bd38648699829cb660" id="r_ad9878b3096d557bd38648699829cb660"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#ad9878b3096d557bd38648699829cb660">GEOS_interruptRequest</a> (void)</td></tr>
 <tr class="separator:ad9878b3096d557bd38648699829cb660"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa8ecc25984c768b447775a70303a3016" id="r_aa8ecc25984c768b447775a70303a3016"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#aa8ecc25984c768b447775a70303a3016">GEOS_interruptThread</a> (void)</td></tr>
+<tr class="separator:aa8ecc25984c768b447775a70303a3016"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a49d835008e2341b2b0b8a7c5358ec07d" id="r_a49d835008e2341b2b0b8a7c5358ec07d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a49d835008e2341b2b0b8a7c5358ec07d">GEOS_interruptCancel</a> (void)</td></tr>
 <tr class="separator:a49d835008e2341b2b0b8a7c5358ec07d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a30f811be4f94eca255d6741f361969c1" id="r_a30f811be4f94eca255d6741f361969c1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a30f811be4f94eca255d6741f361969c1">GEOS_init_r</a> (void)</td></tr>
@@ -1513,6 +1519,23 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>GEOSCoverageCleanParam
 
 </div>
 </div>
+<a id="a8321cf3fc9ead719a589f4ae7292e5f5" name="a8321cf3fc9ead719a589f4ae7292e5f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8321cf3fc9ead719a589f4ae7292e5f5">&#9670;&#160;</a></span>GEOSContextInterruptCallback</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef int() GEOSContextInterruptCallback(void *)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Callback function for use in interruption. The callback will be invoked at each possible interruption point and can be used to request interruption by returning a non-zero value.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#aeb13efade416e581cefd1061430bb463">GEOSContext_setInterruptCallback_r</a> </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.14 </dd></dl>
+
+</div>
+</div>
 <a id="a20364ac461610266953754281d93408a" name="a20364ac461610266953754281d93408a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a20364ac461610266953754281d93408a">&#9670;&#160;</a></span>GEOSCoordSequence</h2>
 
@@ -1643,7 +1666,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>GEOSCoverageCleanParam
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Callback function for use in interruption. The callback will be invoked <em>before</em> checking for interruption, so can be used to request it.</p>
+<p>Callback function for use in interruption. The callback will be invoked at each possible interruption point and can be used to request interruption.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#a711de5bf279890aac64ebda35c946cd7">GEOS_interruptRegisterCallback</a> </dd>
 <dd>
 <a class="el" href="geos__c_8h.html#ad9878b3096d557bd38648699829cb660">GEOS_interruptRequest</a> </dd>
@@ -2442,14 +2465,17 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Register a function to be called when processing is interrupted. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Register a function to be called when a possible interruption point is reached on any thread. The function may be used to request interruption.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">cb</td><td>Callback function to invoke </td></tr>
   </table>
   </dd>
 </dl>
-<dl class="section return"><dt>Returns</dt><dd>the previously configured callback </dd></dl>
-<dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#aec502e984cff878b9a7d7416c03315a0">GEOSInterruptCallback</a> </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>the previously registered callback, or NULL </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#aec502e984cff878b9a7d7416c03315a0">GEOSInterruptCallback</a> </dd>
+<dd>
+<a class="el" href="geos__c_8h.html#aeb13efade416e581cefd1061430bb463">GEOSContext_setInterruptCallback_r</a> </dd></dl>
 <dl class="section since"><dt>Since</dt><dd>3.4 </dd></dl>
 
 </div>
@@ -2477,7 +2503,34 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Request safe interruption of operations </p><dl class="section since"><dt>Since</dt><dd>3.4 </dd></dl>
+<p>Request safe interruption of operations. The next thread to check for an interrupt will be interrupted. To request interruption of a specific thread, instead call <a class="el" href="geos__c_8h.html#aa8ecc25984c768b447775a70303a3016">GEOS_interruptThread()</a> from a callback executed by that thread. </p><dl class="section since"><dt>Since</dt><dd>3.4 </dd></dl>
+
+</div>
+</div>
+<a id="aa8ecc25984c768b447775a70303a3016" name="aa8ecc25984c768b447775a70303a3016"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa8ecc25984c768b447775a70303a3016">&#9670;&#160;</a></span>GEOS_interruptThread()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void GEOS_interruptThread </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Interrupt the current thread. </p><dl class="section since"><dt>Since</dt><dd>3.14 </dd></dl>
 
 </div>
 </div>
@@ -5347,6 +5400,60 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the previously configured message handler or NULL if no message handler was configured</dd></dl>
 <dl class="section since"><dt>Since</dt><dd>3.5 </dd></dl>
+
+</div>
+</div>
+<a id="aeb13efade416e581cefd1061430bb463" name="aeb13efade416e581cefd1061430bb463"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb13efade416e581cefd1061430bb463">&#9670;&#160;</a></span>GEOSContext_setInterruptCallback_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="geos__c_8h.html#a8321cf3fc9ead719a589f4ae7292e5f5">GEOSContextInterruptCallback</a> * GEOSContext_setInterruptCallback_r </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>&#160;</td>
+          <td class="paramname"><em>extHandle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a8321cf3fc9ead719a589f4ae7292e5f5">GEOSContextInterruptCallback</a> *&#160;</td>
+          <td class="paramname"><em>cb</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">void *&#160;</td>
+          <td class="paramname"><em>userData</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Register a function to be called when a possible interruption point is reached in code executed in the specified context. The function can interrupt the thread if desired by returning True.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">extHandle</td><td>the context returned by <a class="el" href="geos__c_8h.html#a30f811be4f94eca255d6741f361969c1">GEOS_init_r</a>. </td></tr>
+    <tr><td class="paramname">cb</td><td>Callback function to invoke </td></tr>
+    <tr><td class="paramname">userData</td><td>optional data to be pe provided as argument to callback </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the previously registered callback, or NULL </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#a8321cf3fc9ead719a589f4ae7292e5f5">GEOSContextInterruptCallback</a> </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.14 </dd></dl>
 
 </div>
 </div>

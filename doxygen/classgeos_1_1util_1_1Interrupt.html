@@ -71,7 +71,7 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a4aba8ba03cf9cf7257224751a55b3ddf" id="r_a4aba8ba03cf9cf7257224751a55b3ddf"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1util_1_1Interrupt.html#a4aba8ba03cf9cf7257224751a55b3ddf">check</a> ()</td></tr>
 <tr class="separator:a4aba8ba03cf9cf7257224751a55b3ddf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae41e6f8c93fe0325ea7e257d4237127f" id="r_ae41e6f8c93fe0325ea7e257d4237127f"><td class="memItemLeft" align="right" valign="top">static Callback *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1util_1_1Interrupt.html#ae41e6f8c93fe0325ea7e257d4237127f">registerCallback</a> (Callback *cb)</td></tr>
-<tr class="memdesc:ae41e6f8c93fe0325ea7e257d4237127f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register a callback that will be invoked before checking for interruption requests.  <br /></td></tr>
+<tr class="memdesc:ae41e6f8c93fe0325ea7e257d4237127f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register a callback that will be invoked by all threads before checking for interruption requests.  <br /></td></tr>
 <tr class="separator:ae41e6f8c93fe0325ea7e257d4237127f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac86682735da1c4fada239db486ee289a" id="r_ac86682735da1c4fada239db486ee289a"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1util_1_1Interrupt.html#ac86682735da1c4fada239db486ee289a">process</a> ()</td></tr>
 <tr class="separator:ac86682735da1c4fada239db486ee289a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -184,9 +184,9 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>interrupt</b> 
 </table>
 </div><div class="memdoc">
 
-<p>Register a callback that will be invoked before checking for interruption requests. </p>
-<p>NOTE that interruption request checking may happen frequently so any callback would better be quick.</p>
-<p>The callback can be used to call <a class="el" href="classgeos_1_1util_1_1Interrupt.html#ad493b6367e0a93ab02ff4133dc6e3b26">Interrupt::request()</a> </p>
+<p>Register a callback that will be invoked by all threads before checking for interruption requests. </p>
+<p>NOTE that interruption request checking may happen frequently so the callback should execute quickly.</p>
+<p>The callback can be used to call <a class="el" href="classgeos_1_1util_1_1Interrupt.html#ad493b6367e0a93ab02ff4133dc6e3b26">Interrupt::request()</a> or Interrupt::requestForCurrentThread(). </p>
 
 </div>
 </div>
@@ -213,7 +213,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>interrupt</b> 
 </table>
 </div><div class="memdoc">
 <p>Request interruption of operations</p>
-<p>Operations will be terminated by a GEOSInterrupt exception at first occasion. </p>
+<p>Operations will be terminated by a GEOSInterrupt exception at first occasion, by the first thread to check for an interrupt request. </p>
 
 </div>
 </div>
