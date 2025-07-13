@@ -512,12 +512,14 @@ GridIntersection::subdividePolygon(const Grid<bounded_extent>& p_grid, const Geo
 
     const geom::GeometryFactory& gfact = *g.getFactory();
 
-    Grid<infinite_extent> grid = make_infinite(p_grid, *g.getEnvelopeInternal());
-    Matrix<std::unique_ptr<Cell>> cells(grid.getNumRows(), grid.getNumCols());
+    const auto cropped_grid = p_grid.crop(*g.getEnvelopeInternal());
 
-    traverse_polygons(cells, grid, g);
+    const Grid<infinite_extent> cell_grid = make_infinite(cropped_grid, *g.getEnvelopeInternal());
+    Matrix<std::unique_ptr<Cell>> cells(cell_grid.getNumRows(), cell_grid.getNumCols());
 
-    const auto areas = collectAreas(cells, p_grid, g);
+    traverse_polygons(cells, cell_grid, g);
+
+    const auto areas = collectAreas(cells, cropped_grid, g);
 
     std::vector<std::unique_ptr<Geometry>> geoms;
     std::vector<std::unique_ptr<Geometry>> edge_geoms;
@@ -545,7 +547,7 @@ GridIntersection::subdividePolygon(const Grid<bounded_extent>& p_grid, const Geo
                 }
             } else if (!edge && areas(i - 1, j - 1) == fill_values<float>::INTERIOR) {
                 // Cell is entirely covered by polygon
-                Envelope env = grid.getCellEnvelope(i, j);
+                Envelope env = cell_grid.getCellEnvelope(i, j);
                 geoms.push_back(gfact.toGeometry(&env));
             }
         }

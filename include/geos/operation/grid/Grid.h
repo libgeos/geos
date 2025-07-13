@@ -154,6 +154,15 @@ class Grid
 
     double getRowY(size_t row) const { return m_extent.getMaxY() - (static_cast<double>(row - extent_tag::padding) + 0.5) * m_dy; }
 
+    Grid crop(const geom::Envelope& e) const
+    {
+        if (m_extent.intersects(e)) {
+            return shrinkToFit(e.intersection(m_extent));
+        } else {
+            return makeEmpty();
+        }
+    }
+
     Grid<extent_tag> shrinkToFit(const geom::Envelope& b) const
     {
         if (b.getArea() == 0) {
