@@ -262,6 +262,21 @@ enum GEOSWKBFlavors {
 };
 
 /**
+* Overlap repair strategies.
+* \see GEOSCoverageCleanParams_setOverlapMergeStrategy
+*/
+enum GEOSOverlapMerge {
+    /** Merge strategy that chooses polygon with longest common border */
+    GEOS_MERGE_LONGEST_BORDER = 0,
+    /** Merge strategy that chooses polygon with maximum area */
+    GEOS_MERGE_MAX_AREA       = 1,
+    /** Merge strategy that chooses polygon with minimum area */
+    GEOS_MERGE_MIN_AREA       = 2,
+    /** Merge strategy that chooses polygon with smallest input index */
+    GEOS_MERGE_MIN_INDEX      = 3
+};
+
+/**
 * Callback function for use in spatial index search calls. Pass into
 * the query function and handle query results as the index
 * returns them.
@@ -4426,21 +4441,6 @@ extern int GEOS_DLL
 GEOSCoverageCleanParams_setGapMaximumWidth(
     GEOSCoverageCleanParams* params,
     double gapMaximumWidth);
-
-/**
-* Overlap repair strategies.
-* \see GEOSCoverageCleanParams_setOverlapMergeStrategy
-*/
-enum GEOSOverlapMerge {
-    /** Merge strategy that chooses polygon with longest common border */
-    GEOS_MERGE_LONGEST_BORDER = 0,
-    /** Merge strategy that chooses polygon with maximum area */
-    GEOS_MERGE_MAX_AREA       = 1,
-    /** Merge strategy that chooses polygon with minimum area */
-    GEOS_MERGE_MIN_AREA       = 2,
-    /** Merge strategy that chooses polygon with smallest input index */
-    GEOS_MERGE_MIN_INDEX      = 3
-};
 
 /*
 * Sets the overlap merge strategy to use, using one from \ref GEOSOverlapMerge.
