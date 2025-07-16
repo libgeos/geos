@@ -30,7 +30,7 @@ foreach(_testfile ${_testfiles})
     if (NOT ${_testname} MATCHES "^capi::")
       string(CONCAT _testname "geos::" ${_testname})
     endif()
-    add_test(NAME unit-${_cmake_testname} COMMAND test_geos_unit ${_testname})
+    add_test(NAME unit-${_cmake_testname} COMMAND test_geos_unit ${_testname} "--data" "${CMAKE_CURRENT_LIST_DIR}/../resources")
     set_tests_properties(unit-${_cmake_testname} PROPERTIES TIMEOUT 30)
 endforeach()
 
