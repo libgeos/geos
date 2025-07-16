@@ -131,7 +131,9 @@ public:
         root(nullptr),
         nodeCapacity(p_nodeCapacity),
         numItems(0)
-        {}
+    {
+        validateConstruction();
+    }
 
     /**
      * Constructs a tree with the given maximum number of child nodes that
@@ -141,9 +143,11 @@ public:
     TemplateSTRtreeImpl(size_t p_nodeCapacity, size_t itemCapacity) :
         root(nullptr),
         nodeCapacity(p_nodeCapacity),
-        numItems(0) {
+        numItems(0)
+    {
         auto finalSize = treeSize(itemCapacity);
         nodes.reserve(finalSize);
+        validateConstruction();
     }
 
     /**
@@ -677,6 +681,12 @@ protected:
 
     static size_t sliceCapacity(size_t numNodes, size_t numSlices) {
         return static_cast<size_t>(std::ceil(static_cast<double>(numNodes) / static_cast<double>(numSlices)));
+    }
+
+    void validateConstruction() const {
+        if (nodeCapacity < 2) {
+            throw util::IllegalArgumentException("STRTree node capacity must be >= 2");
+        }
     }
 };
 

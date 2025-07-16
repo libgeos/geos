@@ -505,6 +505,17 @@ void object::test<14>()
     GEOSSTRtree_destroy(tree);
 }
 
+template<>
+template<>
+void object::test<15>()
+{
+    set_test_name("node capacity too small");
+
+    GEOSSTRtree* tree = GEOSSTRtree_create(1);
+    ensure(tree == nullptr);
+}
+
+
 
 } // namespace tut
 
