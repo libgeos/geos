@@ -19,7 +19,7 @@
    $ cmake --build .
    $ cmake --build . --target docs
    $ ctest --output-on-failure .
-   $ cmake --build . --target distcheck
+   $ cmake --build . --target distcheck -j1
 
 4. Update the NEWS file (extract most important things from the repository log).
    Make sure to update the release date.
