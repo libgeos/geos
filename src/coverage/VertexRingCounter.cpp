@@ -34,12 +34,19 @@ namespace coverage { // geos.coverage
 void
 VertexRingCounter::count(
     const std::vector<const Geometry*>& geoms,
-    std::map<Coordinate, std::size_t>& counts)
+    std::map<Coordinate, std::size_t>& counts,
+    const util::ProgressFunction& progressFunction)
 {
     VertexRingCounter vertextCounter(counts);
+
+    util::ProgressContext progress(progressFunction, geoms.size());
+
     for (const Geometry* geom : geoms) {
         geom->apply_ro(vertextCounter);
+        progress.update();
     }
+
+    progress.finish();
 }
 
 

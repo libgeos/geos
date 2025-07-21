@@ -43,8 +43,15 @@ struct test_coveragesimplifier_data {
         double tolerance,
         const std::vector<std::unique_ptr<Geometry>>& expected)
     {
-        std::vector<std::unique_ptr<Geometry>> actual = CoverageSimplifier::simplify(input, tolerance);
+        double lastRatio = 0.0;
+        geos::util::ProgressFunction myProgress([&lastRatio](double ratio, const char*)
+        {
+            ensure("ratio >= lastRatio", ratio >= lastRatio);
+            lastRatio = ratio;
+        });
+        std::vector<std::unique_ptr<Geometry>> actual = CoverageSimplifier::simplify(input, tolerance, myProgress);
         checkArrayEqual(expected, actual);
+        ensure("lastRatio == 1.0", lastRatio == 1.0);
     }
 
     void checkResultInner(
