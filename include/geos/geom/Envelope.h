@@ -563,6 +563,19 @@ public:
     }
 
     /** \brief
+     * Check if the point p lies in the interior of this Envelope.
+     *
+     * @param p the Coordinate to be tested
+     * @return true if the point lies in the interior
+     */
+    bool
+    containsProperly(const CoordinateXY& p) const
+    {
+        return std::isless(p.x, maxx) && std::isgreater(p.x, minx) &&
+                std::isless(p.y, maxy) && std::isgreater(p.y,  miny);
+    }
+
+    /** \brief
      * Check if the point p intersects (lies inside) the region of this Envelope.
      *
      * @param other the Coordinate to be tested

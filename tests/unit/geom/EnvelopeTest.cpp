@@ -655,5 +655,23 @@ void object::test<20>
     ensure_equals(set.size(), 2u);
 }
 
-} // namespace tut
+template<>
+template<>
+void object::test<21>()
+{
+    set_test_name("containsProperly");
 
+    Envelope env;
+    ensure(env.isNull());
+
+    ensure(!env.containsProperly({0, 0}));
+
+    env.expandToInclude({3, 7});
+    env.expandToInclude( {5, 9});
+
+    ensure(!env.containsProperly({3, 7}));
+    ensure(!env.containsProperly({3, 8}));
+    ensure(env.containsProperly({3.0000001, 8}));
+}
+
+}

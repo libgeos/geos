@@ -198,20 +198,9 @@ intersects(const Envelope& env, const Coordinate& p0, const Coordinate& p1)
 
 /* static */
 static bool
-containsProperly(const Envelope& env, const Coordinate& p)
-{
-    if (env.isNull()) return false;
-    return p.x > env.getMinX() &&
-           p.x < env.getMaxX() &&
-           p.y > env.getMinY() &&
-           p.y < env.getMaxY();
-}
-
-/* static */
-static bool
 containsProperly(const Envelope& env, const Coordinate& p0, const Coordinate& p1)
 {
-    return containsProperly(env, p0) && containsProperly(env, p1);
+    return env.containsProperly(p0) && env.containsProperly(p1);
 }
 
 /* private */
