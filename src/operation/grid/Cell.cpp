@@ -19,6 +19,9 @@
 #include <geos/operation/grid/Crossing.h>
 #include <geos/operation/grid/TraversalAreas.h>
 
+#define DEBUG_CELL 0
+#include <iomanip>
+
 using geos::geom::CoordinateXY;
 using geos::geom::Geometry;
 using geos::geom::GeometryFactory;
@@ -50,15 +53,16 @@ crossing(const geom::Envelope& e, const CoordinateXY& c1, const CoordinateXY& c2
         }
     }
 
-    double m = std::abs((c2.y - c1.y) / (c2.x - c1.x));
+    const double m = std::abs((c2.y - c1.y) / (c2.x - c1.x));
 
-    bool up = c2.y > c1.y;
-    bool right = c2.x > c1.x;
+    const bool up = c2.y > c1.y;
+    const bool right = c2.x > c1.x;
 
     if (up) {
+
         if (right) {
             // 1st quadrant
-            double y2 = c1.y + m * (e.getMaxX() - c1.x);
+            const double y2 = c1.y + m * (e.getMaxX() - c1.x);
 
             if (y2 < e.getMaxY()) {
                 return Crossing{ Side::RIGHT, e.getMaxX(), std::clamp(y2, e.getMinY(), e.getMaxY()) };
@@ -68,7 +72,7 @@ crossing(const geom::Envelope& e, const CoordinateXY& c1, const CoordinateXY& c2
             }
         } else {
             // 2nd quadrant
-            double y2 = c1.y + m * (c1.x - e.getMinX());
+            const double y2 = c1.y + m * (c1.x - e.getMinX());
 
             if (y2 < e.getMaxY()) {
                 return Crossing{ Side::LEFT, e.getMinX(), std::clamp(y2, e.getMinY(), e.getMaxY()) };
@@ -78,24 +82,29 @@ crossing(const geom::Envelope& e, const CoordinateXY& c1, const CoordinateXY& c2
             }
         }
     } else {
+        // For downward segments, we calculate constructed coordinates relative to c2, not c1. This is so the
+        // same coordinate will be calculated regardless of the segment orientation. This is important for maintaining
+        // valid polygon coverages (the same segment will be processed with opposite orientation along shared
+        // boundaries)
+
         if (right) {
             // 4th quadrant
-            double y2 = c1.y - m * (e.getMaxX() - c1.x);
+            const double y2 = c2.y + m * (c2.x - e.getMaxX());
 
             if (y2 > e.getMinY()) {
                 return Crossing{ Side::RIGHT, e.getMaxX(), std::clamp(y2, e.getMinY(), e.getMaxY()) };
             } else {
-                double x2 = c1.x + (c1.y - e.getMinY()) / m;
+                double x2 = c2.x - (e.getMinY() - c2.y) / m;
                 return Crossing{ Side::BOTTOM, std::clamp(x2, e.getMinX(), e.getMaxX()), e.getMinY() };
             }
         } else {
             // 3rd quadrant
-            double y2 = c1.y - m * (c1.x - e.getMinX());
+            const double y2 = c2.y + m * (e.getMinX() - c2.x);
 
             if (y2 > e.getMinY()) {
                 return Crossing{ Side::LEFT, e.getMinX(), std::clamp(y2, e.getMinY(), e.getMaxY()) };
             } else {
-                double x2 = c1.x - (c1.y - e.getMinY()) / m;
+                double x2 = c2.x + (e.getMinY() - c2.y) / m;
                 return Crossing{ Side::BOTTOM, std::clamp(x2, e.getMinX(), e.getMaxX()), e.getMinY() };
             }
         }
@@ -187,14 +196,19 @@ Cell::take(const CoordinateXY& c, const CoordinateXY* prev_original)
     Traversal& t = traversal_in_progress();
 
     if (t.isEmpty()) {
-        //std::cout << "Entering " << m_box << " from " << getSide(c) << " at " << c << std::endl;
+#if DEBUG_CELL
+        std::cout << std::setprecision(17);
+        std::cout << "Entering " << m_box << " from " << getSide(c) << " at " << c << std::endl;
+#endif
 
         t.enter(c, getSide(c));
         return true;
     }
 
     if (getLocation(c) != Location::OUTSIDE) {
-        // std::cout << "Still in " << m_box << " with " << c << std::endl;
+#if DEBUG_CELL
+        std::cout << "Still in " << m_box << " with " << c << std::endl;
+#endif
 
         t.add(c);
 
@@ -212,8 +226,10 @@ Cell::take(const CoordinateXY& c, const CoordinateXY* prev_original)
     Crossing x = prev_original ? crossing(m_box, *prev_original, c) : crossing(m_box, t.getLastCoordinate(), c);
     t.exit(x.getCoord(), x.getSide());
 
-    // std::cout << "Leaving " << m_box << " from " << x.getSide() << " at " << x.getCoord();
-    // std::cout << " on the way to " << c << std::endl;
+#if DEBUG_CELL
+    std::cout << "Leaving " << m_box << " from " << x.getSide() << " at " << x.getCoord();
+    std::cout << " on the way to " << c << std::endl;
+#endif
 
     return false;
 }
