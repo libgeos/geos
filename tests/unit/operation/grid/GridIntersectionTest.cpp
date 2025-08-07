@@ -22,6 +22,21 @@ struct test_gridintersectiontest_data : GEOSTestBase {
 
         ensure_equals(actual, expected);
     }
+
+    static void
+    check_subdivided_polygon(const Geometry& input, const Geometry& subdivided)
+    {
+        double tot_area = 0;
+
+        for (size_t i = 0; i < subdivided.getNumGeometries(); i++) {
+            const Geometry* subg = subdivided.getGeometryN(i);
+            ensure("subdivided component " + subg->toString() + " is invalid",subg->isValid());
+            tot_area += subg->getArea();
+        }
+
+        std::string error = "subdivided polygon area does not match input: " + subdivided.toString();
+        ensure_equals(error, tot_area, input.getArea());
+    }
 };
 
 typedef test_group<test_gridintersectiontest_data, 255> group;
@@ -646,7 +661,7 @@ void object::test<36>()
 
     auto subdivided = GridIntersection::subdividePolygon(ext, *g, false);
 
-    ensure_equals(g->getArea(), subdivided->getArea());
+    check_subdivided_polygon(*g, *subdivided);
 }
 
 template<>
@@ -777,6 +792,22 @@ void object::test<44>()
     auto g = wkt_reader_.read("GEOMETRYCOLLECTION( LINESTRING (0 0, 30 30), POLYGON ((5 5, 10 5, 10 10, 5 5)))");
 
     ensure_THROW(GridIntersection::getIntersectionFractions(ext, *g), std::exception);
+}
+
+template<>
+template<>
+void object::test<45>()
+{
+    set_test_name("subdivide polygon whose edges follow cell boundaries");
+
+    Envelope e(0, 10, 0, 10);
+    Grid<bounded_extent> ext(e, 1, 1);
+
+    auto tree = wkt_reader_.read("POLYGON ((4 0, 6 0, 6 2, 8 2, 6 4, 8 4, 5 7, 2 4, 4 4, 2 2, 4 2, 4 0))");
+
+    auto subd = GridIntersection::subdividePolygon(ext, *tree, false);
+
+    check_subdivided_polygon(*tree, *subd);
 }
 
 }
