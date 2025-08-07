@@ -529,18 +529,19 @@ GridIntersection::subdividePolygon(const Grid<bounded_extent>& p_grid, const Geo
             const bool col_edge = j == 0 || j == cells.getNumCols() - 1;
             const bool edge = row_edge || col_edge;
 
-            if (cells(i, j) != nullptr) {
+            const Cell* cell = cells(i, j).get();
+
+            if (cell != nullptr && cell->isDetermined()) {
+                // It is possible for the area to equal the cell area when the polygon is not the same as the
+                // cell area. (See GridIntersectionTest test #46). So, we only compare the area to
+                // fill_values<float>::INTERIOR for cells that have not been traversed.
                 if (edge) {
                     if (includeExterior) {
-                        edge_geoms.push_back(cells(i, j)->getCoveredPolygons(gfact));
+                        edge_geoms.push_back(cell->getCoveredPolygons(gfact));
                     }
-                } else if (areas(i - 1, j - 1) == fill_values<float>::INTERIOR) {
-                    // Cell is completely covered by polygon
-                    Envelope env = cells(i, j)->box();
-                    geoms.push_back(gfact.toGeometry(&env));
                 } else if (areas(i - 1, j - 1) != fill_values<float>::EXTERIOR) {
                     // Cell is partly covered by polygon
-                    geoms.push_back(cells(i, j)->getCoveredPolygons(gfact));
+                    geoms.push_back(cell->getCoveredPolygons(gfact));
                 }
             } else if (!edge && areas(i - 1, j - 1) == fill_values<float>::INTERIOR) {
                 // Cell is entirely covered by polygon
