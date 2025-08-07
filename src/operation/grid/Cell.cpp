@@ -25,11 +25,6 @@ using geos::geom::GeometryFactory;
 
 namespace geos::operation::grid {
 
-static bool
-strictly_contains(const geom::Envelope& e, const geom::CoordinateXY& c) {
-    return e.getMinX() < c.x && e.getMaxX() > c.x && e.getMinY() < c.y && e.getMaxY() > c.y;
-}
-
 static Crossing
 crossing(const geom::Envelope& e, const CoordinateXY& c1, const CoordinateXY& c2)
 {
@@ -127,7 +122,7 @@ Cell::getArea() const
 }
 
 Side
-Cell::side(const CoordinateXY& c) const
+Cell::getSide(const CoordinateXY& c) const
 {
     if (c.x == m_box.getMinX()) {
         return Side::LEFT;
@@ -151,15 +146,15 @@ Cell::forceExit()
 
     const CoordinateXY& last = getLastTraversal().getLastCoordinate();
 
-    if (location(last) == Location::BOUNDARY) {
-        getLastTraversal().forceExit(side(last));
+    if (getLocation(last) == Location::BOUNDARY) {
+        getLastTraversal().forceExit(getSide(last));
     }
 }
 
 Cell::Location
-Cell::location(const CoordinateXY& c) const
+Cell::getLocation(const CoordinateXY& c) const
 {
-    if (strictly_contains(m_box, c)) {
+    if (m_box.containsProperly(c)) {
         return Cell::Location::INSIDE;
     }
 
@@ -192,13 +187,13 @@ Cell::take(const CoordinateXY& c, const CoordinateXY* prev_original)
     Traversal& t = traversal_in_progress();
 
     if (t.isEmpty()) {
-        // std::cout << "Entering " << m_box << " from " << side(c) << " at " << c << std::endl;
+        //std::cout << "Entering " << m_box << " from " << getSide(c) << " at " << c << std::endl;
 
-        t.enter(c, side(c));
+        t.enter(c, getSide(c));
         return true;
     }
 
-    if (location(c) != Cell::Location::OUTSIDE) {
+    if (getLocation(c) != Location::OUTSIDE) {
         // std::cout << "Still in " << m_box << " with " << c << std::endl;
 
         t.add(c);
@@ -217,7 +212,7 @@ Cell::take(const CoordinateXY& c, const CoordinateXY* prev_original)
     Crossing x = prev_original ? crossing(m_box, *prev_original, c) : crossing(m_box, t.getLastCoordinate(), c);
     t.exit(x.getCoord(), x.getSide());
 
-    // std::cout << "Leaving " << m_box << " from " << x.side() << " at " << x.coord();
+    // std::cout << "Leaving " << m_box << " from " << x.getSide() << " at " << x.getCoord();
     // std::cout << " on the way to " << c << std::endl;
 
     return false;

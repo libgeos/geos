@@ -95,9 +95,9 @@ class Cell
 
     std::vector<Traversal> m_traversals;
 
-    Side side(const geom::CoordinateXY& c) const;
+    Side getSide(const geom::CoordinateXY& c) const;
 
-    Location location(const geom::CoordinateXY& c) const;
+    Location getLocation(const geom::CoordinateXY& c) const;
 
     /// If no Traversals have been started or the most recent Traversal has been completed,
     /// return a new Traversal. Otherwise, return the most recent Traversal.
