@@ -69,18 +69,8 @@ void object::test<2>
     auto input = GEOSWKTReader_read(m_reader,
         "GEOMETRYCOLLECTION(POLYGON ((0 0, 0 1, 1 1, 1 0, 0 0)), POLYGON ((1 0, 0.9 1, 2 1, 2 0, 1 0)))");
 
-    // auto input = GEOSGeom_createCollection(GEOS_GEOMETRYCOLLECTION, geoms, 2);
-    // Temporary, wrap in a try/catch block until JTS upstream issue is fixed.
-    try {
-        auto result = GEOSCoverageUnion(input);
-        ensure( result != nullptr );
-        ensure( GEOSEquals(input, result) );
-        GEOSGeom_destroy(result);
-    }
-    catch(std::exception& e) {
-        (void)0;
-    }
-
+    auto result = GEOSCoverageUnion(input);
+    ensure( result == nullptr );
     GEOSGeom_destroy(input);
 }
 

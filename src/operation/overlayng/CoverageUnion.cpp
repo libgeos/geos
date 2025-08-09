@@ -43,7 +43,14 @@ CoverageUnion::geomunion(const Geometry* coverage)
     }
     else {
         BoundaryChainNoder bcn;
-        result = OverlayNG::geomunion(coverage, nullptr, &bcn);
+        // https://github.com/libgeos/geos/pull/1279#discussion_r2256157484
+        // return a more descriptive exception error
+        try {
+            result = OverlayNG::geomunion(coverage, nullptr, &bcn);
+        }
+        catch (const geos::util::TopologyException& te) {
+            throw geos::util::TopologyException("CoverageUnion cannot process incorrectly noded inputs");
+        }
     }
 
     double area_in = coverage->getArea();
