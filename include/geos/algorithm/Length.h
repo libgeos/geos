@@ -22,6 +22,8 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 
+#include <vector>
+
 namespace geos {
 namespace algorithm { // geos::algorithm
 
@@ -40,6 +42,14 @@ public:
      * @return the length of the linestring
      */
     static double ofLine(const geom::CoordinateSequence* ring);
+
+    /**
+     * Computes the length of a linestring specified by a sequence of points.
+     *
+     * @param ring the points specifying the linestring
+     * @return the length of the linestring
+     */
+    static double ofLine(const std::vector<geom::CoordinateXY>& ring);
 
 };
 
