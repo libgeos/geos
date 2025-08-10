@@ -34,7 +34,7 @@ Traversal::isEmpty() const
 }
 
 void
-Traversal::enter(const CoordinateXY& c, Side s)
+Traversal::enter(const CoordinateXY& c, Side s, const void* parentage)
 {
     if (!m_coords.empty()) {
         throw std::runtime_error("Traversal already started");
@@ -42,6 +42,7 @@ Traversal::enter(const CoordinateXY& c, Side s)
 
     add(c);
     m_entry = s;
+    m_parentage = parentage;
 }
 
 void
