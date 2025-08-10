@@ -76,13 +76,14 @@ class Cell
      * @param c             Coordinate to process
      * @param prev_original The last *uninterpolated* coordinate preceding `c` in the
      *                      boundary being processed
+     * @param parentage an optional pointer indicating the source of the coordinate.
      *
      * @return `true` if the Coordinate was inside this cell, `false` otherwise
      */
-    bool take(const geom::CoordinateXY& c, const geom::CoordinateXY* prev_original = nullptr);
+    bool take(const geom::CoordinateXY& c, const geom::CoordinateXY* prev_original, const void* parentage);
 
   private:
-    std::vector<const std::vector<geom::CoordinateXY>*> getCoordLists() const;
+    std::vector<const Traversal*> getTraversals() const;
 
     enum class Location
     {

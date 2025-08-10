@@ -19,6 +19,8 @@
 
 namespace geos::operation::grid {
 
+class Traversal;
+
 class GEOS_DLL TraversalAreas {
 public:
     /**
@@ -32,7 +34,7 @@ public:
      * @return total area
      */
     static double
-    getLeftHandArea(const geom::Envelope& box, const std::vector<const std::vector<geom::CoordinateXY>*>& coord_lists);
+    getLeftHandArea(const geom::Envelope& box, const std::vector<const Traversal*>& coord_lists);
 
     /**
      * @brief Return an areal geometry representing the closed rings formed by this box and the provided Coordinate sequences
@@ -46,7 +48,7 @@ public:
      * @return a Polygon or MultiPolygon geometry
      */
     static std::unique_ptr<geom::Geometry>
-    getLeftHandRings(const geom::GeometryFactory& gfact, const geom::Envelope& box, const std::vector<const std::vector<geom::CoordinateXY>*>& coord_lists);
+    getLeftHandRings(const geom::GeometryFactory& gfact, const geom::Envelope& box, const std::vector<const Traversal*>& coord_lists);
 
 };
 

@@ -14,10 +14,11 @@
 
 #pragma once
 
-#include <vector>
-
+#include <geos/export.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/operation/grid/Side.h>
+
+#include <vector>
 
 namespace geos::operation::grid {
 
@@ -26,12 +27,13 @@ namespace geos::operation::grid {
  *        within a grid cell, as well as the `Side` from which the line
  *        entered and exited the cell.
  */
-class Traversal
+class GEOS_DLL Traversal
 {
   public:
     Traversal()
       : m_entry{ Side::NONE }
       , m_exit{ Side::NONE }
+      , m_parentage{ nullptr }
     {
     }
 
@@ -48,7 +50,7 @@ class Traversal
     bool hasMultipleUniqueCoordinates() const;
 
     /// Begin a Traversal on the specified `Side`
-    void enter(const geom::CoordinateXY& c, Side s);
+    void enter(const geom::CoordinateXY& c, Side s, const void* parentage);
 
     /// Complete a Traversal on the specified `Side`
     void exit(const geom::CoordinateXY& c, Side s);
@@ -67,10 +69,13 @@ class Traversal
 
     const std::vector<geom::CoordinateXY>& getCoordinates() const { return m_coords; }
 
+    const void* getParentage() const { return m_parentage; }
+
   private:
     std::vector<geom::CoordinateXY> m_coords;
     Side m_entry;
     Side m_exit;
+    const void* m_parentage;
 };
 
 }
