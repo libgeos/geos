@@ -308,8 +308,8 @@ collect_lengths(const Matrix<std::unique_ptr<Cell>>& cells)
     return lengths;
 }
 
-void
-traverse_cells(Matrix<std::unique_ptr<Cell>>& cells, std::vector<CoordinateXY>& coords, const Grid<infinite_extent>& ring_grid, bool areal)
+static void
+traverse_cells(Matrix<std::unique_ptr<Cell>>& cells, std::vector<CoordinateXY>& coords, const Grid<infinite_extent>& ring_grid, bool areal, const void* parentage)
 {
     size_t pos = 0;
     size_t row = ring_grid.getRow(coords.front().y);
@@ -323,7 +323,7 @@ traverse_cells(Matrix<std::unique_ptr<Cell>>& cells, std::vector<CoordinateXY>& 
             const CoordinateXY* next_coord = last_exit ? last_exit : &coords[pos];
             const CoordinateXY* prev_coord = pos > 0 ? &coords[pos - 1] : nullptr;
 
-            cell.take(*next_coord, prev_coord);
+            cell.take(*next_coord, prev_coord, parentage);
 
             if (cell.getLastTraversal().isExited()) {
                 // Only push our exit coordinate if it's not same as the
@@ -437,7 +437,7 @@ GridIntersection::processLine(const LineString& ls, bool exterior_ring)
     }
 
     Matrix<std::unique_ptr<Cell>> cells(ring_grid.getNumRows(), ring_grid.getNumCols());
-    traverse_cells(cells, coordsVec, ring_grid, m_areal);
+    traverse_cells(cells, coordsVec, ring_grid, m_areal, &ls);
 
     // Compute the fraction covered for all cells and assign it to
     // the area matrix
@@ -473,8 +473,8 @@ traverse_ring(Matrix<std::unique_ptr<Cell>>& cells, const Grid<infinite_extent>&
 
     if (want_ccw != algorithm::Orientation::isCCW(&seq)) {
       std::reverse(coords.begin(), coords.end());
-   }
-    traverse_cells(cells, coords, grid, true);
+    }
+    traverse_cells(cells, coords, grid, true, &g);
 }
 
 void

@@ -26,6 +26,17 @@ struct test_gridintersectiontest_data : GEOSTestBase {
     }
 
     static void
+    check_area(const Matrix<float>& actual, const Grid<bounded_extent> ext, const Geometry& input)
+    {
+        double tot_area = 0;
+        for (float f : actual) {
+            tot_area += static_cast<double>(f) * ext.dx()*ext.dy();
+        }
+
+        ensure_equals(tot_area, input.getArea());
+    }
+
+    static void
     check_subdivided_polygon(const Geometry& input, const Geometry& subdivided)
     {
         double tot_area = 0;
@@ -43,7 +54,7 @@ struct test_gridintersectiontest_data : GEOSTestBase {
         ensure("subdivided polygons do not form a valid coverage", geos::coverage::CoverageValidator::isValid(components));
 
         std::string error = "subdivided polygon area does not match input: " + subdivided.toString();
-        ensure_equals(error, tot_area, input.getArea(), 1e-14);
+        ensure_equals(error, tot_area, input.getArea(), input.getArea() * 1e-14);
     }
 };
 
@@ -833,5 +844,21 @@ void object::test<46>()
 
     check_subdivided_polygon(*g, *subd);
 }
+
+template<>
+template<>
+void object::test<47>()
+{
+    set_test_name("self-touching rings force geometry to be corrected");
+
+    Envelope e(3000000, 10000000, 525000, 6595000);
+    Grid<bounded_extent> ext(e, 10000, 10000);
+
+    auto g = wkt_reader_.read("MultiPolygon (((5196000 2052000, 5184185 2054473, 5182537 2054890, 5182796 2055916, 5182006 2056057, 5182183 2056774, 5181023 2058767, 5180374 2058127, 5180034 2058226, 5179989 2057895, 5179854 2057364, 5179674 2056658, 5179236 2056764, 5179289 2055146, 5180169 2052000, 5175958 2052000, 5175900 2068000, 5196000 2068000, 5196000 2052000),(5183832 2056356, 5183529 2055571, 5184300 2055372, 5184506 2056186, 5183832 2056356),(5179491 2062463, 5179636 2059879, 5180441 2059638, 5180438 2059666, 5180855 2061320, 5180076 2061534, 5180260 2062270, 5179491 2062463),(5181043 2062069, 5181035 2065286, 5180449.50561340618878603 2064531.85610372573137283, 5179685 2063225, 5180476 2063057, 5180260 2062270, 5181043 2062069)),((5180501 2056431, 5180341 2055640, 5179465 2055835, 5179674 2056658, 5180501 2056431)),((5180501 2056431, 5180641 2057164, 5181406 2056969, 5181239 2056302, 5180501 2056431)))	");
+    auto subd = GridIntersection::subdividePolygon(ext, *g, false);
+
+    check_subdivided_polygon(*g, *subd);
+}
+
 
 }

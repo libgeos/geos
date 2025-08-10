@@ -191,7 +191,7 @@ Cell::getLastTraversal()
 }
 
 bool
-Cell::take(const CoordinateXY& c, const CoordinateXY* prev_original)
+Cell::take(const CoordinateXY& c, const CoordinateXY* prev_original, const void* parentage)
 {
     Traversal& t = traversal_in_progress();
 
@@ -201,7 +201,7 @@ Cell::take(const CoordinateXY& c, const CoordinateXY* prev_original)
         std::cout << "Entering " << m_box << " from " << getSide(c) << " at " << c << std::endl;
 #endif
 
-        t.enter(c, getSide(c));
+        t.enter(c, getSide(c), parentage);
         return true;
     }
 
@@ -258,32 +258,32 @@ Cell::isDetermined() const
     return false;
 }
 
-std::vector<const std::vector<CoordinateXY>*>
-Cell::getCoordLists() const
+std::vector<const Traversal*>
+Cell::getTraversals() const
 {
-    std::vector<const std::vector<CoordinateXY>*> coord_lists;
-    coord_lists.reserve(m_traversals.size());
+    std::vector<const Traversal*> traversals;
+    traversals.reserve(m_traversals.size());
 
     for (const auto& t : m_traversals) {
         if (t.isTraversed() || t.isClosedRing()) {
-            coord_lists.push_back(&t.getCoordinates());
+            traversals.push_back(&t);
         }
     }
 
-    return coord_lists;
+    return traversals;
 }
 
 double
 Cell::getCoveredFraction() const
 {
-    auto coord_lists = getCoordLists();
+    auto coord_lists = getTraversals();
     return TraversalAreas::getLeftHandArea(m_box, coord_lists) / getArea();
 }
 
 std::unique_ptr<Geometry>
 Cell::getCoveredPolygons(const GeometryFactory& gfact) const
 {
-    auto coord_lists = getCoordLists();
+    auto coord_lists = getTraversals();
     return TraversalAreas::getLeftHandRings(gfact, m_box, coord_lists);
 }
 
