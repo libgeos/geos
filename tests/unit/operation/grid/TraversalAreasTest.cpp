@@ -194,7 +194,7 @@ template<>
 template<>
 void object::test<9>()
 {
-    set_test_name("Closed ring ccw overlapping edge");
+    set_test_name("Closed ring ccw touching edge");
 
     Envelope b{ 0, 10, 00, 10 };
 
@@ -219,6 +219,7 @@ void object::test<10>()
     TraversalVector traversals{ &t1 };
 
     ensure_equals(TraversalAreas::getLeftHandArea(b, traversals), 99);
+
     ensure_equals_geometry(TraversalAreas::getLeftHandRings(gfact, b, traversals).get(), "POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1))");
 }
 
@@ -262,14 +263,14 @@ void object::test<13>()
 {
     set_test_name("Closed ring cw touching edge interior");
 
-    Envelope b{ 0, 10, 0, 10 };
-
-    std::vector<CoordinateXY> c1 = { { 1, 0 }, { 2, 2 }, { 3, 2 }, { 1, 0 } };
+    Envelope b(0, 10, 0, 10);
+    std::vector<CoordinateXY> c1{{8, 8}, {5, 0}, {5, 8}, {8, 8}};
     Traversal t1 = make_traversal(c1);
     TraversalVector traversals{ &t1 };
 
-    ensure_equals(TraversalAreas::getLeftHandArea(b, traversals), 99);
-    ensure_equals_geometry(TraversalAreas::getLeftHandRings(gfact, b, traversals).get(), "POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), (1 0, 2 2, 3 2, 1 0))");
+    ensure_equals(TraversalAreas::getLeftHandArea(b, traversals), 88);
+    ensure_equals_geometry(TraversalAreas::getLeftHandRings(gfact, b, traversals).get(),
+    "POLYGON ((0 10, 10 10, 10 0, 5 0, 0 0, 0 10), (8 8, 5 8, 5 0, 8 8))");
 }
 
 template<>
@@ -278,14 +279,14 @@ void object::test<14>()
 {
     set_test_name("Closed ring cw overlapping edge");
 
-    Envelope b{ 0, 10, 0, 10 };
-
-    std::vector<CoordinateXY> c1 = { { 1, 0 }, { 1, 1 }, { 2, 1 }, { 1, 0 } };
+    Envelope b(0, 10, 0, 10);
+    std::vector<CoordinateXY> c1{{8, 8}, {8, 0}, {5, 0}, {5, 8}, {8, 8}};
     Traversal t1 = make_traversal(c1);
     TraversalVector traversals{ &t1 };
 
-    ensure_equals(TraversalAreas::getLeftHandArea(b, traversals), 99.5);
-    ensure_equals_geometry(TraversalAreas::getLeftHandRings(gfact, b, traversals).get(), "POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), (1 0, 1 1, 2 1, 1 0))");
+    ensure_equals(TraversalAreas::getLeftHandArea(b, traversals), 76);
+    ensure_equals_geometry(TraversalAreas::getLeftHandRings(gfact, b, traversals).get(),
+    "POLYGON ((0 10, 10 10, 10 0, 8 0, 8 8, 5 8, 5 0, 0 0, 0 10))");
 }
 
 template<>
@@ -495,7 +496,26 @@ void object::test<26>()
 
 template<>
 template<>
-void object::test<28>() {
+void object::test<27>()
+{
+    set_test_name("island with lake");
+
+    Envelope b(0, 10, 0, 10);
+    std::vector<CoordinateXY> c1{{1, 1}, {9, 1}, {9, 9}, {1, 9}, {1, 1}};
+    std::vector<CoordinateXY> c2{{2, 2}, {2, 4}, {4, 4}, {4, 2}, {2, 2}};
+    Traversal island = make_traversal(c1, &c1);
+    Traversal lake = make_traversal(c2, &c2);
+    TraversalVector traversals{ &island, &lake };
+
+    ensure_equals(TraversalAreas::getLeftHandArea(b, traversals), 60);
+    ensure_equals_geometry(TraversalAreas::getLeftHandRings(gfact, b, traversals).get(),
+    "POLYGON ((1 1, 1 9, 9 9, 9 1, 1 1), (2 2, 4 2, 4 4, 2 4, 2 2))");
+}
+
+template<>
+template<>
+void object::test<28>()
+{
     set_test_name("lake with island");
 
     Envelope b(0, 10, 0, 10);
@@ -506,8 +526,25 @@ void object::test<28>() {
     TraversalVector traversals{ &island, &lake };
 
     ensure_equals(TraversalAreas::getLeftHandArea(b, traversals), 40);
-    //ensure_equals_geometry(TraversalAreas::getLeftHandRings(gfact, b, traversals).get(),
-    //"MULTIPOLYGON (((0 0, 10 0, 10 10, 0 10, 0 0), (1 1, 9 1, 9 9, 1 9, 1 1)), ((2 2, 4 2, 4 4, 2 4, 2 2)))");
+    ensure_equals_geometry(TraversalAreas::getLeftHandRings(gfact, b, traversals).get(),
+    "MULTIPOLYGON (((0 0, 10 0, 10 10, 0 10, 0 0), (1 1, 9 1, 9 9, 1 9, 1 1)), ((2 2, 4 2, 4 4, 2 4, 2 2)))");
+}
+
+template<>
+template<>
+void object::test<29>()
+{
+    set_test_name("traversals define region with no area");
+    // this can occur only with invalid polygons but we have historically handled these correctly
+
+    Envelope b(0, 10, 0, 10);
+    std::vector<CoordinateXY> c1{{0, 5}, {10, 5}};
+    std::vector<CoordinateXY> c2{{10, 5}, {0, 5}};
+    Traversal t1 = make_traversal(c1, &c1);
+    Traversal t2 = make_traversal(c2, &c2);
+    TraversalVector traversals{ &t1, &t2 };
+
+    ensure_equals(TraversalAreas::getLeftHandArea(b, traversals), 0);
 }
 
 }

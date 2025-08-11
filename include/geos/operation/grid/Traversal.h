@@ -39,6 +39,8 @@ class GEOS_DLL Traversal
 
     bool isClosedRing() const;
 
+    bool isClosedRingWithArea() const;
+
     bool isEmpty() const;
 
     bool isEntered() const;

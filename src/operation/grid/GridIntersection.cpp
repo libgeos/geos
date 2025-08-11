@@ -247,7 +247,7 @@ GridIntersection::setAreal(bool areal)
         m_areal = areal;
     } else {
         if (m_areal != areal) {
-            throw std::runtime_error("Mixed-type geometries not supported.");
+            throw util::GEOSException("Mixed-type geometries not supported.");
         }
     }
 }
@@ -371,7 +371,7 @@ traverse_cells(Matrix<std::unique_ptr<Cell>>& cells, std::vector<CoordinateXY>& 
                     col++;
                     break;
                 default:
-                    throw std::runtime_error("Invalid traversal");
+                    throw util::GEOSException("Invalid traversal");
             }
         }
     }
@@ -499,7 +499,7 @@ traverse_polygons(Matrix<std::unique_ptr<Cell>>& cells, const Grid<infinite_exte
         } else if (typ == GeometryTypeId::GEOS_MULTIPOLYGON || typ == GeometryTypeId::GEOS_GEOMETRYCOLLECTION) {
             traverse_polygons(cells, grid, gi);
         } else {
-            throw std::runtime_error("Unsupported geometry type");
+            throw util::GEOSException("Unsupported geometry type");
         }
     }
 }
