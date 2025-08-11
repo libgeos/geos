@@ -246,7 +246,11 @@ bool
 Cell::isDetermined() const
 {
     for (const auto& t : m_traversals) {
-        if (!t.isTraversed() && !t.isClosedRing()) {
+        if (t.isClosedRing()) {
+            if (!t.isClosedRingWithArea()) {
+                continue;
+            }
+        } else if (!t.isTraversed()) {
             continue;
         }
 
@@ -265,7 +269,7 @@ Cell::getTraversals() const
     traversals.reserve(m_traversals.size());
 
     for (const auto& t : m_traversals) {
-        if (t.isTraversed() || t.isClosedRing()) {
+        if (t.isTraversed() || t.isClosedRingWithArea()) {
             traversals.push_back(&t);
         }
     }

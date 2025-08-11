@@ -13,6 +13,7 @@
  **********************************************************************/
 
 #include <limits>
+#include <optional>
 #include <vector>
 
 #include <geos/algorithm/Area.h>
@@ -156,6 +157,63 @@ isRing(const std::vector<CoordinateXY>& coords)
     return coords.front() == coords.back() && hasMultipleUniqueCoordinates(coords);
 }
 
+static bool
+containsProperly(const Envelope& e, const std::vector<CoordinateXY>& coords)
+{
+    return std::all_of(coords.begin(), coords.end(), [&e](const auto& c) {
+        return e.containsProperly(c);
+    });
+}
+
+static std::vector<CoordinateXY>
+scrollRingToStartOnEdge(const Envelope& box, const std::vector<CoordinateXY>& coords)
+{
+    for (std::size_t i = 0; i < coords.size(); i++)
+    {
+        // Potentially this ring as an ordinary Traversal.
+        if (!box.containsProperly(coords[i])) {
+            // First, modify the ring so that its start point lies on the boundary.
+            std::vector<CoordinateXY> mod;
+            mod.reserve(coords.size());
+
+            for (std::size_t j = i; j < coords.size(); j++) {
+                if (mod.empty() || mod.back() != coords[j]) {
+                    mod.push_back(coords[j]);
+                }
+            }
+            for (std::size_t j = 0; j < i; j++) {
+                if (mod.empty() || mod.back() != coords[j]) {
+                    mod.push_back(coords[j]);
+                }
+            }
+            mod.push_back(mod.front()); // close ring
+
+            return mod;
+        }
+    }
+
+    throw std::runtime_error("Ring does not touch box");
+}
+
+static bool
+hasEdgeSegment(const Envelope& box, const std::vector<CoordinateXY>& coords)
+{
+    for (size_t i = 1; i < coords.size(); i++) {
+        const CoordinateXY& p0 = coords[i - 1];
+        const CoordinateXY& p1 = coords[i];
+
+        if (p0.x == p1.x && (p0.x == box.getMinX() || p0.x == box.getMaxX())) {
+            return true;
+        }
+
+        if (p0.y == p1.y && (p0.y == box.getMinY() || p0.y == box.getMaxY())) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 /**
  * @brief Identify counter-clockwise rings formed by the supplied coordinate vectors and the boundary of this box.
  *
@@ -171,37 +229,105 @@ visitRings(const Envelope& box, const std::vector<const Traversal*>& traversals,
 {
     std::vector<CoordinateChain> chains;
     chains.reserve(traversals.size() + 4);
+    std::vector<std::vector<CoordinateXY>> coordinateStore;
+
+    std::vector<CoordinateXY> boxPoints;
+
+    double areaCCW = 0;
+    double areaCW = 0;
+    std::optional<bool> isInterior;
 
     for (const auto& traversal : traversals) {
         if (!traversal->hasMultipleUniqueCoordinates()) {
             continue;
         }
 
-        const auto& coords = traversal->getCoordinates();
+        const std::vector<CoordinateXY>* coords = &traversal->getCoordinates();
 
-        if (isRing(coords)) {
-            // Closed ring. Check orientation.
+        if (isRing(*coords)) {
+            if (containsProperly(box, *coords) || !hasEdgeSegment(box, *coords)) {
+                // TODO: Remove copy
+                CoordinateSequence seq(0, false, false);
+                seq.setPoints(*coords);
+                const bool isCCW = algorithm::Orientation::isCCW(&seq);
 
-            // TODO: Remove copy
-            CoordinateSequence seq(0, false, false);
-            seq.setPoints(coords);
-            const bool isCCW = algorithm::Orientation::isCCW(&seq);
-            constexpr bool hasMultipleParents = false;
-            visitor(coords, isCCW, hasMultipleParents);
-        } else {
-            // Split coordinates into separate chains when they touch an edge
-            // This prevents the creation of self-touching rings.
-            // For area calculations, this doesn't matter, and the step can be skipped.
-            size_t from = 0;
-            for (size_t to = 1; to < coords.size(); to++) {
-                const CoordinateXY& c = coords[to];
-                const bool ptIsOnEdge = c.x == box.getMinX() || c.x == box.getMaxX() || c.y == box.getMinY() || c.y == box.getMaxY();
-                if (ptIsOnEdge)  {
-                    double start = PerimeterDistance::getPerimeterDistance(box, coords[from]);
-                    double stop = PerimeterDistance::getPerimeterDistance(box, coords[to]);
-                    chains.emplace_back(start, stop, coords, from, to, traversal->getParentage());
-                    from = to;
+                // Add nodes to box edges
+                for (const auto& c : *coords) {
+                    if (!box.containsProperly(c)) {
+                        boxPoints.push_back(c);
+                        coordinateStore.emplace_back(std::vector<CoordinateXY>{c});
+                        double m = PerimeterDistance::getPerimeterDistance(box, c);
+                        chains.emplace_back(m, m, coordinateStore.back());
+                    }
                 }
+
+                constexpr bool hasMultipleParents = false;
+                visitor(*coords, isCCW, hasMultipleParents);
+
+                if (isCCW) {
+                    areaCCW += algorithm::Area::ofRing(*coords);
+                } else {
+                    areaCW += algorithm::Area::ofRing(*coords);
+                }
+
+                continue;
+            }
+            // TODO add node on edge.
+
+            auto modCoords = scrollRingToStartOnEdge(box, *coords);
+            coordinateStore.push_back(std::move(modCoords));
+            coords = &coordinateStore.back();
+        }
+
+        // Split coordinates into separate chains when they touch an edge
+        // This prevents the creation of self-touching rings.
+        // For area calculations, this doesn't matter, and the step can be skipped.
+        size_t from = 0;
+        size_t uniquePoints = 1;
+
+        for (size_t to = 1; to < coords->size(); to++) {
+            const CoordinateXY& prev = (*coords)[from];
+            const CoordinateXY& c = (*coords)[to];
+
+            if (!c.equals2D(prev)) {
+                uniquePoints++;
+            }
+
+            const bool ptOnTop = c.y == box.getMaxY();
+            const bool ptOnBottom = c.y == box.getMinY();
+            const bool ptOnLeft = c.x == box.getMinX();
+            const bool ptOnRight = c.x == box.getMaxX();
+
+            if (ptOnTop || ptOnBottom || ptOnLeft || ptOnRight)  {
+                bool isEdgeSegment = false;
+                if (uniquePoints == 2) {
+                    if (ptOnTop && prev.y == c.y) {
+                        isEdgeSegment = true;
+                        isInterior = c.x < prev.x;
+                    } else if (ptOnBottom && prev.y == c.y) {
+                        isEdgeSegment = true;
+                        isInterior = c.x > prev.x;
+                    } else if (ptOnLeft && prev.x == c.x) {
+                        isEdgeSegment = true;
+                        isInterior = c.y < prev.y;
+                    } else if (ptOnRight && prev.x == c.x) {
+                        isEdgeSegment = true;
+                        isInterior = c.y > prev.y;
+                    }
+                }
+
+                if (isEdgeSegment) {
+                    if (isInterior) {
+                        boxPoints.push_back(c);
+                        boxPoints.push_back(prev);
+                    }
+                } else {
+                    double start = PerimeterDistance::getPerimeterDistance(box, (*coords)[from]);
+                    double stop = PerimeterDistance::getPerimeterDistance(box, (*coords)[to]);
+                    chains.emplace_back(start, stop, *coords, from, to, traversal->getParentage());
+                }
+                from = to;
+                uniquePoints = 1;
             }
         }
     }
@@ -272,7 +398,36 @@ visitRings(const Envelope& box, const std::vector<const Traversal*>& traversals,
 
         if (hasMultipleUniqueCoordinates(coords)) {
             visitor(coords, isCCW, hasMultipleParents);
+            double area = algorithm::Area::ofRing(coords);
+            areaCCW += area;
+            if (area == 0) {
+                isInterior = false;
+            }
         }
+    }
+
+    if (areaCCW == 0 && areaCW == 0 && !isInterior.has_value()) {
+        throw util::GEOSException("Cannot determine coverage fraction (it is either 0 or 100%)");
+    }
+
+    if (areaCW > areaCCW || (areaCCW == 0 && areaCW == 0 && isInterior.value())) {
+        bool sortIsNeeded = !boxPoints.empty();
+
+        boxPoints.emplace_back(box.getMinX(), box.getMinY());
+        boxPoints.emplace_back(box.getMaxX(), box.getMinY());
+        boxPoints.emplace_back(box.getMaxX(), box.getMaxY());
+        boxPoints.emplace_back(box.getMinX(), box.getMaxY());
+
+        if (sortIsNeeded) {
+            std::sort(boxPoints.begin(), boxPoints.end(), [&box](const CoordinateXY& lhs, const CoordinateXY& rhs) {
+                return PerimeterDistance::getPerimeterDistance(box, lhs) <
+                    PerimeterDistance::getPerimeterDistance(box, rhs);
+            });
+        }
+
+        boxPoints.push_back(boxPoints.front());
+
+        visitor(boxPoints, true, false);
     }
 }
 
@@ -281,27 +436,14 @@ TraversalAreas::getLeftHandArea(const Envelope& box, const std::vector<const Tra
 {
     double ccw_sum = 0;
     double cw_sum = 0;
-    bool found_a_ring = false;
 
-    visitRings(box, coord_lists, [&cw_sum, &ccw_sum, &found_a_ring](const std::vector<CoordinateXY>& coords, bool isCCW, bool) {
-        found_a_ring = true;
-
+    visitRings(box, coord_lists, [&cw_sum, &ccw_sum](const std::vector<CoordinateXY>& coords, bool isCCW, bool) {
         if (isCCW) {
             ccw_sum += algorithm::Area::ofRing(coords);
         } else {
             cw_sum += algorithm::Area::ofRing(coords);
         }
     });
-
-    if (!found_a_ring) {
-        throw std::runtime_error("Cannot determine coverage fraction (it is either 0 or 100%)");
-    }
-
-    // If this box has only clockwise rings (holes) then the area
-    // of those holes should be subtracted from the complete box area.
-    if (ccw_sum < cw_sum) {
-        ccw_sum += box.getArea();
-    }
 
     return ccw_sum - cw_sum;
 }
@@ -313,15 +455,13 @@ TraversalAreas::getLeftHandRings(const GeometryFactory& gfact, const Envelope& b
     std::vector<std::unique_ptr<LinearRing>> shells;
     std::vector<std::unique_ptr<LinearRing>> holes;
 
-    bool foundARing = false;
     bool checkValidity = false;
 
-    visitRings(box, coord_lists, [&gfact, &shells, &holes, &foundARing, &checkValidity](const std::vector<CoordinateXY>& coords, bool isCCW, bool hasMultipleParents) {
+    visitRings(box, coord_lists, [&gfact, &shells, &holes, &checkValidity](const std::vector<CoordinateXY>& coords, bool isCCW, bool hasMultipleParents) {
         // If a given ring was created from traversals from both a ring and shell, for example, it is possible for
         // the ring to self-intersect. Rather than try and detect self-intersections o the fly (rare?) we check and
         // repair validity in this limited case.
         checkValidity |= hasMultipleParents;
-        foundARing = true;
 
         // finding a collapsed ring is sufficient to determine whether the cell interior is inside or outside,
         // but we don't want to actually construct the ring.
@@ -344,10 +484,6 @@ TraversalAreas::getLeftHandRings(const GeometryFactory& gfact, const Envelope& b
 
     });
 
-    if (!foundARing) {
-        throw std::runtime_error("Cannot determine coverage fraction (it is either 0 or 100%)");
-    }
-
 #if DEBUG_TRAVERSAL_AREAS
     std::cout << "SHELLS" << std::endl;
     for (const auto& shell: shells) {
@@ -361,17 +497,6 @@ TraversalAreas::getLeftHandRings(const GeometryFactory& gfact, const Envelope& b
 
     if (shells.empty() && holes.empty()) {
         return gfact.createPolygon();
-    }
-
-    if (shells.empty() && !holes.empty()) {
-        auto seq = std::make_unique<CoordinateSequence>(5, false, false);
-        seq->setAt(CoordinateXY{box.getMinX(), box.getMinY()}, 0);
-        seq->setAt(CoordinateXY{box.getMaxX(), box.getMinY()}, 1);
-        seq->setAt(CoordinateXY{box.getMaxX(), box.getMaxY()}, 2);
-        seq->setAt(CoordinateXY{box.getMinX(), box.getMaxY()}, 3);
-        seq->setAt(CoordinateXY{box.getMinX(), box.getMinY()}, 4);
-
-        shells.push_back(gfact.createLinearRing(std::move(seq)));
     }
 
     std::unique_ptr<Geometry> result;
