@@ -721,6 +721,12 @@ extern "C" {
         return GEOSClipByRect_r(handle, g, xmin, ymin, xmax, ymax);
     }
 
+    int
+    GEOSGridIntersectionFractions(const Geometry* g, double xmin, double ymin, double xmax, double ymax,
+                                  unsigned nx, unsigned ny, float* buf)
+    {
+        return GEOSGridIntersectionFractions_r(handle, g, xmin, ymin, xmax, ymax, nx, ny, buf);
+    }
 
     Geometry*
     GEOSGeom_transformXY(const GEOSGeometry* g, GEOSTransformXYCallback callback, void* userdata) {

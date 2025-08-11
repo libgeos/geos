@@ -81,6 +81,8 @@
 #include <geos/operation/cluster/GeometryIntersectsClusterFinder.h>
 #include <geos/operation/distance/DistanceOp.h>
 #include <geos/operation/distance/IndexedFacetDistance.h>
+#include <geos/operation/grid/Grid.h>
+#include <geos/operation/grid/GridIntersection.h>
 #include <geos/operation/linemerge/LineMerger.h>
 #include <geos/operation/intersection/Rectangle.h>
 #include <geos/operation/intersection/RectangleIntersection.h>
@@ -1790,6 +1792,27 @@ extern "C" {
             std::unique_ptr<Geometry> g3 = RectangleIntersection::clip(*g, rect);
             g3->setSRID(g->getSRID());
             return g3.release();
+        });
+    }
+
+    int
+    GEOSGridIntersectionFractions_r(GEOSContextHandle_t extHandle, const Geometry* g, double xmin, double ymin,
+                                    double xmax, double ymax, unsigned nx, unsigned ny, float* buf)
+    {
+        return execute(extHandle, 0, [&]() {
+            Envelope env(xmin, xmax, ymin, ymax);
+            double dx = env.getWidth() / static_cast<double>(nx);
+            double dy = env.getHeight() / static_cast<double>(ny);
+            geos::operation::grid::Grid<geos::operation::grid::bounded_extent> grid(env, dx, dy);
+
+            // Matrix wants a shared_ptr, but we don't actually want anything to be freed because
+            // buf is externally owned. So we give it an empty deleter.
+            std::shared_ptr<float[]> bufPtr(buf, [](float*) {});
+
+            auto cov = std::make_shared<geos::operation::grid::Matrix<float>>(ny, nx, bufPtr);
+            geos::operation::grid::GridIntersection isect(grid, *g, cov);
+
+            return 1;
         });
     }
 

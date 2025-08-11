@@ -27,4 +27,12 @@ if (benchmark_FOUND)
             $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/benchmarks>)
     target_link_libraries(perf_coverage_union PRIVATE
             benchmark::benchmark geos geos_cxx_flags)
+
+    add_executable(perf_grid_intersection GridIntersectionPerfTest.cpp)
+    target_include_directories(perf_grid_intersection PUBLIC
+            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+            $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
+            $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/benchmarks>)
+    target_link_libraries(perf_grid_intersection
+            benchmark::benchmark geos geos_cxx_flags)
 endif()

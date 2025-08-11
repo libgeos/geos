@@ -1168,6 +1168,15 @@ extern GEOSGeometry GEOS_DLL *GEOSClipByRect_r(
     double xmin, double ymin,
     double xmax, double ymax);
 
+/** \see GEOSGridIntersectionFractions */
+extern int GEOS_DLL GEOSGridIntersectionFractions_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* g,
+    double xmin, double ymin,
+    double xmax, double ymax,
+    unsigned nx, unsigned ny,
+    float* buf);
+
 /** \see GEOSPolygonize */
 extern GEOSGeometry GEOS_DLL *GEOSPolygonize_r(
     GEOSContextHandle_t handle,
@@ -3985,6 +3994,29 @@ extern GEOSGeometry GEOS_DLL *GEOSClipByRect(
     const GEOSGeometry* g,
     double xmin, double ymin,
     double xmax, double ymax);
+
+/**
+* Determine the fraction of each cell in a rectangular grid
+* that is covered by a polygon.
+* \param g The input geometry
+* \param xmin Left bound of grd
+* \param ymin Lower bound of grid
+* \param xmax Right bound of grid
+* \param ymax Upper bound of grid
+* \param nx number of columns in grid
+* \param ny number of rows in grid
+* \param buf a buffer of size nx*ny to which the grid cell
+*        coverage fractions will be written in row-major order
+* \return 1 if the operation was successful, 0 on exception
+*
+* \since 3.14.0
+*/
+extern int GEOS_DLL GEOSGridIntersectionFractions(
+    const GEOSGeometry* g,
+    double xmin, double ymin,
+    double xmax, double ymax,
+    unsigned nx, unsigned ny,
+    float* buf);
 
 /**
 * Find paths shared between the two given lineal geometries.

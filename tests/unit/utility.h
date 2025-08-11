@@ -30,6 +30,20 @@
 #include <string>
 #include <vector>
 
+#include <fstream>
+#include <sstream>
+
+#if defined(__GNUC__) && !defined(__clang__)
+#define HAVE_STD_FILESYSTEM (__GNUC__ > 8)
+#else
+#define HAVE_STD_FILESYSTEM 1
+#endif
+#if HAVE_STD_FILESYSTEM
+#include <filesystem>
+#endif
+
+extern std::string RESOURCE_DIR;
+
 using geos::geom::Coordinate;
 using geos::geom::CoordinateSequence;
 using geos::geom::Geometry;
@@ -562,6 +576,35 @@ struct wkb_hex_decoder {
     }
 };
 
+// Base class with helpers
+struct GEOSTestBase {
+
+    static std::string load_resource(const std::string& fname) {
+#if HAVE_STD_FILESYSTEM
+        if (RESOURCE_DIR == "") {
+            skip("geos_unit resource directory is not defined. Set it using --data");
+        }
+
+        auto fpath = std::filesystem::relative(RESOURCE_DIR) /  fname;
+        if (!std::filesystem::exists(fpath)) {
+            std::stringstream ss;
+            ss << "Could not read " << std::filesystem::absolute(fpath);
+            skip(ss.str());
+        }
+
+        std::ifstream file(fpath);
+        std::stringstream contents;
+        contents << file.rdbuf();
+
+        return contents.str();
+#else
+        (void) fname;
+        skip("std::filesystem is not available");
+        return "";
+#endif
+    }
+
+};
 
 } // namespace tut
 
