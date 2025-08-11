@@ -15,6 +15,7 @@
 #include <cstddef>
 #include <stdexcept>
 
+#include <geos/algorithm/Area.h>
 #include <geos/operation/grid/Traversal.h>
 
 using geos::geom::CoordinateXY;
@@ -56,6 +57,13 @@ bool
 Traversal::isClosedRing() const
 {
     return m_coords.size() >= 3 && m_coords[0] == m_coords[m_coords.size() - 1];
+}
+
+bool
+Traversal::isClosedRingWithArea() const
+{
+    // TODO: Don't actually need to compute the area here, just need to make sure there are >= 3 unique points.
+    return isClosedRing() && algorithm::Area::ofRing(m_coords) > 0;
 }
 
 bool
