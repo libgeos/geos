@@ -6,6 +6,7 @@
   - Ported LineDissolver (Paul Ramsey)
   - Ported CoverageCleaner (Paul Ramsey)
   - Add GEOSGridIntersectionFractions to C API (GH-1295, Dan Baston)
+  - Add functions to interrupt processing in a specific thread/context (GH-803, Dan Baston)
   - Add "geos-targets.cmake" to build tree to allow building other software against
     GEOS build without installing first (GH-1269, Dan Baston)
   - Add GEOSCoordSeq_hasZ, GEOSCoordSeq_hasM (GH-1256, Aurele Ferotin)
