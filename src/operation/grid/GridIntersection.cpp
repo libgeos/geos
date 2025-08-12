@@ -547,6 +547,7 @@ GridIntersection::subdividePolygon(const Grid<bounded_extent>& p_grid, const Geo
                 }
             } else if (!edge && areas(i - 1, j - 1) == fill_values<float>::INTERIOR) {
                 // Cell is entirely covered by polygon
+                // TODO: Add nodes from adjacent polygons?
                 Envelope env = cell_grid.getCellEnvelope(i, j);
                 geoms.push_back(gfact.toGeometry(&env));
             }
