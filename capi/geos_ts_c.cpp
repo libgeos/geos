@@ -97,6 +97,7 @@
 #include <geos/operation/sharedpaths/SharedPathsOp.h>
 #include <geos/operation/union/CascadedPolygonUnion.h>
 #include <geos/operation/union/DisjointSubsetUnion.h>
+#include <geos/operation/valid/IsSimpleOp.h>
 #include <geos/operation/valid/IsValidOp.h>
 #include <geos/operation/valid/MakeValid.h>
 #include <geos/operation/valid/RepeatedPointRemover.h>
@@ -1239,6 +1240,29 @@ extern "C" {
     {
         return execute(extHandle, 2, [&]() {
             return g1->isSimple();
+        });
+    }
+
+    char
+    GEOSisSimpleDetail_r(GEOSContextHandle_t extHandle, const Geometry* g1, int returnAllPoints, Geometry** result)
+    {
+        return execute(extHandle, 2, [&]() {
+            geos::operation::valid::IsSimpleOp iso(g1);
+            iso.setFindAllLocations(returnAllPoints);
+
+            *result = nullptr;
+
+            bool simple = iso.isSimple();
+            if (!simple) {
+                auto locations = iso.getNonSimpleLocations();
+                if (locations.size() == 1 || !returnAllPoints) {
+                    *result = extHandle->geomFactory->createPoint(locations.front()).release();
+                } else {
+                    *result = extHandle->geomFactory->createMultiPoint(locations).release();
+                }
+            }
+
+            return simple;
         });
     }
 
