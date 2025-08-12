@@ -460,6 +460,12 @@ extern "C" {
     }
 
     char
+    GEOSisSimpleDetail(const Geometry* g, int returnAllPoints, Geometry** result)
+    {
+        return GEOSisSimpleDetail_r(handle, g, returnAllPoints, result);
+    }
+
+    char
     GEOSisRing(const Geometry* g)
     {
         return GEOSisRing_r(handle, g);

@@ -13,6 +13,7 @@
   - Add GEOSCoordSeq_createWithDimensions, GEOSCoordSeq_setM, GEOSCoordSeq_getM (GH-1246, Dan Baston)
   - Add GEOSGeoJSONWriter_setOutputDimension (GH-1260, Aurele Ferotin)
   - Add GEOSGeom_transformXYZ (GH-1157, Aurele Ferotin)
+  - Add GEOSisSimpleDetail (GH-1296, Dan Baston)
 
 - Breaking Changes:
   - C++17 is now required (GH-1144)

@@ -1638,6 +1638,13 @@ extern char GEOS_DLL *GEOSisValidReason_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry* g);
 
+/** \see GEOSisSimpleDetail */
+extern char GEOS_DLL GEOSisSimpleDetail_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* g,
+    int findAllLocations,
+    GEOSGeometry** location);
+
 /** \see GEOSisValidDetail */
 extern char GEOS_DLL GEOSisValidDetail_r(
     GEOSContextHandle_t handle,
@@ -3366,6 +3373,25 @@ and geometric quality.
 * \since 2.2
 */
 extern char GEOS_DLL GEOSisSimple(const GEOSGeometry* g);
+
+/**
+* In one step, calculate and return whether a geometry is simple
+* and one more more points at which the geometry self-intersects
+* at interior points.
+* Caller has the responsibility to destroy 'location' with 
+* GEOSGeom_destroy()
+*
+* \param g The geometry to test
+* \param findAllLocations Whether to return all self-intersection locations, or just one
+* \param locations A pointer in which the location GEOSGeometry will be placed
+* \return 1 when simple, 0 when non-simple, 2 on exception
+*
+* \since 3.14
+*/
+extern char GEOS_DLL GEOSisSimpleDetail(
+    const GEOSGeometry* g,
+    int findAllLocations,
+    GEOSGeometry** locations);
 
 /**
 * Check the validity of the provided geometry.
