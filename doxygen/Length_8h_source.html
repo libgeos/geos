@@ -75,24 +75,29 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="preprocessor">#include &lt;geos/geom/Coordinate.h&gt;</span></div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="preprocessor">#include &lt;geos/geom/CoordinateSequence.h&gt;</span></div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacegeos.html">geos</a> {</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="keyword">namespace </span>algorithm { <span class="comment">// geos::algorithm</span></div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
-<div class="foldopen" id="foldopen00033" data-start="{" data-end="};">
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1Length.html">   33</a></span><span class="keyword">class </span>GEOS_DLL <a class="code hl_class" href="classgeos_1_1algorithm_1_1Length.html">Length</a> {</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1Length.html#ab673bdfbcf819652c4857457101ad4da">   42</a></span>    <span class="keyword">static</span> <span class="keywordtype">double</span> <a class="code hl_function" href="classgeos_1_1algorithm_1_1Length.html#ab673bdfbcf819652c4857457101ad4da">ofLine</a>(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a>* ring);</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>};</div>
-</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacegeos.html">geos</a> {</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="keyword">namespace </span>algorithm { <span class="comment">// geos::algorithm</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="foldopen" id="foldopen00035" data-start="{" data-end="};">
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1Length.html">   35</a></span><span class="keyword">class </span>GEOS_DLL <a class="code hl_class" href="classgeos_1_1algorithm_1_1Length.html">Length</a> {</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1Length.html#ab673bdfbcf819652c4857457101ad4da">   44</a></span>    <span class="keyword">static</span> <span class="keywordtype">double</span> <a class="code hl_function" href="classgeos_1_1algorithm_1_1Length.html#ab673bdfbcf819652c4857457101ad4da">ofLine</a>(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a>* ring);</div>
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>} <span class="comment">// namespace geos::algorithm</span></div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>} <span class="comment">// namespace geos</span></div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
-<div class="ttc" id="aclassgeos_1_1algorithm_1_1Length_html"><div class="ttname"><a href="classgeos_1_1algorithm_1_1Length.html">geos::algorithm::Length</a></div><div class="ttdoc">Functions for computing length.</div><div class="ttdef"><b>Definition</b> Length.h:33</div></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno"><a class="line" href="classgeos_1_1algorithm_1_1Length.html#aa3805dcd6f41601e99229d2d879f0be7">   52</a></span>    <span class="keyword">static</span> <span class="keywordtype">double</span> <a class="code hl_function" href="classgeos_1_1algorithm_1_1Length.html#aa3805dcd6f41601e99229d2d879f0be7">ofLine</a>(<span class="keyword">const</span> std::vector&lt;geom::CoordinateXY&gt;&amp; ring);</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>};</div>
+</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>} <span class="comment">// namespace geos::algorithm</span></div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>} <span class="comment">// namespace geos</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
+<div class="ttc" id="aclassgeos_1_1algorithm_1_1Length_html"><div class="ttname"><a href="classgeos_1_1algorithm_1_1Length.html">geos::algorithm::Length</a></div><div class="ttdoc">Functions for computing length.</div><div class="ttdef"><b>Definition</b> Length.h:35</div></div>
+<div class="ttc" id="aclassgeos_1_1algorithm_1_1Length_html_aa3805dcd6f41601e99229d2d879f0be7"><div class="ttname"><a href="classgeos_1_1algorithm_1_1Length.html#aa3805dcd6f41601e99229d2d879f0be7">geos::algorithm::Length::ofLine</a></div><div class="ttdeci">static double ofLine(const std::vector&lt; geom::CoordinateXY &gt; &amp;ring)</div></div>
 <div class="ttc" id="aclassgeos_1_1algorithm_1_1Length_html_ab673bdfbcf819652c4857457101ad4da"><div class="ttname"><a href="classgeos_1_1algorithm_1_1Length.html#ab673bdfbcf819652c4857457101ad4da">geos::algorithm::Length::ofLine</a></div><div class="ttdeci">static double ofLine(const geom::CoordinateSequence *ring)</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequence_html"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequence.html">geos::geom::CoordinateSequence</a></div><div class="ttdoc">The internal representation of a list of coordinates inside a Geometry.</div><div class="ttdef"><b>Definition</b> CoordinateSequence.h:56</div></div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition</b> geos.h:38</div></div>

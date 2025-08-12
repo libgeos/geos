@@ -59,13 +59,15 @@ $(function() {
 Static Public Member Functions</h2></td></tr>
 <tr class="memitem:ab673bdfbcf819652c4857457101ad4da" id="r_ab673bdfbcf819652c4857457101ad4da"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1Length.html#ab673bdfbcf819652c4857457101ad4da">ofLine</a> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> *ring)</td></tr>
 <tr class="separator:ab673bdfbcf819652c4857457101ad4da"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3805dcd6f41601e99229d2d879f0be7" id="r_aa3805dcd6f41601e99229d2d879f0be7"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1Length.html#aa3805dcd6f41601e99229d2d879f0be7">ofLine</a> (const std::vector&lt; geom::CoordinateXY &gt; &amp;ring)</td></tr>
+<tr class="separator:aa3805dcd6f41601e99229d2d879f0be7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Functions for computing length. </p>
 <dl class="section author"><dt>Author</dt><dd>Martin Davis </dd></dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="ab673bdfbcf819652c4857457101ad4da" name="ab673bdfbcf819652c4857457101ad4da"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab673bdfbcf819652c4857457101ad4da">&#9670;&#160;</a></span>ofLine()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ab673bdfbcf819652c4857457101ad4da">&#9670;&#160;</a></span>ofLine() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -77,6 +79,40 @@ Static Public Member Functions</h2></td></tr>
           <td class="memname">static double geos::algorithm::Length::ofLine </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> *&#160;</td>
+          <td class="paramname"><em>ring</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Computes the length of a linestring specified by a sequence of points.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ring</td><td>the points specifying the linestring </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the length of the linestring </dd></dl>
+
+</div>
+</div>
+<a id="aa3805dcd6f41601e99229d2d879f0be7" name="aa3805dcd6f41601e99229d2d879f0be7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3805dcd6f41601e99229d2d879f0be7">&#9670;&#160;</a></span>ofLine() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static double geos::algorithm::Length::ofLine </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; geom::CoordinateXY &gt; &amp;&#160;</td>
           <td class="paramname"><em>ring</em></td><td>)</td>
           <td></td>
         </tr>

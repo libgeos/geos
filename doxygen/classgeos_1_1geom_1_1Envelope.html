@@ -115,6 +115,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setToNull</b> ()</td>
 <tr class="memitem:a4675d431515657488428be1ab1eec58c" id="r_a4675d431515657488428be1ab1eec58c"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Envelope.html#a4675d431515657488428be1ab1eec58c">getArea</a> () const</td></tr>
 <tr class="memdesc:a4675d431515657488428be1ab1eec58c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the area of this envelope.  <br /></td></tr>
 <tr class="separator:a4675d431515657488428be1ab1eec58c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4af4d0794258ca635bcbf9548a2ea49f" id="r_a4af4d0794258ca635bcbf9548a2ea49f"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Envelope.html#a4af4d0794258ca635bcbf9548a2ea49f">getPerimeter</a> () const</td></tr>
+<tr class="memdesc:a4af4d0794258ca635bcbf9548a2ea49f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the perimeter of this envelope.  <br /></td></tr>
+<tr class="separator:a4af4d0794258ca635bcbf9548a2ea49f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a749b6caafa11e219cbe6b57f484a9735" id="r_a749b6caafa11e219cbe6b57f484a9735"><td class="memItemLeft" align="right" valign="top"><a id="a749b6caafa11e219cbe6b57f484a9735" name="a749b6caafa11e219cbe6b57f484a9735"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isFinite</b> () const</td></tr>
 <tr class="memdesc:a749b6caafa11e219cbe6b57f484a9735"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if this <a class="el" href="classgeos_1_1geom_1_1Envelope.html" title="An Envelope defines a rectangulare region of the 2D coordinate plane.">Envelope</a> covers a finite region. <br /></td></tr>
@@ -143,6 +146,9 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>getMinX</b> () cons
 <tr class="memitem:a0a2e23666bd34d8229ce2e73088fd734" id="r_a0a2e23666bd34d8229ce2e73088fd734"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Envelope.html#a0a2e23666bd34d8229ce2e73088fd734">intersection</a> (const <a class="el" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a> &amp;env, <a class="el" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a> &amp;result) const</td></tr>
 <tr class="memdesc:a0a2e23666bd34d8229ce2e73088fd734"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the intersection of two <a class="el" href="classgeos_1_1geom_1_1Envelope.html">Envelopes</a>.  <br /></td></tr>
 <tr class="separator:a0a2e23666bd34d8229ce2e73088fd734"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab4b7a007c014388bb6f044ee9f227632" id="r_ab4b7a007c014388bb6f044ee9f227632"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Envelope.html#ab4b7a007c014388bb6f044ee9f227632">intersection</a> (const <a class="el" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a> &amp;env) const</td></tr>
+<tr class="memdesc:ab4b7a007c014388bb6f044ee9f227632"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the intersection of two <a class="el" href="classgeos_1_1geom_1_1Envelope.html">Envelopes</a>.  <br /></td></tr>
+<tr class="separator:ab4b7a007c014388bb6f044ee9f227632"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:addf3571a43639e20496e193a23190974" id="r_addf3571a43639e20496e193a23190974"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Envelope.html#addf3571a43639e20496e193a23190974">translate</a> (double transX, double transY)</td></tr>
 <tr class="memdesc:addf3571a43639e20496e193a23190974"><td class="mdescLeft">&#160;</td><td class="mdescRight">Translates this envelope by given amounts in the X and Y direction.  <br /></td></tr>
 <tr class="separator:addf3571a43639e20496e193a23190974"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1155,6 +1161,36 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const
 
 </div>
 </div>
+<a id="a4af4d0794258ca635bcbf9548a2ea49f" name="a4af4d0794258ca635bcbf9548a2ea49f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4af4d0794258ca635bcbf9548a2ea49f">&#9670;&#160;</a></span>getPerimeter()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double geos::geom::Envelope::getPerimeter </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets the perimeter of this envelope. </p>
+<dl class="section return"><dt>Returns</dt><dd>the perimeter of the envelope </dd>
+<dd>
+0.0 if the envelope is null </dd></dl>
+
+</div>
+</div>
 <a id="a75c4290fc64bcc3ba69473ea2df1eabf" name="a75c4290fc64bcc3ba69473ea2df1eabf"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a75c4290fc64bcc3ba69473ea2df1eabf">&#9670;&#160;</a></span>getWidth()</h2>
 
@@ -1321,8 +1357,35 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const
 
 </div>
 </div>
+<a id="ab4b7a007c014388bb6f044ee9f227632" name="ab4b7a007c014388bb6f044ee9f227632"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab4b7a007c014388bb6f044ee9f227632">&#9670;&#160;</a></span>intersection() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a> geos::geom::Envelope::intersection </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a> &amp;&#160;</td>
+          <td class="paramname"><em>env</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the intersection of two <a class="el" href="classgeos_1_1geom_1_1Envelope.html">Envelopes</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">env</td><td>the envelope to intersect with </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the envelope representing the intersection of the envelopes (this will be the null envelope if either argument is null, or they do not intersect) </dd></dl>
+
+</div>
+</div>
 <a id="a0a2e23666bd34d8229ce2e73088fd734" name="a0a2e23666bd34d8229ce2e73088fd734"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0a2e23666bd34d8229ce2e73088fd734">&#9670;&#160;</a></span>intersection()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a0a2e23666bd34d8229ce2e73088fd734">&#9670;&#160;</a></span>intersection() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
