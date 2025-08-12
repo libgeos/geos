@@ -5,10 +5,16 @@
   - Add clustering functions to C API (GH-1154, Dan Baston)
   - Ported LineDissolver (Paul Ramsey)
   - Ported CoverageCleaner (Paul Ramsey)
+  - Add GEOSGridIntersectionFractions to C API (GH-1295, Dan Baston)
   - Add "geos-targets.cmake" to build tree to allow building other software against
     GEOS build without installing first (GH-1269, Dan Baston)
+  - Add GEOSCoordSeq_hasZ, GEOSCoordSeq_hasM (GH-1256, Aurele Ferotin)
+  - Add GEOSCoordSeq_createWithDimensions, GEOSCoordSeq_setM, GEOSCoordSeq_getM (GH-1246, Dan Baston)
+  - Add GEOSGeoJSONWriter_setOutputDimension (GH-1260, Aurele Ferotin)
+  - Add GEOSGeom_transformXYZ (GH-1157, Aurele Ferotin)
 
 - Breaking Changes:
+  - C++17 is now required (GH-1144)
   - Stricter WKT parsing (GH-1241, @freemine)
   - GEOSCoordSeq_setOrdinate returns an error if the sequence does not have the specified ordinate (GH-1245, Dan Baston)
 
