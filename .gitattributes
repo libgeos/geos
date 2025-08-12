@@ -1,0 +1,9 @@
+
+# Exclude specific files at the root of the repository
+.gitignore export-ignore
+HOWTO_RELEASE export-ignore
+
+web/ export-ignore
+php/ export-ignore
+tools/ci/ export-ignore
+debian/ export-ignore
