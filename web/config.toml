@@ -10,7 +10,7 @@ enableEmoji = true
 enableGitInfo = false
 
 [params]
-  current_release = "3.13.1"
+  current_release = "3.14.0"
   geekdocLogo = "web-logo.png"
 
   # turn these on when we move to the gh/main branch
