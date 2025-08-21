@@ -1,5 +1,5 @@
 ## Changes in 3.14.0
-2025-08-xx
+2025-08-21
 
 - New things:
   - Add clustering functions to C API (GH-1154, Dan Baston)
