@@ -1358,6 +1358,94 @@
     <article class="gdoc-markdown gdoc-post">
       <header class="gdoc-post__header">
         <h1 class="gdoc-post__title">
+          <a href="/posts/2025-08-21-geos-3-14-released/">Version 3.14.0</a>
+        </h1>
+      </header>
+      <section>
+        <p>The 3.14 release of GEOS is now available <a
+  class="gdoc-markdown__link"
+  href="https://libgeos.org/usage/download/"
+>to download</a>.</p>
+<p>The headline features of this release are:</p>
+<ul>
+<li>Coverage cleaning for polygonal coverages.
+<ul>
+<li>Remove small gaps and overlaps.</li>
+<li>Control the tolerance of gap removal.</li>
+<li>Choose between different gap removal heuristics.
+<ul>
+<li>Longest-border, max area, min area</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Clustering algorithms in the C API.
+<ul>
+<li>Exposing previously C++ only implementations into the C API for wider usage.</li>
+<li>DBSCAN, Intersects, Envelope Intersects, and others</li>
+</ul>
+</li>
+<li>Grid cell overlay with polygon.
+<ul>
+<li>Beyond the flood-fill, get actual proportions of each cell covered.</li>
+</ul>
+</li>
+</ul>
+<p>This release includes the following new features in the C API (and of course underlying changes to the C++ code to support these features):</p>
+<ul>
+<li>GEOSCoordSeq_hasZ(coordseq) returns boolean</li>
+<li>GEOSCoordSeq_hasM(coordseq) returns boolean</li>
+<li>GEOSCoordSeq_setM(coordseq, index, value) sets the M ordinate on a point in a sequence</li>
+<li>GEOSCoordSeq_getM(coordseq, index) reads the M ordinate on a point in a sequence</li>
+<li>GEOSCoverageClean() and GEOSCoverageCleanWithParams(), with GEOSCoverageCleanParams for control over polygonal coverage cleaning</li>
+<li>GEOSGridIntersectionFractions() for grid cell overlay</li>
+<li>GEOSisSimpleDetail() to show where a linestring is not simple (self crossing points usually)</li>
+<li>GEOSClusterDBSCAN(), GEOSClusterGeometryDistance(), GEOSClusterGeometryIntersects(), GEOSClusterEnvelopeDistance(), GEOSClusterEnvelopeIntersects() as CAPI clustering functions</li>
+<li>GEOSGeoJSONWriter_setOutputDimension() for greater control of JSON output of 3 and 4 dimensional geometry.</li>
+</ul>
+      </section>
+      <div class="gdoc-post__readmore">
+        
+          <a
+            class="flex-inline align-center fake-link"
+            title="Read full post"
+            href="/posts/2025-08-21-geos-3-14-released/"
+          >
+            Read full post
+            <i class="gdoc-icon">gdoc_arrow_right_alt</i>
+          </a>
+        
+      </div>
+
+      <footer class="gdoc-post__footer">
+        <div class="flex flex-wrap align-center gdoc-post__meta">
+          <span class="flex align-center no-wrap">
+  <svg class="gdoc-icon gdoc_date"><use xlink:href="#gdoc_date"></use></svg>
+  <span class="gdoc-post__tag">
+    <time datetime="2025-08-21T00:00:00Z">
+      
+      Aug 21, 2025
+    </time>
+  </span>
+</span>
+
+<span class="flex align-center no-wrap">
+  <svg class="gdoc-icon gdoc_timer"><use xlink:href="#gdoc_timer"></use></svg>
+  <span class="gdoc-post__tag">3 minutes to read</span>
+</span>
+
+
+
+
+
+
+        </div>
+      </footer>
+    </article>
+  
+    <article class="gdoc-markdown gdoc-post">
+      <header class="gdoc-post__header">
+        <h1 class="gdoc-post__title">
           <a href="/posts/2025-03-03-patch-releases/">GEOS 2025 Patch Releases</a>
         </h1>
       </header>
@@ -1906,75 +1994,6 @@ Release notes for 3.8.4 and 3.9.5 are below: 3.8.4, 3.9.5,
 <span class="flex align-center no-wrap">
   <svg class="gdoc-icon gdoc_timer"><use xlink:href="#gdoc_timer"></use></svg>
   <span class="gdoc-post__tag">2 minutes to read</span>
-</span>
-
-
-
-
-
-
-        </div>
-      </footer>
-    </article>
-  
-    <article class="gdoc-markdown gdoc-post">
-      <header class="gdoc-post__header">
-        <h1 class="gdoc-post__title">
-          <a href="/posts/2022-06-03-geos-3-10-3-released/">Version 3.10.3</a>
-        </h1>
-      </header>
-      <section>
-        <p>As part of a batch release of patches for all stable branches, the 3.10.3 release of GEOS is now available <a
-  class="gdoc-markdown__link"
-  href="https://libgeos.org/usage/download/"
->to download</a>.</p>
-<p>Release notes for the various branches are available:
-<a
-  class="gdoc-markdown__link"
-  href="https://github.com/libgeos/geos/blob/3.7.4/NEWS"
->3.7.4</a>,
-<a
-  class="gdoc-markdown__link"
-  href="https://github.com/libgeos/geos/blob/3.8.3/NEWS"
->3.8.3</a>,
-<a
-  class="gdoc-markdown__link"
-  href="https://github.com/libgeos/geos/blob/3.9.3/NEWS"
->3.9.3</a> and
-<a
-  class="gdoc-markdown__link"
-  href="https://github.com/libgeos/geos/blob/3.10.3/NEWS"
->3.10.3</a>.</p>
-<p>The 3.10.3 release is a bug fix release.</p>
-      </section>
-      <div class="gdoc-post__readmore">
-        
-          <a
-            class="flex-inline align-center fake-link"
-            title="Read full post"
-            href="/posts/2022-06-03-geos-3-10-3-released/"
-          >
-            Read full post
-            <i class="gdoc-icon">gdoc_arrow_right_alt</i>
-          </a>
-        
-      </div>
-
-      <footer class="gdoc-post__footer">
-        <div class="flex flex-wrap align-center gdoc-post__meta">
-          <span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_date"><use xlink:href="#gdoc_date"></use></svg>
-  <span class="gdoc-post__tag">
-    <time datetime="2022-06-03T00:00:00Z">
-      
-      Jun 3, 2022
-    </time>
-  </span>
-</span>
-
-<span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_timer"><use xlink:href="#gdoc_timer"></use></svg>
-  <span class="gdoc-post__tag">One minute to read</span>
 </span>
 
 

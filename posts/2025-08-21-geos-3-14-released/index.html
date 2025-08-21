@@ -12,8 +12,12 @@
 <meta name="generator" content="Hugo 0.111.3">
 
 
+  <meta name="description" content="The 3.14 release of GEOS is now available to download.
+The headline features of this release are:
+Coverage cleaning for polygonal coverages. Remove small gaps and overlaps. Control the tolerance of gap removal. Choose between different gap removal heuristics. Longest-border, max area, min area Clustering algorithms in the C API. Exposing previously C&#43;&#43; only implementations into the C API for wider usage. DBSCAN, Intersects, Envelope Intersects, and others Grid cell overlay with polygon. Beyond the flood-fill, get actual proportions of each cell covered. This release includes the following new features in the C API (and of course underlying changes to the C&#43;&#43; code to support these features):
+GEOSCoordSeq_hasZ(coordseq) returns boolean GEOSCoordSeq_hasM(coordseq) returns boolean GEOSCoordSeq_setM(coordseq, index, value) sets the M ordinate on a point in a sequence GEOSCoordSeq_getM(coordseq, index) reads the M ordinate on a point in a sequence GEOSCoverageClean() and GEOSCoverageCleanWithParams(), with GEOSCoverageCleanParams for control over polygonal coverage cleaning GEOSGridIntersectionFractions() for grid cell overlay GEOSisSimpleDetail() to show where a linestring is not simple (self crossing points usually) GEOSClusterDBSCAN(), GEOSClusterGeometryDistance(), GEOSClusterGeometryIntersects(), GEOSClusterEnvelopeDistance(), GEOSClusterEnvelopeIntersects() as CAPI clustering functions GEOSGeoJSONWriter_setOutputDimension() for greater control of JSON output of 3 and 4 dimensional geometry. " />
 
-    <title>News | GEOS</title>
+    <title>Version 3.14.0 | GEOS</title>
 
     <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
 <link
@@ -34,19 +38,69 @@
     
   <meta
     property="og:title"
-    content="News"
+    content="Version 3.14.0"
   />
   <meta property="og:site_name" content="GEOS" />
-<meta property="og:type" content="website" />
-<meta property="og:url" content="https://libgeos.org/posts/" />
+  <meta property="og:description" content="The 3.14 release of GEOS is now available to download.
+The headline features of this release are:
+Coverage cleaning for polygonal coverages. Remove small gaps and overlaps. Control the tolerance of gap removal. Choose between different gap removal heuristics. Longest-border, max area, min area Clustering algorithms in the C API. Exposing previously C&#43;&#43; only implementations into the C API for wider usage. DBSCAN, Intersects, Envelope Intersects, and others Grid cell overlay with polygon. Beyond the flood-fill, get actual proportions of each cell covered. This release includes the following new features in the C API (and of course underlying changes to the C&#43;&#43; code to support these features):
+GEOSCoordSeq_hasZ(coordseq) returns boolean GEOSCoordSeq_hasM(coordseq) returns boolean GEOSCoordSeq_setM(coordseq, index, value) sets the M ordinate on a point in a sequence GEOSCoordSeq_getM(coordseq, index) reads the M ordinate on a point in a sequence GEOSCoverageClean() and GEOSCoverageCleanWithParams(), with GEOSCoverageCleanParams for control over polygonal coverage cleaning GEOSGridIntersectionFractions() for grid cell overlay GEOSisSimpleDetail() to show where a linestring is not simple (self crossing points usually) GEOSClusterDBSCAN(), GEOSClusterGeometryDistance(), GEOSClusterGeometryIntersects(), GEOSClusterEnvelopeDistance(), GEOSClusterEnvelopeIntersects() as CAPI clustering functions GEOSGeoJSONWriter_setOutputDimension() for greater control of JSON output of 3 and 4 dimensional geometry. " />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://libgeos.org/posts/2025-08-21-geos-3-14-released/" />
 
-
+<meta property="article:section" content="Posts" />
+    <meta
+      property="article:published_time"
+      content="2025-08-21T00:00:00+00:00"
+    />
+    <meta
+      property="article:modified_time"
+      content="2025-08-21T00:00:00+00:00"
+    />
 
 
   <meta name="twitter:card" content="summary" />
-<meta name="twitter:title" content="News" />
+<meta name="twitter:title" content="Version 3.14.0" />
+  <meta name="twitter:description" content="The 3.14 release of GEOS is now available to download.
+The headline features of this release are:
+Coverage cleaning for polygonal coverages. Remove small gaps and overlaps. Control the tolerance of gap removal. Choose between different gap removal heuristics. Longest-border, max area, min area Clustering algorithms in the C API. Exposing previously C&#43;&#43; only implementations into the C API for wider usage. DBSCAN, Intersects, Envelope Intersects, and others Grid cell overlay with polygon. Beyond the flood-fill, get actual proportions of each cell covered. This release includes the following new features in the C API (and of course underlying changes to the C&#43;&#43; code to support these features):
+GEOSCoordSeq_hasZ(coordseq) returns boolean GEOSCoordSeq_hasM(coordseq) returns boolean GEOSCoordSeq_setM(coordseq, index, value) sets the M ordinate on a point in a sequence GEOSCoordSeq_getM(coordseq, index) reads the M ordinate on a point in a sequence GEOSCoverageClean() and GEOSCoverageCleanWithParams(), with GEOSCoverageCleanParams for control over polygonal coverage cleaning GEOSGridIntersectionFractions() for grid cell overlay GEOSisSimpleDetail() to show where a linestring is not simple (self crossing points usually) GEOSClusterDBSCAN(), GEOSClusterGeometryDistance(), GEOSClusterGeometryIntersects(), GEOSClusterEnvelopeDistance(), GEOSClusterEnvelopeIntersects() as CAPI clustering functions GEOSGeoJSONWriter_setOutputDimension() for greater control of JSON output of 3 and 4 dimensional geometry. " />
 
 
+  <script type="application/ld+json">
+  {
+      "@context": "http://schema.org",
+      "@type": "TechArticle",
+      "articleSection": "Posts",
+      "name": "Version 3.14.0",
+      "url" : "https://libgeos.org/posts/2025-08-21-geos-3-14-released/",
+      "headline": "Version 3.14.0",
+      "description": "The 3.14 release of GEOS is now available to download.\nThe headline features of this release are:\nCoverage cleaning for polygonal coverages. Remove small gaps and overlaps. Control the tolerance of gap removal. Choose between different gap removal heuristics. Longest-border, max area, min area Clustering algorithms in the C API. Exposing previously C\u002b\u002b only implementations into the C API for wider usage. DBSCAN, Intersects, Envelope Intersects, and others Grid cell overlay with polygon. Beyond the flood-fill, get actual proportions of each cell covered. This release includes the following new features in the C API (and of course underlying changes to the C\u002b\u002b code to support these features):\nGEOSCoordSeq_hasZ(coordseq) returns boolean GEOSCoordSeq_hasM(coordseq) returns boolean GEOSCoordSeq_setM(coordseq, index, value) sets the M ordinate on a point in a sequence GEOSCoordSeq_getM(coordseq, index) reads the M ordinate on a point in a sequence GEOSCoverageClean() and GEOSCoverageCleanWithParams(), with GEOSCoverageCleanParams for control over polygonal coverage cleaning GEOSGridIntersectionFractions() for grid cell overlay GEOSisSimpleDetail() to show where a linestring is not simple (self crossing points usually) GEOSClusterDBSCAN(), GEOSClusterGeometryDistance(), GEOSClusterGeometryIntersects(), GEOSClusterEnvelopeDistance(), GEOSClusterEnvelopeIntersects() as CAPI clustering functions GEOSGeoJSONWriter_setOutputDimension() for greater control of JSON output of 3 and 4 dimensional geometry. ",
+      "wordCount" : "463",
+      "inLanguage": "en",
+      "isFamilyFriendly": "true",
+      "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https://libgeos.org/posts/2025-08-21-geos-3-14-released/"
+      },
+      "copyrightHolder" : "GEOS",
+      "copyrightYear" : "2025",
+      "dateCreated": "2025-08-21T00:00:00.00Z",
+      "datePublished": "2025-08-21T00:00:00.00Z",
+      "dateModified": "2025-08-21T00:00:00.00Z",
+      "publisher":{
+          "@type":"Organization",
+          "name": "GEOS",
+          "url": "https://libgeos.org/",
+          "logo": {
+              "@type": "ImageObject",
+              "url": "https://libgeos.org/brand.svg",
+              "width":"32",
+              "height":"32"
+          }
+      }
+  }
+  </script>
 
 
     
@@ -111,7 +165,7 @@
   href="/custom.css"
   media="all"
 />
-  <link href="https://libgeos.org/posts/" rel="canonical" type="text/html" />
+  <link href="https://libgeos.org/posts/2025-08-21-geos-3-14-released/" rel="canonical" type="text/html" />
 
 <!-- Made with Geekdoc theme https://github.com/thegeeklab/hugo-geekdoc -->
 
@@ -1229,7 +1283,7 @@
                 
                 <a
                   href="/posts"
-                  class="gdoc-nav__entry is-active"
+                  class="gdoc-nav__entry"
                 >
                   News
                 </a>
@@ -1354,65 +1408,23 @@
 
         <div class="gdoc-page">
           
-  
-    <article class="gdoc-markdown gdoc-post">
-      <header class="gdoc-post__header">
-        <h1 class="gdoc-post__title">
-          <a href="/posts/2022-06-03-geos-3-10-3-released/">Version 3.10.3</a>
-        </h1>
-      </header>
-      <section>
-        <p>As part of a batch release of patches for all stable branches, the 3.10.3 release of GEOS is now available <a
-  class="gdoc-markdown__link"
-  href="https://libgeos.org/usage/download/"
->to download</a>.</p>
-<p>Release notes for the various branches are available:
-<a
-  class="gdoc-markdown__link"
-  href="https://github.com/libgeos/geos/blob/3.7.4/NEWS"
->3.7.4</a>,
-<a
-  class="gdoc-markdown__link"
-  href="https://github.com/libgeos/geos/blob/3.8.3/NEWS"
->3.8.3</a>,
-<a
-  class="gdoc-markdown__link"
-  href="https://github.com/libgeos/geos/blob/3.9.3/NEWS"
->3.9.3</a> and
-<a
-  class="gdoc-markdown__link"
-  href="https://github.com/libgeos/geos/blob/3.10.3/NEWS"
->3.10.3</a>.</p>
-<p>The 3.10.3 release is a bug fix release.</p>
-      </section>
-      <div class="gdoc-post__readmore">
-        
-          <a
-            class="flex-inline align-center fake-link"
-            title="Read full post"
-            href="/posts/2022-06-03-geos-3-10-3-released/"
-          >
-            Read full post
-            <i class="gdoc-icon">gdoc_arrow_right_alt</i>
-          </a>
-        
-      </div>
-
-      <footer class="gdoc-post__footer">
-        <div class="flex flex-wrap align-center gdoc-post__meta">
-          <span class="flex align-center no-wrap">
+  <article class="gdoc-post">
+    <header class="gdoc-post__header">
+      <h1 class="gdoc-post__title">Version 3.14.0</h1>
+      <div class="flex flex-wrap align-center gdoc-post__meta gdoc-post__meta--head">
+        <span class="flex align-center no-wrap">
   <svg class="gdoc-icon gdoc_date"><use xlink:href="#gdoc_date"></use></svg>
   <span class="gdoc-post__tag">
-    <time datetime="2022-06-03T00:00:00Z">
+    <time datetime="2025-08-21T00:00:00Z">
       
-      Jun 3, 2022
+      Aug 21, 2025
     </time>
   </span>
 </span>
 
 <span class="flex align-center no-wrap">
   <svg class="gdoc-icon gdoc_timer"><use xlink:href="#gdoc_timer"></use></svg>
-  <span class="gdoc-post__tag">One minute to read</span>
+  <span class="gdoc-post__tag">3 minutes to read</span>
 </span>
 
 
@@ -1420,196 +1432,169 @@
 
 
 
-        </div>
-      </footer>
-    </article>
-  
-    <article class="gdoc-markdown gdoc-post">
-      <header class="gdoc-post__header">
-        <h1 class="gdoc-post__title">
-          <a href="/posts/2021-11-02-geos-3-10-2-released/">Version 3.10.2</a>
-        </h1>
-      </header>
-      <section>
-        <p>The 3.10.2 release of GEOS is now available <a
-  class="gdoc-markdown__link"
-  href="https://libgeos.org/usage/download/"
->to download</a>.</p>
-<p>This release is a bug fix release.</p>
-      </section>
-      <div class="gdoc-post__readmore">
-        
-          <a
-            class="flex-inline align-center fake-link"
-            title="Read full post"
-            href="/posts/2021-11-02-geos-3-10-2-released/"
-          >
-            Read full post
-            <i class="gdoc-icon">gdoc_arrow_right_alt</i>
-          </a>
-        
       </div>
-
-      <footer class="gdoc-post__footer">
-        <div class="flex flex-wrap align-center gdoc-post__meta">
-          <span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_date"><use xlink:href="#gdoc_date"></use></svg>
-  <span class="gdoc-post__tag">
-    <time datetime="2022-01-15T00:00:00Z">
-      
-      Jan 15, 2022
-    </time>
-  </span>
-</span>
-
-<span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_timer"><use xlink:href="#gdoc_timer"></use></svg>
-  <span class="gdoc-post__tag">One minute to read</span>
-</span>
-
-
-
-
-
-
-        </div>
-      </footer>
-    </article>
-  
-    <article class="gdoc-markdown gdoc-post">
-      <header class="gdoc-post__header">
-        <h1 class="gdoc-post__title">
-          <a href="/posts/2021-11-02-geos-3-10-1-released/">Version 3.10.1</a>
-        </h1>
-      </header>
-      <section>
-        <p>The 3.10.1 release of GEOS is now available <a
+    </header>
+    <section class="gdoc-markdown">
+      <p>The 3.14 release of GEOS is now available <a
   class="gdoc-markdown__link"
   href="https://libgeos.org/usage/download/"
 >to download</a>.</p>
-<p>This release is primarily to fix some version numbering issues in the initial 3.10.0 source tarball. Some extra fixes are bundled as well.</p>
-      </section>
-      <div class="gdoc-post__readmore">
-        
-          <a
-            class="flex-inline align-center fake-link"
-            title="Read full post"
-            href="/posts/2021-11-02-geos-3-10-1-released/"
-          >
-            Read full post
-            <i class="gdoc-icon">gdoc_arrow_right_alt</i>
-          </a>
-        
-      </div>
-
-      <footer class="gdoc-post__footer">
-        <div class="flex flex-wrap align-center gdoc-post__meta">
-          <span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_date"><use xlink:href="#gdoc_date"></use></svg>
-  <span class="gdoc-post__tag">
-    <time datetime="2021-11-02T00:00:00Z">
-      
-      Nov 2, 2021
-    </time>
-  </span>
-</span>
-
-<span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_timer"><use xlink:href="#gdoc_timer"></use></svg>
-  <span class="gdoc-post__tag">One minute to read</span>
-</span>
-
-
-
-
-
-
-        </div>
-      </footer>
-    </article>
-  
-    <article class="gdoc-markdown gdoc-post">
-      <header class="gdoc-post__header">
-        <h1 class="gdoc-post__title">
-          <a href="/posts/2021-10-01-geos-3-10-released/">Version 3.10.0</a>
-        </h1>
-      </header>
-      <section>
-        <p>The 3.10 release of GEOS is now available <a
-  class="gdoc-markdown__link"
-  href="https://libgeos.org/usage/download/"
->to download</a>.</p>
+<p>The headline features of this release are:</p>
 <ul>
-<li>
-<p>This release includes the following new features in the C API (and of course underlying changes to the C++ code to support these features):</p>
+<li>Coverage cleaning for polygonal coverages.
 <ul>
-<li>CAPI additions for testing whether geometries are within a distance of each other, <code>GEOSDistanceWithin</code> and <code>GEOSPreparedDistanceWithin</code></li>
-<li>CAPI addition for adding extra vertices to a geometry, <code>GEOSDensify</code></li>
-<li>CAPI additions for high-performance construction/reading of coordinate sequences from/to memory buffers, <code>GEOSCoordSeq_copyFromArrays</code>, <code>GEOSCoordSeq_copyFromBuffer</code>, <code>GEOSCoordSeq_copyToArrays</code>, and <code>GEOSCoordSeq_copyToBuffer</code></li>
-<li>CAPI addition for new validity enforement algorithm, <code>GEOSMakeValidWithParams</code></li>
-<li>CAPI addition for ISO WKB output, <code>GEOSWKBWriter_getFlavor</code> and <code>GEOSWKBWriter_setFlavor</code></li>
-<li>CAPI addition to create a constrained delaunay of polygonal input, <code>GEOSConstrainedDelaunayTriangulation</code></li>
+<li>Remove small gaps and overlaps.</li>
+<li>Control the tolerance of gap removal.</li>
+<li>Choose between different gap removal heuristics.
+<ul>
+<li>Longest-border, max area, min area</li>
 </ul>
 </li>
 </ul>
-      </section>
-      <div class="gdoc-post__readmore">
-        
-          <a
-            class="flex-inline align-center fake-link"
-            title="Read full post"
-            href="/posts/2021-10-01-geos-3-10-released/"
-          >
-            Read full post
-            <i class="gdoc-icon">gdoc_arrow_right_alt</i>
-          </a>
-        
-      </div>
-
-      <footer class="gdoc-post__footer">
-        <div class="flex flex-wrap align-center gdoc-post__meta">
-          <span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_date"><use xlink:href="#gdoc_date"></use></svg>
-  <span class="gdoc-post__tag">
-    <time datetime="2021-10-21T00:00:00Z">
-      
-      Oct 21, 2021
-    </time>
-  </span>
-</span>
-
-<span class="flex align-center no-wrap">
-  <svg class="gdoc-icon gdoc_timer"><use xlink:href="#gdoc_timer"></use></svg>
-  <span class="gdoc-post__tag">One minute to read</span>
-</span>
-
-
-
-
-
-
-        </div>
-      </footer>
-    </article>
-  
-  
-
-
-<nav class="gdoc-paging flex flex-even align-center" role="navigation">
-  <div class="gdoc-paging__item gdoc-paging__item--prev">
-    
-      <a class="flex-inline align-center fake-link no-wrap" href="/posts/">
-        <i class="gdoc-icon">gdoc_keyboard_arrow_left</i>
-        PREV
-      </a>
-    
-  </div>
-  <div class="gdoc-paging__state">2/2</div>
-  <div class="gdoc-paging__item gdoc-paging__item--next">
-    
-  </div>
-</nav>
-
+</li>
+<li>Clustering algorithms in the C API.
+<ul>
+<li>Exposing previously C++ only implementations into the C API for wider usage.</li>
+<li>DBSCAN, Intersects, Envelope Intersects, and others</li>
+</ul>
+</li>
+<li>Grid cell overlay with polygon.
+<ul>
+<li>Beyond the flood-fill, get actual proportions of each cell covered.</li>
+</ul>
+</li>
+</ul>
+<p>This release includes the following new features in the C API (and of course underlying changes to the C++ code to support these features):</p>
+<ul>
+<li>GEOSCoordSeq_hasZ(coordseq) returns boolean</li>
+<li>GEOSCoordSeq_hasM(coordseq) returns boolean</li>
+<li>GEOSCoordSeq_setM(coordseq, index, value) sets the M ordinate on a point in a sequence</li>
+<li>GEOSCoordSeq_getM(coordseq, index) reads the M ordinate on a point in a sequence</li>
+<li>GEOSCoverageClean() and GEOSCoverageCleanWithParams(), with GEOSCoverageCleanParams for control over polygonal coverage cleaning</li>
+<li>GEOSGridIntersectionFractions() for grid cell overlay</li>
+<li>GEOSisSimpleDetail() to show where a linestring is not simple (self crossing points usually)</li>
+<li>GEOSClusterDBSCAN(), GEOSClusterGeometryDistance(), GEOSClusterGeometryIntersects(), GEOSClusterEnvelopeDistance(), GEOSClusterEnvelopeIntersects() as CAPI clustering functions</li>
+<li>GEOSGeoJSONWriter_setOutputDimension() for greater control of JSON output of 3 and 4 dimensional geometry.</li>
+</ul>
+<p>The full list of changes is as follows:</p>
+<ul>
+<li>
+<p><strong>New things:</strong></p>
+<ul>
+<li>Add clustering functions to C API (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1154"
+>GH-1154</a>, Dan Baston)</li>
+<li>Ported LineDissolver (Paul Ramsey)</li>
+<li>Ported CoverageCleaner (Paul Ramsey)</li>
+<li>Add GEOSGridIntersectionFractions to C API (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1295"
+>GH-1295</a>, Dan Baston)</li>
+<li>Add functions to interrupt processing in a specific thread/context (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/803"
+>GH-803</a>, Dan Baston)</li>
+<li>Add &ldquo;geos-targets.cmake&rdquo; to build tree to allow building other software against
+GEOS build without installing first (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1269"
+>GH-1269</a>, Dan Baston)</li>
+<li>Add GEOSCoordSeq_hasZ, GEOSCoordSeq_hasM (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1256"
+>GH-1256</a>, Aurele Ferotin)</li>
+<li>Add GEOSCoordSeq_createWithDimensions, GEOSCoordSeq_setM, GEOSCoordSeq_getM (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1246"
+>GH-1246</a>, Dan Baston)</li>
+<li>Add GEOSGeoJSONWriter_setOutputDimension (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1260"
+>GH-1260</a>, Aurele Ferotin)</li>
+<li>Add GEOSGeom_transformXYZ (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1157"
+>GH-1157</a>, Aurele Ferotin)</li>
+<li>Add GEOSisSimpleDetail (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1296"
+>GH-1296</a>, Dan Baston)</li>
+</ul>
+</li>
+<li>
+<p><strong>Breaking Changes:</strong></p>
+<ul>
+<li>C++17 is now required (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1144"
+>GH-1144</a>)</li>
+<li>Stricter WKT parsing (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1241"
+>GH-1241</a>, @freemine)</li>
+<li>GEOSCoordSeq_setOrdinate returns an error if the sequence does not have the specified ordinate (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1245"
+>GH-1245</a>, Dan Baston)</li>
+</ul>
+</li>
+<li>
+<p><strong>Fixes/Improvements:</strong></p>
+<ul>
+<li>Fix ConcaveHullOfPolygons nested shell handling (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1169"
+>GH-1169</a>, Martin Davis)</li>
+<li>Fix RelateNG for computing IM for empty-nonempty cases (Martin Davis)</li>
+<li>Fix TopologyPreservingSimplifier/TaggedLineString to avoid jumping components (JTS-1096, Martin Davis)</li>
+<li>Fix WKTWriter for small precisions and with trim enabled (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1199"
+>GH-1199</a>, Mike Taves)</li>
+<li>Fix BufferOp to increase length of segments removed by heuristic (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1200"
+>GH-1200</a>, Martin Davis)</li>
+<li>Improve RelateNG performance for A/L cases in prepared predicates (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1201"
+>GH-1201</a>, Martin Davis)</li>
+<li>Improve OffsetCurve to handle mitre joins for polygons (Martin Davis)</li>
+<li>Fix inscribed circle initialization (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1225"
+>GH-1225</a>, Benoit Maurin)</li>
+<li>Fix overlay heuristic for GeometryCollections with empty elements (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1229"
+>GH-1229</a>, Martin Davis)</li>
+<li>Add ring buffer hole removal heuristic (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1233"
+>GH-1233</a>, Martin Davis)</li>
+<li>Fix buffer element erosion for negative distance and remove overlay deps (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1239"
+>GH-1239</a>, Martin Davis)</li>
+<li>Fix OverlayNG coordinate dimension handling for EMPTY geometries (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1258"
+>GH-1258</a>, Martin Davis)</li>
+<li>Fix DepthSegment comparison logic (really this time) (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1266"
+>GH-1266</a>, Martin Davis)</li>
+<li>Change CoverageGapFinder to return polygons (Martin Davis)</li>
+<li>Update DiscreteFrechetDistance to new algorithm (<a
+  class="gdoc-markdown__link"
+  href="https://github.com/libgeos/geos/issues/1274"
+>GH-1274</a>, Paul Ramsey)</li>
+</ul>
+</li>
+</ul>
+    </section>
+  </article>
 
 
 

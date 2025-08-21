@@ -6,7 +6,56 @@
     <description>Recent content in News on GEOS</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 03 Mar 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://libgeos.org/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 21 Aug 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://libgeos.org/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Version 3.14.0</title>
+      <link>https://libgeos.org/posts/2025-08-21-geos-3-14-released/</link>
+      <pubDate>Thu, 21 Aug 2025 00:00:00 +0000</pubDate>
+      
+      <guid>https://libgeos.org/posts/2025-08-21-geos-3-14-released/</guid>
+      <description>&lt;p&gt;The 3.14 release of GEOS is now available &lt;a
+  class=&#34;gdoc-markdown__link&#34;
+  href=&#34;https://libgeos.org/usage/download/&#34;
+&gt;to download&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The headline features of this release are:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Coverage cleaning for polygonal coverages.
+&lt;ul&gt;
+&lt;li&gt;Remove small gaps and overlaps.&lt;/li&gt;
+&lt;li&gt;Control the tolerance of gap removal.&lt;/li&gt;
+&lt;li&gt;Choose between different gap removal heuristics.
+&lt;ul&gt;
+&lt;li&gt;Longest-border, max area, min area&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Clustering algorithms in the C API.
+&lt;ul&gt;
+&lt;li&gt;Exposing previously C++ only implementations into the C API for wider usage.&lt;/li&gt;
+&lt;li&gt;DBSCAN, Intersects, Envelope Intersects, and others&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;Grid cell overlay with polygon.
+&lt;ul&gt;
+&lt;li&gt;Beyond the flood-fill, get actual proportions of each cell covered.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This release includes the following new features in the C API (and of course underlying changes to the C++ code to support these features):&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;GEOSCoordSeq_hasZ(coordseq) returns boolean&lt;/li&gt;
+&lt;li&gt;GEOSCoordSeq_hasM(coordseq) returns boolean&lt;/li&gt;
+&lt;li&gt;GEOSCoordSeq_setM(coordseq, index, value) sets the M ordinate on a point in a sequence&lt;/li&gt;
+&lt;li&gt;GEOSCoordSeq_getM(coordseq, index) reads the M ordinate on a point in a sequence&lt;/li&gt;
+&lt;li&gt;GEOSCoverageClean() and GEOSCoverageCleanWithParams(), with GEOSCoverageCleanParams for control over polygonal coverage cleaning&lt;/li&gt;
+&lt;li&gt;GEOSGridIntersectionFractions() for grid cell overlay&lt;/li&gt;
+&lt;li&gt;GEOSisSimpleDetail() to show where a linestring is not simple (self crossing points usually)&lt;/li&gt;
+&lt;li&gt;GEOSClusterDBSCAN(), GEOSClusterGeometryDistance(), GEOSClusterGeometryIntersects(), GEOSClusterEnvelopeDistance(), GEOSClusterEnvelopeIntersects() as CAPI clustering functions&lt;/li&gt;
+&lt;li&gt;GEOSGeoJSONWriter_setOutputDimension() for greater control of JSON output of 3 and 4 dimensional geometry.&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
     <item>
       <title>GEOS 2025 Patch Releases</title>
       <link>https://libgeos.org/posts/2025-03-03-patch-releases/</link>
