@@ -38,11 +38,17 @@ class GEOS_DLL PerimeterDistance {
 
     /** Calculates the counter-clockwise distance between two locations on the perimeter
      *  of an Envelope. The locations are specified as clockwise distances from the
-     *  lower left corner of the Envelope, consistent with the `perimeter_distance`
+     *  lower left corner of the Envelope, consistent with the `getPerimeterDistance`
      *  function.
      */
     static double
     getPerimeterDistanceCCW(double measure1, double measure2, double perimeter);
+
+    /** Tests whether measure x would be passed when traveling from a to b in a CCW
+     * direction.
+     */
+    static bool
+    isBetweenCCW(double x, double a, double b);
 
 };
 
