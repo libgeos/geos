@@ -22,6 +22,7 @@
 #include <geos/operation/grid/Cell.h>
 #include <geos/operation/grid/FloodFill.h>
 #include <geos/operation/grid/GridIntersection.h>
+#include <geos/operation/grid/PerimeterDistance.h>
 #include <geos/operation/overlayng/CoverageUnion.h>
 #include <geos/util.h>
 
@@ -504,6 +505,58 @@ traverse_polygons(Matrix<std::unique_ptr<Cell>>& cells, const Grid<infinite_exte
     }
 }
 
+// Create a rectangular polygon from a set of points lying on the boundary
+// of a specified envelope. The provided points do not need to include the
+// corners of the envelope itself.
+static std::unique_ptr<Geometry>
+createRectangle(const geom::GeometryFactory& gfact, const Envelope& env, std::vector<CoordinateXY>& points)
+{
+    if (points.empty()) {
+        return gfact.toGeometry(&env);
+    } else {
+        auto perimeterDistanceCmp = [&env](const CoordinateXY& a, const CoordinateXY& b) {
+            return PerimeterDistance::getPerimeterDistance(env, a) <
+                PerimeterDistance::getPerimeterDistance(env, b);
+        };
+
+        points.emplace_back(env.getMinX(), env.getMinY());
+        points.emplace_back(env.getMinX(), env.getMaxY());
+        points.emplace_back(env.getMaxX(), env.getMinY());
+        points.emplace_back(env.getMaxX(), env.getMaxY());
+
+        std::sort(points.begin(), points.end(), perimeterDistanceCmp);
+        points.push_back(points.front());
+        auto seq = std::make_unique<geom::CoordinateSequence>(0, false, false);
+        seq->reserve(points.size());
+        for (const auto& c : points) {
+            seq->add(c, false);
+        }
+
+        auto ring = gfact.createLinearRing(std::move(seq));
+        return gfact.createPolygon(std::move(ring));
+    }
+}
+
+// Get any points from adjacent cells that are also on the boundary of this cell.
+static std::vector<CoordinateXY>
+getExtraNodes(const Matrix<std::unique_ptr<Cell> > &cells, size_t i, size_t j) {
+    std::vector<CoordinateXY> points;
+
+    if (const Cell *above = cells(i - 1, j).get()) {
+        above->getEdgePoints(Side::BOTTOM, points);
+    }
+    if (const Cell *below = cells(i + 1, j).get()) {
+        below->getEdgePoints(Side::TOP, points);
+    }
+    if (const Cell *left = cells(i, j - 1).get()) {
+        left->getEdgePoints(Side::RIGHT, points);
+    }
+    if (const Cell *right = cells(i, j + 1).get()) {
+        right->getEdgePoints(Side::LEFT, points);
+    }
+
+    return points;
+}
 
 std::unique_ptr<Geometry>
 GridIntersection::subdividePolygon(const Grid<bounded_extent>& p_grid, const Geometry& g, bool includeExterior)
@@ -547,9 +600,11 @@ GridIntersection::subdividePolygon(const Grid<bounded_extent>& p_grid, const Geo
                 }
             } else if (!edge && areas(i - 1, j - 1) == fill_values<float>::INTERIOR) {
                 // Cell is entirely covered by polygon
-                // TODO: Add nodes from adjacent polygons?
+                // In order to have the outputs forms a properly noded coverage,
+                // we need to add nodes from adjacent polygons.
                 Envelope env = cell_grid.getCellEnvelope(i, j);
-                geoms.push_back(gfact.toGeometry(&env));
+                std::vector<CoordinateXY> points = getExtraNodes(cells, i, j);
+                geoms.push_back(createRectangle(gfact, env, points));
             }
         }
     }

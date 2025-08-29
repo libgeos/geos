@@ -696,7 +696,7 @@ void object::test<37>()
 
     auto subdivided = GridIntersection::subdividePolygon(ext, *g, true);
 
-    ensure_equals("", subdivided->getArea(), g->getArea(), 1e-8);
+    check_subdivided_polygon(*g, *subdivided);
 }
 
 template<>
@@ -710,9 +710,8 @@ void object::test<38>()
 
     auto g = wkt_reader_.read("POINT (5 5)")->buffer(20);
 
-    auto subdivided = GridIntersection::subdividePolygon(ext, *g, true);
-
-    ensure_equals("", subdivided->getArea(), g->getArea(), 1e-8);
+    auto subd = GridIntersection::subdividePolygon(ext, *g, true);
+    check_subdivided_polygon(*g, *subd);
 }
 
 template<>
@@ -726,9 +725,8 @@ void object::test<39>()
 
     auto g = GeometryFactory::getDefaultInstance()->toGeometry(&e);
 
-    auto subdivided = GridIntersection::subdividePolygon(ext, *g, false);
-
-    ensure_equals("", subdivided->getArea(), e.getArea(), 1e-8);
+    auto subd = GridIntersection::subdividePolygon(ext, *g, false);
+    check_subdivided_polygon(*g, *subd);
 }
 
 template<>
@@ -742,9 +740,8 @@ void object::test<40>()
 
     auto g = wkt_reader_.read("MULTIPOLYGON (((1 1, 15 1, 15 25, 1 25, 1 1), (12 12, 12 14, 14 14, 14 12, 12 12)), ((16 1, 25 1, 25 25, 16 25, 16 1)))");
 
-    auto subdivided = GridIntersection::subdividePolygon(ext, *g, false);
-
-    ensure_equals("", subdivided->getArea(), g->getArea(), 1e-8);
+    auto subd = GridIntersection::subdividePolygon(ext, *g, false);
+    check_subdivided_polygon(*g, *subd);
 }
 
 template<>
@@ -827,10 +824,7 @@ void object::test<45>()
     check_area(*rci, ext, *g);
 
     auto subd = GridIntersection::subdividePolygon(ext, *g, false);
-    // TODO: Currently fails because polygons do not form a valid coverage.
-    // When we create a rectangle polygon for a fully interior cell, we do not add interior nodes
-    // along its edges if they are present in the input geometry.
-    //check_subdivided_polygon(*g, *subd);
+    check_subdivided_polygon(*g, *subd);
 }
 
 template<>
@@ -849,10 +843,7 @@ void object::test<46>()
 
     auto subd = GridIntersection::subdividePolygon(ext, *g, false);
 
-    // TODO: Currently fails because polygons do not form a valid coverage.
-    // When we create a rectangle polygon for a fully interior cell, we do not add interior nodes
-    // along its edges if they are present in the input geometry.
-    //check_subdivided_polygon(*g, *subd);
+    check_subdivided_polygon(*g, *subd);
 }
 
 template<>

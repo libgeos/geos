@@ -40,6 +40,9 @@ class Cell
     {
     }
 
+    /// Get all points that fall on the specified side of this cell.
+    void getEdgePoints(Side s, std::vector<geom::CoordinateXY>& points) const;
+
     const geom::Envelope& box() const { return m_box; }
 
     double getWidth() const;
