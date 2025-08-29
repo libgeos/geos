@@ -291,4 +291,20 @@ Cell::getCoveredPolygons(const GeometryFactory& gfact) const
     return TraversalAreas::getLeftHandRings(gfact, m_box, coord_lists);
 }
 
+void Cell::getEdgePoints(Side s, std::vector<CoordinateXY> &edgePoints) const
+{
+    for (const Traversal& t : m_traversals) {
+        const auto& coords = t.getCoordinates();
+
+        for (const auto& c : coords) {
+            if ((s == Side::LEFT && c.x == m_box.getMinX()) ||
+                (s == Side::RIGHT && c.x == m_box.getMaxX()) ||
+                (s == Side::BOTTOM && c.y == m_box.getMinY()) ||
+                (s == Side::TOP && c.y == m_box.getMaxY())) {
+                edgePoints.push_back(c);
+            }
+        }
+    }
+}
+
 }

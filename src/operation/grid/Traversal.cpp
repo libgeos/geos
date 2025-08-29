@@ -97,9 +97,15 @@ Traversal::isTraversed() const
 }
 
 const CoordinateXY&
+Traversal::getFirstCoordinate() const
+{
+    return m_coords.front();
+}
+
+const CoordinateXY&
 Traversal::getLastCoordinate() const
 {
-    return m_coords.at(m_coords.size() - 1);
+    return m_coords.back();
 }
 
 const CoordinateXY&

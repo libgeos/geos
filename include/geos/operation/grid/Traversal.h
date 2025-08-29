@@ -61,6 +61,8 @@ class GEOS_DLL Traversal
 
     Side getExitSide() const { return m_exit; }
 
+    const geom::CoordinateXY& getFirstCoordinate() const;
+
     const geom::CoordinateXY& getLastCoordinate() const;
 
     const geom::CoordinateXY& getExitCoordinate() const;
