@@ -13,7 +13,7 @@
  *
  **********************************************************************/
 
-#include <map>
+#include <unordered_map>
 
 #include <geos/coverage/CoverageBoundarySegmentFinder.h>
 #include <geos/coverage/CoverageEdge.h>
