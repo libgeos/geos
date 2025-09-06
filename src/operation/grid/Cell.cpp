@@ -19,16 +19,14 @@
 #include <geos/operation/grid/Crossing.h>
 #include <geos/operation/grid/TraversalAreas.h>
 
+#define DEBUG_CELL 0
+#include <iomanip>
+
 using geos::geom::CoordinateXY;
 using geos::geom::Geometry;
 using geos::geom::GeometryFactory;
 
 namespace geos::operation::grid {
-
-static bool
-strictly_contains(const geom::Envelope& e, const geom::CoordinateXY& c) {
-    return e.getMinX() < c.x && e.getMaxX() > c.x && e.getMinY() < c.y && e.getMaxY() > c.y;
-}
 
 static Crossing
 crossing(const geom::Envelope& e, const CoordinateXY& c1, const CoordinateXY& c2)
@@ -55,15 +53,16 @@ crossing(const geom::Envelope& e, const CoordinateXY& c1, const CoordinateXY& c2
         }
     }
 
-    double m = std::abs((c2.y - c1.y) / (c2.x - c1.x));
+    const double m = std::abs((c2.y - c1.y) / (c2.x - c1.x));
 
-    bool up = c2.y > c1.y;
-    bool right = c2.x > c1.x;
+    const bool up = c2.y > c1.y;
+    const bool right = c2.x > c1.x;
 
     if (up) {
+
         if (right) {
             // 1st quadrant
-            double y2 = c1.y + m * (e.getMaxX() - c1.x);
+            const double y2 = c1.y + m * (e.getMaxX() - c1.x);
 
             if (y2 < e.getMaxY()) {
                 return Crossing{ Side::RIGHT, e.getMaxX(), std::clamp(y2, e.getMinY(), e.getMaxY()) };
@@ -73,7 +72,7 @@ crossing(const geom::Envelope& e, const CoordinateXY& c1, const CoordinateXY& c2
             }
         } else {
             // 2nd quadrant
-            double y2 = c1.y + m * (c1.x - e.getMinX());
+            const double y2 = c1.y + m * (c1.x - e.getMinX());
 
             if (y2 < e.getMaxY()) {
                 return Crossing{ Side::LEFT, e.getMinX(), std::clamp(y2, e.getMinY(), e.getMaxY()) };
@@ -83,24 +82,29 @@ crossing(const geom::Envelope& e, const CoordinateXY& c1, const CoordinateXY& c2
             }
         }
     } else {
+        // For downward segments, we calculate constructed coordinates relative to c2, not c1. This is so the
+        // same coordinate will be calculated regardless of the segment orientation. This is important for maintaining
+        // valid polygon coverages (the same segment will be processed with opposite orientation along shared
+        // boundaries)
+
         if (right) {
             // 4th quadrant
-            double y2 = c1.y - m * (e.getMaxX() - c1.x);
+            const double y2 = c2.y + m * (c2.x - e.getMaxX());
 
             if (y2 > e.getMinY()) {
                 return Crossing{ Side::RIGHT, e.getMaxX(), std::clamp(y2, e.getMinY(), e.getMaxY()) };
             } else {
-                double x2 = c1.x + (c1.y - e.getMinY()) / m;
+                double x2 = c2.x - (e.getMinY() - c2.y) / m;
                 return Crossing{ Side::BOTTOM, std::clamp(x2, e.getMinX(), e.getMaxX()), e.getMinY() };
             }
         } else {
             // 3rd quadrant
-            double y2 = c1.y - m * (c1.x - e.getMinX());
+            const double y2 = c2.y + m * (e.getMinX() - c2.x);
 
             if (y2 > e.getMinY()) {
                 return Crossing{ Side::LEFT, e.getMinX(), std::clamp(y2, e.getMinY(), e.getMaxY()) };
             } else {
-                double x2 = c1.x - (c1.y - e.getMinY()) / m;
+                double x2 = c2.x + (e.getMinY() - c2.y) / m;
                 return Crossing{ Side::BOTTOM, std::clamp(x2, e.getMinX(), e.getMaxX()), e.getMinY() };
             }
         }
@@ -127,7 +131,7 @@ Cell::getArea() const
 }
 
 Side
-Cell::side(const CoordinateXY& c) const
+Cell::getSide(const CoordinateXY& c) const
 {
     if (c.x == m_box.getMinX()) {
         return Side::LEFT;
@@ -151,15 +155,15 @@ Cell::forceExit()
 
     const CoordinateXY& last = getLastTraversal().getLastCoordinate();
 
-    if (location(last) == Location::BOUNDARY) {
-        getLastTraversal().forceExit(side(last));
+    if (getLocation(last) == Location::BOUNDARY) {
+        getLastTraversal().forceExit(getSide(last));
     }
 }
 
 Cell::Location
-Cell::location(const CoordinateXY& c) const
+Cell::getLocation(const CoordinateXY& c) const
 {
-    if (strictly_contains(m_box, c)) {
+    if (m_box.containsProperly(c)) {
         return Cell::Location::INSIDE;
     }
 
@@ -187,19 +191,24 @@ Cell::getLastTraversal()
 }
 
 bool
-Cell::take(const CoordinateXY& c, const CoordinateXY* prev_original)
+Cell::take(const CoordinateXY& c, const CoordinateXY* prev_original, const void* parentage)
 {
     Traversal& t = traversal_in_progress();
 
     if (t.isEmpty()) {
-        // std::cout << "Entering " << m_box << " from " << side(c) << " at " << c << std::endl;
+#if DEBUG_CELL
+        std::cout << std::setprecision(17);
+        std::cout << "Entering " << m_box << " from " << getSide(c) << " at " << c << std::endl;
+#endif
 
-        t.enter(c, side(c));
+        t.enter(c, getSide(c), parentage);
         return true;
     }
 
-    if (location(c) != Cell::Location::OUTSIDE) {
-        // std::cout << "Still in " << m_box << " with " << c << std::endl;
+    if (getLocation(c) != Location::OUTSIDE) {
+#if DEBUG_CELL
+        std::cout << "Still in " << m_box << " with " << c << std::endl;
+#endif
 
         t.add(c);
 
@@ -217,8 +226,10 @@ Cell::take(const CoordinateXY& c, const CoordinateXY* prev_original)
     Crossing x = prev_original ? crossing(m_box, *prev_original, c) : crossing(m_box, t.getLastCoordinate(), c);
     t.exit(x.getCoord(), x.getSide());
 
-    // std::cout << "Leaving " << m_box << " from " << x.side() << " at " << x.coord();
-    // std::cout << " on the way to " << c << std::endl;
+#if DEBUG_CELL
+    std::cout << "Leaving " << m_box << " from " << x.getSide() << " at " << x.getCoord();
+    std::cout << " on the way to " << c << std::endl;
+#endif
 
     return false;
 }
@@ -235,7 +246,11 @@ bool
 Cell::isDetermined() const
 {
     for (const auto& t : m_traversals) {
-        if (!t.isTraversed() && !t.isClosedRing()) {
+        if (t.isClosedRing()) {
+            if (!t.isClosedRingWithArea()) {
+                continue;
+            }
+        } else if (!t.isTraversed()) {
             continue;
         }
 
@@ -247,33 +262,49 @@ Cell::isDetermined() const
     return false;
 }
 
-std::vector<const std::vector<CoordinateXY>*>
-Cell::getCoordLists() const
+std::vector<const Traversal*>
+Cell::getTraversals() const
 {
-    std::vector<const std::vector<CoordinateXY>*> coord_lists;
-    coord_lists.reserve(m_traversals.size());
+    std::vector<const Traversal*> traversals;
+    traversals.reserve(m_traversals.size());
 
     for (const auto& t : m_traversals) {
-        if (t.isTraversed() || t.isClosedRing()) {
-            coord_lists.push_back(&t.getCoordinates());
+        if (t.isTraversed() || t.isClosedRingWithArea()) {
+            traversals.push_back(&t);
         }
     }
 
-    return coord_lists;
+    return traversals;
 }
 
 double
 Cell::getCoveredFraction() const
 {
-    auto coord_lists = getCoordLists();
+    auto coord_lists = getTraversals();
     return TraversalAreas::getLeftHandArea(m_box, coord_lists) / getArea();
 }
 
 std::unique_ptr<Geometry>
 Cell::getCoveredPolygons(const GeometryFactory& gfact) const
 {
-    auto coord_lists = getCoordLists();
+    auto coord_lists = getTraversals();
     return TraversalAreas::getLeftHandRings(gfact, m_box, coord_lists);
+}
+
+void Cell::getEdgePoints(Side s, std::vector<CoordinateXY> &edgePoints) const
+{
+    for (const Traversal& t : m_traversals) {
+        const auto& coords = t.getCoordinates();
+
+        for (const auto& c : coords) {
+            if ((s == Side::LEFT && c.x == m_box.getMinX()) ||
+                (s == Side::RIGHT && c.x == m_box.getMaxX()) ||
+                (s == Side::BOTTOM && c.y == m_box.getMinY()) ||
+                (s == Side::TOP && c.y == m_box.getMaxY())) {
+                edgePoints.push_back(c);
+            }
+        }
+    }
 }
 
 }

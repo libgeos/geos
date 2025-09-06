@@ -40,6 +40,9 @@ class Cell
     {
     }
 
+    /// Get all points that fall on the specified side of this cell.
+    void getEdgePoints(Side s, std::vector<geom::CoordinateXY>& points) const;
+
     const geom::Envelope& box() const { return m_box; }
 
     double getWidth() const;
@@ -76,13 +79,14 @@ class Cell
      * @param c             Coordinate to process
      * @param prev_original The last *uninterpolated* coordinate preceding `c` in the
      *                      boundary being processed
+     * @param parentage an optional pointer indicating the source of the coordinate.
      *
      * @return `true` if the Coordinate was inside this cell, `false` otherwise
      */
-    bool take(const geom::CoordinateXY& c, const geom::CoordinateXY* prev_original = nullptr);
+    bool take(const geom::CoordinateXY& c, const geom::CoordinateXY* prev_original, const void* parentage);
 
   private:
-    std::vector<const std::vector<geom::CoordinateXY>*> getCoordLists() const;
+    std::vector<const Traversal*> getTraversals() const;
 
     enum class Location
     {
@@ -95,9 +99,9 @@ class Cell
 
     std::vector<Traversal> m_traversals;
 
-    Side side(const geom::CoordinateXY& c) const;
+    Side getSide(const geom::CoordinateXY& c) const;
 
-    Location location(const geom::CoordinateXY& c) const;
+    Location getLocation(const geom::CoordinateXY& c) const;
 
     /// If no Traversals have been started or the most recent Traversal has been completed,
     /// return a new Traversal. Otherwise, return the most recent Traversal.
