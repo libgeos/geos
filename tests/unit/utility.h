@@ -33,11 +33,13 @@
 #include <fstream>
 #include <sstream>
 
+#ifndef HAVE_STD_FILESYSTEM
 #if defined(__GNUC__) && !defined(__clang__)
 #define HAVE_STD_FILESYSTEM (__GNUC__ > 8)
 #else
 #define HAVE_STD_FILESYSTEM 1
 #endif
+#endif /* ifndef HAVE_STD_FILESYSTEM */
 #if HAVE_STD_FILESYSTEM
 #include <filesystem>
 #endif
