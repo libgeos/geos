@@ -558,3 +558,10 @@ if(PROJECT_IS_TOP_LEVEL)
 
   unset(_is_multi_config_generator)
 endif()  # PROJECT_IS_TOP_LEVEL
+
+include(CheckIncludeFile)
+check_include_file(fenv.h HAVE_FENV_H)
+
+if(HAVE_FENV_H)
+    target_compile_definitions(geos_cxx_flags INTERFACE HAVE_FENV)
+endif()
