@@ -189,13 +189,13 @@ OffsetSegmentGenerator::computeOffsetSegment(const LineSegment& seg, int p_side,
 void
 OffsetSegmentGenerator::addLineEndCap(const Coordinate& p0, const Coordinate& p1, const Coordinate& p2)
 {
-    LineSegment seg1(p0, p1);
-    LineSegment seg2(p2, p1);
+    LineSegment segL(p0, p1);
+    LineSegment segR(p2, p1);
 
     LineSegment offsetL;
-    computeOffsetSegment(seg1, Position::LEFT, distance, offsetL);
+    computeOffsetSegment(segL, Position::LEFT, distance, offsetL);
     LineSegment offsetR;
-    computeOffsetSegment(seg2, Position::RIGHT, distance, offsetR);
+    computeOffsetSegment(segR, Position::RIGHT, distance, offsetR);
 
     switch(bufParams.getEndCapStyle()) {
     case BufferParameters::CAP_ROUND:
