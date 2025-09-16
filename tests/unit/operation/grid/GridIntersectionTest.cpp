@@ -1,10 +1,12 @@
 #include <tut/tut.hpp>
 
+#include <geos/coverage/CoverageValidator.h>
 #include <geos/operation/grid/GridIntersection.h>
 #include <geos/io/WKTReader.h>
 #include <tut/tut_macros.hpp>
 
 #include <utility.h>
+
 
 using namespace geos::operation::grid;
 using geos::geom::CoordinateXY;
@@ -21,6 +23,38 @@ struct test_gridintersectiontest_data : GEOSTestBase {
         Matrix<float> expected{ v };
 
         ensure_equals(actual, expected);
+    }
+
+    static void
+    check_area(const Matrix<float>& actual, const Grid<bounded_extent> ext, const Geometry& input)
+    {
+        double tot_area = 0;
+        for (float f : actual) {
+            tot_area += static_cast<double>(f) * ext.dx()*ext.dy();
+        }
+
+        ensure_equals("Area does not equal input", tot_area, input.getArea(), 1e-6*tot_area);
+    }
+
+    static void
+    check_subdivided_polygon(const Geometry& input, const Geometry& subdivided)
+    {
+        double tot_area = 0;
+
+        std::vector<const Geometry*> components;
+
+        for (size_t i = 0; i < subdivided.getNumGeometries(); i++) {
+            const Geometry* subg = subdivided.getGeometryN(i);
+            components.push_back(subg);
+
+            ensure("subdivided component " + subg->toString() + " is invalid",subg->isValid());
+            tot_area += subg->getArea();
+        }
+
+        ensure("subdivided polygons do not form a valid coverage", geos::coverage::CoverageValidator::isValid(components));
+
+        std::string error = "subdivided polygon area does not match input: " + subdivided.toString();
+        ensure_equals(error, tot_area, input.getArea(), input.getArea() * 1e-14);
     }
 };
 
@@ -646,7 +680,7 @@ void object::test<36>()
 
     auto subdivided = GridIntersection::subdividePolygon(ext, *g, false);
 
-    ensure_equals(g->getArea(), subdivided->getArea());
+    check_subdivided_polygon(*g, *subdivided);
 }
 
 template<>
@@ -662,7 +696,7 @@ void object::test<37>()
 
     auto subdivided = GridIntersection::subdividePolygon(ext, *g, true);
 
-    ensure_equals("", subdivided->getArea(), g->getArea(), 1e-8);
+    check_subdivided_polygon(*g, *subdivided);
 }
 
 template<>
@@ -676,9 +710,8 @@ void object::test<38>()
 
     auto g = wkt_reader_.read("POINT (5 5)")->buffer(20);
 
-    auto subdivided = GridIntersection::subdividePolygon(ext, *g, true);
-
-    ensure_equals("", subdivided->getArea(), g->getArea(), 1e-8);
+    auto subd = GridIntersection::subdividePolygon(ext, *g, true);
+    check_subdivided_polygon(*g, *subd);
 }
 
 template<>
@@ -692,9 +725,8 @@ void object::test<39>()
 
     auto g = GeometryFactory::getDefaultInstance()->toGeometry(&e);
 
-    auto subdivided = GridIntersection::subdividePolygon(ext, *g, false);
-
-    ensure_equals("", subdivided->getArea(), e.getArea(), 1e-8);
+    auto subd = GridIntersection::subdividePolygon(ext, *g, false);
+    check_subdivided_polygon(*g, *subd);
 }
 
 template<>
@@ -708,9 +740,8 @@ void object::test<40>()
 
     auto g = wkt_reader_.read("MULTIPOLYGON (((1 1, 15 1, 15 25, 1 25, 1 1), (12 12, 12 14, 14 14, 14 12, 12 12)), ((16 1, 25 1, 25 25, 16 25, 16 1)))");
 
-    auto subdivided = GridIntersection::subdividePolygon(ext, *g, false);
-
-    ensure_equals("", subdivided->getArea(), g->getArea(), 1e-8);
+    auto subd = GridIntersection::subdividePolygon(ext, *g, false);
+    check_subdivided_polygon(*g, *subd);
 }
 
 template<>
@@ -778,5 +809,92 @@ void object::test<44>()
 
     ensure_THROW(GridIntersection::getIntersectionFractions(ext, *g), std::exception);
 }
+
+template<>
+template<>
+void object::test<45>()
+{
+    set_test_name("subdivide polygon whose edges follow cell boundaries");
+
+    Envelope e(0, 10, 0, 10);
+    Grid<bounded_extent> ext(e, 1, 1);
+
+    auto g = wkt_reader_.read("POLYGON ((4 0, 6 0, 6 2, 8 2, 6 4, 8 4, 5 7, 2 4, 4 4, 2 2, 4 2, 4 0))");
+    auto rci = GridIntersection::getIntersectionFractions(ext, *g);
+    check_area(*rci, ext, *g);
+
+    auto subd = GridIntersection::subdividePolygon(ext, *g, false);
+    check_subdivided_polygon(*g, *subd);
+}
+
+template<>
+template<>
+void object::test<46>()
+{
+    set_test_name("subdivide polygon whose edges follow cell boundaries (2)");
+
+    Envelope e(0, 10, 0, 10);
+    Grid<bounded_extent> ext(e, 1, 1);
+
+    auto g = wkt_reader_.read("POLYGON ((4.5 0, 6.5 0, 6.5 2, 8.5 2, 6.5 4, 8.5 4, 5.5 7, 2.5 4, 4.5 4, 2.5 2, 4.5 2, 4.5 0))");
+
+    auto rci = GridIntersection::getIntersectionFractions(ext, *g);
+    check_area(*rci, ext, *g);
+
+    auto subd = GridIntersection::subdividePolygon(ext, *g, false);
+
+    check_subdivided_polygon(*g, *subd);
+}
+
+template<>
+template<>
+void object::test<47>()
+{
+    set_test_name("valid polygon coverage obtained when a traversed cell covered area ~= cell area");
+
+    Envelope e(-180, 180, -90, 90);
+    Grid<bounded_extent> ext(e, 0.5, 0.5);
+
+    auto g = wkt_reader_.read("Polygon ((-179.99999999999991473 70.99201035500004764, -179.99999999999991473 71.05263157900003534, -179.99999999999991473 71.5366879880000397, -179.86286373599992316 71.53864166900007149, -179.91222083199991744 71.55585358300004373, -179.90074622299991347 71.55849844000005078, -179.79881751199991413 71.56907786700003271, -179.75743567599991479 71.58319733300004373, -179.73595130099991479 71.58641185100003668, -179.7154434889999095 71.58323802300003535, -179.69749915299991017 71.57733795800004373, -179.67870032499990884 71.57367584800005034, -179.61082923099991149 71.58519114800003535, -179.37205969999990884 71.56907786700003271, -179.3267716139999095 71.55548737200007281, -179.30683346299991854 71.55756256700004769, -179.28718014199992581 71.56293366100004505, -179.24286861899992118 71.56907786700003271, -179.20466061099992316 71.58319733300004373, -179.07457434799991347 71.60004303600004505, -178.73471025299991766 71.57037995000004571, -178.39484615799992184 71.54071686400004637, -178.32319088399989937 71.51837799700007281, -178.25963294199991083 71.51068756700004769, -178.30488033799991854 71.51312897300005034, -178.32347571499991545 71.51512278900003139, -178.3415421209999181 71.51752350500004241, -178.32245846299991854 71.50543854400007149, -178.21532141799991678 71.47801341400003139, -178.19347083199991744 71.47662995000007413, -178.14777584499989871 71.48517487200007281, -178.12446041599991986 71.48187897300005034, -178.00572669199991083 71.44863515800005871, -178.01720130099991479 71.44139232000003403, -178.05418860599991149 71.42877838700007942, -178.04706783799991854 71.42572663000004241, -178.03343665299991017 71.4177920590000781, -178.02623450399991611 71.41510651200007942, -178.03010006399992449 71.41347890800005871, -178.03990637899991611 71.40766022300005034, -177.97089596299991854 71.39642975500004241, -177.77985592399991788 71.33319733300004373, -177.71837317599991479 71.30524323100007678, -177.70641028599990818 71.30390045800004373, -177.68211829299991678 71.30487702000004901, -177.67027747299991347 71.30182526200007942, -177.65538489499991215 71.29315827000004901, -177.58759518099992647 71.28595612200007281, -177.5485733709999181 71.29486725500004241, -177.53111731699991083 71.29633209800005034, -177.51410885299992515 71.29340241100004505, -177.4986466139999095 71.28473541900007149, -177.50621497299991347 71.26862213700007942, -177.48700924399992118 71.25873444200004769, -177.45970618399991281 71.24990469000005078, -177.44343014199992581 71.23700592700004108, -177.4459122389999095 71.22264232000003403, -177.45775305899991281 71.20937734600005342, -177.50780188699991413 71.17377350500004241, -177.58116614499991215 71.1476097680000521, -177.63764400899989937 71.1170108090000781, -177.68415279899991788 71.11098867400005474, -177.7519018219999225 71.09296295800004373, -177.81928463399989937 71.08466217700004108, -177.87767493399991281 71.0525576840000781, -177.93049068899992449 71.04144928600004505, -178.20661373599992316 71.03839752800007545, -178.31012936099992316 71.01361725500004241, -178.59302730999991127 70.99732086800005959, -178.87592525899989937 70.98102448100007678, -178.9802953769999192 70.95066966400003139, -179.34211178299992184 70.9080264340000781, -179.33625240799992184 70.91107819200004769, -179.32225501199991413 70.9216983090000781, -179.36449133999991545 70.93024323100007678, -179.45750891799991678 70.91551341400003139, -179.50121008999991545 70.919663804000038, -179.66600501199991413 70.96548086100006003, -179.85338294199991083 70.97943756700004769, -179.88878333199991744 70.99359772300005034, -179.90754146999989871 70.99677155200004108, -179.99999999999991473 70.99201035500004764))");
+
+    auto subd = GridIntersection::subdividePolygon(ext, *g, false);
+
+    check_subdivided_polygon(*g, *subd);
+}
+
+template<>
+template<>
+void object::test<48>()
+{
+    set_test_name("self-touching rings force geometry to be corrected");
+
+    Envelope e(3000000, 10000000, 525000, 6595000);
+    Grid<bounded_extent> ext(e, 10000, 10000);
+
+    auto g = wkt_reader_.read("MultiPolygon (((5196000 2052000, 5184185 2054473, 5182537 2054890, 5182796 2055916, 5182006 2056057, 5182183 2056774, 5181023 2058767, 5180374 2058127, 5180034 2058226, 5179989 2057895, 5179854 2057364, 5179674 2056658, 5179236 2056764, 5179289 2055146, 5180169 2052000, 5175958 2052000, 5175900 2068000, 5196000 2068000, 5196000 2052000),(5183832 2056356, 5183529 2055571, 5184300 2055372, 5184506 2056186, 5183832 2056356),(5179491 2062463, 5179636 2059879, 5180441 2059638, 5180438 2059666, 5180855 2061320, 5180076 2061534, 5180260 2062270, 5179491 2062463),(5181043 2062069, 5181035 2065286, 5180449.50561340618878603 2064531.85610372573137283, 5179685 2063225, 5180476 2063057, 5180260 2062270, 5181043 2062069)),((5180501 2056431, 5180341 2055640, 5179465 2055835, 5179674 2056658, 5180501 2056431)),((5180501 2056431, 5180641 2057164, 5181406 2056969, 5181239 2056302, 5180501 2056431)))	");
+    auto subd = GridIntersection::subdividePolygon(ext, *g, false);
+
+    check_subdivided_polygon(*g, *subd);
+}
+
+template<>
+template<>
+void object::test<49>()
+{
+    set_test_name("island in lake");
+
+    Envelope e(0, 30, 0, 30 );
+    Grid<bounded_extent> ext(e, 10, 10);
+
+    auto g = wkt_reader_.read("MULTIPOLYGON (((5 5, 25 5, 25 25, 5 25, 5 5), (11 11, 11 19, 19 19, 19 11, 11 11)), ((12 12, 14 12, 14 14, 12 14, 12 12)))");
+
+    auto rci = GridIntersection::getIntersectionFractions(ext, *g);
+    check_area(*rci, ext, *g);
+
+    auto subd = GridIntersection::subdividePolygon(ext, *g, false);
+
+    check_subdivided_polygon(*g, *subd);
+}
+
 
 }

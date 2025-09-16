@@ -61,4 +61,13 @@ PerimeterDistance::getPerimeterDistanceCCW(double measure1, double measure2, dou
     return perimeter + measure1 - measure2;
 }
 
+bool PerimeterDistance::isBetweenCCW(double x, double a, double b)
+{
+    if (a < b) {
+        return x <= a || x >= b;
+    }
+    return x <= a && x >= b;
+}
+
+
 }
