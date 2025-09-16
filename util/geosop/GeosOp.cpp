@@ -26,7 +26,9 @@
 #include <geos/io/WKBStreamReader.h>
 #include <geos/io/WKBWriter.h>
 
+#if defined(HAVE_FENV)
 #include <cfenv>
+#endif
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -394,10 +396,13 @@ void GeosOp::run(OpArguments& opArgs) {
     //------------------------
 
     try {
+#if defined(HAVE_FENV)
         std::feclearexcept(FE_ALL_EXCEPT); // clear floating-point status flags
+#endif
 
         execute(op, opArgs);
 
+#if defined(HAVE_FENV)
         // Catch everything except for FE_INEXACT, which is usually harmless
         const int fpexp = std::fetestexcept(FE_ALL_EXCEPT ^ FE_INEXACT);
         if (args.isVerbose && (fpexp != 0)) {
@@ -414,6 +419,7 @@ void GeosOp::run(OpArguments& opArgs) {
                 std::cerr << " FE_UNDERFLOW";
             std::cerr << std::endl;
         }
+#endif
     }
     catch (std::exception &e) {
         std::cerr << "Run-time exception: " << e.what() << std::endl;
