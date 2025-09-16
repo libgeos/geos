@@ -387,7 +387,7 @@ OffsetCurveBuilder::computeLineBufferCurve(const CoordinateSequence& inputPts,
     auto n2 = simp2.size() - 1;
 
     // add line cap for return of line
-    segGen.addLineEndCap(simp1[n1 - 1], simp[n1], simp2[n2 - 1]);
+    segGen.addLineEndCap(simp1[n1 - 1], simp1[n1], simp2[n2 - 1]);
 
     segGen.initSideSegments(simp2[n2], simp2[n2 - 1], Position::LEFT);
     for(std::size_t i = n2 - 1; i > 0; --i) {
