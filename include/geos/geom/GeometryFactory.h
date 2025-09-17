@@ -33,6 +33,7 @@
 #include <vector>
 #include <memory>
 #include <cassert>
+#include <atomic>
 
 namespace geos {
 namespace geom {
@@ -522,7 +523,7 @@ private:
     PrecisionModel precisionModel;
     int SRID;
 
-    mutable int _refCount;
+    mutable std::atomic<int> _refCount;
     bool _autoDestroy;
 
     friend class Geometry;
