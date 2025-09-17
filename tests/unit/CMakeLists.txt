@@ -14,6 +14,35 @@ file(GLOB_RECURSE _sources ${CMAKE_CURRENT_LIST_DIR}/*.cpp CONFIGURE_DEPEND)
 add_executable(test_geos_unit ${_sources})
 unset(_sources)
 
+# test that std::filesystem header actually is there and works
+if(NOT CMAKE_REQUIRED_QUIET)
+  # CMake 3.17+ use CHECK_START/CHECK_PASS/CHECK_FAIL
+  message(STATUS "Checking if compiler supports std::filesystem")
+endif()
+set(_filename "${CMAKE_CURRENT_BINARY_DIR}/has_filesystem.cpp")
+write_file(${_filename} "\
+#include <filesystem>
+int main() {
+  std::filesystem::path pth {\"../\"};
+  return 0;
+}")
+try_compile(HAVE_STD_FILESYSTEM "${CMAKE_BINARY_DIR}/temp" "${_filename}")
+file(REMOVE "${_filename}")
+unset(_filename)
+if(HAVE_STD_FILESYSTEM)
+  if(NOT CMAKE_REQUIRED_QUIET)
+    # CMake 3.17+ use CHECK_START/CHECK_PASS/CHECK_FAIL
+    message(STATUS "Checking if compiler supports std::filesystem - yes")
+  endif()
+  target_compile_definitions(test_geos_unit PRIVATE HAVE_STD_FILESYSTEM)
+else()
+  if(NOT CMAKE_REQUIRED_QUIET)
+    # CMake 3.17+ use CHECK_START/CHECK_PASS/CHECK_FAIL
+    message(STATUS "Checking if compiler supports std::filesystem - no")
+  endif()
+  target_compile_definitions(test_geos_unit PRIVATE HAVE_STD_FILESYSTEM=0)
+endif()
+
 find_package(Threads)
 
 target_link_libraries(test_geos_unit PRIVATE geos geos_c Threads::Threads)
