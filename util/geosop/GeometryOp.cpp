@@ -238,7 +238,7 @@ std::vector<GeometryOpCreator> opRegistry {
     catMetric, "area of geometry",
     Result::typeDouble,
     [](const Geometry& geom) {
-        return new Result( geom.convexHull() );
+        return new Result( geom.getArea() );
     });
 }},
 {"length", [](std::string name) { return GeometryOp::create(name,
