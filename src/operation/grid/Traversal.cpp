@@ -25,7 +25,9 @@ namespace geos::operation::grid {
 void
 Traversal::add(const CoordinateXY& c)
 {
-    m_coords.push_back(c);
+    if (m_coords.empty() || (m_coords.back() != c)) {
+        m_coords.push_back(c);
+    }
 }
 
 bool

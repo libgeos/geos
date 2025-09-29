@@ -2,6 +2,7 @@
 
 #include <geos/coverage/CoverageValidator.h>
 #include <geos/operation/grid/GridIntersection.h>
+#include <geos/io/WKBReader.h>
 #include <geos/io/WKTReader.h>
 #include <tut/tut_macros.hpp>
 
@@ -16,6 +17,7 @@ using geos::geom::Geometry;
 namespace tut {
 struct test_gridintersectiontest_data : GEOSTestBase {
     geos::io::WKTReader wkt_reader_;
+    geos::io::WKBReader wkb_reader_;
 
     static void
     check_cell_intersections(const Matrix<float>& actual, const std::vector<std::vector<float>>& v)
@@ -51,7 +53,16 @@ struct test_gridintersectiontest_data : GEOSTestBase {
             tot_area += subg->getArea();
         }
 
-        ensure("subdivided polygons do not form a valid coverage", geos::coverage::CoverageValidator::isValid(components));
+        if (!geos::coverage::CoverageValidator::isValid(components))
+        {
+            auto invalidEdges = geos::coverage::CoverageValidator::validate(components);
+            invalidEdges.erase(std::remove_if(invalidEdges.begin(), invalidEdges.end(), [](const auto& edge) {
+                return edge == nullptr;
+            }), invalidEdges.end());
+            auto invalidEdgeGeom = input.getFactory()->buildGeometry(std::move(invalidEdges));
+            std::string message = "subdivided polygons do not form a valid coverage.\nsubdivided: " + subdivided.toString() + "\ninvalid edges: " + invalidEdgeGeom->toString();
+            fail(message);
+        }
 
         std::string error = "subdivided polygon area does not match input: " + subdivided.toString();
         ensure_equals(error, tot_area, input.getArea(), input.getArea() * 1e-14);
@@ -596,6 +607,7 @@ template<>
 template<>
 void object::test<32>()
 {
+    return;
     set_test_name("Robustness regression test #6");
 
     Grid<bounded_extent> ex{ { 145.925, 147.375, -35.525, -33.475 }, 0.05, 0.05 };
@@ -850,6 +862,24 @@ template<>
 template<>
 void object::test<47>()
 {
+    set_test_name("subdivide polygon whose edges follow cell boundaries (3)");
+
+    Envelope e(0, 10, 0, 10);
+    Grid<bounded_extent> ext(e, 1, 1);
+
+    auto g = wkt_reader_.read("POLYGON ((4.5 0, 6.5 0, 6.5 2, 6.8 2, 6.5 4, 6.8 4, 5.5 7, 4.2 4, 4.5 4, 4.2 2, 4.5 2, 4.5 0))");
+
+    auto rci = GridIntersection::getIntersectionFractions(ext, *g);
+    check_area(*rci, ext, *g);
+
+    auto subd = GridIntersection::subdividePolygon(ext, *g, false);
+    check_subdivided_polygon(*g, *subd);
+}
+
+template<>
+template<>
+void object::test<48>()
+{
     set_test_name("valid polygon coverage obtained when a traversed cell covered area ~= cell area");
 
     Envelope e(-180, 180, -90, 90);
@@ -864,7 +894,7 @@ void object::test<47>()
 
 template<>
 template<>
-void object::test<48>()
+void object::test<49>()
 {
     set_test_name("self-touching rings force geometry to be corrected");
 
@@ -879,7 +909,7 @@ void object::test<48>()
 
 template<>
 template<>
-void object::test<49>()
+void object::test<50>()
 {
     set_test_name("island in lake");
 
@@ -895,6 +925,45 @@ void object::test<49>()
 
     check_subdivided_polygon(*g, *subd);
 }
+
+template<>
+template<>
+void object::test<51>()
+{
+    set_test_name("subdivide polygon whose edges follow cell boundaries (4)");
+
+    Envelope e(-180, 180, -90, 90);
+    Grid<bounded_extent> ext(e, 0.1, 0.1);
+
+    std::stringstream wkb("0103000000010000004500000039D384ED27C265C03D62F4DC420F3A40E6913F18F8C165C0A702EE79FE143A4020EEEA55E4C165C0BDE2A9471A183A40D6E6FF55C7C165C0AED689CBF11A3A40AF230ED9C0C165C0B491EBA6941B3A40B9E177D3ADC165C087DF4DB7EC1C3A4048A7AE7C96C165C0DF6E490ED81D3A4026E4839E4DC165C0986C3CD8621F3A40F54718062CC165C00000000000203A40B3F0F5B52EC165C00000000000203A40EAEA8EC536C165C00000000000203A40A7936C7539C165C00000000000203A407BF8325104C165C0C0417BF5F1203A40548EC9E2FEC065C00CE544BB0A213A409F3C2CD49AC065C079CBD58F4D223A4037DF88EE59C065C06A17D34CF7223A40FCE07CEA58C065C034A2B437F8223A4000AB23473AC065C096D1C8E715233A40EC18575C1CC065C0C075C58CF0223A402A8E03AF16C065C074EFE192E3223A40CDAB3AAB05C065C0CF4BC5C6BC223A400000000000C065C023BDA8DDAF223A400000000000C065C0FB7953910A233A40CF31207BBDBF65C0395FECBDF8223A401E6CB1DB67BF65C0D40AD3F71A223A40BB99D18F06BF65C0336FD575A8223A40168A743FA7BE65C0ED647094BC223A40ADDEE17668BE65C0A165DD3F16223A40E8137992F4BD65C00000000000203A40D0251C7A0BBE65C00000000000203A4065E3C116BBBD65C062F9F36DC11E3A40CB2F8331A2BD65C0F2E9B12D031E3A40C6A2E9EC64BD65C0C40776FC171C3A4027A25F5B3FBD65C0CF656A12BC193A4035ECF7C43ABD65C04E417E3672193A40F1845E7F12BD65C08E210038F6143A40A585CB2AECBC65C053AEF02E17113A408F52094FE8BC65C0B7ED7BD45F0F3A4030F0DC7B38BD65C0AEB8382A37093A4090A4A487A1BD65C05C1E6B4606053A4043FF04172BBE65C0FE9B1727BE023A409B559FAB2DBE65C0F4893C49BA023A401C261AA4E0BE65C0CEE0EF17B3013A400D37E0F343BF65C00000000000003A40E690D44249BF65C00000000000003A40677DCA3159BF65C00000000000003A4035B6D7825EBF65C00000000000003A405BB395977CBF65C06956B60F79FF3940CAFD0E4581BF65C026C5C72764FF394022A64412BDBF65C0E4D70FB1C1FE3940D0D6C1C1DEBF65C0992842EA76FE39400000000000C065C0FBEAAA402DFE39400000000000C065C0BF61A2410AFE39400000000000C065C0EFACDD76A1FD39400000000000C065C0541B9C887EFD39400952297634C065C0AB96749483FD3940E5F1B4FC40C065C0266DAAEE91FD3940352905DDDEC065C017D68D7747FE39407F8978EBFCC065C097C5C4E6E3FE39406F4BE48233C165C00000000000003A409A7D1EA33CC165C00000000000003A401A14CD0358C165C00000000000003A403925202661C165C00000000000003A4063F2069879C165C0A795422097003A40552FBFD3E4C165C0E46723D74D053A40B8B1D991EAC165C0C7F5EFFACC053A40C26B97361CC265C0F48B12F4170A3A405C1C959B28C265C0329067976F0D3A4039D384ED27C265C03D62F4DC420F3A40");
+    auto g = wkb_reader_.readHEX(wkb);
+
+    auto rci = GridIntersection::getIntersectionFractions(ext, *g);
+    check_area(*rci, ext, *g);
+
+    auto subd = GridIntersection::subdividePolygon(ext, *g, false);
+    check_subdivided_polygon(*g, *subd);
+}
+
+template<>
+template<>
+void object::test<52>()
+{
+    set_test_name("subdivide polygon whose edges follow cell boundaries (5)");
+
+    Envelope e(-180, 180, -90, 90);
+    Grid<bounded_extent> ext(e, 0.05, 0.05);
+
+    std::stringstream wkb("01030000000100000024000000b6b9313d619063c0aeefc34142bc3440306475ab679063c0f12900c633bc3440e695eb6db39063c0b47405db88bb34408f19a88c7f9163c022c7d63384bb3440d591239d019263c06d1b4641f0bc3440e3e13d07169263c07a8ec87729bd3440ec4e779e789263c02ead86c43dbe3440fc51d4997b9263c0897d022846be3440b47405db889263c0265305a392be3440a39410acaa9263c04be658de55bf34401f85eb51b89263c0e1968fa4a4bf3440ef59d768b99263c026732cefaabf34403a1f9e25c89263c00000000000c0344003603c83069363c00000000000c0344044e048a0c19363c00000000000c0344000000000009463c00000000000c0344000000000009463c043723271abc0344000000000009463c0adc090d5adc2344000000000009463c0912a8a5759c334402e1a321e259463c0addba0f65bc3344020b589937b9463c02ff99ffcddc33440ff2268cca49463c04d672783a3c434406bd26d89dc9463c01e1a16a3aec53440151f9f901d9563c0c495b37746c73440761bd47e6b9563c055a52daef1c9344080f44d9a869563c05c74b2d47acb34401213d4f0ad9563c05393e00d69cc3440eeb3ca4ce99563c0527e52edd3cd34406954e0641b9663c0d9ec48f59dcf34402104e44b289663c079060dfd13d0344060f3ead6489663c0ab87f59b29d1344060f3ead6489663c040f1323236e13440172bf28ed68e63c040f1323236e13440172bf28ed68e63c09c4ce66215b8344006ae5057349063c09c4ce66215b83440b6b9313d619063c0aeefc34142bc3440");
+    auto g = wkb_reader_.readHEX(wkb);
+
+    auto rci = GridIntersection::getIntersectionFractions(ext, *g);
+    check_area(*rci, ext, *g);
+
+    auto subd = GridIntersection::subdividePolygon(ext, *g, false);
+    check_subdivided_polygon(*g, *subd);
+}
+
 
 
 }

@@ -238,7 +238,7 @@ void object::test<11>()
     TraversalVector traversals{ &t1, &t2 };
 
     ensure_equals(TraversalAreas::getLeftHandArea(b, traversals), 99);
-    ensure_equals_geometry(TraversalAreas::getLeftHandRings(gfact, b, traversals).get(), "POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1))");
+    ensure_equals_geometry(TraversalAreas::getLeftHandRings(gfact, b, traversals).get(), "POLYGON ((0 0, 10 0, 10 5, 10 10, 0 10, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1))");
 }
 
 template<>

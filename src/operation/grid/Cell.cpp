@@ -22,12 +22,15 @@
 #define DEBUG_CELL 0
 #include <iomanip>
 
+#include "geos/geom/GeometryFactory.h"
+
 using geos::geom::CoordinateXY;
 using geos::geom::Geometry;
 using geos::geom::GeometryFactory;
 
 namespace geos::operation::grid {
 
+// Report where we leave an Envelope e when moving from c1 to c2
 static Crossing
 crossing(const geom::Envelope& e, const CoordinateXY& c1, const CoordinateXY& c2)
 {
@@ -37,6 +40,10 @@ crossing(const geom::Envelope& e, const CoordinateXY& c1, const CoordinateXY& c2
             return Crossing{ Side::TOP, c1.x, e.getMaxY() };
         } else if (c2.y <= e.getMinY()) {
             return Crossing{ Side::BOTTOM, c1.x, e.getMinY() };
+        //} else if (c2.x == e.getMinX()) {
+        //    return Crossing{ Side::LEFT, c2.x, c2.y };
+        //} else if (c2.x == e.getMaxX()) {
+        //    return Crossing{ Side::RIGHT, c2.x, c2.y };
         } else {
             throw std::runtime_error("Never get here.");
         }
@@ -48,6 +55,10 @@ crossing(const geom::Envelope& e, const CoordinateXY& c1, const CoordinateXY& c2
             return Crossing{ Side::RIGHT, e.getMaxX(), c1.y };
         } else if (c2.x <= e.getMinX()) {
             return Crossing{ Side::LEFT, e.getMinX(), c1.y };
+        //} else if (c2.y == e.getMinY()) {
+        //    return Crossing{ Side::BOTTOM, c2.x, c2.y };
+        //} else if (c2.y == e.getMaxY()) {
+        //    return Crossing{ Side::TOP, c2.x, c2.y };
         } else {
             throw std::runtime_error("Never get here");
         }
@@ -205,7 +216,8 @@ Cell::take(const CoordinateXY& c, const CoordinateXY* prev_original, const void*
         return true;
     }
 
-    if (getLocation(c) != Location::OUTSIDE) {
+    const auto loc = getLocation(c);
+    if (loc == Location::INSIDE) { //!= Location::OUTSIDE) {
 #if DEBUG_CELL
         std::cout << "Still in " << m_box << " with " << c << std::endl;
 #endif
@@ -217,6 +229,17 @@ Cell::take(const CoordinateXY& c, const CoordinateXY* prev_original, const void*
         }
 
         return true;
+    } else if (loc == Location::BOUNDARY) {
+        if (c.x == m_box.getMaxX()) {
+            t.exit(c, Side::RIGHT);
+        } else if (c.y == m_box.getMaxY()) {
+            t.exit(c, Side::TOP);
+        } else if (c.x == m_box.getMinX()) {
+            t.exit(c, Side::LEFT);
+        } else {
+            t.exit(c, Side::BOTTOM);
+        }
+        return false;
     }
 
     // We need to calculate the coordinate of the cell exit point using only uninterpolated coordinates.

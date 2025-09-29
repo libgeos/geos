@@ -43,6 +43,8 @@ class Grid
       , m_domain{}
       , m_dx{ dx }
       , m_dy{ dy }
+      , m_xOrig { extent.getMinX() }
+      , m_yOrig { extent.getMaxY() }
       , m_num_rows{ 2 * extent_tag::padding + (extent.getMaxY() > extent.getMinY() ? static_cast<size_t>(std::round(extent.getHeight() / dy)) : 0) }
       , m_num_cols{ 2 * extent_tag::padding + (extent.getMaxX() > extent.getMinX() ? static_cast<size_t>(std::round(extent.getWidth() / dx)) : 0) } {
         static_assert(std::is_same_v<extent_tag, bounded_extent>);
@@ -53,6 +55,8 @@ class Grid
       , m_domain{ domain }
       , m_dx{ dx }
       , m_dy{ dy }
+      , m_xOrig { extent.getMinX() }
+      , m_yOrig { extent.getMaxY() }
       , m_num_rows{ 2 * extent_tag::padding + (extent.getMaxY() > extent.getMinY() ? static_cast<size_t>(std::round(extent.getHeight() / dy)) : 0) }
       , m_num_cols{ 2 * extent_tag::padding + (extent.getMaxX() > extent.getMinX() ? static_cast<size_t>(std::round(extent.getWidth() / dx)) : 0) }
     {
@@ -163,7 +167,7 @@ class Grid
         }
     }
 
-    Grid<extent_tag> shrinkToFit(const geom::Envelope& b) const
+    Grid<extent_tag> shrinkToFit(const geom::Envelope& b, bool calcExtentFromNewGrid=true) const
     {
         if (b.getArea() == 0) {
             return makeEmpty();
@@ -180,8 +184,8 @@ class Grid
         double snapped_xmin = m_extent.getMinX() + static_cast<double>(col0 - extent_tag::padding) * m_dx;
         double snapped_ymax = m_extent.getMaxY() - static_cast<double>(row1 - extent_tag::padding) * m_dy;
 
-        // Make sure x0 and y1 are within the reduced extent. Because of
-        // floating point round-off errors, this is not always the case.
+        // Make sure snapped_xmin and snapped_ymax are within the reduced extent.
+        // Because of floating point round-off errors, this is not always the case.
         if (b.getMinX() < snapped_xmin) {
             snapped_xmin -= m_dx;
             col0--;
@@ -210,14 +214,17 @@ class Grid
             num_cols--;
         }
 
+        const double snapped_xmax = m_extent.getMinX() + static_cast<double>(col0 + num_cols - extent_tag::padding) * m_dx;
+        const double snapped_ymin = m_extent.getMaxY() - static_cast<double>(row1 + num_rows - extent_tag::padding) * m_dy;
+
         // Perform offsets relative to the new xmin, ymax origin
         // points. If this is not done, then floating point roundoff
         // error can cause progressive shrink() calls with the same
         // inputs to produce different results.
         geom::Envelope reduced_box = {
             snapped_xmin,
-            std::max(snapped_xmin + static_cast<double>(num_cols) * m_dx, b.getMaxX()),
-            std::min(snapped_ymax - static_cast<double>(num_rows) * m_dy, b.getMinY()),
+            calcExtentFromNewGrid ? std::max(snapped_xmin + static_cast<double>(num_cols) * m_dx, b.getMaxX()) : snapped_xmax,
+            calcExtentFromNewGrid ? std::min(snapped_ymax - static_cast<double>(num_rows) * m_dy, b.getMinY()) : snapped_ymin,
             snapped_ymax
         };
 
@@ -241,22 +248,35 @@ class Grid
         }
 
         if constexpr (std::is_same_v<extent_tag, bounded_extent>) {
-            Grid<extent_tag> reduced{ reduced_box, m_dx, m_dy };
+            Grid<extent_tag> reduced{reduced_box, m_dx, m_dy};
 
-        if (b.getMinX() < reduced.xmin() || b.getMinY() < reduced.ymin() || b.getMaxX() > reduced.xmax() || b.getMaxY() > reduced.ymax()) {
-            throw std::runtime_error("Shrink operation failed.");
-        }
+            if (b.getMinX() < reduced.xmin() || b.getMinY() < reduced.ymin() || b.getMaxX() > reduced.xmax() || b.
+                getMaxY() > reduced.ymax()) {
+                throw std::runtime_error("Shrink operation failed.");
+            }
 
+            if (!calcExtentFromNewGrid) {
+                reduced.m_xOrig = m_xOrig;
+                reduced.m_yOrig = m_yOrig;
+                reduced.m_skipRows = reduced.getRowOffset(*this);
+                reduced.m_skipCols = reduced.getColOffset(*this);
+            }
             return reduced;
         } else {
-            Grid<extent_tag> reduced{ reduced_box, m_dx, m_dy , m_domain };
+            Grid<extent_tag> reduced{reduced_box, m_dx, m_dy, m_domain};
 
-        if (b.getMinX() < reduced.xmin() || b.getMinY() < reduced.ymin() || b.getMaxX() > reduced.xmax() || b.getMaxY() > reduced.ymax()) {
-            throw std::runtime_error("Shrink operation failed.");
-        }
+            if (b.getMinX() < reduced.xmin() || b.getMinY() < reduced.ymin() || b.getMaxX() > reduced.xmax() || b.
+                getMaxY() > reduced.ymax()) {
+                throw std::runtime_error("Shrink operation failed.");
+            }
 
+            if (!calcExtentFromNewGrid) {
+                reduced.m_xOrig = m_xOrig;
+                reduced.m_yOrig = m_yOrig;
+                reduced.m_skipRows = reduced.getRowOffset(*this);
+                reduced.m_skipCols = reduced.getColOffset(*this);
+            }
             return reduced;
-
         }
     }
 
@@ -281,8 +301,17 @@ class Grid
     double m_dx;
     double m_dy;
 
+    double m_xOrig;
+    double m_yOrig;
+
+    size_t m_skipRows{0};
+    size_t m_skipCols{0};
+
     size_t m_num_rows;
     size_t m_num_cols;
+
+    friend Grid<infinite_extent> make_infinite(const Grid<bounded_extent>&, const geom::Envelope&);
+    friend Grid<bounded_extent> make_finite(const Grid<infinite_extent>&);
 };
 
 Grid<infinite_extent>

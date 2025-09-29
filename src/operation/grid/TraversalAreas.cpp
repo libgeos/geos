@@ -13,6 +13,7 @@
  **********************************************************************/
 
 #include <limits>
+#include <iomanip>
 #include <optional>
 #include <vector>
 
@@ -28,6 +29,8 @@
 
 #include <geos/operation/polygonize/Polygonizer.h>
 #include <geos/operation/grid/TraversalAreas.h>
+
+#include "geos/operation/valid/RepeatedPointRemover.h"
 
 using geos::geom::CoordinateSequence;
 using geos::geom::CoordinateXY;
@@ -229,7 +232,7 @@ visitRings(const Envelope& box, const std::vector<const Traversal*>& traversals,
 {
     std::vector<CoordinateChain> chains;
     chains.reserve(traversals.size() + 4);
-    std::vector<std::vector<CoordinateXY>> coordinateStore;
+    std::deque<std::vector<CoordinateXY>> coordinateStore;
 
     std::vector<CoordinateXY> boxPoints;
 
@@ -239,6 +242,10 @@ visitRings(const Envelope& box, const std::vector<const Traversal*>& traversals,
 
     for (const auto& traversal : traversals) {
         if (!traversal->hasMultipleUniqueCoordinates()) {
+            const auto& coords = traversal->getCoordinates();
+            double m = PerimeterDistance::getPerimeterDistance(box, coords.front());
+            chains.emplace_back(m, m, coords);
+            boxPoints.push_back(coords.front());
             continue;
         }
 
@@ -317,10 +324,18 @@ visitRings(const Envelope& box, const std::vector<const Traversal*>& traversals,
                 }
 
                 if (isEdgeSegment) {
-                    if (isInterior) {
+                    //if (isInterior) {
                         boxPoints.push_back(c);
                         boxPoints.push_back(prev);
-                    }
+                    //}
+                    coordinateStore.emplace_back(std::vector<CoordinateXY>{c});
+                    double m = PerimeterDistance::getPerimeterDistance(box, c);
+                    chains.emplace_back(m, m, coordinateStore.back());
+
+                    coordinateStore.emplace_back(std::vector<CoordinateXY>{prev});
+                    m = PerimeterDistance::getPerimeterDistance(box, prev);
+                    chains.emplace_back(m, m, coordinateStore.back());
+
                 } else {
                     double start = PerimeterDistance::getPerimeterDistance(box, (*coords)[from]);
                     double stop = PerimeterDistance::getPerimeterDistance(box, (*coords)[to]);
@@ -352,7 +367,9 @@ visitRings(const Envelope& box, const std::vector<const Traversal*>& traversals,
 
 #if DEBUG_TRAVERSAL_AREAS
     std::cout << std::endl << std::fixed;
-    std::cout << "Identifying rings in box " << box.getMinX() << "-" << box.getMaxX() << ", " << box.getMinY() << "-" << box.getMaxY() << std::endl;
+    std::cout << std::setprecision(1);
+    std::cout << "Identifying rings in box " << box.getMinX() << ":" << box.getMaxX() << "," << box.getMinY() << ":" << box.getMaxY() << std::endl;
+    std::cout << std::setprecision(18);
     std::cout << "Available chains:" << std::endl;
     for (const auto& chain : chains) {
         for (const auto& coord : chain) {
@@ -395,6 +412,13 @@ visitRings(const Envelope& box, const std::vector<const Traversal*>& traversals,
         } while (chain != first_chain);
 
         coords.push_back(coords[0]);
+#if DEBUG_TRAVERSAL_AREAS
+        std::cout << "Completed chain ";
+        for (const auto& c : coords) {
+            std::cout << c << ", ";
+        }
+        std::cout<< std::endl;
+#endif
 
         if (hasMultipleUniqueCoordinates(coords)) {
             visitor(coords, isCCW, hasMultipleParents);
@@ -471,9 +495,13 @@ TraversalAreas::getLeftHandRings(const GeometryFactory& gfact, const Envelope& b
 
         auto seq = std::make_unique<CoordinateSequence>(0, false, false);
         seq->reserve(coords.size());
-        for (const auto& coord : coords) {
-            seq->add(coord, false);
+        seq->setPoints(coords);
+        if (seq->hasRepeatedPoints()) {
+            seq = valid::RepeatedPointRemover::removeRepeatedPoints(seq.get());
         }
+        //for (const auto& coord : coords) {
+        //    seq->add(coord, false);
+        //}
         auto ring = gfact.createLinearRing(std::move(seq));
 
         if (isCCW) {

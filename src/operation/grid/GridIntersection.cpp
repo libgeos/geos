@@ -51,6 +51,8 @@ GridIntersection::getIntersectionFractions(const Grid<bounded_extent>& raster_gr
 static Cell*
 get_cell(Matrix<std::unique_ptr<Cell>>& cells, const Grid<infinite_extent>& ex, size_t row, size_t col)
 {
+    assert(row < cells.getNumRows());
+    assert(col < cells.getNumCols());
     if (cells(row, col) == nullptr) {
         cells(row, col) = std::make_unique<Cell>(ex.getCellEnvelope(row, col));
     }
@@ -565,9 +567,13 @@ GridIntersection::subdividePolygon(const Grid<bounded_extent>& p_grid, const Geo
 
     const geom::GeometryFactory& gfact = *g.getFactory();
 
-    const auto cropped_grid = p_grid.crop(*g.getEnvelopeInternal());
+    const auto cropped_grid = p_grid.shrinkToFit(p_grid.getExtent().intersection(*g.getEnvelopeInternal()), false);
+    //const auto cropped_grid = p_grid;
 
-    const Grid<infinite_extent> cell_grid = make_infinite(cropped_grid, *g.getEnvelopeInternal());
+    geom::Envelope gridExtent = *g.getEnvelopeInternal();
+    gridExtent.expandBy(1);
+
+    const Grid<infinite_extent> cell_grid = make_infinite(cropped_grid, gridExtent);
     Matrix<std::unique_ptr<Cell>> cells(cell_grid.getNumRows(), cell_grid.getNumCols());
 
     traverse_polygons(cells, cell_grid, g);

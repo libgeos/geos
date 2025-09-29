@@ -283,4 +283,54 @@ void object::test<15>()
     ensure_equals(g2.getColOffset(g1), 20u);
 }
 
+template<>
+template<>
+void object::test<16>()
+{
+    set_test_name("Crop bounded grid while calculating cell boundaries relative to parent");
+
+    double res = 1.0/3601;
+
+    Grid<bounded_extent> grid{global, res, res};
+
+    const auto env0 = grid.getCellEnvelope(30, 30);
+
+    Envelope cropEnv(global.getMinX() + 17*res + 1e-6, global.getMaxX(), global.getMinY(), global.getMaxY() - 17*res - 1e-6);
+
+    auto cropped = grid.shrinkToFit(cropEnv, false);
+
+    const auto env1 = cropped.getCellEnvelope(13, 13);
+
+    ensure_equals("minX", env0.getMinX(), env1.getMinX());
+    ensure_equals("maxX", env0.getMaxX(), env1.getMaxX());
+    ensure_equals("minY", env0.getMinY(), env1.getMinY());
+    ensure_equals("maxY", env0.getMaxY(), env1.getMaxY());
+}
+
+template<>
+template<>
+void object::test<17>()
+{
+    set_test_name("Crop infinite grid while calculating cell boundaries relative to parent");
+
+    double res = 1.0/3601;
+
+    Grid<infinite_extent> grid{global, res, res, global};
+
+    const auto env0 = grid.getCellEnvelope(30, 30);
+
+    Envelope cropEnv(global.getMinX() + 17*res + 1e-6, global.getMaxX(), global.getMinY(), global.getMaxY() - 17*res - 1e-6);
+
+    auto cropped = grid.shrinkToFit(cropEnv, false);
+    auto rowOffset = cropped.getRowOffset(grid);
+    auto colOffset = cropped.getColOffset(grid);
+
+    const auto env1 = cropped.getCellEnvelope(30 - rowOffset, 30 - colOffset);
+
+    ensure_equals("minX", env0.getMinX(), env1.getMinX());
+    ensure_equals("maxX", env0.getMaxX(), env1.getMaxX());
+    ensure_equals("minY", env0.getMinY(), env1.getMinY());
+    ensure_equals("maxY", env0.getMaxY(), env1.getMaxY());
+}
+
 }
