@@ -63,7 +63,7 @@ Grid<infinite_extent>::getCellEnvelope(size_t row, size_t col) const
     }
 
     if (row == 0) {
-        cell_ymax = std::max(xmax() + PADDED_CELL_SIZE, m_domain.getMaxX());
+        cell_ymax = std::max(ymax() + PADDED_CELL_SIZE, m_domain.getMaxY());
     } else if (row == getNumRows() - 1) {
         cell_ymax = ymin(); // because bottom row of regular may have different height from others
     } else {

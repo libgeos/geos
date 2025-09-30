@@ -4,6 +4,7 @@
 
 - Fixes/Improvements:
   - Make floating-point exceptions optional for geosop (GH-1305, Maxim Kochetkov)
+  - GridIntersection: Fix crash for certain polygons outside grid extent (Dan Baston)
 
 
 ## Changes in 3.14.0
