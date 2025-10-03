@@ -261,9 +261,10 @@ void
 CoordinateSequence::closeRing(bool allowRepeated)
 {
     if(!isEmpty() && (allowRepeated || front<CoordinateXY>() != back<CoordinateXY>())) {
-        m_vect.insert(m_vect.end(),
-                      m_vect.begin(),
-                      std::next(m_vect.begin(), stride()));
+        const std::size_t n = stride();
+        const std::size_t old = m_vect.size();
+        m_vect.resize(old + n);
+        std::copy_n(m_vect.data(), n, m_vect.data() + old);
     }
 }
 
