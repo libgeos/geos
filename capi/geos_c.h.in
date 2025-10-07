@@ -4433,7 +4433,7 @@ extern GEOSGeometry GEOS_DLL * GEOSCoverageSimplifyVW(
 
 /**
 * Create a default GEOSCoverageCleanParams object for controlling
-* the way invalid polygon interactions are repaird by \ref GEOSCoverageCleanWithParams.
+* the way invalid polygon interactions are repaired by \ref GEOSCoverageCleanWithParams.
 * \return A newly allocated GEOSCoverageCleanParams. NULL on exception.
 * Caller is responsible for freeing with GEOSCoverageCleanParams_destroy().
 *
