@@ -421,15 +421,15 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - xcode: 15.4
+        - xcode: "15.4"
           cxxstd: 20
           build_type: Release
           runs_on: macos-14
-        - xcode: 16.4
+        - xcode: "16.4"
           cxxstd: 23
           build_type: ASAN
           runs_on: macos-15
-        - xcode: 26.0
+        - xcode: "26.0"
           cxxstd: 23
           build_type: ASAN
           runs_on: macos-26
