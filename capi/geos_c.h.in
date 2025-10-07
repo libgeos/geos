@@ -6707,7 +6707,7 @@ extern GEOSGeometry GEOS_DLL *GEOSGeomFromWKB_buf(const unsigned char *wkb, size
 extern unsigned char GEOS_DLL *GEOSGeomToWKB_buf(const GEOSGeometry* g, size_t *size);
 
 /**
-* \deprecated use \ref GEOSWKBReader and GEOSWKBWriter_readHEX()
+* \deprecated use \ref GEOSWKBReader and GEOSWKBReader_readHEX()
 */
 extern GEOSGeometry GEOS_DLL *GEOSGeomFromHEX_buf(const unsigned char *hex, size_t size);
 
