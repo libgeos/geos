@@ -20,6 +20,7 @@
 #include <geos/operation/overlay/snap/GeometrySnapper.h>
 #include <geos/operation/overlay/snap/LineStringSnapper.h>
 #include <geos/geom/util/GeometryTransformer.h> // inherit. of SnapTransformer
+#include <geos/geom/util/GeometryFixer.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Polygon.h>
 #include <geos/geom/MultiPolygon.h>
@@ -130,12 +131,11 @@ GeometrySnapper::snapToSelf(double snapTolerance, bool cleanResult)
     // (we need a pointer for dynamic polymorphism)
     std::unique_ptr<GeometryTransformer> snapTrans(new SnapTransformer(snapTolerance, *snapPts));
 
-    GeomPtr result = snapTrans->transform(&srcGeom);
+    std::unique_ptr<Geometry> result = snapTrans->transform(&srcGeom);
 
-    if(cleanResult && (dynamic_cast<const Polygon*>(result.get()) ||
-                       dynamic_cast<const MultiPolygon*>(result.get()))) {
-        // TODO: use better cleaning approach
-        result = result->buffer(0);
+    if (cleanResult && (result->getGeometryTypeId() == GEOS_POLYGON ||
+                        result->getGeometryTypeId() == GEOS_MULTIPOLYGON)) {
+        result = geom::util::GeometryFixer::fix(result.get());
     }
 
     return result;
