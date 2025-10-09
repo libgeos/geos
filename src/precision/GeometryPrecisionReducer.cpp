@@ -84,35 +84,6 @@ GeometryPrecisionReducer::reduce(const geom::Geometry& g, const geom::PrecisionM
 
 
 /* private */
-std::unique_ptr<Geometry>
-GeometryPrecisionReducer::fixPolygonalTopology(const Geometry& geom)
-{
-    /*
-     * If precision model was *not* changed, need to flip
-     * geometry to targetPM, buffer in that model, then flip back
-     */
-    std::unique_ptr<geom::Geometry> tmp;
-    GeometryFactory::Ptr tmpFactory;
-
-    const Geometry* geomToBuffer = &geom;
-
-    if(! newFactory) {
-        tmpFactory = createFactory(*geom.getFactory(), targetPM);
-        tmp = tmpFactory->createGeometry(&geom);
-        geomToBuffer = tmp.get();
-    }
-
-    std::unique_ptr<Geometry> bufGeom(geomToBuffer->buffer(0));
-
-    if(! newFactory) {
-        // a slick way to copy the geometry with the original precision factory
-        bufGeom = geom.getFactory()->createGeometry(bufGeom.get());
-    }
-
-    return bufGeom;
-}
-
-/* private */
 GeometryFactory::Ptr
 GeometryPrecisionReducer::createFactory(const GeometryFactory& oldGF,
                                         const PrecisionModel& newPM)

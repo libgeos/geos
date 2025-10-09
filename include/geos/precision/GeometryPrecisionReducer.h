@@ -68,8 +68,6 @@ private:
     bool useAreaReducer;
     bool isPointwise;
 
-    std::unique_ptr<geom::Geometry> fixPolygonalTopology(const geom::Geometry& geom);
-
     geom::GeometryFactory::Ptr createFactory(
         const geom::GeometryFactory& oldGF,
         const geom::PrecisionModel& newPM);
