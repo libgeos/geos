@@ -361,6 +361,43 @@ void object::test<22>()
         );
 }
 
+/// Multipoint overlapping
+template<>
+template<>
+void object::test<25>()
+{
+    checkClipByRectIdentical(
+        "MULTIPOINT((1 1),(6 4),(5 4))",
+        0, 0, 5, 5,
+        "POINT(1 1)"
+        );
+}
+
+
+/// Multipoint overlapping
+template<>
+template<>
+void object::test<26>()
+{
+    checkClipByRectIdentical(
+        "MULTIPOINT((1 1),(3 4),(5 4))",
+        0, 0, 5, 5,
+        "MULTIPOINT((1 1),(3 4))"
+        );
+}
+
+/// Linestring overlapping
+template<>
+template<>
+void object::test<27>()
+{
+    checkClipByRectIdentical(
+        "LINESTRING(0 0,1 1,3 4,5 4)",
+        0, 0, 5, 5,
+        "LINESTRING(0 0,1 1,3 4,5 4)"
+        );
+}
+
 
 } // namespace tut
 
