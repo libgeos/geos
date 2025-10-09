@@ -21,6 +21,7 @@
 #include <cmath>
 
 #include <geos/geom/util/Densifier.h>
+#include <geos/geom/util/GeometryFixer.h>
 #include <geos/geom/CoordinateList.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
@@ -95,7 +96,7 @@ Densifier::DensifyTransformer::createValidArea(const Geometry* roughAreaGeom)
 {
     if (roughAreaGeom->isValid())
         return Geometry::Ptr(roughAreaGeom->clone());
-    return roughAreaGeom->buffer(0.0);
+    return GeometryFixer::fix(roughAreaGeom);
 }
 
 /* util::Densifier */
