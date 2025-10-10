@@ -6,6 +6,7 @@
 #include <variant>
 
 using geos::algorithm::CircularArcIntersector;
+using geos::algorithm::Orientation;
 using geos::geom::CoordinateXY;
 using geos::geom::CircularArc;
 using geos::MATH_PI;
@@ -14,8 +15,7 @@ namespace tut {
 
 struct test_circulararcintersector_data {
 
-    using Arc = std::array<CoordinateXY, 3>;
-    using ArcOrPoint = std::variant<CoordinateXY, Arc>;
+    using ArcOrPoint = std::variant<CoordinateXY, CircularArc>;
 
     static std::string to_string(CircularArcIntersector::intersection_type t)
     {
@@ -37,11 +37,6 @@ struct test_circulararcintersector_data {
     static std::string toWKT(const CoordinateXY& pt)
     {
         return "POINT (" + pt.toString() + ")";
-    }
-
-    static std::string toWKT(const Arc& arc)
-    {
-        return "CIRCULARSTRING (" + arc[0].toString() + ", " + arc[1].toString() + ", " + arc[2].toString() + ")";
     }
 
     static std::string toWKT(const CircularArc& arc)
@@ -88,22 +83,12 @@ struct test_circulararcintersector_data {
         CircularArcIntersector cai;
         cai.intersects(a0, a1);
 
-        checkIntersectionResult(cai, result, p0, p1);
-    }
-
-    static void checkIntersectionResult(const CircularArcIntersector& cai,
-                                        CircularArcIntersector::intersection_type result,
-                                        ArcOrPoint p0,
-                                        ArcOrPoint p1)
-    {
-        ensure_equals("incorrect intersection type", to_string(cai.getResult()), to_string(result));
+        ensure_equals("incorrect intersection type between " + toWKT(a0) + " and " + toWKT(a1), to_string(cai.getResult()), to_string(result));
 
         std::vector<CoordinateXY> expectedPoints;
-        std::vector<Arc> expectedArcs;
+        std::vector<CircularArc> expectedArcs;
 
-        for (const auto& intersection : {
-                    p0, p1
-                }) {
+        for (const auto& intersection : { p0, p1 }) {
             if (std::holds_alternative<CoordinateXY>(intersection)) {
                 const CoordinateXY& pt = std::get<CoordinateXY>(intersection);
                 if (!pt.isNull()) {
@@ -111,12 +96,12 @@ struct test_circulararcintersector_data {
                 }
             }
             else {
-                expectedArcs.push_back(std::get<Arc>(intersection));
+                expectedArcs.push_back(std::get<CircularArc>(intersection));
             }
         }
 
         std::vector<CoordinateXY> actualPoints;
-        std::vector<Arc> actualArcs;
+        std::vector<CircularArc> actualArcs;
 
         for (std::uint8_t i = 0; i < cai.getNumPoints(); i++) {
             actualPoints.push_back(cai.getPoint(i));
@@ -126,10 +111,27 @@ struct test_circulararcintersector_data {
             actualArcs.push_back(cai.getArc(i));
         }
 
+        auto compareArcs = [](const CircularArc& a, const CircularArc& b) {
+            int cmp;
+            cmp = a.p0.compareTo(b.p0);
+            if (cmp != 0) {
+                return cmp == -1;
+            }
+            cmp = a.p2.compareTo(b.p2);
+            if (cmp != 0) {
+                return cmp == -1;
+            }
+            cmp = a.getCenter().compareTo(b.getCenter());
+            if (cmp != 0) {
+                return cmp == -1;
+            }
+            return a.getOrientation() < b.getOrientation();
+        };
+
         std::sort(actualPoints.begin(), actualPoints.end());
-        std::sort(actualArcs.begin(), actualArcs.end());
+        std::sort(actualArcs.begin(), actualArcs.end(), compareArcs);
         std::sort(expectedPoints.begin(), expectedPoints.end());
-        std::sort(expectedArcs.begin(), expectedArcs.end());
+        std::sort(expectedArcs.begin(), expectedArcs.end(), compareArcs);
 
         bool equal = true;
         if (actualPoints.size() != expectedPoints.size()) {
@@ -148,10 +150,24 @@ struct test_circulararcintersector_data {
                 }
             }
             for (std::size_t i = 0; i < actualArcs.size(); i++) {
-                for (std::size_t j = 0; j < actualArcs[i].size(); j++) {
-                    if (actualArcs[i][j].distance(expectedArcs[i][j]) > eps) {
-                        equal = false;
-                    }
+                if (actualArcs[i].getOrientation() != expectedArcs[i].getOrientation()) {
+                    equal = false;
+                }
+
+                if (std::abs(actualArcs[i].getRadius() - expectedArcs[i].getRadius()) > eps) {
+                    equal = false;
+                }
+
+                if (actualArcs[i].getCenter().distance(expectedArcs[i].getCenter()) > eps) {
+                    equal = false;
+                }
+
+                if (actualArcs[i].p0.distance(expectedArcs[i].p0) > eps) {
+                    equal = false;
+                }
+
+                if (actualArcs[i].p2.distance(expectedArcs[i].p2) > eps) {
+                    equal = false;
                 }
             }
         }
@@ -323,7 +339,7 @@ void object::test<10>()
     checkIntersection({-5, 0}, {0, 5}, {5, 0}, // CW
     {-4, 3}, {0, 5}, {4, 3}, // CW
     CircularArcIntersector::COCIRCULAR_INTERSECTION,
-    Arc{{{-4, 3}, {0, 5}, {4, 3}}}); // CW
+    CircularArc{{-4, 3}, {0, 5}, {4, 3}}); // CW
 }
 
 template<>
@@ -335,7 +351,7 @@ void object::test<11>()
     checkIntersection({5, 0},  {0, 5}, {-5, 0}, // CCW
     {-4, 3}, {0, 5}, {4, 3},  // CW
     CircularArcIntersector::COCIRCULAR_INTERSECTION,
-    Arc{{{4, 3}, {0, 5}, {-4, 3}}}); // CCW
+    CircularArc{{4, 3}, {0, 5}, {-4, 3}}); // CCW
 }
 
 template<>
@@ -347,7 +363,7 @@ void object::test<12>()
     checkIntersection({-5, 0}, {0, 5}, {5, 0},
     {5, 0}, {0, -5}, {0, 5},
     CircularArcIntersector::COCIRCULAR_INTERSECTION,
-    Arc{{{-5, 0}, {-5*std::sqrt(2)/2, 5*std::sqrt(2)/2}, {0, 5}}},
+    CircularArc{{-5, 0}, {-5*std::sqrt(2)/2, 5*std::sqrt(2)/2}, {0, 5}},
     CoordinateXY{5, 0});
 }
 
@@ -360,8 +376,8 @@ void object::test<13>()
     checkIntersection({-5, 0}, {0, 5}, {5, 0},
     {3, 4}, {0, -5}, {-3, 4},
     CircularArcIntersector::COCIRCULAR_INTERSECTION,
-    Arc{{{3, 4}, {4.4721359549995796, 2.2360679774997898}, {5, 0}}},
-    Arc{{{-5, 0}, {-4.4721359549995796, 2.2360679774997907}, {-3, 4}}});
+    CircularArc{{3, 4}, {4.4721359549995796, 2.2360679774997898}, {5, 0}},
+    CircularArc{{-5, 0}, {-4.4721359549995796, 2.2360679774997907}, {-3, 4}});
 }
 
 template<>
@@ -488,21 +504,6 @@ void object::test<37>()
                       CoordinateXY{0, 0});
 }
 
-#if 0
-// failed assertion: Values are not equal: expected `POINT (0 0)` actual `POINT (-5.4568517953157425e-06 5.4568517953157425e-06)`
-template<>
-template<>
-void object::test<38>()
-{
-    set_test_name("intersection between a segment and a nearly-degenerate arc (radius ~= 2e6)");
-
-    checkIntersection({-5, -5}, {0, 0}, {5, 5 + 1e-9},
-                      {-5, 5}, {5, -5},
-                      CircularArcIntersector::ONE_POINT_INTERSECTION,
-                      CoordinateXY{0, 0});
-}
-#endif
-
 template<>
 template<>
 void object::test<38>()
@@ -624,9 +625,241 @@ void object::test<39>()
     checkIntersection({0, 5}, {5, 0}, {0, -5},
                       {4, 3}, {5, 0}, {4, -3},
                       CircularArcIntersector::COCIRCULAR_INTERSECTION,
-                      Arc{{{4, 3}, {5, 0}, {4, -3}}});
+                      CircularArc{{4, 3}, {5, 0}, {4, -3}});
 }
 
+// failed assertion: Values are not equal: expected `POINT (0 0)` actual `POINT (-5.4568517953157425e-06 5.4568517953157425e-06)`
+template<>
+template<>
+void object::test<40>()
+{
+    set_test_name("intersection between a segment and a nearly-degenerate arc (radius ~= 2e6)");
 
+    checkIntersection({-5, -5}, {0, 0}, {5, 5 + 1e-9},
+                      {-5, 5}, {5, -5},
+                      CircularArcIntersector::ONE_POINT_INTERSECTION,
+                      CoordinateXY{0, 0});
+}
+
+template<>
+template<>
+void object::test<41>()
+{
+    set_test_name("IOX-ILI: testFastGerade");
+
+    checkIntersection({611770.424, 234251.322}, {611770.171, 234250.059}, {611769.918, 234248.796},
+    {611613.84, 233467.819},
+    {611610.392, 233468.995},
+    CircularArcIntersector::NO_INTERSECTION);
+}
+
+template<>
+template<>
+void object::test<42>()
+{
+    set_test_name("IOX-ILI: testCircleCircleEndptTolerance");
+    // two arcs touching at endpoints
+
+    checkIntersection({645175.553, 248745.374}, { 645092.332, 248711.677}, { 645009.11, 248677.98},
+                      {645009.11, 248677.98}, {644926.69, 248644.616}, { 644844.269, 248611.253},
+                       CircularArcIntersector::ONE_POINT_INTERSECTION,
+                      CoordinateXY{645009.110, 248677.980});
+}
+
+template<>
+template<>
+void object::test<43>()
+{
+    set_test_name("IOX-ILI: overlayTwoARCS_SameEndPoints_SameDirection");
+    // two arcs with same arcPoint and radius.
+    // startPoints and endPoints are same. lines are in same direction
+
+    checkIntersection(
+    {100.0, 100.0},{120,150.0},{100.0,200.0},
+    {100.0, 100.0},{120,150.0},{100.0,200.0},
+    CircularArcIntersector::COCIRCULAR_INTERSECTION,
+    CircularArc{{100.0, 100.0}, {120, 150}, {100, 200}});
+}
+
+template<>
+template<>
+void object::test<44>()
+{
+    set_test_name("IOX-ILI: overlayTwoARCS_DifferentArcPointOnSameArcLine_SameDirection");
+	// two arcs with different arcPoint (on same arcLine) and same radius length.
+	// startPoints and endPoints are same. lines are in same direction.
+
+    checkIntersection(
+    {0.0, 10.0},{4.0,8.0},{0.0,0.0},
+    {0.0, 10.0},{4.0,2.0},{0.0,0.0},
+    CircularArcIntersector::COCIRCULAR_INTERSECTION,
+    CircularArc{{0, 10}, {5, 5}, {0, 0}});
+}
+
+template<>
+template<>
+void object::test<45>()
+{
+    set_test_name("IOX-ILI: overlayTwoARCS_SameArcPointOnSameArcLine_OneArcLineIsLonger");
+    // two arcs with same arcPoint (on same arcLine) and same radius length.
+    // one arc line is longer than the other arc line.
+    // startPoints is same, endPoints are different. lines are in same direction.
+
+    checkIntersection(
+    {0.0, 10.0},{4.0,8.0},{0.0,0.0},
+    {0.0, 10.0},{4.0,8.0},{4.0,2.0},
+    CircularArcIntersector::COCIRCULAR_INTERSECTION,
+    CircularArc{{0, 10}, {4, 2}, {0, 5}, 5, Orientation::CLOCKWISE});
+}
+
+template<>
+template<>
+void object::test<46>() 
+{
+    set_test_name("IOX-ILI: overlayTwoARCS_SameEndPoints_OtherDirection");
+    // two arcs with same arcPoint and radius
+    // startPoint1 is equal to endPoint2, startPoint2 is equal to endPoint1.
+
+    checkIntersection(
+        CircularArc({100.0, 100.0}, {80.0, 150.0}, {100.0, 200.0}),
+        CircularArc({100.0, 200.0}, {80.0, 150.0}, {100.0, 100.0}),
+        CircularArcIntersector::COCIRCULAR_INTERSECTION,
+        CircularArc({100.0, 100.0}, {80.0, 150.0}, {100.0, 200.0}));
+}
+
+template<>
+template<>
+void object::test<47>() 
+{
+    set_test_name("IOX-ILI: overlayTwoARCS_DifferentStartPoints_SameDirection_DifferentLength");
+    // two arcs. ArcPoint is equal. different angle.
+    // startPoints are different. endPoints are same.
+    CircularArc a({70.0, 60.0}, {50.0, 100.0}, {60.0, 130.0});
+    CircularArc b({60.0, 70.0}, {50.0, 100.0}, {60.0, 130.0});
+
+    checkIntersection(a, b,
+        CircularArcIntersector::COCIRCULAR_INTERSECTION,
+        CircularArc({60, 70}, {60, 130}, a.getCenter(), a.getRadius(), a.getOrientation()));
+}
+
+template<>
+template<>
+void object::test<48>()
+{
+    set_test_name("IOX-ILI: overlayTwoARCS_DifferentStartEndPoints_OtherDirection_DifferentLength");
+    // Two cocircular arcs with opposite orientation.
+    // ArcPoint is equal.
+    // startPoints are different. endPoints are different.
+
+    CircularArc a({70.0,  60.0}, {50.0, 100.0}, {70.0, 140.0});
+    CircularArc b({60.0, 130.0}, {50.0, 100.0}, {60.0,  70.0});
+
+    checkIntersection(a, b, 
+            CircularArcIntersector::COCIRCULAR_INTERSECTION,
+            CircularArc({60, 70}, {60, 130}, a.getCenter(), a.getRadius(), a.getOrientation()));
+
+}
+
+template<>
+template<>
+void object::test<49>()
+{
+    set_test_name("IOX-ILI: overlayTwoARCS_DifferentEndPoints_SameDirection_DifferentLength");
+    // Two arcs with same orientation. 
+    // ArcPoint is equal.
+    // startPoints are same, endpoints are different
+
+    CircularArc a({70.0, 60.0}, {50.0, 100.0}, {70.0, 140.0});
+    CircularArc b({70.0, 60.0}, {50.0, 100.0}, {60.0, 130.0});
+
+    checkIntersection(a, b,
+        CircularArcIntersector::COCIRCULAR_INTERSECTION, b);
+}
+
+template<>
+template<>
+void object::test<50>()
+{
+    set_test_name("IOX-ILI: overlayTwoARCS_DifferentEndPoints_OtherDirection_DifferentLength");
+    // Two arcs with opposite orientation.
+    // ArcPoint is equal.
+    // One endpoint is the same, one is different.
+
+
+    CircularArc a({70.0,  60.0}, {50.0, 100.0}, {70.0, 140.0});
+    CircularArc b({60.0, 130.0}, {50.0, 100.0}, {70.0,  60.0});
+
+    checkIntersection(a, b,
+        CircularArcIntersector::COCIRCULAR_INTERSECTION,
+        CircularArc({70, 60}, {60, 130}, a.getCenter(), a.getRadius(), a.getOrientation()));
+}
+
+template<>
+template<>
+void object::test<51>()
+{
+    set_test_name("IOX-ILI: twoARCS_SameRadiusAndCenter_DontOverlay");
+    // two arcs with same center and radius that don't touch each other.
+
+    CircularArc a({70.0,  60.0}, {50.0,  100.0}, {70.0,  140.0});
+    CircularArc b({140.0, 70.0}, {150.0, 100.0}, {140.0, 130.0});
+
+    checkIntersection(a, b, CircularArcIntersector::NO_INTERSECTION);
+}
+
+template<>
+template<>
+void object::test<52>()
+{
+    set_test_name("IOX-ILI: twoARCS_SameRadiusAndCenter_Touch_DontOverlay");
+    // Two arcs with same radius and center that touch at the endpoints
+
+    CircularArc a({50.0,  100.0}, {100.0, 150.0}, {150.0, 100.0});
+    CircularArc b({150.0, 100.0}, {100.0, 50.0},  {50.0,  100.0});
+
+    checkIntersection(a, b, CircularArcIntersector::TWO_POINT_INTERSECTION, a.p0, a.p2);
+}
+
+template<>
+template<>
+void object::test<53>()
+{
+    set_test_name("IOX-ILI: twoARCS_SameRadiusAndCenter_Touch_DontOverlay_real");
+
+    CircularArc a({2654828.912, 1223354.671}, {2654829.982, 1223353.601}, {2654831.052, 1223354.671});
+    CircularArc b({2654831.052, 1223354.671}, {2654829.982, 1223355.741}, {2654828.912, 1223354.671});
+
+    checkIntersection(a, b, CircularArcIntersector::TWO_POINT_INTERSECTION, a.p0, a.p2);
+}
+
+template<>
+template<>
+void object::test<54>()
+{
+    set_test_name("IOX-ILI: twoARCS_intersect0");
+    // https://github.com/claeis/ilivalidator/issues/186
+
+    CircularArc a({2658317.225, 1250832.586}, {2658262.543, 1250774.465}, {2658210.528, 1250713.944});
+    CircularArc b({2658211.456, 1250715.072}, {2658161.386, 1250651.279}, {2658114.283, 1250585.266});
+
+    // An intersection is visually apparent in QGIS, but CGAL 5.6 reports no intersections...
+    checkIntersection(a, b, CircularArcIntersector::NO_INTERSECTION);
+}
+
+template<>
+template<>
+void object::test<55>()
+{
+    set_test_name("IOX-ILI: twoARCS_issue308");
+    // https://github.com/claeis/ili2db/issues/308
+    
+    CircularArc a({2653134.354, 1227788.188}, {2653137.455, 1227797.289}, {2653140.555, 1227806.391});
+    CircularArc b({2653135.557, 1227789.0},   {2653134.819, 1227788.796}, {2653134.354, 1227788.188});
+
+    // expected result calculated with CGAL 5.6
+    checkIntersection(a, b,
+        CircularArcIntersector::ONE_POINT_INTERSECTION,
+        CoordinateXY{2653134.35399999982, 1227788.18800000008});
+}
 
 }

@@ -64,10 +64,12 @@ CircularArcIntersector::circleIntersects(const CoordinateXY& center, double r, c
         double B = -2*x0 + 2*m*b - 2*m*y0;
         double C = x0*x0 + b*b - 2*b*y0 + y0*y0 - r*r;
 
-        // TODO robust quadratic equation
         double d = std::sqrt(B*B - 4*A*C);
         double X1 = (-B + d)/(2*A);
         double X2 = (-B - d)/(2*A);
+
+        // TODO use robust quadratic solver such as https://github.com/archermarx/quadratic ?
+        // auto [X1, X2] = quadratic::solve(A, B, C);
 
         isect0 = {X1, m* X1 + b};
         isect1 = {X2, m* X2 + b};
@@ -202,11 +204,11 @@ CircularArcIntersector::intersects(const CircularArc& arc1, const CircularArc& a
 
         bool resultArcIsCCW = true;
 
-        if (arc1.orientation() != Orientation::COUNTERCLOCKWISE) {
+        if (arc1.getOrientation() != Orientation::COUNTERCLOCKWISE) {
             std::swap(ap0, ap1);
             resultArcIsCCW = false;
         }
-        if (arc2.orientation() != Orientation::COUNTERCLOCKWISE) {
+        if (arc2.getOrientation() != Orientation::COUNTERCLOCKWISE) {
             std::swap(bp0, bp1);
         }
         ap0 = Angle::normalizePositive(ap0);
@@ -230,10 +232,10 @@ CircularArcIntersector::intersects(const CircularArc& arc1, const CircularArc& a
             }
             else {
                 if (resultArcIsCCW) {
-                    intArc[nArc++] = CircularArcs::createArc(c1, r1, start, end, true);
+                    intArc[nArc++] = CircularArc(start, end, c1, r1, Orientation::COUNTERCLOCKWISE);
                 }
                 else {
-                    intArc[nArc++] = CircularArcs::createArc(c1, r1, end, start, false);
+                    intArc[nArc++] = CircularArc(end, start, c1, r1, Orientation::CLOCKWISE);
                 }
             }
         }
@@ -247,10 +249,10 @@ CircularArcIntersector::intersects(const CircularArc& arc1, const CircularArc& a
             }
             else {
                 if (resultArcIsCCW) {
-                    intArc[nArc++] = CircularArcs::createArc(c1, r1, start, end, true);
+                    intArc[nArc++] = CircularArc(start, end, c1, r1, Orientation::COUNTERCLOCKWISE);
                 }
                 else {
-                    intArc[nArc++] = CircularArcs::createArc(c1, r1, end, start, false);
+                    intArc[nArc++] = CircularArc(end, start, c1, r1, Orientation::CLOCKWISE);
                 }
             }
         }

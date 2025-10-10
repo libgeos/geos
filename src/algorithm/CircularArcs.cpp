@@ -27,14 +27,7 @@ namespace algorithm {
 std::array<geom::CoordinateXY, 3>
 CircularArcs::createArc(const geom::CoordinateXY& center, double radius, double start, double end, bool ccw)
 {
-    if (!ccw) {
-        std::swap(start, end);
-    }
-
-    double mid = (start + end) / 2;
-    if (!Angle::isWithinCCW(mid, start, end)) {
-        mid += MATH_PI;
-    }
+    double mid = getMidpointAngle(start, end, ccw);
 
     if (ccw) {
         return {
@@ -49,6 +42,36 @@ CircularArcs::createArc(const geom::CoordinateXY& center, double radius, double 
             createPoint(center, radius, start),
         };
     }
+}
+
+CoordinateXY
+CircularArcs::getMidpoint(const CoordinateXY& p0, const CoordinateXY& p2, const CoordinateXY& center, double radius, bool isCCW)
+{
+    double start = getAngle(p0, center);
+    double stop = getAngle(p2, center);
+    double mid = getMidpointAngle(start, stop, isCCW);
+    return createPoint(center, radius, mid);
+}
+
+double
+CircularArcs::getAngle(const CoordinateXY& p, const CoordinateXY& center)
+{
+    return std::atan2(p.y - center.y, p.x - center.x);
+}
+
+double
+CircularArcs::getMidpointAngle(double theta0, double theta2, bool isCCW)
+{
+    if (!isCCW) {
+        return getMidpointAngle(theta2, theta0, true);
+    }
+
+    double mid = (theta0 + theta2) / 2;
+    if (!Angle::isWithinCCW(mid, theta0, theta2)) {
+        mid += MATH_PI;
+    }
+
+    return mid;
 }
 
 CoordinateXY
