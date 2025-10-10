@@ -47,7 +47,7 @@ public:
         return intPt[i];
     }
 
-    const std::array<CoordinateXY, 3>& getArc(std::uint8_t i) const
+    const CircularArc& getArc(std::uint8_t i) const
     {
         return intArc[i];
     }
@@ -75,7 +75,7 @@ public:
 
     /// Determines whether and where two circular arcs intersect.
     ///
-    ///	Sets the appropriate value of intesection_type and stores the intersection
+    ///	Sets the appropriate value of intersection_type and stores the intersection
     /// points and/or arcs, if any.
     void intersects(const CircularArc& arc1, const CircularArc& arc2);
 
@@ -87,8 +87,8 @@ private:
     void intersects(const CoordinateXY& p0, const CoordinateXY& p1, const CoordinateXY& q0, const CoordinateXY& q1);
 
     std::array<CoordinateXY, 2> intPt;
-    std::array<std::array<CoordinateXY, 3>, 2> intArc;
-    intersection_type result;
+    std::array<CircularArc, 2> intArc;
+    intersection_type result = NO_INTERSECTION;
     std::uint8_t nPt = 0;
     std::uint8_t nArc = 0;
 

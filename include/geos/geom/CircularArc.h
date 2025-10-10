@@ -31,6 +31,8 @@ public:
 
     using CoordinateXY = geom::CoordinateXY;
 
+    CircularArc() : CircularArc({0, 0}, {0, 0}, {0, 0}) {}
+
     CircularArc(const CoordinateXY& q0, const CoordinateXY& q1, const CoordinateXY& q2)
         : p0(q0)
         , p1(q1)
@@ -40,15 +42,39 @@ public:
         , m_orientation_known(false)
     {}
 
-    const CoordinateXY& p0;
-    const CoordinateXY& p1;
-    const CoordinateXY& p2;
+    CircularArc(double theta0, double theta2, const CoordinateXY& center, double radius, int orientation)
+        : p0(algorithm::CircularArcs::createPoint(center, radius, theta0)),
+          p1(algorithm::CircularArcs::createPoint(center, radius, algorithm::CircularArcs::getMidpointAngle(theta0, theta2, orientation==algorithm::Orientation::COUNTERCLOCKWISE))),
+          p2(algorithm::CircularArcs::createPoint(center, radius, theta2)),
+          m_center(center),
+          m_radius(radius),
+          m_orientation(orientation),
+          m_center_known(true),
+          m_radius_known(true),
+          m_orientation_known(true)
+    {}
+
+    CircularArc(const CoordinateXY& q0, const CoordinateXY& q2, const CoordinateXY& center, double radius, int orientation)
+        : p0(q0),
+          p1(algorithm::CircularArcs::getMidpoint(q0, q2, center, radius, orientation==algorithm::Orientation::COUNTERCLOCKWISE)),
+          p2(q2),
+          m_center(center),
+          m_radius(radius),
+          m_orientation(orientation),
+          m_center_known(true),
+          m_radius_known(true),
+          m_orientation_known(true)
+    {}
+
+    CoordinateXY p0;
+    CoordinateXY p1;
+    CoordinateXY p2;
 
     /// Return the orientation of the arc as one of:
     /// - algorithm::Orientation::CLOCKWISE,
     /// - algorithm::Orientation::COUNTERCLOCKWISE
     /// - algorithm::Orientation::COLLINEAR
-    int orientation() const {
+    int getOrientation() const {
         if (!m_orientation_known) {
             m_orientation = algorithm::Orientation::index(p0, p1, p2);
             m_orientation_known = true;
@@ -100,7 +126,7 @@ public:
         auto t0 = theta0();
         auto t2 = theta2();
 
-        if (orientation() == algorithm::Orientation::COUNTERCLOCKWISE) {
+        if (getOrientation() == algorithm::Orientation::COUNTERCLOCKWISE) {
             std::swap(t0, t2);
         }
 
@@ -135,12 +161,12 @@ public:
 
     /// Return the angle of p0
     double theta0() const {
-        return std::atan2(p0.y - getCenter().y, p0.x - getCenter().x);
+        return algorithm::CircularArcs::getAngle(p0, getCenter());
     }
 
     /// Return the angle of p2
     double theta2() const {
-        return std::atan2(p2.y - getCenter().y, p2.x - getCenter().x);
+        return algorithm::CircularArcs::getAngle(p2, getCenter());
     }
 
     /// Check to see if a coordinate lies on the arc
@@ -158,13 +184,13 @@ public:
             return true;
         }
 
-        auto dist = std::abs(q.distance(getCenter()) - getRadius());
+        //auto dist = std::abs(q.distance(getCenter()) - getRadius());
 
-        if (dist > 1e-8) {
-            return false;
-        }
+        //if (dist > 1e-8) {
+        //    return false;
+        //}
 
-        if (triangulate::quadedge::TrianglePredicate::isInCircleNormalized(p0, p1, p2, q) != geom::Location::BOUNDARY) {
+        if (triangulate::quadedge::TrianglePredicate::isInCircleRobust(p0, p1, p2, q) != geom::Location::BOUNDARY) {
             return false;
         }
 
@@ -180,7 +206,7 @@ public:
             return true;
         }
 
-        if (orientation() == algorithm::Orientation::COUNTERCLOCKWISE) {
+        if (getOrientation() == algorithm::Orientation::COUNTERCLOCKWISE) {
             std::swap(t0, t2);
         }
 
@@ -204,7 +230,7 @@ public:
         auto quad = geom::Quadrant::quadrant(getCenter(), q);
         bool isUpward;
 
-        if (orientation() == algorithm::Orientation::CLOCKWISE) {
+        if (getOrientation() == algorithm::Orientation::CLOCKWISE) {
             isUpward = (quad == geom::Quadrant::SW || quad == geom::Quadrant::NW);
         } else {
             isUpward = (quad == geom::Quadrant::SE || quad == geom::Quadrant::NE);
