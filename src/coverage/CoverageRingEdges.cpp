@@ -13,6 +13,7 @@
  *
  **********************************************************************/
 
+#include <map>
 #include <unordered_map>
 
 #include <geos/coverage/CoverageBoundarySegmentFinder.h>
