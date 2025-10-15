@@ -48,7 +48,10 @@ struct test_relateng_support {
         ensure_equals("preparedContains",   prep_a->contains(b),   a->contains(b));
         ensure_equals("preparedCrosses",    prep_a->crosses(b),    a->crosses(b));
         ensure_equals("preparedTouches",    prep_a->touches(b),    a->touches(b));
-        ensure_equals("preparedRelate", prep_a->relate(b)->toString(), a->relate(b)->toString());
+        ensure_equals("preparedRelate",     prep_a->relate(b)->toString(),
+                                                 a->relate(b)->toString());
+        ensure_equals("preparedRelateBool", prep_a->relate(b, a->relate(b)->toString()),
+                                                 a->relate(b, a->relate(b)->toString()));
     }
 
     void checkIntersectsDisjoint(const std::string& wkta, const std::string& wktb, bool expectedValue)
