@@ -25,7 +25,7 @@ struct test_angle_data {
     test_angle_data()
         :
         TOL(1e-5),
-        PI(3.14159265358979323846)
+        PI(geos::MATH_PI)
     {}
 
 };
@@ -196,7 +196,40 @@ void object::test<6>
         ensure_equals(std::to_string(angrad), rCos, std::cos(angrad));
 
     }
+}
 
+template<>
+template<>
+void object::test<7>()
+{
+    set_test_name("isWithinCCW");
+
+    // interval from 0 to pi
+    {
+        double from = 0, to = PI;
+        ensure("pi/2 in [0, pi]", Angle::isWithinCCW(Angle::PI_OVER_2, from, to));
+        ensure("0 in [0, pi]", Angle::isWithinCCW(0, from, to));
+        ensure("pi in [0, pi]", Angle::isWithinCCW(PI, from, to));
+        ensure("-pi/2 not in [0, pi]", !Angle::isWithinCCW(Angle::normalizePositive(-Angle::PI_OVER_2), from, to));
+    }
+
+    // interval from pi to 0
+    {
+        double from = PI, to = 0;
+        ensure("pi/2 not in [pi, 0]", !Angle::isWithinCCW(Angle::PI_OVER_2, from, to));
+        ensure("0 in [pi, 0]", Angle::isWithinCCW(0, from, to));
+        ensure("pi in [pi, 0]", Angle::isWithinCCW(PI, from, to));
+        ensure("-pi/2 in [pi, 0]", Angle::isWithinCCW(Angle::normalizePositive(-Angle::PI_OVER_2), from, to));
+    }
+
+    // interval from -pi/2 to pi/2
+    {
+        double from = Angle::normalizePositive(-Angle::PI_OVER_2), to = Angle::PI_OVER_2;
+        ensure("0 in [-pi/2, pi/2]", Angle::isWithinCCW(0, from, to));
+        ensure("pi/2 in [-pi/2, pi/2]", Angle::isWithinCCW(Angle::PI_OVER_2, from, to));
+        ensure("-pi/2 in [-pi/2, pi/2]", Angle::isWithinCCW(Angle::normalizePositive(-Angle::PI_OVER_2), from, to));
+        ensure("pi not in [-pi/2, pi/2]", !Angle::isWithinCCW(PI, from, to));
+    }
 }
 
 
