@@ -215,5 +215,19 @@ void object::test<13>()
                   3, 4, 3, 4);
 }
 
+template<>
+template<>
+void object::test<14>()
+{
+    set_test_name("envelope: GH #1313");
+
+    CoordinateXY p0{2, 0};
+    CoordinateXY p1{4, 2};
+    CoordinateXY p2{2, 1};
+
+    checkEnvelope(p0, p1, p2,
+    2, -1.0811388300841898, 5.08113883008419,2.08113883008419);
+}
+
 }
 
