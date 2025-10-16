@@ -15,6 +15,7 @@
 #include <cstddef>
 #include <stdexcept>
 
+#include <geos/algorithm/Area.h>
 #include <geos/operation/grid/Traversal.h>
 
 using geos::geom::CoordinateXY;
@@ -34,7 +35,7 @@ Traversal::isEmpty() const
 }
 
 void
-Traversal::enter(const CoordinateXY& c, Side s)
+Traversal::enter(const CoordinateXY& c, Side s, const void* parentage)
 {
     if (!m_coords.empty()) {
         throw std::runtime_error("Traversal already started");
@@ -42,6 +43,7 @@ Traversal::enter(const CoordinateXY& c, Side s)
 
     add(c);
     m_entry = s;
+    m_parentage = parentage;
 }
 
 void
@@ -55,6 +57,13 @@ bool
 Traversal::isClosedRing() const
 {
     return m_coords.size() >= 3 && m_coords[0] == m_coords[m_coords.size() - 1];
+}
+
+bool
+Traversal::isClosedRingWithArea() const
+{
+    // TODO: Don't actually need to compute the area here, just need to make sure there are >= 3 unique points.
+    return isClosedRing() && algorithm::Area::ofRing(m_coords) > 0;
 }
 
 bool
@@ -88,9 +97,15 @@ Traversal::isTraversed() const
 }
 
 const CoordinateXY&
+Traversal::getFirstCoordinate() const
+{
+    return m_coords.front();
+}
+
+const CoordinateXY&
 Traversal::getLastCoordinate() const
 {
-    return m_coords.at(m_coords.size() - 1);
+    return m_coords.back();
 }
 
 const CoordinateXY&
