@@ -187,25 +187,21 @@ OffsetSegmentGenerator::computeOffsetSegment(const LineSegment& seg, int p_side,
 
 /*public*/
 void
-OffsetSegmentGenerator::addLineEndCap(const Coordinate& p0, const Coordinate& p1)
+OffsetSegmentGenerator::addLineEndCap(const Coordinate& p0, const Coordinate& p1, const Coordinate& p2)
 {
-    LineSegment seg(p0, p1);
+    LineSegment segL(p0, p1);
+    LineSegment segR(p2, p1);
 
     LineSegment offsetL;
-    computeOffsetSegment(seg, Position::LEFT, distance, offsetL);
+    computeOffsetSegment(segL, Position::LEFT, distance, offsetL);
     LineSegment offsetR;
-    computeOffsetSegment(seg, Position::RIGHT, distance, offsetR);
-
-    double dx = p1.x - p0.x;
-    double dy = p1.y - p0.y;
-    double angle = atan2(dy, dx);
+    computeOffsetSegment(segR, Position::RIGHT, distance, offsetR);
 
     switch(bufParams.getEndCapStyle()) {
     case BufferParameters::CAP_ROUND:
         // add offset seg points with a fillet between them
         segList.addPt(offsetL.p1);
-        addDirectedFillet(p1, angle + Angle::PI_OVER_2, angle - Angle::PI_OVER_2,
-                  Orientation::CLOCKWISE, distance);
+        addDirectedFillet(p1, offsetL.p1, offsetR.p1, Orientation::CLOCKWISE, distance);
         segList.addPt(offsetR.p1);
         break;
     case BufferParameters::CAP_FLAT:
@@ -216,7 +212,12 @@ OffsetSegmentGenerator::addLineEndCap(const Coordinate& p0, const Coordinate& p1
     case BufferParameters::CAP_SQUARE:
         // add a square defined by extensions of the offset
         // segment endpoints
+
         Coordinate squareCapSideOffset;
+        // take average in case angles of left and right sides differ
+        double dx = p1.x - p0.x/2 - p2.x/2;
+        double dy = p1.y - p0.y/2 - p2.y/2;
+        double angle = atan2(dy, dx);
         double sinangle, cosangle;
         Angle::sinCosSnap(angle, sinangle, cosangle);
         squareCapSideOffset.x = fabs(distance) * cosangle;

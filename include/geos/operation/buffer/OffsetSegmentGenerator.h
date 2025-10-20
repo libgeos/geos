@@ -144,7 +144,8 @@ public:
     /// Add an end cap around point p1, terminating a line segment
     /// coming from p0
     void addLineEndCap(const geom::Coordinate& p0,
-                       const geom::Coordinate& p1);
+                       const geom::Coordinate& p1,
+                       const geom::Coordinate& p2);
 
     void
     addSegments(const geom::CoordinateSequence& pts, bool isForward)
