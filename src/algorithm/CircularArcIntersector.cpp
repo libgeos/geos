@@ -184,15 +184,12 @@ CircularArcIntersector::intersects(const CircularArc& arc1, const CircularArc& a
     }
 
     // a: the distance from c1 to the "radical line", which connects the two intersection points
+    // The following expression was rewritten by
     double a = (d*d + r1*r1 - r2*r2) / (2*d);
+    // Expression rewritten by Herbie, https://herbie.uwplse.org/demo/
+    // double a = std::fma(r1-r2, (r1 + r2) / (d+d), d*0.5);
 
-    // FIXME shouldn't be possible for a to be more than d, and yet it can happen for
-    // arcs that are very nearly cocircular
-    //if (a > d) {
-    //    std::cerr << "a > d" << std::endl;
-    //}
-
-    // FIXME because the circle center calculation is inexact we need some kind of tolerance here.
+    // TODO because the circle center calculation is inexact we need some kind of tolerance here.
     // Take a PrecisionModel like LineIntersector?
     if (a == 0 || (d == 0 && r1 == r2)) {
         // COCIRCULAR
@@ -262,6 +259,7 @@ CircularArcIntersector::intersects(const CircularArc& arc1, const CircularArc& a
         double dx = c2.x-c1.x;
         double dy = c2.y-c1.y;
 
+#if 1
         // point where a line between the two circle center points intersects
         // the radical line
         CoordinateXY p{c1.x + a* dx/d, c1.y+a* dy/d};
@@ -278,6 +276,35 @@ CircularArcIntersector::intersects(const CircularArc& arc1, const CircularArc& a
         if (!isect1.equals2D(isect0) && arc1.containsPointOnCircle(isect1) && arc2.containsPointOnCircle(isect1)) {
             intPt[nPt++] = isect1;
         }
+#else
+        // Alternate formulation.
+        // Instead of calculating the intersection points and determining if they fall on the arc,
+        // calculate the angles of the intersection points. If they fall on the arc, create intersection points
+        // at those angles.
+
+        double centerPointAngle = std::atan2(dy, dx);
+
+        double arc1IntPtAngleDeviation = std::acos(a / r1);
+
+        double a11 = Angle::normalize(centerPointAngle - arc1IntPtAngleDeviation);
+        double a12 = Angle::normalize(centerPointAngle + arc1IntPtAngleDeviation);
+
+        double b = d - a;
+        double arc2IntPtAngleDeviation = std::acos(b / r2);
+
+        double a21 = Angle::normalize(centerPointAngle + MATH_PI + arc2IntPtAngleDeviation);
+        double a22 = Angle::normalize(centerPointAngle + MATH_PI - arc2IntPtAngleDeviation);
+
+        if (arc1.containsAngle(a11) && arc2.containsAngle(a21)) {
+            intPt[nPt++] = CircularArcs::createPoint(arc1.getCenter(), arc1.getRadius(), a11);
+        }
+        if (arc1.containsAngle(a12) && arc2.containsAngle(a22)) {
+            intPt[nPt++] = CircularArcs::createPoint(arc1.getCenter(), arc1.getRadius(), a12);
+            if (nPt == 2 && intPt[0].equals(intPt[1])) {
+                nPt = 1;
+            }
+        }
+#endif
     }
 
     if (nArc) {
