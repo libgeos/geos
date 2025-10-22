@@ -326,6 +326,34 @@ public:
             p0.z + segmentLengthFraction * (p1.z - p0.z));
     };
 
+    static CoordinateXY pointAlong(double segmentLengthFraction, const CoordinateXY& p0, const CoordinateXY& p1)
+    {
+        return { p0.x + segmentLengthFraction * (p1.x - p0.x),
+                 p0.y + segmentLengthFraction * (p1.y - p0.y) };
+    }
+
+    static Coordinate pointAlong(double segmentLengthFraction, const Coordinate& p0, const Coordinate& p1)
+    {
+        return { p0.x + segmentLengthFraction * (p1.x - p0.x),
+                 p0.y + segmentLengthFraction * (p1.y - p0.y),
+                 p0.z + segmentLengthFraction * (p1.z - p0.z) };
+    }
+
+    static CoordinateXYM pointAlong(double segmentLengthFraction, const CoordinateXYM& p0, const CoordinateXYM& p1)
+    {
+        return { p0.x + segmentLengthFraction * (p1.x - p0.x),
+                 p0.y + segmentLengthFraction * (p1.y - p0.y),
+                 p0.m + segmentLengthFraction * (p1.m - p0.m) };
+    }
+
+    static CoordinateXYZM pointAlong(double segmentLengthFraction, const CoordinateXYZM& p0, const CoordinateXYZM& p1)
+    {
+        return { p0.x + segmentLengthFraction * (p1.x - p0.x),
+                 p0.y + segmentLengthFraction * (p1.y - p0.y),
+                 p0.z + segmentLengthFraction * (p1.z - p0.z),
+                 p0.m + segmentLengthFraction * (p1.m - p0.m) };
+    }
+
     /** \brief
      * Computes the {@link Coordinate} that lies a given
      * fraction along the line defined by this segment and offset from
