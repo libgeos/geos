@@ -179,7 +179,7 @@ public:
 
     /// Check to see if a coordinate lies on the arc, after testing whether
     /// it lies on the circle.
-    bool containsPoint(const CoordinateXY& q) {
+    bool containsPoint(const CoordinateXY& q) const {
         if (q == p0 || q == p1 || q == p2) {
             return true;
         }
@@ -237,6 +237,15 @@ public:
         }
 
         return isUpward;
+    }
+
+    // Split an arc at a specified point.
+    // The point is assumed to be o the arc.
+    std::pair<CircularArc, CircularArc> splitAtPoint(const CoordinateXY& q) const {
+        return {
+            CircularArc(p0, q, getCenter(), getRadius(), getOrientation()),
+            CircularArc(q, p2, getCenter(), getRadius(), getOrientation())
+        };
     }
 
     class Iterator {

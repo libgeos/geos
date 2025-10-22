@@ -24,18 +24,6 @@ using geos::geom::CoordinateXY;
 namespace geos {
 namespace algorithm {
 
-std::array<CoordinateXY, 3>
-CircularArcs::createArc(const geom::CoordinateXY& center, double radius, double start, double end, bool ccw)
-{
-    double mid = getMidpointAngle(start, end, ccw);
-
-    return {
-        createPoint(center, radius, start),
-        createPoint(center, radius, mid),
-        createPoint(center, radius, end),
-    };
-}
-
 CoordinateXY
 CircularArcs::getMidpoint(const CoordinateXY& p0, const CoordinateXY& p2, const CoordinateXY& center, double radius, bool isCCW)
 {

@@ -40,11 +40,6 @@ public:
     static void expandEnvelope(geom::Envelope& e, const geom::CoordinateXY& p0, const geom::CoordinateXY& p1,
                                const geom::CoordinateXY& p2);
 
-
-    /// Return three points defining a arc defined by a circle center, radius, and start/end angles
-    static std::array<geom::CoordinateXY, 3>
-    createArc(const geom::CoordinateXY& center, double radius, double start, double end, bool ccw);
-
     /// Return the point defined by a circle center, radius, and angle
     static geom::CoordinateXY createPoint(const geom::CoordinateXY& center, double radius, double theta);
 

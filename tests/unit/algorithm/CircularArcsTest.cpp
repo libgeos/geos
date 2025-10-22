@@ -2,7 +2,9 @@
 
 #include <geos/geom/Coordinate.h>
 #include <geos/algorithm/CircularArcs.h>
+#include <geos/geom/CircularArc.h>
 
+using geos::geom::CircularArc;
 using geos::geom::CoordinateXY;
 using geos::algorithm::CircularArcs;
 using geos::geom::Envelope;
@@ -46,12 +48,12 @@ struct test_circulararcs_data {
 
     void checkArc(std::string message,
                   const CoordinateXY& center, double radius, bool ccw, double from, double to,
-                  const CoordinateXY& p0, const CoordinateXY& p1, const CoordinateXY& p2)
+                  const CoordinateXY& p0, const CoordinateXY& p1, const CoordinateXY& p2) const
     {
-        auto [q0, q1, q2] = CircularArcs::createArc(center, radius, from, to, ccw);
+        CircularArc arc(from, to, center, radius, ccw);
 
-        if (q0.distance(p0) > eps || q1.distance(p1) > eps || q2.distance(p2) > eps) {
-            ensure_equals(message, toWKT(q0, q1, q2), toWKT(p0, p1, p2));
+        if (arc.p0.distance(p0) > eps || arc.p1.distance(p1) > eps || arc.p2.distance(p2) > eps) {
+            ensure_equals(message, toWKT(arc.p0, arc.p1, arc.p2), toWKT(p0, p1, p2));
         }
     }
 
@@ -266,6 +268,28 @@ void object::test<15>()
     checkArc("CW: lower half-circle", {0, 0}, 1, CW, 0, MATH_PI, {1, 0}, {0, -1}, {-1, 0});
     checkArc("CW: left half-circle", {0, 0}, 1, CW, -MATH_PI/2, MATH_PI/2, {0, -1}, {-1, 0}, {0, 1});
     checkArc("CW: right half-circle", {0, 0}, 1, CW, MATH_PI/2, -MATH_PI/2, {0, 1}, {1, 0}, {0, -1});
+}
+
+template<>
+template<>
+void object::test<16>()
+{
+    set_test_name("splitAtPoint");
+
+    CircularArc cwArc({-1, 0}, {0, 1}, {1, 0});
+    auto [arc1, arc2] = cwArc.splitAtPoint({std::sqrt(2)/2, std::sqrt(2)/2});
+
+    ensure_equals(arc1.p0, CoordinateXY{-1, 0});
+    ensure_equals(arc1.p2, CoordinateXY{std::sqrt(2)/2, std::sqrt(2)/2});
+    ensure_equals(arc1.getCenter(), cwArc.getCenter());
+    ensure_equals(arc1.getRadius(), cwArc.getRadius());
+
+    ensure_equals(arc2.p0, CoordinateXY{std::sqrt(2)/2, std::sqrt(2)/2});
+    ensure_equals(arc2.p2, CoordinateXY{1, 0});
+    ensure_equals(arc2.getCenter(), cwArc.getCenter());
+    ensure_equals(arc2.getRadius(), cwArc.getRadius());
+
+    ensure_equals(cwArc.getLength(), arc1.getLength() + arc2.getLength());
 }
 
 }
