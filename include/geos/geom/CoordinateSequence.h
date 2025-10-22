@@ -710,6 +710,16 @@ public:
         }
     }
 
+    template<typename F>
+    void forEachSegment(F&& fun) const {
+        switch(getCoordinateType()) {
+            case CoordinateType::XY:    forEachSegmentImpl<CoordinateXY, F>(std::move(fun)); break;
+            case CoordinateType::XYZ:   forEachSegmentImpl<Coordinate, F>(std::move(fun)); break;
+            case CoordinateType::XYM:   forEachSegmentImpl<CoordinateXYM, F>(std::move(fun)); break;
+            case CoordinateType::XYZM:  forEachSegmentImpl<CoordinateXYZM, F>(std::move(fun)); break;
+        }
+    }
+
     template<typename T, typename F>
     void forEach(std::size_t from, std::size_t to, F&& fun) const
     {
@@ -795,6 +805,24 @@ private:
     void setAtImpl(const T2& c, std::size_t pos) {
         auto& orig = getAt<T1>(pos);
         orig = c;
+    }
+
+    template<typename CoordType, typename F>
+    void forEachSegmentImpl(F&& fun) const {
+        auto p0it = items<CoordType>().cbegin();
+        const auto end = items<CoordType>().end();
+
+        if (p0it == end) {
+            return;
+        }
+
+        auto p1it = std::next(p0it);
+
+        while (p1it != end) {
+            fun(*p0it, *p1it);
+            ++p0it;
+            ++p1it;
+        }
     }
 
     void make_space(std::size_t pos, std::size_t n) {
