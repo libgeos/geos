@@ -45,7 +45,7 @@ struct test_dpsimp_data {
         ensure("Simplified geometry is invalid!", simplified->isValid());
 
         GeomPtr exp(wktreader.read(wkt_expected));
-        ensure_equals_geometry(simplified.get(), exp.get());
+        ensure_equals_exact_geometry_xyzm(simplified.get(), exp.get(), 0);
     }
 
     void
@@ -297,7 +297,7 @@ void object::test<16>()
 {
     checkDP("POLYGON ((1 0, 2 0, 2 2, 0 2, 0 0, 1 0))",
         0,
-        "POLYGON (( 0 0, 2 0, 2 2, 0 2, 0 0))");
+        "POLYGON ((2 0, 2 2, 0 2, 0 0, 2 0))");
 }
 
 // Test that start point of a closed LineString is not changed
@@ -318,7 +318,7 @@ void object::test<18>()
     checkDP(
       "POLYGON ((42 42, 0 42, 0 100, 42 100, 100 42, 42 42))",
         1,
-        "POLYGON ((100 42, 0 42, 0 100, 42 100, 100 42))"
+        "POLYGON ((0 42, 0 100, 42 100, 100 42, 0 42))"
         );
 }
 
@@ -347,6 +347,39 @@ void object::test<20>()
         fail("Exception not thrown.");
     } catch (const geos::util::IllegalArgumentException&) {
     }
+}
+
+template<>
+template<>
+void object::test<21>()
+{
+    set_test_name("Z values are preserved");
+
+    checkDP("POLYGON Z ((20 220 5, 40 220 10, 60 220 15, 80 220 20, 100 220 25, 120 220 30, 140 220 35, 140 180 40, 100 180 45, 60 180 50, 20 180 55, 20 220 5))",
+        10.0,
+        "POLYGON Z ((20 220 5, 140 220 35, 140 180 40, 20 180 55, 20 220 5))");
+}
+
+template<>
+template<>
+void object::test<22>()
+{
+    set_test_name("M values are preserved");
+
+    checkDP("POLYGON M ((20 220 5, 40 220 10, 60 220 15, 80 220 20, 100 220 25, 120 220 30, 140 220 35, 140 180 40, 100 180 45, 60 180 50, 20 180 55, 20 220 5))",
+        10.0,
+        "POLYGON M ((20 220 5, 140 220 35, 140 180 40, 20 180 55, 20 220 5))");
+}
+
+template<>
+template<>
+void object::test<23>()
+{
+    set_test_name("Z/M values preserved when removing polygon start point");
+
+    checkDP("POLYGON ZM ((1 0 5 7, 2 0 10 9, 2 2 15 11, 0 2 20 13, 0 0 25 15, 1 0 5 7))",
+        0,
+        "POLYGON ZM ((2 0 10 9, 2 2 15 11, 0 2 20 13, 0 0 25 15, 2 0 10 9))");
 }
 
 } // namespace tut
