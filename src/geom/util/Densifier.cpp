@@ -108,16 +108,13 @@ Densifier::Densifier(const Geometry* geom):
 std::unique_ptr<CoordinateSequence>
 Densifier::densifyPoints(const CoordinateSequence& pts, double distanceTolerance, const PrecisionModel* precModel)
 {
-    geom::LineSegment seg;
-    auto coordList = detail::make_unique<CoordinateSequence>();
+    auto coordList = detail::make_unique<CoordinateSequence>(0, pts.hasZ(), pts.hasM());
 
-    auto items = pts.items<Coordinate>();
-    for(auto it = items.cbegin(), itEnd = items.cend() - 1; it < itEnd; ++it) {
-        seg.p0 = *it;
-        seg.p1 = *(it + 1);
-        coordList->add(seg.p0, false);
-        const double len = seg.getLength();
-        const double densifiedSegCountDbl = ceil(len / distanceTolerance);
+    pts.forEachSegment([&coordList, distanceTolerance, precModel](const auto& p0, const auto& p1) {
+        coordList->add(p0, false);
+
+        const double len = p0.distance(p1);
+        const double densifiedSegCountDbl = std::ceil(len / distanceTolerance);
         if(densifiedSegCountDbl > std::numeric_limits<int>::max()) {
             throw geos::util::GEOSException(
                 "Tolerance is too small compared to geometry length");
@@ -128,18 +125,20 @@ Densifier::densifyPoints(const CoordinateSequence& pts, double distanceTolerance
             double densifiedSegLen = len / densifiedSegCount;
             for(int j = 1; j < densifiedSegCount; j++) {
                 double segFract = (j * densifiedSegLen) / len;
-                Coordinate p;
-                seg.pointAlong(segFract, p);
+                auto p = LineSegment::pointAlong(segFract, p0, p1);
                 precModel->makePrecise(p);
                 coordList->add(p, false);
             }
         }
         else {
             // no densification required; insert the last coordinate and continue
-            coordList->add(seg.p1, false);
+            coordList->add(p1, false);
         }
-    }
-    coordList->add(pts[pts.size() - 1], false);
+
+    });
+    pts.applyAt(pts.size() - 1, [&coordList](const auto& pt) {
+        coordList->add(pt, false);
+    });
 
     return coordList;
 }
