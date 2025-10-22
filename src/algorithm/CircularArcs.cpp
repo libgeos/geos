@@ -24,24 +24,16 @@ using geos::geom::CoordinateXY;
 namespace geos {
 namespace algorithm {
 
-std::array<geom::CoordinateXY, 3>
+std::array<CoordinateXY, 3>
 CircularArcs::createArc(const geom::CoordinateXY& center, double radius, double start, double end, bool ccw)
 {
     double mid = getMidpointAngle(start, end, ccw);
 
-    if (ccw) {
-        return {
-            createPoint(center, radius, start),
-            createPoint(center, radius, mid),
-            createPoint(center, radius, end),
-        };
-    } else {
-        return {
-            createPoint(center, radius, end),
-            createPoint(center, radius, mid),
-            createPoint(center, radius, start),
-        };
-    }
+    return {
+        createPoint(center, radius, start),
+        createPoint(center, radius, mid),
+        createPoint(center, radius, end),
+    };
 }
 
 CoordinateXY

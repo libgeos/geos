@@ -658,7 +658,7 @@ template<>
 void object::test<42>()
 {
     set_test_name("IOX-ILI: testCircleCircleEndptTolerance");
-    // two arcs touching at endpoints
+    // two nearly-linear arcs touching at a single endpoint
 
     checkIntersection({645175.553, 248745.374}, { 645092.332, 248711.677}, { 645009.11, 248677.98},
                       {645009.11, 248677.98}, {644926.69, 248644.616}, { 644844.269, 248611.253},
