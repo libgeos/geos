@@ -1536,4 +1536,48 @@ void object::test<56>
     ensure_equals_xyz(seq1.getAt(3), Coordinate{10, 11, DoubleNotANumber});
 }
 
+template<>
+template<>
+void object::test<57>()
+{
+    set_test_name("CoordinateSequence::forEachSegment called on empty CoordinateSequence");
+
+    CoordinateSequence empty;
+    empty.forEachSegment([](const auto&, const auto&) {
+        fail();
+    });
+}
+
+template<>
+template<>
+void object::test<58>()
+{
+    set_test_name("CoordinateSequence::forEachSegment called on single-point CoordinateSequence");
+
+    CoordinateSequence seq;
+    seq.add(CoordinateXY{3, 6});
+    seq.forEachSegment([](const auto&, const auto&) {
+        fail();
+    });
+}
+
+template<>
+template<>
+void object::test<59>()
+{
+    set_test_name("CoordinateSequence::forEachSegment basic test");
+
+    CoordinateSequence seq;
+    seq.add(CoordinateXY{0, 0});
+    seq.add(CoordinateXY{3, 0});
+    seq.add(CoordinateXY{3, 5});
+
+    double length = 0;
+    seq.forEachSegment([&length](const auto& p0, const auto& p1) {
+        length += p0.distance(p1);
+    });
+
+    ensure_equals(length, 8);
+}
+
 } // namespace tut
