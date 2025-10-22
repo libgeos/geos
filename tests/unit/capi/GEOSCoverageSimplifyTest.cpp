@@ -84,8 +84,21 @@ template<> void object::test<3>
     const char* inputWKT = "GEOMETRYCOLLECTION(POLYGON(( 0 0,10 0,10.1 5,10 10,0 10,0 0)),POLYGON((10 0,20 0,20 10,10 10,10.1 5,10 0)))";
 
     input_ = fromWKT(inputWKT);
-    result_ = GEOSCoverageSimplifyVW(input_, 1.0, 0);
 
+    struct Cbk
+    {
+        double lastRatio = 0;
+
+        static void Func(double progressRatio, const char* /* msg */, void* userdata)
+        {
+            Cbk* self = static_cast<Cbk*>(userdata);
+            self->lastRatio = progressRatio;
+        }
+    };
+
+    Cbk cbk;
+    result_ = GEOSCoverageSimplifyVWWithProgress(input_, 1.0, 0, &Cbk::Func, &cbk);
+    ensure("cbk.lastRatio == 1.0", cbk.lastRatio == 1.0);
     ensure( result_ != nullptr );
     ensure( GEOSGeomTypeId(result_) == GEOS_GEOMETRYCOLLECTION );
 
