@@ -292,5 +292,18 @@ void object::test<16>()
     ensure_equals(cwArc.getLength(), arc1.getLength() + arc2.getLength());
 }
 
+template<>
+template<>
+void object::test<17>() {
+    set_test_name("getSagitta");
+
+    CircularArc halfCircle({-1, 0}, {0, 1}, {1, 0});
+    ensure_equals(halfCircle.getSagitta(), 1);
+
+    CircularArc quarterCircle({0, 1}, {std::sqrt(2)/2, std::sqrt(2)/2}, {1, 0});
+    ensure_equals(quarterCircle.getSagitta(),
+        CoordinateXY{std::sqrt(2)/2, std::sqrt(2)/2}.distance(CoordinateXY{0.5, 0.5}));
+}
+
 }
 

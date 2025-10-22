@@ -16,6 +16,7 @@
 
 #include <geos/export.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/LineSegment.h>
 #include <geos/geom/Quadrant.h>
 #include <geos/algorithm/CircularArcs.h>
 #include <geos/algorithm/Orientation.h>
@@ -80,6 +81,10 @@ public:
             m_orientation_known = true;
         }
         return m_orientation;
+    }
+
+    bool isCCW() const {
+        return getOrientation() == algorithm::Orientation::COUNTERCLOCKWISE;
     }
 
     /// Return the center point of the circle associated with this arc
@@ -157,6 +162,12 @@ public:
         auto R = getRadius();
         auto theta = getAngle();
         return R*R/2*(theta - std::sin(theta));
+    }
+
+    /// Return the distance from the centerpoint of the arc to the line segment formed by the end points of the arc.
+    double getSagitta() const {
+        CoordinateXY midpoint = algorithm::CircularArcs::getMidpoint(p0, p2, getCenter(), getRadius(), isCCW());
+        return algorithm::Distance::pointToSegment(midpoint, p0, p2);
     }
 
     /// Return the angle of p0
