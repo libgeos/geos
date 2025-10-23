@@ -49,8 +49,8 @@ public:
      * @return 1 node1 occurs first
      */
     static int
-    compare(int octant, const geom::Coordinate& p0,
-            const geom::Coordinate& p1)
+    compare(int octant, const geom::CoordinateXY& p0,
+            const geom::CoordinateXY& p1)
     {
         // nodes can only be equal if their coordinates are equal
         if(p0.equals2D(p1)) {
