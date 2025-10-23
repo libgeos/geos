@@ -62,6 +62,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:a022f72d7bd9d264c7c0f81a26d40d587"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3bb8055bf767b2dd154256ca1c30e607" id="r_a3bb8055bf767b2dd154256ca1c30e607"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Quadrant.html#a3bb8055bf767b2dd154256ca1c30e607">quadrant</a> (const geom::CoordinateXY &amp;p0, const geom::CoordinateXY &amp;p1)</td></tr>
 <tr class="separator:a3bb8055bf767b2dd154256ca1c30e607"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa7fbfb625b594097742e6cc53f3b2fed" id="r_aa7fbfb625b594097742e6cc53f3b2fed"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Quadrant.html#aa7fbfb625b594097742e6cc53f3b2fed">pseudoAngle</a> (const CoordinateXY &amp;p0, const CoordinateXY &amp;p1)</td></tr>
+<tr class="separator:aa7fbfb625b594097742e6cc53f3b2fed"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2f1c2ec80d8507dfbdd0729c85da006c" id="r_a2f1c2ec80d8507dfbdd0729c85da006c"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Quadrant.html#a2f1c2ec80d8507dfbdd0729c85da006c">isOpposite</a> (int quad1, int quad2)</td></tr>
 <tr class="separator:a2f1c2ec80d8507dfbdd0729c85da006c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0153e3f8c22ce2440ba125574eb440d1" id="r_a0153e3f8c22ce2440ba125574eb440d1"><td class="memItemLeft" align="right" valign="top"><a id="a0153e3f8c22ce2440ba125574eb440d1" name="a0153e3f8c22ce2440ba125574eb440d1"></a>
@@ -192,6 +194,50 @@ static const int&#160;</td><td class="memItemRight" valign="bottom"><b>SE</b> = 
 </table>
 </div><div class="memdoc">
 <p>Returns true if the quadrants are 1 and 3, or 2 and 4 </p>
+
+</div>
+</div>
+<a id="aa7fbfb625b594097742e6cc53f3b2fed" name="aa7fbfb625b594097742e6cc53f3b2fed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa7fbfb625b594097742e6cc53f3b2fed">&#9670;&#160;</a></span>pseudoAngle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static double geos::geom::Quadrant::pseudoAngle </td>
+          <td>(</td>
+          <td class="paramtype">const CoordinateXY &amp;&#160;</td>
+          <td class="paramname"><em>p0</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const CoordinateXY &amp;&#160;</td>
+          <td class="paramname"><em>p1</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Return a measure that increases monotonically with counterclockwise angle and avoids trigonometric calculations. Values are consistent with the numeric quadrant codes</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p0</td><td>circle center coordinate </td></tr>
+    <tr><td class="paramname">p1</td><td>coordinate for which pseudoangle should be calculated </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>
