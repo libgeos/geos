@@ -57,6 +57,8 @@ void
 CircularArcs::expandEnvelope(geom::Envelope& e, const geom::CoordinateXY& p0, const geom::CoordinateXY& p1,
                              const geom::CoordinateXY& p2)
 {
+    using geom::Quadrant;
+
     e.expandToInclude(p0);
     e.expandToInclude(p1);
     e.expandToInclude(p2);
@@ -73,22 +75,24 @@ CircularArcs::expandEnvelope(geom::Envelope& e, const geom::CoordinateXY& p0, co
         return;
     }
 
-    auto orientation = Orientation::index(center, p0, p1);
-
     //* 1 | 0
     //* --+--
     //* 2 | 3
+    const auto pa0 = Quadrant::pseudoAngle(center, p0);
+    const auto pa1 = Quadrant::pseudoAngle(center, p1);
+    const auto pa2 = Quadrant::pseudoAngle(center, p2);
 
-    using geom::Quadrant;
-
-    auto q0 = geom::Quadrant::quadrant(center, p0);
-    auto q2 = geom::Quadrant::quadrant(center, p2);
+    auto q0 = static_cast<int>(pa0);
+    auto q2 = static_cast<int>(pa2);
     double R = center.distance(p1);
 
     if (q0 == q2) {
-        // Start and end quadrants are the same. Either the arc crosses all of
+        // Start and end quadrants are the same. Either the arc crosses all
         // the axes, or none of the axes.
-        if (Orientation::index(center, p1, p2) != orientation) {
+
+        const bool isBetween = pa1 > std::min(pa0, pa2) && pa1 < std::max(pa0, pa2);
+
+        if (!isBetween) {
             e.expandToInclude({center.x, center.y + R});
             e.expandToInclude({center.x - R, center.y});
             e.expandToInclude({center.x, center.y - R});
@@ -97,6 +101,8 @@ CircularArcs::expandEnvelope(geom::Envelope& e, const geom::CoordinateXY& p0, co
 
         return;
     }
+
+    auto orientation = Orientation::index(p0, p1, p2);
 
     if (orientation == Orientation::CLOCKWISE) {
         std::swap(q0, q2);
