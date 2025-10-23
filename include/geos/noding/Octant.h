@@ -33,11 +33,11 @@ namespace noding { // geos.noding
  *
  * Octants are numbered as follows:
  *
- *   2|1
- * 3  |  0
+ *  \2|1/
+ * 3 \|/ 0
  * ---+--
- * 4  |  7
- *   5|6
+ * 4 /|\ 7
+ *  /5|6\
  *
  * If line segments lie along a coordinate axis, the octant is the lower of the two
  * possible values.
