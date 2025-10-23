@@ -37,11 +37,6 @@ One way to perform geodetic computations is to project data to an appropriate pl
 using a transformation library such as [PROJ](https://proj.org/).
 The desired geometric operations can be computed in planar space, and reprojected back to geodetic.
 
-### Does GEOS support coordinates with measures (M)?
-
-No, the GEOS coordinate model only supports X,Y and Z ordinates.
-We hope to add support for M, and also a more efficient XY coordinate storage representation.
-
 ## Robustness
 
 ### Why does `GEOSIntersects(GEOSIntersection(A, B), A) == false`?
@@ -50,7 +45,7 @@ GEOS represents geometry coordinates using IEEE-754 double-precision floating po
 This is a finite representation, whereas the implicit lines between vertices have infinite precision.  In general it is highly unlikely that a coordinate computed via an arithmetic operation
 (such as a line intersection) is reported by an `intersects` test as lying exactly on the (theoretical) lines.
 
-For example, the diagram below shows how the computed intersection point of two lines in general does not lie exactly on either line (scale exaggerrated for clarity):
+For example, the diagram below shows how the computed intersection point of two lines in general does not lie exactly on either line (scale exaggerated for clarity):
 
 ![GEOS computed intersection point for two lines](geos-line-intersect-precision.png)
 
@@ -61,6 +56,6 @@ As explained in the previous question, GEOS uses finite-precision floating point
 because in the general case it is not possible to represent points along a line exactly using finite-precision numbers.
 
 The diagram below shows how points interpolated along a line rarely lie exactly on the line
-(scale exaggerrated for clarity):
+(scale exaggerated for clarity):
 
 ![GEOS computed points interpolated along line](geos-line-interpolated-precision.png)
