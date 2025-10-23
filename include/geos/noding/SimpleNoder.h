@@ -48,7 +48,7 @@ namespace noding { // geos.noding
 class GEOS_DLL SimpleNoder: public SinglePassNoder {
 private:
     std::vector<SegmentString*> nodedSegStrings;
-    virtual void computeIntersects(SegmentString* e0, SegmentString* e1);
+    void computeIntersects(SegmentString* e0, SegmentString* e1);
 
 public:
     SimpleNoder(SegmentIntersector* nSegInt = nullptr)
