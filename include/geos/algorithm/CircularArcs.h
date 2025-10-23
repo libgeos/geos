@@ -14,6 +14,8 @@
 
 #pragma once
 
+#include <array>
+
 #include <geos/export.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Envelope.h>
@@ -28,9 +30,19 @@ public:
     static geom::CoordinateXY getCenter(const geom::CoordinateXY& p0, const geom::CoordinateXY& p1,
                                         const geom::CoordinateXY& p2);
 
+    static double getAngle(const geom::CoordinateXY& pt, const geom::CoordinateXY& center);
+
+    static double getMidpointAngle(double theta0, double theta2, bool isCCW);
+
+    static geom::CoordinateXY getMidpoint(const geom::CoordinateXY& p0, const geom::CoordinateXY& p2, const geom::CoordinateXY& center, double radius, bool isCCW);
+
     /// Expand an envelope to include an arc defined by three points
     static void expandEnvelope(geom::Envelope& e, const geom::CoordinateXY& p0, const geom::CoordinateXY& p1,
                                const geom::CoordinateXY& p2);
+
+    /// Return the point defined by a circle center, radius, and angle
+    static geom::CoordinateXY createPoint(const geom::CoordinateXY& center, double radius, double theta);
+
 };
 
 }
