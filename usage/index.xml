@@ -67,7 +67,7 @@ Databases PostGIS INGRES MonetDB SpatiaLite CockroachDB DuckDB Applications GDAL
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
       <guid>https://libgeos.org/usage/faq/</guid>
-      <description>Design and Architecture Why is the C++ API not kept stable? Why does GEOS follow JTS design? Spatial Model Does GEOS support computation on the geodetic ellipsoid? Does GEOS support coordinates with measures (M)? Robustness Why does GEOSIntersects(GEOSIntersection(A, B), A) == false? Why doesn&amp;rsquo;t a computed point lie exactly on a line? Design and Architecture Why is the C++ API not kept stable? The C++ API is very large, and may have changes in every release.</description>
+      <description>Design and Architecture Why is the C++ API not kept stable? Why does GEOS follow JTS design? Spatial Model Does GEOS support computation on the geodetic ellipsoid? Robustness Why does GEOSIntersects(GEOSIntersection(A, B), A) == false? Why doesn&amp;rsquo;t a computed point lie exactly on a line? Design and Architecture Why is the C++ API not kept stable? The C++ API is very large, and may have changes in every release. It is evolving to adopt modern C++ coding practices, and often has additions and removals as GEOS spatial algorithms get enhanced.</description>
     </item>
     
     <item>

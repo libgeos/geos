@@ -12,7 +12,7 @@
 <meta name="generator" content="Hugo 0.111.3">
 
 
-  <meta name="description" content="Design and Architecture Why is the C&#43;&#43; API not kept stable? Why does GEOS follow JTS design? Spatial Model Does GEOS support computation on the geodetic ellipsoid? Does GEOS support coordinates with measures (M)? Robustness Why does GEOSIntersects(GEOSIntersection(A, B), A) == false? Why doesn&rsquo;t a computed point lie exactly on a line? Design and Architecture Why is the C&#43;&#43; API not kept stable? The C&#43;&#43; API is very large, and may have changes in every release." />
+  <meta name="description" content="Design and Architecture Why is the C&#43;&#43; API not kept stable? Why does GEOS follow JTS design? Spatial Model Does GEOS support computation on the geodetic ellipsoid? Robustness Why does GEOSIntersects(GEOSIntersection(A, B), A) == false? Why doesn&rsquo;t a computed point lie exactly on a line? Design and Architecture Why is the C&#43;&#43; API not kept stable? The C&#43;&#43; API is very large, and may have changes in every release. It is evolving to adopt modern C&#43;&#43; coding practices, and often has additions and removals as GEOS spatial algorithms get enhanced." />
 
     <title>FAQ | GEOS</title>
 
@@ -38,7 +38,7 @@
     content="FAQ"
   />
   <meta property="og:site_name" content="GEOS" />
-  <meta property="og:description" content="Design and Architecture Why is the C&#43;&#43; API not kept stable? Why does GEOS follow JTS design? Spatial Model Does GEOS support computation on the geodetic ellipsoid? Does GEOS support coordinates with measures (M)? Robustness Why does GEOSIntersects(GEOSIntersection(A, B), A) == false? Why doesn’t a computed point lie exactly on a line? Design and Architecture Why is the C&#43;&#43; API not kept stable? The C&#43;&#43; API is very large, and may have changes in every release." />
+  <meta property="og:description" content="Design and Architecture Why is the C&#43;&#43; API not kept stable? Why does GEOS follow JTS design? Spatial Model Does GEOS support computation on the geodetic ellipsoid? Robustness Why does GEOSIntersects(GEOSIntersection(A, B), A) == false? Why doesn’t a computed point lie exactly on a line? Design and Architecture Why is the C&#43;&#43; API not kept stable? The C&#43;&#43; API is very large, and may have changes in every release. It is evolving to adopt modern C&#43;&#43; coding practices, and often has additions and removals as GEOS spatial algorithms get enhanced." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://libgeos.org/usage/faq/" />
 
@@ -47,7 +47,7 @@
 
   <meta name="twitter:card" content="summary" />
 <meta name="twitter:title" content="FAQ" />
-  <meta name="twitter:description" content="Design and Architecture Why is the C&#43;&#43; API not kept stable? Why does GEOS follow JTS design? Spatial Model Does GEOS support computation on the geodetic ellipsoid? Does GEOS support coordinates with measures (M)? Robustness Why does GEOSIntersects(GEOSIntersection(A, B), A) == false? Why doesn’t a computed point lie exactly on a line? Design and Architecture Why is the C&#43;&#43; API not kept stable? The C&#43;&#43; API is very large, and may have changes in every release." />
+  <meta name="twitter:description" content="Design and Architecture Why is the C&#43;&#43; API not kept stable? Why does GEOS follow JTS design? Spatial Model Does GEOS support computation on the geodetic ellipsoid? Robustness Why does GEOSIntersects(GEOSIntersection(A, B), A) == false? Why doesn’t a computed point lie exactly on a line? Design and Architecture Why is the C&#43;&#43; API not kept stable? The C&#43;&#43; API is very large, and may have changes in every release. It is evolving to adopt modern C&#43;&#43; coding practices, and often has additions and removals as GEOS spatial algorithms get enhanced." />
 
 
   <script type="application/ld+json">
@@ -58,8 +58,8 @@
       "name": "FAQ",
       "url" : "https://libgeos.org/usage/faq/",
       "headline": "FAQ",
-      "description": "Design and Architecture Why is the C\u002b\u002b API not kept stable? Why does GEOS follow JTS design? Spatial Model Does GEOS support computation on the geodetic ellipsoid? Does GEOS support coordinates with measures (M)? Robustness Why does GEOSIntersects(GEOSIntersection(A, B), A) == false? Why doesn’t a computed point lie exactly on a line? Design and Architecture Why is the C\u002b\u002b API not kept stable? The C\u002b\u002b API is very large, and may have changes in every release.",
-      "wordCount" : "531",
+      "description": "Design and Architecture Why is the C\u002b\u002b API not kept stable? Why does GEOS follow JTS design? Spatial Model Does GEOS support computation on the geodetic ellipsoid? Robustness Why does GEOSIntersects(GEOSIntersection(A, B), A) == false? Why doesn’t a computed point lie exactly on a line? Design and Architecture Why is the C\u002b\u002b API not kept stable? The C\u002b\u002b API is very large, and may have changes in every release. It is evolving to adopt modern C\u002b\u002b coding practices, and often has additions and removals as GEOS spatial algorithms get enhanced.",
+      "wordCount" : "490",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1474,7 +1474,6 @@
     <li><a href="#spatial-model">Spatial Model</a>
       <ul>
         <li><a href="#does-geos-support-computation-on-the-geodetic-ellipsoid">Does GEOS support computation on the geodetic ellipsoid?</a></li>
-        <li><a href="#does-geos-support-coordinates-with-measures-m">Does GEOS support coordinates with measures (M)?</a></li>
       </ul>
     </li>
     <li><a href="#robustness">Robustness</a>
@@ -1550,17 +1549,6 @@ using a transformation library such as <a
 >PROJ</a>.
 The desired geometric operations can be computed in planar space, and reprojected back to geodetic.</p>
 <div class="gdoc-page__anchorwrap">
-    <h3 id="does-geos-support-coordinates-with-measures-m"
-    >
-        Does GEOS support coordinates with measures (M)?
-        <a data-clipboard-text="https://libgeos.org/usage/faq/#does-geos-support-coordinates-with-measures-m" class="gdoc-page__anchor clip flex align-center" title="Anchor to: Does GEOS support coordinates with measures (M)?" aria-label="Anchor to: Does GEOS support coordinates with measures (M)?" href="#does-geos-support-coordinates-with-measures-m">
-            <svg class="gdoc-icon gdoc_link"><use xlink:href="#gdoc_link"></use></svg>
-        </a>
-    </h3>
-</div>
-<p>No, the GEOS coordinate model only supports X,Y and Z ordinates.
-We hope to add support for M, and also a more efficient XY coordinate storage representation.</p>
-<div class="gdoc-page__anchorwrap">
     <h2 id="robustness"
     >
         Robustness
@@ -1581,7 +1569,7 @@ We hope to add support for M, and also a more efficient XY coordinate storage re
 <p>GEOS represents geometry coordinates using IEEE-754 double-precision floating point numbers.
 This is a finite representation, whereas the implicit lines between vertices have infinite precision.  In general it is highly unlikely that a coordinate computed via an arithmetic operation
 (such as a line intersection) is reported by an <code>intersects</code> test as lying exactly on the (theoretical) lines.</p>
-<p>For example, the diagram below shows how the computed intersection point of two lines in general does not lie exactly on either line (scale exaggerrated for clarity):</p>
+<p>For example, the diagram below shows how the computed intersection point of two lines in general does not lie exactly on either line (scale exaggerated for clarity):</p>
 <p><img
   src="geos-line-intersect-precision.png"
   alt="GEOS computed intersection point for two lines"
@@ -1600,7 +1588,7 @@ This is a finite representation, whereas the implicit lines between vertices hav
 (such as interpolation along a line) is reported by an <code>intersects</code> test as lying exactly on the (theoretical) line.  This is due to both round-off error during calculations, and also
 because in the general case it is not possible to represent points along a line exactly using finite-precision numbers.</p>
 <p>The diagram below shows how points interpolated along a line rarely lie exactly on the line
-(scale exaggerrated for clarity):</p>
+(scale exaggerated for clarity):</p>
 <p><img
   src="geos-line-interpolated-precision.png"
   alt="GEOS computed points interpolated along line"
