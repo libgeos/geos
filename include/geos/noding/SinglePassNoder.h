@@ -15,9 +15,6 @@
 #pragma once
 
 #include <geos/export.h>
-
-#include <vector>
-
 #include <geos/noding/Noder.h>
 
 // Forward declarations
@@ -41,8 +38,6 @@ namespace noding { // geos.noding
  * insert them).
  *
  * Last port: noding/SinglePassNoder.java rev. 1.3 (JTS-1.7)
- *
- * TODO: Noder inheritance (that's just an interface!)
  *
  */
 class GEOS_DLL SinglePassNoder : public Noder { // implements Noder
@@ -73,22 +68,6 @@ public:
     {
         segInt = newSegInt;
     }
-
-    /** \brief
-     * Computes the noding for a collection of {@link SegmentString}s.
-     *
-     * @param segStrings a collection of {@link SegmentString}s to node
-     */
-    void computeNodes(const std::vector<SegmentString*>& segStrings) override = 0;
-
-    /** \brief
-     * Returns a Collection of fully noded {@link SegmentString}s.
-     *
-     * The SegmentStrings have the same context as their parent.
-     *
-     * @return a Collection of SegmentStrings
-     */
-    std::vector<std::unique_ptr<SegmentString>> getNodedSubstrings() override = 0;
 
 };
 
