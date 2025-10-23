@@ -7,6 +7,7 @@
   - Fix OverlayNG coordinate dimemsion handling for EMPTY geometries (GH-1258, Martin Davis)
   - Fix DepthSegment comparison logic (really this time) (GH-1266, Martin Davis)
   - Change CoverageGapFinder to return polygons (Martin Davis)
+  - Fix incorrect envelope calculation for arcs (GH-1314, Dan Baston)
 
 ## Changes in 3.13.1
 2025-03-03
