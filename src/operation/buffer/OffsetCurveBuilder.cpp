@@ -377,8 +377,6 @@ OffsetCurveBuilder::computeLineBufferCurve(const CoordinateSequence& inputPts,
         segGen.addNextSegment(simp1[i], true);
     }
     segGen.addLastSegment();
-    // add line cap for end of line
-    segGen.addLineEndCap(simp1[n1 - 1], simp1[n1]);
 
     //---------- compute points for right side of line
     // Simplify the appropriate side of the line before generating
@@ -387,13 +385,17 @@ OffsetCurveBuilder::computeLineBufferCurve(const CoordinateSequence& inputPts,
     const CoordinateSequence& simp2 = *simp2_;
 
     auto n2 = simp2.size() - 1;
+
+    // add line cap for return of line
+    segGen.addLineEndCap(simp1[n1 - 1], simp1[n1], simp2[n2 - 1]);
+
     segGen.initSideSegments(simp2[n2], simp2[n2 - 1], Position::LEFT);
     for(std::size_t i = n2 - 1; i > 0; --i) {
         segGen.addNextSegment(simp2[i - 1], true);
     }
     segGen.addLastSegment();
     // add line cap for start of line
-    segGen.addLineEndCap(simp2[1], simp2[0]);
+    segGen.addLineEndCap(simp2[1], simp2[0], simp1[1]);
 
     segGen.closeRing();
 }
