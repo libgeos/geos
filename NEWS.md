@@ -1,6 +1,6 @@
 
 ## Changes in 3.14.1
-2025-xx-xx
+2025-10-27
 
 - Fixes/Improvements:
   - Make floating-point exceptions optional for geosop (GH-1305, Maxim Kochetkov)
