@@ -922,6 +922,7 @@ void object::test<64> ()
     std::string a = "LINESTRING(120 215, 176 197)";
     std::string b = "POLYGON ((100 200, 140 230, 180 310, 280 310, 390 270, 400 210, 320 140, 215 141, 150 170, 100 200))";
     checkRelate(a, b, "1FF00F212");
+    checkRelate(b, a, "102F01FF2");
 }
 
 
