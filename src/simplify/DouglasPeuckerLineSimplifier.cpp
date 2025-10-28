@@ -75,7 +75,7 @@ DouglasPeuckerLineSimplifier::setPreserveClosedEndpoint(bool preserve)
 std::unique_ptr<CoordinateSequence>
 DouglasPeuckerLineSimplifier::simplify()
 {
-    auto coordList = detail::make_unique<CoordinateSequence>();
+    auto coordList = detail::make_unique<CoordinateSequence>(0, pts.hasZ(), pts.hasM());
 
     // empty coordlist is the simplest, won't simplify further
     if(pts.isEmpty()) {
@@ -85,9 +85,18 @@ DouglasPeuckerLineSimplifier::simplify()
     usePt = std::vector<bool>(pts.size(), true);
     simplifySection(0, pts.size() - 1);
 
-    for(std::size_t i = 0, n = pts.size(); i < n; ++i) {
-        if(usePt[i]) {
-            coordList->add(pts[i]);
+    // Add continuous ranges of retained points from pts to coordList
+    std::size_t from = 0;
+    while (from < pts.size() && !usePt[from]) {
+        from++;
+    }
+    for(std::size_t to = from + 1; to <= pts.size(); to++) {
+        if (to == pts.size() || !usePt[to]) {
+            coordList->add(pts, from, to - 1);
+            while (to < pts.size() && !usePt[to]) {
+                to++;
+            }
+            from = to;
         }
     }
 
@@ -96,8 +105,7 @@ DouglasPeuckerLineSimplifier::simplify()
     if (simplifyRing && coordList->size() > geom::LinearRing::MINIMUM_VALID_SIZE) {
         geom::LineSegment seg(coordList->getAt(coordList->size() - 2), coordList->getAt(1));
         if (seg.distance(coordList->getAt(0)) <= distanceTolerance) {
-            auto ret = detail::make_unique<CoordinateSequence>();
-            ret->reserve(coordList->size() - 1);
+            auto ret = detail::make_unique<CoordinateSequence>(0, pts.hasZ(), pts.hasM());
             ret->add(*coordList, 1, coordList->size() - 2);
             ret->closeRing();
             coordList = std::move(ret);
