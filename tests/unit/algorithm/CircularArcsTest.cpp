@@ -2,10 +2,13 @@
 
 #include <geos/geom/Coordinate.h>
 #include <geos/algorithm/CircularArcs.h>
+#include <geos/geom/CircularArc.h>
 
+using geos::geom::CircularArc;
 using geos::geom::CoordinateXY;
 using geos::algorithm::CircularArcs;
 using geos::geom::Envelope;
+using geos::MATH_PI;
 
 namespace tut {
 
@@ -35,6 +38,25 @@ struct test_circulararcs_data {
             ensure_equals("p2-p1-p0 ymax", e.getMaxY(), ymax, eps);
         }
     }
+
+    static std::string toWKT(const CoordinateXY& p0, const CoordinateXY& p1, const CoordinateXY& p2)
+    {
+        std::stringstream ss;
+        ss << "CIRCULARSTRING (" << p0 << ", " << p1 << ", " << p2 << ")";
+        return ss.str();
+    }
+
+    void checkArc(std::string message,
+                  const CoordinateXY& center, double radius, bool ccw, double from, double to,
+                  const CoordinateXY& p0, const CoordinateXY& p1, const CoordinateXY& p2) const
+    {
+        CircularArc arc(from, to, center, radius, ccw);
+
+        if (arc.p0.distance(p0) > eps || arc.p1.distance(p1) > eps || arc.p2.distance(p2) > eps) {
+            ensure_equals(message, toWKT(arc.p0, arc.p1, arc.p2), toWKT(p0, p1, p2));
+        }
+    }
+
 };
 
 using group = test_group<test_circulararcs_data>;
@@ -188,11 +210,11 @@ void object::test<11>()
                   -1, -1, 2, 2);
 }
 
-// collinear
 template<>
 template<>
 void object::test<12>()
 {
+    set_test_name("envelope: arc defined by three collinear points");
 
     CoordinateXY p0{1, 2};
     CoordinateXY p1{2, 3};
@@ -202,11 +224,12 @@ void object::test<12>()
                   1, 2, 3, 4);
 }
 
-// repeated
 template<>
 template<>
 void object::test<13>()
 {
+    set_test_name("envelope: arc defined by three repeated points");
+
     CoordinateXY p0{3, 4};
     CoordinateXY p1{3, 4};
     CoordinateXY p2{3, 4};
@@ -217,9 +240,7 @@ void object::test<13>()
 
 template<>
 template<>
-void object::test<14>()
-{
-    set_test_name("envelope: GH #1313");
+void object::test<14>() {
 
     CoordinateXY p0{2, 0};
     CoordinateXY p1{4, 2};
@@ -227,6 +248,61 @@ void object::test<14>()
 
     checkEnvelope(p0, p1, p2,
     2, -1.0811388300841898, 5.08113883008419,2.08113883008419);
+}
+
+template<>
+template<>
+void object::test<15>()
+{
+    set_test_name("createArc");
+
+    constexpr bool CCW = true;
+    constexpr bool CW = false;
+
+    checkArc("CCW: upper half-circle", {0, 0}, 1, CCW, 0, MATH_PI, {1, 0}, {0, 1}, {-1, 0});
+    checkArc("CCW: lower half-circle", {0, 0}, 1, CCW, MATH_PI, 0, {-1, 0}, {0, -1}, {1, 0});
+    checkArc("CCW: left half-circle", {0, 0}, 1, CCW, MATH_PI/2, -MATH_PI/2, {0, 1}, {-1, 0}, {0, -1});
+    checkArc("CCW: right half-circle", {0, 0}, 1, CCW, -MATH_PI/2, MATH_PI/2, {0, -1}, {1, 0}, {0, 1});
+
+    checkArc("CW: upper half-circle", {0, 0}, 1, CW, MATH_PI, 0, {-1, 0}, {0, 1}, {1, 0});
+    checkArc("CW: lower half-circle", {0, 0}, 1, CW, 0, MATH_PI, {1, 0}, {0, -1}, {-1, 0});
+    checkArc("CW: left half-circle", {0, 0}, 1, CW, -MATH_PI/2, MATH_PI/2, {0, -1}, {-1, 0}, {0, 1});
+    checkArc("CW: right half-circle", {0, 0}, 1, CW, MATH_PI/2, -MATH_PI/2, {0, 1}, {1, 0}, {0, -1});
+}
+
+template<>
+template<>
+void object::test<16>()
+{
+    set_test_name("splitAtPoint");
+
+    CircularArc cwArc({-1, 0}, {0, 1}, {1, 0});
+    auto [arc1, arc2] = cwArc.splitAtPoint({std::sqrt(2)/2, std::sqrt(2)/2});
+
+    ensure_equals(arc1.p0, CoordinateXY{-1, 0});
+    ensure_equals(arc1.p2, CoordinateXY{std::sqrt(2)/2, std::sqrt(2)/2});
+    ensure_equals(arc1.getCenter(), cwArc.getCenter());
+    ensure_equals(arc1.getRadius(), cwArc.getRadius());
+
+    ensure_equals(arc2.p0, CoordinateXY{std::sqrt(2)/2, std::sqrt(2)/2});
+    ensure_equals(arc2.p2, CoordinateXY{1, 0});
+    ensure_equals(arc2.getCenter(), cwArc.getCenter());
+    ensure_equals(arc2.getRadius(), cwArc.getRadius());
+
+    ensure_equals(cwArc.getLength(), arc1.getLength() + arc2.getLength());
+}
+
+template<>
+template<>
+void object::test<17>() {
+    set_test_name("getSagitta");
+
+    CircularArc halfCircle({-1, 0}, {0, 1}, {1, 0});
+    ensure_equals(halfCircle.getSagitta(), 1);
+
+    CircularArc quarterCircle({0, 1}, {std::sqrt(2)/2, std::sqrt(2)/2}, {1, 0});
+    ensure_equals(quarterCircle.getSagitta(),
+        CoordinateXY{std::sqrt(2)/2, std::sqrt(2)/2}.distance(CoordinateXY{0.5, 0.5}));
 }
 
 }

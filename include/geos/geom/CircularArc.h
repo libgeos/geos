@@ -16,6 +16,7 @@
 
 #include <geos/export.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/LineSegment.h>
 #include <geos/geom/Quadrant.h>
 #include <geos/algorithm/CircularArcs.h>
 #include <geos/algorithm/Orientation.h>
@@ -31,6 +32,8 @@ public:
 
     using CoordinateXY = geom::CoordinateXY;
 
+    CircularArc() : CircularArc({0, 0}, {0, 0}, {0, 0}) {}
+
     CircularArc(const CoordinateXY& q0, const CoordinateXY& q1, const CoordinateXY& q2)
         : p0(q0)
         , p1(q1)
@@ -40,20 +43,48 @@ public:
         , m_orientation_known(false)
     {}
 
-    const CoordinateXY& p0;
-    const CoordinateXY& p1;
-    const CoordinateXY& p2;
+    CircularArc(double theta0, double theta2, const CoordinateXY& center, double radius, int orientation)
+        : p0(algorithm::CircularArcs::createPoint(center, radius, theta0)),
+          p1(algorithm::CircularArcs::createPoint(center, radius, algorithm::CircularArcs::getMidpointAngle(theta0, theta2, orientation==algorithm::Orientation::COUNTERCLOCKWISE))),
+          p2(algorithm::CircularArcs::createPoint(center, radius, theta2)),
+          m_center(center),
+          m_radius(radius),
+          m_orientation(orientation),
+          m_center_known(true),
+          m_radius_known(true),
+          m_orientation_known(true)
+    {}
+
+    CircularArc(const CoordinateXY& q0, const CoordinateXY& q2, const CoordinateXY& center, double radius, int orientation)
+        : p0(q0),
+          p1(algorithm::CircularArcs::getMidpoint(q0, q2, center, radius, orientation==algorithm::Orientation::COUNTERCLOCKWISE)),
+          p2(q2),
+          m_center(center),
+          m_radius(radius),
+          m_orientation(orientation),
+          m_center_known(true),
+          m_radius_known(true),
+          m_orientation_known(true)
+    {}
+
+    CoordinateXY p0;
+    CoordinateXY p1;
+    CoordinateXY p2;
 
     /// Return the orientation of the arc as one of:
     /// - algorithm::Orientation::CLOCKWISE,
     /// - algorithm::Orientation::COUNTERCLOCKWISE
     /// - algorithm::Orientation::COLLINEAR
-    int orientation() const {
+    int getOrientation() const {
         if (!m_orientation_known) {
             m_orientation = algorithm::Orientation::index(p0, p1, p2);
             m_orientation_known = true;
         }
         return m_orientation;
+    }
+
+    bool isCCW() const {
+        return getOrientation() == algorithm::Orientation::COUNTERCLOCKWISE;
     }
 
     /// Return the center point of the circle associated with this arc
@@ -83,7 +114,7 @@ public:
 
     /// Returns whether this arc forms a straight line (p0, p1, and p2 are collinear)
     bool isLinear() const {
-        return std::isnan(getRadius());
+        return !std::isfinite(getRadius());
     }
 
     /// Return the inner angle of the sector associated with this arc
@@ -100,7 +131,7 @@ public:
         auto t0 = theta0();
         auto t2 = theta2();
 
-        if (orientation() == algorithm::Orientation::COUNTERCLOCKWISE) {
+        if (getOrientation() == algorithm::Orientation::COUNTERCLOCKWISE) {
             std::swap(t0, t2);
         }
 
@@ -133,14 +164,20 @@ public:
         return R*R/2*(theta - std::sin(theta));
     }
 
+    /// Return the distance from the centerpoint of the arc to the line segment formed by the end points of the arc.
+    double getSagitta() const {
+        CoordinateXY midpoint = algorithm::CircularArcs::getMidpoint(p0, p2, getCenter(), getRadius(), isCCW());
+        return algorithm::Distance::pointToSegment(midpoint, p0, p2);
+    }
+
     /// Return the angle of p0
     double theta0() const {
-        return std::atan2(p0.y - getCenter().y, p0.x - getCenter().x);
+        return algorithm::CircularArcs::getAngle(p0, getCenter());
     }
 
     /// Return the angle of p2
     double theta2() const {
-        return std::atan2(p2.y - getCenter().y, p2.x - getCenter().x);
+        return algorithm::CircularArcs::getAngle(p2, getCenter());
     }
 
     /// Check to see if a coordinate lies on the arc
@@ -153,18 +190,18 @@ public:
 
     /// Check to see if a coordinate lies on the arc, after testing whether
     /// it lies on the circle.
-    bool containsPoint(const CoordinateXY& q) {
+    bool containsPoint(const CoordinateXY& q) const {
         if (q == p0 || q == p1 || q == p2) {
             return true;
         }
 
-        auto dist = std::abs(q.distance(getCenter()) - getRadius());
+        //auto dist = std::abs(q.distance(getCenter()) - getRadius());
 
-        if (dist > 1e-8) {
-            return false;
-        }
+        //if (dist > 1e-8) {
+        //    return false;
+        //}
 
-        if (triangulate::quadedge::TrianglePredicate::isInCircleNormalized(p0, p1, p2, q) != geom::Location::BOUNDARY) {
+        if (triangulate::quadedge::TrianglePredicate::isInCircleRobust(p0, p1, p2, q) != geom::Location::BOUNDARY) {
             return false;
         }
 
@@ -180,7 +217,7 @@ public:
             return true;
         }
 
-        if (orientation() == algorithm::Orientation::COUNTERCLOCKWISE) {
+        if (getOrientation() == algorithm::Orientation::COUNTERCLOCKWISE) {
             std::swap(t0, t2);
         }
 
@@ -204,13 +241,22 @@ public:
         auto quad = geom::Quadrant::quadrant(getCenter(), q);
         bool isUpward;
 
-        if (orientation() == algorithm::Orientation::CLOCKWISE) {
+        if (getOrientation() == algorithm::Orientation::CLOCKWISE) {
             isUpward = (quad == geom::Quadrant::SW || quad == geom::Quadrant::NW);
         } else {
             isUpward = (quad == geom::Quadrant::SE || quad == geom::Quadrant::NE);
         }
 
         return isUpward;
+    }
+
+    // Split an arc at a specified point.
+    // The point is assumed to be o the arc.
+    std::pair<CircularArc, CircularArc> splitAtPoint(const CoordinateXY& q) const {
+        return {
+            CircularArc(p0, q, getCenter(), getRadius(), getOrientation()),
+            CircularArc(q, p2, getCenter(), getRadius(), getOrientation())
+        };
     }
 
     class Iterator {
