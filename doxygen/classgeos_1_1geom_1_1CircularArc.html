@@ -65,8 +65,17 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ae19d8204610118c0c18935256df89985" id="r_ae19d8204610118c0c18935256df89985"><td class="memItemLeft" align="right" valign="top"><a id="ae19d8204610118c0c18935256df89985" name="ae19d8204610118c0c18935256df89985"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>CircularArc</b> (const CoordinateXY &amp;q0, const CoordinateXY &amp;q1, const CoordinateXY &amp;q2)</td></tr>
 <tr class="separator:ae19d8204610118c0c18935256df89985"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a54e6b0cb3c059adc2e1d6ff9335aa2ab" id="r_a54e6b0cb3c059adc2e1d6ff9335aa2ab"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CircularArc.html#a54e6b0cb3c059adc2e1d6ff9335aa2ab">orientation</a> () const</td></tr>
-<tr class="separator:a54e6b0cb3c059adc2e1d6ff9335aa2ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba3ce54acb8b3ea8b746d7d5521b8779" id="r_aba3ce54acb8b3ea8b746d7d5521b8779"><td class="memItemLeft" align="right" valign="top"><a id="aba3ce54acb8b3ea8b746d7d5521b8779" name="aba3ce54acb8b3ea8b746d7d5521b8779"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>CircularArc</b> (double <a class="el" href="classgeos_1_1geom_1_1CircularArc.html#ae38704e5693150d0a7cbd36bd531071e">theta0</a>, double <a class="el" href="classgeos_1_1geom_1_1CircularArc.html#af9b28126f066454d5fb6281fab14d75e">theta2</a>, const CoordinateXY &amp;center, double radius, int orientation)</td></tr>
+<tr class="separator:aba3ce54acb8b3ea8b746d7d5521b8779"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b2b0962f30b33960552ee91dc6299cf" id="r_a9b2b0962f30b33960552ee91dc6299cf"><td class="memItemLeft" align="right" valign="top"><a id="a9b2b0962f30b33960552ee91dc6299cf" name="a9b2b0962f30b33960552ee91dc6299cf"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>CircularArc</b> (const CoordinateXY &amp;q0, const CoordinateXY &amp;q2, const CoordinateXY &amp;center, double radius, int orientation)</td></tr>
+<tr class="separator:a9b2b0962f30b33960552ee91dc6299cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4ef6e8fae1d79921332e946674b5571e" id="r_a4ef6e8fae1d79921332e946674b5571e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CircularArc.html#a4ef6e8fae1d79921332e946674b5571e">getOrientation</a> () const</td></tr>
+<tr class="separator:a4ef6e8fae1d79921332e946674b5571e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a64eef834a97dbda31a74fa46da7ebed7" id="r_a64eef834a97dbda31a74fa46da7ebed7"><td class="memItemLeft" align="right" valign="top"><a id="a64eef834a97dbda31a74fa46da7ebed7" name="a64eef834a97dbda31a74fa46da7ebed7"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>isCCW</b> () const</td></tr>
+<tr class="separator:a64eef834a97dbda31a74fa46da7ebed7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a52dab7559f6e3db505a9c3bd355d599c" id="r_a52dab7559f6e3db505a9c3bd355d599c"><td class="memItemLeft" align="right" valign="top"><a id="a52dab7559f6e3db505a9c3bd355d599c" name="a52dab7559f6e3db505a9c3bd355d599c"></a>
 const CoordinateXY &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getCenter</b> () const</td></tr>
 <tr class="memdesc:a52dab7559f6e3db505a9c3bd355d599c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the center point of the circle associated with this arc. <br /></td></tr>
@@ -94,6 +103,10 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>getLength</b> () co
 double&#160;</td><td class="memItemRight" valign="bottom"><b>getArea</b> () const</td></tr>
 <tr class="memdesc:aa4e7d908f643b703b0b288be5c829396"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the area enclosed by the arc p0-p1-p2 and the line segment p2-p0. <br /></td></tr>
 <tr class="separator:aa4e7d908f643b703b0b288be5c829396"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a3683069fafdd10ee7051fa625ddfbb" id="r_a5a3683069fafdd10ee7051fa625ddfbb"><td class="memItemLeft" align="right" valign="top"><a id="a5a3683069fafdd10ee7051fa625ddfbb" name="a5a3683069fafdd10ee7051fa625ddfbb"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>getSagitta</b> () const</td></tr>
+<tr class="memdesc:a5a3683069fafdd10ee7051fa625ddfbb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the distance from the centerpoint of the arc to the line segment formed by the end points of the arc. <br /></td></tr>
+<tr class="separator:a5a3683069fafdd10ee7051fa625ddfbb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae38704e5693150d0a7cbd36bd531071e" id="r_ae38704e5693150d0a7cbd36bd531071e"><td class="memItemLeft" align="right" valign="top"><a id="ae38704e5693150d0a7cbd36bd531071e" name="ae38704e5693150d0a7cbd36bd531071e"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>theta0</b> () const</td></tr>
 <tr class="memdesc:ae38704e5693150d0a7cbd36bd531071e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the angle of p0. <br /></td></tr>
@@ -104,14 +117,17 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>theta2</b> () const
 <tr class="separator:af9b28126f066454d5fb6281fab14d75e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2a0deec2453a73471f020608210de4a8" id="r_a2a0deec2453a73471f020608210de4a8"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CircularArc.html#a2a0deec2453a73471f020608210de4a8">containsPointOnCircle</a> (const CoordinateXY &amp;q) const</td></tr>
 <tr class="separator:a2a0deec2453a73471f020608210de4a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9e4811c877d208e937f1b3c13a73790c" id="r_a9e4811c877d208e937f1b3c13a73790c"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CircularArc.html#a9e4811c877d208e937f1b3c13a73790c">containsPoint</a> (const CoordinateXY &amp;q)</td></tr>
-<tr class="separator:a9e4811c877d208e937f1b3c13a73790c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac442ec0fd1aef248fd26dba5d5697ac6" id="r_ac442ec0fd1aef248fd26dba5d5697ac6"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CircularArc.html#ac442ec0fd1aef248fd26dba5d5697ac6">containsPoint</a> (const CoordinateXY &amp;q) const</td></tr>
+<tr class="separator:ac442ec0fd1aef248fd26dba5d5697ac6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3a9f650ee08b8e6ac3b374fe6d18b023" id="r_a3a9f650ee08b8e6ac3b374fe6d18b023"><td class="memItemLeft" align="right" valign="top"><a id="a3a9f650ee08b8e6ac3b374fe6d18b023" name="a3a9f650ee08b8e6ac3b374fe6d18b023"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>containsAngle</b> (double theta) const</td></tr>
 <tr class="memdesc:a3a9f650ee08b8e6ac3b374fe6d18b023"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check to see if a given angle lies on this arc. <br /></td></tr>
 <tr class="separator:a3a9f650ee08b8e6ac3b374fe6d18b023"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c6fd0765713b6b229107ed0dcb1be3a" id="r_a2c6fd0765713b6b229107ed0dcb1be3a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CircularArc.html#a2c6fd0765713b6b229107ed0dcb1be3a">isUpwardAtPoint</a> (const CoordinateXY &amp;q) const</td></tr>
 <tr class="separator:a2c6fd0765713b6b229107ed0dcb1be3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4c384afc698f2c6927926452cbf1b177" id="r_a4c384afc698f2c6927926452cbf1b177"><td class="memItemLeft" align="right" valign="top"><a id="a4c384afc698f2c6927926452cbf1b177" name="a4c384afc698f2c6927926452cbf1b177"></a>
+std::pair&lt; <a class="el" href="classgeos_1_1geom_1_1CircularArc.html">CircularArc</a>, <a class="el" href="classgeos_1_1geom_1_1CircularArc.html">CircularArc</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>splitAtPoint</b> (const CoordinateXY &amp;q) const</td></tr>
+<tr class="separator:a4c384afc698f2c6927926452cbf1b177"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a81835dae6a1ed029e430d5df8fc167a2" id="r_a81835dae6a1ed029e430d5df8fc167a2"><td class="memItemLeft" align="right" valign="top"><a id="a81835dae6a1ed029e430d5df8fc167a2" name="a81835dae6a1ed029e430d5df8fc167a2"></a>
 Iterator&#160;</td><td class="memItemRight" valign="bottom"><b>begin</b> () const</td></tr>
 <tr class="separator:a81835dae6a1ed029e430d5df8fc167a2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -121,21 +137,21 @@ Iterator&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> () const<
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
-<tr class="memitem:a2d0aeb9675b44806880925a24e4c2a85" id="r_a2d0aeb9675b44806880925a24e4c2a85"><td class="memItemLeft" align="right" valign="top"><a id="a2d0aeb9675b44806880925a24e4c2a85" name="a2d0aeb9675b44806880925a24e4c2a85"></a>
-const CoordinateXY &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>p0</b></td></tr>
-<tr class="separator:a2d0aeb9675b44806880925a24e4c2a85"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acfbe94e470070701aa7404c4e575dda7" id="r_acfbe94e470070701aa7404c4e575dda7"><td class="memItemLeft" align="right" valign="top"><a id="acfbe94e470070701aa7404c4e575dda7" name="acfbe94e470070701aa7404c4e575dda7"></a>
-const CoordinateXY &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>p1</b></td></tr>
-<tr class="separator:acfbe94e470070701aa7404c4e575dda7"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acd4fcbd482d85eb9edaf06076dfbac45" id="r_acd4fcbd482d85eb9edaf06076dfbac45"><td class="memItemLeft" align="right" valign="top"><a id="acd4fcbd482d85eb9edaf06076dfbac45" name="acd4fcbd482d85eb9edaf06076dfbac45"></a>
-const CoordinateXY &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>p2</b></td></tr>
-<tr class="separator:acd4fcbd482d85eb9edaf06076dfbac45"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a88a2e289550ecfa4fc093e191ab8efba" id="r_a88a2e289550ecfa4fc093e191ab8efba"><td class="memItemLeft" align="right" valign="top"><a id="a88a2e289550ecfa4fc093e191ab8efba" name="a88a2e289550ecfa4fc093e191ab8efba"></a>
+CoordinateXY&#160;</td><td class="memItemRight" valign="bottom"><b>p0</b></td></tr>
+<tr class="separator:a88a2e289550ecfa4fc093e191ab8efba"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad02e464dc710a7cf289b8d041091394b" id="r_ad02e464dc710a7cf289b8d041091394b"><td class="memItemLeft" align="right" valign="top"><a id="ad02e464dc710a7cf289b8d041091394b" name="ad02e464dc710a7cf289b8d041091394b"></a>
+CoordinateXY&#160;</td><td class="memItemRight" valign="bottom"><b>p1</b></td></tr>
+<tr class="separator:ad02e464dc710a7cf289b8d041091394b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4b761a96654e20032a845f580725c63" id="r_ad4b761a96654e20032a845f580725c63"><td class="memItemLeft" align="right" valign="top"><a id="ad4b761a96654e20032a845f580725c63" name="ad4b761a96654e20032a845f580725c63"></a>
+CoordinateXY&#160;</td><td class="memItemRight" valign="bottom"><b>p2</b></td></tr>
+<tr class="separator:ad4b761a96654e20032a845f580725c63"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A <a class="el" href="classgeos_1_1geom_1_1CircularArc.html">CircularArc</a> is a reference to three points that define a circular arc. It provides for the lazy calculation of various arc properties such as the center, radius, and orientation </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a9e4811c877d208e937f1b3c13a73790c" name="a9e4811c877d208e937f1b3c13a73790c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9e4811c877d208e937f1b3c13a73790c">&#9670;&#160;</a></span>containsPoint()</h2>
+<a id="ac442ec0fd1aef248fd26dba5d5697ac6" name="ac442ec0fd1aef248fd26dba5d5697ac6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac442ec0fd1aef248fd26dba5d5697ac6">&#9670;&#160;</a></span>containsPoint()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -148,7 +164,7 @@ const CoordinateXY &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>p
           <td>(</td>
           <td class="paramtype">const CoordinateXY &amp;&#160;</td>
           <td class="paramname"><em>q</em></td><td>)</td>
-          <td></td>
+          <td> const</td>
         </tr>
       </table>
   </td>
@@ -216,6 +232,36 @@ const CoordinateXY &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>p
 
 </div>
 </div>
+<a id="a4ef6e8fae1d79921332e946674b5571e" name="a4ef6e8fae1d79921332e946674b5571e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ef6e8fae1d79921332e946674b5571e">&#9670;&#160;</a></span>getOrientation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int geos::geom::CircularArc::getOrientation </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Return the orientation of the arc as one of:</p><ul>
+<li>algorithm::Orientation::CLOCKWISE,</li>
+<li>algorithm::Orientation::COUNTERCLOCKWISE</li>
+<li>algorithm::Orientation::COLLINEAR </li>
+</ul>
+
+</div>
+</div>
 <a id="a2c6fd0765713b6b229107ed0dcb1be3a" name="a2c6fd0765713b6b229107ed0dcb1be3a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2c6fd0765713b6b229107ed0dcb1be3a">&#9670;&#160;</a></span>isUpwardAtPoint()</h2>
 
@@ -240,36 +286,6 @@ const CoordinateXY &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>p
 </table>
 </div><div class="memdoc">
 <p>Return true if the arc is pointing positive in the y direction at the location of a specified point. The point is assumed to be on the arc. </p>
-
-</div>
-</div>
-<a id="a54e6b0cb3c059adc2e1d6ff9335aa2ab" name="a54e6b0cb3c059adc2e1d6ff9335aa2ab"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a54e6b0cb3c059adc2e1d6ff9335aa2ab">&#9670;&#160;</a></span>orientation()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">int geos::geom::CircularArc::orientation </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Return the orientation of the arc as one of:</p><ul>
-<li>algorithm::Orientation::CLOCKWISE,</li>
-<li>algorithm::Orientation::COUNTERCLOCKWISE</li>
-<li>algorithm::Orientation::COLLINEAR </li>
-</ul>
 
 </div>
 </div>

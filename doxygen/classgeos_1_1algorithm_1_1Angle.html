@@ -89,6 +89,8 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:aad6d7eb020edf56d3289bb58b7235997" id="r_aad6d7eb020edf56d3289bb58b7235997"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1Angle.html#aad6d7eb020edf56d3289bb58b7235997">normalizePositive</a> (double <a class="el" href="classgeos_1_1algorithm_1_1Angle.html#aa9a42c5eb2211b3f8d04fc672991576b">angle</a>)</td></tr>
 <tr class="memdesc:aad6d7eb020edf56d3289bb58b7235997"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the normalized positive value of an angle, which is the equivalent angle in the range [ 0, 2*Pi ).  <br /></td></tr>
 <tr class="separator:aad6d7eb020edf56d3289bb58b7235997"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af510025f2ea6823dd931c4fbc0b86760" id="r_af510025f2ea6823dd931c4fbc0b86760"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1Angle.html#af510025f2ea6823dd931c4fbc0b86760">isWithinCCW</a> (double <a class="el" href="classgeos_1_1algorithm_1_1Angle.html#aa9a42c5eb2211b3f8d04fc672991576b">angle</a>, double from, double to)</td></tr>
+<tr class="separator:af510025f2ea6823dd931c4fbc0b86760"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a11b9891ce2c21eb4988bcb18ac245e25" id="r_a11b9891ce2c21eb4988bcb18ac245e25"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1Angle.html#a11b9891ce2c21eb4988bcb18ac245e25">diff</a> (double ang1, double ang2)</td></tr>
 <tr class="separator:a11b9891ce2c21eb4988bcb18ac245e25"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a187158d7ff569463500ceb1d9cbcb0fc" id="r_a187158d7ff569463500ceb1d9cbcb0fc"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1Angle.html#a187158d7ff569463500ceb1d9cbcb0fc">sinCosSnap</a> (const double ang, double &amp;rSin, double &amp;rCos)</td></tr>
@@ -601,6 +603,58 @@ static const int&#160;</td><td class="memItemRight" valign="bottom"><b>NONE</b> 
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="af510025f2ea6823dd931c4fbc0b86760" name="af510025f2ea6823dd931c4fbc0b86760"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af510025f2ea6823dd931c4fbc0b86760">&#9670;&#160;</a></span>isWithinCCW()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static bool geos::algorithm::Angle::isWithinCCW </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>angle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>from</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>to</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns true if angle x is within the counterclockwise arc from angle a to angle b</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">angle</td><td>angle to test </td></tr>
+    <tr><td class="paramname">from</td><td>starting angle of arc </td></tr>
+    <tr><td class="paramname">to</td><td>ending angle of arc</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if <code>angle</code> is within [from, to] </dd></dl>
 
 </div>
 </div>
