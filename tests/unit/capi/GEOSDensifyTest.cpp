@@ -169,6 +169,7 @@ void object::test<10>()
     result_ = GEOSDensify(input_, 0.1);
     ensure("curved geometries not supported", result_ == nullptr);
 }
+
 // Densify a LINESTRING Z, check that Z gets interpolated
 template <>
 template <>
@@ -202,6 +203,19 @@ void object::test<13>()
         "POLYGON Z ((0 0 0, 10 0 2, 10 10 10, 0 10 2, 0 0 0), (1 1 0, 1 7 0, 7 7 0, 7 1 0, 1 1 0))",
         "POLYGON Z ((0 0 0, 5 0 1, 10 0 2, 10 5 6, 10 10 10, 5 10 6, 0 10 2, 0 5 1, 0 0 0), (1 1 0, 1 4 0, 1 7 0, 4 7 0, 7 7 0, 7 4 0, 7 1 0, 4 1 0, 1 1 0))",
         5.0
+    );
+}
+
+template <>
+template <>
+void object::test<14>()
+{
+    set_test_name("M values are interpolated");
+
+    testDensify(
+        "LINESTRING M (0 0 0, 0 6 2)",
+        "LINESTRING M (0 0 0, 0 3 1, 0 6 2)",
+        3.0
     );
 }
 
