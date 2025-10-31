@@ -42,5 +42,19 @@ void object::test<2>()
     ensure_equals("curved geometry not supported", GEOSDisjoint(geom2_, geom1_), 2);
 }
 
+template<>
+template<>
+void object::test<3>()
+{
+    set_test_name("MultiSurface / MultiPoint PIP");
+
+    geom1_ = fromWKT("MULTISURFACE(POLYGON ((100 100, 200 100, 200 200, 100 100)), CURVEPOLYGON (COMPOUNDCURVE(CIRCULARSTRING(0 0, 1 1, 2 0), (2 0, 0 0))))");
+    geom2_ = fromWKT("MULTIPOINT ((5000 5000), (0.1556955 0.5355459))");
+
+    ensure_equals(GEOSDisjoint(geom1_, geom2_), 0);
+    ensure_equals(GEOSDisjoint(geom2_, geom1_), 0);
+}
+
+
 } // namespace tut
 
