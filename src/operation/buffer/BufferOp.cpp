@@ -116,6 +116,23 @@ BufferOp::getResultGeometry(double nDistance)
     }
     distance = nDistance;
     computeGeometry();
+
+    if (distance > 0 && argGeom->getNumGeometries() == 1 && resultGeometry->getNumGeometries() > 1)
+    {
+        auto geoms = detail::down_cast<GeometryCollection*>(resultGeometry.get())->releaseGeometries();
+        size_t maxAreaGeom = 0;
+        double maxArea = geoms[0]->getArea();
+
+        for (size_t i = 1; i < geoms.size(); i++) {
+            if (geoms[i]->getArea() > maxArea) {
+                maxArea = geoms[i]->getArea();
+                maxAreaGeom = i;
+            }
+        }
+
+        return std::move(geoms[maxAreaGeom]);
+    }
+
     return std::unique_ptr<Geometry>(resultGeometry.release());
 }
 
