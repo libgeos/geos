@@ -324,12 +324,11 @@ Geometry::intersects(const Geometry* g) const
     }
 
     auto typ = getGeometryTypeId();
-    if (typ == GEOS_CURVEPOLYGON && g->getGeometryTypeId() == GEOS_POINT) {
-        auto loc = locate::SimplePointInAreaLocator::locatePointInSurface(*g->getCoordinate(), *detail::down_cast<const Surface*>(this));
-        return loc != Location::EXTERIOR;
-    } else if (typ == GEOS_POINT && g->getGeometryTypeId() == GEOS_CURVEPOLYGON) {
-        auto loc = locate::SimplePointInAreaLocator::locatePointInSurface(*getCoordinate(), *detail::down_cast<const Surface*>(g));
-        return loc != Location::EXTERIOR;
+    if ((typ == GEOS_CURVEPOLYGON || typ == GEOS_MULTISURFACE) && g->getGeometryTypeId() == GEOS_POINT) {
+        return locate::SimplePointInAreaLocator::isContained(*g->getCoordinate(), this);
+    }
+    if (typ == GEOS_POINT && (g->getGeometryTypeId() == GEOS_CURVEPOLYGON || g->getGeometryTypeId() == GEOS_MULTISURFACE)) {
+        return locate::SimplePointInAreaLocator::isContained(*getCoordinate(), g);
     }
 
 #if USE_RELATENG
