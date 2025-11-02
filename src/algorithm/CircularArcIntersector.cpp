@@ -99,6 +99,8 @@ CircularArcIntersector::intersects(const CircularArc& arc, const CoordinateXY& p
         return;
     }
 
+    reset();
+
     // TODO: envelope check?
     const CoordinateXY& c = arc.getCenter();
     const double r = arc.getRadius();
@@ -130,6 +132,8 @@ void
 CircularArcIntersector::intersects(const CoordinateXY& p0, const CoordinateXY& p1,
                                    const CoordinateXY& q0, const CoordinateXY& q1)
 {
+    reset();
+
     algorithm::LineIntersector li;
     li.computeIntersection(p0, p1, q0, q1);
     if (li.getIntersectionNum() == 2) {
@@ -162,6 +166,8 @@ CircularArcIntersector::intersects(const CircularArc& arc1, const CircularArc& a
         intersects(arc1, arc2.p0, arc2.p2);
         return;
     }
+
+    reset();
 
     const auto& c1 = arc1.getCenter();
     const auto& c2 = arc2.getCenter();
