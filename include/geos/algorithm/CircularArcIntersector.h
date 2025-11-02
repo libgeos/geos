@@ -82,9 +82,14 @@ public:
     static int
     circleIntersects(const CoordinateXY& center, double r, const CoordinateXY& p0, const CoordinateXY& p1, CoordinateXY& isect0, CoordinateXY& isect1);
 
-private:
 
     void intersects(const CoordinateXY& p0, const CoordinateXY& p1, const CoordinateXY& q0, const CoordinateXY& q1);
+
+private:
+    void reset() {
+        nPt = 0;
+        nArc = 0;
+    }
 
     std::array<CoordinateXY, 2> intPt;
     std::array<CircularArc, 2> intArc;

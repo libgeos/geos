@@ -19,44 +19,80 @@
 
 #include <geos/noding/SimpleNoder.h>
 #include <geos/noding/SegmentString.h>
-#include <geos/noding/SegmentIntersector.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/noding/ArcIntersector.h>
+#include <geos/noding/NodedSegmentString.h>
+#include <geos/noding/NodableArcString.h>
 
 using namespace geos::geom;
 
 namespace geos {
 namespace noding { // geos.noding
 
-/*private*/
-void
-SimpleNoder::computeIntersects(SegmentString* e0, SegmentString* e1)
+template<typename T1, typename T2>
+static void computeIntersectsImpl(ArcIntersector& intersector, T1& e0, T2& e1)
 {
-    assert(segInt); // must provide a segment intersector!
-
-    const CoordinateSequence* pts0 = e0->getCoordinates().get();
-    const CoordinateSequence* pts1 = e1->getCoordinates().get();
-    for(std::size_t i0 = 0, n0 = pts0->getSize() - 1; i0 < n0; i0++) {
-        for(std::size_t i1 = 0, n1 = pts1->getSize() - 1; i1 < n1; i1++) {
-            segInt->processIntersections(e0, i0, e1, i1);
+    for(std::size_t i = 0; i < e0.getSize(); i++) {
+        for(std::size_t j = 0; j < e1.getSize(); j++) {
+            intersector.processIntersections(e0, i, e1, j);
         }
     }
+}
 
+/*private*/
+void
+SimpleNoder::computeIntersects(PathString& e0, PathString& e1)
+{
+    assert(m_intersector); // must provide a segment intersector!
+
+    SegmentString* linear0 = dynamic_cast<SegmentString*>(&e0);
+    SegmentString* linear1 = dynamic_cast<SegmentString*>(&e1);
+
+    if (linear0 && linear1) {
+        computeIntersectsImpl(*m_intersector, *linear0, *linear1);
+    } else if (!linear0 && !linear1) {
+        computeIntersectsImpl(*m_intersector, *detail::down_cast<ArcString*>(&e0), *detail::down_cast<ArcString*>(&e1));
+    } else if (!linear0) {
+        computeIntersectsImpl(*m_intersector, *detail::down_cast<ArcString*>(&e0), *linear1);
+    } else {
+        computeIntersectsImpl(*m_intersector, *linear0, *detail::down_cast<ArcString*>(&e1));
+    }
 }
 
 /*public*/
 void
-SimpleNoder::computeNodes(const std::vector<SegmentString*>& inputSegmentStrings)
+SimpleNoder::computePathNodes(const std::vector<PathString*>& inputPathStrings)
 {
-    nodedSegStrings = inputSegmentStrings;
+    m_pathStrings = inputPathStrings;
 
-    for (SegmentString* edge0: inputSegmentStrings) {
-        for (SegmentString* edge1: inputSegmentStrings) {
-            computeIntersects(edge0, edge1);
+    for (auto* edge0: m_pathStrings) {
+        for (auto* edge1: m_pathStrings) {
+            // TODO skip processing against self?
+            computeIntersects(*edge0, *edge1);
+        }
+    }
+}
+
+std::vector<std::unique_ptr<PathString>>
+SimpleNoder::getNodedPaths()
+{
+    std::vector<std::unique_ptr<PathString>> nodedPaths;
+
+    for (PathString* ps : m_pathStrings) {
+        if (auto* nss = dynamic_cast<NodedSegmentString*>(ps)) {
+            std::vector<std::unique_ptr<SegmentString>> tmp;
+            nss->getNodeList().addSplitEdges(tmp);
+            for (auto& segString : tmp) {
+                nodedPaths.push_back(std::move(segString));
+            }
+        } else {
+            auto* nas = detail::down_cast<NodableArcString*>(ps);
+            nodedPaths.push_back(nas->getNoded());
         }
     }
 
+    return nodedPaths;
 }
-
 
 } // namespace geos.noding
 } // namespace geos

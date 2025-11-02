@@ -22,22 +22,20 @@
 
 #include <vector>
 
-#include <geos/noding/SinglePassNoder.h>
-#include <geos/noding/NodedSegmentString.h> // for inlined (FIXME)
+#include <geos/noding/ArcNoder.h>
 
 // Forward declarations
 namespace geos {
 namespace noding {
-//class SegmentString;
+class PathString;
 }
 }
 
 namespace geos {
 namespace noding { // geos.noding
 
-
 /** \brief
- * Nodes a set of {@link SegmentString}s by
+ * Nodes a set of {@link SegmentString}s and/or {@link ArcString}s by
  * performing a brute-force comparison of every segment to every other one.
  *
  * This has n^2 performance, so is too slow for use on large numbers
@@ -45,24 +43,21 @@ namespace noding { // geos.noding
  *
  * @version 1.7
  */
-class GEOS_DLL SimpleNoder: public SinglePassNoder {
+class GEOS_DLL SimpleNoder: public ArcNoder {
 private:
-    std::vector<SegmentString*> nodedSegStrings;
-    void computeIntersects(SegmentString* e0, SegmentString* e1);
+    std::vector<PathString*> nodedSegStrings;
+    void computeIntersects(PathString& e0, PathString& e1);
 
 public:
-    SimpleNoder(SegmentIntersector* nSegInt = nullptr)
-        :
-        SinglePassNoder(nSegInt)
-    {}
 
-    void computeNodes(const std::vector<SegmentString*>& inputSegmentStrings) override;
+    SimpleNoder(std::unique_ptr<ArcIntersector>(nSegInt)) : ArcNoder(std::move(nSegInt)) {}
 
-    std::vector<std::unique_ptr<SegmentString>>
-    getNodedSubstrings() override
-    {
-        return NodedSegmentString::getNodedSubstrings(nodedSegStrings);
-    }
+    void computePathNodes(const std::vector<PathString*>& inputSegmentStrings) override;
+
+    std::vector<std::unique_ptr<PathString>> getNodedPaths() override;
+
+private:
+    std::vector<PathString*> m_pathStrings;
 };
 
 } // namespace geos.noding
