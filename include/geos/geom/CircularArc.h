@@ -250,6 +250,17 @@ public:
         return isUpward;
     }
 
+    void reverse() {
+        std::swap(p0, p2);
+        if (m_orientation_known) {
+            if (m_orientation == algorithm::Orientation::COUNTERCLOCKWISE) {
+                m_orientation = algorithm::Orientation::CLOCKWISE;
+            } else if (m_orientation == algorithm::Orientation::CLOCKWISE) {
+                m_orientation = algorithm::Orientation::COUNTERCLOCKWISE;
+            }
+        }
+    }
+
     // Split an arc at a specified point.
     // The point is assumed to be o the arc.
     std::pair<CircularArc, CircularArc> splitAtPoint(const CoordinateXY& q) const {
@@ -257,6 +268,10 @@ public:
             CircularArc(p0, q, getCenter(), getRadius(), getOrientation()),
             CircularArc(q, p2, getCenter(), getRadius(), getOrientation())
         };
+    }
+
+    std::string toString() const {
+        return "CIRCULARSTRING (" + p0.toString() + ", " + p1.toString() + ", " + p2.toString() + ")";
     }
 
     class Iterator {
