@@ -116,6 +116,7 @@ BufferOp::getResultGeometry(double nDistance)
     }
     distance = nDistance;
     computeGeometry();
+
     return std::unique_ptr<Geometry>(resultGeometry.release());
 }
 

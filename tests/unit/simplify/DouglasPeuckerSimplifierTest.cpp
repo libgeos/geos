@@ -45,7 +45,7 @@ struct test_dpsimp_data {
         ensure("Simplified geometry is invalid!", simplified->isValid());
 
         GeomPtr exp(wktreader.read(wkt_expected));
-        ensure_equals_geometry(exp.get(), simplified.get());
+        ensure_equals_geometry(simplified.get(), exp.get());
     }
 
     void

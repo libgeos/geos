@@ -363,6 +363,25 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
     }
 }
 
+static void
+keepLargestArea(std::vector<std::unique_ptr<Geometry>> & polyList) {
+    size_t maxAreaGeom = 0;
+    double maxArea = polyList[0]->getArea();
+
+    for (size_t i = 1; i < polyList.size(); i++) {
+        if (polyList[i]->getArea() > maxArea) {
+            maxArea = polyList[i]->getArea();
+            maxAreaGeom = i;
+        }
+    }
+
+    if (maxAreaGeom > 0) {
+        polyList[0] = std::move(polyList[maxAreaGeom]);
+    }
+
+    polyList.resize(1);
+}
+
 /*public*/
 std::unique_ptr<Geometry>
 BufferBuilder::buffer(const Geometry* g, double distance)
@@ -485,9 +504,18 @@ BufferBuilder::buffer(const Geometry* g, double distance)
             return createEmptyResultGeometry();
         }
 
+        //  Heuristic to remove artifacts caused by topology robustness problems
+        //  or buffer curve generation anomalies.
+        //  Uses fact that for distance > 0 single-element inputs must create single element buffers.
+        //  This does not hold if distance <= 0;
+        //  distance = 0 can create multipolygon results due to topology collapse,
+        //  and distance < 0 may erode polygons so they are disconnected.
+        if (distance > 0 && g->getNumGeometries() == 1 && resultPolyList.size() > 1) {
+            keepLargestArea(resultPolyList);
+        }
+
         // resultPolyList ownership transferred here
         resultGeom = geomFact->buildGeometry(std::move(resultPolyList));
-
     }
     catch(const util::GEOSException& /* exc */) {
 
