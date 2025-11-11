@@ -200,23 +200,21 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
 
     // Node these SegmentStrings.
     Noder* noder = getNoder(precisionModel);
-    noder->computeNodes(&curveList);
+    noder->computeNodes(curveList);
 
-    SegmentString::NonConstVect* nodedEdges = noder->getNodedSubstrings();
+    std::vector<SegmentString*> nodedEdges = noder->getNodedSubstrings();
 
     // Create a geometry out of the noded substrings.
     std::vector<std::unique_ptr<Geometry>> singleSidedNodedEdges;
-    singleSidedNodedEdges.reserve(nodedEdges->size());
-    for(std::size_t i = 0, n = nodedEdges->size(); i < n; ++i) {
-        SegmentString* ss = (*nodedEdges)[i];
+    singleSidedNodedEdges.reserve(nodedEdges.size());
+    for(std::size_t i = 0, n = nodedEdges.size(); i < n; ++i) {
+        SegmentString* ss = nodedEdges[i];
 
         auto tmp = geomFact->createLineString(ss->getCoordinates()->clone());
         delete ss;
 
         singleSidedNodedEdges.push_back(std::move(tmp));
     }
-
-    delete nodedEdges;
 
     for(std::size_t i = 0, n = curveList.size(); i < n; ++i) {
         delete curveList[i];
@@ -654,9 +652,9 @@ BufferBuilder::computeNodedEdges(SegmentString::NonConstVect& bufferSegStrList,
               ) << std::endl;
 #endif
 
-    noder->computeNodes(&bufferSegStrList);
+    noder->computeNodes(bufferSegStrList);
 
-    SegmentString::NonConstVect* nodedSegStrings = \
+    SegmentString::NonConstVect nodedSegStrings = \
             noder->getNodedSubstrings();
 
 #if JTS_DEBUG
@@ -669,7 +667,7 @@ BufferBuilder::computeNodedEdges(SegmentString::NonConstVect& bufferSegStrList,
 
 
     for(SegmentString::NonConstVect::iterator
-            i = nodedSegStrings->begin(), e = nodedSegStrings->end();
+            i = nodedSegStrings.begin(), e = nodedSegStrings.end();
             i != e;
             ++i) {
         SegmentString* segStr = *i;
@@ -689,8 +687,6 @@ BufferBuilder::computeNodedEdges(SegmentString::NonConstVect& bufferSegStrList,
         // will take care of the Edge ownership
         insertUniqueEdge(edge);
     }
-
-    delete nodedSegStrings;
 
     if(noder != workingNoder) {
         delete noder;

@@ -67,7 +67,7 @@ class GEOS_DLL MCIndexNoder : public SinglePassNoder {
 private:
     std::vector<index::chain::MonotoneChain> monoChains;
     index::strtree::TemplateSTRtree<const index::chain::MonotoneChain*> index;
-    std::vector<SegmentString*>* nodedSegStrings;
+    std::vector<SegmentString*> nodedSegStrings;
     // statistics
     int nOverlaps;
     double overlapTolerance;
@@ -81,7 +81,6 @@ public:
 
     MCIndexNoder(SegmentIntersector* nSegInt = nullptr, double p_overlapTolerance = 0.0)
         : SinglePassNoder(nSegInt)
-        , nodedSegStrings(nullptr)
         , nOverlaps(0)
         , overlapTolerance(p_overlapTolerance)
         , indexBuilt(false)
@@ -102,13 +101,13 @@ public:
         return index;
     }
 
-    std::vector<SegmentString*>* getNodedSubstrings() const override
+    std::vector<SegmentString*> getNodedSubstrings() override
     {
-        assert(nodedSegStrings); // must have called computeNodes before!
-        return NodedSegmentString::getNodedSubstrings(*nodedSegStrings);
+        //assert(nodedSegStrings); // must have called computeNodes before!
+        return NodedSegmentString::getNodedSubstrings(nodedSegStrings);
     }
 
-    void computeNodes(std::vector<SegmentString*>* inputSegmentStrings) override;
+    void computeNodes(const std::vector<SegmentString*>& inputSegmentStrings) override;
 
     class SegmentOverlapAction : public index::chain::MonotoneChainOverlapAction {
     public:

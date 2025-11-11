@@ -45,12 +45,12 @@ SimpleNoder::computeIntersects(SegmentString* e0, SegmentString* e1)
 
 /*public*/
 void
-SimpleNoder::computeNodes(SegmentString::NonConstVect* inputSegmentStrings)
+SimpleNoder::computeNodes(const std::vector<SegmentString*>& inputSegmentStrings)
 {
     nodedSegStrings = inputSegmentStrings;
 
-    for (SegmentString* edge0: *inputSegmentStrings) {
-        for (SegmentString* edge1: *inputSegmentStrings) {
+    for (SegmentString* edge0: inputSegmentStrings) {
+        for (SegmentString* edge1: inputSegmentStrings) {
             computeIntersects(edge0, edge1);
         }
     }

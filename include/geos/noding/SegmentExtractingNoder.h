@@ -53,7 +53,7 @@ class GEOS_DLL SegmentExtractingNoder : public Noder {
 
 private:
 
-    std::vector<SegmentString*>* segList;
+    std::vector<SegmentString*> segList;
 
     void extractSegments(
         const std::vector<SegmentString*>& inputSegs,
@@ -69,16 +69,15 @@ public:
     /**
     * Creates a new segment-extracting noder.
     */
-    SegmentExtractingNoder() : segList(nullptr)
-        {};
+    SegmentExtractingNoder() = default;
 
-    void computeNodes(std::vector<SegmentString*>* segStrings) override;
+    void computeNodes(const std::vector<SegmentString*>& segStrings) override;
 
     /**
     * @return a Collection of SegmentString representing the
     * substrings. Caller takes ownership over vector and contents.
     */
-    std::vector<SegmentString*>* getNodedSubstrings() const override;
+    std::vector<SegmentString*> getNodedSubstrings() override;
 
 
 };

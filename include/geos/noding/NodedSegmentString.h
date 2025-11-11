@@ -82,9 +82,8 @@ public:
     static void getNodedSubstrings(const SegmentString::NonConstVect& segStrings,
                                    SegmentString::NonConstVect* resultEdgeList);
 
-    /// Returns allocated object
-    static SegmentString::NonConstVect* getNodedSubstrings(
-        const SegmentString::NonConstVect& segStrings);
+    static std::vector<SegmentString*> getNodedSubstrings(
+        const std::vector<SegmentString*>& segStrings);
 
     std::unique_ptr<geom::CoordinateSequence> getNodedCoordinates();
 

@@ -83,13 +83,13 @@ public:
         li.setPrecisionModel(&pm);
     }
 
-    std::vector<SegmentString*>*
-    getNodedSubstrings() const override
+    std::vector<SegmentString*>
+    getNodedSubstrings() override
     {
-        return NodedSegmentString::getNodedSubstrings(*nodedSegStrings);
+        return NodedSegmentString::getNodedSubstrings(nodedSegStrings);
     }
 
-    void computeNodes(std::vector<SegmentString*>* segStrings) override;
+    void computeNodes(const std::vector<SegmentString*>& segStrings) override;
 
     /**
      * Computes nodes introduced as a result of
@@ -99,7 +99,7 @@ public:
      *        NOTE: they *must* be instances of NodedSegmentString, or
      * 	            an assertion will fail.
      */
-    void computeVertexSnaps(std::vector<SegmentString*>& edges);
+    void computeVertexSnaps(const std::vector<SegmentString*>& edges);
 
 private:
 
@@ -110,11 +110,11 @@ private:
 
     double scaleFactor;
 
-    std::vector<SegmentString*>* nodedSegStrings;
+    std::vector<SegmentString*> nodedSegStrings;
 
     std::unique_ptr<MCIndexPointSnapper> pointSnapper;
 
-    void snapRound(MCIndexNoder& noder, std::vector<SegmentString*>* segStrings);
+    void snapRound(MCIndexNoder& noder, const std::vector<SegmentString*>& segStrings);
 
 
     /**
@@ -125,7 +125,7 @@ private:
      *
      */
     void findInteriorIntersections(MCIndexNoder& noder,
-                                   std::vector<SegmentString*>* segStrings,
+                                   const std::vector<SegmentString*>& segStrings,
                                    std::vector<geom::Coordinate>& intersections);
 
     /**

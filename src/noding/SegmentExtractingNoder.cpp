@@ -29,10 +29,9 @@ namespace noding {  // geos.noding
 /* public */
 void
 SegmentExtractingNoder::computeNodes(
-    std::vector<SegmentString*>* segStrings)
+    const std::vector<SegmentString*>& segStrings)
 {
-    segList = new std::vector<SegmentString*>;
-    extractSegments(*segStrings, *segList);
+    extractSegments(segStrings, segList);
 }
 
 
@@ -71,10 +70,10 @@ SegmentExtractingNoder::extractSegments(
 }
 
 
-std::vector<SegmentString*>*
-SegmentExtractingNoder::getNodedSubstrings() const
+std::vector<SegmentString*>
+SegmentExtractingNoder::getNodedSubstrings()
 {
-    return segList;
+    return std::move(segList);
 }
 
 

@@ -152,7 +152,7 @@ ScaledNoder::rescale(SegmentString::NonConstVect& segStrings) const
 
 /*private*/
 void
-ScaledNoder::scale(SegmentString::NonConstVect& segStrings) const
+ScaledNoder::scale(const SegmentString::NonConstVect& segStrings) const
 {
     Scaler scaler(*this);
     for(std::size_t i = 0; i < segStrings.size(); i++) {
@@ -170,7 +170,7 @@ ScaledNoder::scale(SegmentString::NonConstVect& segStrings) const
         // FIXME remove hardcoded hasZ, hasM and derive from input
         if (rpt.hasRepeatedPoint(cs)) {
             auto cs2 = operation::valid::RepeatedPointRemover::removeRepeatedPoints(cs);
-            segStrings[i] = new NodedSegmentString(cs2.release(), true, false, ss->getData());
+            const_cast<std::vector<SegmentString*>&>(segStrings)[i] = new NodedSegmentString(cs2.release(), true, false, ss->getData());
             delete ss;
         }
     }
@@ -188,17 +188,17 @@ ScaledNoder::~ScaledNoder()
 
 
 /*public*/
-SegmentString::NonConstVect*
-ScaledNoder::getNodedSubstrings() const
+SegmentString::NonConstVect
+ScaledNoder::getNodedSubstrings()
 {
-    SegmentString::NonConstVect* splitSS = noder.getNodedSubstrings();
+    SegmentString::NonConstVect splitSS = noder.getNodedSubstrings();
 
 #if GEOS_DEBUG > 1
     sqlPrint("nodedSegStr", *splitSS);
 #endif
 
     if(isScaled) {
-        rescale(*splitSS);
+        rescale(splitSS);
     }
 
 #if GEOS_DEBUG > 1
@@ -211,7 +211,7 @@ ScaledNoder::getNodedSubstrings() const
 
 /*public*/
 void
-ScaledNoder::computeNodes(SegmentString::NonConstVect* inputSegStr)
+ScaledNoder::computeNodes(const SegmentString::NonConstVect& inputSegStr)
 {
 
 #if GEOS_DEBUG > 1
@@ -219,7 +219,7 @@ ScaledNoder::computeNodes(SegmentString::NonConstVect* inputSegStr)
 #endif
 
     if(isScaled) {
-        scale(*inputSegStr);
+        scale(inputSegStr);
     }
 
 #if GEOS_DEBUG > 1

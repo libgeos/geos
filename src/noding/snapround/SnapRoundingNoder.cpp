@@ -36,10 +36,10 @@ namespace snapround { // geos.noding.snapround
 
 
 /*public*/
-std::vector<SegmentString*>*
-SnapRoundingNoder::getNodedSubstrings() const
+std::vector<SegmentString*>
+SnapRoundingNoder::getNodedSubstrings()
 {
-    std::vector<SegmentString*>* nssResult = NodedSegmentString::getNodedSubstrings(snappedResult);
+    std::vector<SegmentString*> nssResult = NodedSegmentString::getNodedSubstrings(snappedResult);
 
     // Intermediate SegmentStrings are no longer needed
     for (auto nss: snappedResult)
@@ -50,15 +50,14 @@ SnapRoundingNoder::getNodedSubstrings() const
 
 /*public*/
 void
-SnapRoundingNoder::computeNodes(std::vector<SegmentString*>* inputSegStrings)
+SnapRoundingNoder::computeNodes(const std::vector<SegmentString*>& inputSegStrings)
 {
-    snapRound(*inputSegStrings, snappedResult);
-    return;
+    snapRound(inputSegStrings, snappedResult);
 }
 
 /*private*/
 void
-SnapRoundingNoder::snapRound(std::vector<SegmentString*>& inputSegStrings, std::vector<SegmentString*>& resultNodedSegments)
+SnapRoundingNoder::snapRound(const std::vector<SegmentString*>& inputSegStrings, std::vector<SegmentString*>& resultNodedSegments)
 {
     /**
     * Determine hot pixels for intersections and vertices.
@@ -75,19 +74,19 @@ SnapRoundingNoder::snapRound(std::vector<SegmentString*>& inputSegStrings, std::
 
 /*private*/
 void
-SnapRoundingNoder::addIntersectionPixels(std::vector<SegmentString*>& segStrings)
+SnapRoundingNoder::addIntersectionPixels(const std::vector<SegmentString*>& segStrings)
 {
     double tolerance = 1.0 / pm->getScale() / INTERSECTION_NEARNESS_FACTOR;
     SnapRoundingIntersectionAdder intAdder(tolerance);
     MCIndexNoder noder(&intAdder, tolerance);
-    noder.computeNodes(&segStrings);
+    noder.computeNodes(segStrings);
     const auto& intPts = intAdder.getIntersections();
     pixelIndex.addNodes(&intPts);
 }
 
 /*private void*/
 void
-SnapRoundingNoder::addVertexPixels(std::vector<SegmentString*>& segStrings)
+SnapRoundingNoder::addVertexPixels(const std::vector<SegmentString*>& segStrings)
 {
     for (SegmentString* nss : segStrings) {
         const CoordinateSequence* pts = nss->getCoordinates();

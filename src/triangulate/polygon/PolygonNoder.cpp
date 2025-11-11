@@ -130,7 +130,7 @@ PolygonNoder::node()
     for (auto& nss : nodedRings) {
         bareNodedRings.push_back(nss.get());
     }
-    noder.computeNodes(&bareNodedRings);
+    noder.computeNodes(bareNodedRings);
 }
 
 /* public */

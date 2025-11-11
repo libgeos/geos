@@ -54,7 +54,7 @@ PolygonTopologyAnalyzer::PolygonTopologyAnalyzer(const Geometry* geom, bool p_is
     // Code copied in from analyzeIntersections()
     noding::MCIndexNoder noder;
     noder.setSegmentIntersector(&segInt);
-    noder.computeNodes(&segStrings);
+    noder.computeNodes(segStrings);
     if (segInt.hasDoubleTouch()) {
         disconnectionPt = segInt.getDoubleTouchLocation();
     }

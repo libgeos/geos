@@ -71,13 +71,13 @@ private:
     // Members
     double snapTolerance;
     SnappingPointIndex snapIndex;
-    std::vector<SegmentString*>* nodedResult;
+    std::vector<SegmentString*> nodedResult;
 
     // Methods
 
-    void seedSnapIndex(std::vector<SegmentString*>& segStrings);
+    void seedSnapIndex(const std::vector<SegmentString*>& segStrings);
 
-    void snapVertices(std::vector<SegmentString*>& segStrings, std::vector<SegmentString*>& nodedStrings);
+    void snapVertices(const std::vector<SegmentString*>& segStrings, std::vector<SegmentString*>& nodedStrings);
 
     SegmentString* snapVertices(SegmentString* ss);
 
@@ -91,7 +91,7 @@ private:
     *
     * @return a list of Coordinates for the intersections
     */
-    std::unique_ptr<std::vector<SegmentString*>> snapIntersections(std::vector<SegmentString*>& inputSS);
+    std::vector<SegmentString*> snapIntersections(std::vector<SegmentString*>& inputSS);
 
 
 public:
@@ -108,9 +108,9 @@ public:
     /**
     * @return a Collection of NodedSegmentStrings representing the substrings
     */
-    std::vector<SegmentString*>* getNodedSubstrings() const override;
+    std::vector<SegmentString*> getNodedSubstrings() override;
 
-    void computeNodes(std::vector<SegmentString*>* inputSegStrings) override;
+    void computeNodes(const std::vector<SegmentString*>& inputSegStrings) override;
 
 
 };

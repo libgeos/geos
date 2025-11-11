@@ -123,17 +123,17 @@ GeometryNoder::toGeometry(SegmentString::NonConstVect& nodedEdges)
 std::unique_ptr<geom::Geometry>
 GeometryNoder::getNoded()
 {
-    SegmentString::NonConstVect p_lineList;
     if (argGeom.isEmpty())
         return argGeom.clone();
 
+    std::vector<SegmentString*> p_lineList;
     extractSegmentStrings(argGeom, p_lineList);
 
     Noder& p_noder = getNoder();
-    SegmentString::NonConstVect* nodedEdges = nullptr;
+    std::vector<SegmentString*> nodedEdges;
 
     try {
-        p_noder.computeNodes(&p_lineList);
+        p_noder.computeNodes(p_lineList);
         nodedEdges = p_noder.getNodedSubstrings();
     }
     catch(const std::exception&) {
@@ -143,12 +143,11 @@ GeometryNoder::getNoded()
         throw;
     }
 
-    std::unique_ptr<geom::Geometry> noded = toGeometry(*nodedEdges);
+    std::unique_ptr<geom::Geometry> noded = toGeometry(nodedEdges);
 
-    for(auto* elem : (*nodedEdges)) {
+    for(auto* elem : nodedEdges) {
         delete elem;
     }
-    delete nodedEdges;
 
     for(auto* elem : p_lineList) {
         delete elem;

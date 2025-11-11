@@ -29,11 +29,11 @@ namespace noding { // geos::noding
 
 /* public */
 void
-BoundaryChainNoder::computeNodes(std::vector<SegmentString*>* segStrings)
+BoundaryChainNoder::computeNodes(const std::vector<SegmentString*>& segStrings)
 {
     SegmentSet boundarySegSet;
     std::vector<BoundaryChainMap> boundaryChains;
-    boundaryChains.reserve(segStrings->size());
+    boundaryChains.reserve(segStrings.size());
     addSegments(segStrings, boundarySegSet, boundaryChains);
     markBoundarySegments(boundarySegSet);
     m_chainList = extractChains(boundaryChains);
@@ -134,20 +134,20 @@ BoundaryChainNoder::findNodeIndex(
 
 
 /* public */
-std::vector<SegmentString*>*
-BoundaryChainNoder::getNodedSubstrings() const
+std::vector<SegmentString*>
+BoundaryChainNoder::getNodedSubstrings()
 {
-    return new std::vector<SegmentString*>(std::move(m_chainList));
+    return std::move(m_chainList);
 }
 
 /* private */
 void
 BoundaryChainNoder::addSegments(
-    std::vector<SegmentString*>* segStrings,
+    const std::vector<SegmentString*>& segStrings,
     SegmentSet& segSet,
     std::vector<BoundaryChainMap>& boundaryChains)
 {
-    for (SegmentString* ss : *segStrings) {
+    for (SegmentString* ss : segStrings) {
         m_constructZ |= ss->getCoordinates()->hasZ();
         m_constructM |= ss->getCoordinates()->hasM();
 

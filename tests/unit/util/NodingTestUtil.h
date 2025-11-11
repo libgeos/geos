@@ -38,7 +38,7 @@ class NodingTestUtil {
 
         // Methods
         static std::unique_ptr<geom::Geometry>
-        toLines(const std::vector<noding::SegmentString*>* nodedList, const geom::GeometryFactory* geomFact);
+        toLines(const std::vector<noding::SegmentString*>& nodedList, const geom::GeometryFactory* geomFact);
 
         static std::vector<noding::SegmentString*>
         toSegmentStrings(std::vector<const geom::LineString*>& lines);

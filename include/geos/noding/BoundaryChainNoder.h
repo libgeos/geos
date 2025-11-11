@@ -142,8 +142,8 @@ public:
         {};
 
     // Noder virtual methods
-    std::vector<SegmentString*>* getNodedSubstrings() const override;
-    void computeNodes(std::vector<SegmentString*>* inputSegStrings) override;
+    std::vector<SegmentString*> getNodedSubstrings() override;
+    void computeNodes(const std::vector<SegmentString*>& inputSegStrings) override;
 
 
 private:
@@ -155,7 +155,7 @@ private:
     bool m_constructM;
 
     // Methods
-    void addSegments(std::vector<SegmentString*>* segStrings,
+    void addSegments(const std::vector<SegmentString*>& segStrings,
         SegmentSet& segSet,
         std::vector<BoundaryChainMap>& includedSegs);
 

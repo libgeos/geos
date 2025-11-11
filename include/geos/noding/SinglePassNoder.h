@@ -79,7 +79,7 @@ public:
      *
      * @param segStrings a collection of {@link SegmentString}s to node
      */
-    void computeNodes(std::vector<SegmentString*>* segStrings) override = 0;
+    void computeNodes(const std::vector<SegmentString*>& segStrings) override = 0;
 
     /** \brief
      * Returns a Collection of fully noded {@link SegmentString}s.
@@ -88,7 +88,7 @@ public:
      *
      * @return a Collection of SegmentStrings
      */
-    std::vector<SegmentString*>* getNodedSubstrings() const override = 0;
+    std::vector<SegmentString*> getNodedSubstrings() override = 0;
 
 };
 

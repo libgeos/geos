@@ -37,7 +37,7 @@ FastNodingValidator::checkInteriorIntersections()
     segInt.reset(new NodingIntersectionFinder(li));
     MCIndexNoder noder;
     noder.setSegmentIntersector(segInt.get());
-    noder.computeNodes(&segStrings);
+    noder.computeNodes(segStrings);
     if(segInt->hasIntersection()) {
         isValidVar = false;
         return;

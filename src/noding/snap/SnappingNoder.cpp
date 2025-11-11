@@ -40,21 +40,21 @@ namespace snap {    // geos.noding.snap
 
 /*public*/
 void
-SnappingNoder::computeNodes(std::vector<SegmentString*>* inputSegStrings)
+SnappingNoder::computeNodes(const std::vector<SegmentString*>& inputSegStrings)
 {
     std::vector<SegmentString*> snappedSS;
-    snapVertices(*inputSegStrings, snappedSS);
+    snapVertices(inputSegStrings, snappedSS);
     auto result = snapIntersections(snappedSS);
     for (SegmentString* ss: snappedSS) {
         delete ss;
     }
-    nodedResult = result.release();
+    nodedResult = std::move(result);
 }
 
 
 /*private*/
 void
-SnappingNoder::snapVertices(std::vector<SegmentString*>& segStrings, std::vector<SegmentString*>& nodedStrings)
+SnappingNoder::snapVertices(const std::vector<SegmentString*>& segStrings, std::vector<SegmentString*>& nodedStrings)
 {
     //geos::util::Profiler* profiler = geos::util::Profiler::instance();
     //auto sw = profiler->get(std::string("SnappingNoder::snapVertices"));
@@ -72,7 +72,7 @@ SnappingNoder::snapVertices(std::vector<SegmentString*>& segStrings, std::vector
 
 /*private*/
 void
-SnappingNoder::seedSnapIndex(std::vector<SegmentString*>& segStrings)
+SnappingNoder::seedSnapIndex(const std::vector<SegmentString*>& segStrings)
 {
     double PHI_INV = (std::sqrt(5.0) - 1.0) / 2.0;
 
@@ -120,7 +120,7 @@ SnappingNoder::snap(const CoordinateSequence* cs)
 
 
 /*private*/
-std::unique_ptr<std::vector<SegmentString*>>
+std::vector<SegmentString*>
 SnappingNoder::snapIntersections(std::vector<SegmentString*>& inputSS)
 {
     SnappingIntersectionAdder intAdder(snapTolerance, snapIndex);
@@ -129,16 +129,15 @@ SnappingNoder::snapIntersections(std::vector<SegmentString*>& inputSS)
      * possible snapped intersections are found
      */
     MCIndexNoder noder(&intAdder, 2 * snapTolerance);
-    noder.computeNodes(&inputSS);
-    std::unique_ptr<std::vector<SegmentString*>> result(noder.getNodedSubstrings());
-    return result;
+    noder.computeNodes(inputSS);
+    return noder.getNodedSubstrings();
 }
 
 /*public*/
-std::vector<SegmentString*>*
-SnappingNoder::getNodedSubstrings() const
+std::vector<SegmentString*>
+SnappingNoder::getNodedSubstrings()
 {
-    return nodedResult;
+    return std::move(nodedResult);
 }
 
 

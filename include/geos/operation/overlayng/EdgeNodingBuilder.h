@@ -177,7 +177,7 @@ private:
     * which is used to provide source topology info to the constructed Edges
     * (and is then discarded).
     */
-    std::vector<Edge*> node(std::vector<noding::SegmentString*>* segStrings);
+    std::vector<Edge*> node(const std::vector<noding::SegmentString*>& segStrings);
     std::vector<Edge*> createEdges(std::vector<noding::SegmentString*>* segStrings);
 
 

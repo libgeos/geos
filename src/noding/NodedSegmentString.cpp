@@ -64,13 +64,12 @@ NodedSegmentString::getNodedCoordinates() {
 
 
 /* public static */
-SegmentString::NonConstVect*
+std::vector<SegmentString*>
 NodedSegmentString::getNodedSubstrings(
-    const SegmentString::NonConstVect& segStrings)
+    const std::vector<SegmentString*>& segStrings)
 {
-    SegmentString::NonConstVect* resultEdgelist = \
-            new SegmentString::NonConstVect();
-    getNodedSubstrings(segStrings, resultEdgelist);
+    std::vector<SegmentString*> resultEdgelist;
+    getNodedSubstrings(segStrings, &resultEdgelist);
     return resultEdgelist;
 }
 

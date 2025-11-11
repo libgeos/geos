@@ -83,7 +83,7 @@ private:
     std::vector<SegmentString*> snappedResult;
 
     // Methods
-    void snapRound(std::vector<SegmentString*>& inputSegStrings, std::vector<SegmentString*>& resultNodedSegments);
+    void snapRound(const std::vector<SegmentString*>& inputSegStrings, std::vector<SegmentString*>& resultNodedSegments);
 
     /**
     * Creates HotPixels for each vertex in the input segStrings.
@@ -92,14 +92,14 @@ private:
     * if they interact with other segments (or they are already
     * created as intersection nodes).
     */
-    void addVertexPixels(std::vector<SegmentString*>& segStrings);
+    void addVertexPixels(const std::vector<SegmentString*>& segStrings);
 
     /**
     * Detects interior intersections in the collection of {@link SegmentString}s,
     * and adds nodes for them to the segment strings.
     * Also creates HotPixel nodes for the intersection points.
     */
-    void addIntersectionPixels(std::vector<SegmentString*>& segStrings);
+    void addIntersectionPixels(const std::vector<SegmentString*>& segStrings);
 
     /**
     * Gets a list of the rounded coordinates.
@@ -148,13 +148,13 @@ public:
     /**
     * @return a Collection of NodedSegmentStrings representing the substrings
     */
-    std::vector<SegmentString*>* getNodedSubstrings() const override;
+    std::vector<SegmentString*> getNodedSubstrings() override;
 
     /**
     * Computes the nodes in the snap-rounding line arrangement.
     * The nodes are added to the {@link NodedSegmentString}s provided as the input.
     */
-    void computeNodes(std::vector<SegmentString*>* inputSegStrings) override; //override
+    void computeNodes(const std::vector<SegmentString*>& inputSegStrings) override; //override
 
 };
 

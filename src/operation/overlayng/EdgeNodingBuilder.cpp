@@ -101,7 +101,7 @@ EdgeNodingBuilder::build(const Geometry* geom0, const Geometry* geom1)
 
     add(geom0, 0);
     add(geom1, 1);
-    std::vector<Edge*> nodedEdges = node(inputEdges.get());
+    std::vector<Edge*> nodedEdges = node(*inputEdges);
 
     /**
      * Merge the noded edges to eliminate duplicates.
@@ -112,19 +112,19 @@ EdgeNodingBuilder::build(const Geometry* geom0, const Geometry* geom1)
 
 /*private*/
 std::vector<Edge*>
-EdgeNodingBuilder::node(std::vector<SegmentString*>* segStrings)
+EdgeNodingBuilder::node(const std::vector<SegmentString*>& segStrings)
 {
     std::vector<Edge*> nodedEdges;
 
     Noder* noder = getNoder();
     noder->computeNodes(segStrings);
 
-    std::unique_ptr<std::vector<SegmentString*>> nodedSS(noder->getNodedSubstrings());
+    auto nodedSS = noder->getNodedSubstrings();
 
-    nodedEdges = createEdges(nodedSS.get());
+    nodedEdges = createEdges(&nodedSS);
 
     // Clean up now that all the info is transferred to Edges
-    for (SegmentString* ss : *nodedSS) {
+    for (SegmentString* ss : nodedSS) {
         delete ss;
     }
 

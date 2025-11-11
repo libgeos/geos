@@ -136,12 +136,12 @@ void object::test<1>
     MCIndexSnapRounder noder(pm);
 
     ensure_equals(nodable.size(), 1u);
-    noder.computeNodes(&nodable);
-    std::unique_ptr<SegStrVct> noded(noder.getNodedSubstrings());
+    noder.computeNodes(nodable);
+    SegStrVct noded(noder.getNodedSubstrings());
 
-    ensure_equals("1e-5", noded->size(), 178u);
+    ensure_equals("1e-5", noded.size(), 178u);
 
-    freeSegmentStrings(*noded);
+    freeSegmentStrings(noded);
     freeSegmentStrings(nodable);
 }
 

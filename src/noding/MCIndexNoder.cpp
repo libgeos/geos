@@ -40,12 +40,11 @@ namespace noding { // geos.noding
 
 /*public*/
 void
-MCIndexNoder::computeNodes(SegmentString::NonConstVect* inputSegStrings)
+MCIndexNoder::computeNodes(const std::vector<SegmentString*>& inputSegStrings)
 {
     nodedSegStrings = inputSegStrings;
-    assert(nodedSegStrings);
 
-    for (const auto& s : *nodedSegStrings) {
+    for (const auto& s : nodedSegStrings) {
         add(s);
     }
 

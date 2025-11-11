@@ -419,14 +419,14 @@ CoverageCleaner::node(std::vector<const Geometry*>& p_coverage, double p_snapDis
     }
 
     SnappingNoder noder(p_snapDistance);
-    noder.computeNodes(&segs);
-    std::unique_ptr<std::vector<SegmentString*>> nodedSegStrings(noder.getNodedSubstrings());
+    noder.computeNodes(segs);
+    auto nodedSegStrings= noder.getNodedSubstrings();
     for (auto* ss : segs) {
         delete ss;
     }
 
-    auto result = toGeometry(*nodedSegStrings, geomFactory);
-    for (SegmentString* ss : *nodedSegStrings) {
+    auto result = toGeometry(nodedSegStrings, geomFactory);
+    for (SegmentString* ss : nodedSegStrings) {
         delete ss;
     }
 

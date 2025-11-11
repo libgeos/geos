@@ -37,7 +37,7 @@ namespace snapround { // geos.noding.snapround
 /*private*/
 void
 MCIndexSnapRounder::findInteriorIntersections(MCIndexNoder& noder,
-        NodedSegmentString::NonConstVect* segStrings,
+        const NodedSegmentString::NonConstVect& segStrings,
         std::vector<Coordinate>& intersections)
 {
     IntersectionFinderAdder intFinderAdder(li, intersections);
@@ -73,12 +73,11 @@ MCIndexSnapRounder::computeVertexSnaps(NodedSegmentString* e)
 
 /*public*/
 void
-MCIndexSnapRounder::computeVertexSnaps(SegmentString::NonConstVect& edges)
+MCIndexSnapRounder::computeVertexSnaps(const SegmentString::NonConstVect& edges)
 {
-    SegmentString::NonConstVect::iterator i = edges.begin(), e = edges.end();
-    for(; i != e; ++i) {
+    for(SegmentString* ss : edges) {
         NodedSegmentString* edge0 =
-            dynamic_cast<NodedSegmentString*>(*i);
+            dynamic_cast<NodedSegmentString*>(ss);
         assert(edge0);
         computeVertexSnaps(edge0);
     }
@@ -87,18 +86,18 @@ MCIndexSnapRounder::computeVertexSnaps(SegmentString::NonConstVect& edges)
 /*private*/
 void
 MCIndexSnapRounder::snapRound(MCIndexNoder& noder,
-                              SegmentString::NonConstVect* segStrings)
+                              const SegmentString::NonConstVect& segStrings)
 {
     std::vector<Coordinate> intersections;
     findInteriorIntersections(noder, segStrings, intersections);
     computeIntersectionSnaps(intersections);
-    computeVertexSnaps(*segStrings);
+    computeVertexSnaps(segStrings);
 
 }
 
 /*public*/
 void
-MCIndexSnapRounder::computeNodes(SegmentString::NonConstVect* inputSegmentStrings)
+MCIndexSnapRounder::computeNodes(const std::vector<SegmentString*>& inputSegmentStrings)
 {
     nodedSegStrings = inputSegmentStrings;
     MCIndexNoder noder;
@@ -116,11 +115,9 @@ void
 MCIndexSnapRounder::checkCorrectness(
     SegmentString::NonConstVect& inputSegmentStrings)
 {
-    std::unique_ptr<SegmentString::NonConstVect> resultSegStrings(
-        NodedSegmentString::getNodedSubstrings(inputSegmentStrings)
-    );
+    auto resultSegStrings = NodedSegmentString::getNodedSubstrings(inputSegmentStrings);
 
-    NodingValidator nv(*resultSegStrings);
+    NodingValidator nv(resultSegStrings);
     try {
         nv.checkValid();
     }

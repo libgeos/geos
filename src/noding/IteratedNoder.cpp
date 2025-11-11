@@ -38,7 +38,7 @@ namespace noding { // geos.noding
 
 /* private */
 void
-IteratedNoder::node(std::vector<SegmentString*>* segStrings,
+IteratedNoder::node(const std::vector<SegmentString*>& segStrings,
                     int& numInteriorIntersections,
                     CoordinateXY& intersectionPoint)
 {
@@ -46,7 +46,11 @@ IteratedNoder::node(std::vector<SegmentString*>* segStrings,
     MCIndexNoder noder;
     noder.setSegmentIntersector(&si);
     noder.computeNodes(segStrings);
-    nodedSegStrings = noder.getNodedSubstrings();
+    auto updatedSegStrings = noder.getNodedSubstrings();
+    for (SegmentString* ss : nodedSegStrings) {
+        delete ss;
+    }
+    nodedSegStrings = std::move(updatedSegStrings);
     numInteriorIntersections = si.numInteriorIntersections;
 
     if (si.hasProperInteriorIntersection()) {
@@ -56,28 +60,19 @@ IteratedNoder::node(std::vector<SegmentString*>* segStrings,
 
 /* public */
 void
-IteratedNoder::computeNodes(SegmentString::NonConstVect* segStrings)
-// throw(GEOSException);
+IteratedNoder::computeNodes(const std::vector<SegmentString*>& segStrings)
 {
     int numInteriorIntersections;
-    nodedSegStrings = segStrings;
     int nodingIterationCount = 0;
     int lastNodesCreated = -1;
-    std::vector<SegmentString*>* lastStrings = nullptr;
+    //std::vector<SegmentString*>* lastStrings = nullptr;
     CoordinateXY intersectionPoint = CoordinateXY::getNull();
+    const std::vector<SegmentString*>* toNode = &segStrings;
 
     do {
         // NOTE: will change this.nodedSegStrings
-        node(nodedSegStrings, numInteriorIntersections, intersectionPoint);
-
-        // Delete noded strings from previous iteration
-        if(lastStrings) {
-            for(auto& s : *lastStrings) {
-                delete s;
-            }
-            delete lastStrings;
-        }
-        lastStrings = nodedSegStrings;
+        node(*toNode, numInteriorIntersections, intersectionPoint);
+        toNode = &nodedSegStrings;
 
         nodingIterationCount++;
         int nodesCreated = numInteriorIntersections;
@@ -86,17 +81,13 @@ IteratedNoder::computeNodes(SegmentString::NonConstVect* segStrings)
          * Fail if the number of nodes created is not declining.
          * However, allow a few iterations at least before doing this
          */
-        //cerr<<"# nodes created: "<<nodesCreated<<endl;
         if(lastNodesCreated > 0
                 && nodesCreated >= lastNodesCreated
                 && nodingIterationCount > maxIter) {
 
             // Delete noded strings from previous iteration
-            if(lastStrings) {
-                for(auto& s : *lastStrings) {
-                    delete s;
-                }
-                delete lastStrings;
+            for (SegmentString* ss : nodedSegStrings) {
+                delete ss;
             }
 
             std::stringstream s;

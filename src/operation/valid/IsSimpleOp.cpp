@@ -216,7 +216,7 @@ IsSimpleOp::isSimpleLinearGeometry(const Geometry& geom)
     NonSimpleIntersectionFinder segInt(isClosedEndpointsInInterior, isFindAllLocations, nonSimplePts);
     MCIndexNoder noder;
     noder.setSegmentIntersector(&segInt);
-    noder.computeNodes(&segStringsBare);
+    noder.computeNodes(segStringsBare);
     if (segInt.hasIntersection()) {
         return false;
     }

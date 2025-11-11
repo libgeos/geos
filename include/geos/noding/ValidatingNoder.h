@@ -51,7 +51,7 @@ class GEOS_DLL ValidatingNoder : public Noder {
 
 private:
 
-    std::vector<SegmentString*>* nodedSS;
+    std::vector<SegmentString*> nodedSS;
     noding::Noder& noder;
 
 
@@ -61,11 +61,11 @@ public:
         : noder(noderArg)
         {}
 
-    void computeNodes(std::vector<SegmentString*>* segStrings) override;
+    void computeNodes(const std::vector<SegmentString*>& segStrings) override;
 
     void validate();
 
-    std::vector<SegmentString*>* getNodedSubstrings() const override;
+    std::vector<SegmentString*> getNodedSubstrings() override;
 
 };
 

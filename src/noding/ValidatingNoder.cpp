@@ -26,7 +26,7 @@ namespace noding { // geos.noding
 
 
 void
-ValidatingNoder::computeNodes(std::vector<SegmentString*>* segStrings)
+ValidatingNoder::computeNodes(const std::vector<SegmentString*>& segStrings)
 {
     noder.computeNodes(segStrings);
     nodedSS = noder.getNodedSubstrings();
@@ -36,24 +36,23 @@ ValidatingNoder::computeNodes(std::vector<SegmentString*>* segStrings)
 void
 ValidatingNoder::validate()
 {
-    FastNodingValidator nv(*nodedSS);
+    FastNodingValidator nv(nodedSS);
     try {
         nv.checkValid();
     }
     catch (const std::exception &) {
-        for (SegmentString* ss: *nodedSS) {
+        for (SegmentString* ss: nodedSS) {
             delete ss;
         }
-        delete nodedSS;
-        nodedSS = nullptr;
+
         throw;
     }
 }
 
-std::vector<SegmentString*>*
-ValidatingNoder::getNodedSubstrings() const
+std::vector<SegmentString*>
+ValidatingNoder::getNodedSubstrings()
 {
-    return nodedSS;
+    return std::move(nodedSS);
 }
 
 
