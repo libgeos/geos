@@ -137,8 +137,7 @@ public:
     using SegmentSet = std::unordered_set<Segment, Segment::HashCode>;
 
     BoundaryChainNoder()
-        : m_chainList(nullptr)
-        , m_constructZ(false)
+        : m_constructZ(false)
         , m_constructM(false)
         {};
 
@@ -150,7 +149,7 @@ public:
 private:
 
     // Members
-    std::vector<SegmentString*>* m_chainList;
+    std::vector<SegmentString*> m_chainList;
     std::vector<std::unique_ptr<geom::CoordinateSequence>> m_substrings;
     bool m_constructZ;
     bool m_constructM;
@@ -169,26 +168,26 @@ private:
 
     static void markBoundarySegments(SegmentSet& segSet);
 
-    std::vector<SegmentString*>* extractChains(std::vector<BoundaryChainMap>& sections) const;
+    std::vector<SegmentString*> extractChains(std::vector<BoundaryChainMap>& sections) const;
 
     Coordinate::UnorderedSet findNodePts(
-        const std::vector<SegmentString*>* segStrings) const;
+        const std::vector<SegmentString*>& segStrings) const;
 
-    std::vector<SegmentString*>* nodeChains(
-        const std::vector<SegmentString*>* chains,
+    std::vector<SegmentString*> nodeChains(
+        const std::vector<SegmentString*>& chains,
         const Coordinate::UnorderedSet& nodePts);
 
     void nodeChain(
         SegmentString* chain,
         const Coordinate::UnorderedSet& nodePts,
-        std::vector<SegmentString*>* nodedChains);
+        std::vector<SegmentString*>& nodedChains);
 
     std::size_t findNodeIndex(
         const SegmentString* chain,
         std::size_t start,
         const Coordinate::UnorderedSet& nodePts) const;
 
-    noding::BasicSegmentString* substring(
+    std::unique_ptr<BasicSegmentString> substring(
         const SegmentString* segString,
         std::size_t start, std::size_t end);
 

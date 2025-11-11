@@ -40,21 +40,19 @@ BoundaryChainNoder::computeNodes(std::vector<SegmentString*>* segStrings)
 
     Coordinate::UnorderedSet nodePts = findNodePts(m_chainList);
     if (!nodePts.empty()) {
-        std::vector<SegmentString*>* tmplist = nodeChains(m_chainList, nodePts);
         // At this point we have copied all the SegmentString*
-        // we want to keep, so t container needs to go away and be replaced
-        delete m_chainList;
-        m_chainList = tmplist;
+        // we want to keep, so the container needs to go away and be replaced
+        m_chainList = nodeChains(m_chainList, nodePts);
     }
 }
 
 /* private */
 Coordinate::UnorderedSet
-BoundaryChainNoder::findNodePts(const std::vector<SegmentString*>* segStrings) const
+BoundaryChainNoder::findNodePts(const std::vector<SegmentString*>& segStrings) const
 {
     Coordinate::UnorderedSet interiorVertices;
     Coordinate::UnorderedSet nodes;
-    for (const SegmentString* ss : *segStrings) {
+    for (const SegmentString* ss : segStrings) {
         //-- endpoints are nodes
         nodes.insert(ss->getCoordinate(0));
         nodes.insert(ss->getCoordinate(ss->size() - 1));
@@ -72,13 +70,13 @@ BoundaryChainNoder::findNodePts(const std::vector<SegmentString*>* segStrings) c
 }
 
 /* private */
-std::vector<SegmentString*>*
+std::vector<SegmentString*>
 BoundaryChainNoder::nodeChains(
-    const std::vector<SegmentString*>* chains,
+    const std::vector<SegmentString*>& chains,
     const Coordinate::UnorderedSet& nodePts)
 {
-    std::vector<SegmentString*>* nodedChains = new std::vector<SegmentString*>();
-    for (SegmentString* chain : *chains) {
+    std::vector<SegmentString*> nodedChains;
+    for (SegmentString* chain : chains) {
         nodeChain(chain, nodePts, nodedChains);
     }
     return nodedChains;
@@ -90,17 +88,17 @@ void
 BoundaryChainNoder::nodeChain(
     SegmentString* chain,
     const Coordinate::UnorderedSet& nodePts,
-    std::vector<SegmentString*>* nodedChains)
+    std::vector<SegmentString*>& nodedChains)
 {
     std::size_t start = 0;
     while (start < chain->size() - 1) {
         std::size_t end = findNodeIndex(chain, start, nodePts);
         //-- if no interior nodes found, keep original chain
         if (start == 0 && end == chain->size() - 1) {
-            nodedChains->push_back(chain);
+            nodedChains.push_back(chain);
             return;
         }
-        nodedChains->push_back(substring(chain, start, end));
+        nodedChains.push_back(substring(chain, start, end).release());
         start = end;
     }
     // We replaced this SegmentString with substrings,
@@ -110,16 +108,13 @@ BoundaryChainNoder::nodeChain(
 }
 
 /* private static */
-BasicSegmentString*
+std::unique_ptr<BasicSegmentString>
 BoundaryChainNoder::substring(const SegmentString* segString, std::size_t start, std::size_t end)
 {
-    // m_substrings.emplace_back(new CoordinateSequence());
-    // CoordinateSequence* pts = m_substrings.back().get();
-    CoordinateSequence* pts = new CoordinateSequence();
-    for (std::size_t i = start; i < end + 1; i++) {
-        pts->add(segString->getCoordinate(i));
-    }
-    return new BasicSegmentString(pts, segString->getData());
+    // FIXME: Doesn't this leak "pts" ?
+    auto pts = std::make_unique<CoordinateSequence>();
+    pts->add(*segString->getCoordinates(), start, end);
+    return std::make_unique<BasicSegmentString>(pts.release(), segString->getData());
 }
 
 
@@ -142,7 +137,7 @@ BoundaryChainNoder::findNodeIndex(
 std::vector<SegmentString*>*
 BoundaryChainNoder::getNodedSubstrings() const
 {
-    return m_chainList;
+    return new std::vector<SegmentString*>(std::move(m_chainList));
 }
 
 /* private */
@@ -206,12 +201,12 @@ BoundaryChainNoder::markBoundarySegments(SegmentSet& segSet)
 }
 
 /* private */
-std::vector<SegmentString*>*
+std::vector<SegmentString*>
 BoundaryChainNoder::extractChains(std::vector<BoundaryChainMap>& boundaryChains) const
 {
-    std::vector<SegmentString*>* chains = new std::vector<SegmentString*>();
+    std::vector<SegmentString*> chains;
     for (BoundaryChainMap& chainMap : boundaryChains) {
-        chainMap.createChains(*chains, m_constructZ, m_constructM);
+        chainMap.createChains(chains, m_constructZ, m_constructM);
     }
     return chains;
 }
