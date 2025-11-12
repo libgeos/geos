@@ -66,8 +66,8 @@ private:
             SegmentString* segString;
             std::vector<bool> isBoundary;
 
-            static SegmentString* createChain(
-                const SegmentString* segString,
+            static std::unique_ptr<SegmentString> createChain(
+                const SegmentString *segString,
                 std::size_t startIndex,
                 std::size_t endIndex,
                 bool constructZ,
@@ -84,7 +84,7 @@ private:
                 };
 
             void setBoundarySegment(std::size_t index);
-            void createChains(std::vector<SegmentString*>& chains, bool constructZ, bool constructM);
+            void createChains(std::vector<std::unique_ptr<SegmentString>> &chains, bool constructZ, bool constructM);
     };
 
     class Segment {
@@ -142,14 +142,14 @@ public:
         {};
 
     // Noder virtual methods
-    std::vector<SegmentString*> getNodedSubstrings() override;
+    std::vector<std::unique_ptr<SegmentString>> getNodedSubstrings() override;
     void computeNodes(const std::vector<SegmentString*>& inputSegStrings) override;
 
 
 private:
 
     // Members
-    std::vector<SegmentString*> m_chainList;
+    std::vector<std::unique_ptr<SegmentString>> m_chainList;
     std::vector<std::unique_ptr<geom::CoordinateSequence>> m_substrings;
     bool m_constructZ;
     bool m_constructM;
@@ -168,19 +168,19 @@ private:
 
     static void markBoundarySegments(SegmentSet& segSet);
 
-    std::vector<SegmentString*> extractChains(std::vector<BoundaryChainMap>& sections) const;
+    std::vector<std::unique_ptr<SegmentString>> extractChains(std::vector<BoundaryChainMap>& sections) const;
 
     Coordinate::UnorderedSet findNodePts(
-        const std::vector<SegmentString*>& segStrings) const;
+        const std::vector<std::unique_ptr<SegmentString>>& segStrings) const;
 
-    std::vector<SegmentString*> nodeChains(
-        const std::vector<SegmentString*>& chains,
-        const Coordinate::UnorderedSet& nodePts);
+    std::vector<std::unique_ptr<SegmentString>> nodeChains(
+        std::vector<std::unique_ptr<SegmentString>> &chains,
+        const Coordinate::UnorderedSet &nodePts);
 
     void nodeChain(
-        SegmentString* chain,
-        const Coordinate::UnorderedSet& nodePts,
-        std::vector<SegmentString*>& nodedChains);
+        std::unique_ptr<SegmentString> chain,
+        const Coordinate::UnorderedSet &nodePts,
+        std::vector<std::unique_ptr<SegmentString>> &nodedChains);
 
     std::size_t findNodeIndex(
         const SegmentString* chain,

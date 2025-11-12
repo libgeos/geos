@@ -384,11 +384,11 @@ CoverageCleaner::polygonize(const Geometry* cleanEdges)
 /* public static */
 std::unique_ptr<Geometry>
 CoverageCleaner::toGeometry(
-    std::vector<SegmentString*>& segStrings,
+    std::vector<std::unique_ptr<SegmentString>>& segStrings,
     const GeometryFactory* geomFact)
 {
     std::vector<std::unique_ptr<LineString>> lines;
-    for (SegmentString* ss : segStrings) {
+    for (auto& ss : segStrings) {
         auto cs = ss->getCoordinates()->clone();
         std::unique_ptr<LineString> line = geomFact->createLineString(std::move(cs));
         lines.emplace_back(line.release());
@@ -426,9 +426,6 @@ CoverageCleaner::node(std::vector<const Geometry*>& p_coverage, double p_snapDis
     }
 
     auto result = toGeometry(nodedSegStrings, geomFactory);
-    for (SegmentString* ss : nodedSegStrings) {
-        delete ss;
-    }
 
     return result;
 }

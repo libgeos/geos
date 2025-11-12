@@ -14,7 +14,6 @@
 
 #include <geos/noding/FastNodingValidator.h>
 #include <geos/noding/ValidatingNoder.h>
-#include <geos/algorithm/LineIntersector.h>
 #include <geos/noding/SegmentString.h>
 
 
@@ -24,6 +23,7 @@
 namespace geos {
 namespace noding { // geos.noding
 
+ValidatingNoder::~ValidatingNoder() = default;
 
 void
 ValidatingNoder::computeNodes(const std::vector<SegmentString*>& segStrings)
@@ -34,22 +34,18 @@ ValidatingNoder::computeNodes(const std::vector<SegmentString*>& segStrings)
 }
 
 void
-ValidatingNoder::validate()
+ValidatingNoder::validate() const
 {
     FastNodingValidator nv(nodedSS);
     try {
         nv.checkValid();
     }
     catch (const std::exception &) {
-        for (SegmentString* ss: nodedSS) {
-            delete ss;
-        }
-
         throw;
     }
 }
 
-std::vector<SegmentString*>
+std::vector<std::unique_ptr<SegmentString>>
 ValidatingNoder::getNodedSubstrings()
 {
     return std::move(nodedSS);

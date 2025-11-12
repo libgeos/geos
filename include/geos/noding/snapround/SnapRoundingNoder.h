@@ -148,7 +148,7 @@ public:
     /**
     * @return a Collection of NodedSegmentStrings representing the substrings
     */
-    std::vector<SegmentString*> getNodedSubstrings() override;
+    std::vector<std::unique_ptr<SegmentString>> getNodedSubstrings() override;
 
     /**
     * Computes the nodes in the snap-rounding line arrangement.

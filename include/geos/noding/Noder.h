@@ -16,6 +16,7 @@
 
 #include <geos/export.h>
 
+#include <memory>
 #include <vector>
 
 // Forward declarations
@@ -50,7 +51,7 @@ public:
      *
      * @param segStrings a collection of {@link SegmentString}s to node
      *        The caller remains responsible for releasing the memory
-     *        associated with the container and its elements.
+     *        associated with the SegmentStrings.
      */
     virtual void computeNodes(const std::vector<SegmentString*>& segStrings) = 0;
 
@@ -62,7 +63,7 @@ public:
      *         Caller is responsible to delete elements of container.
      *         This method may only be called once.
      */
-    virtual std::vector<SegmentString*> getNodedSubstrings() = 0;
+    virtual std::vector<std::unique_ptr<SegmentString>> getNodedSubstrings() = 0;
 
     virtual
     ~Noder() {}

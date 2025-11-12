@@ -62,7 +62,7 @@ public:
     template <class II>
     static void
     getNodedSubstrings(II from, II too_far,
-                       SegmentString::NonConstVect* resultEdgelist)
+                       std::vector<std::unique_ptr<SegmentString>>& resultEdgelist)
     {
         for(II i = from; i != too_far; ++i) {
             NodedSegmentString* nss = dynamic_cast<NodedSegmentString*>(*i);
@@ -73,16 +73,16 @@ public:
 
     template <class C>
     static void
-    getNodedSubstrings(C* segStrings,
-                       SegmentString::NonConstVect* resultEdgelist)
+    getNodedSubstrings(const C& segStrings,
+                       std::vector<std::unique_ptr<SegmentString>>& resultEdgelist)
     {
-        getNodedSubstrings(segStrings->begin(), segStrings->end(), resultEdgelist);
+        getNodedSubstrings(segStrings.begin(), segStrings.end(), resultEdgelist);
     }
 
     static void getNodedSubstrings(const SegmentString::NonConstVect& segStrings,
-                                   SegmentString::NonConstVect* resultEdgeList);
+                                   std::vector<std::unique_ptr<SegmentString>>& resultEdgeList);
 
-    static std::vector<SegmentString*> getNodedSubstrings(
+    static std::vector<std::unique_ptr<SegmentString>> getNodedSubstrings(
         const std::vector<SegmentString*>& segStrings);
 
     std::unique_ptr<geom::CoordinateSequence> getNodedCoordinates();
@@ -123,7 +123,6 @@ public:
     std::unique_ptr<geom::CoordinateSequence> releaseCoordinates();
 
     std::ostream& print(std::ostream& os) const override;
-
 
     /** \brief
      * Add {@link SegmentNode}s for one or both

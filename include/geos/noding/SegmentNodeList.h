@@ -219,10 +219,10 @@ public:
      * Adds the edges to the input list (this is so a single list
      * can be used to accumulate all split edges for a Geometry).
      */
-    void addSplitEdges(std::vector<SegmentString*>& edgeList);
+    void addSplitEdges(std::vector<std::unique_ptr<SegmentString>>& edgeList);
 
     void
-    addSplitEdges(std::vector<SegmentString*>* edgeList)
+    addSplitEdges(std::vector<std::unique_ptr<SegmentString>>* edgeList)
     {
         assert(edgeList);
         addSplitEdges(*edgeList);

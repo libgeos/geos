@@ -62,7 +62,7 @@ SnappingNoder::snapVertices(const std::vector<SegmentString*>& segStrings, std::
 
     seedSnapIndex(segStrings);
     for (SegmentString* ss: segStrings) {
-        nodedStrings.push_back(snapVertices(ss));
+        nodedStrings.push_back(snapVertices(ss).release());
     }
 
     //sw->stop();
@@ -94,12 +94,12 @@ SnappingNoder::seedSnapIndex(const std::vector<SegmentString*>& segStrings)
 }
 
 /*private*/
-SegmentString*
-SnappingNoder::snapVertices(SegmentString* ss)
+std::unique_ptr<SegmentString>
+SnappingNoder::snapVertices(const SegmentString* ss)
 {
     auto snapCoords = snap(ss->getCoordinates());
     // FIXME remove hardcoded hasZ, hasM and derive from input
-    return new NodedSegmentString(snapCoords.release(), false, false, ss->getData());
+    return std::make_unique<NodedSegmentString>(snapCoords.release(), false, false, ss->getData());
 }
 
 
@@ -120,7 +120,7 @@ SnappingNoder::snap(const CoordinateSequence* cs)
 
 
 /*private*/
-std::vector<SegmentString*>
+std::vector<std::unique_ptr<SegmentString>>
 SnappingNoder::snapIntersections(std::vector<SegmentString*>& inputSS)
 {
     SnappingIntersectionAdder intAdder(snapTolerance, snapIndex);
@@ -134,7 +134,7 @@ SnappingNoder::snapIntersections(std::vector<SegmentString*>& inputSS)
 }
 
 /*public*/
-std::vector<SegmentString*>
+std::vector<std::unique_ptr<SegmentString>>
 SnappingNoder::getNodedSubstrings()
 {
     return std::move(nodedResult);

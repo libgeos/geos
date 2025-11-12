@@ -42,6 +42,13 @@ using geos::noding::SegmentString;
 using geos::noding::NodedSegmentString;
 
 
+EdgeNodingBuilder::~EdgeNodingBuilder()
+{
+    for (SegmentString* ss: *inputEdges) {
+        delete ss;
+    }
+}
+
 /*private*/
 Noder*
 EdgeNodingBuilder::getNoder()
@@ -121,23 +128,18 @@ EdgeNodingBuilder::node(const std::vector<SegmentString*>& segStrings)
 
     auto nodedSS = noder->getNodedSubstrings();
 
-    nodedEdges = createEdges(&nodedSS);
-
-    // Clean up now that all the info is transferred to Edges
-    for (SegmentString* ss : nodedSS) {
-        delete ss;
-    }
+    nodedEdges = createEdges(nodedSS);
 
     return nodedEdges;
 }
 
 /*private*/
 std::vector<Edge*>
-EdgeNodingBuilder::createEdges(std::vector<SegmentString*>* segStrings)
+EdgeNodingBuilder::createEdges(std::vector<std::unique_ptr<SegmentString>>& segStrings)
 {
     std::vector<Edge*> createdEdges;
 
-    for (SegmentString* ss : *segStrings) {
+    for (auto& ss : segStrings) {
         const CoordinateSequence* pts = ss->getCoordinates();
 
         // don't create edges from collapsed lines
@@ -148,7 +150,7 @@ EdgeNodingBuilder::createEdges(std::vector<SegmentString*>* segStrings)
         // Record that a non-collapsed edge exists for the parent geometry
         hasEdges[info->getIndex()] = true;
         // Allocate the new Edge locally in a std::deque
-        NodedSegmentString* nss = detail::down_cast<NodedSegmentString*>(ss);
+        NodedSegmentString* nss = detail::down_cast<NodedSegmentString*>(ss.get());
         edgeQue.emplace_back(nss->releaseCoordinates(), info);
         Edge* newEdge = &(edgeQue.back());
         createdEdges.push_back(newEdge);

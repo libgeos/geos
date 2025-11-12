@@ -88,7 +88,7 @@ public:
      *
      * @return a Collection of SegmentStrings
      */
-    std::vector<SegmentString*> getNodedSubstrings() override = 0;
+    std::vector<std::unique_ptr<SegmentString>> getNodedSubstrings() override = 0;
 
 };
 

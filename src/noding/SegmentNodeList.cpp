@@ -164,7 +164,7 @@ SegmentNodeList::findCollapseIndex(const SegmentNode& ei0, const SegmentNode& ei
 
 /* public */
 void
-SegmentNodeList::addSplitEdges(std::vector<SegmentString*>& edgeList)
+SegmentNodeList::addSplitEdges(std::vector<std::unique_ptr<SegmentString>>& edgeList)
 {
 
     // testingOnly
@@ -193,7 +193,7 @@ SegmentNodeList::addSplitEdges(std::vector<SegmentString*>& edgeList)
         }
 
         std::unique_ptr<SegmentString> newEdge = createSplitEdge(eiPrev, ei);
-        edgeList.push_back(newEdge.release());
+        edgeList.push_back(std::move(newEdge));
 #if GEOS_DEBUG
         testingSplitEdges.push_back(edgeList.back());
 #endif

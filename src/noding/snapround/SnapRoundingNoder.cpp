@@ -36,10 +36,10 @@ namespace snapround { // geos.noding.snapround
 
 
 /*public*/
-std::vector<SegmentString*>
+std::vector<std::unique_ptr<SegmentString>>
 SnapRoundingNoder::getNodedSubstrings()
 {
-    std::vector<SegmentString*> nssResult = NodedSegmentString::getNodedSubstrings(snappedResult);
+    auto nssResult = NodedSegmentString::getNodedSubstrings(snappedResult);
 
     // Intermediate SegmentStrings are no longer needed
     for (auto nss: snappedResult)

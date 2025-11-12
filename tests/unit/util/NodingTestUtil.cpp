@@ -92,19 +92,14 @@ NodingTestUtil::nodeValidated(const Geometry* geom1, const Geometry* geom2, Node
     // which creates new NodedSegmentString and new pts member, so complete
     // new copy of data. Can be disposed of after geometries are constructed
     // std::vector<SegmentString*>* nodedList = noderValid.getNodedSubstrings();
-    std::vector<SegmentString*> nodedList = noderValid.getNodedSubstrings();
+    auto nodedList = noderValid.getNodedSubstrings();
 
     // Dispose of ssList
     for (auto ss: ssList) {
         delete ss;
     }
 
-    std::unique_ptr<Geometry> lineGeom = toLines(nodedList, geom1->getFactory());
-
-    // Dispose of nodedList
-    for (auto nss: nodedList) {
-        delete nss;
-    }
+    std::unique_ptr<Geometry> lineGeom = toLines(SegmentString::toRawPointerVector(nodedList), geom1->getFactory());
 
     return lineGeom;
 }

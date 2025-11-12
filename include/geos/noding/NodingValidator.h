@@ -45,7 +45,7 @@ namespace noding { // geos.noding
 class GEOS_DLL NodingValidator {
 private:
     algorithm::LineIntersector li;
-    const std::vector<SegmentString*>& segStrings;
+    std::vector<SegmentString*> segStrings;
 
     /**
      * Checks if a segment string contains a segment
@@ -93,9 +93,13 @@ private:
 
 public:
 
-    NodingValidator(const std::vector<SegmentString*>& newSegStrings):
-        segStrings(newSegStrings)
-    {}
+    NodingValidator(const std::vector<std::unique_ptr<SegmentString>>& newSegStrings)
+    {
+        segStrings.resize(newSegStrings.size());
+        for (size_t i = 0; i < newSegStrings.size(); ++i) {
+            segStrings[i] = newSegStrings[i].get();
+        }
+    }
 
     ~NodingValidator() {}
 

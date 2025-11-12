@@ -58,7 +58,7 @@ public:
 
     void computeNodes(const std::vector<SegmentString*>& inputSegmentStrings) override;
 
-    std::vector<SegmentString*>
+    std::vector<std::unique_ptr<SegmentString>>
     getNodedSubstrings() override
     {
         return NodedSegmentString::getNodedSubstrings(nodedSegStrings);

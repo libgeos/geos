@@ -101,7 +101,7 @@ public:
         return index;
     }
 
-    std::vector<SegmentString*> getNodedSubstrings() override
+    std::vector<std::unique_ptr<SegmentString>> getNodedSubstrings() override
     {
         //assert(nodedSegStrings); // must have called computeNodes before!
         return NodedSegmentString::getNodedSubstrings(nodedSegStrings);

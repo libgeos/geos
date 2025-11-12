@@ -47,9 +47,6 @@ IteratedNoder::node(const std::vector<SegmentString*>& segStrings,
     noder.setSegmentIntersector(&si);
     noder.computeNodes(segStrings);
     auto updatedSegStrings = noder.getNodedSubstrings();
-    for (SegmentString* ss : nodedSegStrings) {
-        delete ss;
-    }
     nodedSegStrings = std::move(updatedSegStrings);
     numInteriorIntersections = si.numInteriorIntersections;
 
@@ -65,14 +62,18 @@ IteratedNoder::computeNodes(const std::vector<SegmentString*>& segStrings)
     int numInteriorIntersections;
     int nodingIterationCount = 0;
     int lastNodesCreated = -1;
-    //std::vector<SegmentString*>* lastStrings = nullptr;
     CoordinateXY intersectionPoint = CoordinateXY::getNull();
-    const std::vector<SegmentString*>* toNode = &segStrings;
 
-    do {
+    bool firstPass = true;
+    do  {
         // NOTE: will change this.nodedSegStrings
-        node(*toNode, numInteriorIntersections, intersectionPoint);
-        toNode = &nodedSegStrings;
+        if (firstPass) {
+            node(segStrings, numInteriorIntersections, intersectionPoint);
+            firstPass = false;
+        } else {
+            auto nodingInput = SegmentString::toRawPointerVector(nodedSegStrings);
+            node(nodingInput, numInteriorIntersections, intersectionPoint);
+        }
 
         nodingIterationCount++;
         int nodesCreated = numInteriorIntersections;
@@ -84,11 +85,6 @@ IteratedNoder::computeNodes(const std::vector<SegmentString*>& segStrings)
         if(lastNodesCreated > 0
                 && nodesCreated >= lastNodesCreated
                 && nodingIterationCount > maxIter) {
-
-            // Delete noded strings from previous iteration
-            for (SegmentString* ss : nodedSegStrings) {
-                delete ss;
-            }
 
             std::stringstream s;
             s << "Iterated noding failed to converge after " <<

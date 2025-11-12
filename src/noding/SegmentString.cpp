@@ -53,6 +53,15 @@ SegmentString::print(std::ostream& os) const
     return os;
 }
 
+std::vector<SegmentString*>
+SegmentString::toRawPointerVector(const std::vector<std::unique_ptr<SegmentString>> & segStrings) {
+    std::vector<SegmentString*> ret(segStrings.size());
+    for (std::size_t i = 0; i < segStrings.size(); i++) {
+        ret[i] = segStrings[i].get();
+    }
+    return ret;
+}
+
 } // namespace geos.noding
 } // namespace geos
 

@@ -46,10 +46,10 @@ struct test_nodedsegmentstring_data {
     }
 
     std::unique_ptr<Geometry>
-    toLines(SegmentString::NonConstVect& ss, const GeometryFactory* gf)
+    toLines(std::vector<std::unique_ptr<SegmentString>>& ss, const GeometryFactory* gf)
     {
         std::vector<std::unique_ptr<Geometry>> lines;
-        for (auto s: ss)
+        for (auto& s: ss)
         {
             std::unique_ptr<CoordinateSequence> cs = s->getCoordinates()->clone();
             lines.push_back(gf->createLineString(std::move(cs)));
@@ -72,13 +72,9 @@ struct test_nodedsegmentstring_data {
           nss.addIntersection(node->getAt(i), segmentIndex.at(i));
         }
 
-        SegmentString::NonConstVect nodedSS;
+        std::vector<std::unique_ptr<SegmentString>> nodedSS;
         nss.getNodeList().addSplitEdges(nodedSS);
         std::unique_ptr<Geometry> result = toLines(nodedSS, line->getFactory());
-        //System.out.println(result);
-        for (auto ss: nodedSS) {
-            delete ss;
-        }
         std::unique_ptr<Geometry> expected = r.read(wktExpected);
         ensure_equals_geometry(expected.get(), result.get());
     }

@@ -83,7 +83,7 @@ public:
         li.setPrecisionModel(&pm);
     }
 
-    std::vector<SegmentString*>
+    std::vector<std::unique_ptr<SegmentString>>
     getNodedSubstrings() override
     {
         return NodedSegmentString::getNodedSubstrings(nodedSegStrings);

@@ -202,16 +202,14 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
     Noder* noder = getNoder(precisionModel);
     noder->computeNodes(curveList);
 
-    std::vector<SegmentString*> nodedEdges = noder->getNodedSubstrings();
+    auto nodedEdges = noder->getNodedSubstrings();
 
     // Create a geometry out of the noded substrings.
     std::vector<std::unique_ptr<Geometry>> singleSidedNodedEdges;
     singleSidedNodedEdges.reserve(nodedEdges.size());
-    for(std::size_t i = 0, n = nodedEdges.size(); i < n; ++i) {
-        SegmentString* ss = nodedEdges[i];
-
+    for(auto& ss : nodedEdges) {
         auto tmp = geomFact->createLineString(ss->getCoordinates()->clone());
-        delete ss;
+        ss.reset();
 
         singleSidedNodedEdges.push_back(std::move(tmp));
     }
@@ -654,8 +652,7 @@ BufferBuilder::computeNodedEdges(SegmentString::NonConstVect& bufferSegStrList,
 
     noder->computeNodes(bufferSegStrList);
 
-    SegmentString::NonConstVect nodedSegStrings = \
-            noder->getNodedSubstrings();
+    auto nodedSegStrings = noder->getNodedSubstrings();
 
 #if JTS_DEBUG
     std::cerr << "after noding: "
@@ -666,15 +663,11 @@ BufferBuilder::computeNodedEdges(SegmentString::NonConstVect& bufferSegStrList,
 #endif
 
 
-    for(SegmentString::NonConstVect::iterator
-            i = nodedSegStrings.begin(), e = nodedSegStrings.end();
-            i != e;
-            ++i) {
-        SegmentString* segStr = *i;
+    for(auto& segStr : nodedSegStrings) {
         const Label* oldLabel = static_cast<const Label*>(segStr->getData());
 
         auto cs = operation::valid::RepeatedPointRemover::removeRepeatedPoints(segStr->getCoordinates());
-        delete segStr;
+        segStr.reset();
         if(cs->size() < 2) {
             // don't insert collapsed edges
             // we need to take care of the memory here as cs is a new sequence

@@ -135,17 +135,11 @@ private:
 
 /*private*/
 void
-ScaledNoder::rescale(SegmentString::NonConstVect& segStrings) const
+ScaledNoder::rescale(std::vector<std::unique_ptr<SegmentString>>& segStrings) const
 {
     ReScaler rescaler(*this);
-    for(SegmentString::NonConstVect::const_iterator
-            i0 = segStrings.begin(), i0End = segStrings.end();
-            i0 != i0End; ++i0) {
-
-        SegmentString* ss = *i0;
-
+    for(auto& ss : segStrings) {
         ss->getCoordinates()->apply_rw(&rescaler);
-
     }
 }
 
@@ -188,10 +182,10 @@ ScaledNoder::~ScaledNoder()
 
 
 /*public*/
-SegmentString::NonConstVect
+std::vector<std::unique_ptr<SegmentString>>
 ScaledNoder::getNodedSubstrings()
 {
-    SegmentString::NonConstVect splitSS = noder.getNodedSubstrings();
+    auto splitSS = noder.getNodedSubstrings();
 
 #if GEOS_DEBUG > 1
     sqlPrint("nodedSegStr", *splitSS);

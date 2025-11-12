@@ -137,11 +137,10 @@ void object::test<1>
 
     ensure_equals(nodable.size(), 1u);
     noder.computeNodes(nodable);
-    SegStrVct noded(noder.getNodedSubstrings());
+    auto noded = noder.getNodedSubstrings();
 
     ensure_equals("1e-5", noded.size(), 178u);
 
-    freeSegmentStrings(noded);
     freeSegmentStrings(nodable);
 }
 

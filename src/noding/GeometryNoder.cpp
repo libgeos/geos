@@ -97,7 +97,7 @@ GeometryNoder::GeometryNoder(const geom::Geometry& g)
 
 /* private */
 std::unique_ptr<geom::Geometry>
-GeometryNoder::toGeometry(SegmentString::NonConstVect& nodedEdges)
+GeometryNoder::toGeometry(std::vector<std::unique_ptr<SegmentString>>& nodedEdges)
 {
     const geom::GeometryFactory* geomFact = argGeom.getFactory();
 
@@ -130,7 +130,7 @@ GeometryNoder::getNoded()
     extractSegmentStrings(argGeom, p_lineList);
 
     Noder& p_noder = getNoder();
-    std::vector<SegmentString*> nodedEdges;
+    std::vector<std::unique_ptr<SegmentString>> nodedEdges;
 
     try {
         p_noder.computeNodes(p_lineList);
@@ -144,10 +144,6 @@ GeometryNoder::getNoded()
     }
 
     std::unique_ptr<geom::Geometry> noded = toGeometry(nodedEdges);
-
-    for(auto* elem : nodedEdges) {
-        delete elem;
-    }
 
     for(auto* elem : p_lineList) {
         delete elem;

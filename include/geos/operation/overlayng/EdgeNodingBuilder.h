@@ -178,7 +178,7 @@ private:
     * (and is then discarded).
     */
     std::vector<Edge*> node(const std::vector<noding::SegmentString*>& segStrings);
-    std::vector<Edge*> createEdges(std::vector<noding::SegmentString*>* segStrings);
+    std::vector<Edge*> createEdges(std::vector<std::unique_ptr<noding::SegmentString>> &segStrings);
 
 
 public:
@@ -199,17 +199,9 @@ public:
         , inputHasM(false)
         {};
 
-    ~EdgeNodingBuilder()
-    {
-        for (noding::SegmentString* ss: *inputEdges) {
-            delete ss;
-        }
-    }
+    ~EdgeNodingBuilder();
 
     void setClipEnvelope(const Envelope* clipEnv);
-
-    // returns newly allocated vector and segmentstrings
-    // std::vector<noding::SegmentString*>* node();
 
     /**
     * Reports whether there are noded edges
@@ -236,8 +228,9 @@ public:
     */
     std::vector<Edge*> build(const Geometry* geom0, const Geometry* geom1);
 
-
-
+    // Declare type as noncopyable
+    EdgeNodingBuilder(const EdgeNodingBuilder& other) = delete;
+    EdgeNodingBuilder& operator=(const EdgeNodingBuilder& rhs) = delete;
 };
 
 

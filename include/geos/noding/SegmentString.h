@@ -171,6 +171,8 @@ public:
         return seq->front<geom::CoordinateXY>().equals(seq->back<geom::CoordinateXY>());
     }
 
+    static std::vector<SegmentString*> toRawPointerVector(const std::vector<std::unique_ptr<SegmentString>> & segStrings);
+
     virtual std::ostream& print(std::ostream& os) const;
 
 protected:

@@ -39,7 +39,7 @@ SegmentExtractingNoder::computeNodes(
 void
 SegmentExtractingNoder::extractSegments(
     const std::vector<SegmentString*>& inputSegs,
-    std::vector<SegmentString*>& outputSegs)
+    std::vector<std::unique_ptr<SegmentString>>& outputSegs)
 {
     for (SegmentString* ss : inputSegs) {
         extractSegments(ss, outputSegs);
@@ -52,7 +52,7 @@ SegmentExtractingNoder::extractSegments(
 void
 SegmentExtractingNoder::extractSegments(
         const SegmentString* ss,
-        std::vector<SegmentString*>& outputSegs)
+        std::vector<std::unique_ptr<SegmentString>>& outputSegs)
 {
     const CoordinateSequence* ss_seq = ss->getCoordinates();
 
@@ -65,12 +65,12 @@ SegmentExtractingNoder::extractSegments(
         cs->reserve(2);
         cs->add(*ss_seq, i, i + 1);
         std::unique_ptr<SegmentString> seg(new NodedSegmentString(cs.release(), constructZ, constructM, ss->getData()));
-        outputSegs.push_back(seg.release());
+        outputSegs.push_back(std::move(seg));
     }
 }
 
 
-std::vector<SegmentString*>
+std::vector<std::unique_ptr<SegmentString>>
 SegmentExtractingNoder::getNodedSubstrings()
 {
     return std::move(segList);

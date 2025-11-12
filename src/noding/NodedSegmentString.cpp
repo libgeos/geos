@@ -43,16 +43,13 @@ NodedSegmentString::getNodeList()
 /* public static */
 void
 NodedSegmentString::getNodedSubstrings(
-    const SegmentString::NonConstVect& segStrings,
-    SegmentString::NonConstVect* resultEdgeList)
+    const std::vector<SegmentString*>& segStrings,
+    std::vector<std::unique_ptr<SegmentString>>& resultEdgeList)
 {
-    assert(resultEdgeList);
-    for(SegmentString::NonConstVect::const_iterator
-            i = segStrings.begin(), iEnd = segStrings.end();
-            i != iEnd; ++i) {
-        NodedSegmentString* ss = dynamic_cast<NodedSegmentString*>(*i);
-        assert(ss);
-        ss->getNodeList().addSplitEdges(resultEdgeList);
+    for(SegmentString* ss : segStrings) {
+        NodedSegmentString* nss = dynamic_cast<NodedSegmentString*>(ss);
+        assert(nss);
+        nss->getNodeList().addSplitEdges(resultEdgeList);
     }
 }
 
@@ -64,12 +61,12 @@ NodedSegmentString::getNodedCoordinates() {
 
 
 /* public static */
-std::vector<SegmentString*>
+std::vector<std::unique_ptr<SegmentString>>
 NodedSegmentString::getNodedSubstrings(
     const std::vector<SegmentString*>& segStrings)
 {
-    std::vector<SegmentString*> resultEdgelist;
-    getNodedSubstrings(segStrings, &resultEdgelist);
+    std::vector<std::unique_ptr<SegmentString>> resultEdgelist;
+    getNodedSubstrings(segStrings, resultEdgelist);
     return resultEdgelist;
 }
 

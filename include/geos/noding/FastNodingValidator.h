@@ -60,13 +60,16 @@ class FastNodingValidator {
 
 public:
 
-    FastNodingValidator(std::vector<noding::SegmentString*>& newSegStrings)
+    FastNodingValidator(const std::vector<std::unique_ptr<SegmentString>>& newSegStrings)
         :
         li(), // robust...
-        segStrings(newSegStrings),
         segInt(),
         isValidVar(true)
     {
+        segStrings.resize(newSegStrings.size());
+        for (std::size_t i = 0; i < newSegStrings.size(); ++i) {
+            segStrings[i] = newSegStrings[i].get();
+        }
     }
 
     /** \brief
@@ -102,7 +105,7 @@ private:
 
     geos::algorithm::LineIntersector li;
 
-    std::vector<noding::SegmentString*>& segStrings;
+    std::vector<SegmentString*> segStrings;
 
     std::unique_ptr<NodingIntersectionFinder> segInt;
 
