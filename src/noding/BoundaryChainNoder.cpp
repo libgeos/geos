@@ -48,7 +48,7 @@ BoundaryChainNoder::computeNodes(const std::vector<SegmentString*>& segStrings)
 
 /* private */
 Coordinate::UnorderedSet
-BoundaryChainNoder::findNodePts(const std::vector<std::unique_ptr<SegmentString>>& segStrings) const
+BoundaryChainNoder::findNodePts(const std::vector<std::unique_ptr<SegmentString>>& segStrings)
 {
     Coordinate::UnorderedSet interiorVertices;
     Coordinate::UnorderedSet nodes;
@@ -122,7 +122,7 @@ std::size_t
 BoundaryChainNoder::findNodeIndex(
     const SegmentString* chain,
     std::size_t start,
-    const Coordinate::UnorderedSet& nodePts) const
+    const Coordinate::UnorderedSet& nodePts)
 {
     for (std::size_t i = start + 1; i < chain->size(); i++) {
         if (nodePts.find(chain->getCoordinate(i)) != nodePts.end())

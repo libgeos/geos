@@ -170,24 +170,24 @@ private:
 
     std::vector<std::unique_ptr<SegmentString>> extractChains(std::vector<BoundaryChainMap>& sections) const;
 
-    Coordinate::UnorderedSet findNodePts(
-        const std::vector<std::unique_ptr<SegmentString>>& segStrings) const;
+    static Coordinate::UnorderedSet findNodePts(
+        const std::vector<std::unique_ptr<SegmentString>>& segStrings);
 
-    std::vector<std::unique_ptr<SegmentString>> nodeChains(
+    static std::vector<std::unique_ptr<SegmentString>> nodeChains(
         std::vector<std::unique_ptr<SegmentString>> &chains,
         const Coordinate::UnorderedSet &nodePts);
 
-    void nodeChain(
+    static void nodeChain(
         std::unique_ptr<SegmentString> chain,
         const Coordinate::UnorderedSet &nodePts,
         std::vector<std::unique_ptr<SegmentString>> &nodedChains);
 
-    std::size_t findNodeIndex(
+    static std::size_t findNodeIndex(
         const SegmentString* chain,
         std::size_t start,
-        const Coordinate::UnorderedSet& nodePts) const;
+        const Coordinate::UnorderedSet& nodePts);
 
-    std::unique_ptr<BasicSegmentString> substring(
+    static std::unique_ptr<BasicSegmentString> substring(
         const SegmentString* segString,
         std::size_t start, std::size_t end);
 
