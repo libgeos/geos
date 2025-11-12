@@ -107,7 +107,10 @@ BoundaryChainNoder::nodeChain(
 std::unique_ptr<BasicSegmentString>
 BoundaryChainNoder::substring(const SegmentString* segString, std::size_t start, std::size_t end)
 {
-    // FIXME: Doesn't this leak "pts" ?
+    // A BasicSegmentString does not own its CoordinateSequence, so why does this not leak?
+    // At least in the CoverageUnion case, we end up here from EdgeNodingBuilder::node, where the
+    // created BasicSegmentStrings are (incorrectly) down-casted to NodedSegmentStrings, and
+    // the coordinate ownership is transferred to an overlayng::Edge.
     auto pts = std::make_unique<CoordinateSequence>();
     pts->add(*segString->getCoordinates(), start, end);
     return std::make_unique<BasicSegmentString>(pts.release(), segString->getData());
