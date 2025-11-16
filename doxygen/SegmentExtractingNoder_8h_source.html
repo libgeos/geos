@@ -94,40 +94,40 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span><span class="keyword">private</span>:</div>
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    std::vector&lt;SegmentString*&gt;* segList;</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    std::vector&lt;std::unique_ptr&lt;SegmentString&gt;&gt; segList;</div>
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    <span class="keywordtype">void</span> extractSegments(</div>
 <div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>        <span class="keyword">const</span> std::vector&lt;SegmentString*&gt;&amp; inputSegs,</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>        std::vector&lt;SegmentString*&gt;&amp; outputSegs);</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>        std::vector&lt;std::unique_ptr&lt;SegmentString&gt;&gt;&amp; outputSegs);</div>
 <div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
 <div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    <span class="keywordtype">void</span> extractSegments(</div>
 <div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>        <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a>* ss,</div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        std::vector&lt;SegmentString*&gt;&amp; outputSegs);</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        std::vector&lt;std::unique_ptr&lt;SegmentString&gt;&gt;&amp; outputSegs);</div>
 <div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
 <div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span> </div>
 <div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span><span class="keyword">public</span>:</div>
 <div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
-<div class="foldopen" id="foldopen00072" data-start="{" data-end="}">
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno"><a class="line" href="classgeos_1_1noding_1_1SegmentExtractingNoder.html#af6f6f4cae52e0743f300012e5189cd9e">   72</a></span>    <a class="code hl_function" href="classgeos_1_1noding_1_1SegmentExtractingNoder.html#af6f6f4cae52e0743f300012e5189cd9e">SegmentExtractingNoder</a>() : segList(nullptr)</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>        {};</div>
-</div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span> </div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno"><a class="line" href="classgeos_1_1noding_1_1SegmentExtractingNoder.html#a1cf0f79c5c763371559a83b8e269d23a">   75</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classgeos_1_1noding_1_1SegmentExtractingNoder.html#a1cf0f79c5c763371559a83b8e269d23a">computeNodes</a>(std::vector&lt;SegmentString*&gt;* segStrings) <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span> </div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno"><a class="line" href="classgeos_1_1noding_1_1SegmentExtractingNoder.html#ad75dd0a9ba4a59b84d79d2d2f89a6811">   81</a></span>    std::vector&lt;SegmentString*&gt;* <a class="code hl_function" href="classgeos_1_1noding_1_1SegmentExtractingNoder.html#ad75dd0a9ba4a59b84d79d2d2f89a6811">getNodedSubstrings</a>() <span class="keyword">const override</span>;</div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span> </div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span> </div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>};</div>
-</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno"><a class="line" href="classgeos_1_1noding_1_1SegmentExtractingNoder.html#a1761701011771c7743a67d22c3b30af0">   72</a></span>    <a class="code hl_function" href="classgeos_1_1noding_1_1SegmentExtractingNoder.html#a1761701011771c7743a67d22c3b30af0">SegmentExtractingNoder</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno"><a class="line" href="classgeos_1_1noding_1_1SegmentExtractingNoder.html#ac17f235e3e31c97ee6b9b16a6eb6cf92">   74</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classgeos_1_1noding_1_1SegmentExtractingNoder.html#ac17f235e3e31c97ee6b9b16a6eb6cf92">computeNodes</a>(<span class="keyword">const</span> std::vector&lt;SegmentString*&gt;&amp; segStrings) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno"><a class="line" href="classgeos_1_1noding_1_1SegmentExtractingNoder.html#a89ab2a1c499aed20bd08c016417964e2">   80</a></span>    std::vector&lt;std::unique_ptr&lt;SegmentString&gt;&gt; <a class="code hl_function" href="classgeos_1_1noding_1_1SegmentExtractingNoder.html#a89ab2a1c499aed20bd08c016417964e2">getNodedSubstrings</a>() <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span> </div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>    <span class="comment">// Declare type as noncopyable</span></div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    <a class="code hl_class" href="classgeos_1_1noding_1_1SegmentExtractingNoder.html">SegmentExtractingNoder</a>(<a class="code hl_class" href="classgeos_1_1noding_1_1SegmentExtractingNoder.html">SegmentExtractingNoder</a> <span class="keyword">const</span>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    <a class="code hl_class" href="classgeos_1_1noding_1_1SegmentExtractingNoder.html">SegmentExtractingNoder</a>&amp; operator=(<a class="code hl_class" href="classgeos_1_1noding_1_1SegmentExtractingNoder.html">SegmentExtractingNoder</a> <span class="keyword">const</span>&amp;) = <span class="keyword">delete</span>;</div>
 <div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span> </div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>} <span class="comment">// namespace geos::noding</span></div>
-<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>} <span class="comment">// namespace geos</span></div>
-<div class="ttc" id="aclassgeos_1_1noding_1_1Noder_html"><div class="ttname"><a href="classgeos_1_1noding_1_1Noder.html">geos::noding::Noder</a></div><div class="ttdoc">Computes all intersections between segments in a set of SegmentString.</div><div class="ttdef"><b>Definition</b> Noder.h:46</div></div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>};</div>
+</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span> </div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>} <span class="comment">// namespace geos::noding</span></div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>} <span class="comment">// namespace geos</span></div>
+<div class="ttc" id="aclassgeos_1_1noding_1_1Noder_html"><div class="ttname"><a href="classgeos_1_1noding_1_1Noder.html">geos::noding::Noder</a></div><div class="ttdoc">Computes all intersections between segments in a set of SegmentString.</div><div class="ttdef"><b>Definition</b> Noder.h:44</div></div>
 <div class="ttc" id="aclassgeos_1_1noding_1_1SegmentExtractingNoder_html"><div class="ttname"><a href="classgeos_1_1noding_1_1SegmentExtractingNoder.html">geos::noding::SegmentExtractingNoder</a></div><div class="ttdef"><b>Definition</b> SegmentExtractingNoder.h:52</div></div>
-<div class="ttc" id="aclassgeos_1_1noding_1_1SegmentExtractingNoder_html_a1cf0f79c5c763371559a83b8e269d23a"><div class="ttname"><a href="classgeos_1_1noding_1_1SegmentExtractingNoder.html#a1cf0f79c5c763371559a83b8e269d23a">geos::noding::SegmentExtractingNoder::computeNodes</a></div><div class="ttdeci">void computeNodes(std::vector&lt; SegmentString * &gt; *segStrings) override</div><div class="ttdoc">Computes the noding for a collection of SegmentStrings.</div></div>
-<div class="ttc" id="aclassgeos_1_1noding_1_1SegmentExtractingNoder_html_ad75dd0a9ba4a59b84d79d2d2f89a6811"><div class="ttname"><a href="classgeos_1_1noding_1_1SegmentExtractingNoder.html#ad75dd0a9ba4a59b84d79d2d2f89a6811">geos::noding::SegmentExtractingNoder::getNodedSubstrings</a></div><div class="ttdeci">std::vector&lt; SegmentString * &gt; * getNodedSubstrings() const override</div></div>
-<div class="ttc" id="aclassgeos_1_1noding_1_1SegmentExtractingNoder_html_af6f6f4cae52e0743f300012e5189cd9e"><div class="ttname"><a href="classgeos_1_1noding_1_1SegmentExtractingNoder.html#af6f6f4cae52e0743f300012e5189cd9e">geos::noding::SegmentExtractingNoder::SegmentExtractingNoder</a></div><div class="ttdeci">SegmentExtractingNoder()</div><div class="ttdef"><b>Definition</b> SegmentExtractingNoder.h:72</div></div>
+<div class="ttc" id="aclassgeos_1_1noding_1_1SegmentExtractingNoder_html_a1761701011771c7743a67d22c3b30af0"><div class="ttname"><a href="classgeos_1_1noding_1_1SegmentExtractingNoder.html#a1761701011771c7743a67d22c3b30af0">geos::noding::SegmentExtractingNoder::SegmentExtractingNoder</a></div><div class="ttdeci">SegmentExtractingNoder()=default</div></div>
+<div class="ttc" id="aclassgeos_1_1noding_1_1SegmentExtractingNoder_html_a89ab2a1c499aed20bd08c016417964e2"><div class="ttname"><a href="classgeos_1_1noding_1_1SegmentExtractingNoder.html#a89ab2a1c499aed20bd08c016417964e2">geos::noding::SegmentExtractingNoder::getNodedSubstrings</a></div><div class="ttdeci">std::vector&lt; std::unique_ptr&lt; SegmentString &gt; &gt; getNodedSubstrings() override</div></div>
+<div class="ttc" id="aclassgeos_1_1noding_1_1SegmentExtractingNoder_html_ac17f235e3e31c97ee6b9b16a6eb6cf92"><div class="ttname"><a href="classgeos_1_1noding_1_1SegmentExtractingNoder.html#ac17f235e3e31c97ee6b9b16a6eb6cf92">geos::noding::SegmentExtractingNoder::computeNodes</a></div><div class="ttdeci">void computeNodes(const std::vector&lt; SegmentString * &gt; &amp;segStrings) override</div><div class="ttdoc">Computes the noding for a collection of SegmentStrings.</div></div>
 <div class="ttc" id="aclassgeos_1_1noding_1_1SegmentString_html"><div class="ttname"><a href="classgeos_1_1noding_1_1SegmentString.html">geos::noding::SegmentString</a></div><div class="ttdoc">An interface for classes which represent a sequence of contiguous line segments.</div><div class="ttdef"><b>Definition</b> SegmentString.h:47</div></div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition</b> geos.h:38</div></div>
 </div><!-- fragment --></div><!-- contents -->

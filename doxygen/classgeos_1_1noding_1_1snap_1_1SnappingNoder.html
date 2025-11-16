@@ -65,11 +65,11 @@ Inheritance diagram for geos::noding::snap::SnappingNoder:</div>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a6cbef831d9dadfa551bb578ad4681d57" id="r_a6cbef831d9dadfa551bb578ad4681d57"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1snap_1_1SnappingNoder.html#a6cbef831d9dadfa551bb578ad4681d57">SnappingNoder</a> (double p_snapTolerance)</td></tr>
 <tr class="separator:a6cbef831d9dadfa551bb578ad4681d57"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abbf7c993ea89332f2a988ea02423cbe9" id="r_abbf7c993ea89332f2a988ea02423cbe9"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1snap_1_1SnappingNoder.html#abbf7c993ea89332f2a988ea02423cbe9">getNodedSubstrings</a> () const override</td></tr>
-<tr class="separator:abbf7c993ea89332f2a988ea02423cbe9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af1cfc5fae753fc583151d47464000297" id="r_af1cfc5fae753fc583151d47464000297"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1snap_1_1SnappingNoder.html#af1cfc5fae753fc583151d47464000297">computeNodes</a> (std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; *inputSegStrings) override</td></tr>
-<tr class="memdesc:af1cfc5fae753fc583151d47464000297"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the noding for a collection of <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentStrings</a>.  <br /></td></tr>
-<tr class="separator:af1cfc5fae753fc583151d47464000297"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a906130edc2a991982fde7d19780c073d" id="r_a906130edc2a991982fde7d19780c073d"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1snap_1_1SnappingNoder.html#a906130edc2a991982fde7d19780c073d">getNodedSubstrings</a> () override</td></tr>
+<tr class="separator:a906130edc2a991982fde7d19780c073d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a92acbe81eccb4bc373081b8f3baf900f" id="r_a92acbe81eccb4bc373081b8f3baf900f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1snap_1_1SnappingNoder.html#a92acbe81eccb4bc373081b8f3baf900f">computeNodes</a> (const std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; &amp;inputSegStrings) override</td></tr>
+<tr class="memdesc:a92acbe81eccb4bc373081b8f3baf900f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the noding for a collection of <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentStrings</a>.  <br /></td></tr>
+<tr class="separator:a92acbe81eccb4bc373081b8f3baf900f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Nodes a set of segment strings snapping vertices and intersection points together if they lie within the given snap tolerance distance. Vertices take priority over intersection points for snapping. Input segment strings are generally only split at true node points (i.e. the output segment strings are of maximal length in the output arrangement).</p>
@@ -110,8 +110,8 @@ Public Member Functions</h2></td></tr>
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="af1cfc5fae753fc583151d47464000297" name="af1cfc5fae753fc583151d47464000297"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af1cfc5fae753fc583151d47464000297">&#9670;&#160;</a></span>computeNodes()</h2>
+<a id="a92acbe81eccb4bc373081b8f3baf900f" name="a92acbe81eccb4bc373081b8f3baf900f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a92acbe81eccb4bc373081b8f3baf900f">&#9670;&#160;</a></span>computeNodes()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -122,7 +122,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void geos::noding::snap::SnappingNoder::computeNodes </td>
           <td>(</td>
-          <td class="paramtype">std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; *&#160;</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; &amp;&#160;</td>
           <td class="paramname"><em>segStrings</em></td><td>)</td>
           <td></td>
         </tr>
@@ -138,17 +138,17 @@ Public Member Functions</h2></td></tr>
 <p>Some Noders may add all these nodes to the input SegmentStrings; others may only add some or none at all.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">segStrings</td><td>a collection of <code><a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a></code>s to node The caller remains responsible for releasing the memory associated with the container and its elements. </td></tr>
+    <tr><td class="paramname">segStrings</td><td>a collection of <code><a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a></code>s to node The caller remains responsible for releasing the memory associated with the SegmentStrings. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Implements <a class="el" href="classgeos_1_1noding_1_1Noder.html#a42da20658cf8a969a1cbb15fd2de725d">geos::noding::Noder</a>.</p>
+<p>Implements <a class="el" href="classgeos_1_1noding_1_1Noder.html#acca12cb6ad5bb67d075a14b6328cb497">geos::noding::Noder</a>.</p>
 
 </div>
 </div>
-<a id="abbf7c993ea89332f2a988ea02423cbe9" name="abbf7c993ea89332f2a988ea02423cbe9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abbf7c993ea89332f2a988ea02423cbe9">&#9670;&#160;</a></span>getNodedSubstrings()</h2>
+<a id="a906130edc2a991982fde7d19780c073d" name="a906130edc2a991982fde7d19780c073d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a906130edc2a991982fde7d19780c073d">&#9670;&#160;</a></span>getNodedSubstrings()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -157,10 +157,10 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; * geos::noding::snap::SnappingNoder::getNodedSubstrings </td>
+          <td class="memname">std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> &gt; &gt; geos::noding::snap::SnappingNoder::getNodedSubstrings </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td></td>
         </tr>
       </table>
   </td>
@@ -171,7 +171,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd>a Collection of NodedSegmentStrings representing the substrings </dd></dl>
 
-<p>Implements <a class="el" href="classgeos_1_1noding_1_1Noder.html#af7f975ea1dd88f1529c5db8af9ebbaf5">geos::noding::Noder</a>.</p>
+<p>Implements <a class="el" href="classgeos_1_1noding_1_1Noder.html#ae5229ea68eb6c711a72fde15ce01ca0c">geos::noding::Noder</a>.</p>
 
 </div>
 </div>

@@ -69,14 +69,14 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4432341606f64a86d93bb504f094782f" id="r_a4432341606f64a86d93bb504f094782f"><td class="memItemLeft" align="right" valign="top"><a id="a4432341606f64a86d93bb504f094782f" name="a4432341606f64a86d93bb504f094782f"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>MCIndexSnapRounder</b> (const <a class="el" href="classgeos_1_1geom_1_1PrecisionModel.html">geom::PrecisionModel</a> &amp;nPm)</td></tr>
 <tr class="separator:a4432341606f64a86d93bb504f094782f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a17456685696d02f7ef39ce6f6bc6826f" id="r_a17456685696d02f7ef39ce6f6bc6826f"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1snapround_1_1MCIndexSnapRounder.html#a17456685696d02f7ef39ce6f6bc6826f">getNodedSubstrings</a> () const override</td></tr>
-<tr class="memdesc:a17456685696d02f7ef39ce6f6bc6826f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a collection of fully noded <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentStrings</a>. The SegmentStrings have the same context as their parent.  <br /></td></tr>
-<tr class="separator:a17456685696d02f7ef39ce6f6bc6826f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae8a9000e13a2aa2284dfe8b969fd1ce9" id="r_ae8a9000e13a2aa2284dfe8b969fd1ce9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1snapround_1_1MCIndexSnapRounder.html#ae8a9000e13a2aa2284dfe8b969fd1ce9">computeNodes</a> (std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; *segStrings) override</td></tr>
-<tr class="memdesc:ae8a9000e13a2aa2284dfe8b969fd1ce9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the noding for a collection of <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentStrings</a>.  <br /></td></tr>
-<tr class="separator:ae8a9000e13a2aa2284dfe8b969fd1ce9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a52a1791b34c8072a0bf699aa6d254257" id="r_a52a1791b34c8072a0bf699aa6d254257"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1snapround_1_1MCIndexSnapRounder.html#a52a1791b34c8072a0bf699aa6d254257">computeVertexSnaps</a> (std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; &amp;edges)</td></tr>
-<tr class="separator:a52a1791b34c8072a0bf699aa6d254257"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae477d14207833408e8d81fc62c42f0dc" id="r_ae477d14207833408e8d81fc62c42f0dc"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1snapround_1_1MCIndexSnapRounder.html#ae477d14207833408e8d81fc62c42f0dc">getNodedSubstrings</a> () override</td></tr>
+<tr class="memdesc:ae477d14207833408e8d81fc62c42f0dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a collection of fully noded <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentStrings</a>. The SegmentStrings have the same context as their parent.  <br /></td></tr>
+<tr class="separator:ae477d14207833408e8d81fc62c42f0dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9d20f26d6e610ef9ae87d6e69e1fe9b0" id="r_a9d20f26d6e610ef9ae87d6e69e1fe9b0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1snapround_1_1MCIndexSnapRounder.html#a9d20f26d6e610ef9ae87d6e69e1fe9b0">computeNodes</a> (const std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; &amp;segStrings) override</td></tr>
+<tr class="memdesc:a9d20f26d6e610ef9ae87d6e69e1fe9b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the noding for a collection of <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentStrings</a>.  <br /></td></tr>
+<tr class="separator:a9d20f26d6e610ef9ae87d6e69e1fe9b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff26ab1dc7a0ae58114e6b1f9d24a25f" id="r_aff26ab1dc7a0ae58114e6b1f9d24a25f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1snapround_1_1MCIndexSnapRounder.html#aff26ab1dc7a0ae58114e6b1f9d24a25f">computeVertexSnaps</a> (const std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; &amp;edges)</td></tr>
+<tr class="separator:aff26ab1dc7a0ae58114e6b1f9d24a25f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Uses Snap Rounding to compute a rounded, fully noded arrangement from a set of <a class="el" href="classgeos_1_1noding_1_1SegmentString.html" title="An interface for classes which represent a sequence of contiguous line segments.">SegmentString</a>. </p>
@@ -86,8 +86,8 @@ Public Member Functions</h2></td></tr>
 <p>This implementation appears to be fully robust using an integer precision model.</p>
 <p>It will function with non-integer precision models, but the results are not 100% guaranteed to be correctly noded. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="ae8a9000e13a2aa2284dfe8b969fd1ce9" name="ae8a9000e13a2aa2284dfe8b969fd1ce9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae8a9000e13a2aa2284dfe8b969fd1ce9">&#9670;&#160;</a></span>computeNodes()</h2>
+<a id="a9d20f26d6e610ef9ae87d6e69e1fe9b0" name="a9d20f26d6e610ef9ae87d6e69e1fe9b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9d20f26d6e610ef9ae87d6e69e1fe9b0">&#9670;&#160;</a></span>computeNodes()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -98,7 +98,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void geos::noding::snapround::MCIndexSnapRounder::computeNodes </td>
           <td>(</td>
-          <td class="paramtype">std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; *&#160;</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; &amp;&#160;</td>
           <td class="paramname"><em>segStrings</em></td><td>)</td>
           <td></td>
         </tr>
@@ -114,17 +114,17 @@ Public Member Functions</h2></td></tr>
 <p>Some Noders may add all these nodes to the input SegmentStrings; others may only add some or none at all.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">segStrings</td><td>a collection of <code><a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a></code>s to node The caller remains responsible for releasing the memory associated with the container and its elements. </td></tr>
+    <tr><td class="paramname">segStrings</td><td>a collection of <code><a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a></code>s to node The caller remains responsible for releasing the memory associated with the SegmentStrings. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Implements <a class="el" href="classgeos_1_1noding_1_1Noder.html#a42da20658cf8a969a1cbb15fd2de725d">geos::noding::Noder</a>.</p>
+<p>Implements <a class="el" href="classgeos_1_1noding_1_1Noder.html#acca12cb6ad5bb67d075a14b6328cb497">geos::noding::Noder</a>.</p>
 
 </div>
 </div>
-<a id="a52a1791b34c8072a0bf699aa6d254257" name="a52a1791b34c8072a0bf699aa6d254257"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a52a1791b34c8072a0bf699aa6d254257">&#9670;&#160;</a></span>computeVertexSnaps()</h2>
+<a id="aff26ab1dc7a0ae58114e6b1f9d24a25f" name="aff26ab1dc7a0ae58114e6b1f9d24a25f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aff26ab1dc7a0ae58114e6b1f9d24a25f">&#9670;&#160;</a></span>computeVertexSnaps()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -132,7 +132,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void geos::noding::snapround::MCIndexSnapRounder::computeVertexSnaps </td>
           <td>(</td>
-          <td class="paramtype">std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; &amp;&#160;</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; &amp;&#160;</td>
           <td class="paramname"><em>edges</em></td><td>)</td>
           <td></td>
         </tr>
@@ -148,8 +148,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a17456685696d02f7ef39ce6f6bc6826f" name="a17456685696d02f7ef39ce6f6bc6826f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a17456685696d02f7ef39ce6f6bc6826f">&#9670;&#160;</a></span>getNodedSubstrings()</h2>
+<a id="ae477d14207833408e8d81fc62c42f0dc" name="ae477d14207833408e8d81fc62c42f0dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae477d14207833408e8d81fc62c42f0dc">&#9670;&#160;</a></span>getNodedSubstrings()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -158,10 +158,10 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; * geos::noding::snapround::MCIndexSnapRounder::getNodedSubstrings </td>
+          <td class="memname">std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> &gt; &gt; geos::noding::snapround::MCIndexSnapRounder::getNodedSubstrings </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td></td>
         </tr>
       </table>
   </td>
@@ -172,9 +172,9 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Returns a collection of fully noded <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentStrings</a>. The SegmentStrings have the same context as their parent. </p>
-<dl class="section return"><dt>Returns</dt><dd>a newly allocated std::vector of newly allocated SegmentStrings (copies of input, if needs be). Caller is responsible to delete container and elements. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>a std::vector of SegmentStrings (copies of input, if needs be). Caller is responsible to delete elements of container. This method may only be called once. </dd></dl>
 
-<p>Implements <a class="el" href="classgeos_1_1noding_1_1Noder.html#af7f975ea1dd88f1529c5db8af9ebbaf5">geos::noding::Noder</a>.</p>
+<p>Implements <a class="el" href="classgeos_1_1noding_1_1Noder.html#ae5229ea68eb6c711a72fde15ce01ca0c">geos::noding::Noder</a>.</p>
 
 </div>
 </div>

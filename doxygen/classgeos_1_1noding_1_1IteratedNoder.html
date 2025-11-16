@@ -72,20 +72,26 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a4e667d1b92701dd1b60ca7ec3ba2b1b0" id="r_a4e667d1b92701dd1b60ca7ec3ba2b1b0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1IteratedNoder.html#a4e667d1b92701dd1b60ca7ec3ba2b1b0">setMaximumIterations</a> (int n)</td></tr>
 <tr class="memdesc:a4e667d1b92701dd1b60ca7ec3ba2b1b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the maximum number of noding iterations performed before the noding is aborted.  <br /></td></tr>
 <tr class="separator:a4e667d1b92701dd1b60ca7ec3ba2b1b0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2d7d058d6ed48c2f1f42bce08f865686" id="r_a2d7d058d6ed48c2f1f42bce08f865686"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1IteratedNoder.html#a2d7d058d6ed48c2f1f42bce08f865686">getNodedSubstrings</a> () const override</td></tr>
-<tr class="memdesc:a2d7d058d6ed48c2f1f42bce08f865686"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a collection of fully noded <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentStrings</a>. The SegmentStrings have the same context as their parent.  <br /></td></tr>
-<tr class="separator:a2d7d058d6ed48c2f1f42bce08f865686"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac22732a7994a8b9ca499e5cb8254ce12" id="r_ac22732a7994a8b9ca499e5cb8254ce12"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1IteratedNoder.html#ac22732a7994a8b9ca499e5cb8254ce12">computeNodes</a> (std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; *inputSegmentStrings) override</td></tr>
-<tr class="memdesc:ac22732a7994a8b9ca499e5cb8254ce12"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fully nodes a list of <code><a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a></code>s, i.e. performs noding iteratively until no intersections are found between segments.  <br /></td></tr>
-<tr class="separator:ac22732a7994a8b9ca499e5cb8254ce12"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade6b6a2424b73180fe64a843a8d325f2" id="r_ade6b6a2424b73180fe64a843a8d325f2"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1IteratedNoder.html#ade6b6a2424b73180fe64a843a8d325f2">getNodedSubstrings</a> () override</td></tr>
+<tr class="memdesc:ade6b6a2424b73180fe64a843a8d325f2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a collection of fully noded <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentStrings</a>. The SegmentStrings have the same context as their parent.  <br /></td></tr>
+<tr class="separator:ade6b6a2424b73180fe64a843a8d325f2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a967c8b53345a0a32b736ff8a242795f1" id="r_a967c8b53345a0a32b736ff8a242795f1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1IteratedNoder.html#a967c8b53345a0a32b736ff8a242795f1">computeNodes</a> (const std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; &amp;inputSegmentStrings) override</td></tr>
+<tr class="memdesc:a967c8b53345a0a32b736ff8a242795f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Fully nodes a list of <code><a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a></code>s, i.e. performs noding iteratively until no intersections are found between segments.  <br /></td></tr>
+<tr class="separator:a967c8b53345a0a32b736ff8a242795f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abbac6ea07aa361e41c02225d648b0adf" id="r_abbac6ea07aa361e41c02225d648b0adf"><td class="memItemLeft" align="right" valign="top"><a id="abbac6ea07aa361e41c02225d648b0adf" name="abbac6ea07aa361e41c02225d648b0adf"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>IteratedNoder</b> (<a class="el" href="classgeos_1_1noding_1_1IteratedNoder.html">IteratedNoder</a> const &amp;)=delete</td></tr>
+<tr class="separator:abbac6ea07aa361e41c02225d648b0adf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8cea1030a89953e2f4e9bce2a3db8f6d" id="r_a8cea1030a89953e2f4e9bce2a3db8f6d"><td class="memItemLeft" align="right" valign="top"><a id="a8cea1030a89953e2f4e9bce2a3db8f6d" name="a8cea1030a89953e2f4e9bce2a3db8f6d"></a>
+<a class="el" href="classgeos_1_1noding_1_1IteratedNoder.html">IteratedNoder</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classgeos_1_1noding_1_1IteratedNoder.html">IteratedNoder</a> const &amp;)=delete</td></tr>
+<tr class="separator:a8cea1030a89953e2f4e9bce2a3db8f6d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Nodes a set of SegmentStrings completely. </p>
 <p>The set of segmentStrings is fully noded; i.e. noding is repeated until no further intersections are detected.</p>
 <p>Iterated noding using a FLOATING precision model is not guaranteed to converge, due to roundoff error. This problem is detected and an exception is thrown. Clients can choose to rerun the noding using a lower precision model. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="ac22732a7994a8b9ca499e5cb8254ce12" name="ac22732a7994a8b9ca499e5cb8254ce12"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac22732a7994a8b9ca499e5cb8254ce12">&#9670;&#160;</a></span>computeNodes()</h2>
+<a id="a967c8b53345a0a32b736ff8a242795f1" name="a967c8b53345a0a32b736ff8a242795f1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a967c8b53345a0a32b736ff8a242795f1">&#9670;&#160;</a></span>computeNodes()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -96,7 +102,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void geos::noding::IteratedNoder::computeNodes </td>
           <td>(</td>
-          <td class="paramtype">std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; *&#160;</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; &amp;&#160;</td>
           <td class="paramname"><em>inputSegmentStrings</em></td><td>)</td>
           <td></td>
         </tr>
@@ -123,12 +129,12 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p>Implements <a class="el" href="classgeos_1_1noding_1_1Noder.html#a42da20658cf8a969a1cbb15fd2de725d">geos::noding::Noder</a>.</p>
+<p>Implements <a class="el" href="classgeos_1_1noding_1_1Noder.html#acca12cb6ad5bb67d075a14b6328cb497">geos::noding::Noder</a>.</p>
 
 </div>
 </div>
-<a id="a2d7d058d6ed48c2f1f42bce08f865686" name="a2d7d058d6ed48c2f1f42bce08f865686"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2d7d058d6ed48c2f1f42bce08f865686">&#9670;&#160;</a></span>getNodedSubstrings()</h2>
+<a id="ade6b6a2424b73180fe64a843a8d325f2" name="ade6b6a2424b73180fe64a843a8d325f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ade6b6a2424b73180fe64a843a8d325f2">&#9670;&#160;</a></span>getNodedSubstrings()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -137,10 +143,10 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; * geos::noding::IteratedNoder::getNodedSubstrings </td>
+          <td class="memname">std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> &gt; &gt; geos::noding::IteratedNoder::getNodedSubstrings </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td></td>
         </tr>
       </table>
   </td>
@@ -151,9 +157,9 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Returns a collection of fully noded <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentStrings</a>. The SegmentStrings have the same context as their parent. </p>
-<dl class="section return"><dt>Returns</dt><dd>a newly allocated std::vector of newly allocated SegmentStrings (copies of input, if needs be). Caller is responsible to delete container and elements. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>a std::vector of SegmentStrings (copies of input, if needs be). Caller is responsible to delete elements of container. This method may only be called once. </dd></dl>
 
-<p>Implements <a class="el" href="classgeos_1_1noding_1_1Noder.html#af7f975ea1dd88f1529c5db8af9ebbaf5">geos::noding::Noder</a>.</p>
+<p>Implements <a class="el" href="classgeos_1_1noding_1_1Noder.html#ae5229ea68eb6c711a72fde15ce01ca0c">geos::noding::Noder</a>.</p>
 
 </div>
 </div>

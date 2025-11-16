@@ -70,12 +70,12 @@ using&#160;</td><td class="memItemRight" valign="bottom"><b>SegmentSet</b> = std
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a5aa7bfd72c385fba411e9f8b98142bc6" id="r_a5aa7bfd72c385fba411e9f8b98142bc6"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1BoundaryChainNoder.html#a5aa7bfd72c385fba411e9f8b98142bc6">getNodedSubstrings</a> () const override</td></tr>
-<tr class="memdesc:a5aa7bfd72c385fba411e9f8b98142bc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a collection of fully noded <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentStrings</a>. The SegmentStrings have the same context as their parent.  <br /></td></tr>
-<tr class="separator:a5aa7bfd72c385fba411e9f8b98142bc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac156c9f9bcf560c9894e0636e1cef8f1" id="r_ac156c9f9bcf560c9894e0636e1cef8f1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1BoundaryChainNoder.html#ac156c9f9bcf560c9894e0636e1cef8f1">computeNodes</a> (std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; *inputSegStrings) override</td></tr>
-<tr class="memdesc:ac156c9f9bcf560c9894e0636e1cef8f1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the noding for a collection of <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentStrings</a>.  <br /></td></tr>
-<tr class="separator:ac156c9f9bcf560c9894e0636e1cef8f1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6332ae665bbf6b2e901d84ce6bec572b" id="r_a6332ae665bbf6b2e901d84ce6bec572b"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1BoundaryChainNoder.html#a6332ae665bbf6b2e901d84ce6bec572b">getNodedSubstrings</a> () override</td></tr>
+<tr class="memdesc:a6332ae665bbf6b2e901d84ce6bec572b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a collection of fully noded <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentStrings</a>. The SegmentStrings have the same context as their parent.  <br /></td></tr>
+<tr class="separator:a6332ae665bbf6b2e901d84ce6bec572b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1598b7a9822f86acf694c70ef3d3d189" id="r_a1598b7a9822f86acf694c70ef3d3d189"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1BoundaryChainNoder.html#a1598b7a9822f86acf694c70ef3d3d189">computeNodes</a> (const std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; &amp;inputSegStrings) override</td></tr>
+<tr class="memdesc:a1598b7a9822f86acf694c70ef3d3d189"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the noding for a collection of <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentStrings</a>.  <br /></td></tr>
+<tr class="separator:a1598b7a9822f86acf694c70ef3d3d189"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A noder which extracts chains of boundary segments as SegmentStrings from a polygonal coverage. Boundary segments are those which are not duplicated in the input polygonal coverage. Extracting chains of segments minimize the number of segment strings created, which produces a more efficient topological graph structure. </p>
@@ -83,8 +83,8 @@ Public Member Functions</h2></td></tr>
 <p>No precision reduction is carried out. If that is required, another noder must be used (such as a snap-rounding noder), or the input must be precision-reduced beforehand.</p>
 <dl class="section author"><dt>Author</dt><dd>Martin Davis </dd></dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="ac156c9f9bcf560c9894e0636e1cef8f1" name="ac156c9f9bcf560c9894e0636e1cef8f1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac156c9f9bcf560c9894e0636e1cef8f1">&#9670;&#160;</a></span>computeNodes()</h2>
+<a id="a1598b7a9822f86acf694c70ef3d3d189" name="a1598b7a9822f86acf694c70ef3d3d189"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1598b7a9822f86acf694c70ef3d3d189">&#9670;&#160;</a></span>computeNodes()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -95,7 +95,7 @@ Public Member Functions</h2></td></tr>
         <tr>
           <td class="memname">void geos::noding::BoundaryChainNoder::computeNodes </td>
           <td>(</td>
-          <td class="paramtype">std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; *&#160;</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; &amp;&#160;</td>
           <td class="paramname"><em>segStrings</em></td><td>)</td>
           <td></td>
         </tr>
@@ -111,17 +111,17 @@ Public Member Functions</h2></td></tr>
 <p>Some Noders may add all these nodes to the input SegmentStrings; others may only add some or none at all.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">segStrings</td><td>a collection of <code><a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a></code>s to node The caller remains responsible for releasing the memory associated with the container and its elements. </td></tr>
+    <tr><td class="paramname">segStrings</td><td>a collection of <code><a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a></code>s to node The caller remains responsible for releasing the memory associated with the SegmentStrings. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Implements <a class="el" href="classgeos_1_1noding_1_1Noder.html#a42da20658cf8a969a1cbb15fd2de725d">geos::noding::Noder</a>.</p>
+<p>Implements <a class="el" href="classgeos_1_1noding_1_1Noder.html#acca12cb6ad5bb67d075a14b6328cb497">geos::noding::Noder</a>.</p>
 
 </div>
 </div>
-<a id="a5aa7bfd72c385fba411e9f8b98142bc6" name="a5aa7bfd72c385fba411e9f8b98142bc6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5aa7bfd72c385fba411e9f8b98142bc6">&#9670;&#160;</a></span>getNodedSubstrings()</h2>
+<a id="a6332ae665bbf6b2e901d84ce6bec572b" name="a6332ae665bbf6b2e901d84ce6bec572b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6332ae665bbf6b2e901d84ce6bec572b">&#9670;&#160;</a></span>getNodedSubstrings()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -130,10 +130,10 @@ Public Member Functions</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; * geos::noding::BoundaryChainNoder::getNodedSubstrings </td>
+          <td class="memname">std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> &gt; &gt; geos::noding::BoundaryChainNoder::getNodedSubstrings </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td></td>
         </tr>
       </table>
   </td>
@@ -144,9 +144,9 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Returns a collection of fully noded <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentStrings</a>. The SegmentStrings have the same context as their parent. </p>
-<dl class="section return"><dt>Returns</dt><dd>a newly allocated std::vector of newly allocated SegmentStrings (copies of input, if needs be). Caller is responsible to delete container and elements. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>a std::vector of SegmentStrings (copies of input, if needs be). Caller is responsible to delete elements of container. This method may only be called once. </dd></dl>
 
-<p>Implements <a class="el" href="classgeos_1_1noding_1_1Noder.html#af7f975ea1dd88f1529c5db8af9ebbaf5">geos::noding::Noder</a>.</p>
+<p>Implements <a class="el" href="classgeos_1_1noding_1_1Noder.html#ae5229ea68eb6c711a72fde15ce01ca0c">geos::noding::Noder</a>.</p>
 
 </div>
 </div>

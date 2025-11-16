@@ -66,23 +66,29 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a62302b1cafc2524fd9d9f9ff9026a5a6" id="r_a62302b1cafc2524fd9d9f9ff9026a5a6"><td class="memItemLeft" align="right" valign="top"><a id="a62302b1cafc2524fd9d9f9ff9026a5a6" name="a62302b1cafc2524fd9d9f9ff9026a5a6"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>ValidatingNoder</b> (<a class="el" href="classgeos_1_1noding_1_1Noder.html">Noder</a> &amp;noderArg)</td></tr>
 <tr class="separator:a62302b1cafc2524fd9d9f9ff9026a5a6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af5706fc6562cd5343f8b1e75d2f08632" id="r_af5706fc6562cd5343f8b1e75d2f08632"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1ValidatingNoder.html#af5706fc6562cd5343f8b1e75d2f08632">computeNodes</a> (std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; *segStrings) override</td></tr>
-<tr class="memdesc:af5706fc6562cd5343f8b1e75d2f08632"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the noding for a collection of <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentStrings</a>.  <br /></td></tr>
-<tr class="separator:af5706fc6562cd5343f8b1e75d2f08632"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae579e757603d7ced56b0fc393f4c24eb" id="r_ae579e757603d7ced56b0fc393f4c24eb"><td class="memItemLeft" align="right" valign="top"><a id="ae579e757603d7ced56b0fc393f4c24eb" name="ae579e757603d7ced56b0fc393f4c24eb"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>validate</b> ()</td></tr>
-<tr class="separator:ae579e757603d7ced56b0fc393f4c24eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aadd889248c96d2b07f52562aa32bc524" id="r_aadd889248c96d2b07f52562aa32bc524"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1ValidatingNoder.html#aadd889248c96d2b07f52562aa32bc524">getNodedSubstrings</a> () const override</td></tr>
-<tr class="memdesc:aadd889248c96d2b07f52562aa32bc524"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a collection of fully noded <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentStrings</a>. The SegmentStrings have the same context as their parent.  <br /></td></tr>
-<tr class="separator:aadd889248c96d2b07f52562aa32bc524"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afe73dedc97602ac7b8fa69fb2f0d1deb" id="r_afe73dedc97602ac7b8fa69fb2f0d1deb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1ValidatingNoder.html#afe73dedc97602ac7b8fa69fb2f0d1deb">computeNodes</a> (const std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; &amp;segStrings) override</td></tr>
+<tr class="memdesc:afe73dedc97602ac7b8fa69fb2f0d1deb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the noding for a collection of <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentStrings</a>.  <br /></td></tr>
+<tr class="separator:afe73dedc97602ac7b8fa69fb2f0d1deb"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37e5d3f5f9d9801506a750ab617bd6dc" id="r_a37e5d3f5f9d9801506a750ab617bd6dc"><td class="memItemLeft" align="right" valign="top"><a id="a37e5d3f5f9d9801506a750ab617bd6dc" name="a37e5d3f5f9d9801506a750ab617bd6dc"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>validate</b> () const</td></tr>
+<tr class="separator:a37e5d3f5f9d9801506a750ab617bd6dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa3649403dba2fae6dcd1c89b205ff586" id="r_aa3649403dba2fae6dcd1c89b205ff586"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1ValidatingNoder.html#aa3649403dba2fae6dcd1c89b205ff586">getNodedSubstrings</a> () override</td></tr>
+<tr class="memdesc:aa3649403dba2fae6dcd1c89b205ff586"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a collection of fully noded <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentStrings</a>. The SegmentStrings have the same context as their parent.  <br /></td></tr>
+<tr class="separator:aa3649403dba2fae6dcd1c89b205ff586"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad66d4c587c010f307dbf022ad0d5c972" id="r_ad66d4c587c010f307dbf022ad0d5c972"><td class="memItemLeft" align="right" valign="top"><a id="ad66d4c587c010f307dbf022ad0d5c972" name="ad66d4c587c010f307dbf022ad0d5c972"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>ValidatingNoder</b> (<a class="el" href="classgeos_1_1noding_1_1ValidatingNoder.html">ValidatingNoder</a> const &amp;)=delete</td></tr>
+<tr class="separator:ad66d4c587c010f307dbf022ad0d5c972"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afb369abf8a9f9201890e385d8b9750cb" id="r_afb369abf8a9f9201890e385d8b9750cb"><td class="memItemLeft" align="right" valign="top"><a id="afb369abf8a9f9201890e385d8b9750cb" name="afb369abf8a9f9201890e385d8b9750cb"></a>
+<a class="el" href="classgeos_1_1noding_1_1ValidatingNoder.html">ValidatingNoder</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classgeos_1_1noding_1_1ValidatingNoder.html">ValidatingNoder</a> const &amp;)=delete</td></tr>
+<tr class="separator:afb369abf8a9f9201890e385d8b9750cb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A wrapper for <code><a class="el" href="classgeos_1_1noding_1_1Noder.html">noding::Noder</a></code>s which validates the output arrangement is correctly noded. An arrangement of line segments is fully noded if there is no line segment which has another segment intersecting its interior. If the noding is not correct, a <code><a class="el" href="classgeos_1_1util_1_1TopologyException.html">util::TopologyException</a></code> is thrown with details of the first invalid location found.</p>
 <dl class="section author"><dt>Author</dt><dd>mdavis</dd></dl>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1noding_1_1FastNodingValidator.html" title="Validates that a collection of SegmentStrings is correctly noded.">FastNodingValidator</a> </dd></dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="af5706fc6562cd5343f8b1e75d2f08632" name="af5706fc6562cd5343f8b1e75d2f08632"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af5706fc6562cd5343f8b1e75d2f08632">&#9670;&#160;</a></span>computeNodes()</h2>
+<a id="afe73dedc97602ac7b8fa69fb2f0d1deb" name="afe73dedc97602ac7b8fa69fb2f0d1deb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afe73dedc97602ac7b8fa69fb2f0d1deb">&#9670;&#160;</a></span>computeNodes()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -93,7 +99,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>validate</b> ()</td><
         <tr>
           <td class="memname">void geos::noding::ValidatingNoder::computeNodes </td>
           <td>(</td>
-          <td class="paramtype">std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; *&#160;</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; &amp;&#160;</td>
           <td class="paramname"><em>segStrings</em></td><td>)</td>
           <td></td>
         </tr>
@@ -109,17 +115,17 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>validate</b> ()</td><
 <p>Some Noders may add all these nodes to the input SegmentStrings; others may only add some or none at all.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">segStrings</td><td>a collection of <code><a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a></code>s to node The caller remains responsible for releasing the memory associated with the container and its elements. </td></tr>
+    <tr><td class="paramname">segStrings</td><td>a collection of <code><a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a></code>s to node The caller remains responsible for releasing the memory associated with the SegmentStrings. </td></tr>
   </table>
   </dd>
 </dl>
 
-<p>Implements <a class="el" href="classgeos_1_1noding_1_1Noder.html#a42da20658cf8a969a1cbb15fd2de725d">geos::noding::Noder</a>.</p>
+<p>Implements <a class="el" href="classgeos_1_1noding_1_1Noder.html#acca12cb6ad5bb67d075a14b6328cb497">geos::noding::Noder</a>.</p>
 
 </div>
 </div>
-<a id="aadd889248c96d2b07f52562aa32bc524" name="aadd889248c96d2b07f52562aa32bc524"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aadd889248c96d2b07f52562aa32bc524">&#9670;&#160;</a></span>getNodedSubstrings()</h2>
+<a id="aa3649403dba2fae6dcd1c89b205ff586" name="aa3649403dba2fae6dcd1c89b205ff586"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa3649403dba2fae6dcd1c89b205ff586">&#9670;&#160;</a></span>getNodedSubstrings()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -128,10 +134,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>validate</b> ()</td><
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; * geos::noding::ValidatingNoder::getNodedSubstrings </td>
+          <td class="memname">std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> &gt; &gt; geos::noding::ValidatingNoder::getNodedSubstrings </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
-          <td> const</td>
+          <td></td>
         </tr>
       </table>
   </td>
@@ -142,9 +148,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>validate</b> ()</td><
 </div><div class="memdoc">
 
 <p>Returns a collection of fully noded <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentStrings</a>. The SegmentStrings have the same context as their parent. </p>
-<dl class="section return"><dt>Returns</dt><dd>a newly allocated std::vector of newly allocated SegmentStrings (copies of input, if needs be). Caller is responsible to delete container and elements. </dd></dl>
+<dl class="section return"><dt>Returns</dt><dd>a std::vector of SegmentStrings (copies of input, if needs be). Caller is responsible to delete elements of container. This method may only be called once. </dd></dl>
 
-<p>Implements <a class="el" href="classgeos_1_1noding_1_1Noder.html#af7f975ea1dd88f1529c5db8af9ebbaf5">geos::noding::Noder</a>.</p>
+<p>Implements <a class="el" href="classgeos_1_1noding_1_1Noder.html#ae5229ea68eb6c711a72fde15ce01ca0c">geos::noding::Noder</a>.</p>
 
 </div>
 </div>
