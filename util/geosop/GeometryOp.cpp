@@ -53,6 +53,7 @@
 #include <geos/operation/intersection/Rectangle.h>
 #include <geos/operation/relate/RelateOp.h>
 #include <geos/operation/valid/MakeValid.h>
+#include <geos/operation/valid/RepeatedPointRemover.h>
 #include <geos/operation/overlayng/OverlayNG.h>
 #include <geos/operation/polygonize/Polygonizer.h>
 #include <geos/operation/polygonize/BuildArea.h>
@@ -279,6 +280,13 @@ std::vector<GeometryOpCreator> opRegistry {
     "make geometry valid (original algorithm)",
     [](const Geometry& geom) {
         return new Result( geos::operation::valid::MakeValid().build( &geom ) );
+    });
+}},
+{"removeRepeatedPoints", [](std::string name) { return GeometryOp::create(name,
+    catValid,
+    "remove repeated points from a geometry within a distance",
+    [](const Geometry& geom, double d) {
+        return new Result( operation::valid::RepeatedPointRemover::removeRepeatedPoints( &geom, d) );
     });
 }},
 
