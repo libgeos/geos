@@ -136,7 +136,7 @@ Area::ofClosedCurve(const geom::Curve& ring) {
                 double triangleArea = 0.5*(p0.x*p2.y - p2.x*p0.y);
                 sum += triangleArea;
 
-                geom::CircularArc arc(p0, p1, p2);
+                geom::CircularArc arc(coords, j-2);
                 if (arc.isLinear()) {
                     continue;
                 }

@@ -113,11 +113,8 @@ RayCrossingCounter::processSequence(const geom::CoordinateSequence& seq, bool is
         }
     } else {
         for (std::size_t i = 2; i < seq.size(); i += 2) {
-            const geom::CoordinateXY& p1 = seq.getAt<geom::CoordinateXY>(i-2);
-            const geom::CoordinateXY& p2 = seq.getAt<geom::CoordinateXY>(i-1);
-            const geom::CoordinateXY& p3 = seq.getAt<geom::CoordinateXY>(i);
-
-            countArc(p1, p2, p3);
+            geom::CircularArc arc(seq, i-2);
+            countArc(arc);
 
             if (isOnSegment()) 	{
                 return;
@@ -197,9 +194,9 @@ RayCrossingCounter::shouldCountCrossing(const geom::CircularArc& arc, const geom
     // a) is in the interior of the arc
     // b) is at the starting point of the arc, and the arc is directed upward at that point
     // c) is at the ending point of the arc is directed downward at that point
-    if (q.equals2D(arc.p0)) {
+    if (q.equals2D(arc.p0())) {
         return arc.isUpwardAtPoint(q);
-    } else if (q.equals2D(arc.p2)) {
+    } else if (q.equals2D(arc.p2())) {
         return !arc.isUpwardAtPoint(q);
     } else {
         return true;
@@ -252,25 +249,22 @@ RayCrossingCounter::pointsIntersectingHorizontalRay(const geom::CircularArc& arc
 }
 
 void
-RayCrossingCounter::countArc(const CoordinateXY& p1,
-                             const CoordinateXY& p2,
-                             const CoordinateXY& p3)
+RayCrossingCounter::countArc(const geom::CircularArc& arc)
 {
     // For each arc, check if it crosses
     // a horizontal ray running from the test point in
     // the positive x direction.
-    geom::CircularArc arc(p1, p2, p3);
 
     // If the arc is degenerate, process it is two line segments
     if (arc.isLinear()) {
-        countSegment(p1, p2);
-        countSegment(p2, p3);
+        countSegment(arc.p0(), arc.p1());
+        countSegment(arc.p1(), arc.p2());
         return;
     }
 
     // Check if the arc is strictly to the left of the test point
     geom::Envelope arcEnvelope;
-    CircularArcs::expandEnvelope(arcEnvelope, p1, p2, p3);
+    CircularArcs::expandEnvelope(arcEnvelope, arc.p0(), arc.p1(), arc.p2());
 
     if (arcEnvelope.getMaxX() < point.x) {
         return;

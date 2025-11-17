@@ -17,11 +17,14 @@
  *
  **********************************************************************/
 
+#include <functional>
 #include <sstream>
 #include <vector>
 
 #include <geos/profiler.h>
 #include <geos/util/TopologyException.h>
+#include <geos/noding/ArcIntersectionAdder.h>
+#include <geos/noding/ArcNoder.h>
 #include <geos/noding/IteratedNoder.h>
 #include <geos/noding/SegmentString.h>
 #include <geos/noding/MCIndexNoder.h>
@@ -31,47 +34,92 @@
 #define GEOS_DEBUG 0
 #endif
 
-using namespace geos::geom;
-
 namespace geos {
 namespace noding { // geos.noding
 
+IteratedNoder::IteratedNoder(const geom::PrecisionModel* newPm,
+                             std::function<std::unique_ptr<Noder>()> noderFunction)
+    :
+    pm(newPm),
+    li(pm),
+    maxIter(MAX_ITER),
+    m_noderFunction(noderFunction)
+{
+}
+
+std::unique_ptr<Noder>
+IteratedNoder::createDefaultNoder()
+{
+    return std::make_unique<MCIndexNoder>();
+}
+
+IteratedNoder::~IteratedNoder() = default;
+
 /* private */
 void
-IteratedNoder::node(const std::vector<SegmentString*>& segStrings,
+IteratedNoder::node(const std::vector<PathString*>& pathStrings,
                     int& numInteriorIntersections,
-                    CoordinateXY& intersectionPoint)
+                    geom::CoordinateXY& intersectionPoint)
 {
-    IntersectionAdder si(li);
-    MCIndexNoder noder;
-    noder.setSegmentIntersector(&si);
-    noder.computeNodes(segStrings);
-    auto updatedSegStrings = noder.getNodedSubstrings();
-    nodedSegStrings = std::move(updatedSegStrings);
-    numInteriorIntersections = si.numInteriorIntersections;
 
-    if (si.hasProperInteriorIntersection()) {
-        intersectionPoint = si.getProperIntersectionPoint();
+    auto noder = m_noderFunction();
+    if (auto* spn = dynamic_cast<SinglePassNoder*>(noder.get())) {
+        IntersectionAdder si(li);
+        spn->setSegmentIntersector(&si);
+        // TODO need to have previously checked that all inputs are SegmentStrings
+
+        std::vector<SegmentString*> segStrings(pathStrings.size());
+        for (size_t i = 0; i < pathStrings.size(); i++) {
+            segStrings[i] = detail::down_cast<SegmentString*>(pathStrings[i]);
+        }
+
+        noder->computeNodes(segStrings);
+
+        auto nodedSegStrings = noder->getNodedSubstrings();
+        nodedPaths.resize(nodedSegStrings.size());
+        for (size_t i = 0; i < nodedSegStrings.size(); i++) {
+            nodedPaths[i].reset(nodedSegStrings[i].release());
+        }
+
+        numInteriorIntersections = si.numInteriorIntersections;
+
+        if (si.hasProperInteriorIntersection()) {
+            intersectionPoint = si.getProperIntersectionPoint();
+        }
+    } else {
+        auto* arcNoder = detail::down_cast<ArcNoder*>(noder.get());
+        // FIXME aia should take a PrecsionModel / LineIntersector?
+        auto aia = std::make_unique<ArcIntersectionAdder>();
+        arcNoder->setArcIntersector(std::move(aia));
+        arcNoder->computePathNodes(pathStrings);
+        nodedPaths = arcNoder->getNodedPaths();
+
+        // FIXME use actual number!
+        numInteriorIntersections = 0;
+
+
+        // numInteriorIntersections?
+        // intesectionPoint?
     }
 }
 
 /* public */
 void
-IteratedNoder::computeNodes(const std::vector<SegmentString*>& segStrings)
+IteratedNoder::computePathNodes(const std::vector<PathString*>& paths)
 {
     int numInteriorIntersections;
     int nodingIterationCount = 0;
     int lastNodesCreated = -1;
-    CoordinateXY intersectionPoint = CoordinateXY::getNull();
+    geom::CoordinateXY intersectionPoint = geom::CoordinateXY::getNull();
 
     bool firstPass = true;
     do  {
         // NOTE: will change this.nodedSegStrings
         if (firstPass) {
-            node(segStrings, numInteriorIntersections, intersectionPoint);
+            node(paths, numInteriorIntersections, intersectionPoint);
             firstPass = false;
         } else {
-            auto nodingInput = SegmentString::toRawPointerVector(nodedSegStrings);
+            auto nodingInput = PathString::toRawPointerVector(nodedPaths);
             node(nodingInput, numInteriorIntersections, intersectionPoint);
         }
 

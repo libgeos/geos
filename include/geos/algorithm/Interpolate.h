@@ -160,7 +160,7 @@ public:
         return get<geom::Ordinate::M>(p, q);
     }
 
-    /// Return a coordinates's non-NaN Z value or interpolate it from two other coordinates if it is NaN.
+    /// Return a coordinate's non-NaN Z value or interpolate it from two other coordinates if it is NaN.
     template<typename C1, typename C2>
     static double
     zGetOrInterpolate(const C1& p, const C2& p1, const C2& p2)
@@ -168,13 +168,28 @@ public:
         return getOrInterpolate<geom::Ordinate::Z>(p, p1, p2);
     }
 
-    /// Return a coordinates's non-NaN M value or interpolate it from two other coordinates if it is NaN.
+    /// Return a coordinate's non-NaN M value or interpolate it from two other coordinates if it is NaN.
     template<typename C1, typename C2>
     static double
     mGetOrInterpolate(const C1& p, const C2& p1, const C2& p2)
     {
         return getOrInterpolate<geom::Ordinate::M>(p, p1, p2);
     }
+
+    static double
+    getOrAverage(double a, double b)
+    {
+        if (std::isnan(a)) {
+            return b;
+        }
+
+        if (std::isnan(b)) {
+            return a;
+        }
+
+        return 0.5*(a+b);
+    }
+
 
 };
 

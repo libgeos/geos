@@ -113,9 +113,7 @@ public:
     void countSegment(const geom::CoordinateXY& p1,
                       const geom::CoordinateXY& p2);
 
-    void countArc(const geom::CoordinateXY& p1,
-                  const geom::CoordinateXY& p2,
-                  const geom::CoordinateXY& p3);
+    void countArc(const geom::CircularArc& arc);
 
     /** \brief
      *  Counts all segments or arcs in the sequence

@@ -3,7 +3,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
  *
- * Copyright (C) 2024 ISciences, LLC
+ * Copyright (C) 2024-2025 ISciences, LLC
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -20,7 +20,6 @@
 #include <geos/geom/Quadrant.h>
 #include <geos/algorithm/CircularArcs.h>
 #include <geos/algorithm/Orientation.h>
-#include <geos/triangulate/quadedge/TrianglePredicate.h>
 
 namespace geos {
 namespace geom {
@@ -30,46 +29,80 @@ namespace geom {
 class GEOS_DLL CircularArc {
 public:
 
-    using CoordinateXY = geom::CoordinateXY;
+    /// Create an empty CircularArc backed by a null CoordinateSequence. A CircularArc created in this way will
+    /// crash if methods are called on it, but a default constructor is necessary to construct std::array<CircularArc, >
+    CircularArc();
 
-    CircularArc() : CircularArc({0, 0}, {0, 0}, {0, 0}) {}
+    /// Create a CircularArc that refers to points in the provided CoordinateSequence. The CoordinateSequence is not
+    /// owned by the CircularArc and should remain reachable for the lifetime of the CircularArc.
+    /// The center, radius, and orientation can be specified to avoid lossy re-computation. They are not checked for
+    /// consistency with the references coordinates.
+    CircularArc(const CoordinateSequence&, std::size_t pos);
+    CircularArc(const CoordinateSequence&, std::size_t pos, const CoordinateXY& center, double radius, int orientation);
 
-    CircularArc(const CoordinateXY& q0, const CoordinateXY& q1, const CoordinateXY& q2)
-        : p0(q0)
-        , p1(q1)
-        , p2(q2)
-        , m_center_known(false)
-        , m_radius_known(false)
-        , m_orientation_known(false)
-    {}
+    /// Create a CircularArc that refers to points in the provided CoordinateSequence.
+    /// Ownership of the CoordinateSequence is transferred to the CircularArc.
+    /// The center, radius, and orientation can be specified to avoid lossy re-computation. They are not checked for
+    /// consistency with the references coordinates.
+    CircularArc(std::unique_ptr<CoordinateSequence>, std::size_t pos);
+    CircularArc(std::unique_ptr<CoordinateSequence>, std::size_t pos, const CoordinateXY& center, double radius, int orientation);
 
-    CircularArc(double theta0, double theta2, const CoordinateXY& center, double radius, int orientation)
-        : p0(algorithm::CircularArcs::createPoint(center, radius, theta0)),
-          p1(algorithm::CircularArcs::createPoint(center, radius, algorithm::CircularArcs::getMidpointAngle(theta0, theta2, orientation==algorithm::Orientation::COUNTERCLOCKWISE))),
-          p2(algorithm::CircularArcs::createPoint(center, radius, theta2)),
-          m_center(center),
-          m_radius(radius),
-          m_orientation(orientation),
-          m_center_known(true),
-          m_radius_known(true),
-          m_orientation_known(true)
-    {}
+    CircularArc(const CircularArc& other);
 
-    CircularArc(const CoordinateXY& q0, const CoordinateXY& q2, const CoordinateXY& center, double radius, int orientation)
-        : p0(q0),
-          p1(algorithm::CircularArcs::getMidpoint(q0, q2, center, radius, orientation==algorithm::Orientation::COUNTERCLOCKWISE)),
-          p2(q2),
-          m_center(center),
-          m_radius(radius),
-          m_orientation(orientation),
-          m_center_known(true),
-          m_radius_known(true),
-          m_orientation_known(true)
-    {}
+    CircularArc(CircularArc&&) noexcept;
 
-    CoordinateXY p0;
-    CoordinateXY p1;
-    CoordinateXY p2;
+    CircularArc& operator=(const CircularArc& other);
+    CircularArc& operator=(CircularArc&&) noexcept;
+
+    ~CircularArc();
+
+    /// Create a CircularArc from the given coordinates, automatically allocating a CoordinateSequence to store them.
+    /// Typically, it is more efficient to create a larger CoordinateSequence that multiple CircularArcs refer to.
+    /// However, the "create" methods are convenient for writing tests.
+    template<typename CoordType>
+    static CircularArc create(const CoordType& p0, const CoordType& p1, const CoordType& p2)
+    {
+        auto seq = std::make_unique<CoordinateSequence>(3, CoordType::template has<Ordinate::Z>(), CoordType::template has<Ordinate::M>());
+        seq->setAt(p0, 0);
+        seq->setAt(p1, 1);
+        seq->setAt(p2, 2);
+
+        CircularArc ret(std::move(seq), 0);
+
+        return ret;
+    }
+
+    static CircularArc create(const CoordinateXY& p0, const CoordinateXY& p2, const CoordinateXY& center, double radius, int orientation);
+    static CircularArc create(const Coordinate& p0, const Coordinate& p2, const CoordinateXY& center, double radius, int orientation);
+    static CircularArc create(const CoordinateXYM& p0, const CoordinateXYM& p2, const CoordinateXY& center, double radius, int orientation);
+    static CircularArc create(const CoordinateXYZM& p0, const CoordinateXYZM& p2, const CoordinateXY& center, double radius, int orientation);
+
+    /// Return the inner angle of the sector associated with this arc
+    double getAngle() const;
+
+    /// Return the area enclosed by the arc p0-p1-p2 and the line segment p2-p0
+    double getArea() const;
+
+    /// Return the center point of the circle associated with this arc
+    const CoordinateXY& getCenter() const {
+        if (!m_center_known) {
+            m_center = algorithm::CircularArcs::getCenter(p0(), p1(), p2());
+            m_center_known = true;
+        }
+
+        return m_center;
+    }
+
+    const CoordinateSequence* getCoordinateSequence() const {
+        return m_seq;
+    }
+
+    std::size_t getCoordinatePosition() const {
+        return m_pos;
+    }
+
+    /// Return the length of the arc
+    double getLength() const;
 
     /// Return the orientation of the arc as one of:
     /// - algorithm::Orientation::CLOCKWISE,
@@ -77,39 +110,35 @@ public:
     /// - algorithm::Orientation::COLLINEAR
     int getOrientation() const {
         if (!m_orientation_known) {
-            m_orientation = algorithm::Orientation::index(p0, p1, p2);
+            m_orientation = algorithm::Orientation::index(p0(), p1(), p2());
             m_orientation_known = true;
         }
         return m_orientation;
     }
 
-    bool isCCW() const {
-        return getOrientation() == algorithm::Orientation::COUNTERCLOCKWISE;
-    }
-
-    /// Return the center point of the circle associated with this arc
-    const CoordinateXY& getCenter() const {
-        if (!m_center_known) {
-            m_center = algorithm::CircularArcs::getCenter(p0, p1, p2);
-            m_center_known = true;
-        }
-
-        return m_center;
-    }
-
     /// Return the radius of the circle associated with this arc
     double getRadius() const {
         if (!m_radius_known) {
-            m_radius = getCenter().distance(p0);
+            m_radius = getCenter().distance(p0());
             m_radius_known = true;
         }
 
         return m_radius;
     }
 
+    /// Return the distance from the centerpoint of the arc to the line segment formed by the end points of the arc.
+    double getSagitta() const {
+        CoordinateXY midpoint = algorithm::CircularArcs::getMidpoint(p0(), p2(), getCenter(), getRadius(), isCCW());
+        return algorithm::Distance::pointToSegment(midpoint, p0(), p2());
+    }
+
+    bool isCCW() const {
+        return getOrientation() == algorithm::Orientation::COUNTERCLOCKWISE;
+    }
+
     /// Return whether this arc forms a complete circle
     bool isCircle() const {
-        return p0.equals(p2);
+        return p0().equals(p2());
     }
 
     /// Returns whether this arc forms a straight line (p0, p1, and p2 are collinear)
@@ -117,68 +146,26 @@ public:
         return !std::isfinite(getRadius());
     }
 
-    /// Return the inner angle of the sector associated with this arc
-    double getAngle() const {
-        if (isCircle()) {
-            return 2*MATH_PI;
-        }
-
-        /// Even Rouault:
-        /// potential optimization?: using crossproduct(p0 - center, p2 - center) = radius * radius * sin(angle)
-        /// could yield the result by just doing a single asin(), instead of 2 atan2()
-        /// actually one should also likely compute dotproduct(p0 - center, p2 - center) = radius * radius * cos(angle),
-        /// and thus angle = atan2(crossproduct(p0 - center, p2 - center) , dotproduct(p0 - center, p2 - center) )
-        auto t0 = theta0();
-        auto t2 = theta2();
-
-        if (getOrientation() == algorithm::Orientation::COUNTERCLOCKWISE) {
-            std::swap(t0, t2);
-        }
-
-        if (t0 < t2) {
-            t0 += 2*MATH_PI;
-        }
-
-        auto diff = t0-t2;
-
-        return diff;
-    }
-
-    /// Return the length of the arc
-    double getLength() const {
-        if (isLinear()) {
-            return p0.distance(p2);
-        }
-
-        return getAngle()*getRadius();
-    }
-
-    /// Return the area enclosed by the arc p0-p1-p2 and the line segment p2-p0
-    double getArea() const {
-        if (isLinear()) {
-            return 0;
-        }
-
-        auto R = getRadius();
-        auto theta = getAngle();
-        return R*R/2*(theta - std::sin(theta));
-    }
-
-    /// Return the distance from the centerpoint of the arc to the line segment formed by the end points of the arc.
-    double getSagitta() const {
-        CoordinateXY midpoint = algorithm::CircularArcs::getMidpoint(p0, p2, getCenter(), getRadius(), isCCW());
-        return algorithm::Distance::pointToSegment(midpoint, p0, p2);
-    }
-
     /// Return the angle of p0
     double theta0() const {
-        return algorithm::CircularArcs::getAngle(p0, getCenter());
+        return algorithm::CircularArcs::getAngle(p0(), getCenter());
+    }
+
+    /// Return the angle of p1
+    double theta1() const {
+        return algorithm::CircularArcs::getAngle(p1(), getCenter());
     }
 
     /// Return the angle of p2
     double theta2() const {
-        return algorithm::CircularArcs::getAngle(p2, getCenter());
+        return algorithm::CircularArcs::getAngle(p2(), getCenter());
     }
+    /// Check to see if a given angle lies on this arc
+    bool containsAngle(double theta) const;
+
+    /// Check to see if a coordinate lies on the arc, after testing whether
+    /// it lies on the circle.
+    bool containsPoint(const CoordinateXY& q) const;
 
     /// Check to see if a coordinate lies on the arc
     /// Only the angle is checked, so it is assumed that the point lies on
@@ -188,91 +175,18 @@ public:
         return containsAngle(theta);
     }
 
-    /// Check to see if a coordinate lies on the arc, after testing whether
-    /// it lies on the circle.
-    bool containsPoint(const CoordinateXY& q) const {
-        if (q == p0 || q == p1 || q == p2) {
-            return true;
-        }
-
-        //auto dist = std::abs(q.distance(getCenter()) - getRadius());
-
-        //if (dist > 1e-8) {
-        //    return false;
-        //}
-
-        if (triangulate::quadedge::TrianglePredicate::isInCircleRobust(p0, p1, p2, q) != geom::Location::BOUNDARY) {
-            return false;
-        }
-
-        return containsPointOnCircle(q);
-    }
-
-    /// Check to see if a given angle lies on this arc
-    bool containsAngle(double theta) const {
-        auto t0 = theta0();
-        auto t2 = theta2();
-
-        if (theta == t0 || theta == t2) {
-            return true;
-        }
-
-        if (getOrientation() == algorithm::Orientation::COUNTERCLOCKWISE) {
-            std::swap(t0, t2);
-        }
-
-        t2 -= t0;
-        theta -= t0;
-
-        if (t2 < 0) {
-            t2 += 2*MATH_PI;
-        }
-        if (theta < 0) {
-            theta += 2*MATH_PI;
-        }
-
-        return theta >= t2;
-    }
-
     /// Return true if the arc is pointing positive in the y direction
     /// at the location of a specified point. The point is assumed to
     /// be on the arc.
-    bool isUpwardAtPoint(const CoordinateXY& q) const {
-        auto quad = geom::Quadrant::quadrant(getCenter(), q);
-        bool isUpward;
+    bool isUpwardAtPoint(const CoordinateXY& q) const;
 
-        if (getOrientation() == algorithm::Orientation::CLOCKWISE) {
-            isUpward = (quad == geom::Quadrant::SW || quad == geom::Quadrant::NW);
-        } else {
-            isUpward = (quad == geom::Quadrant::SE || quad == geom::Quadrant::NE);
-        }
-
-        return isUpward;
-    }
-
-    void reverse() {
-        std::swap(p0, p2);
-        if (m_orientation_known) {
-            if (m_orientation == algorithm::Orientation::COUNTERCLOCKWISE) {
-                m_orientation = algorithm::Orientation::CLOCKWISE;
-            } else if (m_orientation == algorithm::Orientation::CLOCKWISE) {
-                m_orientation = algorithm::Orientation::COUNTERCLOCKWISE;
-            }
-        }
-    }
+    CircularArc reverse() const;
 
     // Split an arc at a specified point.
-    // The point is assumed to be o the arc.
-    std::pair<CircularArc, CircularArc> splitAtPoint(const CoordinateXY& q) const {
-        return {
-            CircularArc(p0, q, getCenter(), getRadius(), getOrientation()),
-            CircularArc(q, p2, getCenter(), getRadius(), getOrientation())
-        };
-    }
+    // The point is assumed to be on the arc.
+    //std::pair<CircularArc, CircularArc> splitAtPoint(const CoordinateXY& q) const;
 
-    std::string toString() const {
-        return "CIRCULARSTRING (" + p0.toString() + ", " + p1.toString() + ", " + p2.toString() + ")";
-    }
+    bool equals(const CircularArc& other, double tol) const;
 
     class Iterator {
     public:
@@ -285,7 +199,7 @@ public:
         Iterator(const CircularArc& arc, int i) : m_arc(arc), m_i(i) {}
 
         reference operator*() const {
-            return m_i == 0 ? m_arc.p0 : (m_i == 1 ? m_arc.p1 : m_arc.p2);
+            return m_i == 0 ? m_arc.p0() : (m_i == 1 ? m_arc.p1() : m_arc.p2());
         }
 
         Iterator& operator++() {
@@ -321,13 +235,39 @@ public:
         return Iterator(*this, 3);
     }
 
+    template<typename T=CoordinateXY>
+    const T& p0() const {
+        return m_seq->getAt<T>(m_pos);
+    }
+
+    template<typename T=CoordinateXY>
+    const T& p1() const {
+        return m_seq->getAt<T>(m_pos + 1);
+    }
+
+    template<typename T=CoordinateXY>
+    const T& p2() const {
+        return m_seq->getAt<T>(m_pos + 2);
+    }
+
+    std::string toString() const;
+
+    template<typename F>
+    auto applyAt(std::size_t i, F&& f) const {
+        return m_seq->applyAt(m_pos + i, f);
+    }
+
 private:
+    const CoordinateSequence* m_seq;
+    std::size_t m_pos;
+
     mutable CoordinateXY m_center;
     mutable double m_radius;
     mutable int m_orientation;
     mutable bool m_center_known = false;
     mutable bool m_radius_known = false;
     mutable bool m_orientation_known = false;
+    bool m_own_coordinates;
 };
 
 }

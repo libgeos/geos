@@ -181,6 +181,8 @@ public:
 
     static std::vector<SegmentString*> toRawPointerVector(const std::vector<std::unique_ptr<SegmentString>> & segStrings);
 
+    static std::vector<SegmentString*> toRawPointerVector(const std::vector<std::unique_ptr<PathString>> & segStrings);
+
     virtual std::ostream& print(std::ostream& os) const;
 
 protected:

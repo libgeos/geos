@@ -681,6 +681,8 @@ public:
 
     void sort();
 
+    /// Swap the coordinates at two indices.
+    void swap(std::size_t i, std::size_t j);
 
     /**
      * Expands the given Envelope to include the coordinates in the

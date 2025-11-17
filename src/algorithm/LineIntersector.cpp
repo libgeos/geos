@@ -181,16 +181,35 @@ public:
                 std::size_t i1) :
         m_li(li),
         m_seq0(seq0),
-        m_i0(i0),
+        m_i00(i0),
+        m_i01(i0 + 1),
         m_seq1(seq1),
-        m_i1(i1) {}
+        m_i10(i1),
+        m_i11(i1 + 1)
+    {}
+
+    DoIntersect(algorithm::LineIntersector& li,
+                const CoordinateSequence& seq0,
+                std::size_t i00,
+                std::size_t i01,
+                const CoordinateSequence& seq1,
+                std::size_t i10,
+                std::size_t i11) :
+        m_li(li),
+        m_seq0(seq0),
+        m_i00(i00),
+        m_i01(i01),
+        m_seq1(seq1),
+        m_i10(i10),
+        m_i11(i11)
+    {}
 
     template<typename T1, typename T2>
     void operator()() {
-        const T1& p00 = m_seq0.getAt<T1>(m_i0);
-        const T1& p01 = m_seq0.getAt<T1>(m_i0 + 1);
-        const T2& p10 = m_seq1.getAt<T2>(m_i1);
-        const T2& p11 = m_seq1.getAt<T2>(m_i1 + 1);
+        const T1& p00 = m_seq0.getAt<T1>(m_i00);
+        const T1& p01 = m_seq0.getAt<T1>(m_i01);
+        const T2& p10 = m_seq1.getAt<T2>(m_i10);
+        const T2& p11 = m_seq1.getAt<T2>(m_i11);
 
         m_li.computeIntersection(p00, p01, p10, p11);
     }
@@ -198,9 +217,11 @@ public:
 private:
     algorithm::LineIntersector& m_li;
     const CoordinateSequence& m_seq0;
-    std::size_t m_i0;
+    std::size_t m_i00;
+    std::size_t m_i01;
     const CoordinateSequence& m_seq1;
-    std::size_t m_i1;
+    std::size_t m_i10;
+    std::size_t m_i11;
 };
 
 /*public*/
@@ -209,6 +230,15 @@ LineIntersector::computeIntersection(const CoordinateSequence& p, std::size_t p0
                                      const CoordinateSequence& q, std::size_t q0)
 {
     DoIntersect dis(*this, p, p0, q, q0);
+    CoordinateSequences::binaryDispatch(p, q, dis);
+}
+
+/*public*/
+void
+LineIntersector::computeIntersection(const CoordinateSequence& p, std::size_t p0, std::size_t p1,
+                                     const CoordinateSequence& q, std::size_t q0, std::size_t q1)
+{
+    DoIntersect dis(*this, p, p0, p1 ,q, q0, q1);
     CoordinateSequences::binaryDispatch(p, q, dis);
 }
 

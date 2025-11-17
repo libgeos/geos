@@ -78,6 +78,9 @@ public:
     template<Ordinate>
     double get() const;
 
+    template<Ordinate>
+    static constexpr bool has();
+
     /// x-coordinate
     double x;
 
@@ -256,6 +259,9 @@ public:
         {};
 
     template<Ordinate>
+    static constexpr bool has();
+
+    template<Ordinate>
     double get() const;
 
     void setNull()
@@ -307,6 +313,9 @@ public:
         , m(m_) {}
 
     double m;
+
+    template<Ordinate>
+    static constexpr bool has();
 
     template<Ordinate>
     double get() const;
@@ -365,6 +374,9 @@ public:
         , m(m_) {}
 
     double m;
+
+    template<Ordinate>
+    static constexpr bool has();
 
     template<Ordinate>
     double get() const;
@@ -464,6 +476,30 @@ inline bool operator<(const CoordinateXY& a, const CoordinateXY& b)
 // Generic accessors, XY
 
 template<>
+constexpr bool CoordinateXY::has<Ordinate::X>()
+{
+    return true;
+}
+
+template<>
+constexpr bool CoordinateXY::has<Ordinate::Y>()
+{
+    return true;
+}
+
+template<>
+constexpr bool CoordinateXY::has<Ordinate::Z>()
+{
+    return false;
+}
+
+template<>
+constexpr bool CoordinateXY::has<Ordinate::M>()
+{
+    return false;
+}
+
+template<>
 inline double CoordinateXY::get<Ordinate::X>() const
 {
     return x;
@@ -488,6 +524,30 @@ inline double CoordinateXY::get<Ordinate::M>() const
 }
 
 // Generic accessors, XYZ
+
+template<>
+constexpr bool Coordinate::has<Ordinate::X>()
+{
+    return true;
+}
+
+template<>
+constexpr bool Coordinate::has<Ordinate::Y>()
+{
+    return true;
+}
+
+template<>
+constexpr bool Coordinate::has<Ordinate::Z>()
+{
+    return true;
+}
+
+template<>
+constexpr bool Coordinate::has<Ordinate::M>()
+{
+    return false;
+}
 
 template<>
 inline double Coordinate::get<Ordinate::X>() const
@@ -516,6 +576,30 @@ inline double Coordinate::get<Ordinate::M>() const
 // Generic accessors, XYM
 
 template<>
+constexpr bool CoordinateXYM::has<Ordinate::X>()
+{
+    return true;
+}
+
+template<>
+constexpr bool CoordinateXYM::has<Ordinate::Y>()
+{
+    return true;
+}
+
+template<>
+constexpr bool CoordinateXYM::has<Ordinate::Z>()
+{
+    return false;
+}
+
+template<>
+constexpr bool CoordinateXYM::has<Ordinate::M>()
+{
+    return true;
+}
+
+template<>
 inline double CoordinateXYM::get<Ordinate::X>() const
 {
     return x;
@@ -540,6 +624,30 @@ inline double CoordinateXYM::get<Ordinate::M>() const
 }
 
 // Generic accessors, XYZM
+
+template<>
+constexpr bool CoordinateXYZM::has<Ordinate::X>()
+{
+    return true;
+}
+
+template<>
+constexpr bool CoordinateXYZM::has<Ordinate::Y>()
+{
+    return true;
+}
+
+template<>
+constexpr bool CoordinateXYZM::has<Ordinate::Z>()
+{
+    return true;
+}
+
+template<>
+constexpr bool CoordinateXYZM::has<Ordinate::M>()
+{
+    return true;
+}
 
 template<>
 inline double CoordinateXYZM::get<Ordinate::X>() const

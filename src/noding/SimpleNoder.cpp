@@ -67,7 +67,6 @@ SimpleNoder::computePathNodes(const std::vector<PathString*>& inputPathStrings)
 
     for (auto* edge0: m_pathStrings) {
         for (auto* edge1: m_pathStrings) {
-            // TODO skip processing against self?
             computeIntersects(*edge0, *edge1);
         }
     }

@@ -69,7 +69,7 @@ CircularString::getLength() const
 
     double tot = 0;
     for (std::size_t i = 2; i < coords.size(); i += 2) {
-        auto len = CircularArc(coords[i-2], coords[i-1], coords[i]).getLength();
+        auto len = CircularArc(coords, i-2).getLength();
         tot += len;
     }
     return tot;

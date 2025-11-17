@@ -50,7 +50,7 @@ private:
 
 public:
 
-    SimpleNoder(std::unique_ptr<ArcIntersector>(nSegInt)) : ArcNoder(std::move(nSegInt)) {}
+    using ArcNoder::ArcNoder;
 
     void computePathNodes(const std::vector<PathString*>& inputSegmentStrings) override;
 

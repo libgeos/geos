@@ -29,7 +29,7 @@ namespace geom {
 class Geometry;
 }
 namespace noding {
-class Noder;
+class ArcNoder;
 }
 }
 
@@ -43,6 +43,8 @@ public:
 
     GeometryNoder(const geom::Geometry& g);
 
+    ~GeometryNoder();
+
     std::unique_ptr<geom::Geometry> getNoded();
 
     // Declare type as noncopyable
@@ -52,17 +54,18 @@ public:
 private:
 
     const geom::Geometry& argGeom;
+    const bool argGeomHasCurves;
 
     SegmentString::NonConstVect lineList;
 
-    static void extractSegmentStrings(const geom::Geometry& g,
-                                      SegmentString::NonConstVect& to);
+    static void extractPathStrings(const geom::Geometry& g,
+                                   std::vector<std::unique_ptr<PathString>>& to);
 
-    Noder& getNoder();
+    ArcNoder& getNoder();
 
-    std::unique_ptr<Noder> noder;
+    std::unique_ptr<ArcNoder> noder;
 
-    std::unique_ptr<geom::Geometry> toGeometry(std::vector<std::unique_ptr<SegmentString>>& noded);
+    std::unique_ptr<geom::Geometry> toGeometry(std::vector<std::unique_ptr<PathString>>& noded) const;
 
 };
 

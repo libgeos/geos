@@ -111,7 +111,7 @@ public:
      * @return <code>true</code> if either intersection point is in
      * the interior of the input segment
      */
-    bool isInteriorIntersection(std::size_t inputLineIndex)
+    bool isInteriorIntersection(std::size_t inputLineIndex) const
     {
         for(std::size_t i = 0; i < result; ++i) {
             if(!(intPt[i].equals2D(*inputLines[inputLineIndex][0])
@@ -160,6 +160,10 @@ public:
     /// Compute the intersection between two segments, given a sequence and starting index of each
     void computeIntersection(const geom::CoordinateSequence& p, std::size_t p0,
                              const geom::CoordinateSequence& q, std::size_t q0);
+
+    /// Compute the intersection between two segments, given a sequence and indices of each endpoint
+    void computeIntersection(const geom::CoordinateSequence& p, std::size_t p0, std::size_t p1,
+                             const geom::CoordinateSequence& q, std::size_t q0, std::size_t q1);
 
     std::string toString() const;
 
