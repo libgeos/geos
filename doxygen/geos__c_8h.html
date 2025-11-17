@@ -23636,7 +23636,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Apply the <a href="https://en.wikipedia.org/wiki/Ramer–Douglas–Peucker_algorithm">Douglas/Peucker algorithm</a> to the coordinate sequences of the input geometry. Removes "unnecessary" vertices, vertices that are co-linear within the tolerance distance. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Apply the <a href="https://en.wikipedia.org/wiki/Ramer–Douglas–Peucker_algorithm">Douglas/Peucker algorithm</a> to the coordinate sequences of the input geometry. Removes "unnecessary" vertices, vertices that are co-linear within the tolerance distance. Z and M values on the retained coordinates will be preserved. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The input geometry </td></tr>
     <tr><td class="paramname">tolerance</td><td>The tolerance to apply. Larger tolerance leads to simpler output. </td></tr>
