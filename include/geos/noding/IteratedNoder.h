@@ -20,12 +20,13 @@
 
 #include <geos/export.h>
 
+#include <functional>
+#include <memory>
 #include <vector>
-#include <iostream>
 
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/noding/SegmentString.h> // due to inlines
-#include <geos/noding/Noder.h> // for inheritance
+#include <geos/noding/ArcNoder.h> // for inheritance
 
 // Forward declarations
 namespace geos {
@@ -49,36 +50,36 @@ namespace noding { // geos::noding
  * Clients can choose to rerun the noding using a lower precision model.
  *
  */
-class GEOS_DLL IteratedNoder : public Noder { // implements Noder
+class GEOS_DLL IteratedNoder : public ArcNoder { // implements Noder
 
 private:
-    static const int MAX_ITER = 5;
+    static constexpr int MAX_ITER = 5;
 
 
     const geom::PrecisionModel* pm;
     algorithm::LineIntersector li;
-    std::vector<std::unique_ptr<SegmentString>> nodedSegStrings;
+    std::vector<std::unique_ptr<PathString>> nodedPaths;
     int maxIter;
+    std::function<std::unique_ptr<Noder>()> m_noderFunction;
 
     /**
      * Node the input segment strings once
      * and create the split edges between the nodes
      */
-    void node(const std::vector<SegmentString*>& segStrings,
+    void node(const std::vector<PathString*>& segStrings,
               int& numInteriorIntersections,
               geom::CoordinateXY& intersectionPoint);
 
+    static std::unique_ptr<Noder> createDefaultNoder();
+
 public:
 
-    IteratedNoder(const geom::PrecisionModel* newPm)
-        :
-        pm(newPm),
-        li(pm),
-        maxIter(MAX_ITER)
-    {
-    }
+    /** \brief
+     * Construct an IteratedNoder using a specific precisionModel and underlying Noder.
+     */
+    IteratedNoder(const geom::PrecisionModel* newPm, std::function<std::unique_ptr<Noder>()> noderFunction = createDefaultNoder);
 
-    ~IteratedNoder() override {}
+    ~IteratedNoder() override;
 
     /** \brief
      * Sets the maximum number of noding iterations performed before
@@ -96,23 +97,21 @@ public:
         maxIter = n;
     }
 
-    std::vector<std::unique_ptr<SegmentString>>
-    getNodedSubstrings() override
+    std::vector<std::unique_ptr<PathString>> getNodedPaths() override
     {
-        return std::move(nodedSegStrings);
+        return std::move(nodedPaths);
     }
 
-
     /** \brief
-     * Fully nodes a list of {@link SegmentString}s, i.e. performs noding iteratively
+     * Fully nodes a list of {@link PathString}s, i.e. performs noding iteratively
      * until no intersections are found between segments.
      *
      * Maintains labelling of edges correctly through the noding.
      *
-     * @param inputSegmentStrings a collection of SegmentStrings to be noded
+     * @param inputPathStrings a collection of SegmentStrings to be noded
      * @throws TopologyException if the iterated noding fails to converge.
      */
-    void computeNodes(const std::vector<SegmentString*>& inputSegmentStrings) override; // throw(GEOSException);
+    void computePathNodes(const std::vector<PathString*>& inputPathStrings) override;
 
     // Declare type as noncopyable
     IteratedNoder(IteratedNoder const&) = delete;

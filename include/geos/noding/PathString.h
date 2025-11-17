@@ -17,6 +17,8 @@
 #include <geos/export.h>
 
 #include <cstddef>
+#include <memory>
+#include <vector>
 
 namespace geos::noding {
 
@@ -30,6 +32,9 @@ public:
     virtual std::size_t getSize() const = 0;
 
     virtual double getLength() const = 0;
+
+    std::vector<PathString*>
+    static toRawPointerVector(const std::vector<std::unique_ptr<PathString>> & segStrings);
 };
 
 }

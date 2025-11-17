@@ -25,9 +25,13 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/GeometryFactory.h>
+#include <geos/geom/CircularString.h>
+#include <geos/geom/MultiCurve.h>
 #include <geos/geom/LineString.h>
 
 #include <geos/noding/IteratedNoder.h>
+#include <geos/noding/NodableArcString.h>
+#include <geos/noding/SimpleNoder.h>
 
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/noding/IntersectionAdder.h>
@@ -46,9 +50,9 @@ namespace {
 /**
  * Add every linear element in a geometry into SegmentString vector
  */
-class SegmentStringExtractor: public geom::GeometryComponentFilter {
+class PathStringExtractor: public geom::GeometryComponentFilter {
 public:
-    SegmentStringExtractor(SegmentString::NonConstVect& to,
+    PathStringExtractor(std::vector<std::unique_ptr<PathString>> & to,
                            bool constructZ,
                            bool constructM)
         : _to(to)
@@ -59,20 +63,31 @@ public:
     void
     filter_ro(const geom::Geometry* g) override
     {
-        const geom::LineString* ls = dynamic_cast<const geom::LineString*>(g);
-        if(ls) {
+        if(const auto* ls = dynamic_cast<const geom::LineString*>(g)) {
             auto coord = ls->getSharedCoordinates();
-            SegmentString* ss = new NodedSegmentString(coord, _constructZ, _constructM, nullptr);
-            _to.push_back(ss);
+            // coord ownership transferred to SegmentString
+            auto ss = std::make_unique<NodedSegmentString>(coord, _constructZ, _constructM, nullptr);
+            _to.push_back(std::move(ss));
+        } else if (const auto* cs = dynamic_cast<const geom::CircularString*>(g)) {
+            auto coords = cs->getCoordinates();
+
+            // TODO: Store this vector in the CircularString ?
+            std::vector<geom::CircularArc> arcs;
+            for (std::size_t i = 0; i < coords->getSize() - 2; i += 2) {
+                arcs.emplace_back(*coords, i);
+            }
+
+            auto as = std::make_unique<NodableArcString>(std::move(arcs), std::move(coords), _constructZ, _constructM, nullptr);
+            _to.push_back(std::move(as));
         }
     }
 private:
-    SegmentString::NonConstVect& _to;
+    std::vector<std::unique_ptr<PathString>>& _to;
     bool _constructZ;
     bool _constructM;
 
-    SegmentStringExtractor(SegmentStringExtractor const&); /*= delete*/
-    SegmentStringExtractor& operator=(SegmentStringExtractor const&); /*= delete*/
+    PathStringExtractor(PathStringExtractor const&); /*= delete*/
+    PathStringExtractor& operator=(PathStringExtractor const&); /*= delete*/
 };
 
 }
@@ -89,14 +104,15 @@ GeometryNoder::node(const geom::Geometry& geom)
 /* public */
 GeometryNoder::GeometryNoder(const geom::Geometry& g)
     :
-    argGeom(g)
-{
-    util::ensureNoCurvedComponents(argGeom);
-}
+    argGeom(g),
+    argGeomHasCurves(g.hasCurvedComponents())
+{}
+
+GeometryNoder::~GeometryNoder() = default;
 
 /* private */
 std::unique_ptr<geom::Geometry>
-GeometryNoder::toGeometry(std::vector<std::unique_ptr<SegmentString>>& nodedEdges)
+GeometryNoder::toGeometry(std::vector<std::unique_ptr<PathString>>& nodedEdges) const
 {
     const geom::GeometryFactory* geomFact = argGeom.getFactory();
 
@@ -105,17 +121,30 @@ GeometryNoder::toGeometry(std::vector<std::unique_ptr<SegmentString>>& nodedEdge
     // Create a geometry out of the noded substrings.
     std::vector<std::unique_ptr<geom::Geometry>> lines;
     lines.reserve(nodedEdges.size());
-    for(auto& ss :  nodedEdges) {
-        const auto& coords = ss->getCoordinates();
 
-        // Check if an equivalent edge is known
-        OrientedCoordinateArray oca1(*coords);
-        if(ocas.insert(oca1).second) {
-            lines.push_back(geomFact->createLineString(coords));
+    bool resultArcs = false;
+    for(auto& path :  nodedEdges) {
+        if (const auto* ss = dynamic_cast<SegmentString*>(path.get())) {
+            const auto& coords = ss->getCoordinates();
+
+            // Check if an equivalent edge is known
+            OrientedCoordinateArray oca1(*coords);
+            if(ocas.insert(oca1).second) {
+                lines.push_back(geomFact->createLineString(coords));
+            }
+        } else {
+            resultArcs = true;
+            auto* as = dynamic_cast<ArcString*>(path.get());
+            // FIXME: check for duplicates
+            lines.push_back(geomFact->createCircularString(as->releaseCoordinates()));
         }
     }
 
-    return geomFact->createMultiLineString(std::move(lines));
+    if (resultArcs) {
+        return geomFact->createMultiCurve(std::move(lines));
+    } else {
+        return geomFact->createMultiLineString(std::move(lines));
+    }
 }
 
 /* public */
@@ -125,49 +154,45 @@ GeometryNoder::getNoded()
     if (argGeom.isEmpty())
         return argGeom.clone();
 
-    std::vector<SegmentString*> p_lineList;
-    extractSegmentStrings(argGeom, p_lineList);
+    std::vector<std::unique_ptr<PathString>> p_lineList;
+    extractPathStrings(argGeom, p_lineList);
 
-    Noder& p_noder = getNoder();
-    std::vector<std::unique_ptr<SegmentString>> nodedEdges;
+    ArcNoder& p_noder = getNoder();
+    std::vector<std::unique_ptr<PathString>> nodedEdges;
 
     try {
-        p_noder.computeNodes(p_lineList);
-        nodedEdges = p_noder.getNodedSubstrings();
+        p_noder.computePathNodes(PathString::toRawPointerVector(p_lineList));
+        nodedEdges = p_noder.getNodedPaths();
     }
     catch(const std::exception&) {
-        for(std::size_t i = 0, n = p_lineList.size(); i < n; ++i) {
-            delete p_lineList[i];
-        }
         throw;
     }
 
     std::unique_ptr<geom::Geometry> noded = toGeometry(nodedEdges);
-
-    for(auto* elem : p_lineList) {
-        delete elem;
-    }
 
     return noded;
 }
 
 /* private static */
 void
-GeometryNoder::extractSegmentStrings(const geom::Geometry& g,
-                                     SegmentString::NonConstVect& to)
+GeometryNoder::extractPathStrings(const geom::Geometry& g,
+                                  std::vector<std::unique_ptr<PathString>>& to)
 {
-    SegmentStringExtractor ex(to, g.hasZ(), g.hasM());
+    PathStringExtractor ex(to, g.hasZ(), g.hasM());
     g.apply_ro(&ex);
 }
 
 /* private */
-Noder&
+ArcNoder&
 GeometryNoder::getNoder()
 {
     if(! noder.get()) {
         const geom::PrecisionModel* pm = argGeom.getFactory()->getPrecisionModel();
-        IteratedNoder* in = new IteratedNoder(pm);
-        noder.reset(in);
+        if (argGeomHasCurves) {
+            noder = std::make_unique<IteratedNoder>(pm, []() { return std::make_unique<SimpleNoder>(); });
+        } else {
+            noder = std::make_unique<IteratedNoder>(pm);
+        }
     }
     return *noder;
 }
