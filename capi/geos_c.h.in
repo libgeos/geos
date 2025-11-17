@@ -5207,6 +5207,7 @@ extern GEOSGeometry GEOS_DLL *GEOSReverse(const GEOSGeometry* g);
 * to the coordinate sequences of the input geometry.
 * Removes "unnecessary" vertices, vertices
 * that are co-linear within the tolerance distance.
+* Z and M values on the retained coordinates will be preserved.
 * \param g The input geometry
 * \param tolerance The tolerance to apply. Larger tolerance leads to simpler output.
 * \return The simplified geometry
