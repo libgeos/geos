@@ -131,45 +131,48 @@ ensure_equals_xy(geos::geom::CoordinateXY const& actual,
 
 inline void
 ensure_equals_xyz(geos::geom::Coordinate const& actual,
-                  geos::geom::Coordinate const& expected)
+                  geos::geom::Coordinate const& expected,
+                  double tol=0)
 {
-    ensure_equals("Coordinate X", actual.x, expected.x );
-    ensure_equals("Coordinate Y", actual.y, expected.y );
+    ensure_equals("Coordinate X", actual.x, expected.x, tol);
+    ensure_equals("Coordinate Y", actual.y, expected.y, tol);
     if ( std::isnan(expected.z) ) {
         ensure("Coordinate Z should be NaN", std::isnan(actual.z) );
     } else {
-        ensure_equals("Coordinate Z", actual.z, expected.z );
+        ensure_equals("Coordinate Z", actual.z, expected.z, tol);
     }
 }
 
 inline void
 ensure_equals_xym(geos::geom::CoordinateXYM const& actual,
-                  geos::geom::CoordinateXYM const& expected)
+                  geos::geom::CoordinateXYM const& expected,
+                  double tol=0)
 {
-    ensure_equals("Coordinate X", actual.x, expected.x );
-    ensure_equals("Coordinate Y", actual.y, expected.y );
+    ensure_equals("Coordinate X", actual.x, expected.x , tol);
+    ensure_equals("Coordinate Y", actual.y, expected.y, tol);
     if ( std::isnan(expected.m) ) {
         ensure("Coordinate M should be NaN", std::isnan(actual.m) );
     } else {
-        ensure_equals("Coordinate M", actual.m, expected.m );
+        ensure_equals("Coordinate M", actual.m, expected.m, tol);
     }
 }
 
 inline void
 ensure_equals_xyzm(geos::geom::CoordinateXYZM const& actual,
-                   geos::geom::CoordinateXYZM const& expected)
+                   geos::geom::CoordinateXYZM const& expected,
+                   double tol = 0)
 {
-    ensure_equals("Coordinate X", actual.x, expected.x );
-    ensure_equals("Coordinate Y", actual.y, expected.y );
+    ensure_equals("Coordinate X", actual.x, expected.x, tol);
+    ensure_equals("Coordinate Y", actual.y, expected.y, tol);
     if ( std::isnan(expected.z) ) {
         ensure("Coordinate Z should be NaN", std::isnan(actual.z) );
     } else {
-        ensure_equals("Coordinate Z", actual.z, expected.z );
+        ensure_equals("Coordinate Z", actual.z, expected.z, tol);
     }
     if ( std::isnan(expected.m) ) {
         ensure("Coordinate M should be NaN", std::isnan(actual.m) );
     } else {
-        ensure_equals("Coordinate M", actual.m, expected.m );
+        ensure_equals("Coordinate M", actual.m, expected.m, tol);
     }
 }
 

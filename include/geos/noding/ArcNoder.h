@@ -27,10 +27,16 @@ namespace geos::noding {
 class GEOS_DLL ArcNoder : public Noder {
 
 public:
+    ArcNoder() = default;
+
     explicit ArcNoder(std::unique_ptr<ArcIntersector> intersector) :
         m_intersector(std::move(intersector)) {}
 
     ~ArcNoder() override;
+
+    void setArcIntersector(std::unique_ptr<ArcIntersector> arcIntersector) {
+        m_intersector = std::move(arcIntersector);
+    }
 
     void computeNodes(const std::vector<SegmentString*>& segStrings) override;
 

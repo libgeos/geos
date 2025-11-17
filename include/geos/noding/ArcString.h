@@ -32,6 +32,12 @@ public:
     explicit ArcString(std::vector<geom::CircularArc> arcs) : m_arcs(std::move(arcs)) {
     }
 
+    ArcString(std::vector<geom::CircularArc> arcs, std::unique_ptr<geom::CoordinateSequence> seq, void* context)
+        : m_arcs(std::move(arcs)),
+          m_seq(std::move(seq)),
+          m_context(context)
+    {}
+
     std::size_t getSize() const override {
         return m_arcs.size();
     }
@@ -56,8 +62,12 @@ public:
         return m_arcs.end();
     }
 
+    std::unique_ptr<geom::CoordinateSequence> releaseCoordinates();
+
 protected:
     std::vector<geom::CircularArc> m_arcs;
+    std::unique_ptr<geom::CoordinateSequence> m_seq;
+    void* m_context;
 };
 
 }

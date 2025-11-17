@@ -12,6 +12,7 @@
  *
  **********************************************************************/
 
+#include <geos/geom/CoordinateSequences.h>
 #include <geos/noding/ArcIntersectionAdder.h>
 #include <geos/noding/NodableArcString.h>
 #include <geos/noding/NodedSegmentString.h>
@@ -27,7 +28,7 @@ ArcIntersectionAdder::processIntersections(ArcString& e0, std::size_t segIndex0,
     }
 
     const geom::CircularArc& arc0 = e0.getArc(segIndex0);
-    const geom::CircularArc& arc1 = e1.getArc(segIndex0);
+    const geom::CircularArc& arc1 = e1.getArc(segIndex1);
 
     m_intersector.intersects(arc0, arc1);
 
@@ -37,8 +38,8 @@ ArcIntersectionAdder::processIntersections(ArcString& e0, std::size_t segIndex0,
 
     // TODO handle cocircular intersections
     for (std::uint8_t i = 0; i < m_intersector.getNumPoints(); i++) {
-        detail::down_cast<NodableArcString*>(&e0)->addIntersection(geom::CoordinateXYZM{m_intersector.getPoint(i)}, segIndex0);
-        detail::down_cast<NodableArcString*>(&e1)->addIntersection(geom::CoordinateXYZM{m_intersector.getPoint(i)}, segIndex1);
+        detail::down_cast<NodableArcString*>(&e0)->addIntersection(m_intersector.getPoint(i), segIndex0);
+        detail::down_cast<NodableArcString*>(&e1)->addIntersection(m_intersector.getPoint(i), segIndex1);
     }
 }
 
@@ -48,10 +49,10 @@ ArcIntersectionAdder::processIntersections(ArcString& e0, std::size_t segIndex0,
 // don't bother intersecting a segment with itself
 
     const geom::CircularArc& arc = e0.getArc(segIndex0);
-    const geom::CoordinateXY& q0 = e1.getCoordinate(segIndex1);
-    const geom::CoordinateXY& q1 = e1.getCoordinate(segIndex1 + 1);
 
-    m_intersector.intersects(arc, q0, q1);
+    // FIXME get useSegEndpoints from somewhere
+    constexpr bool useSegEndpoints = false;
+    m_intersector.intersects(arc, *e1.getCoordinates(), segIndex1, segIndex1 + 1, useSegEndpoints);
 
     if (m_intersector.getResult() == algorithm::CircularArcIntersector::NO_INTERSECTION) {
         return;
@@ -75,12 +76,17 @@ ArcIntersectionAdder::processIntersections(SegmentString& e0, std::size_t segInd
         return;
     }
 
+    m_intersector.intersects(*e0.getCoordinates(), segIndex0, segIndex0 + 1,
+                             *e1.getCoordinates(), segIndex1, segIndex1 + 1);
+
+#if 0
     const CoordinateXY& p0 = e0.getCoordinate(segIndex0);
     const CoordinateXY& p1 = e0.getCoordinate(segIndex0 + 1);
     const CoordinateXY& q0 = e1.getCoordinate(segIndex1);
     const CoordinateXY& q1 = e1.getCoordinate(segIndex1 + 1);
 
     m_intersector.intersects(p0, p1, q0, q1);
+#endif
 
     if (m_intersector.getResult() == algorithm::CircularArcIntersector::NO_INTERSECTION) {
         return;
