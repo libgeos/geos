@@ -439,6 +439,32 @@ void object::test<17>()
     ensure_same(xyzm.get<Ordinate::M>(), 4);
 }
 
+template<>
+template<>
+void object::test<18>()
+{
+    set_test_name("Coordinate::has()");
+
+    ensure_equals(CoordinateXY::has<Ordinate::X>(), true);
+    ensure_equals(CoordinateXY::has<Ordinate::Y>(), true);
+    ensure_equals(CoordinateXY::has<Ordinate::Z>(), false);
+    ensure_equals(CoordinateXY::has<Ordinate::M>(), false);
+
+    ensure_equals(Coordinate::has<Ordinate::X>(), true);
+    ensure_equals(Coordinate::has<Ordinate::Y>(), true);
+    ensure_equals(Coordinate::has<Ordinate::Z>(), true);
+    ensure_equals(Coordinate::has<Ordinate::M>(), false);
+
+    ensure_equals(CoordinateXYM::has<Ordinate::X>(), true);
+    ensure_equals(CoordinateXYM::has<Ordinate::Y>(), true);
+    ensure_equals(CoordinateXYM::has<Ordinate::Z>(), false);
+    ensure_equals(CoordinateXYM::has<Ordinate::M>(), true);
+
+    ensure_equals(CoordinateXYZM::has<Ordinate::X>(), true);
+    ensure_equals(CoordinateXYZM::has<Ordinate::Y>(), true);
+    ensure_equals(CoordinateXYZM::has<Ordinate::Z>(), true);
+    ensure_equals(CoordinateXYZM::has<Ordinate::M>(), true);
+}
 
 } // namespace tut
 

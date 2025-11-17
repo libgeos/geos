@@ -1,11 +1,14 @@
 //
 // Test Suite for C-API GEOSNode
 
+#include <iostream>
 #include <tut/tut.hpp>
 // geos
 #include <geos_c.h>
+#include <geos/geom/Geometry.h>
 
 #include "capi_test_utils.h"
+#include "utility.h"
 
 namespace tut {
 //
@@ -200,12 +203,60 @@ template<>
 template<>
 void object::test<9>()
 {
+    set_test_name("two arcs with two intersection points");
+
     input_ = fromWKT("MULTICURVE (CIRCULARSTRING (0 0, 1 1, 2 0), CIRCULARSTRING (0 1, 1 0, 2 1))");
     ensure(input_);
 
     result_ = GEOSNode(input_);
+    ensure(result_ != nullptr);
 
-    ensure("curved geometries not supported", result_ == nullptr);
+    expected_ = fromWKT("MULTICURVE ("
+                        "CIRCULARSTRING (0 0, 0.0340741737 0.2588190451, 0.1339745962 0.5, 1 1, 1.8660254038 0.5, 1.9659258263 0.2588190451, 2 0),"
+                        "CIRCULARSTRING (0 1, 0.0340741737 0.7411809549, 0.1339745962 0.5, 1 0, 1.8660254038 0.5, 1.9659258263 0.7411809549, 2 1))");
+
+    ensure_geometry_equals_exact(result_, expected_, 1e-8);
+}
+
+template<>
+template<>
+void object::test<10>()
+{
+    set_test_name("CIRCULARSTRING ZM intersecting CIRCULARSTRING M");
+
+    input_ = fromWKT("MULTICURVE (CIRCULARSTRING ZM (-1 0 3 4, 0 1 2 5, 1 0 4 7), CIRCULARSTRING M (-1 2 9, 0 1 13, -1 0 17))");
+    ensure(input_);
+
+    result_ = GEOSNode(input_);
+    ensure(result_ != nullptr);
+
+    expected_ = fromWKT("MULTICURVE ZM ("
+                        "CIRCULARSTRING ZM (-1 0 3 4, -1 1.2246467991e-16 5 4.75, -1 2.7755575616e-16 7 5.5, -1 1.2246467991e-16 7 5.5, -1 5.5511151231e-17 7 5.5, -0.7071067812 0.7071067812 5.25 7.375, -2.7755575616e-16 1 3.5 9.25, -3.8285686989e-16 1 3.5 9.25, -5.5511151231e-17 1 3.5 9.25, 0.7071067812 0.7071067812 3.75 8.125, 1 0 4 7),"
+                        "CIRCULARSTRING ZM (-1 2 NaN 9, -0.2928932188 1.7071067812 NaN 9.125, -2.7755575616e-16 1 3.5 9.25, 0 1 3.5 9.25, -5.5511151231e-17 1 3.5 9.25, -0.2928932188 0.2928932188 5.25 7.375, -1 2.7755575616e-16 7 5.5, -1 0 7 5.5, -1 5.5511151231e-17 7 5.5, -1 0 NaN 11.25, -1 0 NaN 17))");
+
+    ensure_equals_exact_geometry_xyzm(reinterpret_cast<Geometry*>(result_),
+                                      reinterpret_cast<Geometry*>(expected_), 1e-8);
+}
+
+template<>
+template<>
+void object::test<11>()
+{
+    set_test_name("CIRCULARSTRING ZM intersecting LINESTRING M");
+
+    input_ = fromWKT("MULTICURVE (CIRCULARSTRING ZM (-5 0 3 4, -4 3 2 5, 4 3 4 7), LINESTRING M (0 0 7, 0 10 13))");
+    ensure(input_);
+
+    result_ = GEOSNode(input_);
+    ensure(result_ != nullptr);
+
+    expected_ = fromWKT("MULTICURVE ZM ("
+                        "CIRCULARSTRING ZM (-5 0 3 4, -3.5355 3.5355 3 6, 0 5 3 8, 3.5355 3.5355 3.5 7.5, 4 3 4 7),"
+                        "LINESTRING ZM (0 0 NaN 7, 0 5 3 8),"
+                        "LINESTRING ZM (0 5 3 8, 0 10 NaN 13))");
+
+    ensure_equals_exact_geometry_xyzm(reinterpret_cast<Geometry*>(result_),
+                                      reinterpret_cast<Geometry*>(expected_), 1e-4);
 }
 
 } // namespace tut

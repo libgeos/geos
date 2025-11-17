@@ -1580,4 +1580,29 @@ void object::test<59>()
     ensure_equals(length, 8);
 }
 
+template<>
+template<>
+void object::test<60>
+()
+{
+    set_test_name("CoordinateSequence::swap");
+
+    CoordinateSequence seq = CoordinateSequence::XYZM(0);
+    CoordinateXYZM p0{1,2,3,4};
+    CoordinateXYZM p1{5,6,7,8};
+    CoordinateXYZM p2{9,10,11,12};
+    seq.add(p0);
+    seq.add(p1);
+    seq.add(p2);
+
+    seq.swap(1, 1);
+    ensure_equals_xyzm(seq.getAt<CoordinateXYZM>(0), p0);
+    ensure_equals_xyzm(seq.getAt<CoordinateXYZM>(1), p1);
+    ensure_equals_xyzm(seq.getAt<CoordinateXYZM>(2), p2);
+
+    seq.swap(2, 1);
+    ensure_equals_xyzm(seq.getAt<CoordinateXYZM>(0), p0);
+    ensure_equals_xyzm(seq.getAt<CoordinateXYZM>(1), p2);
+    ensure_equals_xyzm(seq.getAt<CoordinateXYZM>(2), p1);
+}
 } // namespace tut
