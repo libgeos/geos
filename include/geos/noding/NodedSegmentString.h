@@ -108,7 +108,7 @@ public:
     {}
 
     NodedSegmentString(SegmentString* ss, bool constructZ, bool constructM)
-        : NodableSegmentString(ss->getData(), ss->getCoordinates()->clone())
+        : NodableSegmentString(ss->getData(), ss->getCoordinates())
         , nodeList(*this, constructZ, constructM)
     {}
 

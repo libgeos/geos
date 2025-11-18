@@ -323,7 +323,7 @@ public:
      */
     std::vector<const Polygon*> getMergedGaps();
 
-    std::unique_ptr<Geometry> toGeometry(
+    static std::unique_ptr<Geometry> toGeometry(
         std::vector<std::unique_ptr<SegmentString>>& segStrings,
         const GeometryFactory* geomFact);
 

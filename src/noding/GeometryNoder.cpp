@@ -111,7 +111,7 @@ GeometryNoder::toGeometry(std::vector<std::unique_ptr<SegmentString>>& nodedEdge
         // Check if an equivalent edge is known
         OrientedCoordinateArray oca1(*coords);
         if(ocas.insert(oca1).second) {
-            lines.push_back(geomFact->createLineString(coords->clone()));
+            lines.push_back(geomFact->createLineString(coords));
         }
     }
 

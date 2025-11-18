@@ -127,13 +127,7 @@ public:
         return pts.get();
     };
 
-    std::unique_ptr<CoordinateSequence> getCoordinates()
-    {
-        // return a copy of pts
-        return pts->clone();
-    };
-
-    std::unique_ptr<CoordinateSequence> getCoordinatesOriented();
+    std::shared_ptr<const CoordinateSequence> getCoordinatesOriented() const;
 
     /**
     * Adds the coordinates of this edge to the given list,
