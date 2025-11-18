@@ -315,6 +315,10 @@ public:
     std::unique_ptr<LineString> createLineString(
         const CoordinateSequence& coordinates) const;
 
+    /// Construct a LineString with a reference to shared coordinates
+    std::unique_ptr<LineString> createLineString(
+        std::shared_ptr<const CoordinateSequence>) const;
+
     /// Construct an EMPTY CircularString
     std::unique_ptr<CircularString> createCircularString(bool hasZ, bool hasM) const;
 

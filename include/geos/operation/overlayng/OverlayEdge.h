@@ -53,7 +53,7 @@ class GEOS_DLL OverlayEdge : public edgegraph::HalfEdge {
 private:
 
     // Members
-    const CoordinateSequence* pts;
+    std::shared_ptr<const CoordinateSequence> pts;
     /**
     * 'true' indicates direction is forward along segString
     * 'false' is reverse direction
@@ -80,7 +80,7 @@ public:
 
     OverlayEdge(const CoordinateXYZM& p_orig, const CoordinateXYZM& p_dirPt,
                 bool p_direction, OverlayLabel* p_label,
-                const CoordinateSequence* p_pts)
+                std::shared_ptr<const CoordinateSequence> p_pts)
         : HalfEdge(p_orig)
         , pts(p_pts)
         , direction(p_direction)
@@ -124,7 +124,7 @@ public:
 
     const CoordinateSequence* getCoordinatesRO() const
     {
-        return pts;
+        return pts.get();
     };
 
     std::unique_ptr<CoordinateSequence> getCoordinates()

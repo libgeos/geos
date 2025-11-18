@@ -659,6 +659,16 @@ const
     return std::unique_ptr<LineString>(new LineString(std::move(newCoords), *this));
 }
 
+std::unique_ptr<LineString>
+GeometryFactory::createLineString(std::shared_ptr<const CoordinateSequence> newCoords)
+const
+{
+    if (!newCoords)
+        return createLineString();
+    // Can't use make_unique with protected constructor
+    return std::unique_ptr<LineString>(new LineString(newCoords, *this));
+}
+
 /*public*/
 std::unique_ptr<CircularString>
 GeometryFactory::createCircularString(CoordinateSequence::Ptr && newCoords)

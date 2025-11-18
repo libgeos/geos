@@ -63,6 +63,13 @@ LineString::LineString(CoordinateSequence::Ptr && newCoords,
     validateConstruction();
 }
 
+LineString::LineString(std::shared_ptr<const CoordinateSequence> newCoords,
+                       const GeometryFactory& factory)
+   : SimpleCurve(newCoords, true, factory)
+{
+    validateConstruction();
+}
+
 LineString*
 LineString::reverseImpl() const
 {

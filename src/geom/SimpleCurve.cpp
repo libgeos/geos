@@ -47,7 +47,15 @@ SimpleCurve::SimpleCurve(std::unique_ptr<CoordinateSequence>&& newCoords,
 {
 }
 
-void
+SimpleCurve::SimpleCurve(std::shared_ptr<const CoordinateSequence> newCoords,
+                         bool isLinear,
+                         const GeometryFactory& factory)
+    : Curve(factory),
+      points(newCoords ? std::move(newCoords) : std::make_unique<CoordinateSequence>()),
+      envelope(computeEnvelopeInternal(isLinear))
+{
+}
+    void
 SimpleCurve::apply_ro(CoordinateFilter* filter) const
 {
     assert(points.get());

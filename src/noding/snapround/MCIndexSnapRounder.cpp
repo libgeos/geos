@@ -60,7 +60,7 @@ MCIndexSnapRounder::computeIntersectionSnaps(std::vector<Coordinate>& snapPts)
 void
 MCIndexSnapRounder::computeVertexSnaps(NodedSegmentString* e)
 {
-    CoordinateSequence& pts0 = *(e->getCoordinates());
+    const CoordinateSequence& pts0 = *(e->getCoordinates());
     for(std::size_t i = 0, n = pts0.size() - 1; i < n; ++i) {
         HotPixel hotPixel(pts0.getAt(i), scaleFactor);
         bool isNodeAdded = pointSnapper->snap(hotPixel, e, i);

@@ -87,7 +87,6 @@ private:
      */
     std::vector<std::unique_ptr<const RelateSegmentString>> segStringTempStore;
     std::vector<std::unique_ptr<const RelateSegmentString>> segStringPermStore;
-    std::vector<std::unique_ptr<CoordinateSequence>> csStore;
 
 
     // Methods
@@ -133,11 +132,11 @@ private:
         std::vector<const SegmentString*>& segStrings,
         std::vector<std::unique_ptr<const RelateSegmentString>>& segStore);
 
-    const CoordinateSequence* orientAndRemoveRepeated(
-        const CoordinateSequence* cs, bool orientCW);
+    std::shared_ptr<const CoordinateSequence> orientAndRemoveRepeated(
+        std::shared_ptr<const CoordinateSequence> cs, bool orientCW);
 
-    const CoordinateSequence* removeRepeated(
-        const CoordinateSequence* cs);
+    std::shared_ptr<const CoordinateSequence> removeRepeated(
+        std::shared_ptr<const CoordinateSequence> cs);
 
 public:
 

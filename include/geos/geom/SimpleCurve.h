@@ -118,6 +118,10 @@ protected:
                 bool isLinear,
                 const GeometryFactory& factory);
 
+    SimpleCurve(std::shared_ptr<const CoordinateSequence> newCoords,
+                bool isLinear,
+                const GeometryFactory& factory);
+
     int compareToSameClass(const Geometry* ls) const override;
 
     Envelope computeEnvelopeInternal(bool isLinear) const;

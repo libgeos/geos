@@ -140,18 +140,17 @@ EdgeNodingBuilder::createEdges(std::vector<std::unique_ptr<SegmentString>>& segS
     std::vector<Edge*> createdEdges;
 
     for (auto& ss : segStrings) {
-        const CoordinateSequence* pts = ss->getCoordinates();
+        const auto& pts = ss->getCoordinates();
 
         // don't create edges from collapsed lines
-        if (Edge::isCollapsed(pts)) continue;
+        if (Edge::isCollapsed(pts.get())) continue;
 
         // This EdgeSourceInfo is already managed locally in a std::deque
         const EdgeSourceInfo* info = static_cast<const EdgeSourceInfo*>(ss->getData());
         // Record that a non-collapsed edge exists for the parent geometry
         hasEdges[info->getIndex()] = true;
         // Allocate the new Edge locally in a std::deque
-        NodedSegmentString* nss = detail::down_cast<NodedSegmentString*>(ss.get());
-        edgeQue.emplace_back(nss->releaseCoordinates(), info);
+        edgeQue.emplace_back(ss->getCoordinates(), info);
         Edge* newEdge = &(edgeQue.back());
         createdEdges.push_back(newEdge);
     }
@@ -287,7 +286,7 @@ EdgeNodingBuilder::addEdge(std::unique_ptr<CoordinateSequence>& cas, const EdgeS
     // TODO: manage these internally to EdgeNodingBuilder in a std::deque,
     // since they do not have a life span longer than the EdgeNodingBuilder
     // in OverlayNG::buildGraph()
-    NodedSegmentString* ss = new NodedSegmentString(cas.release(), inputHasZ, inputHasM, reinterpret_cast<const void*>(info));
+    NodedSegmentString* ss = new NodedSegmentString(std::move(cas), inputHasZ, inputHasM, reinterpret_cast<const void*>(info));
     inputEdges->push_back(ss);
 }
 
