@@ -236,6 +236,9 @@ public:
     std::unique_ptr<LinearRing> createLinearRing(
         std::unique_ptr<CoordinateSequence> && newCoords) const;
 
+    std::unique_ptr<LinearRing> createLinearRing(
+        std::shared_ptr<const CoordinateSequence> newCoords) const;
+
     /// Construct a LinearRing with a deep-copy of given arguments
     std::unique_ptr<LinearRing> createLinearRing(
         const CoordinateSequence& coordinates) const;
@@ -321,6 +324,9 @@ public:
     /// Construct a CircularString taking ownership of given argument
     std::unique_ptr<CircularString> createCircularString(
         std::unique_ptr<CoordinateSequence> && coordinates) const;
+
+    std::unique_ptr<CircularString> createCircularString(
+        std::shared_ptr<const CoordinateSequence> coordinates) const;
 
     /// Construct a CircularString with a deep-copy of given argument
     std::unique_ptr<CircularString> createCircularString(

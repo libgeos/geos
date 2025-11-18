@@ -73,18 +73,24 @@ void
 SimpleCurve::apply_rw(const CoordinateFilter* filter)
 {
     assert(points.get());
-    points->apply_rw(filter);
+    if (points.use_count() > 1) {
+        points = points->clone();
+    }
+    const_cast<CoordinateSequence*>(points.get())->apply_rw(filter);
 }
 
 void
 SimpleCurve::apply_rw(CoordinateSequenceFilter& filter)
 {
+    if (points.use_count() > 1) {
+        points = points->clone();
+    }
     std::size_t npts = points->size();
     if (!npts) {
         return;
     }
     for (std::size_t i = 0; i < npts; ++i) {
-        filter.filter_rw(*points, i);
+        filter.filter_rw(const_cast<CoordinateSequence&>(*points), i);
         if (filter.isDone()) {
             break;
         }
@@ -218,6 +224,13 @@ SimpleCurve::getCoordinatesRO() const
     return points.get();
 }
 
+std::shared_ptr<const CoordinateSequence>
+SimpleCurve::getSharedCoordinates() const
+{
+    assert(nullptr != points.get());
+    return points;
+}
+
 const SimpleCurve*
 SimpleCurve::getCurveN(std::size_t) const
 {
@@ -326,7 +339,10 @@ SimpleCurve::normalize()
         std::size_t j = npts - 1 - i;
         if (!(points->getAt<CoordinateXY>(i) == points->getAt<CoordinateXY>(j))) {
             if (points->getAt<CoordinateXY>(i).compareTo(points->getAt<CoordinateXY>(j)) > 0) {
-                points->reverse();
+                if (points.use_count() > 1) {
+                    points = points->clone();
+                }
+                const_cast<CoordinateSequence*>(points.get())->reverse();
             }
             return;
         }
@@ -358,16 +374,6 @@ SimpleCurve::normalizeClosed()
     }
 
     points = std::move(coords);
-}
-
-std::unique_ptr<CoordinateSequence>
-SimpleCurve::releaseCoordinates()
-{
-    auto newPts = std::make_unique<CoordinateSequence>(0u, points->hasZ(), points->hasM());
-    auto ret = std::move(points);
-    points = std::move(newPts);
-    geometryChanged();
-    return ret;
 }
 
 } // namespace geos::geom
