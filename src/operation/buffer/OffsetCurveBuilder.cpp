@@ -53,7 +53,7 @@ const double OffsetCurveBuilder::SIMPLIFY_FACTOR = 100.0;
 /*public*/
 void
 OffsetCurveBuilder::getLineCurve(const CoordinateSequence* inputPts,
-                                 double nDistance, std::vector<CoordinateSequence*>& lineList)
+                                 double nDistance, std::vector<std::unique_ptr<CoordinateSequence>>& lineList)
 {
     distance = nDistance;
 
@@ -112,7 +112,7 @@ void
 OffsetCurveBuilder::getOffsetCurve(
     const CoordinateSequence* inputPts,
     double p_distance,
-    std::vector<CoordinateSequence*>& lineList)
+    std::vector<std::unique_ptr<CoordinateSequence>>& lineList)
 {
     distance = p_distance;
 
@@ -133,7 +133,7 @@ OffsetCurveBuilder::getOffsetCurve(
 
     // for right side line is traversed in reverse direction, so have to reverse generated line
     if (isRightSide) {
-        for (auto* cs: lineList) {
+        for (auto& cs: lineList) {
             cs->reverse();
         }
     }
@@ -234,7 +234,7 @@ OffsetCurveBuilder::computePointCurve(const Coordinate& pt,
 /*public*/
 void
 OffsetCurveBuilder::getSingleSidedLineCurve(const CoordinateSequence* inputPts,
-        double p_distance, std::vector<CoordinateSequence*>& lineList, bool leftSide,
+        double p_distance, std::vector<std::unique_ptr<CoordinateSequence>>& lineList, bool leftSide,
         bool rightSide)
 {
     // A zero or negative width buffer of a line/point is empty.
@@ -311,13 +311,13 @@ OffsetCurveBuilder::isLineOffsetEmpty(double p_distance)
 void
 OffsetCurveBuilder::getRingCurve(const CoordinateSequence* inputPts,
                                  int side, double nDistance,
-                                 std::vector<CoordinateSequence*>& lineList)
+                                 std::vector<std::unique_ptr<CoordinateSequence>>& lineList)
 {
     distance = nDistance;
 
     // optimize creating ring for zero distance
     if(distance == 0.0) {
-        lineList.push_back(inputPts->clone().release());
+        lineList.push_back(inputPts->clone());
         return;
     }
 

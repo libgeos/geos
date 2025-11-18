@@ -37,7 +37,7 @@ class GEOS_DLL NodableSegmentString : public SegmentString {
 private:
 protected:
 public:
-    NodableSegmentString(const void* newContext, geom::CoordinateSequence* newSeq)
+    NodableSegmentString(const void* newContext, std::shared_ptr<const geom::CoordinateSequence> newSeq)
         :
         SegmentString(newContext, newSeq)
     { }

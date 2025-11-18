@@ -51,7 +51,7 @@ CoverageRing::isKnown(std::vector<CoverageRing*>& rings)
 
 
 /* public */
-CoverageRing::CoverageRing(CoordinateSequence* inPts, bool interiorOnRight)
+CoverageRing::CoverageRing(const std::shared_ptr<const CoordinateSequence>& inPts, bool interiorOnRight)
     : noding::BasicSegmentString(inPts, nullptr)
     , m_isInteriorOnRight(interiorOnRight)
 {
@@ -63,13 +63,7 @@ CoverageRing::CoverageRing(CoordinateSequence* inPts, bool interiorOnRight)
 /* public */
 CoverageRing::CoverageRing(const LinearRing* ring, bool isShell)
     : CoverageRing(
-        // This is bad. The ownership rules of SegmentStrings need
-        // to be carefully considered. Most noders don't even touch
-        // them so a const CoordinateSequence makes sense. Some add
-        // things, like the NodedSegmentString, but do so out-of-line.
-        // Some noders (just ScalingNoder?) completely transform the
-        // inputs. Could maybe do bulk copying for that case?
-        const_cast<CoordinateSequence*>(ring->getCoordinatesRO()),
+        ring->getSharedCoordinates(),
         algorithm::Orientation::isCCW(ring->getCoordinatesRO()) != isShell)
 {}
 

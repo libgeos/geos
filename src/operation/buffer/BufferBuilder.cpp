@@ -177,7 +177,7 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
 
     // Then, get the raw (i.e. unnoded) single sided offset curve.
     OffsetCurveBuilder curveBuilder(precisionModel, modParams);
-    std::vector< CoordinateSequence* > lineList;
+    std::vector<std::unique_ptr<CoordinateSequence>> lineList;
 
     {
         std::unique_ptr< CoordinateSequence > coords(g->getCoordinates());
@@ -188,11 +188,11 @@ BufferBuilder::bufferLineSingleSided(const Geometry* g, double distance,
 
     // Create a SegmentString from these coordinates.
     SegmentString::NonConstVect curveList;
-    for(unsigned int i = 0; i < lineList.size(); ++i) {
-        CoordinateSequence* seq = lineList[i];
-
+    for(auto& seq : lineList) {
+        const bool hasZ = seq->hasZ();
+        const bool hasM = seq->hasM();
         // SegmentString takes ownership of CoordinateSequence
-        SegmentString* ss = new NodedSegmentString(seq, seq->hasZ(), seq->hasM(), nullptr);
+        SegmentString* ss = new NodedSegmentString(std::move(seq), hasZ, hasM, nullptr);
         curveList.push_back(ss);
     }
     lineList.clear();
@@ -666,7 +666,7 @@ BufferBuilder::computeNodedEdges(SegmentString::NonConstVect& bufferSegStrList,
     for(auto& segStr : nodedSegStrings) {
         const Label* oldLabel = static_cast<const Label*>(segStr->getData());
 
-        auto cs = operation::valid::RepeatedPointRemover::removeRepeatedPoints(segStr->getCoordinates());
+        auto cs = operation::valid::RepeatedPointRemover::removeRepeatedPoints(segStr->getCoordinates().get());
         segStr.reset();
         if(cs->size() < 2) {
             // don't insert collapsed edges

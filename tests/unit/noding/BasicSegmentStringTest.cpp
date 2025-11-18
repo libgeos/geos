@@ -26,7 +26,7 @@ struct test_basicsegmentstring_data {
     SegmentStringAutoPtr;
 
     SegmentStringAutoPtr
-    makeSegmentString(geos::geom::CoordinateSequence* cs, void* d = nullptr)
+    makeSegmentString(std::shared_ptr<geos::geom::CoordinateSequence> cs, void* d = nullptr)
     {
         return SegmentStringAutoPtr(
                    new geos::noding::BasicSegmentString(cs, d)
@@ -58,7 +58,7 @@ template<>
 void object::test<1>
 ()
 {
-    auto cs = geos::detail::make_unique<geos::geom::CoordinateSequence>(0u, 2u);
+    auto cs = std::make_shared<geos::geom::CoordinateSequence>(0u, 2u);
 
     ensure(nullptr != cs.get());
 
@@ -70,14 +70,14 @@ void object::test<1>
 
     ensure_equals(cs->size(), 2u);
 
-    SegmentStringAutoPtr ss(makeSegmentString(cs.get()));
+    SegmentStringAutoPtr ss(makeSegmentString(cs));
     ensure(nullptr != ss.get());
 
     ensure_equals(ss->size(), 2u);
 
     ensure_equals(ss->getData(), (void*)nullptr);
 
-    ensure_equals(ss->getCoordinates(), cs.get());
+    ensure_equals(ss->getCoordinates().get(), cs.get());
 
     ensure_equals(ss->getCoordinate(0), c0);
 
@@ -103,7 +103,7 @@ template<>
 void object::test<2>
 ()
 {
-    auto cs = geos::detail::make_unique<geos::geom::CoordinateSequence>(0u, 2u);
+    auto cs = std::make_shared<geos::geom::CoordinateSequence>(0u, 2u);
 
     ensure(nullptr != cs.get());
 
@@ -115,14 +115,14 @@ void object::test<2>
 
     ensure_equals(cs->size(), 2u);
 
-    SegmentStringAutoPtr ss(makeSegmentString(cs.get()));
+    SegmentStringAutoPtr ss(makeSegmentString(cs));
     ensure(nullptr != ss.get());
 
     ensure_equals(ss->size(), 2u);
 
     ensure_equals(ss->getData(), (void*)nullptr);
 
-    ensure_equals(ss->getCoordinates(), cs.get());
+    ensure_equals(ss->getCoordinates().get(), cs.get());
 
     ensure_equals(ss->getCoordinate(0), c0);
 
@@ -140,7 +140,7 @@ template<>
 void object::test<3>
 ()
 {
-    auto cs = geos::detail::make_unique<geos::geom::CoordinateSequence>(0u, 2u);
+    auto cs = std::make_shared<geos::geom::CoordinateSequence>(0u, 2u);
 
     ensure(nullptr != cs.get());
 
@@ -155,14 +155,14 @@ void object::test<3>
 
     ensure_equals(cs->size(), 4u);
 
-    SegmentStringAutoPtr ss(makeSegmentString(cs.get()));
+    SegmentStringAutoPtr ss(makeSegmentString(cs));
     ensure(nullptr != ss.get());
 
     ensure_equals(ss->size(), 4u);
 
     ensure_equals(ss->getData(), (void*)nullptr);
 
-    ensure_equals(ss->getCoordinates(), cs.get());
+    ensure_equals(ss->getCoordinates().get(), cs.get());
 
     ensure_equals(ss->getCoordinate(0), c0);
 

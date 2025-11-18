@@ -36,7 +36,7 @@ namespace noding { // geos::noding
 void
 MCIndexSegmentSetMutualIntersector::addToIndex(SegmentString* segStr)
 {
-    MonotoneChainBuilder::getChains(segStr->getCoordinates(),
+    MonotoneChainBuilder::getChains(segStr->getCoordinates().get(),
                                     segStr, indexChains);
 
 }
@@ -49,7 +49,7 @@ MCIndexSegmentSetMutualIntersector::addToMonoChains(SegmentString* segStr)
     if (segStr->size() == 0)
         return;
     MonoChains segChains;
-    MonotoneChainBuilder::getChains(segStr->getCoordinates(),
+    MonotoneChainBuilder::getChains(segStr->getCoordinates().get(),
                                     segStr, segChains);
     for (auto& mc : segChains) {
         if (envelope == nullptr || envelope->intersects(mc.getEnvelope())) {

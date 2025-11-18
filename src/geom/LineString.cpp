@@ -55,6 +55,15 @@ LineString::LineString(const LineString& ls)
 }
 
 /*public*/
+LineString::LineString(const std::shared_ptr<const CoordinateSequence> & newCoords,
+                       const GeometryFactory& factory)
+    :
+    SimpleCurve(newCoords, true, factory)
+{
+    validateConstruction();
+}
+
+/*public*/
 LineString::LineString(CoordinateSequence::Ptr && newCoords,
                        const GeometryFactory& factory)
     :

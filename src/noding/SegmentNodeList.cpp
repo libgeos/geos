@@ -67,7 +67,7 @@ SegmentNodeList::addEndpoints()
 {
     std::size_t maxSegIndex = edge.size() - 1;
 
-    const auto* edgePts = edge.getCoordinates();
+    const auto& edgePts = edge.getCoordinates();
 
     CoordinateXYZM p0, p1;
     edgePts->getAt(0, p0);
@@ -212,7 +212,7 @@ SegmentNodeList::checkSplitEdgesCorrectness(const std::vector<SegmentString*>& s
     if (splitEdges.empty())
         return;
 
-    const CoordinateSequence* edgePts = edge.getCoordinates();
+    const auto& edgePts = edge.getCoordinates();
     assert(edgePts);
 
     // check that first and last points of split edges
@@ -228,7 +228,7 @@ SegmentNodeList::checkSplitEdgesCorrectness(const std::vector<SegmentString*>& s
     SegmentString* splitn = splitEdges[splitEdges.size() - 1];
     assert(splitn);
 
-    const CoordinateSequence* splitnPts = splitn->getCoordinates();
+    const auto& splitnPts = splitn->getCoordinates();
     assert(splitnPts);
 
     const Coordinate& ptn = splitnPts->getAt(splitnPts->getSize() - 1);
@@ -242,19 +242,19 @@ std::unique_ptr<SegmentString>
 SegmentNodeList::createSplitEdge(const SegmentNode* ei0, const SegmentNode* ei1) const
 {
     auto pts = createSplitEdgePts(ei0, ei1);
-    return detail::make_unique<NodedSegmentString>(pts.release(), constructZ, constructM, edge.getData());
+    return detail::make_unique<NodedSegmentString>(std::move(pts), constructZ, constructM, edge.getData());
 }
 
 
 /*private*/
-std::unique_ptr<CoordinateSequence>
-SegmentNodeList::createSplitEdgePts(const SegmentNode* ei0, const SegmentNode* ei1) const
+std::shared_ptr<CoordinateSequence>
+SegmentNodeList::createSplitEdgePts(const SegmentNode *ei0, const SegmentNode *ei1) const
 {
     bool twoPoints = (ei1->segmentIndex == ei0->segmentIndex);
 
     // if only two points in split edge they must be the node points
     if (twoPoints) {
-        auto pts = detail::make_unique<CoordinateSequence>(2u, constructZ, constructM);
+        auto pts = std::make_shared<CoordinateSequence>(2u, constructZ, constructM);
         pts->setAt(ei0->coord, 0);
         pts->setAt(ei1->coord, 1);
         return pts;
@@ -272,11 +272,11 @@ SegmentNodeList::createSplitEdgePts(const SegmentNode* ei0, const SegmentNode* e
 
     std::size_t npts = 1 + (ei1->segmentIndex - ei0->segmentIndex) + useIntPt1;
 
-    auto pts = detail::make_unique<CoordinateSequence>(0u, constructZ, constructM);
+    auto pts = std::make_shared<CoordinateSequence>(0u, constructZ, constructM);
     pts->reserve(npts);
 
     pts->add(ei0->coord);
-    const CoordinateSequence* edgeCoords = edge.getCoordinates();
+    const auto& edgeCoords = edge.getCoordinates();
     pts->add(*edgeCoords, ei0->segmentIndex + 1, ei1->segmentIndex);
     if (useIntPt1) {
         pts->add(ei1->coord);

@@ -135,7 +135,7 @@ MinimumDiameter::getDiameter()
     computeMinimumDiameter();
     // return empty linestring if no minimum width calculated
     if(minWidthPt.isNull()) {
-        return std::unique_ptr<LineString>(inputGeom->getFactory()->createLineString(nullptr));
+        return std::unique_ptr<LineString>(inputGeom->getFactory()->createLineString());
     }
 
     Coordinate basePt;

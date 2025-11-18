@@ -58,6 +58,9 @@ protected:
     CircularString(std::unique_ptr<CoordinateSequence>&& pts,
                    const GeometryFactory& newFactory);
 
+    CircularString(const std::shared_ptr<const CoordinateSequence>& pts,
+                   const GeometryFactory& newFactory);
+
     CircularString* cloneImpl() const override
     {
         return new CircularString(*this);

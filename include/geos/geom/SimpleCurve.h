@@ -61,6 +61,9 @@ public:
     /// Returns a read-only pointer to internal CoordinateSequence
     const CoordinateSequence* getCoordinatesRO() const;
 
+    /// Returns a read-only pointer to internal CoordinateSequence
+    const std::shared_ptr<const CoordinateSequence>& getSharedCoordinates() const;
+
     const SimpleCurve* getCurveN(std::size_t) const override;
 
     /// \brief
@@ -107,18 +110,13 @@ public:
      */
     void normalize() override;
 
-    /**
-     * \brief
-     * Take ownership of the CoordinateSequence managed by this geometry.
-     * After releasing the coordinates, the geometry should be considered
-     * in a moved-from state and should not be accessed.
-     * @return this Geometry's CoordinateSequence.
-     */
-    std::unique_ptr<CoordinateSequence> releaseCoordinates();
-
 protected:
 
     SimpleCurve(const SimpleCurve& other);
+
+    SimpleCurve(const std::shared_ptr<const CoordinateSequence>& newCoords,
+                bool isLinear,
+                const GeometryFactory& factory);
 
     SimpleCurve(std::unique_ptr<CoordinateSequence>&& newCoords,
                 bool isLinear,
@@ -128,8 +126,7 @@ protected:
 
     Envelope computeEnvelopeInternal(bool isLinear) const;
 
-    // TODO: hold value or shared_ptr instead of unique_ptr?
-    std::unique_ptr<CoordinateSequence> points;
+    std::shared_ptr<const CoordinateSequence> points;
     mutable Envelope envelope;
 
 

@@ -386,13 +386,12 @@ CoveragePolygonValidator::addRing(
 CoverageRing*
 CoveragePolygonValidator::createRing(const LinearRing* ring, bool isShell)
 {
-    CoordinateSequence* pts = const_cast<CoordinateSequence*>(ring->getCoordinatesRO());
+    std::shared_ptr<const CoordinateSequence> pts = ring->getSharedCoordinates();
     if (pts->hasRepeatedOrInvalidPoints()) {
-        CoordinateSequence* cleanPts = RepeatedPointRemover::removeRepeatedAndInvalidPoints(pts).release();
-        localCoordinateSequences.emplace_back(cleanPts);
-        pts = cleanPts;
+        auto cleanPts = RepeatedPointRemover::removeRepeatedAndInvalidPoints(pts.get());
+        pts = std::move(cleanPts);
     }
-    bool isCCW = Orientation::isCCW(pts);
+    bool isCCW = Orientation::isCCW(pts.get());
     bool isInteriorOnRight = isShell ? ! isCCW : isCCW;
     coverageRingStore.emplace_back(pts, isInteriorOnRight);
     CoverageRing& cRing = coverageRingStore.back();

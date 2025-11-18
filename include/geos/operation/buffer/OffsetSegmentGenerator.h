@@ -101,9 +101,9 @@ public:
     /// FIXME: refactor memory management of this
     ///
     void
-    getCoordinates(std::vector<geom::CoordinateSequence*>& to)
+    getCoordinates(std::vector<std::unique_ptr<geom::CoordinateSequence>>& to)
     {
-        to.push_back(segList.getCoordinates());
+        to.emplace_back(segList.getCoordinates());
     }
 
     std::unique_ptr<geom::CoordinateSequence>

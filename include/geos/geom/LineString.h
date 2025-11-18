@@ -114,6 +114,9 @@ protected:
     LineString(CoordinateSequence::Ptr && pts,
                const GeometryFactory& newFactory);
 
+    LineString(const std::shared_ptr<const CoordinateSequence> & pts,
+               const GeometryFactory& newFactory);
+
     LineString* cloneImpl() const override { return new LineString(*this); }
 
     LineString* reverseImpl() const override;

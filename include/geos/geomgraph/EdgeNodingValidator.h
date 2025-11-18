@@ -62,12 +62,6 @@ private:
     // in turn expects this member to be initialized
     std::vector<std::unique_ptr<noding::SegmentString>> segStr;
 
-    // Make sure this member is initialized *before*
-    // the NodingValidator, as initialization of
-    // NodingValidator will use toSegmentString(), that
-    // in turn expects this member to be initialized
-    std::vector<geom::CoordinateSequence*> newCoordSeq;
-
     noding::FastNodingValidator nv;
 
 public:
@@ -91,7 +85,6 @@ public:
     EdgeNodingValidator(std::vector<Edge*>& edges)
         :
         segStr(),
-        newCoordSeq(),
         nv(toSegmentStrings(edges))
     {}
 

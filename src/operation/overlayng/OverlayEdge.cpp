@@ -31,11 +31,11 @@ namespace operation { // geos.operation
 namespace overlayng { // geos.operation.overlayng
 
 /*public*/
-std::unique_ptr<CoordinateSequence>
-OverlayEdge::getCoordinatesOriented()
+std::shared_ptr<const CoordinateSequence>
+OverlayEdge::getCoordinatesOriented() const
 {
     if (direction) {
-        return pts->clone();
+        return pts;
     }
     std::unique_ptr<CoordinateSequence> ptsCopy = pts->clone();
     ptsCopy->reverse();

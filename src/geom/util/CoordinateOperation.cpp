@@ -35,13 +35,13 @@ CoordinateOperation::edit(const Geometry* geometry,
     }
 
     if(const LinearRing* ring = dynamic_cast<const LinearRing*>(geometry)) {
-        const CoordinateSequence* coords = ring->getCoordinatesRO();
+        const auto& coords = ring->getCoordinatesRO();
         auto newCoords = edit(coords, geometry);
         // LinearRing instance takes over ownership of newCoords instance
         return factory->createLinearRing(std::move(newCoords));
     }
     if(const LineString* line = dynamic_cast<const LineString*>(geometry)) {
-        const CoordinateSequence* coords = line->getCoordinatesRO();
+        const auto& coords = line->getCoordinatesRO();
         auto newCoords = edit(coords, geometry);
         return factory->createLineString(std::move(newCoords));
     }

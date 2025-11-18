@@ -497,6 +497,34 @@ void object::test<35>
     }
 }
 
+template<>
+template<>
+void object::test<36>()
+{
+    set_test_name("LinearRing::orient modifies coordinates in-place if there are no external references");
 
+    auto lr = reader_.read<geos::geom::LinearRing>("LINEARRING(0 0, 1 0, 1 1, 0 1, 0 0)");
+    auto seq0 = lr->getCoordinatesRO();
+
+    lr->orient(false);
+    ensure_equals(lr->getCoordinatesRO(), seq0);
+    lr->orient(true);
+    ensure_equals(lr->getCoordinatesRO(), seq0);
+}
+
+template<>
+template<>
+void object::test<37>()
+{
+    set_test_name("LinearRing::orient does not modify coordinates in-place if there are external references");
+
+    auto lr = reader_.read<geos::geom::LinearRing>("LINEARRING(0 0, 1 0, 1 1, 0 1, 0 0)");
+    auto seq0 = lr->getSharedCoordinates();
+
+    lr->orient(false);
+    ensure_equals(lr->getCoordinatesRO(), seq0.get());
+    lr->orient(true);
+    ensure(lr->getCoordinatesRO() != seq0.get());
+}
 
 } // namespace tut

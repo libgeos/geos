@@ -66,8 +66,8 @@ class GEOS_DLL PolygonNoder {
 public:
 
     PolygonNoder(
-        std::unique_ptr<CoordinateSequence>& shellRing,
-        std::vector<std::unique_ptr<CoordinateSequence>>& holeRings);
+        const std::shared_ptr<const CoordinateSequence>& shellRing,
+        const std::vector<std::shared_ptr<const CoordinateSequence>>& holeRings);
 
     void node();
     bool isShellNoded();
@@ -91,11 +91,11 @@ private:
 
     // Methods
     NodedSegmentString*
-        createNodedSegString(std::unique_ptr<CoordinateSequence>& ringPts, std::size_t i);
+        createNodedSegString(const std::shared_ptr<const CoordinateSequence> &ringPts, std::size_t i);
 
     void createNodedSegmentStrings(
-        std::unique_ptr<CoordinateSequence>& shellRing,
-        std::vector<std::unique_ptr<CoordinateSequence>>& holeRings);
+        const std::shared_ptr<const CoordinateSequence> &shellRing,
+        const std::vector<std::shared_ptr<const CoordinateSequence>> &holeRings);
 
     /* Turn off copy constructors for MSVC */
     PolygonNoder(const PolygonNoder&) = delete;
