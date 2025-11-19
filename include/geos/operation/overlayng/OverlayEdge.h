@@ -80,7 +80,7 @@ public:
 
     OverlayEdge(const CoordinateXYZM& p_orig, const CoordinateXYZM& p_dirPt,
                 bool p_direction, OverlayLabel* p_label,
-                std::shared_ptr<const CoordinateSequence> p_pts)
+                const std::shared_ptr<const CoordinateSequence>& p_pts)
         : HalfEdge(p_orig)
         , pts(p_pts)
         , direction(p_direction)

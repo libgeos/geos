@@ -37,8 +37,8 @@ namespace polygon {
 
 
 PolygonNoder::PolygonNoder(
-    std::shared_ptr<const CoordinateSequence>& shellRing,
-    std::vector<std::shared_ptr<const CoordinateSequence>>& holeRings)
+    const std::shared_ptr<const CoordinateSequence>& shellRing,
+    const std::vector<std::shared_ptr<const CoordinateSequence>>& holeRings)
 {
     isHoleTouching.resize(holeRings.size(), false);
     createNodedSegmentStrings(shellRing, holeRings);
@@ -172,8 +172,8 @@ PolygonNoder::getHolesTouching()
 /* private */
 void
 PolygonNoder::createNodedSegmentStrings(
-    std::shared_ptr<const CoordinateSequence>& shellRing,
-    std::vector<std::shared_ptr<const CoordinateSequence>>& holeRings)
+    const std::shared_ptr<const CoordinateSequence>& shellRing,
+    const std::vector<std::shared_ptr<const CoordinateSequence>>& holeRings)
 {
     nodedRings.emplace_back(createNodedSegString(shellRing, 0));
     for (std::size_t i = 1; i <= holeRings.size(); i++) {
@@ -184,7 +184,7 @@ PolygonNoder::createNodedSegmentStrings(
 
 /* private */
 NodedSegmentString*
-PolygonNoder::createNodedSegString(std::shared_ptr<const CoordinateSequence>& ringPts, std::size_t i)
+PolygonNoder::createNodedSegString(const std::shared_ptr<const CoordinateSequence>& ringPts, std::size_t i)
 {
     // note: in PolygonHoleJoiner::nodeRings we will replace the contents
     // of the shellRing and holeRings with the results of the calculation

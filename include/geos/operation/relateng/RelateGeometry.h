@@ -132,11 +132,11 @@ private:
         std::vector<const SegmentString*>& segStrings,
         std::vector<std::unique_ptr<const RelateSegmentString>>& segStore);
 
-    std::shared_ptr<const CoordinateSequence> orientAndRemoveRepeated(
-        std::shared_ptr<const CoordinateSequence> cs, bool orientCW);
+    static std::shared_ptr<const CoordinateSequence> orientAndRemoveRepeated(
+        const std::shared_ptr<const CoordinateSequence>& cs, bool orientCW);
 
-    std::shared_ptr<const CoordinateSequence> removeRepeated(
-        std::shared_ptr<const CoordinateSequence> cs);
+    static std::shared_ptr<const CoordinateSequence> removeRepeated(
+        const std::shared_ptr<const CoordinateSequence>& cs);
 
 public:
 

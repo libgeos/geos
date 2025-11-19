@@ -471,7 +471,7 @@ operator<<(std::ostream& os, const RelateGeometry& rg)
 
 /* private */
 std::shared_ptr<const CoordinateSequence>
-RelateGeometry::orientAndRemoveRepeated(std::shared_ptr<const CoordinateSequence> seq, bool orientCW)
+RelateGeometry::orientAndRemoveRepeated(const std::shared_ptr<const CoordinateSequence>& seq, bool orientCW)
 {
     bool isFlipped = (orientCW == Orientation::isCCW(seq.get()));
     bool hasRepeated = seq->hasRepeatedPoints();
@@ -498,7 +498,7 @@ RelateGeometry::orientAndRemoveRepeated(std::shared_ptr<const CoordinateSequence
 
 /* private */
 std::shared_ptr<const CoordinateSequence>
-RelateGeometry::removeRepeated(std::shared_ptr<const CoordinateSequence> seq)
+RelateGeometry::removeRepeated(const std::shared_ptr<const CoordinateSequence>& seq)
 {
     bool hasRepeated = seq->hasRepeatedPoints();
     if (!hasRepeated)

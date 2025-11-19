@@ -198,7 +198,7 @@ public:
 
     static bool isCollapsed(const geom::CoordinateSequence* pts);
 
-    Edge(std::shared_ptr<const geom::CoordinateSequence> p_pts, const EdgeSourceInfo* info);
+    Edge(const std::shared_ptr<const geom::CoordinateSequence>& p_pts, const EdgeSourceInfo* info);
 
     // return a clone of the underlying points
     std::unique_ptr<geom::CoordinateSequence> getCoordinates()

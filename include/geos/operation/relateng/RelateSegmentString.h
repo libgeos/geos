@@ -82,7 +82,7 @@ private:
     // Methods
 
     static const RelateSegmentString* createSegmentString(
-        std::shared_ptr<const CoordinateSequence> pts,
+        const std::shared_ptr<const CoordinateSequence>& pts,
         bool isA, int dim, int elementId, int ringId,
         const Geometry* poly, const RelateGeometry* parent);
 
@@ -111,14 +111,14 @@ private:
 public:
 
     static const RelateSegmentString* createLine(
-        std::shared_ptr<const CoordinateSequence> pts,
+        const std::shared_ptr<const CoordinateSequence> &pts,
         bool isA, int elementId,
-        const RelateGeometry* parent);
+        const RelateGeometry *parent);
 
     static const RelateSegmentString* createRing(
-        std::shared_ptr<const CoordinateSequence> pts,
+        const std::shared_ptr<const CoordinateSequence> &pts,
         bool isA, int elementId, int ringId,
-        const Geometry* poly, const RelateGeometry* parent);
+        const Geometry *poly, const RelateGeometry *parent);
 
     inline bool isA() const {
         return m_isA;
@@ -132,7 +132,7 @@ public:
         return m_parentPolygonal;
     }
 
-    NodeSection* createNodeSection(std::size_t segIndex, const CoordinateXY intPt) const;
+    NodeSection* createNodeSection(std::size_t segIndex, const CoordinateXY &intPt) const;
 
     /**
      * Tests if a segment intersection point has that segment as its

@@ -27,7 +27,7 @@ using namespace geos::geom;
 using geos::util::GEOSException;
 
 /*public*/
-Edge::Edge(std::shared_ptr<const CoordinateSequence> p_pts, const EdgeSourceInfo* info)
+Edge::Edge(const std::shared_ptr<const CoordinateSequence>& p_pts, const EdgeSourceInfo* info)
     : aDim(OverlayLabel::DIM_UNKNOWN)
     , aDepthDelta(0)
     , aIsHole(false)

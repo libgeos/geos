@@ -102,7 +102,7 @@ public:
      * @param newContext the user-defined data of this segment string
      *                   (may be null)
      */
-    NodedSegmentString(std::shared_ptr<const geom::CoordinateSequence> newPts, bool constructZ, bool constructM, const void* newContext)
+    NodedSegmentString(const std::shared_ptr<const geom::CoordinateSequence>& newPts, bool constructZ, bool constructM, const void* newContext)
         : NodableSegmentString(newContext, newPts)
         , nodeList(*this, constructZ, constructM)
     {}

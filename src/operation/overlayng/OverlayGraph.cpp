@@ -95,7 +95,7 @@ OverlayGraph::addEdge(Edge* edge)
 
 /*private*/
 OverlayEdge*
-OverlayGraph::createEdgePair(std::shared_ptr<const CoordinateSequence> pts, OverlayLabel *lbl)
+OverlayGraph::createEdgePair(const std::shared_ptr<const CoordinateSequence>& pts, OverlayLabel *lbl)
 {
     OverlayEdge* e0 = createOverlayEdge(pts, lbl, true);
     OverlayEdge* e1 = createOverlayEdge(pts, lbl, false);
@@ -105,7 +105,7 @@ OverlayGraph::createEdgePair(std::shared_ptr<const CoordinateSequence> pts, Over
 
 /*private*/
 OverlayEdge*
-OverlayGraph::createOverlayEdge(std::shared_ptr<const CoordinateSequence> pts, OverlayLabel* lbl, bool direction)
+OverlayGraph::createOverlayEdge(const std::shared_ptr<const CoordinateSequence>& pts, OverlayLabel* lbl, bool direction)
 {
     CoordinateXYZM origin;
     CoordinateXYZM dirPt;

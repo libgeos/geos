@@ -55,7 +55,7 @@ public:
         geom::util::LinearComponentExtracter::getLines(*g, lines);
 
         for(const geom::LineString* line : lines) {
-            auto pts = line->getSharedCoordinates();
+            const auto& pts = line->getSharedCoordinates();
             segStr.push_back(new BasicSegmentString(pts, g));
         }
     }

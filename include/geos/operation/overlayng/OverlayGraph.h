@@ -69,13 +69,13 @@ private:
     * Create and add HalfEdge pairs to map and vector containers,
     * using local std::deque storage for objects.
     */
-    OverlayEdge* createEdgePair(std::shared_ptr<const CoordinateSequence> pts, OverlayLabel* lbl);
+    OverlayEdge* createEdgePair(const std::shared_ptr<const CoordinateSequence> &pts, OverlayLabel *lbl);
 
     /**
     * Create a single OverlayEdge in local std::deque storage, and return the
     * pointer.
     */
-    OverlayEdge* createOverlayEdge(std::shared_ptr<const CoordinateSequence> pts, OverlayLabel* lbl, bool direction);
+    OverlayEdge* createOverlayEdge(const std::shared_ptr<const CoordinateSequence> &pts, OverlayLabel *lbl, bool direction);
 
     void insert(OverlayEdge* e);
 

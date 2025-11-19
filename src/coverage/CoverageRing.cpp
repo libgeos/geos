@@ -52,7 +52,7 @@ CoverageRing::isKnown(std::vector<CoverageRing*>& rings)
 
 /* public */
 CoverageRing::CoverageRing(std::shared_ptr<const CoordinateSequence> inPts, bool interiorOnRight)
-    : noding::BasicSegmentString(inPts, nullptr)
+    : noding::BasicSegmentString(std::move(inPts), nullptr)
     , m_isInteriorOnRight(interiorOnRight)
 {
     m_isInvalid.resize(size() - 1, false);

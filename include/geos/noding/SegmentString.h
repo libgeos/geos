@@ -57,7 +57,7 @@ public:
     /// @param newContext the context associated to this SegmentString
     /// @param newSeq coordinates of this SegmentString
     ///
-    SegmentString(const void* newContext, std::shared_ptr<const geom::CoordinateSequence> newSeq)
+    SegmentString(const void* newContext, const std::shared_ptr<const geom::CoordinateSequence>& newSeq)
         :
         seq(newSeq),
         context(newContext)
@@ -100,8 +100,7 @@ public:
     /// \brief
     /// Return a pointer to the CoordinateSequence associated
     /// with this SegmentString.
-    ///
-    std::shared_ptr<const geom::CoordinateSequence> getCoordinates() const {
+    const std::shared_ptr<const geom::CoordinateSequence>& getCoordinates() const {
         return seq;
     }
 
