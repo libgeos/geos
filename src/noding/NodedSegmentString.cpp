@@ -70,14 +70,6 @@ NodedSegmentString::getNodedSubstrings(
     return resultEdgelist;
 }
 
-std::unique_ptr<geom::CoordinateSequence>
-NodedSegmentString::releaseCoordinates()
-{
-    auto ret = std::unique_ptr<CoordinateSequence>(seq);
-    seq = nullptr;
-    return ret;
-}
-
 /* public virtual */
 std::ostream&
 NodedSegmentString::print(std::ostream& os) const

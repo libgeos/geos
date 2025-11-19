@@ -117,11 +117,10 @@ public:
      * @param distance offset distance
      * @param lineList the std::vector to which the newly created
      *                 CoordinateSequences will be pushed_back.
-     *                 Caller is responsible to delete these new elements.
      */
     void getLineCurve(const CoordinateSequence* inputPts,
         double distance,
-        std::vector<CoordinateSequence*>& lineList);
+        std::vector<std::unique_ptr<CoordinateSequence>>& lineList);
 
     /**
     * This method handles single points as well as LineStrings.
@@ -156,7 +155,7 @@ public:
      * @note This is a GEOS extension.
      */
     void getSingleSidedLineCurve(const CoordinateSequence* inputPts,
-                                 double distance, std::vector<CoordinateSequence*>& lineList,
+                                 double distance, std::vector<std::unique_ptr<CoordinateSequence>>& lineList,
                                  bool leftSide, bool rightSide) ;
 
     /** \brief
@@ -171,7 +170,7 @@ public:
      */
     void getRingCurve(const CoordinateSequence* inputPts, int side,
                       double distance,
-                      std::vector<CoordinateSequence*>& lineList);
+                      std::vector<std::unique_ptr<CoordinateSequence>>& lineList);
 
     /**
     * This method handles the degenerate cases of single points and lines,
@@ -189,7 +188,7 @@ public:
 
     void getOffsetCurve(const CoordinateSequence* inputPts,
                         double p_distance,
-                        std::vector<CoordinateSequence*>& lineList);
+                        std::vector<std::unique_ptr<CoordinateSequence>>& lineList);
 
     std::unique_ptr<CoordinateSequence> getOffsetCurve(
         const CoordinateSequence* inputPts,

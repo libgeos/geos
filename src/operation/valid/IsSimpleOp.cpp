@@ -224,15 +224,19 @@ IsSimpleOp::isSimpleLinearGeometry(const Geometry& geom)
 }
 
 /* private static */
-std::vector<std::unique_ptr<CoordinateSequence>>
+std::vector<std::shared_ptr<const CoordinateSequence>>
 IsSimpleOp::removeRepeatedPts(const Geometry& geom)
 {
-    std::vector<std::unique_ptr<CoordinateSequence>> coordseqs;
+    std::vector<std::shared_ptr<const CoordinateSequence>> coordseqs;
     for (std::size_t i = 0, sz = geom.getNumGeometries(); i < sz; i++) {
         const LineString* line = dynamic_cast<const LineString*>(geom.getGeometryN(i));
         if (line) {
-            auto ptsNoRepeat = RepeatedPointRemover::removeRepeatedPoints(line->getCoordinatesRO());
-            coordseqs.emplace_back(ptsNoRepeat.release());
+            auto pts = line->getSharedCoordinates();
+            if (pts->hasRepeatedPoints()) {
+                pts = RepeatedPointRemover::removeRepeatedPoints(line->getCoordinatesRO());
+            }
+
+            coordseqs.push_back(pts);
         }
     }
     return coordseqs;
@@ -240,12 +244,12 @@ IsSimpleOp::removeRepeatedPts(const Geometry& geom)
 
 /* private static */
 std::vector<std::unique_ptr<SegmentString>>
-IsSimpleOp::createSegmentStrings(std::vector<std::unique_ptr<CoordinateSequence>>& seqs)
+IsSimpleOp::createSegmentStrings(std::vector<std::shared_ptr<const CoordinateSequence>>& seqs)
 {
     std::vector<std::unique_ptr<SegmentString>> segStrings;
     for (auto& seq : seqs) {
         BasicSegmentString* bss = new BasicSegmentString(
-            seq.get(),
+            seq,
             nullptr);
         segStrings.emplace_back(static_cast<SegmentString*>(bss));
     }
