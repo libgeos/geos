@@ -344,10 +344,9 @@ visitRings(const Envelope& box, const std::vector<const Traversal*>& traversals,
                     }
 
                     if (isEdgeSegment) {
-                        //if (isInterior) {
                         boxPoints.push_back(c);
                         boxPoints.push_back(prev);
-                        //}
+
                         coordinateStore.emplace_back(std::vector<CoordinateXY>{c});
                         double m = PerimeterDistance::getPerimeterDistance(box, c);
                         chains.emplace_back(m, m, coordinateStore.back());

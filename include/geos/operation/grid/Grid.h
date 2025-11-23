@@ -34,7 +34,7 @@ struct bounded_extent
 };
 
 template<typename extent_tag>
-class Grid
+class GEOS_DLL Grid
 {
 
   public:
