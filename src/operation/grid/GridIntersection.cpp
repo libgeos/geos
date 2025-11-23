@@ -85,7 +85,7 @@ GridIntersection::processingRegion(const Envelope& raster_extent, const Geometry
     return ret;
 }
 
-GridIntersection::GridIntersection(const Grid<bounded_extent>& raster_grid, const Geometry& g, std::shared_ptr<Matrix<float>> cov)
+GridIntersection::GridIntersection(const Grid<bounded_extent>& raster_grid, const Geometry& g, const std::shared_ptr<Matrix<float>>& cov)
   : m_geometry_grid{ make_infinite(raster_grid, *g.getEnvelopeInternal()) }
   , m_results{ cov ? cov : std::make_shared<Matrix<float>>(raster_grid.getNumRows(), raster_grid.getNumCols()) }
   , m_first_geom{ true }
@@ -100,9 +100,11 @@ GridIntersection::GridIntersection(const Grid<bounded_extent>& raster_grid, cons
     }
 }
 
-GridIntersection::GridIntersection(const Grid<bounded_extent>& raster_grid, const Envelope& box, std::shared_ptr<Matrix<float>> cov)
+GridIntersection::GridIntersection(const Grid<bounded_extent>& raster_grid, const Envelope& box, const std::shared_ptr<Matrix<float>>& cov)
   : m_geometry_grid{ make_infinite(raster_grid, box) }
   , m_results{ cov ? cov : std::make_shared<Matrix<float>>(raster_grid.getNumRows(), raster_grid.getNumCols()) }
+  , m_first_geom { true }
+  , m_areal{ false }
 {
     if (!m_geometry_grid.isEmpty()) {
         processRectangularRing(box, true);

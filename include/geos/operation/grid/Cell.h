@@ -79,6 +79,10 @@ class Cell
      * @param c             Coordinate to process
      * @param prev_original The last *uninterpolated* coordinate preceding `c` in the
      *                      boundary being processed
+     * @param exitOnBoundary Whether to exit the cell if `c` lies on the boundary. This is needed to ensure that
+     *                       exit nodes are added to both polygons whose shared boundary is coincident with the
+     *                       Cell boundary. If these nodes are not needed (for example, in the area-only case),
+     *                       it is more efficient to _not_ exit the cell.
      * @param parentage an optional pointer indicating the source of the coordinate.
      *
      * @return `true` if the Coordinate was inside this cell, `false` otherwise

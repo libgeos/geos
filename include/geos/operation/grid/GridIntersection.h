@@ -45,13 +45,13 @@ class GEOS_DLL GridIntersection
      * @brief Compute the fraction of each cell in a rectangular grid that is covered by a Geometry.
      *        A matrix can be provided to which the fractions will be added.
      */
-    GridIntersection(const Grid<bounded_extent>& raster_grid, const geom::Geometry& g, std::shared_ptr<Matrix<float>> cov = nullptr);
+    GridIntersection(const Grid<bounded_extent>& raster_grid, const geom::Geometry& g, const std::shared_ptr<Matrix<float>>& cov = nullptr);
 
     /**
      * @brief Compute the fraction of each cell in a rectangular grid that is covered by an Envelope.
      *        A matrix can be provided to which the fractions will be added.
      */
-    GridIntersection(const Grid<bounded_extent>& raster_grid, const geom::Envelope& box, std::shared_ptr<Matrix<float>> cov = nullptr);
+    GridIntersection(const Grid<bounded_extent>& raster_grid, const geom::Envelope& box, const std::shared_ptr<Matrix<float>>& cov = nullptr);
 
     /**
      * @brief Return the intersection result matrix
