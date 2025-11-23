@@ -312,7 +312,7 @@ visitRings(const Envelope& box, const std::vector<const Traversal*>& traversals,
             size_t from = 0;
             size_t uniquePoints = 1;
 
-            for (size_t to = 1; to < coords->size(); to++) {
+            for (size_t to = 1; to < coords->size(); to++) { // cppcheck-suppress invalidContainer
                 const CoordinateXY& prev = (*coords)[from];
                 const CoordinateXY& c = (*coords)[to];
 
