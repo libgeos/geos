@@ -202,7 +202,7 @@ Cell::getLastTraversal()
 }
 
 bool
-Cell::take(const CoordinateXY& c, const CoordinateXY* prev_original, const void* parentage)
+Cell::take(const CoordinateXY& c, const CoordinateXY* prev_original, bool exitOnBoundary, const void* parentage)
 {
     Traversal& t = traversal_in_progress();
 
@@ -217,7 +217,9 @@ Cell::take(const CoordinateXY& c, const CoordinateXY* prev_original, const void*
     }
 
     const auto loc = getLocation(c);
-    if (loc == Location::INSIDE) { //!= Location::OUTSIDE) {
+    const bool canTakeCoordinate = exitOnBoundary ? (loc == Location::INSIDE) : (loc != Location::OUTSIDE);
+
+    if (canTakeCoordinate) {
 #if DEBUG_CELL
         std::cout << "Still in " << m_box << " with " << c << std::endl;
 #endif

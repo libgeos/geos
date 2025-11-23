@@ -83,7 +83,7 @@ class Cell
      *
      * @return `true` if the Coordinate was inside this cell, `false` otherwise
      */
-    bool take(const geom::CoordinateXY& c, const geom::CoordinateXY* prev_original, const void* parentage);
+    bool take(const geom::CoordinateXY& c, const geom::CoordinateXY* prev_original, bool exitOnBoundary, const void* parentage);
 
   private:
     std::vector<const Traversal*> getTraversals() const;

@@ -221,12 +221,12 @@ hasEdgeSegment(const Envelope& box, const std::vector<CoordinateXY>& coords)
  * @brief Identify counter-clockwise rings formed by the supplied coordinate vectors and the boundary of this box.
  *
  * @param box Box to be included in rings
- * @param coord_lists A list of coordinate vectors, with each vector representing a traversal of `box` or a closed ring.
+ * @param traversals A list of Traversals, with each vector representing a traversal of `box` or a closed ring.
  * @param visitor Function be applied to each ring identified. Because `coord_lists` may include both clockwise and
  *                counter-clockwise closed rings, `visitor` will be provided with the orientation of each ring as an
  *                argument.
  */
-template<typename F>
+template<bool validPolygonsAndCoverage, typename F>
 void
 visitRings(const Envelope& box, const std::vector<const Traversal*>& traversals, F&& visitor)
 {
@@ -242,16 +242,35 @@ visitRings(const Envelope& box, const std::vector<const Traversal*>& traversals,
 
     for (const auto& traversal : traversals) {
         if (!traversal->hasMultipleUniqueCoordinates()) {
-            const auto& coords = traversal->getCoordinates();
-            double m = PerimeterDistance::getPerimeterDistance(box, coords.front());
-            chains.emplace_back(m, m, coords);
-            boxPoints.push_back(coords.front());
+            if constexpr (validPolygonsAndCoverage) {
+                const auto& coords = traversal->getCoordinates();
+                double m = PerimeterDistance::getPerimeterDistance(box, coords.front());
+                chains.emplace_back(m, m, coords);
+                boxPoints.push_back(coords.front());
+            }
             continue;
         }
 
         const std::vector<CoordinateXY>* coords = &traversal->getCoordinates();
 
         if (isRing(*coords)) {
+            if constexpr (!validPolygonsAndCoverage) {
+                CoordinateSequence seq(0, false, false);
+                // TODO: Remove copy
+                seq.setPoints(*coords);
+                const bool isCCW = algorithm::Orientation::isCCW(&seq);
+
+                visitor(*coords, isCCW, false);
+
+                if (isCCW) {
+                    areaCCW += algorithm::Area::ofRing(*coords);
+                } else {
+                    areaCW += algorithm::Area::ofRing(*coords);
+                }
+
+                continue;
+            }
+
             if (containsProperly(box, *coords) || !hasEdgeSegment(box, *coords)) {
                 // TODO: Remove copy
                 CoordinateSequence seq(0, false, false);
@@ -279,71 +298,77 @@ visitRings(const Envelope& box, const std::vector<const Traversal*>& traversals,
 
                 continue;
             }
-            // TODO add node on edge.
 
+            // TODO add node on edge.
             auto modCoords = scrollRingToStartOnEdge(box, *coords);
             coordinateStore.push_back(std::move(modCoords));
             coords = &coordinateStore.back();
         }
 
-        // Split coordinates into separate chains when they touch an edge
-        // This prevents the creation of self-touching rings.
-        // For area calculations, this doesn't matter, and the step can be skipped.
-        size_t from = 0;
-        size_t uniquePoints = 1;
+        if constexpr (validPolygonsAndCoverage) {
+            // Split coordinates into separate chains when they touch an edge
+            // This prevents the creation of self-touching rings.
+            // For area calculations, this doesn't matter, and the step can be skipped.
+            size_t from = 0;
+            size_t uniquePoints = 1;
 
-        for (size_t to = 1; to < coords->size(); to++) {
-            const CoordinateXY& prev = (*coords)[from];
-            const CoordinateXY& c = (*coords)[to];
+            for (size_t to = 1; to < coords->size(); to++) {
+                const CoordinateXY& prev = (*coords)[from];
+                const CoordinateXY& c = (*coords)[to];
 
-            if (!c.equals2D(prev)) {
-                uniquePoints++;
-            }
-
-            const bool ptOnTop = c.y == box.getMaxY();
-            const bool ptOnBottom = c.y == box.getMinY();
-            const bool ptOnLeft = c.x == box.getMinX();
-            const bool ptOnRight = c.x == box.getMaxX();
-
-            if (ptOnTop || ptOnBottom || ptOnLeft || ptOnRight)  {
-                bool isEdgeSegment = false;
-                if (uniquePoints == 2) {
-                    if (ptOnTop && prev.y == c.y) {
-                        isEdgeSegment = true;
-                        isInterior = c.x < prev.x;
-                    } else if (ptOnBottom && prev.y == c.y) {
-                        isEdgeSegment = true;
-                        isInterior = c.x > prev.x;
-                    } else if (ptOnLeft && prev.x == c.x) {
-                        isEdgeSegment = true;
-                        isInterior = c.y < prev.y;
-                    } else if (ptOnRight && prev.x == c.x) {
-                        isEdgeSegment = true;
-                        isInterior = c.y > prev.y;
-                    }
+                if (!c.equals2D(prev)) {
+                    uniquePoints++;
                 }
 
-                if (isEdgeSegment) {
-                    //if (isInterior) {
+                const bool ptOnTop = c.y == box.getMaxY();
+                const bool ptOnBottom = c.y == box.getMinY();
+                const bool ptOnLeft = c.x == box.getMinX();
+                const bool ptOnRight = c.x == box.getMaxX();
+
+                if (ptOnTop || ptOnBottom || ptOnLeft || ptOnRight)  {
+                    bool isEdgeSegment = false;
+                    if (uniquePoints == 2) {
+                        if (ptOnTop && prev.y == c.y) {
+                            isEdgeSegment = true;
+                            isInterior = c.x < prev.x;
+                        } else if (ptOnBottom && prev.y == c.y) {
+                            isEdgeSegment = true;
+                            isInterior = c.x > prev.x;
+                        } else if (ptOnLeft && prev.x == c.x) {
+                            isEdgeSegment = true;
+                            isInterior = c.y < prev.y;
+                        } else if (ptOnRight && prev.x == c.x) {
+                            isEdgeSegment = true;
+                            isInterior = c.y > prev.y;
+                        }
+                    }
+
+                    if (isEdgeSegment) {
+                        //if (isInterior) {
                         boxPoints.push_back(c);
                         boxPoints.push_back(prev);
-                    //}
-                    coordinateStore.emplace_back(std::vector<CoordinateXY>{c});
-                    double m = PerimeterDistance::getPerimeterDistance(box, c);
-                    chains.emplace_back(m, m, coordinateStore.back());
+                        //}
+                        coordinateStore.emplace_back(std::vector<CoordinateXY>{c});
+                        double m = PerimeterDistance::getPerimeterDistance(box, c);
+                        chains.emplace_back(m, m, coordinateStore.back());
 
-                    coordinateStore.emplace_back(std::vector<CoordinateXY>{prev});
-                    m = PerimeterDistance::getPerimeterDistance(box, prev);
-                    chains.emplace_back(m, m, coordinateStore.back());
+                        coordinateStore.emplace_back(std::vector<CoordinateXY>{prev});
+                        m = PerimeterDistance::getPerimeterDistance(box, prev);
+                        chains.emplace_back(m, m, coordinateStore.back());
 
-                } else {
-                    double start = PerimeterDistance::getPerimeterDistance(box, (*coords)[from]);
-                    double stop = PerimeterDistance::getPerimeterDistance(box, (*coords)[to]);
-                    chains.emplace_back(start, stop, *coords, from, to, traversal->getParentage());
+                    } else {
+                        double start = PerimeterDistance::getPerimeterDistance(box, (*coords)[from]);
+                        double stop = PerimeterDistance::getPerimeterDistance(box, (*coords)[to]);
+                        chains.emplace_back(start, stop, *coords, from, to, traversal->getParentage());
+                    }
+                    from = to;
+                    uniquePoints = 1;
                 }
-                from = to;
-                uniquePoints = 1;
             }
+        } else {
+            double start = PerimeterDistance::getPerimeterDistance(box, coords->front());
+            double stop = PerimeterDistance::getPerimeterDistance(box, coords->back());
+            chains.emplace_back(start, stop, *coords);
         }
     }
 
@@ -461,7 +486,9 @@ TraversalAreas::getLeftHandArea(const Envelope& box, const std::vector<const Tra
     double ccw_sum = 0;
     double cw_sum = 0;
 
-    visitRings(box, coord_lists, [&cw_sum, &ccw_sum](const std::vector<CoordinateXY>& coords, bool isCCW, bool) {
+    constexpr bool validPolygons = false;
+
+    visitRings<validPolygons>(box, coord_lists, [&cw_sum, &ccw_sum](const std::vector<CoordinateXY>& coords, bool isCCW, bool) {
         if (isCCW) {
             ccw_sum += algorithm::Area::ofRing(coords);
         } else {
@@ -481,7 +508,9 @@ TraversalAreas::getLeftHandRings(const GeometryFactory& gfact, const Envelope& b
 
     bool checkValidity = false;
 
-    visitRings(box, coord_lists, [&gfact, &shells, &holes, &checkValidity](const std::vector<CoordinateXY>& coords, bool isCCW, bool hasMultipleParents) {
+    constexpr bool validPolygons = true;
+
+    visitRings<validPolygons>(box, coord_lists, [&gfact, &shells, &holes, &checkValidity](const std::vector<CoordinateXY>& coords, bool isCCW, bool hasMultipleParents) {
         // If a given ring was created from traversals from both a ring and shell, for example, it is possible for
         // the ring to self-intersect. Rather than try and detect self-intersections o the fly (rare?) we check and
         // repair validity in this limited case.

@@ -312,7 +312,7 @@ collect_lengths(const Matrix<std::unique_ptr<Cell>>& cells)
 }
 
 static void
-traverse_cells(Matrix<std::unique_ptr<Cell>>& cells, std::vector<CoordinateXY>& coords, const Grid<infinite_extent>& ring_grid, bool areal, const void* parentage)
+traverseCells(Matrix<std::unique_ptr<Cell>>& cells, std::vector<CoordinateXY>& coords, const Grid<infinite_extent>& ring_grid, bool areal, bool exitOnBoundary, const void* parentage)
 {
     size_t pos = 0;
     size_t row = ring_grid.getRow(coords.front().y);
@@ -326,7 +326,7 @@ traverse_cells(Matrix<std::unique_ptr<Cell>>& cells, std::vector<CoordinateXY>& 
             const CoordinateXY* next_coord = last_exit ? last_exit : &coords[pos];
             const CoordinateXY* prev_coord = pos > 0 ? &coords[pos - 1] : nullptr;
 
-            cell.take(*next_coord, prev_coord, parentage);
+            cell.take(*next_coord, prev_coord, exitOnBoundary, parentage);
 
             if (cell.getLastTraversal().isExited()) {
                 // Only push our exit coordinate if it's not same as the
@@ -440,7 +440,7 @@ GridIntersection::processLine(const LineString& ls, bool exterior_ring)
     }
 
     Matrix<std::unique_ptr<Cell>> cells(ring_grid.getNumRows(), ring_grid.getNumCols());
-    traverse_cells(cells, coordsVec, ring_grid, m_areal, &ls);
+    traverseCells(cells, coordsVec, ring_grid, m_areal, false, &ls);
 
     // Compute the fraction covered for all cells and assign it to
     // the area matrix
@@ -466,8 +466,8 @@ GridIntersection::addRingResults(size_t i0, size_t j0, const Matrix<float>& area
     }
 }
 
-void
-traverse_ring(Matrix<std::unique_ptr<Cell>>& cells, const Grid<infinite_extent>& grid, const LineString& g, bool want_ccw)
+static void
+traverseRing(Matrix<std::unique_ptr<Cell>>& cells, const Grid<infinite_extent>& grid, const LineString& g, bool want_ccw, bool exitOnBoundary)
 {
     const geom::CoordinateSequence& seq = *g.getCoordinatesRO();
 
@@ -477,11 +477,11 @@ traverse_ring(Matrix<std::unique_ptr<Cell>>& cells, const Grid<infinite_extent>&
     if (want_ccw != algorithm::Orientation::isCCW(&seq)) {
       std::reverse(coords.begin(), coords.end());
     }
-    traverse_cells(cells, coords, grid, true, &g);
+    traverseCells(cells, coords, grid, true, exitOnBoundary, &g);
 }
 
-void
-traverse_polygons(Matrix<std::unique_ptr<Cell>>& cells, const Grid<infinite_extent>& grid, const Geometry& g)
+static void
+traversePolygons(Matrix<std::unique_ptr<Cell>>& cells, const Grid<infinite_extent>& grid, const Geometry& g, bool exitOnBoundary)
 {
     using geom::GeometryTypeId;
 
@@ -493,14 +493,14 @@ traverse_polygons(Matrix<std::unique_ptr<Cell>>& cells, const Grid<infinite_exte
         if (typ == GeometryTypeId::GEOS_POLYGON) {
             const Polygon& poly = static_cast<const Polygon&>(gi);
             const LineString& shell = *poly.getExteriorRing();
-            traverse_ring(cells, grid, shell, true);
+            traverseRing(cells, grid, shell, true, exitOnBoundary);
 
             std::size_t nrings = poly.getNumInteriorRing();
             for (std::size_t j = 0; j < nrings; j++) {
-                traverse_ring(cells, grid, *poly.getInteriorRingN(j), false);
+                traverseRing(cells, grid, *poly.getInteriorRingN(j), false, exitOnBoundary);
             }
         } else if (typ == GeometryTypeId::GEOS_MULTIPOLYGON || typ == GeometryTypeId::GEOS_GEOMETRYCOLLECTION) {
-            traverse_polygons(cells, grid, gi);
+            traversePolygons(cells, grid, gi, exitOnBoundary);
         } else {
             throw util::GEOSException("Unsupported geometry type");
         }
@@ -576,7 +576,7 @@ GridIntersection::subdividePolygon(const Grid<bounded_extent>& p_grid, const Geo
     const Grid<infinite_extent> cell_grid = make_infinite(cropped_grid, gridExtent);
     Matrix<std::unique_ptr<Cell>> cells(cell_grid.getNumRows(), cell_grid.getNumCols());
 
-    traverse_polygons(cells, cell_grid, g);
+    traversePolygons(cells, cell_grid, g, true);
 
     const auto areas = collectAreas(cells, cropped_grid, g);
 
