@@ -19,7 +19,7 @@ using geos::geom::Envelope;
 namespace geos::operation::grid {
 
 template<>
-Envelope
+Envelope GEOS_DLL
 Grid<bounded_extent>::getCellEnvelope(size_t row, size_t col) const
 {
     // The ternary clauses below are used to make sure that the cells along
@@ -36,7 +36,7 @@ Grid<bounded_extent>::getCellEnvelope(size_t row, size_t col) const
 }
 
 template<>
-Envelope
+Envelope GEOS_DLL
 Grid<infinite_extent>::getCellEnvelope(size_t row, size_t col) const
 {
     double cell_xmin, cell_xmax, cell_ymin, cell_ymax;
