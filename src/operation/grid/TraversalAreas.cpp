@@ -391,7 +391,7 @@ visitRings(const Envelope& box, const std::vector<const Traversal*>& traversals,
 
 #if DEBUG_TRAVERSAL_AREAS
     std::cout << std::endl << std::fixed;
-    std::cout << std::setprecision(1);
+    std::cout << std::setprecision(18);
     std::cout << "Identifying rings in box " << box.getMinX() << ":" << box.getMaxX() << "," << box.getMinY() << ":" << box.getMaxY() << std::endl;
     std::cout << std::setprecision(18);
     std::cout << "Available chains:" << std::endl;
@@ -437,9 +437,18 @@ visitRings(const Envelope& box, const std::vector<const Traversal*>& traversals,
 
         coords.push_back(coords[0]);
 #if DEBUG_TRAVERSAL_AREAS
-        std::cout << "Completed chain ";
-        for (const auto& c : coords) {
-            std::cout << c << ", ";
+        std::cout << "Completed chain LINESTRING (";
+        {
+            bool first = true;
+            for (const auto& c : coords) {
+                if (first) {
+                    first = false;
+                } else {
+                    std::cout << ", ";
+                }
+                std::cout << c;
+            }
+            std::cout << ")";
         }
         std::cout<< std::endl;
 #endif

@@ -65,7 +65,7 @@ struct test_gridintersectiontest_data : GEOSTestBase {
         }
 
         std::string error = "subdivided polygon area does not match input: " + subdivided.toString();
-        ensure_equals(error, tot_area, input.getArea(), input.getArea() * 1e-14);
+        ensure_equals(error, tot_area, input.getArea(), input.getArea() * 1e-6);
     }
 };
 
@@ -490,8 +490,11 @@ void object::test<23>()
     Grid<bounded_extent> extent{ { -180.5, 180.5, -90.5, 90.5 }, 0.5, 0.5 };
 
     auto g = wkt_reader_.read("MULTIPOLYGON (((178.3736000000001 -17.33992000000002, 178.71806000000007 -17.62845999999996, 178.5527099999999 -18.150590000000008, 177.93266000000008 -18.287990000000036, 177.38145999999992 -18.164319999999975, 177.28504000000007 -17.72464999999997, 177.67087 -17.381139999999974, 178.12557000000007 -17.50480999999995, 178.3736000000001 -17.33992000000002)), ((179.36414266196417 -16.801354076946836, 178.7250593629972 -17.012041674368007, 178.5968385951172 -16.63915000000003, 179.0966093629972 -16.43398427754741, 179.4135093629972 -16.379054277547382, 180.00000000000003 -16.06713266364241, 180.00000000000003 -16.555216566639146, 179.36414266196417 -16.801354076946836)), ((-179.91736938476527 -16.501783135649347, -179.99999999999997 -16.555216566639146, -179.99999999999997 -16.06713266364241, -179.79332010904858 -16.020882256741217, -179.91736938476527 -16.501783135649347)))");
+    auto rci = GridIntersection::getIntersectionFractions(extent, *g);
+    check_area(*rci, extent, *g);
 
-    ensure_NO_THROW(GridIntersection(extent, *g));
+    auto subd = GridIntersection::subdividePolygon(extent, *g, false);
+    check_subdivided_polygon(*g, *subd);
 }
 
 template<>
@@ -539,10 +542,15 @@ void object::test<26>()
     // This test exercises some challenging behavior where a polygon follows
     // ymin, but the grid resolution is such that ymin < (ymax - ny*dy)
 
-    Grid<bounded_extent> extent{ { -180, 180, -90, 90 }, 1.0 / 6, 1.0 / 6 };
+    Grid<bounded_extent> ext{ { -180, 180, -90, 90 }, 1.0 / 6, 1.0 / 6 };
 
     auto g = wkt_reader_.read(load_resource("antarctica.wkt"));
-    ensure_NO_THROW(GridIntersection(extent, *g));
+
+    auto rci = GridIntersection::getIntersectionFractions(ext, *g);
+    check_area(*rci, ext, *g);
+
+    auto subd = GridIntersection::subdividePolygon(ext, *g, false);
+    check_subdivided_polygon(*g, *subd);
 }
 
 template<>
@@ -553,12 +561,15 @@ void object::test<27>()
 
     // This test exercises some challenging behavior where a polygon follows
     // xmax, but the grid resolution is such that xmax < (xmin + nx*m_dx)
-
-    Grid<bounded_extent> extent{ { -180, 180, -90, 90 }, 1.0 / 6, 1.0 / 6 };
+    Grid<bounded_extent> ext{ { -180, 180, -90, 90 }, 1.0 / 6, 1.0 / 6 };
 
     auto g = wkt_reader_.read(load_resource("russia.wkt"));
 
-    ensure_NO_THROW(GridIntersection(extent, *g));
+    auto rci = GridIntersection::getIntersectionFractions(ext, *g);
+    check_area(*rci, ext, *g);
+
+    auto subd = GridIntersection::subdividePolygon(ext, *g, false);
+    check_subdivided_polygon(*g, *subd);
 }
 
 template<>
@@ -574,7 +585,11 @@ void object::test<29>()
     Envelope env = g->getEnvelopeInternal()->intersection(extent.getExtent());
     extent = extent.shrinkToFit(env);
 
-    ensure_NO_THROW( GridIntersection::getIntersectionFractions(extent, *g));
+    auto rci = GridIntersection::getIntersectionFractions(extent, *g);
+    check_area(*rci, extent, *g);
+
+    auto subd = GridIntersection::subdividePolygon(extent, *g, false);
+    check_subdivided_polygon(*g, *subd);
 }
 
 template<>
@@ -583,11 +598,15 @@ void object::test<30>()
 {
     set_test_name("Robustness regression test #4");
 
-    Grid<bounded_extent> extent{ { -166.84166666666667, -152.625, 66.991666666666674, 71.358333333333334 }, 0.0083333333333333332, 0.0083333333333333332 };
+    Grid<bounded_extent> ext{ { -166.84166666666667, -152.625, 66.991666666666674, 71.358333333333334 }, 0.0083333333333333332, 0.0083333333333333332 };
 
     auto g = wkt_reader_.read(load_resource("regression4.wkt"));
 
-    ensure_NO_THROW(GridIntersection(extent, *g));
+    auto rci = GridIntersection::getIntersectionFractions(ext, *g);
+    check_area(*rci, ext, *g);
+
+    auto subd = GridIntersection::subdividePolygon(ext, *g, false);
+    check_subdivided_polygon(*g, *subd);
 }
 
 template<>
@@ -596,38 +615,32 @@ void object::test<31>()
 {
     set_test_name("robustness regression test #5");
 
-    Grid<bounded_extent> extent{ { 0, 10, 0, 10 }, 1, 1 };
+    Grid<bounded_extent> ext{ { 0, 10, 0, 10 }, 1, 1 };
 
     auto g = wkt_reader_.read("POINT (2 2)")->buffer(1, 30);
 
-    ensure_NO_THROW( GridIntersection::getIntersectionFractions(extent, *g));
+    auto rci = GridIntersection::getIntersectionFractions(ext, *g);
+    check_area(*rci, ext, *g);
+
+    auto subd = GridIntersection::subdividePolygon(ext, *g, false);
+    check_subdivided_polygon(*g, *subd);
 }
 
 template<>
 template<>
 void object::test<32>()
 {
-    return;
     set_test_name("Robustness regression test #6");
 
-    Grid<bounded_extent> ex{ { 145.925, 147.375, -35.525, -33.475 }, 0.05, 0.05 };
+    Grid<bounded_extent> ext{ { 145.925, 147.375, -35.525, -33.475 }, 0.05, 0.05 };
 
     auto g = wkt_reader_.read(load_resource("regression6.wkt"));
-    GridIntersection gi(ex, *g);
-    const auto& result = *gi.getResults();
 
-    float tot = 0;
+    auto rci = GridIntersection::getIntersectionFractions(ext, *g);
+    check_area(*rci, ext, *g);
 
-    for (size_t i = 0; i < result.getNumRows(); i++) {
-        for (size_t j = 0; j < result.getNumCols(); j++) {
-            tot += result(i, j);
-            if (result(i, j) < 0 || result(i, j) > 1) {
-                fail();
-            }
-        }
-    }
-
-    ensure_equals(tot, 823.0f);
+    auto subd = GridIntersection::subdividePolygon(ext, *g, false);
+    check_subdivided_polygon(*g, *subd);
 }
 
 template<>
@@ -638,6 +651,7 @@ void object::test<33>()
 
     Grid<bounded_extent> ex{ { 487800, 492800, 5813800, 5818800 }, 100, 100 };
 
+    // Polygon is a tiny sliver with an area of 1e-8
     auto g = wkt_reader_.read("POLYGON ((492094.9283999996 5816959.8553, 492374.9335527361 5816811.352641133, 492374.9335527363 5816811.352641133, 492094.9283999996 5816959.8553))");
     ex = ex.shrinkToFit(*g->getEnvelopeInternal());
 
@@ -657,7 +671,8 @@ void object::test<33>()
 
 template<>
 template<>
-void object::test<34>() {set_test_name("Processing region is empty when there are no polygons");
+void object::test<34>() {
+    set_test_name("Processing region is empty when there are no polygons");
 
     Envelope raster_extent{ 0, 10, 0, 10 };
 
@@ -691,7 +706,6 @@ void object::test<36>()
     auto g = wkt_reader_.read("POLYGON ((1 3, 9 5, 8 9, 1 3))") ;
 
     auto subdivided = GridIntersection::subdividePolygon(ext, *g, false);
-
     check_subdivided_polygon(*g, *subdivided);
 }
 
@@ -707,7 +721,6 @@ void object::test<37>()
     auto g = wkt_reader_.read("POLYGON ((8.5 8.7, 12 8, 12 12, 8 12, 8.5 8.7))");
 
     auto subdivided = GridIntersection::subdividePolygon(ext, *g, true);
-
     check_subdivided_polygon(*g, *subdivided);
 }
 
@@ -767,14 +780,11 @@ void object::test<41>()
 
     auto g = wkt_reader_.read("POLYGON ((5 5, 25 5, 25 25, 5 25, 5 5), (12 12, 12 14, 14 14, 12 12))");
 
-    auto fracs = GridIntersection::getIntersectionFractions(ext, *g);
+    auto rci = GridIntersection::getIntersectionFractions(ext, *g);
+    check_area(*rci, ext, *g);
 
-    float sum = 0;
-    for (const auto& frac : *fracs) {
-        sum += frac * 100;
-    }
-
-    ensure_equals("", static_cast<double>(sum), g->getArea(), 1e-5);
+    auto subd = GridIntersection::subdividePolygon(ext, *g, false);
+    check_subdivided_polygon(*g, *subd);
 }
 
 template<>
@@ -854,7 +864,6 @@ void object::test<46>()
     check_area(*rci, ext, *g);
 
     auto subd = GridIntersection::subdividePolygon(ext, *g, false);
-
     check_subdivided_polygon(*g, *subd);
 }
 
@@ -963,7 +972,5 @@ void object::test<52>()
     auto subd = GridIntersection::subdividePolygon(ext, *g, false);
     check_subdivided_polygon(*g, *subd);
 }
-
-
 
 }

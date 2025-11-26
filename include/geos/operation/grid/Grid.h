@@ -250,31 +250,25 @@ class GEOS_DLL Grid
         if constexpr (std::is_same_v<extent_tag, bounded_extent>) {
             Grid<extent_tag> reduced{reduced_box, m_dx, m_dy};
 
-            if (b.getMinX() < reduced.xmin() || b.getMinY() < reduced.ymin() || b.getMaxX() > reduced.xmax() || b.
-                getMaxY() > reduced.ymax()) {
-                throw std::runtime_error("Shrink operation failed.");
-            }
-
             if (!calcExtentFromNewGrid) {
                 reduced.m_xOrig = m_xOrig;
                 reduced.m_yOrig = m_yOrig;
                 reduced.m_skipRows = reduced.getRowOffset(*this);
                 reduced.m_skipCols = reduced.getColOffset(*this);
+            } else if (!reduced.getExtent().contains(b)) {
+                throw std::runtime_error("Shrink operation failed.");
             }
             return reduced;
         } else {
             Grid<extent_tag> reduced{reduced_box, m_dx, m_dy, m_domain};
 
-            if (b.getMinX() < reduced.xmin() || b.getMinY() < reduced.ymin() || b.getMaxX() > reduced.xmax() || b.
-                getMaxY() > reduced.ymax()) {
-                throw std::runtime_error("Shrink operation failed.");
-            }
-
             if (!calcExtentFromNewGrid) {
                 reduced.m_xOrig = m_xOrig;
                 reduced.m_yOrig = m_yOrig;
                 reduced.m_skipRows = reduced.getRowOffset(*this);
                 reduced.m_skipCols = reduced.getColOffset(*this);
+            }else if (!reduced.getExtent().contains(b)) {
+                throw std::runtime_error("Shrink operation failed.");
             }
             return reduced;
         }
