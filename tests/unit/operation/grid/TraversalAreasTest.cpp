@@ -2,9 +2,11 @@
 #include <tut/tut_macros.hpp>
 #include <utility.h>
 
+#include <geos/operation/grid/PerimeterDistance.h>
 #include <geos/operation/grid/Traversal.h>
 #include <geos/operation/grid/TraversalAreas.h>
 
+using geos::operation::grid::PerimeterDistance;
 using geos::operation::grid::Side;
 using geos::operation::grid::Traversal;
 using geos::operation::grid::TraversalAreas;
@@ -545,6 +547,59 @@ void object::test<29>()
     TraversalVector traversals{ &t1, &t2 };
 
     ensure_equals(TraversalAreas::getLeftHandArea(b, traversals), 0);
+}
+
+template<>
+template<>
+void object::test<30>()
+{
+    set_test_name("PerimeterDistance::isLessThan robustness test");
+
+    Envelope env{ 146.52500000000001, 146.57500000000002, -33.625,  -33.575000000000003};
+
+    {
+        // ----p1--p2--+
+        //             |
+        //             |
+        CoordinateXY p1{std::nextafter(env.getMaxX(), geos::DoubleNegInfinity), env.getMaxY()};
+        CoordinateXY p2{env.getMaxX(), env.getMaxY()};
+
+        ensure("points along ymax", PerimeterDistance::isLessThan(env, p1, p2));
+    }
+
+    {
+        //             |
+        //             |
+        // ----p2--p1--+
+        CoordinateXY p1{env.getMaxX(), env.getMinY()};
+        CoordinateXY p2{std::nextafter(env.getMaxX(), geos::DoubleNegInfinity), env.getMinY()};
+
+        ensure("points along ymin", PerimeterDistance::isLessThan(env, p1, p2));
+    }
+
+    {
+        // +------------
+        // p2
+        // |
+        // p1
+        // |
+        CoordinateXY p1{env.getMinX(), std::nextafter(env.getMaxY(), geos::DoubleNegInfinity)};
+        CoordinateXY p2{env.getMinX(), env.getMaxY()};
+
+        ensure("points along xmin", PerimeterDistance::isLessThan(env, p1, p2));
+    }
+
+    {
+        //            p1
+        //            |
+        //            p2
+        //            |
+        // -----------+
+        CoordinateXY p1{env.getMaxX(), std::nextafter(env.getMinY(), geos::DoubleInfinity)};
+        CoordinateXY p2{env.getMaxX(), env.getMinY()};
+
+        ensure("points along xmax", PerimeterDistance::isLessThan(env, p1, p2));
+    }
 }
 
 }

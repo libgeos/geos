@@ -50,6 +50,11 @@ class GEOS_DLL PerimeterDistance {
     static bool
     isBetweenCCW(double x, double a, double b);
 
-};
+    /** Tests whether the perimeter distance of c1 is less than the perimeter distance of c2, in a
+     *  robust way.
+     */
+    static bool
+    isLessThan(const geom::Envelope& e, const geom::CoordinateXY& c1, const geom::CoordinateXY& c2);
 
+};
 }

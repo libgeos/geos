@@ -519,8 +519,7 @@ createRectangle(const geom::GeometryFactory& gfact, const Envelope& env, std::ve
         return gfact.toGeometry(&env);
     } else {
         auto perimeterDistanceCmp = [&env](const CoordinateXY& a, const CoordinateXY& b) {
-            return PerimeterDistance::getPerimeterDistance(env, a) <
-                PerimeterDistance::getPerimeterDistance(env, b);
+            return PerimeterDistance::isLessThan(env, a, b);
         };
 
         points.emplace_back(env.getMinX(), env.getMinY());

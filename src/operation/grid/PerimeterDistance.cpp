@@ -61,12 +61,49 @@ PerimeterDistance::getPerimeterDistanceCCW(double measure1, double measure2, dou
     return perimeter + measure1 - measure2;
 }
 
-bool PerimeterDistance::isBetweenCCW(double x, double a, double b)
+bool
+PerimeterDistance::isBetweenCCW(double x, double a, double b)
 {
     if (a < b) {
         return x <= a || x >= b;
     }
     return x <= a && x >= b;
+}
+
+bool
+PerimeterDistance::isLessThan(const geom::Envelope& env, const geom::CoordinateXY& a, const geom::CoordinateXY& b) {
+    const auto pda = getPerimeterDistance(env, a);
+    const auto pdb = getPerimeterDistance(env, b);
+
+    if (pda < pdb) {
+        return true;
+    }
+    if (pda > pdb) {
+        return false;
+    }
+    if (a.equals2D(b)) {
+        return false;
+    }
+
+    // Points are not equal but are so close that their perimeter distance is the same.
+    // Need to figure out the spatial arrangement of the points.
+    if (a.y == b.y) {
+        // top
+        if (a.y == env.getMaxY()) {
+            return a.x < b.x;
+        }
+        // bottom
+        if (a.y == env.getMinY()) {
+            return b.x > a.x;
+        }
+    }
+
+    // left
+    if (a.x == env.getMinX()) {
+        return a.y < b.y;
+    }
+    // right
+    return b.y > a.y;
 }
 
 
