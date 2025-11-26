@@ -60,14 +60,25 @@ class GEOS_DLL GridIntersection
 
     /**
      * @brief Partition a polygonal geometry by a grid
+     * @param grid the Grid by which the polygon should be partitioned. The Grid does not need to cover the polygon.
+     * @param g a polygonal geometry
+     * @param includeExterior whether the result should contain any portions of the input that fall outside the grid.
+     * @return a GeometryCollection containing the partitioned polygon.
      */
-    static std::unique_ptr<geom::Geometry> subdividePolygon(const Grid<bounded_extent>& p_grid, const geom::Geometry& g, bool includeExterior);
+    static std::unique_ptr<geom::Geometry> subdividePolygon(const Grid<bounded_extent>& grid, const geom::Geometry& g, bool includeExterior);
+
+    /**
+     * @brief Calculate the fraction of each cell in a Grid that is covered by a polygon.
+     * @param grid the Grid for which coverage fractions should be returned
+     * @param g a polygonal or linear geometry
+     * @return a matrix having the same number of rows and columns as the grid, whose values contain either the
+     *         fraction of the cell area (for polygonal inputs) or the length of the intersection (for linear inputs)
+     */
+    static std::shared_ptr<Matrix<float>>
+    getIntersectionFractions(const Grid<bounded_extent>& grid, const geom::Geometry& g);
 
     static std::shared_ptr<Matrix<float>>
-    getIntersectionFractions(const Grid<bounded_extent>& raster_grid, const geom::Geometry& g);
-
-    static std::shared_ptr<Matrix<float>>
-    getIntersectionFractions(const Grid<bounded_extent>& raster_grid, const geom::Envelope& box);
+    getIntersectionFractions(const Grid<bounded_extent>& grid, const geom::Envelope& box);
 
     /**
      * @brief Determines the bounding box of the raster-vector intersection. Considers the bounding boxes

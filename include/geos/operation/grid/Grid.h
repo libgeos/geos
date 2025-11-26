@@ -20,8 +20,6 @@
 
 #include <geos/geom/Envelope.h>
 
-constexpr double DEFAULT_GRID_COMPAT_TOL = 1e-6;
-
 namespace geos::operation::grid {
 struct infinite_extent
 {
@@ -33,11 +31,19 @@ struct bounded_extent
     static constexpr size_t padding = 0;
 };
 
+/**
+ * @brief The Grid class represents a grid of constant-size rectangular cells that covers a specified envelope.
+ *        The width of the cells may be different from the height. If the Grid has an "infinite" extent rather than
+ *        a "bounded" extent, then an extra row and column will be added on all side of the grid. The size of the cells
+ *        in these columns may be larger than those in the primary grid, such that the extended grid covers a "domain"
+ *        that is larger than the extent of the regular grid.
+ */
 template<typename extent_tag>
 class GEOS_DLL Grid
 {
 
   public:
+    /// Construct a bounded grid covering a specified extent.
     Grid(const geom::Envelope& extent, double dx, double dy)
       : m_extent{ extent }
       , m_domain{}
@@ -50,6 +56,8 @@ class GEOS_DLL Grid
         static_assert(std::is_same_v<extent_tag, bounded_extent>);
     }
 
+    /// Construct an infinite grid covering a specified extent with regularly-sized cells, and adding a row and column
+    /// of variably-sized cells to each edge of the primary grid such that the specified domain is covered.
     Grid(const geom::Envelope& extent, double dx, double dy, const geom::Envelope& domain)
       : m_extent{ extent }
       , m_domain{ domain }
@@ -73,6 +81,7 @@ class GEOS_DLL Grid
         }
     }
 
+    /// Get the column in which the specified x coordinate would fall.
     size_t getColumn(double x) const
     {
         if (extent_tag::padding) {
@@ -98,6 +107,7 @@ class GEOS_DLL Grid
           getColumn(m_extent.getMaxX()));
     }
 
+    /// Get the row in which the specified y coordinate would fall.
     size_t getRow(double y) const
     {
         if (extent_tag::padding) {
@@ -123,6 +133,8 @@ class GEOS_DLL Grid
           getRow(m_extent.getMinY()));
     }
 
+    /// Get the cell index in which the specified x and y values would fall. Cells are indexed from left-to-right,
+    /// then top-to-bottom.
     std::size_t getCell(double x, double y) const
     {
         return getRow(y) * getNumCols() + getColumn(x);
@@ -150,12 +162,20 @@ class GEOS_DLL Grid
 
     const geom::Envelope& getExtent() const { return m_extent; }
 
+    /// Return the number of rows by which another grid is offset from this Grid. It is assumed that the two
+    /// grids have the same resolution, and that the maximum y value of the other grid is less than or equal
+    /// to the maximum y value of this grid.
     size_t getRowOffset(const Grid& other) const { return static_cast<size_t>(std::round(std::abs(other.m_extent.getMaxY() - m_extent.getMaxY()) / m_dy)); }
 
+    /// Return the number of columns by which another grid is offset from this Grid. It is assumed that the two
+    /// grids have the same resolution, and that the minimum x value of the other grid is greater than or equal
+    /// to the minimum x value of this grid.
     size_t getColOffset(const Grid& other) const { return static_cast<size_t>(std::round(std::abs(m_extent.getMinX() - other.m_extent.getMinX()) / m_dx)); }
 
+    /// Get the x coordinate at the center of the specified column.
     double getColX(size_t col) const { return m_extent.getMinX() + (static_cast<double>(col - extent_tag::padding) + 0.5) * m_dx; }
 
+    /// Get the y coordinate at the center of the specified row.
     double getRowY(size_t row) const { return m_extent.getMaxY() - (static_cast<double>(row - extent_tag::padding) + 0.5) * m_dy; }
 
     Grid crop(const geom::Envelope& e) const
@@ -167,6 +187,10 @@ class GEOS_DLL Grid
         }
     }
 
+    /// Reduce the size of the grid to contain only the provided Envelope
+    /// If calcExtentFromNewGrid is true, then the xmax and ymin of the new
+    /// grid will be calculated relative to the origin point of the original grid
+    /// rather than the newly cropped grid.
     Grid<extent_tag> shrinkToFit(const geom::Envelope& b, bool calcExtentFromNewGrid=true) const
     {
         if (b.getArea() == 0) {
@@ -295,11 +319,12 @@ class GEOS_DLL Grid
     double m_dx;
     double m_dy;
 
-    double m_xOrig;
+    double m_xOrig; // origin point that is distinct from xmin of m_extent. Used to allow a subgrid to calculate
+                    // sub-envelopes that exactly match those of the parent grid
     double m_yOrig;
 
-    size_t m_skipRows{0};
-    size_t m_skipCols{0};
+    size_t m_skipRows{0}; // number of rows to skip when computing a cell envelope using m_yOrig
+    size_t m_skipCols{0}; // number of cols to skip when computing a cell envelope using m_xOrig
 
     size_t m_num_rows;
     size_t m_num_cols;
