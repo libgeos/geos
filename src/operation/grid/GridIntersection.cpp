@@ -569,7 +569,6 @@ GridIntersection::subdividePolygon(const Grid<bounded_extent>& p_grid, const Geo
     const geom::GeometryFactory& gfact = *g.getFactory();
 
     const auto cropped_grid = p_grid.shrinkToFit(p_grid.getExtent().intersection(*g.getEnvelopeInternal()), false);
-    //const auto cropped_grid = p_grid;
 
     geom::Envelope gridExtent = *g.getEnvelopeInternal();
     gridExtent.expandBy(1);
@@ -619,6 +618,8 @@ GridIntersection::subdividePolygon(const Grid<bounded_extent>& p_grid, const Geo
     if (!edge_geoms.empty()) {
         auto edge_coll = gfact.createGeometryCollection(std::move(edge_geoms));
         geoms.push_back(overlayng::CoverageUnion::geomunion(edge_coll.get()));
+        // Polygon generated here may have extra nodes that do not match adjacent polygons not processed through
+        // subdividePolygon.
     }
 
     return gfact.createGeometryCollection(std::move(geoms));

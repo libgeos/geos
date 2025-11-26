@@ -1175,7 +1175,7 @@ extern GEOSGeometry GEOS_DLL *GEOSSubdivideByGrid_r(
     double xmin, double ymin,
     double xmax, double ymax,
     unsigned nx, unsigned ny,
-    int include_exterior);
+    int includeExterior);
 
 /** \see GEOSGridIntersectionFractions */
 extern int GEOS_DLL GEOSGridIntersectionFractions_r(
@@ -4040,7 +4040,7 @@ extern GEOSGeometry GEOS_DLL *GEOSClipByRect(
 * \param ymax Upper bound of grid
 * \param nx number of columns in grid
 * \param ny number of rows in grid
-* \param include_exterior whether to include portions of the
+* \param includeExterior whether to include portions of the
          input geometry that do not intersect the grid in
          the returned result.
 * \return A geometry collection whose components represent the
@@ -4055,7 +4055,7 @@ extern GEOSGeometry GEOS_DLL *GEOSSubdivideByGrid(
     double xmin, double ymin,
     double xmax, double ymax,
     unsigned nx, unsigned ny,
-    int include_exterior);
+    int includeExterior);
 
 /**
 * Determine the fraction of each cell in a rectangular grid

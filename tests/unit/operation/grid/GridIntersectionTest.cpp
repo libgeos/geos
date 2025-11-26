@@ -976,4 +976,26 @@ void object::test<52>()
     check_subdivided_polygon(*g, *subd);
 }
 
+template<>
+template<>
+void object::test<53>() {
+    set_test_name("includeExterior = true");
+
+    Envelope e(0, 10, 0, 10);
+    Grid<bounded_extent> ext(e, 1, 1);
+
+    auto g = wkt_reader_.read("POLYGON ((9.5 9.5, 11 9.5, 11 11, 9.5 11, 9.5 9.5))");
+
+    auto subd = GridIntersection::subdividePolygon(ext, *g, true);
+
+    auto inside = wkt_reader_.read("POLYGON ((9.5 9.5, 10 9.5, 10 10, 9.5 10, 9.5 9.5))");
+    auto outside = wkt_reader_.read("POLYGON ((9.5 10, 10 10, 10 9.5, 11 9.5, 11 11, 9.5 11, 9.5 10))");
+
+    ensure_equals(subd->getNumGeometries(), 2u);
+
+    // ensure_equals_geometry would fail here because the generated results have extra nodes at grid cell boundaries
+    ensure(subd->getGeometryN(0)->equals(inside.get()));
+    ensure(subd->getGeometryN(1)->equals(outside.get()));
+}
+
 }
