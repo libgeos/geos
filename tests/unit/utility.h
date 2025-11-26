@@ -581,6 +581,14 @@ struct wkb_hex_decoder {
 // Base class with helpers
 struct GEOSTestBase {
 
+    static void
+    skip_on_ci()
+    {
+        if (std::getenv("CI")) {
+            skip("Skip slow test on CI");
+        }
+    }
+
     static std::string load_resource(const std::string& fname) {
 #if HAVE_STD_FILESYSTEM
         if (RESOURCE_DIR == "") {

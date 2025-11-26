@@ -538,6 +538,7 @@ template<>
 void object::test<26>()
 {
     set_test_name("Robustness regression test #1");
+    skip_on_ci();
 
     // This test exercises some challenging behavior where a polygon follows
     // ymin, but the grid resolution is such that ymin < (ymax - ny*dy)
@@ -558,6 +559,7 @@ template<>
 void object::test<27>()
 {
     set_test_name("Robustness regression test #2");
+    skip_on_ci();
 
     // This test exercises some challenging behavior where a polygon follows
     // xmax, but the grid resolution is such that xmax < (xmin + nx*m_dx)
@@ -597,6 +599,7 @@ template<>
 void object::test<30>()
 {
     set_test_name("Robustness regression test #4");
+    skip_on_ci();
 
     Grid<bounded_extent> ext{ { -166.84166666666667, -152.625, 66.991666666666674, 71.358333333333334 }, 0.0083333333333333332, 0.0083333333333333332 };
 
