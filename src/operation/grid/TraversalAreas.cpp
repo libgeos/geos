@@ -13,7 +13,6 @@
  **********************************************************************/
 
 #include <limits>
-#include <iomanip>
 #include <optional>
 #include <vector>
 
@@ -23,14 +22,12 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
+#include <geos/geom/util/GeometryFixer.h>
 #include <geos/operation/grid/PerimeterDistance.h>
 #include <geos/operation/grid/Traversal.h>
-#include <geos/geom/util/GeometryFixer.h>
-
-#include <geos/operation/polygonize/Polygonizer.h>
 #include <geos/operation/grid/TraversalAreas.h>
-
-#include "geos/operation/valid/RepeatedPointRemover.h"
+#include <geos/operation/polygonize/Polygonizer.h>
+#include <geos/operation/valid/RepeatedPointRemover.h>
 
 using geos::geom::CoordinateSequence;
 using geos::geom::CoordinateXY;
@@ -40,6 +37,10 @@ using geos::geom::Envelope;
 
 #define DEBUG_TRAVERSAL_AREAS 0
 
+#if DEBUG_TRAVERSAL_AREAS
+#include <iomanip>
+#endif
+
 namespace geos::operation::grid {
 
 /// A CoordinateChain stores a set of coordinates whose start and end points lie on
@@ -48,7 +49,7 @@ struct CoordinateChain
 {
     const double start; // perimeter distance value of the first coordinate
     const double stop;  // perimeter distance value of the last coordinate
-    const void* parentage;
+    const void* parentage; // pointer to track the linear geometry from which the coordinates originated
     bool visited;
 
     CoordinateChain(double p_start, double p_stop, const std::vector<CoordinateXY>& p_coords)
@@ -113,7 +114,7 @@ getNextChain(std::vector<CoordinateChain>& chains,
             continue;
         }
 
-        double distance = exit_to_entry_perimeter_distance_ccw(*chain, candidate, perimeter);
+        const double distance = exit_to_entry_perimeter_distance_ccw(*chain, candidate, perimeter);
 
 #if DEBUG_TRAVERSAL_AREAS
         std::cout << "Distance " << distance << ", start " << candidate.start << ", stop " << candidate.stop << ": ";
@@ -152,6 +153,15 @@ hasMultipleUniqueCoordinates(const T& vec)
     }
 
     return false;
+}
+
+static bool
+isRingCCW(const std::vector<CoordinateXY>& coords)
+{
+    // TODO: Remove copy
+    CoordinateSequence seq(0, false, false);
+    seq.setPoints(coords);
+    return algorithm::Orientation::isCCW(&seq);
 }
 
 static bool
@@ -234,11 +244,14 @@ visitRings(const Envelope& box, const std::vector<const Traversal*>& traversals,
     chains.reserve(traversals.size() + 4);
     std::deque<std::vector<CoordinateXY>> coordinateStore;
 
-    std::vector<CoordinateXY> boxPoints;
+    std::vector<CoordinateXY> boxPoints; // a list of nodes to be included in the boundary of the
+                                         // polygon, if it is the same as the boundary of the
+                                         // cell. Necessary to form a correctly noded polygon
+                                         // coverage.
+    std::optional<bool> isInterior; // whether the cell is entirely inside the polygon.
 
-    double areaCCW = 0;
-    double areaCW = 0;
-    std::optional<bool> isInterior;
+    double areaCCW = 0; // cumulative area of CCW-oriented rings
+    double areaCW = 0;  // cumulative area of CW-oriented rings
 
     for (const auto& traversal : traversals) {
         if (!traversal->hasMultipleUniqueCoordinates()) {
@@ -255,10 +268,7 @@ visitRings(const Envelope& box, const std::vector<const Traversal*>& traversals,
 
         if (isRing(*coords)) {
             if constexpr (!validPolygonsAndCoverage) {
-                CoordinateSequence seq(0, false, false);
-                // TODO: Remove copy
-                seq.setPoints(*coords);
-                const bool isCCW = algorithm::Orientation::isCCW(&seq);
+                const bool isCCW = isRingCCW(*coords);
 
                 visitor(*coords, isCCW, false);
 
@@ -272,10 +282,7 @@ visitRings(const Envelope& box, const std::vector<const Traversal*>& traversals,
             }
 
             if (containsProperly(box, *coords) || !hasEdgeSegment(box, *coords)) {
-                // TODO: Remove copy
-                CoordinateSequence seq(0, false, false);
-                seq.setPoints(*coords);
-                const bool isCCW = algorithm::Orientation::isCCW(&seq);
+                const bool isCCW = isRingCCW(*coords);
 
                 // Add nodes to box edges
                 for (const auto& c : *coords) {
@@ -468,7 +475,8 @@ visitRings(const Envelope& box, const std::vector<const Traversal*>& traversals,
     }
 
     if (areaCW > areaCCW || (areaCCW == 0 && areaCW == 0 && isInterior.value())) {
-        bool sortIsNeeded = !boxPoints.empty();
+        // Ring is the same as the cell envelope
+        const bool sortIsNeeded = !boxPoints.empty();
 
         boxPoints.emplace_back(box.getMinX(), box.getMinY());
         boxPoints.emplace_back(box.getMaxX(), box.getMinY());
@@ -477,8 +485,7 @@ visitRings(const Envelope& box, const std::vector<const Traversal*>& traversals,
 
         if (sortIsNeeded) {
             std::sort(boxPoints.begin(), boxPoints.end(), [&box](const CoordinateXY& lhs, const CoordinateXY& rhs) {
-                return PerimeterDistance::getPerimeterDistance(box, lhs) <
-                    PerimeterDistance::getPerimeterDistance(box, rhs);
+                return PerimeterDistance::isLessThan(box, lhs, rhs);
             });
         }
 
@@ -520,7 +527,7 @@ TraversalAreas::getLeftHandRings(const GeometryFactory& gfact, const Envelope& b
 
     visitRings<validPolygons>(box, coord_lists, [&gfact, &shells, &holes, &checkValidity](const std::vector<CoordinateXY>& coords, bool isCCW, bool hasMultipleParents) {
         // If a given ring was created from traversals from both a ring and shell, for example, it is possible for
-        // the ring to self-intersect. Rather than try and detect self-intersections o the fly (rare?) we check and
+        // the ring to self-intersect. Rather than try and detect self-intersections on the fly (rare?) we check and
         // repair validity in this limited case.
         checkValidity |= hasMultipleParents;
 
@@ -536,9 +543,6 @@ TraversalAreas::getLeftHandRings(const GeometryFactory& gfact, const Envelope& b
         if (seq->hasRepeatedPoints()) {
             seq = valid::RepeatedPointRemover::removeRepeatedPoints(seq.get());
         }
-        //for (const auto& coord : coords) {
-        //    seq->add(coord, false);
-        //}
         auto ring = gfact.createLinearRing(std::move(seq));
 
         if (isCCW) {
