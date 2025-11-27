@@ -4046,6 +4046,9 @@ extern GEOSGeometry GEOS_DLL *GEOSClipByRect(
 * \return A geometry collection whose components represent the
 *         intersection with each cell in the grid.
 * Caller is responsible for freeing with GEOSGeom_destroy().
+*
+* This algorithm operates in 2D only; Z and M values in the input will be dropped.
+
 * \see GEOSGetGridIntersectionFractions
 *
 * \since 3.14.0
