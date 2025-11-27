@@ -320,15 +320,14 @@ PolygonTopologyAnalyzer::createSegString(const LinearRing* ring, const PolygonRi
     // Let the input LinearRing retain ownership of the
     // CoordinateSequence, and pass it directly into the BasicSegmentString
     // constructor.
-    CoordinateSequence* pts = const_cast<CoordinateSequence*>(ring->getCoordinatesRO());
+    std::shared_ptr<const CoordinateSequence> pts = ring->getSharedCoordinates();
 
     // Repeated points must be removed for accurate intersection detection
-    // So, in this case we create a de-duped copy of the CoordinateSequence
-    // and manage the lifecycle locally. This we pass on to the SegmentString
+    // So, in this case we create a de-duped copy of the CoordinateSequence.
+    // This we pass on to the SegmentString.
     if (pts->hasRepeatedPoints()) {
-        std::unique_ptr<CoordinateSequence> newPts = RepeatedPointRemover::removeRepeatedPoints(pts);
-        pts = newPts.get();
-        coordSeqStore.emplace_back(newPts.release());
+        std::unique_ptr<CoordinateSequence> newPts = RepeatedPointRemover::removeRepeatedPoints(pts.get());
+        pts = std::move(newPts);
     }
 
     // Allocate the BasicSegmentString in the store and return a
