@@ -67,64 +67,73 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="preprocessor">#include &lt;geos/geom/Coordinate.h&gt;</span></div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="preprocessor">#include &lt;geos/operation/grid/Side.h&gt;</span></div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="keyword">namespace </span>geos::operation::grid {</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
-<div class="foldopen" id="foldopen00029" data-start="{" data-end="};">
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1grid_1_1Traversal.html">   29</a></span><span class="keyword">class </span><a class="code hl_class" href="classgeos_1_1operation_1_1grid_1_1Traversal.html">Traversal</a></div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>{</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>  <span class="keyword">public</span>:</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <a class="code hl_class" href="classgeos_1_1operation_1_1grid_1_1Traversal.html">Traversal</a>()</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>      : m_entry{ Side::NONE }</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>      , m_exit{ Side::NONE }</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    {</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    }</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    <span class="keywordtype">bool</span> isClosedRing() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &lt;geos/export.h&gt;</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#include &lt;geos/geom/Coordinate.h&gt;</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="preprocessor">#include &lt;geos/operation/grid/Side.h&gt;</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="keyword">namespace </span>geos::operation::grid {</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
+<div class="foldopen" id="foldopen00030" data-start="{" data-end="};">
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1grid_1_1Traversal.html">   30</a></span><span class="keyword">class </span>GEOS_DLL <a class="code hl_class" href="classgeos_1_1operation_1_1grid_1_1Traversal.html">Traversal</a></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>{</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>  <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <a class="code hl_class" href="classgeos_1_1operation_1_1grid_1_1Traversal.html">Traversal</a>()</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>      : m_entry{ Side::NONE }</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>      , m_exit{ Side::NONE }</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>      , m_parentage{ <span class="keyword">nullptr</span> }</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    {</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    }</div>
 <div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    <span class="keywordtype">bool</span> isEmpty() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    <span class="keywordtype">bool</span> isClosedRing() <span class="keyword">const</span>;</div>
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keywordtype">bool</span> isEntered() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keywordtype">bool</span> isClosedRingWithArea() <span class="keyword">const</span>;</div>
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <span class="keywordtype">bool</span> isExited() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>    <span class="keywordtype">bool</span> isEmpty() <span class="keyword">const</span>;</div>
 <div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <span class="keywordtype">bool</span> isTraversed() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <span class="keywordtype">bool</span> isEntered() <span class="keyword">const</span>;</div>
 <div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <span class="keywordtype">bool</span> hasMultipleUniqueCoordinates() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <span class="keywordtype">bool</span> isExited() <span class="keyword">const</span>;</div>
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1grid_1_1Traversal.html#a1c0e900236bb7d3fdceb48475a4dee00">   51</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classgeos_1_1operation_1_1grid_1_1Traversal.html#a1c0e900236bb7d3fdceb48475a4dee00">enter</a>(<span class="keyword">const</span> geom::CoordinateXY&amp; c, Side s);</div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1grid_1_1Traversal.html#a1b0a4ed417253e0600f01d9804ae2540">   54</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classgeos_1_1operation_1_1grid_1_1Traversal.html#a1b0a4ed417253e0600f01d9804ae2540">exit</a>(<span class="keyword">const</span> geom::CoordinateXY&amp; c, Side s);</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
-<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    Side getEntrySide()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_entry; }</div>
-<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span> </div>
-<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    Side getExitSide()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_exit; }</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    <span class="keywordtype">bool</span> isTraversed() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span>    <span class="keywordtype">bool</span> hasMultipleUniqueCoordinates() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1grid_1_1Traversal.html#a311635deeba87bee816c70bb007990fd">   55</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classgeos_1_1operation_1_1grid_1_1Traversal.html#a311635deeba87bee816c70bb007990fd">enter</a>(<span class="keyword">const</span> geom::CoordinateXY&amp; c, Side s, <span class="keyword">const</span> <span class="keywordtype">void</span>* parentage);</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1grid_1_1Traversal.html#a1b0a4ed417253e0600f01d9804ae2540">   58</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classgeos_1_1operation_1_1grid_1_1Traversal.html#a1b0a4ed417253e0600f01d9804ae2540">exit</a>(<span class="keyword">const</span> geom::CoordinateXY&amp; c, Side s);</div>
 <div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span> </div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    <span class="keyword">const</span> geom::CoordinateXY&amp; getLastCoordinate() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    Side getEntrySide()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_entry; }</div>
 <div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    <span class="keyword">const</span> geom::CoordinateXY&amp; getExitCoordinate() <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>    Side getExitSide()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_exit; }</div>
 <div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    <span class="keywordtype">void</span> add(<span class="keyword">const</span> geom::CoordinateXY&amp; c);</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    <span class="keyword">const</span> geom::CoordinateXY&amp; getFirstCoordinate() <span class="keyword">const</span>;</div>
 <div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span> </div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    <span class="keywordtype">void</span> forceExit(Side s) { m_exit = s; }</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    <span class="keyword">const</span> geom::CoordinateXY&amp; getLastCoordinate() <span class="keyword">const</span>;</div>
 <div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    <span class="keyword">const</span> std::vector&lt;geom::CoordinateXY&gt;&amp; getCoordinates()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_coords; }</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    <span class="keyword">const</span> geom::CoordinateXY&amp; getExitCoordinate() <span class="keyword">const</span>;</div>
 <div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>  <span class="keyword">private</span>:</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    std::vector&lt;geom::CoordinateXY&gt; m_coords;</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    Side m_entry;</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    Side m_exit;</div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>};</div>
-</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    <span class="keywordtype">void</span> add(<span class="keyword">const</span> geom::CoordinateXY&amp; c);</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span> </div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <span class="keywordtype">void</span> forceExit(Side s) { m_exit = s; }</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    <span class="keyword">const</span> std::vector&lt;geom::CoordinateXY&gt;&amp; getCoordinates()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_coords; }</div>
 <div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>}</div>
-<div class="ttc" id="aclassgeos_1_1operation_1_1grid_1_1Traversal_html"><div class="ttname"><a href="classgeos_1_1operation_1_1grid_1_1Traversal.html">geos::operation::grid::Traversal</a></div><div class="ttdoc">The Traversal class records the coordinates of a line that are within a grid cell,...</div><div class="ttdef"><b>Definition</b> Traversal.h:30</div></div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    <span class="keyword">const</span> <span class="keywordtype">void</span>* getParentage()<span class="keyword"> const </span>{ <span class="keywordflow">return</span> m_parentage; }</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>  <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>    std::vector&lt;geom::CoordinateXY&gt; m_coords;</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    Side m_entry;</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    Side m_exit;</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>    <span class="keyword">const</span> <span class="keywordtype">void</span>* m_parentage;</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>};</div>
+</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>}</div>
+<div class="ttc" id="aclassgeos_1_1operation_1_1grid_1_1Traversal_html"><div class="ttname"><a href="classgeos_1_1operation_1_1grid_1_1Traversal.html">geos::operation::grid::Traversal</a></div><div class="ttdoc">The Traversal class records the coordinates of a line that are within a grid cell,...</div><div class="ttdef"><b>Definition</b> Traversal.h:31</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1grid_1_1Traversal_html_a1b0a4ed417253e0600f01d9804ae2540"><div class="ttname"><a href="classgeos_1_1operation_1_1grid_1_1Traversal.html#a1b0a4ed417253e0600f01d9804ae2540">geos::operation::grid::Traversal::exit</a></div><div class="ttdeci">void exit(const geom::CoordinateXY &amp;c, Side s)</div><div class="ttdoc">Complete a Traversal on the specified Side</div></div>
-<div class="ttc" id="aclassgeos_1_1operation_1_1grid_1_1Traversal_html_a1c0e900236bb7d3fdceb48475a4dee00"><div class="ttname"><a href="classgeos_1_1operation_1_1grid_1_1Traversal.html#a1c0e900236bb7d3fdceb48475a4dee00">geos::operation::grid::Traversal::enter</a></div><div class="ttdeci">void enter(const geom::CoordinateXY &amp;c, Side s)</div><div class="ttdoc">Begin a Traversal on the specified Side</div></div>
+<div class="ttc" id="aclassgeos_1_1operation_1_1grid_1_1Traversal_html_a311635deeba87bee816c70bb007990fd"><div class="ttname"><a href="classgeos_1_1operation_1_1grid_1_1Traversal.html#a311635deeba87bee816c70bb007990fd">geos::operation::grid::Traversal::enter</a></div><div class="ttdeci">void enter(const geom::CoordinateXY &amp;c, Side s, const void *parentage)</div><div class="ttdoc">Begin a Traversal on the specified Side</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

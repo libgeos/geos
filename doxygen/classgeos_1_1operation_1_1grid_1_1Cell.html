@@ -50,7 +50,7 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>The <a class="el" href="classgeos_1_1operation_1_1grid_1_1Cell.html" title="The Cell class stores information about the spatial extent of a Grid cell and any cases where a line ...">Cell</a> class stores information about the spatial extent of a <code>Grid</code> cell and any cases where a line crosses that cell (recorded in a <code><a class="el" href="classgeos_1_1operation_1_1grid_1_1Traversal.html" title="The Traversal class records the coordinates of a line that are within a grid cell,...">Traversal</a></code>).  
+<p>The <a class="el" href="classgeos_1_1operation_1_1grid_1_1Cell.html" title="The Cell class stores information about the spatial extent of a Grid cell and any cases where a line ...">Cell</a> class stores information about the spatial extent of a <code><a class="el" href="classgeos_1_1operation_1_1grid_1_1Grid.html" title="The Grid class represents a grid of constant-size rectangular cells that covers a specified envelope....">Grid</a></code> cell and any cases where a line crosses that cell (recorded in a <code><a class="el" href="classgeos_1_1operation_1_1grid_1_1Traversal.html" title="The Traversal class records the coordinates of a line that are within a grid cell,...">Traversal</a></code>).  
  <a href="classgeos_1_1operation_1_1grid_1_1Cell.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="Cell_8h_source.html">Cell.h</a>&gt;</code></p>
@@ -63,6 +63,10 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a1985696436ff904c0ffa58373008102f" id="r_a1985696436ff904c0ffa58373008102f"><td class="memItemLeft" align="right" valign="top"><a id="a1985696436ff904c0ffa58373008102f" name="a1985696436ff904c0ffa58373008102f"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Cell</b> (const <a class="el" href="classgeos_1_1geom_1_1Envelope.html">geom::Envelope</a> &amp;b)</td></tr>
 <tr class="separator:a1985696436ff904c0ffa58373008102f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4b241da5473ba46a32674c468bccb51" id="r_ad4b241da5473ba46a32674c468bccb51"><td class="memItemLeft" align="right" valign="top"><a id="ad4b241da5473ba46a32674c468bccb51" name="ad4b241da5473ba46a32674c468bccb51"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>getEdgePoints</b> (Side s, std::vector&lt; geom::CoordinateXY &gt; &amp;points) const</td></tr>
+<tr class="memdesc:ad4b241da5473ba46a32674c468bccb51"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get all points that fall on the specified side of this cell. <br /></td></tr>
+<tr class="separator:ad4b241da5473ba46a32674c468bccb51"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a375203abeaa34792f53a573f44526af3" id="r_a375203abeaa34792f53a573f44526af3"><td class="memItemLeft" align="right" valign="top"><a id="a375203abeaa34792f53a573f44526af3" name="a375203abeaa34792f53a573f44526af3"></a>
 const <a class="el" href="classgeos_1_1geom_1_1Envelope.html">geom::Envelope</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>box</b> () const</td></tr>
 <tr class="separator:a375203abeaa34792f53a573f44526af3"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -91,11 +95,11 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>getCoveredFraction<
 <tr class="separator:a0025812973f18fadf9ef7dd4cebc3ff4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4b1fcb16dba05afd34e57e26715488d6" id="r_a4b1fcb16dba05afd34e57e26715488d6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgeos_1_1operation_1_1grid_1_1Traversal.html">Traversal</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1grid_1_1Cell.html#a4b1fcb16dba05afd34e57e26715488d6">getLastTraversal</a> ()</td></tr>
 <tr class="separator:a4b1fcb16dba05afd34e57e26715488d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a2b79b71210b6f60936f8be8fe8c0410b" id="r_a2b79b71210b6f60936f8be8fe8c0410b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1grid_1_1Cell.html#a2b79b71210b6f60936f8be8fe8c0410b">take</a> (const geom::CoordinateXY &amp;c, const geom::CoordinateXY *prev_original=nullptr)</td></tr>
-<tr class="separator:a2b79b71210b6f60936f8be8fe8c0410b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5c8324d3c9fb33a00b30993ea85f2ee" id="r_ad5c8324d3c9fb33a00b30993ea85f2ee"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1grid_1_1Cell.html#ad5c8324d3c9fb33a00b30993ea85f2ee">take</a> (const geom::CoordinateXY &amp;c, const geom::CoordinateXY *prev_original, bool exitOnBoundary, const void *parentage)</td></tr>
+<tr class="separator:ad5c8324d3c9fb33a00b30993ea85f2ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>The <a class="el" href="classgeos_1_1operation_1_1grid_1_1Cell.html" title="The Cell class stores information about the spatial extent of a Grid cell and any cases where a line ...">Cell</a> class stores information about the spatial extent of a <code>Grid</code> cell and any cases where a line crosses that cell (recorded in a <code><a class="el" href="classgeos_1_1operation_1_1grid_1_1Traversal.html" title="The Traversal class records the coordinates of a line that are within a grid cell,...">Traversal</a></code>). </p>
+<div class="textblock"><p>The <a class="el" href="classgeos_1_1operation_1_1grid_1_1Cell.html" title="The Cell class stores information about the spatial extent of a Grid cell and any cases where a line ...">Cell</a> class stores information about the spatial extent of a <code><a class="el" href="classgeos_1_1operation_1_1grid_1_1Grid.html" title="The Grid class represents a grid of constant-size rectangular cells that covers a specified envelope....">Grid</a></code> cell and any cases where a line crosses that cell (recorded in a <code><a class="el" href="classgeos_1_1operation_1_1grid_1_1Traversal.html" title="The Traversal class records the coordinates of a line that are within a grid cell,...">Traversal</a></code>). </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
 <a id="a6f1a2bbca4ec96ed560896511a901d3f" name="a6f1a2bbca4ec96ed560896511a901d3f"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a6f1a2bbca4ec96ed560896511a901d3f">&#9670;&#160;</a></span>forceExit()</h2>
@@ -170,8 +174,8 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>getCoveredFraction<
 
 </div>
 </div>
-<a id="a2b79b71210b6f60936f8be8fe8c0410b" name="a2b79b71210b6f60936f8be8fe8c0410b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2b79b71210b6f60936f8be8fe8c0410b">&#9670;&#160;</a></span>take()</h2>
+<a id="ad5c8324d3c9fb33a00b30993ea85f2ee" name="ad5c8324d3c9fb33a00b30993ea85f2ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad5c8324d3c9fb33a00b30993ea85f2ee">&#9670;&#160;</a></span>take()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -186,7 +190,19 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>getCoveredFraction<
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const geom::CoordinateXY *&#160;</td>
-          <td class="paramname"><em>prev_original</em> = <code>nullptr</code>&#160;</td>
+          <td class="paramname"><em>prev_original</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>exitOnBoundary</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>parentage</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -199,7 +215,9 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>getCoveredFraction<
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">c</td><td>Coordinate to process </td></tr>
-    <tr><td class="paramname">prev_original</td><td>The last <em>uninterpolated</em> coordinate preceding <code>c</code> in the boundary being processed</td></tr>
+    <tr><td class="paramname">prev_original</td><td>The last <em>uninterpolated</em> coordinate preceding <code>c</code> in the boundary being processed </td></tr>
+    <tr><td class="paramname">exitOnBoundary</td><td>Whether to exit the cell if <code>c</code> lies on the boundary. This is needed to ensure that exit nodes are added to both polygons whose shared boundary is coincident with the <a class="el" href="classgeos_1_1operation_1_1grid_1_1Cell.html" title="The Cell class stores information about the spatial extent of a Grid cell and any cases where a line ...">Cell</a> boundary. If these nodes are not needed (for example, in the area-only case), it is more efficient to <em>not</em> exit the cell. </td></tr>
+    <tr><td class="paramname">parentage</td><td>an optional pointer indicating the source of the coordinate.</td></tr>
   </table>
   </dd>
 </dl>

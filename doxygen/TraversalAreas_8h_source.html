@@ -72,17 +72,19 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="keyword">namespace </span>geos::operation::grid {</div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span> </div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="keyword">class </span>GEOS_DLL TraversalAreas {</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    <span class="keyword">static</span> <span class="keywordtype">double</span></div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    getLeftHandArea(<span class="keyword">const</span> geom::Envelope&amp; box, <span class="keyword">const</span> std::vector&lt;<span class="keyword">const</span> std::vector&lt;geom::CoordinateXY&gt;*&gt;&amp; coord_lists);</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    <span class="keyword">static</span> std::unique_ptr&lt;geom::Geometry&gt;</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    getLeftHandRings(<span class="keyword">const</span> geom::GeometryFactory&amp; gfact, <span class="keyword">const</span> geom::Envelope&amp; box, <span class="keyword">const</span> std::vector&lt;<span class="keyword">const</span> std::vector&lt;geom::CoordinateXY&gt;*&gt;&amp; coord_lists);</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span> </div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>};</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="keyword">class </span>Traversal;</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="keyword">class </span>GEOS_DLL TraversalAreas {</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    <span class="keyword">static</span> <span class="keywordtype">double</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    getLeftHandArea(<span class="keyword">const</span> geom::Envelope&amp; box, <span class="keyword">const</span> std::vector&lt;const Traversal*&gt;&amp; coord_lists);</div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    <span class="keyword">static</span> std::unique_ptr&lt;geom::Geometry&gt;</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    getLeftHandRings(<span class="keyword">const</span> geom::GeometryFactory&amp; gfact, <span class="keyword">const</span> geom::Envelope&amp; box, <span class="keyword">const</span> std::vector&lt;const Traversal*&gt;&amp; coord_lists);</div>
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>}</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>};</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>}</div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

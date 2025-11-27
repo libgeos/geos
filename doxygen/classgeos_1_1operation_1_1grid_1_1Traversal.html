@@ -60,6 +60,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a694dfdf749ea97c28ffddba672dfda02" id="r_a694dfdf749ea97c28ffddba672dfda02"><td class="memItemLeft" align="right" valign="top"><a id="a694dfdf749ea97c28ffddba672dfda02" name="a694dfdf749ea97c28ffddba672dfda02"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isClosedRing</b> () const</td></tr>
 <tr class="separator:a694dfdf749ea97c28ffddba672dfda02"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbbe57ee3f979d5f561d340a1c26b7d0" id="r_afbbe57ee3f979d5f561d340a1c26b7d0"><td class="memItemLeft" align="right" valign="top"><a id="afbbe57ee3f979d5f561d340a1c26b7d0" name="afbbe57ee3f979d5f561d340a1c26b7d0"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>isClosedRingWithArea</b> () const</td></tr>
+<tr class="separator:afbbe57ee3f979d5f561d340a1c26b7d0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae04aed8f1ad2d3d3c094c8cb620cbce7" id="r_ae04aed8f1ad2d3d3c094c8cb620cbce7"><td class="memItemLeft" align="right" valign="top"><a id="ae04aed8f1ad2d3d3c094c8cb620cbce7" name="ae04aed8f1ad2d3d3c094c8cb620cbce7"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isEmpty</b> () const</td></tr>
 <tr class="separator:ae04aed8f1ad2d3d3c094c8cb620cbce7"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -75,10 +78,10 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isTraversed</b> () co
 <tr class="memitem:a5bf530306686906a635f80d551aedfa3" id="r_a5bf530306686906a635f80d551aedfa3"><td class="memItemLeft" align="right" valign="top"><a id="a5bf530306686906a635f80d551aedfa3" name="a5bf530306686906a635f80d551aedfa3"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasMultipleUniqueCoordinates</b> () const</td></tr>
 <tr class="separator:a5bf530306686906a635f80d551aedfa3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1c0e900236bb7d3fdceb48475a4dee00" id="r_a1c0e900236bb7d3fdceb48475a4dee00"><td class="memItemLeft" align="right" valign="top"><a id="a1c0e900236bb7d3fdceb48475a4dee00" name="a1c0e900236bb7d3fdceb48475a4dee00"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>enter</b> (const geom::CoordinateXY &amp;c, Side s)</td></tr>
-<tr class="memdesc:a1c0e900236bb7d3fdceb48475a4dee00"><td class="mdescLeft">&#160;</td><td class="mdescRight">Begin a <a class="el" href="classgeos_1_1operation_1_1grid_1_1Traversal.html" title="The Traversal class records the coordinates of a line that are within a grid cell,...">Traversal</a> on the specified <code>Side</code> <br /></td></tr>
-<tr class="separator:a1c0e900236bb7d3fdceb48475a4dee00"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a311635deeba87bee816c70bb007990fd" id="r_a311635deeba87bee816c70bb007990fd"><td class="memItemLeft" align="right" valign="top"><a id="a311635deeba87bee816c70bb007990fd" name="a311635deeba87bee816c70bb007990fd"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>enter</b> (const geom::CoordinateXY &amp;c, Side s, const void *parentage)</td></tr>
+<tr class="memdesc:a311635deeba87bee816c70bb007990fd"><td class="mdescLeft">&#160;</td><td class="mdescRight">Begin a <a class="el" href="classgeos_1_1operation_1_1grid_1_1Traversal.html" title="The Traversal class records the coordinates of a line that are within a grid cell,...">Traversal</a> on the specified <code>Side</code> <br /></td></tr>
+<tr class="separator:a311635deeba87bee816c70bb007990fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1b0a4ed417253e0600f01d9804ae2540" id="r_a1b0a4ed417253e0600f01d9804ae2540"><td class="memItemLeft" align="right" valign="top"><a id="a1b0a4ed417253e0600f01d9804ae2540" name="a1b0a4ed417253e0600f01d9804ae2540"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>exit</b> (const geom::CoordinateXY &amp;c, Side s)</td></tr>
 <tr class="memdesc:a1b0a4ed417253e0600f01d9804ae2540"><td class="mdescLeft">&#160;</td><td class="mdescRight">Complete a <a class="el" href="classgeos_1_1operation_1_1grid_1_1Traversal.html" title="The Traversal class records the coordinates of a line that are within a grid cell,...">Traversal</a> on the specified <code>Side</code> <br /></td></tr>
@@ -89,6 +92,9 @@ Side&#160;</td><td class="memItemRight" valign="bottom"><b>getEntrySide</b> () c
 <tr class="memitem:a552a9b9b9825bbedda0c34658425f925" id="r_a552a9b9b9825bbedda0c34658425f925"><td class="memItemLeft" align="right" valign="top"><a id="a552a9b9b9825bbedda0c34658425f925" name="a552a9b9b9825bbedda0c34658425f925"></a>
 Side&#160;</td><td class="memItemRight" valign="bottom"><b>getExitSide</b> () const</td></tr>
 <tr class="separator:a552a9b9b9825bbedda0c34658425f925"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae40eee55d79093db95e6419f9316e8a5" id="r_ae40eee55d79093db95e6419f9316e8a5"><td class="memItemLeft" align="right" valign="top"><a id="ae40eee55d79093db95e6419f9316e8a5" name="ae40eee55d79093db95e6419f9316e8a5"></a>
+const geom::CoordinateXY &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getFirstCoordinate</b> () const</td></tr>
+<tr class="separator:ae40eee55d79093db95e6419f9316e8a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aad74f6987d71eb1f8d8539cb955957bc" id="r_aad74f6987d71eb1f8d8539cb955957bc"><td class="memItemLeft" align="right" valign="top"><a id="aad74f6987d71eb1f8d8539cb955957bc" name="aad74f6987d71eb1f8d8539cb955957bc"></a>
 const geom::CoordinateXY &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getLastCoordinate</b> () const</td></tr>
 <tr class="separator:aad74f6987d71eb1f8d8539cb955957bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -104,6 +110,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>forceExit</b> (Side s
 <tr class="memitem:a75e846db2b19460816fda0f7153a9370" id="r_a75e846db2b19460816fda0f7153a9370"><td class="memItemLeft" align="right" valign="top"><a id="a75e846db2b19460816fda0f7153a9370" name="a75e846db2b19460816fda0f7153a9370"></a>
 const std::vector&lt; geom::CoordinateXY &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getCoordinates</b> () const</td></tr>
 <tr class="separator:a75e846db2b19460816fda0f7153a9370"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4702b2a014d2794a792d1eb17ac1e5e3" id="r_a4702b2a014d2794a792d1eb17ac1e5e3"><td class="memItemLeft" align="right" valign="top"><a id="a4702b2a014d2794a792d1eb17ac1e5e3" name="a4702b2a014d2794a792d1eb17ac1e5e3"></a>
+const void *&#160;</td><td class="memItemRight" valign="bottom"><b>getParentage</b> () const</td></tr>
+<tr class="separator:a4702b2a014d2794a792d1eb17ac1e5e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The <a class="el" href="classgeos_1_1operation_1_1grid_1_1Traversal.html" title="The Traversal class records the coordinates of a line that are within a grid cell,...">Traversal</a> class records the coordinates of a line that are within a grid cell, as well as the <code>Side</code> from which the line entered and exited the cell. </p>

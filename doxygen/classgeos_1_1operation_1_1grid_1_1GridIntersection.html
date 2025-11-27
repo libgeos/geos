@@ -51,21 +51,21 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>The <a class="el" href="classgeos_1_1operation_1_1grid_1_1GridIntersection.html" title="The GridIntersection class computes and stores information about intersection of a Grid and a Geometr...">GridIntersection</a> class computes and stores information about intersection of a Grid and a Geometry. For a polygonal geometry, the fraction of each grid cell covered by polygon is stored. For a linear geometry, the length of the line in each grid cell is stored.  
+<p>The <a class="el" href="classgeos_1_1operation_1_1grid_1_1GridIntersection.html" title="The GridIntersection class computes and stores information about intersection of a Grid and a Geometr...">GridIntersection</a> class computes and stores information about intersection of a <a class="el" href="classgeos_1_1operation_1_1grid_1_1Grid.html" title="The Grid class represents a grid of constant-size rectangular cells that covers a specified envelope....">Grid</a> and a Geometry. For a polygonal geometry, the fraction of each grid cell covered by polygon is stored. For a linear geometry, the length of the line in each grid cell is stored.  
  <a href="classgeos_1_1operation_1_1grid_1_1GridIntersection.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="GridIntersection_8h_source.html">GridIntersection.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:af6fa73452eb1b1abd993d2e8ebb2d7dc" id="r_af6fa73452eb1b1abd993d2e8ebb2d7dc"><td class="memItemLeft" align="right" valign="top"><a id="af6fa73452eb1b1abd993d2e8ebb2d7dc" name="af6fa73452eb1b1abd993d2e8ebb2d7dc"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>GridIntersection</b> (const Grid&lt; bounded_extent &gt; &amp;raster_grid, const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &amp;g, std::shared_ptr&lt; Matrix&lt; float &gt; &gt; cov=nullptr)</td></tr>
-<tr class="memdesc:af6fa73452eb1b1abd993d2e8ebb2d7dc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the fraction of each cell in a rectangular grid that is covered by a Geometry. A matrix can be provided to which the fractions will be added. <br /></td></tr>
-<tr class="separator:af6fa73452eb1b1abd993d2e8ebb2d7dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a70595ed8810e28780ef689387d732535" id="r_a70595ed8810e28780ef689387d732535"><td class="memItemLeft" align="right" valign="top"><a id="a70595ed8810e28780ef689387d732535" name="a70595ed8810e28780ef689387d732535"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>GridIntersection</b> (const Grid&lt; bounded_extent &gt; &amp;raster_grid, const <a class="el" href="classgeos_1_1geom_1_1Envelope.html">geom::Envelope</a> &amp;box, std::shared_ptr&lt; Matrix&lt; float &gt; &gt; cov=nullptr)</td></tr>
-<tr class="memdesc:a70595ed8810e28780ef689387d732535"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the fraction of each cell in a rectangular grid that is covered by an Envelope. A matrix can be provided to which the fractions will be added. <br /></td></tr>
-<tr class="separator:a70595ed8810e28780ef689387d732535"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a93873c07b4989b3ab544c3166ab2bf6b" id="r_a93873c07b4989b3ab544c3166ab2bf6b"><td class="memItemLeft" align="right" valign="top"><a id="a93873c07b4989b3ab544c3166ab2bf6b" name="a93873c07b4989b3ab544c3166ab2bf6b"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>GridIntersection</b> (const <a class="el" href="classgeos_1_1operation_1_1grid_1_1Grid.html">Grid</a>&lt; bounded_extent &gt; &amp;raster_grid, const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &amp;g, const std::shared_ptr&lt; Matrix&lt; float &gt; &gt; &amp;cov=nullptr)</td></tr>
+<tr class="memdesc:a93873c07b4989b3ab544c3166ab2bf6b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the fraction of each cell in a rectangular grid that is covered by a Geometry. A matrix can be provided to which the fractions will be added. <br /></td></tr>
+<tr class="separator:a93873c07b4989b3ab544c3166ab2bf6b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e25f513de05c1a1b27804fef4d11aee" id="r_a9e25f513de05c1a1b27804fef4d11aee"><td class="memItemLeft" align="right" valign="top"><a id="a9e25f513de05c1a1b27804fef4d11aee" name="a9e25f513de05c1a1b27804fef4d11aee"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>GridIntersection</b> (const <a class="el" href="classgeos_1_1operation_1_1grid_1_1Grid.html">Grid</a>&lt; bounded_extent &gt; &amp;raster_grid, const <a class="el" href="classgeos_1_1geom_1_1Envelope.html">geom::Envelope</a> &amp;box, const std::shared_ptr&lt; Matrix&lt; float &gt; &gt; &amp;cov=nullptr)</td></tr>
+<tr class="memdesc:a9e25f513de05c1a1b27804fef4d11aee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the fraction of each cell in a rectangular grid that is covered by an Envelope. A matrix can be provided to which the fractions will be added. <br /></td></tr>
+<tr class="separator:a9e25f513de05c1a1b27804fef4d11aee"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:afa6cd2463abbf736c282138f8316938d" id="r_afa6cd2463abbf736c282138f8316938d"><td class="memItemLeft" align="right" valign="top"><a id="afa6cd2463abbf736c282138f8316938d" name="afa6cd2463abbf736c282138f8316938d"></a>
 std::shared_ptr&lt; Matrix&lt; float &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getResults</b> ()</td></tr>
 <tr class="memdesc:afa6cd2463abbf736c282138f8316938d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the intersection result matrix. <br /></td></tr>
@@ -73,24 +73,69 @@ std::shared_ptr&lt; Matrix&lt; float &gt; &gt;&#160;</td><td class="memItemRight
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:acf4ec51f1528290f3d12f269ddf444fa" id="r_acf4ec51f1528290f3d12f269ddf444fa"><td class="memItemLeft" align="right" valign="top"><a id="acf4ec51f1528290f3d12f269ddf444fa" name="acf4ec51f1528290f3d12f269ddf444fa"></a>
-static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>subdividePolygon</b> (const Grid&lt; bounded_extent &gt; &amp;p_grid, const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &amp;g, bool includeExterior)</td></tr>
-<tr class="memdesc:acf4ec51f1528290f3d12f269ddf444fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Partition a polygonal geometry by a grid. <br /></td></tr>
-<tr class="separator:acf4ec51f1528290f3d12f269ddf444fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adc8c50f18fa8748c15d20d1b97f7c899" id="r_adc8c50f18fa8748c15d20d1b97f7c899"><td class="memItemLeft" align="right" valign="top"><a id="adc8c50f18fa8748c15d20d1b97f7c899" name="adc8c50f18fa8748c15d20d1b97f7c899"></a>
-static std::shared_ptr&lt; Matrix&lt; float &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getIntersectionFractions</b> (const Grid&lt; bounded_extent &gt; &amp;raster_grid, const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &amp;g)</td></tr>
-<tr class="separator:adc8c50f18fa8748c15d20d1b97f7c899"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5dd773522b5cf504de7d464343eef9ed" id="r_a5dd773522b5cf504de7d464343eef9ed"><td class="memItemLeft" align="right" valign="top"><a id="a5dd773522b5cf504de7d464343eef9ed" name="a5dd773522b5cf504de7d464343eef9ed"></a>
-static std::shared_ptr&lt; Matrix&lt; float &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getIntersectionFractions</b> (const Grid&lt; bounded_extent &gt; &amp;raster_grid, const <a class="el" href="classgeos_1_1geom_1_1Envelope.html">geom::Envelope</a> &amp;box)</td></tr>
-<tr class="separator:a5dd773522b5cf504de7d464343eef9ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3013f71b61ce6069a6d659b7eb54d74" id="r_ac3013f71b61ce6069a6d659b7eb54d74"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1grid_1_1GridIntersection.html#ac3013f71b61ce6069a6d659b7eb54d74">subdividePolygon</a> (const <a class="el" href="classgeos_1_1operation_1_1grid_1_1Grid.html">Grid</a>&lt; bounded_extent &gt; &amp;grid, const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &amp;g, bool includeExterior)</td></tr>
+<tr class="memdesc:ac3013f71b61ce6069a6d659b7eb54d74"><td class="mdescLeft">&#160;</td><td class="mdescRight">Partition a polygonal geometry by a grid.  <br /></td></tr>
+<tr class="separator:ac3013f71b61ce6069a6d659b7eb54d74"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb6f56ecfae3354d7c48fcb11a60dce9" id="r_abb6f56ecfae3354d7c48fcb11a60dce9"><td class="memItemLeft" align="right" valign="top">static std::shared_ptr&lt; Matrix&lt; float &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1grid_1_1GridIntersection.html#abb6f56ecfae3354d7c48fcb11a60dce9">getIntersectionFractions</a> (const <a class="el" href="classgeos_1_1operation_1_1grid_1_1Grid.html">Grid</a>&lt; bounded_extent &gt; &amp;grid, const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &amp;g)</td></tr>
+<tr class="memdesc:abb6f56ecfae3354d7c48fcb11a60dce9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Calculate the fraction of each cell in a <a class="el" href="classgeos_1_1operation_1_1grid_1_1Grid.html" title="The Grid class represents a grid of constant-size rectangular cells that covers a specified envelope....">Grid</a> that is covered by a polygon.  <br /></td></tr>
+<tr class="separator:abb6f56ecfae3354d7c48fcb11a60dce9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4de1ce04be8d69dde129454d208e8960" id="r_a4de1ce04be8d69dde129454d208e8960"><td class="memItemLeft" align="right" valign="top"><a id="a4de1ce04be8d69dde129454d208e8960" name="a4de1ce04be8d69dde129454d208e8960"></a>
+static std::shared_ptr&lt; Matrix&lt; float &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getIntersectionFractions</b> (const <a class="el" href="classgeos_1_1operation_1_1grid_1_1Grid.html">Grid</a>&lt; bounded_extent &gt; &amp;grid, const <a class="el" href="classgeos_1_1geom_1_1Envelope.html">geom::Envelope</a> &amp;box)</td></tr>
+<tr class="separator:a4de1ce04be8d69dde129454d208e8960"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9c5be85260bd0a216403bdc0ad730db6" id="r_a9c5be85260bd0a216403bdc0ad730db6"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgeos_1_1geom_1_1Envelope.html">geom::Envelope</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1grid_1_1GridIntersection.html#a9c5be85260bd0a216403bdc0ad730db6">processingRegion</a> (const <a class="el" href="classgeos_1_1geom_1_1Envelope.html">geom::Envelope</a> &amp;raster_extent, const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &amp;geometry)</td></tr>
 <tr class="memdesc:a9c5be85260bd0a216403bdc0ad730db6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Determines the bounding box of the raster-vector intersection. Considers the bounding boxes of individual polygon components separately to avoid unnecessary computation for sparse multi-polygons.  <br /></td></tr>
 <tr class="separator:a9c5be85260bd0a216403bdc0ad730db6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>The <a class="el" href="classgeos_1_1operation_1_1grid_1_1GridIntersection.html" title="The GridIntersection class computes and stores information about intersection of a Grid and a Geometr...">GridIntersection</a> class computes and stores information about intersection of a Grid and a Geometry. For a polygonal geometry, the fraction of each grid cell covered by polygon is stored. For a linear geometry, the length of the line in each grid cell is stored. </p>
-<p>Intersection information returned as <code>Raster</code> with an equivalent resolution to the input <code>Grid</code>. The spatial extent may be reduced from the input <code>Grid.</code> </p>
+<div class="textblock"><p>The <a class="el" href="classgeos_1_1operation_1_1grid_1_1GridIntersection.html" title="The GridIntersection class computes and stores information about intersection of a Grid and a Geometr...">GridIntersection</a> class computes and stores information about intersection of a <a class="el" href="classgeos_1_1operation_1_1grid_1_1Grid.html" title="The Grid class represents a grid of constant-size rectangular cells that covers a specified envelope....">Grid</a> and a Geometry. For a polygonal geometry, the fraction of each grid cell covered by polygon is stored. For a linear geometry, the length of the line in each grid cell is stored. </p>
+<p>Intersection information returned as <code>Raster</code> with an equivalent resolution to the input <code><a class="el" href="classgeos_1_1operation_1_1grid_1_1Grid.html" title="The Grid class represents a grid of constant-size rectangular cells that covers a specified envelope....">Grid</a></code>. The spatial extent may be reduced from the input <code><a class="el" href="classgeos_1_1operation_1_1grid_1_1Grid.html" title="The Grid class represents a grid of constant-size rectangular cells that covers a specified envelope....">Grid</a>.</code> </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="abb6f56ecfae3354d7c48fcb11a60dce9" name="abb6f56ecfae3354d7c48fcb11a60dce9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb6f56ecfae3354d7c48fcb11a60dce9">&#9670;&#160;</a></span>getIntersectionFractions()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::shared_ptr&lt; Matrix&lt; float &gt; &gt; geos::operation::grid::GridIntersection::getIntersectionFractions </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1operation_1_1grid_1_1Grid.html">Grid</a>&lt; bounded_extent &gt; &amp;&#160;</td>
+          <td class="paramname"><em>grid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &amp;&#160;</td>
+          <td class="paramname"><em>g</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Calculate the fraction of each cell in a <a class="el" href="classgeos_1_1operation_1_1grid_1_1Grid.html" title="The Grid class represents a grid of constant-size rectangular cells that covers a specified envelope....">Grid</a> that is covered by a polygon. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">grid</td><td>the <a class="el" href="classgeos_1_1operation_1_1grid_1_1Grid.html" title="The Grid class represents a grid of constant-size rectangular cells that covers a specified envelope....">Grid</a> for which coverage fractions should be returned </td></tr>
+    <tr><td class="paramname">g</td><td>a polygonal or linear geometry </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a matrix having the same number of rows and columns as the grid, whose values contain either the fraction of the cell area (for polygonal inputs) or the length of the intersection (for linear inputs) </dd></dl>
+
+</div>
+</div>
 <a id="a9c5be85260bd0a216403bdc0ad730db6" name="a9c5be85260bd0a216403bdc0ad730db6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9c5be85260bd0a216403bdc0ad730db6">&#9670;&#160;</a></span>processingRegion()</h2>
 
@@ -134,6 +179,59 @@ static std::shared_ptr&lt; Matrix&lt; float &gt; &gt;&#160;</td><td class="memIt
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>the portion of <code>raster_extent</code> that intersects one or more <code>component_boxes</code> </dd></dl>
+
+</div>
+</div>
+<a id="ac3013f71b61ce6069a6d659b7eb54d74" name="ac3013f71b61ce6069a6d659b7eb54d74"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3013f71b61ce6069a6d659b7eb54d74">&#9670;&#160;</a></span>subdividePolygon()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &gt; geos::operation::grid::GridIntersection::subdividePolygon </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1operation_1_1grid_1_1Grid.html">Grid</a>&lt; bounded_extent &gt; &amp;&#160;</td>
+          <td class="paramname"><em>grid</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &amp;&#160;</td>
+          <td class="paramname"><em>g</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>includeExterior</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Partition a polygonal geometry by a grid. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">grid</td><td>the <a class="el" href="classgeos_1_1operation_1_1grid_1_1Grid.html" title="The Grid class represents a grid of constant-size rectangular cells that covers a specified envelope....">Grid</a> by which the polygon should be partitioned. The <a class="el" href="classgeos_1_1operation_1_1grid_1_1Grid.html" title="The Grid class represents a grid of constant-size rectangular cells that covers a specified envelope....">Grid</a> does not need to cover the polygon. </td></tr>
+    <tr><td class="paramname">g</td><td>a polygonal geometry </td></tr>
+    <tr><td class="paramname">includeExterior</td><td>whether the result should contain any portions of the input that fall outside the grid. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a GeometryCollection containing the partitioned polygon. </dd></dl>
 
 </div>
 </div>

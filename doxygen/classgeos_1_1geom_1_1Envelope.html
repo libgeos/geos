@@ -182,6 +182,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>contains</b> (const <
 <tr class="memitem:a648510a2e5471680b154bdb56c731686" id="r_a648510a2e5471680b154bdb56c731686"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Envelope.html#a648510a2e5471680b154bdb56c731686">contains</a> (double x, double y) const</td></tr>
 <tr class="memdesc:a648510a2e5471680b154bdb56c731686"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns <code>true</code> if the given point lies in or on the envelope.  <br /></td></tr>
 <tr class="separator:a648510a2e5471680b154bdb56c731686"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afaac4eaf65040ecb528f1d2a172ebe3a" id="r_afaac4eaf65040ecb528f1d2a172ebe3a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Envelope.html#afaac4eaf65040ecb528f1d2a172ebe3a">containsProperly</a> (const CoordinateXY &amp;p) const</td></tr>
+<tr class="memdesc:afaac4eaf65040ecb528f1d2a172ebe3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the point p lies in the interior of this <a class="el" href="classgeos_1_1geom_1_1Envelope.html" title="An Envelope defines a rectangulare region of the 2D coordinate plane.">Envelope</a>.  <br /></td></tr>
+<tr class="separator:afaac4eaf65040ecb528f1d2a172ebe3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad31bc8823cf4c1afee5cb64797a7c8c4" id="r_ad31bc8823cf4c1afee5cb64797a7c8c4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Envelope.html#ad31bc8823cf4c1afee5cb64797a7c8c4">intersects</a> (const CoordinateXY &amp;other) const</td></tr>
 <tr class="memdesc:ad31bc8823cf4c1afee5cb64797a7c8c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the point p intersects (lies inside) the region of this <a class="el" href="classgeos_1_1geom_1_1Envelope.html" title="An Envelope defines a rectangulare region of the 2D coordinate plane.">Envelope</a>.  <br /></td></tr>
 <tr class="separator:ad31bc8823cf4c1afee5cb64797a7c8c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -551,6 +554,41 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd><code>true</code> if <code>(x, y)</code> lies in the interior or on the boundary of this <a class="el" href="classgeos_1_1geom_1_1Envelope.html" title="An Envelope defines a rectangulare region of the 2D coordinate plane.">Envelope</a>. </dd></dl>
+
+</div>
+</div>
+<a id="afaac4eaf65040ecb528f1d2a172ebe3a" name="afaac4eaf65040ecb528f1d2a172ebe3a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afaac4eaf65040ecb528f1d2a172ebe3a">&#9670;&#160;</a></span>containsProperly()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool geos::geom::Envelope::containsProperly </td>
+          <td>(</td>
+          <td class="paramtype">const CoordinateXY &amp;&#160;</td>
+          <td class="paramname"><em>p</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Check if the point p lies in the interior of this <a class="el" href="classgeos_1_1geom_1_1Envelope.html" title="An Envelope defines a rectangulare region of the 2D coordinate plane.">Envelope</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p</td><td>the <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> to be tested </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the point lies in the interior </dd></dl>
 
 </div>
 </div>
@@ -1104,6 +1142,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const
 <dd>
 0.0 if the envelope is null </dd></dl>
 
+<p class="reference">Referenced by <a class="el" href="classgeos_1_1operation_1_1grid_1_1Grid.html#a3aecbe9657187f7e7304372292a131cf">geos::operation::grid::Grid&lt; extent_tag &gt;::shrinkToFit()</a>.</p>
+
 </div>
 </div>
 <a id="a1f6b4be5dec7528e490d0e29b9b25f4d" name="a1f6b4be5dec7528e490d0e29b9b25f4d"></a>
@@ -1158,6 +1198,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const
 
 <p>Returns the difference between the maximum and minimum y values. </p>
 <dl class="section return"><dt>Returns</dt><dd><code>max y - min y</code>, or 0 if this is a null <a class="el" href="classgeos_1_1geom_1_1Envelope.html" title="An Envelope defines a rectangulare region of the 2D coordinate plane.">Envelope</a> </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="classgeos_1_1operation_1_1grid_1_1Grid.html#a3aecbe9657187f7e7304372292a131cf">geos::operation::grid::Grid&lt; extent_tag &gt;::shrinkToFit()</a>.</p>
 
 </div>
 </div>
@@ -1216,6 +1258,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const
 
 <p>Returns the difference between the maximum and minimum x values. </p>
 <dl class="section return"><dt>Returns</dt><dd><code>max x - min x</code>, or 0 if this is a null <a class="el" href="classgeos_1_1geom_1_1Envelope.html" title="An Envelope defines a rectangulare region of the 2D coordinate plane.">Envelope</a> </dd></dl>
+
+<p class="reference">Referenced by <a class="el" href="classgeos_1_1operation_1_1grid_1_1Grid.html#a3aecbe9657187f7e7304372292a131cf">geos::operation::grid::Grid&lt; extent_tag &gt;::shrinkToFit()</a>.</p>
 
 </div>
 </div>
