@@ -120,6 +120,10 @@ template<>
 void object::test<1>
 ()
 {
+    // XYZ intersects XYZ at interior point.
+    // Z value at the intersection point is the average of the interpolated values from each line.
+    set_test_name("testInterior");
+
     checkIntersection(
                 line<XYZ>({1, 1, 1}, {3, 3, 3}),
                 line<XYZ>({1, 3, 10}, {3, 1, 30}),
@@ -133,6 +137,8 @@ template<>
 void object::test<2>
 ()
 {
+    set_test_name("testInterior2D");
+
     checkIntersection(
                 line<XY>({1, 1}, {3, 3}),
                 line<XY>({1, 3}, {3, 1}),
@@ -145,6 +151,10 @@ template<>
 void object::test<3>
 ()
 {
+    // XYZ intersects XY at interior point.
+    // Z value at the intersection point is the interpolated value from the XYZ line.
+    set_test_name("testInterior3D2D");
+
     checkIntersection(
                 line<XYZ>({1, 1, 1}, {3, 3, 3}),
                 line<XY>({1, 3}, {3, 1}),
@@ -157,6 +167,10 @@ template<>
 void object::test<4>
 ()
 {
+    // XY intersects XYZ at interior point.
+    // Z value at the intersection point is the interpolated value from the XZZ line.
+    set_test_name("testInterior2D3D");
+
     checkIntersection(
                 line<XY>({1, 1}, {3, 3}),
                 line<XYZ>({1, 3, 10}, {3, 1, 30}),
@@ -164,12 +178,16 @@ void object::test<4>
 }
 
 // testInterior2D3DPart
-// result is average of line1 interpolated and line2 p0 Z
 template<>
 template<>
 void object::test<5>
 ()
 {
+    // XYZ intersects XYZ at interior point.
+    // Second line has a Z value of NaN at one point.
+    // result is average of line1 interpolated and line2 p0 Z
+    set_test_name("testInterior2D3DPart");
+
     checkIntersection(
                 line<XYZ>({1, 1, 1}, {3, 3, 3}),
                 line<XYZ>({1, 3, 10}, {3, 1, geos::DoubleNotANumber}),
@@ -182,6 +200,10 @@ template<>
 void object::test<6>
 ()
 {
+    // XYZ intersects XYZ at endpoint.
+    // Result Z value at intersection point is taken from the first line.
+    set_test_name("testEndpoint");
+
     checkIntersection(
                 line<XYZ>({1, 1, 1}, {3, 3, 3}),
                 line<XYZ>({3, 3, 3}, {3, 1, 30}),
@@ -194,6 +216,10 @@ template<>
 void object::test<7>
 ()
 {
+    // XY intersects XY at endpoint.
+    // Result Z value at intersection point is NaN.
+    set_test_name("testEndpoint2D");
+
     checkIntersection(
                 line<XY>({1, 1}, {3, 3}),
                 line<XY>({3, 3}, {3, 1}),
@@ -206,7 +232,10 @@ template<>
 void object::test<8>
 ()
 {
+    // XYZ intersects XY at endpoint.
     // result Z is from 3D point
+    set_test_name("testEndpoint2D3D");
+
     checkIntersection(
                 line<XYZ>({1, 1, 1}, {3, 3, 3}),
                 line<XY>({3, 3}, {3, 1}),
@@ -219,7 +248,10 @@ template<>
 void object::test<9>
 ()
 {
-    // result Z is from 3D point
+    // Intersection at interior of 3D line, endpoint of 3D line
+    // result Z is from 3D endpoint
+    set_test_name("testInteriorEndpoint");
+
     checkIntersection(
                 line<XYZ>({1, 1, 1}, {3, 3, 3}),
                 line<XYZ>({2, 2, 10}, {3, 1, 30}),
@@ -232,7 +264,10 @@ template<>
 void object::test<10>
 ()
 {
+    // Intersection at interior of 3D line, endpoint of 2D line
     // result Z is interpolated
+    set_test_name("testInteriorEndpoint2D3D");
+
     checkIntersection(
                 line<XYZ>({1, 1, 1}, {3, 3, 3}),
                 line<XY>({2, 2}, {3, 1}),
@@ -240,12 +275,15 @@ void object::test<10>
 }
 
 // testInteriorEndpoint2D3D
-// result Z is from 3D point
 template<>
 template<>
 void object::test<11>
 ()
 {
+    // Intersection at interior of 2D line, endpoint of 3D line
+    // result Z is from 3D point
+    set_test_name("testInteriorEndpoint2D3D");
+
     checkIntersection(
                 line<XY>({1, 1}, {3, 3}),
                 line<XYZ>({2, 2, 10}, {3, 1, 20}),
@@ -258,6 +296,10 @@ template<>
 void object::test<12>
 ()
 {
+    // Collinear intersection of two XYZ lines
+    // Z values are equivalent in both inputs
+    set_test_name("testCollinearEqual");
+
     checkIntersection(
                 line<XYZ>({1, 1, 1}, {3, 3, 3}),
                 line<XYZ>({1, 1, 1}, {3, 3, 3}),
@@ -270,6 +312,10 @@ template<>
 void object::test<13>
 ()
 {
+    // Collinear intersection of XY and XYZ
+    // Z values taken from XYZ line
+    set_test_name("testCollinearEqual3D2D");
+
     checkIntersection(
                 line<XYZ>({1, 1, 1}, {3, 3, 3}),
                 line<XY>({1, 1}, {3, 3}),
@@ -282,6 +328,10 @@ template<>
 void object::test<14>
 ()
 {
+    // Endpoint intersection of two collinear XYZ lines
+    // Z values of inputs are the same and are copied to output
+    set_test_name("testCollinearEndpoint");
+
     checkIntersection(
                 line<XYZ>({1, 1, 1}, {3, 3, 3}),
                 line<XYZ>({3, 3, 3}, {5, 5, 5}),
@@ -295,6 +345,10 @@ template<>
 void object::test<15>
 ()
 {
+    // Endpoint intersection of collinear XY and XYZ lines
+    // Z values of result is taken from the XYZ input
+    set_test_name("testCollinearEndpoint3D2D");
+
     checkIntersection(
                 line<XYZ>({1, 1, 1}, {3, 3, 3}),
                 line<XY>({3, 3}, {5, 5}),
@@ -307,6 +361,11 @@ template<>
 void object::test<16>
 ()
 {
+    // Collinear intersection of XYZ lines
+    // Z values in the second line match interpolated values in the first
+    set_test_name("testCollinearContained");
+
+
     checkIntersection(
                 line<XYZ>({1, 1, 1}, {5, 5, 5}),
                 line<XYZ>({3, 3, 3}, {4, 4, 4}),
@@ -320,7 +379,11 @@ template<>
 void object::test<17>
 ()
 {
+    // Collinear intersection of XYZ line with XY line
     // result Z is interpolated
+    set_test_name("testCollinearContained3D2D");
+
+
     checkIntersection(
                 line<XYZ>({1, 1, 1}, {5, 5, 5}),
                 line<XY>({3, 3}, {4, 4}),
@@ -334,6 +397,11 @@ template<>
 void object::test<18>
 ()
 {
+    // Interior intersection of two XYM lines.
+    // Result M is the average of the interpolated coordinate values.
+    set_test_name("testInteriorXYM-XYM");
+
+
     checkIntersection(
                 line<XYM>({1, 1, 1}, {3, 3, 3}),
                 line<XYM>({1, 3, 10}, {3, 1, 30}),
@@ -346,6 +414,10 @@ template<>
 void object::test<19>
 ()
 {
+    // Interior intersection of two XYZM lines.
+    // Result Z and M are the average of the interpolated coordinate values.
+    set_test_name("testInteriorXYZM-XYZM");
+
     checkIntersection(
                 line<XYZM>({1, 1, 1, -1}, {3, 3, 3, -3}),
                 line<XYZM>({1, 3, 10, -10}, {3, 1, 30, -30}),
