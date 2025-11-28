@@ -36,9 +36,6 @@ Length::ofLine(const geom::CoordinateSequence* pts)
 
     double len = 0.0;
     
-    #ifdef HAVE_OPEN_SIMD
-    #pragma omp simd reduction(+:len)
-    #endif
     for(std::size_t i = 1; i < n; i++) {
         const geom::CoordinateXY& pi = pts->getAt<geom::CoordinateXY>(i);
         const geom::CoordinateXY& pi_1 = pts->getAt<geom::CoordinateXY>(i-1);
@@ -60,9 +57,6 @@ Length::ofLine(const std::vector<geom::CoordinateXY>& pts)
 
     double len = 0;
     
-    #ifdef HAVE_OPEN_SIMD
-    #pragma omp simd reduction(+:len)
-    #endif
     for(std::size_t i = 1; i < pts.size(); i++) {
         const geom::CoordinateXY& pi = pts[i];
         const geom::CoordinateXY& pi_1 = pts[i-1];
