@@ -35,22 +35,15 @@ Length::ofLine(const geom::CoordinateSequence* pts)
     }
 
     double len = 0.0;
-
-    const geom::CoordinateXY& p = pts->getAt<geom::CoordinateXY>(0);
-    double x0 = p.x;
-    double y0 = p.y;
-
+    
     for(std::size_t i = 1; i < n; i++) {
         const geom::CoordinateXY& pi = pts->getAt<geom::CoordinateXY>(i);
-        double x1 = pi.x;
-        double y1 = pi.y;
-        double dx = x1 - x0;
-        double dy = y1 - y0;
+        const geom::CoordinateXY& pi_1 = pts->getAt<geom::CoordinateXY>(i-1);
+        
+        double dx = pi.x - pi_1.x;
+        double dy = pi.y - pi_1.y;
 
         len += std::sqrt(dx * dx + dy * dy);
-
-        x0 = x1;
-        y0 = y1;
     }
     return len;
 }
@@ -63,20 +56,15 @@ Length::ofLine(const std::vector<geom::CoordinateXY>& pts)
     }
 
     double len = 0;
-    double x0 = pts[0].x;
-    double y0 = pts[0].y;
-
+    
     for(std::size_t i = 1; i < pts.size(); i++) {
         const geom::CoordinateXY& pi = pts[i];
-        double x1 = pi.x;
-        double y1 = pi.y;
-        double dx = x1 - x0;
-        double dy = y1 - y0;
+        const geom::CoordinateXY& pi_1 = pts[i-1];
+        
+        double dx = pi.x - pi_1.x;
+        double dy = pi.y - pi_1.y;
 
         len += std::sqrt(dx * dx + dy * dy);
-
-        x0 = x1;
-        y0 = y1;
     }
 
     return len;
