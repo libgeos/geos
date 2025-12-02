@@ -35,7 +35,9 @@ struct test_coverageunionng_data {
         std::unique_ptr<Geometry> expected = r.read(wktExpected);
         std::feclearexcept(FE_ALL_EXCEPT);
         std::unique_ptr<Geometry> result = CoverageUnion::geomunion(geom.get());
+#ifdef FE_INVALID
         ensure("FE_INVALID raised", !std::fetestexcept(FE_INVALID));
+#endif
 
         try {
             ensure_equals_geometry_xyzm(result.get(), expected.get());

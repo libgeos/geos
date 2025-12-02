@@ -128,9 +128,11 @@ void object::test<4>
     ensure_equals(status, 1);
     ensure_equals(d, std::sqrt(2));
 
+#ifdef FE_OVERFLOW
     // check for floating point overflow exceptions
     int raised = fetestexcept(FE_OVERFLOW);
     ensure_equals(raised & FE_OVERFLOW, 0);
+#endif
 }
 
 // same distance between boundables should not raise floating point exception
@@ -151,9 +153,11 @@ void object::test<5>
     ensure_equals(status, 1);
     // ensure_equals(d, std::sqrt(2));
 
+#ifdef FE_OVERFLOW
     // check for floating point overflow exceptions
     int raised = fetestexcept(FE_OVERFLOW);
     ensure_equals(raised & FE_OVERFLOW, 0);
+#endif
 }
 
 template<>

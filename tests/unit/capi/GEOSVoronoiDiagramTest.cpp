@@ -69,7 +69,9 @@ void object::test<1>
     geom2_ = GEOSVoronoiDiagram(geom1_, nullptr, 0, 1);
     ensure_geometry_equals(geom2_, "MULTILINESTRING EMPTY");
 
+#ifdef FE_INVALID
     ensure("FE_INVALID raised", !std::fetestexcept(FE_INVALID));
+#endif
 }
 
 //More points:

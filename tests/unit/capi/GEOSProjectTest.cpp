@@ -102,12 +102,16 @@ void object::test<5>
 
     std::feclearexcept(FE_ALL_EXCEPT);
     double dist = GEOSProject(geom1_, geom2_);
+#ifdef FE_INVALID
     ensure("FE_INVALID raised", !std::fetestexcept(FE_INVALID));
+#endif
     ensure_equals("GEOSProject", dist, 0.7071, 0.0001);
 
     std::feclearexcept(FE_ALL_EXCEPT);
     double dist_norm = GEOSProjectNormalized(geom1_, geom2_);
+#ifdef FE_INVALID
     ensure("FE_INVALID raised", !std::fetestexcept(FE_INVALID));
+#endif
     ensure_equals("GEOSProjectNormalized", dist_norm, 0.25);
 }
 
