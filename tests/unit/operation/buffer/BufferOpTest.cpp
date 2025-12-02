@@ -3,6 +3,8 @@
 
 // tut
 #include <tut/tut.hpp>
+#include <tut/tut_macros.hpp>
+
 #include <utility.h>
 // geos
 #include <geos/operation/buffer/BufferOp.h>
@@ -19,6 +21,7 @@
 // std
 #include <memory>
 #include <string>
+
 
 using namespace geos::operation::buffer;
 
@@ -660,6 +663,21 @@ void object::test<30>
     ensure_equals(bufGeom->getGeometryTypeId(), geos::geom::GEOS_POLYGON);
 
     ensure(bufGeom->getArea() > 12000);
+}
+
+template<>
+template<>
+void object::test<31>
+()
+{
+    set_test_name("buffer of line with only Inf coordinates");
+    // See https://github.com/libgeos/geos/issues/1332
+
+    std::string wkt = "LINESTRING (Inf Inf, Inf Inf)";
+
+    auto geom = wktreader.read(wkt);
+
+    ensure_THROW(geom->buffer(0.1), geos::util::GEOSException);
 }
 
 } // namespace tut
