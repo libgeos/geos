@@ -86,7 +86,7 @@ LineDissolver::add(const LineString* lineString)
     if (factory == nullptr) {
         factory = lineString->getFactory();
     }
-    const CoordinateSequence* seq = lineString->getCoordinatesRO();
+    const auto& seq = lineString->getCoordinatesRO();
     bool doneStart = false;
     for (std::size_t i = 1; i < seq->size(); i++) {
         CoordinateXYZM orig, dest;

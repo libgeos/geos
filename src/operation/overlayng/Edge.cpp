@@ -27,14 +27,14 @@ using namespace geos::geom;
 using geos::util::GEOSException;
 
 /*public*/
-Edge::Edge(std::unique_ptr<CoordinateSequence>&& p_pts, const EdgeSourceInfo* info)
+Edge::Edge(const std::shared_ptr<const CoordinateSequence>& p_pts, const EdgeSourceInfo* info)
     : aDim(OverlayLabel::DIM_UNKNOWN)
     , aDepthDelta(0)
     , aIsHole(false)
     , bDim(OverlayLabel::DIM_UNKNOWN)
     , bDepthDelta(0)
     , bIsHole(false)
-    , pts(std::move(p_pts))
+    , pts(p_pts)
 {
     copyInfo(info);
 }

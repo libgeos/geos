@@ -50,7 +50,7 @@ public:
     /// @param newPts CoordinateSequence representing the string, externally owned
     /// @param newContext the context associated to this SegmentString
     ///
-    BasicSegmentString(geom::CoordinateSequence* newPts,
+    BasicSegmentString(const std::shared_ptr<const geom::CoordinateSequence>& newPts,
                        const void* newContext)
         :
         SegmentString(newContext, newPts)

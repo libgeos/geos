@@ -78,7 +78,7 @@ private:
 
 public:
 
-    CoverageRing(CoordinateSequence* pts, bool interiorOnRight);
+    CoverageRing(std::shared_ptr<const CoordinateSequence> pts, bool interiorOnRight);
 
     CoverageRing(const LinearRing* ring, bool isShell);
 

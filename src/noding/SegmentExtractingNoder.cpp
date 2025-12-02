@@ -54,7 +54,7 @@ SegmentExtractingNoder::extractSegments(
         const SegmentString* ss,
         std::vector<std::unique_ptr<SegmentString>>& outputSegs)
 {
-    const CoordinateSequence* ss_seq = ss->getCoordinates();
+    const auto& ss_seq = ss->getCoordinates();
 
     const NodedSegmentString* nss = dynamic_cast<const NodedSegmentString*>(ss);
     bool constructZ = nss ? nss->getNodeList().getConstructZ() : ss_seq->hasZ();
@@ -64,7 +64,7 @@ SegmentExtractingNoder::extractSegments(
         auto cs = detail::make_unique<CoordinateSequence>(0, constructZ, constructM);
         cs->reserve(2);
         cs->add(*ss_seq, i, i + 1);
-        std::unique_ptr<SegmentString> seg(new NodedSegmentString(cs.release(), constructZ, constructM, ss->getData()));
+        std::unique_ptr<SegmentString> seg(new NodedSegmentString(std::move(cs), constructZ, constructM, ss->getData()));
         outputSegs.push_back(std::move(seg));
     }
 }

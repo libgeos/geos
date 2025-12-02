@@ -50,7 +50,7 @@ void object::test<1>
 
     // Create coordinates sequence
     const std::size_t coords_size = 2;
-    auto cs = geos::detail::make_unique<geos::geom::CoordinateSequence>(0u, coords_size);
+    auto cs = std::make_unique<geos::geom::CoordinateSequence>(0u, coords_size);
 
     ensure(nullptr != cs.get());
 
@@ -63,7 +63,7 @@ void object::test<1>
 
     // Create SegmentString instance
 
-    NodedSegmentString segment(cs.release(), false, false, nullptr);
+    NodedSegmentString segment(std::move(cs), false, false, nullptr);
 
     ensure_equals(segment.size(), coords_size);
 
@@ -99,7 +99,7 @@ void object::test<2>
 
     // Create coordinates sequence
     const std::size_t coords_size = 2;
-    auto cs = geos::detail::make_unique<geos::geom::CoordinateSequence>(0u, coords_size);
+    auto cs = std::make_unique<geos::geom::CoordinateSequence>(0u, coords_size);
 
     ensure(nullptr != cs.get());
 
@@ -112,7 +112,7 @@ void object::test<2>
 
     // Create SegmentString instance
 
-    NodedSegmentString segment(cs.release(), false, false, nullptr);
+    NodedSegmentString segment(std::move(cs), false, false, nullptr);
 
     ensure_equals(segment.size(), coords_size);
 
@@ -142,7 +142,7 @@ void object::test<3>
 
     // Create coordinates sequence
     const std::size_t coords_size = 2;
-    auto cs = geos::detail::make_unique<geos::geom::CoordinateSequence>(0u, coords_size);
+    auto cs = std::make_unique<geos::geom::CoordinateSequence>(0u, coords_size);
 
     ensure(nullptr != cs.get());
 
@@ -155,7 +155,7 @@ void object::test<3>
 
     // Create SegmentString instance
 
-    NodedSegmentString segment(cs.release(), false, false, nullptr);
+    NodedSegmentString segment(std::move(cs), false, false, nullptr);
 
     ensure_equals(segment.size(), coords_size);
 
@@ -185,7 +185,7 @@ void object::test<4>
 
     // Create coordinates sequence
     const std::size_t coords_size = 2;
-    auto cs = geos::detail::make_unique<geos::geom::CoordinateSequence>(0u, coords_size);
+    auto cs = std::make_unique<geos::geom::CoordinateSequence>(0u, coords_size);
 
     ensure(nullptr != cs.get());
 
@@ -198,7 +198,7 @@ void object::test<4>
 
     // Create SegmentString instance
 
-    NodedSegmentString segment(cs.release(), false, false, nullptr);
+    NodedSegmentString segment(std::move(cs), false, false, nullptr);
 
     ensure_equals(segment.size(), coords_size);
 
