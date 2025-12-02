@@ -5,6 +5,7 @@
 - Fixes/Improvements:
   - Relax other floating-point exception handling with other compilers (GH-1333, Mike Taves)
   - Quiet FP_DIVBYZERO exception from CGAlgorithmsDD::intersection (GH-1235, Paul Ramsey)
+  - Avoid crash on buffer of geometry with only invalid coordinates (GH-1335, Dan Baston)
 
 ## Changes in 3.14.1
 2025-10-27
