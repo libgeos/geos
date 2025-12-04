@@ -266,7 +266,7 @@ void object::test<10>
 {
     // Intersection at interior of 3D line, endpoint of 2D line
     // result Z is interpolated
-    set_test_name("testInteriorEndpoint2D3D");
+    set_test_name("testInteriorEndpoint3D2D");
 
     checkIntersection(
                 line<XYZ>({1, 1, 1}, {3, 3, 3}),
@@ -422,6 +422,23 @@ void object::test<19>
                 line<XYZM>({1, 1, 1, -1}, {3, 3, 3, -3}),
                 line<XYZM>({1, 3, 10, -10}, {3, 1, 30, -30}),
                 xyzm(2, 2, 11, -11));
+}
+
+template<>
+template<>
+void object::test<20>
+()
+{
+    // Collinear intersection of XYZ lines
+    // Z values in the second line do not match interpolated values in the first
+    // Result Z uses endpoint values of the second line
+    set_test_name("testCollinearContainedDifferentZ");
+
+    checkIntersection(
+                line<XYZ>({1, 1, 1}, {5, 5, 5}),
+                line<XYZ>({3, 3, 7}, {4, 4, 13}),
+                xyz(3, 3, 7),
+                xyz(4, 4, 13));
 }
 
 } // namespace tut
