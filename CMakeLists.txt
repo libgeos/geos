@@ -320,8 +320,8 @@ check_library_exists(m pow "" HAVE_LIBM)
 #-----------------------------------------------------------------------------
 # Extra include
 #-----------------------------------------------------------------------------
-include(CheckIncludeFile)
-check_include_file(fenv.h HAVE_FENV_H)
+include(CheckIncludeFileCXX)
+check_include_file_cxx(cfenv HAVE_FENV_H)
 
 #-----------------------------------------------------------------------------
 # Target geos: C++ API library
