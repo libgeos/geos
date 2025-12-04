@@ -9,7 +9,10 @@
 #include <geos/util.h>
 
 // std
+#if !defined(MISSING_FENV)
+#define HAVE_FENV
 #include <cfenv>
+#endif
 #include <memory>
 
 using namespace geos::geom;
@@ -33,7 +36,9 @@ struct test_coverageunionng_data {
     {
         std::unique_ptr<Geometry> geom = r.read(wkt);
         std::unique_ptr<Geometry> expected = r.read(wktExpected);
+#ifdef HAVE_FENV
         std::feclearexcept(FE_ALL_EXCEPT);
+#endif
         std::unique_ptr<Geometry> result = CoverageUnion::geomunion(geom.get());
 #ifdef FE_INVALID
         ensure("FE_INVALID raised", !std::fetestexcept(FE_INVALID));

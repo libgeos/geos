@@ -8,7 +8,10 @@
 #include <geos/geom/Coordinate.h>
 
 #include <array>
+#if !defined(MISSING_FENV)
+#define HAVE_FENV
 #include <cfenv>
+#endif
 #include <unordered_set>
 
 namespace tut {
@@ -23,7 +26,9 @@ using geos::geom::Envelope;
 struct test_envelope_data {
     test_envelope_data()
     {
+#ifdef HAVE_FENV
         std::feclearexcept(FE_ALL_EXCEPT);
+#endif
     }
 
     static std::size_t

@@ -26,7 +26,10 @@
 #include <geos/io/WKBStreamReader.h>
 #include <geos/io/WKBWriter.h>
 
+#if !defined(MISSING_FENV)
+#define HAVE_FENV
 #include <cfenv>
+#endif
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -394,6 +397,7 @@ void GeosOp::run(OpArguments& opArgs) {
     //------------------------
 
     try {
+#ifdef HAVE_FENV
         std::feclearexcept(FE_ALL_EXCEPT); // clear floating-point status flags
 
         execute(op, opArgs);
@@ -428,6 +432,9 @@ void GeosOp::run(OpArguments& opArgs) {
 #endif
             std::cerr << std::endl;
         }
+#else  // MISSING_FENV
+        execute(op, opArgs);
+#endif  // HAVE_FENV
     }
     catch (std::exception &e) {
         std::cerr << "Run-time exception: " << e.what() << std::endl;
