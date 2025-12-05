@@ -61,7 +61,7 @@ void toUpper(std::string& s)
         s.end(),
         s.begin(),
         [](unsigned char c) {
-            return (char)std::tolower(c);
+            return (char)std::toupper(c);
         }
     );
 }
