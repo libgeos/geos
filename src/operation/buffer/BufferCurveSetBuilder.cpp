@@ -201,6 +201,10 @@ BufferCurveSetBuilder::addLineString(const LineString* line)
 
     auto coord = operation::valid::RepeatedPointRemover::removeRepeatedAndInvalidPoints(line->getCoordinatesRO());
 
+    if (coord->isEmpty()) {
+        throw util::GEOSException("LineString has no valid points.");
+    }
+
     /**
      * Rings (closed lines) are generated with a continuous curve,
      * with no end arcs. This produces better quality linework,
