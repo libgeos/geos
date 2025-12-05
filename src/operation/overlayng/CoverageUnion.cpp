@@ -48,7 +48,7 @@ CoverageUnion::geomunion(const Geometry* coverage)
         try {
             result = OverlayNG::geomunion(coverage, nullptr, &bcn);
         }
-        catch (const geos::util::TopologyException& te) {
+        catch (const geos::util::TopologyException&) {
             throw geos::util::TopologyException("CoverageUnion cannot process incorrectly noded inputs");
         }
     }
