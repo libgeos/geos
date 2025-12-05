@@ -140,7 +140,8 @@ CoverageRingEdges::extractRingEdges(
     std::unique_ptr<CoordinateSequence> pts
         = RepeatedPointRemover::removeRepeatedPoints( ring->getCoordinatesRO() );
     std::vector<CoverageEdge*> ringEdges;
-    //-- if compacted ring is too short, don't process it
+    // if compacted ring is too short, don't process it,
+    // just return empty vector
     if (pts->getSize() < 3)
       return ringEdges;
 

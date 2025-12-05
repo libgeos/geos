@@ -48,6 +48,13 @@ namespace valid {
                 const geom::CoordinateSequence* seq,
                 double tolerance = 0.0);
 
+        static std::unique_ptr<geom::CoordinateSequence>
+            removeRepeatedOrInvalidPoints(
+                const geom::CoordinateSequence* seq,
+                double tolerance = 0.0) {
+                return removeRepeatedAndInvalidPoints(seq, tolerance);
+            };
+
         static std::unique_ptr<geom::Geometry>
             removeRepeatedPoints(
                 const geom::Geometry* geom,

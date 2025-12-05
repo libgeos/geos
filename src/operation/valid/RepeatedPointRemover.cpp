@@ -200,19 +200,21 @@ public:
         auto filtCoords = filter.getCoords();
 
         if (filtCoords->size() == 0) return nullptr;
+        if (filtCoords->size() == 1) return nullptr;
 
         // End points for comparison and sequence repair
         const Coordinate& origEndCoord = coordinates->back();
+        bool origEndCoordIsValid = origEndCoord.isValid();
 
         // Fluff up overly small filtered outputs
-        if(filtCoords->size() < minLength) {
+        if(filtCoords->size() < minLength && origEndCoordIsValid) {
             filtCoords->add(origEndCoord);
         }
 
         const Coordinate& filtEndCoord = filtCoords->back();
 
         // We stripped the last point, let's put it back on
-        if (!origEndCoord.equals2D(filtEndCoord)) {
+        if (origEndCoordIsValid && !origEndCoord.equals2D(filtEndCoord)) {
             // If the end of the filtered coordinates is within
             // tolerance of the original end, we drop the last filtered
             // coordinate so the output still follows the tolerance rule
@@ -223,8 +225,14 @@ public:
             filtCoords->add(origEndCoord);
         }
 
-        return filtCoords;
+        if (filtCoords->size() <= 1) return nullptr;
+        else return filtCoords;
     };
+
+
+
+
+
 }; // RepeatedPointCoordinateOperation
 
 

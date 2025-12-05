@@ -32,9 +32,9 @@ void object::test<1>
 ()
 {
     geom1_ = GEOSGeomFromWKT("POLYGON((0 0, 0 1, 0 10, 10 10, 10 0, 9 0, 1 0, 0 0))");
-    geom2_ = GEOSRemoveRepeatedPoints(geom1_, 3.0);
+    result_ = GEOSRemoveRepeatedPoints(geom1_, 3.0);
     expected_ = GEOSGeomFromWKT("POLYGON ((0 0, 0 10, 10 10, 10 0, 0 0))");
-    ensure_geometry_equals(geom2_, expected_);
+    ensure_geometry_equals(result_, expected_);
 }
 
 // https://github.com/libgeos/geos/issues/759
@@ -44,9 +44,9 @@ void object::test<2>
 ()
 {
     geom1_ = GEOSGeomFromWKT("POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0))");
+    expected_ = GEOSGeomFromWKT("POLYGON EMPTY");
     result_ = GEOSRemoveRepeatedPoints(geom1_, 2.0);
-
-    ensure(result_ == nullptr);
+    ensure_geometry_equals(result_, expected_);
 }
 
 template<>
@@ -57,7 +57,6 @@ void object::test<3>()
     ensure(input_);
 
     result_ = GEOSRemoveRepeatedPoints(input_, 0);
-
     ensure("curved geometry not supported", result_ == nullptr);
 }
 

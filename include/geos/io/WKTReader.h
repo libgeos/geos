@@ -115,6 +115,7 @@ public:
     }
 
     std::unique_ptr<geom::Geometry> read(const std::string& wellKnownText) const;
+    std::unique_ptr<geom::CoordinateSequence> readCoordinates(const std::string& wellKnownText) const;
 
 protected:
     std::unique_ptr<geom::CoordinateSequence> getCoordinates(io::StringTokenizer* tokenizer, OrdinateSet& ordinates) const;
