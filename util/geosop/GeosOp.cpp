@@ -106,8 +106,11 @@ int main(int argc, char** argv) {
     cxxopts::ParseResult result;
     try {
         result = options.parse(argc, argv);
-    } catch ( cxxopts::option_not_exists_exception& ex ) {
+    } catch ( cxxopts::OptionParseException& ex ) {
         std::cerr << ex.what() << std::endl;
+        std::cerr << "Hint: To use negative numeric arguments, either:" << std::endl;
+        std::cerr << "  - put '--' before the operation name: geosop -a GEOM -- opName -0.4" << std::endl;
+        std::cerr << "  - use 'N' prefix for negative numbers: geosop -a GEOM opName N-0.4" << std::endl;
         exit(1);
     }
 
