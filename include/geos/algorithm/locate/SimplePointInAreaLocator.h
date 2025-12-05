@@ -87,6 +87,10 @@ public:
     static bool isContained(const geom::CoordinateXY& p,
                             const geom::Geometry* geom);
 
+    static bool isAnyPointContained(const geom::Geometry& pt, const geom::Geometry& areaGeom);
+
+    static bool isEveryPointContained(const geom::Geometry& pt, const geom::Geometry& areaGeom);
+
     SimplePointInAreaLocator(const geom::Geometry* p_g)
         : g(p_g)
     { }
