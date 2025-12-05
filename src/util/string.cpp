@@ -56,7 +56,14 @@ bool startsWith(const std::string & s, char prefix) {
 
 void toUpper(std::string& s)
 {
-    std::transform(s.begin(), s.end(), s.begin(), ::toupper);
+    std::transform(
+        s.begin(),
+        s.end(),
+        s.begin(),
+        [](unsigned char c) {
+            return (char)std::tolower(c);
+        }
+    );
 }
 
 
