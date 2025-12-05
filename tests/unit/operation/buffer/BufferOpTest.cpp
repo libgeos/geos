@@ -63,10 +63,16 @@ struct test_bufferop_data {
         ensure_equals("Area", actualArea, expectedArea, tolerance);
     }
 
-    void checkBufferEmpty(const std::string& wkt, double dist, bool isEmpty)
+    void checkBufferPolygonEmpty(const std::string& wkt, double dist, bool isEmpty)
     {
         std::unique_ptr<Geometry> geom = wktreader.read(wkt);
         std::unique_ptr<Geometry> actual = geom->buffer(dist);
+        ensure_equals(actual->isEmpty(), isEmpty);
+    }
+
+    void checkBufferPolygonEmpty(const Geometry& geom, double dist, bool isEmpty)
+    {
+        std::unique_ptr<Geometry> actual = geom.buffer(dist);
         ensure_equals(actual->isEmpty(), isEmpty);
     }
 
@@ -421,10 +427,10 @@ void object::test<16>
 ()
 {
     std::string wkt0("POLYGON ((666360.09 429614.71, 666344.4 429597.12, 666358.47 429584.52, 666374.5 429602.33, 666360.09 429614.71))");
-    checkBufferEmpty(wkt0, -9, false);
-    checkBufferEmpty(wkt0, -10, true);
-    checkBufferEmpty(wkt0, -15, true);
-    checkBufferEmpty(wkt0, -18, true);
+    checkBufferPolygonEmpty(wkt0, -9, false);
+    checkBufferPolygonEmpty(wkt0, -10, true);
+    checkBufferPolygonEmpty(wkt0, -15, true);
+    checkBufferPolygonEmpty(wkt0, -18, true);
 }
 
 // Test for https://trac.osgeo.org/geos/ticket/1101 - Non-empty negative buffer of 5-pt convex polygon
@@ -434,10 +440,10 @@ void object::test<17>
 ()
 {
     std::string wkt0("POLYGON ((6 20, 16 20, 21 9, 9 0, 0 10, 6 20))");
-    checkBufferEmpty(wkt0, -8, false);
-    checkBufferEmpty(wkt0, -8.6, true);
-    checkBufferEmpty(wkt0, -9.6, true);
-    checkBufferEmpty(wkt0, -11, true);
+    checkBufferPolygonEmpty(wkt0, -8, false);
+    checkBufferPolygonEmpty(wkt0, -8.6, true);
+    checkBufferPolygonEmpty(wkt0, -9.6, true);
+    checkBufferPolygonEmpty(wkt0, -11, true);
 }
 
 // Test for https://trac.osgeo.org/geos/ticket/1101 - Buffer of Polygon with hole with hole eroded
@@ -661,5 +667,40 @@ void object::test<30>
 
     ensure(bufGeom->getArea() > 12000);
 }
+
+
+// testInvalidCoordPoint
+template<>
+template<>
+void object::test<31> ()
+{
+    // works for Inf ordinates as well
+    auto geom = wktreader.read("POINT (NaN NaN)");
+    checkBufferPolygonEmpty(*geom, 1, true);
+}
+
+// testInvalidCoordsLine
+template<>
+template<>
+void object::test<32> ()
+{
+    // works for Inf ordinates as well
+    auto geom = wktreader.read("LINESTRING (NaN NaN, NaN NaN)");
+    checkBufferPolygonEmpty(*geom, 1, true);
+}
+
+// testInvalidCoordShell
+template<>
+template<>
+void object::test<33> ()
+{
+    // using Inf ordinates creates a valid ring with equal endpoints
+    // this would be simpler if JTS WKT supported Inf
+    auto geom = wktreader.read("POLYGON ((Inf Inf, Inf Inf, Inf Inf, Inf Inf, Inf Inf))");
+    checkBufferPolygonEmpty(*geom, 1, true);
+}
+
+
+
 
 } // namespace tut

@@ -436,10 +436,15 @@ void object::test<24>()
     std::string wkb("0106000020E61000000100000001030000000100000005000000000000000000F07F000000000000F07F000000000000F07F000000000000F07F000000000000F07F000000000000F07F000000000000F07F000000000000F07F000000000000F07F000000000000F07F");
     geom1_ = GEOSGeomFromHEX_buf(reinterpret_cast<const unsigned char*>(wkb.c_str()), wkb.size());
     ensure(geom1_ != nullptr);
+
+    expected_ = fromWKT("POLYGON EMPTY");
+    ensure(expected_ != nullptr);
+
     geom2_ = GEOSBuffer(geom1_, 20, 8);
-    ensure(geom2_ == nullptr);
+    ensure_geometry_equals(expected_, geom2_, 0.001);
+
     geom3_ = GEOSBuffer(geom1_, -20, 8);
-    ensure(geom3_ == nullptr);
+    ensure_geometry_equals(expected_, geom3_, 0.001);
 }
 
 

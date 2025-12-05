@@ -201,6 +201,10 @@ BufferCurveSetBuilder::addLineString(const LineString* line)
 
     auto coord = operation::valid::RepeatedPointRemover::removeRepeatedAndInvalidPoints(line->getCoordinatesRO());
 
+    if (coord->size() == 0) {
+        return;
+    }
+
     /**
      * Rings (closed lines) are generated with a continuous curve,
      * with no end arcs. This produces better quality linework,
@@ -272,21 +276,22 @@ BufferCurveSetBuilder::addPolygon(const Polygon* p)
         return;
     }
 
-    auto shellCoord =
+    auto shellCoords =
             operation::valid::RepeatedPointRemover::removeRepeatedAndInvalidPoints(shell->getCoordinatesRO());
 
-    if (shellCoord->isEmpty()) {
-        throw util::GEOSException("Shell empty after removing invalid points");
+    if (shellCoords->isEmpty()) {
+        return;
+        //throw util::GEOSException("Shell empty after removing invalid points");
     }
 
     // don't attempt to buffer a polygon
     // with too few distinct vertices
-    if(distance <= 0.0 && shellCoord->size() < 3) {
+    if(distance <= 0.0 && shellCoords->size() < 3) {
         return;
     }
 
     addPolygonRingSide(
-        shellCoord.get(),
+        shellCoords.get(),
         offsetDistance,
         offsetSide,
         Location::EXTERIOR,
@@ -302,13 +307,17 @@ BufferCurveSetBuilder::addPolygon(const Polygon* p)
             continue;
         }
 
-        auto holeCoord = valid::RepeatedPointRemover::removeRepeatedAndInvalidPoints(hole->getCoordinatesRO());
+        auto holeCoords = valid::RepeatedPointRemover::removeRepeatedAndInvalidPoints(hole->getCoordinatesRO());
+
+        //-- skip if no valid coordinates
+        if (holeCoords->isEmpty())
+            continue;
 
         // Holes are topologically labelled opposite to the shell,
         // since the interior of the polygon lies on their opposite
         // side (on the left, if the hole is oriented CCW)
         addPolygonRingSide(
-            holeCoord.get(),
+            holeCoords.get(),
             offsetDistance,
             Position::opposite(offsetSide),
             Location::INTERIOR,
