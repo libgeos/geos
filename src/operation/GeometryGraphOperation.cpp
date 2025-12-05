@@ -80,8 +80,8 @@ GeometryGraphOperation::GeometryGraphOperation(const Geometry* g0,
         setComputationPrecision(pm1);
     }
 
-    arg[0] = std::make_unique<GeometryGraph>(0, g0, boundaryNodeRule);
-    arg[1] = std::make_unique<GeometryGraph>(1, g1, boundaryNodeRule);
+    arg[0] = std::make_unique<GeometryGraph>(static_cast<uint8_t>(0), g0, boundaryNodeRule);
+    arg[1] = std::make_unique<GeometryGraph>(static_cast<uint8_t>(1), g1, boundaryNodeRule);
 }
 
 
@@ -93,7 +93,7 @@ GeometryGraphOperation::GeometryGraphOperation(const Geometry* g0):
 
     setComputationPrecision(pm0);
 
-    arg[0] = std::make_unique<GeometryGraph>(0, g0);
+    arg[0] = std::make_unique<GeometryGraph>(static_cast<uint8_t>(0), g0);
 }
 
 const Geometry*
