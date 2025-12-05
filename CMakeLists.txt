@@ -230,6 +230,24 @@ target_compile_options(geos_cxx_flags INTERFACE
 # works with multi-configuration generators.
 target_compile_definitions(geos_cxx_flags INTERFACE $<$<NOT:$<CONFIG:Debug>>:NDEBUG>)
 
+# OpenMP SIMD
+include(CheckCXXCompilerFlag)
+
+if(MSVC)
+  set(SIMD_FLAGS "/openmp:experimental")
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "IntelLLVM")
+  set(SIMD_FLAGS "-qopenmp-simd")
+else()
+  set(SIMD_FLAGS "-fopenmp-simd")
+endif()
+
+check_cxx_compiler_flag(${SIMD_FLAGS} COMPILER_HAS_SIMD)
+if(COMPILER_HAS_SIMD)
+  target_compile_options(geos_cxx_flags INTERFACE ${SIMD_FLAGS})
+  target_compile_definitions(geos_cxx_flags INTERFACE HAVE_OPEN_SIMD)
+endif()
+
+
 #-----------------------------------------------------------------------------
 # Target geos_developer_cxx_flags: developer mode compilation flags
 #-----------------------------------------------------------------------------
