@@ -5,7 +5,10 @@
 // geos
 #include <geos_c.h>
 // std
+#if !defined(MISSING_FENV)
+#define HAVE_FENV
 #include <cfenv>
+#endif
 
 #include "capi_test_utils.h"
 
@@ -57,7 +60,9 @@ template<>
 void object::test<1>
 ()
 {
+#ifdef HAVE_FENV
     std::feclearexcept(FE_ALL_EXCEPT);
+#endif
 
     geom1_ = GEOSGeomFromWKT("POINT(10 20)");
 
@@ -69,7 +74,9 @@ void object::test<1>
     geom2_ = GEOSVoronoiDiagram(geom1_, nullptr, 0, 1);
     ensure_geometry_equals(geom2_, "MULTILINESTRING EMPTY");
 
+#ifdef FE_INVALID
     ensure("FE_INVALID raised", !std::fetestexcept(FE_INVALID));
+#endif
 }
 
 //More points:

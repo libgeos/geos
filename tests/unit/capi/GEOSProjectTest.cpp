@@ -100,14 +100,22 @@ void object::test<5>
     geom1_ = GEOSGeomFromWKT("LINESTRING (0 0, 1 1, 1 1, 2 2)");
     geom2_ = GEOSGeomFromWKT("POINT (0 1)");
 
+#ifdef HAVE_FENV
     std::feclearexcept(FE_ALL_EXCEPT);
+#endif
     double dist = GEOSProject(geom1_, geom2_);
+#ifdef FE_INVALID
     ensure("FE_INVALID raised", !std::fetestexcept(FE_INVALID));
+#endif
     ensure_equals("GEOSProject", dist, 0.7071, 0.0001);
 
+#ifdef HAVE_FENV
     std::feclearexcept(FE_ALL_EXCEPT);
+#endif
     double dist_norm = GEOSProjectNormalized(geom1_, geom2_);
+#ifdef FE_INVALID
     ensure("FE_INVALID raised", !std::fetestexcept(FE_INVALID));
+#endif
     ensure_equals("GEOSProjectNormalized", dist_norm, 0.25);
 }
 

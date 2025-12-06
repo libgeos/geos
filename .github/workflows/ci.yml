@@ -485,6 +485,49 @@ jobs:
       working-directory: ./build
       run: ctest -V --output-on-failure -C ${{ matrix.build_type }}
 
+  emscripten:
+    name: Emscripten WASM build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install
+      run: |
+        set -e
+        sudo -E apt-get update
+        sudo -E apt-get autopurge -y needrestart
+        sudo -E apt-get -yq --no-install-suggests --no-install-recommends install make cmake emscripten ccache
+
+    - uses: actions/checkout@v5
+
+    - name: Retrieve build cache
+      uses: actions/cache/restore@v4
+      id: restore-cache
+      with:
+        path: .ccache
+        key: emscripten-${{ github.ref_name }}-${{ github.run_id }}
+        restore-keys: emscripten
+
+    - name: Build
+      run: |
+        set -e
+        mkdir build
+        cd build
+        cmake --version
+        emcmake cmake \
+          -D BUILD_SHARED_LIBS=OFF \
+          -D USE_CCACHE=ON \
+          ..
+        cmake --build . -j $(nproc)
+        ccache --show-stats
+
+    - name: Save build cache
+      uses: actions/cache/save@v4
+      with:
+        path: .ccache
+        key: ${{ steps.restore-cache.outputs.cache-primary-key }}
+
+#    - name: Test
+#      working-directory: ./build
+#      run: ctest --output-on-failure
 
   code-quality:
     name: Code quality checks

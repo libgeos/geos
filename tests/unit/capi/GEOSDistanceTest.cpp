@@ -9,7 +9,10 @@
 #include <algorithm>
 #include <cstdio>
 #include <cstdlib>
+#if !defined(MISSING_FENV)
+#define HAVE_FENV
 #include <fenv.h>
+#endif
 #include <cmath>
 
 #include "capi_test_utils.h"
@@ -119,8 +122,10 @@ void object::test<4>
     geom1_ = fromWKT("POINT (0 0)");
     geom2_ = fromWKT("POINT (1 1)");
 
+#ifdef HAVE_FENV
     // clear all floating point exceptions
     feclearexcept (FE_ALL_EXCEPT);
+#endif
 
     double d;
     int status = GEOSDistance(geom1_, geom2_, &d);
@@ -128,9 +133,11 @@ void object::test<4>
     ensure_equals(status, 1);
     ensure_equals(d, std::sqrt(2));
 
+#ifdef FE_OVERFLOW
     // check for floating point overflow exceptions
     int raised = fetestexcept(FE_OVERFLOW);
     ensure_equals(raised & FE_OVERFLOW, 0);
+#endif
 }
 
 // same distance between boundables should not raise floating point exception
@@ -142,8 +149,10 @@ void object::test<5>
     geom1_ = fromWKT("LINESTRING (0 0, 1 1)");
     geom2_ = fromWKT("LINESTRING (2 1, 1 2)");
 
+#ifdef HAVE_FENV
     // clear all floating point exceptions
     feclearexcept (FE_ALL_EXCEPT);
+#endif
 
     double d;
     int status = GEOSDistance(geom1_, geom2_, &d);
@@ -151,9 +160,11 @@ void object::test<5>
     ensure_equals(status, 1);
     // ensure_equals(d, std::sqrt(2));
 
+#ifdef FE_OVERFLOW
     // check for floating point overflow exceptions
     int raised = fetestexcept(FE_OVERFLOW);
     ensure_equals(raised & FE_OVERFLOW, 0);
+#endif
 }
 
 template<>

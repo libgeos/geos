@@ -16,7 +16,10 @@
 #include <cmath>
 #include <string>
 #include <memory>
+#if !defined(MISSING_FENV)
+#define HAVE_FENV
 #include <cfenv>
+#endif
 
 namespace geos {
 namespace geom {
@@ -191,13 +194,17 @@ template<>
 void object::test<6>
 ()
 {
+#ifdef HAVE_FENV
     std::feclearexcept(FE_ALL_EXCEPT);
+#endif
 
     runTest(
         "LINESTRING (0 0, 100 0, 10 100, 10 100)",
         "LINESTRING (0 100, 0 10, 80 10)", 0.001, 47.89);
 
+#ifdef FE_INVALID
     ensure("FE_INVALID raised", !std::fetestexcept(FE_INVALID));
+#endif
 }
 
 // Crash on collection with empty components

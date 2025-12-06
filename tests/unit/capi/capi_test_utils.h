@@ -7,7 +7,10 @@
 
 #include <cstdarg>
 #include <cstdio>
+#if !defined(MISSING_FENV)
+#define HAVE_FENV
 #include <cfenv>
+#endif
 
 
 namespace capitest {
@@ -29,7 +32,9 @@ namespace capitest {
             wktw_ = GEOSWKTWriter_create();
             GEOSWKTWriter_setRoundingPrecision(wktw_, 10);
 
+#ifdef HAVE_FENV
             std::feclearexcept(FE_ALL_EXCEPT);
+#endif
         }
 
         ~utility()

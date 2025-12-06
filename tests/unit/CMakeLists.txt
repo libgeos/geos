@@ -63,6 +63,11 @@ foreach(_testfile ${_testfiles})
     set_tests_properties(unit-${_cmake_testname} PROPERTIES TIMEOUT 30)
 endforeach()
 
+if(NOT HAVE_FENV_H)
+  # Used to set HAVE_FENV in test files
+  add_compile_definitions(MISSING_FENV)
+endif()
+
 # Run all the unit tests in one go, for faster memory checking
 # under valgrind. Restrict to one configuration so it is only
 # run with 'ctest -C Valgrind'
