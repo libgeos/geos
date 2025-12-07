@@ -18,6 +18,7 @@ The official Git repository is at [GitHub](https://github.com/libgeos/geos).
 | :---: | :----- | :---: | :----- | :---: | :----- |
 | GitHub | [![github](https://github.com/libgeos/geos/workflows/CI/badge.svg?branch/main)](https://github.com/libgeos/geos/actions?query=workflow:CI+branch:main) | Bessie | [![bessie](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Worker_Run/label=bessie&build=last:${params.reference=refs/heads/main})](https://debbie.postgis.net/view/GEOS/job/GEOS_Worker_Run/label=bessie) | Debbie | [![debbie](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Master)](https://debbie.postgis.net/view/GEOS/job/GEOS_Master/) |
 | Winnie | [![winnie](https://winnie.postgis.net/view/GEOS/job/GEOS_Master/badge/icon)](https://winnie.postgis.net/view/GEOS/job/GEOS_Master/) |  Berrie | [![berrie](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Worker_Run/label=berrie&build=last:${params.reference=refs/heads/main})](https://debbie.postgis.net/view/GEOS/job/GEOS_Worker_Run/label=berrie) | Berrie64 | [![berrie64](https://debbie.postgis.net/buildStatus/icon?job=GEOS_Worker_Run/label=berrie64&build=last:${params.reference=refs/heads/main})](https://debbie.postgis.net/view/GEOS/job/GEOS_Worker_Run/label=berrie64) |
+| Codecov | [![codecov](https://codecov.io/gh/libgeos/geos/branch/main/graph/badge.svg?token=rOsQs83Jbu)](https://codecov.io/gh/libgeos/geos) |  |  |  |  |
 
 ## Community Resources
 
