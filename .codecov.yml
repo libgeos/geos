@@ -1,8 +1,13 @@
 coverage:
   precision: 2
+  status:
+    project:
+      default:
+        target: auto
+        threshold: 1%
 
 ignore:
   - "tests/unit/tut"
   - "tests/xmltester/tinyxml2"
 
-comment: off
+comment: false
