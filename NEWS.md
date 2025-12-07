@@ -1,4 +1,10 @@
 
+## Changes in 3.14.2
+2025-xx-xx
+
+- Fixes/Improvements:
+  - Relax other floating-point exception handling with other compilers (GH-1333, Mike Taves)
+
 ## Changes in 3.14.1
 2025-10-27
 
@@ -7,7 +13,6 @@
   - Fix undefined behaviour in CoordinateSequence::closeRing (GH-1309, Paul Ramsey)
   - GridIntersection: Fix crash for certain polygons outside grid extent (Dan Baston)
   - Fix incorrect envelope calculation for arcs (GH-1314, Dan Baston)
-
 
 ## Changes in 3.14.0
 2025-08-21

@@ -16,6 +16,10 @@ add_executable(geosop
 
 target_link_libraries(geosop PRIVATE geos geos_c)
 
+if(NOT HAVE_FENV_H)
+  target_compile_definitions(geosop PRIVATE MISSING_FENV)
+endif()
+
 install(TARGETS geosop
   DESTINATION ${CMAKE_INSTALL_BINDIR}
 )

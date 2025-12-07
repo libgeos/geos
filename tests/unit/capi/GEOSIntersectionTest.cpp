@@ -140,7 +140,9 @@ void object::test<7>
 
     result_ = GEOSIntersection(geom1_, geom2_);
 
+#ifdef FE_INVALID
     ensure(!std::fetestexcept(FE_INVALID));
+#endif
 }
 
 template<>

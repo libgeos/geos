@@ -26,7 +26,8 @@
 #include <geos/io/WKBStreamReader.h>
 #include <geos/io/WKBWriter.h>
 
-#if defined(HAVE_FENV)
+#if !defined(MISSING_FENV)
+#define HAVE_FENV
 #include <cfenv>
 #endif
 #include <fstream>
@@ -396,30 +397,44 @@ void GeosOp::run(OpArguments& opArgs) {
     //------------------------
 
     try {
-#if defined(HAVE_FENV)
+#ifdef HAVE_FENV
         std::feclearexcept(FE_ALL_EXCEPT); // clear floating-point status flags
-#endif
 
         execute(op, opArgs);
 
-#if defined(HAVE_FENV)
+#ifdef FE_INEXACT
         // Catch everything except for FE_INEXACT, which is usually harmless
         const int fpexp = std::fetestexcept(FE_ALL_EXCEPT ^ FE_INEXACT);
+#else
+        const int fpexp = std::fetestexcept(FE_ALL_EXCEPT);
+#endif
         if (args.isVerbose && (fpexp != 0)) {
             std::cerr << "Operation raised floating-point environment flag(s):";
+#ifdef FE_DIVBYZERO
             if (fpexp & FE_DIVBYZERO)
                 std::cerr << " FE_DIVBYZERO";
+#endif
+#ifdef FE_INEXACT
             if (fpexp & FE_INEXACT)
                 std::cerr << " FE_INEXACT";
+#endif
+#ifdef FE_INVALID
             if (fpexp & FE_INVALID)
                 std::cerr << " FE_INVALID";
+#endif
+#ifdef FE_OVERFLOW
             if (fpexp & FE_OVERFLOW)
                 std::cerr << " FE_OVERFLOW";
+#endif
+#ifdef FE_UNDERFLOW
             if (fpexp & FE_UNDERFLOW)
                 std::cerr << " FE_UNDERFLOW";
+#endif
             std::cerr << std::endl;
         }
-#endif
+#else  // MISSING_FENV
+        execute(op, opArgs);
+#endif  // HAVE_FENV
     }
     catch (std::exception &e) {
         std::cerr << "Run-time exception: " << e.what() << std::endl;
