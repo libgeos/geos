@@ -20,8 +20,16 @@
 namespace geos {
 namespace math { // geos.util
 
-
-
+/* private */
+void DD::setNaN()
+{
+    hi = std::numeric_limits<double>::quiet_NaN();
+}
+/* public */
+bool DD::isInf() const
+{
+    return std::isinf(hi);
+}
 /* public */
 bool DD::isNaN() const
 {
@@ -350,6 +358,7 @@ DD DD::determinant(double x1, double y1, double x2, double y2)
 {
     return determinant(DD(x1), DD(y1), DD(x2), DD(y2) );
 }
+
 
 /**
 * Computes the value of this number raised to an integral power.
