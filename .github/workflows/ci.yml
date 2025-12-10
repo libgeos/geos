@@ -99,15 +99,6 @@ jobs:
           # clang 10 and lower are not supported
           # in ubuntu 22.04 and higher
 
-        - cxx_compiler: clang++-11
-          c_compiler: clang-11
-          build_type: Debug
-          cxxstd: 14
-          arch: 64
-          packages: 'clang-11'
-          cmake: 3.15.*
-          os: ubuntu-22.04
-
         - cxx_compiler: clang++-12
           c_compiler: clang-12
           build_type: ASAN
@@ -171,6 +162,15 @@ jobs:
           cxxstd: 20
           arch: 64
           packages: 'clang-18'
+          cmake: 3.30.*
+          os: ubuntu-24.04
+
+        - cxx_compiler: clang++-19
+          c_compiler: clang-19
+          build_type: Debug
+          cxxstd: 20
+          arch: 64
+          packages: 'clang-19'
           cmake: 3.30.*
           os: ubuntu-24.04
 
