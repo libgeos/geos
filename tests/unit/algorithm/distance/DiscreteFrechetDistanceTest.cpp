@@ -76,27 +76,24 @@ void object::test<1> ()
     try {
         checkDensifiedFrechet("LINESTRING (0 0, 2 1)", "LINESTRING EMPTY", 0.0, 0);
     }
-    catch(const geos::util::IllegalArgumentException& e) {
+    catch(const geos::util::IllegalArgumentException &) {
         // We do expect an exception
-        ::geos::ignore_unused_variable_warning(e);
     }
 
     // too big densify factor
     try {
         checkDensifiedFrechet("LINESTRING (0 0, 2 1)", "LINESTRING EMPTY", 1 + 1e-10, 0);
     }
-    catch(const geos::util::IllegalArgumentException& e) {
+    catch(const geos::util::IllegalArgumentException &) {
         // We do expect an exception
-        ::geos::ignore_unused_variable_warning(e);
     }
 
     // too small positive densify factor
     try {
         checkDensifiedFrechet("LINESTRING (0 0, 2 1)", "LINESTRING EMPTY", 1e-30, 0);
     }
-    catch(const geos::util::IllegalArgumentException& e) {
+    catch(const geos::util::IllegalArgumentException &) {
         // We do expect an exception
-        ::geos::ignore_unused_variable_warning(e);
     }
 }
 

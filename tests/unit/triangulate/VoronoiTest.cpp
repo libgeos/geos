@@ -323,8 +323,7 @@ void object::test<14>
     try {
         runVoronoi(wkt, "", 0, false, true);
         fail();
-    } catch (const geos::util::GEOSException & e) {
-        ::geos::ignore_unused_variable_warning(e);
+    } catch (const geos::util::GEOSException &) {
     }
 }
 

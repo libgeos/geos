@@ -204,8 +204,7 @@ ClassicUnionStrategy::Union(const geom::Geometry* g0, const geom::Geometry* g1)
     try {
         return operation::overlayng::OverlayNGRobust::Overlay(g0, g1, operation::overlayng::OverlayNG::UNION);
     }
-    catch (const util::TopologyException &ex) {
-        ::geos::ignore_unused_variable_warning(ex);
+    catch (const util::TopologyException &) {
         // union-by-buffer only works for polygons
         if (g0->getDimension() != 2 || g1->getDimension() != 2)
           throw;

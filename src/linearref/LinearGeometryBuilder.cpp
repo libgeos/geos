@@ -117,10 +117,9 @@ LinearGeometryBuilder::endLine()
     try {
         line = geomFact->createLineString(std::move(coordList));
     }
-    catch(util::IllegalArgumentException & ex) {
+    catch(util::IllegalArgumentException &) {
         // exception is due to too few points in line.
         // only propagate if not ignoring short lines
-        ::geos::ignore_unused_variable_warning(ex);
         if(! ignoreInvalidLines) {
             throw;
         }

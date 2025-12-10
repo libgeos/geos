@@ -202,16 +202,15 @@ void object::test<8> ()
     try {
         MaximumInscribedCircle mic(g1.get(), 1);
         mic.getCenter();
-    } catch (const util::GEOSException & e) {
-        ::geos::ignore_unused_variable_warning(e);
+    } catch (const util::GEOSException &) {
     }
 
     auto g2 = reader_.read("POLYGON ((0 0, 1 0, 2 NaN,  0 0))");
     try {
         MaximumInscribedCircle mic(g1.get(), 1);
         mic.getCenter();
-    } catch (const util::GEOSException & e) {
-        ::geos::ignore_unused_variable_warning(e);
+    }
+    catch (const util::GEOSException &) {
     }
 }
 

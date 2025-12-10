@@ -46,8 +46,7 @@ struct test_coverageunionng_data {
 
         try {
             ensure_equals_geometry_xyzm(result.get(), expected.get());
-        } catch (const std::exception& e) {
-            ::geos::ignore_unused_variable_warning(e);
+        } catch (const std::exception &) {
             std::string wkt_result = w.write(result.get());
             std::cerr << std::endl << wkt_result << std::endl;
             throw;
