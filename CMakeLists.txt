@@ -179,9 +179,22 @@ set(CMAKE_CXX_FLAGS_ASAN "${CMAKE_CXX_FLAGS_DEBUG}  -g -O0 -fsanitize=address -f
 set(CMAKE_EXE_LINKER_FLAGS_ASAN "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -fsanitize=address")
 set(CMAKE_SHARED_LINKER_FLAGS_ASAN "${CMAKE_SHARED_LINKER_FLAGS_DEBUG} -fsanitize=address")
 
+#-----------------------------------------------------------------------------
+# Add UBSAN build option
+#-----------------------------------------------------------------------------
+
+set(CMAKE_C_FLAGS_UBSAN "${CMAKE_C_FLAGS_DEBUG} -fsanitize=undefined")
+set(CMAKE_CXX_FLAGS_UBSAN "${CMAKE_CXX_FLAGS_DEBUG} -fsanitize=undefined")
+set(CMAKE_EXE_LINKER_FLAGS_UBSAN "${CMAKE_EXE_LINKER_FLAGS_DEBUG} -fsanitize=undefined")
+set(CMAKE_SHARED_LINKER_FLAGS_UBSAN "${CMAKE_SHARED_LINKER_FLAGS_DEBUG} -fsanitize=undefined")
+
+#-----------------------------------------------------------------------------
+# Add ASAN and UBSAN as explicit items in menu
+#-----------------------------------------------------------------------------
+
 get_property(_cmake_build_type_is_cache CACHE CMAKE_BUILD_TYPE PROPERTY TYPE)
 if (_cmake_build_type_is_cache)
-  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo" "ASAN")
+  set_property(CACHE CMAKE_BUILD_TYPE PROPERTY STRINGS "Debug" "Release" "MinSizeRel" "RelWithDebInfo" "ASAN" "UBSAN")
 endif()
 unset(_cmake_build_type_is_cache)
 
