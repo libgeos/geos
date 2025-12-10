@@ -114,6 +114,7 @@ class GEOS_DLL DD {
         int signum() const;
         DD rint() const;
 
+        void setNaN();
 
     public:
         DD(double p_hi, double p_lo) : hi(p_hi), lo(p_lo) {};
@@ -165,6 +166,7 @@ class GEOS_DLL DD {
         static DD pow(const DD &d, int exp);
         static DD trunc(const DD &d);
 
+        bool isInf() const;
         bool isNaN() const;
         bool isNegative() const;
         bool isPositive() const;
