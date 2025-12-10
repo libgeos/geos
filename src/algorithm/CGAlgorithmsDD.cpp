@@ -139,19 +139,12 @@ CGAlgorithmsDD::intersection(const CoordinateXY& p1, const CoordinateXY& p2,
     DD y = (qx * pw) - (px * qw);
     DD w = (px * qy) - (qx * py);
 
+    if (w.isZero())
+        return CoordinateXY::getNull();
+
     double xInt = (x / w).ToDouble();
     double yInt = (y / w).ToDouble();
-
-    Coordinate rv;
-
-    if (!std::isfinite(xInt) || !std::isfinite(yInt)) {
-        rv.setNull();
-        return rv;
-    }
-
-    rv.x = xInt;
-    rv.y = yInt;
-    return rv;
+    return {xInt, yInt};
 }
 
 /* public static */

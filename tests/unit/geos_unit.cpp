@@ -49,7 +49,7 @@ usage()
          << "  " << module << " geos::geom::Envelope\n"
          << "  " << module << " geos::geom::Envelope 2\n"
          << endl
-         << "GEOS homepage: http://geos.osgeo.org" << endl;
+         << "GEOS homepage: https://libgeos.org" << endl;
 }
 
 int
