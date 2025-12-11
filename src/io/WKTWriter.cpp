@@ -241,12 +241,12 @@ WKTWriter::appendGeometryTaggedText(const Geometry& geometry,
         case GEOS_CIRCULARSTRING: appendSimpleCurveTaggedText(static_cast<const SimpleCurve&>(geometry), outputOrdinates, level, writer); break;
         case GEOS_COMPOUNDCURVE: appendCompoundCurveTaggedText(static_cast<const CompoundCurve&>(geometry), outputOrdinates, level, writer); break;
         case GEOS_CURVEPOLYGON:
-        case GEOS_POLYGON:    appendSurfaceTaggedText(static_cast<const Polygon&>(geometry), outputOrdinates, level, writer); break;
+        case GEOS_POLYGON:    appendSurfaceTaggedText(static_cast<const Surface&>(geometry), outputOrdinates, level, writer); break;
         case GEOS_MULTIPOINT: appendMultiPointTaggedText(static_cast<const MultiPoint&>(geometry), outputOrdinates, level, writer); break;
         case GEOS_MULTICURVE:
-        case GEOS_MULTILINESTRING:    appendMultiCurveTaggedText(static_cast<const MultiLineString&>(geometry), outputOrdinates, level, writer); break;
+        case GEOS_MULTILINESTRING:    appendMultiCurveTaggedText(static_cast<const GeometryCollection&>(geometry), outputOrdinates, level, writer); break;
         case GEOS_MULTISURFACE:
-        case GEOS_MULTIPOLYGON:       appendMultiSurfaceTaggedText(static_cast<const MultiPolygon&>(geometry), outputOrdinates, level, writer); break;
+        case GEOS_MULTIPOLYGON:       appendMultiSurfaceTaggedText(static_cast<const GeometryCollection&>(geometry), outputOrdinates, level, writer); break;
         case GEOS_GEOMETRYCOLLECTION: appendGeometryCollectionTaggedText(static_cast<const GeometryCollection&>(geometry), outputOrdinates, level, writer); break;
     }
 }
