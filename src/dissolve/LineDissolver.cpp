@@ -50,6 +50,10 @@ LineDissolver::dissolve(const Geometry* g)
 void
 LineDissolver::add(const Geometry* geom)
 {
+    if (factory == nullptr) {
+        factory = geom->getFactory();
+    }
+
     struct LineStringFilter : public GeometryComponentFilter {
 
         LineDissolver *m_ld;
@@ -83,9 +87,6 @@ LineDissolver::add(std::vector<const Geometry*> geometries)
 void
 LineDissolver::add(const LineString* lineString)
 {
-    if (factory == nullptr) {
-        factory = lineString->getFactory();
-    }
     const CoordinateSequence* seq = lineString->getCoordinatesRO();
     bool doneStart = false;
     for (std::size_t i = 1; i < seq->size(); i++) {
@@ -129,6 +130,7 @@ LineDissolver::computeResult()
         if (MarkHalfEdge::isMarked(e)) continue;
         process(e);
     }
+
     result = factory->buildGeometry(std::move(lines));
 }
 
