@@ -30,6 +30,14 @@ CircularString::CircularString(std::unique_ptr<CoordinateSequence>&& newCoords,
     validateConstruction();
 }
 
+CircularString::CircularString(std::shared_ptr<const CoordinateSequence> newCoords,
+                               const GeometryFactory& factory)
+    :
+    SimpleCurve(newCoords, false, factory)
+{
+    validateConstruction();
+}
+
 CircularString::~CircularString() = default;
 
 std::unique_ptr<CircularString>

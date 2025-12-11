@@ -458,6 +458,13 @@ GeometryFactory::createLinearRing(CoordinateSequence::Ptr && newCoords) const
     return std::unique_ptr<LinearRing>(new LinearRing(std::move(newCoords), *this));
 }
 
+std::unique_ptr<LinearRing>
+GeometryFactory::createLinearRing(std::shared_ptr<const CoordinateSequence> newCoords) const
+{
+    // Can't use make_unique with protected constructor
+    return std::unique_ptr<LinearRing>(new LinearRing(newCoords, *this));
+}
+
 /*public*/
 std::unique_ptr<LinearRing>
 GeometryFactory::createLinearRing(const CoordinateSequence& fromCoords) const
@@ -652,6 +659,16 @@ const
     return std::unique_ptr<LineString>(new LineString(std::move(newCoords), *this));
 }
 
+std::unique_ptr<LineString>
+GeometryFactory::createLineString(std::shared_ptr<const CoordinateSequence> newCoords)
+const
+{
+    if (!newCoords)
+        return createLineString();
+    // Can't use make_unique with protected constructor
+    return std::unique_ptr<LineString>(new LineString(newCoords, *this));
+}
+
 /*public*/
 std::unique_ptr<CircularString>
 GeometryFactory::createCircularString(CoordinateSequence::Ptr && newCoords)
@@ -661,6 +678,16 @@ const
         return createCircularString(false, false);
     // Can't use make_unique with protected constructor
     return std::unique_ptr<CircularString>(new CircularString(std::move(newCoords), *this));
+}
+
+std::unique_ptr<CircularString>
+GeometryFactory::createCircularString(std::shared_ptr<const CoordinateSequence> newCoords)
+const
+{
+    if (!newCoords)
+        return createCircularString(false, false);
+    // Can't use make_unique with protected constructor
+    return std::unique_ptr<CircularString>(new CircularString(newCoords, *this));
 }
 
 /*public*/

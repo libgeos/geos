@@ -374,7 +374,7 @@ CoverageRingEdges::buildRing(const LinearRing* ring) const
     for (std::size_t i = 0; i < ringEdges->size(); i++) {
         Coordinate& lastPt = pts->isEmpty() ? nullPt : pts->back();
         bool dir = isEdgeDirForward(*ringEdges, i, lastPt);
-        const CoordinateSequence* ringCs = ringEdges->at(i)->getCoordinates();
+        const auto& ringCs = ringEdges->at(i)->getCoordinates();
         pts->add(*ringCs, false, dir);
     }
     return ring->getFactory()->createLinearRing(std::move(pts));

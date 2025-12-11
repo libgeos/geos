@@ -83,7 +83,7 @@ OverlayEdge*
 OverlayGraph::addEdge(Edge* edge)
 {
     // CoordinateSequence* pts = = edge->getCoordinates().release();
-    CoordinateSequence* pts = edge->releaseCoordinates();
+    std::shared_ptr<const CoordinateSequence> pts = edge->releaseCoordinates();
     OverlayEdge* e = createEdgePair(pts, createOverlayLabel(edge));
 #if GEOS_DEBUG
     std::cerr << "added edge: " << *e << std::endl;
@@ -95,9 +95,8 @@ OverlayGraph::addEdge(Edge* edge)
 
 /*private*/
 OverlayEdge*
-OverlayGraph::createEdgePair(const CoordinateSequence *pts, OverlayLabel *lbl)
+OverlayGraph::createEdgePair(const std::shared_ptr<const CoordinateSequence>& pts, OverlayLabel *lbl)
 {
-    csQue.emplace_back(const_cast<CoordinateSequence *>(pts));
     OverlayEdge* e0 = createOverlayEdge(pts, lbl, true);
     OverlayEdge* e1 = createOverlayEdge(pts, lbl, false);
     e0->link(e1);
@@ -106,7 +105,7 @@ OverlayGraph::createEdgePair(const CoordinateSequence *pts, OverlayLabel *lbl)
 
 /*private*/
 OverlayEdge*
-OverlayGraph::createOverlayEdge(const CoordinateSequence* pts, OverlayLabel* lbl, bool direction)
+OverlayGraph::createOverlayEdge(const std::shared_ptr<const CoordinateSequence>& pts, OverlayLabel* lbl, bool direction)
 {
     CoordinateXYZM origin;
     CoordinateXYZM dirPt;

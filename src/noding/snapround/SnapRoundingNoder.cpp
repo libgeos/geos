@@ -89,8 +89,8 @@ void
 SnapRoundingNoder::addVertexPixels(const std::vector<SegmentString*>& segStrings)
 {
     for (SegmentString* nss : segStrings) {
-        const CoordinateSequence* pts = nss->getCoordinates();
-        pixelIndex.add(pts);
+        const auto& pts = nss->getCoordinates();
+        pixelIndex.add(pts.get());
     }
 }
 
@@ -153,7 +153,7 @@ SnapRoundingNoder::computeSegmentSnaps(NodedSegmentString* ss)
         return nullptr;
 
     // Create new nodedSS to allow adding any hot pixel nodes
-    NodedSegmentString* snapSS = new NodedSegmentString(ptsRound.release(), ss->getNodeList().getConstructZ(), ss->getNodeList().getConstructM(), ss->getData());
+    NodedSegmentString* snapSS = new NodedSegmentString(std::move(ptsRound), ss->getNodeList().getConstructZ(), ss->getNodeList().getConstructM(), ss->getData());
 
     std::size_t snapSSindex = 0;
     for (std::size_t i = 0, sz = pts->size()-1; i < sz; i++ ) {
@@ -240,7 +240,7 @@ SnapRoundingNoder::snapSegment(const CoordinateXY& p0, const CoordinateXY& p1, N
 void
 SnapRoundingNoder::addVertexNodeSnaps(NodedSegmentString* ss)
 {
-    const CoordinateSequence* pts = ss->getCoordinates();
+    const auto& pts = ss->getCoordinates();
     std::size_t i = 0;
     pts->forEach([this, ss, &i](const auto& p0) -> void {
         if (i > 0 && i < ss->size() - 1) {

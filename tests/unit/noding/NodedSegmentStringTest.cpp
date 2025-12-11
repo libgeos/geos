@@ -38,10 +38,10 @@ struct test_nodedsegmentstring_data {
     WKTReader r;
 
     SegmentStringAutoPtr
-    makeSegmentString(geos::geom::CoordinateSequence* cs, void* d = nullptr)
+    makeSegmentString(std::unique_ptr<geos::geom::CoordinateSequence> cs, void* d = nullptr)
     {
         return SegmentStringAutoPtr(
-                   new geos::noding::NodedSegmentString(cs, true, false, d)
+                   new geos::noding::NodedSegmentString(std::move(cs), true, false, d)
                );
     }
 
@@ -65,7 +65,7 @@ struct test_nodedsegmentstring_data {
         std::unique_ptr<Geometry> line = r.read(wktLine);
         std::unique_ptr<Geometry> pts = r.read(wktNodes);
 
-        NodedSegmentString nss(line->getCoordinates().release(), true, false, 0);
+        NodedSegmentString nss(line->getCoordinates(), true, false, 0);
         std::unique_ptr<CoordinateSequence> node = pts->getCoordinates();
 
         for (std::size_t i = 0, n=node->size(); i < n; ++i) {
@@ -116,7 +116,7 @@ void object::test<1>
 
     ensure_equals(cs->size(), 2u);
 
-    SegmentStringAutoPtr ss(makeSegmentString(cs.release()));
+    SegmentStringAutoPtr ss(makeSegmentString(std::move(cs)));
     ensure(nullptr != ss.get());
 
     ensure_equals(ss->size(), 2u);
@@ -152,7 +152,7 @@ void object::test<2>
 
     ensure_equals(cs->size(), 2u);
 
-    SegmentStringAutoPtr ss(makeSegmentString(cs.release()));
+    SegmentStringAutoPtr ss(makeSegmentString(std::move(cs)));
     ensure(nullptr != ss.get());
 
     ensure_equals(ss->size(), 2u);
@@ -191,7 +191,7 @@ void object::test<3>
 
     ensure_equals(cs->size(), 4u);
 
-    SegmentStringAutoPtr ss(makeSegmentString(cs.release()));
+    SegmentStringAutoPtr ss(makeSegmentString(std::move(cs)));
     ensure(nullptr != ss.get());
 
     ensure_equals(ss->size(), 4u);
@@ -253,7 +253,7 @@ void object::test<5>
     cs->add(p0);
     cs->add(p1);
 
-    SegmentStringAutoPtr ss(makeSegmentString(cs.release()));
+    SegmentStringAutoPtr ss(makeSegmentString(std::move(cs)));
 
     ensure_equals(ss->getNodeList().size(), 0u);
 

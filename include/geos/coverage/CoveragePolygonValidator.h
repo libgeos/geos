@@ -204,7 +204,6 @@ private:
     double gapWidth = 0.0;
     std::vector<std::unique_ptr<CoveragePolygon>> m_adjCovPolygons;
     std::deque<CoverageRing> coverageRingStore;
-    std::vector<std::unique_ptr<CoordinateSequence>> localCoordinateSequences;
     std::deque<CoverageRingSegment> coverageRingSegmentStore;
 
     typedef std::unordered_map<CoverageRingSegment*, CoverageRingSegment*, CoverageRingSegment::CoverageRingSegHash, CoverageRingSegment::CoverageRingSegEq> CoverageRingSegmentMap;

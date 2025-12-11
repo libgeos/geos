@@ -51,7 +51,7 @@ void
 EdgeSetIntersector::addToIndex(const SegmentString* segStr)
 {
     std::vector<MonotoneChain> segChains;
-    MonotoneChainBuilder::getChains(segStr->getCoordinates(), const_cast<SegmentString*>(segStr), segChains);
+    MonotoneChainBuilder::getChains(segStr->getCoordinates().get(), const_cast<SegmentString*>(segStr), segChains);
 
     for (MonotoneChain& mc : segChains) {
         if (envelope == nullptr || envelope->intersects(mc.getEnvelope())) {

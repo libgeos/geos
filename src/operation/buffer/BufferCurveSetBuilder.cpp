@@ -85,18 +85,17 @@ BufferCurveSetBuilder::getCurves()
 
 /*public*/
 void
-BufferCurveSetBuilder::addCurves(const std::vector<CoordinateSequence*>& lineList,
+BufferCurveSetBuilder::addCurves(std::vector<std::unique_ptr<CoordinateSequence>>& lineList,
                                  geom::Location leftLoc, geom::Location rightLoc)
 {
     for(std::size_t i = 0, n = lineList.size(); i < n; ++i) {
-        CoordinateSequence* coords = lineList[i];
-        addCurve(coords, leftLoc, rightLoc);
+        addCurve(std::move(lineList[i]), leftLoc, rightLoc);
     }
 }
 
 /*private*/
 void
-BufferCurveSetBuilder::addCurve(CoordinateSequence* coord,
+BufferCurveSetBuilder::addCurve(std::unique_ptr<CoordinateSequence> coord,
                                 geom::Location leftLoc, geom::Location rightLoc)
 {
 #if GEOS_DEBUG
@@ -107,15 +106,16 @@ BufferCurveSetBuilder::addCurve(CoordinateSequence* coord,
 #if GEOS_DEBUG
         std::cerr << " skipped (size<2)" << std::endl;
 #endif
-        delete coord;
         return;
     }
 
     // add the edge for a coordinate list which is a raw offset curve
     Label* newlabel = new Label(0, Location::BOUNDARY, leftLoc, rightLoc);
 
+    const bool hasZ = coord->hasZ();
+    const bool hasM = coord->hasM();
     // coord ownership transferred to SegmentString
-    SegmentString* e = new NodedSegmentString(coord, coord->hasZ(), coord->hasM(), newlabel);
+    SegmentString* e = new NodedSegmentString(std::move(coord), hasZ, hasM, newlabel);
 
     // SegmentString doesn't own the sequence, so we need to delete in
     // the destructor
@@ -185,7 +185,7 @@ BufferCurveSetBuilder::addPoint(const Point* p)
     if (coord->size() >= 1 && ! coord->getAt(0).isValid()) {
         return;
     }
-    std::vector<CoordinateSequence*> lineList;
+    std::vector<std::unique_ptr<CoordinateSequence>> lineList;
     curveBuilder.getLineCurve(coord, distance, lineList);
 
     addCurves(lineList, Location::EXTERIOR, Location::INTERIOR);
@@ -217,7 +217,7 @@ BufferCurveSetBuilder::addLineString(const LineString* line)
         addLinearRingSides(coord.get(), distance);
     }
     else {
-        std::vector<CoordinateSequence*> lineList;
+        std::vector<std::unique_ptr<CoordinateSequence>> lineList;
         curveBuilder.getLineCurve(coord.get(), distance, lineList);
         addCurves(lineList, Location::EXTERIOR, Location::INTERIOR);
     }
@@ -365,20 +365,20 @@ BufferCurveSetBuilder::addPolygonRingSide(const CoordinateSequence* coord,
 /* private */
 void
 BufferCurveSetBuilder::addRingSide(const CoordinateSequence* coord,
-                                      double offsetDistance, int side, geom::Location leftLoc, geom::Location rightLoc)
+                                   double offsetDistance, int side, geom::Location leftLoc, geom::Location rightLoc)
 {
-    std::vector<CoordinateSequence*> lineList;
+    std::vector<std::unique_ptr<CoordinateSequence>> lineList;
     curveBuilder.getRingCurve(coord, side, offsetDistance, lineList);
     // ASSERT: lineList contains exactly 1 curve (this is the JTS semantics)
     if (lineList.size() > 0) {
-        const CoordinateSequence* curve = lineList[0];
+        const CoordinateSequence* curve = lineList[0].get();
         /**
          * If the offset curve has inverted completely it will produce
          * an unwanted artifact in the result, so skip it.
          */
         if (isRingCurveInverted(coord, offsetDistance, curve)) {
-            for( auto line: lineList ) {
-                delete line;
+            for(auto& line: lineList ) {
+                line.reset();
             }
             return;
         }
