@@ -62,6 +62,8 @@ OffsetCurve::setJoined(bool pIsJoined)
 std::unique_ptr<Geometry>
 OffsetCurve::getCurve()
 {
+    util::ensureNoCurvedComponents(inputGeom);
+
     GeometryMapper::mapOp GetCurveMapOp = [this](const Geometry& geom)->std::unique_ptr<Geometry> {
 
         if (geom.getGeometryTypeId() == GEOS_POINT) return nullptr;
