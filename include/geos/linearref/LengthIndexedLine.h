@@ -138,7 +138,7 @@ public:
      * slightly off the line and is equidistant from two different
      * points on the line.
      *
-     * The supplied point does not `*necessarily* have to lie precisely
+     * The supplied point does not *necessarily* have to lie precisely
      * on the line, but if it is far from the line the accuracy and
      * performance of this function is not guaranteed.
      * Use {@link #project} to compute a guaranteed result for points
