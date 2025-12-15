@@ -54,8 +54,7 @@ ArcIntersectionAdder::processIntersections(ArcString& e0, std::size_t segIndex0,
 void
 ArcIntersectionAdder::processIntersections(ArcString& e0, std::size_t segIndex0, SegmentString& e1, std::size_t segIndex1)
 {
-// don't bother intersecting a segment with itself
-
+    // don't bother intersecting a segment with itself
     const geom::CircularArc& arc = e0.getArc(segIndex0);
 
     // FIXME get useSegEndpoints from somewhere
@@ -79,7 +78,7 @@ ArcIntersectionAdder::processIntersections(SegmentString& e0, std::size_t segInd
 {
     using geom::CoordinateXY;
 
-// don't bother intersecting a segment with itself
+    // don't bother intersecting a segment with itself
     if(&e0 == &e1 && segIndex0 == segIndex1) {
         return;
     }
@@ -87,20 +86,11 @@ ArcIntersectionAdder::processIntersections(SegmentString& e0, std::size_t segInd
     m_intersector.intersects(*e0.getCoordinates(), segIndex0, segIndex0 + 1,
                              *e1.getCoordinates(), segIndex1, segIndex1 + 1);
 
-#if 0
-    const CoordinateXY& p0 = e0.getCoordinate(segIndex0);
-    const CoordinateXY& p1 = e0.getCoordinate(segIndex0 + 1);
-    const CoordinateXY& q0 = e1.getCoordinate(segIndex1);
-    const CoordinateXY& q1 = e1.getCoordinate(segIndex1 + 1);
-
-    m_intersector.intersects(p0, p1, q0, q1);
-#endif
-
     if (m_intersector.getResult() == algorithm::CircularArcIntersector::NO_INTERSECTION) {
         return;
     }
 
-// todo collinear?
+    // todo collinear?
 
     static_cast<NodedSegmentString&>(e0).addIntersection(m_intersector.getPoint(0), segIndex0);
 
