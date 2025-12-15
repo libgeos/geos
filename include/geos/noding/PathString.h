@@ -20,11 +20,14 @@
 #include <memory>
 #include <vector>
 
+namespace geos::geom {
+    class CoordinateSequence;
+}
+
 namespace geos::noding {
 
-/// A PathString represents a contiguous line/arc to the used as an input for
-/// noding. To access the coordinates, it is necessary to know whether they
-/// represent a set of line segments (SegmentString) or circular arcs (ArcString).
+/// A PathString represents a contiguous line/arc to be used as an input or output
+/// of a noding process.
 class GEOS_DLL PathString {
 public:
     virtual ~PathString() = default;
@@ -32,6 +35,11 @@ public:
     virtual std::size_t getSize() const = 0;
 
     virtual double getLength() const = 0;
+
+    /// \brief
+    /// Return a pointer to the CoordinateSequence associated
+    /// with this PathString.
+    virtual const std::shared_ptr<const geom::CoordinateSequence>& getCoordinates() const = 0;
 
     std::vector<PathString*>
     static toRawPointerVector(const std::vector<std::unique_ptr<PathString>> & segStrings);
