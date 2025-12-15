@@ -15,8 +15,9 @@
 #include <geos/noding/ArcString.h>
 
 namespace geos::noding {
- std::unique_ptr<geom::CoordinateSequence>
- ArcString::releaseCoordinates() {
-  return std::move(m_seq);
- }
+const std::shared_ptr<const geom::CoordinateSequence>&
+ArcString::getCoordinates() const
+{
+    return m_seq;
+}
 }

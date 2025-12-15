@@ -111,7 +111,7 @@ public:
     /// \brief
     /// Return a pointer to the CoordinateSequence associated
     /// with this SegmentString.
-    const std::shared_ptr<const geom::CoordinateSequence>& getCoordinates() const {
+    const std::shared_ptr<const geom::CoordinateSequence>& getCoordinates() const override {
         return seq;
     }
 

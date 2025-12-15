@@ -136,7 +136,7 @@ GeometryNoder::toGeometry(std::vector<std::unique_ptr<PathString>>& nodedEdges) 
             resultArcs = true;
             auto* as = dynamic_cast<ArcString*>(path.get());
             // FIXME: check for duplicates
-            lines.push_back(geomFact->createCircularString(as->releaseCoordinates()));
+            lines.push_back(geomFact->createCircularString(as->getCoordinates()));
         }
     }
 

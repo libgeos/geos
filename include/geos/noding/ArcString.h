@@ -62,11 +62,11 @@ public:
         return m_arcs.end();
     }
 
-    std::unique_ptr<geom::CoordinateSequence> releaseCoordinates();
+    const std::shared_ptr<const geom::CoordinateSequence>& getCoordinates() const override;
 
 protected:
     std::vector<geom::CircularArc> m_arcs;
-    std::unique_ptr<geom::CoordinateSequence> m_seq;
+    std::shared_ptr<const geom::CoordinateSequence> m_seq;
     void* m_context;
 };
 
