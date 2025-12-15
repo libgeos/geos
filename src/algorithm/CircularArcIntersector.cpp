@@ -507,7 +507,6 @@ CircularArcIntersector::intersects(const CircularArc& arc1, const CircularArc& a
         }
 #endif
 
-#if 1
         // Add endpoint intersections missed due to precision issues.
         // TODO: Add some logic to prevent double-counting of endpoints. Ideally, the endpoint test would happen before
         // computing intersection points, so if there is an endpoint intersection we get the exact intersection point
@@ -524,7 +523,6 @@ CircularArcIntersector::intersects(const CircularArc& arc1, const CircularArc& a
         if (nPt < 2 && arc1.p2().equals2D(arc2.p2()) && (nPt == 0 || !intPt[0].equals2D(arc1.p2()))) {
             addIntersection(arc1.p2(), arc1, arc2);
         }
-#endif
     }
 
     if (nArc) {
@@ -566,6 +564,17 @@ CircularArcIntersector::intersects(const CoordinateSequence &p, std::size_t p0, 
     }
 }
 
+static void
+setFromEndpoint(geom::CoordinateXYZM& pt, const CircularArc& arc, std::size_t index)
+{
+    arc.applyAt(index, [&pt](const auto& endpoint) {
+        pt.x = endpoint.x;
+        pt.y = endpoint.y;
+        pt.z = Interpolate::zGet(pt, endpoint);
+        pt.m = Interpolate::mGet(pt, endpoint);
+    });
+}
+
 void
 CircularArcIntersector::addArcIntersection(double startAngle, double endAngle, int orientation, const CircularArc& arc1, const CircularArc& arc2)
 {
@@ -580,48 +589,27 @@ CircularArcIntersector::addArcIntersection(double startAngle, double endAngle, i
     CoordinateXYZM computedMidPt(CircularArcs::createPoint(center, radius, theta1));
     CoordinateXYZM computedEndPt(CircularArcs::createPoint(center, radius, endAngle));
 
-    if (computedStartPt.equals2D(arc1.p0())) {
-        arc1.applyAt(0, [&computedStartPt](const auto& endpoint) {
-            computedStartPt.z = Interpolate::zGet(computedStartPt, endpoint);
-            computedStartPt.m = Interpolate::mGet(computedStartPt, endpoint);
-        });
-    } else if (computedStartPt.equals2D(arc1.p2())) {
-        arc1.applyAt(2, [&computedStartPt](const auto& endpoint) {
-            computedStartPt.z = Interpolate::zGet(computedStartPt, endpoint);
-            computedStartPt.m = Interpolate::mGet(computedStartPt, endpoint);
-        });
-    } else if (computedStartPt.equals2D(arc2.p0())) {
-        arc2.applyAt(0, [&computedStartPt](const auto& endpoint) {
-            computedStartPt.z = Interpolate::zGet(computedStartPt, endpoint);
-            computedStartPt.m = Interpolate::mGet(computedStartPt, endpoint);
-        });
-    } else if (computedStartPt.equals2D(arc2.p2())) {
-        arc2.applyAt(2, [&computedStartPt](const auto& endpoint) {
-            computedStartPt.z = Interpolate::zGet(computedStartPt, endpoint);
-            computedStartPt.m = Interpolate::mGet(computedStartPt, endpoint);
-        });
+    // Check to see if the endpoints of the intersection match the endpoints of either of
+    // the endpoints. Use angles for the check to avoid missing an endpoint intersection from
+    // inaccuracy the point construction.
+    if (startAngle == arc1.theta0()) {
+        setFromEndpoint(computedStartPt, arc1, 0);
+    } else if (startAngle == arc1.theta2()) {
+        setFromEndpoint(computedStartPt, arc1, 2);
+    } else if (startAngle == arc2.theta0()) {
+        setFromEndpoint(computedStartPt, arc2, 0);
+    } else if (startAngle == arc2.theta2()) {
+        setFromEndpoint(computedStartPt, arc2, 2);
     }
 
-    if (computedEndPt.equals2D(arc1.p0())) {
-        arc1.applyAt(0, [&computedEndPt](const auto& endpoint) {
-            computedEndPt.z = Interpolate::zGet(computedEndPt, endpoint);
-            computedEndPt.m = Interpolate::mGet(computedEndPt, endpoint);
-        });
-    } else if (computedEndPt.equals2D(arc1.p2())) {
-        arc1.applyAt(2, [&computedEndPt](const auto& endpoint) {
-            computedEndPt.z = Interpolate::zGet(computedEndPt, endpoint);
-            computedEndPt.m = Interpolate::mGet(computedEndPt, endpoint);
-        });
-    } else if (computedEndPt.equals2D(arc2.p0())) {
-        arc2.applyAt(0, [&computedEndPt](const auto& endpoint) {
-            computedEndPt.z = Interpolate::zGet(computedEndPt, endpoint);
-            computedEndPt.m = Interpolate::mGet(computedEndPt, endpoint);
-        });
-    } else if (computedEndPt.equals2D(arc2.p2())) {
-        arc2.applyAt(2, [&computedEndPt](const auto& endpoint) {
-            computedEndPt.z = Interpolate::zGet(computedEndPt, endpoint);
-            computedEndPt.m = Interpolate::mGet(computedEndPt, endpoint);
-        });
+    if (endAngle == arc1.theta0()) {
+        setFromEndpoint(computedEndPt, arc1, 0);
+    } else if (endAngle == arc1.theta2()) {
+        setFromEndpoint(computedEndPt, arc1, 2);
+    } else if (endAngle == arc2.theta0()) {
+        setFromEndpoint(computedEndPt, arc2, 0);
+    } else if (endAngle == arc2.theta2()) {
+        setFromEndpoint(computedEndPt, arc2, 2);
     }
 
     interpolateZM(arc1, arc2, computedStartPt);
