@@ -14,6 +14,8 @@
 
 #include <geos/noding/NodableArcString.h>
 
+#define DEBUG_NODABLE_ARC_STRING 0
+
 namespace geos::noding {
 
 static double
@@ -34,19 +36,10 @@ NodableArcString::NodableArcString(std::vector<geom::CircularArc> arcs, std::uni
 {
 }
 
-
-//std::unique_ptr<ArcString> clone() const {
-//
-//}
-
 std::unique_ptr<ArcString>
 NodableArcString::getNoded() {
 
     auto dstSeq = std::make_unique<geom::CoordinateSequence>(0, m_constructZ, m_constructM);
-
-        //if (m_adds.empty()) {
-        //    return clone();
-        //}
 
         std::vector<geom::CircularArc> arcs;
         for (size_t i = 0; i < m_arcs.size(); i++) {
@@ -80,7 +73,7 @@ NodableArcString::getNoded() {
                     }
                 });
 
-#if 0
+#if DEBUG_NODABLE_ARC_STRING
                 std::cout << "Splitting " << toSplit.toString() << " " << (isCCW ? "CCW" : "CW") << " paStart " << paStart << " paStop " << geom::Quadrant::pseudoAngle(center, toSplit.p2()) << std::endl;
                 for (const auto& splitPt : splitPoints)
                 {
@@ -97,7 +90,11 @@ NodableArcString::getNoded() {
 
                 // Add intermediate points of split arc
                 for (const auto& splitPoint : splitPoints) {
-                    if (!arcs.empty() && splitPoint.equals2D(arcs.back().p2())) {
+                    if (arcs.empty()) {
+                        if (splitPoint.equals2D(p0)) {
+                            continue;
+                        }
+                    } else if (splitPoint.equals2D(arcs.back().p2())) {
                         continue;
                     }
 
@@ -116,14 +113,15 @@ NodableArcString::getNoded() {
 
                 // Add last point of split arc
                 toSplit.getCoordinateSequence()->getAt(toSplit.getCoordinatePosition() + 2, p2);
+                if (arcs.empty() || !arcs.back().p2().equals2D(p2)) {
+                    geom::CoordinateXYZM midpoint(algorithm::CircularArcs::getMidpoint(p0, p2, center, radius, isCCW));
+                    midpoint.z = (p0.z + p2.z) / 2;
+                    midpoint.m = (p0.m + p2.m) / 2;
 
-                geom::CoordinateXYZM midpoint(algorithm::CircularArcs::getMidpoint(p0, p2, center, radius, isCCW));
-                midpoint.z = (p0.z + p2.z) / 2;
-                midpoint.m = (p0.m + p2.m) / 2;
-
-                dstSeq->add(midpoint);
-                dstSeq->add(p2);
-                arcs.emplace_back(*dstSeq, dstPos, center, radius, orientation);
+                    dstSeq->add(midpoint);
+                    dstSeq->add(p2);
+                    arcs.emplace_back(*dstSeq, dstPos, center, radius, orientation);
+                }
             }
         }
 

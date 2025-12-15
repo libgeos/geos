@@ -21,14 +21,20 @@ namespace geos::noding {
 
 /// A NodablePath represents a PathString to which coordinates can be added.
 class GEOS_DLL NodablePath {
-    //virtual void addIntersection( const geom::Coordinate& intPt, int segmentIndex) =0;
-    //virtual void addIntersection( const geom::CoordinateXYM& intPt, int segmentIndex) =0;
 public:
-    virtual void addInt(const geom::CoordinateXY& intPt, size_t pathIndex) {
+    virtual void addIntersection( const geom::Coordinate& intPt, size_t pathIndex) {
         addIntersection(geom::CoordinateXYZM{intPt}, pathIndex);
     }
 
-    virtual void addIntersection(geom::CoordinateXYZM intPt, size_t pathIndex) =0;
+    virtual void addIntersection( const geom::CoordinateXYM& intPt, size_t pathIndex) {
+        addIntersection(geom::CoordinateXYZM{intPt}, pathIndex);
+    }
+
+    virtual void addIntersection(const geom::CoordinateXY& intPt, size_t pathIndex) {
+        addIntersection(geom::CoordinateXYZM{intPt}, pathIndex);
+    }
+
+    virtual void addIntersection(const geom::CoordinateXYZM& intPt, size_t pathIndex) =0;
 };
 
 }

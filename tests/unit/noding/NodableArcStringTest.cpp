@@ -26,7 +26,7 @@ struct test_nodablearcstring_data {
         NodableArcString nas(arcs, nullptr, false, false, nullptr);
 
         for (const auto& coord : coords) {
-            nas.addInt(coord, 0);
+            nas.addIntersection(coord, 0);
         }
 
         auto noded = nas.getNoded();

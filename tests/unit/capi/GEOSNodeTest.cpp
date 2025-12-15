@@ -259,5 +259,25 @@ void object::test<11>()
                                       reinterpret_cast<Geometry*>(expected_), 1e-4);
 }
 
+template<>
+template<>
+void object::test<12>()
+{
+    set_test_name("two cocircular CIRCULARSTRINGs");
+
+    input_ = fromWKT("MULTICURVE ("
+        "CIRCULARSTRING (-5 0, 0 5, 5 0),"
+        "CIRCULARSTRING (-4 3, 0 5, 4 3))");
+
+    result_ = GEOSNode(input_);
+
+    expected_ = fromWKT("MULTICURVE ("
+                        "CIRCULARSTRING (-5.0000000000000000 0.0000000000000000, -4.7434164902525691 1.5811388300841900, -4.0000000000000000 3.0000000000000000, 0.0000000000000003 5.0000000000000000, 4.0000000000000000 3.0000000000000000, 4.7434164902525691 1.5811388300841898, 5.0000000000000000 0.0000000000000000),"
+                        "CIRCULARSTRING (-4.0000000000000000 3.0000000000000000, 0.0000000000000003 5.0000000000000000, 4.0000000000000000 3.0000000000000000))");
+
+    ensure_equals_exact_geometry_xyzm(reinterpret_cast<Geometry*>(result_),
+                                      reinterpret_cast<Geometry*>(expected_), 1e-4);
+}
+
 } // namespace tut
 

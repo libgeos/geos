@@ -12,7 +12,6 @@
  *
  **********************************************************************/
 
-#include <geos/geom/CoordinateSequences.h>
 #include <geos/noding/ArcIntersectionAdder.h>
 #include <geos/noding/NodableArcString.h>
 #include <geos/noding/NodedSegmentString.h>
@@ -36,10 +35,19 @@ ArcIntersectionAdder::processIntersections(ArcString& e0, std::size_t segIndex0,
         return;
     }
 
-    // TODO handle cocircular intersections
     for (std::uint8_t i = 0; i < m_intersector.getNumPoints(); i++) {
         detail::down_cast<NodableArcString*>(&e0)->addIntersection(m_intersector.getPoint(i), segIndex0);
         detail::down_cast<NodableArcString*>(&e1)->addIntersection(m_intersector.getPoint(i), segIndex1);
+    }
+
+    for (std::uint8_t i = 0; i < m_intersector.getNumArcs(); i++) {
+        const auto& arc = m_intersector.getArc(i);
+        for (size_t j : {0u, 2u}) {
+            arc.applyAt(j, [&e0, &segIndex0, &e1, &segIndex1](const auto& pt) {
+                detail::down_cast<NodableArcString*>(&e0)->addIntersection(pt, segIndex0);
+                detail::down_cast<NodableArcString*>(&e1)->addIntersection(pt, segIndex1);
+            });
+        }
     }
 }
 

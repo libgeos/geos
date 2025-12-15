@@ -25,18 +25,10 @@ namespace tut {
 
 struct test_simplenoder_data {
 
-    // FIXME: This is duplicated from CircularArcIntersectorTest
     template<typename T>
     CircularArc makeArc(T p0, T p2, const CoordinateXY& center, double radius, int orientation)
     {
-        auto seq = std::make_unique<CoordinateSequence>(3, T::template has<Ordinate::Z>(), T::template has<Ordinate::M>());
-        seq->setAt(p0, 0);
-        seq->setAt(geos::algorithm::CircularArcs::getMidpoint(p0, p2, center, radius, orientation == Orientation::COUNTERCLOCKWISE), 1);
-        seq->setAt(p2, 2);
-
-        CircularArc ret(std::move(seq), 0);
-
-        return ret;
+        return CircularArc::create(p0, p2, center, radius, orientation);
     }
 
     template<typename T1, typename T2>

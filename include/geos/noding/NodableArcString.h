@@ -23,13 +23,13 @@ namespace geos::noding {
 class GEOS_DLL NodableArcString : public ArcString, public NodablePath {
 
 public:
-    //using ArcString::ArcString;
-
     NodableArcString(std::vector<geom::CircularArc> arcs, std::unique_ptr<geom::CoordinateSequence> coords, bool constructZ, bool constructM, void* context);
 
     std::unique_ptr<ArcString> clone() const;
 
-    void addIntersection(geom::CoordinateXYZM intPt, size_t segmentIndex) override {
+    using NodablePath::addIntersection;
+
+    void addIntersection(const geom::CoordinateXYZM& intPt, size_t segmentIndex) override {
         m_adds[segmentIndex].push_back(intPt);
     }
 
