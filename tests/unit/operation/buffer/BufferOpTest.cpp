@@ -3,6 +3,8 @@
 
 // tut
 #include <tut/tut.hpp>
+#include <tut/tut_macros.hpp>
+
 #include <utility.h>
 // geos
 #include <geos/operation/buffer/BufferOp.h>
@@ -20,6 +22,7 @@
 #include <memory>
 #include <string>
 #include <vector>
+
 
 using namespace geos::operation::buffer;
 
@@ -622,6 +625,21 @@ void object::test<28>
     std::string wkt = "MULTIPOLYGON (((24 95.239, 24 96, 24 99, 24.816 99, 24 95.239)), ((3 90, 3 93, 3 96, 3 99, 21 99, 21 96, 21 93, 21 90, 3 90)))";
     checkBuffer(wkt, 0, 0.01,
 "MULTIPOLYGON (((24 95.239, 24 96, 24 99, 24.816 99, 24 95.239)), ((3 90, 3 93, 3 96, 3 99, 21 99, 21 96, 21 93, 21 90, 3 90)))");    
+}
+
+template<>
+template<>
+void object::test<31>
+()
+{
+    set_test_name("buffer of line with only Inf coordinates");
+    // See https://github.com/libgeos/geos/issues/1332
+
+    std::string wkt = "LINESTRING (Inf Inf, Inf Inf)";
+
+    auto geom = wktreader.read(wkt);
+
+    ensure_THROW(geom->buffer(0.1), geos::util::GEOSException);
 }
 
 } // namespace tut
