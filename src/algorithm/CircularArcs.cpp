@@ -131,7 +131,7 @@ CircularArcs::expandEnvelope(geom::Envelope& e, const geom::CoordinateXY& p0, co
     }
 
     // collinear
-    if (std::isnan(center.x)) {
+    if (!std::isfinite(center.x) || !std::isfinite(center.y)) {
         return;
     }
 
