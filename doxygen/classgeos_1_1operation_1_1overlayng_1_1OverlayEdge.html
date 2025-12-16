@@ -64,9 +64,9 @@ Inheritance diagram for geos::operation::overlayng::OverlayEdge:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a6196454a03196ddf404b8eb738ac012e" id="r_a6196454a03196ddf404b8eb738ac012e"><td class="memItemLeft" align="right" valign="top"><a id="a6196454a03196ddf404b8eb738ac012e" name="a6196454a03196ddf404b8eb738ac012e"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>OverlayEdge</b> (const CoordinateXYZM &amp;p_orig, const CoordinateXYZM &amp;p_dirPt, bool p_direction, <a class="el" href="classgeos_1_1operation_1_1overlayng_1_1OverlayLabel.html">OverlayLabel</a> *p_label, const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *p_pts)</td></tr>
-<tr class="separator:a6196454a03196ddf404b8eb738ac012e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab46721b49b605fd1a74cd821e7b30196" id="r_ab46721b49b605fd1a74cd821e7b30196"><td class="memItemLeft" align="right" valign="top"><a id="ab46721b49b605fd1a74cd821e7b30196" name="ab46721b49b605fd1a74cd821e7b30196"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>OverlayEdge</b> (const CoordinateXYZM &amp;p_orig, const CoordinateXYZM &amp;p_dirPt, bool p_direction, <a class="el" href="classgeos_1_1operation_1_1overlayng_1_1OverlayLabel.html">OverlayLabel</a> *p_label, const std::shared_ptr&lt; const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt; &amp;p_pts)</td></tr>
+<tr class="separator:ab46721b49b605fd1a74cd821e7b30196"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7be8cf6900c06e1402a5311fb41012d2" id="r_a7be8cf6900c06e1402a5311fb41012d2"><td class="memItemLeft" align="right" valign="top"><a id="a7be8cf6900c06e1402a5311fb41012d2" name="a7be8cf6900c06e1402a5311fb41012d2"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isForward</b> () const</td></tr>
 <tr class="separator:a7be8cf6900c06e1402a5311fb41012d2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -84,12 +84,9 @@ const CoordinateXYZM &amp;&#160;</td><td class="memItemRight" valign="bottom"><b
 <tr class="memitem:a6fd758c75ff5c3f7741c12b564b04f6a" id="r_a6fd758c75ff5c3f7741c12b564b04f6a"><td class="memItemLeft" align="right" valign="top"><a id="a6fd758c75ff5c3f7741c12b564b04f6a" name="a6fd758c75ff5c3f7741c12b564b04f6a"></a>
 const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getCoordinatesRO</b> () const</td></tr>
 <tr class="separator:a6fd758c75ff5c3f7741c12b564b04f6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a575f1ba594b8c2e641251a04b6f82020" id="r_a575f1ba594b8c2e641251a04b6f82020"><td class="memItemLeft" align="right" valign="top"><a id="a575f1ba594b8c2e641251a04b6f82020" name="a575f1ba594b8c2e641251a04b6f82020"></a>
-std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getCoordinates</b> ()</td></tr>
-<tr class="separator:a575f1ba594b8c2e641251a04b6f82020"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8957afd276563f500f4db77968e01545" id="r_a8957afd276563f500f4db77968e01545"><td class="memItemLeft" align="right" valign="top"><a id="a8957afd276563f500f4db77968e01545" name="a8957afd276563f500f4db77968e01545"></a>
-std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getCoordinatesOriented</b> ()</td></tr>
-<tr class="separator:a8957afd276563f500f4db77968e01545"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8afa98e260261ef7c869258d6b51d816" id="r_a8afa98e260261ef7c869258d6b51d816"><td class="memItemLeft" align="right" valign="top"><a id="a8afa98e260261ef7c869258d6b51d816" name="a8afa98e260261ef7c869258d6b51d816"></a>
+std::shared_ptr&lt; const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getCoordinatesOriented</b> () const</td></tr>
+<tr class="separator:a8afa98e260261ef7c869258d6b51d816"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af40306ac86d8f7672ad10d09be2060d7" id="r_af40306ac86d8f7672ad10d09be2060d7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1overlayng_1_1OverlayEdge.html#af40306ac86d8f7672ad10d09be2060d7">addCoordinates</a> (<a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *coords) const</td></tr>
 <tr class="separator:af40306ac86d8f7672ad10d09be2060d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8f015bed90f322a2c889bed18b44023b" id="r_a8f015bed90f322a2c889bed18b44023b"><td class="memItemLeft" align="right" valign="top"><a id="a8f015bed90f322a2c889bed18b44023b" name="a8f015bed90f322a2c889bed18b44023b"></a>

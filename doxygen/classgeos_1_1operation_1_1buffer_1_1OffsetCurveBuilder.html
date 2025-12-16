@@ -65,22 +65,22 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a4ae8af720de8f4e6cb720269e7a73cd9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7bec44c7279de815b2e50e5aa5f885ff" id="r_a7bec44c7279de815b2e50e5aa5f885ff"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1buffer_1_1OffsetCurveBuilder.html#a7bec44c7279de815b2e50e5aa5f885ff">isLineOffsetEmpty</a> (double distance)</td></tr>
 <tr class="separator:a7bec44c7279de815b2e50e5aa5f885ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5812be46280b28134f7549bd3ba73012" id="r_a5812be46280b28134f7549bd3ba73012"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1buffer_1_1OffsetCurveBuilder.html#a5812be46280b28134f7549bd3ba73012">getLineCurve</a> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *inputPts, double distance, std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> * &gt; &amp;lineList)</td></tr>
-<tr class="memdesc:a5812be46280b28134f7549bd3ba73012"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method handles single points as well as lines.  <br /></td></tr>
-<tr class="separator:a5812be46280b28134f7549bd3ba73012"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24d13417063fa0045e1c1fe3e2149181" id="r_a24d13417063fa0045e1c1fe3e2149181"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1buffer_1_1OffsetCurveBuilder.html#a24d13417063fa0045e1c1fe3e2149181">getLineCurve</a> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *inputPts, double distance, std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt; &gt; &amp;lineList)</td></tr>
+<tr class="memdesc:a24d13417063fa0045e1c1fe3e2149181"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method handles single points as well as lines.  <br /></td></tr>
+<tr class="separator:a24d13417063fa0045e1c1fe3e2149181"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea38fe4c59e10f334a2df9cfea34ee12" id="r_aea38fe4c59e10f334a2df9cfea34ee12"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1buffer_1_1OffsetCurveBuilder.html#aea38fe4c59e10f334a2df9cfea34ee12">getLineCurve</a> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *inputPts, double pDistance)</td></tr>
 <tr class="separator:aea38fe4c59e10f334a2df9cfea34ee12"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad0041d27dd0fb55e974ecbef64ece078" id="r_ad0041d27dd0fb55e974ecbef64ece078"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1buffer_1_1OffsetCurveBuilder.html#ad0041d27dd0fb55e974ecbef64ece078">getSingleSidedLineCurve</a> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *inputPts, double distance, std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> * &gt; &amp;lineList, bool leftSide, bool rightSide)</td></tr>
-<tr class="memdesc:ad0041d27dd0fb55e974ecbef64ece078"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method handles single points as well as lines.  <br /></td></tr>
-<tr class="separator:ad0041d27dd0fb55e974ecbef64ece078"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af08fb9ac691a4a31d277c869ff880a25" id="r_af08fb9ac691a4a31d277c869ff880a25"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1buffer_1_1OffsetCurveBuilder.html#af08fb9ac691a4a31d277c869ff880a25">getRingCurve</a> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *inputPts, int side, double distance, std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> * &gt; &amp;lineList)</td></tr>
-<tr class="memdesc:af08fb9ac691a4a31d277c869ff880a25"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method handles the degenerate cases of single points and lines, as well as rings.  <br /></td></tr>
-<tr class="separator:af08fb9ac691a4a31d277c869ff880a25"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a520a8dc9392abc8162ab807166c9fe09" id="r_a520a8dc9392abc8162ab807166c9fe09"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1buffer_1_1OffsetCurveBuilder.html#a520a8dc9392abc8162ab807166c9fe09">getSingleSidedLineCurve</a> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *inputPts, double distance, std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt; &gt; &amp;lineList, bool leftSide, bool rightSide)</td></tr>
+<tr class="memdesc:a520a8dc9392abc8162ab807166c9fe09"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method handles single points as well as lines.  <br /></td></tr>
+<tr class="separator:a520a8dc9392abc8162ab807166c9fe09"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad6b5462808396f22051170ff0ea06ae9" id="r_ad6b5462808396f22051170ff0ea06ae9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1buffer_1_1OffsetCurveBuilder.html#ad6b5462808396f22051170ff0ea06ae9">getRingCurve</a> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *inputPts, int side, double distance, std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt; &gt; &amp;lineList)</td></tr>
+<tr class="memdesc:ad6b5462808396f22051170ff0ea06ae9"><td class="mdescLeft">&#160;</td><td class="mdescRight">This method handles the degenerate cases of single points and lines, as well as rings.  <br /></td></tr>
+<tr class="separator:ad6b5462808396f22051170ff0ea06ae9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4a4d8dfecd2b681c24f099a57b31e867" id="r_a4a4d8dfecd2b681c24f099a57b31e867"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1buffer_1_1OffsetCurveBuilder.html#a4a4d8dfecd2b681c24f099a57b31e867">getRingCurve</a> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *inputPts, int side, double pDistance)</td></tr>
 <tr class="separator:a4a4d8dfecd2b681c24f099a57b31e867"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4f5e747b89066f7b3f3aa9d99aae8e37" id="r_a4f5e747b89066f7b3f3aa9d99aae8e37"><td class="memItemLeft" align="right" valign="top"><a id="a4f5e747b89066f7b3f3aa9d99aae8e37" name="a4f5e747b89066f7b3f3aa9d99aae8e37"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>getOffsetCurve</b> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *inputPts, double p_distance, std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> * &gt; &amp;lineList)</td></tr>
-<tr class="separator:a4f5e747b89066f7b3f3aa9d99aae8e37"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4fd96d15dfc35c4c5fe5133f81d83e59" id="r_a4fd96d15dfc35c4c5fe5133f81d83e59"><td class="memItemLeft" align="right" valign="top"><a id="a4fd96d15dfc35c4c5fe5133f81d83e59" name="a4fd96d15dfc35c4c5fe5133f81d83e59"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>getOffsetCurve</b> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *inputPts, double p_distance, std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt; &gt; &amp;lineList)</td></tr>
+<tr class="separator:a4fd96d15dfc35c4c5fe5133f81d83e59"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a80ff2017312de398dba0e947d17a7033" id="r_a80ff2017312de398dba0e947d17a7033"><td class="memItemLeft" align="right" valign="top"><a id="a80ff2017312de398dba0e947d17a7033" name="a80ff2017312de398dba0e947d17a7033"></a>
 std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getOffsetCurve</b> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *inputPts, double pDistance)</td></tr>
 <tr class="separator:a80ff2017312de398dba0e947d17a7033"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -118,8 +118,8 @@ std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.
 
 </div>
 </div>
-<a id="a5812be46280b28134f7549bd3ba73012" name="a5812be46280b28134f7549bd3ba73012"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5812be46280b28134f7549bd3ba73012">&#9670;&#160;</a></span>getLineCurve() <span class="overload">[1/2]</span></h2>
+<a id="a24d13417063fa0045e1c1fe3e2149181" name="a24d13417063fa0045e1c1fe3e2149181"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a24d13417063fa0045e1c1fe3e2149181">&#9670;&#160;</a></span>getLineCurve() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -139,7 +139,7 @@ std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> * &gt; &amp;&#160;</td>
+          <td class="paramtype">std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt; &gt; &amp;&#160;</td>
           <td class="paramname"><em>lineList</em>&#160;</td>
         </tr>
         <tr>
@@ -156,7 +156,7 @@ std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.
   <table class="params">
     <tr><td class="paramname">inputPts</td><td>input points </td></tr>
     <tr><td class="paramname">distance</td><td>offset distance </td></tr>
-    <tr><td class="paramname">lineList</td><td>the std::vector to which the newly created CoordinateSequences will be pushed_back. Caller is responsible to delete these new elements. </td></tr>
+    <tr><td class="paramname">lineList</td><td>the std::vector to which the newly created CoordinateSequences will be pushed_back. </td></tr>
   </table>
   </dd>
 </dl>
@@ -200,8 +200,8 @@ std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.
 
 </div>
 </div>
-<a id="af08fb9ac691a4a31d277c869ff880a25" name="af08fb9ac691a4a31d277c869ff880a25"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af08fb9ac691a4a31d277c869ff880a25">&#9670;&#160;</a></span>getRingCurve() <span class="overload">[1/2]</span></h2>
+<a id="ad6b5462808396f22051170ff0ea06ae9" name="ad6b5462808396f22051170ff0ea06ae9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad6b5462808396f22051170ff0ea06ae9">&#9670;&#160;</a></span>getRingCurve() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -227,7 +227,7 @@ std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> * &gt; &amp;&#160;</td>
+          <td class="paramtype">std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt; &gt; &amp;&#160;</td>
           <td class="paramname"><em>lineList</em>&#160;</td>
         </tr>
         <tr>
@@ -295,8 +295,8 @@ std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.
 
 </div>
 </div>
-<a id="ad0041d27dd0fb55e974ecbef64ece078" name="ad0041d27dd0fb55e974ecbef64ece078"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad0041d27dd0fb55e974ecbef64ece078">&#9670;&#160;</a></span>getSingleSidedLineCurve()</h2>
+<a id="a520a8dc9392abc8162ab807166c9fe09" name="a520a8dc9392abc8162ab807166c9fe09"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a520a8dc9392abc8162ab807166c9fe09">&#9670;&#160;</a></span>getSingleSidedLineCurve()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -316,7 +316,7 @@ std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> * &gt; &amp;&#160;</td>
+          <td class="paramtype">std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt; &gt; &amp;&#160;</td>
           <td class="paramname"><em>lineList</em>, </td>
         </tr>
         <tr>

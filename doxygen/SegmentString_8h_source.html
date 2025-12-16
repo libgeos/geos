@@ -100,7 +100,7 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>                                     <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a>&amp; ss);</div>
 <div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
 <div class="foldopen" id="foldopen00060" data-start="{" data-end="}">
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno"><a class="line" href="classgeos_1_1noding_1_1SegmentString.html#a22f4911ff2cb28fd186045c0b4e5448b">   60</a></span>    <a class="code hl_function" href="classgeos_1_1noding_1_1SegmentString.html#a22f4911ff2cb28fd186045c0b4e5448b">SegmentString</a>(<span class="keyword">const</span> <span class="keywordtype">void</span>* newContext, <a class="code hl_class" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a>* newSeq)</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno"><a class="line" href="classgeos_1_1noding_1_1SegmentString.html#a0e6957515de94a05e48f512a5f5ce5c7">   60</a></span>    <a class="code hl_function" href="classgeos_1_1noding_1_1SegmentString.html#a0e6957515de94a05e48f512a5f5ce5c7">SegmentString</a>(<span class="keyword">const</span> <span class="keywordtype">void</span>* newContext, <span class="keyword">const</span> std::shared_ptr&lt;const geom::CoordinateSequence&gt;&amp; newSeq)</div>
 <div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>        :</div>
 <div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        seq(newSeq),</div>
 <div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>        context(newContext)</div>
@@ -135,96 +135,95 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>        <span class="keywordflow">return</span> seq-&gt;getAt&lt;CoordType&gt;(i);</div>
 <div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    }</div>
 <div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span> </div>
-<div class="foldopen" id="foldopen00106" data-start="{" data-end="}">
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno"><a class="line" href="classgeos_1_1noding_1_1SegmentString.html#a845528845114551b59971c503b268e9b">  106</a></span>    <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a>* <a class="code hl_function" href="classgeos_1_1noding_1_1SegmentString.html#a845528845114551b59971c503b268e9b">getCoordinates</a>()<span class="keyword"> const </span>{</div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>        <span class="keywordflow">return</span> seq;</div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>    }</div>
+<div class="foldopen" id="foldopen00103" data-start="{" data-end="}">
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno"><a class="line" href="classgeos_1_1noding_1_1SegmentString.html#ab137d105d84c14794d69ec091133e18f">  103</a></span>    <span class="keyword">const</span> std::shared_ptr&lt;const geom::CoordinateSequence&gt;&amp; <a class="code hl_function" href="classgeos_1_1noding_1_1SegmentString.html#ab137d105d84c14794d69ec091133e18f">getCoordinates</a>()<span class="keyword"> const </span>{</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>        <span class="keywordflow">return</span> seq;</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    }</div>
 </div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span> </div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>    <a class="code hl_class" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a>* getCoordinates() {</div>
-<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>        <span class="keywordflow">return</span> seq;</div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>    }</div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span> </div>
-<div class="foldopen" id="foldopen00121" data-start="{" data-end="}">
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno"><a class="line" href="classgeos_1_1noding_1_1SegmentString.html#aa15df810175a07c391401d4872bd64d3">  121</a></span>    <span class="keywordtype">int</span> <a class="code hl_function" href="classgeos_1_1noding_1_1SegmentString.html#aa15df810175a07c391401d4872bd64d3">getSegmentOctant</a>(std::size_t index)<span class="keyword"> const</span></div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span><span class="keyword">    </span>{</div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>        <span class="keywordflow">if</span> (index &gt;= size() - 1) {</div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>            <span class="keywordflow">return</span> -1;</div>
-<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>        }</div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>        <span class="keywordflow">return</span> safeOctant(seq-&gt;getAt&lt;geom::CoordinateXY&gt;(index),</div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>                          seq-&gt;getAt&lt;geom::CoordinateXY&gt;(index + 1));</div>
-<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>    };</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span> </div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>    <span class="keywordtype">void</span> setCoordinates(<span class="keyword">const</span> std::shared_ptr&lt;const geom::CoordinateSequence&gt;&amp; newSeq) {</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>        seq = newSeq;</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>    }</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span> </div>
+<div class="foldopen" id="foldopen00118" data-start="{" data-end="}">
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno"><a class="line" href="classgeos_1_1noding_1_1SegmentString.html#aa15df810175a07c391401d4872bd64d3">  118</a></span>    <span class="keywordtype">int</span> <a class="code hl_function" href="classgeos_1_1noding_1_1SegmentString.html#aa15df810175a07c391401d4872bd64d3">getSegmentOctant</a>(std::size_t index)<span class="keyword"> const</span></div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>        <span class="keywordflow">if</span> (index &gt;= size() - 1) {</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>            <span class="keywordflow">return</span> -1;</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>        }</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>        <span class="keywordflow">return</span> safeOctant(seq-&gt;getAt&lt;geom::CoordinateXY&gt;(index),</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>                          seq-&gt;getAt&lt;geom::CoordinateXY&gt;(index + 1));</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>    };</div>
 </div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span> </div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>    <span class="keyword">static</span> <span class="keywordtype">int</span> getSegmentOctant(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a>&amp; ss, std::size_t index) {</div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>        <span class="keywordflow">return</span> ss.<a class="code hl_function" href="classgeos_1_1noding_1_1SegmentString.html#aa15df810175a07c391401d4872bd64d3">getSegmentOctant</a>(index);</div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>    }</div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span> </div>
-<div class="foldopen" id="foldopen00142" data-start="{" data-end="}">
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno"><a class="line" href="classgeos_1_1noding_1_1SegmentString.html#a33f16ccb5eac721353cc76d4c2ac8bec">  142</a></span>    <span class="keyword">const</span> geom::CoordinateXY&amp; <a class="code hl_function" href="classgeos_1_1noding_1_1SegmentString.html#a33f16ccb5eac721353cc76d4c2ac8bec">nextInRing</a>(std::size_t index)<span class="keyword"> const</span></div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span><span class="keyword">    </span>{</div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>        std::size_t nextIndex = index + 1;</div>
-<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>        <span class="keywordflow">if</span> (nextIndex &gt; size() - 1) {</div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>            nextIndex = 1;</div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>        }</div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>        <span class="keywordflow">return</span> getCoordinate(nextIndex);</div>
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>    }</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span> </div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>    <span class="keyword">static</span> <span class="keywordtype">int</span> getSegmentOctant(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a>&amp; ss, std::size_t index) {</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>        <span class="keywordflow">return</span> ss.<a class="code hl_function" href="classgeos_1_1noding_1_1SegmentString.html#aa15df810175a07c391401d4872bd64d3">getSegmentOctant</a>(index);</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>    }</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span> </div>
+<div class="foldopen" id="foldopen00139" data-start="{" data-end="}">
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno"><a class="line" href="classgeos_1_1noding_1_1SegmentString.html#a33f16ccb5eac721353cc76d4c2ac8bec">  139</a></span>    <span class="keyword">const</span> geom::CoordinateXY&amp; <a class="code hl_function" href="classgeos_1_1noding_1_1SegmentString.html#a33f16ccb5eac721353cc76d4c2ac8bec">nextInRing</a>(std::size_t index)<span class="keyword"> const</span></div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>        std::size_t nextIndex = index + 1;</div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span>        <span class="keywordflow">if</span> (nextIndex &gt; size() - 1) {</div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>            nextIndex = 1;</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>        }</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span>        <span class="keywordflow">return</span> getCoordinate(nextIndex);</div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno">  146</span>    }</div>
 </div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span> </div>
-<div class="foldopen" id="foldopen00159" data-start="{" data-end="}">
-<div class="line"><a id="l00159" name="l00159"></a><span class="lineno"><a class="line" href="classgeos_1_1noding_1_1SegmentString.html#abb348df482855110a04b5ceab7a91183">  159</a></span>    <span class="keyword">const</span> geom::CoordinateXY&amp; <a class="code hl_function" href="classgeos_1_1noding_1_1SegmentString.html#abb348df482855110a04b5ceab7a91183">prevInRing</a>(std::size_t index)<span class="keyword"> const</span></div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span><span class="keyword">    </span>{</div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>        std::size_t prevIndex;</div>
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>        <span class="keywordflow">if</span> (index == 0)</div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>            prevIndex = size() - 2;</div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>        <span class="keywordflow">else</span></div>
-<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>            prevIndex = index - 1;</div>
-<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>        <span class="keywordflow">return</span> getCoordinate( prevIndex );</div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>    }</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span> </div>
+<div class="foldopen" id="foldopen00156" data-start="{" data-end="}">
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno"><a class="line" href="classgeos_1_1noding_1_1SegmentString.html#abb348df482855110a04b5ceab7a91183">  156</a></span>    <span class="keyword">const</span> geom::CoordinateXY&amp; <a class="code hl_function" href="classgeos_1_1noding_1_1SegmentString.html#abb348df482855110a04b5ceab7a91183">prevInRing</a>(std::size_t index)<span class="keyword"> const</span></div>
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span><span class="keyword">    </span>{</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>        std::size_t prevIndex;</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>        <span class="keywordflow">if</span> (index == 0)</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>            prevIndex = size() - 2;</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>        <span class="keywordflow">else</span></div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>            prevIndex = index - 1;</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>        <span class="keywordflow">return</span> getCoordinate( prevIndex );</div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>    }</div>
 </div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span> </div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span> </div>
-<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>    <span class="keywordtype">bool</span> isClosed()<span class="keyword"> const </span>{</div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>        <span class="keywordflow">return</span> seq-&gt;front&lt;geom::CoordinateXY&gt;().equals(seq-&gt;back&lt;geom::CoordinateXY&gt;());</div>
-<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>    }</div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span> </div>
-<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span>    <span class="keyword">static</span> std::vector&lt;SegmentString*&gt; toRawPointerVector(<span class="keyword">const</span> std::vector&lt;std::unique_ptr&lt;SegmentString&gt;&gt; &amp; segStrings);</div>
-<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span> </div>
-<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>    <span class="keyword">virtual</span> std::ostream&amp; print(std::ostream&amp; os) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span> </div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span> </div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>    <span class="keywordtype">bool</span> isClosed()<span class="keyword"> const </span>{</div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>        <span class="keywordflow">return</span> seq-&gt;front&lt;geom::CoordinateXY&gt;().equals(seq-&gt;back&lt;geom::CoordinateXY&gt;());</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>    }</div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span> </div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span>    <span class="keyword">static</span> std::vector&lt;SegmentString*&gt; toRawPointerVector(<span class="keyword">const</span> std::vector&lt;std::unique_ptr&lt;SegmentString&gt;&gt; &amp; segStrings);</div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span> </div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span>    <span class="keyword">virtual</span> std::ostream&amp; print(std::ostream&amp; os) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno">  174</span> </div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span><span class="keyword">protected</span>:</div>
+<div class="line"><a id="l00176" name="l00176"></a><span class="lineno">  176</span>    std::shared_ptr&lt;const geom::CoordinateSequence&gt; seq;</div>
 <div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span> </div>
-<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span><span class="keyword">protected</span>:</div>
-<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>    <a class="code hl_class" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a>* seq;</div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span>    <span class="keyword">const</span> <span class="keywordtype">void</span>* context;</div>
 <div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span> </div>
-<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>    <span class="keyword">const</span> <span class="keywordtype">void</span>* context;</div>
-<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span> </div>
-<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>    <span class="keyword">static</span> <span class="keywordtype">int</span> safeOctant(<span class="keyword">const</span> geom::CoordinateXY&amp; p0, <span class="keyword">const</span> geom::CoordinateXY&amp; p1)</div>
-<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>    {</div>
-<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>        <span class="keywordflow">if</span>(p0.equals2D(p1)) {</div>
-<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>            <span class="keywordflow">return</span> 0;</div>
-<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>        }</div>
-<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>        <span class="keywordflow">return</span> Octant::octant(p0, p1);</div>
-<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>    };</div>
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span> </div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>    <span class="comment">// Declare type as noncopyable</span></div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>    SegmentString(<span class="keyword">const</span> SegmentString&amp; other) = <span class="keyword">delete</span>;</div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>    SegmentString&amp; operator=(<span class="keyword">const</span> SegmentString&amp; rhs) = <span class="keyword">delete</span>;</div>
-<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>};</div>
+<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>    <span class="keyword">static</span> <span class="keywordtype">int</span> safeOctant(<span class="keyword">const</span> geom::CoordinateXY&amp; p0, <span class="keyword">const</span> geom::CoordinateXY&amp; p1)</div>
+<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>    {</div>
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>        <span class="keywordflow">if</span>(p0.equals2D(p1)) {</div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>            <span class="keywordflow">return</span> 0;</div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>        }</div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>        <span class="keywordflow">return</span> Octant::octant(p0, p1);</div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>    };</div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span> </div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>    <span class="comment">// Declare type as noncopyable</span></div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>    SegmentString(<span class="keyword">const</span> SegmentString&amp; other) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>    SegmentString&amp; operator=(<span class="keyword">const</span> SegmentString&amp; rhs) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>};</div>
 </div>
-<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span> </div>
-<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>std::ostream&amp; operator&lt;&lt; (std::ostream&amp; os, <span class="keyword">const</span> SegmentString&amp; ss);</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span> </div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>std::ostream&amp; operator&lt;&lt; (std::ostream&amp; os, <span class="keyword">const</span> SegmentString&amp; ss);</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span> </div>
+<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>} <span class="comment">// namespace geos.noding</span></div>
+<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>} <span class="comment">// namespace geos</span></div>
 <div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span> </div>
-<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>} <span class="comment">// namespace geos.noding</span></div>
-<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>} <span class="comment">// namespace geos</span></div>
-<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span> </div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequence_html"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequence.html">geos::geom::CoordinateSequence</a></div><div class="ttdoc">The internal representation of a list of coordinates inside a Geometry.</div><div class="ttdef"><b>Definition</b> CoordinateSequence.h:56</div></div>
 <div class="ttc" id="aclassgeos_1_1noding_1_1SegmentString_html"><div class="ttname"><a href="classgeos_1_1noding_1_1SegmentString.html">geos::noding::SegmentString</a></div><div class="ttdoc">An interface for classes which represent a sequence of contiguous line segments.</div><div class="ttdef"><b>Definition</b> SegmentString.h:47</div></div>
-<div class="ttc" id="aclassgeos_1_1noding_1_1SegmentString_html_a22f4911ff2cb28fd186045c0b4e5448b"><div class="ttname"><a href="classgeos_1_1noding_1_1SegmentString.html#a22f4911ff2cb28fd186045c0b4e5448b">geos::noding::SegmentString::SegmentString</a></div><div class="ttdeci">SegmentString(const void *newContext, geom::CoordinateSequence *newSeq)</div><div class="ttdoc">Construct a SegmentString.</div><div class="ttdef"><b>Definition</b> SegmentString.h:60</div></div>
-<div class="ttc" id="aclassgeos_1_1noding_1_1SegmentString_html_a33f16ccb5eac721353cc76d4c2ac8bec"><div class="ttname"><a href="classgeos_1_1noding_1_1SegmentString.html#a33f16ccb5eac721353cc76d4c2ac8bec">geos::noding::SegmentString::nextInRing</a></div><div class="ttdeci">const geom::CoordinateXY &amp; nextInRing(std::size_t index) const</div><div class="ttdef"><b>Definition</b> SegmentString.h:142</div></div>
+<div class="ttc" id="aclassgeos_1_1noding_1_1SegmentString_html_a0e6957515de94a05e48f512a5f5ce5c7"><div class="ttname"><a href="classgeos_1_1noding_1_1SegmentString.html#a0e6957515de94a05e48f512a5f5ce5c7">geos::noding::SegmentString::SegmentString</a></div><div class="ttdeci">SegmentString(const void *newContext, const std::shared_ptr&lt; const geom::CoordinateSequence &gt; &amp;newSeq)</div><div class="ttdoc">Construct a SegmentString.</div><div class="ttdef"><b>Definition</b> SegmentString.h:60</div></div>
+<div class="ttc" id="aclassgeos_1_1noding_1_1SegmentString_html_a33f16ccb5eac721353cc76d4c2ac8bec"><div class="ttname"><a href="classgeos_1_1noding_1_1SegmentString.html#a33f16ccb5eac721353cc76d4c2ac8bec">geos::noding::SegmentString::nextInRing</a></div><div class="ttdeci">const geom::CoordinateXY &amp; nextInRing(std::size_t index) const</div><div class="ttdef"><b>Definition</b> SegmentString.h:139</div></div>
 <div class="ttc" id="aclassgeos_1_1noding_1_1SegmentString_html_a7d841f73f1fd1a2a093c732263cf51d1"><div class="ttname"><a href="classgeos_1_1noding_1_1SegmentString.html#a7d841f73f1fd1a2a093c732263cf51d1">geos::noding::SegmentString::getData</a></div><div class="ttdeci">const void * getData() const</div><div class="ttdoc">Gets the user-defined data for this segment string.</div><div class="ttdef"><b>Definition</b> SegmentString.h:75</div></div>
-<div class="ttc" id="aclassgeos_1_1noding_1_1SegmentString_html_a845528845114551b59971c503b268e9b"><div class="ttname"><a href="classgeos_1_1noding_1_1SegmentString.html#a845528845114551b59971c503b268e9b">geos::noding::SegmentString::getCoordinates</a></div><div class="ttdeci">const geom::CoordinateSequence * getCoordinates() const</div><div class="ttdoc">Return a pointer to the CoordinateSequence associated with this SegmentString.</div><div class="ttdef"><b>Definition</b> SegmentString.h:106</div></div>
-<div class="ttc" id="aclassgeos_1_1noding_1_1SegmentString_html_aa15df810175a07c391401d4872bd64d3"><div class="ttname"><a href="classgeos_1_1noding_1_1SegmentString.html#aa15df810175a07c391401d4872bd64d3">geos::noding::SegmentString::getSegmentOctant</a></div><div class="ttdeci">int getSegmentOctant(std::size_t index) const</div><div class="ttdoc">Gets the octant of the segment starting at vertex index.</div><div class="ttdef"><b>Definition</b> SegmentString.h:121</div></div>
-<div class="ttc" id="aclassgeos_1_1noding_1_1SegmentString_html_abb348df482855110a04b5ceab7a91183"><div class="ttname"><a href="classgeos_1_1noding_1_1SegmentString.html#abb348df482855110a04b5ceab7a91183">geos::noding::SegmentString::prevInRing</a></div><div class="ttdeci">const geom::CoordinateXY &amp; prevInRing(std::size_t index) const</div><div class="ttdef"><b>Definition</b> SegmentString.h:159</div></div>
+<div class="ttc" id="aclassgeos_1_1noding_1_1SegmentString_html_aa15df810175a07c391401d4872bd64d3"><div class="ttname"><a href="classgeos_1_1noding_1_1SegmentString.html#aa15df810175a07c391401d4872bd64d3">geos::noding::SegmentString::getSegmentOctant</a></div><div class="ttdeci">int getSegmentOctant(std::size_t index) const</div><div class="ttdoc">Gets the octant of the segment starting at vertex index.</div><div class="ttdef"><b>Definition</b> SegmentString.h:118</div></div>
+<div class="ttc" id="aclassgeos_1_1noding_1_1SegmentString_html_ab137d105d84c14794d69ec091133e18f"><div class="ttname"><a href="classgeos_1_1noding_1_1SegmentString.html#ab137d105d84c14794d69ec091133e18f">geos::noding::SegmentString::getCoordinates</a></div><div class="ttdeci">const std::shared_ptr&lt; const geom::CoordinateSequence &gt; &amp; getCoordinates() const</div><div class="ttdoc">Return a pointer to the CoordinateSequence associated with this SegmentString.</div><div class="ttdef"><b>Definition</b> SegmentString.h:103</div></div>
+<div class="ttc" id="aclassgeos_1_1noding_1_1SegmentString_html_abb348df482855110a04b5ceab7a91183"><div class="ttname"><a href="classgeos_1_1noding_1_1SegmentString.html#abb348df482855110a04b5ceab7a91183">geos::noding::SegmentString::prevInRing</a></div><div class="ttdeci">const geom::CoordinateXY &amp; prevInRing(std::size_t index) const</div><div class="ttdef"><b>Definition</b> SegmentString.h:156</div></div>
 <div class="ttc" id="aclassgeos_1_1noding_1_1SegmentString_html_ae904e3ae8ad4cbf87f6d72d4a74b0371"><div class="ttname"><a href="classgeos_1_1noding_1_1SegmentString.html#ae904e3ae8ad4cbf87f6d72d4a74b0371">geos::noding::SegmentString::setData</a></div><div class="ttdeci">void setData(const void *data)</div><div class="ttdoc">Sets the user-defined data for this segment string.</div><div class="ttdef"><b>Definition</b> SegmentString.h:86</div></div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition</b> geos.h:38</div></div>
 </div><!-- fragment --></div><!-- contents -->

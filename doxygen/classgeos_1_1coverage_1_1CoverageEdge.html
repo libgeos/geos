@@ -58,9 +58,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aea6b269b0701fb0c1907ea573413e6db" id="r_aea6b269b0701fb0c1907ea573413e6db"><td class="memItemLeft" align="right" valign="top"><a id="aea6b269b0701fb0c1907ea573413e6db" name="aea6b269b0701fb0c1907ea573413e6db"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>CoverageEdge</b> (std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt; &amp;&amp;pts, bool <a class="el" href="classgeos_1_1coverage_1_1CoverageEdge.html#a7209f4146c5fd59ac0a5d43b6a7b3700">isFreeRing</a>)</td></tr>
 <tr class="separator:aea6b269b0701fb0c1907ea573413e6db"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7c842ff7c9895461e1fadefb10529dec" id="r_a7c842ff7c9895461e1fadefb10529dec"><td class="memItemLeft" align="right" valign="top"><a id="a7c842ff7c9895461e1fadefb10529dec" name="a7c842ff7c9895461e1fadefb10529dec"></a>
-std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1LineString.html">LineString</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>toLineString</b> (const <a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a> *geomFactory)</td></tr>
-<tr class="separator:a7c842ff7c9895461e1fadefb10529dec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afeeb91785bdd54cdd3b65a5359011e45" id="r_afeeb91785bdd54cdd3b65a5359011e45"><td class="memItemLeft" align="right" valign="top"><a id="afeeb91785bdd54cdd3b65a5359011e45" name="afeeb91785bdd54cdd3b65a5359011e45"></a>
+std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1LineString.html">LineString</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>toLineString</b> (const <a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a> *geomFactory) const</td></tr>
+<tr class="separator:afeeb91785bdd54cdd3b65a5359011e45"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb5da284dcc58169b607d1e7d8e8e1ce" id="r_abb5da284dcc58169b607d1e7d8e8e1ce"><td class="memItemLeft" align="right" valign="top"><a id="abb5da284dcc58169b607d1e7d8e8e1ce" name="abb5da284dcc58169b607d1e7d8e8e1ce"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>incRingCount</b> ()</td></tr>
 <tr class="separator:abb5da284dcc58169b607d1e7d8e8e1ce"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -69,12 +69,12 @@ std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getRingCount</
 <tr class="separator:aac968d4fcbdb529822faa885e78a9842"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7209f4146c5fd59ac0a5d43b6a7b3700" id="r_a7209f4146c5fd59ac0a5d43b6a7b3700"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1coverage_1_1CoverageEdge.html#a7209f4146c5fd59ac0a5d43b6a7b3700">isFreeRing</a> () const</td></tr>
 <tr class="separator:a7209f4146c5fd59ac0a5d43b6a7b3700"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec4916b5c9b4242a8c3a966113a20274" id="r_aec4916b5c9b4242a8c3a966113a20274"><td class="memItemLeft" align="right" valign="top"><a id="aec4916b5c9b4242a8c3a966113a20274" name="aec4916b5c9b4242a8c3a966113a20274"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setCoordinates</b> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *pts)</td></tr>
-<tr class="separator:aec4916b5c9b4242a8c3a966113a20274"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae36bc851ebb757224f0185969ddbc14a" id="r_ae36bc851ebb757224f0185969ddbc14a"><td class="memItemLeft" align="right" valign="top"><a id="ae36bc851ebb757224f0185969ddbc14a" name="ae36bc851ebb757224f0185969ddbc14a"></a>
-const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getCoordinates</b> () const</td></tr>
-<tr class="separator:ae36bc851ebb757224f0185969ddbc14a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0fdec0a2d657afa6f3a856ffeb74ef92" id="r_a0fdec0a2d657afa6f3a856ffeb74ef92"><td class="memItemLeft" align="right" valign="top"><a id="a0fdec0a2d657afa6f3a856ffeb74ef92" name="a0fdec0a2d657afa6f3a856ffeb74ef92"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setCoordinates</b> (const std::shared_ptr&lt; const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt; &amp;pts)</td></tr>
+<tr class="separator:a0fdec0a2d657afa6f3a856ffeb74ef92"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a72c20c47d10658935477895dc63e3e32" id="r_a72c20c47d10658935477895dc63e3e32"><td class="memItemLeft" align="right" valign="top"><a id="a72c20c47d10658935477895dc63e3e32" name="a72c20c47d10658935477895dc63e3e32"></a>
+const std::shared_ptr&lt; const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getCoordinates</b> () const</td></tr>
+<tr class="separator:a72c20c47d10658935477895dc63e3e32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4abc33a1f7d3aaf01376c23f126580ab" id="r_a4abc33a1f7d3aaf01376c23f126580ab"><td class="memItemLeft" align="right" valign="top"><a id="a4abc33a1f7d3aaf01376c23f126580ab" name="a4abc33a1f7d3aaf01376c23f126580ab"></a>
 const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getEndCoordinate</b> () const</td></tr>
 <tr class="separator:a4abc33a1f7d3aaf01376c23f126580ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
