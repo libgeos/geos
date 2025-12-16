@@ -3,6 +3,7 @@
 
 - Fixes/Improvements:
   - Fix DepthSegment comparison logic (really this time) (GH-1266, Martin Davis)
+  - Avoid crash on buffer of geometry with only invalid coordinates (GH-1335, Dan Baston)
 
 ## Changes in 3.11.5
 2025-03-03
