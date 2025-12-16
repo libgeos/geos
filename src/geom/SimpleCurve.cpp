@@ -144,7 +144,7 @@ SimpleCurve::computeEnvelopeInternal(bool isLinear) const
     }
     else {
         Envelope e;
-        for (std::size_t i = 2; i < points->size(); i++) {
+        for (std::size_t i = 2; i < points->size(); i += 2) {
             algorithm::CircularArcs::expandEnvelope(e,
                                                     points->getAt<CoordinateXY>(i-2),
                                                     points->getAt<CoordinateXY>(i-1),
