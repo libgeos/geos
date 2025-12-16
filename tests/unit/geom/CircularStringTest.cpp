@@ -8,6 +8,8 @@
 #include <geos/io/WKTReader.h>
 #include <geos/util/UnsupportedOperationException.h>
 
+#include "utility.h"
+
 using geos::geom::CoordinateSequence;
 using geos::geom::CircularString;
 using XY = geos::geom::CoordinateXY;
@@ -173,6 +175,28 @@ void object::test<4>()
     ensure("isClosed", !cs_->isClosed());
     XY pt(4, 0);
     ensure("isCoordinate", cs_->isCoordinate(pt));
+}
+
+template<>
+template<>
+void object::test<5>()
+{
+    set_test_name("invalid number of points");
+
+    auto pts = std::make_shared<CoordinateSequence>();
+    ensure_NO_THROW(factory_->createCircularString(pts));
+
+    pts->add(0.0, 0.0);
+    ensure_THROW(factory_->createCircularString(pts), geos::util::GEOSException);
+
+    pts->add(1.0, 1.0);
+    ensure_THROW(factory_->createCircularString(pts), geos::util::GEOSException);
+
+    pts->add(2.0, 0.0);
+    ensure_NO_THROW(factory_->createCircularString(pts));
+
+    pts->add(3.0, -1.0);
+    ensure_THROW(factory_->createCircularString(pts), geos::util::GEOSException);
 }
 
 }

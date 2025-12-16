@@ -97,8 +97,8 @@ CircularString::validateConstruction()
         return;
     }
 
-    if (points->size() == 2) {
-        throw util::IllegalArgumentException("point array must contain 0 or >2 elements\n");
+    if (points->size() > 0 && (points->size() < 3 || points->size() % 2 == 0)) {
+        throw util::IllegalArgumentException("point array size must zero or be an odd number >= 3");
     }
 }
 

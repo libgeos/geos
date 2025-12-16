@@ -193,10 +193,10 @@ void object::test<9>
 {
     GEOSGeometry* geoms[2];
     geoms[0] = fromWKT("POLYGON ((0 0, 1 0, 1 1, 0 0))");
-    geoms[1] = fromWKT("CURVEPOLYGON (CIRCULARSTRING (10 10, 20 10, 15 15, 10 10))");
+    geoms[1] = fromWKT("CURVEPOLYGON (COMPOUNDCURVE (CIRCULARSTRING (10 10, 20 10, 15 15), (15 15, 10 10)))");
 
     result_ = GEOSGeom_createCollection(GEOS_MULTISURFACE, geoms, 2);
-    expected_ = fromWKT("MULTISURFACE (((0 0, 1 0, 1 1, 0 0)), CURVEPOLYGON (CIRCULARSTRING (10 10, 20 10, 15 15, 10 10)))");
+    expected_ = fromWKT("MULTISURFACE (((0 0, 1 0, 1 1, 0 0)), CURVEPOLYGON (COMPOUNDCURVE(CIRCULARSTRING (10 10, 20 10, 15 15), (15 15, 10 10))))");
 
     ensure_geometry_equals_identical(result_, expected_);
 }
