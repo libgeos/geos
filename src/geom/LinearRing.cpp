@@ -44,6 +44,13 @@ LinearRing::LinearRing(CoordinateSequence::Ptr && newCoords,
     validateConstruction();
 }
 
+LinearRing::LinearRing(const std::shared_ptr<const CoordinateSequence>& newCoords,
+                       const GeometryFactory& newFactory)
+        : LineString(newCoords, newFactory)
+{
+    validateConstruction();
+}
+
 void
 LinearRing::validateConstruction()
 {
@@ -108,7 +115,13 @@ LinearRing::orient(bool isCW)
     }
 
     if (algorithm::Orientation::isCCW(points.get()) == isCW) {
-        points->reverse();
+        if (points.use_count() == 1) {
+            const_cast<CoordinateSequence*>(points.get())->reverse();
+        } else {
+            auto newPoints = points->clone();
+            newPoints->reverse();
+            points = std::move(newPoints);
+        }
     }
 
 }

@@ -59,8 +59,8 @@ CoverageEdge::createLines(
 {
     std::vector<std::unique_ptr<LineString>> lines;
     for (const CoverageEdge* edge : edges) {
-        auto cs = edge->getCoordinates()->clone();
-        auto ls = geomFactory->createLineString(std::move(cs));
+        const auto& cs = edge->getCoordinates();
+        auto ls = geomFactory->createLineString(cs);
         lines.push_back(std::move(ls));
     }
     return geomFactory->createMultiLineString(std::move(lines));
@@ -68,10 +68,10 @@ CoverageEdge::createLines(
 
 /* public */
 std::unique_ptr<LineString>
-CoverageEdge::toLineString(const GeometryFactory* geomFactory)
+CoverageEdge::toLineString(const GeometryFactory* geomFactory) const
 {
-    const CoordinateSequence* cs = getCoordinates();
-    return geomFactory->createLineString(cs->clone());
+    const auto& cs = getCoordinates();
+    return geomFactory->createLineString(cs);
 }
 
 /* private static */

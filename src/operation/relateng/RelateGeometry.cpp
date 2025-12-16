@@ -404,9 +404,8 @@ RelateGeometry::extractSegmentStringsFromAtomic(bool isA,
         const LineString* line = static_cast<const LineString*>(p_geom);
         /*
          * Condition the input Coordinate sequence so that it has no repeated points.
-         * This requires taking a copy which removeRepeated does behind the scenes and stores in csStore.
          */
-        const CoordinateSequence* cs = removeRepeated(line->getCoordinatesRO());
+        std::shared_ptr<const CoordinateSequence> cs = removeRepeated(line->getSharedCoordinates());
         auto ss = RelateSegmentString::createLine(cs, isA, elementId, this);
         segStore.emplace_back(ss);
         segStrings.push_back(ss);
@@ -441,11 +440,11 @@ RelateGeometry::extractRingToSegmentString(bool isA,
 
     /*
      * Condition the input Coordinate sequence so that it has no repeated points
-     * and is oriented in a deterministic way. This requires taking a copy which
-     * orientAndRemoveRepeated does behind the scenes and stores in csStore.
+     * and is oriented in a deterministic way. This may require taking a copy which
+     * orientAndRemoveRepeated does behind the scenes.
      */
     bool requireCW = (ringId == 0);
-    const CoordinateSequence* cs = orientAndRemoveRepeated(ring->getCoordinatesRO(), requireCW);
+    std::shared_ptr<const CoordinateSequence> cs = orientAndRemoveRepeated(ring->getSharedCoordinates(), requireCW);
     auto ss = RelateSegmentString::createRing(cs, isA, elementId, ringId, parentPoly, this);
     segStore.emplace_back(ss);
     segStrings.push_back(ss);
@@ -471,10 +470,10 @@ operator<<(std::ostream& os, const RelateGeometry& rg)
 
 
 /* private */
-const CoordinateSequence *
-RelateGeometry::orientAndRemoveRepeated(const CoordinateSequence *seq, bool orientCW)
+std::shared_ptr<const CoordinateSequence>
+RelateGeometry::orientAndRemoveRepeated(const std::shared_ptr<const CoordinateSequence>& seq, bool orientCW)
 {
-    bool isFlipped = (orientCW == Orientation::isCCW(seq));
+    bool isFlipped = (orientCW == Orientation::isCCW(seq.get()));
     bool hasRepeated = seq->hasRepeatedPoints();
     /* Already conditioned */
     if (!isFlipped && !hasRepeated) {
@@ -482,36 +481,29 @@ RelateGeometry::orientAndRemoveRepeated(const CoordinateSequence *seq, bool orie
     }
 
     if (hasRepeated) {
-        auto deduped = RepeatedPointRemover::removeRepeatedPoints(seq);
+        auto deduped = RepeatedPointRemover::removeRepeatedPoints(seq.get());
         if (isFlipped)
             deduped->reverse();
-        CoordinateSequence* cs = deduped.release();
-        csStore.emplace_back(cs);
-        return cs;
+        return deduped;
     }
 
     if (isFlipped) {
         auto reversed = seq->clone();
         reversed->reverse();
-        CoordinateSequence* cs = reversed.release();
-        csStore.emplace_back(cs);
-        return cs;
+        return reversed;
     }
 
     return seq;
 }
 
 /* private */
-const CoordinateSequence *
-RelateGeometry::removeRepeated(const CoordinateSequence *seq)
+std::shared_ptr<const CoordinateSequence>
+RelateGeometry::removeRepeated(const std::shared_ptr<const CoordinateSequence>& seq)
 {
     bool hasRepeated = seq->hasRepeatedPoints();
     if (!hasRepeated)
         return seq;
-    auto deduped = RepeatedPointRemover::removeRepeatedPoints(seq);
-    CoordinateSequence* cs = deduped.release();
-    csStore.emplace_back(cs);
-    return cs;
+    return RepeatedPointRemover::removeRepeatedPoints(seq.get());
 }
 
 

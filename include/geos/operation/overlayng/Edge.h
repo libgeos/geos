@@ -64,7 +64,7 @@ private:
     int bDim = OverlayLabel::DIM_UNKNOWN;
     int bDepthDelta = 0;
     bool bIsHole = false;
-    std::unique_ptr<geom::CoordinateSequence> pts;
+    std::shared_ptr<const geom::CoordinateSequence> pts;
 
     // Methods
 
@@ -198,8 +198,7 @@ public:
 
     static bool isCollapsed(const geom::CoordinateSequence* pts);
 
-    // takes ownership of pts from caller
-    Edge(std::unique_ptr<geom::CoordinateSequence>&& p_pts, const EdgeSourceInfo* info);
+    Edge(const std::shared_ptr<const geom::CoordinateSequence>& p_pts, const EdgeSourceInfo* info);
 
     // return a clone of the underlying points
     std::unique_ptr<geom::CoordinateSequence> getCoordinates()
@@ -214,10 +213,10 @@ public:
     };
 
     // release the underlying points to the caller
-    geom::CoordinateSequence* releaseCoordinates()
+    std::shared_ptr<const geom::CoordinateSequence> releaseCoordinates()
     {
-        geom::CoordinateSequence* cs = pts.release();
-        pts.reset(nullptr);
+        auto cs = pts;
+        pts.reset();
         return cs;
     };
 

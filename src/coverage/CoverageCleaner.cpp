@@ -389,8 +389,8 @@ CoverageCleaner::toGeometry(
 {
     std::vector<std::unique_ptr<LineString>> lines;
     for (auto& ss : segStrings) {
-        auto cs = ss->getCoordinates()->clone();
-        std::unique_ptr<LineString> line = geomFact->createLineString(std::move(cs));
+        const auto& cs = ss->getCoordinates();
+        std::unique_ptr<LineString> line = geomFact->createLineString(cs);
         lines.emplace_back(line.release());
     }
     if (lines.size() == 1) return lines[0]->clone();

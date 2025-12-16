@@ -39,7 +39,7 @@ namespace relateng {  // geos.operation.relateng
 /* public static */
 const RelateSegmentString*
 RelateSegmentString::createLine(
-    const CoordinateSequence* pts,
+    const std::shared_ptr<const CoordinateSequence>& pts,
     bool isA, int elementId,
     const RelateGeometry* parent)
 {
@@ -50,7 +50,7 @@ RelateSegmentString::createLine(
 /* public static */
 const RelateSegmentString*
 RelateSegmentString::createRing(
-    const CoordinateSequence* pts,
+    const std::shared_ptr<const CoordinateSequence>& pts,
     bool isA, int elementId, int ringId,
     const Geometry* poly, const RelateGeometry* parent)
 {
@@ -61,7 +61,7 @@ RelateSegmentString::createRing(
 /* private static */
 const RelateSegmentString*
 RelateSegmentString::createSegmentString(
-    const CoordinateSequence* pts,
+    const std::shared_ptr<const CoordinateSequence>& pts,
     bool isA, int dim, int elementId, int ringId,
     const Geometry* poly, const RelateGeometry* parent)
 {
@@ -71,7 +71,7 @@ RelateSegmentString::createSegmentString(
 
 /* public */
 NodeSection*
-RelateSegmentString::createNodeSection(std::size_t segIndex, const CoordinateXY intPt) const
+RelateSegmentString::createNodeSection(std::size_t segIndex, const CoordinateXY& intPt) const
 {
     const CoordinateXY& c0 = getCoordinate(segIndex);
     const CoordinateXY& c1 = getCoordinate(segIndex + 1);

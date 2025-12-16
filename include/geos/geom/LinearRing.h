@@ -78,6 +78,9 @@ public:
     LinearRing(CoordinateSequence::Ptr && points,
             const GeometryFactory& newFactory);
 
+    LinearRing(const std::shared_ptr<const CoordinateSequence>& points,
+            const GeometryFactory& newFactory);
+
     std::unique_ptr<LinearRing> clone() const
     {
         return std::unique_ptr<LinearRing>(cloneImpl());

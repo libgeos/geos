@@ -147,7 +147,7 @@ Polygon::getArea() const
     double area = 0.0;
     area += algorithm::Area::ofRing(shell->getCoordinatesRO());
     for(const auto& lr : holes) {
-        const CoordinateSequence* h = lr->getCoordinatesRO();
+        const auto& h = lr->getCoordinatesRO();
         area -= algorithm::Area::ofRing(h);
     }
     return area;

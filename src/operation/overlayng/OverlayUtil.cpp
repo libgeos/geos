@@ -311,8 +311,8 @@ OverlayUtil::toLines(OverlayGraph* graph, bool isOutputEdges, const GeometryFact
       bool includeEdge = isOutputEdges || edge->isInResultArea();
       if (! includeEdge) continue;
 
-      std::unique_ptr<CoordinateSequence> pts = edge->getCoordinatesOriented();
-      std::unique_ptr<LineString> line = geomFact->createLineString(std::move(pts));
+      std::shared_ptr<const CoordinateSequence> pts = edge->getCoordinatesOriented();
+      std::unique_ptr<LineString> line = geomFact->createLineString(pts);
       // line->setUserData(labelForResult(edge));
       lines.push_back(std::move(line));
     }

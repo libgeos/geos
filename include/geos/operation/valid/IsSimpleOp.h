@@ -129,11 +129,11 @@ private:
 
     bool isSimpleLinearGeometry(const geom::Geometry& geom);
 
-    static std::vector<std::unique_ptr<geos::geom::CoordinateSequence>>
+    static std::vector<std::shared_ptr<const geos::geom::CoordinateSequence>>
         removeRepeatedPts(const geom::Geometry& geom);
 
     static std::vector<std::unique_ptr<noding::SegmentString>>
-        createSegmentStrings(std::vector<std::unique_ptr<geos::geom::CoordinateSequence>>& seqs);
+        createSegmentStrings(std::vector<std::shared_ptr<const geos::geom::CoordinateSequence>>& seqs);
 
     class NonSimpleIntersectionFinder : public noding::SegmentIntersector
     {

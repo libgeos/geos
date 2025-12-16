@@ -7,6 +7,7 @@
 // geos
 #include <geos/geom/LineString.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateFilter.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Dimension.h>
 #include <geos/geom/Geometry.h>
@@ -21,6 +22,8 @@
 #include <string>
 #include <cmath>
 #include <cassert>
+
+using geos::geom::CoordinateXY;
 
 namespace tut {
 //
@@ -533,7 +536,7 @@ void object::test<29>
     ensure(c != nullptr);
 }
 
-// releaseCoordinates
+// getSharedCoordinates
 template<>
 template<>
 void object::test<30>()
@@ -542,8 +545,21 @@ void object::test<30>()
     auto env = ls->getEnvelopeInternal();
     ensure_equals(*env, geos::geom::Envelope(0,10, 0, 10));
 
-    auto cs = ls->releaseCoordinates();
+    auto cs = ls->getSharedCoordinates();
     ensure_equals(cs->getSize(), 2u);
+
+    struct AddFive : public geos::geom::CoordinateFilter {
+        void filter_rw(CoordinateXY* pt) const override {
+            pt->x += 5;
+            pt->y += 5;
+        }
+    };
+
+    AddFive filter;
+    ls->apply_rw(&filter);
+
+    ensure_equals(cs->getAt<CoordinateXY>(0), CoordinateXY(0, 0));
+    ensure_equals(cs->getAt<CoordinateXY>(1), CoordinateXY(10, 10));
 }
 
 // Test of LinearRing constructor with a NaN coordinate

@@ -37,17 +37,13 @@ EdgeNodingValidator::toSegmentStrings(std::vector<Edge*>& edges)
     for(std::size_t i = 0, n = edges.size(); i < n; ++i) {
         Edge* e = edges[i];
         auto cs = e->getCoordinates()->clone();
-        segStr.push_back(std::make_unique<BasicSegmentString>(cs.get(), e));
-        newCoordSeq.push_back(cs.release());
+        segStr.push_back(std::make_unique<BasicSegmentString>(std::move(cs), e));
     }
     return segStr;
 }
 
 EdgeNodingValidator::~EdgeNodingValidator()
 {
-    for(std::size_t i = 0, n = newCoordSeq.size(); i < n; ++i) {
-        delete newCoordSeq[i];
-    }
 }
 
 } // namespace geos.geomgraph

@@ -102,25 +102,22 @@ public:
      * @param newContext the user-defined data of this segment string
      *                   (may be null)
      */
-    NodedSegmentString(geom::CoordinateSequence* newPts, bool constructZ, bool constructM, const void* newContext)
+    NodedSegmentString(const std::shared_ptr<const geom::CoordinateSequence>& newPts, bool constructZ, bool constructM, const void* newContext)
         : NodableSegmentString(newContext, newPts)
         , nodeList(*this, constructZ, constructM)
     {}
 
     NodedSegmentString(SegmentString* ss, bool constructZ, bool constructM)
-        : NodableSegmentString(ss->getData(), ss->getCoordinates()->clone().release())
+        : NodableSegmentString(ss->getData(), ss->getCoordinates())
         , nodeList(*this, constructZ, constructM)
     {}
 
     ~NodedSegmentString() override {
-        delete seq;
     }
 
     SegmentNodeList& getNodeList();
 
     const SegmentNodeList& getNodeList() const;
-
-    std::unique_ptr<geom::CoordinateSequence> releaseCoordinates();
 
     std::ostream& print(std::ostream& os) const override;
 

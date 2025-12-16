@@ -136,7 +136,7 @@ CoverageSimplifier::setCoordinates(std::vector<CoverageEdge*>& edges, const Mult
 {
     for (std::size_t i = 0; i < edges.size(); i++) {
         CoverageEdge* edge = edges[i];
-        edge->setCoordinates(lines->getGeometryN(i)->getCoordinatesRO());
+        edge->setCoordinates(lines->getGeometryN(i)->getSharedCoordinates());
     }
 }
 

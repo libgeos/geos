@@ -139,7 +139,9 @@ ScaledNoder::rescale(std::vector<std::unique_ptr<SegmentString>>& segStrings) co
 {
     ReScaler rescaler(*this);
     for(auto& ss : segStrings) {
-        ss->getCoordinates()->apply_rw(&rescaler);
+        auto copy = ss->getCoordinates()->clone();
+        copy->apply_rw(&rescaler);
+        ss->setCoordinates(std::move(copy));
     }
 }
 
@@ -152,7 +154,7 @@ ScaledNoder::scale(const SegmentString::NonConstVect& segStrings) const
     for(std::size_t i = 0; i < segStrings.size(); i++) {
         SegmentString* ss = segStrings[i];
 
-        CoordinateSequence* cs = ss->getCoordinates();
+        auto cs = ss->getCoordinates()->clone();
 
 #ifndef NDEBUG
         std::size_t npts = cs->size();
@@ -162,10 +164,12 @@ ScaledNoder::scale(const SegmentString::NonConstVect& segStrings) const
 
         operation::valid::RepeatedPointTester rpt;
         // FIXME remove hardcoded hasZ, hasM and derive from input
-        if (rpt.hasRepeatedPoint(cs)) {
-            auto cs2 = operation::valid::RepeatedPointRemover::removeRepeatedPoints(cs);
-            const_cast<std::vector<SegmentString*>&>(segStrings)[i] = new NodedSegmentString(cs2.release(), true, false, ss->getData());
+        if (rpt.hasRepeatedPoint(cs.get())) {
+            auto cs2 = operation::valid::RepeatedPointRemover::removeRepeatedPoints(cs.get());
+            const_cast<std::vector<SegmentString*>&>(segStrings)[i] = new NodedSegmentString(std::move(cs2), true, false, ss->getData());
             delete ss;
+        } else {
+            ss->setCoordinates(std::move(cs));
         }
     }
 }

@@ -104,7 +104,7 @@ private:
      *
      * @param coord is raw offset curve, ownership transferred here
      */
-    void addCurve(geom::CoordinateSequence* coord, geom::Location leftLoc,
+    void addCurve(std::unique_ptr<geom::CoordinateSequence> coord, geom::Location leftLoc,
                   geom::Location rightLoc);
 
     void add(const geom::Geometry& g);
@@ -279,7 +279,7 @@ public:
     /// @param leftLoc left location
     /// @param rightLoc right location
     ///
-    void addCurves(const std::vector<geom::CoordinateSequence*>& lineList,
+    void addCurves(std::vector<std::unique_ptr<geom::CoordinateSequence>>& lineList,
                    geom::Location leftLoc, geom::Location rightLoc);
 
     /**

@@ -31,11 +31,8 @@ NodingTestUtil::toLines(const std::vector<SegmentString*>& nodedList, const Geom
     std::vector<std::unique_ptr<Geometry>> lines;
 
     for (auto nss : nodedList) {
-      CoordinateSequence* pts = nss->getCoordinates();
-      // pts is owned by nss, so we make a copy to build the line
-      // on top of. Lines are 100% self-contained and own all their parts.
-      // Input nodedList can be freed.
-      lines.emplace_back(geomFact->createLineString(pts->clone()));
+      const auto& pts = nss->getCoordinates();
+      lines.emplace_back(geomFact->createLineString(pts));
     }
     if (lines.size() == 1) return std::move(lines[0]);
 
@@ -62,7 +59,7 @@ NodingTestUtil::toSegmentStrings(std::vector<const LineString*>& lines)
         // into a unique_ptr<> which we have to release() to the
         // NodedSegmentString constructor, so
         // nss now owns nss->pts
-        NodedSegmentString* nss = new NodedSegmentString(line->getCoordinates().release(), constructZ, constructM, line);
+        NodedSegmentString* nss = new NodedSegmentString(line->getCoordinates(), constructZ, constructM, line);
         nssList.push_back(nss);
     }
     return nssList;

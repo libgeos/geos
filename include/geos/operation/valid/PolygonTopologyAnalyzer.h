@@ -55,11 +55,6 @@ private:
     // can pass around pointers with abandon
     std::deque<PolygonRing> polyRingStore;
     std::deque<noding::BasicSegmentString> segStringStore;
-    // when building SegmentStrings we sometimes want
-    // to use deduped CoordinateSequences so we will
-    // keep the deduped ones here so they get cleaned
-    // up when processing is complete
-    std::vector<std::unique_ptr<CoordinateSequence>> coordSeqStore;
 
     PolygonRing* createPolygonRing(const LinearRing* p_ring);
     PolygonRing* createPolygonRing(const LinearRing* p_ring, int p_index, PolygonRing* p_shell);

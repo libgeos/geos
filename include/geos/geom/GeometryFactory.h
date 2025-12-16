@@ -236,6 +236,9 @@ public:
     std::unique_ptr<LinearRing> createLinearRing(
         std::unique_ptr<CoordinateSequence> && newCoords) const;
 
+    std::unique_ptr<LinearRing> createLinearRing(
+        const std::shared_ptr<const CoordinateSequence>& newCoords) const;
+
     /// Construct a LinearRing with a deep-copy of given arguments
     std::unique_ptr<LinearRing> createLinearRing(
         const CoordinateSequence& coordinates) const;
@@ -312,6 +315,10 @@ public:
     std::unique_ptr<LineString> createLineString(
         const CoordinateSequence& coordinates) const;
 
+    /// Construct a LineString with a reference to shared coordinates
+    std::unique_ptr<LineString> createLineString(
+        const std::shared_ptr<const CoordinateSequence>&) const;
+
     /// Construct an EMPTY CircularString
     std::unique_ptr<CircularString> createCircularString(bool hasZ, bool hasM) const;
 
@@ -321,6 +328,10 @@ public:
     /// Construct a CircularString taking ownership of given argument
     std::unique_ptr<CircularString> createCircularString(
         std::unique_ptr<CoordinateSequence> && coordinates) const;
+
+    /// Construct a CircularStrign with a reference to shared coordinates
+    std::unique_ptr<CircularString> createCircularString(
+        const std::shared_ptr<const CoordinateSequence>& coordinates) const;
 
     /// Construct a CircularString with a deep-copy of given argument
     std::unique_ptr<CircularString> createCircularString(

@@ -142,18 +142,20 @@ PolygonHoleJoiner::extractOrientedRings(const Polygon* polygon)
     std::vector<const LinearRing*> holes = sortHoles(polygon);
     for (const LinearRing* hole : holes) {
         auto oHole = extractOrientedRing(hole, false);
-        holeRings.emplace_back(oHole.release());
+        holeRings.emplace_back(oHole);
     }
 }
 
 /* private static */
-std::unique_ptr<CoordinateSequence>
+std::shared_ptr<const CoordinateSequence>
 PolygonHoleJoiner::extractOrientedRing(const LinearRing* ring, bool isCW)
 {
-    std::unique_ptr<CoordinateSequence> pts = ring->getCoordinates();
+    auto pts = ring->getSharedCoordinates();
     bool isRingCW = ! Orientation::isCCW(pts.get());
     if (isCW != isRingCW) {
-        pts->reverse();
+        auto reversed = pts->clone();
+        reversed->reverse();
+        pts = std::move(reversed);
     }
     return pts;
 }
@@ -408,8 +410,9 @@ PolygonHoleJoiner::findLowestLeftVertexIndex(const CoordinateSequence& holeCoord
 bool
 PolygonHoleJoiner::intersectsBoundary(const Coordinate& p0, const Coordinate& p1)
 {
-    CoordinateSequence cs { p0, p1 };
-    BasicSegmentString bss(&cs, nullptr);
+    auto cs = std::make_shared<CoordinateSequence>(std::initializer_list<Coordinate>{p0, p1});
+
+    BasicSegmentString bss(cs, nullptr);
     std::vector<const SegmentString*> segStrings { &bss };
 
     InteriorIntersectionDetector segInt;
@@ -425,11 +428,11 @@ PolygonHoleJoiner::createBoundaryIntersector()
 {
     std::vector<const SegmentString*> polySegStrings;
     polySegStringStore.clear();
-    BasicSegmentString* bss = new BasicSegmentString(shellRing.get(), nullptr);
+    BasicSegmentString* bss = new BasicSegmentString(shellRing, nullptr);
     polySegStringStore.emplace_back(bss);
     polySegStrings.push_back(bss);
     for (auto& hole : holeRings) {
-        bss = new BasicSegmentString(hole.get(), nullptr);
+        bss = new BasicSegmentString(hole, nullptr);
         polySegStringStore.emplace_back(bss);
         polySegStrings.push_back(bss);
     }
