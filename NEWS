@@ -2,7 +2,7 @@
 2025-xx-xx
 
 - Fixes/Improvements:
-  -
+  - Avoid crash on buffer of geometry with only invalid coordinates (GH-1335, Dan Baston)
 
 ## Changes in 3.10.7
 2025-03-03
