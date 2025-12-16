@@ -36,6 +36,7 @@
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/util.h>
 
+#include <limits>
 #include <vector>
 #include <iostream>
 
@@ -97,7 +98,7 @@ DistanceOp::DistanceOp(const Geometry& g0, const Geometry& g1, double tdist)
 /**
  * Report the distance between the closest points on the input geometries.
  *
- * @return the distance between the geometries
+ * @return the distance between the geometries, or NaN if one of them is empty.
  */
 double
 DistanceOp::distance()
@@ -111,7 +112,7 @@ DistanceOp::distance()
         throw IllegalArgumentException("null geometries are not supported");
     }
     if(geom[0]->isEmpty() || geom[1]->isEmpty()) {
-        return 0.0;
+        return std::numeric_limits<double>::quiet_NaN();
     }
     if(geom[0]->getGeometryTypeId() == GEOS_POINT && geom[1]->getGeometryTypeId() == GEOS_POINT) {
         return static_cast<const Point*>(geom[0])->getCoordinate()->distance(*static_cast<const Point*>(geom[1])->getCoordinate());

@@ -3387,7 +3387,7 @@ extern char GEOS_DLL GEOSisSimple(const GEOSGeometry* g);
 * In one step, calculate and return whether a geometry is simple
 * and one more more points at which the geometry self-intersects
 * at interior points.
-* Caller has the responsibility to destroy 'location' with 
+* Caller has the responsibility to destroy 'location' with
 * GEOSGeom_destroy()
 *
 * \param g The geometry to test
@@ -3631,7 +3631,8 @@ extern int GEOS_DLL GEOSGeomGetLength(
 * Calculate the distance between two geometries.
 * \param[in] g1 Input geometry
 * \param[in] g2 Input geometry
-* \param[out] dist Pointer to be filled in with distance result
+* \param[out] dist Pointer to be filled in with distance result. NaN is returned
+*                  if one of the geometry is empty.
 * \return 1 on success, 0 on exception.
 * \since 2.2
 */
@@ -5462,7 +5463,7 @@ extern char GEOS_DLL GEOSIntersects(const GEOSGeometry* g1, const GEOSGeometry* 
 extern char GEOS_DLL GEOSCrosses(const GEOSGeometry* g1, const GEOSGeometry* g2);
 
 /**
-* Tests if geometry g1 is completely within g2, 
+* Tests if geometry g1 is completely within g2,
 * but not wholly contained in the boundary of g2.
 * \param g1 Input geometry
 * \param g2 Input geometry

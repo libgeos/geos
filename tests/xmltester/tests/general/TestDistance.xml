@@ -4,8 +4,8 @@
   <desc>PeP - point to an empty point</desc>
   <a>    POINT(10 10)  </a>
   <b>    POINT EMPTY  </b>
-<test><op name="distance" arg1="A" arg2="B">    0.0   </op></test>
-<test><op name="distance" arg1="B" arg2="A">    0.0   </op></test>
+<test><op name="distance" arg1="A" arg2="B">    NaN   </op></test>
+<test><op name="distance" arg1="B" arg2="A">    NaN   </op></test>
 </case>
 
 <case>
@@ -36,8 +36,8 @@
   <desc>LL - line to empty line</desc>
   <a>    LINESTRING (0 0, 0 10)  </a>
   <b>    LINESTRING EMPTY  </b>
-<test><op name="distance" arg1="A" arg2="B">    0.0   </op></test>
-<test><op name="distance" arg1="B" arg2="A">    0.0   </op></test>
+<test><op name="distance" arg1="A" arg2="B">    NaN   </op></test>
+<test><op name="distance" arg1="B" arg2="A">    NaN   </op></test>
 </case>
 
 <case>
@@ -68,8 +68,8 @@
   <desc>PA - point to empty polygon</desc>
   <a>    POINT (240 160)  </a>
   <b>    POLYGON EMPTY  </b>
-<test><op name="distance" arg1="A" arg2="B" >    0.0   </op></test>
-<test><op name="distance" arg1="B" arg2="A" >    0.0   </op></test>
+<test><op name="distance" arg1="A" arg2="B" >    NaN   </op></test>
+<test><op name="distance" arg1="B" arg2="A" >    NaN   </op></test>
 </case>
 
 <case>
