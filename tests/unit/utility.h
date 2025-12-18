@@ -388,7 +388,7 @@ ensure_equals_exact_geometry_xyz(const geos::geom::Geometry *lhs_in,
     assert(nullptr != rhs_in);
 
     using geos::geom::Point;
-    using geos::geom::LineString;
+    using geos::geom::SimpleCurve;
     using geos::geom::Polygon;
     using geos::geom::CoordinateSequence;
     using geos::geom::GeometryCollection;
@@ -401,18 +401,18 @@ ensure_equals_exact_geometry_xyz(const geos::geom::Geometry *lhs_in,
       const Point *gpt2 = static_cast<const Point *>(rhs_in);
       return ensure_equals_dims( gpt1->getCoordinatesRO(), gpt2->getCoordinatesRO(), 3, tolerance);
     }
-    else if (const LineString* gln1 = dynamic_cast<const LineString *>(lhs_in)) {
-      const LineString *gln2 = static_cast<const LineString *>(rhs_in);
+    else if (const SimpleCurve* gln1 = dynamic_cast<const SimpleCurve *>(lhs_in)) {
+      const SimpleCurve *gln2 = static_cast<const SimpleCurve *>(rhs_in);
       return ensure_equals_dims( gln1->getCoordinatesRO(), gln2->getCoordinatesRO(), 3, tolerance);
-    }
-    else if (dynamic_cast<const Polygon *>(lhs_in)) {
-      ensure("Not implemented yet", 0);
     }
     else if (const GeometryCollection* gc1 = dynamic_cast<const GeometryCollection *>(lhs_in)) {
       const GeometryCollection *gc2 = static_cast<const GeometryCollection *>(rhs_in);
       for (unsigned int i = 0; i < gc1->getNumGeometries(); i++) {
         ensure_equals_exact_geometry_xyz(gc1->getGeometryN(i), gc2->getGeometryN(i), tolerance);
       }
+    }
+    else {
+        fail("Not implemented yet");
     }
 }
 
@@ -445,8 +445,9 @@ ensure_equals_exact_geometry_xyzm(const geos::geom::Geometry *lhs_in,
     assert(nullptr != rhs_in);
 
     using geos::geom::Point;
-    using geos::geom::LineString;
-    using geos::geom::Polygon;
+    using geos::geom::Curve;
+    using geos::geom::SimpleCurve;
+    using geos::geom::Surface;
     using geos::geom::CoordinateSequence;
     using geos::geom::GeometryCollection;
 
@@ -457,14 +458,14 @@ ensure_equals_exact_geometry_xyzm(const geos::geom::Geometry *lhs_in,
       const Point *gpt2 = static_cast<const Point *>(rhs_in);
       return ensure_equals_exact_xyzm(gpt1->getCoordinatesRO(), gpt2->getCoordinatesRO(), tolerance);
     }
-    else if (const LineString* gln1 = dynamic_cast<const LineString *>(lhs_in)) {
-      const LineString *gln2 = static_cast<const LineString *>(rhs_in);
+    else if (const SimpleCurve* gln1 = dynamic_cast<const SimpleCurve*>(lhs_in)) {
+      const SimpleCurve *gln2 = static_cast<const SimpleCurve*>(rhs_in);
       return ensure_equals_exact_xyzm(gln1->getCoordinatesRO(), gln2->getCoordinatesRO(), tolerance);
     }
-    else if (const Polygon* gply1 = dynamic_cast<const Polygon*>(lhs_in)) {
-      const Polygon* gply2 = static_cast<const Polygon*>(rhs_in);
-      const LinearRing* extRing1 = gply1->getExteriorRing();
-      const LinearRing* extRing2 = gply2->getExteriorRing();
+    else if (const Surface* gply1 = dynamic_cast<const Surface*>(lhs_in)) {
+      const Surface* gply2 = static_cast<const Surface*>(rhs_in);
+      const Curve* extRing1 = gply1->getExteriorRing();
+      const Curve* extRing2 = gply2->getExteriorRing();
 
       ensure_equals_exact_geometry_xyzm(extRing1, extRing2, tolerance);
 
@@ -483,6 +484,8 @@ ensure_equals_exact_geometry_xyzm(const geos::geom::Geometry *lhs_in,
       for (unsigned int i = 0; i < gc1->getNumGeometries(); i++) {
         ensure_equals_exact_geometry_xyzm(gc1->getGeometryN(i), gc2->getGeometryN(i), tolerance);
       }
+    } else {
+        fail("Not implemented yet.");
     }
 }
 
@@ -548,14 +551,14 @@ ensure_equals_exact_geometry(const geos::geom::Geometry *lhs_in,
       const LineString *gln2 = static_cast<const LineString *>(rhs_in);
       return ensure_equals_dims( gln1->getCoordinatesRO(), gln2->getCoordinatesRO(), 2, tolerance);
     }
-    else if (dynamic_cast<const Polygon *>(lhs_in)) {
-      ensure("Not implemented yet", 0);
-    }
     else if (const GeometryCollection* gc1 = dynamic_cast<const GeometryCollection *>(lhs_in)) {
-      const GeometryCollection *gc2 = static_cast<const GeometryCollection *>(rhs_in);
-      for (unsigned int i = 0; i < gc1->getNumGeometries(); i++) {
-        ensure_equals_exact_geometry(gc1->getGeometryN(i), gc2->getGeometryN(i), tolerance);
-      }
+        const GeometryCollection *gc2 = static_cast<const GeometryCollection *>(rhs_in);
+        for (unsigned int i = 0; i < gc1->getNumGeometries(); i++) {
+            ensure_equals_exact_geometry(gc1->getGeometryN(i), gc2->getGeometryN(i), tolerance);
+        }
+    }
+    else {
+        fail("Not implemented yet");
     }
 }
 
