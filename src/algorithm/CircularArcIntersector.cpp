@@ -345,7 +345,7 @@ CircularArcIntersector::intersects(const CircularArc& arc1, const CircularArc& a
     const auto r1 = arc1.getRadius();
     const auto r2 = arc2.getRadius();
 
-    auto d = c1.distance(c2);
+    const auto d = c1.distance(c2);
 
     if (d > r1 + r2) {
         // Circles are disjoint
@@ -360,157 +360,16 @@ CircularArcIntersector::intersects(const CircularArc& arc1, const CircularArc& a
     }
 
     // a: the distance from c1 to the "radical line", which connects the two intersection points
-    // The following expression was rewritten by
-    double a = (d*d + r1*r1 - r2*r2) / (2*d);
     // Expression rewritten by Herbie, https://herbie.uwplse.org/demo/
-    // double a = std::fma(r1-r2, (r1 + r2) / (d+d), d*0.5);
+    // const double a = (d*d + r1*r1 - r2*r2) / (2*d);
+    const double a = std::fma(r1-r2, (r1 + r2) / (d+d), d*0.5);
 
     // TODO because the circle center calculation is inexact we need some kind of tolerance here.
     // Take a PrecisionModel like LineIntersector?
     if (a == 0 || (d == 0 && r1 == r2)) {
-        // COCIRCULAR
-
-        double ap0 = arc1.theta0();
-        double ap1 = arc1.theta2();
-        double bp0 = arc2.theta0();
-        double bp1 = arc2.theta2();
-
-        // Orientation of the result matches the first input
-        bool resultArcIsCCW = true;
-
-        // Make both inputs counter-clockwise for the purpose of determining intersections
-        if (arc1.getOrientation() != Orientation::COUNTERCLOCKWISE) {
-            std::swap(ap0, ap1);
-            resultArcIsCCW = false;
-        }
-        if (arc2.getOrientation() != Orientation::COUNTERCLOCKWISE) {
-            std::swap(bp0, bp1);
-        }
-        ap0 = Angle::normalizePositive(ap0);
-        ap1 = Angle::normalizePositive(ap1);
-        bp0 = Angle::normalizePositive(bp0);
-        bp1 = Angle::normalizePositive(bp1);
-
-        bool checkBp1inA = true;
-        bool checkAcontained = true;
-
-        // Possible intersection arrangements:
-        // A contained within B
-        // A overlaps B
-        // B contained within A
-
-        // check start of B within A?
-        if (Angle::isWithinCCW(bp0, ap0, ap1)) {
-            checkAcontained = false;
-            const double start = bp0;
-            const double end = nextAngleCCW(start, bp1, ap1);
-
-            if (end == bp1) {
-                checkBp1inA = false;
-            }
-
-            if (start == end) {
-                const CoordinateXY computedIntPt = CircularArcs::createPoint(c1, r1, start);
-                addIntersection(computedIntPt, arc1, arc2);
-            }
-            else {
-                if (resultArcIsCCW) {
-                    addArcIntersection(start, end, Orientation::COUNTERCLOCKWISE, arc1, arc2);
-                }
-                else {
-                    addArcIntersection(end, start, Orientation::CLOCKWISE, arc1, arc2);
-                }
-            }
-        }
-
-        if (checkBp1inA && Angle::isWithinCCW(bp1, ap0, ap1)) {
-            // end of B within A?
-            checkAcontained = false;
-
-            const double start = ap0;
-            const double end = bp1;
-            if (start == end) {
-                const CoordinateXY computedIntPt = CircularArcs::createPoint(c1, r1, start);
-                addIntersection(computedIntPt, arc1, arc2);
-            }
-            else {
-                if (resultArcIsCCW) {
-                    addArcIntersection(start, end, Orientation::CLOCKWISE, arc1, arc2);
-                }
-                else {
-                    addArcIntersection(end, start, Orientation::CLOCKWISE, arc1, arc2);
-                }
-            }
-        }
-
-        if (checkAcontained && Angle::isWithinCCW(ap0, bp0 , bp1) && ap0 != bp0  && ap0 != bp1 && Angle::isWithinCCW(ap1, bp0, bp1) && ap1 != bp1 && ap1 != bp0) {
-            if (resultArcIsCCW) {
-                addArcIntersection(ap0, ap1, Orientation::COUNTERCLOCKWISE, arc1, arc2);
-            }
-            else {
-                addArcIntersection(ap1, ap0, Orientation::CLOCKWISE, arc1, arc2);
-            }
-        }
+        computeCocircularIntersection(arc1, arc2);
     } else {
-        // NOT COCIRCULAR
-
-        const double dx = c2.x-c1.x;
-        const double dy = c2.y-c1.y;
-
-#if 1
-        // point where a line between the two circle center points intersects
-        // the radical line
-        CoordinateXY p{c1.x + a* dx/d, c1.y+a* dy/d};
-
-        // distance from p to the intersection points
-        const double h = std::sqrt(r1*r1 - a*a);
-
-        const CoordinateXY isect0{p.x + h* dy/d, p.y - h* dx/d };
-        const CoordinateXY isect1{p.x - h* dy/d, p.y + h* dx/d };
-
-        for (const CoordinateXY& computedIntPt : {isect0, isect1}) {
-            if (nPt > 0 && computedIntPt.equals2D(intPt[0])) {
-                continue;
-            }
-
-            if (arc1.containsPointOnCircle(computedIntPt) && arc2.containsPointOnCircle(computedIntPt)) {
-                addIntersection(computedIntPt, arc1, arc2);
-            }
-        }
-#else
-        // Alternate formulation.
-        // Instead of calculating the intersection points and determining if they fall on the arc,
-        // calculate the angles of the intersection points. If they fall on the arc, create intersection points
-        // at those angles.
-
-        double centerPointAngle = std::atan2(dy, dx);
-
-        double arc1IntPtAngleDeviation = std::acos(a / r1);
-
-        double a11 = Angle::normalize(centerPointAngle - arc1IntPtAngleDeviation);
-        double a12 = Angle::normalize(centerPointAngle + arc1IntPtAngleDeviation);
-
-        double b = d - a;
-        double arc2IntPtAngleDeviation = std::acos(b / r2);
-
-        double a21 = Angle::normalize(centerPointAngle + MATH_PI + arc2IntPtAngleDeviation);
-        double a22 = Angle::normalize(centerPointAngle + MATH_PI - arc2IntPtAngleDeviation);
-
-        if (arc1.containsAngle(a11) && arc2.containsAngle(a21)) {
-            intPt[nPt++] = CircularArcs::createPoint(arc1.getCenter(), arc1.getRadius(), a11);
-        }
-        if (arc1.containsAngle(a12) && arc2.containsAngle(a22)) {
-            intPt[nPt++] = CircularArcs::createPoint(arc1.getCenter(), arc1.getRadius(), a12);
-            if (nPt == 2 && intPt[0].equals(intPt[1])) {
-                nPt = 1;
-            }
-        }
-#endif
-
-        // Add endpoint intersections missed due to precision issues.
-        // TODO: Add some logic to prevent double-counting of endpoints. Ideally, the endpoint test would happen before
-        // computing intersection points, so if there is an endpoint intersection we get the exact intersection point
-        // instead of a computed one.
+        // Add endpoint intersections that may be missed or inexactly computed.
         if (nPt < 2 && arc1.p0().equals2D(arc2.p0()) && (nPt == 0 || !intPt[0].equals2D(arc1.p0()))) {
             addIntersection(arc1.p0(), arc1, arc2);
         }
@@ -522,6 +381,72 @@ CircularArcIntersector::intersects(const CircularArc& arc1, const CircularArc& a
         }
         if (nPt < 2 && arc1.p2().equals2D(arc2.p2()) && (nPt == 0 || !intPt[0].equals2D(arc1.p2()))) {
             addIntersection(arc1.p2(), arc1, arc2);
+        }
+
+        if (nPt < 2) {
+            const double dx = c2.x-c1.x;
+            const double dy = c2.y-c1.y;
+
+#if 1
+            // point where a line between the two circle center points intersects
+            // the radical line
+            CoordinateXY p{c1.x + a* dx/d, c1.y+a* dy/d};
+
+            // distance from p to the intersection points
+            const double h = std::sqrt(r1*r1 - a*a);
+
+            CoordinateXY isect0{p.x + h* dy/d, p.y - h* dx/d };
+            CoordinateXY isect1{p.x - h* dy/d, p.y + h* dx/d };
+
+            // One of the computed intersection points may be an inexact version of an endpoint.
+            // If we already have an endpoint intersection, process the farther-away computed
+            // point first.
+            if (nPt == 1 && intPt[0].distance(isect0) < intPt[0].distance(isect1)) {
+                std::swap(isect0, isect1);
+            }
+
+            for (const CoordinateXY& computedIntPt : {isect0, isect1}) {
+                if (nPt > 0 && computedIntPt.equals2D(intPt[0])) {
+                    continue;
+                }
+
+                if (nPt > 1) {
+                    continue;
+                }
+
+                if (arc1.containsPointOnCircle(computedIntPt) && arc2.containsPointOnCircle(computedIntPt)) {
+                    addIntersection(computedIntPt, arc1, arc2);
+                }
+            }
+#else
+            // Alternate formulation.
+            // Instead of calculating the intersection points and determining if they fall on the arc,
+            // calculate the angles of the intersection points. If they fall on the arc, create intersection points
+            // at those angles.
+
+            double centerPointAngle = std::atan2(dy, dx);
+
+            double arc1IntPtAngleDeviation = std::acos(a / r1);
+
+            double a11 = Angle::normalize(centerPointAngle - arc1IntPtAngleDeviation);
+            double a12 = Angle::normalize(centerPointAngle + arc1IntPtAngleDeviation);
+
+            double b = d - a;
+            double arc2IntPtAngleDeviation = std::acos(b / r2);
+
+            double a21 = Angle::normalize(centerPointAngle + MATH_PI + arc2IntPtAngleDeviation);
+            double a22 = Angle::normalize(centerPointAngle + MATH_PI - arc2IntPtAngleDeviation);
+
+            if (arc1.containsAngle(a11) && arc2.containsAngle(a21)) {
+                intPt[nPt++] = CircularArcs::createPoint(arc1.getCenter(), arc1.getRadius(), a11);
+            }
+            if (arc1.containsAngle(a12) && arc2.containsAngle(a22)) {
+                intPt[nPt++] = CircularArcs::createPoint(arc1.getCenter(), arc1.getRadius(), a12);
+                if (nPt == 2 && intPt[0].equals(intPt[1])) {
+                    nPt = 1;
+                }
+            }
+#endif
         }
     }
 
@@ -573,6 +498,95 @@ setFromEndpoint(geom::CoordinateXYZM& pt, const CircularArc& arc, std::size_t in
         pt.z = Interpolate::zGet(pt, endpoint);
         pt.m = Interpolate::mGet(pt, endpoint);
     });
+}
+
+void
+CircularArcIntersector::computeCocircularIntersection(const CircularArc& arc1, const CircularArc& arc2)
+{
+    const auto& center = arc1.getCenter();
+    const double radius = arc1.getRadius();
+
+    double ap0 = arc1.theta0();
+    double ap1 = arc1.theta2();
+    double bp0 = arc2.theta0();
+    double bp1 = arc2.theta2();
+
+    // Orientation of the result matches the first input
+        bool resultArcIsCCW = true;
+
+        // Make both inputs counter-clockwise for the purpose of determining intersections
+        if (arc1.getOrientation() != Orientation::COUNTERCLOCKWISE) {
+            std::swap(ap0, ap1);
+            resultArcIsCCW = false;
+        }
+        if (arc2.getOrientation() != Orientation::COUNTERCLOCKWISE) {
+            std::swap(bp0, bp1);
+        }
+        ap0 = Angle::normalizePositive(ap0);
+        ap1 = Angle::normalizePositive(ap1);
+        bp0 = Angle::normalizePositive(bp0);
+        bp1 = Angle::normalizePositive(bp1);
+
+        bool checkBp1inA = true;
+        bool checkAcontained = true;
+
+        // Possible intersection arrangements:
+        // A contained within B
+        // A overlaps B
+        // B contained within A
+
+        // check start of B within A?
+        if (Angle::isWithinCCW(bp0, ap0, ap1)) {
+            checkAcontained = false;
+            const double start = bp0;
+            const double end = nextAngleCCW(start, bp1, ap1);
+
+            if (end == bp1) {
+                checkBp1inA = false;
+            }
+
+            if (start == end) {
+                const CoordinateXY computedIntPt = CircularArcs::createPoint(center, radius, start);
+                addIntersection(computedIntPt, arc1, arc2);
+            }
+            else {
+                if (resultArcIsCCW) {
+                    addArcIntersection(start, end, Orientation::COUNTERCLOCKWISE, arc1, arc2);
+                }
+                else {
+                    addArcIntersection(end, start, Orientation::CLOCKWISE, arc1, arc2);
+                }
+            }
+        }
+
+        if (checkBp1inA && Angle::isWithinCCW(bp1, ap0, ap1)) {
+            // end of B within A?
+            checkAcontained = false;
+
+            const double start = ap0;
+            const double end = bp1;
+            if (start == end) {
+                const CoordinateXY computedIntPt = CircularArcs::createPoint(center, radius, start);
+                addIntersection(computedIntPt, arc1, arc2);
+            }
+            else {
+                if (resultArcIsCCW) {
+                    addArcIntersection(start, end, Orientation::CLOCKWISE, arc1, arc2);
+                }
+                else {
+                    addArcIntersection(end, start, Orientation::CLOCKWISE, arc1, arc2);
+                }
+            }
+        }
+
+        if (checkAcontained && Angle::isWithinCCW(ap0, bp0 , bp1) && ap0 != bp0  && ap0 != bp1 && Angle::isWithinCCW(ap1, bp0, bp1) && ap1 != bp1 && ap1 != bp0) {
+            if (resultArcIsCCW) {
+                addArcIntersection(ap0, ap1, Orientation::COUNTERCLOCKWISE, arc1, arc2);
+            }
+            else {
+                addArcIntersection(ap1, ap0, Orientation::CLOCKWISE, arc1, arc2);
+            }
+        }
 }
 
 void

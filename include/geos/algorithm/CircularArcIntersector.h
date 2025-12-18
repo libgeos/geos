@@ -138,6 +138,8 @@ private:
     static int
     circleIntersects(const CoordinateXY& center, double r, const CoordinateXY& p0, const CoordinateXY& p1, CoordinateXY& isect0, CoordinateXY& isect1);
 
+    void computeCocircularIntersection(const CircularArc& arc1, const CircularArc& arc2);
+
     std::array<CoordinateXYZM, 2> intPt;
     std::array<CircularArc, 2> intArc;
     intersection_type result = NO_INTERSECTION;
