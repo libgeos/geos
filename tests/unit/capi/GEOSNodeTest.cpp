@@ -231,8 +231,12 @@ void object::test<10>()
     ensure(result_ != nullptr);
 
     expected_ = fromWKT("MULTICURVE ZM ("
-                        "CIRCULARSTRING ZM (-1 0 3 4, -1 1.2246467991e-16 5 4.75, -1 2.7755575616e-16 7 5.5, -1 1.2246467991e-16 7 5.5, -1 5.5511151231e-17 7 5.5, -0.7071067812 0.7071067812 5.25 7.375, -2.7755575616e-16 1 3.5 9.25, -3.8285686989e-16 1 3.5 9.25, -5.5511151231e-17 1 3.5 9.25, 0.7071067812 0.7071067812 3.75 8.125, 1 0 4 7),"
-                        "CIRCULARSTRING ZM (-1 2 NaN 9, -0.2928932188 1.7071067812 NaN 9.125, -2.7755575616e-16 1 3.5 9.25, 0 1 3.5 9.25, -5.5511151231e-17 1 3.5 9.25, -0.2928932188 0.2928932188 5.25 7.375, -1 2.7755575616e-16 7 5.5, -1 0 7 5.5, -1 5.5511151231e-17 7 5.5, -1 0 NaN 11.25, -1 0 NaN 17))");
+        "CIRCULARSTRING ZM (-1 0 3 4, -0.7071067812 0.7071067812 2.5 6.5, -5.5511151231e-17 1 2 9, 0.7071067812 0.7071067812 3 8, 1 0 4 7),"
+        "CIRCULARSTRING ZM (-1 2 NaN 9, -0.2928932188 1.7071067812 NaN 9, -5.5511151231e-17 1 2 9, -0.2928932188 0.2928932188 2.5 6.5, -1 0 3 4))");
+
+    ensure_equals(GEOSGetNumGeometries(result_), 2);
+    ensure_equals("Noded arc 1 should have 5 points", GEOSGeomGetNumPoints(GEOSGetGeometryN(result_, 0)), 5);
+    ensure_equals("Noded arc 2 should have 5 points", GEOSGeomGetNumPoints(GEOSGetGeometryN(result_, 1)), 5);
 
     ensure_equals_exact_geometry_xyzm(reinterpret_cast<Geometry*>(result_),
                                       reinterpret_cast<Geometry*>(expected_), 1e-8);
@@ -251,7 +255,7 @@ void object::test<11>()
     ensure(result_ != nullptr);
 
     expected_ = fromWKT("MULTICURVE ZM ("
-                        "CIRCULARSTRING ZM (-5 0 3 4, -3.5355 3.5355 3 6, 0 5 3 8, 3.5355 3.5355 3.5 7.5, 4 3 4 7),"
+                        "CIRCULARSTRING ZM (-5 0 3 4, -3.5355 3.5355 3 6, 0 5 3 8, 2.2361 4.4721 3.5 7.5, 4 3 4 7),"
                         "LINESTRING ZM (0 0 NaN 7, 0 5 3 8),"
                         "LINESTRING ZM (0 5 3 8, 0 10 NaN 13))");
 
@@ -303,7 +307,7 @@ void object::test<14>()
 {
     set_test_name("CIRCULARSTRING Z / LINESTRING Z endpoint intersection");
 
-    input_ = fromWKT("MULTICURVE (CIRCULARSTRING Z (-5 0 3, -4 3 5, 4 3 6), LINESTRING Z (0 0 7, 4 3 13))");
+    input_ = fromWKT("MULTICURVE (CIRCULARSTRING Z (-4 3 3, 0 5 5, 4 3 7), LINESTRING Z (0 0 7, 4 3 13))");
     ensure(input_);
 
     result_ = GEOSNode(input_);
