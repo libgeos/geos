@@ -57,9 +57,9 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:ad46e6c91ff33c9b14be08072a094ac4a" id="r_ad46e6c91ff33c9b14be08072a094ac4a"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1SegmentPointComparator.html#ad46e6c91ff33c9b14be08072a094ac4a">compare</a> (int octant, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;p0, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;p1)</td></tr>
-<tr class="memdesc:ad46e6c91ff33c9b14be08072a094ac4a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compares two Coordinates for their relative position along a segment lying in the specified <a class="el" href="classgeos_1_1noding_1_1Octant.html" title="Methods for computing and working with octants of the Cartesian plane.">Octant</a>.  <br /></td></tr>
-<tr class="separator:ad46e6c91ff33c9b14be08072a094ac4a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeffba6eba82317e36b86f25e6154a318" id="r_aeffba6eba82317e36b86f25e6154a318"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1SegmentPointComparator.html#aeffba6eba82317e36b86f25e6154a318">compare</a> (int octant, const geom::CoordinateXY &amp;p0, const geom::CoordinateXY &amp;p1)</td></tr>
+<tr class="memdesc:aeffba6eba82317e36b86f25e6154a318"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compares two Coordinates for their relative position along a segment lying in the specified <a class="el" href="classgeos_1_1noding_1_1Octant.html" title="Methods for computing and working with octants of the Cartesian plane.">Octant</a>.  <br /></td></tr>
+<tr class="separator:aeffba6eba82317e36b86f25e6154a318"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0dacaf6187868de20cab6b03da25a968" id="r_a0dacaf6187868de20cab6b03da25a968"><td class="memItemLeft" align="right" valign="top"><a id="a0dacaf6187868de20cab6b03da25a968" name="a0dacaf6187868de20cab6b03da25a968"></a>
 static int&#160;</td><td class="memItemRight" valign="bottom"><b>relativeSign</b> (double x0, double x1)</td></tr>
 <tr class="separator:a0dacaf6187868de20cab6b03da25a968"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -71,8 +71,8 @@ static int&#160;</td><td class="memItemRight" valign="bottom"><b>compareValue</b
 <div class="textblock"><p>Implements a robust method of comparing the relative position of two points along the same segment. </p>
 <p>The coordinates are assumed to lie "near" the segment. This means that this algorithm will only return correct results if the input coordinates have the same precision and correspond to rounded values of exact coordinates lying on the segment. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="ad46e6c91ff33c9b14be08072a094ac4a" name="ad46e6c91ff33c9b14be08072a094ac4a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ad46e6c91ff33c9b14be08072a094ac4a">&#9670;&#160;</a></span>compare()</h2>
+<a id="aeffba6eba82317e36b86f25e6154a318" name="aeffba6eba82317e36b86f25e6154a318"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeffba6eba82317e36b86f25e6154a318">&#9670;&#160;</a></span>compare()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -89,13 +89,13 @@ static int&#160;</td><td class="memItemRight" valign="bottom"><b>compareValue</b
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;&#160;</td>
+          <td class="paramtype">const geom::CoordinateXY &amp;&#160;</td>
           <td class="paramname"><em>p0</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;&#160;</td>
+          <td class="paramtype">const geom::CoordinateXY &amp;&#160;</td>
           <td class="paramname"><em>p1</em>&#160;</td>
         </tr>
         <tr>

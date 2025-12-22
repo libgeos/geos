@@ -47,7 +47,7 @@ $(function() {
 <a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pro-attribs">Protected Attributes</a> &#124;
 <a href="classgeos_1_1noding_1_1SinglePassNoder-members.html">List of all members</a>  </div>
-  <div class="headertitle"><div class="title">geos::noding::SinglePassNoder Class Reference<span class="mlabels"><span class="mlabel">abstract</span></span></div></div>
+  <div class="headertitle"><div class="title">geos::noding::SinglePassNoder Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
@@ -75,12 +75,13 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af9c1fb39270a9a2917e40d65c3b1303d" id="r_af9c1fb39270a9a2917e40d65c3b1303d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1SinglePassNoder.html#af9c1fb39270a9a2917e40d65c3b1303d">setSegmentIntersector</a> (<a class="el" href="classgeos_1_1noding_1_1SegmentIntersector.html">SegmentIntersector</a> *newSegInt)</td></tr>
 <tr class="memdesc:af9c1fb39270a9a2917e40d65c3b1303d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the <a class="el" href="classgeos_1_1noding_1_1SegmentIntersector.html" title="Processes possible intersections detected by a Noder.">SegmentIntersector</a> to use with this noder.  <br /></td></tr>
 <tr class="separator:af9c1fb39270a9a2917e40d65c3b1303d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abf733591cd74dc9eba6a50cb6ada5a77" id="r_abf733591cd74dc9eba6a50cb6ada5a77"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1SinglePassNoder.html#abf733591cd74dc9eba6a50cb6ada5a77">computeNodes</a> (const std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; &amp;segStrings) override=0</td></tr>
-<tr class="memdesc:abf733591cd74dc9eba6a50cb6ada5a77"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the noding for a collection of <code><a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a></code>s.  <br /></td></tr>
-<tr class="separator:abf733591cd74dc9eba6a50cb6ada5a77"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:adb7921de51a65c234a24089fba961d8f" id="r_adb7921de51a65c234a24089fba961d8f"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1SinglePassNoder.html#adb7921de51a65c234a24089fba961d8f">getNodedSubstrings</a> () override=0</td></tr>
-<tr class="memdesc:adb7921de51a65c234a24089fba961d8f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a Collection of fully noded <code><a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a></code>s.  <br /></td></tr>
-<tr class="separator:adb7921de51a65c234a24089fba961d8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classgeos_1_1noding_1_1Noder"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classgeos_1_1noding_1_1Noder')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classgeos_1_1noding_1_1Noder.html">geos::noding::Noder</a></td></tr>
+<tr class="memitem:acca12cb6ad5bb67d075a14b6328cb497 inherit pub_methods_classgeos_1_1noding_1_1Noder" id="r_acca12cb6ad5bb67d075a14b6328cb497"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1Noder.html#acca12cb6ad5bb67d075a14b6328cb497">computeNodes</a> (const std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; &amp;segStrings)=0</td></tr>
+<tr class="memdesc:acca12cb6ad5bb67d075a14b6328cb497 inherit pub_methods_classgeos_1_1noding_1_1Noder"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the noding for a collection of <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentStrings</a>.  <br /></td></tr>
+<tr class="separator:acca12cb6ad5bb67d075a14b6328cb497 inherit pub_methods_classgeos_1_1noding_1_1Noder"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae5229ea68eb6c711a72fde15ce01ca0c inherit pub_methods_classgeos_1_1noding_1_1Noder" id="r_ae5229ea68eb6c711a72fde15ce01ca0c"><td class="memItemLeft" align="right" valign="top">virtual std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1Noder.html#ae5229ea68eb6c711a72fde15ce01ca0c">getNodedSubstrings</a> ()=0</td></tr>
+<tr class="memdesc:ae5229ea68eb6c711a72fde15ce01ca0c inherit pub_methods_classgeos_1_1noding_1_1Noder"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a collection of fully noded <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentStrings</a>. The SegmentStrings have the same context as their parent.  <br /></td></tr>
+<tr class="separator:ae5229ea68eb6c711a72fde15ce01ca0c inherit pub_methods_classgeos_1_1noding_1_1Noder"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -92,80 +93,8 @@ Protected Attributes</h2></td></tr>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Base class for <code><a class="el" href="classgeos_1_1noding_1_1Noder.html">Noder</a></code>s which make a single pass to find intersections. </p>
 <p>This allows using a custom <a class="el" href="classgeos_1_1noding_1_1SegmentIntersector.html" title="Processes possible intersections detected by a Noder.">SegmentIntersector</a> (which for instance may simply identify intersections, rather than insert them).</p>
-<p>Last port: noding/SinglePassNoder.java rev. 1.3 (JTS-1.7)</p>
-<p>TODO: <a class="el" href="classgeos_1_1noding_1_1Noder.html" title="Computes all intersections between segments in a set of SegmentString.">Noder</a> inheritance (that's just an interface!) </p>
+<p>Last port: noding/SinglePassNoder.java rev. 1.3 (JTS-1.7) </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="abf733591cd74dc9eba6a50cb6ada5a77" name="abf733591cd74dc9eba6a50cb6ada5a77"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#abf733591cd74dc9eba6a50cb6ada5a77">&#9670;&#160;</a></span>computeNodes()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void geos::noding::SinglePassNoder::computeNodes </td>
-          <td>(</td>
-          <td class="paramtype">const std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> * &gt; &amp;&#160;</td>
-          <td class="paramname"><em>segStrings</em></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Computes the noding for a collection of <code><a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a></code>s. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">segStrings</td><td>a collection of <code><a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a></code>s to node </td></tr>
-  </table>
-  </dd>
-</dl>
-
-<p>Implements <a class="el" href="classgeos_1_1noding_1_1Noder.html#acca12cb6ad5bb67d075a14b6328cb497">geos::noding::Noder</a>.</p>
-
-<p>Implemented in <a class="el" href="classgeos_1_1noding_1_1MCIndexNoder.html#aa4707778abf8d31af2535e5c4dfa3164">geos::noding::MCIndexNoder</a>, and <a class="el" href="classgeos_1_1noding_1_1SimpleNoder.html#a13f75958d399c6fb94d76addbcbe63b3">geos::noding::SimpleNoder</a>.</p>
-
-</div>
-</div>
-<a id="adb7921de51a65c234a24089fba961d8f" name="adb7921de51a65c234a24089fba961d8f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adb7921de51a65c234a24089fba961d8f">&#9670;&#160;</a></span>getNodedSubstrings()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a> &gt; &gt; geos::noding::SinglePassNoder::getNodedSubstrings </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">pure virtual</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Returns a Collection of fully noded <code><a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a></code>s. </p>
-<p>The SegmentStrings have the same context as their parent.</p>
-<dl class="section return"><dt>Returns</dt><dd>a Collection of SegmentStrings </dd></dl>
-
-<p>Implements <a class="el" href="classgeos_1_1noding_1_1Noder.html#ae5229ea68eb6c711a72fde15ce01ca0c">geos::noding::Noder</a>.</p>
-
-<p>Implemented in <a class="el" href="classgeos_1_1noding_1_1MCIndexNoder.html#a94a9b76257a0c9317a7b80be7e55d02f">geos::noding::MCIndexNoder</a>, and <a class="el" href="classgeos_1_1noding_1_1SimpleNoder.html#a6978d055a7720f2127422334abba4776">geos::noding::SimpleNoder</a>.</p>
-
-</div>
-</div>
 <a id="af9c1fb39270a9a2917e40d65c3b1303d" name="af9c1fb39270a9a2917e40d65c3b1303d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#af9c1fb39270a9a2917e40d65c3b1303d">&#9670;&#160;</a></span>setSegmentIntersector()</h2>
 
