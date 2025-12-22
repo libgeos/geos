@@ -9,6 +9,7 @@
 #include <geos/io/WKTReader.h>
 
 using geos::geom::CoordinateXY;
+using geos::geom::CurvePolygon;
 
 namespace tut {
 
@@ -181,6 +182,20 @@ void object::test<3>()
             "CIRCULARSTRING (1.7 1, 1.6 0.5, 1.6 0.4, 1.4 0.4, 1.7 1))").get()));
     auto cc3 = cp_->reverse();
     ensure_THROW(cc3->normalize(), geos::util::UnsupportedOperationException);
+}
+
+template<>
+template<>
+void object::test<4>()
+{
+    set_test_name("getArea");
+
+    // SELECT ST_Area(ST_CurveToLine('CURVEPOLYGON (CIRCULARSTRING(0 0,0 2,1 2,1 1,2 1,3 0,0 0))', 36000));
+    auto cp = wktreader_.read<CurvePolygon>("CURVEPOLYGON (CIRCULARSTRING(0 0,0 2,1 2,1 1,2 1,3 0,0 0))");
+    ensure_equals("cp->getArea()", cp->getArea(), 9.8185835, 1e-6);
+
+    auto cpRev = cp->reverse();
+    ensure_equals("cpRev->getArea()", cpRev->getArea(), 9.8185835, 1e-6);
 }
 
 }
