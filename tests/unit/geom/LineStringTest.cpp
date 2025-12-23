@@ -643,6 +643,38 @@ void object::test<35>
     ensure_equals(out, "POINT ZM (20 21 22 23)");
 }
 
+template<>
+template<>
+void object::test<36>()
+{
+    set_test_name("getLinearized");
+
+    // check that we return LineString* rather than Curve* or Geometry*
+    std::unique_ptr<LineString> linearized = line_->getLinearized(1e-3);
+
+    ensure_equals_exact_geometry_xyzm(linearized.get(), line_.get(), 0);
+}
+
+template<>
+template<>
+void object::test<37>()
+{
+    set_test_name("getCurved");
+
+    WKTReader reader;
+
+    auto input = reader.read<LineString>("LINESTRING (2 2, 2.292893 2.707107, 3 3, 3.707107 2.707107, 4 2, 2 2)");
+
+    // check that we return Curve* instead of Geometry*
+    std::unique_ptr<geos::geom::Curve> curved = input->getCurved(1e-3);
+
+    ensure_equals(curved->getGeometryTypeId(), geos::geom::GEOS_COMPOUNDCURVE);
+
+    auto expected = reader.read("COMPOUNDCURVE (CIRCULARSTRING (2 2, 3 3, 4 2), (4 2, 2 2))");
+
+    ensure_equals_exact_geometry_xyzm(curved.get(), expected.get(), 1e-6);
+}
+
 
 } // namespace tut
 

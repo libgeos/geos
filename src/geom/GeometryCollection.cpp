@@ -107,6 +107,30 @@ GeometryCollection::getCoordinates() const
     return coordinates;
 }
 
+GeometryCollection*
+GeometryCollection::getCurvedImpl(double distanceTolerance) const
+{
+    std::vector<std::unique_ptr<Geometry>> curvedGeoms(geometries.size());
+    for (std::size_t i = 0; i < geometries.size(); i++) {
+        curvedGeoms[i] = geometries[i]->getCurved(distanceTolerance);
+    }
+
+    return getFactory()->createGeometryCollection(std::move(curvedGeoms)).release();
+}
+
+
+GeometryCollection*
+GeometryCollection::getLinearizedImpl(double stepDegrees) const
+{
+    std::vector<std::unique_ptr<Geometry>> linGeoms(geometries.size());
+    for (std::size_t i = 0; i < geometries.size(); i++) {
+        linGeoms[i] = geometries[i]->getLinearized(stepDegrees);
+    }
+
+    return getFactory()->createGeometryCollection(std::move(linGeoms)).release();
+}
+
+
 bool
 GeometryCollection::isEmpty() const
 {

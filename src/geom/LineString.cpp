@@ -19,8 +19,13 @@
  **********************************************************************/
 
 #include <geos/util/IllegalArgumentException.h>
+#include <geos/algorithm/CircularArcs.h>
+#include <geos/algorithm/CurveBuilder.h>
 #include <geos/algorithm/Length.h>
 #include <geos/algorithm/Orientation.h>
+#include <geos/geom/CircularArc.h>
+#include <geos/geom/CircularString.h>
+#include <geos/geom/CompoundCurve.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CoordinateSequenceFilter.h>
@@ -101,6 +106,17 @@ LineString::validateConstruction()
     }
 }
 
+Curve*
+LineString::getCurvedImpl(double distanceTolerance) const
+{
+    return getCurved(distanceTolerance).release();
+}
+
+std::unique_ptr<Curve>
+LineString::getCurved(double distanceTolerance) const
+{
+    return CurveBuilder::getCurved(*this, distanceTolerance);
+}
 
 std::string
 LineString::getGeometryType() const

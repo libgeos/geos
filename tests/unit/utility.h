@@ -451,6 +451,7 @@ ensure_equals_exact_geometry_xyzm(const geos::geom::Geometry *lhs_in,
     assert(nullptr != rhs_in);
 
     using geos::geom::Point;
+    using geos::geom::CompoundCurve;
     using geos::geom::Curve;
     using geos::geom::CompoundCurve;
     using geos::geom::SimpleCurve;
@@ -556,6 +557,9 @@ ensure_equals_exact_geometry(const geos::geom::Geometry *lhs_in,
     assert(nullptr != lhs_in);
     assert(nullptr != rhs_in);
 
+    using geos::geom::Point;
+    using geos::geom::SimpleCurve;
+    using geos::geom::Surface;
     using geos::geom::CoordinateSequence;
     using geos::geom::Curve;
     using geos::geom::GeometryCollection;

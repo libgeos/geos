@@ -18,6 +18,8 @@
 #include <memory>
 #include <string>
 
+#include "utility.h"
+
 constexpr int MAX_TESTS = 100;
 
 namespace tut {
@@ -628,6 +630,24 @@ void object::test<48>
     ensure(point_->hasDimension(geos::geom::Dimension::P));
     ensure(!point_->hasDimension(geos::geom::Dimension::L));
     ensure(!point_->hasDimension(geos::geom::Dimension::A));
+}
+
+template<>
+template<>
+void object::test<49>()
+{
+    set_test_name("getLinearized");
+
+    ensure_equals_exact_geometry_xyzm(point_.get(), point_->getLinearized(4).get(), 0);
+}
+
+template<>
+template<>
+void object::test<50>()
+{
+    set_test_name("getCurved");
+
+    ensure_equals_exact_geometry_xyzm(point_.get(), point_->getCurved(1e-3).get(), 0);
 }
 
 } // namespace tut
