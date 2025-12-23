@@ -86,7 +86,11 @@ public:
     /// Return the center point of the circle associated with this arc
     const CoordinateXY& getCenter() const {
         if (!m_center_known) {
-            m_center = algorithm::CircularArcs::getCenter(p0(), p1(), p2());
+            if (isCCW()) {
+                m_center = algorithm::CircularArcs::getCenter(p0(), p1(), p2());
+            } else {
+                m_center = algorithm::CircularArcs::getCenter(p2(), p1(), p0());
+            }
             m_center_known = true;
         }
 
@@ -119,7 +123,11 @@ public:
     /// Return the radius of the circle associated with this arc
     double getRadius() const {
         if (!m_radius_known) {
-            m_radius = getCenter().distance(p0());
+            if (isCCW()) {
+                m_radius = getCenter().distance(p0());
+            } else {
+                m_radius = getCenter().distance(p2());
+            }
             m_radius_known = true;
         }
 
