@@ -19,6 +19,7 @@
 #include <geos/geom/CoordinateSequenceFilter.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/export.h>
+#include <geos/util/Progress.h>
 
 namespace geos {
 namespace geom {
@@ -54,7 +55,8 @@ public:
 
     static void count(
         const std::vector<const Geometry*>& geoms,
-        std::map<Coordinate, std::size_t>& counts);
+        std::map<Coordinate, std::size_t>& counts,
+        const util::ProgressFunction& progressFunction = util::defaultProgress);
 
 private:
 
