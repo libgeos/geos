@@ -41,6 +41,7 @@ OverlayEdgeRing::OverlayEdgeRing(OverlayEdge* start, const GeometryFactory* geom
     , m_isHole(false)
     , locator(nullptr)
     , shell(nullptr)
+    , coordinatesSet(nullptr)
 {
     auto ringPts = detail::make_unique<CoordinateSequence>(0u, start->getCoordinatesRO()->hasZ(), start->getCoordinatesRO()->hasM());
     computeRingPts(start, *ringPts);
@@ -206,8 +207,19 @@ OverlayEdgeRing::findEdgeRingContaining(const std::vector<OverlayEdgeRing*>& erL
         // hole must be contained in shell
         if (! tryShellEnv->contains(testEnv)) continue;
 
-        const Coordinate& testPt = EdgeRing::ptNotInList(testRing->getCoordinatesRO(), tryRing->getCoordinatesRO());
-        bool isContained = tryEdgeRing->isInRing(testPt);
+        // get a test vertex from the test ring that is not a part of the try ring
+        const Coordinate* testPt = &Coordinate::getNull();
+        for (auto& p : testRing->getCoordinatesRO()->items<Coordinate>()) {
+            auto coordSet = tryEdgeRing->getCoordinatesSet();
+            if (coordSet->find(p) == coordSet->end()) {
+                testPt = &p;
+                break;
+            }
+        }
+
+        // check if the test vertex is contained in the try ring
+        bool isContained = tryEdgeRing->isInRing(*testPt);
+        
         // check if the new containing ring is smaller than the current minimum ring
         if (isContained) {
             if (minRing == nullptr || minRingEnv->contains(tryShellEnv)) {
@@ -227,6 +239,19 @@ OverlayEdgeRing::getLocator()
       locator.reset(new IndexedPointInAreaLocator(*(getRingPtr())));
     }
     return locator.get();
+}
+
+std::unordered_set<Coordinate, geom::CoordinateXY::HashCode>*
+OverlayEdgeRing::getCoordinatesSet()
+{
+    if (coordinatesSet == nullptr) {
+        std::unique_ptr<CoordinateSequence> coords = ring->getCoordinates();
+        coordinatesSet.reset(new std::unordered_set<Coordinate, geom::CoordinateXY::HashCode>(
+            coords->items<Coordinate>().begin(),
+            coords->items<Coordinate>().end()
+        ));
+    }
+    return coordinatesSet.get();
 }
 
 /*public*/

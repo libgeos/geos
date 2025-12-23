@@ -52,7 +52,7 @@ class GEOS_DLL OverlayEdgeRing {
     using Polygon = geos::geom::Polygon;
     using PointOnGeometryLocator = algorithm::locate::PointOnGeometryLocator;
     using IndexedPointInAreaLocator = algorithm::locate::IndexedPointInAreaLocator;
-
+    
 private:
 
     // Members
@@ -63,6 +63,7 @@ private:
     OverlayEdgeRing* shell;
     // a list of EdgeRings which are holes in this EdgeRing
     std::vector<OverlayEdgeRing*> holes;
+    std::unique_ptr<std::unordered_set<Coordinate, geom::CoordinateXY::HashCode>> coordinatesSet;
 
     // Methods
     void computeRingPts(OverlayEdge* start, CoordinateSequence& pts);
@@ -75,6 +76,7 @@ private:
     */
     const CoordinateSequence& getCoordinates();
     PointOnGeometryLocator* getLocator();
+    std::unordered_set<Coordinate, geom::CoordinateXY::HashCode>* getCoordinatesSet();
     static void closeRing(CoordinateSequence& pts);
 
 
