@@ -49,6 +49,10 @@ public:
 
     GeometryTypeId getGeometryTypeId() const override;
 
+    std::unique_ptr<MultiPolygon> getLinearized(double degreeSpacing) const {
+        return std::unique_ptr<MultiPolygon>(getLinearizedImpl(degreeSpacing));
+    }
+
     bool hasDimension(Dimension::DimensionType d) const override
     {
         return d == Dimension::A;
@@ -80,6 +84,10 @@ protected:
     {
         return new MultiSurface(*this);
     }
+
+    MultiSurface* getCurvedImpl(double) const override { return cloneImpl(); }
+
+    MultiPolygon* getLinearizedImpl(double) const override;
 
     int
     getSortIndex() const override

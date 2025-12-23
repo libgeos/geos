@@ -16,6 +16,8 @@
 
 #include <geos/geom/Curve.h>
 #include <geos/geom/GeometryFilter.h>
+#include <geos/geom/LineString.h>
+#include <geos/util.h>
 
 namespace geos {
 namespace geom {
@@ -55,9 +57,20 @@ Curve::isRing() const
 }
 
 std::unique_ptr<Curve>
-Curve::reverse() const
-{
+Curve::reverse() const {
     return std::unique_ptr<Curve>(static_cast<Curve*>(Geometry::reverse().release()));
+}
+
+std::unique_ptr<LineString>
+Curve::getLinearized(double degreeSpacing) const
+{
+    return std::unique_ptr<LineString>(detail::down_cast<LineString*>(getLinearizedImpl(degreeSpacing)));
+}
+
+std::unique_ptr<Curve>
+Curve::getCurved(double distanceTolerance) const
+{
+    return std::unique_ptr<Curve>(getCurvedImpl(distanceTolerance));
 }
 
 

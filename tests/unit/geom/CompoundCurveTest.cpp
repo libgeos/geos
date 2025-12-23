@@ -10,9 +10,12 @@
 #include <geos/geom/CircularString.h>
 #include <geos/geom/IntersectionMatrix.h>
 #include <geos/io/WKTReader.h>
+#include <geos/operation/valid/RepeatedPointTester.h>
 #include <geos/util.h>
 
+
 using geos::geom::CompoundCurve;
+using geos::geom::Curve;
 using geos::geom::CoordinateXY;
 using geos::geom::CoordinateSequence;
 using geos::geom::SimpleCurve;
@@ -349,7 +352,7 @@ template<>
 template<>
 void object::test<9>()
 {
-    set_test_name("cannot create non-contiguous CompoundCurve");
+    set_test_name("construction failure on non-contiguous curves");
 
     std::vector<std::unique_ptr<SimpleCurve>> curves;
 
@@ -406,6 +409,42 @@ void object::test<11>()
     // needs to be reversed, scrolled, split
     checkNormalize("COMPOUNDCURVE (CIRCULARSTRING (10 0, 0 -10, -10 0, -5 5, 0 0), (0 0, 10 0))",
     "COMPOUNDCURVE (CIRCULARSTRING (-10 0, -5 5, 0 0), (0 0, 10 0), CIRCULARSTRING (10 0, 0 -10, -10 0))");
+}
+
+template<>
+template<>
+void object::test<12>()
+{
+    set_test_name("getLinearized()");
+
+    auto cc = wktreader_.read("COMPOUNDCURVE (CIRCULARSTRING(-5 0, 0 5, 4 3, 5 0, 0 -5), (0 -5, -5 0))");
+    auto ls = cc->getLinearized(90.0 / 4);
+
+    ensure_equals(ls->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
+    ensure_equals(static_cast<geos::geom::Curve*>(cc.get())->getLinearized(90.0 / 4)->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
+    ensure_equals(static_cast<CompoundCurve*>(ls.get())->getLinearized(90.0 / 4)->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
+
+    geos::operation::valid::RepeatedPointTester rpt;
+    ensure(!rpt.hasRepeatedPoint(ls.get()));
+
+    auto expected = wktreader_.read("LINESTRING (-5 0, -4.685 1.7467, -3.7796 3.2733, -2.3979 4.3875, -0.7141 4.9487, 1.0597 4.8864, 2.6999 4.2084, 4 3, 4.8129 1.3551, 4.9776 -0.4723, 4.4721 -2.2361, 3.3644 -3.6987, 1.8036 -4.6634, 0 -5, -5 0)");
+    ensure_equals_exact_geometry(static_cast<Geometry*>(ls.get()), expected.get(), 1e-4);
+
+    auto ccRev = cc->reverse();
+    auto lsRev = ccRev->getLinearized(90.0 / 4);
+    ensure_equals_exact_geometry(static_cast<Geometry*>(lsRev->reverse().get()), expected.get(), 1e-4);
+}
+
+template<>
+template<>
+void object::test<13>()
+{
+    set_test_name("getCurved()");
+
+    // check that we return Curve* rather than Geometry*
+    std::unique_ptr<Curve> curved = cc_->getCurved(100.0);
+
+    ensure_equals_exact_geometry_xyzm(curved.get(), cc_.get(), 0);
 }
 
 }
