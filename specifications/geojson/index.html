@@ -73,7 +73,7 @@ Unlike WKB and WKT, GeoJSON does not restrict itself to just geometry representa
       "url" : "https://libgeos.org/specifications/geojson/",
       "headline": "GeoJSON",
       "description": "“GeoJSON” is a standard for structuring JSON when encoding geometry and features. By using GeoJSON, rather than some other arbitrary scheme for structuring JSON, you maximize the interoperability of your JSON output. There are dozens of tools and websites that happily consume and emit GeoJSON.\nThe GeoJSON standard is formally maintained by the IETF as “RFC 7946”.\nUnlike WKB and WKT, GeoJSON does not restrict itself to just geometry representation. It also standardizes the transport of attribution.",
-      "wordCount" : "414",
+      "wordCount" : "418",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1552,11 +1552,12 @@ Unlike WKB and WKT, GeoJSON does not restrict itself to just geometry representa
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;geos/io/GeoJSONReader.h&gt;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;geos/io/WKTWriter.h&gt;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;geos/geom/Geometry.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;fstream&gt;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp"></span>
 </span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="k">namespace</span> <span class="n">geos</span><span class="o">::</span><span class="n">io</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="k">using</span> <span class="k">namespace</span> <span class="n">geos</span><span class="o">::</span><span class="n">geom</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">main</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">// Read file into string
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">std</span><span class="o">::</span><span class="n">ifstream</span> <span class="n">ifs</span><span class="p">(</span><span class="s">&#34;geojson.json&#34;</span><span class="p">);</span>
@@ -1564,8 +1565,7 @@ Unlike WKB and WKT, GeoJSON does not restrict itself to just geometry representa
 </span></span><span class="line"><span class="cl">                        <span class="p">(</span><span class="n">std</span><span class="o">::</span><span class="n">istreambuf_iterator</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">()</span>    <span class="p">));</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="c1">// Parse GeoJSON string into GeoJSON objects
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
-</span></span><span class="line"><span class="cl">    <span class="n">GeoJSONReader</span> <span class="n">reader</span><span class="p">;</span>
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">GeoJSONReader</span> <span class="n">reader</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="n">GeoJSONFeatureCollection</span> <span class="n">fc</span> <span class="o">=</span> <span class="n">reader</span><span class="p">.</span><span class="n">readFeatures</span><span class="p">(</span><span class="n">content</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="c1">// Prepare WKT writer
@@ -1574,18 +1574,18 @@ Unlike WKB and WKT, GeoJSON does not restrict itself to just geometry representa
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">writer</span><span class="p">.</span><span class="n">setRoundingPrecision</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="c1">// Print out the features
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">feature</span><span class="p">:</span> <span class="n">fc</span><span class="p">)</span> <span class="p">{</span>
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">for</span> <span class="p">(</span><span class="k">auto</span><span class="o">&amp;</span> <span class="nl">feature</span> <span class="p">:</span> <span class="n">fc</span><span class="p">.</span><span class="n">getFeatures</span><span class="p">())</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">        <span class="c1">// Read the geometry
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">const</span> <span class="n">Geometry</span><span class="o">*</span> <span class="n">geom</span> <span class="o">=</span> <span class="n">feature</span><span class="p">.</span><span class="n">getGeometry</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">        <span class="c1">// Read the properties
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">GeoJSONValue</span><span class="o">&gt;&amp;</span> <span class="n">props</span> <span class="o">=</span> <span class="n">feature</span><span class="p">.</span><span class="n">getProperties</span><span class="p">();</span>
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">const</span> <span class="n">std</span><span class="o">::</span><span class="n">map</span><span class="o">&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">string</span><span class="p">,</span> <span class="n">GeoJSONValue</span><span class="o">&gt;&amp;</span> <span class="n">props</span> <span class="o">=</span> <span class="n">feature</span><span class="p">.</span><span class="n">getProperties</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">        <span class="c1">// Write all properties
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;----------&#34;</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="p">(</span><span class="k">const</span> <span class="k">auto</span><span class="o">&amp;</span> <span class="nl">prop</span> <span class="p">:</span> <span class="n">props</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">prop</span><span class="p">.</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">prop</span><span class="p">.</span><span class="n">second</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">std</span><span class="o">::</span><span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">prop</span><span class="p">.</span><span class="n">first</span> <span class="o">&lt;&lt;</span> <span class="s">&#34;: &#34;</span> <span class="o">&lt;&lt;</span> <span class="n">prop</span><span class="p">.</span><span class="n">second</span><span class="p">.</span><span class="n">getString</span><span class="p">()</span> <span class="o">&lt;&lt;</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">        <span class="c1">// Write WKT feometry
