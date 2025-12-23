@@ -52,11 +52,12 @@ The C++ GeoJSON reader does include the option to read full `Feature` and `Featu
 #include <geos/io/GeoJSONReader.h>
 #include <geos/io/WKTWriter.h>
 #include <geos/geom/Geometry.h>
+#include <fstream>
 
 using namespace geos::io;
 using namespace geos::geom;
 
-void main(void)
+int main()
 {
     // Read file into string
     std::ifstream ifs("geojson.json");
@@ -64,7 +65,6 @@ void main(void)
                         (std::istreambuf_iterator<char>()    ));
 
     // Parse GeoJSON string into GeoJSON objects
-
     GeoJSONReader reader;
     GeoJSONFeatureCollection fc = reader.readFeatures(content);
 
@@ -74,18 +74,18 @@ void main(void)
     writer.setRoundingPrecision(2);
 
     // Print out the features
-    for (auto& feature: fc) {
+    for (auto& feature : fc.getFeatures()) {
 
         // Read the geometry
         const Geometry* geom = feature.getGeometry();
 
         // Read the properties
-        std::map<std::string, GeoJSONValue>& props = feature.getProperties();
+        const std::map<std::string, GeoJSONValue>& props = feature.getProperties();
 
         // Write all properties
         std::cout << "----------" << std::endl;
         for (const auto& prop : props) {
-            std::cout << prop.first << ": " << prop.second << std::endl;
+            std::cout << prop.first << ": " << prop.second.getString() << std::endl;
         }
 
         // Write WKT feometry
