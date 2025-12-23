@@ -285,6 +285,57 @@ CircularArc::getLength() const {
     return getAngle()*getRadius();
 }
 
+
+void
+CircularArc::addLinearizedPoints(CoordinateSequence& seq, double stepDegrees) const
+{
+    if (isLinear()) {
+        seq.add(*getCoordinateSequence(), getCoordinatePosition() + 1, getCoordinatePosition() + 2);
+        return;
+    }
+
+    const double angle = getAngle();
+    const bool isCCW = getOrientation() == geos::algorithm::Orientation::COUNTERCLOCKWISE;
+    const double stepRad = stepDegrees * MATH_PI / 180.0;
+    const int nSegments = std::max(static_cast<int>(std::ceil(angle / stepRad)), 2);
+
+    double adjStepRad = angle / nSegments;
+
+    const CoordinateXY& center = getCenter();
+    const double radius = getRadius();
+
+    // To ensure that the vertices in the linearized arc are independent of the
+    // arc orientation, we process the arc in a CCW manner regardless of its
+    // original orientation.
+    const double startAngle = isCCW ? theta0() : theta2();
+
+    const bool hasZ = getCoordinateSequence()->hasZ();
+    const bool hasM = getCoordinateSequence()->hasM();
+
+    CoordinateXYZM p0, p2;
+    getCoordinateSequence()->getAt(getCoordinatePosition(), p0);
+    getCoordinateSequence()->getAt(getCoordinatePosition() + 2, p2);
+
+    for (int i = 1; i < nSegments; i++) {
+        const int j = isCCW ? i: nSegments - i;
+        const double frac = static_cast<double>(j) / nSegments;
+        const double theta = startAngle + j*adjStepRad;
+
+        CoordinateXYZM pt{geos::algorithm::CircularArcs::createPoint(center, radius, theta)};
+
+        if (hasZ) {
+            pt.z = p0.z + frac*(p2.z - p0.z);
+        }
+        if (hasM) {
+            pt.m = p0.m + frac*(p2.m - p0.m);
+        }
+
+        seq.add(pt);
+    }
+
+    seq.add(p2);
+}
+
 bool
 CircularArc::isUpwardAtPoint(const CoordinateXY& q) const {
     auto quad = geom::Quadrant::quadrant(getCenter(), q);
@@ -401,5 +452,6 @@ CircularArc::toString() const {
     ss << ")";
     return ss.str();
 }
+
 
 }

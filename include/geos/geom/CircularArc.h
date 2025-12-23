@@ -108,6 +108,10 @@ public:
     /// Return the length of the arc
     double getLength() const;
 
+    /// Add linearized points representing this arc to the provided CoordinateSequence.
+    /// The origin point of the arc will NOT be added.
+    void addLinearizedPoints(CoordinateSequence& seq, double stepDegrees) const;
+
     /// Return the orientation of the arc as one of:
     /// - algorithm::Orientation::CLOCKWISE,
     /// - algorithm::Orientation::COUNTERCLOCKWISE

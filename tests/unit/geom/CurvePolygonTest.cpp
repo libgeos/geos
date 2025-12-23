@@ -8,6 +8,8 @@
 #include <geos/geom/IntersectionMatrix.h>
 #include <geos/io/WKTReader.h>
 
+#include "utility.h"
+
 using geos::geom::CoordinateXY;
 using geos::geom::CurvePolygon;
 
@@ -196,6 +198,33 @@ void object::test<4>()
 
     auto cpRev = cp->reverse();
     ensure_equals("cpRev->getArea()", cpRev->getArea(), 9.8185835, 1e-6);
+}
+
+template<>
+template<>
+void object::test<5>()
+{
+    set_test_name("getLinearized");
+
+    auto cp = wktreader_.read<CurvePolygon>("CURVEPOLYGON (COMPOUNDCURVE (CIRCULARSTRING (0 0, 2 0, 2 1, 2 3, 4 3), (4 3, 4 5, 1 4, 0 0)), CIRCULARSTRING (1.7 1, 1.4 0.4, 1.6 0.4, 1.6 0.5, 1.7 1))");
+
+    // check that we return Polygon* rather than Geometry*
+    std::unique_ptr<Polygon> poly = cp->getLinearized(90.0 / 4);
+
+    auto expected = wktreader_.read("POLYGON ((0 0, 0.2675 -0.3446, 0.6464 -0.5607, 1.0793 -0.6152, 1.5 -0.5, 1.8446 -0.2325, 2.0607 0.1464, 2.1152 0.5793, 2 1, 1.6934 1.4588, 1.5858 2, 1.6934 2.5412, 2 3, 2.4588 3.3066, 3 3.4142, 3.5412 3.3066, 4 3, 4 5, 1 4, 0 0), (1.7 1, 1.5871 1.0537, 1.4623 1.0629, 1.3427 1.0265, 1.2444 0.9492, 1.1806 0.8416, 1.16 0.7183, 1.1855 0.5958, 1.2534 0.4908, 1.3548 0.4175, 1.4757 0.3858, 1.6 0.4, 1.6203 0.705, 1.7 1))");
+
+    ensure_equals_exact_geometry_xyzm(poly.get(), expected.get(), 1e-4);
+}
+
+template<>
+template<>
+void object::test<6>()
+{
+    set_test_name("getCurved");
+
+    std::unique_ptr<CurvePolygon> curved = cp_->getCurved(1000);
+
+    ensure_equals_exact_geometry_xyzm(curved.get(), cp_.get(), 0);
 }
 
 }

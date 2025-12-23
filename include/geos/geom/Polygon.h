@@ -94,6 +94,12 @@ public:
     std::string getGeometryType() const override;
     GeometryTypeId getGeometryTypeId() const override;
 
+    std::unique_ptr<Surface> getCurved(double distanceTolerance) const {
+        return std::unique_ptr<Surface>(getCurvedImpl(distanceTolerance));
+    }
+
+    std::unique_ptr<Polygon> getLinearized(double) const;
+
     void normalize() override;
 
     std::unique_ptr<Polygon> reverse() const { return std::unique_ptr<Polygon>(reverseImpl()); }
@@ -115,6 +121,10 @@ public:
 protected:
 
     using SurfaceImpl::SurfaceImpl;
+
+    Surface* getCurvedImpl(double) const override;
+
+    Polygon* getLinearizedImpl(double) const override { return cloneImpl(); };
 
     Polygon* cloneImpl() const override { return new Polygon(*this); }
 

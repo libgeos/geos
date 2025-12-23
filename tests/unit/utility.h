@@ -9,6 +9,7 @@
 // geos
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryCollection.h>
+#include <geos/geom/CompoundCurve.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Dimension.h>
 #include <geos/geom/Point.h>
@@ -445,14 +446,15 @@ ensure_equals_exact_geometry_xyzm(const geos::geom::Geometry *lhs_in,
     assert(nullptr != rhs_in);
 
     using geos::geom::Point;
+    using geos::geom::CompoundCurve;
     using geos::geom::Curve;
     using geos::geom::SimpleCurve;
     using geos::geom::Surface;
     using geos::geom::CoordinateSequence;
     using geos::geom::GeometryCollection;
 
-    ensure_equals("type id do not match",
-                  lhs_in->getGeometryTypeId(), rhs_in->getGeometryTypeId());
+    ensure_equals("types do not match",
+                  lhs_in->getGeometryType(), rhs_in->getGeometryType());
 
     if (const Point* gpt1 = dynamic_cast<const Point *>(lhs_in)) {
       const Point *gpt2 = static_cast<const Point *>(rhs_in);
@@ -484,6 +486,14 @@ ensure_equals_exact_geometry_xyzm(const geos::geom::Geometry *lhs_in,
       for (unsigned int i = 0; i < gc1->getNumGeometries(); i++) {
         ensure_equals_exact_geometry_xyzm(gc1->getGeometryN(i), gc2->getGeometryN(i), tolerance);
       }
+    } else if (const auto* cc1 = dynamic_cast<const CompoundCurve*>(lhs_in)) {
+        const auto* cc2 = static_cast<const CompoundCurve*>(rhs_in);
+
+        ensure_equals("number of curves does not match", cc1->getNumCurves(), cc2->getNumCurves());
+
+        for (std::size_t i = 0; i < cc1->getNumCurves(); i++) {
+            ensure_equals_exact_geometry_xyzm(cc1->getCurveN(i), cc2->getCurveN(i), tolerance);
+        }
     } else {
         fail("Not implemented yet.");
     }
@@ -535,8 +545,8 @@ ensure_equals_exact_geometry(const geos::geom::Geometry *lhs_in,
     assert(nullptr != rhs_in);
 
     using geos::geom::Point;
-    using geos::geom::LineString;
-    using geos::geom::Polygon;
+    using geos::geom::SimpleCurve;
+    using geos::geom::Surface;
     using geos::geom::CoordinateSequence;
     using geos::geom::GeometryCollection;
 
@@ -547,7 +557,7 @@ ensure_equals_exact_geometry(const geos::geom::Geometry *lhs_in,
       const Point *gpt2 = static_cast<const Point *>(rhs_in);
       return ensure_equals_dims( gpt1->getCoordinatesRO(), gpt2->getCoordinatesRO(), 2, tolerance);
     }
-    else if (const LineString* gln1 = dynamic_cast<const LineString *>(lhs_in)) {
+    else if (const SimpleCurve* gln1 = dynamic_cast<const SimpleCurve *>(lhs_in)) {
       const LineString *gln2 = static_cast<const LineString *>(rhs_in);
       return ensure_equals_dims( gln1->getCoordinatesRO(), gln2->getCoordinatesRO(), 2, tolerance);
     }
