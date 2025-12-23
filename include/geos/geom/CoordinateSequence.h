@@ -579,8 +579,10 @@ public:
 
     void add(const CoordinateSequence& cl, bool allowRepeated, bool forwardDirection);
 
+    /// Add the portion of a CoordinateSequence between the specified indices (inclusive)
     void add(const CoordinateSequence& cs, std::size_t from, std::size_t to);
 
+    /// Add the portion of a CoordinateSequence between the specified indices (inclusive)
     void add(const CoordinateSequence& cs, std::size_t from, std::size_t to, bool allowRepeated);
 
     template<typename T, typename... Args>
