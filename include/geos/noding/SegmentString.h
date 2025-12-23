@@ -21,9 +21,11 @@
 #pragma once
 
 #include <geos/export.h>
+#include <geos/algorithm/Length.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/noding/Octant.h>
+#include <geos/noding/PathString.h>
 
 #include <vector>
 
@@ -44,7 +46,7 @@ namespace noding { // geos.noding
  * SegmentStrings can carry a context object, which is useful
  * for preserving topological or parentage information.
  */
-class GEOS_DLL SegmentString {
+class GEOS_DLL SegmentString : public PathString {
 public:
     typedef std::vector<const SegmentString*> ConstVect;
     typedef std::vector<SegmentString*> NonConstVect;
@@ -89,7 +91,12 @@ public:
     }
 
     std::size_t size() const {
+        // FIXME: Remove this method, or make consistent with getSize
         return seq->size();
+    }
+
+    std::size_t getSize() const override{
+        return seq->size() - 1;
     }
 
     template<typename CoordType = geom::Coordinate>
@@ -97,10 +104,14 @@ public:
         return seq->getAt<CoordType>(i);
     }
 
+    double getLength() const override {
+        return algorithm::Length::ofLine(seq.get());
+    }
+
     /// \brief
     /// Return a pointer to the CoordinateSequence associated
     /// with this SegmentString.
-    const std::shared_ptr<const geom::CoordinateSequence>& getCoordinates() const {
+    const std::shared_ptr<const geom::CoordinateSequence>& getCoordinates() const override {
         return seq;
     }
 
@@ -169,6 +180,8 @@ public:
     }
 
     static std::vector<SegmentString*> toRawPointerVector(const std::vector<std::unique_ptr<SegmentString>> & segStrings);
+
+    static std::vector<SegmentString*> toRawPointerVector(const std::vector<std::unique_ptr<PathString>> & segStrings);
 
     virtual std::ostream& print(std::ostream& os) const;
 

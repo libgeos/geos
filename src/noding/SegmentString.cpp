@@ -62,6 +62,15 @@ SegmentString::toRawPointerVector(const std::vector<std::unique_ptr<SegmentStrin
     return ret;
 }
 
+std::vector<SegmentString*>
+SegmentString::toRawPointerVector(const std::vector<std::unique_ptr<PathString>> & segStrings) {
+    std::vector<SegmentString*> ret(segStrings.size());
+    for (std::size_t i = 0; i < segStrings.size(); i++) {
+        ret[i] = detail::down_cast<SegmentString*>(segStrings[i].get());
+    }
+    return ret;
+}
+
 } // namespace geos.noding
 } // namespace geos
 
