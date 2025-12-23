@@ -174,4 +174,29 @@ void object::test<3>()
     auto cc3 = ms_->reverse();
 }
 
+template<>
+template<>
+void object::test<4>()
+{
+    set_test_name("getLinearized()");
+
+    // check that we return MultiPolygon*
+    std::unique_ptr<geos::geom::MultiPolygon> mp_ = ms_->getLinearized(2);
+
+    ensure_equals(mp_->getGeometryTypeId(), geos::geom::GEOS_MULTIPOLYGON);
+}
+
+template<>
+template<>
+void object::test<5>()
+{
+    set_test_name("getCurved()");
+
+    std::unique_ptr<geos::geom::GeometryCollection> curved = ms_->getCurved(100);
+
+    ensure_equals_exact_geometry_xyzm(ms_.get(), curved.get(), 0);
+}
+
+
+
 }

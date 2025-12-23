@@ -86,6 +86,18 @@ MultiSurface::getGeometryTypeId() const
     return GEOS_MULTISURFACE;
 }
 
+MultiPolygon*
+MultiSurface::getLinearizedImpl(double stepSizeDegrees) const
+{
+    std::vector<std::unique_ptr<Geometry>> polygons(geometries.size());
+
+    for (std::size_t i = 0; i < geometries.size(); i++) {
+        polygons[i] = geometries[i]->getLinearized(stepSizeDegrees);
+    }
+
+    return getFactory()->createMultiPolygon(std::move(polygons)).release();
+}
+
 MultiSurface*
 MultiSurface::reverseImpl() const
 {

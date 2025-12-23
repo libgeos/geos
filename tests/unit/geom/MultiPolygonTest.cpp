@@ -7,6 +7,8 @@
 #include <geos/geom/MultiPolygon.h>
 #include <geos/io/WKTReader.h>
 
+#include "utility.h"
+
 namespace tut {
 //
 // Test Group
@@ -72,5 +74,37 @@ void object::test<4>
     ensure(!mp_->hasDimension(geos::geom::Dimension::L));
     ensure(mp_->hasDimension(geos::geom::Dimension::A));
 }
+
+template<>
+template<>
+void object::test<5>()
+{
+    set_test_name("correct type returned by getLinearized");
+
+    ensure(mp_->getLinearized(0)->getGeometryTypeId() == geos::geom::GeometryTypeId::GEOS_MULTIPOLYGON);
+}
+
+template<>
+template<>
+void object::test<6>()
+{
+    set_test_name("getCurved");
+
+    auto input = reader_.read(
+        "MULTIPOLYGON (((0 0, 10 0, 10 10, 0 10, 0 0), (2 2, 2.292893 2.707107, 3 3, 3.707107 2.707107, 4 2, 2 2)),"
+                                     "((20 0, 30 0, 30 10, 20 0)))");
+
+    // Tolerance to small to allow conversion to MultiSurface
+    ensure_equals(input->getCurved(1e-12)->getGeometryTypeId(), geos::geom::GeometryTypeId::GEOS_MULTIPOLYGON);
+
+    auto curved = input->getCurved(0.001);
+
+    ensure_equals(curved->getGeometryTypeId(), geos::geom::GeometryTypeId::GEOS_MULTISURFACE);
+
+    auto expected = reader_.read("MULTISURFACE (CURVEPOLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), COMPOUNDCURVE (CIRCULARSTRING(2 2, 3 3, 4 2), (4 2, 2 2))), ((20 0, 30 0, 30 10, 20 0)))");
+
+    ensure_equals_exact_geometry_xyzm(curved.get(), expected.get(), 1e-3);
+}
+
 
 } // namespace tut
