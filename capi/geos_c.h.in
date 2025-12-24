@@ -3779,7 +3779,7 @@ extern int GEOS_DLL GEOSHausdorffDistanceDensify(
  * \param[out] pt1_x X coordinate of point on g1
  * \param[out] pt1_y Y coordinate of point on g1
  * \param[out] pt2_x X coordinate of point on g2
- * \param[out[ pt2_y Y coordinate of point on g2
+ * \param[out] pt2_y Y coordinate of point on g2
  * \return 1 on success, 0 on exception.
  * \see goes::algorithm::distance::DiscreteHausdorffDistance
  * \since 3.2
