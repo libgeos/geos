@@ -68,6 +68,28 @@ DiscreteHausdorffDistance::distance(const geom::Geometry& g0,
     return dist.distance();
 }
 
+/*static public*/
+/*populate double pointers with points used in computation and return distance*/
+double
+DiscreteHausdorffDistance::distanceWithPoints(const geom::Geometry& g0,
+				    const geom::Geometry& g1,
+				    double *pt1_x, double *pt1_y,
+				    double *pt2_x, double *pt2_y)
+{
+    DiscreteHausdorffDistance dist(g0, g1);
+    double distance = dist.distance();
+    const std::array<CoordinateXY, 2>& points = dist.getCoordinates();
+
+    *pt1_x = points[0].x;
+    *pt1_y = points[0].y;
+    *pt2_x = points[1].x;
+    *pt2_y = points[1].y;
+
+    return distance;
+}
+
+
+
 /* static public */
 double
 DiscreteHausdorffDistance::distance(const geom::Geometry& g0,
@@ -77,6 +99,27 @@ DiscreteHausdorffDistance::distance(const geom::Geometry& g0,
     DiscreteHausdorffDistance dist(g0, g1);
     dist.setDensifyFraction(densifyFrac);
     return dist.distance();
+}
+
+
+/* static public */
+double DiscreteHausdorffDistance::distanceDensifyWithPoints(const geom::Geometry& g0,
+							    const geom::Geometry& g1,
+							    double densifyFrac,
+							    double *pt1_x, double *pt1_y,
+							    double *pt2_x, double *pt2_y)
+{
+    DiscreteHausdorffDistance dist(g0, g1);
+    dist.setDensifyFraction(densifyFrac);
+    double distance = dist.distance();
+    const std::array<CoordinateXY, 2>& points = dist.getCoordinates();
+
+    *pt1_x = points[0].x;
+    *pt1_y = points[0].y;
+    *pt2_x = points[1].x;
+    *pt2_y = points[1].y;
+
+    return distance;
 }
 
 /* public */

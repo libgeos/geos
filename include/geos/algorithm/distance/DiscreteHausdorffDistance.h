@@ -93,10 +93,20 @@ public:
 
     static double distance(const geom::Geometry& g0,
                            const geom::Geometry& g1);
+    
+    static double distanceWithPoints(const geom::Geometry& g0,
+		    		     const geom::Geometry& g1,
+				     double *pt1_x, double *pt1_y,
+   				     double *pt2_x, double *pt2_y);
 
     static double distance(const geom::Geometry& g0,
                            const geom::Geometry& g1, double densifyFrac);
-
+   
+    static double distanceDensifyWithPoints(const geom::Geometry& g0,
+		       			    const geom::Geometry& g1, double densifrFrac,
+					    double *pt1_x, double *pt1_y,
+					    double *pt2_x, double *pt2_y);
+	    
     DiscreteHausdorffDistance(const geom::Geometry& p_g0,
                               const geom::Geometry& p_g1)
         :

@@ -318,9 +318,21 @@ extern "C" {
     }
 
     int
+    GEOSHausdorffDistanceWithPoints(const Geometry* g1, const Geometry* g2, double* dist, double* pt1_x, double* pt1_y, double* pt2_x, double* pt2_y)
+    {
+        return GEOSHausdorffDistanceWithPoints_r(handle, g1, g2, dist, pt1_x, pt1_y, pt2_x, pt2_y);
+    }
+
+    int
     GEOSHausdorffDistanceDensify(const Geometry* g1, const Geometry* g2, double densifyFrac, double* dist)
     {
         return GEOSHausdorffDistanceDensify_r(handle, g1, g2, densifyFrac, dist);
+    }
+
+    int
+    GEOSHausdorffDistanceDensifyWithPoints(const Geometry* g1, const Geometry* g2, double densifyFrac, double* dist, double* pt1_x, double* pt1_y, double* pt2_x, double* pt2_y)
+    {
+        return GEOSHausdorffDistanceDensifyWithPoints_r(handle, g1, g2, densifyFrac, dist, pt1_x, pt1_y, pt2_x, pt2_y); 
     }
 
     int
