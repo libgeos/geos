@@ -969,6 +969,18 @@ extern "C" {
     }
 
     int
+    GEOSHausdorffDistanceWithPoints_r(GEOSContextHandle_t extHandle,
+        const Geometry* g1, const Geometry* g2,
+        double* dist, double* pt1_x, double* pt1_y,
+    	double* pt2_x, double* pt2_y)
+    {
+        return execute(extHandle, 0, [&]() {
+            *dist = DiscreteHausdorffDistance::distanceWithPoints(*g1, *g2, pt1_x, pt1_y, pt2_x, pt2_y);
+            return 1;
+        });
+    }
+
+    int
     GEOSHausdorffDistanceDensify_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2,
                                    double densifyFrac, double* dist)
     {
@@ -976,6 +988,16 @@ extern "C" {
             *dist = DiscreteHausdorffDistance::distance(*g1, *g2, densifyFrac);
             return 1;
         });
+    }
+
+    int
+    GEOSHausdorffDistanceDensifyWithPoints_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2,
+		                   double densifyFrac, double* dist, double* pt1_x, double* pt1_y, double* pt2_x, double* pt2_y)
+    {
+        return execute(extHandle, 0, [&]() {
+	   *dist = DiscreteHausdorffDistance::distanceDensifyWithPoints(*g1, *g2, densifyFrac, pt1_x, pt1_y, pt2_x, pt2_y);
+	   return 1;
+	});
     }
 
     int
