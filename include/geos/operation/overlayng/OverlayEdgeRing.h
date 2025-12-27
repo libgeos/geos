@@ -73,9 +73,11 @@ private:
     * The coordinates are computed once only and cached.
     * @return an array of the {@link Coordinate}s in this ring
     */
-    const CoordinateSequence& getCoordinates();
+    const CoordinateSequence& getCoordinates() const;
     PointOnGeometryLocator* getLocator();
     static void closeRing(CoordinateSequence& pts);
+    bool contains(const OverlayEdgeRing& otherRing);
+    bool isPointInOrOut(const OverlayEdgeRing& otherRing);
 
 
 public:
@@ -84,6 +86,8 @@ public:
 
     std::unique_ptr<LinearRing> getRing();
     const LinearRing* getRingPtr() const;
+
+    const geom::Envelope getEnvelope() const;
 
     /**
     * Tests whether this ring is a hole.
@@ -114,7 +118,7 @@ public:
 
     void addHole(OverlayEdgeRing* ring);
 
-    bool isInRing(const Coordinate& pt);
+    geom::Location locate(const Coordinate& pt);
 
     const Coordinate& getCoordinate();
 

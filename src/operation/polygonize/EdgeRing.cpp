@@ -51,39 +51,16 @@ namespace polygonize { // geos.operation.polygonize
 EdgeRing*
 EdgeRing::findEdgeRingContaining(const std::vector<EdgeRing*> & erList)
 {
-    const LinearRing* testRing = getRingInternal();
-    if(! testRing) {
-        return nullptr;
-    }
-    const Envelope* testEnv = testRing->getEnvelopeInternal();
-    EdgeRing* minRing = nullptr;
-    const Envelope* minRingEnv = nullptr;
-
-    for(auto& tryEdgeRing : erList) {
-        auto tryRing = tryEdgeRing->getRingInternal();
-        auto tryShellEnv = tryRing->getEnvelopeInternal();
-        // the hole envelope cannot equal the shell envelope
-        // (also guards against testing rings against themselves)
-        if (tryShellEnv->equals(testEnv)) {
-            continue;
-        }
-        // hole must be contained in shell
-        if (!tryShellEnv->contains(testEnv)) {
-            continue;
-        }
-
-        auto tryCoords = tryRing->getCoordinatesRO();
-        const Coordinate& testPt = ptNotInList(testRing->getCoordinatesRO(), tryCoords);
-
-        // check if this new containing ring is smaller than the current minimum ring
-        if(tryEdgeRing->isInRing(testPt)) {
-            if(minRing == nullptr || minRingEnv->contains(tryShellEnv)) {
-                minRing = tryEdgeRing;
-                minRingEnv = minRing->getRingInternal()->getEnvelopeInternal();
+    EdgeRing* minContainingRing = nullptr;
+    for (auto& edgeRing : erList) {
+        if (edgeRing->contains(*this)) {
+            if (minContainingRing == nullptr
+                || minContainingRing->getEnvelope().contains(edgeRing->getEnvelope())) {
+                minContainingRing = edgeRing;
             }
         }
     }
-    return minRing;
+    return minContainingRing;
 }
 
 std::vector<PolygonizeDirectedEdge*>
@@ -212,6 +189,34 @@ EdgeRing::computeValid()
     }
     getRingInternal();
     is_valid = ring->isValid();
+}
+
+bool
+EdgeRing::contains(EdgeRing& otherRing) {
+    // the test envelope must be properly contained
+    // (guards against testing rings against themselves)
+    const Envelope& env = getEnvelope();
+    const Envelope& testEnv = otherRing.getEnvelope();
+    if (! env.containsProperly(testEnv)) {
+        return false;
+    }
+    return isPointInOrOut(otherRing);
+  }
+
+bool
+EdgeRing::isPointInOrOut(EdgeRing& otherRing) {
+    // in most cases only one or two points will be checked
+    for (const Coordinate& pt : otherRing.getCoordinates()->items<Coordinate>()) {
+        geom::Location loc = locate(pt);
+        if (loc == geom::Location::INTERIOR) {
+            return true;
+        }
+        if (loc == geom::Location::EXTERIOR) {
+            return false;
+        }
+        // pt is on BOUNDARY, so keep checking for a determining location
+    }
+    return false;
 }
 
 /*private*/

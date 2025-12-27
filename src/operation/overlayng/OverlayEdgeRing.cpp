@@ -60,6 +60,12 @@ OverlayEdgeRing::getRingPtr() const
     return ring.get();
 }
 
+const geom::Envelope
+OverlayEdgeRing::getEnvelope() const
+{
+    return *ring->getEnvelopeInternal();
+}
+
 /**
 * Tests whether this ring is a hole.
 * @return <code>true</code> if this ring is a hole
@@ -164,7 +170,7 @@ OverlayEdgeRing::computeRing(std::unique_ptr<CoordinateSequence> && p_ringPts, c
 */
 /*private*/
 const CoordinateSequence&
-OverlayEdgeRing::getCoordinates()
+OverlayEdgeRing::getCoordinates() const
 {
     return *(detail::down_cast<const CoordinateSequence*>(ring->getCoordinatesRO()));
 }
@@ -191,32 +197,16 @@ OverlayEdgeRing::getCoordinates()
 OverlayEdgeRing*
 OverlayEdgeRing::findEdgeRingContaining(const std::vector<OverlayEdgeRing*>& erList)
 {
-    const LinearRing* testRing = ring.get();
-    const Envelope* testEnv = testRing->getEnvelopeInternal();
-
-    OverlayEdgeRing* minRing = nullptr;
-    const Envelope* minRingEnv = nullptr;
-    for (auto tryEdgeRing: erList) {
-        const LinearRing* tryRing = tryEdgeRing->getRingPtr();
-        const Envelope* tryShellEnv = tryRing->getEnvelopeInternal();
-        // the hole envelope cannot equal the shell envelope
-        // (also guards against testing rings against themselves)
-        if (tryShellEnv->equals(testEnv)) continue;
-
-        // hole must be contained in shell
-        if (! tryShellEnv->contains(testEnv)) continue;
-
-        const Coordinate& testPt = EdgeRing::ptNotInList(testRing->getCoordinatesRO(), tryRing->getCoordinatesRO());
-        bool isContained = tryEdgeRing->isInRing(testPt);
-        // check if the new containing ring is smaller than the current minimum ring
-        if (isContained) {
-            if (minRing == nullptr || minRingEnv->contains(tryShellEnv)) {
-                minRing = tryEdgeRing;
-                minRingEnv = minRing->getRingPtr()->getEnvelopeInternal();
+    OverlayEdgeRing* minContainingRing = nullptr;
+    for (OverlayEdgeRing* edgeRing : erList) {
+        if (edgeRing->contains(*this)) {
+            if (minContainingRing == nullptr
+                || minContainingRing->getEnvelope().contains(edgeRing->getEnvelope())) {
+                minContainingRing = edgeRing;
             }
         }
     }
-    return minRing;
+    return minContainingRing;
 }
 
 /*private*/
@@ -230,13 +220,49 @@ OverlayEdgeRing::getLocator()
 }
 
 /*public*/
-bool
-OverlayEdgeRing::isInRing(const Coordinate& pt)
+geom::Location
+OverlayEdgeRing::locate(const Coordinate& pt)
 {
     /**
     * Use an indexed point-in-polygon for performance
     */
-    return Location::EXTERIOR != getLocator()->locate(&pt);
+    return getLocator()->locate(&pt);
+}
+
+/**
+ * Tests if an edgeRing is properly contained in this ring.
+ * Relies on property that edgeRings never overlap (although they may
+ * touch at single vertices).
+ * 
+ * @param ring ring to test
+ * @return true if ring is properly contained
+ */
+bool
+OverlayEdgeRing::contains(const OverlayEdgeRing& otherRing) {
+    // the test envelope must be properly contained
+    // (guards against testing rings against themselves)
+    const Envelope& env = getEnvelope();
+    const Envelope& testEnv = otherRing.getEnvelope();
+    if (! env.containsProperly(testEnv)) {
+        return false;
+    }
+    return isPointInOrOut(otherRing);
+}
+
+bool
+OverlayEdgeRing::isPointInOrOut(const OverlayEdgeRing& otherRing) {
+    // in most cases only one or two points will be checked
+    for (const Coordinate& pt : otherRing.getCoordinates().items<Coordinate>()) {
+        geom::Location loc = locate(pt);
+        if (loc == geom::Location::INTERIOR) {
+            return true;
+        }
+        if (loc == geom::Location::EXTERIOR) {
+            return false;
+        }
+        // pt is on BOUNDARY, so keep checking for a determining location
+    }
+    return false;
 }
 
 /*public*/
