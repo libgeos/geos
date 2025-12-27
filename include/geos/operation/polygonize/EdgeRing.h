@@ -86,6 +86,10 @@ private:
      */
     const geom::CoordinateSequence* getCoordinates();
 
+    geom::Envelope getEnvelope() {
+        return *getRingInternal()->getEnvelopeInternal();
+    }
+
     static void addEdge(const geom::CoordinateSequence* coords,
                         bool isForward,
                         geom::CoordinateSequence* coordList);
@@ -96,6 +100,9 @@ private:
         }
         return ringLocator.get();
     }
+
+    bool contains(EdgeRing& otherRing);
+    bool isPointInOrOut(EdgeRing& otherRing);
 
 public:
     /** \brief
@@ -335,8 +342,8 @@ public:
      */
     std::unique_ptr<geom::LinearRing> getRingOwnership();
 
-    bool isInRing(const geom::Coordinate & pt) {
-        return geom::Location::EXTERIOR != getLocator()->locate(&pt);
+    geom::Location locate(const geom::Coordinate & pt) {
+        return getLocator()->locate(&pt);
     }
 };
 
