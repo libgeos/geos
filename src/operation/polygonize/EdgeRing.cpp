@@ -192,7 +192,7 @@ EdgeRing::computeValid()
 }
 
 bool
-EdgeRing::contains(EdgeRing& otherRing) {
+EdgeRing::contains(const EdgeRing& otherRing) const {
     // the test envelope must be properly contained
     // (guards against testing rings against themselves)
     const Envelope& env = getEnvelope();
@@ -204,9 +204,9 @@ EdgeRing::contains(EdgeRing& otherRing) {
   }
 
 bool
-EdgeRing::isPointInOrOut(EdgeRing& otherRing) {
+EdgeRing::isPointInOrOut(const EdgeRing& otherRing) const {
     // in most cases only one or two points will be checked
-    for (const Coordinate& pt : otherRing.getCoordinates()->items<Coordinate>()) {
+    for (const CoordinateXY& pt : otherRing.getCoordinates()->items<CoordinateXY>()) {
         geom::Location loc = locate(pt);
         if (loc == geom::Location::INTERIOR) {
             return true;
@@ -221,10 +221,10 @@ EdgeRing::isPointInOrOut(EdgeRing& otherRing) {
 
 /*private*/
 const CoordinateSequence*
-EdgeRing::getCoordinates()
+EdgeRing::getCoordinates() const
 {
     if(ringPts == nullptr) {
-        ringPts = detail::make_unique<CoordinateSequence>(0u, 0u);
+        ringPts = std::make_shared<CoordinateSequence>(0u, 0u);
         for(const auto& de : deList) {
             auto edge = dynamic_cast<PolygonizeEdge*>(de->getEdge());
             addEdge(edge->getLine()->getCoordinatesRO(),
@@ -239,12 +239,12 @@ std::unique_ptr<LineString>
 EdgeRing::getLineString()
 {
     getCoordinates();
-    return std::unique_ptr<LineString>(factory->createLineString(*ringPts));
+    return factory->createLineString(ringPts);
 }
 
 /*public*/
-LinearRing*
-EdgeRing::getRingInternal()
+const LinearRing*
+EdgeRing::getRingInternal() const
 {
     if(ring != nullptr) {
         return ring.get();

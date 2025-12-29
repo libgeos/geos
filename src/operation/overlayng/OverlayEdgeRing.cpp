@@ -42,9 +42,9 @@ OverlayEdgeRing::OverlayEdgeRing(OverlayEdge* start, const GeometryFactory* geom
     , locator(nullptr)
     , shell(nullptr)
 {
-    auto ringPts = detail::make_unique<CoordinateSequence>(0u, start->getCoordinatesRO()->hasZ(), start->getCoordinatesRO()->hasM());
+    auto ringPts = std::make_shared<CoordinateSequence>(0u, start->getCoordinatesRO()->hasZ(), start->getCoordinatesRO()->hasM());
     computeRingPts(start, *ringPts);
-    computeRing(std::move(ringPts), geometryFactory);
+    computeRing(ringPts, geometryFactory);
 }
 
 /*public*/
@@ -60,7 +60,7 @@ OverlayEdgeRing::getRingPtr() const
     return ring.get();
 }
 
-const geom::Envelope
+const Envelope&
 OverlayEdgeRing::getEnvelope() const
 {
     return *ring->getEnvelopeInternal();
@@ -155,10 +155,10 @@ OverlayEdgeRing::computeRingPts(OverlayEdge* start, CoordinateSequence& pts)
 
 /*private*/
 void
-OverlayEdgeRing::computeRing(std::unique_ptr<CoordinateSequence> && p_ringPts, const GeometryFactory* geometryFactory)
+OverlayEdgeRing::computeRing(const std::shared_ptr<CoordinateSequence> & p_ringPts, const GeometryFactory* geometryFactory)
 {
     if (ring != nullptr) return;   // don't compute more than once
-    ring = geometryFactory->createLinearRing(std::move(p_ringPts));
+    ring = geometryFactory->createLinearRing(p_ringPts);
     m_isHole = algorithm::Orientation::isCCW(ring->getCoordinatesRO());
 }
 
@@ -172,7 +172,7 @@ OverlayEdgeRing::computeRing(std::unique_ptr<CoordinateSequence> && p_ringPts, c
 const CoordinateSequence&
 OverlayEdgeRing::getCoordinates() const
 {
-    return *(detail::down_cast<const CoordinateSequence*>(ring->getCoordinatesRO()));
+    return *ring->getCoordinatesRO();
 }
 
 /**
@@ -195,7 +195,7 @@ OverlayEdgeRing::getCoordinates() const
 */
 /*public*/
 OverlayEdgeRing*
-OverlayEdgeRing::findEdgeRingContaining(const std::vector<OverlayEdgeRing*>& erList)
+OverlayEdgeRing::findEdgeRingContaining(const std::vector<OverlayEdgeRing*>& erList) const
 {
     OverlayEdgeRing* minContainingRing = nullptr;
     for (OverlayEdgeRing* edgeRing : erList) {
@@ -211,7 +211,7 @@ OverlayEdgeRing::findEdgeRingContaining(const std::vector<OverlayEdgeRing*>& erL
 
 /*private*/
 PointOnGeometryLocator*
-OverlayEdgeRing::getLocator()
+OverlayEdgeRing::getLocator() const
 {
     if (locator == nullptr) {
       locator.reset(new IndexedPointInAreaLocator(*(getRingPtr())));
@@ -221,7 +221,7 @@ OverlayEdgeRing::getLocator()
 
 /*public*/
 geom::Location
-OverlayEdgeRing::locate(const Coordinate& pt)
+OverlayEdgeRing::locate(const CoordinateXY& pt) const
 {
     /**
     * Use an indexed point-in-polygon for performance
@@ -238,7 +238,7 @@ OverlayEdgeRing::locate(const Coordinate& pt)
  * @return true if ring is properly contained
  */
 bool
-OverlayEdgeRing::contains(const OverlayEdgeRing& otherRing) {
+OverlayEdgeRing::contains(const OverlayEdgeRing& otherRing) const {
     // the test envelope must be properly contained
     // (guards against testing rings against themselves)
     const Envelope& env = getEnvelope();
@@ -250,9 +250,9 @@ OverlayEdgeRing::contains(const OverlayEdgeRing& otherRing) {
 }
 
 bool
-OverlayEdgeRing::isPointInOrOut(const OverlayEdgeRing& otherRing) {
+OverlayEdgeRing::isPointInOrOut(const OverlayEdgeRing& otherRing) const {
     // in most cases only one or two points will be checked
-    for (const Coordinate& pt : otherRing.getCoordinates().items<Coordinate>()) {
+    for (const CoordinateXY& pt : otherRing.getCoordinates().items<CoordinateXY>()) {
         geom::Location loc = locate(pt);
         if (loc == geom::Location::INTERIOR) {
             return true;
@@ -267,7 +267,7 @@ OverlayEdgeRing::isPointInOrOut(const OverlayEdgeRing& otherRing) {
 
 /*public*/
 const Coordinate&
-OverlayEdgeRing::getCoordinate()
+OverlayEdgeRing::getCoordinate() const
 {
     return ring->getCoordinatesRO()->getAt(0);
 }
