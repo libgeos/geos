@@ -576,6 +576,19 @@ public:
     }
 
     /** \brief
+     * Tests if an envelope is properly contained in this one.
+     * The envelope is properly contained if it is contained 
+     * by this one but not equal to it.
+     * 
+     * @param other the envelope to test
+     * @return true if the envelope is properly contained
+     */
+    bool containsProperly(const Envelope& other) const {
+        if (equals(&other)) return false;
+        return covers(other);
+    }
+
+    /** \brief
      * Check if the point p intersects (lies inside) the region of this Envelope.
      *
      * @param other the Coordinate to be tested

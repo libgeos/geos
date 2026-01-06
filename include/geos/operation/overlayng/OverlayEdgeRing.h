@@ -28,6 +28,7 @@ class PointOnGeometryLocator;
 }
 namespace geom {
 class Coordinate;
+class CoordinateXY;
 class CoordinateSequence;
 class GeometryFactory;
 class LinearRing;
@@ -46,6 +47,7 @@ namespace overlayng { // geos.operation.overlayng
 
 class GEOS_DLL OverlayEdgeRing {
     using Coordinate = geos::geom::Coordinate;
+    using CoordinateXY = geos::geom::CoordinateXY;
     using CoordinateSequence = geos::geom::CoordinateSequence;
     using GeometryFactory = geos::geom::GeometryFactory;
     using LinearRing = geos::geom::LinearRing;
@@ -59,23 +61,25 @@ private:
     OverlayEdge* startEdge;
     std::unique_ptr<LinearRing> ring;
     bool m_isHole;
-    std::unique_ptr<IndexedPointInAreaLocator> locator;
+    mutable std::unique_ptr<IndexedPointInAreaLocator> locator;
     OverlayEdgeRing* shell;
     // a list of EdgeRings which are holes in this EdgeRing
     std::vector<OverlayEdgeRing*> holes;
 
     // Methods
     void computeRingPts(OverlayEdge* start, CoordinateSequence& pts);
-    void computeRing(std::unique_ptr<CoordinateSequence> && ringPts, const GeometryFactory* geometryFactory);
+    void computeRing(const std::shared_ptr<CoordinateSequence> & ringPts, const GeometryFactory* geometryFactory);
 
     /**
     * Computes the list of coordinates which are contained in this ring.
     * The coordinates are computed once only and cached.
     * @return an array of the {@link Coordinate}s in this ring
     */
-    const CoordinateSequence& getCoordinates();
-    PointOnGeometryLocator* getLocator();
+    const CoordinateSequence& getCoordinates() const;
+    PointOnGeometryLocator* getLocator() const;
     static void closeRing(CoordinateSequence& pts);
+    bool contains(const OverlayEdgeRing& otherRing) const;
+    bool isPointInOrOut(const OverlayEdgeRing& otherRing) const;
 
 
 public:
@@ -84,6 +88,8 @@ public:
 
     std::unique_ptr<LinearRing> getRing();
     const LinearRing* getRingPtr() const;
+
+    const geom::Envelope& getEnvelope() const;
 
     /**
     * Tests whether this ring is a hole.
@@ -114,9 +120,9 @@ public:
 
     void addHole(OverlayEdgeRing* ring);
 
-    bool isInRing(const Coordinate& pt);
+    geom::Location locate(const CoordinateXY& pt) const;
 
-    const Coordinate& getCoordinate();
+    const Coordinate& getCoordinate() const;
 
     /**
     * Computes the {@link Polygon} formed by this ring and any contained holes.
@@ -144,7 +150,7 @@ public:
     * @return containing EdgeRing, if there is one
     * or null if no containing EdgeRing is found
     */
-    OverlayEdgeRing* findEdgeRingContaining(const std::vector<OverlayEdgeRing*>& erList);
+    OverlayEdgeRing* findEdgeRingContaining(const std::vector<OverlayEdgeRing*>& erList) const;
 
 
 };

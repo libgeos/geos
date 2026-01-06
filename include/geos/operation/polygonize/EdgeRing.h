@@ -64,9 +64,9 @@ private:
     DeList deList;
 
     // cache the following data for efficiency
-    std::unique_ptr<geom::LinearRing> ring;
-    std::unique_ptr<geom::CoordinateSequence> ringPts;
-    std::unique_ptr<algorithm::locate::PointOnGeometryLocator> ringLocator;
+    mutable std::unique_ptr<geom::LinearRing> ring;
+    mutable std::shared_ptr<geom::CoordinateSequence> ringPts;
+    mutable std::unique_ptr<algorithm::locate::PointOnGeometryLocator> ringLocator;
 
     std::unique_ptr<std::vector<std::unique_ptr<geom::LinearRing>>> holes;
 
@@ -84,18 +84,25 @@ private:
      *
      * @return an array of the Coordinate in this ring
      */
-    const geom::CoordinateSequence* getCoordinates();
+    const geom::CoordinateSequence* getCoordinates() const;
+
+    const geom::Envelope& getEnvelope() const {
+        return *getRingInternal()->getEnvelopeInternal();
+    }
 
     static void addEdge(const geom::CoordinateSequence* coords,
                         bool isForward,
                         geom::CoordinateSequence* coordList);
 
-    algorithm::locate::PointOnGeometryLocator* getLocator() {
+    algorithm::locate::PointOnGeometryLocator* getLocator() const {
         if (ringLocator == nullptr) {
             ringLocator.reset(new algorithm::locate::IndexedPointInAreaLocator(*getRingInternal()));
         }
         return ringLocator.get();
     }
+
+    bool contains(const EdgeRing& otherRing) const;
+    bool isPointInOrOut(const EdgeRing& otherRing) const;
 
 public:
     /** \brief
@@ -324,7 +331,7 @@ public:
      * Ownership of ring is retained by the object.
      * Details of problems are written to standard output.
      */
-    geom::LinearRing* getRingInternal();
+    const geom::LinearRing* getRingInternal() const;
 
     /** \brief
      * Returns this ring as a LinearRing, or null if an Exception
@@ -335,8 +342,8 @@ public:
      */
     std::unique_ptr<geom::LinearRing> getRingOwnership();
 
-    bool isInRing(const geom::Coordinate & pt) {
-        return geom::Location::EXTERIOR != getLocator()->locate(&pt);
+    geom::Location locate(const geom::CoordinateXY& pt) const {
+        return getLocator()->locate(&pt);
     }
 };
 
