@@ -971,11 +971,17 @@ extern "C" {
     int
     GEOSHausdorffDistanceWithPoints_r(GEOSContextHandle_t extHandle,
         const Geometry* g1, const Geometry* g2,
-        double* dist, double* pt1_x, double* pt1_y,
-    	double* pt2_x, double* pt2_y)
+        double* dist, double* p1x, double* p1y,
+    	double* p2x, double* p2y)
     {
         return execute(extHandle, 0, [&]() {
-            *dist = DiscreteHausdorffDistance::distanceWithPoints(*g1, *g2, pt1_x, pt1_y, pt2_x, pt2_y);
+            DiscreteHausdorffDistance dhd(*g1, *g2);
+            *dist = dhd.distance();
+            const auto& pts = dhd.getCoordinates();
+            *p1x = pts[0].x;
+            *p1y = pts[0].y;
+            *p2x = pts[1].x;
+            *p2y = pts[1].y;
             return 1;
         });
     }
@@ -992,12 +998,19 @@ extern "C" {
 
     int
     GEOSHausdorffDistanceDensifyWithPoints_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2,
-		                   double densifyFrac, double* dist, double* pt1_x, double* pt1_y, double* pt2_x, double* pt2_y)
+		                   double densifyFrac, double* dist, double* p1x, double* p1y, double* p2x, double* p2y)
     {
         return execute(extHandle, 0, [&]() {
-	   *dist = DiscreteHausdorffDistance::distanceDensifyWithPoints(*g1, *g2, densifyFrac, pt1_x, pt1_y, pt2_x, pt2_y);
-	   return 1;
-	});
+            DiscreteHausdorffDistance dhd(*g1, *g2);
+            dhd.setDensifyFraction(densifyFrac);
+            *dist = dhd.distance();
+            const auto& pts = dhd.getCoordinates();
+            *p1x = pts[0].x;
+            *p1y = pts[0].y;
+            *p2x = pts[1].x;
+            *p2y = pts[1].y;
+            return 1;
+        });
     }
 
     int

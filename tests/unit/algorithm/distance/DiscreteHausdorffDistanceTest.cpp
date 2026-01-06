@@ -64,32 +64,6 @@ struct test_DiscreteHausdorffDistance_data {
 
     void
     runTest(const std::string& wkt1, const std::string& wkt2,
-	    double expectedDistance, std::array<CoordinateXY, 2> expectedPoints)
-    {
-        GeomPtr g1(reader.read(wkt1));
-	GeomPtr g2(reader.read(wkt2));
-        
-	double pt1_x;
-	double pt1_y;
-	double pt2_x;
-	double pt2_y;
-
-	double distance = DiscreteHausdorffDistance::distanceWithPoints(*g1, *g2, &pt1_x, &pt1_y, &pt2_x, &pt2_y);
-        
-	double diff = std::fabs(distance - expectedDistance);
-	double diffPt1_x = std::fabs(pt1_x - expectedPoints[0].x);
-	double diffPt1_y = std::fabs(pt1_y - expectedPoints[0].y);
-	double diffPt2_x = std::fabs(pt2_x - expectedPoints[1].x);
-	double diffPt2_y = std::fabs(pt2_y - expectedPoints[1].y);
-	ensure(diff <= TOLERANCE);
-	ensure(diffPt1_x <= TOLERANCE);
-	ensure(diffPt1_y <= TOLERANCE);
-	ensure(diffPt2_x <= TOLERANCE);
-	ensure(diffPt2_y <= TOLERANCE);
-    }
-
-    void
-    runTest(const std::string& wkt1, const std::string& wkt2,
             double densifyFactor, double expectedDistance)
     {
         GeomPtr g1(reader.read(wkt1));
@@ -101,34 +75,6 @@ struct test_DiscreteHausdorffDistance_data {
         // std::cerr << "expectedDistance:" << expectedDistance << " actual distance:" << distance << std::endl;
         ensure(diff <= TOLERANCE);
     }
-    void
-    runTest(const std::string& wkt1, const std::string& wkt2,
-	    double densifyFactor, double expectedDistance, std::array<CoordinateXY, 2> expectedPoints)
-    {
-        GeomPtr g1(reader.read(wkt1));
-	GeomPtr g2(reader.read(wkt2));
-
-	double pt1_x;
-	double pt1_y;
-	double pt2_x;
-	double pt2_y;
-
-	double distance = DiscreteHausdorffDistance::distanceDensifyWithPoints(*g1, *g2, densifyFactor, &pt1_x, &pt1_y, &pt2_x, &pt2_y);
-        
-	double distanceDiff = std::fabs(distance - expectedDistance);
-	double diffPt1_x = std::fabs(pt1_x - expectedPoints[0].x);
-	double diffPt1_y = std::fabs(pt1_y - expectedPoints[0].y);
-	double diffPt2_x = std::fabs(pt2_x - expectedPoints[1].x);
-	double diffPt2_y = std::fabs(pt2_y - expectedPoints[1].y);
-
-	ensure(distanceDiff <= TOLERANCE);
-	ensure(diffPt1_x <= TOLERANCE);
-	ensure(diffPt1_y <= TOLERANCE);
-        ensure(diffPt2_x <= TOLERANCE);
-	ensure(diffPt2_y <= TOLERANCE);
-    }
-
-
 
     PrecisionModel pm;
     GeometryFactory::Ptr gf;
@@ -287,20 +233,5 @@ void object::test<8>
             2.8284271247461903);
 }
 
-// Test 9 - Hausdorff with points
-// see https://github.com/libgeos/geos/issues/1327
-template<>
-template<>
-void object::test<9>
-()
-{	
-  const std::array<CoordinateXY, 2> expectedPoints = {
-    CoordinateXY(1.0, 1.0),
-    CoordinateXY(-5.0, 0.0)
-  };
-  runTest("LINEARRING (1 1, 1 2, 5 1, 1 1)", "LINEARRING (0 0, -5 0, 0 -1, 0 0)", 6.082763, expectedPoints);
-  //Densify of 0.001
-  runTest("LINEARRING (1 1, 1 2, 5 1, 1 1)", "LINEARRING (0 0, -5 0, 0 -1, 0 0)", 0.001,  6.082763, expectedPoints);
-}
-
 } // namespace tut
+

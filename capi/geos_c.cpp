@@ -318,9 +318,9 @@ extern "C" {
     }
 
     int
-    GEOSHausdorffDistanceWithPoints(const Geometry* g1, const Geometry* g2, double* dist, double* pt1_x, double* pt1_y, double* pt2_x, double* pt2_y)
+    GEOSHausdorffDistanceWithPoints(const Geometry* g1, const Geometry* g2, double* dist, double* p1x, double* p1y, double* p2x, double* p2y)
     {
-        return GEOSHausdorffDistanceWithPoints_r(handle, g1, g2, dist, pt1_x, pt1_y, pt2_x, pt2_y);
+        return GEOSHausdorffDistanceWithPoints_r(handle, g1, g2, dist, p1x, p1y, p2x, p2y);
     }
 
     int
@@ -330,9 +330,9 @@ extern "C" {
     }
 
     int
-    GEOSHausdorffDistanceDensifyWithPoints(const Geometry* g1, const Geometry* g2, double densifyFrac, double* dist, double* pt1_x, double* pt1_y, double* pt2_x, double* pt2_y)
+    GEOSHausdorffDistanceDensifyWithPoints(const Geometry* g1, const Geometry* g2, double densifyFrac, double* dist, double* p1x, double* p1y, double* p2x, double* p2y)
     {
-        return GEOSHausdorffDistanceDensifyWithPoints_r(handle, g1, g2, densifyFrac, dist, pt1_x, pt1_y, pt2_x, pt2_y); 
+        return GEOSHausdorffDistanceDensifyWithPoints_r(handle, g1, g2, densifyFrac, dist, p1x, p1y, p2x, p2y);
     }
 
     int

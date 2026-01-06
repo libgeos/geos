@@ -1960,8 +1960,8 @@ extern int GEOS_DLL GEOSHausdorffDistanceWithPoints_r(
     const GEOSGeometry *g1,
     const GEOSGeometry *g2,
     double *dist,
-    double *pt1_x, double *pt1_y,
-    double *pt2_x, double *pt2_y);
+    double *p1x, double *p1y,
+    double *p2x, double *p2y);
 
 /** \see GEOSHausdorffDistanceDensify */
 extern int GEOS_DLL GEOSHausdorffDistanceDensify_r(
@@ -1976,8 +1976,8 @@ extern int GEOS_DLL GEOSHausdorffDistanceDensifyWithPoints_r(
     const GEOSGeometry *g1,
     const GEOSGeometry *g2,
     double densifyFrac, double* dist,
-    double *pt1_x, double *pt1_y,
-    double *pt2_x, double *pt2_y);
+    double *p1x, double *p1y,
+    double *p2x, double *p2y);
 
 /** \see GEOSFrechetDistance */
 extern int GEOS_DLL GEOSFrechetDistance_r(
@@ -3729,19 +3729,20 @@ extern int GEOS_DLL GEOSHausdorffDistance(
 * \param[in] g1 Input geometry
 * \param[in] g2 Input geometry
 * \param[out] dist Pointer to be filled in with distance result
-* \param[out] pt1_x X coordinate of point on g1
-* \param[out] pt1_y Y coordinate of point on g1
-* \param[out] pt2_x X coordinate of point on g2
-* \param[out] pt2_y Y coordinate of point on g2
+* \param[out] p1x X coordinate of point on g1
+* \param[out] p1y Y coordinate of point on g1
+* \param[out] p2x X coordinate of point on g2
+* \param[out] p2y Y coordinate of point on g2
 * \return 1 on success, 0 on exception.
 * \see geos::algorithm::distance::DiscreteHausdorffDistance
+* \since 3.15
 */
 extern int GEOS_DLL GEOSHausdorffDistanceWithPoints(
     const GEOSGeometry *g1,
     const GEOSGeometry *g2,
     double *dist,
-    double *pt1_x, double *pt1_y,
-    double *pt2_x, double *pt2_y);
+    double *p1x, double *p1y,
+    double *p2x, double *p2y);
 
 
 
@@ -3776,21 +3777,21 @@ extern int GEOS_DLL GEOSHausdorffDistanceDensify(
  * \param[in] densifyFrac The largest % of the overall line length that
  * any given two point segment should be.
  * \param[out] dist Pointer to be filled in with distance result
- * \param[out] pt1_x X coordinate of point on g1
- * \param[out] pt1_y Y coordinate of point on g1
- * \param[out] pt2_x X coordinate of point on g2
- * \param[out] pt2_y Y coordinate of point on g2
+ * \param[out] p1x X coordinate of point on g1
+ * \param[out] p1y Y coordinate of point on g1
+ * \param[out] p2x X coordinate of point on g2
+ * \param[out] p2y Y coordinate of point on g2
  * \return 1 on success, 0 on exception.
  * \see goes::algorithm::distance::DiscreteHausdorffDistance
- * \since 3.2
+ * \since 3.15
  */
 extern int GEOS_DLL GEOSHausdorffDistanceDensifyWithPoints(
     const GEOSGeometry *g1,
     const GEOSGeometry *g2,
     double densifyFrac,
     double *dist,
-    double* pt1_x, double* pt1_y,
-    double* pt2_x, double* pt2_y);
+    double* p1x, double* p1y,
+    double* p2x, double* p2y);
 
 /**
 * Calculate the
