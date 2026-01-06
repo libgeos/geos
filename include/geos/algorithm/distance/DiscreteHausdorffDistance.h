@@ -96,7 +96,7 @@ public:
 
     static double distance(const geom::Geometry& g0,
                            const geom::Geometry& g1, double densifyFrac);
-
+   
     DiscreteHausdorffDistance(const geom::Geometry& p_g0,
                               const geom::Geometry& p_g1)
         :
@@ -130,7 +130,7 @@ public:
         return ptDist.getDistance();
     }
 
-    const std::array<geom::CoordinateXY, 2>
+    const std::array<geom::CoordinateXY, 2>&
     getCoordinates() const
     {
         return ptDist.getCoordinates();

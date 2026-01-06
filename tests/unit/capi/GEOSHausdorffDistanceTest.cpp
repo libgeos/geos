@@ -72,4 +72,45 @@ void object::test<3>()
     ensure_equals("curved geometry not supported", GEOSHausdorffDistance(geom2_, geom1_, &dist), 0);
 }
 
+template<>
+template<>
+void object::test<4>()
+{
+    set_test_name("GEOSHausdorffDistanceWithPoints");
+
+    geom1_ = fromWKT("LINEARRING (1 1, 1 2, 5 1, 1 1)");
+    geom2_ = fromWKT("LINEARRING (0 0, -5 0, 0 -1, 0 0)");
+
+    double dist;
+    double p1x, p1y, p2x, p2y;
+    ensure_equals(GEOSHausdorffDistanceWithPoints(geom1_, geom2_, &dist, &p1x, &p1y, &p2x, &p2y), 1);
+
+    ensure_equals("dist", dist, 6.082763, 1e-5);
+    ensure_equals(p1x, 1);
+    ensure_equals(p1y, 1);
+    ensure_equals(p2x, -5);
+    ensure_equals(p2y, 0);
+}
+
+template<>
+template<>
+void object::test<5>()
+{
+    set_test_name("GEOSHausdorffDistanceDensifyWithPoints");
+
+    constexpr double densifyFrac = 0.001;
+    geom1_ = fromWKT("LINEARRING (1 1, 1 2, 5 1, 1 1)");
+    geom2_ = fromWKT("LINEARRING (0 0, -5 0, 0 -1, 0 0)");
+
+    double dist;
+    double p1x, p1y, p2x, p2y;
+    ensure_equals(GEOSHausdorffDistanceDensifyWithPoints(geom1_, geom2_, densifyFrac, &dist, &p1x, &p1y, &p2x, &p2y), 1);
+
+    ensure_equals("dist", dist, 6.082763, 1e-5);
+    ensure_equals(p1x, 1);
+    ensure_equals(p1y, 1);
+    ensure_equals(p2x, -5);
+    ensure_equals(p2y, 0);
+}
+
 } // namespace tut

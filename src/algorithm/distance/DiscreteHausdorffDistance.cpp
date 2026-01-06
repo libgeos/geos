@@ -79,8 +79,8 @@ DiscreteHausdorffDistance::distance(const geom::Geometry& g0,
     return dist.distance();
 }
 
-/* public */
 
+/* public */
 void DiscreteHausdorffDistance::setDensifyFraction(double dFrac)
 {
     // !(dFrac > 0) written that way to catch NaN
