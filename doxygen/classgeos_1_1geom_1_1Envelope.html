@@ -185,6 +185,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>contains</b> (const <
 <tr class="memitem:afaac4eaf65040ecb528f1d2a172ebe3a" id="r_afaac4eaf65040ecb528f1d2a172ebe3a"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Envelope.html#afaac4eaf65040ecb528f1d2a172ebe3a">containsProperly</a> (const CoordinateXY &amp;p) const</td></tr>
 <tr class="memdesc:afaac4eaf65040ecb528f1d2a172ebe3a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the point p lies in the interior of this <a class="el" href="classgeos_1_1geom_1_1Envelope.html" title="An Envelope defines a rectangulare region of the 2D coordinate plane.">Envelope</a>.  <br /></td></tr>
 <tr class="separator:afaac4eaf65040ecb528f1d2a172ebe3a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa093e2d75d81e43d4b52801dbc209c37" id="r_aa093e2d75d81e43d4b52801dbc209c37"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Envelope.html#aa093e2d75d81e43d4b52801dbc209c37">containsProperly</a> (const <a class="el" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a> &amp;other) const</td></tr>
+<tr class="memdesc:aa093e2d75d81e43d4b52801dbc209c37"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tests if an envelope is properly contained in this one. The envelope is properly contained if it is contained by this one but not equal to it.  <br /></td></tr>
+<tr class="separator:aa093e2d75d81e43d4b52801dbc209c37"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad31bc8823cf4c1afee5cb64797a7c8c4" id="r_ad31bc8823cf4c1afee5cb64797a7c8c4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Envelope.html#ad31bc8823cf4c1afee5cb64797a7c8c4">intersects</a> (const CoordinateXY &amp;other) const</td></tr>
 <tr class="memdesc:ad31bc8823cf4c1afee5cb64797a7c8c4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if the point p intersects (lies inside) the region of this <a class="el" href="classgeos_1_1geom_1_1Envelope.html" title="An Envelope defines a rectangulare region of the 2D coordinate plane.">Envelope</a>.  <br /></td></tr>
 <tr class="separator:ad31bc8823cf4c1afee5cb64797a7c8c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -558,7 +561,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const
 </div>
 </div>
 <a id="afaac4eaf65040ecb528f1d2a172ebe3a" name="afaac4eaf65040ecb528f1d2a172ebe3a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#afaac4eaf65040ecb528f1d2a172ebe3a">&#9670;&#160;</a></span>containsProperly()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#afaac4eaf65040ecb528f1d2a172ebe3a">&#9670;&#160;</a></span>containsProperly() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -589,6 +592,41 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>operator!=</b> (const
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if the point lies in the interior </dd></dl>
+
+</div>
+</div>
+<a id="aa093e2d75d81e43d4b52801dbc209c37" name="aa093e2d75d81e43d4b52801dbc209c37"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa093e2d75d81e43d4b52801dbc209c37">&#9670;&#160;</a></span>containsProperly() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool geos::geom::Envelope::containsProperly </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a> &amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Tests if an envelope is properly contained in this one. The envelope is properly contained if it is contained by this one but not equal to it. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">other</td><td>the envelope to test </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the envelope is properly contained </dd></dl>
 
 </div>
 </div>
