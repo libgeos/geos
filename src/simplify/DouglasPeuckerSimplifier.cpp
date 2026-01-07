@@ -201,8 +201,12 @@ DouglasPeuckerSimplifier::setDistanceTolerance(double tol)
 }
 
 Geometry::Ptr
-DouglasPeuckerSimplifier::getResultGeometry()
+DouglasPeuckerSimplifier::getResultGeometry() const
 {
+    if (inputGeom->isEmpty()) {
+        return inputGeom->clone();
+    }
+
     DPTransformer t(distanceTolerance);
     return t.transform(inputGeom);
 
