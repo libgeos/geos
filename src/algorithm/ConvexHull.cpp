@@ -63,13 +63,21 @@ private:
     polarCompare(const Coordinate* o, const Coordinate* p,
                  const Coordinate* q)
     {
-        int orient = Orientation::index(*o, *p, *q);
+        // To use this comparator in std::sort it must provide a stable ordering, such that
+        // if cmp(a, b) is true then cmp(b, a) is false. Unfortunately Orientation::index may
+        // not provide this guarantee when the inputs differ by many orders of magnitude. To
+        // guard against this, we normalize the order of P and Q before calling OrientationIndex
+        // and flip the result if the inputs were flipped.
+        const bool swap = geom::CoordinateLessThan()(p, q);
+
+        const int orient = swap ? Orientation::index(*o, *q, *p) : Orientation::index(*o, *p, *q);
 
         if(orient == Orientation::COUNTERCLOCKWISE) {
-            return 1;
+            return swap ? -1 : 1;
         }
+
         if(orient == Orientation::CLOCKWISE) {
-            return -1;
+            return swap ? 1 : -1;
         }
 
         /**
@@ -102,7 +110,7 @@ public:
     RadiallyLessThen(const Coordinate* c): origin(c) {}
 
     bool
-    operator()(const Coordinate* p1, const Coordinate* p2)
+    operator()(const Coordinate* p1, const Coordinate* p2) const
     {
         return (polarCompare(origin, p1, p2) == -1);
     }
