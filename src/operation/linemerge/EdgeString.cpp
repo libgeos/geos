@@ -27,7 +27,6 @@
 #include <geos/util.h>
 
 #include <vector>
-#include <cassert>
 
 
 using namespace geos::geom;
@@ -60,9 +59,23 @@ EdgeString::getCoordinates() const
 {
     int forwardDirectedEdges = 0;
     int reverseDirectedEdges = 0;
-    auto coordinates = detail::make_unique<CoordinateSequence>();
-    for(std::size_t i = 0, e = directedEdges.size(); i < e; ++i) {
-        LineMergeDirectedEdge* directedEdge = directedEdges[i];
+
+    bool resultHasZ = false;
+    bool resultHasM = false;
+
+    for (const LineMergeDirectedEdge* directedEdge : directedEdges) {
+        const LineMergeEdge* lme = detail::down_cast<LineMergeEdge*>(directedEdge->getEdge());
+
+        resultHasZ |= lme->getLine()->hasZ();
+        resultHasM |= lme->getLine()->hasM();
+    }
+
+    auto coordinates = std::make_unique<CoordinateSequence>(0, resultHasZ, resultHasM);
+
+    bool lastPointMissingZ = false;
+    bool lastPointMissingM = false;
+
+    for (const LineMergeDirectedEdge* directedEdge : directedEdges) {
         if(directedEdge->getEdgeDirection()) {
             forwardDirectedEdges++;
         }
@@ -70,15 +83,30 @@ EdgeString::getCoordinates() const
             reverseDirectedEdges++;
         }
 
-        LineMergeEdge* lme = detail::down_cast<LineMergeEdge*>(directedEdge->getEdge());
+        const LineMergeEdge* lme = detail::down_cast<LineMergeEdge*>(directedEdge->getEdge());
+        const CoordinateSequence* seq = lme->getLine()->getCoordinatesRO();
 
-        coordinates->add(*lme->getLine()->getCoordinatesRO(),
+        if (lastPointMissingZ && seq->hasZ()) {
+            const double z = directedEdge->getEdgeDirection() ? seq->getZ(0) : seq->getZ(seq->getSize() - 1);
+            coordinates->setZ(coordinates->getSize() - 1, z);
+        }
+        if (lastPointMissingM && seq->hasM()) {
+            const double m = directedEdge->getEdgeDirection() ? seq->getM(0) : seq->getM(seq->getSize() - 1);
+            coordinates->setM(coordinates->getSize() - 1, m);
+        }
+
+        coordinates->add(*seq,
                          false,
                          directedEdge->getEdgeDirection());
+
+        lastPointMissingZ = resultHasZ && !seq->hasZ();
+        lastPointMissingM = resultHasM && !seq->hasM();
     }
+
     if(reverseDirectedEdges > forwardDirectedEdges) {
         coordinates->reverse();
     }
+
     return coordinates;
 }
 

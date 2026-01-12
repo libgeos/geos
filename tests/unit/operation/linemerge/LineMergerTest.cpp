@@ -17,6 +17,8 @@
 #include <string>
 #include <vector>
 
+#include "utility.h"
+
 namespace tut {
 //
 // Test Group
@@ -490,6 +492,35 @@ void object::test<19>
     ensure_equals(merged.size(), 1u);
 
     ensure_equals(geom->getLength(), merged[0]->getLength());
+}
+
+template<>
+template<>
+void object::test<20>
+()
+{
+    std::vector<std::string> wkts{
+        "LINESTRING Z (0 0 0, 1 2 3, 2 4 6)",
+        "LINESTRING M (10 9 8, 2 4 7)",
+        "LINESTRING Z (10 9 2, 11 12 15)"
+    };
+    std::vector<std::unique_ptr<Geometry>> geoms;
+
+    LineMerger lm;
+
+    for (const auto& wkt : wkts) {
+        auto geom = wktreader.read(wkt);
+        lm.add(geom.get());
+        geoms.push_back(std::move(geom));
+    }
+
+    auto merged = lm.getMergedLineStrings();
+
+    ensure_equals(merged.size(), 1u);
+
+    auto expected = wktreader.read("LINESTRING ZM (0 0 0 NaN, 1 2 3 NaN, 2 4 6 7, 10 9 2 8, 11 12 15 NaN)");
+
+    ensure_equals_exact_geometry_xyzm(merged.front().get(), expected.get(), 0.0);
 }
 
 } // namespace tut
