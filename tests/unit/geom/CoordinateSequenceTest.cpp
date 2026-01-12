@@ -1536,4 +1536,41 @@ void object::test<56>
     ensure_equals_xyz(seq1.getAt(3), Coordinate{10, 11, DoubleNotANumber});
 }
 
+template<>
+template<>
+void object::test<60>()
+{
+    set_test_name("Z/M accessors on XY sequence");
+
+    CoordinateSequence seq(0, false, false);
+    seq.add(CoordinateXY{0, 0});
+    seq.add(CoordinateXY{3, 0});
+
+    seq.setZ(0, 500);
+    seq.setM(0, 501);
+
+    ensure(std::isnan(seq.getZ(0)));
+    ensure(std::isnan(seq.getM(0)));
+}
+
+template<>
+template<>
+void object::test<61>()
+{
+    set_test_name("Z/M accessors on XYZM sequence");
+
+    CoordinateSequence seq(0, true, true);
+    seq.add(CoordinateXY{0, 0});
+    seq.add(CoordinateXY{3, 0});
+
+    seq.setZ(0, 500);
+    seq.setM(0, 501);
+
+    ensure_equals(seq.getZ(0), 500);
+    ensure_equals(seq.getM(0), 501);
+
+    ensure(std::isnan(seq.getZ(1)));
+    ensure(std::isnan(seq.getM(1)));
+}
+
 } // namespace tut
