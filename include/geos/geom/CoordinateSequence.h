@@ -337,6 +337,80 @@ public:
         return m_vect[index * stride() + 1];
     }
 
+    /**
+     * Returns ordinate Z of the specified coordinate.
+     *
+     * @param index
+     * @return the value of the Z ordinate in the index'th coordinate, or NaN if the
+     *         CoordinateSequence does not store Z values
+     */
+    double getZ(std::size_t index) const
+    {
+        return getOrdinate(index, Z);
+    }
+
+    /**
+     * Returns ordinate M of the specified coordinate.
+     *
+     * @param index
+     * @return the value of the M ordinate in the index'th coordinate, or NaN if the
+     *         CoordinateSequence does not store M values
+     */
+    double getM(std::size_t index) const
+    {
+        return getOrdinate(index, M);
+    }
+
+    /**
+     * Set the X value of the specified coordinate.
+     *
+     * @param index
+     * @param x the new X value
+     */
+    void setX(std::size_t index, double x)
+    {
+        m_vect[index * stride()] = x;
+    }
+
+    /**
+     * Set the Y value of the specified coordinate.
+     *
+     * @param index
+     * @param y the new Y value
+     */
+    void setY(std::size_t index, double y)
+    {
+        m_vect[index * stride() + 1] = y;
+    }
+
+    /**
+     * Set the Z value of the specified coordinate.
+     *
+     * Has no effect if the CoordinateSequence does not store Z values.
+     *
+     * @param index
+     * @param z the new Z value
+     */
+    void setZ(std::size_t index, double z)
+    {
+        if (hasZ())
+            setOrdinate(index, Z, z);
+    }
+
+    /**
+     * Set the M value of the specified coordinate.
+     *
+     * Has no effect if the CoordinateSequence does not store M values.
+     *
+     * @param index
+     * @param m the new M value
+     */
+    void setM(std::size_t index, double m)
+    {
+        if (hasM())
+            setOrdinate(index, M, m);
+    }
+
     /// Return last Coordinate in the sequence
     template<typename T=Coordinate>
     const T& back() const
