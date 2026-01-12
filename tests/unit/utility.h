@@ -428,8 +428,8 @@ ensure_equals_exact_xyzm(const geos::geom::CoordinateSequence* seq1,
         seq2->getAt(i, c2);
 
         ensure("xy not in tolerance", c1.distance(c2) <= tol);
-        ensure_same("z not same", c1.z, c2.z);
-        ensure_same("z not same", c1.m, c2.m);
+        ensure_same(("index " + std::to_string(i) + "/" + std::to_string(seq1->getSize() - 1) + " z not same").c_str(), c1.z, c2.z);
+        ensure_same(("index " + std::to_string(i) + "/" + std::to_string(seq1->getSize() - 1) + " m not same").c_str(), c1.m, c2.m);
     }
 }
 
