@@ -37,7 +37,7 @@ struct test_dpsimp_data {
     {}
 
     void
-    checkDP(const std::string& wkt, double tolerance, const std::string& wkt_expected)
+    checkDP(const std::string& wkt, double tolerance, const std::string& wkt_expected) const
     {
         GeomPtr g(wktreader.read(wkt));
         GeomPtr simplified = DouglasPeuckerSimplifier::simplify(g.get(), tolerance);
@@ -49,7 +49,7 @@ struct test_dpsimp_data {
     }
 
     void
-    checkDPNoChange(const std::string& wkt, double tolerance)
+    checkDPNoChange(const std::string& wkt, double tolerance) const
     {
         checkDP(wkt, tolerance, wkt);
     }
@@ -380,6 +380,26 @@ void object::test<23>()
     checkDP("POLYGON ZM ((1 0 5 7, 2 0 10 9, 2 2 15 11, 0 2 20 13, 0 0 25 15, 1 0 5 7))",
         0,
         "POLYGON ZM ((2 0 10 9, 2 2 15 11, 0 2 20 13, 0 0 25 15, 2 0 10 9))");
+}
+
+template<>
+template<>
+void object::test<24>()
+{
+    set_test_name("simplification preserves dimensions of empty geometries");
+
+    const std::vector<std::string> geomTypes{"POINT", "LINESTRING", "POLYGON"};
+    const std::vector<std::string> dimensions{"", "Z", "M", "ZM"};
+    const std::vector<std::string> mods{"", "MULTI"};
+
+    for (const auto& geomType : geomTypes) {
+        for (const auto& dimension: dimensions) {
+            for (const auto& mod: mods) {
+                std::string wkt = mod + geomType + " " + dimension + " EMPTY";
+                checkDP(wkt, 0, wkt);
+            }
+        }
+    }
 }
 
 } // namespace tut

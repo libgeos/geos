@@ -68,7 +68,7 @@ public:
      */
     void setDistanceTolerance(double tolerance);
 
-    std::unique_ptr<geom::Geometry> getResultGeometry();
+    std::unique_ptr<geom::Geometry> getResultGeometry() const;
 
 
 private:
