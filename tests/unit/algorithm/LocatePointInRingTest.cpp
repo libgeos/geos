@@ -284,6 +284,17 @@ void object::test<11>()
     runPtLocator(Location::EXTERIOR, CoordinateXY(0, 5), wkt);
 }
 
+template<>
+template<>
+void object::test<12>()
+{
+    set_test_name("robustness test from PostGIS ticket #6023");
+
+    std::string wkt = "POLYGON ((11.230120879533454 62.84897119848748,11.230120879533905 62.8489711984873,11.23020501303477 62.84900750109812,11.230170431987244 62.84904481447776,11.230117909393426 62.8489943480894,11.230120879533454 62.84897119848748))";
+
+    runPtLocator(Location::BOUNDARY, CoordinateXY(11.230120879533454, 62.84897119848748), wkt);
+}
+
 
 } // namespace tut
 
