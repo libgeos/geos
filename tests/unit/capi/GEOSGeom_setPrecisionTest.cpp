@@ -326,5 +326,20 @@ void object::test<23>()
     checkPrecision(wkt,  100000, "LINESTRING ( 700000 200000,  700000 1400000)");
 }
 
+template<>
+template<>
+void object::test<24>()
+{
+    // https://github.com/libgeos/geos/issues/1365{
+    set_test_name("M value retained on last point");
+
+    input_ = fromWKT("POLYGON ZM ((0 0 0 0, 0 1 1 1, 1 1 2 3, 1 0 4 5, 0 0 6 7))");
+    expected_ = fromWKT("POLYGON ZM ((0 1 1 1, 1 1 2 3, 1 0 4 5, 0 0 6 7, 0 1 1 1))");
+
+    result_ = GEOSGeom_setPrecision(input_, 0.1, 0);
+
+    ensure(GEOSEqualsIdentical(result_, expected_));
+}
+
 } // namespace tut
 
