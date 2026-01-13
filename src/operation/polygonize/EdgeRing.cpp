@@ -224,9 +224,19 @@ const CoordinateSequence*
 EdgeRing::getCoordinates() const
 {
     if(ringPts == nullptr) {
-        ringPts = std::make_shared<CoordinateSequence>(0u, 0u);
+        bool hasZ = false;
+        bool hasM = false;
+
         for(const auto& de : deList) {
-            auto edge = dynamic_cast<PolygonizeEdge*>(de->getEdge());
+            const auto edge = detail::down_cast<PolygonizeEdge*>(de->getEdge());
+            hasZ |= edge->getLine()->hasZ();
+            hasM |= edge->getLine()->hasM();
+        }
+
+        ringPts = std::make_shared<CoordinateSequence>(0u, hasZ, hasM);
+
+        for(const auto& de : deList) {
+            auto edge = detail::down_cast<PolygonizeEdge*>(de->getEdge());
             addEdge(edge->getLine()->getCoordinatesRO(),
                     de->getEdgeDirection(), ringPts.get());
         }
@@ -281,13 +291,13 @@ EdgeRing::addEdge(const CoordinateSequence* coords, bool isForward,
 {
     const std::size_t npts = coords->getSize();
     if(isForward) {
-        for(std::size_t i = 0; i < npts; ++i) {
-            coordList->add(coords->getAt(i), false);
-        }
+        coordList->add(*coords, 0, npts - 1, false);
     }
     else {
         for(std::size_t i = npts; i > 0; --i) {
-            coordList->add(coords->getAt(i - 1), false);
+            coords->applyAt(i-1, [coordList](const auto& coord) {
+                coordList->add(coord, false);
+            });
         }
     }
 }

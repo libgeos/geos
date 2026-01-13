@@ -381,5 +381,25 @@ void object::test<10>()
         INVALID_RING_LINES);
 }
 
+template<>
+template<>
+void object::test<11>()
+{
+    set_test_name("Z/M preserved");
+
+    doTest(
+        {"GEOMETRYCOLLECTION ("
+            "LINESTRING ZM (10 0 3 4, 0 0 0 0, 0 10 1 2, 10 10 2 3),"
+            "LINESTRING ZM (10 10 2 3, 10 0 3 4),"
+            "LINESTRING M (10 0 8, 20 0 9, 10 10 11))"
+        },
+        {
+          "POLYGON ZM ((0 0 0 0, 0 10 1 2, 10 10 2 3, 10 0 3 4, 0 0 0 0))",
+          "POLYGON ZM ((10 0 3 4, 10 10 2 3, 20 0 NaN 9, 10 0 3 4))"
+        },
+        false,
+        POLYGONS);
+}
+
 } // namespace tut
 

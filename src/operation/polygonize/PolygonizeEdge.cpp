@@ -32,7 +32,7 @@ PolygonizeEdge::PolygonizeEdge(const LineString* newLine)
 }
 
 const LineString*
-PolygonizeEdge::getLine()
+PolygonizeEdge::getLine() const
 {
     return line;
 }
