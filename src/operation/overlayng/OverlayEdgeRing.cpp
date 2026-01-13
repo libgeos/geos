@@ -128,7 +128,7 @@ void
 OverlayEdgeRing::closeRing(CoordinateSequence& pts)
 {
     if(pts.size() > 0) {
-        pts.add(pts.getAt(0), false);
+        pts.closeRing(false);
     }
 }
 
