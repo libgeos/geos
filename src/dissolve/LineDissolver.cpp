@@ -87,6 +87,9 @@ LineDissolver::add(const LineString* lineString)
         factory = lineString->getFactory();
     }
     const CoordinateSequence* seq = lineString->getCoordinatesRO();
+    constructZ |= seq->hasZ();
+    constructM |= seq->hasM();
+
     bool doneStart = false;
     for (std::size_t i = 1; i < seq->size(); i++) {
         CoordinateXYZM orig, dest;
@@ -235,7 +238,7 @@ LineDissolver::buildLine(HalfEdge* eStart)
 void
 LineDissolver::buildRing(HalfEdge* eStartRing)
 {
-    std::unique_ptr<CoordinateSequence> line(new CoordinateSequence(0, 4));
+    std::unique_ptr<CoordinateSequence> line(new CoordinateSequence(0, constructZ, constructM));
     HalfEdge* e = eStartRing;
 
     // add first node
