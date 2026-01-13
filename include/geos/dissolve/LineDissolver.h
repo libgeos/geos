@@ -83,6 +83,8 @@ private:
     std::vector<std::unique_ptr<LineString>> lines;
     std::stack<HalfEdge*> nodeEdgeStack;
     DissolveHalfEdge* ringStartEdge = nullptr;
+    bool constructZ = false;
+    bool constructM = false;
 
 
     void computeResult();
@@ -136,7 +138,7 @@ private:
 
     void buildRing(HalfEdge* eStartRing);
 
-    void addLine(std::unique_ptr<CoordinateSequence>& cs);
+    void addLine(const std::shared_ptr<CoordinateSequence>& cs);
 
 
 public:
