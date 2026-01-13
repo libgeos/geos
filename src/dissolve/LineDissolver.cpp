@@ -202,7 +202,7 @@ LineDissolver::updateRingStartEdge(DissolveHalfEdge* e)
 void
 LineDissolver::buildLine(HalfEdge* eStart)
 {
-    auto line = std::make_unique<CoordinateSequence>(0, constructZ, constructM);
+    auto line = std::make_shared<CoordinateSequence>(0, constructZ, constructM);
     DissolveHalfEdge* e = static_cast<DissolveHalfEdge*>(eStart);
     ringStartEdge = nullptr;
 
@@ -240,7 +240,7 @@ LineDissolver::buildLine(HalfEdge* eStart)
 void
 LineDissolver::buildRing(HalfEdge* eStartRing)
 {
-    auto line = std::make_unique<CoordinateSequence>(0, constructZ, constructM);
+    auto line = std::make_shared<CoordinateSequence>(0, constructZ, constructM);
     HalfEdge* e = eStartRing;
 
     // add first node
@@ -267,9 +267,9 @@ LineDissolver::buildRing(HalfEdge* eStartRing)
 
 /* private */
 void
-LineDissolver::addLine(std::unique_ptr<CoordinateSequence>& cs)
+LineDissolver::addLine(const std::shared_ptr<CoordinateSequence>& cs)
 {
-    auto ls = factory->createLineString(std::move(cs));
+    auto ls = factory->createLineString(cs);
     lines.emplace_back(ls.release());
 }
 
