@@ -77,6 +77,8 @@ struct test_coveragecleaner_data {
     {
         ensure_equals("checkEqual sizes", actual.size(), expected.size());
         for (std::size_t i = 0; i < actual.size(); i++) {
+            ensure_equals("hasZ does not match", actual[i]->hasZ(), expected[i]->hasZ());
+            ensure_equals("hasM does not match", actual[i]->hasM(), expected[i]->hasM());
             ensure_equals_geometry(actual[i], expected[i]);
         }
     }
