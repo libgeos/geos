@@ -168,7 +168,7 @@ void object::test<4>
 ()
 {
     // XY intersects XYZ at interior point.
-    // Z value at the intersection point is the interpolated value from the XZZ line.
+    // Z value at the intersection point is the interpolated value from the XYZ line.
     set_test_name("testInterior2D3D");
 
     checkIntersection(
