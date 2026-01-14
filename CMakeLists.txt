@@ -214,11 +214,17 @@ target_compile_features(geos_cxx_flags INTERFACE cxx_std_17)
 #   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98207
 #-----------------------------------------------------------------------------
 
+set(GEOS_USE_STRICT_FP OFF)
+
+if (CMAKE_CXX_COMPILER_ID MATCHES "Clang" AND NOT EMSCRIPTEN)
+    set(GEOS_USE_STRICT_FP ON)
+endif()
+
 target_compile_options(geos_cxx_flags INTERFACE
-	"$<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:-ffp-model=strict>"
-	"$<$<CXX_COMPILER_ID:GNU>:-ffp-contract=off>"
-	"$<$<BOOL:${MSVC}>:/fp:precise>"
-	)
+    $<$<BOOL:${GEOS_USE_STRICT_FP}>:-ffp-model=strict>
+    "$<$<CXX_COMPILER_ID:GNU>:-ffp-contract=off>"
+    "$<$<BOOL:${MSVC}>:/fp:precise>"
+)
 
 # Use -ffloat-store for 32-bit builds (needed to make some tests pass)
 target_compile_options(geos_cxx_flags INTERFACE
