@@ -236,8 +236,8 @@ template<>
 template<>
 void object::test<12>()
 {
-    geom1_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE(CIRCULARSTRING(0 0, 1 1, 2 0), (2 0, 0 0)))");
-    geom2_ = fromWKT("POINT (0.1556955 0.5355459)");
+    geom1_ = fromWKT("MULTISURFACE(POLYGON ((100 100, 200 100, 200 200, 100 100)), CURVEPOLYGON (COMPOUNDCURVE(CIRCULARSTRING(0 0, 1 1, 2 0), (2 0, 0 0))))");
+    geom2_ = fromWKT("MULTIPOINT ((5000 5000), (0.1556955 0.5355459))");
 
     // PostGIS would return false here because geom2 is inside geom1
     // but outside the linearized form of geom1
@@ -254,6 +254,19 @@ void object::test<13>()
 
     ensure_equals(GEOSIntersects(geom1_, geom2_), 0);
     ensure_equals(GEOSIntersects(geom2_, geom1_), 0);
+}
+
+template<>
+template<>
+void object::test<14>()
+{
+    set_test_name("PostGIS ticket 5832");
+
+    geom1_ = fromWKT("MULTISURFACE(CURVEPOLYGON(COMPOUNDCURVE((25492739.7449 6677441.1816,25492771.1213 6677416.7832),CIRCULARSTRING(25492771.1213 6677416.7832,25492832.3384 6677400.8583,25492885.9851 6677434.3719),(25492885.9851 6677434.3719,25492900.7986 6677455.7498),CIRCULARSTRING(25492900.7986 6677455.7498,25492901.1068 6677457.3233,25492900.1601 6677458.6175,25492822.2626 6677477.2365,25492747.0232 6677449.7828),(25492747.0232 6677449.7828,25492739.7748 6677444.3615),CIRCULARSTRING(25492739.7748 6677444.3615,25492738.9731 6677442.7789,25492739.7449 6677441.1816))))");
+    geom2_ = fromWKT("POINT (25492818 6677399.98)");
+
+    ensure_equals(GEOSIntersects(geom1_, geom2_), 1);
+    ensure_equals(GEOSIntersects(geom2_, geom1_), 1);
 }
 
 } // namespace tut
