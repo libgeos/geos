@@ -485,6 +485,48 @@ jobs:
       working-directory: ./build
       run: ctest -V --output-on-failure -C ${{ matrix.build_type }}
 
+  freebsd:
+    name: FreeBSD
+    runs-on: ubuntu-latest
+    env:
+      CCACHE_DIR: "~/ccache"
+    steps:
+    - uses: actions/checkout@v5
+
+    - name: Retrieve build cache
+      uses: actions/cache/restore@v4
+      id: restore-cache
+      with:
+        path: .ccache
+        key: freebsd-${{ github.ref_name }}-${{ github.run_id }}
+        restore-keys: freebsd
+
+    - name: Build and test
+      uses: vmactions/freebsd-vm@v1
+      with:
+        release: "15.0"
+        envs: CCACHE_COMPRESS CCACHE_COMPRESSLEVEL CCACHE_MAXSIZE
+        usesh: true
+        prepare: |
+          pkg install -y cmake ccache
+        run: |
+          set -e
+          export CCACHE_DIR=$PWD/.ccache
+          cmake --version
+          cmake -S . -B _build -D USE_CCACHE=ON ..
+          cmake --build _build -j $(nproc)
+          ccache --show-stats
+          cd _build
+          ctest --output-on-failure
+          cd ..
+          rm -rf _build
+
+    - name: Save build cache
+      uses: actions/cache/save@v4
+      with:
+        path: .ccache
+        key: ${{ steps.restore-cache.outputs.cache-primary-key }}
+
   emscripten:
     name: Emscripten WASM build
     runs-on: ubuntu-latest
