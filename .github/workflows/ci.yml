@@ -488,8 +488,6 @@ jobs:
   freebsd:
     name: FreeBSD
     runs-on: ubuntu-latest
-    env:
-      CCACHE_DIR: "~/ccache"
     steps:
     - uses: actions/checkout@v5
 
