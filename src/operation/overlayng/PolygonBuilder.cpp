@@ -168,7 +168,7 @@ PolygonBuilder::assignHoles(OverlayEdgeRing* shell, const std::vector<OverlayEdg
 void
 PolygonBuilder::placeFreeHoles(const std::vector<OverlayEdgeRing*>& shells, const std::vector<OverlayEdgeRing*> & freeHoles) const
 {
-    // build spacial index
+    // build spatial index
     index::strtree::TemplateSTRtree<OverlayEdgeRing*> index;
     for (auto& shell : shells) {
         index.insert(*shell->getRingPtr()->getEnvelopeInternal(), shell);
