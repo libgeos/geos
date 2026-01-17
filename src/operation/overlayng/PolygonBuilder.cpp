@@ -168,11 +168,21 @@ PolygonBuilder::assignHoles(OverlayEdgeRing* shell, const std::vector<OverlayEdg
 void
 PolygonBuilder::placeFreeHoles(const std::vector<OverlayEdgeRing*>& shells, const std::vector<OverlayEdgeRing*> & freeHoles) const
 {
-    // TODO: use a spatial index to improve performance
+    // build spatial index
+    index::strtree::TemplateSTRtree<OverlayEdgeRing*> index;
+    for (auto& shell : shells) {
+        index.insert(*shell->getRingPtr()->getEnvelopeInternal(), shell);
+    }
+
+    std::vector<OverlayEdgeRing*> shellListOverlaps;
     for (OverlayEdgeRing* hole : freeHoles) {
         // only place this hole if it doesn't yet have a shell
         if (hole->getShell() == nullptr) {
-            OverlayEdgeRing* shell = hole->findEdgeRingContaining(shells);
+            // get list of overlapping shells
+            shellListOverlaps.clear();
+            index.query(*hole->getRingPtr()->getEnvelopeInternal(), shellListOverlaps);
+
+            OverlayEdgeRing* shell = hole->findEdgeRingContaining(shellListOverlaps);
             // only when building a polygon-valid result
             if (isEnforcePolygonal && shell == nullptr) {
                 throw util::TopologyException("unable to assign free hole to a shell", hole->getCoordinate());
