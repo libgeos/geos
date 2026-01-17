@@ -3,10 +3,13 @@
 2026-xx-xx
 
 - New things:
-  - 
+  -
 
 - Breaking Changes:
   - BufferOp returns POLYGON EMPTY when fed Inf/Nan coords (GH-1332)
+
+- Improvements:
+  - GEOSSnap: Recursively snap segments till nothing moves (#760)
 
 
 ## Changes in 3.14.0
