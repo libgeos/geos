@@ -174,11 +174,12 @@ PolygonBuilder::placeFreeHoles(const std::vector<OverlayEdgeRing*>& shells, cons
         index.insert(*shell->getRingPtr()->getEnvelopeInternal(), shell);
     }
 
+    std::vector<OverlayEdgeRing*> shellListOverlaps;
     for (OverlayEdgeRing* hole : freeHoles) {
         // only place this hole if it doesn't yet have a shell
         if (hole->getShell() == nullptr) {
             // get list of overlapping shells
-            std::vector<OverlayEdgeRing*> shellListOverlaps;
+            shellListOverlaps.clear();
             index.query(*hole->getRingPtr()->getEnvelopeInternal(), shellListOverlaps);
 
             OverlayEdgeRing* shell = hole->findEdgeRingContaining(shellListOverlaps);
