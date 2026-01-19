@@ -65,7 +65,6 @@ public:
     {
         if(const auto* ls = dynamic_cast<const geom::LineString*>(g)) {
             auto coord = ls->getSharedCoordinates();
-            // coord ownership transferred to SegmentString
             auto ss = std::make_unique<NodedSegmentString>(coord, _constructZ, _constructM, nullptr);
             _to.push_back(std::move(ss));
         } else if (const auto* cs = dynamic_cast<const geom::CircularString*>(g)) {
@@ -119,19 +118,17 @@ GeometryNoder::toGeometry(std::vector<std::unique_ptr<PathString>>& nodedEdges) 
 
     bool resultArcs = false;
     for(auto& path :  nodedEdges) {
-        if (const auto* ss = dynamic_cast<SegmentString*>(path.get())) {
-            const auto& coords = ss->getCoordinates();
+        const auto& coords = path->getCoordinates();
 
-            // Check if an equivalent edge is known
-            OrientedCoordinateArray oca1(*coords);
-            if(ocas.insert(oca1).second) {
+        OrientedCoordinateArray oca1(*coords);
+        // Check if an equivalent edge is known
+        if(ocas.insert(oca1).second) {
+            if (dynamic_cast<SegmentString*>(path.get())) {
                 lines.push_back(geomFact->createLineString(coords));
+            } else {
+                resultArcs = true;
+                lines.push_back(geomFact->createCircularString(coords));
             }
-        } else {
-            resultArcs = true;
-            auto* as = dynamic_cast<ArcString*>(path.get());
-            // FIXME: check for duplicates
-            lines.push_back(geomFact->createCircularString(as->getCoordinates()));
         }
     }
 
