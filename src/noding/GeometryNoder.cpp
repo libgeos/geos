@@ -69,7 +69,7 @@ public:
             auto ss = std::make_unique<NodedSegmentString>(coord, _constructZ, _constructM, nullptr);
             _to.push_back(std::move(ss));
         } else if (const auto* cs = dynamic_cast<const geom::CircularString*>(g)) {
-            auto coords = cs->getCoordinates();
+            const auto& coords = cs->getSharedCoordinates();
 
             // TODO: Store this vector in the CircularString ?
             std::vector<geom::CircularArc> arcs;
@@ -77,7 +77,7 @@ public:
                 arcs.emplace_back(*coords, i);
             }
 
-            auto as = std::make_unique<NodableArcString>(std::move(arcs), std::move(coords), _constructZ, _constructM, nullptr);
+            auto as = std::make_unique<NodableArcString>(std::move(arcs), coords, _constructZ, _constructM, nullptr);
             _to.push_back(std::move(as));
         }
     }
