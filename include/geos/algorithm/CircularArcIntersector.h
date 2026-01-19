@@ -103,7 +103,7 @@ private:
      * When the endpoints of the new arc correspond with those of the inputs, Z/M values
      * will be preferentially taken from arc1.
      */
-    void addArcIntersection(double startAngle, double endAngle, int orientation, const CircularArc& arc1, const CircularArc& arc2);
+    void addCocircularIntersection(double startAngle, double endAngle, int orientation, const CircularArc& arc1, const CircularArc& arc2);
 
     /** Add a point intersection between two arcs.
      *
@@ -113,7 +113,7 @@ private:
      * If the intersection point does not equal the endpoint of either arc, its Z/M values
      * will be interpolated.
      */
-    void addIntersection(const CoordinateXY& computedIntPt, const CircularArc& arc1, const CircularArc& arc2);
+    void addArcArcIntersectionPoint(const CoordinateXY& computedIntPt, const CircularArc& arc1, const CircularArc& arc2);
 
     /** Add a point intersection between an arc and a segment.
      *
@@ -123,7 +123,8 @@ private:
      * `useSegEndpoint` is true. If the intersection point does not equal the endpoint of the arc
      * or the segment, its Z/M values will be interpolated.
      */
-    void addIntersection(const CoordinateXY& computedIntPt, const CircularArc& lhs, const geom::CoordinateSequence& seq, std::size_t pos0, std::size_t pos1, bool useSegEndpoints);
+    void addArcSegmentIntersectionPoint(const CoordinateXY& computedIntPt, const CircularArc& lhs,
+        const geom::CoordinateSequence& seq, std::size_t pos0, std::size_t pos1, bool useSegEndpoints);
 
     /** Determines whether and where two circles intersect a line segment.
      *
@@ -139,6 +140,9 @@ private:
     circleIntersects(const CoordinateXY& center, double r, const CoordinateXY& p0, const CoordinateXY& p1, CoordinateXY& isect0, CoordinateXY& isect1);
 
     void computeCocircularIntersection(const CircularArc& arc1, const CircularArc& arc2);
+
+    /** Checks whether the provided point has already been recorded as an intersection point. */
+    bool hasIntersection(const geom::CoordinateXY& p) const;
 
     std::array<CoordinateXYZM, 2> intPt;
     std::array<CircularArc, 2> intArc;
