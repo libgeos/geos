@@ -228,6 +228,25 @@ public:
     /// @return true if `angle` is within [from, to]
     static bool isWithinCCW(double angle, double from, double to);
 
+    /// Return which of the two provided angles would be encountered first when moving
+    /// counterclockwise from the specified start angle.
+    ///
+    /// @param from the starting angle
+    /// @param a the first candidate angle
+    /// @param b the second candidate angle
+    ///
+    /// @return a or b
+    static double nextCCW(double from, double a, double b);
+
+    /// Return the fraction of an angle as a fraction of a larger angle
+    ///
+    /// @param x an angle between a and b
+    /// @param a the starting angle
+    /// @param b the ending angle
+    ///
+    /// @return a value in the range [0, 1]
+    static double fractionCCW(double x, double a, double b);
+
     /// Computes the unoriented smallest difference between two angles.
     ///
     /// The angles are assumed to be normalized to the range [-Pi, Pi].
