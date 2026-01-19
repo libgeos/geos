@@ -23,7 +23,7 @@ namespace geos::noding {
 class GEOS_DLL NodableArcString : public ArcString, public NodablePath {
 
 public:
-    NodableArcString(std::vector<geom::CircularArc> arcs, std::unique_ptr<geom::CoordinateSequence> coords, bool constructZ, bool constructM, void* context);
+    NodableArcString(std::vector<geom::CircularArc> arcs, const std::shared_ptr<const geom::CoordinateSequence>& coords, bool constructZ, bool constructM, void* context);
 
     std::unique_ptr<ArcString> clone() const;
 

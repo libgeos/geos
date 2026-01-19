@@ -29,8 +29,8 @@ pseudoAngleDiffCCW(double paStart, double pa) {
     return diff;
 }
 
-NodableArcString::NodableArcString(std::vector<geom::CircularArc> arcs, std::unique_ptr<geom::CoordinateSequence> coords, bool constructZ, bool constructM, void* context) :
-    ArcString(std::move(arcs), std::move(coords), context),
+NodableArcString::NodableArcString(std::vector<geom::CircularArc> arcs, const std::shared_ptr<const geom::CoordinateSequence>& coords, bool constructZ, bool constructM, void* context) :
+    ArcString(std::move(arcs), coords, context),
     m_constructZ(constructZ),
     m_constructM(constructM)
 {

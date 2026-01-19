@@ -32,9 +32,9 @@ public:
     explicit ArcString(std::vector<geom::CircularArc> arcs) : m_arcs(std::move(arcs)) {
     }
 
-    ArcString(std::vector<geom::CircularArc> arcs, std::unique_ptr<geom::CoordinateSequence> seq, void* context)
+    ArcString(std::vector<geom::CircularArc> arcs, const std::shared_ptr<const geom::CoordinateSequence>& seq, void* context)
         : m_arcs(std::move(arcs)),
-          m_seq(std::move(seq)),
+          m_seq(seq),
           m_context(context)
     {}
 
