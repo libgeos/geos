@@ -48,7 +48,7 @@ namespace noding { // geos.noding
 namespace {
 
 /**
- * Add every linear element in a geometry into SegmentString vector
+ * Add every linear element in a geometry into PathString vector
  */
 class PathStringExtractor: public geom::GeometryComponentFilter {
 public:
@@ -70,12 +70,7 @@ public:
             _to.push_back(std::move(ss));
         } else if (const auto* cs = dynamic_cast<const geom::CircularString*>(g)) {
             const auto& coords = cs->getSharedCoordinates();
-
-            // TODO: Store this vector in the CircularString ?
-            std::vector<geom::CircularArc> arcs;
-            for (std::size_t i = 0; i < coords->getSize() - 2; i += 2) {
-                arcs.emplace_back(*coords, i);
-            }
+            auto arcs = cs->getArcs();
 
             auto as = std::make_unique<NodableArcString>(std::move(arcs), coords, _constructZ, _constructM, nullptr);
             _to.push_back(std::move(as));
