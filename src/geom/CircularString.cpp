@@ -46,6 +46,23 @@ CircularString::clone() const
     return std::unique_ptr<CircularString>(cloneImpl());
 }
 
+void
+CircularString::createArcs() const
+{
+    for (std::size_t i = 0; i < points->getSize() - 2; i += 2) {
+        arcs.emplace_back(*points, i);
+    }
+}
+
+const std::vector<CircularArc>&
+CircularString::getArcs() const
+{
+    if (arcs.empty()) {
+        createArcs();
+    }
+    return arcs;
+}
+
 std::string
 CircularString::getGeometryType() const
 {
@@ -65,13 +82,11 @@ CircularString::getLength() const
         return 0;
     }
 
-    const CoordinateSequence& coords = *getCoordinatesRO();
-
     double tot = 0;
-    for (std::size_t i = 2; i < coords.size(); i += 2) {
-        auto len = CircularArc(coords, i-2).getLength();
-        tot += len;
+    for (const auto& arc : getArcs()) {
+        tot += arc.getLength();
     }
+
     return tot;
 }
 

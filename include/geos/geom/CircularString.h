@@ -14,6 +14,7 @@
 
 #pragma once
 
+#include <geos/geom/CircularArc.h>
 #include <geos/geom/SimpleCurve.h>
 
 namespace geos {
@@ -29,6 +30,8 @@ public:
     ~CircularString() override;
 
     std::unique_ptr<CircularString> clone() const;
+
+    const std::vector<CircularArc>& getArcs() const;
 
     std::string getGeometryType() const override;
 
@@ -80,6 +83,11 @@ protected:
     CircularString* reverseImpl() const override;
 
     void validateConstruction();
+
+private:
+    void createArcs() const;
+
+    mutable std::vector<CircularArc> arcs;
 
 };
 

@@ -381,17 +381,6 @@ CircularArc::equals(const CircularArc &other, double tol) const
     return true;
 }
 
-
-#if 0
-std::pair<CircularArc, CircularArc>
-CircularArc::splitAtPoint(const CoordinateXY& q) const {
-    return std::make_pair(
-        CircularArc(p0(), q, getCenter(), getRadius(), getOrientation()),
-        CircularArc(q, p2(), getCenter(), getRadius(), getOrientation())
-    );
-}
-#endif
-
 std::string
 CircularArc::toString() const {
     std::stringstream ss;

@@ -21,8 +21,10 @@
 
 #include <geos/algorithm/Area.h>
 #include <geos/geom/CircularArc.h>
+#include <geos/geom/CircularString.h>
 #include <geos/geom/Curve.h>
 #include <geos/geom/SimpleCurve.h>
+#include <geos/util.h>
 #include <geos/util/IllegalArgumentException.h>
 
 using geos::geom::CoordinateXY;
@@ -128,22 +130,22 @@ Area::ofClosedCurve(const geom::Curve& ring) {
         const geom::CoordinateSequence& coords = *section.getCoordinatesRO();
 
         if (section.isCurved()) {
-            for (std::size_t j = 2; j < coords.size(); j += 2) {
-                const CoordinateXY& p0 = coords.getAt<CoordinateXY>(j-2);
-                const CoordinateXY& p1 = coords.getAt<CoordinateXY>(j-1);
-                const CoordinateXY& p2 = coords.getAt<CoordinateXY>(j);
+            const auto* cs = detail::down_cast<const geom::CircularString*>(&section);
+
+            for (const auto& arc : cs->getArcs()) {
+                const CoordinateXY& p0 = arc.p0();
+                const CoordinateXY& p2 = arc.p2();
 
                 double triangleArea = 0.5*(p0.x*p2.y - p2.x*p0.y);
                 sum += triangleArea;
 
-                geom::CircularArc arc(coords, j-2);
                 if (arc.isLinear()) {
                     continue;
                 }
 
                 double circularSegmentArea = arc.getArea();
 
-                if (algorithm::Orientation::index(p0, p2, p1) == algorithm::Orientation::CLOCKWISE) {
+                if (arc.isCCW()) {
                     sum += circularSegmentArea;
                 } else {
                     sum -= circularSegmentArea;
