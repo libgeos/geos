@@ -16,6 +16,7 @@ using geos::geom::CoordinateXY;
 using geos::geom::CoordinateXYM;
 using geos::geom::CoordinateXYZM;
 using geos::geom::CircularArc;
+using geos::geom::PrecisionModel;
 using geos::MATH_PI;
 
 namespace tut {
@@ -1611,6 +1612,86 @@ void object::test<81>
             XYZM{2, 2, 11, -11}
     );
 }
+
+template<>
+template<>
+void object::test<82>()
+{
+    set_test_name("arc/segment interior intersection with fixed PrecisionModel");
+
+    PrecisionModel pm(10);
+    CircularArcIntersector cai(&pm);
+
+    auto arcPts = CoordinateSequence::XY(3);
+    arcPts.setAt(XY{-200, 0}, 0);
+    arcPts.setAt(XY{0, 200}, 1);
+    arcPts.setAt(XY{200, 0}, 2);
+    CircularArc arc(arcPts, 0);
+
+    auto segPts = CoordinateSequence::XY(2);
+    segPts.setAt(XY{0, 0}, 0);
+    segPts.setAt(XY{200, 200}, 0);
+
+    cai.intersects(arc, segPts, 0, 1, false);
+
+    ensure_equals(cai.getNumPoints(), 1u);
+    ensure_equals(cai.getPoint(0), XY{141.4, 141.4});
+}
+
+template<>
+template<>
+void object::test<83>()
+{
+    set_test_name("arc/arc interior intersection with fixed PrecisionModel");
+
+    PrecisionModel pm(10);
+    CircularArcIntersector cai(&pm);
+
+    auto arcPts1 = CoordinateSequence::XY(3);
+    arcPts1.setAt(XY{-200, 0}, 0);
+    arcPts1.setAt(XY{0, 200}, 1);
+    arcPts1.setAt(XY{200, 0}, 2);
+    CircularArc arc1(arcPts1, 0);
+
+    auto arcPts2 = CoordinateSequence::XY(3);
+    arcPts2.setAt(XY{0, 0}, 0);
+    arcPts2.setAt(XY{200, 200}, 1);
+    arcPts2.setAt(XY{400, 0}, 2);
+    CircularArc arc2(arcPts2, 0);
+
+    cai.intersects(arc1, arc2);
+
+    ensure_equals(cai.getNumPoints(), 1u);
+    ensure_equals(cai.getPoint(0), XY{100, 173.2});
+}
+
+template<>
+template<>
+void object::test<84>()
+{
+    set_test_name("degenerate arc/degenerate arc intersection with fixed PrecisionModel");
+
+    PrecisionModel pm(10);
+    CircularArcIntersector cai(&pm);
+
+    auto arcPts1 = CoordinateSequence::XY(3);
+    arcPts1.setAt(XY{0, 0}, 0);
+    arcPts1.setAt(XY{35, 75}, 1);
+    arcPts1.setAt(XY{70, 150}, 2);
+    CircularArc arc1(arcPts1, 0);
+
+    auto arcPts2 = CoordinateSequence::XY(3);
+    arcPts2.setAt(XY{0, 100}, 0);
+    arcPts2.setAt(XY{50, 50}, 1);
+    arcPts2.setAt(XY{100, 0}, 2);
+    CircularArc arc2(arcPts2, 0);
+
+    cai.intersects(arc1, arc2);
+
+    ensure_equals(cai.getNumPoints(), 1u);
+    ensure_equals(cai.getPoint(0), XY{31.8, 68.2});
+}
+
 
 // TODO: check Z values of arc result centerpoints
 // TODO: add tests for seg/seg

@@ -38,6 +38,10 @@ public:
         COCIRCULAR_INTERSECTION = 3,
     };
 
+    explicit CircularArcIntersector(const geom::PrecisionModel* pm = nullptr)
+        : precisionModel(pm)
+    {}
+
     intersection_type getResult() const
     {
         return result;
@@ -146,6 +150,7 @@ private:
 
     std::array<CoordinateXYZM, 2> intPt;
     std::array<CircularArc, 2> intArc;
+    const geom::PrecisionModel* precisionModel;
     intersection_type result = NO_INTERSECTION;
     std::uint8_t nPt = 0;
     std::uint8_t nArc = 0;

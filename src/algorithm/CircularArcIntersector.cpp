@@ -438,7 +438,7 @@ void
 CircularArcIntersector::intersects(const CoordinateSequence &p, std::size_t p0, std::size_t p1,
                                    const CoordinateSequence &q, std::size_t q0, std::size_t q1)
 {
-    LineIntersector li;
+    LineIntersector li(precisionModel);
     li.computeIntersection(p, p0, p1, q, q0, q1);
 
     if (li.getIntersectionNum() == 2) {
@@ -570,6 +570,12 @@ CircularArcIntersector::addCocircularIntersection(double startAngle, double endA
     CoordinateXYZM computedMidPt(CircularArcs::createPoint(center, radius, theta1));
     CoordinateXYZM computedEndPt(CircularArcs::createPoint(center, radius, endAngle));
 
+    if (precisionModel) {
+        precisionModel->makePrecise(computedStartPt);
+        precisionModel->makePrecise(computedMidPt);
+        precisionModel->makePrecise(computedEndPt);
+    }
+
     // Check to see if the endpoints of the intersection match the endpoints of either of
     // the input arcs. Use angles for the check to avoid missing an endpoint intersection from
     // inaccuracy in the point construction.
@@ -610,6 +616,10 @@ CircularArcIntersector::addArcArcIntersectionPoint(const CoordinateXY& computedI
     CoordinateXYZM& newIntPt = intPt[nPt++];
     newIntPt = computedIntPt;
 
+    if (precisionModel) {
+        precisionModel->makePrecise(newIntPt);
+    }
+
     if (computedIntPt.equals2D(arc1.p0())) {
         arc1.applyAt(0, [&newIntPt](const auto& endpoint) {
             newIntPt.z = Interpolate::zGet(newIntPt, endpoint);
@@ -631,6 +641,10 @@ CircularArcIntersector::addArcSegmentIntersectionPoint(const CoordinateXY& compu
 {
     CoordinateXYZM& newIntPt = intPt[nPt++];
     newIntPt = computedIntPt;
+
+    if (precisionModel) {
+        precisionModel->makePrecise(newIntPt);
+    }
 
     for (int i = 0; i < 2; i++) {
         if (useSegEndpoints) {
