@@ -1092,24 +1092,128 @@ void object::test<33>
     //inform("Test not implemented!");
 }
 
-// Test of buildGeometry(std::vector<Geometry*>* geoms) const
 template<>
 template<>
 void object::test<34>
 ()
 {
-    // TODO - mloskot
-    //inform("Test not implemented!");
+    set_test_name("GeometryFactory::buildGeometry(std::vector<std::unique_ptr<Geometry>>&&)");
+
+    auto line = reader_.read("LINESTRING(0 0, 10 10)");
+    auto point = reader_.read("POINT (3 2)");
+    auto poly = reader_.read("POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))");
+    auto circstring = reader_.read("CIRCULARSTRING(0 0, 1 1, 2 0)");
+    auto curvepoly = reader_.read("CURVEPOLYGON(COMPOUNDCURVE(CIRCULARSTRING(0 0, 1 1, 2 0), (2 0, 0 0)))");
+
+    // GeometryCollection
+    {
+        std::vector<std::unique_ptr<Geometry>> geoms;
+        geoms.push_back(line->clone());
+        geoms.push_back(point->clone());
+        ensure_equals(factory_->buildGeometry(std::move(geoms))->getGeometryTypeId(), geos::geom::GEOS_GEOMETRYCOLLECTION);
+    }
+
+    // MultiPoint
+    {
+        std::vector<std::unique_ptr<Geometry>> geoms;
+        geoms.push_back(point->clone());
+        geoms.push_back(point->clone());
+        ensure_equals(factory_->buildGeometry(std::move(geoms))->getGeometryTypeId(), geos::geom::GEOS_MULTIPOINT);
+    }
+
+    // MultiCurve
+    {
+        std::vector<std::unique_ptr<Geometry>> geoms;
+        geoms.push_back(line->clone());
+        geoms.push_back(circstring->clone());
+        ensure_equals(factory_->buildGeometry(std::move(geoms))->getGeometryTypeId(), geos::geom::GEOS_MULTICURVE);
+    }
+
+    // MultiLineString
+    {
+        std::vector<std::unique_ptr<Geometry>> geoms;
+        geoms.push_back(line->clone());
+        geoms.push_back(line->clone());
+        ensure_equals(factory_->buildGeometry(std::move(geoms))->getGeometryTypeId(), geos::geom::GEOS_MULTILINESTRING);
+    }
+
+    // MultiPolygon
+    {
+        std::vector<std::unique_ptr<Geometry>> geoms;
+        geoms.push_back(poly->clone());
+        geoms.push_back(poly->clone());
+        ensure_equals(factory_->buildGeometry(std::move(geoms))->getGeometryTypeId(), geos::geom::GEOS_MULTIPOLYGON);
+    }
+
+    // MultiSurface
+    {
+        std::vector<std::unique_ptr<Geometry>> geoms;
+        geoms.push_back(poly->clone());
+        geoms.push_back(curvepoly->clone());
+        ensure_equals(factory_->buildGeometry(std::move(geoms))->getGeometryTypeId(), geos::geom::GEOS_MULTISURFACE);
+    }
 }
 
-// Test of buildGeometry(const std::vector<Geometry*>& geoms)
 template<>
 template<>
 void object::test<35>
 ()
 {
-    // TODO - mloskot
-    //inform("Test not implemented!");
+    set_test_name("GeometryFactory::buildGeometry(const std::vector<const Geometry*>&)");
+
+    auto line = reader_.read("LINESTRING(0 0, 10 10)");
+    auto point = reader_.read("POINT (3 2)");
+    auto poly = reader_.read("POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))");
+    auto circstring = reader_.read("CIRCULARSTRING(0 0, 1 1, 2 0)");
+    auto curvepoly = reader_.read("CURVEPOLYGON(COMPOUNDCURVE(CIRCULARSTRING(0 0, 1 1, 2 0), (2 0, 0 0)))");
+
+    // GeometryCollection
+    {
+        std::vector<const Geometry*> geoms;
+        geoms.push_back(line.get());
+        geoms.push_back(point.get());
+        ensure_equals(factory_->buildGeometry(geoms)->getGeometryTypeId(), geos::geom::GEOS_GEOMETRYCOLLECTION);
+    }
+
+    // MultiPoint
+    {
+        std::vector<const Geometry*> geoms;
+        geoms.push_back(point.get());
+        geoms.push_back(point.get());
+        ensure_equals(factory_->buildGeometry(geoms)->getGeometryTypeId(), geos::geom::GEOS_MULTIPOINT);
+    }
+
+    // MultiCurve
+    {
+        std::vector<const Geometry*> geoms;
+        geoms.push_back(line.get());
+        geoms.push_back(circstring.get());
+        ensure_equals(factory_->buildGeometry(geoms)->getGeometryTypeId(), geos::geom::GEOS_MULTICURVE);
+    }
+
+    // MultiLineString
+    {
+        std::vector<const Geometry*> geoms;
+        geoms.push_back(line.get());
+        geoms.push_back(line.get());
+        ensure_equals(factory_->buildGeometry(geoms)->getGeometryTypeId(), geos::geom::GEOS_MULTILINESTRING);
+    }
+
+    // MultiPolygon
+    {
+        std::vector<const Geometry*> geoms;
+        geoms.push_back(poly.get());
+        geoms.push_back(poly.get());
+        ensure_equals(factory_->buildGeometry(geoms)->getGeometryTypeId(), geos::geom::GEOS_MULTIPOLYGON);
+    }
+
+    // MultiSurface
+    {
+        std::vector<const Geometry*> geoms;
+        geoms.push_back(poly.get());
+        geoms.push_back(curvepoly.get());
+        ensure_equals(factory_->buildGeometry(geoms)->getGeometryTypeId(), geos::geom::GEOS_MULTISURFACE);
+    }
 }
 
 // Test of

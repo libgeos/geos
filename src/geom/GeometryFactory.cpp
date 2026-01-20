@@ -321,6 +321,20 @@ GeometryFactory::createMultiCurve() const {
     return createMultiCurve(std::vector<std::unique_ptr<Curve>>());
 }
 
+/*public*/
+std::unique_ptr<MultiCurve>
+GeometryFactory::createMultiCurve(const std::vector<const Geometry*>& fromCurves)
+const
+{
+    std::vector<std::unique_ptr<Geometry>> newGeoms(fromCurves.size());
+
+    for(std::size_t i = 0; i < fromCurves.size(); i++) {
+        newGeoms[i]= fromCurves[i]->clone(); // MultiCurve constructor will check that it's actually a Curve
+    }
+
+    return createMultiCurve(std::move(newGeoms));
+}
+
 std::unique_ptr<MultiCurve>
 GeometryFactory::createMultiCurve(std::vector<std::unique_ptr<Curve>> && fromCurves) const {
     // Can't use make_unique because constructor is protected
@@ -431,6 +445,19 @@ GeometryFactory::createMultiSurface(std::vector<std::unique_ptr<Surface>> && new
 {
     // Can't use make_unique because constructor is protected
     return std::unique_ptr<MultiSurface>(new MultiSurface(std::move(newSurfaces), *this));
+}
+
+/*public*/
+std::unique_ptr<MultiSurface>
+GeometryFactory::createMultiSurface(const std::vector<const Geometry*>& from) const
+{
+    std::vector<std::unique_ptr<Geometry>> newGeoms(from.size());
+
+    for(std::size_t i = 0; i < from.size(); i++) {
+        newGeoms[i] = from[i]->clone(); // MultiSurface constructor will check that it's actually a Surface
+    }
+
+    return createMultiSurface(std::move(newGeoms));
 }
 
 /*public*/
@@ -795,18 +822,25 @@ GeometryTypeId commonType(const T& geoms) {
         return geoms[0]->getGeometryTypeId();
     }
 
-    GeometryTypeId type = geoms[0]->getGeometryTypeId();
+    bool hasCurvedComponents = geoms[0]->hasCurvedComponents();
+
+    const Dimension::DimensionType dim = geoms[0]->getDimension();
     for (std::size_t i = 1; i < geoms.size(); i++) {
-        if (geoms[i]->getGeometryTypeId() != type) {
+        hasCurvedComponents |= geoms[i]->hasCurvedComponents();
+
+        if (geoms[i]->getDimension() != dim) {
             return GEOS_GEOMETRYCOLLECTION;
         }
     }
 
     switch(geoms[0]->getGeometryTypeId()) {
         case GEOS_POINT: return GEOS_MULTIPOINT;
+        case GEOS_COMPOUNDCURVE:
+        case GEOS_CIRCULARSTRING: return GEOS_MULTICURVE;
         case GEOS_LINEARRING:
-        case GEOS_LINESTRING: return GEOS_MULTILINESTRING;
-        case GEOS_POLYGON: return GEOS_MULTIPOLYGON;
+        case GEOS_LINESTRING: return hasCurvedComponents ? GEOS_MULTICURVE : GEOS_MULTILINESTRING;
+        case GEOS_CURVEPOLYGON: return GEOS_MULTISURFACE;
+        case GEOS_POLYGON: return hasCurvedComponents ? GEOS_MULTISURFACE : GEOS_MULTIPOLYGON;
         default: return GEOS_GEOMETRYCOLLECTION;
     }
 }
@@ -826,8 +860,10 @@ GeometryFactory::buildGeometry(std::vector<std::unique_ptr<Geometry>> && geoms) 
 
     switch(resultType) {
         case GEOS_MULTIPOINT: return createMultiPoint(std::move(geoms));
+        case GEOS_MULTICURVE: return createMultiCurve(std::move(geoms));
         case GEOS_MULTILINESTRING: return createMultiLineString(std::move(geoms));
         case GEOS_MULTIPOLYGON: return createMultiPolygon(std::move(geoms));
+        case GEOS_MULTISURFACE: return createMultiSurface(std::move(geoms));
         default: return createGeometryCollection(std::move(geoms));
     }
 }
@@ -890,8 +926,10 @@ GeometryFactory::buildGeometry(const std::vector<const Geometry*>& fromGeoms) co
 
     switch(resultType) {
         case GEOS_MULTIPOINT: return createMultiPoint(fromGeoms);
+        case GEOS_MULTICURVE: return createMultiCurve(fromGeoms);
         case GEOS_MULTILINESTRING: return createMultiLineString(fromGeoms);
         case GEOS_MULTIPOLYGON: return createMultiPolygon(fromGeoms);
+        case GEOS_MULTISURFACE: return createMultiSurface(fromGeoms);
         default: return createGeometryCollection(fromGeoms);
     }
 }

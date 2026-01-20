@@ -197,6 +197,10 @@ public:
     /// Construct an EMPTY MultiCurve
     std::unique_ptr<MultiCurve> createMultiCurve() const;
 
+    /// Construct a MultiCurve with a deep-copy of given arguments
+    std::unique_ptr<MultiCurve> createMultiCurve(
+        const std::vector<const Geometry*>& from) const;
+
     /// Construct a MultiCurve taking ownership of given arguments
     std::unique_ptr<MultiCurve> createMultiCurve(
             std::vector<std::unique_ptr<Geometry>> && fromCurves) const;
@@ -220,6 +224,10 @@ public:
 
     /// Construct an EMPTY MultiSurface
     std::unique_ptr<MultiSurface> createMultiSurface() const;
+
+    /// Construct a MultiSurface with a deep-copy of given arguments
+    std::unique_ptr<MultiSurface> createMultiSurface(
+        const std::vector<const Geometry*>& from) const;
 
     /// Construct a MultiSurface taking ownership of given arguments
     std::unique_ptr<MultiSurface> createMultiSurface(
