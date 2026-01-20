@@ -23,6 +23,9 @@ namespace geos::noding {
 class GEOS_DLL ArcIntersectionAdder : public ArcIntersector {
 
 public:
+    explicit ArcIntersectionAdder(algorithm::CircularArcIntersector& cai) :
+        m_intersector(cai) {}
+
     void processIntersections(ArcString& e0, std::size_t segIndex0, ArcString& e1, std::size_t segIndex1) override;
 
     void processIntersections(ArcString& e0, std::size_t segIndex0, SegmentString& e1, std::size_t segIndex1) override;
@@ -30,7 +33,7 @@ public:
     void processIntersections(SegmentString& e0, std::size_t segIndex0, SegmentString& e1, std::size_t segIndex1) override;
 
 private:
-    algorithm::CircularArcIntersector m_intersector;
+    algorithm::CircularArcIntersector& m_intersector;
 };
 
 }
