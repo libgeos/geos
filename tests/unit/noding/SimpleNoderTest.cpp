@@ -13,6 +13,7 @@ using geos::geom::CoordinateXY;
 using geos::geom::CoordinateSequence;
 using geos::geom::CircularArc;
 using geos::geom::Ordinate;
+using geos::algorithm::CircularArcIntersector;
 using geos::algorithm::Orientation;
 using geos::noding::ArcString;
 using geos::noding::SegmentString;
@@ -108,6 +109,7 @@ template<>
 void object::test<1>()
 {
     set_test_name("segment-segment intersection");
+    CircularArcIntersector cai;
 
     auto seq1 = std::make_shared<CoordinateSequence>();
     seq1->add(CoordinateXY{0, 0});
@@ -121,7 +123,7 @@ void object::test<1>()
 
     std::vector<PathString*> ss{&ss1, &ss2};
 
-    SimpleNoder noder(std::make_unique<geos::noding::ArcIntersectionAdder>());
+    SimpleNoder noder(std::make_unique<geos::noding::ArcIntersectionAdder>(cai));
     noder.computePathNodes(ss);
 
     auto paths = noder.getNodedPaths();
@@ -134,6 +136,7 @@ template<>
 void object::test<2>()
 {
     set_test_name("arc-arc intersection");
+    CircularArcIntersector cai;
 
     std::vector<CircularArc> arcs0;
     arcs0.push_back(makeArc(CoordinateXY{-1, 0}, {1, 0}, {0, 0}, 1, Orientation::CLOCKWISE));
@@ -146,7 +149,7 @@ void object::test<2>()
 
     std::vector<PathString*> ss{&as0, &as1};
 
-    SimpleNoder noder(std::make_unique<geos::noding::ArcIntersectionAdder>());
+    SimpleNoder noder(std::make_unique<geos::noding::ArcIntersectionAdder>(cai));
     noder.computePathNodes(ss);
 
     auto paths = noder.getNodedPaths();
@@ -159,6 +162,7 @@ template<>
 void object::test<3>()
 {
     set_test_name("arc-segment intersection");
+    CircularArcIntersector cai;
 
     std::vector<CircularArc> arcs0;
     arcs0.push_back(makeArc(CoordinateXY{-1, 0}, {1, 0}, {0, 0}, 1, Orientation::CLOCKWISE));
@@ -171,7 +175,7 @@ void object::test<3>()
 
     std::vector<PathString*> ss{&as0, &ss1};
 
-    SimpleNoder noder(std::make_unique<geos::noding::ArcIntersectionAdder>());
+    SimpleNoder noder(std::make_unique<geos::noding::ArcIntersectionAdder>(cai));
     noder.computePathNodes(ss);
 
     auto paths = noder.getNodedPaths();

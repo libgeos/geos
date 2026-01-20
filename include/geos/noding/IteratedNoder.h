@@ -24,6 +24,7 @@
 #include <memory>
 #include <vector>
 
+#include <geos/algorithm/CircularArcIntersector.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/noding/SegmentString.h> // due to inlines
 #include <geos/noding/ArcNoder.h> // for inheritance
@@ -57,6 +58,7 @@ private:
 
 
     const geom::PrecisionModel* pm;
+    algorithm::CircularArcIntersector cai;
     algorithm::LineIntersector li;
     std::vector<std::unique_ptr<PathString>> nodedPaths;
     int maxIter;

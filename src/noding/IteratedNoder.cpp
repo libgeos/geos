@@ -41,6 +41,7 @@ IteratedNoder::IteratedNoder(const geom::PrecisionModel* newPm,
                              std::function<std::unique_ptr<Noder>()> noderFunction)
     :
     pm(newPm),
+    cai(pm),
     li(pm),
     maxIter(MAX_ITER),
     m_noderFunction(noderFunction)
@@ -88,8 +89,7 @@ IteratedNoder::node(const std::vector<PathString*>& pathStrings,
         }
     } else {
         auto* arcNoder = detail::down_cast<ArcNoder*>(noder.get());
-        // FIXME aia should take a PrecsionModel / LineIntersector?
-        auto aia = std::make_unique<ArcIntersectionAdder>();
+        auto aia = std::make_unique<ArcIntersectionAdder>(cai);
         arcNoder->setArcIntersector(std::move(aia));
         arcNoder->computePathNodes(pathStrings);
         nodedPaths = arcNoder->getNodedPaths();
