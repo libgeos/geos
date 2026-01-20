@@ -1418,6 +1418,41 @@ void object::test<41>
     g2 = reader_.read("MULTIPOINT((1 1))");
     ensure_equals_geometry(g2.get(), mg1.get());
     ensure_equals_geometry(g2.get(), mg2.get());
+
+    // CircularString
+    {
+        auto cs = factory_->createEmpty(geos::geom::GEOS_CIRCULARSTRING);
+        ensure_equals(cs->getGeometryTypeId(), geos::geom::GEOS_CIRCULARSTRING);
+        ensure_equals(factory_->createMulti(std::move(cs))->getGeometryTypeId(), geos::geom::GEOS_MULTICURVE);
+    }
+
+    // CompoundCurve
+    {
+        auto cc = factory_->createEmpty(geos::geom::GEOS_COMPOUNDCURVE);
+        ensure_equals(cc->getGeometryTypeId(), geos::geom::GEOS_COMPOUNDCURVE);
+        ensure_equals(factory_->createMulti(std::move(cc))->getGeometryTypeId(), geos::geom::GEOS_MULTICURVE);
+    }
+
+    // CurvePolygon
+    {
+        auto cp = factory_->createEmpty(geos::geom::GEOS_CURVEPOLYGON);
+        ensure_equals(cp->getGeometryTypeId(), geos::geom::GEOS_CURVEPOLYGON);
+        ensure_equals(factory_->createMulti(std::move(cp))->getGeometryTypeId(), geos::geom::GEOS_MULTISURFACE);
+    }
+
+    // MultiCurve
+    {
+        auto mc = factory_->createEmpty(geos::geom::GEOS_MULTICURVE);
+        ensure_equals(mc->getGeometryTypeId(), geos::geom::GEOS_MULTICURVE);
+        ensure_equals(factory_->createMulti(std::move(mc))->getGeometryTypeId(), geos::geom::GEOS_MULTICURVE);
+    }
+
+    // MultiSurface
+    {
+        auto ms = factory_->createEmpty(geos::geom::GEOS_MULTISURFACE);
+        ensure_equals(ms->getGeometryTypeId(), geos::geom::GEOS_MULTISURFACE);
+        ensure_equals(factory_->createMulti(std::move(ms))->getGeometryTypeId(), geos::geom::GEOS_MULTISURFACE);
+    }
 }
 
 

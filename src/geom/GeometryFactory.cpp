@@ -774,9 +774,14 @@ GeometryFactory::createEmpty(GeometryTypeId typeId) const
         case GEOS_POINT: return createPoint();
         case GEOS_LINESTRING: return createLineString();
         case GEOS_POLYGON: return createPolygon();
+        case GEOS_CIRCULARSTRING: return createCircularString(false, false);
+        case GEOS_COMPOUNDCURVE: return createCompoundCurve();
+        case GEOS_CURVEPOLYGON: return createCurvePolygon(false, false);
         case GEOS_MULTIPOINT: return createMultiPoint();
         case GEOS_MULTILINESTRING: return createMultiLineString();
         case GEOS_MULTIPOLYGON: return createMultiPolygon();
+        case GEOS_MULTICURVE: return createMultiCurve();
+        case GEOS_MULTISURFACE: return createMultiSurface();
         case GEOS_GEOMETRYCOLLECTION: return createGeometryCollection();
         default:
             throw geos::util::IllegalArgumentException("Invalid GeometryTypeId");
@@ -807,6 +812,11 @@ GeometryFactory::createMulti(std::unique_ptr<Geometry> && geom) const
             return gf->createMultiLineString(std::move(subgeoms));
         case GEOS_POLYGON:
             return gf->createMultiPolygon(std::move(subgeoms));
+        case GEOS_CIRCULARSTRING:
+        case GEOS_COMPOUNDCURVE:
+            return gf->createMultiCurve(std::move(subgeoms));
+        case GEOS_CURVEPOLYGON:
+            return gf->createMultiSurface(std::move(subgeoms));
         default:
             throw geos::util::IllegalArgumentException("Unsupported GeometryTypeId");
     }
