@@ -81,7 +81,7 @@ void object::test<2>()
     // Geometry type functions
     ensure_equals("getGeometryType", ms_->getGeometryType(), "MultiSurface");
     ensure_equals("getGeometryTypdId", ms_->getGeometryTypeId(), geos::geom::GEOS_MULTISURFACE);
-    ensure("isCollection", !ms_->isCollection());
+    ensure("isCollection", ms_->isCollection());
 
     // Geometry size functions
     ensure("isEmpty", !ms_->isEmpty());

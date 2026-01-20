@@ -389,7 +389,9 @@ public:
         return t == GEOS_GEOMETRYCOLLECTION ||
                t == GEOS_MULTIPOINT ||
                t == GEOS_MULTILINESTRING ||
-               t == GEOS_MULTIPOLYGON;
+               t == GEOS_MULTIPOLYGON ||
+               t == GEOS_MULTICURVE ||
+               t == GEOS_MULTISURFACE;
     }
 
     static GeometryTypeId multiTypeId(GeometryTypeId typeId) {
@@ -397,6 +399,9 @@ public:
             case GEOS_POINT: return GEOS_MULTIPOINT;
             case GEOS_LINESTRING: return GEOS_MULTILINESTRING;
             case GEOS_POLYGON: return GEOS_MULTIPOLYGON;
+            case GEOS_CIRCULARSTRING:
+            case GEOS_COMPOUNDCURVE: return GEOS_MULTICURVE;
+            case GEOS_CURVEPOLYGON: return GEOS_MULTISURFACE;
             default: return typeId;
         }
     }

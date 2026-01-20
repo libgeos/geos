@@ -92,7 +92,7 @@ void object::test<2>()
     // Geometry type functions
     ensure_equals("getGeometryType", mc_->getGeometryType(), "MultiCurve");
     ensure_equals("getGeometryTypdId", mc_->getGeometryTypeId(), geos::geom::GEOS_MULTICURVE);
-    ensure("isCollection", !mc_->isCollection());
+    ensure("isCollection", mc_->isCollection());
 
     // Geometry size functions
     ensure("isEmpty", !mc_->isEmpty());
