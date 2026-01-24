@@ -16,19 +16,19 @@ struct test_circulararc_data {
 
     void checkAngle(const CoordinateXY& p0, const CoordinateXY& p1, const CoordinateXY& p2, double expected)
     {
-        CircularArc arc(p0, p1, p2);
+        auto arc = CircularArc::create(p0, p1, p2);
         ensure_equals(p0.toString() + " / " + p1.toString() + " / " + p2.toString(), arc.getAngle(), expected, eps);
 
-        CircularArc rev(p2, p1, p0);
+        auto rev = CircularArc::create(p2, p1, p0);
         ensure_equals(p2.toString() + " / " + p1.toString() + " / " + p0.toString(), rev.getAngle(), expected, eps);
     }
 
     void checkLength(const CoordinateXY& p0, const CoordinateXY& p1, const CoordinateXY& p2, double expected)
     {
-        CircularArc arc(p0, p1, p2);
+        auto arc = CircularArc::create(p0, p1, p2);
         ensure_equals(p0.toString() + " / " + p1.toString() + " / " + p2.toString(), arc.getLength(), expected, eps);
 
-        CircularArc rev(p2, p1, p0);
+        auto rev = CircularArc::create(p2, p1, p0);
         ensure_equals(p2.toString() + " / " + p1.toString() + " / " + p0.toString(), rev.getLength(), expected, eps);
     }
 };
@@ -83,14 +83,14 @@ void object::test<3>()
 {
     set_test_name("CircularArc::getArea()");
 
-    ensure_equals("half circle, R=2", CircularArc({-2, 0}, {0, 2}, {2, 0}).getArea(), MATH_PI*2);
+    ensure_equals("half circle, R=2", CircularArc::create(CoordinateXY{-2, 0}, {0, 2}, {2, 0}).getArea(), MATH_PI*2);
 
-    ensure_equals("full circle, R=3", CircularArc({-3, 0}, {3, 0}, {-3, 0}).getArea(), MATH_PI*3*3);
+    ensure_equals("full circle, R=3", CircularArc::create(CoordinateXY{-3, 0}, {3, 0}, {-3, 0}).getArea(), MATH_PI*3*3);
 
-    ensure_equals("3/4, mouth up, R=2", CircularArc({-std::sqrt(2), std::sqrt(2)}, {0, -2}, {std::sqrt(2), std::sqrt(2)}).getArea(),
+    ensure_equals("3/4, mouth up, R=2", CircularArc::create(CoordinateXY{-std::sqrt(2), std::sqrt(2)}, {0, -2}, {std::sqrt(2), std::sqrt(2)}).getArea(),
                   MATH_PI*4 - 2*(MATH_PI/2-1), 1e-8);
 
-    ensure_equals("1/4, pointing up, R=2", CircularArc({-std::sqrt(2), std::sqrt(2)}, {0, 2}, {std::sqrt(2), std::sqrt(2)}).getArea(),
+    ensure_equals("1/4, pointing up, R=2", CircularArc::create(CoordinateXY{-std::sqrt(2), std::sqrt(2)}, {0, 2}, {std::sqrt(2), std::sqrt(2)}).getArea(),
                   2*(MATH_PI/2-1), 1e-8);
 }
 
@@ -100,8 +100,8 @@ void object::test<4>()
 {
     set_test_name("CircularArc::isLinear()");
 
-    ensure_equals("not linear", CircularArc({-1, 0}, {0, 1}, {1, 0}).isLinear(), false);
-    ensure_equals("linear", CircularArc({0, 0}, {1, 1}, {2, 2}).isLinear(), true);
+    ensure_equals("not linear", CircularArc::create(CoordinateXY{-1, 0}, {0, 1}, {1, 0}).isLinear(), false);
+    ensure_equals("linear", CircularArc::create(CoordinateXY{0, 0}, {1, 1}, {2, 2}).isLinear(), true);
 }
 
 template<>
@@ -110,15 +110,17 @@ void object::test<5>()
 {
     set_test_name("CircularArc::containsPointOnCircle");
 
+    // FIXME: Add asserts
+
     // complete circle
-    CircularArc({5, 0}, {-5, 0}, {5, 0}).containsPointOnCircle({5, 0});
-    CircularArc({5, 0}, {-5, 0}, {5, 0}).containsPointOnCircle({4, 3});
+    CircularArc::create(CoordinateXY{5, 0}, {-5, 0}, {5, 0}).containsPointOnCircle({5, 0});
+    CircularArc::create(CoordinateXY{5, 0}, {-5, 0}, {5, 0}).containsPointOnCircle({4, 3});
 
     // lower semi-circle
-    CircularArc({-5, 0}, {0, -5}, {5, 0}).containsPointOnCircle({5, 0});
+    CircularArc::create(CoordinateXY{-5, 0}, {0, -5}, {5, 0}).containsPointOnCircle({5, 0});
 
     // upper semi-circle
-    CircularArc({-5, 0}, {0, 5}, {5, 0}).containsPointOnCircle({5, 0});
+    CircularArc::create(CoordinateXY{-5, 0}, {0, 5}, {5, 0}).containsPointOnCircle({5, 0});
 }
 
 }

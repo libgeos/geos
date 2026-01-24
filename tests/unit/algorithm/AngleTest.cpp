@@ -232,6 +232,30 @@ void object::test<7>()
     }
 }
 
+template<>
+template<>
+void object::test<8>()
+{
+    set_test_name("Angle::nextCCW");
+
+    ensure_equals(Angle::nextCCW(Angle::PI_OVER_2, Angle::PI_OVER_4, PI), PI);
+    ensure_equals(Angle::nextCCW(Angle::PI_OVER_4, Angle::PI_OVER_2, PI), Angle::PI_OVER_2);
+    ensure_equals(Angle::nextCCW(Angle::PI_OVER_2, Angle::PI_OVER_4, Angle::PI_TIMES_2), Angle::PI_TIMES_2);
+    ensure_equals(Angle::nextCCW(Angle::PI_TIMES_2, Angle::PI_OVER_4, 0), 0);
+}
+
+template<>
+template<>
+void object::test<9>()
+{
+    set_test_name("Angle::fractionCCW");
+
+    ensure_equals("pi/2 in interval [2pi, pi]", Angle::fractionCCW(Angle::PI_OVER_2, Angle::PI_TIMES_2, PI), 0.5);
+    ensure_equals("3pi/2 in interval [pi, 0]", Angle::fractionCCW(3*Angle::PI_OVER_2, PI, 0), 0.5);
+    ensure_equals("3pi/2 in interval [pi, 2pi]", Angle::fractionCCW(3*Angle::PI_OVER_2, PI, Angle::PI_TIMES_2), 0.5);
+    ensure_equals("0 in interval [3pi/2, pi/2]", Angle::fractionCCW(0,  3*Angle::PI_OVER_2, Angle::PI_OVER_2), 0.5);
+    ensure_equals("2pi in interval [3pi/2, pi]", Angle::fractionCCW(Angle::PI_TIMES_2,  3*Angle::PI_OVER_2, PI), 1.0/3);
+}
 
 } // namespace tut
 

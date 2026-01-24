@@ -156,6 +156,29 @@ Angle::getTurn(double ang1, double ang2)
     return NONE;
 }
 
+double
+Angle::nextCCW(double from, double a, double b)
+{
+    if (normalizePositive(a - from) < normalizePositive(b - from)) {
+        return a;
+    }
+
+    return b;
+}
+
+double
+Angle::fractionCCW(double x, double a, double b)
+{
+    if (x < a) {
+        x += 2*MATH_PI;
+    }
+    if (b < a) {
+        b += 2*MATH_PI;
+    }
+    return (x - a) / (b - a);
+}
+
+
 /* public static */
 double
 Angle::normalize(double angle)

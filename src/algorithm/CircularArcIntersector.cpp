@@ -3,7 +3,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
  *
- * Copyright (C) 2024 ISciences, LLC
+ * Copyright (C) 2024-2026 ISciences, LLC
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -15,22 +15,188 @@
 #include <geos/algorithm/Angle.h>
 #include <geos/algorithm/CircularArcIntersector.h>
 #include <geos/algorithm/LineIntersector.h>
+#include <geos/geom/CoordinateSequences.h>
+
+#include <iomanip>
+
+using geos::geom::CoordinateSequence;
+using geos::geom::CoordinateXY;
+using geos::geom::CircularArc;
 
 namespace geos::algorithm {
 
 static double
-nextAngleCCW(double from, double a, double b)
+interpolateValue(double a1, double a2, double frac)
 {
-    if (Angle::normalizePositive(a - from) < Angle::normalizePositive(b - from)) {
-        return a;
+    frac = std::clamp(frac, 0.0, 1.0);
+    if (std::isnan(a1)) {
+        return a2;
     }
-    else {
-        return b;
+    if (std::isnan(a2)) {
+        return a1;
+    }
+    return a1 + frac * (a2 - a1);
+}
+
+static void
+interpolateZM(const CircularArc& arc, const CoordinateXY& pt, double& z, double& m)
+{
+    using geom::Ordinate;
+
+    const CoordinateSequence& seq = *arc.getCoordinateSequence();
+    std::size_t i0 = arc.getCoordinatePosition();
+
+    // Read Z, M from control point
+    double z1, m1;
+    seq.applyAt(i0 + 1, [&z1, &m1](const auto& arcPt) {
+        z1 = arcPt.template get<Ordinate::Z>();
+        m1 = arcPt.template get<Ordinate::M>();
+    });
+    // Test point = control point?
+    // Take Z, M from the control point
+    if (arc.p1().equals2D(pt)) {
+        z = z1;
+        m = m1;
+        return;
+    }
+
+    // Read Z, M from start point
+    double z0, m0;
+    seq.applyAt(i0, [&z0, &m0](const auto& arcPt) {
+        z0 = arcPt.template get<Ordinate::Z>();
+        m0 = arcPt.template get<Ordinate::M>();
+    });
+    // Test point = start point?
+    // Take Z, M from the start point
+    if (arc.p0().equals2D(pt)) {
+        z = z0;
+        m = m0;
+        return;
+    }
+
+    // Read Z, M from end point
+    double z2, m2;
+    seq.applyAt(i0 + 2, [&z2, &m2](const auto& arcPt) {
+        z2 = arcPt.template get<Ordinate::Z>();
+        m2 = arcPt.template get<Ordinate::M>();
+    });
+    // Test point = end point?
+    // Take Z, M from the end point
+    if (arc.p2().equals2D(pt)) {
+        z = z2;
+        m = m2;
+        return;
+    }
+
+    double theta0 = arc.theta0();
+    const double theta1 = arc.theta1();
+    double theta2 = arc.theta2();
+    const double theta = CircularArcs::getAngle(pt, arc.getCenter());
+
+    if (!arc.isCCW()) {
+        std::swap(theta0, theta2);
+        std::swap(z0, z2);
+        std::swap(m0, m2);
+    }
+
+    if (std::isnan(z1)) {
+        // Interpolate between p0 /  p2
+        const double frac = Angle::fractionCCW(theta, theta0, theta2);
+        z = interpolateValue(z0, z2, frac);
+    } else if (Angle::isWithinCCW(theta, theta0, theta1)) {
+        // Interpolate between p0 / p1
+        const double frac = Angle::fractionCCW(theta, theta0, theta1);
+        z = interpolateValue(z0, z1, frac);
+    } else {
+        // Interpolate between p1 / p2
+        const double frac = Angle::fractionCCW(theta, theta1, theta2);
+        z = interpolateValue(z1, z2, frac);
+    }
+
+    if (std::isnan(m1)) {
+        // Interpolate between p0 /  p2
+        const double frac = Angle::fractionCCW(theta, theta0, theta2);
+        m = interpolateValue(m0, m2, frac);
+    } else if (Angle::isWithinCCW(theta, theta0, theta1)) {
+        // Interpolate between p0 / p1
+        const double frac = Angle::fractionCCW(theta, theta0, theta1);
+        m = interpolateValue(m0, m1, frac);
+    } else {
+        // Interpolate between p1 / p2
+        const double frac = Angle::fractionCCW(theta, theta1, theta2);
+        m = interpolateValue(m1, m2, frac);
+    }
+
+}
+
+// Interpolate the Z/M values of a point lying on the provided line segment
+static void
+interpolateSegmentZM(const CoordinateSequence& seq,
+                     std::size_t ind0, std::size_t ind1,
+                     CoordinateXY& pt, double& z, double& m)
+{
+    seq.applyAt(ind0, [&seq, &pt, ind1, &z, &m](const auto& p0) {
+        using CoordinateType = std::decay_t<decltype(p0)>;
+
+        const auto& p1 = seq.getAt<CoordinateType>(ind1);
+        z = Interpolate::zGetOrInterpolate(pt, p0, p1);
+        m = Interpolate::mGetOrInterpolate(pt, p0, p1);
+    });
+}
+
+
+// Interpolate the Z/M values of an intersection point between two arcs
+static void
+interpolateZM(const CircularArc& arc0, const CircularArc& arc1, geom::CoordinateXYZM& pt)
+{
+    if (!std::isnan(pt.z) && !std::isnan(pt.m)) {
+        return;
+    }
+
+    double z0, m0;
+    double z1, m1;
+    interpolateZM(arc0, pt, z0, m0);
+    interpolateZM(arc1, pt, z1, m1);
+
+    if (std::isnan(pt.z)) {
+        pt.z = Interpolate::getOrAverage(z0, z1);
+    }
+    if (std::isnan(pt.m)) {
+        pt.m = Interpolate::getOrAverage(m0, m1);
+    }
+}
+
+// Interpolate the Z/M values of an intersection point between an arc and a segment
+static void
+interpolateZM(const CircularArc& arc0,
+              const CoordinateSequence& seq,
+              std::size_t ind0, std::size_t ind1,
+              geom::CoordinateXYZM& pt)
+{
+    if (!std::isnan(pt.z) && !std::isnan(pt.m)) {
+        return;
+    }
+
+    double z0, m0;
+    double z1, m1;
+    interpolateZM(arc0, pt, z0, m0);
+    interpolateSegmentZM(seq, ind0, ind1, pt, z1, m1);
+
+    if (std::isnan(pt.z)) {
+        pt.z = Interpolate::getOrAverage(z0, z1);
+    }
+    if (std::isnan(pt.m)) {
+        pt.m = Interpolate::getOrAverage(m0, m1);
     }
 }
 
 int
-CircularArcIntersector::circleIntersects(const CoordinateXY& center, double r, const CoordinateXY& p0, const CoordinateXY& p1, CoordinateXY& ret0, CoordinateXY& ret1)
+CircularArcIntersector::circleIntersects(const CoordinateXY& center,
+                                         double r,
+                                         const CoordinateXY& p0,
+                                         const CoordinateXY& p1,
+                                         CoordinateXY& ret0,
+                                         CoordinateXY& ret1)
 {
     const double& x0 = center.x;
     const double& y0 = center.y;
@@ -91,27 +257,44 @@ CircularArcIntersector::circleIntersects(const CoordinateXY& center, double r, c
     return n;
 }
 
+bool
+CircularArcIntersector::hasIntersection(const geom::CoordinateXY &p) const {
+    switch (nPt) {
+        case 2: return intPt[1].equals2D(p) || intPt[0].equals2D(p);
+        case 1: return intPt[0].equals2D(p);
+        case 0: return false;
+        default: break;
+    }
+
+    assert(0);
+    return false;
+}
+
 void
-CircularArcIntersector::intersects(const CircularArc& arc, const CoordinateXY& p0, const CoordinateXY& p1)
+CircularArcIntersector::intersects(const CircularArc& arc, const CoordinateSequence& seq, std::size_t segPos0, std::size_t segPos1, bool useSegEndpoints)
 {
     if (arc.isLinear()) {
-        intersects(arc.p0, arc.p2, p0, p1);
+        std::size_t arcPos0 = arc.getCoordinatePosition();
+        intersects(*arc.getCoordinateSequence(), arcPos0, arcPos0 + 2,
+                   seq, segPos0, segPos1);
         return;
     }
+
+    reset();
 
     // TODO: envelope check?
     const CoordinateXY& c = arc.getCenter();
     const double r = arc.getRadius();
 
-    CoordinateXY isect0, isect1;
-    auto n = circleIntersects(c, r, p0, p1, isect0, isect1);
+    CoordinateXYZM isect0, isect1;
+    auto n = circleIntersects(c, r, seq.getAt<CoordinateXY>(segPos0), seq.getAt<CoordinateXY>(segPos1), isect0, isect1);
 
     if (n > 0 && arc.containsPointOnCircle(isect0)) {
-        intPt[nPt++] = isect0;
+        addArcSegmentIntersectionPoint(isect0, arc, seq, segPos0, segPos1, useSegEndpoints);
     }
 
     if (n > 1  && arc.containsPointOnCircle(isect1)) {
-        intPt[nPt++] = isect1;
+        addArcSegmentIntersectionPoint(isect1, arc, seq, segPos0, segPos1, useSegEndpoints);
     }
 
     switch (nPt) {
@@ -127,41 +310,27 @@ CircularArcIntersector::intersects(const CircularArc& arc, const CoordinateXY& p
 }
 
 void
-CircularArcIntersector::intersects(const CoordinateXY& p0, const CoordinateXY& p1,
-                                   const CoordinateXY& q0, const CoordinateXY& q1)
-{
-    algorithm::LineIntersector li;
-    li.computeIntersection(p0, p1, q0, q1);
-    if (li.getIntersectionNum() == 2) {
-        // FIXME this means a collinear intersection, so we should report as cocircular?
-        intPt[0] = li.getIntersection(0);
-        intPt[1] = li.getIntersection(1);
-        result = TWO_POINT_INTERSECTION;
-    } else if (li.getIntersectionNum() == 1) {
-        intPt[0] = li.getIntersection(0);
-        nPt = 1;
-        result = ONE_POINT_INTERSECTION;
-    } else {
-        result = NO_INTERSECTION;
-    }
-}
-
-void
 CircularArcIntersector::intersects(const CircularArc& arc1, const CircularArc& arc2)
 {
     // Handle cases where one or both arcs are degenerate
     if (arc1.isLinear()) {
         if (arc2.isLinear()) {
-            intersects(arc1.p0, arc1.p2, arc2.p0, arc2.p2);
+            const auto arc1pos = arc1.getCoordinatePosition();
+            const auto arc2pos = arc2.getCoordinatePosition();
+
+            intersects(*arc1.getCoordinateSequence(), arc1pos, arc1pos + 2,
+                       *arc2.getCoordinateSequence(), arc2pos, arc2pos + 2);
             return;
         } else {
-            intersects(arc2, arc1.p0, arc1.p2);
+            intersects(arc2, *arc1.getCoordinateSequence(), arc1.getCoordinatePosition(), arc1.getCoordinatePosition() + 2, true);
             return;
         }
     } else if (arc2.isLinear()) {
-        intersects(arc1, arc2.p0, arc2.p2);
+        intersects(arc1, *arc2.getCoordinateSequence(), arc2.getCoordinatePosition(), arc2.getCoordinatePosition() + 2, false);
         return;
     }
+
+    reset();
 
     const auto& c1 = arc1.getCenter();
     const auto& c2 = arc2.getCenter();
@@ -169,7 +338,7 @@ CircularArcIntersector::intersects(const CircularArc& arc1, const CircularArc& a
     const auto r1 = arc1.getRadius();
     const auto r2 = arc2.getRadius();
 
-    auto d = c1.distance(c2);
+    const auto d = c1.distance(c2);
 
     if (d > r1 + r2) {
         // Circles are disjoint
@@ -184,127 +353,65 @@ CircularArcIntersector::intersects(const CircularArc& arc1, const CircularArc& a
     }
 
     // a: the distance from c1 to the "radical line", which connects the two intersection points
-    // The following expression was rewritten by
-    double a = (d*d + r1*r1 - r2*r2) / (2*d);
     // Expression rewritten by Herbie, https://herbie.uwplse.org/demo/
-    // double a = std::fma(r1-r2, (r1 + r2) / (d+d), d*0.5);
+    // const double a = (d*d + r1*r1 - r2*r2) / (2*d);
+    const double a = std::fma(r1-r2, (r1 + r2) / (d+d), d*0.5);
 
     // TODO because the circle center calculation is inexact we need some kind of tolerance here.
     // Take a PrecisionModel like LineIntersector?
     if (a == 0 || (d == 0 && r1 == r2)) {
-        // COCIRCULAR
-
-        double ap0 = arc1.theta0();
-        double ap1 = arc1.theta2();
-        double bp0 = arc2.theta0();
-        double bp1 = arc2.theta2();
-
-        bool resultArcIsCCW = true;
-
-        if (arc1.getOrientation() != Orientation::COUNTERCLOCKWISE) {
-            std::swap(ap0, ap1);
-            resultArcIsCCW = false;
-        }
-        if (arc2.getOrientation() != Orientation::COUNTERCLOCKWISE) {
-            std::swap(bp0, bp1);
-        }
-        ap0 = Angle::normalizePositive(ap0);
-        ap1 = Angle::normalizePositive(ap1);
-        bp0 = Angle::normalizePositive(bp0);
-        bp1 = Angle::normalizePositive(bp1);
-
-        bool checkBp1inA = true;
-
-        // check start of B within A?
-        if (Angle::isWithinCCW(bp0, ap0, ap1)) {
-            double start = bp0;
-            double end = nextAngleCCW(start, bp1, ap1);
-
-            if (end == bp1) {
-                checkBp1inA = false;
-            }
-
-            if (start == end) {
-                intPt[nPt++] = CircularArcs::createPoint(c1, r1, start);
-            }
-            else {
-                if (resultArcIsCCW) {
-                    intArc[nArc++] = CircularArc(start, end, c1, r1, Orientation::COUNTERCLOCKWISE);
-                }
-                else {
-                    intArc[nArc++] = CircularArc(end, start, c1, r1, Orientation::CLOCKWISE);
-                }
-            }
-        }
-
-        if (checkBp1inA && Angle::isWithinCCW(bp1, ap0, ap1)) {
-            // end of B within A?
-            double start = ap0;
-            double end = bp1;
-            if (start == end) {
-                intPt[nPt++] = CircularArcs::createPoint(c1, r1, start);
-            }
-            else {
-                if (resultArcIsCCW) {
-                    intArc[nArc++] = CircularArc(start, end, c1, r1, Orientation::COUNTERCLOCKWISE);
-                }
-                else {
-                    intArc[nArc++] = CircularArc(end, start, c1, r1, Orientation::CLOCKWISE);
-                }
-            }
-        }
+        computeCocircularIntersection(arc1, arc2);
     } else {
-        // NOT COCIRCULAR
-
-        double dx = c2.x-c1.x;
-        double dy = c2.y-c1.y;
-
-#if 1
-        // point where a line between the two circle center points intersects
-        // the radical line
-        CoordinateXY p{c1.x + a* dx/d, c1.y+a* dy/d};
-
-        // distance from p to the intersection points
-        double h = std::sqrt(r1*r1 - a*a);
-
-        CoordinateXY isect0{p.x + h* dy/d, p.y - h* dx/d };
-        CoordinateXY isect1{p.x - h* dy/d, p.y + h* dx/d };
-
-        if (arc1.containsPointOnCircle(isect0) && arc2.containsPointOnCircle(isect0)) {
-            intPt[nPt++] = isect0;
+        // Explicitly add endpoint intersections that may be missed or inexactly computed.
+        if (arc1.p0().equals2D(arc2.p0()) && !hasIntersection(arc1.p0())) {
+            addArcArcIntersectionPoint(arc1.p0(), arc1, arc2);
         }
-        if (!isect1.equals2D(isect0) && arc1.containsPointOnCircle(isect1) && arc2.containsPointOnCircle(isect1)) {
-            intPt[nPt++] = isect1;
+        if (arc1.p0().equals2D(arc2.p2()) && !hasIntersection(arc1.p0())) {
+            addArcArcIntersectionPoint(arc1.p0(), arc1, arc2);
         }
-#else
-        // Alternate formulation.
-        // Instead of calculating the intersection points and determining if they fall on the arc,
-        // calculate the angles of the intersection points. If they fall on the arc, create intersection points
-        // at those angles.
-
-        double centerPointAngle = std::atan2(dy, dx);
-
-        double arc1IntPtAngleDeviation = std::acos(a / r1);
-
-        double a11 = Angle::normalize(centerPointAngle - arc1IntPtAngleDeviation);
-        double a12 = Angle::normalize(centerPointAngle + arc1IntPtAngleDeviation);
-
-        double b = d - a;
-        double arc2IntPtAngleDeviation = std::acos(b / r2);
-
-        double a21 = Angle::normalize(centerPointAngle + MATH_PI + arc2IntPtAngleDeviation);
-        double a22 = Angle::normalize(centerPointAngle + MATH_PI - arc2IntPtAngleDeviation);
-
-        if (arc1.containsAngle(a11) && arc2.containsAngle(a21)) {
-            intPt[nPt++] = CircularArcs::createPoint(arc1.getCenter(), arc1.getRadius(), a11);
+        if (arc1.p2().equals2D(arc2.p0()) && !hasIntersection(arc1.p2())) {
+            addArcArcIntersectionPoint(arc1.p2(), arc1, arc2);
         }
-        if (arc1.containsAngle(a12) && arc2.containsAngle(a22)) {
-            intPt[nPt++] = CircularArcs::createPoint(arc1.getCenter(), arc1.getRadius(), a12);
-            if (nPt == 2 && intPt[0].equals(intPt[1])) {
-                nPt = 1;
+        if (arc1.p2().equals2D(arc2.p2()) && !hasIntersection(arc1.p2())) {
+            addArcArcIntersectionPoint(arc1.p2(), arc1, arc2);
+        }
+
+        if (nPt < 2) {
+            // Compute interior intersection points.
+            const double dx = c2.x-c1.x;
+            const double dy = c2.y-c1.y;
+
+            // point where a line between the two circle center points intersects
+            // the radical line
+            CoordinateXY p{c1.x + a* dx/d, c1.y+a* dy/d};
+
+            // distance from p to the intersection points
+            const double h = std::sqrt(r1*r1 - a*a);
+
+            CoordinateXY isect0{p.x + h* dy/d, p.y - h* dx/d };
+            CoordinateXY isect1{p.x - h* dy/d, p.y + h* dx/d };
+
+            // One of the computed intersection points may be an inexact version of an endpoint.
+            // If we already have an endpoint intersection, we need to process the farther-away
+            // computed point first.
+            if (nPt == 1 && intPt[0].distance(isect0) < intPt[0].distance(isect1)) {
+                std::swap(isect0, isect1);
+            }
+
+            for (const CoordinateXY& computedIntPt : {isect0, isect1}) {
+                if (nPt > 0 && computedIntPt.equals2D(intPt[0])) {
+                    continue;
+                }
+
+                if (nPt > 1) {
+                    continue;
+                }
+
+                if (arc1.containsPointOnCircle(computedIntPt) && arc2.containsPointOnCircle(computedIntPt)) {
+                    addArcArcIntersectionPoint(computedIntPt, arc1, arc2);
+                }
             }
         }
-#endif
     }
 
     if (nArc) {
@@ -321,8 +428,258 @@ CircularArcIntersector::intersects(const CircularArc& arc1, const CircularArc& a
         case 0:
             result = NO_INTERSECTION;
             break;
+        default:
+            assert(0);
         }
     }
 }
+
+void
+CircularArcIntersector::intersects(const CoordinateSequence &p, std::size_t p0, std::size_t p1,
+                                   const CoordinateSequence &q, std::size_t q0, std::size_t q1)
+{
+    LineIntersector li(precisionModel);
+    li.computeIntersection(p, p0, p1, q, q0, q1);
+
+    if (li.getIntersectionNum() == 2) {
+        // FIXME this means a collinear intersection, so we should report as cocircular?
+        intPt[0] = li.getIntersection(0);
+        intPt[1] = li.getIntersection(1);
+        result = TWO_POINT_INTERSECTION;
+    } else if (li.getIntersectionNum() == 1) {
+        intPt[0] = li.getIntersection(0);
+        nPt = 1;
+        result = ONE_POINT_INTERSECTION;
+    } else {
+        result = NO_INTERSECTION;
+    }
+}
+
+/// Overwrite X/Y, and NaN Z/M values on the supplied point with those from the coordinate at the specified index
+static void
+setFromEndpoint(geom::CoordinateXYZM& pt, const CircularArc& arc, std::size_t index)
+{
+    arc.applyAt(index, [&pt](const auto& endpoint) {
+        pt.x = endpoint.x;
+        pt.y = endpoint.y;
+        pt.z = Interpolate::zGet(pt, endpoint);
+        pt.m = Interpolate::mGet(pt, endpoint);
+    });
+}
+
+void
+CircularArcIntersector::computeCocircularIntersection(const CircularArc& arc1, const CircularArc& arc2)
+{
+    const auto& center = arc1.getCenter();
+    const double radius = arc1.getRadius();
+
+    double ap0 = arc1.theta0();
+    double ap1 = arc1.theta2();
+    double bp0 = arc2.theta0();
+    double bp1 = arc2.theta2();
+
+    // Orientation of the result matches the first input
+        bool resultArcIsCCW = true;
+
+        // Make both inputs counter-clockwise for the purpose of determining intersections
+        if (arc1.getOrientation() != Orientation::COUNTERCLOCKWISE) {
+            std::swap(ap0, ap1);
+            resultArcIsCCW = false;
+        }
+        if (arc2.getOrientation() != Orientation::COUNTERCLOCKWISE) {
+            std::swap(bp0, bp1);
+        }
+        ap0 = Angle::normalizePositive(ap0);
+        ap1 = Angle::normalizePositive(ap1);
+        bp0 = Angle::normalizePositive(bp0);
+        bp1 = Angle::normalizePositive(bp1);
+
+        bool checkBp1inA = true;
+        bool checkAcontained = true;
+
+        // Possible intersection arrangements:
+        // A contained within B
+        // A overlaps B
+        // B contained within A
+
+        // check start of B within A?
+        if (Angle::isWithinCCW(bp0, ap0, ap1)) {
+            checkAcontained = false;
+            const double start = bp0;
+            const double end = Angle::nextCCW(start, bp1, ap1);
+
+            if (end == bp1) {
+                checkBp1inA = false;
+            }
+
+            if (start == end) {
+                const CoordinateXY computedIntPt = CircularArcs::createPoint(center, radius, start);
+                addArcArcIntersectionPoint(computedIntPt, arc1, arc2);
+            }
+            else {
+                if (resultArcIsCCW) {
+                    addCocircularIntersection(start, end, Orientation::COUNTERCLOCKWISE, arc1, arc2);
+                }
+                else {
+                    addCocircularIntersection(end, start, Orientation::CLOCKWISE, arc1, arc2);
+                }
+            }
+        }
+
+        if (checkBp1inA && Angle::isWithinCCW(bp1, ap0, ap1)) {
+            // end of B within A?
+            checkAcontained = false;
+
+            const double start = ap0;
+            const double end = bp1;
+            if (start == end) {
+                const CoordinateXY computedIntPt = CircularArcs::createPoint(center, radius, start);
+                addArcArcIntersectionPoint(computedIntPt, arc1, arc2);
+            }
+            else {
+                if (resultArcIsCCW) {
+                    addCocircularIntersection(start, end, Orientation::CLOCKWISE, arc1, arc2);
+                }
+                else {
+                    addCocircularIntersection(end, start, Orientation::CLOCKWISE, arc1, arc2);
+                }
+            }
+        }
+
+        if (checkAcontained && Angle::isWithinCCW(ap0, bp0 , bp1) && ap0 != bp0  && ap0 != bp1 && Angle::isWithinCCW(ap1, bp0, bp1) && ap1 != bp1 && ap1 != bp0) {
+            if (resultArcIsCCW) {
+                addCocircularIntersection(ap0, ap1, Orientation::COUNTERCLOCKWISE, arc1, arc2);
+            }
+            else {
+                addCocircularIntersection(ap1, ap0, Orientation::CLOCKWISE, arc1, arc2);
+            }
+        }
+}
+
+void
+CircularArcIntersector::addCocircularIntersection(double startAngle, double endAngle, int orientation, const CircularArc& arc1, const CircularArc& arc2)
+{
+    const auto theta1  = CircularArcs::getMidpointAngle(startAngle, endAngle, orientation == Orientation::COUNTERCLOCKWISE);
+    const CoordinateXY& center = arc1.getCenter();
+    const double radius = arc1.getRadius();
+
+    const bool constructZ = arc1.getCoordinateSequence()->hasZ() || arc2.getCoordinateSequence()->hasZ();
+    const bool constructM = arc1.getCoordinateSequence()->hasM() || arc2.getCoordinateSequence()->hasM();
+
+    CoordinateXYZM computedStartPt(CircularArcs::createPoint(center, radius, startAngle));
+    CoordinateXYZM computedMidPt(CircularArcs::createPoint(center, radius, theta1));
+    CoordinateXYZM computedEndPt(CircularArcs::createPoint(center, radius, endAngle));
+
+    if (precisionModel) {
+        precisionModel->makePrecise(computedStartPt);
+        precisionModel->makePrecise(computedMidPt);
+        precisionModel->makePrecise(computedEndPt);
+    }
+
+    // Check to see if the endpoints of the intersection match the endpoints of either of
+    // the input arcs. Use angles for the check to avoid missing an endpoint intersection from
+    // inaccuracy in the point construction.
+    if (startAngle == arc1.theta0()) {
+        setFromEndpoint(computedStartPt, arc1, 0);
+    } else if (startAngle == arc1.theta2()) {
+        setFromEndpoint(computedStartPt, arc1, 2);
+    } else if (startAngle == arc2.theta0()) {
+        setFromEndpoint(computedStartPt, arc2, 0);
+    } else if (startAngle == arc2.theta2()) {
+        setFromEndpoint(computedStartPt, arc2, 2);
+    }
+
+    if (endAngle == arc1.theta0()) {
+        setFromEndpoint(computedEndPt, arc1, 0);
+    } else if (endAngle == arc1.theta2()) {
+        setFromEndpoint(computedEndPt, arc1, 2);
+    } else if (endAngle == arc2.theta0()) {
+        setFromEndpoint(computedEndPt, arc2, 0);
+    } else if (endAngle == arc2.theta2()) {
+        setFromEndpoint(computedEndPt, arc2, 2);
+    }
+
+    interpolateZM(arc1, arc2, computedStartPt);
+    interpolateZM(arc1, arc2, computedMidPt);
+    interpolateZM(arc1, arc2, computedEndPt);
+
+    auto seq = std::make_unique<CoordinateSequence>(3, constructZ, constructM);
+    seq->setAt(computedStartPt, 0);
+    seq->setAt(computedMidPt, 1);
+    seq->setAt(computedEndPt, 2);
+
+    intArc[nArc++] = CircularArc(std::move(seq), 0, center, radius, orientation);
+}
+
+void
+CircularArcIntersector::addArcArcIntersectionPoint(const CoordinateXY& computedIntPt, const CircularArc& arc1, const CircularArc& arc2) {
+    CoordinateXYZM& newIntPt = intPt[nPt++];
+    newIntPt = computedIntPt;
+
+    if (precisionModel) {
+        precisionModel->makePrecise(newIntPt);
+    }
+
+    if (computedIntPt.equals2D(arc1.p0())) {
+        arc1.applyAt(0, [&newIntPt](const auto& endpoint) {
+            newIntPt.z = Interpolate::zGet(newIntPt, endpoint);
+            newIntPt.m = Interpolate::mGet(newIntPt, endpoint);
+        });
+    } else if (computedIntPt.equals2D(arc1.p2())) {
+        arc1.applyAt(2, [&newIntPt](const auto& endpoint) {
+            newIntPt.z = Interpolate::zGet(newIntPt, endpoint);
+            newIntPt.m = Interpolate::mGet(newIntPt, endpoint);
+        });
+    }
+
+    interpolateZM(arc1, arc2, newIntPt);
+}
+
+void
+CircularArcIntersector::addArcSegmentIntersectionPoint(const CoordinateXY& computedIntPt, const CircularArc& arc1,
+    const CoordinateSequence& seq, std::size_t pos0, std::size_t pos1, bool useSegEndpoints)
+{
+    CoordinateXYZM& newIntPt = intPt[nPt++];
+    newIntPt = computedIntPt;
+
+    if (precisionModel) {
+        precisionModel->makePrecise(newIntPt);
+    }
+
+    for (int i = 0; i < 2; i++) {
+        if (useSegEndpoints) {
+            if (computedIntPt.equals2D(seq.getAt<CoordinateXY>(pos0))) {
+                seq.applyAt(pos0, [&newIntPt](const auto& endpoint) {
+                    newIntPt.z = Interpolate::zGet(newIntPt, endpoint);
+                    newIntPt.m = Interpolate::mGet(newIntPt, endpoint);
+                });
+            }
+            if (computedIntPt.equals2D(seq.getAt<CoordinateXY>(pos1))) {
+                seq.applyAt(pos1, [&newIntPt](const auto& endpoint) {
+                    newIntPt.z = Interpolate::zGet(newIntPt, endpoint);
+                    newIntPt.m = Interpolate::mGet(newIntPt, endpoint);
+                });
+            }
+        } else {
+            if (computedIntPt.equals2D(arc1.p0())) {
+                arc1.applyAt(0, [&newIntPt](const auto& endpoint) {
+                    newIntPt.z = Interpolate::zGet(newIntPt, endpoint);
+                    newIntPt.m = Interpolate::mGet(newIntPt, endpoint);
+                });
+            }
+            if (computedIntPt.equals2D(arc1.p2())) {
+                arc1.applyAt(2, [&newIntPt](const auto& endpoint) {
+                    newIntPt.z = Interpolate::zGet(newIntPt, endpoint);
+                    newIntPt.m = Interpolate::mGet(newIntPt, endpoint);
+                });
+            }
+        }
+
+        useSegEndpoints = !useSegEndpoints;
+    }
+
+    interpolateZM(arc1, seq, pos0, pos1, newIntPt);
+}
+
 
 }
