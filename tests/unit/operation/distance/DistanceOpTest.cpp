@@ -228,7 +228,7 @@ void object::test<8>
 
     DistanceOp dist(g0.get(), g1.get());
 
-    ensure_equals(dist.distance(), 0);
+    ensure(std::isinf(dist.distance()));
 
     ensure(dist.nearestPoints() == nullptr);
 }
@@ -416,7 +416,7 @@ void object::test<16>
 
     DistanceOp dist(g0.get(), g1.get());
 
-    ensure_equals(dist.distance(), 0);
+    ensure(std::isinf(dist.distance()));
 
     ensure(dist.nearestPoints() == nullptr);
 }
@@ -497,7 +497,7 @@ void object::test<19>
     ensure(g1->isValid());
     ensure(g2->isValid());
 
-    ensure_equals(g1->distance(g2.get()), 0);
+    ensure(std::isinf(g1->distance(g2.get())));
 }
 
 // Test case reported in Shapely
@@ -580,7 +580,6 @@ void object::test<22>()
     ensure_equals(g2->distance(g1.get()), 1);
 }
 
-// Empty is same as empty so zero...?
 template<>
 template<>
 void object::test<23>()
@@ -589,8 +588,8 @@ void object::test<23>()
     auto g2 = wktreader.read("LINESTRING EMPTY");
 
     ensure(g1 != nullptr && g2 != nullptr);
-    ensure_equals(g1->distance(g2.get()), 0);
-    ensure_equals(g2->distance(g1.get()), 0);
+    ensure(std::isinf(g1->distance(g2.get())));
+    ensure(std::isinf(g2->distance(g1.get())));
 }
 
 template<>
@@ -601,8 +600,8 @@ void object::test<24>()
     auto g2 = wktreader.read("LINESTRING EMPTY");
 
     ensure(g1 != nullptr && g2 != nullptr);
-    ensure_equals(g1->distance(g2.get()), 0);
-    ensure_equals(g2->distance(g1.get()), 0);
+    ensure(std::isinf(g1->distance(g2.get())));
+    ensure(std::isinf(g2->distance(g1.get())));
 }
 
 // But ignore empty if there's a real distance?
@@ -638,8 +637,8 @@ void object::test<27>()
     auto g2 = wktreader.read("GEOMETRYCOLLECTION(POINT(1 0))");
 
     ensure(g1 != nullptr && g2 != nullptr);
-    ensure_equals(g1->distance(g2.get()), 0);
-    ensure_equals(g2->distance(g1.get()), 0);
+    ensure(std::isinf(g1->distance(g2.get())));
+    ensure(std::isinf(g2->distance(g1.get())));
 }
 
 

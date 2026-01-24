@@ -894,8 +894,12 @@ Test::checkResult( bool result )
 void
 Test::checkResult( double result)
 {
-    char* rest;
-    double expectedRes = std::strtod(opResult.c_str(), &rest);
+    char* rest = nullptr;
+    const double expectedRes = (opResult == "NaN" || opResult == "nan") ?
+        std::numeric_limits<double>::quiet_NaN() :
+        (opResult == "Inf" || opResult == "inf") ?
+        std::numeric_limits<double>::infinity() :
+        std::strtod(opResult.c_str(), &rest);
     if(rest == opResult.c_str()) {
         throw std::runtime_error("malformed testcase: missing expected double value");
     }
@@ -903,6 +907,12 @@ Test::checkResult( double result)
         if (result == 0.0) {
             isSuccess = true;
         }
+    }
+    else if (std::isnan(expectedRes)) {
+        isSuccess = std::isnan(result);
+    }
+    else if( expectedRes == result ) {
+        isSuccess = true;
     }
     else {
         if (std::abs(expectedRes - result) / expectedRes < 1e-3) {
