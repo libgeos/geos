@@ -239,6 +239,12 @@ LineStringSnapper::snapSegments(geom::CoordinateList& srcCoords,
     std::cerr << "Snapping segments of: " << srcCoords << std::endl;
 #endif
 
+	// Recursively snap segments till nothing moves
+	// See https://trac.osgeo.org/geos/ticket/760
+    bool moved = false;
+    do
+    {
+    moved = false;
     for(Coordinate::ConstVect::const_iterator
             it = snapPts.begin(), end = snapPts.end();
             it != end;
@@ -260,6 +266,8 @@ LineStringSnapper::snapSegments(geom::CoordinateList& srcCoords,
 #endif
             continue;
         }
+
+        moved = true;
 
         /* Check if the snap point falls outside of the segment */
         // If the snap point is outside, this means that an endpoint
@@ -376,6 +384,8 @@ LineStringSnapper::snapSegments(geom::CoordinateList& srcCoords,
             srcCoords.insert(segpos, snapPt);
         }
     }
+    // while things keep moving
+    } while (moved);
 
 #if GEOS_DEBUG
     std::cerr << " After segment snapping, srcCoors are: " << srcCoords << std::endl;
