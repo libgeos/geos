@@ -270,7 +270,7 @@ std::unique_ptr<geom::Geometry> BuildArea::build(const geom::Geometry* geom) {
 
     /* Run a single overlay operation to dissolve shared edges */
     auto shp = std::unique_ptr<geom::Geometry>(
-        geos::operation::geounion::CascadedPolygonUnion::CascadedPolygonUnion::Union(tmp.get()));
+        geos::operation::geounion::CascadedPolygonUnion::CascadedPolygonUnion::Union(tmp.get(), nullptr));
     if( shp ) {
         shp->setSRID(geom->getSRID());
     }

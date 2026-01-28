@@ -47,18 +47,19 @@ std::unique_ptr<geom::Geometry>
 CascadedPolygonUnion::Union(std::vector<geom::Polygon*>* polys)
 {
     CascadedPolygonUnion op(polys);
-    return op.Union();
+    geos::util::ProgressFunction* progressFunction = nullptr;
+    return op.Union(progressFunction);
 }
 
 std::unique_ptr<geom::Geometry>
-CascadedPolygonUnion::Union(std::vector<geom::Polygon*>* polys, UnionStrategy* unionFun)
+CascadedPolygonUnion::Union(std::vector<geom::Polygon*>* polys, UnionStrategy* unionFun, geos::util::ProgressFunction* progressFunction)
 {
     CascadedPolygonUnion op(polys, unionFun);
-    return op.Union();
+    return op.Union(progressFunction);
 }
 
 std::unique_ptr<geom::Geometry>
-CascadedPolygonUnion::Union(const geom::MultiPolygon* multipoly)
+CascadedPolygonUnion::Union(const geom::MultiPolygon* multipoly, geos::util::ProgressFunction* progressFunction)
 {
     std::vector<geom::Polygon*> polys;
 
@@ -67,11 +68,11 @@ CascadedPolygonUnion::Union(const geom::MultiPolygon* multipoly)
     }
 
     CascadedPolygonUnion op(&polys);
-    return op.Union();
+    return op.Union(progressFunction);
 }
 
 std::unique_ptr<geom::Geometry>
-CascadedPolygonUnion::Union()
+CascadedPolygonUnion::Union(geos::util::ProgressFunction* progressFunction)
 {
     if(inputPolys->empty()) {
         return nullptr;
@@ -94,28 +95,43 @@ CascadedPolygonUnion::Union()
     // TODO avoid creating this vector and run binaryUnion off the iterators directly
     std::vector<const geom::Geometry*> geoms(index.items().begin(), index.items().end());
 
-    return binaryUnion(geoms, 0, geoms.size());
+    size_t inc = 0;
+    std::function<void()> UnitProgress = [progressFunction, &inc, &geoms]()
+    {
+        ++inc;
+        (*progressFunction)(static_cast<double>(inc)/static_cast<double>(geoms.size()), "");
+    };
+
+    return binaryUnion(geoms, 0, geoms.size(), progressFunction ? &UnitProgress : nullptr);
 }
 
 
 std::unique_ptr<geom::Geometry>
 CascadedPolygonUnion::binaryUnion(const std::vector<const geom::Geometry*> & geoms,
-                                  std::size_t start, std::size_t end)
+                                  std::size_t start, std::size_t end,
+                                  std::function<void()>* unitProgress)
 {
     if(end - start == 0) {
         return nullptr;
     }
     else if(end - start == 1) {
+        if( unitProgress )
+            (*unitProgress)();
         return unionSafe(geoms[start], nullptr);
     }
     else if(end - start == 2) {
+        if( unitProgress )
+        {
+            (*unitProgress)();
+            (*unitProgress)();
+        }
         return unionSafe(geoms[start], geoms[start + 1]);
     }
     else {
         // recurse on both halves of the list
         std::size_t mid = (end + start) / 2;
-        std::unique_ptr<geom::Geometry> g0(binaryUnion(geoms, start, mid));
-        std::unique_ptr<geom::Geometry> g1(binaryUnion(geoms, mid, end));
+        std::unique_ptr<geom::Geometry> g0(binaryUnion(geoms, start, mid, unitProgress));
+        std::unique_ptr<geom::Geometry> g1(binaryUnion(geoms, mid, end, unitProgress));
         return unionSafe(std::move(g0), std::move(g1));
     }
 }

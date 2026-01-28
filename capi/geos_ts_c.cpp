@@ -117,6 +117,7 @@
 #include <geos/util/Interrupt.h>
 #include <geos/util/UniqueCoordinateArrayFilter.h>
 #include <geos/util/Machine.h>
+#include <geos/util/Progress.h>
 #include <geos/version.h>
 
 // This should go away
@@ -1780,6 +1781,24 @@ extern "C" {
     {
         return execute(extHandle, [&]() {
             std::unique_ptr<Geometry> g3(g->Union());
+            g3->setSRID(g->getSRID());
+            return g3.release();
+        });
+    }
+
+    Geometry*
+    GEOSUnaryUnionWithProgress_r(GEOSContextHandle_t extHandle, const Geometry* g,
+                                 GEOSProgressCallback_r progressFunc,
+                                 void* progressUserData)
+    {
+        geos::util::ProgressFunction progressFunction(
+            [progressFunc, progressUserData](double progress, const char* message)
+        {
+            progressFunc(progress, message, progressUserData);
+        });
+
+        return execute(extHandle, [&]() {
+            std::unique_ptr<Geometry> g3(g->Union(&progressFunction));
             g3->setSRID(g->getSRID());
             return g3.release();
         });
@@ -4676,6 +4695,25 @@ extern "C" {
         double tolerance,
         int preserveBoundary)
     {
+        return GEOSCoverageSimplifyVWWithProgress_r(extHandle, input, tolerance,
+                                                    preserveBoundary,
+                                                    nullptr, nullptr);
+    }
+
+    Geometry*
+    GEOSCoverageSimplifyVWWithProgress_r(GEOSContextHandle_t extHandle,
+        const Geometry* input,
+        double tolerance,
+        int preserveBoundary,
+        GEOSProgressCallback_r progressFunc,
+        void* progressUserData)
+    {
+        geos::util::ProgressFunction progressFunction(
+            [progressFunc, progressUserData](double progress, const char* message)
+        {
+            progressFunc(progress, message, progressUserData);
+        });
+
         using geos::coverage::CoverageSimplifier;
 
         return execute(extHandle, [&]() -> Geometry* {
@@ -4690,10 +4728,10 @@ extern "C" {
             CoverageSimplifier cov(coverage);
             std::vector<std::unique_ptr<Geometry>> simple;
             if (preserveBoundary == 1) {
-                simple = cov.simplifyInner(tolerance);
+                simple = cov.simplifyInner(tolerance, progressFunc ? progressFunction : geos::util::defaultProgress);
             }
             else if (preserveBoundary == 0) {
-                simple = cov.simplify(tolerance);
+                simple = cov.simplify(tolerance, progressFunc ? progressFunction : geos::util::defaultProgress);
             }
             else return nullptr;
 

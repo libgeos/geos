@@ -55,14 +55,22 @@ CoverageEdge::createEdge(const CoordinateSequence& ring,
 std::unique_ptr<MultiLineString>
 CoverageEdge::createLines(
     const std::vector<CoverageEdge*>& edges,
-    const GeometryFactory* geomFactory)
+    const GeometryFactory* geomFactory,
+    const util::ProgressFunction& progressFunction)
 {
     std::vector<std::unique_ptr<LineString>> lines;
+
+    util::ProgressContext progress(progressFunction, edges.size());
+
     for (const CoverageEdge* edge : edges) {
         const auto& cs = edge->getCoordinates();
         auto ls = geomFactory->createLineString(cs);
         lines.push_back(std::move(ls));
+        progress.update();
     }
+
+    progress.finish();
+
     return geomFactory->createMultiLineString(std::move(lines));
 }
 
