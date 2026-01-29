@@ -37,7 +37,7 @@ public:
 
 private:
 
-    CurveBuilder(const geom::GeometryFactory& factory);
+    explicit CurveBuilder(const geom::GeometryFactory& factory);
 
     std::unique_ptr<geom::Curve> compute(const geom::LineString& ls, double distanceTolerance);
 
