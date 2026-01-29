@@ -73,9 +73,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a788a8925549e86880cd4f263140845cc" id="r_a788a8925549e86880cd4f263140845cc"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1LineIntersector.html#a788a8925549e86880cd4f263140845cc">isInteriorIntersection</a> ()</td></tr>
 <tr class="memdesc:a788a8925549e86880cd4f263140845cc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tests whether either intersection point is an interior point of one of the input segments.  <br /></td></tr>
 <tr class="separator:a788a8925549e86880cd4f263140845cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5297a7c9d67fd8e0ac88acc723ba2444" id="r_a5297a7c9d67fd8e0ac88acc723ba2444"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1LineIntersector.html#a5297a7c9d67fd8e0ac88acc723ba2444">isInteriorIntersection</a> (std::size_t inputLineIndex)</td></tr>
-<tr class="memdesc:a5297a7c9d67fd8e0ac88acc723ba2444"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tests whether either intersection point is an interior point of the specified input segment.  <br /></td></tr>
-<tr class="separator:a5297a7c9d67fd8e0ac88acc723ba2444"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae14ebdac42078b07a27f1e90b1c7eb98" id="r_ae14ebdac42078b07a27f1e90b1c7eb98"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1LineIntersector.html#ae14ebdac42078b07a27f1e90b1c7eb98">isInteriorIntersection</a> (std::size_t inputLineIndex) const</td></tr>
+<tr class="memdesc:ae14ebdac42078b07a27f1e90b1c7eb98"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tests whether either intersection point is an interior point of the specified input segment.  <br /></td></tr>
+<tr class="separator:ae14ebdac42078b07a27f1e90b1c7eb98"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a742294f2808e7d07387771ca31a6c07f" id="r_a742294f2808e7d07387771ca31a6c07f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1LineIntersector.html#a742294f2808e7d07387771ca31a6c07f">setPrecisionModel</a> (const <a class="el" href="classgeos_1_1geom_1_1PrecisionModel.html">geom::PrecisionModel</a> *newPM)</td></tr>
 <tr class="separator:a742294f2808e7d07387771ca31a6c07f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab2306b29dd15cb7e11c98e43e8799360" id="r_ab2306b29dd15cb7e11c98e43e8799360"><td class="memTemplParams" colspan="2"><a id="ab2306b29dd15cb7e11c98e43e8799360" name="ab2306b29dd15cb7e11c98e43e8799360"></a>
@@ -87,6 +87,10 @@ template&lt;typename C1 , typename C2 &gt; </td></tr>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>computeIntersection</b> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> &amp;p, std::size_t p0, const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> &amp;q, std::size_t q0)</td></tr>
 <tr class="memdesc:a1a230b7bc3fc25b37b9f8e977dad4027"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the intersection between two segments, given a sequence and starting index of each. <br /></td></tr>
 <tr class="separator:a1a230b7bc3fc25b37b9f8e977dad4027"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9eb5a33cb95784e151ea18b4856733b" id="r_af9eb5a33cb95784e151ea18b4856733b"><td class="memItemLeft" align="right" valign="top"><a id="af9eb5a33cb95784e151ea18b4856733b" name="af9eb5a33cb95784e151ea18b4856733b"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>computeIntersection</b> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> &amp;p, std::size_t p0, std::size_t p1, const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> &amp;q, std::size_t q0, std::size_t q1)</td></tr>
+<tr class="memdesc:af9eb5a33cb95784e151ea18b4856733b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the intersection between two segments, given a sequence and indices of each endpoint. <br /></td></tr>
+<tr class="separator:af9eb5a33cb95784e151ea18b4856733b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac69cde47d29749afade1acebce3d148b" id="r_ac69cde47d29749afade1acebce3d148b"><td class="memItemLeft" align="right" valign="top"><a id="ac69cde47d29749afade1acebce3d148b" name="ac69cde47d29749afade1acebce3d148b"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>toString</b> () const</td></tr>
 <tr class="separator:ac69cde47d29749afade1acebce3d148b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -476,8 +480,8 @@ static double&#160;</td><td class="memItemRight" valign="bottom"><b>nonRobustCom
 
 </div>
 </div>
-<a id="a5297a7c9d67fd8e0ac88acc723ba2444" name="a5297a7c9d67fd8e0ac88acc723ba2444"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5297a7c9d67fd8e0ac88acc723ba2444">&#9670;&#160;</a></span>isInteriorIntersection() <span class="overload">[2/2]</span></h2>
+<a id="ae14ebdac42078b07a27f1e90b1c7eb98" name="ae14ebdac42078b07a27f1e90b1c7eb98"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae14ebdac42078b07a27f1e90b1c7eb98">&#9670;&#160;</a></span>isInteriorIntersection() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -490,7 +494,7 @@ static double&#160;</td><td class="memItemRight" valign="bottom"><b>nonRobustCom
           <td>(</td>
           <td class="paramtype">std::size_t&#160;</td>
           <td class="paramname"><em>inputLineIndex</em></td><td>)</td>
-          <td></td>
+          <td> const</td>
         </tr>
       </table>
   </td>

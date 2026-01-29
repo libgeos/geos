@@ -91,6 +91,10 @@ Static Public Member Functions</h2></td></tr>
 <tr class="separator:aad6d7eb020edf56d3289bb58b7235997"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af510025f2ea6823dd931c4fbc0b86760" id="r_af510025f2ea6823dd931c4fbc0b86760"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1Angle.html#af510025f2ea6823dd931c4fbc0b86760">isWithinCCW</a> (double <a class="el" href="classgeos_1_1algorithm_1_1Angle.html#aa9a42c5eb2211b3f8d04fc672991576b">angle</a>, double from, double to)</td></tr>
 <tr class="separator:af510025f2ea6823dd931c4fbc0b86760"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6e4eba22b0298ea165c366aad1966f2a" id="r_a6e4eba22b0298ea165c366aad1966f2a"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1Angle.html#a6e4eba22b0298ea165c366aad1966f2a">nextCCW</a> (double from, double a, double b)</td></tr>
+<tr class="separator:a6e4eba22b0298ea165c366aad1966f2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac115793620a3eb9ddd1ca7d5d91aa176" id="r_ac115793620a3eb9ddd1ca7d5d91aa176"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1Angle.html#ac115793620a3eb9ddd1ca7d5d91aa176">fractionCCW</a> (double x, double a, double b)</td></tr>
+<tr class="separator:ac115793620a3eb9ddd1ca7d5d91aa176"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a11b9891ce2c21eb4988bcb18ac245e25" id="r_a11b9891ce2c21eb4988bcb18ac245e25"><td class="memItemLeft" align="right" valign="top">static double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1Angle.html#a11b9891ce2c21eb4988bcb18ac245e25">diff</a> (double ang1, double ang2)</td></tr>
 <tr class="separator:a11b9891ce2c21eb4988bcb18ac245e25"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a187158d7ff569463500ceb1d9cbcb0fc" id="r_a187158d7ff569463500ceb1d9cbcb0fc"><td class="memItemLeft" align="right" valign="top">static void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1algorithm_1_1Angle.html#a187158d7ff569463500ceb1d9cbcb0fc">sinCosSnap</a> (const double ang, double &amp;rSin, double &amp;rCos)</td></tr>
@@ -401,6 +405,58 @@ static const int&#160;</td><td class="memItemRight" valign="bottom"><b>NONE</b> 
 
 </div>
 </div>
+<a id="ac115793620a3eb9ddd1ca7d5d91aa176" name="ac115793620a3eb9ddd1ca7d5d91aa176"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac115793620a3eb9ddd1ca7d5d91aa176">&#9670;&#160;</a></span>fractionCCW()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static double geos::algorithm::Angle::fractionCCW </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Return the fraction of an angle as a fraction of a larger angle</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">x</td><td>an angle between a and b </td></tr>
+    <tr><td class="paramname">a</td><td>the starting angle </td></tr>
+    <tr><td class="paramname">b</td><td>the ending angle</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a value in the range [0, 1] </dd></dl>
+
+</div>
+</div>
 <a id="a4e25f61567be2ab03f92d36c775a9b9b" name="a4e25f61567be2ab03f92d36c775a9b9b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a4e25f61567be2ab03f92d36c775a9b9b">&#9670;&#160;</a></span>getTurn()</h2>
 
@@ -655,6 +711,58 @@ static const int&#160;</td><td class="memItemRight" valign="bottom"><b>NONE</b> 
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if <code>angle</code> is within [from, to] </dd></dl>
+
+</div>
+</div>
+<a id="a6e4eba22b0298ea165c366aad1966f2a" name="a6e4eba22b0298ea165c366aad1966f2a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e4eba22b0298ea165c366aad1966f2a">&#9670;&#160;</a></span>nextCCW()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">static double geos::algorithm::Angle::nextCCW </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>from</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>a</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>b</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Return which of the two provided angles would be encountered first when moving counterclockwise from the specified start angle.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">from</td><td>the starting angle </td></tr>
+    <tr><td class="paramname">a</td><td>the first candidate angle </td></tr>
+    <tr><td class="paramname">b</td><td>the second candidate angle</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a or b </dd></dl>
 
 </div>
 </div>
