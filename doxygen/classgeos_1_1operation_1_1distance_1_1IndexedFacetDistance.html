@@ -67,11 +67,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ad8f572c168dbf4ea336181c76eed30b1" id="r_ad8f572c168dbf4ea336181c76eed30b1"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1distance_1_1IndexedFacetDistance.html#ad8f572c168dbf4ea336181c76eed30b1">isWithinDistance</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *g, double maxDistance) const</td></tr>
 <tr class="memdesc:ad8f572c168dbf4ea336181c76eed30b1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tests whether the base geometry lies within a specified distance of the given geometry.  <br /></td></tr>
 <tr class="separator:ad8f572c168dbf4ea336181c76eed30b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8bf4ce45834846a9ee13b76c90d19087" id="r_a8bf4ce45834846a9ee13b76c90d19087"><td class="memItemLeft" align="right" valign="top">std::vector&lt; <a class="el" href="classgeos_1_1operation_1_1distance_1_1GeometryLocation.html">GeometryLocation</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1distance_1_1IndexedFacetDistance.html#a8bf4ce45834846a9ee13b76c90d19087">nearestLocations</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *g) const</td></tr>
-<tr class="memdesc:a8bf4ce45834846a9ee13b76c90d19087"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the nearest locations on the base geometry and the given geometry.  <br /></td></tr>
-<tr class="separator:a8bf4ce45834846a9ee13b76c90d19087"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0f74cfece82435b6bbe1d08a68d3ff6a" id="r_a0f74cfece82435b6bbe1d08a68d3ff6a"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1distance_1_1IndexedFacetDistance.html#a0f74cfece82435b6bbe1d08a68d3ff6a">nearestPoints</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *g) const</td></tr>
-<tr class="memdesc:a0f74cfece82435b6bbe1d08a68d3ff6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compute the nearest locations on the target geometry and the given geometry.  <br /></td></tr>
+<tr class="memdesc:a0f74cfece82435b6bbe1d08a68d3ff6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the nearest points on the base geometry and the given geometry.  <br /></td></tr>
 <tr class="separator:a0f74cfece82435b6bbe1d08a68d3ff6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
@@ -82,6 +79,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:a40e39a8b5718b864a3b3bf9a7c2c8ee7" id="r_a40e39a8b5718b864a3b3bf9a7c2c8ee7"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1distance_1_1IndexedFacetDistance.html#a40e39a8b5718b864a3b3bf9a7c2c8ee7">nearestPoints</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *g1, const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *g2)</td></tr>
 <tr class="memdesc:a40e39a8b5718b864a3b3bf9a7c2c8ee7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the nearest points of the facets of two geometries.  <br /></td></tr>
 <tr class="separator:a40e39a8b5718b864a3b3bf9a7c2c8ee7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac022b270f60c9072ff7848c0570a68bf" id="r_ac022b270f60c9072ff7848c0570a68bf"><td class="memItemLeft" align="right" valign="top"><a id="ac022b270f60c9072ff7848c0570a68bf" name="ac022b270f60c9072ff7848c0570a68bf"></a>
+static bool&#160;</td><td class="memItemRight" valign="bottom"><b>isWithinDistance</b> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *g1, const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *g2, double <a class="el" href="classgeos_1_1operation_1_1distance_1_1IndexedFacetDistance.html#a6fe2effb5e9fff357f2c2aab5c7d1b10">distance</a>)</td></tr>
+<tr class="separator:ac022b270f60c9072ff7848c0570a68bf"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Computes the distance between the facets (segments and vertices) of two <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometrys</a> using a Branch-and-Bound algorithm. </p>
@@ -242,33 +242,6 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a8bf4ce45834846a9ee13b76c90d19087" name="a8bf4ce45834846a9ee13b76c90d19087"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8bf4ce45834846a9ee13b76c90d19087">&#9670;&#160;</a></span>nearestLocations()</h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">std::vector&lt; <a class="el" href="classgeos_1_1operation_1_1distance_1_1GeometryLocation.html">GeometryLocation</a> &gt; geos::operation::distance::IndexedFacetDistance::nearestLocations </td>
-          <td>(</td>
-          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *&#160;</td>
-          <td class="paramname"><em>g</em></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Computes the nearest locations on the base geometry and the given geometry. </p>
-<dl class="params"><dt>Parameters</dt><dd>
-  <table class="params">
-    <tr><td class="paramname">g</td><td>the geometry to compute the nearest location to </td></tr>
-  </table>
-  </dd>
-</dl>
-<dl class="section return"><dt>Returns</dt><dd>the nearest locations </dd></dl>
-
-</div>
-</div>
 <a id="a0f74cfece82435b6bbe1d08a68d3ff6a" name="a0f74cfece82435b6bbe1d08a68d3ff6a"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0f74cfece82435b6bbe1d08a68d3ff6a">&#9670;&#160;</a></span>nearestPoints() <span class="overload">[1/2]</span></h2>
 
@@ -285,7 +258,7 @@ Static Public Member Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>Compute the nearest locations on the target geometry and the given geometry. </p>
+<p>Computes the nearest points on the base geometry and the given geometry. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>the geometry to compute the nearest point to </td></tr>
