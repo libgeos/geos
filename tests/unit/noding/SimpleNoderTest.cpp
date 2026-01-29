@@ -123,7 +123,8 @@ void object::test<1>()
 
     std::vector<PathString*> ss{&ss1, &ss2};
 
-    SimpleNoder noder(std::make_unique<geos::noding::ArcIntersectionAdder>(cai));
+    geos::noding::ArcIntersectionAdder aia(cai);
+    SimpleNoder noder(aia);
     noder.computePathNodes(ss);
 
     auto paths = noder.getNodedPaths();
@@ -149,7 +150,8 @@ void object::test<2>()
 
     std::vector<PathString*> ss{&as0, &as1};
 
-    SimpleNoder noder(std::make_unique<geos::noding::ArcIntersectionAdder>(cai));
+    geos::noding::ArcIntersectionAdder aia(cai);
+    SimpleNoder noder(aia);
     noder.computePathNodes(ss);
 
     auto paths = noder.getNodedPaths();
@@ -175,7 +177,8 @@ void object::test<3>()
 
     std::vector<PathString*> ss{&as0, &ss1};
 
-    SimpleNoder noder(std::make_unique<geos::noding::ArcIntersectionAdder>(cai));
+    geos::noding::ArcIntersectionAdder aia(cai);
+    SimpleNoder noder(aia);
     noder.computePathNodes(ss);
 
     auto paths = noder.getNodedPaths();

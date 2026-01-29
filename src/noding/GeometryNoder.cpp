@@ -157,11 +157,9 @@ GeometryNoder::getNoded()
     if (argGeomHasCurves) {
         ArcNoder& p_noder = static_cast<ArcNoder&>(getNoder());
 
-        // TODO: Improve lifecycle here. We have a heap-allocated ArcIntersectionAdder referencing
-        // a stack-allocated CircularArcIntersector.
         algorithm::CircularArcIntersector cai(argGeom.getPrecisionModel());
-        auto arcIntersector = std::make_unique<ArcIntersectionAdder>(cai);
-        p_noder.setArcIntersector(std::move(arcIntersector));
+        ArcIntersectionAdder aia(cai);
+        p_noder.setArcIntersector(aia);
 
         p_noder.computePathNodes(PathString::toRawPointerVector(lineList));
         nodedEdges = p_noder.getNodedPaths();

@@ -29,13 +29,13 @@ class GEOS_DLL ArcNoder : public Noder {
 public:
     ArcNoder() = default;
 
-    explicit ArcNoder(std::unique_ptr<ArcIntersector> intersector) :
-        m_intersector(std::move(intersector)) {}
+    explicit ArcNoder(ArcIntersector& intersector) :
+        m_intersector(&intersector) {}
 
     ~ArcNoder() override;
 
-    void setArcIntersector(std::unique_ptr<ArcIntersector> arcIntersector) {
-        m_intersector = std::move(arcIntersector);
+    void setArcIntersector(ArcIntersector& arcIntersector) {
+        m_intersector = &arcIntersector;
     }
 
     void computeNodes(const std::vector<SegmentString*>& segStrings) override;
@@ -47,7 +47,7 @@ public:
     virtual std::vector<std::unique_ptr<PathString>> getNodedPaths() = 0;
 
 protected:
-    std::unique_ptr<ArcIntersector> m_intersector;
+    ArcIntersector* m_intersector;
 };
 
 }
