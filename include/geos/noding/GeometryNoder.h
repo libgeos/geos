@@ -29,7 +29,7 @@ namespace geom {
 class Geometry;
 }
 namespace noding {
-class ArcNoder;
+class Noder;
 }
 }
 
@@ -56,14 +56,12 @@ private:
     const geom::Geometry& argGeom;
     const bool argGeomHasCurves;
 
-    SegmentString::NonConstVect lineList;
-
     static void extractPathStrings(const geom::Geometry& g,
                                    std::vector<std::unique_ptr<PathString>>& to);
 
-    ArcNoder& getNoder();
+    Noder& getNoder();
 
-    std::unique_ptr<ArcNoder> noder;
+    std::unique_ptr<Noder> noder;
 
     std::unique_ptr<geom::Geometry> toGeometry(std::vector<std::unique_ptr<PathString>>& noded) const;
 

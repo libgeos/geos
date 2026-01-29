@@ -16,6 +16,7 @@
  *
  **********************************************************************/
 
+#include <geos/algorithm/CircularArcIntersector.h>
 #include <geos/noding/GeometryNoder.h>
 #include <geos/noding/SegmentString.h>
 #include <geos/noding/NodedSegmentString.h>
@@ -41,6 +42,8 @@
 
 #include <memory> // for unique_ptr
 #include <iostream>
+
+#include "geos/noding/ArcIntersectionAdder.h"
 
 namespace geos {
 namespace noding { // geos.noding
@@ -146,18 +149,30 @@ GeometryNoder::getNoded()
     if (argGeom.isEmpty())
         return argGeom.clone();
 
-    std::vector<std::unique_ptr<PathString>> p_lineList;
-    extractPathStrings(argGeom, p_lineList);
-
-    ArcNoder& p_noder = getNoder();
+    std::vector<std::unique_ptr<PathString>> lineList;
     std::vector<std::unique_ptr<PathString>> nodedEdges;
 
-    try {
-        p_noder.computePathNodes(PathString::toRawPointerVector(p_lineList));
+    extractPathStrings(argGeom, lineList);
+
+    if (argGeomHasCurves) {
+        ArcNoder& p_noder = static_cast<ArcNoder&>(getNoder());
+
+        // TODO: Improve lifecycle here. We have a heap-allocated ArcIntersectionAdder referencing
+        // a stack-allocated CircularArcIntersector.
+        algorithm::CircularArcIntersector cai(argGeom.getPrecisionModel());
+        auto arcIntersector = std::make_unique<ArcIntersectionAdder>(cai);
+        p_noder.setArcIntersector(std::move(arcIntersector));
+
+        p_noder.computePathNodes(PathString::toRawPointerVector(lineList));
         nodedEdges = p_noder.getNodedPaths();
-    }
-    catch(const std::exception&) {
-        throw;
+    } else {
+        Noder& p_noder = getNoder();
+        p_noder.computeNodes(SegmentString::toRawPointerVector(lineList));
+        auto nodedSegStrings = p_noder.getNodedSubstrings();
+        nodedEdges.resize(nodedSegStrings.size());
+        for (size_t i = 0; i < nodedSegStrings.size(); i++) {
+            nodedEdges[i] = std::move(nodedSegStrings[i]);
+        }
     }
 
     std::unique_ptr<geom::Geometry> noded = toGeometry(nodedEdges);
@@ -175,13 +190,13 @@ GeometryNoder::extractPathStrings(const geom::Geometry& g,
 }
 
 /* private */
-ArcNoder&
+Noder&
 GeometryNoder::getNoder()
 {
-    if(! noder.get()) {
+    if(!noder) {
         const geom::PrecisionModel* pm = argGeom.getFactory()->getPrecisionModel();
         if (argGeomHasCurves) {
-            noder = std::make_unique<IteratedNoder>(pm, []() { return std::make_unique<SimpleNoder>(); });
+            noder = std::make_unique<SimpleNoder>();
         } else {
             noder = std::make_unique<IteratedNoder>(pm);
         }
