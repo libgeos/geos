@@ -54,7 +54,7 @@ CurveBuilder::compute(const LineString& ls, double distanceTolerance) {
 
         CircularArc arc(points, start);
 
-        if (arc.isLinear()) {
+        if (arc.isLinear() || arc.getAngle() > 2*maxSpacingRadians) {
             addLineCoords(points, start, start + 2);
             start += 2;
             continue;
@@ -64,6 +64,7 @@ CurveBuilder::compute(const LineString& ls, double distanceTolerance) {
         bool foundArc = false;
 
         // Continue to consume points until we are no longer on the same arc.
+        // We need to find at least one additional point that fits on this arc to consider this an arc.
         while (stop < points.getSize()) {
             const CoordinateXY& pt = points.getAt<CoordinateXY>(stop);
 
@@ -89,34 +90,6 @@ CurveBuilder::compute(const LineString& ls, double distanceTolerance) {
 
             foundArc = true;
             stop++;
-        }
-
-        if (foundArc) {
-            double angle = Angle::angleBetweenOriented(arc.p0(), arc.getCenter(), points.getAt<CoordinateXY>(stop - 1));
-
-            if (angle == 0) {
-                angle = 2*M_PI;
-            } else if (arc.isCCW()) {
-                if (angle < 0) {
-                    // Arc is CCW but angle is CW
-                    angle = 2*M_PI + angle;
-                }
-            } else {
-                if (angle > 0) {
-                    // Arc is CW but angle is CCW
-                    angle = 2*M_PI - angle;
-                } else {
-                    angle = std::abs(angle);
-                }
-            }
-
-            constexpr int edgesPerQuadrant = 2;
-            const std::size_t minArcEdges = static_cast<std::size_t>(std::round(angle * 2 / M_PI * edgesPerQuadrant));
-            const std::size_t actualArcEdges = stop - start - 1;
-
-            if (actualArcEdges < minArcEdges) {
-                foundArc = false;
-            }
         }
 
         if (foundArc) {
