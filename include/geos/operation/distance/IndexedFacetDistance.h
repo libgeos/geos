@@ -94,17 +94,14 @@ public:
     /// \return true of the geometry lies within the specified distance
     bool isWithinDistance(const geom::Geometry* g, double maxDistance) const;
 
-    /// \brief Computes the nearest locations on the base geometry and the given geometry.
-    ///
-    /// \param g the geometry to compute the nearest location to
-    /// \return the nearest locations
-    std::vector<GeometryLocation> nearestLocations(const geom::Geometry* g) const;
+    static bool isWithinDistance(const geom::Geometry* g1, const geom::Geometry* g2, double distance);
 
-    /// \brief Compute the nearest locations on the target geometry and the given geometry.
+    /// \brief Computes the nearest points on the base geometry and the given geometry.
     ///
     /// \param g the geometry to compute the nearest point to
     /// \return the nearest points
     std::unique_ptr<geom::CoordinateSequence> nearestPoints(const geom::Geometry* g) const;
+
 
 private:
     struct FacetDistance {

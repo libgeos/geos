@@ -27,7 +27,7 @@ namespace geos {
 namespace operation {
 namespace distance {
 
-/*public static*/
+/* public static */
 double
 IndexedFacetDistance::distance(const Geometry* g1, const Geometry* g2)
 {
@@ -35,9 +35,17 @@ IndexedFacetDistance::distance(const Geometry* g1, const Geometry* g2)
     return ifd.distance(g2);
 }
 
-/*public static*/
+/* public static */
+bool
+IndexedFacetDistance::isWithinDistance(const Geometry* g1, const Geometry* g2, double distance)
+{
+    IndexedFacetDistance ifd(g1);
+    return ifd.isWithinDistance(g2, distance);
+}
+
+/* public static */
 std::unique_ptr<CoordinateSequence>
-IndexedFacetDistance::nearestPoints(const geom::Geometry* g1, const geom::Geometry* g2)
+IndexedFacetDistance::nearestPoints(const Geometry* g1, const Geometry* g2)
 {
     IndexedFacetDistance dist(g1);
     return dist.nearestPoints(g2);
@@ -47,14 +55,31 @@ double
 IndexedFacetDistance::distance(const Geometry* g) const
 {
     auto tree2 = FacetSequenceTreeBuilder::build(g);
-    auto nearest = cachedTree->nearestNeighbour<FacetDistance>(*tree2);
-
-    if (!nearest.first) {
+    auto objs = cachedTree->nearestNeighbour<FacetDistance>(*tree2);
+    if (!objs.first || !objs.second) {
         throw util::GEOSException("Cannot calculate IndexedFacetDistance on empty geometries.");
     }
-
-    return nearest.first->distance(*nearest.second);
+    auto fs1 = static_cast<const FacetSequence*>(objs.first);
+    auto fs2 = static_cast<const FacetSequence*>(objs.second);
+    return fs1->distance(*fs2);
 }
+
+std::unique_ptr<geom::CoordinateSequence>
+IndexedFacetDistance::nearestPoints(const geom::Geometry* g) const
+{
+    auto tree2 = FacetSequenceTreeBuilder::build(g);
+    auto objs = cachedTree->nearestNeighbour<FacetDistance>(*tree2);
+    if (!objs.first || !objs.second) {
+        throw util::GEOSException("Cannot calculate IndexedFacetDistance on empty geometries.");
+    }
+    auto fs1 = static_cast<const FacetSequence*>(objs.first);
+    auto fs2 = static_cast<const FacetSequence*>(objs.second);
+    auto nearestPts = fs1->nearestLocations(*fs2);
+    std::unique_ptr<CoordinateSequence> cs(new CoordinateSequence());
+    cs->setPoints(nearestPts);
+    return cs;
+}
+
 
 bool
 IndexedFacetDistance::isWithinDistance(const Geometry* g, double maxDistance) const
@@ -80,29 +105,6 @@ IndexedFacetDistance::isWithinDistance(const Geometry* g, double maxDistance) co
     return cachedTree->isWithinDistance<FacetDistance>(*tree2, maxDistance);
 }
 
-std::vector<GeometryLocation>
-IndexedFacetDistance::nearestLocations(const geom::Geometry* g) const
-{
-
-    auto tree2 = FacetSequenceTreeBuilder::build(g);
-    auto nearest = cachedTree->nearestNeighbour<FacetDistance>(*tree2);
-
-    if (!nearest.first) {
-        throw util::GEOSException("Cannot calculate IndexedFacetDistance on empty geometries.");
-    }
-
-    return nearest.first->nearestLocations(*nearest.second);
-}
-
-std::unique_ptr<CoordinateSequence>
-IndexedFacetDistance::nearestPoints(const geom::Geometry* g) const
-{
-    std::vector<GeometryLocation> minDistanceLocation = nearestLocations(g);
-    auto nearestPts = detail::make_unique<CoordinateSequence>(2u);
-    nearestPts->setAt(minDistanceLocation[0].getCoordinate(), 0);
-    nearestPts->setAt(minDistanceLocation[1].getCoordinate(), 1);
-    return nearestPts;
-}
 
 }
 }

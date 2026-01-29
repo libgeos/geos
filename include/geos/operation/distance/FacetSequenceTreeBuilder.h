@@ -18,25 +18,32 @@
 
 #pragma once
 
-#include <geos/index/ItemVisitor.h>
 #include <geos/index/strtree/TemplateSTRtree.h>
-#include <geos/geom/Geometry.h>
-#include <geos/geom/CoordinateSequence.h>
 #include <geos/operation/distance/FacetSequence.h>
+
+
+namespace geos {
+namespace geom {
+class CoordinateSequence;
+class Geometry;
+}
+}
 
 namespace geos {
 namespace operation {
 namespace distance {
+
 class GEOS_DLL FacetSequenceTreeBuilder {
+
 private:
+
     // 6 seems to be a good facet sequence size
     static const std::size_t FACET_SEQUENCE_SIZE = 6;
 
     // Seems to be better to use a minimum node capacity
     static const std::size_t STR_TREE_NODE_CAPACITY = 4;
 
-    static void addFacetSequences(const geom::Geometry* geom,
-                                  const geom::CoordinateSequence* pts,
+    static void addFacetSequences(const geom::CoordinateSequence* pts,
                                   std::vector<FacetSequence> & sections);
     static std::vector<FacetSequence> computeFacetSequences(const geom::Geometry* g);
 
@@ -55,6 +62,7 @@ private:
     };
 
 public:
+
     /** \brief
      * Return a tree of FacetSequences constructed from the supplied Geometry.
      *
@@ -63,6 +71,7 @@ public:
      */
     static std::unique_ptr<geos::index::strtree::TemplateSTRtree<const FacetSequence*>> build(const geom::Geometry* g);
 };
+
 }
 }
 }
