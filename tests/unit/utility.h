@@ -177,13 +177,13 @@ ensure_equals_xyzm(geos::geom::CoordinateXYZM const& actual,
     }
 }
 
-inline void ensure_same(const char* msg, double a, double b)
+inline void ensure_same(const char* msg, double a, double b, double tol = std::numeric_limits<double>::epsilon())
 {
     if (std::isnan(a) && std::isnan(b)) {
         return;
     }
 
-    ensure_equals(msg, a, b);
+    ensure_equals(msg, a, b, tol);
 }
 
 inline void ensure_same(double a, double b)
@@ -432,8 +432,8 @@ ensure_equals_exact_xyzm(const geos::geom::CoordinateSequence* seq1,
         seq2->getAt(i, c2);
 
         ensure("xy not in tolerance", c1.distance(c2) <= tol);
-        ensure_same(("index " + std::to_string(i) + "/" + std::to_string(seq1->getSize() - 1) + " z not same").c_str(), c1.z, c2.z);
-        ensure_same(("index " + std::to_string(i) + "/" + std::to_string(seq1->getSize() - 1) + " m not same").c_str(), c1.m, c2.m);
+        ensure_same(("index " + std::to_string(i) + "/" + std::to_string(seq1->getSize() - 1) + " z not same").c_str(), c1.z, c2.z, tol);
+        ensure_same(("index " + std::to_string(i) + "/" + std::to_string(seq1->getSize() - 1) + " m not same").c_str(), c1.m, c2.m, tol);
     }
 }
 
