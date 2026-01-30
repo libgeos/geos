@@ -16,6 +16,7 @@
 
 #include <geos/geom/Curve.h>
 #include <geos/geom/GeometryCollection.h>
+#include <geos/geom/MultiLineString.h>
 
 namespace geos {
 namespace geom {

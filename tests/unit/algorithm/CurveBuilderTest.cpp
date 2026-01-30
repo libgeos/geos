@@ -6,7 +6,7 @@
 
 namespace tut {
 
-struct test_curvebuilder_data {
+struct test_algorithm_curvebuilder_data {
     geos::io::WKTReader reader_;
 
     void checkRoundTrip(const std::string& wkt_in, const std::string& wkt_expected, double stepSizeDegrees) const {
@@ -42,10 +42,10 @@ struct test_curvebuilder_data {
     }
 };
 
-typedef test_group<test_curvebuilder_data> group;
+typedef test_group<test_algorithm_curvebuilder_data> group;
 typedef group::object object;
 
-group test_curvebuilder_group("geos::algorithm::CurveBuilder");
+group test_algorithm_curvebuilder_group("geos::algorithm::CurveBuilder");
 
 template<>
 template<>
