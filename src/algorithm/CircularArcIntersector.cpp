@@ -25,109 +25,6 @@ using geos::geom::CircularArc;
 
 namespace geos::algorithm {
 
-static double
-interpolateValue(double a1, double a2, double frac)
-{
-    frac = std::clamp(frac, 0.0, 1.0);
-    if (std::isnan(a1)) {
-        return a2;
-    }
-    if (std::isnan(a2)) {
-        return a1;
-    }
-    return a1 + frac * (a2 - a1);
-}
-
-static void
-interpolateZM(const CircularArc& arc, const CoordinateXY& pt, double& z, double& m)
-{
-    using geom::Ordinate;
-
-    const CoordinateSequence& seq = *arc.getCoordinateSequence();
-    std::size_t i0 = arc.getCoordinatePosition();
-
-    // Read Z, M from control point
-    double z1, m1;
-    seq.applyAt(i0 + 1, [&z1, &m1](const auto& arcPt) {
-        z1 = arcPt.template get<Ordinate::Z>();
-        m1 = arcPt.template get<Ordinate::M>();
-    });
-    // Test point = control point?
-    // Take Z, M from the control point
-    if (arc.p1().equals2D(pt)) {
-        z = z1;
-        m = m1;
-        return;
-    }
-
-    // Read Z, M from start point
-    double z0, m0;
-    seq.applyAt(i0, [&z0, &m0](const auto& arcPt) {
-        z0 = arcPt.template get<Ordinate::Z>();
-        m0 = arcPt.template get<Ordinate::M>();
-    });
-    // Test point = start point?
-    // Take Z, M from the start point
-    if (arc.p0().equals2D(pt)) {
-        z = z0;
-        m = m0;
-        return;
-    }
-
-    // Read Z, M from end point
-    double z2, m2;
-    seq.applyAt(i0 + 2, [&z2, &m2](const auto& arcPt) {
-        z2 = arcPt.template get<Ordinate::Z>();
-        m2 = arcPt.template get<Ordinate::M>();
-    });
-    // Test point = end point?
-    // Take Z, M from the end point
-    if (arc.p2().equals2D(pt)) {
-        z = z2;
-        m = m2;
-        return;
-    }
-
-    double theta0 = arc.theta0();
-    const double theta1 = arc.theta1();
-    double theta2 = arc.theta2();
-    const double theta = CircularArcs::getAngle(pt, arc.getCenter());
-
-    if (!arc.isCCW()) {
-        std::swap(theta0, theta2);
-        std::swap(z0, z2);
-        std::swap(m0, m2);
-    }
-
-    if (std::isnan(z1)) {
-        // Interpolate between p0 /  p2
-        const double frac = Angle::fractionCCW(theta, theta0, theta2);
-        z = interpolateValue(z0, z2, frac);
-    } else if (Angle::isWithinCCW(theta, theta0, theta1)) {
-        // Interpolate between p0 / p1
-        const double frac = Angle::fractionCCW(theta, theta0, theta1);
-        z = interpolateValue(z0, z1, frac);
-    } else {
-        // Interpolate between p1 / p2
-        const double frac = Angle::fractionCCW(theta, theta1, theta2);
-        z = interpolateValue(z1, z2, frac);
-    }
-
-    if (std::isnan(m1)) {
-        // Interpolate between p0 /  p2
-        const double frac = Angle::fractionCCW(theta, theta0, theta2);
-        m = interpolateValue(m0, m2, frac);
-    } else if (Angle::isWithinCCW(theta, theta0, theta1)) {
-        // Interpolate between p0 / p1
-        const double frac = Angle::fractionCCW(theta, theta0, theta1);
-        m = interpolateValue(m0, m1, frac);
-    } else {
-        // Interpolate between p1 / p2
-        const double frac = Angle::fractionCCW(theta, theta1, theta2);
-        m = interpolateValue(m1, m2, frac);
-    }
-
-}
 
 // Interpolate the Z/M values of a point lying on the provided line segment
 static void
@@ -155,8 +52,8 @@ interpolateZM(const CircularArc& arc0, const CircularArc& arc1, geom::Coordinate
 
     double z0, m0;
     double z1, m1;
-    interpolateZM(arc0, pt, z0, m0);
-    interpolateZM(arc1, pt, z1, m1);
+    arc0.interpolateZM(pt, z0, m0);
+    arc1.interpolateZM(pt, z1, m1);
 
     if (std::isnan(pt.z)) {
         pt.z = Interpolate::getOrAverage(z0, z1);
@@ -179,7 +76,7 @@ interpolateZM(const CircularArc& arc0,
 
     double z0, m0;
     double z1, m1;
-    interpolateZM(arc0, pt, z0, m0);
+    arc0.interpolateZM(pt, z0, m0);
     interpolateSegmentZM(seq, ind0, ind1, pt, z1, m1);
 
     if (std::isnan(pt.z)) {

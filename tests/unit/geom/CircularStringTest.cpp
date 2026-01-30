@@ -419,6 +419,23 @@ void object::test<23>()
     ensure_equals_exact_geometry_xyzm(curved.get(), cs.get(), 0);
 }
 
-// TODO: Test Z, M interpolation in getLinearized()
+template<>
+template<>
+void object::test<24>()
+{
+    set_test_name("getLinearized() Z/M");
+    using XYZM = geos::geom::CoordinateXYZM;
+
+    auto cs = wktreader_.read<CircularString>("CIRCULARSTRING ZM (0 5 4 5, 5 0 6 8, 0 -5 30 40)");
+    auto ls = cs->getLinearized(30);
+
+    const CoordinateSequence* seq = ls->getCoordinatesRO();
+
+    // line point 1 is 30 degrees from the start of the arc. Z/M interpolated from CircularString points 0 and 1
+    ensure_equals_xyzm(seq->getAt<XYZM>(1), XYZM{2.5, 4.33, 4 + (6.0 - 4.0) / 3, 5 + (8.0 - 5.0) / 3}, 1e-3);
+
+    // line point 5 is 30 degrees from end of the arc. Z/M interpolated from CircularString points 1 and 2
+    ensure_equals_xyzm(seq->getAt<XYZM>(5), XYZM{2.5, -4.33, 6 + (30.0 - 6)*(2.0/3), 8 + (40.0 - 8)*(2.0/3)}, 1e-3);
+}
 
 }

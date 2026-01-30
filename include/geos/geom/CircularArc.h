@@ -144,6 +144,11 @@ public:
         return algorithm::Distance::pointToSegment(midpoint, p0(), p2());
     }
 
+    /// Interpolate Z/M values from the three points that define the arc.
+    /// Interpolation will be performed between [p0, p1] or [p1, p2] depending on
+    /// the position of the supplied point.
+    void interpolateZM(const CoordinateXY& pt, double& z, double& m) const;
+
     bool isCCW() const {
         return getOrientation() == algorithm::Orientation::COUNTERCLOCKWISE;
     }
