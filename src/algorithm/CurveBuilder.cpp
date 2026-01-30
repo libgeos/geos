@@ -171,11 +171,37 @@ CurveBuilder::addArc(const CircularArc& arc, std::size_t stop) {
     const double averageRadius = 0.5*(p0.distance(averageCenter) + p2.distance(averageCenter));
 
     p1 = CircularArcs::getMidpoint(p0, p2, averageCenter, averageRadius, arc.isCCW());
-    p1.z = 0.5*(p0.z + p2.z);
-    p1.m = 0.5*(p0.m + p2.m);
+
+    if (points.hasZ() || points.hasM()) {
+        auto nPoints = stop - start + 1;
+
+        if (nPoints % 2) {
+            // We have an odd number of vertices, so the central vertex should be the same
+            // as the control point in the original arc.
+            auto midpointIndex = start + nPoints / 2;
+            p1.z = points.getZ(midpointIndex);
+            p1.m = points.getM(midpointIndex);
+        } else {
+            // We have an even number of vertices. Calculate Z/M of the control
+            // point in the original arc.
+            CoordinateXYZM a, b;
+            points.getAt(start + nPoints / 2 - 1, a);
+            points.getAt(start + nPoints / 2, b);
+
+            const double thetaA = CircularArcs::getAngle(a, averageCenter);
+            const double theta0 = CircularArcs::getAngle(p0, averageCenter);
+            const double theta1 = CircularArcs::getAngle(p1, averageCenter);
+
+            // Assumption: point a has the same angle fraction over [p0, p1] that b has over [p2, p1]
+            const double f = arc.isCCW() ? Angle::fractionCCW(thetaA, theta0, theta1) : 1 - Angle::fractionCCW(thetaA, theta1, theta0);
+
+            p1.z = (a.z + b.z - p0.z*(1 - f) - p2.z*(1 - f)) / (2 * f);
+            p1.m = (a.m + b.m - p0.m*(1 - f) - p2.m*(1 - f)) / (2 * f);
+        }
+    }
 
     if (!arcCoords) {
-        arcCoords = std::make_shared<CoordinateSequence>( points.hasZ(), points.hasM());
+        arcCoords = std::make_shared<CoordinateSequence>(0,  points.hasZ(), points.hasM());
         arcCoords->reserve(3);
         arcCoords->add(p0);
     }
