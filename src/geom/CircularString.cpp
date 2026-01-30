@@ -90,6 +90,30 @@ CircularString::getLength() const
     return tot;
 }
 
+std::unique_ptr<Curve>
+CircularString::getCurved(double) const
+{
+    return getFactory()->createCircularString(points);
+}
+
+
+LineString*
+CircularString::getLinearizedImpl(double degreeSpacing) const {
+    if (isEmpty()) {
+        return getFactory()->createLineString().release();
+    }
+
+    auto seq = std::make_shared<CoordinateSequence>(0, hasZ(), hasM());
+    seq->add(*getCoordinatesRO(), static_cast<std::size_t>(0), 0);
+
+    for (const CircularArc& arc : getArcs())
+    {
+        arc.addLinearizedPoints(*seq, degreeSpacing);
+    }
+
+    return getFactory()->createLineString(seq).release();
+}
+
 CircularString*
 CircularString::reverseImpl() const
 {

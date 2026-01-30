@@ -14,6 +14,7 @@
 
 #pragma once
 
+#include <geos/geom/LineString.h>
 #include <geos/geom/SimpleCurve.h>
 #include <geos/util.h>
 #include <vector>
@@ -106,6 +107,10 @@ protected:
     {
         envelope = computeEnvelopeInternal();
     }
+
+    LineString* getLinearizedImpl(double) const override;
+
+    CompoundCurve* getCurvedImpl(double) const override { return cloneImpl(); }
 
     int getSortIndex() const override
     {

@@ -16,7 +16,9 @@
 #include <geos/geom/Curve.h>
 #include <geos/geom/CurvePolygon.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/GeometryFactory.h>
 #include <geos/util/UnsupportedOperationException.h>
+#include <geos/util.h>
 
 namespace geos {
 namespace geom {
@@ -61,6 +63,28 @@ namespace geom {
         return sum;
     }
 
+    std::unique_ptr<Polygon>
+    CurvePolygon::getLinearized(double spacingDegrees) const {
+        return std::unique_ptr<Polygon>(getLinearizedImpl(spacingDegrees));
+    }
+
+    Polygon*
+    CurvePolygon::getLinearizedImpl(double spacingDegrees) const {
+        const auto& gfact = *getFactory();
+
+        auto linShell = gfact.createLinearRing(shell->getLinearized(spacingDegrees)->getSharedCoordinates());
+
+        if (holes.empty()) {
+            return getFactory()->createPolygon(std::move(linShell)).release();
+        }
+
+        std::vector<std::unique_ptr<LinearRing>> linHoles(holes.size());
+        for (size_t i = 0; i < holes.size(); i++) {
+            linHoles[i] = gfact.createLinearRing(holes[i]->getLinearized(spacingDegrees)->getSharedCoordinates());
+        }
+        return getFactory()->createPolygon(std::move(linShell), std::move(linHoles)).release();
+    }
+
     bool CurvePolygon::hasCurvedComponents() const {
         if (shell->hasCurvedComponents()) {
             return true;
@@ -73,7 +97,7 @@ namespace geom {
         return false;
     }
 
-    Geometry*
+    CurvePolygon*
     CurvePolygon::cloneImpl() const {
         return new CurvePolygon(*this);
     }

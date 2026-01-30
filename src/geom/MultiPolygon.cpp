@@ -22,6 +22,7 @@
 #include <geos/geom/Polygon.h>
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/MultiLineString.h>
+#include <geos/geom/MultiSurface.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Dimension.h>
 
@@ -85,6 +86,26 @@ MultiPolygon::getBoundary() const
     }
 
     return getFactory()->createMultiLineString(std::move(allRings));
+}
+
+GeometryCollection*
+MultiPolygon::getCurvedImpl(double distanceTolerance) const {
+    std::vector<std::unique_ptr<Geometry>> curvedGeoms(geometries.size());
+
+    bool hasCurves = false;
+
+    for (std::size_t i = 0; i < geometries.size(); i++) {
+        curvedGeoms[i] = geometries[i]->getCurved(distanceTolerance);
+        if (curvedGeoms[i]->hasCurvedComponents()) {
+            hasCurves = true;
+        }
+    }
+
+    if (hasCurves) {
+        return getFactory()->createMultiSurface(std::move(curvedGeoms)).release();
+    }
+
+    return getFactory()->createMultiPolygon(std::move(curvedGeoms)).release();
 }
 
 GeometryTypeId

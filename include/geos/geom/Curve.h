@@ -16,6 +16,10 @@
 
 #include <geos/geom/Geometry.h>
 
+namespace geos::geom {
+    class LineString;
+}
+
 namespace geos {
 namespace geom {
 
@@ -52,6 +56,10 @@ public:
         return Dimension::L; // line
     }
 
+    std::unique_ptr<LineString> getLinearized(double degreeSpacing) const;
+
+    std::unique_ptr<Curve> getCurved(double distanceTolerance) const;
+
     /// Returns true if the first and last coordinate in the Curve are the same
     virtual bool isClosed() const = 0;
 
@@ -65,6 +73,7 @@ public:
 protected:
     Curve(const GeometryFactory& factory) : Geometry(&factory) {}
 
+    Curve* getCurvedImpl(double distanceTolerance) const override = 0;
 };
 
 }
