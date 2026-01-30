@@ -219,5 +219,28 @@ void object::test<15>()
     ensure_equals_exact_geometry_xyzm(curve1.get(), curve2.get(), 0);
 }
 
+template<>
+template<>
+void object::test<16>()
+{
+    set_test_name("Z/M preserved in round-trip");
+
+    // Midpoint Z/M halfway between start/end
+    // Linearized arc has an odd number of vertices
+    checkRoundTripUnchanged("CIRCULARSTRING (0 0 1 7, 1 1 2 9, 2 0 3 11)", 22.5);
+
+    // Midpoint Z/M not halfway between start/end
+    // Linearized arc has an odd number of vertices
+    checkRoundTripUnchanged("CIRCULARSTRING (0 0 1 7, 1 1 2 9, 2 0 4 13)", 22.5);
+
+    // Midpoint Z/M halfway between start/end
+    // Linearized arc has an even number of vertices
+    checkRoundTripUnchanged("CIRCULARSTRING (0 0 1 7, 1 1 2 9, 2 0 3 11)", 20);
+
+    // Midpoint Z/M not halfway between start/end
+    // Linearized arc has an odd number of vertices
+    checkRoundTripUnchanged("CIRCULARSTRING (0 0 1 7, 1 1 2 9, 2 0 4 13)", 20);
+}
+
 
 }
