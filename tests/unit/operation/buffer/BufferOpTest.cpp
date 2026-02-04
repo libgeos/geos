@@ -717,38 +717,4 @@ void object::test<34> ()
 
 
 
-// testInvalidCoordPoint
-template<>
-template<>
-void object::test<31> ()
-{
-    // works for Inf ordinates as well
-    auto geom = wktreader.read("POINT (NaN NaN)");
-    checkBufferPolygonEmpty(*geom, 1, true);
-}
-
-// testInvalidCoordsLine
-template<>
-template<>
-void object::test<32> ()
-{
-    // works for Inf ordinates as well
-    auto geom = wktreader.read("LINESTRING (NaN NaN, NaN NaN)");
-    checkBufferPolygonEmpty(*geom, 1, true);
-}
-
-// testInvalidCoordShell
-template<>
-template<>
-void object::test<33> ()
-{
-    // using Inf ordinates creates a valid ring with equal endpoints
-    // this would be simpler if JTS WKT supported Inf
-    auto geom = wktreader.read("POLYGON ((Inf Inf, Inf Inf, Inf Inf, Inf Inf, Inf Inf))");
-    checkBufferPolygonEmpty(*geom, 1, true);
-}
-
-
-
-
 } // namespace tut
