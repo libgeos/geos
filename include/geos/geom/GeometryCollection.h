@@ -168,6 +168,14 @@ public:
     /// Returns the number of geometries in this collection
     std::size_t getNumGeometries() const override;
 
+    std::unique_ptr<GeometryCollection> getCurved(double distanceTolerance) {
+        return std::unique_ptr<GeometryCollection>(getCurvedImpl(distanceTolerance));
+    }
+
+    std::unique_ptr<GeometryCollection> getLinearized(double stepDegrees) {
+        return std::unique_ptr<GeometryCollection>(getLinearizedImpl(stepDegrees));
+    }
+
     /// Returns a pointer to the nth Geometry in this collection
     const Geometry* getGeometryN(std::size_t n) const override;
 
@@ -238,6 +246,10 @@ protected:
     GeometryCollection* cloneImpl() const override { return new GeometryCollection(*this); }
 
     GeometryCollection* reverseImpl() const override;
+
+    GeometryCollection* getLinearizedImpl(double) const override;
+
+    GeometryCollection* getCurvedImpl(double) const override;
 
     int
     getSortIndex() const override

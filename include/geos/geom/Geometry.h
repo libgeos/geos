@@ -335,6 +335,26 @@ public:
         return this;
     }
 
+    /// Compute an approximation of the Geometry that contains no arcs.
+    /// If the Geometry already contains no arcs, a copy will be returned.
+    ///
+    /// \param degreeSpacing The spacing to use between successive points
+    ///        when approximating an arc.
+    std::unique_ptr<Geometry> getLinearized(double degreeSpacing) const
+    {
+        return std::unique_ptr<Geometry>(getLinearizedImpl(degreeSpacing));
+    }
+
+    /// Attempt to replace linear sections of a geometry with arcs, where possible.
+    /// Any arcs that already exist in the Geometry will be retained unmodified.
+    ///
+    /// \param distanceTolerance The distance tolerance to use when comparing the center
+    ///        point of arcs computed between different sets of three vertices.
+    std::unique_ptr<Geometry> getCurved(double distanceTolerance) const
+    {
+        return std::unique_ptr<Geometry>(getCurvedImpl(distanceTolerance));
+    }
+
     /**
      * \brief Tests the validity of this <code>Geometry</code>.
      *
@@ -901,6 +921,10 @@ protected:
 
     /// Make a geometry with coordinates in reverse order
     virtual Geometry* reverseImpl() const = 0;
+
+    virtual Geometry* getLinearizedImpl(double degreeSpacing) const = 0;
+
+    virtual Geometry* getCurvedImpl(double degreeSpacing) const = 0;
 
     /// Returns true if the array contains any non-empty Geometrys.
     template<typename T>

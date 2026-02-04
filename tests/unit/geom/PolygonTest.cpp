@@ -748,4 +748,35 @@ void object::test<47>
     ensure(empty_poly_zm_->hasM());
 }
 
+template<>
+template<>
+void object::test<49>()
+{
+    set_test_name("getLinearized");
+
+    // check that we return Polygon* rather than Geometry*
+    std::unique_ptr<Polygon> linearized = poly_zm_->getLinearized(4);
+
+    ensure_equals_exact_geometry_xyzm(linearized.get(), poly_zm_.get(),  0);
+}
+
+template<>
+template<>
+void object::test<50>()
+{
+    set_test_name("getCurved");
+
+    WKTReader reader;
+    auto input = reader.read<Polygon>("POLYGON ((0 0, 0.2675 -0.3446, 0.6464 -0.5607, 1.0793 -0.6152, 1.5 -0.5, 1.8446 -0.2325, 2.0607 0.1464, 2.1152 0.5793, 2 1, 1.6934 1.4588, 1.5858 2, 1.6934 2.5412, 2 3, 2.4588 3.3066, 3 3.4142, 3.5412 3.3066, 4 3, 4 5, 1 4, 0 0), (1.7 1, 1.5871 1.0537, 1.4623 1.0629, 1.3427 1.0265, 1.2444 0.9492, 1.1806 0.8416, 1.16 0.7183, 1.1855 0.5958, 1.2534 0.4908, 1.3548 0.4175, 1.4757 0.3858, 1.6 0.4, 1.6203 0.705, 1.7 1))");
+
+    // check that we return Surface* rather than Geometry*
+    std::unique_ptr<geos::geom::Surface> curved = input->getCurved(0.01);
+
+    ensure_equals(curved->getGeometryTypeId(), geos::geom::GeometryTypeId::GEOS_CURVEPOLYGON);
+
+    auto expected = reader.read("CURVEPOLYGON (COMPOUNDCURVE (CIRCULARSTRING (0 0, 1.501026632988956 -0.500132555776532, 2 1, 1.999860522668543 2.999400752659415, 4 3), (4 3, 4 5, 1 4, 0 0)), COMPOUNDCURVE (CIRCULARSTRING (1.7 1, 1.16517094963354 0.7813913411683361, 1.6 0.4), (1.6 0.4, 1.6203 0.705, 1.7 1)))");
+
+    ensure_equals_exact_geometry_xyzm(curved.get(), expected.get(), 1e-2);
+}
+
 } // namespace tut

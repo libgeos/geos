@@ -12,6 +12,7 @@
  *
  **********************************************************************/
 
+#include <geos/algorithm/Angle.h>
 #include <geos/geom/CircularArc.h>
 #include <geos/triangulate/quadedge/TrianglePredicate.h>
 #include <sstream>
@@ -285,6 +286,152 @@ CircularArc::getLength() const {
     return getAngle()*getRadius();
 }
 
+
+void
+CircularArc::addLinearizedPoints(CoordinateSequence& seq, double stepDegrees) const
+{
+    if (isLinear()) {
+        seq.add(*getCoordinateSequence(), getCoordinatePosition() + 1, getCoordinatePosition() + 2);
+        return;
+    }
+
+    const double angle = getAngle();
+    const bool isCCW = getOrientation() == geos::algorithm::Orientation::COUNTERCLOCKWISE;
+    const double stepRad = stepDegrees * MATH_PI / 180.0;
+    const int nSegments = std::max(static_cast<int>(std::ceil(angle / stepRad)), 2);
+
+    double adjStepRad = angle / nSegments;
+
+    const CoordinateXY& center = getCenter();
+    const double radius = getRadius();
+
+    // To ensure that the vertices in the linearized arc are independent of the
+    // arc orientation, we process the arc in a CCW manner regardless of its
+    // original orientation.
+    const double startAngle = isCCW ? theta0() : theta2();
+
+    const bool hasZ = getCoordinateSequence()->hasZ();
+    const bool hasM = getCoordinateSequence()->hasM();
+
+    for (int i = 1; i < nSegments; i++) {
+        const int j = isCCW ? i: nSegments - i;
+        const double theta = startAngle + j*adjStepRad;
+
+        CoordinateXYZM pt{geos::algorithm::CircularArcs::createPoint(center, radius, theta)};
+
+        if (hasZ || hasM) {
+            interpolateZM(pt, pt.z, pt.m);
+        }
+
+        seq.add(pt);
+    }
+
+    seq.add(*getCoordinateSequence(), getCoordinatePosition() + 2, getCoordinatePosition() + 2);
+}
+
+static double
+interpolateValue(double a1, double a2, double frac)
+{
+    frac = std::clamp(frac, 0.0, 1.0);
+    if (std::isnan(a1)) {
+        return a2;
+    }
+    if (std::isnan(a2)) {
+        return a1;
+    }
+    return a1 + frac * (a2 - a1);
+}
+
+void
+CircularArc::interpolateZM(const CoordinateXY &pt, double &z, double &m) const
+{
+    using geom::Ordinate;
+
+    const CoordinateSequence& seq = *getCoordinateSequence();
+    std::size_t i0 = getCoordinatePosition();
+
+    // Read Z, M from control point
+    double z1, m1;
+    seq.applyAt(i0 + 1, [&z1, &m1](const auto& arcPt) {
+        z1 = arcPt.template get<Ordinate::Z>();
+        m1 = arcPt.template get<Ordinate::M>();
+    });
+    // Test point = control point?
+    // Take Z, M from the control point
+    if (p1().equals2D(pt)) {
+        z = z1;
+        m = m1;
+        return;
+    }
+
+    // Read Z, M from start point
+    double z0, m0;
+    seq.applyAt(i0, [&z0, &m0](const auto& arcPt) {
+        z0 = arcPt.template get<Ordinate::Z>();
+        m0 = arcPt.template get<Ordinate::M>();
+    });
+    // Test point = start point?
+    // Take Z, M from the start point
+    if (p0().equals2D(pt)) {
+        z = z0;
+        m = m0;
+        return;
+    }
+
+    // Read Z, M from end point
+    double z2, m2;
+    seq.applyAt(i0 + 2, [&z2, &m2](const auto& arcPt) {
+        z2 = arcPt.template get<Ordinate::Z>();
+        m2 = arcPt.template get<Ordinate::M>();
+    });
+    // Test point = end point?
+    // Take Z, M from the end point
+    if (p2().equals2D(pt)) {
+        z = z2;
+        m = m2;
+        return;
+    }
+
+    double norm_theta0 = theta0();
+    const double norm_theta1 = theta1();
+    double norm_theta2 = theta2();
+    const double theta = algorithm::CircularArcs::getAngle(pt, getCenter());
+
+    if (!isCCW()) {
+        std::swap(norm_theta0, norm_theta2);
+        std::swap(z0, z2);
+        std::swap(m0, m2);
+    }
+
+    if (std::isnan(z1)) {
+        // Interpolate between p0 /  p2
+        const double frac = algorithm::Angle::fractionCCW(theta, norm_theta0, norm_theta2);
+        z = interpolateValue(z0, z2, frac);
+    } else if (algorithm::Angle::isWithinCCW(theta, norm_theta0, norm_theta1)) {
+        // Interpolate between p0 / p1
+        const double frac = algorithm::Angle::fractionCCW(theta, norm_theta0, norm_theta1);
+        z = interpolateValue(z0, z1, frac);
+    } else {
+        // Interpolate between p1 / p2
+        const double frac = algorithm::Angle::fractionCCW(theta, norm_theta1, norm_theta2);
+        z = interpolateValue(z1, z2, frac);
+    }
+
+    if (std::isnan(m1)) {
+        // Interpolate between p0 /  p2
+        const double frac = algorithm::Angle::fractionCCW(theta, norm_theta0, norm_theta2);
+        m = interpolateValue(m0, m2, frac);
+    } else if (algorithm::Angle::isWithinCCW(theta, norm_theta0, norm_theta1)) {
+        // Interpolate between p0 / p1
+        const double frac = algorithm::Angle::fractionCCW(theta, norm_theta0, norm_theta1);
+        m = interpolateValue(m0, m1, frac);
+    } else {
+        // Interpolate between p1 / p2
+        const double frac = algorithm::Angle::fractionCCW(theta, norm_theta1, norm_theta2);
+        m = interpolateValue(m1, m2, frac);
+    }
+}
+
 bool
 CircularArc::isUpwardAtPoint(const CoordinateXY& q) const {
     auto quad = geom::Quadrant::quadrant(getCenter(), q);
@@ -401,5 +548,6 @@ CircularArc::toString() const {
     ss << ")";
     return ss.str();
 }
+
 
 }

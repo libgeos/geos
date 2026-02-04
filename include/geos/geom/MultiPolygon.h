@@ -26,7 +26,6 @@
 #include <geos/geom/GeometryCollection.h> // for inheritance
 #include <geos/geom/Polygon.h> // for inheritance
 #include <geos/geom/Dimension.h> // for Dimension::DimensionType
-#include <geos/geom/GeometryCollection.h>
 
 
 // Forward declarations
@@ -131,6 +130,10 @@ protected:
         {};
 
     MultiPolygon* cloneImpl() const override { return new MultiPolygon(*this); }
+
+    GeometryCollection* getCurvedImpl(double distanceTolerance) const override;
+
+    MultiPolygon* getLinearizedImpl(double) const override { return cloneImpl(); }
 
     MultiPolygon* reverseImpl() const override;
 
