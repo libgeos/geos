@@ -629,9 +629,24 @@ void object::test<28>
 "MULTIPOLYGON (((24 95.239, 24 96, 24 99, 24.816 99, 24 95.239)), ((3 90, 3 93, 3 96, 3 99, 21 99, 21 96, 21 93, 21 90, 3 90)))");    
 }
 
+// testEndCap
+// test end cap for a line where left and right side are simplified differently, so there is an angle at the end
+// See https://github.com/libgeos/geos/issues/1217
 template<>
 template<>
 void object::test<29>
+()
+{
+    std::string wkt("LINESTRING (0.7 4.7, 146.3 137.1, 146.3 137, 146.6 136.7)");
+    std::unique_ptr<Geometry> result13 = buffer(wkt, 11);
+    checkValidPolygon(*result13);
+    checkNumHoles(*result13, 0);
+}
+
+
+template<>
+template<>
+void object::test<30>
 ()
 {
     set_test_name("GH-1321");
@@ -648,7 +663,7 @@ void object::test<29>
 
 template<>
 template<>
-void object::test<30>
+void object::test<31>
 ()
 {
     set_test_name("sf-2552");
@@ -667,6 +682,39 @@ void object::test<30>
 
     ensure(bufGeom->getArea() > 12000);
 }
+
+
+// testInvalidCoordPoint
+template<>
+template<>
+void object::test<32> ()
+{
+    // works for Inf ordinates as well
+    auto geom = wktreader.read("POINT (NaN NaN)");
+    checkBufferPolygonEmpty(*geom, 1, true);
+}
+
+// testInvalidCoordsLine
+template<>
+template<>
+void object::test<33> ()
+{
+    // works for Inf ordinates as well
+    auto geom = wktreader.read("LINESTRING (NaN NaN, NaN NaN)");
+    checkBufferPolygonEmpty(*geom, 1, true);
+}
+
+// testInvalidCoordShell
+template<>
+template<>
+void object::test<34> ()
+{
+    // using Inf ordinates creates a valid ring with equal endpoints
+    // this would be simpler if JTS WKT supported Inf
+    auto geom = wktreader.read("POLYGON ((Inf Inf, Inf Inf, Inf Inf, Inf Inf, Inf Inf))");
+    checkBufferPolygonEmpty(*geom, 1, true);
+}
+
 
 
 // testInvalidCoordPoint
