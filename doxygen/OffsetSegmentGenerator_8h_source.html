@@ -166,116 +166,117 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span> </div>
 <div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>    <span class="keywordtype">void</span> addNextSegment(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p, <span class="keywordtype">bool</span> addStartPoint);</div>
 <div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span> </div>
-<div class="line"><a id="l00146" name="l00146"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator.html#a92ce04e3921923e381b58cf7e06b2bb4">  146</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator.html#a92ce04e3921923e381b58cf7e06b2bb4">addLineEndCap</a>(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p0,</div>
-<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>                       <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p1);</div>
-<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span> </div>
-<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>    <span class="keywordtype">void</span></div>
-<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>    addSegments(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a>&amp; pts, <span class="keywordtype">bool</span> isForward)</div>
-<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>    {</div>
-<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>        segList.addPts(pts, isForward);</div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>    }</div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span> </div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator.html#a5553b8151f5b3c0a91040069d7158d3a">  167</a></span>    <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator.html#a5553b8151f5b3c0a91040069d7158d3a">computeOffsetSegment</a>(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1LineSegment.html">geom::LineSegment</a>&amp; seg,</div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>                              <span class="keywordtype">int</span> side, <span class="keywordtype">double</span> distance,</div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>                              <a class="code hl_class" href="classgeos_1_1geom_1_1LineSegment.html">geom::LineSegment</a>&amp; offset);</div>
-<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span> </div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span> </div>
-<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">double</span> OFFSET_SEGMENT_SEPARATION_FACTOR; <span class="comment">// 1.0E-3;</span></div>
-<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span> </div>
-<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">double</span> INSIDE_TURN_VERTEX_SNAP_DISTANCE_FACTOR; <span class="comment">// 1.0E-3;</span></div>
-<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span> </div>
-<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">double</span> CURVE_VERTEX_SNAP_DISTANCE_FACTOR; <span class="comment">//  1.0E-6;</span></div>
-<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span> </div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> MAX_CLOSING_SEG_LEN_FACTOR = 80;</div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span> </div>
-<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>    <span class="keywordtype">double</span> maxCurveSegmentError; <span class="comment">// 0.0</span></div>
-<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span> </div>
-<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span>    <span class="keywordtype">double</span> filletAngleQuantum;</div>
-<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span> </div>
-<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span>    <span class="keywordtype">int</span> closingSegLengthFactor; <span class="comment">// 1;</span></div>
-<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span> </div>
-<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>    <a class="code hl_class" href="classgeos_1_1operation_1_1buffer_1_1OffsetSegmentString.html">OffsetSegmentString</a> segList;</div>
-<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span> </div>
-<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>    <span class="keywordtype">double</span> distance;</div>
-<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span> </div>
-<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>    <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1PrecisionModel.html">geom::PrecisionModel</a>* precisionModel;</div>
-<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span> </div>
-<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span>    <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html">BufferParameters</a>&amp; bufParams;</div>
-<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span> </div>
-<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span>    <a class="code hl_class" href="classgeos_1_1algorithm_1_1LineIntersector.html">algorithm::LineIntersector</a> li;</div>
-<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span> </div>
-<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>    <a class="code hl_class" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> s0, s1, s2;</div>
-<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span> </div>
-<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>    <a class="code hl_class" href="classgeos_1_1geom_1_1LineSegment.html">geom::LineSegment</a> seg0;</div>
-<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span> </div>
-<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span>    <a class="code hl_class" href="classgeos_1_1geom_1_1LineSegment.html">geom::LineSegment</a> seg1;</div>
-<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span> </div>
-<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>    <a class="code hl_class" href="classgeos_1_1geom_1_1LineSegment.html">geom::LineSegment</a> offset0;</div>
-<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span> </div>
-<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>    <a class="code hl_class" href="classgeos_1_1geom_1_1LineSegment.html">geom::LineSegment</a> offset1;</div>
-<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span> </div>
-<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>    <span class="keywordtype">int</span> side;</div>
-<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span> </div>
-<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>    <span class="keywordtype">bool</span> _hasNarrowConcaveAngle; <span class="comment">// =false</span></div>
-<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span> </div>
-<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>    <span class="keywordtype">void</span> addCollinear(<span class="keywordtype">bool</span> addStartPoint);</div>
-<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span> </div>
-<div class="line"><a id="l00266" name="l00266"></a><span class="lineno">  266</span>    <span class="keywordtype">void</span> addMitreJoin(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; cornerPt,</div>
-<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>                      <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1LineSegment.html">geom::LineSegment</a>&amp; offset0,</div>
-<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>                      <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1LineSegment.html">geom::LineSegment</a>&amp; offset1,</div>
-<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>                      <span class="keywordtype">double</span> distance);</div>
-<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span> </div>
+<div class="line"><a id="l00146" name="l00146"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator.html#a3315914bbb62a25841a0e0895669856b">  146</a></span>    <span class="keywordtype">void</span> <a class="code hl_function" href="classgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator.html#a3315914bbb62a25841a0e0895669856b">addLineEndCap</a>(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p0,</div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>                       <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p1,</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span>                       <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p2);</div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span> </div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>    <span class="keywordtype">void</span></div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>    addSegments(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a>&amp; pts, <span class="keywordtype">bool</span> isForward)</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>    {</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>        segList.addPts(pts, isForward);</div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>    }</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span> </div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator.html#a5553b8151f5b3c0a91040069d7158d3a">  168</a></span>    <span class="keyword">static</span> <span class="keywordtype">void</span> <a class="code hl_function" href="classgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator.html#a5553b8151f5b3c0a91040069d7158d3a">computeOffsetSegment</a>(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1LineSegment.html">geom::LineSegment</a>&amp; seg,</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span>                              <span class="keywordtype">int</span> side, <span class="keywordtype">double</span> distance,</div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>                              <a class="code hl_class" href="classgeos_1_1geom_1_1LineSegment.html">geom::LineSegment</a>&amp; offset);</div>
+<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span> </div>
+<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span> </div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span>    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">double</span> OFFSET_SEGMENT_SEPARATION_FACTOR; <span class="comment">// 1.0E-3;</span></div>
+<div class="line"><a id="l00179" name="l00179"></a><span class="lineno">  179</span> </div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">double</span> INSIDE_TURN_VERTEX_SNAP_DISTANCE_FACTOR; <span class="comment">// 1.0E-3;</span></div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span> </div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">double</span> CURVE_VERTEX_SNAP_DISTANCE_FACTOR; <span class="comment">//  1.0E-6;</span></div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span> </div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">int</span> MAX_CLOSING_SEG_LEN_FACTOR = 80;</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span> </div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>    <span class="keywordtype">double</span> maxCurveSegmentError; <span class="comment">// 0.0</span></div>
+<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span> </div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>    <span class="keywordtype">double</span> filletAngleQuantum;</div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span> </div>
+<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>    <span class="keywordtype">int</span> closingSegLengthFactor; <span class="comment">// 1;</span></div>
+<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span> </div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>    <a class="code hl_class" href="classgeos_1_1operation_1_1buffer_1_1OffsetSegmentString.html">OffsetSegmentString</a> segList;</div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span> </div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>    <span class="keywordtype">double</span> distance;</div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span> </div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>    <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1PrecisionModel.html">geom::PrecisionModel</a>* precisionModel;</div>
+<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span> </div>
+<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span>    <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1operation_1_1buffer_1_1BufferParameters.html">BufferParameters</a>&amp; bufParams;</div>
+<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span> </div>
+<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span>    <a class="code hl_class" href="classgeos_1_1algorithm_1_1LineIntersector.html">algorithm::LineIntersector</a> li;</div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span> </div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>    <a class="code hl_class" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> s0, s1, s2;</div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span> </div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>    <a class="code hl_class" href="classgeos_1_1geom_1_1LineSegment.html">geom::LineSegment</a> seg0;</div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span> </div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span>    <a class="code hl_class" href="classgeos_1_1geom_1_1LineSegment.html">geom::LineSegment</a> seg1;</div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span> </div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>    <a class="code hl_class" href="classgeos_1_1geom_1_1LineSegment.html">geom::LineSegment</a> offset0;</div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span> </div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>    <a class="code hl_class" href="classgeos_1_1geom_1_1LineSegment.html">geom::LineSegment</a> offset1;</div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span> </div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>    <span class="keywordtype">int</span> side;</div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span> </div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>    <span class="keywordtype">bool</span> _hasNarrowConcaveAngle; <span class="comment">// =false</span></div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span> </div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span>    <span class="keywordtype">void</span> addCollinear(<span class="keywordtype">bool</span> addStartPoint);</div>
+<div class="line"><a id="l00260" name="l00260"></a><span class="lineno">  260</span> </div>
+<div class="line"><a id="l00267" name="l00267"></a><span class="lineno">  267</span>    <span class="keywordtype">void</span> addMitreJoin(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; cornerPt,</div>
+<div class="line"><a id="l00268" name="l00268"></a><span class="lineno">  268</span>                      <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1LineSegment.html">geom::LineSegment</a>&amp; offset0,</div>
+<div class="line"><a id="l00269" name="l00269"></a><span class="lineno">  269</span>                      <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1LineSegment.html">geom::LineSegment</a>&amp; offset1,</div>
+<div class="line"><a id="l00270" name="l00270"></a><span class="lineno">  270</span>                      <span class="keywordtype">double</span> distance);</div>
 <div class="line"><a id="l00271" name="l00271"></a><span class="lineno">  271</span> </div>
-<div class="line"><a id="l00282" name="l00282"></a><span class="lineno">  282</span>    <span class="keywordtype">void</span> addLimitedMitreJoin(</div>
-<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>        <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1LineSegment.html">geom::LineSegment</a>&amp; offset0,</div>
-<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>        <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1LineSegment.html">geom::LineSegment</a>&amp; offset1,</div>
-<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>        <span class="keywordtype">double</span> distance,</div>
-<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>        <span class="keywordtype">double</span> mitreLimitDistance);</div>
-<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span> </div>
-<div class="line"><a id="l00295" name="l00295"></a><span class="lineno">  295</span>    <span class="keyword">static</span> <a class="code hl_class" href="classgeos_1_1geom_1_1LineSegment.html">geom::LineSegment</a> extend(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1LineSegment.html">geom::LineSegment</a>&amp; seg, <span class="keywordtype">double</span> dist);</div>
-<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span> </div>
-<div class="line"><a id="l00307" name="l00307"></a><span class="lineno">  307</span>    <span class="keyword">static</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> project(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; pt, <span class="keywordtype">double</span> d, <span class="keywordtype">double</span> dir);</div>
-<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span> </div>
-<div class="line"><a id="l00316" name="l00316"></a><span class="lineno">  316</span>    <span class="keywordtype">void</span> addBevelJoin(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1LineSegment.html">geom::LineSegment</a>&amp; offset0,</div>
-<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span>                      <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1LineSegment.html">geom::LineSegment</a>&amp; offset1);</div>
-<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span> </div>
-<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span>    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">double</span> PI; <span class="comment">//  3.14159265358979</span></div>
-<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span> </div>
-<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span>    <span class="comment">// Not in JTS, used for single-sided buffers</span></div>
-<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span>    <span class="keywordtype">int</span> endCapIndex;</div>
-<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span> </div>
-<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span>    <span class="keywordtype">void</span> init(<span class="keywordtype">double</span> newDistance);</div>
-<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span> </div>
-<div class="line"><a id="l00333" name="l00333"></a><span class="lineno">  333</span>    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">double</span> SIMPLIFY_FACTOR; <span class="comment">// 100.0;</span></div>
-<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span> </div>
-<div class="line"><a id="l00340" name="l00340"></a><span class="lineno">  340</span>    <span class="keywordtype">void</span> addOutsideTurn(<span class="keywordtype">int</span> orientation, <span class="keywordtype">bool</span> addStartPoint);</div>
-<div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span> </div>
-<div class="line"><a id="l00347" name="l00347"></a><span class="lineno">  347</span>    <span class="keywordtype">void</span> addInsideTurn(<span class="keywordtype">int</span> orientation, <span class="keywordtype">bool</span> addStartPoint);</div>
-<div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span> </div>
-<div class="line"><a id="l00360" name="l00360"></a><span class="lineno">  360</span>    <span class="keywordtype">void</span> addDirectedFillet(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p, <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p0,</div>
-<div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span>                   <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p1,</div>
-<div class="line"><a id="l00362" name="l00362"></a><span class="lineno">  362</span>                   <span class="keywordtype">int</span> direction, <span class="keywordtype">double</span> radius);</div>
-<div class="line"><a id="l00363" name="l00363"></a><span class="lineno">  363</span> </div>
-<div class="line"><a id="l00373" name="l00373"></a><span class="lineno">  373</span>    <span class="keywordtype">void</span> addDirectedFillet(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p, <span class="keywordtype">double</span> startAngle,</div>
-<div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span>                   <span class="keywordtype">double</span> endAngle, <span class="keywordtype">int</span> direction, <span class="keywordtype">double</span> radius);</div>
-<div class="line"><a id="l00375" name="l00375"></a><span class="lineno">  375</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span>    <span class="comment">// An OffsetSegmentGenerator cannot be copied because of member &quot;const BufferParameters&amp; bufParams&quot;</span></div>
-<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span>    <span class="comment">// Not declaring these functions triggers MSVC warning C4512: &quot;assignment operator could not be generated&quot;</span></div>
-<div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span>    <a class="code hl_class" href="classgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator.html">OffsetSegmentGenerator</a>(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator.html">OffsetSegmentGenerator</a>&amp;);</div>
-<div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span>    <span class="keywordtype">void</span> operator=(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator.html">OffsetSegmentGenerator</a>&amp;);</div>
-<div class="line"><a id="l00380" name="l00380"></a><span class="lineno">  380</span> </div>
-<div class="line"><a id="l00381" name="l00381"></a><span class="lineno">  381</span>};</div>
+<div class="line"><a id="l00272" name="l00272"></a><span class="lineno">  272</span> </div>
+<div class="line"><a id="l00283" name="l00283"></a><span class="lineno">  283</span>    <span class="keywordtype">void</span> addLimitedMitreJoin(</div>
+<div class="line"><a id="l00284" name="l00284"></a><span class="lineno">  284</span>        <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1LineSegment.html">geom::LineSegment</a>&amp; offset0,</div>
+<div class="line"><a id="l00285" name="l00285"></a><span class="lineno">  285</span>        <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1LineSegment.html">geom::LineSegment</a>&amp; offset1,</div>
+<div class="line"><a id="l00286" name="l00286"></a><span class="lineno">  286</span>        <span class="keywordtype">double</span> distance,</div>
+<div class="line"><a id="l00287" name="l00287"></a><span class="lineno">  287</span>        <span class="keywordtype">double</span> mitreLimitDistance);</div>
+<div class="line"><a id="l00288" name="l00288"></a><span class="lineno">  288</span> </div>
+<div class="line"><a id="l00296" name="l00296"></a><span class="lineno">  296</span>    <span class="keyword">static</span> <a class="code hl_class" href="classgeos_1_1geom_1_1LineSegment.html">geom::LineSegment</a> extend(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1LineSegment.html">geom::LineSegment</a>&amp; seg, <span class="keywordtype">double</span> dist);</div>
+<div class="line"><a id="l00297" name="l00297"></a><span class="lineno">  297</span> </div>
+<div class="line"><a id="l00308" name="l00308"></a><span class="lineno">  308</span>    <span class="keyword">static</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> project(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; pt, <span class="keywordtype">double</span> d, <span class="keywordtype">double</span> dir);</div>
+<div class="line"><a id="l00309" name="l00309"></a><span class="lineno">  309</span> </div>
+<div class="line"><a id="l00317" name="l00317"></a><span class="lineno">  317</span>    <span class="keywordtype">void</span> addBevelJoin(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1LineSegment.html">geom::LineSegment</a>&amp; offset0,</div>
+<div class="line"><a id="l00318" name="l00318"></a><span class="lineno">  318</span>                      <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1LineSegment.html">geom::LineSegment</a>&amp; offset1);</div>
+<div class="line"><a id="l00319" name="l00319"></a><span class="lineno">  319</span> </div>
+<div class="line"><a id="l00320" name="l00320"></a><span class="lineno">  320</span>    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">double</span> PI; <span class="comment">//  3.14159265358979</span></div>
+<div class="line"><a id="l00321" name="l00321"></a><span class="lineno">  321</span> </div>
+<div class="line"><a id="l00322" name="l00322"></a><span class="lineno">  322</span>    <span class="comment">// Not in JTS, used for single-sided buffers</span></div>
+<div class="line"><a id="l00323" name="l00323"></a><span class="lineno">  323</span>    <span class="keywordtype">int</span> endCapIndex;</div>
+<div class="line"><a id="l00324" name="l00324"></a><span class="lineno">  324</span> </div>
+<div class="line"><a id="l00325" name="l00325"></a><span class="lineno">  325</span>    <span class="keywordtype">void</span> init(<span class="keywordtype">double</span> newDistance);</div>
+<div class="line"><a id="l00326" name="l00326"></a><span class="lineno">  326</span> </div>
+<div class="line"><a id="l00334" name="l00334"></a><span class="lineno">  334</span>    <span class="keyword">static</span> <span class="keyword">const</span> <span class="keywordtype">double</span> SIMPLIFY_FACTOR; <span class="comment">// 100.0;</span></div>
+<div class="line"><a id="l00335" name="l00335"></a><span class="lineno">  335</span> </div>
+<div class="line"><a id="l00341" name="l00341"></a><span class="lineno">  341</span>    <span class="keywordtype">void</span> addOutsideTurn(<span class="keywordtype">int</span> orientation, <span class="keywordtype">bool</span> addStartPoint);</div>
+<div class="line"><a id="l00342" name="l00342"></a><span class="lineno">  342</span> </div>
+<div class="line"><a id="l00348" name="l00348"></a><span class="lineno">  348</span>    <span class="keywordtype">void</span> addInsideTurn(<span class="keywordtype">int</span> orientation, <span class="keywordtype">bool</span> addStartPoint);</div>
+<div class="line"><a id="l00349" name="l00349"></a><span class="lineno">  349</span> </div>
+<div class="line"><a id="l00361" name="l00361"></a><span class="lineno">  361</span>    <span class="keywordtype">void</span> addDirectedFillet(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p, <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p0,</div>
+<div class="line"><a id="l00362" name="l00362"></a><span class="lineno">  362</span>                   <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p1,</div>
+<div class="line"><a id="l00363" name="l00363"></a><span class="lineno">  363</span>                   <span class="keywordtype">int</span> direction, <span class="keywordtype">double</span> radius);</div>
+<div class="line"><a id="l00364" name="l00364"></a><span class="lineno">  364</span> </div>
+<div class="line"><a id="l00374" name="l00374"></a><span class="lineno">  374</span>    <span class="keywordtype">void</span> addDirectedFillet(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&amp; p, <span class="keywordtype">double</span> startAngle,</div>
+<div class="line"><a id="l00375" name="l00375"></a><span class="lineno">  375</span>                   <span class="keywordtype">double</span> endAngle, <span class="keywordtype">int</span> direction, <span class="keywordtype">double</span> radius);</div>
+<div class="line"><a id="l00376" name="l00376"></a><span class="lineno">  376</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00377" name="l00377"></a><span class="lineno">  377</span>    <span class="comment">// An OffsetSegmentGenerator cannot be copied because of member &quot;const BufferParameters&amp; bufParams&quot;</span></div>
+<div class="line"><a id="l00378" name="l00378"></a><span class="lineno">  378</span>    <span class="comment">// Not declaring these functions triggers MSVC warning C4512: &quot;assignment operator could not be generated&quot;</span></div>
+<div class="line"><a id="l00379" name="l00379"></a><span class="lineno">  379</span>    <a class="code hl_class" href="classgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator.html">OffsetSegmentGenerator</a>(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator.html">OffsetSegmentGenerator</a>&amp;);</div>
+<div class="line"><a id="l00380" name="l00380"></a><span class="lineno">  380</span>    <span class="keywordtype">void</span> operator=(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator.html">OffsetSegmentGenerator</a>&amp;);</div>
+<div class="line"><a id="l00381" name="l00381"></a><span class="lineno">  381</span> </div>
+<div class="line"><a id="l00382" name="l00382"></a><span class="lineno">  382</span>};</div>
 </div>
-<div class="line"><a id="l00382" name="l00382"></a><span class="lineno">  382</span> </div>
-<div class="line"><a id="l00383" name="l00383"></a><span class="lineno">  383</span>} <span class="comment">// namespace geos::operation::buffer</span></div>
-<div class="line"><a id="l00384" name="l00384"></a><span class="lineno">  384</span>} <span class="comment">// namespace geos::operation</span></div>
-<div class="line"><a id="l00385" name="l00385"></a><span class="lineno">  385</span>} <span class="comment">// namespace geos</span></div>
-<div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span> </div>
-<div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span><span class="preprocessor">#ifdef _MSC_VER</span></div>
-<div class="line"><a id="l00388" name="l00388"></a><span class="lineno">  388</span><span class="preprocessor">#pragma warning(pop)</span></div>
-<div class="line"><a id="l00389" name="l00389"></a><span class="lineno">  389</span><span class="preprocessor">#endif</span></div>
-<div class="line"><a id="l00390" name="l00390"></a><span class="lineno">  390</span> </div>
+<div class="line"><a id="l00383" name="l00383"></a><span class="lineno">  383</span> </div>
+<div class="line"><a id="l00384" name="l00384"></a><span class="lineno">  384</span>} <span class="comment">// namespace geos::operation::buffer</span></div>
+<div class="line"><a id="l00385" name="l00385"></a><span class="lineno">  385</span>} <span class="comment">// namespace geos::operation</span></div>
+<div class="line"><a id="l00386" name="l00386"></a><span class="lineno">  386</span>} <span class="comment">// namespace geos</span></div>
+<div class="line"><a id="l00387" name="l00387"></a><span class="lineno">  387</span> </div>
+<div class="line"><a id="l00388" name="l00388"></a><span class="lineno">  388</span><span class="preprocessor">#ifdef _MSC_VER</span></div>
+<div class="line"><a id="l00389" name="l00389"></a><span class="lineno">  389</span><span class="preprocessor">#pragma warning(pop)</span></div>
+<div class="line"><a id="l00390" name="l00390"></a><span class="lineno">  390</span><span class="preprocessor">#endif</span></div>
+<div class="line"><a id="l00391" name="l00391"></a><span class="lineno">  391</span> </div>
 <div class="ttc" id="aclassgeos_1_1algorithm_1_1LineIntersector_html"><div class="ttname"><a href="classgeos_1_1algorithm_1_1LineIntersector.html">geos::algorithm::LineIntersector</a></div><div class="ttdoc">A LineIntersector is an algorithm that can both test whether two line segments intersect and compute ...</div><div class="ttdef"><b>Definition</b> LineIntersector.h:53</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequence_html"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequence.html">geos::geom::CoordinateSequence</a></div><div class="ttdoc">The internal representation of a list of coordinates inside a Geometry.</div><div class="ttdef"><b>Definition</b> CoordinateSequence.h:56</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Coordinate_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Coordinate.html">geos::geom::Coordinate</a></div><div class="ttdoc">Coordinate is the lightweight class used to store coordinates.</div><div class="ttdef"><b>Definition</b> Coordinate.h:220</div></div>
@@ -285,10 +286,10 @@ $(document).ready(function() { init_codefold(0); });
 <div class="ttc" id="aclassgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator_html"><div class="ttname"><a href="classgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator.html">geos::operation::buffer::OffsetSegmentGenerator</a></div><div class="ttdef"><b>Definition</b> OffsetSegmentGenerator.h:60</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator_html_a01ea69a2d48b9156dd1f81e18c9c05f0"><div class="ttname"><a href="classgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator.html#a01ea69a2d48b9156dd1f81e18c9c05f0">geos::operation::buffer::OffsetSegmentGenerator::addFirstSegment</a></div><div class="ttdeci">void addFirstSegment()</div><div class="ttdoc">Add first offset point.</div><div class="ttdef"><b>Definition</b> OffsetSegmentGenerator.h:129</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator_html_a17bc6dfa934fa6a2513f803cd311192f"><div class="ttname"><a href="classgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator.html#a17bc6dfa934fa6a2513f803cd311192f">geos::operation::buffer::OffsetSegmentGenerator::hasNarrowConcaveAngle</a></div><div class="ttdeci">bool hasNarrowConcaveAngle() const</div><div class="ttdef"><b>Definition</b> OffsetSegmentGenerator.h:87</div></div>
+<div class="ttc" id="aclassgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator_html_a3315914bbb62a25841a0e0895669856b"><div class="ttname"><a href="classgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator.html#a3315914bbb62a25841a0e0895669856b">geos::operation::buffer::OffsetSegmentGenerator::addLineEndCap</a></div><div class="ttdeci">void addLineEndCap(const geom::Coordinate &amp;p0, const geom::Coordinate &amp;p1, const geom::Coordinate &amp;p2)</div><div class="ttdoc">Add an end cap around point p1, terminating a line segment coming from p0.</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator_html_a3835105899291f68f717b5d306f3f66a"><div class="ttname"><a href="classgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator.html#a3835105899291f68f717b5d306f3f66a">geos::operation::buffer::OffsetSegmentGenerator::addLastSegment</a></div><div class="ttdeci">void addLastSegment()</div><div class="ttdoc">Add last offset point.</div><div class="ttdef"><b>Definition</b> OffsetSegmentGenerator.h:136</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator_html_a5553b8151f5b3c0a91040069d7158d3a"><div class="ttname"><a href="classgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator.html#a5553b8151f5b3c0a91040069d7158d3a">geos::operation::buffer::OffsetSegmentGenerator::computeOffsetSegment</a></div><div class="ttdeci">static void computeOffsetSegment(const geom::LineSegment &amp;seg, int side, double distance, geom::LineSegment &amp;offset)</div><div class="ttdoc">Compute an offset segment for an input segment on a given side and at a given distance.</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator_html_a8a94b9d31bc5f4b33667ece63cd7d33a"><div class="ttname"><a href="classgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator.html#a8a94b9d31bc5f4b33667ece63cd7d33a">geos::operation::buffer::OffsetSegmentGenerator::getCoordinates</a></div><div class="ttdeci">void getCoordinates(std::vector&lt; std::unique_ptr&lt; geom::CoordinateSequence &gt; &gt; &amp;to)</div><div class="ttdef"><b>Definition</b> OffsetSegmentGenerator.h:104</div></div>
-<div class="ttc" id="aclassgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator_html_a92ce04e3921923e381b58cf7e06b2bb4"><div class="ttname"><a href="classgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator.html#a92ce04e3921923e381b58cf7e06b2bb4">geos::operation::buffer::OffsetSegmentGenerator::addLineEndCap</a></div><div class="ttdeci">void addLineEndCap(const geom::Coordinate &amp;p0, const geom::Coordinate &amp;p1)</div><div class="ttdoc">Add an end cap around point p1, terminating a line segment coming from p0.</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator_html_a97cba22afe73b6b6af37f22053c4aa51"><div class="ttname"><a href="classgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator.html#a97cba22afe73b6b6af37f22053c4aa51">geos::operation::buffer::OffsetSegmentGenerator::createSquare</a></div><div class="ttdeci">void createSquare(const geom::Coordinate &amp;p, double distance)</div><div class="ttdoc">Adds a CW square around a point.</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator_html_ad7535d5639d68bc8821c23040f502d4d"><div class="ttname"><a href="classgeos_1_1operation_1_1buffer_1_1OffsetSegmentGenerator.html#ad7535d5639d68bc8821c23040f502d4d">geos::operation::buffer::OffsetSegmentGenerator::createCircle</a></div><div class="ttdeci">void createCircle(const geom::Coordinate &amp;p, double distance)</div><div class="ttdoc">Adds a CW circle around a point.</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1buffer_1_1OffsetSegmentString_html"><div class="ttname"><a href="classgeos_1_1operation_1_1buffer_1_1OffsetSegmentString.html">geos::operation::buffer::OffsetSegmentString</a></div><div class="ttdef"><b>Definition</b> OffsetSegmentString.h:41</div></div>
