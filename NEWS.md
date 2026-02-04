@@ -8,6 +8,10 @@
 - Breaking Changes:
   - BufferOp returns POLYGON EMPTY when fed Inf/Nan coords (GH-1332)
 
+- Fixes/Improvements:
+  - Buffer of Linestring includes spurious hole (GH-1217, Moritz Kirmse)
+
+
 
 ## Changes in 3.14.0
 2025-08-21
