@@ -76,5 +76,56 @@ void object::test<3> ()
     ensure_equals_geometry(expected.get(), result.get());
 }
 
+// Test snapping of empty geometries -- POINT EMPTY
+template<>
+template<>
+void object::test<4> ()
+{
+    std::string wkt = "POINT EMPTY";
+    auto src = reader.read(wkt);
+    GeometrySnapper snapper(*src);
+    auto snap = reader.read(wkt); // Snap against itself
+    auto result = snapper.snapTo(*snap, 1);
+    auto expected = reader.read(wkt);
+
+    ensure_equals_geometry(expected.get(), result.get());
+    ensure_equals(result->getCoordinateDimension(), 2);
+    ensure_equals(result->getGeometryType(), "Point");
+}
+
+// Test snapping of empty geometries -- LINESTRING EMPTY
+template<>
+template<>
+void object::test<5> ()
+{
+    std::string wkt = "LINESTRING EMPTY";
+    auto src = reader.read(wkt);
+    GeometrySnapper snapper(*src);
+    auto snap = reader.read(wkt); // Snap against itself
+    auto result = snapper.snapTo(*snap, 1);
+    auto expected = reader.read(wkt);
+
+    ensure_equals_geometry(expected.get(), result.get());
+    ensure_equals(result->getCoordinateDimension(), 2);
+    ensure_equals(result->getGeometryType(), "LineString");
+}
+
+// Test snapping of empty geometries -- POLYGON EMPTY
+template<>
+template<>
+void object::test<6> ()
+{
+    std::string wkt = "POLYGON EMPTY";
+    auto src = reader.read(wkt);
+    GeometrySnapper snapper(*src);
+    auto snap = reader.read(wkt); // Snap against itself
+    auto result = snapper.snapTo(*snap, 1);
+    auto expected = reader.read(wkt);
+
+    ensure_equals_geometry(expected.get(), result.get());
+    ensure_equals(result->getCoordinateDimension(), 2);
+    ensure_equals(result->getGeometryType(), "Polygon");
+}
+
 
 } // namespace tut

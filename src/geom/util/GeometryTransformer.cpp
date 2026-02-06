@@ -79,6 +79,11 @@ GeometryTransformer::transform(const Geometry* nInputGeom)
     inputGeom = nInputGeom;
     factory = inputGeom->getFactory();
 
+    // If the input geometry is empty, return a clone of it to preserve its type and dimension
+    if (inputGeom->isEmpty()) {
+        return inputGeom->clone();
+    }
+
     if(const Point* p = dynamic_cast<const Point*>(inputGeom)) {
         return transformPoint(p, nullptr);
     }
