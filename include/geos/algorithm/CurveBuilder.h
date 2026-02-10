@@ -18,6 +18,10 @@
 
 #include <memory>
 
+namespace geos::algorithm {
+    class LineToCurveParams;
+}
+
 namespace geos::geom {
     class CircularArc;
     class CoordinateSequence;
@@ -33,13 +37,13 @@ class GEOS_DLL CurveBuilder {
 
 public:
 
-    static std::unique_ptr<geom::Curve> getCurved(const geom::LineString& ls, double distanceTolerance);
+    static std::unique_ptr<geom::Curve> getCurved(const geom::LineString& ls, const LineToCurveParams& params);
 
 private:
 
     explicit CurveBuilder(const geom::GeometryFactory& factory);
 
-    std::unique_ptr<geom::Curve> compute(const geom::LineString& ls, double distanceTolerance);
+    std::unique_ptr<geom::Curve> compute(const geom::LineString& ls, const LineToCurveParams& params);
 
     void addArc(const geom::CircularArc& arc, std::size_t stop);
 

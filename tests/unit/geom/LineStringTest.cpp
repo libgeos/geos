@@ -5,6 +5,8 @@
 #include <tut/tut.hpp>
 #include <utility.h>
 // geos
+#include <geos/algorithm/CurveToLineParams.h>
+#include <geos/algorithm/LineToCurveParams.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateFilter.h>
@@ -650,7 +652,7 @@ void object::test<36>()
     set_test_name("getLinearized");
 
     // check that we return LineString* rather than Curve* or Geometry*
-    std::unique_ptr<LineString> linearized = line_->getLinearized(1e-3);
+    std::unique_ptr<LineString> linearized = line_->getLinearized(geos::algorithm::CurveToLineParams::stepSizeDegrees(45));
 
     ensure_equals_exact_geometry_xyzm(linearized.get(), line_.get(), 0);
 }
@@ -666,7 +668,10 @@ void object::test<37>()
     auto input = reader.read<LineString>("LINESTRING (2 2, 2.292893 2.707107, 3 3, 3.707107 2.707107, 4 2, 2 2)");
 
     // check that we return Curve* instead of Geometry*
-    std::unique_ptr<geos::geom::Curve> curved = input->getCurved(1e-3);
+    auto params = geos::algorithm::LineToCurveParams::getDefault();
+    params.setRadiusTolerance(1e-3);
+
+    std::unique_ptr<geos::geom::Curve> curved = input->getCurved(params);
 
     ensure_equals(curved->getGeometryTypeId(), geos::geom::GEOS_COMPOUNDCURVE);
 

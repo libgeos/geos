@@ -56,7 +56,7 @@ public:
         return std::unique_ptr<CircularString>(reverseImpl());
     }
 
-    std::unique_ptr<Curve> getCurved(double distanceTolerance) const;
+    std::unique_ptr<Curve> getCurved(const algorithm::LineToCurveParams&) const;
 
 protected:
 
@@ -79,11 +79,11 @@ protected:
         envelope = computeEnvelopeInternal(false);
     }
 
-    CircularString* getCurvedImpl(double) const override {
+    CircularString* getCurvedImpl(const algorithm::LineToCurveParams&) const override {
         return cloneImpl();
     }
 
-    LineString* getLinearizedImpl(double) const override;
+    LineString* getLinearizedImpl(const algorithm::CurveToLineParams&) const override;
 
     int
     getSortIndex() const override

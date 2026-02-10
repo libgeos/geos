@@ -31,6 +31,8 @@
 #include <vector>
 #include <memory>
 
+#include "geos/algorithm/CurveToLineParams.h"
+
 namespace geos {
 namespace geom { // geos::geom
 
@@ -108,11 +110,11 @@ GeometryCollection::getCoordinates() const
 }
 
 GeometryCollection*
-GeometryCollection::getCurvedImpl(double distanceTolerance) const
+GeometryCollection::getCurvedImpl(const algorithm::LineToCurveParams& params) const
 {
     std::vector<std::unique_ptr<Geometry>> curvedGeoms(geometries.size());
     for (std::size_t i = 0; i < geometries.size(); i++) {
-        curvedGeoms[i] = geometries[i]->getCurved(distanceTolerance);
+        curvedGeoms[i] = geometries[i]->getCurved(params);
     }
 
     return getFactory()->createGeometryCollection(std::move(curvedGeoms)).release();
@@ -120,11 +122,11 @@ GeometryCollection::getCurvedImpl(double distanceTolerance) const
 
 
 GeometryCollection*
-GeometryCollection::getLinearizedImpl(double stepDegrees) const
+GeometryCollection::getLinearizedImpl(const algorithm::CurveToLineParams& params) const
 {
     std::vector<std::unique_ptr<Geometry>> linGeoms(geometries.size());
     for (std::size_t i = 0; i < geometries.size(); i++) {
-        linGeoms[i] = geometries[i]->getLinearized(stepDegrees);
+        linGeoms[i] = geometries[i]->getLinearized(params);
     }
 
     return getFactory()->createGeometryCollection(std::move(linGeoms)).release();

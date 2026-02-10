@@ -1,8 +1,12 @@
 #include <tut/tut.hpp>
 
+#include <geos/algorithm/CurveToLineParams.h>
+#include <geos/algorithm/LineToCurveParams.h>
 #include <geos/io/WKTReader.h>
 
 #include "utility.h"
+
+using geos::algorithm::CurveToLineParams;
 
 namespace tut {
 
@@ -12,8 +16,13 @@ struct test_curvebuilder_data {
     void checkRoundTrip(const std::string& wkt_in, const std::string& wkt_expected, double stepSizeDegrees) const {
         auto inCurve = reader_.read(wkt_in);
 
-        auto linearized = inCurve->getLinearized(stepSizeDegrees);
-        auto outCurve = linearized->getCurved(1e-6);
+        auto ctlParams = CurveToLineParams::stepSizeDegrees(stepSizeDegrees);
+        auto linearized = inCurve->getLinearized(ctlParams);
+
+        auto ltcParams = geos::algorithm::LineToCurveParams();
+        ltcParams.setRadiusTolerance(1e-6);
+
+        auto outCurve = linearized->getCurved(ltcParams);
         auto expected = reader_.read(wkt_expected);
 
         double distanceTolerance = 1e-4;
@@ -27,16 +36,23 @@ struct test_curvebuilder_data {
 
     void checkLineToCurve(const std::string& wkt_in, const std::string& wkt_expected, double distanceTolerance) const {
         auto ls = reader_.read<LineString>(wkt_in);
-        auto curve = ls->getCurved(distanceTolerance);
+
+        auto ltcParams = geos::algorithm::LineToCurveParams();
+        ltcParams.setRadiusTolerance(distanceTolerance);
+
+        auto curve = ls->getCurved(ltcParams);
         auto expected = reader_.read(wkt_expected);
 
         ensure_equals_exact_geometry_xyzm(curve.get(), expected.get(), distanceTolerance);
     }
 
     void checkLineToCurveUnchanged(const std::string& wkt_in, double distanceTolerance) const {
+        auto ltcParams = geos::algorithm::LineToCurveParams();
+        ltcParams.setRadiusTolerance(distanceTolerance);
+
         auto ls = reader_.read<LineString>(wkt_in);
         auto expected = ls->clone();
-        auto curve = ls->getCurved(distanceTolerance);
+        auto curve = ls->getCurved(ltcParams);
 
         ensure_equals_exact_geometry_xyzm(curve.get(), expected.get(), 0.0);
     }
@@ -208,13 +224,16 @@ void object::test<15>()
 
     auto cs = reader_.read("CIRCULARSTRING (-5 0, 0 5, 5 0)");
 
-    auto lin = cs->getLinearized(90.0 / 4);
+    auto lin = cs->getLinearized(CurveToLineParams::stepSizeDegrees(90.0 / 4));
     auto linRev = lin->reverse();
 
-    auto curveRev = linRev->getCurved(1e-4);
+    geos::algorithm::LineToCurveParams ltc;
+    ltc.setRadiusTolerance(1e-4);
+
+    auto curveRev = linRev->getCurved(ltc);
     auto curve1 = curveRev->reverse();
 
-    auto curve2 = lin->getCurved(1e-4);
+    auto curve2 = lin->getCurved(ltc);
 
     ensure_equals_exact_geometry_xyzm(curve1.get(), curve2.get(), 0);
 }
@@ -240,6 +259,16 @@ void object::test<16>()
     // Midpoint Z/M not halfway between start/end
     // Linearized arc has an odd number of vertices
     checkRoundTripUnchanged("CIRCULARSTRING (0 0 1 7, 1 1 2 9, 2 0 4 13)", 20);
+}
+
+template<>
+template<>
+void object::test<17>() {
+    set_test_name("big coordinates");
+
+    checkRoundTripUnchanged("CIRCULARSTRING (426857.987717275 5427937.52346616,500000.000000001 5538630.70286887,573142.012282726 5427937.52346616)", 4);
+
+    checkRoundTripUnchanged("CIRCULARSTRING (426858 5427938,500000 5538632,573142 5427938)", 4);
 }
 
 

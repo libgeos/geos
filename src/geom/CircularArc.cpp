@@ -17,6 +17,8 @@
 #include <geos/triangulate/quadedge/TrianglePredicate.h>
 #include <sstream>
 
+#include "geos/algorithm/CurveToLineParams.h"
+
 namespace geos::geom {
 
 CircularArc::CircularArc() :
@@ -295,12 +297,14 @@ CircularArc::getLength() const {
 
 
 void
-CircularArc::addLinearizedPoints(CoordinateSequence& seq, double stepDegrees) const
+CircularArc::addLinearizedPoints(CoordinateSequence& seq, const algorithm::CurveToLineParams& params) const
 {
     if (isLinear()) {
         seq.add(*getCoordinateSequence(), getCoordinatePosition() + 1, getCoordinatePosition() + 2);
         return;
     }
+
+    const double stepDegrees = params.getStepSizeDegrees(*this);
 
     const double angle = getAngle();
     const bool isCCW = getOrientation() == geos::algorithm::Orientation::COUNTERCLOCKWISE;

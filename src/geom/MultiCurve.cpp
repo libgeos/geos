@@ -79,12 +79,12 @@ MultiCurve::getGeometryTypeId() const
 }
 
 MultiLineString*
-MultiCurve::getLinearizedImpl(double stepSizeDegrees) const
+MultiCurve::getLinearizedImpl(const algorithm::CurveToLineParams& params) const
 {
     std::vector<std::unique_ptr<Geometry>> lines(geometries.size());
 
     for (std::size_t i = 0; i < geometries.size(); i++) {
-        lines[i] = geometries[i]->getLinearized(stepSizeDegrees);
+        lines[i] = geometries[i]->getLinearized(params);
     }
 
     return getFactory()->createMultiLineString(std::move(lines)).release();

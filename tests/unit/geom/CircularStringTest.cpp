@@ -1,6 +1,9 @@
 #include <tut/tut.hpp>
 #include <tut/tut_macros.hpp>
 
+#include <geos/algorithm/CurveToLineParams.h>
+#include <geos/algorithm/LineToCurveParams.h>
+#include <geos/geom/CircularArc.h>
 #include <geos/geom/CircularString.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -9,8 +12,9 @@
 #include <geos/util/UnsupportedOperationException.h>
 
 #include "utility.h"
-#include "geos/geom/CircularArc.h"
 
+using geos::algorithm::CurveToLineParams;
+using geos::algorithm::LineToCurveParams;
 using geos::geom::CoordinateSequence;
 using geos::geom::CircularString;
 using XY = geos::geom::CoordinateXY;
@@ -47,34 +51,31 @@ struct test_circularstring_data {
     }
 
     void checkLinearizeMaxDeviation(const std::string& wkt_in, const std::string& wkt_expected, double maxDeviation, double tol=1e-12) {
-        cs_ = wktreader_.read<CircularString>(wkt_in);
-        auto seq = cs_->getCoordinatesRO();
-        geos::geom::CircularArc arc(*seq, 0);
-        double radius = arc.getRadius();
-
-        double stepSizeDegrees = getDegreesFromSagitta(radius, maxDeviation);
-        checkLinearize(wkt_in, wkt_expected, stepSizeDegrees, tol);
+        auto ctl = CurveToLineParams::maxDeviation(maxDeviation);
+        checkLinearize(wkt_in, wkt_expected, ctl, tol);
     }
 
     void checkLinearize(const std::string& wkt_in, const std::string& wkt_expected, double stepSizeDegrees, double tol=1e-12) {
+        auto ctl = CurveToLineParams::stepSizeDegrees(stepSizeDegrees);
+        checkLinearize(wkt_in, wkt_expected, ctl, tol);
+    }
+
+    void checkLinearize(const std::string& wkt_in, const std::string& wkt_expected, const geos::algorithm::CurveToLineParams& params, double tol=1e-12) {
         cs_ = wktreader_.read<CircularString>(wkt_in);
 
-        auto ls = cs_->getLinearized(stepSizeDegrees);
+        auto ls = cs_->getLinearized(params);
 
         auto expected = wktreader_.read(wkt_expected);
 
         ensure_equals_exact_geometry_xyzm(ls.get(), expected.get(), tol);
 
         auto csRev = cs_->reverse();
-        auto lsRev = csRev->getLinearized(stepSizeDegrees);
+        auto lsRev = csRev->getLinearized(params);
         auto lsRevRev = lsRev->reverse();
 
         ensure_equals_exact_geometry_xyzm(lsRevRev.get(), expected.get(), tol);
     }
 
-    static double getDegreesFromSagitta(double radius, double sagitta) {
-        return std::acos(1 - sagitta / radius) * 360 / geos::MATH_PI;
-    }
 };
 
 typedef test_group<test_circularstring_data> group;
@@ -387,7 +388,7 @@ template<>
 void object::test<15>() {
     set_test_name("liblwgeom: 10 segments per quadrant - circular");
     auto cs = wktreader_.read<CircularString>("CIRCULARSTRING (0 0, 1 0, 0 0)");
-    auto ls = cs->getLinearized(90.0 / 10);
+    auto ls = cs->getLinearized(CurveToLineParams::stepSizeDegrees(90.0 / 10));
     ensure_equals(ls->getNumPoints(), 41u); // PostGIS test has 40, but this is incorrect
     const auto* seq = ls->getCoordinatesRO();
     seq->forEachSegment([](const auto& p0, const auto& p1) {
@@ -450,8 +451,8 @@ void object::test<22>() {
     auto cs = wktreader_.read("CIRCULARSTRING(71.96 -65.64,22.2 -18.52,20 50)");
     auto csRev = cs->reverse();
 
-    auto ls1 = cs->getLinearized(90.0 / 4);
-    auto ls2 = cs->reverse()->getLinearized(90.0 / 4)->reverse();
+    auto ls1 = cs->getLinearized(CurveToLineParams::stepSizeDegrees(90.0 / 4));
+    auto ls2 = cs->reverse()->getLinearized(CurveToLineParams::stepSizeDegrees(90.0 / 4))->reverse();
 
     ensure("Linearization of reversed CIRCULARSTRING is not direction neutral", ls1->equalsExact(ls2.get(), 0.0));
 }
@@ -483,13 +484,15 @@ void object::test<25>()
 
     auto cs = wktreader_.read<CircularString>("CIRCULARSTRING(0 0, 1 1, 2 0)");
 
+    const auto params = CurveToLineParams::stepSizeDegrees(45);
+
     // check that we return LineString* rather than Curve* or Geometry*
-    std::unique_ptr<LineString> linearized = cs->getLinearized(45);
+    std::unique_ptr<LineString> linearized = cs->getLinearized(params);
 
     ensure_equals("CircularString::getLinearized", linearized.get()->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
-    ensure_equals("SimpleCurve::getLinearized", static_cast<geos::geom::SimpleCurve*>(cs.get())->getLinearized(45)->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
-    ensure_equals("Curve::getLinearized", static_cast<geos::geom::Curve*>(cs.get())->getLinearized(45)->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
-    ensure_equals("Geometry::getLinearized", static_cast<Geometry*>(cs.get())->getLinearized(45)->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
+    ensure_equals("SimpleCurve::getLinearized", static_cast<geos::geom::SimpleCurve*>(cs.get())->getLinearized(params)->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
+    ensure_equals("Curve::getLinearized", static_cast<geos::geom::Curve*>(cs.get())->getLinearized(params)->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
+    ensure_equals("Geometry::getLinearized", static_cast<Geometry*>(cs.get())->getLinearized(params)->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
 }
 
 template<>
@@ -501,20 +504,20 @@ void object::test<26>()
     auto cs = wktreader_.read<CircularString>("CIRCULARSTRING(0 0, 1 1, 2 0)");
 
     // Check that we return Curve* rather than Geometry*
-    std::unique_ptr<geos::geom::Curve> curved = cs->getCurved(1000);
+    std::unique_ptr<geos::geom::Curve> curved = cs->getCurved(LineToCurveParams::getDefault());
 
     ensure_equals_exact_geometry_xyzm(curved.get(), cs.get(), 0);
 }
 
 template<>
 template<>
-void object::test<24>()
+void object::test<27>()
 {
     set_test_name("getLinearized() Z/M");
     using XYZM = geos::geom::CoordinateXYZM;
 
     auto cs = wktreader_.read<CircularString>("CIRCULARSTRING ZM (0 5 4 5, 5 0 6 8, 0 -5 30 40)");
-    auto ls = cs->getLinearized(30);
+    auto ls = cs->getLinearized(CurveToLineParams::stepSizeDegrees(30));
 
     const CoordinateSequence* seq = ls->getCoordinatesRO();
 

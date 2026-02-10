@@ -3,6 +3,8 @@
 
 #include <tut/tut.hpp>
 // geos
+#include <geos/algorithm/CurveToLineParams.h>
+#include <geos/algorithm/LineToCurveParams.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -638,7 +640,7 @@ void object::test<49>()
 {
     set_test_name("getLinearized");
 
-    ensure_equals_exact_geometry_xyzm(point_.get(), point_->getLinearized(4).get(), 0);
+    ensure_equals_exact_geometry_xyzm(point_.get(), point_->getLinearized(geos::algorithm::CurveToLineParams::stepSizeDegrees(4)).get(), 0);
 }
 
 template<>
@@ -647,7 +649,7 @@ void object::test<50>()
 {
     set_test_name("getCurved");
 
-    ensure_equals_exact_geometry_xyzm(point_.get(), point_->getCurved(1e-3).get(), 0);
+    ensure_equals_exact_geometry_xyzm(point_.get(), point_->getCurved(geos::algorithm::LineToCurveParams::getDefault()).get(), 0);
 }
 
 } // namespace tut

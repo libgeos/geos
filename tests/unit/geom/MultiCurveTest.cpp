@@ -1,6 +1,8 @@
 #include <tut/tut.hpp>
 #include <tut/tut_macros.hpp>
 
+#include <geos/algorithm/CurveToLineParams.h>
+#include <geos/algorithm/LineToCurveParams.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CompoundCurve.h>
 #include <geos/geom/CircularString.h>
@@ -209,7 +211,7 @@ void object::test<5>()
     set_test_name("getLinearized()");
 
     // check that we return MultiLineString*, not Geometry*
-    std::unique_ptr<geos::geom::MultiLineString> mls = mc_->getLinearized(2);
+    std::unique_ptr<geos::geom::MultiLineString> mls = mc_->getLinearized(geos::algorithm::CurveToLineParams::stepSizeDegrees(2));
 
     ensure_equals(mls->getGeometryTypeId(), geos::geom::GEOS_MULTILINESTRING);
     ensure_equals("getLength()", mls->getLength(), mc_->getLength(), 1e-3);
@@ -221,7 +223,7 @@ void object::test<6>()
 {
     set_test_name("getCurved()");
 
-    std::unique_ptr<geos::geom::GeometryCollection> curved = mc_->getCurved(100);
+    std::unique_ptr<geos::geom::GeometryCollection> curved = mc_->getCurved(geos::algorithm::LineToCurveParams::getDefault());
     ensure_equals_exact_geometry_xyzm(mc_.get(), curved.get(), 0);
 }
 

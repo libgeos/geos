@@ -242,7 +242,7 @@ CompoundCurve::getLength() const
 }
 
 LineString*
-CompoundCurve::getLinearizedImpl(double degreeSpacing) const
+CompoundCurve::getLinearizedImpl(const algorithm::CurveToLineParams& params) const
 {
     auto seq = std::make_shared<CoordinateSequence>(0, hasZ(), hasM());
     for (const auto& curve : curves) {
@@ -256,7 +256,7 @@ CompoundCurve::getLinearizedImpl(double degreeSpacing) const
             for (std::size_t i = 0; i < curveSeq->size() - 2; i += 2)
             {
                 CircularArc arc(*curveSeq, i);
-                arc.addLinearizedPoints(*seq, degreeSpacing);
+                arc.addLinearizedPoints(*seq, params);
             }
         } else {
             seq->add(*curveSeq, 1, curveSeq->size() - 1);

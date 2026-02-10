@@ -81,7 +81,7 @@ public:
 
     GeometryTypeId getGeometryTypeId() const override;
 
-    std::unique_ptr<MultiLineString> getLinearized(double) const {
+    std::unique_ptr<MultiLineString> getLinearized(const algorithm::CurveToLineParams&) const {
         return clone();
     }
 
@@ -136,9 +136,9 @@ protected:
 
     MultiLineString* reverseImpl() const override;
 
-    GeometryCollection* getCurvedImpl(double disanceTolerance) const override;
+    GeometryCollection* getCurvedImpl(const algorithm::LineToCurveParams&) const override;
 
-    MultiLineString* getLinearizedImpl(double stepDegrees) const override;
+    MultiLineString* getLinearizedImpl(const algorithm::CurveToLineParams&) const override;
 
     int
     getSortIndex() const override

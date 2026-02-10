@@ -92,7 +92,7 @@ public:
 
     double getLength() const override;
 
-    std::unique_ptr<Curve> getCurved(double distanceTolerance) const;
+    std::unique_ptr<Curve> getCurved(const algorithm::LineToCurveParams&) const;
 
     bool isCurved() const override {
         return false;
@@ -127,9 +127,9 @@ protected:
     LineString(const std::shared_ptr<const CoordinateSequence> & pts,
                const GeometryFactory& newFactory);
 
-    LineString* getLinearizedImpl(double) const override { return cloneImpl(); }
+    LineString* getLinearizedImpl(const algorithm::CurveToLineParams&) const override { return cloneImpl(); }
 
-    Curve* getCurvedImpl(double distanceTolerance) const override;
+    Curve* getCurvedImpl(const algorithm::LineToCurveParams&) const override;
 
     LineString* cloneImpl() const override { return new LineString(*this); }
 

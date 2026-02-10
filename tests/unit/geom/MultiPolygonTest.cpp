@@ -3,6 +3,8 @@
 
 #include <tut/tut.hpp>
 // geos
+#include <geos/algorithm/CurveToLineParams.h>
+#include <geos/algorithm/LineToCurveParams.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/MultiPolygon.h>
 #include <geos/io/WKTReader.h>
@@ -81,7 +83,7 @@ void object::test<5>()
 {
     set_test_name("correct type returned by getLinearized");
 
-    ensure(mp_->getLinearized(0)->getGeometryTypeId() == geos::geom::GeometryTypeId::GEOS_MULTIPOLYGON);
+    ensure(mp_->getLinearized(geos::algorithm::CurveToLineParams::stepSizeDegrees(45))->getGeometryTypeId() == geos::geom::GeometryTypeId::GEOS_MULTIPOLYGON);
 }
 
 template<>
@@ -94,10 +96,14 @@ void object::test<6>()
         "MULTIPOLYGON (((0 0, 10 0, 10 10, 0 10, 0 0), (2 2, 2.292893 2.707107, 3 3, 3.707107 2.707107, 4 2, 2 2)),"
                                      "((20 0, 30 0, 30 10, 20 0)))");
 
-    // Tolerance to small to allow conversion to MultiSurface
-    ensure_equals(input->getCurved(1e-12)->getGeometryTypeId(), geos::geom::GeometryTypeId::GEOS_MULTIPOLYGON);
+    auto params = geos::algorithm::LineToCurveParams::getDefault();
 
-    auto curved = input->getCurved(0.001);
+    // Tolerance to small to allow conversion to MultiSurface
+    params.setRadiusTolerance(1e-12);
+    ensure_equals(input->getCurved(params)->getGeometryTypeId(), geos::geom::GeometryTypeId::GEOS_MULTIPOLYGON);
+
+    params.setRadiusTolerance(1e-3);
+    auto curved = input->getCurved(params);
 
     ensure_equals(curved->getGeometryTypeId(), geos::geom::GeometryTypeId::GEOS_MULTISURFACE);
 
