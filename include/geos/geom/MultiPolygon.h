@@ -131,9 +131,9 @@ protected:
 
     MultiPolygon* cloneImpl() const override { return new MultiPolygon(*this); }
 
-    GeometryCollection* getCurvedImpl(double distanceTolerance) const override;
+    GeometryCollection* getCurvedImpl(const algorithm::LineToCurveParams&) const override;
 
-    MultiPolygon* getLinearizedImpl(double) const override { return cloneImpl(); }
+    MultiPolygon* getLinearizedImpl(const algorithm::CurveToLineParams&) const override { return cloneImpl(); }
 
     MultiPolygon* reverseImpl() const override;
 

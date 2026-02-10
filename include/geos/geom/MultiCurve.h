@@ -50,8 +50,8 @@ public:
 
     GeometryTypeId getGeometryTypeId() const override;
 
-    std::unique_ptr<MultiLineString> getLinearized(double distanceTolerance) const {
-        return std::unique_ptr<MultiLineString>(getLinearizedImpl(distanceTolerance));
+    std::unique_ptr<MultiLineString> getLinearized(const algorithm::CurveToLineParams& params) const {
+        return std::unique_ptr<MultiLineString>(getLinearizedImpl(params));
     }
 
     bool hasDimension(Dimension::DimensionType d) const override
@@ -118,9 +118,9 @@ protected:
 
     MultiCurve* reverseImpl() const override;
 
-    MultiCurve* getCurvedImpl(double) const override { return cloneImpl(); }
+    MultiCurve* getCurvedImpl(const algorithm::LineToCurveParams&) const override { return cloneImpl(); }
 
-    MultiLineString* getLinearizedImpl(double) const override;
+    MultiLineString* getLinearizedImpl(const algorithm::CurveToLineParams&) const override;
 
     int
     getSortIndex() const override

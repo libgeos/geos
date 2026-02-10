@@ -22,6 +22,8 @@
 #include <geos/geom/SimpleCurve.h>
 #include <geos/util/UnsupportedOperationException.h>
 
+#include "geos/algorithm/CurveToLineParams.h"
+
 namespace geos {
 namespace geom {
 
@@ -102,15 +104,15 @@ namespace geom {
     }
 
     std::unique_ptr<Polygon>
-    CurvePolygon::getLinearized(double spacingDegrees) const {
-        return std::unique_ptr<Polygon>(getLinearizedImpl(spacingDegrees));
+    CurvePolygon::getLinearized(const algorithm::CurveToLineParams& params) const {
+        return std::unique_ptr<Polygon>(getLinearizedImpl(params));
     }
 
     Polygon*
-    CurvePolygon::getLinearizedImpl(double spacingDegrees) const {
+    CurvePolygon::getLinearizedImpl(const algorithm::CurveToLineParams& params) const {
         const auto& gfact = *getFactory();
 
-        auto linShell = gfact.createLinearRing(shell->getLinearized(spacingDegrees)->getSharedCoordinates());
+        auto linShell = gfact.createLinearRing(shell->getLinearized(params)->getSharedCoordinates());
 
         if (holes.empty()) {
             return getFactory()->createPolygon(std::move(linShell)).release();
@@ -118,7 +120,7 @@ namespace geom {
 
         std::vector<std::unique_ptr<LinearRing>> linHoles(holes.size());
         for (size_t i = 0; i < holes.size(); i++) {
-            linHoles[i] = gfact.createLinearRing(holes[i]->getLinearized(spacingDegrees)->getSharedCoordinates());
+            linHoles[i] = gfact.createLinearRing(holes[i]->getLinearized(params)->getSharedCoordinates());
         }
         return getFactory()->createPolygon(std::move(linShell), std::move(linHoles)).release();
     }

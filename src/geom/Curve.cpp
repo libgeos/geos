@@ -62,15 +62,15 @@ Curve::reverse() const {
 }
 
 std::unique_ptr<LineString>
-Curve::getLinearized(double degreeSpacing) const
+Curve::getLinearized(const algorithm::CurveToLineParams& params) const
 {
-    return std::unique_ptr<LineString>(detail::down_cast<LineString*>(getLinearizedImpl(degreeSpacing)));
+    return std::unique_ptr<LineString>(detail::down_cast<LineString*>(getLinearizedImpl(params)));
 }
 
 std::unique_ptr<Curve>
-Curve::getCurved(double distanceTolerance) const
+Curve::getCurved(const algorithm::LineToCurveParams& params) const
 {
-    return std::unique_ptr<Curve>(getCurvedImpl(distanceTolerance));
+    return std::unique_ptr<Curve>(getCurvedImpl(params));
 }
 
 

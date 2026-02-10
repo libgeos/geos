@@ -36,11 +36,11 @@ public:
 
     GeometryTypeId getGeometryTypeId() const override;
 
-    std::unique_ptr<CurvePolygon> getCurved(double) {
+    std::unique_ptr<CurvePolygon> getCurved(const algorithm::LineToCurveParams&) {
         return std::unique_ptr<CurvePolygon>(cloneImpl());
     }
 
-    std::unique_ptr<Polygon> getLinearized(double degreeSpacing) const;
+    std::unique_ptr<Polygon> getLinearized(const algorithm::CurveToLineParams&) const;
 
     bool hasCurvedComponents() const override;
 
@@ -51,9 +51,9 @@ protected:
 
     CurvePolygon* cloneImpl() const override;
 
-    Polygon* getLinearizedImpl(double degreeSpacing) const override;
+    Polygon* getLinearizedImpl(const algorithm::CurveToLineParams&) const override;
 
-    CurvePolygon* getCurvedImpl(double) const override { return cloneImpl(); }
+    CurvePolygon* getCurvedImpl(const algorithm::LineToCurveParams&) const override { return cloneImpl(); }
 
     int
     getSortIndex() const override

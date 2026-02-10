@@ -27,6 +27,8 @@
 
 #include <vector>
 
+#include "geos/algorithm/LineToCurveParams.h"
+
 using geos::geom::GeometryFactory;
 using geos::geom::MultiLineString;
 using geos::geomgraph::GeometryGraph;
@@ -95,14 +97,14 @@ MultiLineString::getGeometryTypeId() const
 }
 
 GeometryCollection*
-MultiLineString::getCurvedImpl(double disanceTolerance) const
+MultiLineString::getCurvedImpl(const algorithm::LineToCurveParams& params) const
 {
     std::vector<std::unique_ptr<Geometry>> curvedGeoms(geometries.size());
 
     bool hasCurves = false;
 
     for (std::size_t i = 0; i < geometries.size(); i++) {
-        curvedGeoms[i] = detail::down_cast<Curve*>(geometries[i].get())->getCurved(disanceTolerance);
+        curvedGeoms[i] = detail::down_cast<Curve*>(geometries[i].get())->getCurved(params);
         hasCurves |= curvedGeoms[i]->hasCurvedComponents();
     }
 
@@ -114,7 +116,7 @@ MultiLineString::getCurvedImpl(double disanceTolerance) const
 }
 
 MultiLineString*
-MultiLineString::getLinearizedImpl(double) const
+MultiLineString::getLinearizedImpl(const algorithm::CurveToLineParams&) const
 {
     return cloneImpl();
 }

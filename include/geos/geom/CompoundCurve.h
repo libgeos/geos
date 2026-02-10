@@ -114,9 +114,9 @@ protected:
         envelope = computeEnvelopeInternal();
     }
 
-    LineString* getLinearizedImpl(double) const override;
+    LineString* getLinearizedImpl(const algorithm::CurveToLineParams&) const override;
 
-    CompoundCurve* getCurvedImpl(double) const override { return cloneImpl(); }
+    CompoundCurve* getCurvedImpl(const algorithm::LineToCurveParams&) const override { return cloneImpl(); }
 
     int getSortIndex() const override
     {

@@ -187,9 +187,9 @@ protected:
 
     Point(const Point& p);
 
-    Point* getCurvedImpl(double) const override { return cloneImpl(); };
+    Point* getCurvedImpl(const algorithm::LineToCurveParams&) const override { return cloneImpl(); };
 
-    Point* getLinearizedImpl(double) const override { return cloneImpl(); };
+    Point* getLinearizedImpl(const algorithm::CurveToLineParams&) const override { return cloneImpl(); };
 
     Point* cloneImpl() const override { return new Point(*this); }
 

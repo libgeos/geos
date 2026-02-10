@@ -21,6 +21,11 @@
 #include <geos/algorithm/CircularArcs.h>
 #include <geos/algorithm/Orientation.h>
 
+// Forward declarations
+namespace geos::algorithm {
+class CurveToLineParams;
+}
+
 namespace geos {
 namespace geom {
 
@@ -112,7 +117,7 @@ public:
 
     /// Add linearized points representing this arc to the provided CoordinateSequence.
     /// The origin point of the arc will NOT be added.
-    void addLinearizedPoints(CoordinateSequence& seq, double stepDegrees) const;
+    void addLinearizedPoints(CoordinateSequence& seq, const algorithm::CurveToLineParams& params) const;
 
     /// Return the orientation of the arc as one of:
     /// - algorithm::Orientation::CLOCKWISE,

@@ -2,6 +2,7 @@
 #include <tut/tut.hpp>
 #include <tut/tut_macros.hpp>
 
+#include <geos/algorithm/CurveToLineParams.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateFilter.h>
 #include <geos/geom/GeometryFactory.h>
@@ -13,7 +14,10 @@
 #include <geos/operation/valid/RepeatedPointTester.h>
 #include <geos/util.h>
 
+#include "geos/algorithm/LineToCurveParams.h"
 
+
+using geos::algorithm::CurveToLineParams;
 using geos::geom::CompoundCurve;
 using geos::geom::Curve;
 using geos::geom::CoordinateXY;
@@ -418,11 +422,11 @@ void object::test<12>()
     set_test_name("getLinearized()");
 
     auto cc = wktreader_.read("COMPOUNDCURVE (CIRCULARSTRING(-5 0, 0 5, 4 3, 5 0, 0 -5), (0 -5, -5 0))");
-    auto ls = cc->getLinearized(90.0 / 4);
+    auto ls = cc->getLinearized(CurveToLineParams::stepSizeDegrees(90.0 / 4));
 
     ensure_equals(ls->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
-    ensure_equals(static_cast<geos::geom::Curve*>(cc.get())->getLinearized(90.0 / 4)->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
-    ensure_equals(static_cast<CompoundCurve*>(ls.get())->getLinearized(90.0 / 4)->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
+    ensure_equals(static_cast<geos::geom::Curve*>(cc.get())->getLinearized(CurveToLineParams::stepSizeDegrees(90.0 / 4))->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
+    ensure_equals(static_cast<CompoundCurve*>(ls.get())->getLinearized(CurveToLineParams::stepSizeDegrees(90.0 / 4))->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
 
     geos::operation::valid::RepeatedPointTester rpt;
     ensure(!rpt.hasRepeatedPoint(ls.get()));
@@ -431,7 +435,7 @@ void object::test<12>()
     ensure_equals_exact_geometry(static_cast<Geometry*>(ls.get()), expected.get(), 1e-4);
 
     auto ccRev = cc->reverse();
-    auto lsRev = ccRev->getLinearized(90.0 / 4);
+    auto lsRev = ccRev->getLinearized(CurveToLineParams::stepSizeDegrees(90.0 / 4));
     ensure_equals_exact_geometry(static_cast<Geometry*>(lsRev->reverse().get()), expected.get(), 1e-4);
 }
 
@@ -442,7 +446,7 @@ void object::test<13>()
     set_test_name("getCurved()");
 
     // check that we return Curve* rather than Geometry*
-    std::unique_ptr<Curve> curved = cc_->getCurved(100.0);
+    std::unique_ptr<Curve> curved = cc_->getCurved(geos::algorithm::LineToCurveParams::getDefault());
 
     ensure_equals_exact_geometry_xyzm(curved.get(), cc_.get(), 0);
 }

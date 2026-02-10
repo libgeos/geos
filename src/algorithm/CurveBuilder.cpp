@@ -21,6 +21,8 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LineString.h>
 
+#include "geos/algorithm/LineToCurveParams.h"
+
 namespace geos::algorithm {
 
 using geom::CircularArc;
@@ -34,13 +36,13 @@ CurveBuilder::CurveBuilder(const GeometryFactory &p_factory)
     : factory(p_factory) {}
 
 std::unique_ptr<geom::Curve>
-CurveBuilder::getCurved(const LineString &ls, double distanceTolerance) {
+CurveBuilder::getCurved(const LineString &ls, const LineToCurveParams& params) {
     CurveBuilder cb(*ls.getFactory());
-    return cb.compute(ls, distanceTolerance);
+    return cb.compute(ls, params);
 }
 
 std::unique_ptr<geom::Curve>
-CurveBuilder::compute(const LineString& ls, double distanceTolerance) {
+CurveBuilder::compute(const LineString& ls, const LineToCurveParams& params) {
     const auto& points = *ls.getSharedCoordinates();
 
     std::size_t start = 0;
@@ -71,7 +73,7 @@ CurveBuilder::compute(const LineString& ls, double distanceTolerance) {
             const double distance = pt.distance(arc.getCenter());
 
             // Does the radius match?
-            if (std::abs(distance - arc.getRadius()) > distanceTolerance) {
+            if (std::abs(distance - arc.getRadius()) > params.getRadiusTolerance()) {
                 break;
             }
 
@@ -82,9 +84,7 @@ CurveBuilder::compute(const LineString& ls, double distanceTolerance) {
             const double prevAngle = Angle::angleBetween(arc.p0(), arc.p1(), arc.p2());
             const double currAngle = Angle::angleBetween(prev2, prev1, pt);
 
-            double angleTolerance = prevAngle*1e-3;
-
-            if (std::abs(currAngle - prevAngle) > angleTolerance) {
+            if (std::abs(currAngle - prevAngle) > prevAngle * params.getAngleStepTolerance()) {
                 break;
             }
 
