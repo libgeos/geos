@@ -18,6 +18,8 @@
 #include <geos/geom/MultiCurve.h>
 #include <geos/geom/MultiSurface.h>
 
+#include "geos/algorithm/CurveToLineParams.h"
+
 namespace geos {
 namespace geom {
 
@@ -87,12 +89,12 @@ MultiSurface::getGeometryTypeId() const
 }
 
 MultiPolygon*
-MultiSurface::getLinearizedImpl(double stepSizeDegrees) const
+MultiSurface::getLinearizedImpl(const algorithm::CurveToLineParams& params) const
 {
     std::vector<std::unique_ptr<Geometry>> polygons(geometries.size());
 
     for (std::size_t i = 0; i < geometries.size(); i++) {
-        polygons[i] = geometries[i]->getLinearized(stepSizeDegrees);
+        polygons[i] = geometries[i]->getLinearized(params);
     }
 
     return getFactory()->createMultiPolygon(std::move(polygons)).release();

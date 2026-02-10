@@ -107,15 +107,15 @@ LineString::validateConstruction()
 }
 
 Curve*
-LineString::getCurvedImpl(double distanceTolerance) const
+LineString::getCurvedImpl(const algorithm::LineToCurveParams& params) const
 {
-    return getCurved(distanceTolerance).release();
+    return getCurved(params).release();
 }
 
 std::unique_ptr<Curve>
-LineString::getCurved(double distanceTolerance) const
+LineString::getCurved(const algorithm::LineToCurveParams& params) const
 {
-    return CurveBuilder::getCurved(*this, distanceTolerance);
+    return CurveBuilder::getCurved(*this, params);
 }
 
 std::string

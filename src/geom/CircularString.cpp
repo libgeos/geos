@@ -154,14 +154,14 @@ CircularString::normalizeClosed() {
 }
 
 std::unique_ptr<Curve>
-CircularString::getCurved(double) const
+CircularString::getCurved(const algorithm::LineToCurveParams&) const
 {
     return getFactory()->createCircularString(points);
 }
 
 
 LineString*
-CircularString::getLinearizedImpl(double degreeSpacing) const {
+CircularString::getLinearizedImpl(const algorithm::CurveToLineParams& params) const {
     if (isEmpty()) {
         return getFactory()->createLineString().release();
     }
@@ -171,7 +171,7 @@ CircularString::getLinearizedImpl(double degreeSpacing) const {
 
     for (const CircularArc& arc : getArcs())
     {
-        arc.addLinearizedPoints(*seq, degreeSpacing);
+        arc.addLinearizedPoints(*seq, params);
     }
 
     return getFactory()->createLineString(seq).release();

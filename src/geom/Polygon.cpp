@@ -37,6 +37,8 @@
 #include <algorithm>
 #include <memory>
 
+#include "geos/algorithm/CurveToLineParams.h"
+
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
 #endif
@@ -68,9 +70,9 @@ Polygon::getCoordinates() const
 }
 
 Surface*
-Polygon::getCurvedImpl(double distanceTolerance) const
+Polygon::getCurvedImpl(const algorithm::LineToCurveParams& params) const
 {
-    auto curvedShell = shell->getCurved(distanceTolerance);
+    auto curvedShell = shell->getCurved(params);
     bool isCurved = curvedShell->hasCurvedComponents();
 
     if (holes.empty()) {
@@ -83,7 +85,7 @@ Polygon::getCurvedImpl(double distanceTolerance) const
 
     std::vector<std::unique_ptr<Curve>> holesCurved(holes.size());
     for (std::size_t i = 0; i < holes.size(); i++) {
-        holesCurved[i] = holes[i]->getCurved(distanceTolerance);
+        holesCurved[i] = holes[i]->getCurved(params);
         isCurved |= holesCurved[i]->hasCurvedComponents();
     }
 
@@ -95,9 +97,9 @@ Polygon::getCurvedImpl(double distanceTolerance) const
 }
 
 std::unique_ptr<Polygon>
-Polygon::getLinearized(double degreeSpacing) const
+Polygon::getLinearized(const algorithm::CurveToLineParams& params) const
 {
-    return std::unique_ptr<Polygon>(getLinearizedImpl(degreeSpacing));
+    return std::unique_ptr<Polygon>(getLinearizedImpl(params));
 }
 
 std::string

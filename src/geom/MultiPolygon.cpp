@@ -89,13 +89,13 @@ MultiPolygon::getBoundary() const
 }
 
 GeometryCollection*
-MultiPolygon::getCurvedImpl(double distanceTolerance) const {
+MultiPolygon::getCurvedImpl(const algorithm::LineToCurveParams& params) const {
     std::vector<std::unique_ptr<Geometry>> curvedGeoms(geometries.size());
 
     bool hasCurves = false;
 
     for (std::size_t i = 0; i < geometries.size(); i++) {
-        curvedGeoms[i] = geometries[i]->getCurved(distanceTolerance);
+        curvedGeoms[i] = geometries[i]->getCurved(params);
         if (curvedGeoms[i]->hasCurvedComponents()) {
             hasCurves = true;
         }

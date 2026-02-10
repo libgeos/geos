@@ -3,6 +3,8 @@
 
 #include <tut/tut.hpp>
 // geos
+#include <geos/algorithm/CurveToLineParams.h>
+#include <geos/algorithm/LineToCurveParams.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/MultiLineString.h>
 #include <geos/io/WKTReader.h>
@@ -86,7 +88,7 @@ void object::test<5>()
     set_test_name("getLinearized()");
 
     // check that return MultiLineString*, not Geometry*
-    std::unique_ptr<MultiLineString> linearized = mls_->getLinearized(1.0);
+    std::unique_ptr<MultiLineString> linearized = mls_->getLinearized(geos::algorithm::CurveToLineParams::stepSizeDegrees(1));
 
     ensure_equals_exact_geometry_xyzm(linearized.get(), mls_.get(), 0);
 }
@@ -99,11 +101,16 @@ void object::test<6>()
 
     auto input = reader_.read<MultiLineString>("MULTILINESTRING ((3 3, 4 4), (-2 0, -1.414 1.414, 0 2, 1.414 1.414, 2 0, 2 3))");
 
-    ensure_equals(input->getCurved(1e-9)->getGeometryTypeId(), geos::geom::GEOS_MULTILINESTRING);
+    auto params = geos::algorithm::LineToCurveParams::getDefault();
 
+    // tolerance is too fine to generate a MultiCurve
+    params.setRadiusTolerance(1e-9);
     // check that we return GeometryCollection*, not Geometry*
-    std::unique_ptr<geos::geom::GeometryCollection> curved = input->getCurved(2e-3);
+    std::unique_ptr<geos::geom::GeometryCollection> curved = input->getCurved(params);
+    ensure_equals(curved->getGeometryTypeId(), geos::geom::GEOS_MULTILINESTRING);
 
+    params.setRadiusTolerance(2e-3);
+    curved = input->getCurved(params);
     ensure_equals(curved->getGeometryTypeId(), geos::geom::GEOS_MULTICURVE);
 
     auto expected = reader_.read("MULTICURVE ((3 3, 4 4), COMPOUNDCURVE(CIRCULARSTRING (-2 0, 0 2, 2 0), (2 0, 2 3)))");

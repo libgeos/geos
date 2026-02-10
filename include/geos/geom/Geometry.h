@@ -50,6 +50,10 @@
 
 // Forward declarations
 namespace geos {
+namespace algorithm {
+class CurveToLineParams;
+class LineToCurveParams;
+}
 namespace geom {
 class Coordinate;
 class CoordinateFilter;
@@ -337,22 +341,16 @@ public:
 
     /// Compute an approximation of the Geometry that contains no arcs.
     /// If the Geometry already contains no arcs, a copy will be returned.
-    ///
-    /// \param degreeSpacing The spacing to use between successive points
-    ///        when approximating an arc.
-    std::unique_ptr<Geometry> getLinearized(double degreeSpacing) const
+    std::unique_ptr<Geometry> getLinearized(const algorithm::CurveToLineParams& params) const
     {
-        return std::unique_ptr<Geometry>(getLinearizedImpl(degreeSpacing));
+        return std::unique_ptr<Geometry>(getLinearizedImpl(params));
     }
 
     /// Attempt to replace linear sections of a geometry with arcs, where possible.
     /// Any arcs that already exist in the Geometry will be retained unmodified.
-    ///
-    /// \param distanceTolerance The distance tolerance to use when comparing the center
-    ///        point of arcs computed between different sets of three vertices.
-    std::unique_ptr<Geometry> getCurved(double distanceTolerance) const
+    std::unique_ptr<Geometry> getCurved(const algorithm::LineToCurveParams& params) const
     {
-        return std::unique_ptr<Geometry>(getCurvedImpl(distanceTolerance));
+        return std::unique_ptr<Geometry>(getCurvedImpl(params));
     }
 
     /**
@@ -922,9 +920,9 @@ protected:
     /// Make a geometry with coordinates in reverse order
     virtual Geometry* reverseImpl() const = 0;
 
-    virtual Geometry* getLinearizedImpl(double degreeSpacing) const = 0;
+    virtual Geometry* getLinearizedImpl(const algorithm::CurveToLineParams&) const = 0;
 
-    virtual Geometry* getCurvedImpl(double degreeSpacing) const = 0;
+    virtual Geometry* getCurvedImpl(const algorithm::LineToCurveParams&) const = 0;
 
     /// Returns true if the array contains any non-empty Geometrys.
     template<typename T>

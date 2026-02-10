@@ -1,6 +1,8 @@
 #include <tut/tut.hpp>
 #include <tut/tut_macros.hpp>
 
+#include <geos/algorithm/CurveToLineParams.h>
+#include <geos/algorithm/LineToCurveParams.h>
 #include <geos/geom/CircularString.h>
 #include <geos/geom/CurvePolygon.h>
 #include <geos/geom/GeometryFactory.h>
@@ -181,7 +183,7 @@ void object::test<4>()
     set_test_name("getLinearized()");
 
     // check that we return MultiPolygon*
-    std::unique_ptr<geos::geom::MultiPolygon> mp_ = ms_->getLinearized(2);
+    std::unique_ptr<geos::geom::MultiPolygon> mp_ = ms_->getLinearized(geos::algorithm::CurveToLineParams::stepSizeDegrees(4));
 
     ensure_equals(mp_->getGeometryTypeId(), geos::geom::GEOS_MULTIPOLYGON);
 }
@@ -192,7 +194,7 @@ void object::test<5>()
 {
     set_test_name("getCurved()");
 
-    std::unique_ptr<geos::geom::GeometryCollection> curved = ms_->getCurved(100);
+    std::unique_ptr<geos::geom::GeometryCollection> curved = ms_->getCurved(geos::algorithm::LineToCurveParams::getDefault());
 
     ensure_equals_exact_geometry_xyzm(ms_.get(), curved.get(), 0);
 }
