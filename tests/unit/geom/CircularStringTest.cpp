@@ -504,7 +504,7 @@ void object::test<26>()
     auto cs = wktreader_.read<CircularString>("CIRCULARSTRING(0 0, 1 1, 2 0)");
 
     // Check that we return Curve* rather than Geometry*
-    std::unique_ptr<geos::geom::Curve> curved = cs->getCurved(LineToCurveParams::getDefault());
+    std::unique_ptr<geos::geom::Curve> curved = cs->getCurved(LineToCurveParams());
 
     ensure_equals_exact_geometry_xyzm(curved.get(), cs.get(), 0);
 }

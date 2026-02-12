@@ -649,7 +649,7 @@ void object::test<50>()
 {
     set_test_name("getCurved");
 
-    ensure_equals_exact_geometry_xyzm(point_.get(), point_->getCurved(geos::algorithm::LineToCurveParams::getDefault()).get(), 0);
+    ensure_equals_exact_geometry_xyzm(point_.get(), point_->getCurved(geos::algorithm::LineToCurveParams()).get(), 0);
 }
 
 } // namespace tut

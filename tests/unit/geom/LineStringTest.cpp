@@ -668,7 +668,7 @@ void object::test<37>()
     auto input = reader.read<LineString>("LINESTRING (2 2, 2.292893 2.707107, 3 3, 3.707107 2.707107, 4 2, 2 2)");
 
     // check that we return Curve* instead of Geometry*
-    auto params = geos::algorithm::LineToCurveParams::getDefault();
+    auto params = geos::algorithm::LineToCurveParams();
     params.setRadiusTolerance(1e-3);
 
     std::unique_ptr<geos::geom::Curve> curved = input->getCurved(params);
