@@ -58,9 +58,6 @@ private:
     std::vector<std::unique_ptr<geom::SimpleCurve>> curves;
     const geom::GeometryFactory& factory;
 
-    /// Maximum angle between two vertices to be considered part of the same arc.
-    static constexpr double maxSpacingRadians = MATH_PI / 4 + 0.01;
-
     /// Declared as non-copyable
     CurveBuilder(const CurveBuilder& other);
     CurveBuilder& operator=(const CurveBuilder& rhs);

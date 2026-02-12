@@ -96,7 +96,7 @@ void object::test<6>()
         "MULTIPOLYGON (((0 0, 10 0, 10 10, 0 10, 0 0), (2 2, 2.292893 2.707107, 3 3, 3.707107 2.707107, 4 2, 2 2)),"
                                      "((20 0, 30 0, 30 10, 20 0)))");
 
-    auto params = geos::algorithm::LineToCurveParams::getDefault();
+    auto params = geos::algorithm::LineToCurveParams();
 
     // Tolerance to small to allow conversion to MultiSurface
     params.setRadiusTolerance(1e-12);

@@ -194,7 +194,7 @@ void object::test<5>()
 {
     set_test_name("getCurved()");
 
-    std::unique_ptr<geos::geom::GeometryCollection> curved = ms_->getCurved(geos::algorithm::LineToCurveParams::getDefault());
+    std::unique_ptr<geos::geom::GeometryCollection> curved = ms_->getCurved(geos::algorithm::LineToCurveParams());
 
     ensure_equals_exact_geometry_xyzm(ms_.get(), curved.get(), 0);
 }

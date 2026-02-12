@@ -101,7 +101,7 @@ void object::test<6>()
 
     auto input = reader_.read<MultiLineString>("MULTILINESTRING ((3 3, 4 4), (-2 0, -1.414 1.414, 0 2, 1.414 1.414, 2 0, 2 3))");
 
-    auto params = geos::algorithm::LineToCurveParams::getDefault();
+    auto params = geos::algorithm::LineToCurveParams();
 
     // tolerance is too fine to generate a MultiCurve
     params.setRadiusTolerance(1e-9);
