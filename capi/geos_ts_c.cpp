@@ -18,6 +18,8 @@
  ***********************************************************************/
 
 #include <geos/algorithm/BoundaryNodeRule.h>
+#include <geos/algorithm/CurveToLineParams.h>
+#include <geos/algorithm/LineToCurveParams.h>
 #include <geos/algorithm/MinimumBoundingCircle.h>
 #include <geos/algorithm/MinimumDiameter.h>
 #include <geos/algorithm/MinimumAreaRectangle.h>
@@ -145,7 +147,9 @@
 #define GEOSPreparedGeometry geos::geom::prep::PreparedGeometry
 #define GEOSClusterInfo geos::operation::cluster::Clusters
 #define GEOSCoordSequence geos::geom::CoordinateSequence
+#define GEOSCurveToLineParams geos::algorithm::CurveToLineParams
 #define GEOSBufferParams geos::operation::buffer::BufferParameters
+#define GEOSLineToCurveParams geos::algorithm::LineToCurveParams
 #define GEOSSTRtree geos::index::strtree::TemplateSTRtree<void*>
 #define GEOSWKTReader geos::io::WKTReader
 #define GEOSWKTWriter geos::io::WKTWriter
@@ -3499,6 +3503,61 @@ extern "C" {
             const PrecisionModel* pm = g->getPrecisionModel();
             double cursize = pm->isFloating() ? 0 : 1.0 / pm->getScale();
             return cursize;
+        });
+    }
+
+    GEOSGeometry*
+    GEOSCurveToLine_r(GEOSContextHandle_t extHandle, const Geometry *g,
+                      const GEOSCurveToLineParams* params)
+    {
+        return execute(extHandle, [&]() {
+            return g->getLinearized(*params).release();
+        });
+    }
+
+    int
+    GEOSCurveToLineParams_setTolerance_r(GEOSContextHandle_t extHandle, GEOSCurveToLineParams* params,
+                                         int toleranceType, double toleranceValue)
+    {
+        return execute(extHandle, 0, [&]() {
+            params->setTolerance(static_cast<GEOSCurveToLineParams::TOLERANCE_TYPE>(toleranceType), toleranceValue);
+            return 1;
+        });
+    }
+
+    GEOSGeometry*
+    GEOSLineToCurve_r(GEOSContextHandle_t extHandle, const GEOSGeometry* g,
+                      const GEOSLineToCurveParams* params)
+    {
+        return execute(extHandle, [&]() {
+            return g->getCurved(*params).release();
+        });
+    }
+
+    int
+    GEOSLineToCurveParams_setMaxAngleDifferenceDegrees_r(GEOSContextHandle_t extHandle, GEOSLineToCurveParams* params, double tolerance)
+    {
+        return execute(extHandle, 0, [&]() {
+            params->setMaxExteriorAngleDifferenceDegrees(tolerance);
+            return 1;
+        });
+    }
+
+    int
+    GEOSLineToCurveParams_setMaxStepDegrees_r(GEOSContextHandle_t extHandle, GEOSLineToCurveParams* params, double tolerance)
+    {
+        return execute(extHandle, 0, [&]() {
+            params->setMaxStepDegrees(tolerance);
+            return 1;
+        });
+    }
+
+    int
+    GEOSLineToCurveParams_setRadiusTolerance_r(GEOSContextHandle_t extHandle, GEOSLineToCurveParams* params, double tolerance)
+    {
+        return execute(extHandle, 0, [&]() {
+            params->setRadiusTolerance(tolerance);
+            return 1;
         });
     }
 

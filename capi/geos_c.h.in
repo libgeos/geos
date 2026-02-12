@@ -188,6 +188,20 @@ typedef struct GEOSMakeValidParams_t GEOSMakeValidParams;
 */
 typedef struct GEOSClusterInfo_t GEOSClusterInfo;
 
+/**
+* Parameter object for curve-to-line conversion
+* \see GEOSCurveToLineParams_create()
+* \see GEOSCurveToLineParams_destroy()
+*/
+typedef struct GEOSCurveToLineParams_t GEOSCurveToLineParams;
+
+/**
+* Parameter object for line-to-curve conversion
+* \see GEOSLineToCurveParams_create()
+* \see GEOSLineToCurveParams_destroy()
+*/
+typedef struct GEOSLineToCurveParams_t GEOSLineToCurveParams;
+
 #endif
 
 /** \cond */
@@ -1798,6 +1812,53 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_setPrecision_r(
 extern double GEOS_DLL GEOSGeom_getPrecision_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry *g);
+
+/**
+* Curve-to-line tolerance types.
+*/
+enum GEOSCurveToLineTolerance {
+    /** Maximum angle between successive vertices of a linearized arc */
+    GEOS_CURVETOLINE_STEP_DEGREES = 0,
+    /** Maximum distance between an arc and its linearized approximation */
+    GEOS_CURVETOLINE_MAX_DEVIATION = 1
+};
+
+/** \see GEOSCurveToLine */
+extern GEOSGeometry GEOS_DLL *GEOSCurveToLine_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* g,
+    const GEOSCurveToLineParams* params);
+
+/** \see GEOSCurveToLineParams_setTolerance */
+extern int GEOS_DLL GEOSCurveToLineParams_setTolerance_r(
+    GEOSContextHandle_t extHandle,
+    GEOSCurveToLineParams* params,
+    int toleranceType,
+    double toleranceValue);
+
+/** \see GEOSLineToCurve */
+extern GEOSGeometry GEOS_DLL *GEOSLineToCurve_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* g,
+    const GEOSLineToCurveParams* params);
+
+/** \see GEOSLineToCurveParams_setRadiusTolerance */
+extern int GEOS_DLL GEOSLineToCurveParams_setRadiusTolerance_r(
+        GEOSContextHandle_t extHandle,
+        GEOSLineToCurveParams* params,
+        double tolerance);
+
+/** \see GEOSLineToCurveParams_setMaxStepDegrees */
+extern int GEOS_DLL GEOSLineToCurveParams_setMaxStepDegrees_r(
+        GEOSContextHandle_t extHandle,
+        GEOSLineToCurveParams* params,
+        double tolerance);
+
+/** \see GEOSLineToCurveParams_setMaxAngleDifferenceDegrees */
+extern int GEOS_DLL GEOSLineToCurveParams_setMaxAngleDifferenceDegrees_r(
+        GEOSContextHandle_t extHandle,
+        GEOSLineToCurveParams* params,
+        double tolerance);
 
 /** \see GEOSGetNumInteriorRings */
 extern int GEOS_DLL GEOSGetNumInteriorRings_r(
@@ -5635,6 +5696,110 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_setPrecision(
 	const GEOSGeometry *g,
     double gridSize,
     int flags);
+
+///@}
+
+/* ============================================================== */
+
+/** @name Line/Curve conversion
+* Functions for converting between curved and linear geometry types.
+*/
+///@{
+
+/** Approximate all circular arcs in a geometry using line segments.
+*   If the input has no circular arcs, a copy will be returned.
+*   \param g the geometry to convert
+*   \param params parameters to use in the linearization.
+*   \return The linearized geometry.
+*           Caller must free with GEOSGeom_destroy()
+*           NULL on exception
+*
+*   \since 3.15
+*/ 
+extern GEOSGeometry GEOS_DLL *GEOSCurveToLine(
+    const GEOSGeometry* g,
+    const GEOSCurveToLineParams* params);
+
+extern GEOSCurveToLineParams GEOS_DLL *GEOSCurveToLineParams_create();
+
+extern void GEOS_DLL GEOSCurveToLineParams_destroy(GEOSCurveToLineParams* params);
+
+/** Set the tolerance type and value to use when converting curves to lines.
+*
+*   \param params parameters to use in the conversion.
+*   \param toleranceType \see GEOSCurveToLineTolerance
+*   \param toleranceValue the value to use with toleranceType
+*   \return 1 if the operation succeeded, 0 otherwise*
+*
+*   \since 3.15
+*/ 
+extern int GEOS_DLL GEOSCurveToLineParams_setTolerance(
+    GEOSCurveToLineParams* params,
+    int toleranceType,
+    double toleranceValue);
+
+/** Replace line segments in the geometry with circular arcs, where possible.
+*
+*   \param g the geometry to convert
+*   \param params parameters to use in the conversion.
+*   \return The converted geometry.
+*           Caller must free with GEOSGeom_destroy()
+*           NULL on exception
+*
+*   \since 3.15
+*/ 
+extern GEOSGeometry GEOS_DLL *GEOSLineToCurve(
+    const GEOSGeometry* g,
+    const GEOSLineToCurveParams* params);
+
+extern GEOSLineToCurveParams GEOS_DLL *GEOSLineToCurveParams_create();
+
+extern void GEOS_DLL GEOSLineToCurveParams_destroy(GEOSLineToCurveParams* params);
+
+/** Set the radius tolerance used in line-to-curve conversion.
+*
+*   A vertex may be considered to continue a circular arc if its distance to the
+*   previously-computed circle center is within the specified fraction of the
+*   circle radius.
+* 
+*   \param params the parameters object
+*   \param tolerance the tolerance value
+*   \return 1 on success, 0 on failure
+*   \since 3.15
+*/
+extern int GEOS_DLL GEOSLineToCurveParams_setRadiusTolerance(
+        GEOSLineToCurveParams* params,
+        double tolerance);
+
+/** Set the maximum angle spacing used in line-to-curve conversion.
+*
+*   A vertex may be considered to continue a circular arc if the circular sector
+*   between the vertex and the final point in the arc is less than the specified tolerance. Because of round-off errors, this value should be slightly greater than the one used
+*   in \ref GEOSCurveToLineParams_setTolerance.
+* 
+*   \param params the parameters object
+*   \param tolerance the tolerance value
+*   \return 1 on success, 0 on failure
+*   \since 3.15
+*/
+extern int GEOS_DLL GEOSLineToCurveParams_setMaxStepDegrees(
+        GEOSLineToCurveParams* params,
+        double tolerance);
+
+/** Set the maximum angle difference used in line-to-curve conversion
+*
+*   A vertex p[n] may be considered to continue a circular arc if the 
+*   difference between the angles p[n-2] / p[n-1] / p[n] is within the
+*   specified difference of the angle p[0] / p[1] / p[2].
+* 
+*   \param params the parameters object
+*   \param tolerance the tolerance value
+*   \return 1 on success, 0 on failure
+*   \since 3.15
+*/
+extern int GEOS_DLL GEOSLineToCurveParams_setMaxAngleDifferenceDegrees(
+        GEOSLineToCurveParams* params,
+        double tolerance);
 
 ///@}
 
