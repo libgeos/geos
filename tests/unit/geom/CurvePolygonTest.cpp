@@ -302,7 +302,7 @@ void object::test<8>()
 {
     set_test_name("getCurved");
 
-    std::unique_ptr<CurvePolygon> curved = cp_->getCurved(geos::algorithm::LineToCurveParams::getDefault());
+    std::unique_ptr<CurvePolygon> curved = cp_->getCurved(geos::algorithm::LineToCurveParams());
 
     ensure_equals_exact_geometry_xyzm(curved.get(), cp_.get(), 0);
 }

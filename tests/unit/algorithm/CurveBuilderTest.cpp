@@ -21,9 +21,12 @@ struct test_curvebuilder_data {
 
         auto ltcParams = geos::algorithm::LineToCurveParams();
         ltcParams.setRadiusTolerance(1e-6);
+        ltcParams.setMaxStepDegrees(stepSizeDegrees*1.001);
 
         auto outCurve = linearized->getCurved(ltcParams);
         auto expected = reader_.read(wkt_expected);
+
+        std::cout << outCurve->toString() << std::endl;
 
         double distanceTolerance = 1e-4;
 
@@ -34,11 +37,12 @@ struct test_curvebuilder_data {
         checkRoundTrip(wkt_in, wkt_in, stepSizeDegrees);
     }
 
-    void checkLineToCurve(const std::string& wkt_in, const std::string& wkt_expected, double distanceTolerance) const {
+    void checkLineToCurve(const std::string& wkt_in, const std::string& wkt_expected, double distanceTolerance, double stepSizeDegrees) const {
         auto ls = reader_.read<LineString>(wkt_in);
 
         auto ltcParams = geos::algorithm::LineToCurveParams();
         ltcParams.setRadiusTolerance(distanceTolerance);
+        ltcParams.setMaxStepDegrees(stepSizeDegrees);
 
         auto curve = ls->getCurved(ltcParams);
         auto expected = reader_.read(wkt_expected);
@@ -89,7 +93,7 @@ void object::test<3>()
 
     checkLineToCurve("LINESTRING(0 0,29.2893 70.7107,100 100,170.7107 70.7107,200 0)",
                      "CIRCULARSTRING (0 0, 100 100, 200 0)",
-                     2e-3);
+                     2e-3, 45.1);
 }
 
 template<>
@@ -100,7 +104,7 @@ void object::test<4>()
 
     checkLineToCurve("LINESTRING(0 0,29.2893 70.7107,100 100,170.7107 70.7107,200 0, 0 0)",
                      "COMPOUNDCURVE (CIRCULARSTRING (0 0, 100 100, 200 0), LINESTRING (200 0, 0 0))",
-                     2.5e-3);
+                     2.5e-3, 45.1);
 }
 
 template<>

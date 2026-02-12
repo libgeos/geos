@@ -43,6 +43,10 @@ CurveBuilder::getCurved(const LineString &ls, const LineToCurveParams& params) {
 
 std::unique_ptr<geom::Curve>
 CurveBuilder::compute(const LineString& ls, const LineToCurveParams& params) {
+    if (ls.isEmpty()) {
+        return ls.clone();
+    }
+
     const auto& points = *ls.getSharedCoordinates();
 
     std::size_t start = 0;
@@ -56,9 +60,15 @@ CurveBuilder::compute(const LineString& ls, const LineToCurveParams& params) {
 
         CircularArc arc(points, start);
 
-        if (arc.isLinear() || arc.getAngle() > 2*maxSpacingRadians) {
+        if (arc.isLinear()) {
             addLineCoords(points, start, start + 2);
             start += 2;
+            continue;
+        }
+
+        if (arc.getAngle() > 2 *params.getMaxAngleRadians()) {
+            addLineCoords(points, start, start + 1);
+            start++;
             continue;
         }
 
@@ -73,18 +83,27 @@ CurveBuilder::compute(const LineString& ls, const LineToCurveParams& params) {
             const double distance = pt.distance(arc.getCenter());
 
             // Does the radius match?
-            if (std::abs(distance - arc.getRadius()) > params.getRadiusTolerance()) {
+            if (std::abs(distance - arc.getRadius()) > params.getRadiusTolerance() * arc.getRadius()) {
                 break;
             }
 
             const CoordinateXY& prev1 = points.getAt<CoordinateXY>(stop - 1);
             const CoordinateXY& prev2 = points.getAt<CoordinateXY>(stop - 2);
 
-            // Is the angle similar to, or less than, the previous ones?
-            const double prevAngle = Angle::angleBetween(arc.p0(), arc.p1(), arc.p2());
-            const double currAngle = Angle::angleBetween(prev2, prev1, pt);
+            // Check that angle p[stop-1] /_ center /_ p[stop] is less than the step tolerance.
+            // This check is not done in PostGIS.
+            const double currAngle = std::abs(Angle::angleBetweenOriented(prev1, arc.getCenter(), pt));
 
-            if (std::abs(currAngle - prevAngle) > prevAngle * params.getAngleStepTolerance()) {
+            if (currAngle > params.getMaxAngleRadians()) {
+                break;
+            }
+
+            // Check that the angle p[stop-2] /_ p[stop-1] /_ p[stop] is consistent with that in the
+            // original section of the arc.
+            const double prevExtAngle = Angle::angleBetween(arc.p0(), arc.p1(), arc.p2());
+            const double currExtAngle = Angle::angleBetween(prev2, prev1, pt);
+
+            if (std::abs(currExtAngle - prevExtAngle) > params.getMaxExteriorAngleDifferenceRadians()) {
                 break;
             }
 

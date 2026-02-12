@@ -446,7 +446,7 @@ void object::test<13>()
     set_test_name("getCurved()");
 
     // check that we return Curve* rather than Geometry*
-    std::unique_ptr<Curve> curved = cc_->getCurved(geos::algorithm::LineToCurveParams::getDefault());
+    std::unique_ptr<Curve> curved = cc_->getCurved(geos::algorithm::LineToCurveParams());
 
     ensure_equals_exact_geometry_xyzm(curved.get(), cc_.get(), 0);
 }

@@ -27,9 +27,28 @@ public:
         MAX_DEVIATION,
     };
 
-    CurveToLineParams(TOLERANCE_TYPE tolType, double tolValue) :
-        toleranceType(tolType),
-        toleranceValue(tolValue) {}
+    CurveToLineParams() : CurveToLineParams(TOLERANCE_TYPE::STEP_DEGREES, 4.0) {}
+
+    CurveToLineParams(TOLERANCE_TYPE tolType, double tolValue) {
+        setTolerance(tolType, tolValue);
+    }
+
+    void setTolerance(TOLERANCE_TYPE tolType, double tolValue) {
+        if (tolType == TOLERANCE_TYPE::STEP_DEGREES) {
+            if (!(tolValue > 0)) {
+                throw util::IllegalArgumentException("Step size must be positive");
+            }
+        } else if (tolType == TOLERANCE_TYPE::MAX_DEVIATION) {
+            if (!(tolValue > 0)) {
+                throw util::IllegalArgumentException("Max deviation must be positive");
+            }
+        } else {
+            throw util::IllegalArgumentException("Invalid tolerance type");
+        }
+
+        toleranceType = tolType;
+        toleranceValue = tolValue;
+    }
 
     static CurveToLineParams maxDeviation(double dev) {
         return CurveToLineParams(TOLERANCE_TYPE::MAX_DEVIATION, dev);
@@ -48,12 +67,13 @@ public:
             return std::acos(1 - toleranceValue / arc.getRadius()) * 360 / MATH_PI;
         }
 
-        throw util::GEOSException("Invalid tolerance type");
+        throw util::IllegalArgumentException("Invalid tolerance type");
     }
 
 private:
-    const TOLERANCE_TYPE toleranceType;
-    const double toleranceValue;
+
+    TOLERANCE_TYPE toleranceType;
+    double toleranceValue;
 
 };
 
