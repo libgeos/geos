@@ -89,7 +89,7 @@ CoverageEdge::extractEdgePoints(const CoordinateSequence& ring,
     std::size_t iring = start;
     for (std::size_t i = 0; i < size; i++) {
         // Use applyAt to correctly add coordinates while preserving dimension
-        ring.applyAt(iring, [&](const auto& c){
+        ring.applyAt(iring, [&pts, &i](const auto& c){
             pts->setAt(c, i);
         });
         iring += 1;

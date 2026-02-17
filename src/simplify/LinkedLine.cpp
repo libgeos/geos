@@ -161,7 +161,7 @@ LinkedLine::getCoordinates() const
     std::size_t len = m_isRing ? m_coord.size() - 1 : m_coord.size();
     for (std::size_t i = 0; i < len; i++) {
         if (hasCoordinate(i)) {
-            m_coord.applyAt(i, [&](const auto& c){ // Use applyAt for safe coordinate copy
+            m_coord.applyAt(i, [&coords](const auto& c){ // Use applyAt for safe coordinate copy
                 coords->add(c, false);
             });
         }

@@ -516,45 +516,9 @@ void object::test<32> ()
 
     std::vector<std::unique_ptr<Geometry>> input = readArray({ wktInput });
     std::vector<std::unique_ptr<Geometry>> expected = readArray({ wktExpected });
-
     std::vector<std::unique_ptr<Geometry>> actual = CoverageSimplifier::simplify(input, 0.0);
 
-    ensure("simplification result size", actual.size() == 1);
-    ensure_equals_geometry(actual[0].get(), expected[0].get());
-
-    const geos::geom::Polygon* polyInput = dynamic_cast<const geos::geom::Polygon*>(input[0].get());
-    const geos::geom::Polygon* polyActual = dynamic_cast<const geos::geom::Polygon*>(actual[0].get());
-
-    ensure("input is a Polygon", polyInput != nullptr);
-    ensure("actual is a Polygon", polyActual != nullptr);
-
-    const geos::geom::LinearRing* lrInput = polyInput->getExteriorRing();
-    const geos::geom::LinearRing* lrActual = polyActual->getExteriorRing();
-
-    const geos::geom::SimpleCurve* scInput = dynamic_cast<const geos::geom::SimpleCurve*>(lrInput);
-    const geos::geom::SimpleCurve* scActual = dynamic_cast<const geos::geom::SimpleCurve*>(lrActual);
-
-    ensure("input linear ring is a SimpleCurve", scInput != nullptr);
-    ensure("actual linear ring is a SimpleCurve", scActual != nullptr);
-
-    const CoordinateSequence* csInput = scInput->getCoordinatesRO();
-    const CoordinateSequence* csActual = scActual->getCoordinatesRO();
-
-    ensure_equals("input has M", csInput->hasM(), true);
-    ensure_equals("actual has M", csActual->hasM(), true);
-
-    ensure_equals("input has Z", csInput->hasZ(), true);
-    ensure_equals("actual has Z", csActual->hasZ(), true);
-
-    ensure_equals("M value at index 0", csActual->getM(0), csInput->getM(0));
-    ensure_equals("M value at index 1", csActual->getM(1), csInput->getM(1));
-    ensure_equals("M value at index 2", csActual->getM(2), csInput->getM(2));
-    ensure_equals("M value at index 3", csActual->getM(3), csInput->getM(3));
-
-    ensure_equals("Z value at index 0", csActual->getZ(0), csInput->getZ(0));
-    ensure_equals("Z value at index 1", csActual->getZ(1), csInput->getZ(1));
-    ensure_equals("Z value at index 2", csActual->getZ(2), csInput->getZ(2));
-    ensure_equals("Z value at index 3", csActual->getZ(3), csInput->getZ(3));
+    ensure_equals_exact_geometry_xyzm(actual[0].get(), expected[0].get(), 0.001);
 }
 
 
