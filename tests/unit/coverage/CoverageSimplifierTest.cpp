@@ -6,6 +6,10 @@
 
 // geos
 #include <geos/coverage/CoverageSimplifier.h>
+#include <geos/geom/Polygon.h> // Added for Polygon
+#include <geos/geom/SimpleCurve.h> // Added for SimpleCurve
+
+
 
 using geos::coverage::CoverageSimplifier;
 
@@ -500,6 +504,21 @@ void object::test<31> ()
         return;
     }
     ensure("did not throw IllegalArgumentException", false);
+}
+
+// Test GH-1366: M values are preserved
+template<>
+template<>
+void object::test<32> ()
+{
+    std::string wktInput = "POLYGON ZM ((0 0 0 0, 10 0 1 1, 10 10 2 2, 0 10 3 3, 0 0 0 0))";
+    std::string wktExpected = "POLYGON ZM ((0 0 0 0, 10 0 1 1, 10 10 2 2, 0 10 3 3, 0 0 0 0))"; // No simplification occurs with tolerance 0
+
+    std::vector<std::unique_ptr<Geometry>> input = readArray({ wktInput });
+    std::vector<std::unique_ptr<Geometry>> expected = readArray({ wktExpected });
+    std::vector<std::unique_ptr<Geometry>> actual = CoverageSimplifier::simplify(input, 0.0);
+
+    ensure_equals_exact_geometry_xyzm(actual[0].get(), expected[0].get(), 0.001);
 }
 
 

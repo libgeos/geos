@@ -79,13 +79,19 @@ std::unique_ptr<CoordinateSequence>
 CoverageEdge::extractEdgePoints(const CoordinateSequence& ring,
     std::size_t start, std::size_t end)
 {
-    auto pts = detail::make_unique<CoordinateSequence>();
     std::size_t size = start < end
                   ? end - start + 1
                   : ring.getSize() - start + end;
+
+    // Create CoordinateSequence with the same dimensions as the input ring
+    auto pts = detail::make_unique<CoordinateSequence>(size, ring.hasZ(), ring.hasM());
+
     std::size_t iring = start;
     for (std::size_t i = 0; i < size; i++) {
-        pts->add(ring.getAt(iring));
+        // Use applyAt to correctly add coordinates while preserving dimension
+        ring.applyAt(iring, [&pts, &i](const auto& c){
+            pts->setAt(c, i);
+        });
         iring += 1;
         if (iring >= ring.getSize())
             iring = 1;

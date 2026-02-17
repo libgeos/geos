@@ -156,11 +156,14 @@ LinkedLine::remove(std::size_t index)
 std::unique_ptr<CoordinateSequence>
 LinkedLine::getCoordinates() const
 {
-    std::unique_ptr<CoordinateSequence> coords(new CoordinateSequence());
+    // Create CoordinateSequence with the same dimensions as the original m_coord
+    std::unique_ptr<CoordinateSequence> coords(new CoordinateSequence(0, m_coord.hasZ(), m_coord.hasM()));
     std::size_t len = m_isRing ? m_coord.size() - 1 : m_coord.size();
     for (std::size_t i = 0; i < len; i++) {
         if (hasCoordinate(i)) {
-            coords->add(m_coord.getAt(i), false);
+            m_coord.applyAt(i, [&coords](const auto& c){ // Use applyAt for safe coordinate copy
+                coords->add(c, false);
+            });
         }
     }
     if (m_isRing) {

@@ -369,7 +369,8 @@ CoverageRingEdges::buildRing(const LinearRing* ring) const
     }
 
     // CoordinateList ptsList = new CoordinateList();
-    std::unique_ptr<CoordinateSequence> pts(new CoordinateSequence());
+    // Create CoordinateSequence with the same dimensions as the original ring
+    std::unique_ptr<CoordinateSequence> pts(new CoordinateSequence(0, ring->hasZ(), ring->hasM()));
     Coordinate nullPt = Coordinate::getNull();
     for (std::size_t i = 0; i < ringEdges->size(); i++) {
         Coordinate& lastPt = pts->isEmpty() ? nullPt : pts->back();
