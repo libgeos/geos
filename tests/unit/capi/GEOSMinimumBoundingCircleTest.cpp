@@ -120,13 +120,21 @@ template<>
 void object::test<5>
 ()
 {
+    set_test_name("curved inputs");
+    useContext();
+
     input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
     ensure(input_);
 
-    GEOSGeometry* center;
     double radius;
-    result_ = GEOSMinimumBoundingCircle(input_, &radius, &center);
+    result_ = GEOSMinimumBoundingCircle_r(ctxt_, input_, &radius, &geom1_);
     ensure("curved geometry not supported", result_ == nullptr);
+
+    useCurveConversion();
+    result_ = GEOSMinimumBoundingCircle_r(ctxt_, input_, &radius, &geom1_);
+    ensure(result_);
+
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_POLYGON);
 }
 
 template<>

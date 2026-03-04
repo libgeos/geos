@@ -244,9 +244,6 @@ void object::test<8>
     geom1_ = fromWKT("LINESTRING ZM (0 0 5 4, 2 0 6 5, 2 2 7 6)");
     geom2_ = fromWKT("LINESTRING ZM (2 2 7 6, 0 0 5 4)");
 
-    ensure(geom1_);
-    ensure(geom2_);
-
     std::array<GEOSGeometry*, 2> geoms = {geom1_, geom2_};
     result_ = GEOSPolygonize(geoms.data(), geoms.size());
     ensure(result_);
@@ -318,4 +315,3 @@ void object::test<10>()
 }
 
 } // namespace tut
-

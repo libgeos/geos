@@ -35,14 +35,23 @@ template<>
 template<>
 void object::test<2>()
 {
+    set_test_name("GEOSRelatePattern with automatic linearization");
+
+    useContext();
+
     geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
     geom2_ = fromWKT("LINESTRING (1 0, 2 1)");
 
     ensure(geom1_);
     ensure(geom2_);
 
-    ensure_equals("curved geometry not supported", GEOSRelatePattern(geom1_, geom2_, "0********"), 2);
-    ensure_equals("curved geometry not supported", GEOSRelatePattern(geom2_, geom1_, "0********"), 2);
+    ensure_equals(GEOSRelatePattern_r(ctxt_, geom1_, geom2_, "0********"), 2);
+    ensure_equals(GEOSRelatePattern_r(ctxt_, geom2_, geom1_, "0********"), 2);
+
+    useCurveConversion();
+
+    ensure_equals(GEOSRelatePattern_r(ctxt_, geom1_, geom2_, "0********"), 1);
+    ensure_equals(GEOSRelatePattern_r(ctxt_, geom2_, geom1_, "0********"), 1);
 }
 
 // invalid DE-9IM

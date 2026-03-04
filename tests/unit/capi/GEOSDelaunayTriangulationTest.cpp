@@ -127,11 +127,16 @@ template<>
 template<>
 void object::test<7>()
 {
+    set_test_name("curved inputs");
+
     input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0, 3 -1, 4 0)");
     ensure(input_);
 
     result_ = GEOSDelaunayTriangulation(input_, 0, 0);
-    ensure("curved geometry not supported", result_ == nullptr);
+    ensure(result_);
+
+    ensure_equals(GEOSGeomTypeId(result_), GEOS_GEOMETRYCOLLECTION);
+    ensure_equals(GEOSGetNumGeometries(result_), 4);
 }
 
 template<>

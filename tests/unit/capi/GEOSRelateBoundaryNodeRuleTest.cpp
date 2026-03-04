@@ -21,7 +21,9 @@ struct test_capigeosrelateboundarynoderule_data : public capitest::utility {
 
     ~test_capigeosrelateboundarynoderule_data()
     {
-        GEOSFree(pat_);
+        if (pat_) {
+            GEOSFree(pat_);
+        }
     }
 };
 
@@ -136,6 +138,29 @@ void object::test<8>
     ensure(nullptr == pat_);
 }
 
+template<>
+template<>
+void object::test<9>()
+{
+    set_test_name("GEOSRelateBoundaryNodeRule with automatic linearization");
+
+    useContext();
+
+    geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    geom2_ = fromWKT("LINESTRING (1 0, 2 1)");
+
+    ensure(geom1_);
+    ensure(geom2_);
+
+    ensure(GEOSRelateBoundaryNodeRule_r(ctxt_, geom1_, geom2_, GEOSRELATE_BNR_MOD2) == nullptr);
+    ensure(GEOSRelateBoundaryNodeRule_r(ctxt_, geom2_, geom1_, GEOSRELATE_BNR_MOD2) == nullptr);
+
+    useCurveConversion();
+
+    char* pattern = GEOSRelateBoundaryNodeRule_r(ctxt_, geom1_, geom2_, GEOSRELATE_BNR_MOD2);
+    ensure(pattern);
+    GEOSFree_r(ctxt_, pattern);
+}
 
 
 } // namespace tut

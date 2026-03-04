@@ -260,13 +260,16 @@ template<>
 template<>
 void object::test<14>()
 {
-    set_test_name("curved geometries not supported by RectangleIntersects");
+    set_test_name("GEOSIntersects with automatic linearization");
 
-    geom1_ = fromWKT("POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0))");
-    geom2_ = fromWKT("CIRCULARSTRING (5 0, 10 5, 15 0)");
+    useContext();
 
-    ensure_equals(GEOSIntersects(geom1_, geom2_), 2);
-    ensure_equals(GEOSIntersects(geom2_, geom1_), 2);
+    geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    geom2_ = fromWKT("CIRCULARSTRING (2 0, 3 -1, 4 0)");
+
+    ensure_equals(2, GEOSIntersects_r(ctxt_, geom1_, geom2_));
+    useCurveConversion();
+    ensure_equals(1, GEOSIntersects_r(ctxt_, geom1_, geom2_));
 }
 
 } // namespace tut

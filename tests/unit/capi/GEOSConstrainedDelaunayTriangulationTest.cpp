@@ -72,11 +72,21 @@ template<>
 template<>
 void object::test<4>()
 {
+   set_test_name("curved inputs");
+    useContext();
+
     input_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE (CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 0 0)))");
     ensure(input_ != nullptr);
 
-    result_ = GEOSConstrainedDelaunayTriangulation(input_);
+    result_ = GEOSConstrainedDelaunayTriangulation_r(ctxt_, input_);
     ensure("curved geometry not supported", result_ == nullptr);
+
+    useCurveConversion();
+
+    result_ = GEOSConstrainedDelaunayTriangulation_r(ctxt_, input_);
+    ensure(result_);
+
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_GEOMETRYCOLLECTION);
 }
 
 template<>

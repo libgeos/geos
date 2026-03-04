@@ -104,5 +104,15 @@ void object::test<7>()
     );
 }
 
+template<>
+template<>
+void object::test<9>()
+{
+    set_test_name("curved inputs");
+
+    checkEnvelope("CIRCULARSTRING (0 0, 1 1, 2 0)",
+        "POLYGON ((0 0, 2 0, 2 1, 0 1, 0 0))");
+}
+
 } // namespace tut
 

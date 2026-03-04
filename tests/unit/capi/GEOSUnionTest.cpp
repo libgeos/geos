@@ -1,6 +1,7 @@
 #include <tut/tut.hpp>
 // geos
 #include <geos_c.h>
+#include <geos/constants.h>
 
 #include "capi_test_utils.h"
 

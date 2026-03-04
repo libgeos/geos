@@ -36,13 +36,19 @@ template<>
 template<>
 void object::test<2>()
 {
-    geom1_ = fromWKT("LINESTRING (5 3, 5 4)");
-    geom2_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE (CIRCULARSTRING (0 0, 10 10, 20 0), (20 0, 0 0)))");
+    set_test_name("GEOSCoveredBy with automatic linearization");
+    useContext();
+
+    geom1_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE (CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 0 0)))");
+    geom2_ = fromWKT("LINESTRING (1 0.5, 1 0.6)");
 
     ensure(geom1_);
     ensure(geom2_);
 
-    ensure_equals("curved geometry not supported", GEOSCoveredBy(geom1_, geom2_), 2);
+    ensure_equals(GEOSCoveredBy_r(ctxt_, geom2_, geom1_), 2);
+    useCurveConversion();
+    ensure_equals(GEOSCoveredBy_r(ctxt_, geom1_, geom2_), 0);
+    ensure_equals(GEOSCoveredBy_r(ctxt_, geom2_, geom1_), 1);
 }
 
 } // namespace tut

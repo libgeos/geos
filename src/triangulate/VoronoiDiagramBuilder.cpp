@@ -51,7 +51,6 @@ VoronoiDiagramBuilder::VoronoiDiagramBuilder() :
 void
 VoronoiDiagramBuilder::setSites(const geom::Geometry& geom)
 {
-    util::ensureNoCurvedComponents(geom);
     siteCoords = DelaunayTriangulationBuilder::extractUniqueCoordinates(geom);
     inputGeom = &geom;
 }

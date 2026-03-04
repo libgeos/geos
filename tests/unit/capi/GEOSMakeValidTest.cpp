@@ -3,6 +3,7 @@
 #include <tut/tut.hpp>
 // geos
 #include <geos_c.h>
+#include <geos/constants.h>
 // std
 #include <cstring>
 #include <cstdint>
@@ -94,12 +95,39 @@ template<>
 template<>
 void object::test<5>()
 {
+    set_test_name("curved inputs, curved output");
+    useContext();
+
     // ring outside shell
     input_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE (CIRCULARSTRING (0 0, 10 10, 20 0), (20 0, 0 0)), (10 10, 30 10, 30 30, 10 10))");
     ensure(input_);
+    GEOSSetSRID_r(ctxt_, input_, 4326);
 
-    result_ = GEOSMakeValid(input_);
+
+    result_ = GEOSMakeValid_r(ctxt_, input_);
     ensure("curved geometry not supported", result_ == nullptr);
+
+    // Input converted to line, output not converted to curve
+    GEOSContext_setCurveToLineParams_r(ctxt_, curveToLineParams_);
+    result_ = GEOSMakeValid_r(ctxt_, input_);
+    ensure(result_);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_MULTIPOLYGON);
+    GEOSGeom_destroy_r(ctxt_, result_);
+
+    // Input converted to line, output converted to curve
+    GEOSContext_setLineToCurveParams_r(ctxt_, lineToCurveParams_);
+    result_ = GEOSMakeValid_r(ctxt_, input_);
+
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_MULTISURFACE);
+    ensure_equals(GEOSGetNumGeometries_r(ctxt_, result_), 2);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, GEOSGetGeometryN_r(ctxt_, result_, 0u)), GEOS_CURVEPOLYGON);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, GEOSGetGeometryN_r(ctxt_, result_, 1u)), GEOS_POLYGON);
+
+    double area = -1;
+    ensure(GEOSArea_r(ctxt_, result_, &area));
+    ensure_equals("area does not match expected", area, geos::MATH_PI*10*10/2 + 20*20/2, 1e-2);
+
+    ensure_equals(GEOSGetSRID_r(ctxt_, result_), 4326);
 }
 
 template<>

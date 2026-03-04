@@ -49,5 +49,22 @@ void object::test<2>()
     ensure_equals("curved geometry not supported", GEOSTouches(geom2_, geom1_), 2);
 }
 
+template<>
+template<>
+void object::test<3>()
+{
+    set_test_name("GEOSTouches with automatic linearization");
+
+    useContext();
+
+    geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    geom2_ = fromWKT("CIRCULARSTRING (2 0, 3 -1, 4 0)");
+
+    ensure_equals(2, GEOSTouches_r(ctxt_, geom1_, geom2_));
+
+    useCurveConversion();
+    ensure_equals(1, GEOSTouches_r(ctxt_, geom1_, geom2_));
+}
+
 } // namespace tut
 

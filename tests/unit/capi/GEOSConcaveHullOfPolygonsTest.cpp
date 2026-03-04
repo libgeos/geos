@@ -1,5 +1,3 @@
-//
-// Test Suite for C-API GEOSConcaveHull
 
 #include <tut/tut.hpp>
 // geos
@@ -53,11 +51,27 @@ template<>
 template<>
 void object::test<3>()
 {
-    input_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE( CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 0 0) ))");
+    set_test_name("curved inputs");
+    useContext();
+
+    input_ = fromWKT("MULTISURFACE ("
+        "CURVEPOLYGON (CIRCULARSTRING (0 0, 1 1, 2 0, 1 -1, 0 0)),"
+        "CURVEPOLYGON (CIRCULARSTRING (4 0, 5 1, 6 0, 5 -1, 4 0)),"
+        "CURVEPOLYGON (CIRCULARSTRING (2 2, 3 3, 4 2, 3 1, 2 2))"
+    ")");
     ensure(input_ != nullptr);
 
-    result_ = GEOSConcaveHullOfPolygons(input_, 0.7, false, false);
+    printf("%s", toWKT(input_).c_str());
+
+    result_ = GEOSConcaveHullOfPolygons_r(ctxt_, input_, 0.7, false, false);
     ensure("curved geometry not supported", result_ == nullptr);
+
+    useCurveConversion();
+
+    result_ = GEOSConcaveHullOfPolygons_r(ctxt_, input_, 0.3, false, false);
+    ensure(result_);
+
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_POLYGON);
 }
   
 template<>

@@ -39,14 +39,20 @@ template<>
 template<>
 void object::test<2>()
 {
-    geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
-    geom2_ = fromWKT("LINESTRING (1 0, 2 1)");
+    set_test_name("GEOSOverlaps with automatic linearization");
+    useContext();
+
+    geom1_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE (CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 0 0)))");
+    geom2_ = fromWKT("POLYGON ((1 0, 2 0, 2 1, 1 0 ))");
 
     ensure(geom1_);
     ensure(geom2_);
 
-    ensure_equals("curved geometry not supported", GEOSOverlaps(geom1_, geom2_), 2);
-    ensure_equals("curved geometry not supported", GEOSOverlaps(geom2_, geom1_), 2);
+    ensure_equals(GEOSOverlaps_r(ctxt_, geom1_, geom2_), 2);
+    ensure_equals(GEOSOverlaps_r(ctxt_, geom2_, geom1_), 2);
+    useCurveConversion();
+    ensure_equals(GEOSOverlaps_r(ctxt_, geom1_, geom2_), 1);
+    ensure_equals(GEOSOverlaps_r(ctxt_, geom2_, geom1_), 1);
 }
 
 } // namespace tut

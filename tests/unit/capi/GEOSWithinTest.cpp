@@ -88,13 +88,19 @@ template<>
 template<>
 void object::test<4>()
 {
-    geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
-    geom2_ = fromWKT("LINESTRING (1 0, 2 0)");
+    set_test_name("GEOSWithin with automatic linearization");
+    useContext();
+
+    geom1_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE (CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 0 0)))");
+    geom2_ = fromWKT("LINESTRING (1 0.5, 1 0.6)");
 
     ensure(geom1_);
     ensure(geom2_);
 
-    ensure_equals("curved geometry not supported", GEOSWithin(geom2_, geom1_), 2);
+    ensure_equals(GEOSWithin_r(ctxt_, geom2_, geom1_), 2);
+    useCurveConversion();
+    ensure_equals(GEOSWithin_r(ctxt_, geom1_, geom2_), 0);
+    ensure_equals(GEOSWithin_r(ctxt_, geom2_, geom1_), 1);
 }
 
 } // namespace tut

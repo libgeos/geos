@@ -133,6 +133,7 @@
 #include <cstring>
 #include <fstream>
 #include <iostream>
+#include <optional>
 #include <sstream>
 #include <string>
 #include <memory>
@@ -259,6 +260,8 @@ typedef struct GEOSContextHandle_HS {
     int WKBByteOrder;
     int initialized;
     std::unique_ptr<Point> point2d;
+    std::optional<GEOSLineToCurveParams> lineToCurveParams;
+    std::optional<GEOSCurveToLineParams> curveToLineParams;
 
     GEOSContextHandle_HS()
         :
@@ -394,6 +397,81 @@ typedef struct GEOSContextHandle_HS {
         }
     }
 } GEOSContextHandleInternal_t;
+
+class InputGeometry {
+
+public:
+    explicit InputGeometry(const Geometry* geom) :
+        m_geom(const_cast<Geometry*>(geom)), m_owned(false) {}
+
+    explicit InputGeometry(std::unique_ptr<Geometry> geom) :
+        m_geom(geom.release()), m_owned(true) {}
+
+    ~InputGeometry() {
+        if (m_owned) {
+            delete m_geom;
+        }
+    }
+
+    operator const Geometry*() const {
+        return m_geom;
+    }
+
+    const Geometry* get() const {
+        return m_geom;
+    }
+
+    const Geometry* operator->() const {
+        return m_geom;
+    }
+
+    bool isLinearized() const {
+        return m_owned;
+    }
+
+    InputGeometry(const InputGeometry&) = delete;
+    InputGeometry& operator=(const InputGeometry&) = delete;
+
+    InputGeometry(InputGeometry&& other) noexcept : m_geom(other.m_geom), m_owned(other.m_owned) {
+        other.m_geom = nullptr;
+        other.m_owned = false;
+    }
+    InputGeometry& operator=(InputGeometry&& other) noexcept {
+        m_geom = other.m_geom;
+        m_owned = other.m_owned;
+        other.m_geom = nullptr;
+        other.m_owned = false;
+
+        return *this;
+    }
+
+private:
+    Geometry* m_geom;
+    bool m_owned;
+};
+
+static bool
+isCurvedType (geos::geom::GeometryTypeId typ) {
+    return typ == geos::geom::GeometryTypeId::GEOS_CIRCULARSTRING ||
+        typ == geos::geom::GeometryTypeId::GEOS_COMPOUNDCURVE ||
+        typ == geos::geom::GeometryTypeId::GEOS_CURVEPOLYGON ||
+        typ == geos::geom::GeometryTypeId::GEOS_MULTICURVE ||
+        typ == geos::geom::GeometryTypeId::GEOS_MULTISURFACE;
+}
+
+InputGeometry convertToLineIfNeeded(GEOSContextHandle_t extHandle, const Geometry* g) {
+    if (extHandle->curveToLineParams.has_value() && g != nullptr && (isCurvedType(g->getGeometryTypeId()) || g->hasCurvedComponents())) {
+        return InputGeometry(g->getLinearized(extHandle->curveToLineParams.value()));
+    }
+    return InputGeometry(g);
+}
+
+Geometry* convertToCurveIfNeeded(GEOSContextHandle_t extHandle, std::unique_ptr<Geometry> g) {
+    if (extHandle->lineToCurveParams.has_value() && g->hasCurvedComponents()) {
+        return g->getCurved(extHandle->lineToCurveParams.value()).release();
+    }
+    return g.release();
+}
 
 // CAPI_ItemVisitor is used internally by the CAPI STRtree
 // wrappers. It's defined here just to keep it out of the
@@ -554,6 +632,44 @@ inline void execute(GEOSContextHandle_t extHandle, F&& f) {
     }
 }
 
+template<typename F>
+Geometry* convertCurvesAndExecute(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2, F&& f)
+{
+    return execute(extHandle, [&]() {
+        const auto geom1 = convertToLineIfNeeded(extHandle, g1);
+        const auto geom2 = convertToLineIfNeeded(extHandle, g2);
+
+        auto result = f(geom1.get(), geom2.get());
+
+        if (result) {
+            if (extHandle->lineToCurveParams && (geom1.isLinearized() || geom2.isLinearized())) {
+                result = result->getCurved(extHandle->lineToCurveParams.value());
+            }
+
+            result->setSRID(g1->getSRID());
+        }
+
+        return result.release();
+    });
+}
+
+template<typename F>
+Geometry* convertCurvesAndExecute(GEOSContextHandle_t extHandle, const Geometry* g1, F&& f)
+{
+    return execute(extHandle, [&]() {
+        const auto geom1 = convertToLineIfNeeded(extHandle, g1);
+
+        auto g3 = f(geom1.get());
+
+        if (extHandle->lineToCurveParams && (geom1.isLinearized())) {
+            g3 = g3->getCurved(extHandle->lineToCurveParams.value());
+        }
+
+        g3->setSRID(g1->getSRID());
+        return g3.release();
+    });
+}
+
 extern "C" {
 
     GEOSContextHandle_t
@@ -634,6 +750,24 @@ extern "C" {
         return handle->setInterruptHandler(cb, userData);
     }
 
+    void GEOSContext_setCurveToLineParams_r(GEOSContextHandle_t extHandle, const GEOSCurveToLineParams* params)
+    {
+        if (params) {
+            extHandle->curveToLineParams = *params;
+        } else {
+            extHandle->curveToLineParams = std::nullopt;
+        }
+    }
+
+    void GEOSContext_setLineToCurveParams_r(GEOSContextHandle_t extHandle, const GEOSLineToCurveParams* params)
+    {
+        if (params) {
+            extHandle->lineToCurveParams = *params;
+        } else {
+            extHandle->lineToCurveParams = std::nullopt;
+        }
+    }
+
     void
     finishGEOS_r(GEOSContextHandle_t extHandle)
     {
@@ -666,7 +800,10 @@ extern "C" {
     GEOSDisjoint_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
         return execute(extHandle, 2, [&]() {
-            return g1->disjoint(g2);
+            const auto geom1 = convertToLineIfNeeded(extHandle, g1);
+            const auto geom2 = convertToLineIfNeeded(extHandle, g2);
+
+            return geom1->disjoint(geom2);
         });
     }
 
@@ -674,7 +811,10 @@ extern "C" {
     GEOSTouches_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
         return execute(extHandle, 2, [&]() {
-            return g1->touches(g2);
+            const auto geom1 = convertToLineIfNeeded(extHandle, g1);
+            const auto geom2 = convertToLineIfNeeded(extHandle, g2);
+
+            return geom1->touches(geom2);
         });
     }
 
@@ -682,7 +822,10 @@ extern "C" {
     GEOSIntersects_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
         return execute(extHandle, 2, [&]() {
-            return g1->intersects(g2);
+            const auto geom1 = convertToLineIfNeeded(extHandle, g1);
+            const auto geom2 = convertToLineIfNeeded(extHandle, g2);
+
+            return geom1->intersects(geom2);
         });
     }
 
@@ -690,7 +833,10 @@ extern "C" {
     GEOSCrosses_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
         return execute(extHandle, 2, [&]() {
-            return g1->crosses(g2);
+            const auto geom1 = convertToLineIfNeeded(extHandle, g1);
+            const auto geom2 = convertToLineIfNeeded(extHandle, g2);
+
+            return geom1->crosses(geom2);
         });
     }
 
@@ -698,7 +844,10 @@ extern "C" {
     GEOSWithin_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
         return execute(extHandle, 2, [&]() {
-            return g1->within(g2);
+            const auto geom1 = convertToLineIfNeeded(extHandle, g1);
+            const auto geom2 = convertToLineIfNeeded(extHandle, g2);
+
+            return geom1->within(geom2);
         });
     }
 
@@ -706,7 +855,10 @@ extern "C" {
     GEOSContains_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
         return execute(extHandle, 2, [&]() {
-            return g1->contains(g2);
+            const auto geom1 = convertToLineIfNeeded(extHandle, g1);
+            const auto geom2 = convertToLineIfNeeded(extHandle, g2);
+
+            return geom1->contains(geom2);
         });
     }
 
@@ -714,7 +866,10 @@ extern "C" {
     GEOSOverlaps_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
         return execute(extHandle, 2, [&]() {
-            return g1->overlaps(g2);
+            const auto geom1 = convertToLineIfNeeded(extHandle, g1);
+            const auto geom2 = convertToLineIfNeeded(extHandle, g2);
+
+            return geom1->overlaps(geom2);
         });
     }
 
@@ -722,7 +877,10 @@ extern "C" {
     GEOSCovers_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
         return execute(extHandle, 2, [&]() {
-            return g1->covers(g2);
+            const auto geom1 = convertToLineIfNeeded(extHandle, g1);
+            const auto geom2 = convertToLineIfNeeded(extHandle, g2);
+
+            return geom1->covers(geom2);
         });
     }
 
@@ -730,7 +888,10 @@ extern "C" {
     GEOSCoveredBy_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
         return execute(extHandle, 2, [&]() {
-            return g1->coveredBy(g2);
+            const auto geom1 = convertToLineIfNeeded(extHandle, g1);
+            const auto geom2 = convertToLineIfNeeded(extHandle, g2);
+
+            return geom1->coveredBy(geom2);
         });
     }
 
@@ -738,7 +899,10 @@ extern "C" {
     GEOSEquals_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
         return execute(extHandle, 2, [&]() {
-            return g1->equals(g2);
+            const auto geom1 = convertToLineIfNeeded(extHandle, g1);
+            const auto geom2 = convertToLineIfNeeded(extHandle, g2);
+
+            return geom1->equals(geom2);
         });
     }
 
@@ -751,8 +915,11 @@ extern "C" {
     GEOSRelatePattern_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2, const char* imPattern)
     {
         return execute(extHandle, 2, [&]() {
+            const auto geom1 = convertToLineIfNeeded(extHandle, g1);
+            const auto geom2 = convertToLineIfNeeded(extHandle, g2);
+
             std::string s(imPattern);
-            return g1->relate(g2, s);
+            return geom1->relate(geom2, s);
         });
     }
 
@@ -775,9 +942,12 @@ extern "C" {
     GEOSRelate_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
         return execute(extHandle, [&]() {
+            const auto geom1 = convertToLineIfNeeded(extHandle, g1);
+            const auto geom2 = convertToLineIfNeeded(extHandle, g2);
+
             using geos::geom::IntersectionMatrix;
 
-            auto im = g1->relate(g2);
+            auto im = geom1->relate(geom2);
             if(im == nullptr) {
                 return (char*) nullptr;
             }
@@ -787,7 +957,7 @@ extern "C" {
     }
 
     char*
-    GEOSRelateBoundaryNodeRule_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2, int bnr)
+    GEOSRelateBoundaryNodeRule_r(GEOSContextHandle_t extHandle, const Geometry* geom1, const Geometry* geom2, int bnr)
     {
         using geos::operation::relate::RelateOp;
         using geos::geom::IntersectionMatrix;
@@ -795,6 +965,8 @@ extern "C" {
 
         return execute(extHandle, [&]() -> char* {
             std::unique_ptr<IntersectionMatrix> im;
+            const auto g1 = convertToLineIfNeeded(extHandle, geom1);
+            const auto g2 = convertToLineIfNeeded(extHandle, geom2);
 
             switch (bnr) {
                 case GEOSRELATE_BNR_MOD2: /* same as OGC */
@@ -842,9 +1014,11 @@ extern "C" {
         return execute(extHandle, 2, [&]() {
             GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
 
+            const auto inputGeom = convertToLineIfNeeded(extHandle, g1);
+
             using geos::operation::valid::IsValidOp;
 
-            IsValidOp ivo(g1);
+            IsValidOp ivo(inputGeom);
             const TopologyValidationError* err = ivo.getValidationError();
 
             if(err) {
@@ -861,12 +1035,14 @@ extern "C" {
     GEOSisValidReason_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
         return execute(extHandle, [&]() {
+            const auto inputGeom = convertToLineIfNeeded(extHandle, g1);
+
             using geos::operation::valid::IsValidOp;
 
             char* result = nullptr;
             char const* const validstr = "Valid Geometry";
 
-            IsValidOp ivo(g1);
+            IsValidOp ivo(inputGeom);
             const TopologyValidationError* err = ivo.getValidationError();
 
             if(err) {
@@ -893,7 +1069,9 @@ extern "C" {
         using geos::operation::valid::IsValidOp;
 
         return execute(extHandle, 2, [&]() {
-            IsValidOp ivo(g);
+            const auto inputGeom = convertToLineIfNeeded(extHandle, g);
+
+            IsValidOp ivo(inputGeom);
             if(flags & GEOSVALID_ALLOW_SELFTOUCHING_RING_FORMING_HOLE) {
                 ivo.setSelfTouchingRingFormingHoleValid(true);
             }
@@ -961,7 +1139,10 @@ extern "C" {
     GEOSDistanceIndexed_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2, double* dist)
     {
         return execute(extHandle, 0, [&]() {
-            *dist = IndexedFacetDistance::distance(g1, g2);
+            const auto input1 = convertToLineIfNeeded(extHandle, g1);
+            const auto input2 = convertToLineIfNeeded(extHandle, g2);
+
+            *dist = IndexedFacetDistance::distance(input1, input2);
             return 1;
         });
     }
@@ -970,7 +1151,10 @@ extern "C" {
     GEOSHausdorffDistance_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2, double* dist)
     {
         return execute(extHandle, 0, [&]() {
-            *dist = DiscreteHausdorffDistance::distance(*g1, *g2);
+            const auto input1 = convertToLineIfNeeded(extHandle, g1);
+            const auto input2 = convertToLineIfNeeded(extHandle, g2);
+
+            *dist = DiscreteHausdorffDistance::distance(*input1, *input2);
             return 1;
         });
     }
@@ -982,7 +1166,10 @@ extern "C" {
     	double* p2x, double* p2y)
     {
         return execute(extHandle, 0, [&]() {
-            DiscreteHausdorffDistance dhd(*g1, *g2);
+            const auto input1 = convertToLineIfNeeded(extHandle, g1);
+            const auto input2 = convertToLineIfNeeded(extHandle, g2);
+
+            DiscreteHausdorffDistance dhd(*input1, *input2);
             *dist = dhd.distance();
             const auto& pts = dhd.getCoordinates();
             *p1x = pts[0].x;
@@ -998,7 +1185,10 @@ extern "C" {
                                    double densifyFrac, double* dist)
     {
         return execute(extHandle, 0, [&]() {
-            *dist = DiscreteHausdorffDistance::distance(*g1, *g2, densifyFrac);
+            const auto input1 = convertToLineIfNeeded(extHandle, g1);
+            const auto input2 = convertToLineIfNeeded(extHandle, g2);
+
+            *dist = DiscreteHausdorffDistance::distance(*input1, *input2, densifyFrac);
             return 1;
         });
     }
@@ -1008,7 +1198,10 @@ extern "C" {
 		                   double densifyFrac, double* dist, double* p1x, double* p1y, double* p2x, double* p2y)
     {
         return execute(extHandle, 0, [&]() {
-            DiscreteHausdorffDistance dhd(*g1, *g2);
+            const auto input1 = convertToLineIfNeeded(extHandle, g1);
+            const auto input2 = convertToLineIfNeeded(extHandle, g2);
+
+            DiscreteHausdorffDistance dhd(*input1, *input2);
             dhd.setDensifyFraction(densifyFrac);
             *dist = dhd.distance();
             const auto& pts = dhd.getCoordinates();
@@ -1024,7 +1217,10 @@ extern "C" {
     GEOSFrechetDistance_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2, double* dist)
     {
         return execute(extHandle, 0, [&]() {
-            *dist = DiscreteFrechetDistance::distance(*g1, *g2);
+            const auto input1 = convertToLineIfNeeded(extHandle, g1);
+            const auto input2 = convertToLineIfNeeded(extHandle, g2);
+
+            *dist = DiscreteFrechetDistance::distance(*input1, *input2);
             return 1;
         });
     }
@@ -1034,7 +1230,10 @@ extern "C" {
                                  double* dist)
     {
         return execute(extHandle, 0, [&]() {
-            *dist = DiscreteFrechetDistance::distance(*g1, *g2, densifyFrac);
+            const auto input1 = convertToLineIfNeeded(extHandle, g1);
+            const auto input2 = convertToLineIfNeeded(extHandle, g2);
+
+            *dist = DiscreteFrechetDistance::distance(*input1, *input2, densifyFrac);
             return 1;
         });
     }
@@ -1064,7 +1263,11 @@ extern "C" {
             if(g1->isEmpty() || g2->isEmpty()) {
                 return nullptr;
             }
-            return geos::operation::distance::DistanceOp::nearestPoints(g1, g2).release();
+
+            const auto input1 = convertToLineIfNeeded(extHandle, g1);
+            const auto input2 = convertToLineIfNeeded(extHandle, g2);
+
+            return geos::operation::distance::DistanceOp::nearestPoints(input1, input2).release();
         });
     }
 
@@ -1084,8 +1287,8 @@ extern "C" {
     {
         return execute(extHandle, [&]() {
             geos::operation::cluster::DBSCANClusterFinder finder(eps, minPoints);
-
-            return capi_clusters(g, finder);
+            const auto input = convertToLineIfNeeded(extHandle, g);
+            return capi_clusters(input, finder);
         });
     }
 
@@ -1094,7 +1297,8 @@ extern "C" {
     {
         return execute(extHandle, [&]() {
             geos::operation::cluster::GeometryIntersectsClusterFinder finder;
-            return capi_clusters(g, finder);
+            const auto input = convertToLineIfNeeded(extHandle, g);
+            return capi_clusters(input, finder);
         });
     }
 
@@ -1121,7 +1325,8 @@ extern "C" {
     {
         return execute(extHandle, [&]() {
             geos::operation::cluster::GeometryDistanceClusterFinder finder(d);
-            return capi_clusters(g, finder);
+            const auto input = convertToLineIfNeeded(extHandle, g);
+            return capi_clusters(input, finder);
         });
     }
 
@@ -1282,7 +1487,7 @@ extern "C" {
     GEOSisSimple_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
         return execute(extHandle, 2, [&]() {
-            return g1->isSimple();
+            return convertToLineIfNeeded(extHandle, g1)->isSimple();
         });
     }
 
@@ -1290,7 +1495,9 @@ extern "C" {
     GEOSisSimpleDetail_r(GEOSContextHandle_t extHandle, const Geometry* g1, int returnAllPoints, Geometry** result)
     {
         return execute(extHandle, 2, [&]() {
-            geos::operation::valid::IsSimpleOp iso(g1);
+            const auto inputGeom = convertToLineIfNeeded(extHandle, g1);
+
+            geos::operation::valid::IsSimpleOp iso(inputGeom);
             iso.setFindAllLocations(returnAllPoints);
 
             *result = nullptr;
@@ -1313,7 +1520,8 @@ extern "C" {
     GEOSisRing_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
         return execute(extHandle, 2, [&]() {
-            const Curve* ls = dynamic_cast<const Curve*>(g);
+            const auto inputGeom = convertToLineIfNeeded(extHandle, g);
+            const Curve* ls = dynamic_cast<const Curve*>(inputGeom.get());
             if(ls) {
                 return ls->isRing();
             }
@@ -1361,10 +1569,8 @@ extern "C" {
     Geometry*
     GEOSIntersection_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
-        return execute(extHandle, [&]() {
-            auto g3 = g1->intersection(g2);
-            g3->setSRID(g1->getSRID());
-            return g3.release();
+        return convertCurvesAndExecute(extHandle, g1, g2, [](const Geometry* geom1, const Geometry* geom2) {
+            return geom1->intersection(geom2);
         });
     }
 
@@ -1392,7 +1598,9 @@ extern "C" {
     GEOSBuffer_r(GEOSContextHandle_t extHandle, const Geometry* g1, double width, int quadrantsegments)
     {
         return execute(extHandle, [&]() {
-            auto g3 = g1->buffer(width, quadrantsegments);
+            const auto inputGeom = convertToLineIfNeeded(extHandle, g1);
+
+            auto g3 = inputGeom->buffer(width, quadrantsegments);
             g3->setSRID(g1->getSRID());
             return g3.release();
         });
@@ -1407,6 +1615,8 @@ extern "C" {
         using geos::util::IllegalArgumentException;
 
         return execute(extHandle, [&]() {
+            const auto inputGeom = convertToLineIfNeeded(extHandle, g1);
+
             BufferParameters bp;
             bp.setQuadrantSegments(quadsegs);
 
@@ -1424,7 +1634,7 @@ extern "C" {
                 static_cast<BufferParameters::JoinStyle>(joinStyle)
             );
             bp.setMitreLimit(mitreLimit);
-            BufferOp op(g1, bp);
+            BufferOp op(inputGeom, bp);
             std::unique_ptr<Geometry> g3 = op.getResultGeometry(width);
             g3->setSRID(g1->getSRID());
             return g3.release();
@@ -1437,7 +1647,9 @@ extern "C" {
         using geos::geom::util::Densifier;
 
         return execute(extHandle, [&]() {
-            Densifier densifier(g);
+            const auto inputGeom = convertToLineIfNeeded(extHandle, g);
+
+            Densifier densifier(inputGeom);
             densifier.setDistanceTolerance(tolerance);
             auto g3 = densifier.getResultGeometry();
             g3->setSRID(g->getSRID());
@@ -1450,6 +1662,8 @@ extern "C" {
                       double mitreLimit)
     {
         return execute(extHandle, [&]() {
+            const auto inputGeom = convertToLineIfNeeded(extHandle, g1);
+
             BufferParameters bp;
             //-- use default cap style ROUND
             bp.setQuadrantSegments(quadsegs);
@@ -1462,7 +1676,7 @@ extern "C" {
             );
             bp.setMitreLimit(mitreLimit);
 
-            OffsetCurve oc(*g1, width, bp);
+            OffsetCurve oc(*inputGeom, width, bp);
             std::unique_ptr<Geometry> g3 = oc.getCurve();
             g3->setSRID(g1->getSRID());
             return g3.release();
@@ -1499,7 +1713,8 @@ extern "C" {
     GEOSConvexHull_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
         return execute(extHandle, [&]() {
-            auto g3 = g1->convexHull();
+            const auto inputGeom = convertToLineIfNeeded(extHandle, g1);
+            auto g3 = inputGeom->convexHull();
             g3->setSRID(g1->getSRID());
             return g3.release();
         });
@@ -1512,7 +1727,9 @@ extern "C" {
         unsigned int allowHoles)
     {
         return execute(extHandle, [&]() {
-            ConcaveHull hull(g1);
+            const auto inputGeom = convertToLineIfNeeded(extHandle, g1);
+
+            ConcaveHull hull(inputGeom);
             hull.setMaximumEdgeLengthRatio(ratio);
             hull.setHolesAllowed(allowHoles);
             std::unique_ptr<Geometry> g3 = hull.getHull();
@@ -1528,7 +1745,9 @@ extern "C" {
         unsigned int allowHoles)
     {
         return execute(extHandle, [&]() {
-            ConcaveHull hull(g1);
+            const auto inputGeom = convertToLineIfNeeded(extHandle, g1);
+
+            ConcaveHull hull(inputGeom);
             hull.setMaximumEdgeLength(length);
             hull.setHolesAllowed(allowHoles);
             std::unique_ptr<Geometry> g3 = hull.getHull();
@@ -1543,10 +1762,8 @@ extern "C" {
         unsigned int isOuter,
         double vertexNumFraction)
     {
-        return execute(extHandle, [&]() {
-            std::unique_ptr<Geometry> g3 = PolygonHullSimplifier::hull(g1, isOuter, vertexNumFraction);
-            g3->setSRID(g1->getSRID());
-            return g3.release();
+        return convertCurvesAndExecute(extHandle, g1, [&](const GEOSGeometry* inputGeom) {
+            return PolygonHullSimplifier::hull(inputGeom, isOuter, vertexNumFraction);
         });
     }
 
@@ -1557,16 +1774,12 @@ extern "C" {
         unsigned int parameterMode,
         double parameter)
     {
-        return execute(extHandle, [&]() {
+        return convertCurvesAndExecute(extHandle, g1, [&](const Geometry* inputGeom) {
             if (parameterMode == GEOSHULL_PARAM_AREA_RATIO) {
-                std::unique_ptr<Geometry> g3 = PolygonHullSimplifier::hullByAreaDelta(g1, isOuter, parameter);
-                g3->setSRID(g1->getSRID());
-                return g3.release();
+                return PolygonHullSimplifier::hullByAreaDelta(inputGeom, isOuter, parameter);
             }
             else if (parameterMode == GEOSHULL_PARAM_VERTEX_RATIO) {
-                std::unique_ptr<Geometry> g3 = PolygonHullSimplifier::hull(g1, isOuter, parameter);
-                g3->setSRID(g1->getSRID());
-                return g3.release();
+                return PolygonHullSimplifier::hull(inputGeom, isOuter, parameter);
             }
             else {
                 throw IllegalArgumentException("GEOSPolygonHullSimplifyMode_r: Unknown parameterMode");
@@ -1582,9 +1795,11 @@ extern "C" {
         unsigned int isHolesAllowed)
     {
         return execute(extHandle, [&]() {
+            const auto inputGeom = convertToLineIfNeeded(extHandle, g1);
+
             std::unique_ptr<Geometry> g3 =
                 ConcaveHullOfPolygons::concaveHullByLengthRatio(
-                    g1, lengthRatio,
+                    inputGeom, lengthRatio,
                     isTight > 0,
                     isHolesAllowed > 0);
             g3->setSRID(g1->getSRID());
@@ -1598,7 +1813,9 @@ extern "C" {
         using geos::algorithm::MinimumAreaRectangle;
 
         return execute(extHandle, [&]() {
-            auto g3 = MinimumAreaRectangle::getMinimumRectangle(g);
+            const auto inputGeom = convertToLineIfNeeded(extHandle, g);
+
+            auto g3 = MinimumAreaRectangle::getMinimumRectangle(inputGeom);
             g3->setSRID(g->getSRID());
             return g3.release();
         });
@@ -1608,7 +1825,9 @@ extern "C" {
     GEOSMaximumInscribedCircle_r(GEOSContextHandle_t extHandle, const Geometry* g, double tolerance)
     {
         return execute(extHandle, [&]() {
-            geos::algorithm::construct::MaximumInscribedCircle mic(g, tolerance);
+            const auto inputGeom = convertToLineIfNeeded(extHandle, g);
+
+            geos::algorithm::construct::MaximumInscribedCircle mic(inputGeom, tolerance);
             auto g3 = mic.getRadiusLine();
             g3->setSRID(g->getSRID());
             return g3.release();
@@ -1619,7 +1838,10 @@ extern "C" {
     GEOSLargestEmptyCircle_r(GEOSContextHandle_t extHandle, const Geometry* g, const GEOSGeometry* boundary, double tolerance)
     {
         return execute(extHandle, [&]() {
-            geos::algorithm::construct::LargestEmptyCircle lec(g, boundary, tolerance);
+            const auto obstacles = convertToLineIfNeeded(extHandle, g);
+            const auto bounds = convertToLineIfNeeded(extHandle, boundary);
+
+            geos::algorithm::construct::LargestEmptyCircle lec(obstacles, bounds, tolerance);
             auto g3 = lec.getRadiusLine();
             g3->setSRID(g->getSRID());
             return g3.release();
@@ -1630,7 +1852,9 @@ extern "C" {
     GEOSMinimumWidth_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
         return execute(extHandle, [&]() {
-            geos::algorithm::MinimumDiameter m(g);
+            const auto inputGeom = convertToLineIfNeeded(extHandle, g);
+
+            geos::algorithm::MinimumDiameter m(inputGeom);
             auto g3 = m.getDiameter();
             g3->setSRID(g->getSRID());
             return g3.release();
@@ -1641,7 +1865,8 @@ extern "C" {
     GEOSMinimumClearanceLine_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
         return execute(extHandle, [&]() {
-            geos::precision::MinimumClearance mc(g);
+            const auto inputGeom = convertToLineIfNeeded(extHandle, g);
+            geos::precision::MinimumClearance mc(inputGeom);
             auto g3 = mc.getLine();
             g3->setSRID(g->getSRID());
             return g3.release();
@@ -1652,7 +1877,8 @@ extern "C" {
     GEOSMinimumClearance_r(GEOSContextHandle_t extHandle, const Geometry* g, double* d)
     {
         return execute(extHandle, 2, [&]() {
-            geos::precision::MinimumClearance mc(g);
+            const auto inputGeom = convertToLineIfNeeded(extHandle, g);
+            geos::precision::MinimumClearance mc(inputGeom);
             double res = mc.getDistance();
             *d = res;
             return 0;
@@ -1735,10 +1961,8 @@ extern "C" {
     Geometry*
     GEOSUnion_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
-        return execute(extHandle, [&]() {
-            auto g3 = g1->Union(g2);
-            g3->setSRID(g1->getSRID());
-            return g3.release();
+        return convertCurvesAndExecute(extHandle, g1, g2, [&](const Geometry* input1, const Geometry* input2) {
+            return input1->Union(input2);
         });
     }
 
@@ -1766,30 +1990,24 @@ extern "C" {
     Geometry*
     GEOSCoverageUnion_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
-        return execute(extHandle, [&]() {
-            auto g3 = geos::coverage::CoverageUnion::Union(g);
-            g3->setSRID(g->getSRID());
-            return g3.release();
+        return convertCurvesAndExecute(extHandle, g, [&](const Geometry* inputGeom) {
+            return geos::coverage::CoverageUnion::Union(inputGeom);
         });
     }
 
     Geometry*
     GEOSDisjointSubsetUnion_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
-        return execute(extHandle, [&]() {
-            auto g3 = geos::operation::geounion::DisjointSubsetUnion::Union(g);
-            g3->setSRID(g->getSRID());
-            return g3.release();
+        return convertCurvesAndExecute(extHandle, g, [&](const Geometry* inputGeom) {
+            return geos::operation::geounion::DisjointSubsetUnion::Union(inputGeom);
         });
     }
 
     Geometry*
     GEOSUnaryUnion_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
-        return execute(extHandle, [&]() {
-            std::unique_ptr<Geometry> g3(g->Union());
-            g3->setSRID(g->getSRID());
-            return g3.release();
+        return convertCurvesAndExecute(extHandle, g, [&](const Geometry* input1) {
+            return input1->Union();
         });
     }
 
@@ -1853,7 +2071,7 @@ extern "C" {
     GEOSPointOnSurface_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
         return execute(extHandle, [&]() {
-            auto ret = g1->getInteriorPoint();
+            auto ret = convertToLineIfNeeded(extHandle, g1)->getInteriorPoint();
             ret->setSRID(g1->getSRID());
             return ret.release();
         });
@@ -1862,13 +2080,13 @@ extern "C" {
     Geometry*
     GEOSClipByRect_r(GEOSContextHandle_t extHandle, const Geometry* g, double xmin, double ymin, double xmax, double ymax)
     {
-        return execute(extHandle, [&]() {
+        return convertCurvesAndExecute(extHandle, g, [&](const Geometry* inputGeom) {
             using geos::operation::intersection::Rectangle;
             using geos::operation::intersection::RectangleIntersection;
             Rectangle rect(xmin, ymin, xmax, ymax);
-            std::unique_ptr<Geometry> g3 = RectangleIntersection::clip(*g, rect);
+            std::unique_ptr<Geometry> g3 = RectangleIntersection::clip(*inputGeom, rect);
             g3->setSRID(g->getSRID());
-            return g3.release();
+            return g3;
         });
     }
 
@@ -1876,13 +2094,13 @@ extern "C" {
     GEOSSubdivideByGrid_r(GEOSContextHandle_t extHandle, const Geometry* g, double xmin, double ymin,
                           double xmax, double ymax, unsigned nx, unsigned ny, int include_exterior)
     {
-        return execute(extHandle, [&]() {
+        return convertCurvesAndExecute(extHandle, g, [&](const Geometry* inputGeom) {
             Envelope env(xmin, xmax, ymin, ymax);
             double dx = env.getWidth() / static_cast<double>(nx);
             double dy = env.getHeight() / static_cast<double>(ny);
             geos::operation::grid::Grid<geos::operation::grid::bounded_extent> grid(env, dx, dy);
 
-            return geos::operation::grid::GridIntersection::subdividePolygon(grid, *g, include_exterior).release();
+            return geos::operation::grid::GridIntersection::subdividePolygon(grid, *inputGeom, include_exterior);
         });
     }
 
@@ -1895,6 +2113,8 @@ extern "C" {
 #pragma GCC diagnostic ignored "-Warray-bounds"
 #endif
         return execute(extHandle, 0, [&]() {
+            const auto inputGeom = convertToLineIfNeeded(extHandle, g);
+
             Envelope env(xmin, xmax, ymin, ymax);
             double dx = env.getWidth() / static_cast<double>(nx);
             double dy = env.getHeight() / static_cast<double>(ny);
@@ -1905,7 +2125,7 @@ extern "C" {
             std::shared_ptr<float[]> bufPtr(buf, [](float*) {});
 
             auto cov = std::make_shared<geos::operation::grid::Matrix<float>>(ny, nx, bufPtr);
-            geos::operation::grid::GridIntersection isect(grid, *g, cov);
+            geos::operation::grid::GridIntersection isect(grid, *inputGeom, cov);
 
             return 1;
         });
@@ -2310,7 +2530,9 @@ extern "C" {
     GEOSGetCentroid_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
         return execute(extHandle, [&]() -> Geometry* {
-            auto ret = g->getCentroid();
+            const auto inputGeom = convertToLineIfNeeded(extHandle, g);
+
+            auto ret = inputGeom->getCentroid();
             ret->setSRID(g->getSRID());
             return ret.release();
         });
@@ -2337,8 +2559,9 @@ extern "C" {
     {
         return execute(extHandle, [&]() -> Geometry* {
             GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+            const auto inputGeom = convertToLineIfNeeded(extHandle, g);
 
-            geos::algorithm::MinimumBoundingCircle mc(g);
+            geos::algorithm::MinimumBoundingCircle mc(inputGeom);
             std::unique_ptr<Geometry> ret = mc.getCircle();
             const GeometryFactory* gf = handle->geomFactory;
             if (center) *center = gf->createPoint(mc.getCentre()).release();
@@ -2595,33 +2818,25 @@ extern "C" {
     Geometry*
     GEOSMakeValidWithParams_r(
         GEOSContextHandle_t extHandle,
-        const Geometry* g,
+        const Geometry* input,
         const GEOSMakeValidParams* params)
     {
         using geos::geom::util::GeometryFixer;
         using geos::operation::valid::MakeValid;
 
-        if (params && params->method == GEOS_MAKE_VALID_LINEWORK) {
-            return execute(extHandle, [&]() {
+        return convertCurvesAndExecute(extHandle, input, [params](const Geometry* g) {
+            if (params && params->method == GEOS_MAKE_VALID_LINEWORK) {
                 MakeValid makeValid;
-                auto out = makeValid.build(g);
-                out->setSRID(g->getSRID());
-                return out.release();
-            });
-        }
-        else if (params && params->method == GEOS_MAKE_VALID_STRUCTURE) {
-            return execute(extHandle, [&]() {
+                return makeValid.build(g);
+            }
+            if (params && params->method == GEOS_MAKE_VALID_STRUCTURE) {
                 GeometryFixer fixer(g);
                 fixer.setKeepCollapsed(params->keepCollapsed == 0 ? false : true);
-                auto out = fixer.getResult();
-                out->setSRID(g->getSRID());
-                return out.release();
-            });
-        }
-        else {
-            extHandle->ERROR_MESSAGE("Unknown method in GEOSMakeValidParams");
-            return nullptr;
-        }
+                return fixer.getResult();
+            }
+
+            throw IllegalArgumentException("Unknown method in GEOSMakeValidParams");
+        });
     }
 
     Geometry*
@@ -4430,7 +4645,9 @@ extern "C" {
                 throw std::runtime_error("third argument of GEOSProject_r must be Point");
             }
             const geos::geom::Coordinate inputPt(*p->getCoordinate());
-            return geos::linearref::LengthIndexedLine(g).project(inputPt);
+            const auto inputLine = convertToLineIfNeeded(extHandle, g);
+
+            return geos::linearref::LengthIndexedLine(inputLine).project(inputPt);
         });
     }
 
@@ -4441,8 +4658,9 @@ extern "C" {
         return execute(extHandle, [&]() {
             GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
             const GeometryFactory* gf = handle->geomFactory;
+            const auto inputGeom = convertToLineIfNeeded(extHandle, g);
 
-            geos::linearref::LengthIndexedLine lil(g);
+            geos::linearref::LengthIndexedLine lil(inputGeom);
             CoordinateXYZM coord = lil.extractPoint(d);
 
             std::unique_ptr<Point> point;
@@ -4465,24 +4683,22 @@ extern "C" {
     GEOSProjectNormalized_r(GEOSContextHandle_t extHandle, const Geometry* g,
                             const Geometry* p)
     {
+        return execute(extHandle, -1, [&]() {
+            const auto inputLine = convertToLineIfNeeded(extHandle, g);
 
-        double length;
-        double distance;
-        if(GEOSLength_r(extHandle, g, &length) != 1) {
-            return -1.0;
-        };
+            double length = inputLine->getLength();
+            double distance = GEOSProject_r(extHandle, inputLine.get(), p);
 
-        distance = GEOSProject_r(extHandle, g, p);
+            if (distance == 0.0 && length == 0.0)
+                return 0.0;
 
-        if (distance == 0.0 && length == 0.0)
-            return 0.0;
-
-        /* Meaningless projection? error */
-        if (distance < 0.0 || ! std::isfinite(distance) || length == 0.0) {
-            return -1.0;
-        } else {
-            return distance / length;
-        }
+            /* Meaningless projection? error */
+            if (distance < 0.0 || ! std::isfinite(distance) || length == 0.0) {
+                return -1.0;
+            } else {
+                return distance / length;
+            }
+        });
     }
 
 
@@ -4553,7 +4769,12 @@ extern "C" {
 
         SharedPathsOp::PathList forw, back;
         try {
-            SharedPathsOp::sharedPathsOp(*g1, *g2, forw, back);
+            const auto inputGeom1 = convertToLineIfNeeded(handle, g1);
+            const auto inputGeom2 = convertToLineIfNeeded(handle, g2);
+
+            SharedPathsOp::sharedPathsOp(*inputGeom1, *inputGeom2, forw, back);
+            // Result will be a MultiLineString of line segments.
+            // Geometry::getCurved() will pass it through unmodified.
         }
         catch(const std::exception& e) {
             SharedPathsOp::clearEdges(forw);
@@ -4697,7 +4918,9 @@ extern "C" {
         using geos::operation::buffer::BufferOp;
 
         return execute(extHandle, [&]() {
-            BufferOp op(g1, *bp);
+            const auto inputGeom = convertToLineIfNeeded(extHandle, g1);
+
+            BufferOp op(inputGeom, *bp);
             std::unique_ptr<Geometry> g3 = op.getResultGeometry(width);
             g3->setSRID(g1->getSRID());
             return g3.release();
@@ -4733,7 +4956,9 @@ extern "C" {
         using geos::triangulate::polygon::ConstrainedDelaunayTriangulator;
 
         return execute(extHandle, [&]() -> Geometry* {
-            return ConstrainedDelaunayTriangulator::triangulate(g1).release();
+            const auto inputGeom = convertToLineIfNeeded(extHandle, g1);
+
+            return ConstrainedDelaunayTriangulator::triangulate(inputGeom).release();
         });
     }
 
@@ -4795,7 +5020,9 @@ extern "C" {
         using geos::coverage::CoverageValidator;
 
         return execute(extHandle, 2, [&]() {
-            const GeometryCollection* col = dynamic_cast<const GeometryCollection*>(input);
+            const auto linearized = convertToLineIfNeeded(extHandle, input);
+
+            const GeometryCollection* col = dynamic_cast<const GeometryCollection*>(linearized.get());
             if (!col)
                 throw geos::util::IllegalArgumentException("input is not a collection");
 
@@ -4837,8 +5064,8 @@ extern "C" {
     {
         using geos::coverage::CoverageSimplifier;
 
-        return execute(extHandle, [&]() -> Geometry* {
-            const GeometryCollection* col = dynamic_cast<const GeometryCollection*>(input);
+        return convertCurvesAndExecute(extHandle, input, [&](const Geometry* linearized) -> std::unique_ptr<Geometry> {
+            const GeometryCollection* col = dynamic_cast<const GeometryCollection*>(linearized);
             if (!col)
                 return nullptr;
 
@@ -4857,8 +5084,7 @@ extern "C" {
             else return nullptr;
 
             const GeometryFactory* gf = input->getFactory();
-            std::unique_ptr<Geometry> r = gf->createGeometryCollection(std::move(simple));
-            return r.release();
+            return gf->createGeometryCollection(std::move(simple));
         });
     }
 
@@ -4932,8 +5158,8 @@ extern "C" {
     {
         using geos::coverage::CoverageCleaner;
 
-        return execute(extHandle, [&]() -> Geometry* {
-            const GeometryCollection* col = dynamic_cast<const GeometryCollection*>(input);
+        return convertCurvesAndExecute(extHandle, input, [params](const Geometry* linearized) -> std::unique_ptr<Geometry> {
+            const GeometryCollection* col = dynamic_cast<const GeometryCollection*>(linearized);
             if (!col)
                 return nullptr;
 
@@ -4950,9 +5176,8 @@ extern "C" {
             c.clean();
 
             auto cleanCov = c.getResult();
-            const GeometryFactory* gf = input->getFactory();
-            std::unique_ptr<Geometry> r = gf->createGeometryCollection(std::move(cleanCov));
-            return r.release();
+            const GeometryFactory* gf = linearized->getFactory();
+            return gf->createGeometryCollection(std::move(cleanCov));
         });
     }
 

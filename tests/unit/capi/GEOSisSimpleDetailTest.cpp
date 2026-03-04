@@ -61,12 +61,15 @@ template<>
 template<>
 void object::test<4>()
 {
-    set_test_name("error raised on curved geometry");
+    set_test_name("curved inputs");
+    useContext();
 
     input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
     ensure(input_ != nullptr);
 
-    ensure_equals(GEOSisSimpleDetail(input_, 0, &result_), 2);
+    ensure_equals(GEOSisSimpleDetail_r(ctxt_, input_, 0, &result_), 2);
+    useCurveConversion();
+    ensure_equals(GEOSisSimpleDetail_r(ctxt_, input_, 0, &result_), 1);
 }
 
 template<>

@@ -4,6 +4,7 @@
 #include <tut/tut.hpp>
 // geos
 #include <geos_c.h>
+#include <iostream>
 
 #include "capi_test_utils.h"
 
@@ -160,6 +161,61 @@ void object::test<2>()
         }
         GEOSClusterInfo_destroy(clusters);
         GEOSFree(cluster_ids);
+    }
+}
+
+template<>
+template<>
+void object::test<3>()
+{
+    set_test_name("curved inputs");
+    useContext();
+
+    input_ = fromWKT(
+                 "GEOMETRYCOLLECTION ("
+                 "POINT (-2 0),"
+                 "POINT (2 0),"
+                 "CIRCULARSTRING (-1 0, 0 1, 1 0),"
+                 "LINESTRING (0 0, 1 0)"
+                 ")");
+
+    // EnvelopeDistance supports curves
+    {
+        GEOSClusterInfo* clusters = GEOSClusterEnvelopeDistance_r(ctxt_, input_, 1);
+        ensure_equals("EnvelopeDistance=1", GEOSClusterInfo_getNumClusters_r(ctxt_, clusters), 1u);
+        GEOSClusterInfo_destroy_r(ctxt_, clusters);
+    }
+
+    // EnvelopeIntersects supports curves
+    {
+        GEOSClusterInfo* clusters = GEOSClusterEnvelopeIntersects_r(ctxt_, input_);
+        ensure_equals("EnvelopeIntersects", GEOSClusterInfo_getNumClusters_r(ctxt_, clusters), 3u);
+        GEOSClusterInfo_destroy_r(ctxt_, clusters);
+    }
+
+    // These cluster methods do not support curves
+    ensure(GEOSClusterDBSCAN_r(ctxt_, input_, 0.9, 0) == nullptr);
+    ensure(GEOSClusterGeometryDistance_r(ctxt_, input_, 0.9) == nullptr);
+    ensure(GEOSClusterGeometryIntersects_r(ctxt_, input_) == nullptr);
+
+    useCurveConversion();
+
+    {
+        GEOSClusterInfo* clusters = GEOSClusterDBSCAN_r(ctxt_, input_, 0.9, 0);
+        ensure_equals("DBSCAN", GEOSClusterInfo_getNumClusters_r(ctxt_, clusters), 3u);
+        GEOSClusterInfo_destroy_r(ctxt_, clusters);
+    }
+
+    {
+        GEOSClusterInfo* clusters = GEOSClusterGeometryDistance_r(ctxt_, input_, 0.9);
+        ensure_equals("GeometryDistance", GEOSClusterInfo_getNumClusters_r(ctxt_, clusters), 3u);
+        GEOSClusterInfo_destroy_r(ctxt_, clusters);
+    }
+
+    {
+        GEOSClusterInfo* clusters = GEOSClusterGeometryIntersects_r(ctxt_, input_);
+        ensure_equals("GeometryIntersects", GEOSClusterInfo_getNumClusters_r(ctxt_, clusters), 3u);
+        GEOSClusterInfo_destroy_r(ctxt_, clusters);
     }
 }
 

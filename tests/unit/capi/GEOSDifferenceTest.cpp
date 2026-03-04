@@ -68,8 +68,7 @@ void object::test<3>()
     geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
     geom2_ = fromWKT("LINESTRING (1 0, 2 1)");
 
-    ensure(geom1_);
-    ensure(geom2_);
+    GEOSSetSRID_r(ctxt_, geom1_, 4326);
 
     result_ = GEOSDifference(geom1_, geom2_);
     ensure(result_);

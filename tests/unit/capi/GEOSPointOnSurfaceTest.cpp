@@ -224,11 +224,20 @@ template<>
 void object::test<10>
 ()
 {
+    set_test_name("curved inputs");
+    useContext();
+
     input_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE(CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 0 0)))");
     ensure(input_);
 
-    result_ = GEOSPointOnSurface(input_);
+    result_ = GEOSPointOnSurface_r(ctxt_, input_);
     ensure("curved geometry not supported", result_ == nullptr);
+
+    useCurveConversion();
+    result_ = GEOSPointOnSurface_r(ctxt_, input_);
+    ensure(result_);
+
+    ensure_equals(GEOSContains_r(ctxt_, input_, result_), 1);
 }
 
 template<>

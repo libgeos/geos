@@ -3,6 +3,7 @@
 #include <tut/tut.hpp>
 // geos
 #include <geos_c.h>
+#include <geos/constants.h>
 
 #include "capi_test_utils.h"
 
@@ -146,6 +147,37 @@ void object::test<10>
     result_ = GEOSInterpolate(input_, 5);
 
     ensure(result_ == nullptr);
+}
+
+template<>
+template<>
+void object::test<11>()
+{
+    set_test_name("CircularString input");
+    useContext();
+
+    input_ = fromWKT("CIRCULARSTRING (0 0, 2 2, 4 0)");
+    ensure(input_);
+
+    result_ = GEOSInterpolate_r(ctxt_, input_, geos::MATH_PI);
+    ensure(!result_);
+
+    result_ = GEOSInterpolateNormalized_r(ctxt_, input_, 0.5);
+    ensure(!result_);
+
+    useCurveConversion();
+    result_ = GEOSInterpolate_r(ctxt_, input_, geos::MATH_PI);
+    ensure(result_);
+
+    expected_ = fromWKT("POINT (2 2)");
+    ensure(expected_);
+
+    ensure_geometry_equals_exact(result_, expected_, 0.1);
+
+    geom3_ = GEOSInterpolateNormalized_r(ctxt_, input_, 0.5);
+    ensure(geom3_);
+
+    ensure_geometry_equals_exact(geom3_, expected_, 0.1);
 }
 
 } // namespace tut
