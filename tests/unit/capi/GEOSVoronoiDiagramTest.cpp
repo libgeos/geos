@@ -183,11 +183,13 @@ template<>
 void object::test<9>
 ()
 {
+    set_test_name("curved inputs");
+
     input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
     ensure(input_);
 
     result_ = GEOSVoronoiDiagram(input_, nullptr, 0, 0);
-    ensure("curved geometry not supported", result_ == nullptr);
+    ensure(result_);
 }
 
 } // namespace tut

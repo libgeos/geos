@@ -219,12 +219,37 @@ template<>
 template<>
 void object::test<12>()
 {
-    input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    set_test_name("curved inputs");
+    useContext();
 
+    input_ = fromWKT("MULTICURVE (CIRCULARSTRING (-5 0, 0 5, 5 0), (-5 3, 5 3))");
     ensure(input_);
+    GEOSSetSRID_r(ctxt_, input_, 4326);
+    double input_length = -1;
+    ensure(GEOSLength_r(ctxt_, input_, &input_length));
 
-    result_ = GEOSUnaryUnion(input_);
-    ensure("curved geometry not supported", result_ == nullptr);
+    result_ = GEOSUnaryUnion_r(ctxt_, input_);
+    ensure(result_ == nullptr);
+
+    GEOSCurveToLineParams_setTolerance_r(ctxt_, curveToLineParams_, GEOS_CURVETOLINE_STEP_DEGREES, 1);
+    GEOSContext_setCurveToLineParams_r(ctxt_, curveToLineParams_);
+
+    // Input converted to line, output not converted to curve
+    result_ = GEOSUnaryUnion_r(ctxt_, input_);
+    ensure(result_);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_MULTILINESTRING);
+    ensure_equals(GEOSGetSRID_r(ctxt_, result_), 4326);
+    GEOSGeom_destroy_r(ctxt_, result_);
+
+    // Input converted to line, output converted to curve
+    GEOSContext_setLineToCurveParams_r(ctxt_, lineToCurveParams_);
+    result_ = GEOSUnaryUnion_r(ctxt_, input_);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_MULTICURVE);
+    double result_length = -1;
+    ensure(GEOSLength_r(ctxt_, result_, &result_length));
+
+    ensure_equals(GEOSGetSRID_r(ctxt_, result_), 4326);
+    ensure_equals("length does not match", result_length, input_length, 1e-5);
 }
 
 

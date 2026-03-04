@@ -53,4 +53,27 @@ void object::test<2>()
     ensure_geometry_equals_identical(expected_, result_);
 }
 
+template<>
+template<>
+void object::test<3>()
+{
+    set_test_name("curved inputs");
+    useContext();
+
+    input_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE(CIRCULARSTRING(0 0, 1 1, 2 0), (2 0, 0 0)))");
+    ensure(input_);
+
+    result_ = GEOSSubdivideByGrid_r(ctxt_, input_, 0, 0, 2, 1, 2, 1, false);
+    ensure(!result_);
+
+    useCurveConversion();
+    result_ = GEOSSubdivideByGrid_r(ctxt_, input_, 0, 0, 2, 1, 2, 1, false);
+    ensure(result_);
+
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_GEOMETRYCOLLECTION);
+    ensure_equals(GEOSGetNumGeometries_r(ctxt_, result_), 2);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, GEOSGetGeometryN_r(ctxt_, result_, 0)), GEOS_CURVEPOLYGON);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, GEOSGetGeometryN_r(ctxt_, result_, 1)), GEOS_CURVEPOLYGON);
+}
+
 }

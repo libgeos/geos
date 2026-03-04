@@ -143,4 +143,31 @@ void object::test<7>()
     ensure_geometry_equals(result_, expected_);
 }
 
+template<>
+template<>
+void object::test<8>()
+{
+    set_test_name("curved inputs");
+    useContext();
+
+    input_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE (CIRCULARSTRING (0 0, 5 5, 10 0), (10 0, 15 0, 15 10, 10 10), CIRCULARSTRING (10 10, 5 5.1, 0 10), (0 10,  -5 10, -5 0, 0 0)))");
+    ensure(input_);
+
+    double result = -1;
+    ensure_equals(GEOSMinimumClearance_r(ctxt_, input_, &result), 2);
+    ensure(GEOSMinimumClearanceLine_r(ctxt_, input_) == nullptr);
+
+    useCurveConversion();
+    ensure_equals(GEOSMinimumClearance_r(ctxt_, input_, &result), 0);
+    ensure_equals("minimum clearance value does not match", result, 0.1, 0.01);
+
+    result_ = GEOSMinimumClearanceLine_r(ctxt_, input_);
+    ensure(result_);
+
+    expected_ = fromWKT("LINESTRING (5 5, 5 5.1)");
+    ensure(expected_);
+
+    ensure_geometry_equals(result_, expected_, 0.2);
+}
+
 } // namespace tut

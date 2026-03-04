@@ -23,9 +23,13 @@ struct test_capigeosbuffer_data : public capitest::utility
         : bp_(nullptr)
     {}
 
-    ~test_capigeosbuffer_data()
+    ~test_capigeosbuffer_data() override
     {
-        GEOSBufferParams_destroy(bp_);
+        if (ctxt_) {
+            GEOSBufferParams_destroy_r(ctxt_, bp_);
+        } else {
+            GEOSBufferParams_destroy(bp_);
+        }
     }
 
 };
@@ -465,11 +469,44 @@ template<>
 template<>
 void object::test<26>()
 {
+    set_test_name("curved input");
+    useContext();
+
+    bp_ = GEOSBufferParams_create_r(ctxt_);
+
     input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
     ensure(input_ != nullptr);
 
-    result_ = GEOSBuffer(input_, 1, 8);
+    result_ = GEOSBuffer_r(ctxt_, input_, 1, 8);
     ensure(result_ == nullptr);
+
+    result_ = GEOSBufferWithStyle_r(ctxt_, input_, 1, 8,
+        GEOSBUF_CAP_ROUND,
+        GEOSBUF_JOIN_BEVEL,
+        5.0);
+    ensure(result_ == nullptr);
+
+    result_ = GEOSBufferWithParams_r(ctxt_, input_, bp_, 1);
+    ensure(result_ == nullptr);
+
+    useCurveConversion();
+
+    result_ = GEOSBuffer_r(ctxt_, input_, 1, 8);
+    ensure(result_ != nullptr);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_POLYGON);
+    GEOSGeom_destroy_r(ctxt_, result_);
+
+    result_ = GEOSBufferWithStyle_r(ctxt_, input_, 1, 8,
+        GEOSBUF_CAP_ROUND,
+        GEOSBUF_JOIN_BEVEL,
+        5.0);
+    ensure(result_ != nullptr);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_POLYGON);
+    GEOSGeom_destroy_r(ctxt_, result_);
+
+    result_ = GEOSBufferWithParams_r(ctxt_, input_, bp_, 1);
+    ensure(result_ != nullptr);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_POLYGON);
 }
 
 template<>

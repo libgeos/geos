@@ -33,14 +33,34 @@ template<>
 template<>
 void object::test<2>()
 {
-    geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
-    geom2_ = fromWKT("LINESTRING (1 0, 2 1)");
+    set_test_name("curved inputs, curved output");
+    useContext();
+
+    geom1_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE( CIRCULARSTRING (-5 0, 0 5, 5 0), (5 0, -5 0)))");
+    geom2_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE( CIRCULARSTRING (-5 5, 0 0, 5 5), (5 5, -5 5)))");
 
     ensure(geom1_);
     ensure(geom2_);
+    GEOSSetSRID_r(ctxt_, geom1_, 4326);
 
-    result_ = GEOSSymDifference(geom1_, geom2_);
+    result_ = GEOSSymDifference_r(ctxt_, geom1_, geom2_);
     ensure("curved geometry not supported", result_ == nullptr);
+
+    GEOSCurveToLineParams_setTolerance_r(ctxt_, curveToLineParams_, GEOS_CURVETOLINE_STEP_DEGREES, 1);
+    GEOSContext_setCurveToLineParams_r(ctxt_, curveToLineParams_);
+
+    // Input converted to line, output not converted to curve
+    result_ = GEOSSymDifference_r(ctxt_, geom1_, geom2_);
+    ensure(result_);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_MULTIPOLYGON);
+    GEOSGeom_destroy_r(ctxt_, result_);
+
+    // Input converted to line, output converted to curve
+    GEOSContext_setLineToCurveParams_r(ctxt_, lineToCurveParams_);
+    result_ = GEOSSymDifference_r(ctxt_, geom1_, geom2_);
+
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_MULTISURFACE);
+    ensure_equals(GEOSGetSRID_r(ctxt_, result_), 4326);
 }
 
 } // namespace tut

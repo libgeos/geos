@@ -111,12 +111,24 @@ template<>
 template<>
 void object::test<7>()
 {
-    input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    set_test_name("curved inputs");
+    useContext();
+
+    input_ = fromWKT("CIRCULARSTRING (-5 0, 0 5, 5 0)");
     ensure(input_);
 
-    result_ = GEOSLineSubstring(input_, 0.5, 0);
-
+    result_ = GEOSLineSubstring_r(ctxt_, input_, 0.5, 0);
     ensure("curved geometries not supported", result_ == nullptr);
+
+    GEOSContext_setCurveToLineParams_r(ctxt_, curveToLineParams_);
+    GEOSLineToCurveParams_setRadiusTolerance_r(ctxt_, lineToCurveParams_, 0.5);
+    GEOSContext_setLineToCurveParams_r(ctxt_, lineToCurveParams_);
+
+    result_ = GEOSLineSubstring_r(ctxt_, input_, 0.204832, 0.795167);
+    ensure(result_);
+
+    expected_ = fromWKT("CIRCULARSTRING (-4 3, 0 5, 4 3)");
+    ensure_geometry_equals_exact(result_, expected_, 0.01);
 }
 
 // NaN start fraction

@@ -23,9 +23,13 @@ struct test_capimaximuminscribedcircle_data : public capitest::utility {
         GEOSWKTWriter_setRoundingPrecision(wktw_, 8);
     }
 
-    ~test_capimaximuminscribedcircle_data()
+    ~test_capimaximuminscribedcircle_data() override
     {
-        GEOSFree(wkt_);
+        if (ctxt_) {
+            GEOSFree_r(ctxt_, wkt_);
+        } else {
+            GEOSFree(wkt_);
+        }
     }
 
 };
@@ -74,11 +78,20 @@ template<>
 template<>
 void object::test<3>()
 {
+    set_test_name("curved inputs");
+    useContext();
+
     input_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE (CIRCULARSTRING (0 0, 10 10, 20 0), (20 0, 0 0)))");
     ensure(input_);
 
-    result_ = GEOSMaximumInscribedCircle(input_, 1);
+    result_ = GEOSMaximumInscribedCircle_r(ctxt_, input_, 1);
     ensure("curved geometry not supported", result_ == nullptr);
+
+    useCurveConversion();
+    result_ = GEOSMaximumInscribedCircle_r(ctxt_, input_, 1);
+    ensure(result_);
+
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_LINESTRING);
 }
 
 } // namespace tut

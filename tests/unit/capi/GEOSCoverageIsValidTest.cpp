@@ -77,22 +77,25 @@ template<> void object::test<2>
 
     expected_ = fromWKT(expectedWKT);
 
-    // std::cout << toWKT(result_) << std::endl;
-    // std::cout << toWKT(expected_) << std::endl;
-
     ensure_geometry_equals(result_, expected_, 0.01);
 }
 
 template<>
-template<> void object::test<3>
+template<>
+void object::test<3>
 ()
 {
-    input_ = fromWKT("GEOMETRYCOLLECTION ( "
-        "CURVEPOLYGON (COMPOUNDCURVE ( CIRCULARSTRING (2 0, 1 1, 2 2), (2 2, 0 2, 0 0, 2 0))), "
-        "CURVEPOLYGON (COMPOUNDCURVE ( CIRCULARSTRING (2 2, 1 1, 2 0), (2 0, 4 0, 4 2, 2 2))))");
-    ensure(input_);
+    set_test_name("curved inputs");
+    useContext();
 
-    ensure_equals("curved geometry not supported", GEOSCoverageIsValid(input_, 0, nullptr), 2);
+    input_ = fromWKT("GEOMETRYCOLLECTION ( "
+        "CURVEPOLYGON (COMPOUNDCURVE ( (4 0, 0 0, 0 4, 4 4), CIRCULARSTRING (4 4, 2 2, 4 0))), "
+        "CURVEPOLYGON (CIRCULARSTRING (4 4, 6 2, 4 0, 2 2, 4 4)))");
+
+    ensure_equals("curved geometry not supported", GEOSCoverageIsValid_r(ctxt_, input_, 0, nullptr), 2);
+
+    useCurveConversion();
+    ensure_equals(GEOSCoverageIsValid_r(ctxt_, input_, 0, nullptr), 1);
 }
 
 } // namespace tut

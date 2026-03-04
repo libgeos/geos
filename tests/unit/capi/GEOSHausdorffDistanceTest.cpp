@@ -61,6 +61,10 @@ template<>
 template<>
 void object::test<3>()
 {
+    set_test_name("curved inputs");
+
+    useContext();
+
     geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
     geom2_ = fromWKT("LINESTRING (1 2, 2 2)");
 
@@ -68,8 +72,29 @@ void object::test<3>()
     ensure(geom2_);
 
     double dist;
-    ensure_equals("curved geometry not supported", GEOSHausdorffDistance(geom1_, geom2_, &dist), 0);
-    ensure_equals("curved geometry not supported", GEOSHausdorffDistance(geom2_, geom1_, &dist), 0);
+    double p1x, p1y, p2x, p2y;
+
+    ensure_equals(GEOSHausdorffDistance_r(ctxt_, geom1_, geom2_, &dist), 0);
+    ensure_equals(GEOSHausdorffDistance_r(ctxt_, geom2_, geom1_, &dist), 0);
+    ensure_equals(GEOSHausdorffDistanceDensify_r(ctxt_, geom1_, geom2_, 0.5, &dist), 0);
+    ensure_equals(GEOSHausdorffDistanceDensify_r(ctxt_, geom2_, geom1_, 0.5, &dist), 0);
+
+    ensure_equals(GEOSHausdorffDistanceWithPoints_r(ctxt_, geom1_, geom2_, &dist, &p1x, &p1y, &p2x, &p2y), 0);
+    ensure_equals(GEOSHausdorffDistanceWithPoints_r(ctxt_, geom2_, geom1_, &dist, &p1x, &p1y, &p2x, &p2y), 0);
+    ensure_equals(GEOSHausdorffDistanceDensifyWithPoints_r(ctxt_, geom1_, geom2_, 0.5, &dist, &p1x, &p1y, &p2x, &p2y), 0);
+    ensure_equals(GEOSHausdorffDistanceDensifyWithPoints_r(ctxt_, geom2_, geom1_, 0.5, &dist, &p1x, &p1y, &p2x, &p2y), 0);
+
+    useCurveConversion();
+    ensure_equals(GEOSHausdorffDistance_r(ctxt_, geom1_, geom2_, &dist), 1);
+    ensure_equals(GEOSHausdorffDistance_r(ctxt_, geom2_, geom1_, &dist), 1);
+    ensure_equals(GEOSHausdorffDistanceDensify_r(ctxt_, geom1_, geom2_, 0.5, &dist), 1);
+    ensure_equals(GEOSHausdorffDistanceDensify_r(ctxt_, geom2_, geom1_, 0.5, &dist), 1);
+
+    ensure_equals(GEOSHausdorffDistanceWithPoints_r(ctxt_, geom1_, geom2_, &dist, &p1x, &p1y, &p2x, &p2y), 1);
+    ensure_equals(GEOSHausdorffDistanceWithPoints_r(ctxt_, geom2_, geom1_, &dist, &p1x, &p1y, &p2x, &p2y), 1);
+    ensure_equals(GEOSHausdorffDistanceDensifyWithPoints_r(ctxt_, geom1_, geom2_, 0.5, &dist, &p1x, &p1y, &p2x, &p2y), 1);
+    ensure_equals(GEOSHausdorffDistanceDensifyWithPoints_r(ctxt_, geom2_, geom1_, 0.5, &dist, &p1x, &p1y, &p2x, &p2y), 1);
+
 }
 
 template<>

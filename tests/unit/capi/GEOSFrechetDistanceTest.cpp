@@ -70,6 +70,10 @@ template<>
 template<>
 void object::test<5>()
 {
+    set_test_name("curved inputs");
+
+    useContext();
+
     geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
     geom2_ = fromWKT("LINESTRING (1 2, 2 2)");
 
@@ -77,8 +81,16 @@ void object::test<5>()
     ensure(geom2_);
 
     double dist;
-    ensure_equals("curved geometry not supported", GEOSFrechetDistance(geom1_, geom2_, &dist), 0);
-    ensure_equals("curved geometry not supported", GEOSFrechetDistance(geom2_, geom1_, &dist), 0);
+    ensure_equals(GEOSFrechetDistance_r(ctxt_, geom1_, geom2_, &dist), 0);
+    ensure_equals(GEOSFrechetDistance_r(ctxt_, geom2_, geom1_, &dist), 0);
+    ensure_equals(GEOSFrechetDistanceDensify_r(ctxt_, geom1_, geom2_, 0.5, &dist), 0);
+    ensure_equals(GEOSFrechetDistanceDensify_r(ctxt_, geom2_, geom1_, 0.5, &dist), 0);
+
+    useCurveConversion();
+    ensure_equals(GEOSFrechetDistance_r(ctxt_, geom1_, geom2_, &dist), 1);
+    ensure_equals(GEOSFrechetDistance_r(ctxt_, geom2_, geom1_, &dist), 1);
+    ensure_equals(GEOSFrechetDistanceDensify_r(ctxt_, geom1_, geom2_, 0.5, &dist), 1);
+    ensure_equals(GEOSFrechetDistanceDensify_r(ctxt_, geom2_, geom1_, 0.5, &dist), 1);
 }
 
 } // namespace tut

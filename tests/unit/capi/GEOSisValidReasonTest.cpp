@@ -61,11 +61,22 @@ template<>
 template<>
 void object::test<7>()
 {
-    input_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE( CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 0 0)))");
+    set_test_name("GEOSIsValidReason with automatic linearization");
+
+    useContext();
+
+    input_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE( CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 1 1, 0 0)))");
     ensure(input_ != nullptr);
 
-    char* reason = GEOSisValidReason(input_);
+    char* reason = GEOSisValidReason_r(ctxt_, input_);
     ensure(reason == nullptr);
+
+    useCurveConversion();
+
+    reason = GEOSisValidReason_r(ctxt_, input_);
+    ensure(reason != nullptr);
+    ensure_equals(std::string(reason).substr(0, 17), "Self-intersection");
+    GEOSFree_r(ctxt_, reason);
 }
 
 

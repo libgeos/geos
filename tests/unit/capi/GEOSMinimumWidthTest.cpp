@@ -68,11 +68,19 @@ template<>
 void object::test<3>
 ()
 {
-    input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    set_test_name("curved inputs");
+    useContext();
+
+    input_ = fromWKT("CIRCULARSTRING (0 0, 1 1.5, 2 1)");
     ensure(input_);
 
-    result_ = GEOSMinimumWidth(input_);
+    result_ = GEOSMinimumWidth_r(ctxt_, input_);
     ensure("curved geometry not supported", result_ == nullptr);
+
+    useCurveConversion();
+    result_ = GEOSMinimumWidth_r(ctxt_, input_);
+
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_LINESTRING);
 }
 
 } // namespace tut

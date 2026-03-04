@@ -34,14 +34,24 @@ template<>
 template<>
 void object::test<2>()
 {
+    set_test_name("GEOSRelate with automatic linearization");
+
+    useContext();
+
     geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
     geom2_ = fromWKT("LINESTRING (1 0, 2 1)");
 
     ensure(geom1_);
     ensure(geom2_);
 
-    ensure("curved geometry not supported", GEOSRelate(geom1_, geom2_) == nullptr);
-    ensure("curved geometry not supported", GEOSRelate(geom2_, geom1_) == nullptr);
+    ensure(GEOSRelate_r(ctxt_, geom1_, geom2_) == nullptr);
+    ensure(GEOSRelate_r(ctxt_, geom2_, geom1_) == nullptr);
+
+    useCurveConversion();
+
+    char* pattern = GEOSRelate_r(ctxt_, geom1_, geom2_);
+    ensure(pattern);
+    GEOSFree_r(ctxt_, pattern);
 }
 
 } // namespace tut
