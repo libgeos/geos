@@ -1,6 +1,7 @@
 #include <tut/tut.hpp>
 // geos
 #include <geos_c.h>
+#include <geos/constants.h>
 
 #include "capi_test_utils.h"
 
@@ -66,14 +67,45 @@ template<>
 template<>
 void object::test<3>()
 {
-    geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
-    geom2_ = fromWKT("LINESTRING (1 0, 2 1)");
+    set_test_name("curved inputs, curved output");
+    useContext();
+
+    geom1_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE( CIRCULARSTRING (-5 0, 0 5, 5 0), (5 0, -5 0)))");
+    geom2_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE( CIRCULARSTRING (-5 0, 0 -5, 5 0), (5 0, -5 0)))");
 
     ensure(geom1_);
     ensure(geom2_);
+    GEOSSetSRID_r(ctxt_, geom1_, 4326);
 
-    result_ = GEOSUnion(geom1_, geom2_);
+    result_ = GEOSUnion_r(ctxt_, geom1_, geom2_);
     ensure("curved geometry not supported", result_ == nullptr);
+
+    GEOSCurveToLineParams_setTolerance_r(ctxt_, curveToLineParams_, GEOS_CURVETOLINE_STEP_DEGREES, 1);
+    GEOSContext_setCurveToLineParams_r(ctxt_, curveToLineParams_);
+
+    // Input converted to line, output not converted to curve
+    result_ = GEOSUnion_r(ctxt_, geom1_, geom2_);
+    ensure(result_);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_POLYGON);
+    {
+        double area = -1;
+        ensure_equals(GEOSArea_r(ctxt_, result_, &area), 1);
+        ensure_equals("area does not match expected", area, geos::MATH_PI*5*5, 5e-3);
+    }
+    ensure_equals(GEOSGetSRID_r(ctxt_, result_), 4326);
+    GEOSGeom_destroy_r(ctxt_, result_);
+
+    // Input converted to line, output converted to curve
+    GEOSContext_setLineToCurveParams_r(ctxt_, lineToCurveParams_);
+    result_ = GEOSUnion_r(ctxt_, geom1_, geom2_);
+
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_CURVEPOLYGON);
+    {
+        double area = -1;
+        ensure_equals(GEOSArea_r(ctxt_, result_, &area), 1);
+        ensure_equals("area does not match expected", area, geos::MATH_PI*5*5, 1e-6);
+    }
+    ensure_equals(GEOSGetSRID_r(ctxt_, result_), 4326);
 }
 
 } // namespace tut

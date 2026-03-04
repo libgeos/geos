@@ -89,14 +89,25 @@ template<>
 template<>
 void object::test<4>()
 {
+    set_test_name("curved inputs");
+    useContext();
+
     geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
-    geom2_ = fromWKT("LINESTRING (1 0, 2 1)");
+    geom2_ = fromWKT("COMPOUNDCURVE ((4 0, 2 0), CIRCULARSTRING (2 0, 1 1, 0 0))");
 
     ensure(geom1_);
     ensure(geom2_);
 
-    result_ = GEOSSharedPaths(geom1_, geom2_);
+    result_ = GEOSSharedPaths_r(ctxt_, geom1_, geom2_);
     ensure("curved geometry not supported", result_ == nullptr);
+
+    useCurveConversion();
+
+    result_ = GEOSSharedPaths_r(ctxt_, geom1_, geom2_);
+    ensure(result_);
+
+    // result remains linear because segments are represented as
+    // a MultiLineString, not a LineString.
 }
 
 template<>

@@ -123,11 +123,20 @@ template<>
 void object::test<8>
 ()
 {
-    input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    set_test_name("curved inputs");
+    useContext();
+
+    input_ = fromWKT("CIRCULARSTRING (0 0, 1 1.5, 2 1)");
     ensure(input_);
 
-    result_ = GEOSMinimumRotatedRectangle(input_);
+    result_ = GEOSMinimumRotatedRectangle_r(ctxt_, input_);
     ensure("curved geometry not supported", result_ == nullptr);
+
+    useCurveConversion();
+    result_ = GEOSMinimumRotatedRectangle_r(ctxt_, input_);
+
+    ensure(result_);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_POLYGON);
 }
 
 } // namespace tut

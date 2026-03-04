@@ -256,5 +256,21 @@ void object::test<13>()
     ensure_equals(GEOSIntersects(geom2_, geom1_), 0);
 }
 
+template<>
+template<>
+void object::test<14>()
+{
+    set_test_name("GEOSIntersects with automatic linearization");
+
+    useContext();
+
+    geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    geom2_ = fromWKT("CIRCULARSTRING (2 0, 3 -1, 4 0)");
+
+    ensure_equals(2, GEOSIntersects_r(ctxt_, geom1_, geom2_));
+    useCurveConversion();
+    ensure_equals(1, GEOSIntersects_r(ctxt_, geom1_, geom2_));
+}
+
 } // namespace tut
 

@@ -294,11 +294,28 @@ template<>
 template<>
 void object::test<17>()
 {
+    set_test_name("curved inputs");
+    useContext();
+
     input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
     ensure(input_ != nullptr);
 
-    result_ = GEOSClipByRect(input_, 0, 0, 1, 1);
+    result_ = GEOSClipByRect_r(ctxt_, input_, 0, 0, 1, 1);
     ensure(result_ == nullptr);
+
+    GEOSCurveToLineParams_setTolerance_r(ctxt_, curveToLineParams_, GEOS_CURVETOLINE_STEP_DEGREES, 1);
+    GEOSContext_setCurveToLineParams_r(ctxt_, curveToLineParams_);
+
+    // Input converted to line, output not converted to curve
+    result_ = GEOSClipByRect_r(ctxt_, input_, 0, 0, 1, 1);
+    ensure(result_);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_LINESTRING);
+    GEOSGeom_destroy_r(ctxt_, result_);
+
+    // Input converted to line, output converted to curve
+    GEOSContext_setLineToCurveParams_r(ctxt_, lineToCurveParams_);
+    result_ = GEOSClipByRect_r(ctxt_, input_, 0, 0, 1, 1);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_CIRCULARSTRING);
 }
 
 /// Point Z inside

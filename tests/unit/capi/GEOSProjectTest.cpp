@@ -3,6 +3,7 @@
 #include <tut/tut.hpp>
 // geos
 #include <geos_c.h>
+#include <geos/constants.h>
 
 #include "capi_test_utils.h"
 
@@ -117,6 +118,29 @@ void object::test<5>
     ensure("FE_INVALID raised", !std::fetestexcept(FE_INVALID));
 #endif
     ensure_equals("GEOSProjectNormalized", dist_norm, 0.25);
+}
+
+template<>
+template<>
+void object::test<6>
+()
+{
+    set_test_name("CircularString input");
+    useContext();
+
+    geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    geom2_ = fromWKT("POINT (1 1.1)");
+
+    ensure_equals(GEOSProject_r(ctxt_, geom1_, geom2_), -1.0);
+    ensure_equals(GEOSProjectNormalized_r(ctxt_, geom1_, geom2_), -1.0);
+
+    useCurveConversion();
+
+    double dist = GEOSProject_r(ctxt_, geom1_, geom2_);
+    ensure_equals("GEOSProject result does not match", dist, geos::MATH_PI/2, 1e-2);
+
+    double dist_norm = GEOSProjectNormalized_r(ctxt_, geom1_, geom2_);
+    ensure_equals("GEOSProjectNormalized result does not match", dist_norm, 0.5, 1e-3);
 }
 
 } // namespace tut

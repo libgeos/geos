@@ -77,8 +77,6 @@ DelaunayTriangulationBuilder::DelaunayTriangulationBuilder() :
 void
 DelaunayTriangulationBuilder::setSites(const Geometry& geom)
 {
-    util::ensureNoCurvedComponents(geom);
-
     // remove any duplicate points (they will cause the triangulation to fail)
     siteCoords = extractUniqueCoordinates(geom);
 }

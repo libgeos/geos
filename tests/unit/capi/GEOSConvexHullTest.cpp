@@ -43,11 +43,20 @@ template<>
 template<>
 void object::test<2>()
 {
+    set_test_name("curved inputs");
+    useContext();
+
     input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
     ensure(input_ != nullptr);
 
-    result_ = GEOSConvexHull(input_);
+    result_ = GEOSConvexHull_r(ctxt_, input_);
     ensure(result_ == nullptr);
+
+    useCurveConversion();
+    result_ = GEOSConvexHull_r(ctxt_, input_);
+    ensure(result_ != nullptr);
+
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_POLYGON);
 }
 
 } // namespace tut
