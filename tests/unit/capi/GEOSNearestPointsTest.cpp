@@ -139,5 +139,25 @@ void object::test<6>
     );
 }
 
+template<>
+template<>
+void object::test<7>()
+{
+    set_test_name("2D points returned for 4D inputs");
+
+    geom1_ = fromWKT("POINT ZM (0 0 1 2)");
+    geom2_ = fromWKT("POINT ZM (3 4 7 9)");
+
+    ensure(geom1_);
+    ensure(geom2_);
+
+    GEOSCoordSequence* coords = GEOSNearestPoints(geom1_, geom2_);
+    ensure(coords);
+    ensure(!GEOSCoordSeq_hasM(coords));
+    ensure(!GEOSCoordSeq_hasZ(coords));
+
+    GEOSCoordSeq_destroy(coords);
+}
+
 } // namespace tut
 

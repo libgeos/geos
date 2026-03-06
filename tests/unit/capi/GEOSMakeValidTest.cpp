@@ -102,4 +102,31 @@ void object::test<5>()
     ensure("curved geometry not supported", result_ == nullptr);
 }
 
+template<>
+template<>
+void object::test<6>()
+{
+    set_test_name("Z/M values preserved for valid input");
+
+    input_ = fromWKT("POLYGON ZM ((0 0 1 2, 1 0 2 3, 1 1 3 4, 0 0 1 2))");
+    ensure(input_);
+
+    result_ = GEOSMakeValid(input_);
+    ensure_geometry_equals_identical(result_, input_);
+}
+
+template<>
+template<>
+void object::test<7>()
+{
+    set_test_name("Z/M values are preserved/interpolated for self-intersecting input");
+
+    input_ = fromWKT("POLYGON ZM ((0 0 1 2, 1 0 2 3, 0 1 3 4, 1 1 4 5, 0 0 1 2))");
+    ensure(input_);
+
+    result_ = GEOSMakeValid(input_);
+    expected_ = fromWKT("MULTIPOLYGON ZM (((0 0 1 2, 0.5 0.5 2.5 3.5, 1 0 2 3, 0 0 1 2)), ((1 1 4 5, 0.5 0.5 2.5 3.5, 0 1 3 4, 1 1 4 5)))");
+    ensure_geometry_equals_identical(result_, expected_);
+}
+
 } // namespace tut

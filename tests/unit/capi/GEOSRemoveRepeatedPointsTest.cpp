@@ -60,4 +60,19 @@ void object::test<3>()
     ensure("curved geometry not supported", result_ == nullptr);
 }
 
+template<>
+template<>
+void object::test<4>()
+{
+    set_test_name("Z/M values not considered");
+
+    input_ = fromWKT("LINESTRING ZM (0 0 0 0, 1 3 5 6, 1 3 6 7, 2 6 7 4)");
+    ensure(input_);
+
+    expected_ = fromWKT("LINESTRING ZM (0 0 0 0, 1 3 5 6, 2 6 7 4)");
+
+    result_ = GEOSRemoveRepeatedPoints(input_, 0);
+    ensure_geometry_equals_identical(result_, expected_);
+}
+
 } // namespace tut

@@ -3290,7 +3290,8 @@ extern char GEOS_DLL GEOSisEmpty(const GEOSGeometry* g);
 /**
 * Tests whether the input geometry is a ring. Rings are
 * linestrings, without self-intersections,
-* with start and end point being identical.
+* with start and end point having the same XY values.
+* Z and M values are not considered.
 * \param g The geometry to test
 * \return 1 on true, 0 on false, 2 on exception
 * \since 2.2
@@ -3317,7 +3318,8 @@ extern char GEOS_DLL GEOSHasM(const GEOSGeometry* g);
 /**
 * Tests whether the input geometry is closed.
 * A closed geometry is a linestring or multilinestring
-* with the start and end points being the same.
+* with the start and end points having the same XY values.
+* Z and M values are not considered.
 * \param g The geometry to test
 * \return 1 on true, 0 on false, 2 on exception
 * \since 3.3
@@ -3363,6 +3365,8 @@ extern void GEOS_DLL GEOSGeom_setUserData(GEOSGeometry* g, void* userData);
 * - Polygon shell rings are oriented CW, and holes CCW
 * - Collection elements are sorted by their first coordinate
 *
+* Coordinate Z and M values are not modified during normalization.
+*
 * Use before calling \ref GEOSEqualsExact to avoid false "not equal" results.
 * \param g Input geometry
 * \return 0 on success or -1 on exception
@@ -3373,6 +3377,7 @@ extern int GEOS_DLL GEOSNormalize(GEOSGeometry* g);
 /**
 * Enforce a ring orientation on all polygonal elements in the input geometry.
 * Non-polygonal geometries will not be modified.
+* Coordinate Z and M values are not modified.
 *
 * \param g Input geometry
 * \param exteriorCW if 1, exterior rings will be clockwise and interior rings
@@ -3395,6 +3400,7 @@ and geometric quality.
 /**
 * Tests whether the input geometry is "simple". Mostly relevant for
 * linestrings. A "simple" linestring has no self-intersections.
+* Z and M values are not considered.
 * \param g The geometry to test
 * \return 1 on true, 0 on false, 2 on exception
 * \since 2.2
@@ -3427,6 +3433,8 @@ extern char GEOS_DLL GEOSisSimpleDetail(
 * - Polygon rings must be non-self-intersecting, and interior rings
 *   contained within exterior rings.
 * - Multi-polygon components may not touch or overlap.
+*
+* Z and M values are not considered.
 *
 * \param g The geometry to test
 * \return 1 on true, 0 on false, 2 on exception
@@ -3560,7 +3568,7 @@ extern int GEOS_DLL GEOSMakeValidParams_setKeepCollapsed(
 extern int GEOS_DLL GEOSMinimumClearance(const GEOSGeometry* g, double* d);
 
 /**
-* Returns a LineString whose endpoints define the minimum clearance of a geometry.
+* Returns a 2D LineString whose endpoints define the minimum clearance of a geometry.
 * If the geometry has no minimum clearance, an empty LineString will be returned.
 *
 * \param g the input geometry
@@ -3580,6 +3588,9 @@ extern GEOSGeometry GEOS_DLL *GEOSMinimumClearanceLine(const GEOSGeometry* g);
 * Removing repeated points with a non-zero tolerance may
 * result in an invalid geometry being returned. Be sure
 * to check and repair validity.
+*
+* Z and M coordinate values are preserved but are not considered when 
+* determining if a point is repeated.
 *
 * \return A geometry with all points within the tolerance of each other removed.
 * \param g The geometry to filter
@@ -3614,6 +3625,7 @@ extern int GEOS_DLL GEOSArea(
 
 /**
 * Calculate the length of a geometry.
+* Length is calculated in the XY plane; Z and M values are ignored.
 * \param[in] g Input geometry
 * \param[out] length Pointer to be filled in with length result
 * \return 1 on success, 0 on exception.
@@ -3626,6 +3638,7 @@ extern int GEOS_DLL GEOSLength(
 /**
 * Calculate the length of a LineString.
 * Only works for LineString inputs, returns exception otherwise.
+* Length is calculated in the XY plane; Z and M values are ignored.
 *
 * \param[in] g Input geometry
 * \param[out] length Pointer to be filled in with length result
@@ -3647,6 +3660,8 @@ extern int GEOS_DLL GEOSGeomGetLength(
 
 /**
 * Calculate the distance between two geometries.
+* Distance is calculated in the XY plane; Z and M values are ignored.
+*
 * \param[in] g1 Input geometry
 * \param[in] g2 Input geometry
 * \param[out] dist Pointer to be filled in with distance result. Positive
@@ -3662,6 +3677,8 @@ extern int GEOS_DLL GEOSDistance(
 /**
 * Test whether the distance between two geometries is
 * within the given dist.
+* Distance is calculated in the XY plane; Z and M values are ignored.
+*
 * \param g1 Input geometry
 * \param g2 Input geometry
 * \param dist The max distance
@@ -3695,6 +3712,7 @@ extern int GEOS_DLL GEOSDistanceIndexed(
 /**
 * The closest points of the two geometries.
 * The first point comes from g1 geometry and the second point comes from g2.
+* Returned points will not have Z or M values.
 *
 * \param[in] g1 Input geometry
 * \param[in] g2 Input geometry
@@ -4301,6 +4319,8 @@ extern void GEOS_DLL GEOSClusterInfo_destroy(GEOSClusterInfo* clusters);
 
 /**
 * Buffer a geometry.
+* The coordinates of the constructed geometry will not have Z or M values.
+* 
 * \param g The input geometry to be buffered.
 * \param width The distance by which to expand the geometry (or contract)
 *        if the value is negative.
@@ -4413,6 +4433,8 @@ extern GEOSGeometry GEOS_DLL *GEOSBufferWithParams(
 
 /**
 * Generate a buffer using the provided style parameters.
+* The coordinates of the constructed geometry will not have Z or M values.
+* 
 * \param g The geometry to buffer
 * \param width Width of the buffer
 * \param quadsegs Number of segments per quadrant
@@ -4434,7 +4456,8 @@ extern GEOSGeometry GEOS_DLL *GEOSBufferWithStyle(
 
 /**
 * Generates offset curve line(s) for a geometry.
-* Handles all geometry types as input.
+* Handles all non-curved geometry types as input.
+* The coordinates of the constructed geometry will not have Z or M values.
 *
 * - For a LineString the result is a LineString.
 * - For a Point the result is an empty LineString.

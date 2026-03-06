@@ -182,5 +182,22 @@ void object::test<6>()
     ensure_equals("curved geometry not supported", ret, 0);
 }
 
+template<>
+template<>
+void object::test<7>()
+{
+    set_test_name("distance calculated in 2D only");
+
+    geom1_ = fromWKT("POINT ZM (0 0 1 2)");
+    geom2_ = fromWKT("POINT ZM (3 4 7 9)");
+
+    ensure(geom1_);
+    ensure(geom2_);
+
+    double dist;
+    ensure_equals(GEOSDistance(geom1_, geom2_, &dist), 1);
+    ensure_equals(dist, 5.0);
+}
+
 } // namespace tut
 

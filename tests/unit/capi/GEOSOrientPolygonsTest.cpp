@@ -95,5 +95,20 @@ void object::test<6>()
     ensure_equals("curved geometries not supported", ret, -1);
 }
 
+template<>
+template<>
+void object::test<7>()
+{
+    set_test_name("Z/M values preserved");
+
+    geom1_ = GEOSGeomFromWKT("POLYGON ZM ((0 0 5 7, 10 0 6 8, 10 10 7 9, 0 10 8 10, 0 0 5 7), (1 1 1 3, 2 1 2 4, 2 2 3 5, 1 2 4 6, 1 1 1 3))");
+
+    ensure_equals(GEOSOrientPolygons(geom1_, 0), 0);
+    ensure_equals(toWKT(geom1_), "POLYGON ZM ((0 0 5 7, 10 0 6 8, 10 10 7 9, 0 10 8 10, 0 0 5 7), (1 1 1 3, 1 2 4 6, 2 2 3 5, 2 1 2 4, 1 1 1 3))");
+
+    ensure_equals(GEOSOrientPolygons(geom1_, 1), 0);
+    ensure_equals(toWKT(geom1_), "POLYGON ZM ((0 0 5 7, 0 10 8 10, 10 10 7 9, 10 0 6 8, 0 0 5 7), (1 1 1 3, 2 1 2 4, 2 2 3 5, 1 2 4 6, 1 1 1 3))");
+}
+
 } // namespace tut
 
