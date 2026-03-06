@@ -59,6 +59,25 @@ LinearLocation::pointAlongSegmentByFraction(const Coordinate& p0, const Coordina
     return Coordinate(x, y, z);
 }
 
+CoordinateXYZM
+LinearLocation::pointAlongSegmentByFraction(const CoordinateXYZM& p0, const CoordinateXYZM& p1, double frac)
+{
+    if(frac <= 0.0) {
+        return p0;
+    }
+    if(frac >= 1.0) {
+        return p1;
+    }
+
+    double x = (p1.x - p0.x) * frac + p0.x;
+    double y = (p1.y - p0.y) * frac + p0.y;
+    // interpolate Z/M values. If either is NaN, result will be NaN as well.
+    double z = (p1.z - p0.z) * frac + p0.z;
+    double m = (p1.m - p0.m) * frac + p0.m;
+
+    return CoordinateXYZM(x, y, z, m);
+}
+
 /* public */
 LinearLocation::LinearLocation(std::size_t p_segmentIndex,
                                double p_segmentFraction)
@@ -201,21 +220,27 @@ LinearLocation::isVertex() const
 }
 
 /* public */
-Coordinate
+CoordinateXYZM
 LinearLocation::getCoordinate(const Geometry* linearGeom) const
 {
     if(linearGeom->isEmpty()) {
-        return Coordinate::getNull();
+        return CoordinateXYZM::getNull();
     }
     const LineString* lineComp = dynamic_cast<const LineString*>(linearGeom->getGeometryN(componentIndex));
     if(! lineComp) {
         throw util::IllegalArgumentException("LinearLocation::getCoordinate only works with LineString geometries");
     }
-    Coordinate p0 = lineComp->getCoordinateN(segmentIndex);
-    if(segmentIndex >= lineComp->getNumPoints() - 1) {
+
+    const CoordinateSequence* pts = lineComp->getCoordinatesRO();
+    CoordinateXYZM p0;
+    pts->getAt(segmentIndex, p0);
+    if (segmentIndex >= pts->size() - 1) {
         return p0;
     }
-    Coordinate p1 = lineComp->getCoordinateN(segmentIndex + 1);
+
+    CoordinateXYZM p1;
+    pts->getAt(segmentIndex + 1, p1);
+
     return pointAlongSegmentByFraction(p0, p1, segmentFraction);
 }
 

@@ -36,11 +36,11 @@ namespace linearref { // geos.linearref
 LengthIndexedLine::LengthIndexedLine(const Geometry* p_linearGeom) :
     linearGeom(p_linearGeom) {}
 
-Coordinate
+CoordinateXYZM
 LengthIndexedLine::extractPoint(double index) const
 {
     LinearLocation loc = LengthLocationMap::getLocation(linearGeom, index);
-    Coordinate coord = loc.getCoordinate(linearGeom);
+    CoordinateXYZM coord = loc.getCoordinate(linearGeom);
     return coord;
 }
 
