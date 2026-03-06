@@ -331,7 +331,7 @@ void object::test<15>()
     result_ = GEOSNode(input_);
     ensure(result_ != nullptr);
 
-    expected_ = fromWKT("MULTILINESTRING Z ((-5 0 3, 4 3 6), (0 0 NaN, 4 3 NaN))");
+    expected_ = fromWKT("MULTILINESTRING Z ((-5 0 3, 4 3 6), (0 0 NaN, 4 3 6))");
 
     ensure_equals_exact_geometry_xyzm(reinterpret_cast<Geometry*>(result_),
                                       reinterpret_cast<Geometry*>(expected_), 1e-4);
@@ -349,7 +349,7 @@ void object::test<16>()
     result_ = GEOSNode(input_);
     ensure(result_ != nullptr);
 
-    expected_ = fromWKT("MULTICURVE Z (CIRCULARSTRING Z (-5 0 3, -1.5811388301 4.7434164903 4.5, 4 3 6), (0 0 NaN, 4 3 NaN))");
+    expected_ = fromWKT("MULTICURVE Z (CIRCULARSTRING Z (-5 0 3, -1.5811388301 4.7434164903 4.5, 4 3 6), (0 0 NaN, 4 3 6))");
 
     ensure_equals_exact_geometry_xyzm(reinterpret_cast<Geometry*>(result_),
                                       reinterpret_cast<Geometry*>(expected_), 1e-4);
