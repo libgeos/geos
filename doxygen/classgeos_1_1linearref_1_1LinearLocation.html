@@ -90,9 +90,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5a57b49bee2ad142d553204c9266c7fe" id="r_a5a57b49bee2ad142d553204c9266c7fe"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1linearref_1_1LinearLocation.html#a5a57b49bee2ad142d553204c9266c7fe">isVertex</a> () const</td></tr>
 <tr class="memdesc:a5a57b49bee2ad142d553204c9266c7fe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tests whether this location refers to a vertex.  <br /></td></tr>
 <tr class="separator:a5a57b49bee2ad142d553204c9266c7fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa86e5e825075122546cfe61ad1094eaf" id="r_aa86e5e825075122546cfe61ad1094eaf"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1linearref_1_1LinearLocation.html#aa86e5e825075122546cfe61ad1094eaf">getCoordinate</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *linearGeom) const</td></tr>
-<tr class="memdesc:aa86e5e825075122546cfe61ad1094eaf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> along the given linear <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> which is referenced by this location.  <br /></td></tr>
-<tr class="separator:aa86e5e825075122546cfe61ad1094eaf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a87eecec5746d2ee68f9e48f85dc3269d" id="r_a87eecec5746d2ee68f9e48f85dc3269d"><td class="memItemLeft" align="right" valign="top">geom::CoordinateXYZM&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1linearref_1_1LinearLocation.html#a87eecec5746d2ee68f9e48f85dc3269d">getCoordinate</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *linearGeom) const</td></tr>
+<tr class="memdesc:a87eecec5746d2ee68f9e48f85dc3269d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> along the given linear <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> which is referenced by this location.  <br /></td></tr>
+<tr class="separator:a87eecec5746d2ee68f9e48f85dc3269d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7ac1df9654746357db8e515f654389c0" id="r_a7ac1df9654746357db8e515f654389c0"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1LineSegment.html">geom::LineSegment</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1linearref_1_1LinearLocation.html#a7ac1df9654746357db8e515f654389c0">getSegment</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *linearGeom) const</td></tr>
 <tr class="memdesc:a7ac1df9654746357db8e515f654389c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets a <a class="el" href="classgeos_1_1geom_1_1LineSegment.html">LineSegment</a> representing the segment of the given linear <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> which contains this location.  <br /></td></tr>
 <tr class="separator:a7ac1df9654746357db8e515f654389c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -120,6 +120,9 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:ae9137b3ee11b144d01d928a2ad85ac14" id="r_ae9137b3ee11b144d01d928a2ad85ac14"><td class="memItemLeft" align="right" valign="top">static <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1linearref_1_1LinearLocation.html#ae9137b3ee11b144d01d928a2ad85ac14">pointAlongSegmentByFraction</a> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;p0, const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;p1, double frac)</td></tr>
 <tr class="memdesc:ae9137b3ee11b144d01d928a2ad85ac14"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> of a point a given fraction along the line segment <code>(p0, p1)</code>.  <br /></td></tr>
 <tr class="separator:ae9137b3ee11b144d01d928a2ad85ac14"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38bac14da4e5f93a9c8d9e2202da3345" id="r_a38bac14da4e5f93a9c8d9e2202da3345"><td class="memItemLeft" align="right" valign="top"><a id="a38bac14da4e5f93a9c8d9e2202da3345" name="a38bac14da4e5f93a9c8d9e2202da3345"></a>
+static geom::CoordinateXYZM&#160;</td><td class="memItemRight" valign="bottom"><b>pointAlongSegmentByFraction</b> (const geom::CoordinateXYZM &amp;p0, const geom::CoordinateXYZM &amp;p1, double frac)</td></tr>
+<tr class="separator:a38bac14da4e5f93a9c8d9e2202da3345"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a05ac45d8968264059d80c7b75e1b655d" id="r_a05ac45d8968264059d80c7b75e1b655d"><td class="memItemLeft" align="right" valign="top">static int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1linearref_1_1LinearLocation.html#a05ac45d8968264059d80c7b75e1b655d">compareLocationValues</a> (std::size_t componentIndex0, std::size_t segmentIndex0, double segmentFraction0, std::size_t componentIndex1, std::size_t segmentIndex1, double segmentFraction1)</td></tr>
 <tr class="memdesc:a05ac45d8968264059d80c7b75e1b655d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Compares two sets of location values for order.  <br /></td></tr>
 <tr class="separator:a05ac45d8968264059d80c7b75e1b655d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -328,14 +331,14 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 
 </div>
 </div>
-<a id="aa86e5e825075122546cfe61ad1094eaf" name="aa86e5e825075122546cfe61ad1094eaf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa86e5e825075122546cfe61ad1094eaf">&#9670;&#160;</a></span>getCoordinate()</h2>
+<a id="a87eecec5746d2ee68f9e48f85dc3269d" name="a87eecec5746d2ee68f9e48f85dc3269d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a87eecec5746d2ee68f9e48f85dc3269d">&#9670;&#160;</a></span>getCoordinate()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> geos::linearref::LinearLocation::getCoordinate </td>
+          <td class="memname">geom::CoordinateXYZM geos::linearref::LinearLocation::getCoordinate </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *&#160;</td>
           <td class="paramname"><em>linearGeom</em></td><td>)</td>

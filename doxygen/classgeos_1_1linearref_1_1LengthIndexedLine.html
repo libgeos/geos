@@ -60,9 +60,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a7f1fd2d3467a3bae6e28e2da893506f9" id="r_a7f1fd2d3467a3bae6e28e2da893506f9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1linearref_1_1LengthIndexedLine.html#a7f1fd2d3467a3bae6e28e2da893506f9">LengthIndexedLine</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *linearGeom)</td></tr>
 <tr class="memdesc:a7f1fd2d3467a3bae6e28e2da893506f9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs an object which allows a linear <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> to be linearly referenced using length as an index.  <br /></td></tr>
 <tr class="separator:a7f1fd2d3467a3bae6e28e2da893506f9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af261bc3be9c43e3f71260a442eba46ee" id="r_af261bc3be9c43e3f71260a442eba46ee"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1linearref_1_1LengthIndexedLine.html#af261bc3be9c43e3f71260a442eba46ee">extractPoint</a> (double index) const</td></tr>
-<tr class="memdesc:af261bc3be9c43e3f71260a442eba46ee"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> for the point on the line at the given index.  <br /></td></tr>
-<tr class="separator:af261bc3be9c43e3f71260a442eba46ee"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a036b1f64ef2c92ca78b554e427a4346b" id="r_a036b1f64ef2c92ca78b554e427a4346b"><td class="memItemLeft" align="right" valign="top">geom::CoordinateXYZM&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1linearref_1_1LengthIndexedLine.html#a036b1f64ef2c92ca78b554e427a4346b">extractPoint</a> (double index) const</td></tr>
+<tr class="memdesc:a036b1f64ef2c92ca78b554e427a4346b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> for the point on the line at the given index.  <br /></td></tr>
+<tr class="separator:a036b1f64ef2c92ca78b554e427a4346b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a67f0ebffd9b6ee260c6616f0f3918195" id="r_a67f0ebffd9b6ee260c6616f0f3918195"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1linearref_1_1LengthIndexedLine.html#a67f0ebffd9b6ee260c6616f0f3918195">extractPoint</a> (double index, double offsetDistance) const</td></tr>
 <tr class="memdesc:a67f0ebffd9b6ee260c6616f0f3918195"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> for the point on the line at the given index, offset by the given distance.  <br /></td></tr>
 <tr class="separator:a67f0ebffd9b6ee260c6616f0f3918195"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -185,14 +185,14 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="af261bc3be9c43e3f71260a442eba46ee" name="af261bc3be9c43e3f71260a442eba46ee"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af261bc3be9c43e3f71260a442eba46ee">&#9670;&#160;</a></span>extractPoint() <span class="overload">[1/2]</span></h2>
+<a id="a036b1f64ef2c92ca78b554e427a4346b" name="a036b1f64ef2c92ca78b554e427a4346b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a036b1f64ef2c92ca78b554e427a4346b">&#9670;&#160;</a></span>extractPoint() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> geos::linearref::LengthIndexedLine::extractPoint </td>
+          <td class="memname">geom::CoordinateXYZM geos::linearref::LengthIndexedLine::extractPoint </td>
           <td>(</td>
           <td class="paramtype">double&#160;</td>
           <td class="paramname"><em>index</em></td><td>)</td>
@@ -202,7 +202,7 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Computes the <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">Coordinate</a> for the point on the line at the given index. </p>
-<p>If the index is out of range the first or last point on the line will be returned. The Z-ordinate of the computed point will be interpolated from the Z-ordinates of the line segment containing it, if they exist.</p>
+<p>If the index is out of range the first or last point on the line will be returned. The Z and M ordinates of the computed point will be interpolated from the Z and M ordinates of the line segment containing it, if they exist.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">index</td><td>the index of the desired point </td></tr>

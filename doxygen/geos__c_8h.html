@@ -17259,7 +17259,10 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Measuring from start of line, return point that is distance the start. Line parameter must be a LineString. The returned point is not guaranteed to intersect the line due to limitations of floating point calculations. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Return the point that is the specified 2D distance along a LineString from the start.</p>
+<p>If applicable, the Z value of the returned point will be interpolated from the input line. Since GEOS 3.15, the M value will also be interpolated.</p>
+<p>If the input is not a LineString, NULL will be returned.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">line</td><td>linear target of projection </td></tr>
     <tr><td class="paramname">d</td><td>distance from start of line to created point </td></tr>
@@ -17347,7 +17350,10 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Measuring from start of line, return point that is a proportion the start. Line parameter must be a LineString. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Measuring from start of a LineString, return the point at the specified fraction of the total length.</p>
+<p>If applicable, the Z value of the returned point will be interpolated from the input line. Since GEOS 3.15, the M value will also be interpolated.</p>
+<p>If the input is not a LineString, NULL will be returned.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">line</td><td>linear target of projection </td></tr>
     <tr><td class="paramname">proportion</td><td>The proportion from the start of line to created point </td></tr>
