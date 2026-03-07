@@ -3886,7 +3886,7 @@ extern double GEOS_DLL GEOSProjectNormalized(const GEOSGeometry* line,
                                              const GEOSGeometry* point);
 
 /**
-* Measuring from start of a LineString, return the point that it the specified
+* Measuring from start of a LineString, return the point at the specified
 * fraction of the total length.
 *
 * If applicable, the Z value of the returned point will be interpolated from the input line.
