@@ -199,4 +199,19 @@ void object::test<5>()
     ensure_THROW(factory_->createCircularString(pts), geos::util::GEOSException);
 }
 
+// Test that getArcs() on empty CircularString does not cause underflow
+template<>
+template<>
+void object::test<6>()
+{
+    set_test_name("getArcs on empty CircularString");
+
+    auto cs = factory_->createCircularString(false, false);
+    ensure(cs->isEmpty());
+
+    // This should not cause size_t underflow or infinite loop
+    const auto& arcs = cs->getArcs();
+    ensure_equals(arcs.size(), 0u);
+}
+
 }

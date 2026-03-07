@@ -49,6 +49,9 @@ CircularString::clone() const
 void
 CircularString::createArcs() const
 {
+    if (points->getSize() < 3) {
+        return;
+    }
     for (std::size_t i = 0; i < points->getSize() - 2; i += 2) {
         arcs.emplace_back(*points, i);
     }
