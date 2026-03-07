@@ -2934,7 +2934,8 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Buffer a geometry. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Buffer a geometry. The coordinates of the constructed geometry will not have Z or M values.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The input geometry to be buffered. </td></tr>
     <tr><td class="paramname">width</td><td>The distance by which to expand the geometry (or contract) if the value is negative. </td></tr>
@@ -3706,7 +3707,8 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Generate a buffer using the provided style parameters. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Generate a buffer using the provided style parameters. The coordinates of the constructed geometry will not have Z or M values.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The geometry to buffer </td></tr>
     <tr><td class="paramname">width</td><td>Width of the buffer </td></tr>
@@ -10003,7 +10005,8 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Calculate the distance between two geometries. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Calculate the distance between two geometries. Distance is calculated in the XY plane; Z and M values are ignored.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">g1</td><td>Input geometry </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">g2</td><td>Input geometry </td></tr>
@@ -10206,7 +10209,8 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Test whether the distance between two geometries is within the given dist. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Test whether the distance between two geometries is within the given dist. Distance is calculated in the XY plane; Z and M values are ignored.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g1</td><td>Input geometry </td></tr>
     <tr><td class="paramname">g2</td><td>Input geometry </td></tr>
@@ -14651,7 +14655,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Calculate the length of a LineString. Only works for LineString inputs, returns exception otherwise.</p>
+<p>Calculate the length of a LineString. Only works for LineString inputs, returns exception otherwise. Length is calculated in the XY plane; Z and M values are ignored.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">g</td><td>Input geometry </td></tr>
@@ -17701,7 +17705,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Tests whether the input geometry is closed. A closed geometry is a linestring or multilinestring with the start and end points being the same. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Tests whether the input geometry is closed. A closed geometry is a linestring or multilinestring with the start and end points having the same XY values. Z and M values are not considered. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The geometry to test </td></tr>
   </table>
@@ -17843,7 +17847,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Tests whether the input geometry is a ring. Rings are linestrings, without self-intersections, with start and end point being identical. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Tests whether the input geometry is a ring. Rings are linestrings, without self-intersections, with start and end point having the same XY values. Z and M values are not considered. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The geometry to test </td></tr>
   </table>
@@ -17914,7 +17918,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Tests whether the input geometry is "simple". Mostly relevant for linestrings. A "simple" linestring has no self-intersections. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Tests whether the input geometry is "simple". Mostly relevant for linestrings. A "simple" linestring has no self-intersections. Z and M values are not considered. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The geometry to test </td></tr>
   </table>
@@ -18093,6 +18097,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 <li>Polygon rings must be non-self-intersecting, and interior rings contained within exterior rings.</li>
 <li>Multi-polygon components may not touch or overlap.</li>
 </ul>
+<p>Z and M values are not considered.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The geometry to test </td></tr>
@@ -18466,7 +18471,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Calculate the length of a geometry. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Calculate the length of a geometry. Length is calculated in the XY plane; Z and M values are ignored. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">g</td><td>Input geometry </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">length</td><td>Pointer to be filled in with length result </td></tr>
@@ -19534,7 +19539,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns a LineString whose endpoints define the minimum clearance of a geometry. If the geometry has no minimum clearance, an empty LineString will be returned.</p>
+<p>Returns a 2D LineString whose endpoints define the minimum clearance of a geometry. If the geometry has no minimum clearance, an empty LineString will be returned.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>the input geometry </td></tr>
@@ -19760,7 +19765,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
   </tr>
 </table>
 </div><div class="memdoc">
-<p>The closest points of the two geometries. The first point comes from g1 geometry and the second point comes from g2.</p>
+<p>The closest points of the two geometries. The first point comes from g1 geometry and the second point comes from g2. Returned points will not have Z or M values.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">g1</td><td>Input geometry </td></tr>
@@ -19918,6 +19923,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
 <li>Polygon shell rings are oriented CW, and holes CCW</li>
 <li>Collection elements are sorted by their first coordinate</li>
 </ul>
+<p>Coordinate Z and M values are not modified during normalization.</p>
 <p>Use before calling <a class="el" href="geos__c_8h.html#a23922c100edd72a8d82720213607e7bf">GEOSEqualsExact</a> to avoid false "not equal" results. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>Input geometry </td></tr>
@@ -20017,7 +20023,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Generates offset curve line(s) for a geometry. Handles all geometry types as input.</p>
+<p>Generates offset curve line(s) for a geometry. Handles all non-curved geometry types as input. The coordinates of the constructed geometry will not have Z or M values.</p>
 <ul>
 <li>For a LineString the result is a LineString.</li>
 <li>For a Point the result is an empty LineString.</li>
@@ -20274,7 +20280,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Enforce a ring orientation on all polygonal elements in the input geometry. Non-polygonal geometries will not be modified.</p>
+<p>Enforce a ring orientation on all polygonal elements in the input geometry. Non-polygonal geometries will not be modified. Coordinate Z and M values are not modified.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>Input geometry </td></tr>
@@ -23432,6 +23438,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
 </div><div class="memdoc">
 <p>Works from start of each coordinate sequence in the geometry, retaining points that are further away from the previous retained point than the tolerance value.</p>
 <p>Removing repeated points with a non-zero tolerance may result in an invalid geometry being returned. Be sure to check and repair validity.</p>
+<p>Z and M coordinate values are preserved but are not considered when determining if a point is repeated.</p>
 <dl class="section return"><dt>Returns</dt><dd>A geometry with all points within the tolerance of each other removed. </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
