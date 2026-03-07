@@ -270,5 +270,24 @@ void object::test<13>()
     ensure("curved geometries not supported", result_ == nullptr);
 }
 
+template<>
+template<>
+void object::test<14>()
+{
+    set_test_name("offset of XYZM geometry is XY");
+
+    input_ = fromWKT("LINESTRING ZM (0 0 3 5, 10 0 7 8)");
+    ensure(input_);
+
+    result_ = GEOSOffsetCurve(input_, 2, 0, GEOSBUF_JOIN_ROUND, 2);
+
+    ensure(result_);
+    ensure(!GEOSHasZ(result_));
+    ensure(!GEOSHasM(result_));
+
+    expected_ = fromWKT("LINESTRING (0 2, 10 2)");
+    ensure_geometry_equals(result_, expected_);
+}
+
 } // namespace tut
 

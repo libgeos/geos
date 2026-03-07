@@ -126,4 +126,21 @@ void object::test<6>
     ensure_equals(GEOSMinimumClearance(input_, &d), 2);
 }
 
+template<>
+template<>
+void object::test<7>()
+{
+    set_test_name("2D LineString returned for 4D inputs");
+
+    input_ = fromWKT("POLYGON ZM ((0 0 1 2, 2 0 2 3, 2 1 3 4, 1 0.1 4 5, 0 1 5 6, 0 0 1 2))");
+    result_ = GEOSMinimumClearanceLine(input_);
+
+    ensure(result_ != nullptr);
+    ensure(!GEOSHasZ(result_));
+    ensure(!GEOSHasM(result_));
+
+    expected_ = fromWKT("LINESTRING (1 0.1, 1 0)");
+    ensure_geometry_equals(result_, expected_);
+}
+
 } // namespace tut

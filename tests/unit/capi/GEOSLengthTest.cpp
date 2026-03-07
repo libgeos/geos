@@ -72,5 +72,21 @@ void object::test<4>()
     ensure_equals(length, geos::MATH_PI);
 }
 
+template<>
+template<>
+void object::test<5>()
+{
+    set_test_name("length calculated in 2D only");
+
+    input_ = fromWKT("LINESTRING (0 0 0 0, 1 0 7 9)");
+    ensure(input_ != nullptr);
+
+    double length = -1;
+    int ret = GEOSLength(input_, &length);
+    ensure_equals(ret, 1);
+    ensure_equals(length, 1);
+}
+
+
 } // namespace tut
 

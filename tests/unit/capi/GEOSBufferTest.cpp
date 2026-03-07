@@ -472,4 +472,19 @@ void object::test<26>()
     ensure(result_ == nullptr);
 }
 
+template<>
+template<>
+void object::test<27>()
+{
+    set_test_name("buffer of XYZM geometry is XY");
+
+    input_ = fromWKT("POINT ZM (1 2 3 4)");
+    ensure(input_ != nullptr);
+
+    result_ = GEOSBuffer(input_, 1, 8);
+    ensure(result_ != nullptr);
+    ensure(!GEOSHasZ(result_));
+    ensure(!GEOSHasM(result_));
+}
+
 } // namespace tut
