@@ -4291,11 +4291,21 @@ extern "C" {
     {
         return execute(extHandle, [&]() {
             GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+            const GeometryFactory* gf = handle->geomFactory;
 
             geos::linearref::LengthIndexedLine lil(g);
-            geos::geom::Coordinate coord = lil.extractPoint(d);
-            const GeometryFactory* gf = handle->geomFactory;
-            auto point = coord.isNull() ? gf->createPoint(g->getCoordinateDimension()) : gf->createPoint(coord);
+            CoordinateXYZM coord = lil.extractPoint(d);
+
+            std::unique_ptr<Point> point;
+
+            if (coord.isNull()) {
+                point = gf->createPoint(g->hasZ(), g->hasM());
+            } else {
+                auto seq = std::make_unique<CoordinateSequence>(1, g->hasZ(), g->hasM());
+                seq->setAt(coord, 0);
+                point = gf->createPoint(std::move(seq));
+            }
+
             point->setSRID(g->getSRID());
             return point.release();
         });

@@ -84,6 +84,8 @@ public:
      */
     static geom::Coordinate pointAlongSegmentByFraction(const geom::Coordinate& p0, const geom::Coordinate& p1,
             double frac);
+    static geom::CoordinateXYZM pointAlongSegmentByFraction(const geom::CoordinateXYZM& p0, const geom::CoordinateXYZM& p1,
+            double frac);
 
 
     /** \brief
@@ -161,7 +163,7 @@ public:
      * @param linearGeom the linear geometry referenced by this location
      * @return the Coordinate at the location
      */
-    geom::Coordinate getCoordinate(const geom::Geometry* linearGeom) const;
+    geom::CoordinateXYZM getCoordinate(const geom::Geometry* linearGeom) const;
 
     /** \brief
      * Gets a [LineSegment](@ref geom::LineSegment) representing the segment of the
