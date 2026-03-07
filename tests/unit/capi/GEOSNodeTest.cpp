@@ -355,5 +355,24 @@ void object::test<16>()
                                       reinterpret_cast<Geometry*>(expected_), 1e-4);
 }
 
+// Test empty CircularString noding (underflow regression test)
+template<>
+template<>
+void object::test<17>()
+{
+    set_test_name("empty CIRCULARSTRING does not cause underflow");
+
+    geom1_ = GEOSGeomFromWKT("CIRCULARSTRING EMPTY");
+    ensure(geom1_ != nullptr);
+
+    geom2_ = GEOSNode(geom1_);
+    ensure(geom2_ != nullptr);
+
+    wkt_ = GEOSWKTWriter_write(wktw_, geom2_);
+    std::string out(wkt_);
+
+    ensure_equals(out, "CIRCULARSTRING EMPTY");
+}
+
 } // namespace tut
 
