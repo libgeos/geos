@@ -17,7 +17,7 @@ struct test_geosenvelope_data : public capitest::utility
         input_ = fromWKT(wktIn);
         result_ = GEOSEnvelope(input_);
         expected_ = fromWKT(wktExp);
-        ensure_geometry_equals(result_, expected_, 0);
+        ensure_geometry_equals_identical(result_, expected_);
     }
 
 };
@@ -66,6 +66,42 @@ void object::test<4>()
     checkEnvelope(
         "POLYGON EMPTY",
         "POINT EMPTY");
+}
+
+template<>
+template<>
+void object::test<5>()
+{
+    set_test_name("POINT ZM");
+
+    checkEnvelope(
+        "POINT ZM (1 2 3 4)",
+             "POINT (1 2)"
+        );
+}
+
+template<>
+template<>
+void object::test<6>()
+{
+    set_test_name("LINESTRING ZM");
+
+    checkEnvelope(
+        "LINESTRING ZM (0 0 3 4, 5 0 7 8)",
+        "POLYGON ((0 0, 5 0, 5 0, 0 0, 0 0))" // collapsed polygon
+    );
+}
+
+template<>
+template<>
+void object::test<7>()
+{
+    set_test_name("POLYGON ZM");
+
+    checkEnvelope(
+        "POLYGON ZM ((0 0 1 2, 1 0 3 4, 1 1 5 6, 0 0 1 2))",
+        "POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0))" // collapsed polygon
+    );
 }
 
 } // namespace tut

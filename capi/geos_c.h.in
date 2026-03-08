@@ -4711,8 +4711,11 @@ GEOSCoverageClean(
 ///@{
 
 /**
-* Returns minimum rectangular polygon or point that contains the geometry,
+* Returns minimum 2D rectangular polygon or point that contains the geometry,
 * or an empty point for empty inputs.
+*
+* Z and M values in the input coordinates are ignored.
+*
 * \param g The geometry to calculate an envelope for
 * \return A newly allocated polygonal envelope or point. NULL on exception.
 * Caller is responsible for freeing with GEOSGeom_destroy().
@@ -4728,6 +4731,8 @@ extern GEOSGeometry GEOS_DLL *GEOSEnvelope(const GEOSGeometry* g);
 * - the boundary of a linestring is the end points
 * - the boundary of a point is the point
 *
+* Z and M values in the input coordinates are preserved.
+*
 * \param g The input geometry
 * \return A newly allocated geometry of the boundary. NULL on exception.
 * Caller is responsible for freeing with GEOSGeom_destroy().
@@ -4736,8 +4741,12 @@ extern GEOSGeometry GEOS_DLL *GEOSEnvelope(const GEOSGeometry* g);
 extern GEOSGeometry GEOS_DLL *GEOSBoundary(const GEOSGeometry* g);
 
 /**
-* Returns convex hull of a geometry. The smallest convex Geometry
+* Returns the convex hull of a geometry. The smallest convex Geometry
 * that contains all the points in the input Geometry
+*
+* Z values in the input coordinates will be preserved.
+* M values in the input coordinates will not be preserved.
+*
 * \param g The input geometry
 * \return A newly allocated geometry of the convex hull. NULL on exception.
 * Caller is responsible for freeing with GEOSGeom_destroy().
@@ -4753,6 +4762,9 @@ extern GEOSGeometry GEOS_DLL *GEOSConvexHull(const GEOSGeometry* g);
 * to the area occupied by the input.
 * Frequently used to convert a multi-point into a polygonal area.
 * that contains all the points in the input Geometry.
+*
+* Z values in the input coordinates will be preserved.
+* M values in the input coordinates will not be preserved.
 *
 * A set of points has a sequence of hulls of increasing concaveness,
 * determined by a numeric target parameter.
@@ -4788,6 +4800,9 @@ extern GEOSGeometry GEOS_DLL *GEOSConcaveHull(
 * to the area occupied by the input.
 * Frequently used to convert a multi-point into a polygonal area.
 * that contains all the points in the input Geometry.
+*
+* Z values in the input coordinates will be preserved.
+* M values in the input coordinates will not be preserved.
 *
 * A set of points has a sequence of hulls of increasing concaveness,
 * determined by a numeric target parameter.
@@ -5368,6 +5383,8 @@ extern GEOSGeometry GEOS_DLL *GEOSSimplify(
 * that are co-linear within the tolerance distance.
 * Returns a valid output geometry, checking for collapses, ring-intersections, etc
 * and attempting to avoid. More computationally expensive than GEOSSimplify()
+* Z values on the retained coordinates will be preserved.
+* M values will not be preserved.
 * \param g The input geometry
 * \param tolerance The tolerance to apply. Larger tolerance leads to simpler output.
 * \return The simplified geometry
@@ -5384,6 +5401,10 @@ extern GEOSGeometry GEOS_DLL *GEOSTopologyPreserveSimplify(
 * Return all distinct vertices of input geometry as a MultiPoint.
 * Note that only 2 dimensions of the vertices are considered when
 * testing for equality.
+*
+* Z values on the retained coordinates will be preserved.
+* M values will not be preserved.
+*
 * \param g The input geometry
 * \return The distinct points
 * Caller is responsible for freeing with GEOSGeom_destroy().

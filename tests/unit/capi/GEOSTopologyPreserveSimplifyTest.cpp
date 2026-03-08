@@ -58,5 +58,21 @@ void object::test<3>()
     ensure("curved geometry not supported", result_ == nullptr);
 }
 
+template<>
+template<>
+void object::test<4>()
+{
+    set_test_name("LINESTRING ZM");
+
+    input_ = fromWKT("LINESTRING ZM (0 0 5 8, 1 1 6 2, 2 0 7 9)");
+    ensure(input_);
+
+    result_ = GEOSTopologyPreserveSimplify(input_, 2);
+    ensure(result_);
+
+    expected_ = fromWKT("LINESTRING Z (0 0 5, 2 0 7)");
+    ensure_geometry_equals_identical(result_, expected_);
+}
+
 } // namespace tut
 

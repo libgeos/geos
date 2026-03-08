@@ -72,6 +72,20 @@ void object::test<4>() {
     ensure_geometry_equals(result_, "MULTIPOINT ((0 0), (1 1), (2 0))");
 }
 
+template <>
+template <>
+void object::test<5>() {
+    input_ = fromWKT("MULTIPOINT ZM (0 4 7 8, 0 4 11 12, 3 5 6 2)");
+    ensure(input_);
+
+    result_ = GEOSGeom_extractUniquePoints(input_);
+    ensure(result_);
+
+    expected_ = fromWKT("MULTIPOINT Z (0 4 7, 3 5 6)");
+    ensure(expected_);
+
+    ensure_geometry_equals(expected_, result_);
+}
 
 } // namespace tut
 

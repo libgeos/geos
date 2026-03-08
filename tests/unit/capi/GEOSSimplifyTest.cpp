@@ -50,5 +50,21 @@ void object::test<2>()
     ensure(result_ == nullptr);
 }
 
+template<>
+template<>
+void object::test<3>()
+{
+    set_test_name("LINESTRING ZM");
+
+    input_ = fromWKT("LINESTRING ZM (0 0 5 8, 1 1 6 2, 2 0 7 9)");
+    ensure(input_);
+
+    result_ = GEOSSimplify(input_, 2);
+    ensure(result_);
+
+    expected_ = fromWKT("LINESTRING ZM (0 0 5 8, 2 0 7 9)");
+    ensure_geometry_equals_identical(result_, expected_);
+}
+
 } // namespace tut
 

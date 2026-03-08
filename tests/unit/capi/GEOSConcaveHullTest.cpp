@@ -61,4 +61,15 @@ void object::test<3>()
     ensure(result_ == nullptr);
 }
 
+template<>
+template<>
+void object::test<4>()
+{
+    input_ = fromWKT("MULTIPOINT ZM (0 0 1 2, 1 0 3 4, 1 1 5 6, 1 8 11 4, 0.5 0.5 -4 -7)");
+    result_ = GEOSConcaveHull(input_, 0, 0);
+
+    printf("%s", toWKT(result_).c_str());
+}
+
+
 } // namespace tut
