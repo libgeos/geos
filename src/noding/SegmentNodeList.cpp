@@ -280,6 +280,14 @@ SegmentNodeList::createSplitEdgePts(const SegmentNode *ei0, const SegmentNode *e
     pts->add(*edgeCoords, ei0->segmentIndex + 1, ei1->segmentIndex);
     if (useIntPt1) {
         pts->add(ei1->coord);
+    } else if (ei1->coord.equals2D(lastSegStartPt)) {
+        // Can we pick up Z/M values from ei1 that weren't present in edgeCoords?
+        if (constructZ && !edgeCoords->hasZ() && !std::isnan(ei1->coord.z)) {
+            pts->setZ(pts->size() - 1, ei1->coord.z);
+        }
+        if (constructM && !edgeCoords->hasM() && !std::isnan(ei1->coord.m)) {
+            pts->setM(pts->size() - 1, ei1->coord.m);
+        }
     }
 
     assert(pts->size() == npts);

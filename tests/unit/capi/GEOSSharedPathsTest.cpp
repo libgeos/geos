@@ -99,5 +99,40 @@ void object::test<4>()
     ensure("curved geometry not supported", result_ == nullptr);
 }
 
+template<>
+template<>
+void object::test<5>() {
+    set_test_name("Z/M values taken from first input");
+
+    geom1_ = fromWKT("LINESTRING ZM (0 1 5 4, 0 0 6 5, 1 0 7 6, 1 1 8 7)");
+    geom2_ = fromWKT("LINESTRING ZM (0 -1 3 8, 0 0 2 9, 1 0 1 10, 1 -1 0 11)");
+
+    ensure(geom1_);
+    ensure(geom2_);
+
+    result_ = GEOSSharedPaths(geom1_, geom2_);
+
+    expected_ = fromWKT("GEOMETRYCOLLECTION(MULTILINESTRING ZM ((0 0 6 5, 1 0 7 6)), MULTILINESTRING EMPTY)");
+    ensure_geometry_equals_identical(result_, expected_);
+}
+
+template<>
+template<>
+void object::test<6>() {
+    set_test_name("Z/M values taken from second input");
+
+    geom1_ = fromWKT("LINESTRING (0 1, 0 0, 1 0, 1 1)");
+    geom2_ = fromWKT("LINESTRING ZM (0 -1 3 8, 0 0 2 9, 1 0 1 10, 1 -1 0 11)");
+
+    ensure(geom1_);
+    ensure(geom2_);
+
+    result_ = GEOSSharedPaths(geom1_, geom2_);
+
+    expected_ = fromWKT("GEOMETRYCOLLECTION(MULTILINESTRING ZM ((0 0 2 9, 1 0 1 10)), MULTILINESTRING EMPTY)");
+    ensure_geometry_equals_identical(result_, expected_);
+}
+
+
 } // namespace tut
 

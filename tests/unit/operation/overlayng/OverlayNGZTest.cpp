@@ -294,4 +294,26 @@ void object::test<19>()
                       "POINT M (5 5 99)");
 }
 
+template<>
+template<>
+void object::test<20>()
+{
+    set_test_name("LINESTRING / LINESTRING ZM intersection");
+
+    checkIntersection("LINESTRING (0 0, 1 0)",
+        "LINESTRING ZM (0 0 2 9, 1 0 5 7)",
+        "LINESTRING ZM (0 0 2 9, 1 0 5 7)");
+}
+
+template<>
+template<>
+void object::test<21>()
+{
+    set_test_name("LINESTRING M / LINESTRING Z intersection");
+
+    checkIntersection("LINESTRING M (0 0 9, 1 0 7)",
+        "LINESTRING Z (1 0 5, 0 0 2)",
+        "LINESTRING ZM (0 0 2 9, 1 0 5 7)");
+}
+
 } // namespace tut
