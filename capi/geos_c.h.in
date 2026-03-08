@@ -5034,7 +5034,7 @@ extern GEOSGeometry GEOS_DLL *GEOSMinimumWidth(const GEOSGeometry* g);
 
 
 /**
-* Returns a point that is inside the boundary of a polygonal geometry.
+* Returns a 2D point that is inside the boundary of a polygonal geometry.
 * \param g The input geometry
 * \return A point that is inside the input
 * Caller is responsible for freeing with GEOSGeom_destroy().
@@ -5045,7 +5045,7 @@ extern GEOSGeometry GEOS_DLL *GEOSMinimumWidth(const GEOSGeometry* g);
 extern GEOSGeometry GEOS_DLL *GEOSPointOnSurface(const GEOSGeometry* g);
 
 /**
-* Returns a point at the center of mass of the input.
+* Returns a 2D point at the center of mass of the input.
 * \param g The input geometry
 * \return A point at the center of mass of the input
 * Caller is responsible for freeing with GEOSGeom_destroy().
@@ -5056,7 +5056,7 @@ extern GEOSGeometry GEOS_DLL *GEOSPointOnSurface(const GEOSGeometry* g);
 extern GEOSGeometry GEOS_DLL *GEOSGetCentroid(const GEOSGeometry* g);
 
 /**
-* Returns a geometry which represents the "minimum bounding circle",
+* Returns a 2D geometry which represents the "minimum bounding circle",
 * the smallest circle that contains the input.
 * \param[in] g The input geometry
 * \param[out] radius Pointer will be filled with output radius.
@@ -5074,6 +5074,9 @@ extern GEOSGeometry GEOS_DLL *GEOSMinimumBoundingCircle(
 
 /**
 * Return a Delaunay triangulation of the vertices of the given geometry.
+*
+* Z values from the input points will be propagated to the generated polygons.
+* M values from the input points will be ignored.
 *
 * \param g the input geometry whose vertices will be used as "sites"
 * \param tolerance optional snapping tolerance to use for improved robustness
@@ -5094,6 +5097,9 @@ extern GEOSGeometry GEOS_DLL * GEOSDelaunayTriangulation(
 * Return a constrained Delaunay triangulation of the vertices of the
 * given polygon(s).
 * For non-polygonal inputs, returns an empty geometry collection.
+*
+* Z values from the input points will be propagated to the generated polygons.
+* M values from the input points will be ignored.
 *
 * \param g the input geometry whose rings will be used as input
 * \return A newly allocated geometry. NULL on exception.
@@ -5116,7 +5122,8 @@ enum GEOSVoronoiFlags
 };
 
 /**
-* Returns the Voronoi polygons or edges of the vertices of the given geometry.
+* Returns the 2D Voronoi polygons or edges computed from the vertices 
+* of the given geometry.
 *
 * \param g the input geometry whose vertices will be used as sites.
 * \param tolerance snapping tolerance to use for improved robustness. A
@@ -5152,6 +5159,10 @@ extern GEOSGeometry GEOS_DLL * GEOSVoronoiDiagram(
 /**
 * For linear inputs, returns a new geometry in which no lines cross
 * each other, and all touching occurs at end points.
+*
+* Z and M values of input coordinates will be preserved.
+* Z and M values at constructed points will be interpolated.
+*
 * \param g The input geometry
 * \return The noded geometry or NULL on exception
 * Caller is responsible for freeing with GEOSGeom_destroy().
@@ -5165,8 +5176,10 @@ extern GEOSGeometry GEOS_DLL *GEOSNode(const GEOSGeometry* g);
 * Polygonizes a set of Geometries which contain linework that
 * represents the edges of a planar graph.
 *
-* All types of Geometry are accepted as input; the constituent
+* All non-curved types of Geometry are accepted as input; the constituent
 * linework is extracted as the edges to be polygonized.
+*
+* Z and M values from the input linework will be preserved.
 *
 * The edges must be correctly noded; that is, they must only meet
 * at their endpoints and not overlap anywhere. If your edges are not
@@ -5195,7 +5208,7 @@ extern GEOSGeometry GEOS_DLL *GEOSNode(const GEOSGeometry* g);
 * that the input lines form a valid polygonal geometry (which may
 * include holes or nested polygons).
 *
-* \param geoms Array of linear geometries to polygons. Caller retains ownersihp of both array container and objects.
+* \param geoms Array of linear geometries to polygons. Caller retains ownership of both array container and objects.
 * \param ngeoms Size of the geoms array.
 * \return The polygonal output geometry.
 * Caller is responsible for freeing with GEOSGeom_destroy().
@@ -5212,7 +5225,7 @@ extern GEOSGeometry GEOS_DLL *GEOSPolygonize(
 * but returns a result which is a valid polygonal geometry.
 * The result will not contain any edge-adjacent elements.
 *
-* \param geoms Array of linear geometries to polygons. Caller retains ownersihp of both array container and objects.
+* \param geoms Array of linear geometries to polygons. Caller retains ownership of both array container and objects.
 * \param ngeoms Size of the geoms array.
 * \return The polygonal output geometry.
 * Caller is responsible for freeing with GEOSGeom_destroy().
@@ -5287,7 +5300,8 @@ extern GEOSGeometry GEOS_DLL *GEOSBuildArea(const GEOSGeometry* g);
 * Densifies a geometry using a given distance tolerance.
 * Additional vertices will be added to every line segment
 * that is greater this tolerance; these vertices will
-* evenly subdivide that segment.
+* evenly subdivide that segment. Z and M values of added
+* vertices will be interpolated.
 * Only linear components of input geometry are densified.
 * \param g The geometry to densify
 * \param tolerance the distance tolerance to densify
@@ -5304,7 +5318,11 @@ extern GEOSGeometry GEOS_DLL *GEOSDensify(
 * Merges a set of LineStrings,
 * joining them at nodes which have cardinality 2.
 * Lines may have their direction reversed.
-
+*
+* Z and M values from the input will be preserved. If the Z and M
+* values differ at the points where two lines are joined, the values
+* from one of the points will be selected.
+*
 * \param g The input linework
 * \return The merged linework.
 * Caller is responsible for freeing with GEOSGeom_destroy().
@@ -5318,7 +5336,11 @@ extern GEOSGeometry GEOS_DLL *GEOSLineMerge(const GEOSGeometry* g);
 * joining them at nodes which have cardinality 2.
 * and where the lines have the same direction.
 * This means that lines do not have their direction reversed.
-
+*
+* Z and M values from the input will be preserved. If the Z and M
+* values differ at the points where two lines are joined, the values
+* from one of the points will be selected.
+*
 * \param g The input linework
 * \return The merged linework.
 * Caller is responsible for freeing with GEOSGeom_destroy().
@@ -5331,6 +5353,10 @@ extern GEOSGeometry GEOS_DLL *GEOSLineMergeDirected(const GEOSGeometry* g);
 /**
  *  Computes the line which is the section of the input LineString starting and
  *  ending at the given length fractions.
+ *
+ *  Z values will be interpolated from the input.
+ *  M values from the input will be ignored.
+ *
  *  \param g The input LineString
  *  \param start_fraction start fraction (0-1) along the length of g
  *  \param end_fraction end fraction (0-1) along the length of g
@@ -5347,7 +5373,8 @@ extern GEOSGeometry GEOS_DLL *GEOSLineSubstring(
 /**
 * For geometries with coordinate sequences, reverses the order
 * of the sequences. Converts CCW rings to CW. Reverses direction
-* of LineStrings.
+* of LineStrings. Z and M values of the input coordinates are
+* preserved.
 * \param g The input geometry
 * \return The reversed geometry
 * Caller is responsible for freeing with GEOSGeom_destroy().

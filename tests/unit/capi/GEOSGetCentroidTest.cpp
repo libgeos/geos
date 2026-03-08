@@ -145,5 +145,22 @@ void object::test<6>()
     ensure("curved geometry not supported", result_ == nullptr);
 }
 
+template<>
+template<>
+void object::test<7>()
+{
+    set_test_name("Z/M dimensions ignored");
+
+    input_ = fromWKT("LINESTRING ZM (0 0 4 3, 2 6 9 1)");
+    ensure(input_);
+
+    result_ = GEOSGetCentroid(input_);
+    ensure(result_);
+
+    expected_ = fromWKT("POINT (1 3)");
+    ensure(expected_);
+    ensure_geometry_equals_identical(result_, expected_);
+}
+
 } // namespace tut
 

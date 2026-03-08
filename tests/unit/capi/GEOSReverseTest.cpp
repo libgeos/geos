@@ -13,6 +13,22 @@ namespace tut {
 
 // Common data used in test cases.
 struct test_capigeosreverse : public capitest::utility {
+    void
+    testReverse(const std::string& wkt_input,
+                const std::string& wkt_output)
+    {
+        GEOSGeometry* input = GEOSGeomFromWKT(wkt_input.c_str());
+        GEOSGeometry* expected_result = GEOSGeomFromWKT(wkt_output.c_str());
+        GEOSGeometry* result = GEOSReverse(input);
+
+        ensure(result != nullptr);
+
+        ensure_geometry_equals_identical(result, expected_result);
+
+        GEOSGeom_destroy(input);
+        GEOSGeom_destroy(expected_result);
+        GEOSGeom_destroy(result);
+    }
 };
 
 typedef test_group<test_capigeosreverse> group;
@@ -20,21 +36,6 @@ typedef group::object object;
 
 group test_capigeosreverse_group("capi::GEOSReverse");
 
-void
-testReverse(const std::string& wkt_input,
-            const std::string& wkt_output)
-{
-    GEOSGeometry* input = GEOSGeomFromWKT(wkt_input.c_str());
-    GEOSGeometry* expected_result = GEOSGeomFromWKT(wkt_output.c_str());
-    GEOSGeometry* result = GEOSReverse(input);
-
-    ensure(result != nullptr);
-    ensure_equals(1, GEOSEqualsExact(result, expected_result, 0.0));
-
-    GEOSGeom_destroy(input);
-    GEOSGeom_destroy(expected_result);
-    GEOSGeom_destroy(result);
-}
 
 //
 // Test Cases
@@ -125,6 +126,15 @@ void object::test<9>()
 {
     testReverse("CIRCULARSTRING (0 0, 1 1, 2 0)",
                 "CIRCULARSTRING (2 0, 1 1, 0 0)");
+}
+
+template<>
+template<>
+void object::test<10>()
+{
+    testReverse("POINT ZM (1 2 3 4)", "POINT ZM (1 2 3 4)");
+    testReverse("LINESTRING ZM (1 2 3 4, 5 6 7 8)", "LINESTRING ZM (5 6 7 8, 1 2 3 4)");
+    testReverse("POLYGON ZM ((1 2 3 4, 5 6 7 8, 9 10 11 12, 1 2 3 4))", "POLYGON ZM ((1 2 3 4, 9 10 11 12, 5 6 7 8, 1 2 3 4))");
 }
 
 } // namespace tut

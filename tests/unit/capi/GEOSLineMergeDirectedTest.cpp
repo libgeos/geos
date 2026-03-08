@@ -70,5 +70,24 @@ void object::test<3>()
     ensure("curved geometries not supported", result_ == nullptr);
 }
 
+
+template<>
+template<>
+void object::test<4>()
+{
+    set_test_name("MULTILINESTRING ZM input");
+
+    input_ = fromWKT("MULTILINESTRING ZM ((0 0 4 5, 2 8 4 3), (2 8 8 6, 10 10 9 3))");
+    ensure(input_);
+
+    result_ = GEOSLineMergeDirected(input_);
+    ensure(result_);
+
+    expected_ = fromWKT("LINESTRING ZM (0 0 4 5, 2 8 4 3, 10 10 9 3)");
+    ensure(expected_);
+
+    ensure_geometry_equals_identical(result_, expected_);
+}
+
 } // namesplace tut
 

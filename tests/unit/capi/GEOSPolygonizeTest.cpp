@@ -5,6 +5,8 @@
 // geos
 #include <geos_c.h>
 
+#include <array>
+
 #include "capi_test_utils.h"
 
 namespace tut {
@@ -203,6 +205,29 @@ void object::test<7>
     for(auto& input : geoms) {
         GEOSGeom_destroy(input);
     }
+}
+
+template<>
+template<>
+void object::test<8>
+()
+{
+    set_test_name("LINESTRING ZM inputs");
+
+    geom1_ = fromWKT("LINESTRING ZM (0 0 5 4, 2 0 6 5, 2 2 7 6)");
+    geom2_ = fromWKT("LINESTRING ZM (2 2 7 6, 0 0 5 4)");
+
+    ensure(geom1_);
+    ensure(geom2_);
+
+    std::array<GEOSGeometry*, 2> geoms = {geom1_, geom2_};
+    result_ = GEOSPolygonize(geoms.data(), geoms.size());
+    ensure(result_);
+
+    expected_ = fromWKT("GEOMETRYCOLLECTION ZM (POLYGON ZM ((2 2 7 6, 2 0 6 5, 0 0 5 4, 2 2 7 6)))");
+    ensure(expected_);
+
+    ensure_geometry_equals_identical(result_, expected_);
 }
 
 } // namespace tut

@@ -85,22 +85,13 @@ template<>
 void object::test<5>
 ()
 {
-    input_ = GEOSGeomFromWKT("LINESTRINGZ (0 0 0, 2 2 5)");
+    set_test_name("Z dimension is interpolated, M dimension is dropped");
+
+    input_ = GEOSGeomFromWKT("LINESTRING ZM (0 0 0 0, 2 2 5 10)");
     result_ = GEOSLineSubstring(input_, 0, 0.5);
-    expected_ = GEOSGeomFromWKT("LINESTRING (0 0 0, 1 1 2.5)");
+    expected_ = GEOSGeomFromWKT("LINESTRING Z (0 0 0, 1 1 2.5)");
 
-    ensure_geometry_equals(result_, expected_);
-
-    // check 3rd dimension that isgnored by ensure_geometry_equals
-    ensure(GEOSHasZ(result_));
-    auto seq = GEOSGeom_getCoordSeq(expected_);
-
-    double z0, z1;
-    GEOSCoordSeq_getZ(seq, 0, &z0);
-    GEOSCoordSeq_getZ(seq, 1, &z1);
-
-    ensure_equals(z0, 0);
-    ensure_equals(z1, 2.5);
+    ensure_geometry_equals_identical(result_, expected_);
 }
 
 // reversed fractions give a reversed substring

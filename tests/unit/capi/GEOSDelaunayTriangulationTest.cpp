@@ -134,5 +134,21 @@ void object::test<7>()
     ensure("curved geometry not supported", result_ == nullptr);
 }
 
+template<>
+template<>
+void object::test<8>()
+{
+    set_test_name("MULTIPOINT ZM input");
+
+    input_ = fromWKT("MULTIPOINT ZM (0 0 4 3, 1 7 9 8, 6 2 6 2)");
+    ensure(input_);
+
+    result_ = GEOSDelaunayTriangulation(input_, 0, 0);
+    ensure(result_);
+
+    ensure(GEOSHasZ(result_));
+    ensure(!GEOSHasM(result_));
+}
+
 } // namespace tut
 

@@ -79,6 +79,21 @@ void object::test<4>()
     ensure("curved geometry not supported", result_ == nullptr);
 }
 
+template<>
+template<>
+void object::test<5>()
+{
+    set_test_name("POLYGON ZM input");
+
+    input_ = fromWKT("POLYGON ZM ((0 0 4 3, 1 7 9 8, 6 2 6 2, 0 0 4 4))");
+    ensure(input_);
+
+    result_ = GEOSConstrainedDelaunayTriangulation(input_);
+    ensure(result_);
+
+    ensure(GEOSHasZ(result_));
+    ensure(!GEOSHasM(result_));
+}
 
 } // namespace tut
 

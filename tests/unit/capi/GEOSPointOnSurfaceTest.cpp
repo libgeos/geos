@@ -231,5 +231,20 @@ void object::test<10>
     ensure("curved geometry not supported", result_ == nullptr);
 }
 
+template<>
+template<>
+void object::test<11>()
+{
+    set_test_name("Z/M values ignored");
+
+    input_ = fromWKT("POLYGON ZM ((0 0 4 2, 10 0 8 4, 10 10 12 6, 0 10 8 1, 0 0 4 2))");
+    ensure(input_);
+
+    result_ = GEOSPointOnSurface(input_);
+    ensure(result_);
+    ensure(!GEOSHasZ(result_));
+    ensure(!GEOSHasM(result_));
+}
+
 } // namespace tut
 
