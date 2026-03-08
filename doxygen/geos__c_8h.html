@@ -2847,6 +2847,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 <li>the boundary of a linestring is the end points</li>
 <li>the boundary of a point is the point</li>
 </ul>
+<p>Z and M values in the input coordinates are preserved.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The input geometry </td></tr>
@@ -4857,6 +4858,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </table>
 </div><div class="memdoc">
 <p>Returns a "concave hull" of a geometry. A concave hull is a polygon which contains all the points of the input, but is a better approximation than the convex hull to the area occupied by the input. Frequently used to convert a multi-point into a polygonal area. that contains all the points in the input Geometry.</p>
+<p>Z values in the input coordinates will be preserved. M values in the input coordinates will not be preserved.</p>
 <p>A set of points has a sequence of hulls of increasing concaveness, determined by a numeric target parameter. The concave hull is constructed by removing the longest outer edges of the Delaunay Triangulation of the space between the polygons, until the target criterion parameter is reached. This can be expressed as a ratio between the lengths of the longest and shortest edges. 1 produces the convex hull; 0 produces a hull with maximum concaveness</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -4968,6 +4970,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </table>
 </div><div class="memdoc">
 <p>Returns a "concave hull" of a geometry. A concave hull is a polygon which contains all the points of the input, but is a better approximation than the convex hull to the area occupied by the input. Frequently used to convert a multi-point into a polygonal area. that contains all the points in the input Geometry.</p>
+<p>Z values in the input coordinates will be preserved. M values in the input coordinates will not be preserved.</p>
 <p>A set of points has a sequence of hulls of increasing concaveness, determined by a numeric target parameter. The concave hull is constructed by removing the longest outer edges of the Delaunay Triangulation of the space between the polygons, until the specified maximm edge length is reached. A large value produces the convex hull, 0 produces the hull of maximum concaveness.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -5596,7 +5599,9 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns convex hull of a geometry. The smallest convex Geometry that contains all the points in the input Geometry </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Returns the convex hull of a geometry. The smallest convex Geometry that contains all the points in the input Geometry</p>
+<p>Z values in the input coordinates will be preserved. M values in the input coordinates will not be preserved.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The input geometry </td></tr>
   </table>
@@ -10295,7 +10300,9 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns minimum rectangular polygon or point that contains the geometry, or an empty point for empty inputs. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Returns minimum 2D rectangular polygon or point that contains the geometry, or an empty point for empty inputs.</p>
+<p>Z and M values in the input coordinates are ignored.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The geometry to calculate an envelope for </td></tr>
   </table>
@@ -12949,7 +12956,9 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Return all distinct vertices of input geometry as a MultiPoint. Note that only 2 dimensions of the vertices are considered when testing for equality. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Return all distinct vertices of input geometry as a MultiPoint. Note that only 2 dimensions of the vertices are considered when testing for equality.</p>
+<p>Z values on the retained coordinates will be preserved. M values will not be preserved.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The input geometry </td></tr>
   </table>
@@ -25511,7 +25520,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Apply the <a href="https://en.wikipedia.org/wiki/Ramer–Douglas–Peucker_algorithm">Douglas/Peucker algorithm</a> to the coordinate sequences of the input geometry. Removes "unnecessary" vertices, vertices that are co-linear within the tolerance distance. Returns a valid output geometry, checking for collapses, ring-intersections, etc and attempting to avoid. More computationally expensive than <a class="el" href="geos__c_8h.html#ad4f517469412938b9654bdde69fdaed8">GEOSSimplify()</a> </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Apply the <a href="https://en.wikipedia.org/wiki/Ramer–Douglas–Peucker_algorithm">Douglas/Peucker algorithm</a> to the coordinate sequences of the input geometry. Removes "unnecessary" vertices, vertices that are co-linear within the tolerance distance. Returns a valid output geometry, checking for collapses, ring-intersections, etc and attempting to avoid. More computationally expensive than <a class="el" href="geos__c_8h.html#ad4f517469412938b9654bdde69fdaed8">GEOSSimplify()</a> Z values on the retained coordinates will be preserved. M values will not be preserved. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The input geometry </td></tr>
     <tr><td class="paramname">tolerance</td><td>The tolerance to apply. Larger tolerance leads to simpler output. </td></tr>
