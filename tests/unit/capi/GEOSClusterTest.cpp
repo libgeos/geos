@@ -105,6 +105,8 @@ template<>
 template<>
 void object::test<2>()
 {
+    set_test_name("DBSCAN");
+
     input_ = fromWKT(
                  "GEOMETRYCOLLECTION ("
                  "POINT (0 0),"
@@ -117,6 +119,24 @@ void object::test<2>()
                  "POINT ( 3 -0.1),"
                  "POINT ( 3 0.1)"
                  ")");
+
+    {
+        GEOSClusterInfo* clusters = GEOSClusterDBSCAN(input_, 0.01, 0);
+        ensure_equals("nine clusters with eps=0.01, minPoints = 0", GEOSClusterInfo_getNumClusters(clusters), 9u);
+        GEOSClusterInfo_destroy(clusters);
+    }
+
+    {
+        GEOSClusterInfo* clusters = GEOSClusterDBSCAN(input_, 0.01, 1);
+        ensure_equals("nine clusters with eps=0.01, minPoints = 1", GEOSClusterInfo_getNumClusters(clusters), 9u);
+        GEOSClusterInfo_destroy(clusters);
+    }
+
+    {
+        GEOSClusterInfo* clusters = GEOSClusterDBSCAN(input_, 0.1, 1);
+        ensure_equals("five clusters with eps=0.1, minPoints = 1", GEOSClusterInfo_getNumClusters(clusters), 5u);
+        GEOSClusterInfo_destroy(clusters);
+    }
 
     {
         GEOSClusterInfo* clusters = GEOSClusterDBSCAN(input_, 1.01, 5);

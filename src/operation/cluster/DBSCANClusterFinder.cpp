@@ -44,8 +44,10 @@ Clusters DBSCANClusterFinder::process(const std::vector<const geom::Geometry*> &
                       index::strtree::TemplateSTRtree<std::size_t> & tree,
                       UnionFind & uf) {
 
-    std::vector<bool> in_a_cluster(components.size());
-    std::vector<bool> is_in_core(components.size());
+    const bool allInputsInCluster = m_minPoints <= 1;
+
+    std::vector<bool> in_a_cluster(components.size(), allInputsInCluster);
+    std::vector<bool> is_in_core(components.size(), allInputsInCluster);
 
     std::vector<size_t> hits;
     std::vector<size_t> neighbors;
@@ -59,7 +61,7 @@ Clusters DBSCANClusterFinder::process(const std::vector<const geom::Geometry*> &
         });
 
         if (hits.size() < m_minPoints) {
-            // We didn't find enough points do do anything even if they're all within eps.
+            // We didn't find enough points to do anything even if they're all within eps.
             continue;
         }
 
