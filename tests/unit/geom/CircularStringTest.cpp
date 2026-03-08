@@ -199,4 +199,16 @@ void object::test<5>()
     ensure_THROW(factory_->createCircularString(pts), geos::util::GEOSException);
 }
 
+template<>
+template<>
+void object::test<6>()
+{
+    set_test_name("getArcs on empty CircularString");
+
+    auto geom = factory_->createEmpty(geos::geom::GEOS_CIRCULARSTRING);
+
+    const auto& arcs = static_cast<const CircularString*>(geom.get())->getArcs();
+    ensure(arcs.empty());
+}
+
 }
