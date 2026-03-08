@@ -16,6 +16,10 @@
 #include <geos/geom/Curve.h>
 #include <geos/geom/CurvePolygon.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/LineString.h>
+#include <geos/geom/MultiCurve.h>
+#include <geos/geom/SimpleCurve.h>
 #include <geos/util/UnsupportedOperationException.h>
 
 namespace geos {
@@ -43,9 +47,37 @@ namespace geom {
         return GEOS_CURVEPOLYGON;
     }
 
+    static std::unique_ptr<Geometry>
+    getRingForBoundary(const Geometry* ring)
+    {
+        // Convert LinearRing -> LineString
+        if (ring->getGeometryTypeId() == GEOS_LINEARRING) {
+            return ring->getFactory()->createLineString(*static_cast<const LineString*>(ring));
+        }
+        return ring->clone();
+    }
+
     std::unique_ptr<Geometry>
     CurvePolygon::getBoundary() const {
-        throw util::UnsupportedOperationException();
+
+        const GeometryFactory* gf = getFactory();
+
+        if(isEmpty()) {
+            return gf->createMultiCurve();
+        }
+
+        if(holes.empty()) {
+            return getRingForBoundary(shell.get());
+        }
+
+        std::vector<std::unique_ptr<Geometry>> rings(holes.size() + 1);
+
+        rings[0] = getRingForBoundary(shell.get());
+        for(std::size_t i = 0; i < holes.size(); ++i) {
+            rings[i + 1] = getRingForBoundary(holes[i].get());
+        }
+
+        return getFactory()->createMultiCurve(std::move(rings));
     }
 
     void

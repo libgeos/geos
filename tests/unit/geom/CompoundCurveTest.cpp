@@ -6,6 +6,7 @@
 #include <geos/geom/CoordinateFilter.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CompoundCurve.h>
+#include <geos/geom/Point.h>
 #include <geos/geom/CircularString.h>
 #include <geos/geom/IntersectionMatrix.h>
 #include <geos/io/WKTReader.h>
@@ -54,6 +55,8 @@ template<>
 template<>
 void object::test<1>()
 {
+    set_test_name("empty CompoundCurve");
+
     auto cc = factory_->createCompoundCurve();
 
     ensure("isEmpty", cc->isEmpty());
@@ -68,6 +71,9 @@ void object::test<1>()
 
     ensure_equals("getArea", cc->getArea(), 0);
     ensure_equals("getLength", cc->getLength(), 0);
+
+    ensure("getStartPoint", cc->getStartPoint() == nullptr);
+    ensure("getEndPoint", cc->getEndPoint() == nullptr);
 }
 
 // Basic Geometry API
@@ -77,7 +83,7 @@ void object::test<2>()
 {
     // Geometry type functions
     ensure_equals("getGeometryType", cc_->getGeometryType(), "CompoundCurve");
-    ensure_equals("getGeometryTypdId", cc_->getGeometryTypeId(), geos::geom::GEOS_COMPOUNDCURVE);
+    ensure_equals("getGeometryTypeId", cc_->getGeometryTypeId(), geos::geom::GEOS_COMPOUNDCURVE);
     ensure("isCollection", !cc_->isCollection());
 
     // Geometry size functions
@@ -110,6 +116,11 @@ void object::test<2>()
     // Coordinate access functions
     ensure("getCoordinates", cc_->getCoordinates()->getSize() == 5u);
     ensure_equals("getCoordinate", *cc_->getCoordinate(), CoordinateXY(0, 0));
+    ensure_equals_geometry(static_cast<Geometry*>(cc_->getStartPoint().get()), wktreader_.read("POINT (0 0)").get());
+    ensure_equals_geometry(static_cast<Geometry*>(cc_->getEndPoint().get()), wktreader_.read("POINT (2 2)").get());
+
+    ensure_equals_geometry(cc_->getStartPoint().get(), factory_->createPoint(CoordinateXY{0, 0}).get());
+    ensure_equals_geometry(cc_->getEndPoint().get(), factory_->createPoint(CoordinateXY{2, 2}).get());
 }
 
 // Operations
@@ -154,7 +165,15 @@ void object::test<3>()
     ensure_THROW(cc_->convexHull(), geos::util::UnsupportedOperationException);
     ensure_THROW(cc_->buffer(1), geos::util::UnsupportedOperationException);
     ensure_THROW(cc_->getCentroid(), geos::util::UnsupportedOperationException);
-    ensure_THROW(cc_->getBoundary(), geos::util::UnsupportedOperationException);
+
+    {
+        CoordinateSequence seq(2, false, false);
+        seq.setAt(CoordinateXY{0, 0}, 0);
+        seq.setAt(CoordinateXY{2, 2}, 1);
+        std::unique_ptr<Geometry> mp = factory_->createMultiPoint(seq);
+
+        ensure_equals_geometry(cc_->getBoundary().get(), mp.get());
+    }
 
     ensure("clone", cc_->equalsIdentical(cc_->clone().get()));
 

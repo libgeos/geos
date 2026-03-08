@@ -24,8 +24,11 @@
 
 namespace geos {
 namespace geom {
+class Curve;
 class LineString;
+class MultiCurve;
 class MultiLineString;
+class GeometryCollection;
 }
 }
 
@@ -108,11 +111,11 @@ private:
   const geom::GeometryFactory& m_geomFact;
   const algorithm::BoundaryNodeRule& m_bnRule;
 
-  std::unique_ptr<geom::Geometry> boundaryMultiLineString(const geom::MultiLineString& mLine);
+  std::unique_ptr<geom::Geometry> boundaryMultiCurve(const geom::GeometryCollection& mLine);
 
-  std::unique_ptr<geom::CoordinateSequence> computeBoundaryCoordinates(const geom::MultiLineString& mLine);
+  std::unique_ptr<geom::CoordinateSequence> computeBoundaryCoordinates(const geom::GeometryCollection& mLine) const;
 
-  std::unique_ptr<geom::Geometry> boundaryLineString(const geom::LineString& line);
+  std::unique_ptr<geom::Geometry> boundaryCurve(const geom::Curve& line) const;
 };
 
 }

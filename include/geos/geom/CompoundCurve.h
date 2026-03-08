@@ -56,6 +56,8 @@ public:
     /// Returns the nth section of the CompoundCurve
     const SimpleCurve* getCurveN(std::size_t) const override;
 
+    std::unique_ptr<Point> getEndPoint() const override;
+
     const Envelope* getEnvelopeInternal() const override
     {
         return &envelope;
@@ -71,6 +73,8 @@ public:
     std::size_t getNumCurves() const override;
 
     std::size_t getNumPoints() const override;
+
+    std::unique_ptr<Point> getStartPoint() const override;
 
     bool hasCurvedComponents() const override;
 

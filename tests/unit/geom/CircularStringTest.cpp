@@ -148,9 +148,10 @@ void object::test<3>()
 
     ensure_THROW(cs_->getCentroid(), geos::util::UnsupportedOperationException);
 
-    //auto expected_boundary = wktreader_.read("MULTIPOINT ((0 0), (1 1), (2 0), (3 -1), (4 0))");
-    //ensure("getBoundary", cs_->getBoundary()->equalsIdentical(expected_boundary.get()));
-    ensure_THROW(cs_->getBoundary(), geos::util::UnsupportedOperationException);
+    {
+        auto expected_boundary = wktreader_.read("MULTIPOINT ((0 0), (4 0))");
+        ensure("getBoundary", cs_->getBoundary()->equalsIdentical(expected_boundary.get()));
+    }
 
     ensure("clone", cs_->equalsIdentical(cs_->clone().get()));
 

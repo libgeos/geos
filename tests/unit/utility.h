@@ -534,11 +534,11 @@ ensure_equals_exact_geometry(const geos::geom::Geometry *lhs_in,
     assert(nullptr != lhs_in);
     assert(nullptr != rhs_in);
 
-    using geos::geom::Point;
-    using geos::geom::LineString;
-    using geos::geom::Polygon;
     using geos::geom::CoordinateSequence;
     using geos::geom::GeometryCollection;
+    using geos::geom::Point;
+    using geos::geom::Polygon;
+    using geos::geom::SimpleCurve;
 
     ensure_equals("type id do not match",
                   lhs_in->getGeometryTypeId(), rhs_in->getGeometryTypeId());
@@ -547,8 +547,8 @@ ensure_equals_exact_geometry(const geos::geom::Geometry *lhs_in,
       const Point *gpt2 = static_cast<const Point *>(rhs_in);
       return ensure_equals_dims( gpt1->getCoordinatesRO(), gpt2->getCoordinatesRO(), 2, tolerance);
     }
-    else if (const LineString* gln1 = dynamic_cast<const LineString *>(lhs_in)) {
-      const LineString *gln2 = static_cast<const LineString *>(rhs_in);
+    else if (const SimpleCurve* gln1 = dynamic_cast<const SimpleCurve *>(lhs_in)) {
+      const SimpleCurve *gln2 = static_cast<const SimpleCurve *>(rhs_in);
       return ensure_equals_dims( gln1->getCoordinatesRO(), gln2->getCoordinatesRO(), 2, tolerance);
     }
     else if (const GeometryCollection* gc1 = dynamic_cast<const GeometryCollection *>(lhs_in)) {

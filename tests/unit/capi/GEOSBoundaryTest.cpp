@@ -34,11 +34,16 @@ template<>
 template<>
 void object::test<2>()
 {
+    set_test_name("curved inputs");
+
     input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
     ensure(input_ != nullptr);
 
     result_ = GEOSBoundary(input_);
-    ensure(result_ == nullptr);
+    ensure(result_);
+
+    expected_ = fromWKT("MULTIPOINT (0 0, 2 0)");
+    ensure_geometry_equals_identical(result_, expected_);
 }
 
 template<>

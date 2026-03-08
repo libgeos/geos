@@ -8,6 +8,8 @@
 #include <geos/geom/MultiCurve.h>
 #include <geos/io/WKTReader.h>
 
+#include "utility.h"
+
 using geos::geom::CoordinateXY;
 
 namespace tut {
@@ -166,7 +168,10 @@ void object::test<3>()
     ensure_THROW(mc_->convexHull(), geos::util::UnsupportedOperationException);
     ensure_THROW(mc_->buffer(1), geos::util::UnsupportedOperationException);
     ensure_THROW(mc_->getCentroid(), geos::util::UnsupportedOperationException);
-    ensure_THROW(mc_->getBoundary(), geos::util::UnsupportedOperationException);
+    {
+        auto expected_boundary = wktreader_.read("MULTIPOINT ((8 9), (10 11))");
+        ensure_equals_geometry(mc_->getBoundary().get(), expected_boundary.get());
+    }
 
     ensure("clone", mc_->equalsIdentical(mc_->clone().get()));
 

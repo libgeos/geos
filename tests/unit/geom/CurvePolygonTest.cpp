@@ -1,3 +1,4 @@
+#include <geos_c.h>
 #include <tut/tut.hpp>
 #include <tut/tut_macros.hpp>
 
@@ -7,6 +8,8 @@
 #include <geos/geom/CurvePolygon.h>
 #include <geos/geom/IntersectionMatrix.h>
 #include <geos/io/WKTReader.h>
+
+#include "utility.h"
 
 using geos::geom::CoordinateXY;
 using geos::geom::CurvePolygon;
@@ -64,6 +67,8 @@ template<>
 template<>
 void object::test<1>()
 {
+    set_test_name("empty CurvePolygon");
+
     auto cp = factory_->createCurvePolygon(false, false);
 
     ensure("isEmpty", cp->isEmpty());
@@ -77,6 +82,12 @@ void object::test<1>()
 
     ensure_equals("getArea", cp->getArea(), 0.0);
     ensure_equals("getLength", cp->getLength(), 0.0);
+
+    {
+        auto boundary = cp->getBoundary();
+        ensure(boundary->isEmpty());
+        ensure_equals(boundary->getGeometryTypeId(), geos::geom::GeometryTypeId::GEOS_MULTICURVE);
+    }
 }
 
 // Basic Geometry API
@@ -170,7 +181,11 @@ void object::test<3>()
     ensure_THROW(cp_->convexHull(), geos::util::UnsupportedOperationException);
     ensure_THROW(cp_->buffer(1), geos::util::UnsupportedOperationException);
     ensure_THROW(cp_->getCentroid(), geos::util::UnsupportedOperationException);
-    ensure_THROW(cp_->getBoundary(), geos::util::UnsupportedOperationException);
+    {
+        auto boundary = cp_->getBoundary();
+        ensure_equals(boundary->getGeometryTypeId(), geos::geom::GEOS_MULTICURVE);
+        ensure_equals(cp_->getLength(), boundary->getLength());
+    }
 
     ensure("clone", cp_->equalsIdentical(cp_->clone().get()));
 
