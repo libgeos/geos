@@ -204,8 +204,6 @@ jobs:
         CXXFLAGS: "-m${{ matrix.ci.arch }}"
       run: |
         set -e
-        mkdir build
-        cd build
         cmake --version
         cmake ${{ matrix.ci.cmake_extra }} \
           -D CMAKE_BUILD_TYPE=${{ matrix.ci.build_type }} \
@@ -214,9 +212,9 @@ jobs:
           -D CMAKE_CXX_STANDARD=${{ matrix.ci.cxxstd }} \
           -D BUILD_DOCUMENTATION=YES \
           -D USE_CCACHE=ON \
-          ..
-        make -j $(nproc)
-        cmake --build . --target docs
+          -S . -B build
+        cmake --build build -j $(nproc)
+        cmake --build build --target docs
         ccache --show-stats
 
     - name: Save build cache
@@ -250,8 +248,8 @@ jobs:
 
     - name: Generate coverage report
       if: matrix.ci.build_type == 'Coverage'
+      working-directory: ./build
       run: |
-        cd build
         lcov --ignore-errors=gcov,negative --capture --directory CMakeFiles --output-file coverage.info
 
     - name: Upload Coverage to Codecov
@@ -299,15 +297,13 @@ jobs:
       env:
         CCACHE_DIR: ${{ github.workspace }}\.ccache
       run: |
-        mkdir build
-        cd build
         cmake --version
         cmake \
           -G "MSYS Makefiles" \
           -D CMAKE_BUILD_TYPE=${{ matrix.build_type}} \
           -D USE_CCACHE=ON \
-          ..
-        cmake --build . -j 4
+          -S . -B build
+        cmake --build build -j 4
         ccache --show-stats --verbose
 
     - name: Save build cache
@@ -339,8 +335,6 @@ jobs:
     - name: 'Build'
       shell: cmd
       run: |
-        md build
-        cd build
         cmake --version
         cmake ^
           -G "Visual Studio 17 2022" ^
@@ -348,9 +342,9 @@ jobs:
           -D CMAKE_BUILD_TYPE=Debug ^
           -D CMAKE_CXX_STANDARD=17 ^
           -D BUILD_SHARED_LIBS=ON ^
-          ..
+          -S . -B build
         IF %ERRORLEVEL% NEQ 0 exit /B 1
-        cmake --build . --config Debug -j 4 -- /p:CL_MPcount=4
+        cmake --build build --config Debug -j 4 -- /p:CL_MPcount=4
 
     - name: 'Test'
       working-directory: build
@@ -398,8 +392,6 @@ jobs:
         CCACHE_DIR: ${{ github.workspace }}\.ccache
       shell: cmd
       run: |
-        md build
-        cd build
         cmake --version
         cmake ^
           -G Ninja ^
@@ -407,9 +399,9 @@ jobs:
           -D CMAKE_CXX_STANDARD=${{ matrix.ci.cxxstd }} ^
           -D BUILD_SHARED_LIBS=ON ^
           -D USE_CCACHE=ON ^
-          ..
+          -S . -B build
         IF %ERRORLEVEL% NEQ 0 exit /B 1
-        cmake --build . --config Release -j 4
+        cmake --build build --config Release -j 4
         IF %ERRORLEVEL% NEQ 0 exit /B 1
         ccache --show-stats --verbose
 
@@ -471,15 +463,13 @@ jobs:
     - name: 'Build'
       run: |
         set -e
-        mkdir build
-        cd build
         cmake --version
         cmake \
           -D CMAKE_BUILD_TYPE=${{ matrix.build_type }} \
           -D CMAKE_CXX_STANDARD=${{ matrix.cxxstd }} \
           -D USE_CCACHE=ON \
-          ..
-        cmake --build . --config ${{ matrix.build_type }} -j 4
+          -S . -B build
+        cmake --build build --config ${{ matrix.build_type }} -j 4
         ccache --show-stats
 
     - name: Save build cache
@@ -518,13 +508,11 @@ jobs:
           set -e
           export CCACHE_DIR=$PWD/.ccache
           cmake --version
-          cmake -S . -B _build -D USE_CCACHE=ON ..
-          cmake --build _build -j $(nproc)
+          cmake -S . -B build -D USE_CCACHE=ON
+          cmake --build build -j $(nproc)
           ccache --show-stats
-          cd _build
-          ctest --output-on-failure
-          cd ..
-          rm -rf _build
+          (cd build && ctest --output-on-failure)
+          rm -rf build
 
     - name: Save build cache
       uses: actions/cache/save@v5
@@ -556,14 +544,12 @@ jobs:
     - name: Build
       run: |
         set -e
-        mkdir build
-        cd build
         cmake --version
         emcmake cmake \
           -D BUILD_SHARED_LIBS=OFF \
           -D USE_CCACHE=ON \
-          ..
-        cmake --build . -j $(nproc)
+          -S . -B build
+        cmake --build build -j $(nproc)
         ccache --show-stats
 
     - name: Save build cache
