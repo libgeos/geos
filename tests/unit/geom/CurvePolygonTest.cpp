@@ -198,4 +198,41 @@ void object::test<4>()
     ensure_equals("cpRev->getArea()", cpRev->getArea(), 9.8185835, 1e-6);
 }
 
+template<>
+template<>
+void object::test<5>()
+{
+    set_test_name("construction error on non-closed ring");
+
+    auto seq = std::make_unique<geos::geom::CoordinateSequence>(3);
+    seq->setAt(CoordinateXY{0, 0}, 0);
+    seq->setAt(CoordinateXY{1, 1}, 1);
+    seq->setAt(CoordinateXY{2, 0}, 2);
+    auto cs = factory_->createCircularString(std::move(seq));
+
+    seq = std::make_unique<geos::geom::CoordinateSequence>(2);
+    seq->setAt(CoordinateXY{2, 0}, 0);
+    seq->setAt(CoordinateXY{1, 0}, 1);
+    auto ls = factory_->createLineString(std::move(seq));
+
+    std::vector<std::unique_ptr<geos::geom::SimpleCurve>> curves;
+    curves.push_back(std::move(cs));
+    curves.push_back(std::move(ls));
+
+    auto cc = factory_->createCompoundCurve(std::move(curves));
+
+    // shell is non-closed
+    ensure_THROW(factory_->createCurvePolygon(std::move(cc)), geos::util::IllegalArgumentException);
+
+    geos::geom::Envelope shellEnv(-100, 100, -100, 100);
+    auto shell = static_cast<const geos::geom::Polygon*>(factory_->toGeometry(&shellEnv).get())->getExteriorRing()->clone();
+
+    std::vector<std::unique_ptr<geos::geom::Curve>> holes;
+    holes.push_back(std::move(cc));
+
+    // hole is non-cloesd
+    ensure_THROW(factory_->createCurvePolygon(std::move(shell), std::move(holes)), geos::util::IllegalArgumentException);
+}
+
+
 }
