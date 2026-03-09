@@ -70,6 +70,8 @@ protected:
         if (shell == nullptr) {
             shell.reset(static_cast<RingType*>(createEmptyRing(newFactory).release()));
         }
+
+        validateConstruction();
     }
 
     SurfaceImpl(std::unique_ptr<RingType>&& newShell,
@@ -83,12 +85,7 @@ protected:
             shell.reset(static_cast<RingType*>(createEmptyRing(newFactory).release()));
         }
 
-        if(shell->isEmpty() && hasNonEmptyElements(&holes)) {
-            throw geos::util::IllegalArgumentException("shell is empty but holes are not");
-        }
-        if (hasNullElements(&holes)) {
-            throw geos::util::IllegalArgumentException("holes must not contain null elements");
-        }
+        validateConstruction();
     }
 
 public:

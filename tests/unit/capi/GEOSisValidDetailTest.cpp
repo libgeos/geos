@@ -144,7 +144,7 @@ template<>
 template<>
 void object::test<7>()
 {
-    input_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE( CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 1 1)))");
+    input_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE( CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 0 0)))");
     ensure(input_ != nullptr);
 
     char ret = GEOSisValidDetail(input_, 0, nullptr, nullptr);

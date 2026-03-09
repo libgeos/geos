@@ -282,5 +282,30 @@ Surface::isEmpty() const
     return getExteriorRing()->isEmpty();
 }
 
+void
+Surface::validateConstruction() const
+{
+    const bool shellIsEmpty = getExteriorRing()->isEmpty();
+
+    if (!shellIsEmpty && !getExteriorRing()->isClosed()) {
+        throw util::IllegalArgumentException("Exterior ring is not closed");
+    }
+
+    for (std::size_t i = 0 ; i < getNumInteriorRing(); i++) {
+        const Curve* hole = getInteriorRingN(i);
+
+        if (hole == nullptr) {
+            throw util::IllegalArgumentException("holes must not contain null elements");
+        }
+
+        if (shellIsEmpty && !hole->isEmpty()) {
+            throw util::IllegalArgumentException("shell is empty but holes are not");
+        }
+
+        if (!hole->isClosed()) {
+            throw util::IllegalArgumentException("Hole is not closed");
+        }
+    }
+}
 }
 }

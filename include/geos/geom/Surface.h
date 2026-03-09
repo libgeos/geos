@@ -109,6 +109,8 @@ protected:
 
     void geometryChangedAction() override {}
 
+    void validateConstruction() const;
+
 };
 
 }
