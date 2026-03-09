@@ -7,6 +7,7 @@
 #include "utility.h"
 
 using geos::algorithm::CurveToLineParams;
+using geos::algorithm::LineToCurveParams;
 
 namespace tut {
 
@@ -273,6 +274,36 @@ void object::test<17>() {
     checkRoundTripUnchanged("CIRCULARSTRING (426857.987717275 5427937.52346616,500000.000000001 5538630.70286887,573142.012282726 5427937.52346616)", 4);
 
     checkRoundTripUnchanged("CIRCULARSTRING (426858 5427938,500000 5538632,573142 5427938)", 4);
+}
+
+template<>
+template<>
+void object::test<18>()
+{
+    set_test_name("full circle, 2D");
+
+    auto geom = reader_.read("POINT (0 0)")->buffer(5);
+    LineToCurveParams params;
+    auto curved = geom->getCurved(params);
+
+    auto expected = reader_.read("CURVEPOLYGON (CIRCULARSTRING (5 0, 0 -5, -5 0, 0 5, 5 0))");
+
+    ensure_equals_exact_geometry_xyzm(curved.get(), expected.get(), 1e-8);
+}
+
+template<>
+template<>
+void object::test<19>()
+{
+    set_test_name("full circle, XYZM");
+
+    // with step size of 11.25 degrees, control points of the arc will appear in linearized
+    // arc, so their Z/M values can be recovered for the result arcs
+    checkRoundTripUnchanged("CIRCULARSTRING ZM (-5 0 4 3, 0 5 8 6, 5 0 12 9, 0 -5 15 11, -5 0 18 13)", 11.25);
+
+    // with step size of 4 degrees, Z/M values for the result arc control points must be
+    // interpolated from points in the linearized arc.
+    checkRoundTripUnchanged("CIRCULARSTRING ZM (-5 0 4 3, 0 5 8 6, 5 0 12 9, 0 -5 15 11, -5 0 18 13)", 4);
 }
 
 

@@ -46,6 +46,11 @@ CircularArcs::getMidpointAngle(double theta0, double theta2, bool isCCW)
         return getMidpointAngle(theta2, theta0, true);
     }
 
+    if (theta0 == theta2) {
+        // full circle
+        return theta0 + MATH_PI;
+    }
+
     double mid = (theta0 + theta2) / 2;
     if (!Angle::isWithinCCW(mid, theta0, theta2)) {
         mid += MATH_PI;

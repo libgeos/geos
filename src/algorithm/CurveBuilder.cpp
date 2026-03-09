@@ -161,6 +161,63 @@ CurveBuilder::finishLine() {
     }
 }
 
+/// Interpolates Z and M values from the midpoint of the arc, by:
+/// 1) Determining the two vertices of the linearized arc that bound the original arc midpoint
+/// 2) Assuming that Z and M increase/decrease at a constant rate from the origin of the original
+///    arc to its midpoint, and increase/decrease at a possibly different constant rate from the
+///    midpoint of the original arc to its endpoint.
+/// 3) Computing values of Z and M based on (2).
+static void
+interpolateMidpointZM(CoordinateXYZM& p1, const CircularArc& arc, size_t stop, const CoordinateXY& center)
+{
+    const auto start = arc.getCoordinatePosition();
+    const auto nPoints = stop - start + 1;
+    const CoordinateSequence& points = *arc.getCoordinateSequence();
+
+    // We have an even number of vertices. Calculate Z/M of the control
+    // point in the original arc.
+    CoordinateXYZM a, b;
+    points.getAt(start + nPoints / 2 - 1, a);
+    points.getAt(start + nPoints / 2, b);
+
+    const double thetaA = CircularArcs::getAngle(a, center);
+    const double theta0 = arc.theta0();
+    const double theta1 = CircularArcs::getAngle(p1, center);
+
+    // Assumption: point a has the same angle fraction over [p0, p1] that b has over [p2, p1]
+    const double f = arc.isCCW() ? Angle::fractionCCW(thetaA, theta0, theta1) : 1 - Angle::fractionCCW(thetaA, theta1, theta0);
+
+    const double z0 = points.getZ(start);
+    const double z2 = points.getZ(stop);
+
+    const double m0 = points.getM(start);
+    const double m2 = points.getM(stop);
+
+    p1.z = (a.z + b.z - z0*(1 - f) - z2*(1 - f)) / (2 * f);
+    p1.m = (a.m + b.m - m0*(1 - f) - m2*(1 - f)) / (2 * f);
+}
+
+/// Assigns Z and M values to the midpoint of an arc given points representing a linearized version of the arc.
+/// If the linearized version of the arc has an odd number of points, the Z and M values are taken directly from
+/// the central vertex of the linearized arc. If the linearized version of the arc has an even number of points,
+/// the Z and M values are calculated using the two vertices that bound the midpoint of the arc.
+static void
+getOrInterpolateMidPointZM(CoordinateXYZM& p1, const CircularArc& arc, size_t stop, const CoordinateXY& center) {
+    const auto start = arc.getCoordinatePosition();
+    const auto nPoints = stop - start + 1;
+    const CoordinateSequence& points = *arc.getCoordinateSequence();
+
+    if (nPoints % 2) {
+        // We have an odd number of vertices, so the central vertex should be the same
+        // as the control point in the original arc.
+        auto midpointIndex = start + nPoints / 2;
+        p1.z = points.getZ(midpointIndex);
+        p1.m = points.getM(midpointIndex);
+    } else {
+        interpolateMidpointZM(p1, arc, stop, center);
+    }
+}
+
 void
 CurveBuilder::addArc(const CircularArc& arc, std::size_t stop) {
     finishLine();
@@ -183,50 +240,71 @@ CurveBuilder::addArc(const CircularArc& arc, std::size_t stop) {
 
     const CoordinateXY averageCenter = { xSum / static_cast<double>(nArcApproximations), ySum / static_cast<double>(nArcApproximations) };
 
-    CoordinateXYZM p0, p1, p2;
+    CoordinateXYZM p0, p2;
     points.getAt(start, p0);
     points.getAt(stop, p2);
 
     const double averageRadius = 0.5*(p0.distance(averageCenter) + p2.distance(averageCenter));
 
-    p1 = CircularArcs::getMidpoint(p0, p2, averageCenter, averageRadius, arc.isCCW());
+    if (p0.equals2D(p2)) {
+        // Arc forms a complete circle
+        const bool isCCW = CircularArc(points, start).isCCW();
 
-    if (points.hasZ() || points.hasM()) {
-        auto nPoints = stop - start + 1;
+        CoordinateXYZM p1(CircularArcs::getMidpoint(p0, p0, averageCenter, averageRadius, isCCW));
 
-        if (nPoints % 2) {
-            // We have an odd number of vertices, so the central vertex should be the same
-            // as the control point in the original arc.
-            auto midpointIndex = start + nPoints / 2;
-            p1.z = points.getZ(midpointIndex);
-            p1.m = points.getM(midpointIndex);
-        } else {
-            // We have an even number of vertices. Calculate Z/M of the control
-            // point in the original arc.
-            CoordinateXYZM a, b;
-            points.getAt(start + nPoints / 2 - 1, a);
-            points.getAt(start + nPoints / 2, b);
+        CoordinateXYZM p01(CircularArcs::getMidpoint(p0, p1, averageCenter, averageRadius, isCCW));
+        CoordinateXYZM p12(CircularArcs::getMidpoint(p1, p2, averageCenter, averageRadius, isCCW));
 
-            const double thetaA = CircularArcs::getAngle(a, averageCenter);
-            const double theta0 = CircularArcs::getAngle(p0, averageCenter);
-            const double theta1 = CircularArcs::getAngle(p1, averageCenter);
-
-            // Assumption: point a has the same angle fraction over [p0, p1] that b has over [p2, p1]
-            const double f = arc.isCCW() ? Angle::fractionCCW(thetaA, theta0, theta1) : 1 - Angle::fractionCCW(thetaA, theta1, theta0);
-
-            p1.z = (a.z + b.z - p0.z*(1 - f) - p2.z*(1 - f)) / (2 * f);
-            p1.m = (a.m + b.m - p0.m*(1 - f) - p2.m*(1 - f)) / (2 * f);
+        if (!arcCoords) {
+            // should always be the case
+            arcCoords = std::make_shared<CoordinateSequence>(0,  points.hasZ(), points.hasM());
+            arcCoords->reserve(5);
+            arcCoords->add(p0);
         }
-    }
 
-    if (!arcCoords) {
-        arcCoords = std::make_shared<CoordinateSequence>(0,  points.hasZ(), points.hasM());
-        arcCoords->reserve(3);
-        arcCoords->add(p0);
-    }
+        if (points.hasZ() || points.hasM()) {
+            auto nPoints = stop - start + 1;
+            if ((nPoints - 1) % 4 == 0) {
+                auto i01 = start + (nPoints - 1) / 4;
+                p01.z = points.getZ(i01);
+                p01.m = points.getM(i01);
 
-    arcCoords->add(p1);
-    arcCoords->add(p2);
+                auto i1 = start + (nPoints - 1) / 2;
+                p1.z = points.getZ(i1);
+                p1.m = points.getM(i1);
+
+                auto i12 = start + 3 * (nPoints - 1) / 4;
+                p12.z = points.getZ(i12);
+                p12.m = points.getM(i12);
+            } else {
+                getOrInterpolateMidPointZM(p1, arc, stop, averageCenter);
+                p01.z = 0.5*(p0.z + p1.z);
+                p01.m = 0.5*(p0.m + p1.m);
+                p12.z = 0.5*(p1.z + p2.z);
+                p12.m = 0.5*(p1.m + p2.m);
+            }
+        }
+
+        arcCoords->add(p01);
+        arcCoords->add(p1);
+        arcCoords->add(p12);
+        arcCoords->add(p2);
+    } else {
+        CoordinateXYZM p1(CircularArcs::getMidpoint(p0, p2, averageCenter, averageRadius, arc.isCCW()));
+
+        if (points.hasZ() || points.hasM()) {
+            getOrInterpolateMidPointZM(p1, arc, stop, averageCenter);
+        }
+
+        if (!arcCoords) {
+            arcCoords = std::make_shared<CoordinateSequence>(0,  points.hasZ(), points.hasM());
+            arcCoords->reserve(3);
+            arcCoords->add(p0);
+        }
+
+        arcCoords->add(p1);
+        arcCoords->add(p2);
+    }
 }
 
 }
