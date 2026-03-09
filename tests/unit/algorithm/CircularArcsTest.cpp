@@ -305,5 +305,19 @@ void object::test<17>() {
         CoordinateXY{std::sqrt(2)/2, std::sqrt(2)/2}.distance(CoordinateXY{0.5, 0.5}));
 }
 
+template<>
+template<>
+void object::test<18>() {
+    set_test_name("getMidpointAngle");
+
+    // half-circle
+    ensure_equals(CircularArcs::getMidpointAngle(0, MATH_PI, true), MATH_PI/2);
+    ensure_equals(CircularArcs::getMidpointAngle(0, MATH_PI, false), 3*MATH_PI/2);
+
+    // full circle
+    ensure_equals(CircularArcs::getMidpointAngle(0, 0, true), MATH_PI);
+    ensure_equals(CircularArcs::getMidpointAngle(0, 0, false), MATH_PI);
+}
+
 }
 
