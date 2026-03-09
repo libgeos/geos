@@ -1,11 +1,13 @@
-
 ## Changes in 3.14.2
-2025-xx-xx
+2026-xx-xx
 
 - Fixes/Improvements:
   - Relax other floating-point exception handling with other compilers (GH-1333, Mike Taves)
   - Quiet FP_DIVBYZERO exception from CGAlgorithmsDD::intersection (GH-1235, Paul Ramsey)
   - Avoid crash on buffer of geometry with only invalid coordinates (GH-1335, Dan Baston)
+  - Fix some cases of dropped M values in overlay (GH-1364/GH-1388, Dan Baston)
+  - GEOSClusterDBSCAN fix unassigned clusters with minPoints <= 1 (GH-1386, Dan Baston)
+  - Fix crash in GEOSConvexHull (GH-1358, Dan Baston)
 
 ## Changes in 3.14.1
 2025-10-27
