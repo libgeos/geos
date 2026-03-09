@@ -3,15 +3,27 @@
 2026-xx-xx
 
 - New things:
-  - 
+  - Add new C API functions for Hausdorff distance (GH-1352, Sven Jensen)
+  - Add GEOSSubdivideByGrid (GH-1232, Dan Baston)
 
 - Breaking Changes:
   - BufferOp returns POLYGON EMPTY when fed Inf/Nan coords (GH-1332)
+  - Return Inf when calculating distance to an empty geometry (GH-1345, Even Rouault)
+
 
 - Fixes/Improvements:
   - Buffer of Linestring includes spurious hole (GH-1217, Moritz Kirmse)
-
-
+  - Preserve M values in GEOSInterpolate (GH-1390, Dan Baston)
+  - Preserve M values in GEOSLineMerge (GH-1364, Dan Baston)
+  - Preserve M values in GEOSCoverageSimplify (GH-1384, Paul Ramsey)
+  - Preserve M values in GEOSDensify (GH-1319, Dan Baston)
+  - Preserve M values in GEOSSimplify (GH-1317, Dan Baston)
+  - Preserve M values in GEOSPolygonize (GH-1363 Dan Baston)
+  - Fix some cases of dropped M values in overlay (GH-1364/GH-1388, Dan Baston)
+  - Support curved inputs in GEOSNode (GH-1347, Dan Baston)
+  - GEOSClusterDBSCAN fix unsassigned clusters with minPoints <= 1 (GH-1386, Dan Baston)
+  - Fix crash in GEOSConvexHull (GH-1358, Dan Baston)
+  - Overlay performance improvements (GH-1353, arriopolis, Martin Davis)
 
 ## Changes in 3.14.0
 2025-08-21
