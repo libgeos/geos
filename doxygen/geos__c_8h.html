@@ -5190,6 +5190,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </table>
 </div><div class="memdoc">
 <p>Return a constrained Delaunay triangulation of the vertices of the given polygon(s). For non-polygonal inputs, returns an empty geometry collection.</p>
+<p>Z values from the input points will be propagated to the generated polygons. M values from the input points will be ignored.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>the input geometry whose rings will be used as input </td></tr>
@@ -9470,6 +9471,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </table>
 </div><div class="memdoc">
 <p>Return a Delaunay triangulation of the vertices of the given geometry.</p>
+<p>Z values from the input points will be propagated to the generated polygons. M values from the input points will be ignored.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>the input geometry whose vertices will be used as "sites" </td></tr>
@@ -9565,7 +9567,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Densifies a geometry using a given distance tolerance. Additional vertices will be added to every line segment that is greater this tolerance; these vertices will evenly subdivide that segment. Only linear components of input geometry are densified. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Densifies a geometry using a given distance tolerance. Additional vertices will be added to every line segment that is greater this tolerance; these vertices will evenly subdivide that segment. Z and M values of added vertices will be interpolated. Only linear components of input geometry are densified. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The geometry to densify </td></tr>
     <tr><td class="paramname">tolerance</td><td>the distance tolerance to densify </td></tr>
@@ -15691,7 +15693,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns a point at the center of mass of the input. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Returns a 2D point at the center of mass of the input. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The input geometry </td></tr>
   </table>
@@ -18565,6 +18567,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
 </table>
 </div><div class="memdoc">
 <p>Merges a set of LineStrings, joining them at nodes which have cardinality 2. Lines may have their direction reversed.</p>
+<p>Z and M values from the input will be preserved. If the Z and M values differ at the points where two lines are joined, the values from one of the points will be selected.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The input linework </td></tr>
@@ -18638,6 +18641,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
 </table>
 </div><div class="memdoc">
 <p>Merges a set of LineStrings, joining them at nodes which have cardinality 2. and where the lines have the same direction. This means that lines do not have their direction reversed.</p>
+<p>Z and M values from the input will be preserved. If the Z and M values differ at the points where two lines are joined, the values from one of the points will be selected.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The input linework </td></tr>
@@ -18726,7 +18730,9 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Computes the line which is the section of the input LineString starting and ending at the given length fractions. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Computes the line which is the section of the input LineString starting and ending at the given length fractions.</p>
+<p>Z values will be interpolated from the input. M values from the input will be ignored.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The input LineString </td></tr>
     <tr><td class="paramname">start_fraction</td><td>start fraction (0-1) along the length of g </td></tr>
@@ -19373,7 +19379,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns a geometry which represents the "minimum bounding circle", the smallest circle that contains the input. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Returns a 2D geometry which represents the "minimum bounding circle", the smallest circle that contains the input. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">g</td><td>The input geometry </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">radius</td><td>Pointer will be filled with output radius. </td></tr>
@@ -19859,7 +19865,9 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
   </tr>
 </table>
 </div><div class="memdoc">
-<p>For linear inputs, returns a new geometry in which no lines cross each other, and all touching occurs at end points. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>For linear inputs, returns a new geometry in which no lines cross each other, and all touching occurs at end points.</p>
+<p>Z and M values of input coordinates will be preserved. Z and M values at constructed points will be interpolated.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The input geometry </td></tr>
   </table>
@@ -20463,7 +20471,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns a point that is inside the boundary of a polygonal geometry. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Returns a 2D point that is inside the boundary of a polygonal geometry. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The input geometry </td></tr>
   </table>
@@ -20769,7 +20777,8 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
 </table>
 </div><div class="memdoc">
 <p>Polygonizes a set of Geometries which contain linework that represents the edges of a planar graph.</p>
-<p>All types of Geometry are accepted as input; the constituent linework is extracted as the edges to be polygonized.</p>
+<p>All non-curved types of Geometry are accepted as input; the constituent linework is extracted as the edges to be polygonized.</p>
+<p>Z and M values from the input linework will be preserved.</p>
 <p>The edges must be correctly noded; that is, they must only meet at their endpoints and not overlap anywhere. If your edges are not already noded, run them through <a class="el" href="geos__c_8h.html#aff0189281a68ba343406649d1b5fc17f">GEOSUnaryUnion()</a> first. Polygonization will accept incorrectly noded input but will not form polygons from non-noded edges, and reports them as errors.</p>
 <p>The Polygonizer reports the following kinds of errors:</p>
 <ul>
@@ -20781,7 +20790,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
 <p>The <a class="el" href="geos__c_8h.html#a1a2854a08c8d117dd58e96455f4308a1">GEOSPolygonize_valid()</a> variant allows extracting only polygons which form a valid polygonal result. The set of extracted polygons is guaranteed to be edge-disjoint. This is useful when it is known that the input lines form a valid polygonal geometry (which may include holes or nested polygons).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">geoms</td><td>Array of linear geometries to polygons. Caller retains ownersihp of both array container and objects. </td></tr>
+    <tr><td class="paramname">geoms</td><td>Array of linear geometries to polygons. Caller retains ownership of both array container and objects. </td></tr>
     <tr><td class="paramname">ngeoms</td><td>Size of the geoms array. </td></tr>
   </table>
   </dd>
@@ -20987,7 +20996,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
 <p>Has the same polygonizing behavior as <a class="el" href="geos__c_8h.html#a79cbe36e26561a02378f950907d6870a">GEOSPolygonize()</a>, but returns a result which is a valid polygonal geometry. The result will not contain any edge-adjacent elements.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">geoms</td><td>Array of linear geometries to polygons. Caller retains ownersihp of both array container and objects. </td></tr>
+    <tr><td class="paramname">geoms</td><td>Array of linear geometries to polygons. Caller retains ownership of both array container and objects. </td></tr>
     <tr><td class="paramname">ngeoms</td><td>Size of the geoms array. </td></tr>
   </table>
   </dd>
@@ -23533,7 +23542,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
   </tr>
 </table>
 </div><div class="memdoc">
-<p>For geometries with coordinate sequences, reverses the order of the sequences. Converts CCW rings to CW. Reverses direction of LineStrings. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>For geometries with coordinate sequences, reverses the order of the sequences. Converts CCW rings to CW. Reverses direction of LineStrings. Z and M values of the input coordinates are preserved. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The input geometry </td></tr>
   </table>
@@ -26154,7 +26163,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns the Voronoi polygons or edges of the vertices of the given geometry.</p>
+<p>Returns the 2D Voronoi polygons or edges computed from the vertices of the given geometry.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>the input geometry whose vertices will be used as sites. </td></tr>
