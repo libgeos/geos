@@ -51,6 +51,8 @@ private:
     double snapTol;
 
     const Coordinate::ConstVect& snapPts;
+    bool constructZ;
+    bool constructM;
 
     CoordinateSequence::Ptr
     snapLine(
@@ -59,7 +61,7 @@ private:
         using std::unique_ptr;
 
         assert(srcPts);
-        auto coords = detail::make_unique<CoordinateSequence>();
+        auto coords = detail::make_unique<CoordinateSequence>(0, constructZ, constructM);
         coords->add(*srcPts);
         LineStringSnapper snapper(*coords, snapTol);
         return snapper.snapTo(snapPts);
@@ -68,10 +70,13 @@ private:
 public:
 
     SnapTransformer(double nSnapTol,
-                    const Coordinate::ConstVect& nSnapPts)
+                    const Coordinate::ConstVect& nSnapPts,
+                    bool p_constructZ, bool p_constructM)
         :
         snapTol(nSnapTol),
-        snapPts(nSnapPts)
+        snapPts(nSnapPts),
+        constructZ(p_constructZ),
+        constructM(p_constructM)
     {
     }
 
@@ -112,7 +117,7 @@ GeometrySnapper::snapTo(const geom::Geometry& g, double snapTolerance)
 
     // Apply a SnapTransformer to source geometry
     // (we need a pointer for dynamic polymorphism)
-    std::unique_ptr<GeometryTransformer> snapTrans(new SnapTransformer(snapTolerance, *snapPts));
+    std::unique_ptr<GeometryTransformer> snapTrans(new SnapTransformer(snapTolerance, *snapPts, srcGeom.hasZ(), false));
     return snapTrans->transform(&srcGeom);
 }
 
@@ -129,7 +134,7 @@ GeometrySnapper::snapToSelf(double snapTolerance, bool cleanResult)
 
     // Apply a SnapTransformer to source geometry
     // (we need a pointer for dynamic polymorphism)
-    std::unique_ptr<GeometryTransformer> snapTrans(new SnapTransformer(snapTolerance, *snapPts));
+    std::unique_ptr<GeometryTransformer> snapTrans(new SnapTransformer(snapTolerance, *snapPts, srcGeom.hasZ(), false));
 
     std::unique_ptr<Geometry> result = snapTrans->transform(&srcGeom);
 
