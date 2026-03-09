@@ -129,5 +129,20 @@ void object::test<5>
     ensure("curved geometry not supported", result_ == nullptr);
 }
 
+template<>
+template<>
+void object::test<6>
+()
+{
+    set_test_name("https://github.com/libgeos/geos/issues/1072");
+
+    geom1_ =  fromWKT("LINESTRING(7777777777777777770 7777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777770 1, 1 7 1,-2 1 2)");
+    geom2_ =  GEOSSingleSidedBuffer(geom1_, 1.0, 64, 1, 1.0, 1);
+    result_ =  GEOSMinimumBoundingCircle(geom2_, NULL, NULL);
+
+    // no segfault
+}
+
+
 } // namespace tut
 
