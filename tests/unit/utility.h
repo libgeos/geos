@@ -541,12 +541,13 @@ template <typename T> inline void ensure_equals_exact_geometry(const T *lhs_in, 
 template <>
 inline void
 ensure_equals_exact_geometry(const geos::geom::Geometry *lhs_in,
-                                 const geos::geom::Geometry *rhs_in,
-                                 double tolerance)
+                             const geos::geom::Geometry *rhs_in,
+                             double tolerance)
 {
     assert(nullptr != lhs_in);
     assert(nullptr != rhs_in);
 
+    using geos::geom::Curve;
     using geos::geom::Point;
     using geos::geom::SimpleCurve;
     using geos::geom::Surface;
@@ -566,6 +567,23 @@ ensure_equals_exact_geometry(const geos::geom::Geometry *lhs_in,
     else if (const SimpleCurve* gln1 = dynamic_cast<const SimpleCurve *>(lhs_in)) {
       const SimpleCurve *gln2 = static_cast<const SimpleCurve *>(rhs_in);
       return ensure_equals_dims( gln1->getCoordinatesRO(), gln2->getCoordinatesRO(), 2, tolerance);
+    }
+    else if (const Surface* gply1 = dynamic_cast<const Surface*>(lhs_in)) {
+        const Surface* gply2 = static_cast<const Surface*>(rhs_in);
+        const Geometry* extRing1 = gply1->getExteriorRing();
+        const Geometry* extRing2 = gply2->getExteriorRing();
+
+        ensure_equals_exact_geometry(extRing1, extRing2, tolerance);
+
+        ensure_equals("number of holes does not match",
+                      gply1->getNumInteriorRing(),
+                      gply2->getNumInteriorRing());
+
+        for (std::size_t i = 0; i < gply1->getNumInteriorRing(); i++) {
+            ensure_equals_exact_geometry(static_cast<const Geometry*>(gply1->getInteriorRingN(i)),
+                                         static_cast<const Geometry*>(gply2->getInteriorRingN(i)),
+                                         tolerance);
+        }
     }
     else if (const GeometryCollection* gc1 = dynamic_cast<const GeometryCollection *>(lhs_in)) {
         const GeometryCollection *gc2 = static_cast<const GeometryCollection *>(rhs_in);
