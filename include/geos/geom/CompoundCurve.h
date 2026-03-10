@@ -119,6 +119,10 @@ protected:
     CompoundCurve* reverseImpl() const override;
 
 private:
+    void normalizeClosed();
+
+    void reverseInPlace();
+
     std::vector<std::unique_ptr<SimpleCurve>> curves;
     Envelope envelope;
 };

@@ -42,7 +42,7 @@ struct test_circularstring_data {
 
         auto expected = wktreader_.read<CircularString>(wkt_expected);
 
-        ensure_equals_exact_xyzm(cs->getCoordinatesRO(), expected->getCoordinatesRO(), 0);
+        ensure_equals_exact_geometry_xyzm(cs.get(), expected.get(), 0);
     }
 };
 

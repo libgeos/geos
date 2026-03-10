@@ -101,6 +101,8 @@ public:
 
     bool isEmpty() const override;
 
+    std::unique_ptr<SimpleCurve> reverse() const;
+
 protected:
 
     SimpleCurve(const SimpleCurve& other);

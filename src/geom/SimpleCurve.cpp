@@ -330,5 +330,11 @@ SimpleCurve::isEmpty() const
     return points->isEmpty();
 }
 
+std::unique_ptr<SimpleCurve>
+SimpleCurve::reverse() const
+{
+    return std::unique_ptr<SimpleCurve>(static_cast<SimpleCurve*>(reverseImpl()));
+}
+
 } // namespace geos::geom
 } // namespace geos

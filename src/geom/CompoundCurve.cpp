@@ -3,7 +3,7 @@
  * GEOS - Geometry Engine Open Source
  * http://geos.osgeo.org
  *
- * Copyright (C) 2024 ISciences, LLC
+ * Copyright (C) 2024-2026 ISciences, LLC
  *
  * This is free software; you can redistribute and/or modify it under
  * the terms of the GNU Lesser General Public Licence as published
@@ -14,10 +14,13 @@
 
 #include <sstream>
 
+#include <geos/algorithm/Orientation.h>
 #include <geos/geom/CompoundCurve.h>
 #include <geos/geom/CoordinateFilter.h>
+#include <geos/geom/CircularString.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/operation/BoundaryOp.h>
+#include <geos/operation/split/SplitGeometryAtVertex.h>
 #include <geos/util.h>
 
 namespace geos {
@@ -315,7 +318,83 @@ CompoundCurve::isEmpty() const
 void
 CompoundCurve::normalize()
 {
-    throw util::UnsupportedOperationException();
+    if (isEmpty()) {
+        return;
+    }
+
+    if (isClosed()) {
+        normalizeClosed();
+        return;
+    }
+
+    const CoordinateXY& firstPt = curves.front()->getCoordinatesRO()->front<CoordinateXY>();
+    const CoordinateXY& lastPt = curves.back()->getCoordinatesRO()->back<CoordinateXY>();
+
+    if (firstPt.compareTo(lastPt) > 0) {
+        reverseInPlace();
+    }
+}
+
+
+void
+CompoundCurve::normalizeClosed()
+{
+    std::size_t minCurve = 0;
+    std::size_t minInd = 0;
+    const CoordinateXY* minPt = nullptr;
+
+    auto orientationPoints = getCoordinates();
+
+    // TODO: Avoid copying all coordinates here.
+    // Would require updating Orientation::isCCW to take an iterator
+    if (orientationPoints->size() >= 4 && algorithm::Orientation::isCCW(orientationPoints.get())) {
+        reverseInPlace();
+    }
+
+    for (std::size_t iCurve = 0; iCurve < curves.size(); iCurve++) {
+        const CoordinateSequence* curvePts = curves[iCurve]->getCoordinatesRO();
+
+        auto nPts = curvePts == nullptr ? 0 : curvePts->size();
+
+        std::size_t step = curves[iCurve]->getGeometryTypeId() == GEOS_CIRCULARSTRING ? 2 : 1;
+
+        for (std::size_t i = 0 ; i < nPts; i += step) {
+            const CoordinateXY* pt = &curvePts->getAt<CoordinateXY>(i);
+            if (minPt == nullptr || pt->compareTo(*minPt) < 0) {
+                minPt = pt;
+                minCurve = iCurve;
+                minInd = i;
+            }
+        }
+    }
+
+    if (minCurve == 0 && minInd == 0) {
+        return;
+    }
+
+    std::vector<std::unique_ptr<SimpleCurve>> newCurves;
+    std::unique_ptr<SimpleCurve> finalCurve;
+    if (minInd == 0) {
+        newCurves.push_back(std::move(curves[minCurve]));
+    } else if (minInd == curves[minCurve]->getNumPoints() - 1) {
+        finalCurve = std::move(curves[minCurve]);
+    } else {
+        auto split = operation::split::SplitGeometryAtVertex::splitSimpleCurveAtVertex(*curves[minCurve], minInd);
+        newCurves.push_back(std::move(split.second));
+        finalCurve = std::move(split.first);
+    }
+
+    for (std::size_t i = minCurve + 1; i < curves.size(); i++) {
+        newCurves.push_back(std::move(curves[i]));
+    }
+    for (std::size_t i = 0; i < minCurve; i++) {
+        newCurves.push_back(std::move(curves[i]));
+    }
+    if (finalCurve) {
+        newCurves.push_back(std::move(finalCurve));
+    }
+
+    curves = std::move(newCurves);
 }
 
 std::unique_ptr<CompoundCurve>
@@ -334,6 +413,16 @@ CompoundCurve::reverseImpl() const
 
     return getFactory()->createCompoundCurve(std::move(reversed)).release();
 }
+
+void
+CompoundCurve::reverseInPlace()
+{
+    std::reverse(curves.begin(), curves.end());
+    for (auto& curve: curves) {
+        curve = curve->reverse();
+    }
+}
+
 
 void
 CompoundCurve::validateConstruction() const

@@ -44,6 +44,15 @@ struct test_compoundcurve_data {
         cc_ = factory_->createCompoundCurve(std::move(curves));
     }
 
+    void checkNormalize(const std::string& wkt_in, const std::string& wkt_expected) const {
+        auto cs = wktreader_.read(wkt_in);
+        cs->normalize();
+
+        auto expected = wktreader_.read(wkt_expected);
+
+        ensure_equals_exact_geometry_xyzm(cs.get(), expected.get(), 0);
+    }
+
 };
 
 typedef test_group<test_compoundcurve_data> group;
@@ -128,6 +137,8 @@ template<>
 template<>
 void object::test<3>()
 {
+    set_test_name("operations");
+
     // Predicates
     ensure_THROW(cc_->contains(cc_.get()), geos::util::UnsupportedOperationException);
     ensure_THROW(cc_->coveredBy(cc_.get()), geos::util::UnsupportedOperationException);
@@ -180,7 +191,6 @@ void object::test<3>()
     ensure("reverse", cc_->reverse()->equalsIdentical(wktreader_.read(""
             "COMPOUNDCURVE ((2 2, 2 0), CIRCULARSTRING (2 0, 1 1, 0 0))").get()));
     auto cc3 = cc_->reverse();
-    ensure_THROW(cc3->normalize(), geos::util::UnsupportedOperationException);
 }
 
 // GeometryFilter
@@ -337,6 +347,8 @@ template<>
 template<>
 void object::test<9>()
 {
+    set_test_name("cannot create non-contiguous CompoundCurve");
+
     std::vector<std::unique_ptr<SimpleCurve>> curves;
 
     curves.push_back(wktreader_.read<SimpleCurve>("LINESTRING (0 0, 1 2)"));
@@ -347,6 +359,51 @@ void object::test<9>()
     curves.push_back(wktreader_.read<SimpleCurve>("LINESTRING (0 0, 1 2)"));
     curves.push_back(wktreader_.read<SimpleCurve>("CIRCULARSTRING EMPTY"));
     ensure_THROW(factory_->createCompoundCurve(std::move(curves)), geos::util::IllegalArgumentException);
+}
+
+template<>
+template<>
+void object::test<10>()
+{
+    set_test_name("normalize non-closed CompoundCurve");
+
+    // already normalized
+    checkNormalize("COMPOUNDCURVE((-2 2, -3 5, 0 10), CIRCULARSTRING (0 10, -5 5, 0 0))",
+              "COMPOUNDCURVE((-2 2, -3 5, 0 10), CIRCULARSTRING (0 10, -5 5, 0 0))");
+
+    checkNormalize("COMPOUNDCURVE((-2 2, -3 5, 0 10), CIRCULARSTRING (0 10, -5 5, 0 0))",
+              "COMPOUNDCURVE((-2 2, -3 5, 0 10), CIRCULARSTRING (0 10, -5 5, 0 0))");
+
+    // needs to be reversed
+    checkNormalize("COMPOUNDCURVE(CIRCULARSTRING (0 0, -5 5, 0 10), (0 10, -3 5, -2 2))",
+              "COMPOUNDCURVE((-2 2, -3 5, 0 10), CIRCULARSTRING (0 10, -5 5, 0 0))");
+}
+
+template<>
+template<>
+void object::test<11>()
+{
+    set_test_name("normalize closed CompoundCurve");
+    // already normalized
+    checkNormalize("COMPOUNDCURVE(CIRCULARSTRING(-5 0, 0 5, 5 0), (5 0, -5 0))",
+              "COMPOUNDCURVE(CIRCULARSTRING(-5 0, 0 5, 5 0), (5 0, -5 0))");
+
+    // needs to be reversed
+    checkNormalize("COMPOUNDCURVE((-5 0, 5 0), CIRCULARSTRING(5 0, 0 5, -5 0))",
+              "COMPOUNDCURVE(CIRCULARSTRING(-5 0, 0 5, 5 0), (5 0, -5 0))");
+
+    // needs to be reversed and scrolled
+    checkNormalize("COMPOUNDCURVE((5 0, -5 0), CIRCULARSTRING(-5 0, 0 5, 5 0))",
+              "COMPOUNDCURVE(CIRCULARSTRING(-5 0, 0 5, 5 0), (5 0, -5 0))");
+
+    // needs to be reversed and scrolled, but no geometries split
+    // actual minimum point is a control point and cannot become the origin
+    checkNormalize("COMPOUNDCURVE (CIRCULARSTRING (0 10, -5 5, 0 0), (0 0, 0 10))",
+        "COMPOUNDCURVE(CIRCULARSTRING (0 0, -5 5, 0 10), (0 10, 0 0))");
+
+    // needs to be reversed, scrolled, split
+    checkNormalize("COMPOUNDCURVE (CIRCULARSTRING (10 0, 0 -10, -10 0, -5 5, 0 0), (0 0, 10 0))",
+    "COMPOUNDCURVE (CIRCULARSTRING (-10 0, -5 5, 0 0), (0 0, 10 0), CIRCULARSTRING (10 0, 0 -10, -10 0))");
 }
 
 }

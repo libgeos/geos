@@ -394,9 +394,8 @@ ensure_equals_exact_geometry_xyz(const geos::geom::Geometry *lhs_in,
     using geos::geom::CoordinateSequence;
     using geos::geom::GeometryCollection;
 
-    ensure_equals("type id do not match",
-                  lhs_in->getGeometryTypeId(), rhs_in->getGeometryTypeId());
-
+    ensure_equals("types do not match",
+                  lhs_in->getGeometryType(), rhs_in->getGeometryType());
 
     if (const Point* gpt1 = dynamic_cast<const Point *>(lhs_in)) {
       const Point *gpt2 = static_cast<const Point *>(rhs_in);
@@ -453,8 +452,8 @@ ensure_equals_exact_geometry_xyzm(const geos::geom::Geometry *lhs_in,
     using geos::geom::CoordinateSequence;
     using geos::geom::GeometryCollection;
 
-    ensure_equals("type id do not match",
-                  lhs_in->getGeometryTypeId(), rhs_in->getGeometryTypeId());
+    ensure_equals("types do not match",
+                  lhs_in->getGeometryType(), rhs_in->getGeometryType());
 
     if (const Point* gpt1 = dynamic_cast<const Point *>(lhs_in)) {
       const Point *gpt2 = static_cast<const Point *>(rhs_in);

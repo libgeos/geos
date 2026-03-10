@@ -131,6 +131,8 @@ template<>
 template<>
 void object::test<3>()
 {
+    set_test_name("operations");
+
     // Predicates
     ensure_THROW(mc_->contains(mc_.get()), geos::util::UnsupportedOperationException);
     ensure_THROW(mc_->coveredBy(mc_.get()), geos::util::UnsupportedOperationException);
@@ -183,7 +185,6 @@ void object::test<3>()
             "  (10 11, 8 9),"
             "  CIRCULARSTRING (1.7 1, 1.6 0.5, 1.6 0.4, 1.4 0.4, 1.7 1))").get()));
     auto cc3 = mc_->reverse();
-    ensure_THROW(cc3->normalize(), geos::util::UnsupportedOperationException);
 }
 
 // isClosed
