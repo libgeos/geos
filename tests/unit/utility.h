@@ -9,6 +9,7 @@
 // geos
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryCollection.h>
+#include <geos/geom/CompoundCurve.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Dimension.h>
 #include <geos/geom/Point.h>
@@ -446,6 +447,7 @@ ensure_equals_exact_geometry_xyzm(const geos::geom::Geometry *lhs_in,
 
     using geos::geom::Point;
     using geos::geom::Curve;
+    using geos::geom::CompoundCurve;
     using geos::geom::SimpleCurve;
     using geos::geom::Surface;
     using geos::geom::CoordinateSequence;
@@ -461,6 +463,17 @@ ensure_equals_exact_geometry_xyzm(const geos::geom::Geometry *lhs_in,
     else if (const SimpleCurve* gln1 = dynamic_cast<const SimpleCurve*>(lhs_in)) {
       const SimpleCurve *gln2 = static_cast<const SimpleCurve*>(rhs_in);
       return ensure_equals_exact_xyzm(gln1->getCoordinatesRO(), gln2->getCoordinatesRO(), tolerance);
+    }
+    else if (const CompoundCurve* cc1 = dynamic_cast<const CompoundCurve*>(lhs_in)) {
+        const CompoundCurve *cc2 = static_cast<const CompoundCurve*>(rhs_in);
+
+        ensure_equals("number of curves does not match",
+                      cc1->getNumCurves(),
+                      cc2->getNumCurves());
+
+        for (std::size_t i =0; i < cc1->getNumCurves(); i++) {
+            ensure_equals_exact_geometry_xyzm(cc1->getCurveN(i), cc2->getCurveN(i), tolerance);
+        }
     }
     else if (const Surface* gply1 = dynamic_cast<const Surface*>(lhs_in)) {
       const Surface* gply2 = static_cast<const Surface*>(rhs_in);
