@@ -131,19 +131,12 @@ LineString::normalize()
         normalizeClosed();
         return;
     }
-    std::size_t npts = points->getSize();
-    std::size_t n = npts / 2;
-    for (std::size_t i = 0; i < n; i++) {
-        std::size_t j = npts - 1 - i;
-        if (!(points->getAt<CoordinateXY>(i) == points->getAt<CoordinateXY>(j))) {
-            if (points->getAt<CoordinateXY>(i).compareTo(points->getAt<CoordinateXY>(j)) > 0) {
-                if (points.use_count() > 1) {
-                    points = points->clone();
-                }
-                const_cast<CoordinateSequence*>(points.get())->reverse();
-            }
-            return;
+
+    if (points->front<CoordinateXY>().compareTo( points->back<CoordinateXY>()) == 1) {
+        if (points.use_count() > 1) {
+            points = points->clone();
         }
+        const_cast<CoordinateSequence*>(points.get())->reverse();
     }
 }
 
