@@ -81,8 +81,16 @@ namespace geom {
     }
 
     void
-    CurvePolygon::normalize() {
-        throw util::UnsupportedOperationException();
+    CurvePolygon::normalize()
+    {
+        shell->normalize();
+        for(auto& lr : holes) {
+            lr->normalize();
+            lr = lr->reverse();
+        }
+        std::sort(holes.begin(), holes.end(), [](const auto& a, const auto& b) {
+            return a->compareTo(b.get()) > 0;
+        });
     }
 
     double CurvePolygon::getArea() const {

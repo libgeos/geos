@@ -54,6 +54,12 @@ Curve::isRing() const
     return isClosed() && isSimple();
 }
 
+std::unique_ptr<Curve>
+Curve::reverse() const
+{
+    return std::unique_ptr<Curve>(static_cast<Curve*>(Geometry::reverse().release()));
+}
+
 
 }
 }

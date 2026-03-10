@@ -144,6 +144,8 @@ template<>
 template<>
 void object::test<3>()
 {
+    set_test_name("operations");
+
     // Predicates
     ensure_THROW(cp_->contains(cp_.get()), geos::util::UnsupportedOperationException);
     ensure_THROW(cp_->coveredBy(cp_.get()), geos::util::UnsupportedOperationException);
@@ -196,7 +198,6 @@ void object::test<3>()
             "COMPOUNDCURVE ((0 0, 1 4, 4 5, 4 3), CIRCULARSTRING (4 3, 2 3, 2 1, 2 0, 0 0)), "
             "CIRCULARSTRING (1.7 1, 1.6 0.5, 1.6 0.4, 1.4 0.4, 1.7 1))").get()));
     auto cc3 = cp_->reverse();
-    ensure_THROW(cc3->normalize(), geos::util::UnsupportedOperationException);
 }
 
 template<>
@@ -245,9 +246,36 @@ void object::test<5>()
     std::vector<std::unique_ptr<geos::geom::Curve>> holes;
     holes.push_back(std::move(cc));
 
-    // hole is non-cloesd
+    // hole is non-closed
     ensure_THROW(factory_->createCurvePolygon(std::move(shell), std::move(holes)), geos::util::IllegalArgumentException);
 }
 
+template<>
+template<>
+void object::test<6>()
+{
+    set_test_name("normalize");
+
+    auto input = wktreader_.read(
+        "CURVEPOLYGON ("
+        "COMPOUNDCURVE ((10 10, 10 0, 0 0, 0 10), CIRCULARSTRING (0 10, 5 15,  10 10)),"
+        "(6 5, 6 6, 5 6, 5 5, 6 5),"
+        "CIRCULARSTRING (7 7, 8 8, 9 7, 8 6, 7 7),"
+        "CIRCULARSTRING (5 3, 4 2, 3 3, 4 4, 5 3))");
+
+    // ordering of holes is not strictly spatial, because we first sort on
+    // geometry type
+    auto expected = wktreader_.read(
+    "CURVEPOLYGON ("
+    "COMPOUNDCURVE ((0 0, 0 10), CIRCULARSTRING (0 10, 5 15, 10 10), (10 10, 10 0, 0 0)), "
+        "CIRCULARSTRING (7 7, 8 6, 9 7, 8 8, 7 7), "
+        "CIRCULARSTRING (3 3, 4 2, 5 3, 4 4, 3 3), "
+        "(5 5, 6 5, 6 6, 5 6, 5 5))");
+
+    auto result = input->clone();
+    result->normalize();
+
+    ensure_equals_exact_geometry_xyzm(result.get(), expected.get(), 0);
+}
 
 }

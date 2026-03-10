@@ -120,6 +120,8 @@ template<>
 template<>
 void object::test<3>()
 {
+    set_test_name("operations");
+
     // Predicates
     ensure_THROW(ms_->contains(ms_.get()), geos::util::UnsupportedOperationException);
     ensure_THROW(ms_->coveredBy(ms_.get()), geos::util::UnsupportedOperationException);
@@ -170,7 +172,6 @@ void object::test<3>()
     "MULTISURFACE (((0 0, 0 1, 1 1, 1 0, 0 0)), "
                   "CURVEPOLYGON (CIRCULARSTRING (10 10, 11 9, 12 10, 11 11, 10 10)))").get()));
     auto cc3 = ms_->reverse();
-    ensure_THROW(cc3->normalize(), geos::util::UnsupportedOperationException);
 }
 
 }
