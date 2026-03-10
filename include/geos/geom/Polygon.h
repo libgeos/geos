@@ -129,7 +129,7 @@ protected:
 
 private:
 
-    void normalize(LinearRing* ring, bool clockwise);
+    static void normalize(LinearRing* ring, bool clockwise);
 
 };
 

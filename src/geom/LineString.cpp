@@ -122,5 +122,63 @@ LineString::getGeometryTypeId() const
     return GEOS_LINESTRING;
 }
 
+void
+LineString::normalize()
+{
+    if (isEmpty()) return;
+    assert(points.get());
+    if (isClosed()) {
+        normalizeClosed();
+        return;
+    }
+    std::size_t npts = points->getSize();
+    std::size_t n = npts / 2;
+    for (std::size_t i = 0; i < n; i++) {
+        std::size_t j = npts - 1 - i;
+        if (!(points->getAt<CoordinateXY>(i) == points->getAt<CoordinateXY>(j))) {
+            if (points->getAt<CoordinateXY>(i).compareTo(points->getAt<CoordinateXY>(j)) > 0) {
+                if (points.use_count() > 1) {
+                    points = points->clone();
+                }
+                const_cast<CoordinateSequence*>(points.get())->reverse();
+            }
+            return;
+        }
+    }
+}
+
+/*private*/
+void
+LineString::normalizeClosed()
+{
+    if (isEmpty()) {
+        return;
+    }
+
+    const auto& ringCoords = getCoordinatesRO();
+    std::size_t minIndex = ringCoords->minCoordinateIndex();
+
+    const bool isCCW = ringCoords->size() >= 4 && Orientation::isCCW(ringCoords);
+
+    if (minIndex == 0 && !isCCW) {
+        // already normalized
+        return;
+    }
+
+    auto coords = std::make_shared<CoordinateSequence>(0u, ringCoords->hasZ(), ringCoords->hasM());
+    coords->reserve(ringCoords->size());
+    // exclude last point (repeated)
+    coords->add(*ringCoords, 0, ringCoords->size() - 2);
+    coords->scroll(minIndex);
+    coords->closeRing(true);
+
+    if (isCCW) {
+        coords->reverse();
+    }
+
+    points = coords;
+}
+
+
 } // namespace geos::geom
 } // namespace geos

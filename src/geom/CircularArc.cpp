@@ -276,6 +276,13 @@ CircularArc::getArea() const {
     return R*R/2*(theta - std::sin(theta));
 }
 
+Envelope
+CircularArc::getEnvelope() const {
+    Envelope env;
+    algorithm::CircularArcs::expandEnvelope(env, p0(), p1(), p2());
+    return env;
+}
+
 double
 CircularArc::getLength() const {
     if (isLinear()) {

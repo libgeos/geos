@@ -94,6 +94,66 @@ CircularString::getLength() const
     return tot;
 }
 
+void
+CircularString::normalize()
+{
+    if (isEmpty()) return;
+
+    assert(points.get());
+    if (isClosed()) {
+        normalizeClosed();
+        return;
+    }
+
+    if (points->front<CoordinateXY>().compareTo( points->back<CoordinateXY>()) == 1) {
+        if (points.use_count() > 1) {
+            points = points->clone();
+        }
+        const_cast<CoordinateSequence*>(points.get())->reverse();
+        arcs.clear();
+    }
+}
+
+/*private*/
+void
+CircularString::normalizeClosed()
+{
+    if (isEmpty()) {
+        return;
+    }
+
+    const auto& ringCoords = getCoordinatesRO();
+    const bool reverse = ringCoords->size() >= 4 && algorithm::Orientation::isCCW(ringCoords);
+
+    std::size_t minInd = 0;
+    const CoordinateXY* minPt = &ringCoords->getAt<CoordinateXY>(minInd);
+    for (std::size_t i = 2; i < ringCoords->size() - 2; i++) {
+        const CoordinateXY& pt = ringCoords->getAt<CoordinateXY>(i);
+        if (pt.compareTo(*minPt) < 0) {
+            minInd = i;
+            minPt = &pt;
+        }
+    }
+
+    if (minInd > 0) {
+        auto coords = std::make_shared<CoordinateSequence>(0u, ringCoords->hasZ(), ringCoords->hasM());
+        coords->reserve(ringCoords->size());
+
+        coords->add(*ringCoords, minInd, ringCoords->size() - 2);
+        coords->add(*ringCoords, 0, minInd);
+
+        if (reverse) {
+            coords->reverse();
+        }
+        points = std::move(coords);
+    } else if (reverse) {
+        if (points.use_count() > 1) {
+            points = points->clone();
+        }
+        const_cast<CoordinateSequence*>(points.get())->reverse();
+    }
+}
+
 CircularString*
 CircularString::reverseImpl() const
 {

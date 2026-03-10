@@ -624,8 +624,13 @@ public:
     /// Get a string representation of CoordinateSequence
     std::string toString() const;
 
-    /// Returns lower-left Coordinate in list
+    /// Returns lower-left Coordinate in list, or nullptr if the
+    /// sequence is empty
     const CoordinateXY* minCoordinate() const;
+
+    /// Returns the index of the minCoordinate, or the maximum value of
+    /// size_t if the sequence is empty
+    std::size_t minCoordinateIndex() const;
 
     /** \brief
      *  Returns either the given CoordinateSequence if its length
@@ -658,6 +663,8 @@ public:
 
     /// Scroll given CoordinateSequence so to start with given Coordinate.
     static void scroll(CoordinateSequence* cl, const CoordinateXY* firstCoordinate);
+    void scroll(const CoordinateXY* firstCoordinate);
+    void scroll(std::size_t firstCoordinateIndex);
 
     /** \brief
      * Determines which orientation of the {@link Coordinate} array

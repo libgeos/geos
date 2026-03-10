@@ -35,6 +35,15 @@ struct test_circularstring_data {
 
         cs_ = factory_->createCircularString(seq);
     }
+
+    void checkNormalize(const std::string& wkt_in, const std::string& wkt_expected) const {
+        auto cs = wktreader_.read<CircularString>(wkt_in);
+        cs->normalize();
+
+        auto expected = wktreader_.read<CircularString>(wkt_expected);
+
+        ensure_equals_exact_xyzm(cs->getCoordinatesRO(), expected->getCoordinatesRO(), 0);
+    }
 };
 
 typedef test_group<test_circularstring_data> group;
@@ -158,7 +167,6 @@ void object::test<3>()
     ensure("reverse", cs_->reverse()->equalsIdentical(wktreader_.read("CIRCULARSTRING (4 0, 3 -1, 2 0, 1 1, 0 0)").get()));
 
     auto cs3 = cs_->reverse();
-    ensure_THROW(cs3->normalize(), geos::util::UnsupportedOperationException);
 }
 
 // SimpleCurve API
@@ -210,6 +218,72 @@ void object::test<6>()
 
     const auto& arcs = static_cast<const CircularString*>(geom.get())->getArcs();
     ensure(arcs.empty());
+}
+
+template<>
+template<>
+void object::test<7>()
+{
+    set_test_name("normalize of closed CircularString");
+
+    // circle, already normalized
+    checkNormalize("CIRCULARSTRING (-5 0, 0 5, 5 0, 0 -5, -5 0)",
+              "CIRCULARSTRING (-5 0, 0 5, 5 0, 0 -5, -5 0)");
+
+    // circle, start point is OK but need to reverse points
+    checkNormalize("CIRCULARSTRING (-5 0, 0 -5, 5 0, 0 5, -5 0)",
+              "CIRCULARSTRING (-5 0, 0 5, 5 0, 0 -5, -5 0)");
+
+    // circle, need to change start point but orientation is OK
+    checkNormalize("CIRCULARSTRING (5 0, 0 -5, -5 0, 0 5, 5 0)",
+              "CIRCULARSTRING (-5 0, 0 5, 5 0, 0 -5, -5 0)");
+
+    // circle, need to change start point and orientation
+    checkNormalize("CIRCULARSTRING (5 0, 0 5, -5 0, 0 -5, 5 0)",
+              "CIRCULARSTRING (-5 0, 0 5, 5 0, 0 -5, -5 0)");
+
+    // half-moon, already normalized
+    checkNormalize("CIRCULARSTRING (0 0, -5 5, 0 10, -3 5, 0 0)",
+              "CIRCULARSTRING (0 0, -5 5, 0 10, -3 5, 0 0)");
+
+    // half-moon, already normalized
+    checkNormalize("CIRCULARSTRING (0 0, -5 5, 0 10, -3 5, 0 0)",
+              "CIRCULARSTRING (0 0, -5 5, 0 10, -3 5, 0 0)");
+
+    // half-moon, start point is OK but need to make CW
+    checkNormalize("CIRCULARSTRING (0 0, -3 5, 0 10, -5 5, 0 0)",
+              "CIRCULARSTRING (0 0, -5 5, 0 10, -3 5, 0 0)");
+
+    // half-moon, need to change start point but orientation is OK
+    checkNormalize("CIRCULARSTRING (0 10, -3 5, 0 0, -5 5, 0 10)",
+              "CIRCULARSTRING (0 0, -5 5, 0 10, -3 5, 0 0)");
+
+    // half-moon, need to change start point and orientation
+    checkNormalize("CIRCULARSTRING (0 10, -5 5, 0 0, -3 5, 0 10)",
+              "CIRCULARSTRING (0 0, -5 5, 0 10, -3 5, 0 0)");
+}
+
+template<>
+template<>
+void object::test<8>()
+{
+    set_test_name("normalize open CircularString");
+
+    // already normalized
+    checkNormalize("CIRCULARSTRING (-10 0, 0 10, 10 0, 0 5, -5 0)",
+             "CIRCULARSTRING (-10 0, 0 10, 10 0, 0 5, -5 0)");
+
+    // need to reverse
+    checkNormalize("CIRCULARSTRING (-5 0, 0 5, 10 0, 0 10, -10 0)",
+              "CIRCULARSTRING (-10 0, 0 10, 10 0, 0 5, -5 0)");
+
+    // already normalized
+    checkNormalize("CIRCULARSTRING (-2 2, -3 5, 0 10, -5 5, 0 0)",
+              "CIRCULARSTRING (-2 2, -3 5, 0 10, -5 5, 0 0)");
+
+    // need to reverse
+    checkNormalize("CIRCULARSTRING (0 0, -5 5, 0 10, -3 5, -2 2)",
+              "CIRCULARSTRING (-2 2, -3 5, 0 10, -5 5, 0 0)");
 }
 
 }

@@ -48,6 +48,8 @@ public:
         return true;
     }
 
+    void normalize() override;
+
     std::unique_ptr<CircularString> reverse() const
     {
         return std::unique_ptr<CircularString>(reverseImpl());
@@ -86,6 +88,8 @@ protected:
 
 private:
     void createArcs() const;
+
+    void normalizeClosed();
 
     mutable std::vector<CircularArc> arcs;
 

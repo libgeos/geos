@@ -96,6 +96,14 @@ public:
         return false;
     }
 
+    /** \brief
+     * Normalizes a LineString.
+     *
+     * A normalized LineString has the first point which is not equal to
+     * its reflected point less than the reflected point.
+     */
+    void normalize() override;
+
     /**
      * Creates a LineString whose coordinates are in the reverse
      * order of this object's
@@ -133,6 +141,8 @@ protected:
     }
 
 private:
+
+    void normalizeClosed();
 
     void validateConstruction();
 };

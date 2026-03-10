@@ -101,15 +101,6 @@ public:
 
     bool isEmpty() const override;
 
-    /** \brief
-     * Normalizes a SimpleCurve.
-     *
-     * A normalized simple curve
-     * has the first point which is not equal to its reflected point
-     * less than the reflected point.
-     */
-    void normalize() override;
-
 protected:
 
     SimpleCurve(const SimpleCurve& other);
@@ -128,11 +119,6 @@ protected:
 
     std::shared_ptr<const CoordinateSequence> points;
     mutable Envelope envelope;
-
-
-private:
-
-    void normalizeClosed();
 };
 
 }

@@ -101,6 +101,8 @@ public:
         return m_pos;
     }
 
+    Envelope getEnvelope() const;
+
     /// Return the length of the arc
     double getLength() const;
 

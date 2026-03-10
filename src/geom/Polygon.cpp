@@ -118,18 +118,25 @@ Polygon::normalize(LinearRing* ring, bool clockwise)
     }
 
     const auto& ringCoords = ring->getCoordinatesRO();
+    std::size_t minCoordinateIndex = ringCoords->minCoordinateIndex();
+
+    const bool switchOrientation = algorithm::Orientation::isCCW(ringCoords) == clockwise;
+
+    if (minCoordinateIndex == 0 && !switchOrientation) {
+        // already normalized
+        return;
+    }
+
     CoordinateSequence coords(0u, ringCoords->hasZ(), ringCoords->hasM());
     coords.reserve(ringCoords->size());
 
     // exclude last point (repeated)
     coords.add(*ringCoords, 0, ringCoords->size() - 2);
 
-    const CoordinateXY* minCoordinate = coords.minCoordinate();
-
-    CoordinateSequence::scroll(&coords, minCoordinate);
+    coords.scroll(minCoordinateIndex);
     coords.closeRing();
 
-    if(algorithm::Orientation::isCCW(&coords) == clockwise) {
+    if(switchOrientation) {
         coords.reverse();
     }
     ring->setPoints(&coords);

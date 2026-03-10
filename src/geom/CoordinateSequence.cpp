@@ -362,14 +362,25 @@ CoordinateSequence::atLeastNCoordinatesOrNothing(std::size_t n,
 const CoordinateXY*
 CoordinateSequence::minCoordinate() const
 {
+    if (isEmpty()) {
+        return nullptr;
+    }
+    return &getAt<CoordinateXY>(minCoordinateIndex());
+}
+
+std::size_t
+CoordinateSequence::minCoordinateIndex() const
+{
     const CoordinateXY* minCoord = nullptr;
+    std::size_t minIndex = std::numeric_limits<std::size_t>::max();
     const std::size_t p_size = getSize();
     for(std::size_t i = 0; i < p_size; i++) {
         if(minCoord == nullptr || minCoord->compareTo(getAt<CoordinateXY>(i)) > 0) {
             minCoord = &getAt<CoordinateXY>(i);
+            minIndex = i;
         }
     }
-    return minCoord;
+    return minIndex;
 }
 
 size_t
@@ -386,17 +397,28 @@ CoordinateSequence::indexOf(const CoordinateXY* coordinate,
 }
 
 void
-CoordinateSequence::scroll(CoordinateSequence* cl,
-                           const CoordinateXY* firstCoordinate)
+CoordinateSequence::scroll(CoordinateSequence* cl, const CoordinateXY* firstCoordinate)
 {
-    std::size_t ind = indexOf(firstCoordinate, cl);
+    cl->scroll(firstCoordinate);
+}
+
+void
+CoordinateSequence::scroll(const CoordinateXY* firstCoordinate)
+{
+    std::size_t ind = indexOf(firstCoordinate, this);
     if(ind == 0 || ind == std::numeric_limits<std::size_t>::max()) {
         return;    // not found or already first
     }
 
-    std::rotate(cl->m_vect.begin(),
-        std::next(cl->m_vect.begin(), static_cast<std::ptrdiff_t>(ind * cl->stride())),
-        cl->m_vect.end());
+    scroll(ind);
+}
+
+void
+CoordinateSequence::scroll(size_t ind)
+{
+    std::rotate(m_vect.begin(),
+        std::next(m_vect.begin(), static_cast<std::ptrdiff_t>(ind * stride())),
+        m_vect.end());
 }
 
 int
