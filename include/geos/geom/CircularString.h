@@ -79,7 +79,7 @@ protected:
     int
     getSortIndex() const override
     {
-        return SORTINDEX_LINESTRING;
+        return SORTINDEX_CIRCULARSTRING;
     };
 
     CircularString* reverseImpl() const override;
