@@ -3,6 +3,7 @@
 #include <tut/tut.hpp>
 // geos
 #include <geos_c.h>
+#include <geos/constants.h>
 // std
 #include <cmath>
 
@@ -128,6 +129,17 @@ void object::test<7>()
     set_test_name("GEOSGeom_getDimensions");
 
     ensure_equals(GEOSGeom_getDimensions(cc_), 1);
+}
+
+template<>
+template<>
+void object::test<8>()
+{
+    set_test_name("GEOSGeomGetLength");
+
+    double length = -1;
+    ensure_equals(GEOSGeomGetLength(cc_, &length), 1);
+    ensure_equals(length, geos::MATH_PI*1.5*5 + 5);
 }
 
 } // namespace tut

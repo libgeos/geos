@@ -2146,16 +2146,16 @@ extern "C" {
     }
 
     /*
-     * Call only on LINESTRING
-     * return 0 on exception, otherwise 1
+     * Call only on LineString, CircularString, or CompoundCurve
+     * Returns NULL on exception
      */
     int
     GEOSGeomGetLength_r(GEOSContextHandle_t extHandle, const Geometry* g1, double* length)
     {
         return execute(extHandle, 0, [&]() {
-            const LineString* ls = dynamic_cast<const LineString*>(g1);
+            const Curve* ls = dynamic_cast<const Curve*>(g1);
             if(!ls) {
-                throw IllegalArgumentException("Argument is not a LineString");
+                throw IllegalArgumentException("Argument is not a Curve (LineString, CircularString, or CompoundCurve)");
             }
             *length = ls->getLength();
             return 1;

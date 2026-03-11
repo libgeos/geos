@@ -3403,9 +3403,11 @@ extern void GEOS_DLL GEOSGeom_setUserData(GEOSGeometry* g, void* userData);
 * - Rings start with their smallest coordinate
 *   (using XY ordering)
 * - Polygon shell rings are oriented CW, and holes CCW
-* - Collection elements are sorted by their first coordinate
+* - Collection elements are sorted by their geometry type and first coordinate
 *
 * Coordinate Z and M values are not modified during normalization.
+*
+* Curved geometry types are supported since GEOS 3.15.
 *
 * Use before calling \ref GEOSEqualsExact to avoid false "not equal" results.
 * \param g Input geometry
@@ -3676,9 +3678,13 @@ extern int GEOS_DLL GEOSLength(
     double *length);
 
 /**
-* Calculate the length of a LineString.
-* Only works for LineString inputs, returns exception otherwise.
+* Calculate the length of a LineString, CircularString, or CompoundCurve.
+*
+* Returns an exception if a different geometry type is provided.
 * Length is calculated in the XY plane; Z and M values are ignored.
+*
+* CircularString and CompoundCurve arguments are supported since
+* GEOS 3.15.
 *
 * \param[in] g Input geometry
 * \param[out] length Pointer to be filled in with length result
