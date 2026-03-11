@@ -56,5 +56,37 @@ void object::test<2>()
     ensure_equals(GEOSGeom_getExtent(geom1_, &d, &d, &d, &d), 0);
 }
 
+template<>
+template<>
+void object::test<3>()
+{
+    set_test_name("curved inputs");
+
+    input_ = fromWKT("CIRCULARSTRING (-5 0, 4 3, 0 -5)");
+
+    {
+        double xmin, ymin, xmax, ymax = -1;
+        ensure_equals(GEOSGeom_getXMin(input_, &xmin), 1);
+        ensure_equals(GEOSGeom_getXMax(input_, &xmax), 1);
+        ensure_equals(GEOSGeom_getYMin(input_, &ymin), 1);
+        ensure_equals(GEOSGeom_getYMax(input_, &ymax), 1);
+
+        ensure_equals(xmin, -5);
+        ensure_equals(xmax, 5);
+        ensure_equals(ymin, -5);
+        ensure_equals(ymax, 5);
+    }
+
+    {
+        double xmin, ymin, xmax, ymax = -1;
+
+        ensure_equals(GEOSGeom_getExtent(input_, &xmin, &ymin, &xmax, &ymax), 1);
+        ensure_equals(xmin, -5);
+        ensure_equals(xmax, 5);
+        ensure_equals(ymin, -5);
+        ensure_equals(ymax, 5);
+    }
+}
+
 } // namespace tut
 

@@ -3186,7 +3186,12 @@ extern int GEOS_DLL GEOSGeom_getCoordinateDimension(
     const GEOSGeometry* g);
 
 /**
-* Finds the minimum X value in the geometry.
+* Gets the minimum X value of the geometry's envelope.
+* For linear geometry types, this is the same as the minimum X
+* coordinate value.
+*
+* Curved geometry types are supported since GEOS 3.13.
+*
 * \param[in] g Input geometry
 * \param[out] value Pointer to place result
 * \return 0 on exception
@@ -3196,7 +3201,12 @@ extern int GEOS_DLL GEOSGeom_getCoordinateDimension(
 extern int GEOS_DLL GEOSGeom_getXMin(const GEOSGeometry* g, double* value);
 
 /**
-* Finds the minimum Y value in the geometry.
+* Gets the minimum Y value of the geometry's envelope.
+* For linear geometry types, this is the same as the minimum Y
+* coordinate value.
+*
+* Curved geometry types are supported since GEOS 3.13.
+*
 * \param[in] g Input geometry
 * \param[out] value Pointer to place result
 * \return 0 on exception
@@ -3206,7 +3216,12 @@ extern int GEOS_DLL GEOSGeom_getXMin(const GEOSGeometry* g, double* value);
 extern int GEOS_DLL GEOSGeom_getYMin(const GEOSGeometry* g, double* value);
 
 /**
-* Finds the maximum X value in the geometry.
+* Get the maximum X value of the geometry's envelope.
+* For linear geometry types, this is the same as the maximum X
+* coordinate value.
+*
+* Curved geometry types are supported since GEOS 3.13.
+*
 * \param[in] g Input geometry
 * \param[out] value Pointer to place result
 * \return 0 on exception
@@ -3216,7 +3231,12 @@ extern int GEOS_DLL GEOSGeom_getYMin(const GEOSGeometry* g, double* value);
 extern int GEOS_DLL GEOSGeom_getXMax(const GEOSGeometry* g, double* value);
 
 /**
-* Finds the maximum Y value in the geometry.
+* Gets the maximum Y value of the geometry's envelope.
+* For linear geometry types, this is the same as the maximum Y
+* coordinate value.
+*
+* Curved geometry types are supported since GEOS 3.13.
+*
 * \param[in] g Input geometry
 * \param[out] value Pointer to place result
 * \return 0 on exception
@@ -3226,8 +3246,12 @@ extern int GEOS_DLL GEOSGeom_getXMax(const GEOSGeometry* g, double* value);
 extern int GEOS_DLL GEOSGeom_getYMax(const GEOSGeometry* g, double* value);
 
 /**
-* Finds the extent (minimum and maximum X and Y value) of the geometry.
+* Finds the extent (minimum and maximum X and Y value) of the
+* geometry's envelope.
+*
 * Raises an exception for empty geometry input.
+*
+* Curved geometry types are supported since GEOS 3.13.
 *
 * \param[in] g Input geometry
 * \param[out] xmin Pointer to place result for minimum X value
