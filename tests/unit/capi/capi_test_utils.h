@@ -37,7 +37,7 @@ namespace capitest {
 #endif
         }
 
-        ~utility()
+        virtual ~utility()
         {
             if (wktw_)     GEOSWKTWriter_destroy(wktw_);
             if (geom1_)    GEOSGeom_destroy(geom1_);

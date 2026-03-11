@@ -2067,16 +2067,16 @@ extern "C" {
     }
 
     /*
-     * Call only on LINESTRING
+     * Call only on LineString, CircularString, or CompoundCurve
      * Returns NULL on exception
      */
     Geometry*
     GEOSGeomGetPointN_r(GEOSContextHandle_t extHandle, const Geometry* g1, int n)
     {
         return execute(extHandle, [&]() {
-            const SimpleCurve* ls = dynamic_cast<const SimpleCurve*>(g1);
+            const Curve* ls = dynamic_cast<const Curve*>(g1);
             if(!ls) {
-                throw IllegalArgumentException("Argument is not a SimpleCurve");
+                throw IllegalArgumentException("Argument is not a Curve (LineString, CircularString, or CompoundCurve)");
             }
             if(n < 0) {
                 throw IllegalArgumentException("Index must be non-negative.");
@@ -2086,15 +2086,16 @@ extern "C" {
     }
 
     /*
-     * Call only on LINESTRING
+     * Call only on LineString, CircularString, or CompoundCurve
+     * Returns NULL on exception
      */
     Geometry*
     GEOSGeomGetStartPoint_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
         return execute(extHandle, [&]() {
-            const SimpleCurve* ls = dynamic_cast<const SimpleCurve*>(g1);
+            const Curve* ls = dynamic_cast<const Curve*>(g1);
             if(!ls) {
-                throw IllegalArgumentException("Argument is not a SimpleCurve");
+                throw IllegalArgumentException("Argument is not a Curve (LineString, CircularString, or CompoundCurve)");
             }
 
             return ls->getStartPoint().release();
@@ -2102,15 +2103,16 @@ extern "C" {
     }
 
     /*
-     * Call only on LINESTRING
+     * Call only on LineString, CircularString, or CompoundCurve
+     * Returns NULL on exception
      */
     Geometry*
     GEOSGeomGetEndPoint_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
         return execute(extHandle, [&]() {
-            const SimpleCurve* ls = dynamic_cast<const SimpleCurve*>(g1);
+            const Curve* ls = dynamic_cast<const Curve*>(g1);
             if(!ls) {
-                throw IllegalArgumentException("Argument is not a SimpleCurve");
+                throw IllegalArgumentException("Argument is not a Curve (LineString, CircularString, or CompoundCurve)");
             }
             return ls->getEndPoint().release();
         });
@@ -2161,15 +2163,16 @@ extern "C" {
     }
 
     /*
-     * Call only on LINESTRING
+     * Call only on LineString, CircularString, or CompoundCurve
+     * Returns NULL on exception
      */
     int
     GEOSGeomGetNumPoints_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
         return execute(extHandle, -1, [&]() {
-            const SimpleCurve* ls = dynamic_cast<const SimpleCurve*>(g1);
+            const Curve* ls = dynamic_cast<const Curve*>(g1);
             if(!ls) {
-                throw IllegalArgumentException("Argument is not a SimpleCurve");
+                throw IllegalArgumentException("Argument is not a Curve (LineString, CircularString, or CompoundCurve)");
             }
             return static_cast<int>(ls->getNumPoints());
         });

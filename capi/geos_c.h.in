@@ -3060,9 +3060,12 @@ extern double GEOS_DLL GEOSGeom_getPrecision(const GEOSGeometry *g);
 extern int GEOS_DLL GEOSGetNumInteriorRings(const GEOSGeometry* g);
 
 /**
-* Returns the number of points, for a LineString input, or
-* an exception otherwise.
-* \param g Input LineString geometry
+* Return the number of points in a linear geometry.
+*
+* CircularString inputs are supported since GEOS 3.14.
+* CompoundCurve inputs are supported since GEOS 3.15.
+*
+* \param g Input geometry, must be a LineString, CircularString, or CompoundCurve
 * \return Number of points, -1 on exception
 * \since 2.2
 */
@@ -3146,7 +3149,7 @@ extern int GEOS_DLL GEOSGetNumCoordinates(
 
 /**
 * Return the coordinate sequence underlying the
-* given geometry (Must be a LineString, LinearRing or Point).
+* given geometry (Must be a LineString, LinearRing, CircularString, or Point).
 * Do not directly free the coordinate sequence, it is owned by
 * the parent geometry.
 * \param g Input geometry
@@ -3159,9 +3162,9 @@ extern const GEOSCoordSequence GEOS_DLL *GEOSGeom_getCoordSeq(
 /**
 * Return the planar dimensionality of the geometry.
 *
-* - 0 for point, multipoint
-* - 1 for linestring, multilinestring
-* - 2 for polygon, multipolygon
+* - 0 for Point, MultiPoint
+* - 1 for LineString, MultiLineString, CircularString, CompoundCurve, MultiCurve
+* - 2 for Polygon, MultiPolygon, CurvePolygon, MultiSurface
 *
 * \see geos::geom::Dimension::DimensionType
 * \param g Input geometry
@@ -3175,7 +3178,8 @@ extern int GEOS_DLL GEOSGeom_getDimensions(
 * Return the cartesian dimension of the geometry.
 *
 * - 2 for XY data
-* - 3 for XYZ data
+* - 3 for XYZ or XYM data
+* - 4 for XYZM data
 *
 * \param g Input geometry
 * \return The dimension
@@ -3270,8 +3274,12 @@ extern int GEOS_DLL GEOSGeom_getExtent(
     double* ymax);
 
 /**
-* Return the N'th point of a LineString
-* \param g Input geometry, must be a LineString
+* Return the N'th point of a linear geometry.
+*
+* CircularString inputs are supported since GEOS 3.14.
+* CompoundCurve inputs are supported since GEOS 3.15.
+*
+* \param g Input geometry, must be a LineString, CircularString, or CompoundCurve
 * \param n Index of desired point (zero based)
 * \return A Point geometry.
 *         Caller must free with GEOSGeom_destroy()
@@ -3281,8 +3289,12 @@ extern int GEOS_DLL GEOSGeom_getExtent(
 extern GEOSGeometry GEOS_DLL *GEOSGeomGetPointN(const GEOSGeometry *g, int n);
 
 /**
-* Return the first point of a LineString
-* \param g Input geometry, must be a LineString
+* Return the first point of a linear geometry.
+*
+* CircularString inputs are supported since GEOS 3.14.
+* CompoundCurve inputs are supported since GEOS 3.15.
+*
+* \param g Input geometry, must be a LineString, CircularString, or CompoundCurve
 * \return A Point geometry.
 *         Caller must free with GEOSGeom_destroy()
 *         NULL on exception.
@@ -3291,15 +3303,18 @@ extern GEOSGeometry GEOS_DLL *GEOSGeomGetPointN(const GEOSGeometry *g, int n);
 extern GEOSGeometry GEOS_DLL *GEOSGeomGetStartPoint(const GEOSGeometry *g);
 
 /**
-* Return the last point of a LineString
-* \param g Input geometry, must be a LineString
+* Return the last point of a linear geometry.
+*
+* CircularString inputs are supported since GEOS 3.14.
+* CompoundCurve inputs are supported since GEOS 3.15.
+*
+* \param g Input geometry, must be a LineString, CircularString, or CompoundCurve
 * \return A Point geometry.
 *         Caller must free with GEOSGeom_destroy()
 *         NULL on exception.
 * \since 3.3
 */
 extern GEOSGeometry GEOS_DLL *GEOSGeomGetEndPoint(const GEOSGeometry *g);
-
 
 /**
 * Tests whether the input geometry is empty. If the geometry or any
@@ -3341,9 +3356,10 @@ extern char GEOS_DLL GEOSHasM(const GEOSGeometry* g);
 
 /**
 * Tests whether the input geometry is closed.
-* A closed geometry is a linestring or multilinestring
-* with the start and end points having the same XY values.
-* Z and M values are not considered.
+* A closed geometry is a LineString, MultiLineString, CircularString,
+* CompoundCurve, or MultiCurve with the start and end points having 
+* the same XY values. Z and M values are not considered.
+*
 * \param g The geometry to test
 * \return 1 on true, 0 on false, 2 on exception
 * \since 3.3
