@@ -3656,6 +3656,11 @@ extern GEOSGeometry GEOS_DLL *GEOSRemoveRepeatedPoints(
 
 /**
 * Calculate the area of a geometry.
+*
+* Curved geometry types are supported since GEOS 3.13.
+*
+* Area is calculated in the XY plane; Z and M values are ignored.
+*
 * \param[in] g Input geometry
 * \param[out] area Pointer to be filled in with area result
 * \return 1 on success, 0 on exception.
@@ -3667,6 +3672,9 @@ extern int GEOS_DLL GEOSArea(
 
 /**
 * Calculate the length of a geometry.
+*
+* Curved geometry types are supported since GEOS 3.13.
+*
 * Length is calculated in the XY plane; Z and M values are ignored.
 * \param[in] g Input geometry
 * \param[out] length Pointer to be filled in with length result
@@ -4762,6 +4770,8 @@ GEOSCoverageClean(
 *
 * Z and M values in the input coordinates are ignored.
 *
+* Cuved geometry types are supported as of GEOS 3.13.
+*
 * \param g The geometry to calculate an envelope for
 * \return A newly allocated polygonal envelope or point. NULL on exception.
 * Caller is responsible for freeing with GEOSGeom_destroy().
@@ -5211,6 +5221,8 @@ extern GEOSGeometry GEOS_DLL * GEOSVoronoiDiagram(
 * Z and M values of input coordinates will be preserved.
 * Z and M values at constructed points will be interpolated.
 *
+* Curved geometry types are supported since GEOS 3.15.
+*
 * \param g The input geometry
 * \return The noded geometry or NULL on exception
 * Caller is responsible for freeing with GEOSGeom_destroy().
@@ -5423,6 +5435,9 @@ extern GEOSGeometry GEOS_DLL *GEOSLineSubstring(
 * of the sequences. Converts CCW rings to CW. Reverses direction
 * of LineStrings. Z and M values of the input coordinates are
 * preserved.
+*
+* Curved geometry types are supported since GEOS 3.13.
+*
 * \param g The input geometry
 * \return The reversed geometry
 * Caller is responsible for freeing with GEOSGeom_destroy().
@@ -5480,6 +5495,8 @@ extern GEOSGeometry GEOS_DLL *GEOSTopologyPreserveSimplify(
 * Z values on the retained coordinates will be preserved.
 * M values will not be preserved.
 *
+* Curved geometry types are supported since GEOS 3.13.
+*
 * \param g The input geometry
 * \return The distinct points
 * Caller is responsible for freeing with GEOSGeom_destroy().
@@ -5515,6 +5532,9 @@ extern int GEOS_DLL GEOSHilbertCode(
 * Apply XY coordinate transform callback to all coordinates in a copy of
 * input geometry.  If the callback returns an error, returned geometry will be
 * NULL.  Z and M values, if present, are not modified by this function.
+*
+* Curved geometry types are supported since GEOS 3.13.
+*
 * \param[in] g Input geometry
 * \param[in] callback a function to be executed for each coordinate in the
                 geometry.  The callback takes 3 parameters: x and y coordinate
@@ -5534,6 +5554,9 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_transformXY(
 * Apply XYZ coordinate transform callback to all coordinates in a copy of
 * input geometry.  If the callback returns an error, returned geometry will be
 * NULL.  M values, if present, are not modified by this function.
+*
+* Curved geometry types are supported since GEOS 3.13.
+*
 * \param[in] g Input geometry
 * \param[in] callback a function to be executed for each coordinate in the
                 geometry.  The callback takes 4 parameters: x, y and z coordinate
@@ -5736,6 +5759,9 @@ extern char GEOS_DLL GEOSCoveredBy(const GEOSGeometry* g1, const GEOSGeometry* g
 * Unlike GEOSEquals(), geometries that are topologically equivalent but have different
 * representations (e.g., LINESTRING (0 0, 1 1) and MULTILINESTRING ((0 0, 1 1)) ) are not
 * considered equal by GEOSEqualsExact().
+*
+* Curved geometry types are supported since GEOS 3.13.
+*
 * \param g1 Input geometry
 * \param g2 Input geometry
 * \param tolerance Tolerance to determine vertex equality
@@ -5749,11 +5775,13 @@ extern char GEOS_DLL GEOSEqualsExact(
     double tolerance);
 
 /**
- * Determine pointwise equality of two geometries by checking
- * that the structure, ordering, and values of all vertices are
- * identical in all dimensions. NaN values are considered to be
- * equal to other NaN values.
- *
+* Determine pointwise equality of two geometries by checking
+* that the structure, ordering, and values of all vertices are
+* identical in all dimensions. NaN values are considered to be
+* equal to other NaN values.
+*
+* Curved geometry types are supported since GEOS 3.13.
+*
 * \param g1 Input geometry
 * \param g2 Input geometry
 * \returns 1 on true, 0 on false, 2 on exception
