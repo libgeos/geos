@@ -55,13 +55,16 @@ public:
     /// \brief
     /// Return the end point of the Curve
     /// or NULL if this is an EMPTY Curve.
-    ///
     virtual std::unique_ptr<Point> getEndPoint() const = 0;
+
+    /// \brief
+    /// Return the n'th point of the Curve
+    /// or NULL if this is an EMPTY Curve.
+    virtual std::unique_ptr<Point> getPointN(std::size_t n) const = 0;
 
     /// \brief
     /// Return the start point of the Curve
     /// or NULL if this is an EMPTY Curve.
-    ///
     virtual std::unique_ptr<Point> getStartPoint() const = 0;
 
     /// Returns true if the first and last coordinate in the Curve are the same

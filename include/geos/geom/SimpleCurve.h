@@ -81,7 +81,7 @@ public:
 
     std::size_t getNumPoints() const override;
 
-    virtual std::unique_ptr<Point> getPointN(std::size_t n) const;
+    std::unique_ptr<Point> getPointN(std::size_t n) const override;
 
     /// \brief
     /// Return the start point of the LineString

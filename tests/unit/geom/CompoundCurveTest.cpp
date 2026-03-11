@@ -83,6 +83,7 @@ void object::test<1>()
 
     ensure("getStartPoint", cc->getStartPoint() == nullptr);
     ensure("getEndPoint", cc->getEndPoint() == nullptr);
+    ensure("getPointN", cc->getPointN(3) == nullptr);
 }
 
 // Basic Geometry API
@@ -101,7 +102,7 @@ void object::test<2>()
     ensure_equals("getLength", cc_->getLength(), geos::MATH_PI + 2);
     ensure_equals("getNumGeometries", cc_->getNumGeometries(), 1u);
     ensure_equals("getNumCurves", cc_->getNumCurves(), 2u);
-    ensure_equals("getNumPoints", cc_->getNumPoints(), 5u); // FIXME should this be 5 or 4?
+    ensure_equals("getNumPoints", cc_->getNumPoints(), 5u);
     geos::geom::Envelope expected(0, 2, 0, 2);
     ensure("getEnvelopeInternal", cc_->getEnvelopeInternal()->equals(&expected));
 
@@ -130,6 +131,7 @@ void object::test<2>()
 
     ensure_equals_geometry(cc_->getStartPoint().get(), factory_->createPoint(CoordinateXY{0, 0}).get());
     ensure_equals_geometry(cc_->getEndPoint().get(), factory_->createPoint(CoordinateXY{2, 2}).get());
+    ensure_equals_geometry(cc_->getPointN(4).get(), factory_->createPoint(CoordinateXY{2, 2}).get());
 }
 
 // Operations

@@ -397,6 +397,22 @@ CompoundCurve::normalizeClosed()
     curves = std::move(newCurves);
 }
 
+std::unique_ptr<Point>
+CompoundCurve::getPointN(std::size_t n) const
+{
+    for (const auto& curve : curves) {
+        if (n < curve->getNumPoints()) {
+            return curve->getCoordinatesRO()->applyAt(n, [this](const auto& c) {
+                return getFactory()->createPoint(c);
+            });
+        }
+
+        n -= curve->getNumPoints();
+    }
+
+    return nullptr;
+}
+
 std::unique_ptr<CompoundCurve>
 CompoundCurve::reverse() const
 {

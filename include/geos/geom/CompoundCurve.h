@@ -74,6 +74,8 @@ public:
 
     std::size_t getNumPoints() const override;
 
+    std::unique_ptr<Point> getPointN(std::size_t n) const override;
+
     std::unique_ptr<Point> getStartPoint() const override;
 
     bool hasCurvedComponents() const override;
