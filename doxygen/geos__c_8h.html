@@ -2763,7 +2763,10 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Calculate the area of a geometry. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Calculate the area of a geometry.</p>
+<p>Curved geometry types are supported since GEOS 3.13.</p>
+<p>Area is calculated in the XY plane; Z and M values are ignored.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">g</td><td>Input geometry </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">area</td><td>Pointer to be filled in with area result </td></tr>
@@ -10305,6 +10308,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </div><div class="memdoc">
 <p>Returns minimum 2D rectangular polygon or point that contains the geometry, or an empty point for empty inputs.</p>
 <p>Z and M values in the input coordinates are ignored.</p>
+<p>Cuved geometry types are supported as of GEOS 3.13.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The geometry to calculate an envelope for </td></tr>
@@ -10481,7 +10485,9 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Determine pointwise equality of two geometries, by checking that they have identical structure and that each vertex of g2 is within the distance tolerance of the corresponding vertex in g1. Z and M values are ignored by GEOSEqualsExact, and this function may return true for inputs with different dimensionality. Unlike <a class="el" href="geos__c_8h.html#a45499a7d87851015d36e57d285da9d8e">GEOSEquals()</a>, geometries that are topologically equivalent but have different representations (e.g., LINESTRING (0 0, 1 1) and MULTILINESTRING ((0 0, 1 1)) ) are not considered equal by <a class="el" href="geos__c_8h.html#a23922c100edd72a8d82720213607e7bf">GEOSEqualsExact()</a>. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Determine pointwise equality of two geometries, by checking that they have identical structure and that each vertex of g2 is within the distance tolerance of the corresponding vertex in g1. Z and M values are ignored by GEOSEqualsExact, and this function may return true for inputs with different dimensionality. Unlike <a class="el" href="geos__c_8h.html#a45499a7d87851015d36e57d285da9d8e">GEOSEquals()</a>, geometries that are topologically equivalent but have different representations (e.g., LINESTRING (0 0, 1 1) and MULTILINESTRING ((0 0, 1 1)) ) are not considered equal by <a class="el" href="geos__c_8h.html#a23922c100edd72a8d82720213607e7bf">GEOSEqualsExact()</a>.</p>
+<p>Curved geometry types are supported since GEOS 3.13.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g1</td><td>Input geometry </td></tr>
     <tr><td class="paramname">g2</td><td>Input geometry </td></tr>
@@ -10578,6 +10584,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </table>
 </div><div class="memdoc">
 <p>Determine pointwise equality of two geometries by checking that the structure, ordering, and values of all vertices are identical in all dimensions. NaN values are considered to be equal to other NaN values.</p>
+<p>Curved geometry types are supported since GEOS 3.13.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g1</td><td>Input geometry </td></tr>
@@ -12961,6 +12968,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </div><div class="memdoc">
 <p>Return all distinct vertices of input geometry as a MultiPoint. Note that only 2 dimensions of the vertices are considered when testing for equality.</p>
 <p>Z values on the retained coordinates will be preserved. M values will not be preserved.</p>
+<p>Curved geometry types are supported since GEOS 3.13.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The input geometry </td></tr>
@@ -13035,7 +13043,8 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 <p>Return the cartesian dimension of the geometry.</p>
 <ul>
 <li>2 for XY data</li>
-<li>3 for XYZ data</li>
+<li>3 for XYZ or XYM data</li>
+<li>4 for XYZM data</li>
 </ul>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
@@ -13108,7 +13117,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Return the coordinate sequence underlying the given geometry (Must be a LineString, LinearRing or Point). Do not directly free the coordinate sequence, it is owned by the parent geometry. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Return the coordinate sequence underlying the given geometry (Must be a LineString, LinearRing, CircularString, or Point). Do not directly free the coordinate sequence, it is owned by the parent geometry. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>Input geometry </td></tr>
   </table>
@@ -13181,9 +13190,9 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </div><div class="memdoc">
 <p>Return the planar dimensionality of the geometry.</p>
 <ul>
-<li>0 for point, multipoint</li>
-<li>1 for linestring, multilinestring</li>
-<li>2 for polygon, multipolygon</li>
+<li>0 for Point, MultiPoint</li>
+<li>1 for LineString, MultiLineString, CircularString, CompoundCurve, MultiCurve</li>
+<li>2 for Polygon, MultiPolygon, CurvePolygon, MultiSurface</li>
 </ul>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1geom_1_1Dimension.html#af46f1c0c325eb685fcf32987748d04cf">geos::geom::Dimension::DimensionType</a> </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
@@ -13285,7 +13294,9 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Finds the extent (minimum and maximum X and Y value) of the geometry. Raises an exception for empty geometry input.</p>
+<p>Finds the extent (minimum and maximum X and Y value) of the geometry's envelope.</p>
+<p>Raises an exception for empty geometry input.</p>
+<p>Curved geometry types are supported since GEOS 3.13.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">g</td><td>Input geometry </td></tr>
@@ -13537,7 +13548,9 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Finds the maximum X value in the geometry. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Get the maximum X value of the geometry's envelope. For linear geometry types, this is the same as the maximum X coordinate value.</p>
+<p>Curved geometry types are supported since GEOS 3.13.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">g</td><td>Input geometry </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">value</td><td>Pointer to place result </td></tr>
@@ -13625,7 +13638,9 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Finds the minimum X value in the geometry. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Gets the minimum X value of the geometry's envelope. For linear geometry types, this is the same as the minimum X coordinate value.</p>
+<p>Curved geometry types are supported since GEOS 3.13.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">g</td><td>Input geometry </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">value</td><td>Pointer to place result </td></tr>
@@ -13713,7 +13728,9 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Finds the maximum Y value in the geometry. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Gets the maximum Y value of the geometry's envelope. For linear geometry types, this is the same as the maximum Y coordinate value.</p>
+<p>Curved geometry types are supported since GEOS 3.13.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">g</td><td>Input geometry </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">value</td><td>Pointer to place result </td></tr>
@@ -13801,7 +13818,9 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Finds the minimum Y value in the geometry. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Gets the minimum Y value of the geometry's envelope. For linear geometry types, this is the same as the minimum Y coordinate value.</p>
+<p>Curved geometry types are supported since GEOS 3.13.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">g</td><td>Input geometry </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">value</td><td>Pointer to place result </td></tr>
@@ -14176,7 +14195,9 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Apply XY coordinate transform callback to all coordinates in a copy of input geometry. If the callback returns an error, returned geometry will be NULL. Z and M values, if present, are not modified by this function. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Apply XY coordinate transform callback to all coordinates in a copy of input geometry. If the callback returns an error, returned geometry will be NULL. Z and M values, if present, are not modified by this function.</p>
+<p>Curved geometry types are supported since GEOS 3.13.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">g</td><td>Input geometry </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">callback</td><td>a function to be executed for each coordinate in the geometry. The callback takes 3 parameters: x and y coordinate values to be updated and a void userdata pointer. </td></tr>
@@ -14277,7 +14298,9 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Apply XYZ coordinate transform callback to all coordinates in a copy of input geometry. If the callback returns an error, returned geometry will be NULL. M values, if present, are not modified by this function. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Apply XYZ coordinate transform callback to all coordinates in a copy of input geometry. If the callback returns an error, returned geometry will be NULL. M values, if present, are not modified by this function.</p>
+<p>Curved geometry types are supported since GEOS 3.13.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">g</td><td>Input geometry </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">callback</td><td>a function to be executed for each coordinate in the geometry. The callback takes 4 parameters: x, y and z coordinate values to be updated and a void userdata pointer. </td></tr>
@@ -14586,9 +14609,11 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Return the last point of a LineString </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Return the last point of a linear geometry.</p>
+<p>CircularString inputs are supported since GEOS 3.14. CompoundCurve inputs are supported since GEOS 3.15.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">g</td><td>Input geometry, must be a LineString </td></tr>
+    <tr><td class="paramname">g</td><td>Input geometry, must be a LineString, CircularString, or CompoundCurve </td></tr>
   </table>
   </dd>
 </dl>
@@ -14667,7 +14692,9 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Calculate the length of a LineString. Only works for LineString inputs, returns exception otherwise. Length is calculated in the XY plane; Z and M values are ignored.</p>
+<p>Calculate the length of a LineString, CircularString, or CompoundCurve.</p>
+<p>Returns an exception if a different geometry type is provided. Length is calculated in the XY plane; Z and M values are ignored.</p>
+<p>CircularString and CompoundCurve arguments are supported since GEOS 3.15.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">g</td><td>Input geometry </td></tr>
@@ -14834,9 +14861,11 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns the number of points, for a LineString input, or an exception otherwise. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Return the number of points in a linear geometry.</p>
+<p>CircularString inputs are supported since GEOS 3.14. CompoundCurve inputs are supported since GEOS 3.15.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">g</td><td>Input LineString geometry </td></tr>
+    <tr><td class="paramname">g</td><td>Input geometry, must be a LineString, CircularString, or CompoundCurve </td></tr>
   </table>
   </dd>
 </dl>
@@ -14915,9 +14944,11 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Return the N'th point of a LineString </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Return the N'th point of a linear geometry.</p>
+<p>CircularString inputs are supported since GEOS 3.14. CompoundCurve inputs are supported since GEOS 3.15.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">g</td><td>Input geometry, must be a LineString </td></tr>
+    <tr><td class="paramname">g</td><td>Input geometry, must be a LineString, CircularString, or CompoundCurve </td></tr>
     <tr><td class="paramname">n</td><td>Index of desired point (zero based) </td></tr>
   </table>
   </dd>
@@ -14993,9 +15024,11 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Return the first point of a LineString </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Return the first point of a linear geometry.</p>
+<p>CircularString inputs are supported since GEOS 3.14. CompoundCurve inputs are supported since GEOS 3.15.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">g</td><td>Input geometry, must be a LineString </td></tr>
+    <tr><td class="paramname">g</td><td>Input geometry, must be a LineString, CircularString, or CompoundCurve </td></tr>
   </table>
   </dd>
 </dl>
@@ -17723,7 +17756,12 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Tests whether the input geometry is closed. A closed geometry is a linestring or multilinestring with the start and end points having the same XY values. Z and M values are not considered. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Tests whether the input geometry is closed. A closed geometry is either:</p><ul>
+<li>a non-empty LineString, CircularString, or CompoundCurve whose start and end points having the same XY values; or</li>
+<li>a non-empty MultiLineString or MultiCurve whose elements are all closed.</li>
+</ul>
+<p>Z and M values are not considered.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The geometry to test </td></tr>
   </table>
@@ -18489,7 +18527,9 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Calculate the length of a geometry. Length is calculated in the XY plane; Z and M values are ignored. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Calculate the length of a geometry.</p>
+<p>Curved geometry types are supported since GEOS 3.13.</p>
+<p>Length is calculated in the XY plane; Z and M values are ignored. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">g</td><td>Input geometry </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">length</td><td>Pointer to be filled in with length result </td></tr>
@@ -19868,6 +19908,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
 </div><div class="memdoc">
 <p>For linear inputs, returns a new geometry in which no lines cross each other, and all touching occurs at end points.</p>
 <p>Z and M values of input coordinates will be preserved. Z and M values at constructed points will be interpolated.</p>
+<p>Curved geometry types are supported since GEOS 3.15.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The input geometry </td></tr>
@@ -19945,9 +19986,10 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
 <li>Lines are oriented to have smallest coordinate first (apart from duplicate endpoints)</li>
 <li>Rings start with their smallest coordinate (using XY ordering)</li>
 <li>Polygon shell rings are oriented CW, and holes CCW</li>
-<li>Collection elements are sorted by their first coordinate</li>
+<li>Collection elements are sorted by their geometry type and first coordinate</li>
 </ul>
 <p>Coordinate Z and M values are not modified during normalization.</p>
+<p>Curved geometry types are supported since GEOS 3.15.</p>
 <p>Use before calling <a class="el" href="geos__c_8h.html#a23922c100edd72a8d82720213607e7bf">GEOSEqualsExact</a> to avoid false "not equal" results. </p><dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>Input geometry </td></tr>
@@ -23543,7 +23585,9 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
   </tr>
 </table>
 </div><div class="memdoc">
-<p>For geometries with coordinate sequences, reverses the order of the sequences. Converts CCW rings to CW. Reverses direction of LineStrings. Z and M values of the input coordinates are preserved. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>For geometries with coordinate sequences, reverses the order of the sequences. Converts CCW rings to CW. Reverses direction of LineStrings. Z and M values of the input coordinates are preserved.</p>
+<p>Curved geometry types are supported since GEOS 3.13.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The input geometry </td></tr>
   </table>
