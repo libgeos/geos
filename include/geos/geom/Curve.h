@@ -52,6 +52,18 @@ public:
         return Dimension::L; // line
     }
 
+    /// \brief
+    /// Return the end point of the Curve
+    /// or NULL if this is an EMPTY Curve.
+    ///
+    virtual std::unique_ptr<Point> getEndPoint() const = 0;
+
+    /// \brief
+    /// Return the start point of the Curve
+    /// or NULL if this is an EMPTY Curve.
+    ///
+    virtual std::unique_ptr<Point> getStartPoint() const = 0;
+
     /// Returns true if the first and last coordinate in the Curve are the same
     virtual bool isClosed() const = 0;
 

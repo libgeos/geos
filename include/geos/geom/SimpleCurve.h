@@ -70,7 +70,7 @@ public:
     /// Return the end point of the LineString
     /// or NULL if this is an EMPTY LineString.
     ///
-    virtual std::unique_ptr<Point> getEndPoint() const;
+    std::unique_ptr<Point> getEndPoint() const override;
 
     const Envelope* getEnvelopeInternal() const override
     {
@@ -87,7 +87,7 @@ public:
     /// Return the start point of the LineString
     /// or NULL if this is an EMPTY LineString.
     ///
-    virtual std::unique_ptr<Point> getStartPoint() const;
+    std::unique_ptr<Point> getStartPoint() const override;
 
     bool hasM() const override;
 

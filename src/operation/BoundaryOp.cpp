@@ -20,16 +20,22 @@
 #include <geos/algorithm/BoundaryNodeRule.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
+#include <geos/geom/CompoundCurve.h>
+#include <geos/geom/Curve.h>
 #include <geos/geom/LineString.h>
+#include <geos/geom/MultiCurve.h>
 #include <geos/geom/MultiLineString.h>
+#include <geos/geom/SimpleCurve.h>
 #include <geos/util.h>
 #include <map>
 
 using geos::geom::Coordinate;
 using geos::geom::CoordinateSequence;
+using geos::geom::Curve;
 using geos::geom::Dimension;
 using geos::geom::Geometry;
 using geos::geom::LineString;
+using geos::geom::MultiCurve;
 using geos::geom::MultiLineString;
 using geos::geom::Point;
 using geos::algorithm::BoundaryNodeRule;
@@ -52,14 +58,16 @@ BoundaryOp::BoundaryOp(const geom::Geometry& geom, const algorithm::BoundaryNode
 std::unique_ptr<geom::Geometry>
 BoundaryOp::getBoundary()
 {
-    util::ensureNoCurvedComponents(m_geom);
-
-    if (auto ls = dynamic_cast<const LineString*>(&m_geom)) {
-        return boundaryLineString(*ls);
+    if (auto ls = dynamic_cast<const Curve*>(&m_geom)) {
+        return boundaryCurve(*ls);
     }
 
     if (auto mls = dynamic_cast<const MultiLineString*>(&m_geom)) {
-        return boundaryMultiLineString(*mls);
+        return boundaryMultiCurve(*mls);
+    }
+
+    if (auto mc = dynamic_cast<const MultiCurve*>(&m_geom)) {
+        return boundaryMultiCurve(*mc);
     }
 
     return m_geom.getBoundary();
@@ -104,7 +112,7 @@ BoundaryOp::hasBoundary(const geom::Geometry& geom, const algorithm::BoundaryNod
 }
 
 std::unique_ptr<Geometry>
-BoundaryOp::boundaryLineString(const geom::LineString& line)
+BoundaryOp::boundaryCurve(const geom::Curve& line) const
 {
     if (m_geom.isEmpty()) {
         return m_geomFact.createMultiPoint();
@@ -112,7 +120,7 @@ BoundaryOp::boundaryLineString(const geom::LineString& line)
 
     if (line.isClosed()) {
         // check whether endpoints of valence 2 are on the boundary or not
-        bool closedEndpointOnBoundary = m_bnRule.isInBoundary(2);
+        const bool closedEndpointOnBoundary = m_bnRule.isInBoundary(2);
         if (closedEndpointOnBoundary) {
             return line.getStartPoint();
         }
@@ -129,7 +137,7 @@ BoundaryOp::boundaryLineString(const geom::LineString& line)
 }
 
 std::unique_ptr<Geometry>
-BoundaryOp::boundaryMultiLineString(const geom::MultiLineString& mLine)
+BoundaryOp::boundaryMultiCurve(const geom::GeometryCollection& mLine)
 {
     if (m_geom.isEmpty()) {
         return m_geomFact.createMultiPoint();
@@ -143,29 +151,68 @@ BoundaryOp::boundaryMultiLineString(const geom::MultiLineString& mLine)
             return m_geomFact.createPoint(c);
         });
     }
+
     // this handles 0 points case as well
     return std::unique_ptr<Geometry>(m_geomFact.createMultiPoint(*bdyPts));
 }
 
-std::unique_ptr<CoordinateSequence>
-BoundaryOp::computeBoundaryCoordinates(const geom::MultiLineString& mLine)
+static const CoordinateSequence*
+getFirstSequence(const Curve& curve)
 {
+    if (curve.getGeometryTypeId() == geom::GEOS_COMPOUNDCURVE) {
+        const auto& cc = static_cast<const geom::CompoundCurve&>(curve);
+        for (std::size_t i = 0; i < cc.getNumCurves(); i++) {
+            if (!cc.getCurveN(i)->isEmpty()) {
+                return cc.getCurveN(i)->getCoordinatesRO();
+            }
+        }
+
+        return nullptr;
+    }
+
+    return static_cast<const geom::SimpleCurve&>(curve).getCoordinatesRO();
+}
+
+static const CoordinateSequence*
+getLastSequence(const Curve& curve)
+{
+    if (curve.getGeometryTypeId() == geom::GEOS_COMPOUNDCURVE) {
+        const auto& cc = static_cast<const geom::CompoundCurve&>(curve);
+        for (std::size_t i = cc.getNumCurves(); i != 0; i--) {
+            if (!cc.getCurveN(i-1)->isEmpty()) {
+                return cc.getCurveN(i-1)->getCoordinatesRO();
+            }
+        }
+
+        return nullptr;
+    }
+
+    return static_cast<const geom::SimpleCurve&>(curve).getCoordinatesRO();
+}
+
+std::unique_ptr<CoordinateSequence>
+BoundaryOp::computeBoundaryCoordinates(const geom::GeometryCollection& mLine) const
+{
+    assert(mLine.getGeometryTypeId() == geom::GEOS_MULTILINESTRING || mLine.getGeometryTypeId() == geom::GEOS_MULTICURVE);
+
     auto bdyPts = detail::make_unique<CoordinateSequence>(0, mLine.hasZ(), mLine.hasM());
     std::map<geom::CoordinateXYZM, int> endpointMap;
 
     for (std::size_t i = 0; i < mLine.getNumGeometries(); i++) {
-      const LineString* line = mLine.getGeometryN(i);
+      const Curve* line = detail::down_cast<const Curve*>(mLine.getGeometryN(i));
 
       if (line->getNumPoints() == 0) {
         continue;
       }
 
-      const CoordinateSequence& pts = *line->getCoordinatesRO();
-
       geom::CoordinateXYZM start;
       geom::CoordinateXYZM end;
-      pts.getAt(0, start);
-      pts.getAt(pts.size() - 1, end);
+
+      const geom::CoordinateSequence* firstPts = getFirstSequence(*line);
+      const geom::CoordinateSequence* lastPts = getLastSequence(*line);
+
+      firstPts->getAt(0, start);
+      lastPts->getAt(lastPts->size() - 1, end);
 
       endpointMap[start]++;
       endpointMap[end]++;

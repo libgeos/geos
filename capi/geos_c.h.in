@@ -4733,6 +4733,8 @@ extern GEOSGeometry GEOS_DLL *GEOSEnvelope(const GEOSGeometry* g);
 *
 * Z and M values in the input coordinates are preserved.
 *
+* Curved geometry types are supported as of GEOS 3.15.
+*
 * \param g The input geometry
 * \return A newly allocated geometry of the boundary. NULL on exception.
 * Caller is responsible for freeing with GEOSGeom_destroy().

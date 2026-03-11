@@ -9,6 +9,8 @@
 #include <geos/io/WKTReader.h>
 #include <geos/util/UnsupportedOperationException.h>
 
+#include "utility.h"
+
 using geos::geom::CoordinateXY;
 
 namespace tut {
@@ -155,7 +157,10 @@ void object::test<3>()
     ensure_THROW(ms_->convexHull(), geos::util::UnsupportedOperationException);
     ensure_THROW(ms_->buffer(1), geos::util::UnsupportedOperationException);
     ensure_THROW(ms_->getCentroid(), geos::util::UnsupportedOperationException);
-    ensure_THROW(ms_->getBoundary(), geos::util::UnsupportedOperationException);
+    {
+        auto expected_boundary = wktreader_.read("MULTICURVE ((0 0, 1 0, 1 1, 0 1, 0 0), CIRCULARSTRING (10 10, 11 11, 12 10, 11 9, 10 10))");
+        ensure_equals_exact_geometry(ms_->getBoundary().get(), expected_boundary.get(), 0);
+    }
 
     ensure("clone", ms_->equalsIdentical(ms_->clone().get()));
 

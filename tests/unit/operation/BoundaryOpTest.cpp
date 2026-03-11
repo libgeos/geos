@@ -8,6 +8,8 @@
 #include <string>
 #include <memory>
 
+#include "utility.h"
+
 using namespace geos::algorithm;
 using namespace geos::geom;
 using geos::operation::BoundaryOp;
@@ -28,7 +30,7 @@ struct test_boundaryop_data {
         BoundaryOp op(*g, bnRule);
         auto boundary = op.getBoundary();
 
-        ensure(boundary->equals(expected.get()));
+        ensure_equals_geometry(boundary.get(), expected.get());
     }
 
     void checkHasBoundary(const std::string& wkt)
@@ -105,7 +107,7 @@ void object::test<3>()
             "POINT (10 10)"  );
 }
 
-// testMultiLinestd::stringWithRingTouchAtEndpoint
+// testMultiLineStringWithRingTouchAtEndpoint
 template<>
 template<>
 void object::test<4>()
@@ -156,7 +158,7 @@ void object::test<8>()
     checkHasBoundary( "LINESTRING (100 100, 20 20, 200 20, 100 100)", false);
 }
 
-// testHasBoundaryMultiLinestd::stringClosed
+// testHasBoundaryMultiLineStringClosed
 template<>
 template<>
 void object::test<9>()
@@ -164,7 +166,7 @@ void object::test<9>()
     checkHasBoundary( "MULTILINESTRING ((0 0, 0 1), (0 1, 1 1, 1 0, 0 0))", false);
 }
 
-// testHasBoundaryMultiLinestd::stringOpen
+// testHasBoundaryMultiLineStringOpen
 template<>
 template<>
 void object::test<10>()
@@ -186,6 +188,104 @@ template<>
 void object::test<12>()
 {
     checkHasBoundary( "POLYGON EMPTY", false);
+}
+
+template<>
+template<>
+void object::test<13>()
+{
+    set_test_name("closed CircularString has no boundary");
+
+    checkHasBoundary( "CIRCULARSTRING (-5 0, 0 5, 5 0, 0 -5, -5 0)", false);
+}
+
+template<>
+template<>
+void object::test<14>()
+{
+    set_test_name("non-closed CircularString has a boundary");
+
+    checkHasBoundary( "CIRCULARSTRING (-5 0, 0 5, 5 0)");
+}
+
+template<>
+template<>
+void object::test<15>()
+{
+    set_test_name("closed CompoundCurve has no boundary");
+
+    checkHasBoundary( "COMPOUNDCURVE (CIRCULARSTRING(-5 0, 0 5, 5 0), (5 0, -5 0))", false);
+}
+
+template<>
+template<>
+void object::test<16>()
+{
+    set_test_name("non-closed CompoundCurve has a boundary");
+
+    checkHasBoundary( "COMPOUNDCURVE (CIRCULARSTRING(-5 0, 0 5, 5 0), (5 0, 0 0))");
+}
+
+template<>
+template<>
+void object::test<17>()
+{
+    set_test_name("closed MultiCurve has no boundary");
+
+    checkHasBoundary( "MULTICURVE ((-5 0, 5 0), CIRCULARSTRING (-5 0, 0 5, 5 0))", false);
+}
+
+
+template<>
+template<>
+void object::test<18>()
+{
+    set_test_name("non-closed MultiCurve has a boundary");
+
+    checkHasBoundary( "MULTICURVE ((0 0, 5 0), CIRCULARSTRING (-5 0, 0 5, 5 0))");
+}
+
+template<>
+template<>
+void object::test<19>()
+{
+    set_test_name("boundary of closed CircularString");
+
+    std::string a = "CIRCULARSTRING (-5 0, 0 5, 5 0, 0 -5, -5 0)";
+    // rings are simple under all rules
+    runBoundaryTest(a, BoundaryNodeRule::getBoundaryRuleMod2(),
+            "MULTIPOINT EMPTY");
+    runBoundaryTest(a, BoundaryNodeRule::getBoundaryEndPoint(),
+            "POINT (-5 0)"  );
+}
+
+template<>
+template<>
+void object::test<20>()
+{
+    set_test_name("boundary of closed CompoundCurve");
+
+    std::string a = "COMPOUNDCURVE(CIRCULARSTRING (-5 0, 0 5, 5 0), (5 0, -5 0))";
+    // rings are simple under all rules
+    runBoundaryTest(a, BoundaryNodeRule::getBoundaryRuleMod2(),
+            "MULTIPOINT EMPTY");
+    runBoundaryTest(a, BoundaryNodeRule::getBoundaryEndPoint(),
+            "POINT (-5 0)"  );
+}
+
+template<>
+template<>
+void object::test<21>()
+{
+    set_test_name("boundary of MultiCurve");
+
+    std::string a = "MULTICURVE ((100 100, 20 20), CIRCULARSTRING (20 20, 110 0, 200 20), (200 20, 100 100), (100 200, 100 100))";
+    // under Mod-2, the ring has no boundary, so the line intersects the interior ==> not simple
+    runBoundaryTest(a, BoundaryNodeRule::getBoundaryRuleMod2(),
+            "MULTIPOINT ((100 100), (100 200))" );
+    // under Endpoint, the ring has a boundary point, so the line does NOT intersect the interior ==> simple
+    runBoundaryTest(a, BoundaryNodeRule::getBoundaryEndPoint(),
+            "MULTIPOINT ((100 100), (100 200), (20 20), (200 20))"  );
 }
 
 }

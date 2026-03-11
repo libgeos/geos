@@ -202,6 +202,18 @@ CompoundCurve::getCurveN(std::size_t i) const
     return curves[i].get();
 }
 
+std::unique_ptr<Point>
+CompoundCurve::getEndPoint() const
+{
+    for (std::size_t i = curves.size(); i != 0; i--) {
+        if (!curves[i-1]->isEmpty()) {
+            return curves[i-1]->getEndPoint();
+        }
+    }
+
+    return nullptr;
+}
+
 std::string
 CompoundCurve::getGeometryType() const
 {
@@ -238,6 +250,18 @@ CompoundCurve::getNumPoints() const
         n += curve->getNumPoints();
     }
     return n;
+}
+
+std::unique_ptr<Point>
+CompoundCurve::getStartPoint() const
+{
+    for (const auto& curve : curves) {
+        if (!curve->isEmpty()) {
+            return curve->getStartPoint();
+        }
+    }
+
+    return nullptr;
 }
 
 bool
