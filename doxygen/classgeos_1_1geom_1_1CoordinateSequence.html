@@ -271,14 +271,20 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>pop_back</b> ()</td><
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>toString</b> () const</td></tr>
 <tr class="memdesc:gaca9592f066ecbc03dde2e827aa59b54f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a string representation of <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html" title="The internal representation of a list of coordinates inside a Geometry.">CoordinateSequence</a>. <br /></td></tr>
 <tr class="separator:gaca9592f066ecbc03dde2e827aa59b54f"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ga79d7d4968879146855bb9e037dd1f411" id="r_ga79d7d4968879146855bb9e037dd1f411"><td class="memItemLeft" align="right" valign="top">
-const CoordinateXY *&#160;</td><td class="memItemRight" valign="bottom"><b>minCoordinate</b> () const</td></tr>
-<tr class="memdesc:ga79d7d4968879146855bb9e037dd1f411"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns lower-left <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> in list. <br /></td></tr>
+<tr class="memitem:ga79d7d4968879146855bb9e037dd1f411" id="r_ga79d7d4968879146855bb9e037dd1f411"><td class="memItemLeft" align="right" valign="top">const CoordinateXY *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__util.html#ga79d7d4968879146855bb9e037dd1f411">minCoordinate</a> () const</td></tr>
 <tr class="separator:ga79d7d4968879146855bb9e037dd1f411"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:gaa6eec1207f399d621144f19606fb01b7" id="r_gaa6eec1207f399d621144f19606fb01b7"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__util.html#gaa6eec1207f399d621144f19606fb01b7">minCoordinateIndex</a> () const</td></tr>
+<tr class="separator:gaa6eec1207f399d621144f19606fb01b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga0b6fc62c3a901496be471de894c312fa" id="r_ga0b6fc62c3a901496be471de894c312fa"><td class="memItemLeft" align="right" valign="top">
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>equalsIdentical</b> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &amp;other) const</td></tr>
 <tr class="memdesc:ga0b6fc62c3a901496be471de894c312fa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if the two sequences are identical (pointwise equal in all dimensions, with NaN == NaN). <br /></td></tr>
 <tr class="separator:ga0b6fc62c3a901496be471de894c312fa"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga435ad419ab411eaffa4bf4db8dc8b60e" id="r_ga435ad419ab411eaffa4bf4db8dc8b60e"><td class="memItemLeft" align="right" valign="top">
+void&#160;</td><td class="memItemRight" valign="bottom"><b>scroll</b> (const CoordinateXY *firstCoordinate)</td></tr>
+<tr class="separator:ga435ad419ab411eaffa4bf4db8dc8b60e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga878aaf12f81561149edb97b80caf9578" id="r_ga878aaf12f81561149edb97b80caf9578"><td class="memItemLeft" align="right" valign="top">
+void&#160;</td><td class="memItemRight" valign="bottom"><b>scroll</b> (std::size_t firstCoordinateIndex)</td></tr>
+<tr class="separator:ga878aaf12f81561149edb97b80caf9578"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga18952029ba26af894137333b708d4d2f" id="r_ga18952029ba26af894137333b708d4d2f"><td class="memItemLeft" align="right" valign="top">
 void&#160;</td><td class="memItemRight" valign="bottom"><b>reverse</b> ()</td></tr>
 <tr class="memdesc:ga18952029ba26af894137333b708d4d2f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reverse <a class="el" href="classgeos_1_1geom_1_1Coordinate.html" title="Coordinate is the lightweight class used to store coordinates.">Coordinate</a> order in given <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html" title="The internal representation of a list of coordinates inside a Geometry.">CoordinateSequence</a>. <br /></td></tr>

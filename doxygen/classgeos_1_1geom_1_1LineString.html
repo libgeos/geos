@@ -88,6 +88,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a5e94d17eeeb26e2b342785741256f2de" id="r_a5e94d17eeeb26e2b342785741256f2de"><td class="memItemLeft" align="right" valign="top"><a id="a5e94d17eeeb26e2b342785741256f2de" name="a5e94d17eeeb26e2b342785741256f2de"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isCurved</b> () const override</td></tr>
 <tr class="separator:a5e94d17eeeb26e2b342785741256f2de"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2a88ddbfc1533447b469b00907144733" id="r_a2a88ddbfc1533447b469b00907144733"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1LineString.html#a2a88ddbfc1533447b469b00907144733">normalize</a> () override</td></tr>
+<tr class="memdesc:a2a88ddbfc1533447b469b00907144733"><td class="mdescLeft">&#160;</td><td class="mdescRight">Normalizes a <a class="el" href="classgeos_1_1geom_1_1LineString.html">LineString</a>.  <br /></td></tr>
+<tr class="separator:a2a88ddbfc1533447b469b00907144733"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4c95b00f859d6a567918ab10b02d925a" id="r_a4c95b00f859d6a567918ab10b02d925a"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1LineString.html">LineString</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1LineString.html#a4c95b00f859d6a567918ab10b02d925a">reverse</a> () const</td></tr>
 <tr class="separator:a4c95b00f859d6a567918ab10b02d925a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
@@ -323,6 +326,36 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>GeometryFactory</b><
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geos::geom::Geometry</a>.</p>
+
+</div>
+</div>
+<a id="a2a88ddbfc1533447b469b00907144733" name="a2a88ddbfc1533447b469b00907144733"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2a88ddbfc1533447b469b00907144733">&#9670;&#160;</a></span>normalize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void geos::geom::LineString::normalize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Normalizes a <a class="el" href="classgeos_1_1geom_1_1LineString.html">LineString</a>. </p>
+<p>A normalized <a class="el" href="classgeos_1_1geom_1_1LineString.html">LineString</a> has the first point which is not equal to its reflected point less than the reflected point. </p>
+
+<p>Implements <a class="el" href="classgeos_1_1geom_1_1Geometry.html#a2ea3b58d562bc183e118e2a68f86414d">geos::geom::Geometry</a>.</p>
 
 </div>
 </div>

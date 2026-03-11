@@ -168,12 +168,16 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>    CompoundCurve* reverseImpl() <span class="keyword">const override</span>;</div>
 <div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span> </div>
 <div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>    std::vector&lt;std::unique_ptr&lt;SimpleCurve&gt;&gt; curves;</div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>    Envelope envelope;</div>
-<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>};</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>    <span class="keywordtype">void</span> normalizeClosed();</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span> </div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>    <span class="keywordtype">void</span> reverseInPlace();</div>
 <div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span> </div>
-<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>}</div>
-<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>}</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>    std::vector&lt;std::unique_ptr&lt;SimpleCurve&gt;&gt; curves;</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>    Envelope envelope;</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>};</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span> </div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>}</div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>}</div>
 <div class="ttc" id="anamespacegeos_1_1geom_html_ae613a409fcf8fc6d957848aafbd67c63"><div class="ttname"><a href="namespacegeos_1_1geom.html#ae613a409fcf8fc6d957848aafbd67c63">geos::geom::GeometryTypeId</a></div><div class="ttdeci">GeometryTypeId</div><div class="ttdoc">Geometry types.</div><div class="ttdef"><b>Definition</b> Geometry.h:73</div></div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition</b> geos.h:38</div></div>
 </div><!-- fragment --></div><!-- contents -->
