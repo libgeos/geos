@@ -3356,9 +3356,13 @@ extern char GEOS_DLL GEOSHasM(const GEOSGeometry* g);
 
 /**
 * Tests whether the input geometry is closed.
-* A closed geometry is a LineString, MultiLineString, CircularString,
-* CompoundCurve, or MultiCurve with the start and end points having 
-* the same XY values. Z and M values are not considered.
+* A closed geometry is either:
+* - a non-empty LineString, CircularString, or CompoundCurve whose
+*   start and end points having the same XY values; or
+* - a non-empty MultiLineString or MultiCurve whose elements are 
+*   all closed.
+*  
+* Z and M values are not considered.
 *
 * \param g The geometry to test
 * \return 1 on true, 0 on false, 2 on exception
