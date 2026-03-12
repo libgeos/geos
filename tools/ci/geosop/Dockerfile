@@ -1,28 +1,38 @@
-FROM docker.osgeo.org/geos/build-test:alpine AS base
-ARG VERSION=47f145e
+ARG BASEIMAGE="alpine:3.23"
+ARG GEOS_VERSION
 
-WORKDIR /source
+FROM ${BASEIMAGE} AS builder
+
+RUN apk add --no-cache \
+  cmake \
+  ninja \
+  g++ \
+  gcc
+
 ADD . /source
 
-#RUN wget --quiet https://github.com/libgeos/geos/archive/${VERSION}.tar.gz --output-document - \
-#| tar xz --directory=. --strip-components=1
+ARG GEOS_VERSION
+ENV GEOS_VERSION=${GEOS_VERSION}
+RUN if [ -n "${GEOS_VERSION}" ]; then \
+    rm -rf /source && mkdir /source && \
+    wget https://github.com/libgeos/geos/archive/${GEOS_VERSION}.tar.gz \
+      --output-document - | tar xz --directory=/source --strip-components=1; \
+  fi
 
-WORKDIR /build
-RUN cmake -D CMAKE_BUILD_TYPE=Release -D BUILD_BENCHMARKS=OFF -D BUILD_TESTING=OFF /source \
-  && make install \
-  && cp bin/geosop /usr/local/bin/geosop
+RUN cmake -S /source -B /build -G Ninja \
+    -D CMAKE_BUILD_TYPE=Release \
+    -D CMAKE_INSTALL_LIBDIR=lib \
+    -D BUILD_BENCHMARKS=OFF \
+    -D BUILD_DOCUMENTATION=OFF \
+    -D BUILD_TESTING=OFF \
+  && cmake --build /build \
+  && cmake --install /build --prefix /install --strip
 
-WORKDIR /install/bin
-RUN cp --no-dereference /usr/local/bin/geos* . \
-  && for i in ./*; do strip -s $i 2>/dev/null || /bin/true; done
+FROM ${BASEIMAGE} AS runner
 
-WORKDIR /install/lib
-RUN cp --no-dereference /usr/local/lib*/libgeos*.so.* . \
-  && for i in ./*; do strip -s $i 2>/dev/null || /bin/true; done
-
-FROM alpine
 RUN apk add --no-cache libstdc++
-COPY --from=base /install/bin/geos* /usr/local/bin/
-COPY --from=base /install/lib/libgeos* /usr/local/lib/
+
+COPY --from=builder /install/bin/geosop /usr/local/bin/geosop
+COPY --from=builder /install/lib/libgeos.* /usr/local/lib/
 
 ENTRYPOINT ["geosop"]
