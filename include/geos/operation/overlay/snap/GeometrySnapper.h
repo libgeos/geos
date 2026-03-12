@@ -138,7 +138,7 @@ private:
     const geom::Geometry& srcGeom;
 
     /// Extract target (unique) coordinates
-    std::unique_ptr<geom::Coordinate::ConstVect> extractTargetCoordinates(
+    static std::unique_ptr<geom::Coordinate::ConstVect> extractTargetCoordinates(
         const geom::Geometry& g);
 
     // Declare type as noncopyable
