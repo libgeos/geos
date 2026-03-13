@@ -2092,5 +2092,15 @@ extern "C" {
         return GEOSCoverageSimplifyVW_r(handle, input, tolerance, preserveBoundary);
     }
 
+    Geometry*
+    GEOSCoverageSimplifyVWWithProgress(const Geometry* input, double tolerance,
+                                       int preserveBoundary,
+                                       GEOSProgressCallback_r progressFunc,
+                                       void* progressUserData)
+    {
+        return GEOSCoverageSimplifyVWWithProgress_r(
+            handle, input, tolerance, preserveBoundary, progressFunc, progressUserData);
+    }
+
 
 } /* extern "C" */
