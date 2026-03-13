@@ -3,6 +3,8 @@
 
 #include <tut/tut.hpp>
 // geos
+#include <geos/algorithm/CurveToLineParams.h>
+#include <geos/algorithm/LineToCurveParams.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -17,6 +19,8 @@
 // std
 #include <memory>
 #include <string>
+
+#include "utility.h"
 
 constexpr int MAX_TESTS = 100;
 
@@ -628,6 +632,24 @@ void object::test<48>
     ensure(point_->hasDimension(geos::geom::Dimension::P));
     ensure(!point_->hasDimension(geos::geom::Dimension::L));
     ensure(!point_->hasDimension(geos::geom::Dimension::A));
+}
+
+template<>
+template<>
+void object::test<49>()
+{
+    set_test_name("getLinearized");
+
+    ensure_equals_exact_geometry_xyzm(point_.get(), point_->getLinearized(geos::algorithm::CurveToLineParams::stepSizeDegrees(4)).get(), 0);
+}
+
+template<>
+template<>
+void object::test<50>()
+{
+    set_test_name("getCurved");
+
+    ensure_equals_exact_geometry_xyzm(point_.get(), point_->getCurved(geos::algorithm::LineToCurveParams()).get(), 0);
 }
 
 } // namespace tut

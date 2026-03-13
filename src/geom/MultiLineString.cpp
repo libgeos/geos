@@ -20,12 +20,14 @@
 
 #include <geos/geomgraph/GeometryGraph.h>
 #include <geos/geom/GeometryFactory.h>
+#include <geos/geom/MultiCurve.h>
 #include <geos/geom/MultiLineString.h>
 #include <geos/operation/BoundaryOp.h>
 #include <geos/util.h>
 
 #include <vector>
-#include <cassert>
+
+#include "geos/algorithm/LineToCurveParams.h"
 
 using geos::geom::GeometryFactory;
 using geos::geom::MultiLineString;
@@ -92,6 +94,31 @@ GeometryTypeId
 MultiLineString::getGeometryTypeId() const
 {
     return GEOS_MULTILINESTRING;
+}
+
+GeometryCollection*
+MultiLineString::getCurvedImpl(const algorithm::LineToCurveParams& params) const
+{
+    std::vector<std::unique_ptr<Geometry>> curvedGeoms(geometries.size());
+
+    bool hasCurves = false;
+
+    for (std::size_t i = 0; i < geometries.size(); i++) {
+        curvedGeoms[i] = detail::down_cast<Curve*>(geometries[i].get())->getCurved(params);
+        hasCurves |= curvedGeoms[i]->hasCurvedComponents();
+    }
+
+    if (hasCurves) {
+        return getFactory()->createMultiCurve(std::move(curvedGeoms)).release();
+    }
+
+    return getFactory()->createMultiLineString(std::move(curvedGeoms)).release();
+}
+
+MultiLineString*
+MultiLineString::getLinearizedImpl(const algorithm::CurveToLineParams&) const
+{
+    return cloneImpl();
 }
 
 MultiLineString*

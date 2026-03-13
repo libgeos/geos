@@ -38,12 +38,17 @@ template<>
 void object::test<2>()
 {
     set_test_name("curved input");
+    useContext();
 
     input_ = fromWKT("CURVEPOLYGON ((0.5 0.5, 2.5 0.5, 2.5 2.5, 0.5 2.5, 0.5 0.5))");
 
-    std::vector<float> result_vec;
-    int result = GEOSGridIntersectionFractions(input_, 1, 0, 5, 3, 4, 3, result_vec.data());
+    std::vector<float> result_vec(12);
+    int result = GEOSGridIntersectionFractions_r(ctxt_, input_, 1, 0, 5, 3, 4, 3, result_vec.data());
     ensure_equals(result, 0);
+
+    useCurveConversion();
+    result = GEOSGridIntersectionFractions_r(ctxt_, input_, 1, 0, 5, 3, 4, 3, result_vec.data());
+    ensure_equals(result, 1);
 }
 
 template<>

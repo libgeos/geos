@@ -24,13 +24,20 @@ namespace capitest {
         GEOSGeometry* result_ = nullptr;
         GEOSGeometry* expected_ = nullptr;
         char* wkt_ = nullptr;
-       char* str_ = nullptr;
+        char* str_ = nullptr;
+
+        GEOSContextHandle_t ctxt_ = nullptr;
+        GEOSCurveToLineParams* curveToLineParams_ = nullptr;
+        GEOSLineToCurveParams* lineToCurveParams_ = nullptr;
 
         utility()
         {
             initGEOS(notice, notice);
             wktw_ = GEOSWKTWriter_create();
             GEOSWKTWriter_setRoundingPrecision(wktw_, 10);
+
+            curveToLineParams_ = GEOSCurveToLineParams_create();
+            lineToCurveParams_ = GEOSLineToCurveParams_create();
 
 #ifdef HAVE_FENV
             std::feclearexcept(FE_ALL_EXCEPT);
@@ -39,18 +46,53 @@ namespace capitest {
 
         virtual ~utility()
         {
-            if (wktw_)     GEOSWKTWriter_destroy(wktw_);
-            if (geom1_)    GEOSGeom_destroy(geom1_);
-            if (geom2_)    GEOSGeom_destroy(geom2_);
-            if (geom3_)    GEOSGeom_destroy(geom3_);
-            if (input_)    GEOSGeom_destroy(input_);
-            if (result_)   GEOSGeom_destroy(result_);
-            if (expected_) GEOSGeom_destroy(expected_);
-            if (wkt_)      GEOSFree(wkt_);
-            if (str_)      GEOSFree(str_);
-            finishGEOS();
+            if (ctxt_ == nullptr) {
+                if (wktw_)     GEOSWKTWriter_destroy(wktw_);
+                if (geom1_)    GEOSGeom_destroy(geom1_);
+                if (geom2_)    GEOSGeom_destroy(geom2_);
+                if (geom3_)    GEOSGeom_destroy(geom3_);
+                if (input_)    GEOSGeom_destroy(input_);
+                if (result_)   GEOSGeom_destroy(result_);
+                if (expected_) GEOSGeom_destroy(expected_);
+                if (wkt_)      GEOSFree(wkt_);
+                if (str_)      GEOSFree(str_);
+                if (lineToCurveParams_) GEOSLineToCurveParams_destroy(lineToCurveParams_);
+                if (curveToLineParams_) GEOSCurveToLineParams_destroy(curveToLineParams_);
+                finishGEOS();
+            } else {
+                if (wktw_)     GEOSWKTWriter_destroy_r(ctxt_, wktw_);
+                if (geom1_)    GEOSGeom_destroy_r(ctxt_, geom1_);
+                if (geom2_)    GEOSGeom_destroy_r(ctxt_, geom2_);
+                if (geom3_)    GEOSGeom_destroy_r(ctxt_, geom3_);
+                if (input_)    GEOSGeom_destroy_r(ctxt_, input_);
+                if (result_)   GEOSGeom_destroy_r(ctxt_, result_);
+                if (expected_) GEOSGeom_destroy_r(ctxt_, expected_);
+                if (wkt_)      GEOSFree_r(ctxt_, wkt_);
+                if (str_)      GEOSFree_r(ctxt_, str_);
+                if (lineToCurveParams_) GEOSLineToCurveParams_destroy(lineToCurveParams_);
+                if (curveToLineParams_) GEOSCurveToLineParams_destroy(curveToLineParams_);
+                finishGEOS_r(ctxt_);
+            }
         }
 
+        // Use an explicit context handle (stored as ctxt_) instead of the default
+        // context handle.
+        void useContext() {
+            finishGEOS();
+            ctxt_ = initGEOS_r(notice, notice);
+            GEOSWKTWriter_setRoundingPrecision(wktw_, 10);
+        }
+
+        void useCurveConversion() {
+            GEOSCurveToLineParams* curveToLineParams = GEOSCurveToLineParams_create();
+            GEOSLineToCurveParams* lineToCurveParams = GEOSLineToCurveParams_create();
+
+            GEOSContext_setCurveToLineParams_r(ctxt_, curveToLineParams);
+            GEOSContext_setLineToCurveParams_r(ctxt_, lineToCurveParams);
+
+            GEOSCurveToLineParams_destroy(curveToLineParams);
+            GEOSLineToCurveParams_destroy(lineToCurveParams);
+        }
 
         static void notice(GEOS_PRINTF_FORMAT const char* fmt, ...) GEOS_PRINTF_FORMAT_ATTR(1, 2)
         {
@@ -74,7 +116,7 @@ namespace capitest {
         GEOSGeometry*
         fromWKT(const char* wkt)
         {
-            GEOSGeometry* g = GEOSGeomFromWKT(wkt);
+            GEOSGeometry* g = ctxt_ ? GEOSGeomFromWKT_r(ctxt_, wkt) : GEOSGeomFromWKT(wkt);
             if (g == nullptr) {
                 std::string message = "WKT is invalid: " + std::string(wkt);
                 tut::ensure(message, g != nullptr);
@@ -85,9 +127,19 @@ namespace capitest {
         std::string
         toWKT(const GEOSGeometry* g)
         {
-            char* wkt = GEOSWKTWriter_write(wktw_, g);
-            std::string ret(wkt);
-            GEOSFree(wkt);
+            char* wkt;
+            std::string ret;
+
+            if (ctxt_ == nullptr) {
+                wkt = GEOSWKTWriter_write(wktw_, g);
+                ret = wkt;
+                GEOSFree(wkt);
+            } else {
+                wkt = GEOSWKTWriter_write_r(ctxt_, wktw_, g);
+                ret = wkt;
+                GEOSFree_r(ctxt_, wkt);
+            }
+
             return ret;
         }
 
@@ -97,6 +149,10 @@ namespace capitest {
             char rslt;
             if (g1 == nullptr || g2 == nullptr) {
                 rslt = (g1 == nullptr && g2 == nullptr) ? 1 : 0;
+            } else if (ctxt_ != nullptr) {
+                GEOSNormalize_r(ctxt_, g1);
+                GEOSNormalize_r(ctxt_, g2);
+                rslt = GEOSEqualsExact_r(ctxt_, g1, g2, tolerance);
             }
             else {
                 GEOSNormalize(g1);
@@ -114,6 +170,9 @@ namespace capitest {
             if (g1 == nullptr || g2 == nullptr) {
                 rslt = (g1 == nullptr && g2 == nullptr) ? 1 : 0;
             }
+            else if (ctxt_) {
+                rslt = GEOSEqualsExact_r(ctxt_, g1, g2, tolerance);
+            }
             else {
                 rslt = GEOSEqualsExact(g1, g2, tolerance);
             }
@@ -127,8 +186,9 @@ namespace capitest {
             char rslt;
             if (g1 == nullptr || g2 == nullptr) {
                 rslt = (g1 == nullptr && g2 == nullptr) ? 1 : 0;
-            }
-            else {
+            } else if (ctxt_) {
+                rslt = GEOSEqualsIdentical_r(ctxt_, g1, g2);
+            } else {
                 rslt = GEOSEqualsIdentical(g1, g2);
             }
             report_not_equal("ensure_equals_identical", g1, g2, 1e-12, rslt);
@@ -167,17 +227,9 @@ namespace capitest {
             if (rslt == 1) return;
             //TODO: handle rslt exception value
 
-            char* wkt1 = nullptr;
-            char* wkt2 = nullptr;
-            if (g1 != nullptr)
-                wkt1 = GEOSWKTWriter_write(wktw_, g1);
-            if (g2 != nullptr)
-                wkt2 = GEOSWKTWriter_write(wktw_, g2);
-            const char* val1 = (g1 == nullptr) ? "null" : wkt1;
-            const char* val2 = (g2 == nullptr) ? "null" : wkt2;
-            std::fprintf(stdout, "\n%s : %s != %s (tol = %f)\n", tag, val1, val2, tolerance);
-            GEOSFree(wkt1);
-            GEOSFree(wkt2);
+            const std::string wkt1 = g1 == nullptr ? "null" : toWKT(g1);
+            const std::string wkt2 = g2 == nullptr ? "null" : toWKT(g2);
+            std::fprintf(stdout, "\n%s : %s != %s (tol = %f)\n", tag, wkt1.c_str(), wkt2.c_str(), tolerance);
         }
 
     };

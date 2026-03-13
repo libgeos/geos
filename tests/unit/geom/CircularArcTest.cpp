@@ -1,11 +1,15 @@
 #include <tut/tut.hpp>
 
+#include <geos/algorithm/Orientation.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CircularArc.h>
 #include <geos/constants.h>
 
 using geos::geom::CoordinateXY;
+using geos::geom::CoordinateXYZM;
 using geos::geom::CircularArc;
+using geos::geom::CoordinateSequence;
+
 using geos::MATH_PI;
 
 namespace tut {
@@ -31,6 +35,9 @@ struct test_circulararc_data {
         auto rev = CircularArc::create(p2, p1, p0);
         ensure_equals(p2.toString() + " / " + p1.toString() + " / " + p0.toString(), rev.getLength(), expected, eps);
     }
+
+
+
 };
 
 using group = test_group<test_circulararc_data>;
@@ -121,6 +128,24 @@ void object::test<5>()
 
     // upper semi-circle
     CircularArc::create(CoordinateXY{-5, 0}, {0, 5}, {5, 0}).containsPointOnCircle({5, 0});
+}
+
+template<>
+template<>
+void object::test<6>() {
+    set_test_name("getRadius and getCenter are order-independent");
+    using XY = CoordinateXY;
+
+    CircularArc arc1 = CircularArc::create(XY{71.96, -65.54}, XY{22.2, -18.52}, XY{20, 50});
+    double r1 = arc1.getRadius();
+    CoordinateXY c1 = arc1.getCenter();
+
+    CircularArc arc2 = CircularArc::create(XY{20, 50}, XY{22.2, -18.52}, XY{71.96, -65.54});
+    double r2 = arc1.getRadius();
+    CoordinateXY c2 = arc1.getCenter();
+
+    ensure_equals(r1, r2);
+    ensure_equals(c1, c2);
 }
 
 }

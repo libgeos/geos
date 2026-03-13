@@ -15,6 +15,7 @@
 #include <sstream>
 
 #include <geos/algorithm/Orientation.h>
+#include <geos/geom/CircularArc.h>
 #include <geos/geom/CompoundCurve.h>
 #include <geos/geom/CoordinateFilter.h>
 #include <geos/geom/CircularString.h>
@@ -22,6 +23,7 @@
 #include <geos/operation/BoundaryOp.h>
 #include <geos/operation/split/SplitGeometryAtVertex.h>
 #include <geos/util.h>
+
 
 namespace geos {
 namespace geom {
@@ -237,6 +239,30 @@ CompoundCurve::getLength() const
         sum += curve->getLength();
     }
     return sum;
+}
+
+LineString*
+CompoundCurve::getLinearizedImpl(const algorithm::CurveToLineParams& params) const
+{
+    auto seq = std::make_shared<CoordinateSequence>(0, hasZ(), hasM());
+    for (const auto& curve : curves) {
+        const CoordinateSequence* curveSeq = curve->getCoordinatesRO();
+
+        if (seq->isEmpty()) {
+            seq->add(*curveSeq, static_cast<size_t>(0), 0);
+        }
+
+        if (curve->isCurved()) {
+            for (std::size_t i = 0; i < curveSeq->size() - 2; i += 2)
+            {
+                CircularArc arc(*curveSeq, i);
+                arc.addLinearizedPoints(*seq, params);
+            }
+        } else {
+            seq->add(*curveSeq, 1, curveSeq->size() - 1);
+        }
+    }
+    return getFactory()->createLineString(std::move(seq)).release();
 }
 
 std::size_t

@@ -62,12 +62,20 @@ template<>
 template<>
 void object::test<3>()
 {
+    set_test_name("curved inputs");
+    useContext();
+
     input_ = fromWKT("MULTICURVE (CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 3 0))");
     ensure(input_);
 
-    result_ = GEOSLineMergeDirected(input_);
-
+    result_ = GEOSLineMergeDirected_r(ctxt_, input_);
     ensure("curved geometries not supported", result_ == nullptr);
+
+    useCurveConversion();
+
+    result_ = GEOSLineMergeDirected_r(ctxt_, input_);
+    expected_ = fromWKT("COMPOUNDCURVE (CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 3 0))");
+    ensure_geometry_equals(result_, expected_);
 }
 
 

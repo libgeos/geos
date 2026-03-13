@@ -177,13 +177,13 @@ ensure_equals_xyzm(geos::geom::CoordinateXYZM const& actual,
     }
 }
 
-inline void ensure_same(const char* msg, double a, double b)
+inline void ensure_same(const char* msg, double a, double b, double tol = std::numeric_limits<double>::epsilon())
 {
     if (std::isnan(a) && std::isnan(b)) {
         return;
     }
 
-    ensure_equals(msg, a, b);
+    ensure_equals(msg, a, b, tol);
 }
 
 inline void ensure_same(double a, double b)
@@ -431,8 +431,8 @@ ensure_equals_exact_xyzm(const geos::geom::CoordinateSequence* seq1,
         seq2->getAt(i, c2);
 
         ensure("xy not in tolerance", c1.distance(c2) <= tol);
-        ensure_same(("index " + std::to_string(i) + "/" + std::to_string(seq1->getSize() - 1) + " z not same").c_str(), c1.z, c2.z);
-        ensure_same(("index " + std::to_string(i) + "/" + std::to_string(seq1->getSize() - 1) + " m not same").c_str(), c1.m, c2.m);
+        ensure_same(("index " + std::to_string(i) + "/" + std::to_string(seq1->getSize() - 1) + " z not same").c_str(), c1.z, c2.z, tol);
+        ensure_same(("index " + std::to_string(i) + "/" + std::to_string(seq1->getSize() - 1) + " m not same").c_str(), c1.m, c2.m, tol);
     }
 }
 
@@ -445,6 +445,7 @@ ensure_equals_exact_geometry_xyzm(const geos::geom::Geometry *lhs_in,
     assert(nullptr != rhs_in);
 
     using geos::geom::Point;
+    using geos::geom::CompoundCurve;
     using geos::geom::Curve;
     using geos::geom::CompoundCurve;
     using geos::geom::SimpleCurve;
@@ -540,12 +541,16 @@ template <typename T> inline void ensure_equals_exact_geometry(const T *lhs_in, 
 template <>
 inline void
 ensure_equals_exact_geometry(const geos::geom::Geometry *lhs_in,
-                                 const geos::geom::Geometry *rhs_in,
-                                 double tolerance)
+                             const geos::geom::Geometry *rhs_in,
+                             double tolerance)
 {
     assert(nullptr != lhs_in);
     assert(nullptr != rhs_in);
 
+    using geos::geom::Curve;
+    using geos::geom::Point;
+    using geos::geom::SimpleCurve;
+    using geos::geom::Surface;
     using geos::geom::CoordinateSequence;
     using geos::geom::GeometryCollection;
     using geos::geom::Point;
@@ -562,6 +567,23 @@ ensure_equals_exact_geometry(const geos::geom::Geometry *lhs_in,
     else if (const SimpleCurve* gln1 = dynamic_cast<const SimpleCurve *>(lhs_in)) {
       const SimpleCurve *gln2 = static_cast<const SimpleCurve *>(rhs_in);
       return ensure_equals_dims( gln1->getCoordinatesRO(), gln2->getCoordinatesRO(), 2, tolerance);
+    }
+    else if (const Surface* gply1 = dynamic_cast<const Surface*>(lhs_in)) {
+        const Surface* gply2 = static_cast<const Surface*>(rhs_in);
+        const Geometry* extRing1 = gply1->getExteriorRing();
+        const Geometry* extRing2 = gply2->getExteriorRing();
+
+        ensure_equals_exact_geometry(extRing1, extRing2, tolerance);
+
+        ensure_equals("number of holes does not match",
+                      gply1->getNumInteriorRing(),
+                      gply2->getNumInteriorRing());
+
+        for (std::size_t i = 0; i < gply1->getNumInteriorRing(); i++) {
+            ensure_equals_exact_geometry(static_cast<const Geometry*>(gply1->getInteriorRingN(i)),
+                                         static_cast<const Geometry*>(gply2->getInteriorRingN(i)),
+                                         tolerance);
+        }
     }
     else if (const GeometryCollection* gc1 = dynamic_cast<const GeometryCollection *>(lhs_in)) {
         const GeometryCollection *gc2 = static_cast<const GeometryCollection *>(rhs_in);

@@ -36,14 +36,22 @@ template<>
 template<>
 void object::test<2>()
 {
+    set_test_name("GEOSCrosses with automatic linearization");
+    useContext();
+
     geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
     geom2_ = fromWKT("LINESTRING (1 0, 2 1)");
 
     ensure(geom1_);
     ensure(geom2_);
 
-    ensure_equals("curved geometry not supported", GEOSCrosses(geom1_, geom2_), 2);
-    ensure_equals("curved geometry not supported", GEOSCrosses(geom2_, geom1_), 2);
+    ensure_equals(GEOSCrosses_r(ctxt_, geom1_, geom2_), 2);
+    ensure_equals(GEOSCrosses_r(ctxt_, geom2_, geom1_), 2);
+
+    useCurveConversion();
+
+    ensure_equals(GEOSCrosses_r(ctxt_, geom1_, geom2_), 1);
+    ensure_equals(GEOSCrosses_r(ctxt_, geom2_, geom1_), 1);
 }
 
 } // namespace tut

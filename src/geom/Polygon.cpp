@@ -22,6 +22,7 @@
 #include <geos/algorithm/Orientation.h>
 #include <geos/util.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/CurvePolygon.h>
 #include <geos/geom/Polygon.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/MultiLineString.h> // for getBoundary()
@@ -35,6 +36,8 @@
 #include <cassert>
 #include <algorithm>
 #include <memory>
+
+#include "geos/algorithm/CurveToLineParams.h"
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -64,6 +67,39 @@ Polygon::getCoordinates() const
     }
 
     return cl;
+}
+
+Surface*
+Polygon::getCurvedImpl(const algorithm::LineToCurveParams& params) const
+{
+    auto curvedShell = shell->getCurved(params);
+    bool isCurved = curvedShell->hasCurvedComponents();
+
+    if (holes.empty()) {
+        if (isCurved) {
+            return getFactory()->createCurvePolygon(std::move(curvedShell)).release();
+        } else {
+            return cloneImpl();
+        }
+    }
+
+    std::vector<std::unique_ptr<Curve>> holesCurved(holes.size());
+    for (std::size_t i = 0; i < holes.size(); i++) {
+        holesCurved[i] = holes[i]->getCurved(params);
+        isCurved |= holesCurved[i]->hasCurvedComponents();
+    }
+
+    if (isCurved) {
+        return getFactory()->createCurvePolygon(std::move(curvedShell), std::move(holesCurved)).release();
+    }
+
+    return cloneImpl();
+}
+
+std::unique_ptr<Polygon>
+Polygon::getLinearized(const algorithm::CurveToLineParams& params) const
+{
+    return std::unique_ptr<Polygon>(getLinearizedImpl(params));
 }
 
 std::string

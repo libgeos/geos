@@ -1,6 +1,8 @@
 #include <tut/tut.hpp>
 #include <tut/tut_macros.hpp>
 
+#include <geos/algorithm/CurveToLineParams.h>
+#include <geos/algorithm/LineToCurveParams.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CompoundCurve.h>
 #include <geos/geom/CircularString.h>
@@ -200,6 +202,29 @@ void object::test<4>()
 
     // some elements are closed => MultiCurve is not closed
     ensure(!wktreader_.read<geos::geom::MultiCurve>("MULTICURVE ((0 0, 1 0, 1 1, 0 0), CIRCULARSTRING (3 3, 4 4, 5 3))")->isClosed());
+}
+
+template<>
+template<>
+void object::test<5>()
+{
+    set_test_name("getLinearized()");
+
+    // check that we return MultiLineString*, not Geometry*
+    std::unique_ptr<geos::geom::MultiLineString> mls = mc_->getLinearized(geos::algorithm::CurveToLineParams::stepSizeDegrees(2));
+
+    ensure_equals(mls->getGeometryTypeId(), geos::geom::GEOS_MULTILINESTRING);
+    ensure_equals("getLength()", mls->getLength(), mc_->getLength(), 1e-3);
+}
+
+template<>
+template<>
+void object::test<6>()
+{
+    set_test_name("getCurved()");
+
+    std::unique_ptr<geos::geom::GeometryCollection> curved = mc_->getCurved(geos::algorithm::LineToCurveParams());
+    ensure_equals_exact_geometry_xyzm(mc_.get(), curved.get(), 0);
 }
 
 }
