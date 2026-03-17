@@ -87,6 +87,12 @@ public:
 
 };
 
+GeometrySnapper::GeometrySnapper(const Geometry& g)
+    : srcGeom(g)
+{
+    util::ensureNoCurvedComponents(g);
+}
+
 /*private*/
 std::unique_ptr<Coordinate::ConstVect>
 GeometrySnapper::extractTargetCoordinates(const Geometry& g)

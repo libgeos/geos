@@ -18,11 +18,16 @@
  **********************************************************************/
 
 #include <geos/geom/util/GeometryTransformer.h>
+#include <geos/geom/CircularString.h>
+#include <geos/geom/CompoundCurve.h>
+#include <geos/geom/CurvePolygon.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
+#include <geos/geom/MultiCurve.h>
 #include <geos/geom/MultiPoint.h>
 #include <geos/geom/MultiPolygon.h>
 #include <geos/geom/MultiLineString.h>
+#include <geos/geom/MultiSurface.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Polygon.h>
 #include <geos/geom/Point.h>
@@ -84,29 +89,33 @@ GeometryTransformer::transform(const Geometry* nInputGeom)
         return inputGeom->clone();
     }
 
-    if(const Point* p = dynamic_cast<const Point*>(inputGeom)) {
-        return transformPoint(p, nullptr);
-    }
-    if(const MultiPoint* mp = dynamic_cast<const MultiPoint*>(inputGeom)) {
-        return transformMultiPoint(mp, nullptr);
-    }
-    if(const LinearRing* lr = dynamic_cast<const LinearRing*>(inputGeom)) {
-        return transformLinearRing(lr, nullptr);
-    }
-    if(const LineString* ls = dynamic_cast<const LineString*>(inputGeom)) {
-        return transformLineString(ls, nullptr);
-    }
-    if(const MultiLineString* mls = dynamic_cast<const MultiLineString*>(inputGeom)) {
-        return transformMultiLineString(mls, nullptr);
-    }
-    if(const Polygon* p = dynamic_cast<const Polygon*>(inputGeom)) {
-        return transformPolygon(p, nullptr);
-    }
-    if(const MultiPolygon* mp = dynamic_cast<const MultiPolygon*>(inputGeom)) {
-        return transformMultiPolygon(mp, nullptr);
-    }
-    if(const GeometryCollection* gc = dynamic_cast<const GeometryCollection*>(inputGeom)) {
-        return transformGeometryCollection(gc, nullptr);
+    switch (inputGeom->getGeometryTypeId()) {
+        case GEOS_POINT:
+            return transformPoint(detail::down_cast<const Point*>(inputGeom), nullptr);
+        case GEOS_LINESTRING:
+            return transformLineString(detail::down_cast<const LineString*>(inputGeom), nullptr);
+        case GEOS_LINEARRING:
+            return transformLinearRing(detail::down_cast<const LinearRing*>(inputGeom), nullptr);
+        case GEOS_POLYGON:
+            return transformPolygon(detail::down_cast<const Polygon*>(inputGeom), nullptr);
+        case GEOS_CIRCULARSTRING:
+            return transformCircularString(detail::down_cast<const CircularString*>(inputGeom), nullptr);
+        case GEOS_COMPOUNDCURVE:
+            return transformCompoundCurve(detail::down_cast<const CompoundCurve*>(inputGeom), nullptr);
+        case GEOS_CURVEPOLYGON:
+            return transformCurvePolygon(detail::down_cast<const CurvePolygon*>(inputGeom), nullptr);
+        case GEOS_MULTIPOINT:
+            return transformMultiPoint(detail::down_cast<const MultiPoint*>(inputGeom), nullptr);
+        case GEOS_MULTILINESTRING:
+            return transformMultiLineString(detail::down_cast<const MultiLineString*>(inputGeom), nullptr);
+        case GEOS_MULTIPOLYGON:
+            return transformMultiPolygon(detail::down_cast<const MultiPolygon*>(inputGeom), nullptr);
+        case GEOS_MULTICURVE:
+            return transformMultiCurve(detail::down_cast<const MultiCurve*>(inputGeom), nullptr);
+        case GEOS_MULTISURFACE:
+            return transformMultiSurface(detail::down_cast<const MultiSurface*>(inputGeom), nullptr);
+        case GEOS_GEOMETRYCOLLECTION:
+            return transformGeometryCollection(detail::down_cast<const GeometryCollection*>(inputGeom), nullptr);
     }
 
     throw IllegalArgumentException("Unknown Geometry subtype.");
@@ -224,6 +233,78 @@ GeometryTransformer::transformLineString(
                transformCoordinates(geom->getCoordinatesRO(), geom));
 }
 
+std::unique_ptr<Geometry>
+GeometryTransformer::transformCircularString(
+    const CircularString* geom,
+    const Geometry* parent)
+{
+    ::geos::ignore_unused_variable_warning(parent);
+
+#if GEOS_DEBUG
+    std::cerr << "GeometryTransformer::transformCircularString(CircularString " << geom << ", Geometry " << parent << ");"
+              << std::endl;
+#endif
+
+    return factory->createCircularString(
+               transformCoordinates(geom->getCoordinatesRO(), geom));
+}
+
+std::unique_ptr<Geometry>
+GeometryTransformer::transformCompoundCurve(
+    const CompoundCurve* geom,
+    const Geometry* parent)
+{
+    ::geos::ignore_unused_variable_warning(parent);
+
+#if GEOS_DEBUG
+    std::cerr << "GeometryTransformer::transformCompoundCurve(CompoundCurve " << geom << ", Geometry " << parent << ");"
+              << std::endl;
+#endif
+
+    std::vector<std::unique_ptr<SimpleCurve>> curves;
+    std::vector<std::unique_ptr<Geometry>> components;
+    bool outputIsCompoundCurve = true;
+
+    for(std::size_t i = 0; i < geom->getNumCurves(); i++) {
+        const SimpleCurve* c = geom->getCurveN(i);
+
+        std::unique_ptr<Geometry> transformGeom;
+        if(const CircularString* cs = dynamic_cast<const CircularString*>(c)) {
+            transformGeom = transformCircularString(cs, geom);
+        }
+        else if(const LineString* ls = dynamic_cast<const LineString*>(c)) {
+            transformGeom = transformLineString(ls, geom);
+        }
+        else {
+            throw geos::util::IllegalArgumentException("Unknown Curve subtype.");
+        }
+
+        if(transformGeom == nullptr || transformGeom->isEmpty()) {
+            continue;
+        }
+
+        if (!dynamic_cast<const SimpleCurve*>(transformGeom.get())) {
+            outputIsCompoundCurve = false;
+
+            for (auto& curve : curves) {
+                components.push_back(std::move(curve));
+            }
+        }
+
+        if (outputIsCompoundCurve) {
+            curves.emplace_back(detail::down_cast<SimpleCurve*>(transformGeom.release()));
+        } else {
+            components.push_back(std::move(transformGeom));
+        }
+    }
+
+    if (outputIsCompoundCurve) {
+        return factory->createCompoundCurve(std::move(curves));
+    }
+
+    return factory->buildGeometry(std::move(components));
+}
+
 Geometry::Ptr
 GeometryTransformer::transformMultiLineString(
     const MultiLineString* geom,
@@ -259,6 +340,34 @@ GeometryTransformer::transformMultiLineString(
 
     return factory->buildGeometry(std::move(transGeomList));
 
+}
+
+std::unique_ptr<Geometry>
+GeometryTransformer::transformMultiCurve(
+    const MultiCurve* geom,
+    const Geometry* parent)
+{
+    ::geos::ignore_unused_variable_warning(parent);
+
+#if GEOS_DEBUG
+    std::cerr << "GeometryTransformer::transformMultiCurve(MultiCurve " << geom << ", Geometry " << parent << ");"
+              << std::endl;
+#endif
+
+    std::vector<std::unique_ptr<Geometry>> components;
+    for(std::size_t i = 0; i < geom->getNumGeometries(); i++) {
+        auto transformGeom = transform(geom->getGeometryN(i));
+
+        if(transformGeom && !transformGeom->isEmpty()) {
+            components.push_back(std::move(transformGeom));
+        }
+    }
+
+    if (components.empty()) {
+        return factory->createMultiCurve();
+    }
+
+    return factory->buildGeometry(std::move(components));
 }
 
 Geometry::Ptr
@@ -325,6 +434,93 @@ GeometryTransformer::transformPolygon(
 
 }
 
+std::unique_ptr<Geometry>
+GeometryTransformer::transformCurvePolygon(
+    const CurvePolygon* geom,
+    const Geometry* parent)
+{
+    ::geos::ignore_unused_variable_warning(parent);
+
+#if GEOS_DEBUG
+    std::cerr << "GeometryTransformer::transformCurvePolygon(CurvePolygon " << geom << ", Geometry " << parent << ");"
+              << std::endl;
+#endif
+
+    bool isAllValidCurves = true;
+
+    const Curve* shellIn = geom->getExteriorRing();
+    assert(shellIn);
+
+    std::unique_ptr<Geometry> shell;
+    if(const CompoundCurve* cc = dynamic_cast<const CompoundCurve*>(shellIn)) {
+        shell = transformCompoundCurve(cc, geom);
+    }
+    else if(const CircularString* cs = dynamic_cast<const CircularString*>(shellIn)) {
+        shell = transformCircularString(cs, geom);
+    }
+    else if(const LineString* ls = dynamic_cast<const LineString*>(shellIn)) {
+        shell = transformLineString(ls, geom);
+    }
+    else {
+        throw geos::util::IllegalArgumentException("Unknown Curve subtype.");
+    }
+
+    if(shell == nullptr || !dynamic_cast<Curve*>(shell.get()) || shell->isEmpty()) {
+        isAllValidCurves = false;
+    }
+
+    std::vector<std::unique_ptr<Curve>> holes;
+    for(std::size_t i = 0, n = geom->getNumInteriorRing(); i < n; i++) {
+        const Curve* holeIn = geom->getInteriorRingN(i);
+        assert(holeIn);
+
+        Geometry::Ptr hole;
+        if(const CompoundCurve* cc = dynamic_cast<const CompoundCurve*>(holeIn)) {
+            hole = transformCompoundCurve(cc, geom);
+        }
+        else if(const CircularString* cs = dynamic_cast<const CircularString*>(holeIn)) {
+            hole = transformCircularString(cs, geom);
+        }
+        else if(const LineString* ls = dynamic_cast<const LineString*>(holeIn)) {
+            hole = transformLineString(ls, geom);
+        }
+        else {
+            throw geos::util::IllegalArgumentException("Unknown Curve subtype.");
+        }
+
+        if(hole == nullptr || hole->isEmpty()) {
+            continue;
+        }
+
+        if(dynamic_cast<Curve*>(hole.get())) {
+            holes.emplace_back(dynamic_cast<Curve*>(hole.release()));
+        }
+        else {
+            if(skipTransformedInvalidInteriorRings) {
+                continue;
+            }
+            isAllValidCurves = false;
+        }
+    }
+
+    if(isAllValidCurves) {
+        std::unique_ptr<Curve> shellCurve(dynamic_cast<Curve*>(shell.release()));
+        return factory->createCurvePolygon(std::move(shellCurve), std::move(holes));
+    }
+    else {
+        std::vector<std::unique_ptr<Geometry>> components;
+        if(shell != nullptr) {
+            components.push_back(std::move(shell));
+        }
+
+        for(auto& g : holes) {
+            components.push_back(std::move(g));
+        }
+
+        return factory->buildGeometry(std::move(components));
+    }
+}
+
 Geometry::Ptr
 GeometryTransformer::transformMultiPolygon(
     const MultiPolygon* geom,
@@ -350,7 +546,6 @@ GeometryTransformer::transformMultiPolygon(
         if(transformGeom->isEmpty()) {
             continue;
         }
-
         transGeomList.push_back(std::move(transformGeom));
     }
 
@@ -360,6 +555,34 @@ GeometryTransformer::transformMultiPolygon(
 
     return factory->buildGeometry(std::move(transGeomList));
 
+}
+
+std::unique_ptr<Geometry>
+GeometryTransformer::transformMultiSurface(
+    const MultiSurface* geom,
+    const Geometry* parent)
+{
+    ::geos::ignore_unused_variable_warning(parent);
+
+#if GEOS_DEBUG
+    std::cerr << "GeometryTransformer::transformMultiSurface(MultiSurface " << geom << ", Geometry " << parent << ");"
+              << std::endl;
+#endif
+
+    std::vector<std::unique_ptr<Geometry>> components;
+    for(std::size_t i = 0; i < geom->getNumGeometries(); i++) {
+        auto transformGeom = transform(geom->getGeometryN(i));
+
+        if(transformGeom && !transformGeom->isEmpty()) {
+            components.push_back(std::move(transformGeom));
+        }
+    }
+
+    if (components.empty()) {
+        return factory->createMultiSurface();
+    }
+
+    return factory->buildGeometry(std::move(components));
 }
 
 Geometry::Ptr

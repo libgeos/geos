@@ -35,6 +35,8 @@
 #include <unordered_map>
 #include <cassert>
 
+#include "geos/util.h"
+
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
 #endif
@@ -214,6 +216,7 @@ TopologyPreservingSimplifier::TopologyPreservingSimplifier(const Geometry* geom)
     inputGeom(geom),
     lineSimplifier(new TaggedLinesSimplifier())
 {
+    util::ensureNoCurvedComponents(geom);
 }
 
 /*public*/

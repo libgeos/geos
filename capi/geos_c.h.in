@@ -5622,6 +5622,7 @@ extern GEOSGeometry GEOS_DLL *GEOSSnap(
 * has the same semantics as GEOS_PREC_NO_TOPO
 *
 * Z and M values in the input are preserved.
+* Curved geometries are supported since GEOS 3.15 if GEOS_PREC_NO_TOPO is used.
 *
 * \param g Input geometry
 * \param gridSize cell size of grid to round coordinates to,

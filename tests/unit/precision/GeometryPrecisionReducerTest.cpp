@@ -52,12 +52,12 @@ struct test_gpr_data {
 
     void checkReducePointwise(
         const std::string& wkt,
-        const std::string& wktExpected)
+        const std::string& wktExpected) const
     {
         std::unique_ptr<Geometry> g = reader_.read(wkt);
         std::unique_ptr<Geometry> expected = reader_.read(wktExpected);
         std::unique_ptr<Geometry> actual = GeometryPrecisionReducer::reducePointwise(*g, pm_fixed_);
-        ensure_equals_geometry(expected.get(), actual.get());
+        ensure_equals_exact_geometry_xyzm(expected.get(), actual.get(), 0);
         ensure("Factories are not the same", expected->getFactory() == actual->getFactory());
     }
 
@@ -409,7 +409,65 @@ void object::test<28> ()
         "MULTIPOLYGON(((0 0, 1 0, 1 1, 0 1, 0 0)), ((10 10, 11 10, 11 11, 10 11, 10 10)))");
 }
 
+template<>
+template<>
+void object::test<29>()
+{
+    set_test_name("CircularString pointwise");
 
+    checkReducePointwise("CIRCULARSTRING (1.23 2.34, 4.56 5.67, 8.910 3.21)",
+                  "CIRCULARSTRING (1 2, 5 6, 9 3)");
+}
+
+template<>
+template<>
+void object::test<30>()
+{
+    set_test_name("CompoundCurve pointwise");
+
+    checkReducePointwise("COMPOUNDCURVE ((0 0, 1.23 2.34), CIRCULARSTRING (1.23 2.34, 4.56 5.67, 8.910 3.21), (8.91 3.21, 10 10))",
+                  "COMPOUNDCURVE ((0 0, 1 2), CIRCULARSTRING(1 2, 5 6, 9 3), (9 3, 10 10))");
+}
+
+template<>
+template<>
+void object::test<31>()
+{
+    set_test_name("CurvePolygon pointwise");
+
+    // CompoundCurve shell, no holes
+    checkReducePointwise("CURVEPOLYGON (COMPOUNDCURVE ((8.91 3.21, 1.23 2.34), CIRCULARSTRING (1.23 2.34, 4.56 5.67, 8.910 3.21)))",
+                  "CURVEPOLYGON (COMPOUNDCURVE ((9 3, 1 2), CIRCULARSTRING (1 2, 5 6, 9 3)))");
+
+    // LineString shell, CircularString hole
+    checkReducePointwise("CURVEPOLYGON ((0 0, 10 0, 10.1 10, 0 10, 0 0), CIRCULARSTRING (5 5, 6 6, 7 5.4, 6 4, 5 5))",
+        "CURVEPOLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), CIRCULARSTRING (5 5, 6 6, 7 5, 6 4, 5 5))");
+
+    // CircularString shell, LineString hole, CompoundCurve hole
+    checkReducePointwise(
+        "CURVEPOLYGON (CIRCULARSTRING (-5 0, 0 5.2, 5 0, 0 -5, -5 0), (0 0, 1 0, 1 1.3, 0 1, 0 0), COMPOUNDCURVE((-2 -2, 0 -2), CIRCULARSTRING (0 -2, -1 -0.8, -2 -2)))",
+        "CURVEPOLYGON (CIRCULARSTRING (-5 0, 0 5, 5 0, 0 -5, -5 0), (0 0, 1 0, 1 1, 0 1, 0 0), COMPOUNDCURVE((-2 -2, 0 -2), CIRCULARSTRING (0 -2, -1 -1, -2 -2)))");
+}
+
+template<>
+template<>
+void object::test<32>()
+{
+    set_test_name("MultiCurve pointwise");
+
+    checkReducePointwise("MULTICURVE ((100.1 100, 102 102), COMPOUNDCURVE ((0 0, 1.23 2.34), CIRCULARSTRING (1.23 2.34, 4.56 5.67, 8.910 3.21), (8.91 3.21, 10 10)))",
+                  "MULTICURVE ((100 100, 102 102), COMPOUNDCURVE ((0 0, 1 2), CIRCULARSTRING(1 2, 5 6, 9 3), (9 3, 10 10)))");
+}
+
+template<>
+template<>
+void object::test<33>()
+{
+    set_test_name("MultiSurface pointwise");
+
+    checkReducePointwise("MULTISURFACE(CURVEPOLYGON (COMPOUNDCURVE ((8.91 3.21, 1.23 2.34), CIRCULARSTRING (1.23 2.34, 4.56 5.67, 8.910 3.21))), ((5 0, 10.2 0, 10 2, 5 0)))",
+                  "MULTISURFACE(CURVEPOLYGON (COMPOUNDCURVE ((9 3, 1 2), CIRCULARSTRING (1 2, 5 6, 9 3))), ((5 0, 10 0, 10 2, 5 0)))");
+}
 
 template<>
 template<>

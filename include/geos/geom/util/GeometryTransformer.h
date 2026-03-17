@@ -41,6 +41,11 @@ class MultiPoint;
 class MultiPolygon;
 class MultiLineString;
 class GeometryCollection;
+class CircularString;
+class CompoundCurve;
+class CurvePolygon;
+class MultiCurve;
+class MultiSurface;
 namespace util {
 //class GeometryEditorOperation;
 }
@@ -121,6 +126,14 @@ protected:
         const LineString* geom,
         const Geometry* parent);
 
+    virtual Geometry::Ptr transformCircularString(
+        const CircularString* geom,
+        const Geometry* parent);
+
+    virtual Geometry::Ptr transformCompoundCurve(
+        const CompoundCurve* geom,
+        const Geometry* parent);
+
     virtual Geometry::Ptr transformMultiLineString(
         const MultiLineString* geom,
         const Geometry* parent);
@@ -129,8 +142,20 @@ protected:
         const Polygon* geom,
         const Geometry* parent);
 
+    virtual Geometry::Ptr transformCurvePolygon(
+        const CurvePolygon* geom,
+        const Geometry* parent);
+
     virtual Geometry::Ptr transformMultiPolygon(
         const MultiPolygon* geom,
+        const Geometry* parent);
+
+    virtual Geometry::Ptr transformMultiCurve(
+        const MultiCurve* geom,
+        const Geometry* parent);
+
+    virtual Geometry::Ptr transformMultiSurface(
+        const MultiSurface* geom,
         const Geometry* parent);
 
     virtual Geometry::Ptr transformGeometryCollection(
