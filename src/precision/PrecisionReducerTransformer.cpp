@@ -169,7 +169,7 @@ PrecisionReducerTransformer::transformMultiPolygon(
 
 // private
 std::unique_ptr<Geometry>
-PrecisionReducerTransformer::reduceArea(const Geometry* geom)
+PrecisionReducerTransformer::reduceArea(const Geometry* geom) const
 {
     return operation::overlayng::PrecisionReducer::reducePrecision(geom, &targetPM);
 }

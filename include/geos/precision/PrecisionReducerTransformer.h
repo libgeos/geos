@@ -50,9 +50,9 @@ private:
     const geom::PrecisionModel& targetPM;
     bool isRemoveCollapsed;
 
-    std::unique_ptr<geom::Geometry> reduceArea(const geom::Geometry* geom);
+    std::unique_ptr<geom::Geometry> reduceArea(const geom::Geometry* geom) const;
 
-    void extend(
+    static void extend(
         geom::CoordinateSequence& coords,
         std::size_t minLength);
 

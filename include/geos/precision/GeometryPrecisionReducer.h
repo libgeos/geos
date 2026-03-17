@@ -68,7 +68,7 @@ private:
     bool useAreaReducer;
     bool isPointwise;
 
-    geom::GeometryFactory::Ptr createFactory(
+    static geom::GeometryFactory::Ptr createFactory(
         const geom::GeometryFactory& oldGF,
         const geom::PrecisionModel& newPM);
 
