@@ -106,7 +106,7 @@ struct test_gpr_data {
 
         // std::cout << *actual << std::endl;
 
-        ensure_equals_geometry(expected.get(), actual.get());
+        ensure_equals_geometry_xyzm(expected.get(), actual.get());
         if (samePM)
             ensure("Factories are not the same", actual->getFactory() == g->getFactory());
         else
@@ -410,6 +410,35 @@ void object::test<28> ()
 }
 
 
+
+template<>
+template<>
+void object::test<34>()
+{
+    set_test_name("empty LineString ZM pointwise");
+
+    checkReducePointwise("LINESTRING ZM EMPTY", "LINESTRING ZM EMPTY");
+}
+
+template<>
+template<>
+void object::test<35>()
+{
+    set_test_name("LineString ZM pointwise");
+
+    checkReducePointwise("LINESTRING ZM (1.23 4.56 7.89 9.87, 2.34 5.67 0.21 0.24)",
+                  "LINESTRING ZM (1 5 7.89 9.87, 2 6 0.21 0.24)");
+}
+
+template<>
+template<>
+void object::test<36>()
+{
+    set_test_name("LineString ZM");
+
+    checkReduce("LINESTRING ZM (1.23 4.56 7.89 9.87, 2.34 5.67 0.21 0.24)",
+               "LINESTRING ZM (1 5 7.89 9.87, 2 6 0.21 0.24)");
+}
 
 } // namespace tut
 

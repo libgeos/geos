@@ -5621,6 +5621,8 @@ extern GEOSGeometry GEOS_DLL *GEOSSnap(
 * So the combination GEOS_PREC_NO_TOPO || GEOS_PREC_KEEP_COLLAPSED
 * has the same semantics as GEOS_PREC_NO_TOPO
 *
+* Z and M values in the input are preserved.
+*
 * \param g Input geometry
 * \param gridSize cell size of grid to round coordinates to,
 *        or 0 for FLOATING precision
