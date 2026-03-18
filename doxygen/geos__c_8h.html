@@ -14007,6 +14007,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 <p>Note that operations will always be performed in the precision of the geometry with higher precision (smaller "gridSize"). That same precision will be attached to the operation outputs.</p>
 <p>In the Default and GEOS_PREC_KEEP_COLLAPSED modes invalid input may cause an error to occur, unless the invalidity is below the scale of the requested precision</p>
 <p>There are only 3 modes. The GEOS_PREC_NO_TOPO mode takes precedence over GEOS_PREC_KEEP_COLLAPSED. So the combination GEOS_PREC_NO_TOPO || GEOS_PREC_KEEP_COLLAPSED has the same semantics as GEOS_PREC_NO_TOPO</p>
+<p>Z and M values in the input are preserved.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>Input geometry </td></tr>
