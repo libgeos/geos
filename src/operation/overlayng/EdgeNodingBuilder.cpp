@@ -16,10 +16,13 @@
  *
  **********************************************************************/
 
+#include <geos/algorithm/Orientation.h>
+#include <geos/geom/CompoundCurve.h>
+#include <geos/geom/CircularString.h>
 #include <geos/noding/ValidatingNoder.h>
 #include <geos/noding/NodedSegmentString.h>
 #include <geos/noding/MCIndexNoder.h>
-#include <geos/algorithm/Orientation.h>
+#include <geos/noding/NodableArcString.h>
 #include <geos/noding/snapround/SnapRoundingNoder.h>
 #include <geos/operation/overlayng/EdgeNodingBuilder.h>
 #include <geos/operation/overlayng/EdgeMerger.h>
@@ -36,15 +39,17 @@ using namespace geos::geom;
 using geos::operation::valid::RepeatedPointRemover;
 using geos::noding::snapround::SnapRoundingNoder;
 using geos::noding::Noder;
+using geos::noding::NodableArcString;
 using geos::noding::MCIndexNoder;
 using geos::noding::ValidatingNoder;
 using geos::noding::SegmentString;
 using geos::noding::NodedSegmentString;
+using geos::noding::PathString;
 
 
 EdgeNodingBuilder::~EdgeNodingBuilder()
 {
-    for (SegmentString* ss: *inputEdges) {
+    for (auto* ss: inputEdges) {
         delete ss;
     }
 }
@@ -108,7 +113,7 @@ EdgeNodingBuilder::build(const Geometry* geom0, const Geometry* geom1)
 
     add(geom0, 0);
     add(geom1, 1);
-    std::vector<Edge*> nodedEdges = node(*inputEdges);
+    std::vector<Edge*> nodedEdges = node(inputEdges);
 
     /**
      * Merge the noded edges to eliminate duplicates.
@@ -119,14 +124,14 @@ EdgeNodingBuilder::build(const Geometry* geom0, const Geometry* geom1)
 
 /*private*/
 std::vector<Edge*>
-EdgeNodingBuilder::node(const std::vector<SegmentString*>& segStrings)
+EdgeNodingBuilder::node(const std::vector<PathString*>& segStrings)
 {
     std::vector<Edge*> nodedEdges;
 
     Noder* noder = getNoder();
-    noder->computeNodes(segStrings);
+    noder->computePathNodes(segStrings);
 
-    auto nodedSS = noder->getNodedSubstrings();
+    auto nodedSS = noder->getNodedPaths();
 
     nodedEdges = createEdges(nodedSS);
 
@@ -135,12 +140,14 @@ EdgeNodingBuilder::node(const std::vector<SegmentString*>& segStrings)
 
 /*private*/
 std::vector<Edge*>
-EdgeNodingBuilder::createEdges(std::vector<std::unique_ptr<SegmentString>>& segStrings)
+EdgeNodingBuilder::createEdges(std::vector<std::unique_ptr<PathString>>& segStrings)
 {
     std::vector<Edge*> createdEdges;
 
     for (auto& ss : segStrings) {
         const auto& pts = ss->getCoordinates();
+
+        const bool isCurved = dynamic_cast<const noding::ArcString*>(ss.get());
 
         // don't create edges from collapsed lines
         if (Edge::isCollapsed(pts.get())) continue;
@@ -150,7 +157,7 @@ EdgeNodingBuilder::createEdges(std::vector<std::unique_ptr<SegmentString>>& segS
         // Record that a non-collapsed edge exists for the parent geometry
         hasEdges[info->getIndex()] = true;
         // Allocate the new Edge locally in a std::deque
-        edgeQue.emplace_back(ss->getCoordinates(), info);
+        edgeQue.emplace_back(ss->getCoordinates(), info, isCurved);
         Edge* newEdge = &(edgeQue.back());
         createdEdges.push_back(newEdge);
     }
@@ -179,12 +186,18 @@ EdgeNodingBuilder::add(const Geometry* g, uint8_t geomIndex)
     switch (g->getGeometryTypeId())
     {
         case GEOS_POLYGON:
-            return addPolygon(static_cast<const Polygon*>(g), geomIndex);
+        case GEOS_CURVEPOLYGON:
+            return addPolygon(static_cast<const Surface*>(g), geomIndex);
         case GEOS_LINESTRING:
         case GEOS_LINEARRING:
-            return addLine(static_cast<const LineString*>(g), geomIndex);
+        case GEOS_CIRCULARSTRING:
+            return addSimpleCurve(static_cast<const SimpleCurve*>(g), geomIndex);
+        case GEOS_COMPOUNDCURVE:
+            return addCompoundCurve(static_cast<const CompoundCurve*>(g), geomIndex);
         case GEOS_MULTILINESTRING:
         case GEOS_MULTIPOLYGON:
+        case GEOS_MULTICURVE:
+        case GEOS_MULTISURFACE:
             return addCollection(static_cast<const GeometryCollection*>(g), geomIndex);
         case GEOS_GEOMETRYCOLLECTION:
             return addGeometryCollection(static_cast<const GeometryCollection*>(g), geomIndex, g->getDimension());
@@ -192,6 +205,7 @@ EdgeNodingBuilder::add(const Geometry* g, uint8_t geomIndex)
         case GEOS_MULTIPOINT:
             return; // do nothing
         default:
+            throw util::IllegalArgumentException("Unexpected geometry type: " + g->getGeometryType());
             return; // do nothing
     }
 }
@@ -221,13 +235,13 @@ EdgeNodingBuilder::addGeometryCollection(const GeometryCollection* gc, uint8_t g
 
 /*private*/
 void
-EdgeNodingBuilder::addPolygon(const Polygon* poly, uint8_t geomIndex)
+EdgeNodingBuilder::addPolygon(const Surface* poly, uint8_t geomIndex)
 {
-    const LinearRing* shell = poly->getExteriorRing();
+    const Curve* shell = poly->getExteriorRing();
     addPolygonRing(shell, false, geomIndex);
 
     for (std::size_t i = 0; i < poly->getNumInteriorRing(); i++) {
-        const LinearRing* hole = poly->getInteriorRingN(i);
+        const Curve* hole = poly->getInteriorRingN(i);
 
         // Holes are topologically labelled opposite to the shell, since
         // the interior of the polygon lies on their opposite side
@@ -238,25 +252,60 @@ EdgeNodingBuilder::addPolygon(const Polygon* poly, uint8_t geomIndex)
 
 /*private*/
 void
-EdgeNodingBuilder::addPolygonRing(const LinearRing* ring, bool isHole, uint8_t geomIndex)
-  {
+EdgeNodingBuilder::addPolygonRing(const Curve* ring, bool isHole, uint8_t geomIndex)
+{
     // don't add empty rings
     if (ring->isEmpty()) return;
 
     if (isClippedCompletely(ring->getEnvelopeInternal()))
       return;
 
-    std::unique_ptr<geom::CoordinateSequence> pts = clip(ring);
+    const auto type = ring->getGeometryTypeId();
 
-    /**
-    * Don't add edges that collapse to a point
-    */
-    if (pts->size() < 2) {
+    if (type == GEOS_COMPOUNDCURVE) {
+        const CompoundCurve* cc = static_cast<const CompoundCurve*>(ring);
+        const auto coords = ring->getCoordinates();
+        const int depthDelta = computeDepthDelta(coords.get(), isHole);
+
+        const EdgeSourceInfo* eso = createEdgeSourceInfo(geomIndex, depthDelta, isHole);
+
+        for (std::size_t i = 0; i < cc->getNumCurves(); i++) {
+            const SimpleCurve* section = cc->getCurveN(i);
+            if (section->getNumPoints() >= 2) {
+                if (section->getGeometryTypeId() == GEOS_CIRCULARSTRING) {
+                    const CircularString* cs = static_cast<const CircularString*>(section);
+                    addCurvedEdge(cs->getSharedCoordinates(), cs->getArcs(), eso);
+                } else {
+                    addEdge(section->getSharedCoordinates(), eso);
+                }
+            }
+        }
+
         return;
     }
 
-    int depthDelta = computeDepthDelta(ring, isHole);
-    addEdge(pts, createEdgeSourceInfo(geomIndex, depthDelta, isHole));
+    const SimpleCurve* scRing = static_cast<const SimpleCurve*>(ring);
+    const int depthDelta = computeDepthDelta(scRing->getCoordinatesRO(), isHole);
+    const EdgeSourceInfo* esInfo = createEdgeSourceInfo(geomIndex, depthDelta, isHole);
+
+    if (ring->getGeometryTypeId() == GEOS_LINEARRING || ring->getGeometryTypeId() == GEOS_LINESTRING) {
+        // TODO: Support CircularString in RingClipper
+        std::shared_ptr<const CoordinateSequence> pts = clip(static_cast<const LineString*>(ring));
+
+        /**
+        * Don't add edges that collapse to a point
+        */
+        if (pts->size() < 2) {
+            return;
+        }
+
+        addEdge(pts, esInfo);
+    } else {
+        assert(ring->getGeometryTypeId() == GEOS_CIRCULARSTRING);
+
+        const CircularString* cs = static_cast<const CircularString*>(ring);
+        addCurvedEdge(cs->getSharedCoordinates(), cs->getArcs(), esInfo);
+    }
 }
 
 /*private*/
@@ -281,13 +330,20 @@ EdgeNodingBuilder::createEdgeSourceInfo(uint8_t index, int depthDelta, bool isHo
 
 /*private*/
 void
-EdgeNodingBuilder::addEdge(std::unique_ptr<CoordinateSequence>& cas, const EdgeSourceInfo* info)
+EdgeNodingBuilder::addEdge(const std::shared_ptr<const CoordinateSequence>& cas, const EdgeSourceInfo* info)
 {
     // TODO: manage these internally to EdgeNodingBuilder in a std::deque,
     // since they do not have a life span longer than the EdgeNodingBuilder
     // in OverlayNG::buildGraph()
-    NodedSegmentString* ss = new NodedSegmentString(std::move(cas), inputHasZ, inputHasM, reinterpret_cast<const void*>(info));
-    inputEdges->push_back(ss);
+    NodedSegmentString* ss = new NodedSegmentString(cas, inputHasZ, inputHasM, reinterpret_cast<const void*>(info));
+    inputEdges.push_back(ss);
+}
+
+void
+EdgeNodingBuilder::addCurvedEdge(const std::shared_ptr<const CoordinateSequence>& cas, const std::vector<CircularArc>& arcs, const EdgeSourceInfo* info)
+{
+    NodableArcString* as = new NodableArcString(arcs, cas, inputHasZ, inputHasM, reinterpret_cast<const void*>(info));
+    inputEdges.push_back(as);
 }
 
 /*private*/
@@ -299,8 +355,8 @@ EdgeNodingBuilder::isClippedCompletely(const Envelope* env) const
 }
 
 /* private */
-std::unique_ptr<geom::CoordinateSequence>
-EdgeNodingBuilder::clip(const LinearRing* ring)
+std::shared_ptr<const CoordinateSequence>
+EdgeNodingBuilder::clip(const LineString* ring) const
 {
     const Envelope* env = ring->getEnvelopeInternal();
 
@@ -316,16 +372,20 @@ EdgeNodingBuilder::clip(const LinearRing* ring)
 }
 
 /*private*/
-std::unique_ptr<CoordinateSequence>
+std::shared_ptr<const CoordinateSequence>
 EdgeNodingBuilder::removeRepeatedPoints(const LineString* line)
 {
-    const CoordinateSequence* pts = line->getCoordinatesRO();
-    return RepeatedPointRemover::removeRepeatedPoints(pts);
+    const std::shared_ptr<const CoordinateSequence>& pts = line->getSharedCoordinates();
+    if (pts->hasRepeatedPoints()) {
+        return RepeatedPointRemover::removeRepeatedPoints(pts.get());
+    } else {
+        return pts;
+    }
 }
 
 /*private*/
 int
-EdgeNodingBuilder::computeDepthDelta(const LinearRing* ring, bool isHole)
+EdgeNodingBuilder::computeDepthDelta(const CoordinateSequence* ringCoords, bool isHole)
 {
     /**
      * Compute the orientation of the ring, to
@@ -335,7 +395,8 @@ EdgeNodingBuilder::computeDepthDelta(const LinearRing* ring, bool isHole)
      * It is important to compute orientation on the original ring,
      * since topology collapse can make the orientation computation give the wrong answer.
      */
-    bool isCCW = algorithm::Orientation::isCCW(ring->getCoordinatesRO());
+
+    const bool isCCW = algorithm::Orientation::isCCW(ringCoords);
 
     /**
      * Compute whether ring is in canonical orientation or not.
@@ -360,29 +421,46 @@ EdgeNodingBuilder::computeDepthDelta(const LinearRing* ring, bool isHole)
 
 /*private*/
 void
-EdgeNodingBuilder::addLine(const LineString* line, uint8_t geomIndex)
+EdgeNodingBuilder::addSimpleCurve(const SimpleCurve* curve, uint8_t geomIndex)
 {
     // don't add empty lines
-    if (line->isEmpty()) return;
+    if (curve->isEmpty()) return;
 
-    if (isClippedCompletely(line->getEnvelopeInternal()))
+    if (isClippedCompletely(curve->getEnvelopeInternal()))
         return;
+
+    if (curve->getGeometryTypeId() == GEOS_CIRCULARSTRING) {
+        // TODO: Support CircularString in LineLimiter
+        const CircularString* cs = static_cast<const CircularString*>(curve);
+        addCurve(cs->getSharedCoordinates(), cs->getArcs(), geomIndex);
+        return;
+    }
+
+    const LineString* line = detail::down_cast<const LineString*>(curve);
 
     if (isToBeLimited(line)) {
         std::vector<std::unique_ptr<CoordinateSequence>>& sections = limit(line);
         for (auto& pts : sections) {
-            addLine(pts, geomIndex);
+            addLine(std::move(pts), geomIndex);
         }
     }
     else {
-        std::unique_ptr<CoordinateSequence> ptsNoRepeat = removeRepeatedPoints(line);
+        const auto ptsNoRepeat = removeRepeatedPoints(line);
         addLine(ptsNoRepeat, geomIndex);
+    }
+}
+
+void
+EdgeNodingBuilder::addCompoundCurve(const CompoundCurve* curve, uint8_t geomIndex)
+{
+    for (std::size_t i = 0; i < curve->getNumCurves(); i++) {
+        addSimpleCurve(curve->getCurveN(i), geomIndex);
     }
 }
 
 /*private*/
 void
-EdgeNodingBuilder::addLine(std::unique_ptr<CoordinateSequence>& pts, uint8_t geomIndex)
+EdgeNodingBuilder::addLine(const std::shared_ptr<const CoordinateSequence>& pts, uint8_t geomIndex)
 {
     /**
      * Don't add edges that collapse to a point
@@ -392,6 +470,20 @@ EdgeNodingBuilder::addLine(std::unique_ptr<CoordinateSequence>& pts, uint8_t geo
     }
 
     addEdge(pts, createEdgeSourceInfo(geomIndex));
+}
+
+/*private*/
+void
+EdgeNodingBuilder::addCurve(const std::shared_ptr<const CoordinateSequence>& pts, const std::vector<CircularArc>& arcs, uint8_t geomIndex)
+{
+    /**
+     * Don't add edges that collapse to a point
+     */
+    if (pts->size() < 2) {
+        return;
+    }
+
+    addCurvedEdge(pts, arcs, createEdgeSourceInfo(geomIndex));
 }
 
 /*private*/
