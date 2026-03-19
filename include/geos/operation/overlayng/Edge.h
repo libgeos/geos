@@ -64,6 +64,7 @@ private:
     int bDepthDelta = 0;
     bool bIsHole = false;
     std::shared_ptr<const geom::CoordinateSequence> pts;
+    bool ptsCurved;
 
     // Methods
 
@@ -183,6 +184,7 @@ private:
 
 public:
 
+#if 0
     Edge()
         : aDim(OverlayLabel::DIM_UNKNOWN)
         , aDepthDelta(0)
@@ -192,15 +194,20 @@ public:
         , bIsHole(false)
         , pts(nullptr)
         {};
+#endif
+
+    Edge(const std::shared_ptr<const geom::CoordinateSequence>& p_pts, const EdgeSourceInfo* info, bool isCurved);
 
     friend std::ostream& operator<<(std::ostream& os, const Edge& e);
 
     static bool isCollapsed(const geom::CoordinateSequence* pts);
 
-    Edge(const std::shared_ptr<const geom::CoordinateSequence>& p_pts, const EdgeSourceInfo* info);
+    bool isCurved() const {
+        return ptsCurved;
+    }
 
     // return a clone of the underlying points
-    std::unique_ptr<geom::CoordinateSequence> getCoordinates()
+    std::unique_ptr<geom::CoordinateSequence> getCoordinates() const
     {
         return pts->clone();
     };

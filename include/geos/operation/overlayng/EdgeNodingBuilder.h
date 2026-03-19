@@ -20,12 +20,14 @@
 
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/CircularArc.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/Polygon.h>
+#include <geos/geom/SimpleCurve.h>
 #include <geos/noding/IntersectionAdder.h>
 #include <geos/noding/Noder.h>
 #include <geos/noding/SegmentString.h>
@@ -65,11 +67,16 @@ class GEOS_DLL EdgeNodingBuilder {
     using PrecisionModel = geos::geom::PrecisionModel;
     using Envelope = geos::geom::Envelope;
     using GeometryCollection = geos::geom::GeometryCollection;
+    using Surface = geos::geom::Surface;
     using Polygon = geos::geom::Polygon;
     using CoordinateSequence = geos::geom::CoordinateSequence;
+    using CompoundCurve = geos::geom::CompoundCurve;
+    using CircularString = geos::geom::CircularString;
     using LinearRing = geos::geom::LinearRing;
     using LineString = geos::geom::LineString;
     using Geometry = geos::geom::Geometry;
+    using SimpleCurve = geos::geom::SimpleCurve;
+    using Curve = geos::geom::Curve;
 
 private:
 
@@ -79,7 +86,7 @@ private:
 
     // Members
     const PrecisionModel* pm;
-    std::unique_ptr<std::vector<noding::SegmentString*>> inputEdges;
+    std::vector<noding::PathString*> inputEdges;
     noding::Noder* customNoder;
     std::array<bool, 2> hasEdges;
     const Envelope* clipEnv;
@@ -112,11 +119,17 @@ private:
 
     void addCollection(const GeometryCollection* gc, uint8_t geomIndex);
     void addGeometryCollection(const GeometryCollection* gc, uint8_t geomIndex, int expectedDim);
-    void addPolygon(const Polygon* poly, uint8_t geomIndex);
-    void addPolygonRing(const LinearRing* ring, bool isHole, uint8_t geomIndex);
-    void addLine(const LineString* line, uint8_t geomIndex);
-    void addLine(std::unique_ptr<CoordinateSequence>& pts, uint8_t geomIndex);
-    void addEdge(std::unique_ptr<CoordinateSequence>& cas, const EdgeSourceInfo* info);
+    void addPolygon(const Surface* poly, uint8_t geomIndex);
+    void addPolygonRing(const Curve* ring, bool isHole, uint8_t geomIndex);
+    void addSimpleCurve(const SimpleCurve* line, uint8_t geomIndex);
+    void addCompoundCurve(const CompoundCurve* line, uint8_t geomIndex);
+
+    void addCurve(const std::shared_ptr<const CoordinateSequence>& pts, const std::vector<geom::CircularArc>& arcs, uint8_t geomIndex);
+    void addLine(const std::shared_ptr<const CoordinateSequence>& pts, uint8_t geomIndex);
+
+    void addEdge(const std::shared_ptr<const CoordinateSequence>& cas, const EdgeSourceInfo* info);
+    void addCurvedEdge(const std::shared_ptr<const CoordinateSequence>& cas, const std::vector<geom::CircularArc>& arcs, const EdgeSourceInfo* info);
+
 
     // Create a EdgeSourceInfo* owned by EdgeNodingBuilder
     const EdgeSourceInfo* createEdgeSourceInfo(uint8_t index, int depthDelta, bool isHole);
@@ -156,7 +169,7 @@ private:
     * @param ring the line to clip
     * @return the points in the clipped line
     */
-    std::unique_ptr<CoordinateSequence> clip(const LinearRing* line);
+    std::shared_ptr<const CoordinateSequence> clip(const LineString* ring) const;
 
     /**
     * Removes any repeated points from a linear component.
@@ -165,9 +178,9 @@ private:
     * @param line the line to process
     * @return the points of the line with repeated points removed
     */
-    static std::unique_ptr<CoordinateSequence> removeRepeatedPoints(const LineString* line);
+    static std::shared_ptr<const CoordinateSequence> removeRepeatedPoints(const LineString* line);
 
-    static int computeDepthDelta(const LinearRing* ring, bool isHole);
+    static int computeDepthDelta(const CoordinateSequence* ringCoords, bool isHole);
 
     void add(const Geometry* g, uint8_t geomIndex);
 
@@ -177,8 +190,8 @@ private:
     * which is used to provide source topology info to the constructed Edges
     * (and is then discarded).
     */
-    std::vector<Edge*> node(const std::vector<noding::SegmentString*>& segStrings);
-    std::vector<Edge*> createEdges(std::vector<std::unique_ptr<noding::SegmentString>> &segStrings);
+    std::vector<Edge*> node(const std::vector<noding::PathString*>& segStrings);
+    std::vector<Edge*> createEdges(std::vector<std::unique_ptr<noding::PathString>> &segStrings);
 
 
 public:
@@ -190,7 +203,6 @@ public:
     */
     EdgeNodingBuilder(const PrecisionModel* p_pm, noding::Noder* p_customNoder)
         : pm(p_pm)
-        , inputEdges(new std::vector<noding::SegmentString*>)
         , customNoder(p_customNoder)
         , hasEdges{{false,false}}
         , clipEnv(nullptr)
