@@ -2834,7 +2834,7 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createCircularString(GEOSCoordSequence* s
 * Caller is responsible for freeing with GEOSGeom_destroy().
 * \since 3.13
 */
-extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCircularString();
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCircularString(void);
 
 /**
 * Creates a CompoundCurve geometry.
@@ -2853,7 +2853,7 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createCompoundCurve(GEOSGeometry** curves
 * Caller is responsible for freeing with GEOSGeom_destroy().
 * \since 3.13
 */
-extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCompoundCurve();
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCompoundCurve(void);
 
 /**
 * Creates a CurvePolygon geometry from ring geometries.
@@ -2879,7 +2879,7 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createCurvePolygon(
 * Caller is responsible for freeing with GEOSGeom_destroy().
 * \since 3.13
 */
-extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCurvePolygon();
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCurvePolygon(void);
 
 /**
 * Create a geometry collection.
@@ -4638,7 +4638,7 @@ extern GEOSGeometry GEOS_DLL * GEOSCoverageSimplifyVW(
 * \since 3.14
 */
 extern GEOSCoverageCleanParams GEOS_DLL *
-GEOSCoverageCleanParams_create();
+GEOSCoverageCleanParams_create(void);
 
 /**
 * Destroy a GEOSCoverageCleanParams and free all associated memory.
