@@ -16,6 +16,10 @@
 
 #include <geos/geom/Geometry.h>
 
+namespace geos::geom {
+    class LineString;
+}
+
 namespace geos {
 namespace geom {
 
@@ -67,6 +71,10 @@ public:
     /// or NULL if this is an EMPTY Curve.
     virtual std::unique_ptr<Point> getStartPoint() const = 0;
 
+    std::unique_ptr<LineString> getLinearized(const algorithm::CurveToLineParams&) const;
+
+    std::unique_ptr<Curve> getCurved(const algorithm::LineToCurveParams&) const;
+
     /// Returns true if the first and last coordinate in the Curve are the same
     virtual bool isClosed() const = 0;
 
@@ -82,6 +90,7 @@ public:
 protected:
     Curve(const GeometryFactory& factory) : Geometry(&factory) {}
 
+    Curve* getCurvedImpl(const algorithm::LineToCurveParams&) const override = 0;
 };
 
 }

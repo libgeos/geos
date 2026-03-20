@@ -80,11 +80,15 @@ template<>
 void object::test<6>
 ()
 {
-    geom1_ = GEOSGeomFromWKT("COMPOUNDCURVE (CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 0 0))");
+    set_test_name("curved inputs");
+    useContext();
+
+    geom1_ = fromWKT("COMPOUNDCURVE (CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 0 0))");
     ensure(geom1_);
 
-    char r = GEOSisRing(geom1_);
-    ensure_equals("curved geometetries not supported", r, 2);
+    //ensure_equals(GEOSisRing_r(ctxt_, geom1_), 2);
+    useCurveConversion();
+    ensure_equals(GEOSisRing_r(ctxt_, geom1_), 1);
 }
 
 } // namespace tut

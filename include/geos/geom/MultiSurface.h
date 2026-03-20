@@ -49,6 +49,10 @@ public:
 
     GeometryTypeId getGeometryTypeId() const override;
 
+    std::unique_ptr<MultiPolygon> getLinearized(const algorithm::CurveToLineParams& params) const {
+        return std::unique_ptr<MultiPolygon>(getLinearizedImpl(params));
+    }
+
     bool hasDimension(Dimension::DimensionType d) const override
     {
         return d == Dimension::A;
@@ -80,6 +84,10 @@ protected:
     {
         return new MultiSurface(*this);
     }
+
+    MultiSurface* getCurvedImpl(const algorithm::LineToCurveParams&) const override { return cloneImpl(); }
+
+    MultiPolygon* getLinearizedImpl(const algorithm::CurveToLineParams&) const override;
 
     int
     getSortIndex() const override

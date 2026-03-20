@@ -81,6 +81,10 @@ public:
 
     GeometryTypeId getGeometryTypeId() const override;
 
+    std::unique_ptr<MultiLineString> getLinearized(const algorithm::CurveToLineParams&) const {
+        return clone();
+    }
+
     bool isClosed() const;
 
     std::unique_ptr<MultiLineString> clone() const
@@ -131,6 +135,10 @@ protected:
     MultiLineString* cloneImpl() const override { return new MultiLineString(*this); }
 
     MultiLineString* reverseImpl() const override;
+
+    GeometryCollection* getCurvedImpl(const algorithm::LineToCurveParams&) const override;
+
+    MultiLineString* getLinearizedImpl(const algorithm::CurveToLineParams&) const override;
 
     int
     getSortIndex() const override

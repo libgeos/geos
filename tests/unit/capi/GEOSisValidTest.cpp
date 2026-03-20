@@ -68,11 +68,15 @@ template<>
 template<>
 void object::test<5>()
 {
+    set_test_name("GEOSIsValid with automatic linearization");
+    useContext();
+
     input_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE( CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 0 0)))");
     ensure(input_ != nullptr);
 
-    char ret = GEOSisValid(input_);
-    ensure_equals("error raised on curved geometry", ret, 2);
+    ensure_equals(GEOSisValid_r(ctxt_, input_), 2);
+    useCurveConversion();
+    ensure_equals(GEOSisValid_r(ctxt_, input_), 1);
 }
 
 } // namespace tut

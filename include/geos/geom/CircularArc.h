@@ -21,6 +21,11 @@
 #include <geos/algorithm/CircularArcs.h>
 #include <geos/algorithm/Orientation.h>
 
+// Forward declarations
+namespace geos::algorithm {
+class CurveToLineParams;
+}
+
 namespace geos {
 namespace geom {
 
@@ -110,6 +115,10 @@ public:
     /// Return the length of the arc
     double getLength() const;
 
+    /// Add linearized points representing this arc to the provided CoordinateSequence.
+    /// The origin point of the arc will NOT be added.
+    void addLinearizedPoints(CoordinateSequence& seq, const algorithm::CurveToLineParams& params) const;
+
     /// Return the orientation of the arc as one of:
     /// - algorithm::Orientation::CLOCKWISE,
     /// - algorithm::Orientation::COUNTERCLOCKWISE
@@ -141,6 +150,11 @@ public:
         CoordinateXY midpoint = algorithm::CircularArcs::getMidpoint(p0(), p2(), getCenter(), getRadius(), isCCW());
         return algorithm::Distance::pointToSegment(midpoint, p0(), p2());
     }
+
+    /// Interpolate Z/M values from the three points that define the arc.
+    /// Interpolation will be performed between [p0, p1] or [p1, p2] depending on
+    /// the position of the supplied point.
+    void interpolateZM(const CoordinateXY& pt, double& z, double& m) const;
 
     bool isCCW() const {
         return getOrientation() == algorithm::Orientation::COUNTERCLOCKWISE;

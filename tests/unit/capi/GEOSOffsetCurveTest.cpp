@@ -262,12 +262,19 @@ template<>
 template<>
 void object::test<13>()
 {
+    set_test_name("curved inputs");
+    useContext();
+
     input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
     ensure(input_);
 
-    result_ = GEOSOffsetCurve(input_, 1, 8, GEOSBUF_JOIN_ROUND, 0);
-
+    result_ = GEOSOffsetCurve_r(ctxt_, input_, 1, 8, GEOSBUF_JOIN_ROUND, 0);
     ensure("curved geometries not supported", result_ == nullptr);
+
+    useCurveConversion();
+    result_ = GEOSOffsetCurve_r(ctxt_, input_, 1, 8, GEOSBUF_JOIN_ROUND, 0);
+    ensure(result_);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_LINESTRING);
 }
 
 template<>
