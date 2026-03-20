@@ -122,7 +122,7 @@ extern "C" {
     }
 
     void
-    finishGEOS()
+    finishGEOS(void)
     {
         if(handle != NULL) {
             finishGEOS_r(handle);
@@ -137,13 +137,13 @@ extern "C" {
     }
 
     void
-    GEOS_interruptRequest()
+    GEOS_interruptRequest(void)
     {
         geos::util::Interrupt::request();
     }
 
     void
-    GEOS_interruptCancel()
+    GEOS_interruptCancel(void)
     {
         geos::util::Interrupt::cancel();
     }
@@ -1011,7 +1011,7 @@ extern "C" {
     }
 
     GEOSMakeValidParams*
-    GEOSMakeValidParams_create()
+    GEOSMakeValidParams_create(void)
     {
         return GEOSMakeValidParams_create_r(handle);
     }
@@ -1047,7 +1047,7 @@ extern "C" {
     }
 
     GEOSCoverageCleanParams*
-    GEOSCoverageCleanParams_create()
+    GEOSCoverageCleanParams_create(void)
     {
         return GEOSCoverageCleanParams_create_r(handle);
     }
@@ -1169,7 +1169,7 @@ extern "C" {
     }
 
     int
-    GEOS_getWKBOutputDims()
+    GEOS_getWKBOutputDims(void)
     {
         return GEOS_getWKBOutputDims_r(handle);
     }
@@ -1181,7 +1181,7 @@ extern "C" {
     }
 
     int
-    GEOS_getWKBByteOrder()
+    GEOS_getWKBByteOrder(void)
     {
         return GEOS_getWKBByteOrder_r(handle);
     }
@@ -1478,7 +1478,7 @@ extern "C" {
 
     /* WKT Reader */
     WKTReader*
-    GEOSWKTReader_create()
+    GEOSWKTReader_create(void)
     {
         return GEOSWKTReader_create_r(handle);
     }
@@ -1503,7 +1503,7 @@ extern "C" {
 
     /* WKT Writer */
     WKTWriter*
-    GEOSWKTWriter_create()
+    GEOSWKTWriter_create(void)
     {
         return GEOSWKTWriter_create_r(handle);
     }
@@ -1552,7 +1552,7 @@ extern "C" {
 
     /* WKB Reader */
     WKBReader*
-    GEOSWKBReader_create()
+    GEOSWKBReader_create(void)
     {
         return GEOSWKBReader_create_r(handle);
     }
@@ -1583,7 +1583,7 @@ extern "C" {
 
     /* WKB Writer */
     WKBWriter*
-    GEOSWKBWriter_create()
+    GEOSWKBWriter_create(void)
     {
         return GEOSWKBWriter_create_r(handle);
     }
@@ -1664,7 +1664,7 @@ extern "C" {
 
     /* GeoJSON Reader */
     GeoJSONReader*
-    GEOSGeoJSONReader_create()
+    GEOSGeoJSONReader_create(void)
     {
         return GEOSGeoJSONReader_create_r(handle);
     }
@@ -1683,7 +1683,7 @@ extern "C" {
 
     /* GeoJSON Writer */
     GeoJSONWriter*
-    GEOSGeoJSONWriter_create()
+    GEOSGeoJSONWriter_create(void)
     {
         return GEOSGeoJSONWriter_create_r(handle);
     }
@@ -1939,37 +1939,37 @@ extern "C" {
     }
 
     geos::geom::Geometry*
-    GEOSGeom_createEmptyPoint()
+    GEOSGeom_createEmptyPoint(void)
     {
         return GEOSGeom_createEmptyPoint_r(handle);
     }
 
     geos::geom::Geometry*
-    GEOSGeom_createEmptyLineString()
+    GEOSGeom_createEmptyLineString(void)
     {
         return GEOSGeom_createEmptyLineString_r(handle);
     }
 
     geos::geom::Geometry*
-    GEOSGeom_createEmptyPolygon()
+    GEOSGeom_createEmptyPolygon(void)
     {
         return GEOSGeom_createEmptyPolygon_r(handle);
     }
 
     geos::geom::Geometry*
-    GEOSGeom_createEmptyCircularString()
+    GEOSGeom_createEmptyCircularString(void)
     {
         return GEOSGeom_createEmptyCircularString_r(handle);
     }
 
     geos::geom::Geometry*
-    GEOSGeom_createEmptyCompoundCurve()
+    GEOSGeom_createEmptyCompoundCurve(void)
     {
         return GEOSGeom_createEmptyCompoundCurve_r(handle);
     }
 
     geos::geom::Geometry*
-    GEOSGeom_createEmptyCurvePolygon()
+    GEOSGeom_createEmptyCurvePolygon(void)
     {
         return GEOSGeom_createEmptyCurvePolygon_r(handle);
     }
@@ -2001,7 +2001,7 @@ extern "C" {
     }
 
     GEOSBufferParams*
-    GEOSBufferParams_create()
+    GEOSBufferParams_create(void)
     {
         return GEOSBufferParams_create_r(handle);
     }
