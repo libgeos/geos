@@ -70,7 +70,7 @@ public:
             std::ostringstream s;
             s << "Cannot compute the quadrant for point ";
             s << "(" << dx << "," << dy << ")" << std::endl;
-            throw util::IllegalArgumentException(s.str());
+            throw geos::util::IllegalArgumentException(s.str());
         }
         if(dx >= 0) {
             if(dy >= 0) {
@@ -98,7 +98,7 @@ public:
     static int quadrant(const geom::CoordinateXY& p0, const geom::CoordinateXY& p1)
     {
         if(p1.x == p0.x && p1.y == p0.y) {
-            throw util::IllegalArgumentException("Cannot compute the quadrant for two identical points " + p0.toString());
+            throw geos::util::IllegalArgumentException("Cannot compute the quadrant for two identical points " + p0.toString());
         }
 
         if(p1.x >= p0.x) {

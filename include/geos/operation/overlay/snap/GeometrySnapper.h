@@ -24,6 +24,8 @@
 #include <memory>
 #include <vector>
 
+#include "geos/util.h"
+
 // Forward declarations
 namespace geos {
 namespace geom {
@@ -80,11 +82,7 @@ public:
      *
      * @param g the geometry to snap
      */
-    GeometrySnapper(const geom::Geometry& g)
-        :
-        srcGeom(g)
-    {
-    }
+    GeometrySnapper(const geom::Geometry& g);
 
     /** \brief
      * Snaps the vertices in the component {@link geom::LineString}s
@@ -138,7 +136,7 @@ private:
     const geom::Geometry& srcGeom;
 
     /// Extract target (unique) coordinates
-    std::unique_ptr<geom::Coordinate::ConstVect> extractTargetCoordinates(
+    static std::unique_ptr<geom::Coordinate::ConstVect> extractTargetCoordinates(
         const geom::Geometry& g);
 
     // Declare type as noncopyable
