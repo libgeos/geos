@@ -33,7 +33,7 @@ jobs:
         sudo -E apt-get -yq --no-install-suggests --no-install-recommends install make doxygen
 
     - name: 'Check Out'
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Get tag
       id: tag
@@ -68,7 +68,7 @@ jobs:
     - name: Create Release
       if: ${{ steps.tag.outputs.tag == steps.version.outputs.geosversion }}
       id: create_release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         body_path: ${{ steps.notes.outputs.geosnotes }}
         name: Release ${{ steps.version.outputs.geosversion }}
