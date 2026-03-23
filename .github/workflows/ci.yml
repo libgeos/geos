@@ -189,10 +189,10 @@ jobs:
         echo "$(python3 -m site --user-base)/bin" >> $GITHUB_PATH
 
     - name: 'Check Out'
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Retrieve build cache
-      uses: actions/cache/restore@v4
+      uses: actions/cache/restore@v5
       id: restore-cache
       with:
         path: .ccache
@@ -221,7 +221,7 @@ jobs:
         ccache --show-stats
 
     - name: Save build cache
-      uses: actions/cache/save@v4
+      uses: actions/cache/save@v5
       with:
         path: .ccache
         key: ${{ steps.restore-cache.outputs.cache-primary-key }}
@@ -243,7 +243,7 @@ jobs:
 
     - name: 'Upload Valgrind Log'
       if: failure()
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: valgrind-log
         path: build/Testing/Temporary/MemoryChecker.**.log
@@ -276,7 +276,7 @@ jobs:
 
     steps:
     - name: 'Check Out'
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: 'Setup'
       uses: msys2/setup-msys2@v2
@@ -291,7 +291,7 @@ jobs:
 
     - name: Retrieve build cache
       id: restore-cache
-      uses: actions/cache/restore@v4
+      uses: actions/cache/restore@v5
       with:
         path: .ccache
         key: windows-mingw-${{ matrix.build_type}}-${{ github.ref_name }}-${{ github.run_id }}
@@ -313,7 +313,7 @@ jobs:
         ccache --show-stats --verbose
 
     - name: Save build cache
-      uses: actions/cache/save@v4
+      uses: actions/cache/save@v5
       with:
         path: .ccache
         key: ${{ steps.restore-cache.outputs.cache-primary-key }}
@@ -327,7 +327,7 @@ jobs:
     runs-on: windows-2022
     steps:
     - name: 'Check Out'
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     # ccache not supported for this generator and/or Debug
 
@@ -367,11 +367,11 @@ jobs:
     steps:
 
     - name: 'Check Out'
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Retrieve build cache
       id: restore-cache
-      uses: actions/cache/restore@v4
+      uses: actions/cache/restore@v5
       with:
         path: .ccache
         key: msvc-ninja-${{ matrix.ci.os }}-${{ matrix.ci.cxxstd }}-${{ matrix.ci.arch }}-${{ github.ref_name }}-${{ github.run_id }}
@@ -406,7 +406,7 @@ jobs:
         ccache --show-stats --verbose
 
     - name: Save build cache
-      uses: actions/cache/save@v4
+      uses: actions/cache/save@v5
       with:
         path: .ccache
         key: ${{ steps.restore-cache.outputs.cache-primary-key }}
@@ -447,11 +447,11 @@ jobs:
         clang++ --version
 
     - name: 'Check Out'
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: Retrieve build cache
       id: restore-cache
-      uses: actions/cache/restore@v4
+      uses: actions/cache/restore@v5
       with:
         path: .ccache
         key: ${{ runner.os }}-${{ matrix.xcode }}-${{ matrix.build_type}}-${{ matrix.cxxstd }}-${{ github.ref_name }}-${{ github.run_id }}
@@ -472,7 +472,7 @@ jobs:
         ccache --show-stats
 
     - name: Save build cache
-      uses: actions/cache/save@v4
+      uses: actions/cache/save@v5
       with:
         path: .ccache
         key: ${{ steps.restore-cache.outputs.cache-primary-key }}
@@ -492,10 +492,10 @@ jobs:
         sudo -E apt-get autopurge -y needrestart
         sudo -E apt-get -yq --no-install-suggests --no-install-recommends install make cmake emscripten ccache
 
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
 
     - name: Retrieve build cache
-      uses: actions/cache/restore@v4
+      uses: actions/cache/restore@v5
       id: restore-cache
       with:
         path: .ccache
@@ -516,7 +516,7 @@ jobs:
         ccache --show-stats
 
     - name: Save build cache
-      uses: actions/cache/save@v4
+      uses: actions/cache/save@v5
       with:
         path: .ccache
         key: ${{ steps.restore-cache.outputs.cache-primary-key }}
@@ -537,7 +537,7 @@ jobs:
         python3 -m pip install --disable-pip-version-check --user codespell
 
     - name: 'Check Out'
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: 'cppcheck'
       run: ./tools/cppcheck.sh
@@ -561,7 +561,7 @@ jobs:
         echo "$(python3 -m site --user-base)/bin" >> $GITHUB_PATH
 
     - name: 'Check Out'
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         path: geos
 

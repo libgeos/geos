@@ -27,7 +27,7 @@ jobs:
         sudo -E apt-get -yq --no-install-suggests --no-install-recommends install make doxygen
 
     - name: 'Check Out 📗'
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
 
     - name: 'Hugo Build 🛠'
       # ...or replace 'master' with a full version tag, such as: v0.64.1
@@ -51,7 +51,7 @@ jobs:
         cp -ra build.cmake/doxygen/doxygen_docs/html/* public_html/doxygen
 
     - name: 'Deploy 🚀'
-      uses: JamesIves/github-pages-deploy-action@v4.4.1
+      uses: JamesIves/github-pages-deploy-action@v4
       with:
         branch: gh-pages           # The branch the action should deploy to.
         folder: public_html    # The folder the action should deploy.
