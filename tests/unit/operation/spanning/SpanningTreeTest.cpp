@@ -283,4 +283,26 @@ void object::test<9>()
     ensure_equals(count, 2);
 }
 
+// Simple square
+template<> template<>
+void object::test<10>()
+{
+    std::string wkt = "MULTILINESTRING((0 0,1 0),(1 1,1 0),(0 0,1 1),(0 0,0 1),(1 1,0 1),(1 0,0 1))";
+    auto geom = readWKT(wkt);
+    auto curves = toCurves(geom.get());
+
+    std::vector<std::size_t> result;
+    geos::operation::spanning::SpanningTree::mst(curves, result);
+    ensure_equals(result.size(), 6u);
+    // MULTILINESTRING((0 0,1 0),(1 1,1 0),(0 0,0 1))
+
+    int count = 0;
+    for (std::size_t r : result) {
+        //std::cout << r << std::endl;
+        if (r > 0) count++;
+    }
+    ensure_equals(count, 3);
+}
+
+
 } // namespace tut
