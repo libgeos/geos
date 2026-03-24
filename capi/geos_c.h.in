@@ -1225,7 +1225,7 @@ extern GEOSGeometry GEOS_DLL *GEOSLineMerge_r(
 /** \see GEOSMinimumSpanningTree */
 extern size_t GEOS_DLL *GEOSMinimumSpanningTree_r(
     GEOSContextHandle_t handle,
-    const GEOSGeometry * const geoms[],
+    const GEOSGeometry ** geoms,
     unsigned int ngeoms);
 
 /** \see GEOSLineMergeDirected */
@@ -5417,7 +5417,7 @@ extern GEOSGeometry GEOS_DLL *GEOSLineMerge(const GEOSGeometry* g);
  *         Returns NULL if ngeoms is 0 or on error.
  * \since 3.15.0
  */
-extern size_t GEOS_DLL *GEOSMinimumSpanningTree(const GEOSGeometry * const geoms[], unsigned int ngeoms);
+extern size_t GEOS_DLL *GEOSMinimumSpanningTree(const GEOSGeometry ** geoms, unsigned int ngeoms);
 
 /**
  * Merges a set of LineStrings,* joining them at nodes which have cardinality 2.
