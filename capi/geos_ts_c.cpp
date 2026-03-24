@@ -2706,7 +2706,7 @@ extern "C" {
     }
 
     std::size_t*
-    GEOSMinimumSpanningTree_r(GEOSContextHandle_t extHandle, const Geometry ** geoms, unsigned int ngeoms)
+    GEOSMinimumSpanningTree_r(GEOSContextHandle_t extHandle, const Geometry* const* geoms, unsigned int ngeoms)
     {
         using geos::operation::spanning::SpanningTree;
         using geos::geom::Curve;

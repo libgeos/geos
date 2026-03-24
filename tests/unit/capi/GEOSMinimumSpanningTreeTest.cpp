@@ -30,8 +30,7 @@ group test_capigeosmst_group("capi::GEOSMinimumSpanningTree");
 // Standard case
 template<>
 template<>
-void object::test<1>
-()
+void object::test<1> ()
 {
     constexpr int size = 3;
     GEOSGeometry* geoms[size];
@@ -69,8 +68,7 @@ void object::test<1>
 // Disconnected graph
 template<>
 template<>
-void object::test<2>
-()
+void object::test<2> ()
 {
     constexpr int size = 2;
     GEOSGeometry* geoms[size];
@@ -94,8 +92,7 @@ void object::test<2>
 // Mixed inputs (non-linestrings)
 template<>
 template<>
-void object::test<3>
-()
+void object::test<3> ()
 {
     constexpr int size = 3;
     GEOSGeometry* geoms[size];
@@ -120,8 +117,7 @@ void object::test<3>
 // Empty input
 template<>
 template<>
-void object::test<4>
-()
+void object::test<4> ()
 {
     size_t* result = GEOSMinimumSpanningTree(nullptr, 0);
     ensure(nullptr == result);
@@ -130,12 +126,12 @@ void object::test<4>
 // Null array entries
 template<>
 template<>
-void object::test<5>
-()
+void object::test<5> ()
 {
     constexpr int size = 2;
-    GEOSGeometry* geoms[size] = { nullptr, nullptr };
+    GEOSGeometry* geoms[size];
     geoms[0] = GEOSGeomFromWKT("LINESTRING(0 0, 10 0)");
+    geoms[1] = 0;
 
     size_t* result = GEOSMinimumSpanningTree(geoms, size);
 
@@ -151,8 +147,7 @@ void object::test<5>
 // Curved inputs
 template<>
 template<>
-void object::test<6>
-()
+void object::test<6> ()
 {
     constexpr int size = 2;
     GEOSGeometry* geoms[size];

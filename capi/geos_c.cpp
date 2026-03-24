@@ -1115,7 +1115,7 @@ extern "C" {
     }
 
     std::size_t*
-    GEOSMinimumSpanningTree(const Geometry** geoms, unsigned int ngeoms)
+    GEOSMinimumSpanningTree(const Geometry* const* geoms, unsigned int ngeoms)
     {
         return GEOSMinimumSpanningTree_r(handle, geoms, ngeoms);
     }
