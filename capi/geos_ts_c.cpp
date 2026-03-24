@@ -2709,25 +2709,33 @@ extern "C" {
     GEOSMinimumSpanningTree_r(GEOSContextHandle_t extHandle, const Geometry* const* geoms, unsigned int ngeoms)
     {
         using geos::operation::spanning::SpanningTree;
-        using geos::geom::LineString;
+        using geos::geom::Curve;
 
         if (ngeoms == 0 || geoms == nullptr) {
             return nullptr;
         }
 
         return execute(extHandle, [&]() {
-            std::vector<const LineString*> linevec(ngeoms);
+            std::vector<const Curve*> curvevec(ngeoms);
             for (unsigned int i = 0; i < ngeoms; ++i) {
-                if (geoms[i] && geoms[i]->getGeometryTypeId() == geos::geom::GEOS_LINESTRING) {
-                    linevec[i] = static_cast<const LineString*>(geoms[i]);
+                if (geoms[i]) {
+                    auto typeId = geoms[i]->getGeometryTypeId();
+                    if (typeId == geos::geom::GEOS_LINESTRING ||
+                        typeId == geos::geom::GEOS_CIRCULARSTRING ||
+                        typeId == geos::geom::GEOS_COMPOUNDCURVE) {
+                        curvevec[i] = static_cast<const Curve*>(geoms[i]);
+                    }
+                    else {
+                        curvevec[i] = nullptr;
+                    }
                 }
                 else {
-                    linevec[i] = nullptr;
+                    curvevec[i] = nullptr;
                 }
             }
 
             std::vector<int> result;
-            SpanningTree::mst(linevec, result);
+            SpanningTree::mst(curvevec, result);
 
             int* result_buf = static_cast<int*>(malloc(ngeoms * sizeof(int)));
             if (result_buf) {

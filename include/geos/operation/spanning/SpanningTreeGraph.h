@@ -23,7 +23,7 @@
 // Forward declarations
 namespace geos {
 namespace geom {
-class LineString;
+class Curve;
 class Coordinate;
 class Geometry;
 }
@@ -55,12 +55,12 @@ public:
 
     /** \brief
      * Adds an Edge, DirectedEdges, and Nodes for the given
-     * LineString representation of an edge.
+     * Curve representation of an edge.
      *
-     * @param lineString the linestring to add to the graph
-     * @param index the original index of the linestring
+     * @param curve the curve to add to the graph
+     * @param index the original index of the curve
      */
-    void addEdge(const geom::LineString* lineString, std::size_t index);
+    void addEdge(const geom::Curve* curve, std::size_t index);
     
     ~SpanningTreeGraph() override;
 };

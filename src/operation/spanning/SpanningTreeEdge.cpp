@@ -13,30 +13,30 @@
  **********************************************************************/
 
 #include <geos/operation/spanning/SpanningTreeEdge.h>
-#include <geos/geom/LineString.h>
+#include <geos/geom/Curve.h>
 
 namespace geos {
 namespace operation { // geos::operation
 namespace spanning { // geos::operation::spanning
 
-SpanningTreeEdge::SpanningTreeEdge(const geom::LineString* newLine, std::size_t newIndex)
+SpanningTreeEdge::SpanningTreeEdge(const geom::Curve* newCurve, std::size_t newIndex)
     :
     planargraph::Edge(),
-    line(newLine),
+    curve(newCurve),
     index(newIndex)
 {
 }
 
-const geom::LineString*
-SpanningTreeEdge::getLineString() const
+const geom::Curve*
+SpanningTreeEdge::getCurve() const
 {
-    return line;
+    return curve;
 }
 
 double
 SpanningTreeEdge::getLength() const
 {
-    return line->getLength();
+    return curve->getLength();
 }
 
 std::size_t

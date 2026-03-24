@@ -21,7 +21,7 @@
 // Forward declarations
 namespace geos {
 namespace geom {
-class LineString;
+class Curve;
 }
 namespace planargraph {
 class DirectedEdge;
@@ -38,18 +38,18 @@ namespace spanning { // geos::operation::spanning
 class GEOS_DLL SpanningTreeEdge: public planargraph::Edge {
 
 private:
-    const geom::LineString* line;
+    const geom::Curve* curve;
     std::size_t index;
 
 public:
 
     /** \brief
      * Constructs a SpanningTreeEdge initialized with the given
-     * LineString and its index.
+     * Curve and its index.
      */
-    SpanningTreeEdge(const geom::LineString* newLine, std::size_t newIndex);
+    SpanningTreeEdge(const geom::Curve* newCurve, std::size_t newIndex);
 
-    const geom::LineString* getLineString() const;
+    const geom::Curve* getCurve() const;
     
     double getLength() const;
     

@@ -5402,13 +5402,14 @@ extern GEOSGeometry GEOS_DLL *GEOSDensify(
 extern GEOSGeometry GEOS_DLL *GEOSLineMerge(const GEOSGeometry* g);
 
 /**
- * Computes the Minimum Spanning Tree of the given LineStrings.
+ * Computes the Minimum Spanning Tree of the given Curves.
  *
- * The input is an array of LineStrings which form the edges of a graph.
- * The nodes of the graph are the endpoints of the LineStrings.
+ * The input is an array of Curves (LineString, CircularString, CompoundCurve)
+ * which form the edges of a graph.
+ * The nodes of the graph are the endpoints of the Curves.
  * Coincident endpoints are treated as the same node.
  *
- * \param geoms Input array of LineStrings. Non-LineString geometries are ignored.
+ * \param geoms Input array of Curves. Non-Curve geometries are ignored.
  * \param ngeoms Number of geometries in the input array.
  * \return An array of integers of size ngeoms. 0 if the edge is not in the MST.
  *         Values > 0 indicate the component ID of the subtree the edge belongs to.

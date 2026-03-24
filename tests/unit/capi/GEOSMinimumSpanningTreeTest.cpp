@@ -148,4 +148,36 @@ void object::test<5>
     GEOSGeom_destroy(geoms[0]);
 }
 
+// Curved inputs
+template<>
+template<>
+void object::test<6>
+()
+{
+    constexpr int size = 2;
+    GEOSGeometry* geoms[size];
+    geoms[0] = GEOSGeomFromWKT("CIRCULARSTRING(0 0, 5 5, 10 0)");
+    geoms[1] = GEOSGeomFromWKT("COMPOUNDCURVE((10 0, 10 10), CIRCULARSTRING(10 10, 5 15, 0 10), (0 10, 0 0))");
+
+    int* result = GEOSMinimumSpanningTree(geoms, size);
+
+    ensure(nullptr != result);
+    // Both should be in if they connect (0,0) and (10,0) via a loop? 
+    // Wait, geoms[0] connects (0,0) and (10,0).
+    // geoms[1] connects (10,0) and (0,0) via some other points.
+    // Together they form a loop. MST should pick one.
+    
+    int count = 0;
+    for (int i = 0; i < size; ++i) {
+        if (result[i] > 0) count++;
+    }
+    ensure_equals(count, 1);
+
+    GEOSFree(result);
+
+    for(auto& input : geoms) {
+        GEOSGeom_destroy(input);
+    }
+}
+
 } // namespace tut

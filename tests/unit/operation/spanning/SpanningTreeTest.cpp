@@ -8,6 +8,7 @@
 #include <geos/io/WKTReader.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Geometry.h>
+#include <geos/geom/Curve.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/GeometryCollection.h>
 // std
@@ -37,17 +38,19 @@ struct test_spanning_data {
         return std::unique_ptr<geos::geom::Geometry>(wktreader.read(inputWKT));
     }
     
-    std::vector<const geos::geom::LineString*>
-    toLines(const geos::geom::Geometry* geom) {
-        std::vector<const geos::geom::LineString*> lines;
+    std::vector<const geos::geom::Curve*>
+    toCurves(const geos::geom::Geometry* geom) {
+        std::vector<const geos::geom::Curve*> curves;
         if (const geos::geom::GeometryCollection* gc = dynamic_cast<const geos::geom::GeometryCollection*>(geom)) {
             for (std::size_t i = 0; i < gc->getNumGeometries(); ++i) {
-                if (const geos::geom::LineString* ls = dynamic_cast<const geos::geom::LineString*>(gc->getGeometryN(i))) {
-                    lines.push_back(ls);
+                if (const geos::geom::Curve* c = dynamic_cast<const geos::geom::Curve*>(gc->getGeometryN(i))) {
+                    curves.push_back(c);
                 }
             }
+        } else if (const geos::geom::Curve* c = dynamic_cast<const geos::geom::Curve*>(geom)) {
+            curves.push_back(c);
         }
-        return lines;
+        return curves;
     }
 };
 
@@ -73,10 +76,10 @@ void object::test<1>()
     
     std::string wkt = "MULTILINESTRING((0 0, 10 0), (10 0, 5 10), (5 10, 0 0))";
     auto geom = readWKT(wkt);
-    auto lines = toLines(geom.get());
+    auto curves = toCurves(geom.get());
 
     std::vector<int> result;
-    geos::operation::spanning::SpanningTree::mst(lines, result);
+    geos::operation::spanning::SpanningTree::mst(curves, result);
 
     ensure_equals(result.size(), 3u);
     
@@ -103,10 +106,10 @@ void object::test<2>()
 {
     std::string wkt = "MULTILINESTRING((0 0, 10 0), (20 0, 30 0))";
     auto geom = readWKT(wkt);
-    auto lines = toLines(geom.get());
+    auto curves = toCurves(geom.get());
 
     std::vector<int> result;
-    geos::operation::spanning::SpanningTree::mst(lines, result);
+    geos::operation::spanning::SpanningTree::mst(curves, result);
 
     ensure_equals(result.size(), 2u);
     ensure(result[0] > 0);
@@ -125,10 +128,10 @@ void object::test<3>()
         "(0 0, 10 10), (10 0, 0 10))"; // 4-5: Diagonals (~14.14)
     
     auto geom = readWKT(wkt);
-    auto lines = toLines(geom.get());
+    auto curves = toCurves(geom.get());
     
     std::vector<int> result;
-    geos::operation::spanning::SpanningTree::mst(lines, result);
+    geos::operation::spanning::SpanningTree::mst(curves, result);
     
     ensure_equals(result.size(), 6u);
     
@@ -159,9 +162,9 @@ void object::test<3>()
 template<> template<>
 void object::test<4>()
 {
-    std::vector<const geos::geom::LineString*> lines;
+    std::vector<const geos::geom::Curve*> curves;
     std::vector<int> result;
-    geos::operation::spanning::SpanningTree::mst(lines, result);
+    geos::operation::spanning::SpanningTree::mst(curves, result);
     ensure(result.empty());
 }
 
@@ -172,12 +175,12 @@ void object::test<5>()
     auto factory = geos::geom::GeometryFactory::create();
     auto empty = factory->createLineString();
     
-    std::vector<const geos::geom::LineString*> lines;
-    lines.push_back(nullptr);
-    lines.push_back(empty.get());
+    std::vector<const geos::geom::Curve*> curves;
+    curves.push_back(nullptr);
+    curves.push_back(empty.get());
     
     std::vector<int> result;
-    geos::operation::spanning::SpanningTree::mst(lines, result);
+    geos::operation::spanning::SpanningTree::mst(curves, result);
     
     ensure_equals(result.size(), 2u);
     ensure_equals(result[0], 0);
@@ -190,10 +193,10 @@ void object::test<6>()
 {
     std::string wkt = "MULTILINESTRING((0 0, 0 0))";
     auto geom = readWKT(wkt);
-    auto lines = toLines(geom.get());
+    auto curves = toCurves(geom.get());
     
     std::vector<int> result;
-    geos::operation::spanning::SpanningTree::mst(lines, result);
+    geos::operation::spanning::SpanningTree::mst(curves, result);
     
     ensure_equals(result.size(), 1u);
     ensure_equals(result[0], 0);
@@ -203,17 +206,12 @@ void object::test<6>()
 template<> template<>
 void object::test<7>()
 {
-    std::string wkt = "LINESTRING(0 0, 10 10, 0 0)";
+    std::string wkt = "MULTILINESTRING((0 0, 10 10, 0 0))";
     auto geom = readWKT(wkt);
-    auto lines = toLines(geom.get()); // wait, toLines expects a collection
-    
-    // Manual setup if needed, but MULTILINESTRING is easier
-    wkt = "MULTILINESTRING((0 0, 10 10, 0 0))";
-    geom = readWKT(wkt);
-    lines = toLines(geom.get());
+    auto curves = toCurves(geom.get());
 
     std::vector<int> result;
-    geos::operation::spanning::SpanningTree::mst(lines, result);
+    geos::operation::spanning::SpanningTree::mst(curves, result);
     
     ensure_equals(result.size(), 1u);
     // A single loop doesn't form a tree with 2 nodes? 
@@ -228,16 +226,61 @@ void object::test<8>()
 {
     std::string wkt = "MULTILINESTRING((0 0, 10 0), (0 0, 10 0))";
     auto geom = readWKT(wkt);
-    auto lines = toLines(geom.get());
+    auto curves = toCurves(geom.get());
 
     std::vector<int> result;
-    geos::operation::spanning::SpanningTree::mst(lines, result);
+    geos::operation::spanning::SpanningTree::mst(curves, result);
     
     ensure_equals(result.size(), 2u);
     // One should be in, one out.
     int count = 0;
     for (int r : result) if (r > 0) count++;
     ensure_equals(count, 1);
+}
+
+// Mixed Curved geometries
+template<> template<>
+void object::test<9>()
+{
+    std::string wkt = "GEOMETRYCOLLECTION("
+        "CIRCULARSTRING(0 0, 5 5, 10 0),"
+        "LINESTRING(10 0, 10 10),"
+        "COMPOUNDCURVE(CIRCULARSTRING(10 10, 5 15, 0 10), (0 10, 0 0))"
+        ")";
+    auto geom = readWKT(wkt);
+    auto curves = toCurves(geom.get());
+    ensure_equals(curves.size(), 3u);
+
+    std::vector<int> result;
+    geos::operation::spanning::SpanningTree::mst(curves, result);
+
+    int count = 0;
+    for (int r : result) if (r > 0) count++;
+    
+    // Debug:
+    // for (std::size_t i = 0; i < curves.size(); ++i) {
+    //    std::cout << "Curve " << i << " length=" << curves[i]->getLength() << " result=" << result[i] << std::endl;
+    // }
+
+    // Geometries:
+    // C0: (0,0) -> (10,0) via (5,5). Length: PI*5 ~= 15.7
+    // C1: (10,0) -> (10,10). Length: 10
+    // C2: (10,10) -> (0,0) via (5,15) and (0,10). 
+    //     Part 1: (10,10) -> (0,10) via (5,15). Length: PI*5 ~= 15.7
+    //     Part 2: (0,10) -> (0,0). Length: 10
+    //     Total C2 length ~= 25.7
+    
+    // Nodes: (0,0), (10,0), (10,10). 
+    // Wait, (0,10) is NOT a node because it's INTERNAL to COMPOUNDCURVE C2.
+    // So we have 3 nodes: N0(0,0), N1(10,0), N2(10,10).
+    // Edges:
+    // E0: N0-N1 (Length 15.7)
+    // E1: N1-N2 (Length 10)
+    // E2: N2-N0 (Length 25.7)
+    
+    // MST should pick E1 (10) and E0 (15.7). Total 2 edges.
+    // My expectation of 3 was wrong because I thought there were 4 nodes.
+    ensure_equals(count, 2);
 }
 
 } // namespace tut

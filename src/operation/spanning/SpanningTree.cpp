@@ -15,7 +15,7 @@
 #include <geos/operation/spanning/SpanningTree.h>
 #include <geos/operation/spanning/SpanningTreeGraph.h>
 #include <geos/operation/spanning/SpanningTreeEdge.h>
-#include <geos/geom/LineString.h>
+#include <geos/geom/Curve.h>
 #include <geos/planargraph/Node.h>
 #include <geos/planargraph/DirectedEdge.h>
 
@@ -71,16 +71,16 @@ namespace {
 } // anonymous namespace
 
 void
-SpanningTree::mst(const std::vector<const geom::LineString*>& lines, std::vector<int>& result)
+SpanningTree::mst(const std::vector<const geom::Curve*>& curves, std::vector<int>& result)
 {
     SpanningTreeGraph graph;
     
     // Resize result to match input and initialize with 0
-    result.assign(lines.size(), 0);
+    result.assign(curves.size(), 0);
     
-    for (std::size_t i = 0; i < lines.size(); ++i) {
-        if (lines[i]) {
-            graph.addEdge(lines[i], i);
+    for (std::size_t i = 0; i < curves.size(); ++i) {
+        if (curves[i]) {
+            graph.addEdge(curves[i], i);
         }
     }
     

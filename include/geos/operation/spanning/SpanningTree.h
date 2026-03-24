@@ -20,7 +20,7 @@
 // Forward declarations
 namespace geos {
 namespace geom {
-class LineString;
+class Curve;
 }
 }
 
@@ -29,10 +29,11 @@ namespace operation { // geos::operation
 namespace spanning { // geos::operation::spanning
 
 /** \brief
- * Constructs a Minimum Spanning Tree (MST) from a set of LineStrings.
+ * Constructs a Minimum Spanning Tree (MST) from a set of Curves.
  *
- * The input is a vector of LineStrings which form the edges of a graph.
- * The nodes of the graph are the endpoints of the LineStrings.
+ * The input is a vector of Curves (LineString, CircularString, CompoundCurve)
+ * which form the edges of a graph.
+ * The nodes of the graph are the endpoints of the Curves.
  * Coincident endpoints are treated as the same node.
  *
  * The algorithm uses Kruskal's algorithm to find the MST.
@@ -42,14 +43,14 @@ class GEOS_DLL SpanningTree {
 public:
     
     /** \brief
-     * Computes the Minimum Spanning Tree of the given LineStrings.
+     * Computes the Minimum Spanning Tree of the given Curves.
      *
-     * @param lines Input vector of LineStrings.
+     * @param curves Input vector of Curves.
      * @param result Output vector of integers. 0 if the edge is not in the MST.
      *               Values > 0 indicate the component ID of the subtree the edge belongs to.
      *               The vector will be resized to match the input size.
      */
-    static void mst(const std::vector<const geom::LineString*>& lines, std::vector<int>& result);
+    static void mst(const std::vector<const geom::Curve*>& curves, std::vector<int>& result);
 
 };
 
