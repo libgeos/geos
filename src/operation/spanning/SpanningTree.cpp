@@ -21,7 +21,7 @@
 
 #include <vector>
 #include <algorithm>
-#include <map>
+#include <unordered_map>
 
 using namespace geos::planargraph;
 using namespace geos::geom;
@@ -34,23 +34,36 @@ namespace {
 
     // Union-Find data structure
     struct UnionFind {
-        std::map<Node*, Node*> parent;
+        std::unordered_map<Node*, Node*> parent;
+        std::unordered_map<Node*, int> rank;
         
         Node* find(Node* n) {
-            if (parent.find(n) == parent.end()) {
+            auto it = parent.find(n);
+            if (it == parent.end()) {
                 parent[n] = n;
+                rank[n] = 0;
                 return n;
             }
-            if (parent[n] == n) return n;
-            parent[n] = find(parent[n]); // path compression
-            return parent[n];
+            if (it->second == n) return n;
+            it->second = find(it->second); // path compression
+            return it->second;
         }
         
         void unite(Node* a, Node* b) {
             Node* rootA = find(a);
             Node* rootB = find(b);
             if (rootA != rootB) {
-                parent[rootA] = rootB;
+                // Union by rank
+                if (rank[rootA] < rank[rootB]) {
+                    parent[rootA] = rootB;
+                }
+                else if (rank[rootA] > rank[rootB]) {
+                    parent[rootB] = rootA;
+                }
+                else {
+                    parent[rootA] = rootB;
+                    rank[rootB]++;
+                }
             }
         }
     };
@@ -102,7 +115,7 @@ SpanningTree::mst(const std::vector<const geom::LineString*>& lines, std::vector
     
     // Assign component IDs
     int componentId = 0;
-    std::map<Node*, int> rootToComponentId;
+    std::unordered_map<Node*, int> rootToComponentId;
     
     for (auto* edge : treeEdges) {
         Node* u = edge->getDirEdge(0)->getFromNode();

@@ -155,4 +155,89 @@ void object::test<3>()
     ensure_equals(result[5], 0);
 }
 
+// Empty input
+template<> template<>
+void object::test<4>()
+{
+    std::vector<const geos::geom::LineString*> lines;
+    std::vector<int> result;
+    geos::operation::spanning::SpanningTree::mst(lines, result);
+    ensure(result.empty());
+}
+
+// Null pointers and empty geometries
+template<> template<>
+void object::test<5>()
+{
+    auto factory = geos::geom::GeometryFactory::create();
+    auto empty = factory->createLineString();
+    
+    std::vector<const geos::geom::LineString*> lines;
+    lines.push_back(nullptr);
+    lines.push_back(empty.get());
+    
+    std::vector<int> result;
+    geos::operation::spanning::SpanningTree::mst(lines, result);
+    
+    ensure_equals(result.size(), 2u);
+    ensure_equals(result[0], 0);
+    ensure_equals(result[1], 0);
+}
+
+// Short lines (zero length) - should be ignored
+template<> template<>
+void object::test<6>()
+{
+    std::string wkt = "MULTILINESTRING((0 0, 0 0))";
+    auto geom = readWKT(wkt);
+    auto lines = toLines(geom.get());
+    
+    std::vector<int> result;
+    geos::operation::spanning::SpanningTree::mst(lines, result);
+    
+    ensure_equals(result.size(), 1u);
+    ensure_equals(result[0], 0);
+}
+
+// Loops (start == end)
+template<> template<>
+void object::test<7>()
+{
+    std::string wkt = "LINESTRING(0 0, 10 10, 0 0)";
+    auto geom = readWKT(wkt);
+    auto lines = toLines(geom.get()); // wait, toLines expects a collection
+    
+    // Manual setup if needed, but MULTILINESTRING is easier
+    wkt = "MULTILINESTRING((0 0, 10 10, 0 0))";
+    geom = readWKT(wkt);
+    lines = toLines(geom.get());
+
+    std::vector<int> result;
+    geos::operation::spanning::SpanningTree::mst(lines, result);
+    
+    ensure_equals(result.size(), 1u);
+    // A single loop doesn't form a tree with 2 nodes? 
+    // Actually, start and end are the same node. So 1 node, 1 edge.
+    // Kruskal: find(start) == find(end), so not included.
+    ensure_equals(result[0], 0);
+}
+
+// Multi-edges (two edges between same nodes)
+template<> template<>
+void object::test<8>()
+{
+    std::string wkt = "MULTILINESTRING((0 0, 10 0), (0 0, 10 0))";
+    auto geom = readWKT(wkt);
+    auto lines = toLines(geom.get());
+
+    std::vector<int> result;
+    geos::operation::spanning::SpanningTree::mst(lines, result);
+    
+    ensure_equals(result.size(), 2u);
+    // One should be in, one out.
+    int count = 0;
+    for (int r : result) if (r > 0) count++;
+    ensure_equals(count, 1);
+}
+
 } // namespace tut

@@ -1222,6 +1222,12 @@ extern GEOSGeometry GEOS_DLL *GEOSLineMerge_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry* g);
 
+/** \see GEOSMinimumSpanningTree */
+extern int GEOS_DLL *GEOSMinimumSpanningTree_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry * const geoms[],
+    unsigned int ngeoms);
+
 /** \see GEOSLineMergeDirected */
 extern GEOSGeometry GEOS_DLL *GEOSLineMergeDirected_r(
     GEOSContextHandle_t handle,
@@ -5396,8 +5402,24 @@ extern GEOSGeometry GEOS_DLL *GEOSDensify(
 extern GEOSGeometry GEOS_DLL *GEOSLineMerge(const GEOSGeometry* g);
 
 /**
-* Merges a set of LineStrings,
-* joining them at nodes which have cardinality 2.
+ * Computes the Minimum Spanning Tree of the given LineStrings.
+ *
+ * The input is an array of LineStrings which form the edges of a graph.
+ * The nodes of the graph are the endpoints of the LineStrings.
+ * Coincident endpoints are treated as the same node.
+ *
+ * \param geoms Input array of LineStrings. Non-LineString geometries are ignored.
+ * \param ngeoms Number of geometries in the input array.
+ * \return An array of integers of size ngeoms. 0 if the edge is not in the MST.
+ *         Values > 0 indicate the component ID of the subtree the edge belongs to.
+ *         The caller is responsible for freeing the returned array using GEOSFree().
+ *         Returns NULL if ngeoms is 0 or on error.
+ * \since 3.15.0
+ */
+extern int GEOS_DLL *GEOSMinimumSpanningTree(const GEOSGeometry * const geoms[], unsigned int ngeoms);
+
+/**
+ * Merges a set of LineStrings,* joining them at nodes which have cardinality 2.
 * and where the lines have the same direction.
 * This means that lines do not have their direction reversed.
 *

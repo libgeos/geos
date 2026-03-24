@@ -84,6 +84,7 @@
 #include <geos/operation/grid/Grid.h>
 #include <geos/operation/grid/GridIntersection.h>
 #include <geos/operation/linemerge/LineMerger.h>
+#include <geos/operation/spanning/SpanningTree.h>
 #include <geos/operation/intersection/Rectangle.h>
 #include <geos/operation/intersection/RectangleIntersection.h>
 #include <geos/operation/overlay/snap/GeometrySnapper.h>
@@ -2701,6 +2702,38 @@ extern "C" {
             out->setSRID(g->getSRID());
 
             return out.release();
+        });
+    }
+
+    int*
+    GEOSMinimumSpanningTree_r(GEOSContextHandle_t extHandle, const Geometry* const* geoms, unsigned int ngeoms)
+    {
+        using geos::operation::spanning::SpanningTree;
+        using geos::geom::LineString;
+
+        if (ngeoms == 0 || geoms == nullptr) {
+            return nullptr;
+        }
+
+        return execute(extHandle, [&]() {
+            std::vector<const LineString*> linevec(ngeoms);
+            for (unsigned int i = 0; i < ngeoms; ++i) {
+                if (geoms[i] && geoms[i]->getGeometryTypeId() == geos::geom::GEOS_LINESTRING) {
+                    linevec[i] = static_cast<const LineString*>(geoms[i]);
+                }
+                else {
+                    linevec[i] = nullptr;
+                }
+            }
+
+            std::vector<int> result;
+            SpanningTree::mst(linevec, result);
+
+            int* result_buf = static_cast<int*>(malloc(ngeoms * sizeof(int)));
+            if (result_buf) {
+                std::copy(result.begin(), result.end(), result_buf);
+            }
+            return result_buf;
         });
     }
 

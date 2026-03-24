@@ -53,17 +53,34 @@ SpanningTreeGraph::addEdge(const LineString* lineString, std::size_t index)
 {
     if (lineString->isEmpty()) return;
     const CoordinateSequence* coordinates = lineString->getCoordinatesRO();
-    if (coordinates->size() <= 1) return;
+    std::size_t n = coordinates->size();
+    if (n <= 1) return;
 
     Coordinate startCoord = coordinates->getAt(0);
-    Coordinate endCoord = coordinates->getAt(coordinates->size() - 1);
+    Coordinate endCoord = coordinates->getAt(n - 1);
+
+    // Find first point != startCoord
+    std::size_t i = 1;
+    while (i < n && coordinates->getAt(i).equals(startCoord)) {
+        i++;
+    }
+    if (i == n) return; // All points are the same
+
+    // Find last point != endCoord
+    std::size_t j = n - 2;
+    while (j > 0 && coordinates->getAt(j).equals(endCoord)) {
+        j--;
+    }
+    // If we reached here, i < n means there's at least one point != startCoord.
+    // So there must be at least one point != endCoord unless startCoord == endCoord.
+    // But even then, j will be >= 0.
 
     Node* startNode = getNode(startCoord);
     Node* endNode = getNode(endCoord);
 
     // Create DirectedEdges
-    DirectedEdge* dirEdge0 = new DirectedEdge(startNode, endNode, coordinates->getAt(1), true);
-    DirectedEdge* dirEdge1 = new DirectedEdge(endNode, startNode, coordinates->getAt(coordinates->size() - 2), false);
+    DirectedEdge* dirEdge0 = new DirectedEdge(startNode, endNode, coordinates->getAt(i), true);
+    DirectedEdge* dirEdge1 = new DirectedEdge(endNode, startNode, coordinates->getAt(j), false);
     
     newDirEdges.push_back(dirEdge0);
     newDirEdges.push_back(dirEdge1);
