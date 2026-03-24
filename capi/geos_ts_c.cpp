@@ -2705,7 +2705,7 @@ extern "C" {
         });
     }
 
-    int*
+    std::size_t*
     GEOSMinimumSpanningTree_r(GEOSContextHandle_t extHandle, const Geometry* const* geoms, unsigned int ngeoms)
     {
         using geos::operation::spanning::SpanningTree;
@@ -2734,10 +2734,10 @@ extern "C" {
                 }
             }
 
-            std::vector<int> result;
+            std::vector<std::size_t> result;
             SpanningTree::mst(curvevec, result);
 
-            int* result_buf = static_cast<int*>(malloc(ngeoms * sizeof(int)));
+            std::size_t* result_buf = static_cast<std::size_t*>(malloc(ngeoms * sizeof(std::size_t)));
             if (result_buf) {
                 std::copy(result.begin(), result.end(), result_buf);
             }

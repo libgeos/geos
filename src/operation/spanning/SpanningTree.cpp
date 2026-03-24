@@ -71,7 +71,7 @@ namespace {
 } // anonymous namespace
 
 void
-SpanningTree::mst(const std::vector<const geom::Curve*>& curves, std::vector<int>& result)
+SpanningTree::mst(const std::vector<const geom::Curve*>& curves, std::vector<std::size_t>& result)
 {
     SpanningTreeGraph graph;
     
@@ -114,8 +114,8 @@ SpanningTree::mst(const std::vector<const geom::Curve*>& curves, std::vector<int
     }
     
     // Assign component IDs
-    int componentId = 0;
-    std::unordered_map<Node*, int> rootToComponentId;
+    std::size_t componentId = 0;
+    std::unordered_map<Node*, std::size_t> rootToComponentId;
     
     for (auto* edge : treeEdges) {
         Node* u = edge->getDirEdge(0)->getFromNode();

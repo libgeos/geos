@@ -46,11 +46,11 @@ public:
      * Computes the Minimum Spanning Tree of the given Curves.
      *
      * @param curves Input vector of Curves.
-     * @param result Output vector of integers. 0 if the edge is not in the MST.
+     * @param result Output vector of size_t. 0 if the edge is not in the MST.
      *               Values > 0 indicate the component ID of the subtree the edge belongs to.
      *               The vector will be resized to match the input size.
      */
-    static void mst(const std::vector<const geom::Curve*>& curves, std::vector<int>& result);
+    static void mst(const std::vector<const geom::Curve*>& curves, std::vector<std::size_t>& result);
 
 };
 

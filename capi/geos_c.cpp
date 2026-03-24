@@ -1114,7 +1114,7 @@ extern "C" {
         return GEOSLineMerge_r(handle, g);
     }
 
-    int*
+    std::size_t*
     GEOSMinimumSpanningTree(const Geometry* const* geoms, unsigned int ngeoms)
     {
         return GEOSMinimumSpanningTree_r(handle, geoms, ngeoms);

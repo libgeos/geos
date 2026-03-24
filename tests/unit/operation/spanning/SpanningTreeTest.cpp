@@ -78,14 +78,14 @@ void object::test<1>()
     auto geom = readWKT(wkt);
     auto curves = toCurves(geom.get());
 
-    std::vector<int> result;
+    std::vector<std::size_t> result;
     geos::operation::spanning::SpanningTree::mst(curves, result);
 
     ensure_equals(result.size(), 3u);
     
     // Count edges in MST (should be 2)
     int count = 0;
-    for (int r : result) {
+    for (std::size_t r : result) {
         if (r > 0) count++;
     }
     ensure_equals(count, 2);
@@ -94,8 +94,8 @@ void object::test<1>()
     ensure(result[0] > 0);
     
     // Component IDs should be the same (connected graph)
-    int compId = result[0];
-    for (int r : result) {
+    std::size_t compId = result[0];
+    for (std::size_t r : result) {
         if (r > 0) ensure_equals(r, compId);
     }
 }
@@ -108,7 +108,7 @@ void object::test<2>()
     auto geom = readWKT(wkt);
     auto curves = toCurves(geom.get());
 
-    std::vector<int> result;
+    std::vector<std::size_t> result;
     geos::operation::spanning::SpanningTree::mst(curves, result);
 
     ensure_equals(result.size(), 2u);
@@ -130,14 +130,14 @@ void object::test<3>()
     auto geom = readWKT(wkt);
     auto curves = toCurves(geom.get());
     
-    std::vector<int> result;
+    std::vector<std::size_t> result;
     geos::operation::spanning::SpanningTree::mst(curves, result);
     
     ensure_equals(result.size(), 6u);
     
     int count = 0;
-    std::set<int> components;
-    for (int r : result) {
+    std::set<std::size_t> components;
+    for (std::size_t r : result) {
         if (r > 0) {
             count++;
             components.insert(r);
@@ -154,8 +154,8 @@ void object::test<3>()
     ensure_equals(components.size(), 1u);
     
     // Diagonals should not be included as they are longer
-    ensure_equals(result[4], 0);
-    ensure_equals(result[5], 0);
+    ensure_equals(result[4], 0u);
+    ensure_equals(result[5], 0u);
 }
 
 // Empty input
@@ -163,7 +163,7 @@ template<> template<>
 void object::test<4>()
 {
     std::vector<const geos::geom::Curve*> curves;
-    std::vector<int> result;
+    std::vector<std::size_t> result;
     geos::operation::spanning::SpanningTree::mst(curves, result);
     ensure(result.empty());
 }
@@ -179,12 +179,12 @@ void object::test<5>()
     curves.push_back(nullptr);
     curves.push_back(empty.get());
     
-    std::vector<int> result;
+    std::vector<std::size_t> result;
     geos::operation::spanning::SpanningTree::mst(curves, result);
     
     ensure_equals(result.size(), 2u);
-    ensure_equals(result[0], 0);
-    ensure_equals(result[1], 0);
+    ensure_equals(result[0], 0u);
+    ensure_equals(result[1], 0u);
 }
 
 // Short lines (zero length) - should be ignored
@@ -195,11 +195,11 @@ void object::test<6>()
     auto geom = readWKT(wkt);
     auto curves = toCurves(geom.get());
     
-    std::vector<int> result;
+    std::vector<std::size_t> result;
     geos::operation::spanning::SpanningTree::mst(curves, result);
     
     ensure_equals(result.size(), 1u);
-    ensure_equals(result[0], 0);
+    ensure_equals(result[0], 0u);
 }
 
 // Loops (start == end)
@@ -210,14 +210,14 @@ void object::test<7>()
     auto geom = readWKT(wkt);
     auto curves = toCurves(geom.get());
 
-    std::vector<int> result;
+    std::vector<std::size_t> result;
     geos::operation::spanning::SpanningTree::mst(curves, result);
     
     ensure_equals(result.size(), 1u);
     // A single loop doesn't form a tree with 2 nodes? 
     // Actually, start and end are the same node. So 1 node, 1 edge.
     // Kruskal: find(start) == find(end), so not included.
-    ensure_equals(result[0], 0);
+    ensure_equals(result[0], 0u);
 }
 
 // Multi-edges (two edges between same nodes)
@@ -228,13 +228,13 @@ void object::test<8>()
     auto geom = readWKT(wkt);
     auto curves = toCurves(geom.get());
 
-    std::vector<int> result;
+    std::vector<std::size_t> result;
     geos::operation::spanning::SpanningTree::mst(curves, result);
     
     ensure_equals(result.size(), 2u);
     // One should be in, one out.
     int count = 0;
-    for (int r : result) if (r > 0) count++;
+    for (std::size_t r : result) if (r > 0) count++;
     ensure_equals(count, 1);
 }
 
@@ -251,11 +251,11 @@ void object::test<9>()
     auto curves = toCurves(geom.get());
     ensure_equals(curves.size(), 3u);
 
-    std::vector<int> result;
+    std::vector<std::size_t> result;
     geos::operation::spanning::SpanningTree::mst(curves, result);
 
     int count = 0;
-    for (int r : result) if (r > 0) count++;
+    for (std::size_t r : result) if (r > 0) count++;
     
     // Debug:
     // for (std::size_t i = 0; i < curves.size(); ++i) {

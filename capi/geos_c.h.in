@@ -1223,7 +1223,7 @@ extern GEOSGeometry GEOS_DLL *GEOSLineMerge_r(
     const GEOSGeometry* g);
 
 /** \see GEOSMinimumSpanningTree */
-extern int GEOS_DLL *GEOSMinimumSpanningTree_r(
+extern size_t GEOS_DLL *GEOSMinimumSpanningTree_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry * const geoms[],
     unsigned int ngeoms);
@@ -5411,13 +5411,13 @@ extern GEOSGeometry GEOS_DLL *GEOSLineMerge(const GEOSGeometry* g);
  *
  * \param geoms Input array of Curves. Non-Curve geometries are ignored.
  * \param ngeoms Number of geometries in the input array.
- * \return An array of integers of size ngeoms. 0 if the edge is not in the MST.
+ * \return An array of size_t of size ngeoms. 0 if the edge is not in the MST.
  *         Values > 0 indicate the component ID of the subtree the edge belongs to.
  *         The caller is responsible for freeing the returned array using GEOSFree().
  *         Returns NULL if ngeoms is 0 or on error.
  * \since 3.15.0
  */
-extern int GEOS_DLL *GEOSMinimumSpanningTree(const GEOSGeometry * const geoms[], unsigned int ngeoms);
+extern size_t GEOS_DLL *GEOSMinimumSpanningTree(const GEOSGeometry * const geoms[], unsigned int ngeoms);
 
 /**
  * Merges a set of LineStrings,* joining them at nodes which have cardinality 2.

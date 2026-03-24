@@ -39,7 +39,7 @@ void object::test<1>
     geoms[1] = GEOSGeomFromWKT("LINESTRING(10 0, 5 10)"); // ~11.18
     geoms[2] = GEOSGeomFromWKT("LINESTRING(5 10, 0 0)"); // ~11.18
 
-    int* result = GEOSMinimumSpanningTree(geoms, size);
+    size_t* result = GEOSMinimumSpanningTree(geoms, size);
 
     ensure(nullptr != result);
     
@@ -51,10 +51,10 @@ void object::test<1>
     ensure(result[0] > 0); // Shortest edge must be in
     
     // Check component IDs are same
-    int compId = -1;
+    size_t compId = 0;
     for (int i = 0; i < size; ++i) {
         if (result[i] > 0) {
-            if (compId == -1) compId = result[i];
+            if (compId == 0) compId = result[i];
             else ensure_equals(result[i], compId);
         }
     }
@@ -77,7 +77,7 @@ void object::test<2>
     geoms[0] = GEOSGeomFromWKT("LINESTRING(0 0, 10 0)");
     geoms[1] = GEOSGeomFromWKT("LINESTRING(20 0, 30 0)");
 
-    int* result = GEOSMinimumSpanningTree(geoms, size);
+    size_t* result = GEOSMinimumSpanningTree(geoms, size);
 
     ensure(nullptr != result);
     ensure(result[0] > 0);
@@ -103,12 +103,12 @@ void object::test<3>
     geoms[1] = GEOSGeomFromWKT("POINT(5 5)");
     geoms[2] = GEOSGeomFromWKT("POLYGON((0 0, 1 0, 1 1, 0 1, 0 0))");
 
-    int* result = GEOSMinimumSpanningTree(geoms, size);
+    size_t* result = GEOSMinimumSpanningTree(geoms, size);
 
     ensure(nullptr != result);
     ensure(result[0] > 0);
-    ensure_equals(result[1], 0);
-    ensure_equals(result[2], 0);
+    ensure_equals(result[1], 0u);
+    ensure_equals(result[2], 0u);
 
     GEOSFree(result);
 
@@ -123,7 +123,7 @@ template<>
 void object::test<4>
 ()
 {
-    int* result = GEOSMinimumSpanningTree(nullptr, 0);
+    size_t* result = GEOSMinimumSpanningTree(nullptr, 0);
     ensure(nullptr == result);
 }
 
@@ -137,11 +137,11 @@ void object::test<5>
     GEOSGeometry* geoms[size] = { nullptr, nullptr };
     geoms[0] = GEOSGeomFromWKT("LINESTRING(0 0, 10 0)");
 
-    int* result = GEOSMinimumSpanningTree(geoms, size);
+    size_t* result = GEOSMinimumSpanningTree(geoms, size);
 
     ensure(nullptr != result);
     ensure(result[0] > 0);
-    ensure_equals(result[1], 0);
+    ensure_equals(result[1], 0u);
 
     GEOSFree(result);
 
@@ -159,13 +159,10 @@ void object::test<6>
     geoms[0] = GEOSGeomFromWKT("CIRCULARSTRING(0 0, 5 5, 10 0)");
     geoms[1] = GEOSGeomFromWKT("COMPOUNDCURVE((10 0, 10 10), CIRCULARSTRING(10 10, 5 15, 0 10), (0 10, 0 0))");
 
-    int* result = GEOSMinimumSpanningTree(geoms, size);
+    size_t* result = GEOSMinimumSpanningTree(geoms, size);
 
     ensure(nullptr != result);
-    // Both should be in if they connect (0,0) and (10,0) via a loop? 
-    // Wait, geoms[0] connects (0,0) and (10,0).
-    // geoms[1] connects (10,0) and (0,0) via some other points.
-    // Together they form a loop. MST should pick one.
+    // Forms a loop, MST should pick one.
     
     int count = 0;
     for (int i = 0; i < size; ++i) {
