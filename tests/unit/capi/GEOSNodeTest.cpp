@@ -201,5 +201,17 @@ void object::test<8>
     GEOSFree(wkt_expected);
 }
 
+template<>
+template<>
+void object::test<17>()
+{
+    set_test_name("GeometryCollection with empty element");
+
+    input_ = fromWKT("GEOMETRYCOLLECTION (POLYGON EMPTY, POLYGON ((0 0, 1 1, 0 1, 0 0)))");
+
+    result_ = GEOSNode(input_);
+    ensure(result_);
+}
+
 } // namespace tut
 
