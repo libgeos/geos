@@ -213,5 +213,17 @@ void object::test<9>()
     ensure("curved geometries not supported", result_ == nullptr);
 }
 
+template<>
+template<>
+void object::test<17>()
+{
+    set_test_name("GeometryCollection with empty element");
+
+    input_ = fromWKT("GEOMETRYCOLLECTION (POLYGON EMPTY, POLYGON ((0 0, 1 1, 0 1, 0 0)))");
+
+    result_ = GEOSNode(input_);
+    ensure(result_);
+}
+
 } // namespace tut
 

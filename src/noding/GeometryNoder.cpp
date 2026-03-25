@@ -59,6 +59,10 @@ public:
     void
     filter_ro(const geom::Geometry* g) override
     {
+        if (g->isEmpty()) {
+            return;
+        }
+
         const geom::LineString* ls = dynamic_cast<const geom::LineString*>(g);
         if(ls) {
             auto coord = ls->getCoordinates();
