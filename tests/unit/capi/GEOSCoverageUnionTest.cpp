@@ -78,13 +78,27 @@ template<>
 template<> void object::test<4>
 ()
 {
-    input_ = fromWKT("GEOMETRYCOLLECTION ( "
-        "CURVEPOLYGON (COMPOUNDCURVE ( CIRCULARSTRING (2 0, 1 1, 2 2), (2 2, 0 2, 0 0, 2 0))), "
-        "CURVEPOLYGON (COMPOUNDCURVE ( CIRCULARSTRING (2 2, 1 1, 2 0), (2 0, 4 0, 4 2, 2 2))))");
-    ensure(input_);
+    set_test_name("curved inputs");
+    useContext();
 
-    result_ = GEOSCoverageSimplifyVW(input_, 0.1, false);
+    input_ = fromWKT("GEOMETRYCOLLECTION ( "
+        "CURVEPOLYGON (COMPOUNDCURVE ( (4 0, 0 0, 0 4, 4 4), CIRCULARSTRING (4 4, 2 2, 4 0))), "
+        "CURVEPOLYGON (CIRCULARSTRING (4 4, 6 2, 4 0, 2 2, 4 4)))");
+
+    result_ = GEOSCoverageUnion_r(ctxt_, input_);
     ensure("curved geometry not supported", result_ == nullptr);
+
+    // Input converted to line, output not converted to curve
+    GEOSContext_setCurveToLineParams_r(ctxt_, curveToLineParams_);
+    result_ = GEOSCoverageUnion_r(ctxt_, input_);
+    ensure(result_);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_POLYGON);
+    GEOSGeom_destroy_r(ctxt_, result_);
+
+    // Input converted to line, output converted to curve
+    GEOSContext_setLineToCurveParams_r(ctxt_, lineToCurveParams_);
+    result_ = GEOSCoverageUnion_r(ctxt_, input_);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_CURVEPOLYGON);
 }
 
 } // namespace tut

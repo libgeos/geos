@@ -64,26 +64,22 @@ template<>
 template<>
 void object::test<3>()
 {
-    input_ = fromWKT("MULTICURVE (CIRCULARSTRING (0 0, 1 1, 2 0), (0 3, 2 3))");
-    ensure(input_);
+    set_test_name("curved inputs");
+    useContext();
 
-    result_ = GEOSLargestEmptyCircle(input_, nullptr, 0.001);
-
-    ensure("curved geometries not supported", result_ == nullptr);
-}
-
-template<>
-template<>
-void object::test<4>()
-{
-    input_ = GEOSGeomFromWKT("MULTILINESTRING ((40 90, 90 60), (90 40, 40 10))");
-    geom2_ = GEOSGeomFromWKT("CURVEPOLYGON (COMPOUNDCURVE (CIRCULARSTRING(0 100, 50 150, 100 100), (100 100, 100 0, 0 0, 0 100)))");
+    input_ = fromWKT("MULTILINESTRING ((40 90, 90 60), (90 40, 40 10))");
+    geom2_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE (CIRCULARSTRING(0 100, 50 150, 100 100), (100 100, 100 0, 0 0, 0 100)))");
     ensure(input_);
     ensure(geom2_);
 
-    result_ = GEOSLargestEmptyCircle(input_, geom2_, 0.001);
-
+    result_ = GEOSLargestEmptyCircle_r(ctxt_, input_, geom2_, 0.001);
     ensure("curved geometries not supported", result_ == nullptr);
+
+    useCurveConversion();
+    result_ = GEOSLargestEmptyCircle_r(ctxt_, input_, geom2_, 0.001);
+    ensure(result_);
+
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_LINESTRING);
 }
 
 

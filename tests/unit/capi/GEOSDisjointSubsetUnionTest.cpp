@@ -48,12 +48,36 @@ void object::test<2>()
 
 template <>
 template <>
-void object::test<3>() {
-    input_ = fromWKT("MULTICURVE ((0 0, 1 1), CIRCULARSTRING (1 1, 2 0, 3 1), (5 5, 8 8))");
+void object::test<3>()
+{
+    set_test_name("curved inputs");
+    useContext();
+
+    input_ = fromWKT("MULTISURFACE ("
+                     "CURVEPOLYGON (COMPOUNDCURVE(CIRCULARSTRING (0 0, 5 5, 10 0), (10 0, 10 -10, 0 -10, 0 0))),"
+                     "((10 -10, 20 -10, 20 0, 10 0, 10 -10)),"
+                     "CURVEPOLYGON (CIRCULARSTRING (100 100, 110 110, 120 100, 110 90, 100 100)))");
     ensure(input_);
 
-    result_ = GEOSDisjointSubsetUnion(input_);
+    result_ = GEOSDisjointSubsetUnion_r(ctxt_, input_);
     ensure("curved geometry not supported", result_ == nullptr);
+
+    GEOSContext_setCurveToLineParams_r(ctxt_, curveToLineParams_);
+
+    // Input converted to line, output not converted to curve
+    result_ = GEOSDisjointSubsetUnion_r(ctxt_, input_);
+    ensure(result_);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_MULTIPOLYGON);
+    ensure_equals(GEOSGetNumGeometries_r(ctxt_, result_), 2);
+    GEOSGeom_destroy_r(ctxt_, result_);
+
+    // Input converted to line, output converted to curve
+    GEOSContext_setLineToCurveParams_r(ctxt_, lineToCurveParams_);
+    result_ = GEOSDisjointSubsetUnion_r(ctxt_, input_);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_MULTISURFACE);
+    ensure_equals(GEOSGetNumGeometries_r(ctxt_, result_), 2);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, GEOSGetGeometryN_r(ctxt_, result_, 0)), GEOS_CURVEPOLYGON);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, GEOSGetGeometryN_r(ctxt_, result_, 1)), GEOS_CURVEPOLYGON);
 }
 
 } // namespace tut

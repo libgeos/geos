@@ -15,6 +15,8 @@
  *
  ***********************************************************************/
 
+#include <geos/algorithm/CurveToLineParams.h>
+#include <geos/algorithm/LineToCurveParams.h>
 #include <geos/geom/prep/PreparedGeometryFactory.h>
 #include <geos/index/strtree/TemplateSTRtree.h>
 #include <geos/io/WKTReader.h>
@@ -43,7 +45,9 @@
 #define GEOSPreparedGeometry geos::geom::prep::PreparedGeometry
 #define GEOSClusterInfo geos::operation::cluster::Clusters
 #define GEOSCoordSequence geos::geom::CoordinateSequence
+#define GEOSCurveToLineParams geos::algorithm::CurveToLineParams
 #define GEOSBufferParams geos::operation::buffer::BufferParameters
+#define GEOSLineToCurveParams geos::algorithm::LineToCurveParams
 #define GEOSSTRtree geos::index::strtree::TemplateSTRtree<void*>
 #define GEOSWKTReader geos::io::WKTReader
 #define GEOSWKTWriter geos::io::WKTWriter
@@ -217,6 +221,65 @@ extern "C" {
         return GEOSCoveredBy_r(handle, g1, g2);
     }
 
+    GEOSCurveToLineParams*
+    GEOSCurveToLineParams_create()
+    {
+        return new geos::algorithm::CurveToLineParams;
+    }
+
+    int
+    GEOSCurveToLineParams_setTolerance(GEOSCurveToLineParams* params, int toleranceType, double toleranceValue)
+    {
+        return GEOSCurveToLineParams_setTolerance_r(handle, params, toleranceType, toleranceValue);
+    }
+
+    void
+    GEOSCurveToLineParams_destroy(GEOSCurveToLineParams* params)
+    {
+        delete params;
+    }
+
+    GEOSGeometry*
+    GEOSCurveToLine(const GEOSGeometry* g, const GEOSCurveToLineParams* params)
+    {
+        return GEOSCurveToLine_r(handle, g, params);
+    }
+
+    GEOSGeometry*
+    GEOSLineToCurve(const GEOSGeometry* g, const GEOSLineToCurveParams* params)
+    {
+        return GEOSLineToCurve_r(handle, g, params);
+    }
+
+    GEOSLineToCurveParams*
+    GEOSLineToCurveParams_create()
+    {
+        return new geos::algorithm::LineToCurveParams;
+    }
+
+    void
+    GEOSLineToCurveParams_destroy(GEOSLineToCurveParams* params)
+    {
+        delete params;
+    }
+
+    int
+    GEOSLineToCurveParams_setRadiusTolerance(GEOSLineToCurveParams* params, double tolerance)
+    {
+        return GEOSLineToCurveParams_setRadiusTolerance_r(handle, params, tolerance);
+    }
+
+    int
+    GEOSLineToCurveParams_setMaxStepDegrees(GEOSLineToCurveParams* params, double tolerance)
+    {
+        return GEOSLineToCurveParams_setMaxStepDegrees_r(handle, params, tolerance);
+    }
+
+    int
+    GEOSLineToCurveParams_setMaxAngleDifferenceDegrees(GEOSLineToCurveParams* params, double tolerance)
+    {
+        return GEOSLineToCurveParams_setMaxAngleDifferenceDegrees_r(handle, params, tolerance);
+    }
 
 //-------------------------------------------------------------------
 // low-level relate functions

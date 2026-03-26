@@ -54,21 +54,42 @@ template<>
 template<>
 void object::test<3>()
 {
-    input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    set_test_name("curved inputs");
+    useContext();
+
+    input_ = fromWKT("CURVEPOLYGON (CIRCULARSTRING (0 0, 1 1, 2 0, 1 0.8, 0 0))");
     ensure(input_ != nullptr);
 
-    result_ = GEOSConcaveHull(input_, 0, 0);
+    result_ = GEOSConcaveHull_r(ctxt_, input_, 0.5, 0);
     ensure(result_ == nullptr);
+
+    result_ = GEOSConcaveHullByLength_r(ctxt_, input_, 10, 0);
+    ensure(result_ == nullptr);
+
+    useCurveConversion();
+
+    result_ = GEOSConcaveHull_r(ctxt_, input_, 0.5, 0);
+    ensure(result_);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_POLYGON);
+    GEOSGeom_destroy_r(ctxt_, result_);
+
+    result_ = GEOSConcaveHullByLength_r(ctxt_, input_, 10, 0);
+    ensure(result_);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_POLYGON);
 }
 
 template<>
 template<>
 void object::test<4>()
 {
+    set_test_name("MULTIPOINT ZM");
+
     input_ = fromWKT("MULTIPOINT ZM (0 0 1 2, 1 0 3 4, 1 1 5 6, 1 8 11 4, 0.5 0.5 -4 -7)");
     result_ = GEOSConcaveHull(input_, 0, 0);
 
-    printf("%s", toWKT(result_).c_str());
+    ensure(result_);
+    ensure(GEOSHasZ(result_));
+    ensure(!GEOSHasM(result_));
 }
 
 

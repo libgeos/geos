@@ -81,6 +81,8 @@ template<>
 void object::test<2>
 ()
 {
+    set_test_name("closest points are vertices of two disjoint inputs");
+
     checkNearestPoints(
         "POLYGON((1 1,1 5,5 5,5 1,1 1))",
         "POLYGON((8 8, 9 9, 9 10, 8 8))",
@@ -94,6 +96,8 @@ template<>
 void object::test<3>
 ()
 {
+    set_test_name("point inside polygon");
+
     checkNearestPoints(
         "POLYGON((1 1,1 5,5 5,5 1,1 1))",
         "POINT(2 2)",
@@ -107,6 +111,8 @@ template<>
 void object::test<4>
 ()
 {
+    set_test_name("closest point is not a vertex of LineString");
+
     checkNearestPoints(
         "LINESTRING(1 5,5 5,5 1,1 1)",
         "POINT(2 2)",
@@ -119,6 +125,8 @@ template<>
 void object::test<5>
 ()
 {
+    set_test_name("two crossing LineStrings");
+
     checkNearestPoints(
         "LINESTRING(0 0,10 10)",
         "LINESTRING(0 10,10 0)",
@@ -131,6 +139,8 @@ template<>
 void object::test<6>
 ()
 {
+    set_test_name("LineString partially inside Polygon");
+
     checkNearestPoints(
         "POLYGON((0 0,10 0,10 10,0 10,0 0))",
         "LINESTRING(8 5,12 5)",
@@ -141,8 +151,7 @@ void object::test<6>
 
 template<>
 template<>
-void object::test<7>()
-{
+void object::test<7>() {
     set_test_name("2D points returned for 4D inputs");
 
     geom1_ = fromWKT("POINT ZM (0 0 1 2)");
@@ -157,6 +166,42 @@ void object::test<7>()
     ensure(!GEOSCoordSeq_hasZ(coords));
 
     GEOSCoordSeq_destroy(coords);
+}
+
+template<>
+template<>
+void object::test<8>
+()
+{
+    set_test_name("curved inputs");
+
+    useContext();
+
+    geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    geom2_ = fromWKT("LINESTRING (3 0, 4 0)");
+
+    GEOSCoordSequence* coords = GEOSNearestPoints_r(ctxt_, geom1_, geom2_);
+    ensure(coords == nullptr);
+
+    useCurveConversion();
+
+    coords = GEOSNearestPoints_r(ctxt_, geom1_, geom2_);
+    ensure(coords != nullptr);
+
+    unsigned int size;
+    ensure(GEOSCoordSeq_getSize_r(ctxt_, coords, &size));
+    ensure_equals(size, 2u);
+
+    double x1, y1, x2, y2;
+    GEOSCoordSeq_getXY_r(ctxt_, coords, 0, &x1, &y1);
+    GEOSCoordSeq_getXY_r(ctxt_, coords, 1, &x2, &y2);
+
+    ensure_equals(x1, 2);
+    ensure_equals(y1, 0);
+    ensure_equals(x2, 3);
+    ensure_equals(y2, 0);
+
+    GEOSCoordSeq_destroy_r(ctxt_, coords);
 }
 
 } // namespace tut

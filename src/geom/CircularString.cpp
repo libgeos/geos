@@ -116,8 +116,7 @@ CircularString::normalize()
 
 /*private*/
 void
-CircularString::normalizeClosed()
-{
+CircularString::normalizeClosed() {
     if (isEmpty()) {
         return;
     }
@@ -152,6 +151,30 @@ CircularString::normalizeClosed()
         }
         const_cast<CoordinateSequence*>(points.get())->reverse();
     }
+}
+
+std::unique_ptr<Curve>
+CircularString::getCurved(const algorithm::LineToCurveParams&) const
+{
+    return getFactory()->createCircularString(points);
+}
+
+
+LineString*
+CircularString::getLinearizedImpl(const algorithm::CurveToLineParams& params) const {
+    if (isEmpty()) {
+        return getFactory()->createLineString().release();
+    }
+
+    auto seq = std::make_shared<CoordinateSequence>(0, hasZ(), hasM());
+    seq->add(*getCoordinatesRO(), static_cast<std::size_t>(0), 0);
+
+    for (const CircularArc& arc : getArcs())
+    {
+        arc.addLinearizedPoints(*seq, params);
+    }
+
+    return getFactory()->createLineString(seq).release();
 }
 
 CircularString*

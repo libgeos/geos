@@ -37,7 +37,9 @@ struct test_capiisvaliddetail_data : public capitest::utility {
     ~test_capiisvaliddetail_data()
     {
         GEOSGeom_destroy(loc_);
-        GEOSFree(reason_);
+        if (reason_) {
+            GEOSFree(reason_);
+        }
     }
 
 };
@@ -144,11 +146,13 @@ template<>
 template<>
 void object::test<7>()
 {
+    useContext();
     input_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE( CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 0 0)))");
     ensure(input_ != nullptr);
 
-    char ret = GEOSisValidDetail(input_, 0, nullptr, nullptr);
-    ensure_equals("error raised on curved geometry", ret, 2);
+    ensure_equals(GEOSisValidDetail_r(ctxt_, input_, 0, nullptr, nullptr), 2);
+    useCurveConversion();
+    ensure_equals(GEOSisValidDetail_r(ctxt_, input_, 0, nullptr, nullptr), 1);
 }
 
 } // namespace tut

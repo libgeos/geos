@@ -163,11 +163,19 @@ template<>
 template<>
 void object::test<10>()
 {
+    set_test_name("curved inputs");
+    useContext();
+
     input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
     ensure(input_);
 
-    result_ = GEOSDensify(input_, 0.1);
+    result_ = GEOSDensify_r(ctxt_, input_, 0.1);
     ensure("curved geometries not supported", result_ == nullptr);
+
+    useCurveConversion();
+    result_ = GEOSDensify_r(ctxt_, input_, 0.1);
+    ensure(result_);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_LINESTRING);
 }
 
 // Densify a LINESTRING Z, check that Z gets interpolated

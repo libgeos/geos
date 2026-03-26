@@ -106,7 +106,11 @@ CoverageCleaner::CoverageCleaner(std::vector<const Geometry*>& p_coverage)
     : coverage(p_coverage)
     , geomFactory(p_coverage.empty() ? nullptr : coverage[0]->getFactory())
     , snappingDistance(computeDefaultSnappingDistance(p_coverage))
-{}
+{
+    for (const auto& geom : coverage) {
+        util::ensureNoCurvedComponents(geom);
+    }
+}
 
 
 /* public */

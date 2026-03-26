@@ -93,13 +93,43 @@ template<>
 template<>
 void object::test<6>()
 {
+    set_test_name("GEOSPolygonHullSimplify curved inputs");
+    useContext();
+
     input_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE( CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 1 0.0001, 0 0)))");
     ensure(input_);
 
-    result_ = GEOSPolygonHullSimplify(input_, 1, 0.8);
+    result_ = GEOSPolygonHullSimplify_r(ctxt_, input_, 1, 0.8);
     ensure("curved geometries not supported", result_ == nullptr);
+
+    useCurveConversion();
+    result_ = GEOSPolygonHullSimplify_r(ctxt_, input_, 1, 0.8);
+    ensure(result_);
+
+    expected_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE ((0 0, 2 0), CIRCULARSTRING (2 0, 1 1, 0 0)))");
+    ensure_geometry_equals(result_, expected_);
 }
 
+template<>
+template<>
+void object::test<7>()
+{
+    set_test_name("GEOSPolygonHullSimplifyMode curved inputs");
+    useContext();
+
+    input_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE( CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 1 0.0001, 0 0)))");
+    ensure(input_);
+
+    result_ = GEOSPolygonHullSimplifyMode_r(ctxt_, input_, 1, GEOSHULL_PARAM_AREA_RATIO, 0.8);
+    ensure("curved geometries not supported", result_ == nullptr);
+
+    useCurveConversion();
+    result_ = GEOSPolygonHullSimplifyMode_r(ctxt_, input_, 1, GEOSHULL_PARAM_AREA_RATIO, 0.8);
+    ensure(result_);
+
+    expected_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE ((0 0, 2 0), CIRCULARSTRING (2 0, 1 1, 0 0)))");
+    ensure_geometry_equals(result_, expected_);
+}
 
 } // namespace tut
 

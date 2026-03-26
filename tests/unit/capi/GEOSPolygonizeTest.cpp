@@ -189,29 +189,6 @@ template<>
 void object::test<7>
 ()
 {
-    constexpr int size = 2;
-    GEOSGeometry* geoms[size];
-    geoms[0] = GEOSGeomFromWKT("LINESTRING (0 0, 2 0)");
-    geoms[1] = GEOSGeomFromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
-
-    for (auto& geom : geoms) {
-        ensure(geom != nullptr);
-    }
-
-    GEOSGeometry* g = GEOSPolygonize(geoms, size);
-
-    ensure("curved geometries not supported", g == nullptr);
-
-    for(auto& input : geoms) {
-        GEOSGeom_destroy(input);
-    }
-}
-
-template<>
-template<>
-void object::test<8>
-()
-{
     set_test_name("LINESTRING ZM inputs");
 
     geom1_ = fromWKT("LINESTRING ZM (0 0 5 4, 2 0 6 5, 2 2 7 6)");
@@ -228,6 +205,122 @@ void object::test<8>
     ensure(expected_);
 
     ensure_geometry_equals_identical(result_, expected_);
+}
+
+
+template<>
+template<>
+void object::test<8>
+()
+{
+    set_test_name("GEOSPolygonize curved inputs");
+    useContext();
+
+    geom1_ = fromWKT("LINESTRING (0 0, 2 0)");
+    geom2_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+
+    constexpr int size = 2;
+    std::array<GEOSGeometry*, size> geoms{geom1_, geom2_};
+
+    result_ = GEOSPolygonize_r(ctxt_, geoms.data(), size);
+    ensure(!result_);
+
+    // Input converted to line, output not converted to curve
+    GEOSContext_setCurveToLineParams_r(ctxt_, curveToLineParams_);
+    result_ = GEOSPolygonize_r(ctxt_, geoms.data(), size);
+    ensure(result_);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_GEOMETRYCOLLECTION);
+    ensure_equals(GEOSGetNumGeometries_r(ctxt_, result_), 1);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, GEOSGetGeometryN_r(ctxt_, result_, 0)), GEOS_POLYGON);
+    GEOSGeom_destroy(result_);
+
+    // Input converted to line, output converted to curve
+    GEOSContext_setLineToCurveParams_r(ctxt_, lineToCurveParams_);
+    result_ = GEOSPolygonize_r(ctxt_, geoms.data(), size);
+    ensure(result_);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_GEOMETRYCOLLECTION);
+    ensure_equals(GEOSGetNumGeometries_r(ctxt_, result_), 1);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, GEOSGetGeometryN_r(ctxt_, result_, 0)), GEOS_CURVEPOLYGON);
+}
+
+template<>
+template<>
+void object::test<9>
+()
+{
+    set_test_name("GEOSPolygonize_valid curved inputs returning a single polygon");
+    useContext();
+
+    geom1_ = fromWKT("LINESTRING (0 0, 20 0)");
+    geom2_ = fromWKT("CIRCULARSTRING (0 0, 10 10, 20 0)");
+    geom3_ = fromWKT("LINESTRING (9 1, 11 1, 11 2, 9 2, 9 1)");
+    GEOSSetSRID_r(ctxt_, geom3_, 4326);
+
+    constexpr int size = 3;
+    std::array<GEOSGeometry*, size> geoms{geom1_, geom2_, geom3_};
+
+    result_ = GEOSPolygonize_valid_r(ctxt_, geoms.data(), size);
+    ensure(!result_);
+
+    // Input converted to line, output not converted to curve
+    GEOSContext_setCurveToLineParams_r(ctxt_, curveToLineParams_);
+    result_ = GEOSPolygonize_valid_r(ctxt_, geoms.data(), size);
+    ensure(result_);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_POLYGON);
+    ensure_equals(GEOSGetNumGeometries_r(ctxt_, result_), 1);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, GEOSGetGeometryN_r(ctxt_, result_, 0)), GEOS_POLYGON);
+    ensure_equals(GEOSGetSRID_r(ctxt_, result_), 4326);
+    GEOSGeom_destroy(result_);
+
+    // Input converted to line, output converted to curve
+    GEOSContext_setLineToCurveParams_r(ctxt_, lineToCurveParams_);
+    result_ = GEOSPolygonize_valid_r(ctxt_, geoms.data(), size);
+    ensure(result_);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_CURVEPOLYGON);
+    ensure_equals(GEOSGetNumGeometries_r(ctxt_, result_), 1);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, GEOSGetGeometryN_r(ctxt_, result_, 0)), GEOS_CURVEPOLYGON);
+    ensure_equals(GEOSGetSRID_r(ctxt_, result_), 4326);
+}
+
+template<>
+template<>
+void object::test<10>
+()
+{
+    set_test_name("GEOSPolygonize_valid curved inputs returning a multiple polygons");
+    useContext();
+
+    geom1_ = fromWKT("LINESTRING (0 0, 20 0)");
+    geom2_ = fromWKT("CIRCULARSTRING (0 0, 10 10, 20 0)");
+    geom3_ = fromWKT("LINESTRING (20 0, 30 0, 30 30, 20 0)");
+    GEOSSetSRID_r(ctxt_, geom3_, 4326);
+
+    constexpr int size = 3;
+    std::array<GEOSGeometry*, size> geoms{geom1_, geom2_, geom3_};
+
+    result_ = GEOSPolygonize_valid_r(ctxt_, geoms.data(), size);
+    ensure(!result_);
+
+    // Input converted to line, output not converted to curve
+    GEOSContext_setCurveToLineParams_r(ctxt_, curveToLineParams_);
+    result_ = GEOSPolygonize_valid_r(ctxt_, geoms.data(), size);
+    ensure(result_);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_MULTIPOLYGON);
+    ensure_equals(GEOSGetNumGeometries_r(ctxt_, result_), 2);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, GEOSGetGeometryN_r(ctxt_, result_, 0)), GEOS_POLYGON);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, GEOSGetGeometryN_r(ctxt_, result_, 1)), GEOS_POLYGON);
+    ensure_equals(GEOSGetSRID_r(ctxt_, result_), 4326);
+    GEOSGeom_destroy(result_);
+
+    // Input converted to line, output converted to curve
+    GEOSContext_setLineToCurveParams_r(ctxt_, lineToCurveParams_);
+    result_ = GEOSPolygonize_valid_r(ctxt_, geoms.data(), size);
+    ensure(result_);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_MULTISURFACE);
+    ensure_equals(GEOSGetNumGeometries_r(ctxt_, result_), 2);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, GEOSGetGeometryN_r(ctxt_, result_, 0)), GEOS_CURVEPOLYGON);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, GEOSGetGeometryN_r(ctxt_, result_, 1)), GEOS_POLYGON);
+    ensure_equals(GEOSGetSRID_r(ctxt_, result_), 4326);
 }
 
 } // namespace tut

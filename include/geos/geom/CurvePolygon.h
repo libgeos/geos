@@ -15,6 +15,7 @@
 #pragma once
 
 #include <geos/geom/SurfaceImpl.h>
+#include <geos/geom/Polygon.h>
 
 namespace geos {
 namespace geom {
@@ -35,6 +36,12 @@ public:
 
     GeometryTypeId getGeometryTypeId() const override;
 
+    std::unique_ptr<CurvePolygon> getCurved(const algorithm::LineToCurveParams&) {
+        return std::unique_ptr<CurvePolygon>(cloneImpl());
+    }
+
+    std::unique_ptr<Polygon> getLinearized(const algorithm::CurveToLineParams&) const;
+
     bool hasCurvedComponents() const override;
 
     void normalize() override;
@@ -42,7 +49,11 @@ public:
 protected:
     using SurfaceImpl::SurfaceImpl;
 
-    Geometry* cloneImpl() const override;
+    CurvePolygon* cloneImpl() const override;
+
+    Polygon* getLinearizedImpl(const algorithm::CurveToLineParams&) const override;
+
+    CurvePolygon* getCurvedImpl(const algorithm::LineToCurveParams&) const override { return cloneImpl(); }
 
     int
     getSortIndex() const override

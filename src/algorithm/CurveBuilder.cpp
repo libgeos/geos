@@ -1,0 +1,310 @@
+/**********************************************************************
+*
+ * GEOS - Geometry Engine Open Source
+ * http://geos.osgeo.org
+ *
+ * Copyright (C) 2025-2026 ISciences, LLC
+ *
+ * This is free software; you can redistribute and/or modify it under
+ * the terms of the GNU Lesser General Public Licence as published
+ * by the Free Software Foundation.
+ * See the COPYING file for more information.
+ *
+ **********************************************************************/
+
+#include <geos/algorithm/Angle.h>
+#include <geos/algorithm/CurveBuilder.h>
+
+#include <geos/geom/CircularArc.h>
+#include <geos/geom/CircularString.h>
+#include <geos/geom/CompoundCurve.h>
+#include <geos/geom/GeometryFactory.h>
+#include <geos/geom/LineString.h>
+
+#include "geos/algorithm/LineToCurveParams.h"
+
+namespace geos::algorithm {
+
+using geom::CircularArc;
+using geom::CoordinateSequence;
+using geom::CoordinateXY;
+using geom::CoordinateXYZM;
+using geom::GeometryFactory;
+using geom::LineString;
+
+CurveBuilder::CurveBuilder(const GeometryFactory &p_factory)
+    : factory(p_factory) {}
+
+std::unique_ptr<geom::Curve>
+CurveBuilder::getCurved(const LineString &ls, const LineToCurveParams& params) {
+    CurveBuilder cb(*ls.getFactory());
+    return cb.compute(ls, params);
+}
+
+std::unique_ptr<geom::Curve>
+CurveBuilder::compute(const LineString& ls, const LineToCurveParams& params) {
+    if (ls.isEmpty()) {
+        return ls.clone();
+    }
+
+    const auto& points = *ls.getSharedCoordinates();
+
+    std::size_t start = 0;
+
+    while (start + 1 < points.getSize()) {
+
+        if (start + 2 >= points.getSize()) {
+            addLineCoords(points, start, start + 1);
+            break;
+        }
+
+        CircularArc arc(points, start);
+
+        if (arc.isLinear()) {
+            addLineCoords(points, start, start + 2);
+            start += 2;
+            continue;
+        }
+
+        if (arc.getAngle() > 2 *params.getMaxAngleRadians()) {
+            addLineCoords(points, start, start + 1);
+            start++;
+            continue;
+        }
+
+        std::size_t stop = start + 3;
+        bool foundArc = false;
+
+        // Continue to consume points until we are no longer on the same arc.
+        // We need to find at least one additional point that fits on this arc to consider this an arc.
+        while (stop < points.getSize()) {
+            const CoordinateXY& pt = points.getAt<CoordinateXY>(stop);
+
+            const double distance = pt.distance(arc.getCenter());
+
+            // Does the radius match?
+            if (std::abs(distance - arc.getRadius()) > params.getRadiusTolerance() * arc.getRadius()) {
+                break;
+            }
+
+            const CoordinateXY& prev1 = points.getAt<CoordinateXY>(stop - 1);
+            const CoordinateXY& prev2 = points.getAt<CoordinateXY>(stop - 2);
+
+            // Check that angle p[stop-1] /_ center /_ p[stop] is less than the step tolerance.
+            // This check is not done in PostGIS.
+            const double currAngle = std::abs(Angle::angleBetweenOriented(prev1, arc.getCenter(), pt));
+
+            if (currAngle > params.getMaxAngleRadians()) {
+                break;
+            }
+
+            // Check that the angle p[stop-2] /_ p[stop-1] /_ p[stop] is consistent with that in the
+            // original section of the arc.
+            const double prevExtAngle = Angle::angleBetween(arc.p0(), arc.p1(), arc.p2());
+            const double currExtAngle = Angle::angleBetween(prev2, prev1, pt);
+
+            if (std::abs(currExtAngle - prevExtAngle) > params.getMaxExteriorAngleDifferenceRadians()) {
+                break;
+            }
+
+            foundArc = true;
+            stop++;
+        }
+
+        if (foundArc) {
+            addArc(arc, stop - 1);
+            start = stop - 1;
+        } else {
+            addLineCoords(points, start, start + 1);
+            start++;
+        }
+
+    }
+
+    finishArc();
+    finishLine();
+
+    if (curves.size() == 1) {
+        return std::move(curves.front());
+    }
+
+    return factory.createCompoundCurve(std::move(curves));
+}
+
+void
+CurveBuilder::addLineCoords(const CoordinateSequence& points, std::size_t from, std::size_t to)
+{
+    finishArc();
+
+    if (lineCoords) {
+        lineCoords->add(points, from + 1, to);
+    } else {
+        lineCoords = std::make_shared<CoordinateSequence>(0, points.hasZ(), points.hasM());
+        lineCoords->add(points, from, to);
+    }
+}
+
+void
+CurveBuilder::finishArc()
+{
+    if (arcCoords) {
+        curves.push_back(factory.createCircularString(arcCoords));
+        arcCoords.reset();
+    }
+}
+
+void
+CurveBuilder::finishLine() {
+    if (lineCoords) {
+        curves.push_back(factory.createLineString(lineCoords));
+        lineCoords.reset();
+    }
+}
+
+/// Interpolates Z and M values from the midpoint of the arc, by:
+/// 1) Determining the two vertices of the linearized arc that bound the original arc midpoint
+/// 2) Assuming that Z and M increase/decrease at a constant rate from the origin of the original
+///    arc to its midpoint, and increase/decrease at a possibly different constant rate from the
+///    midpoint of the original arc to its endpoint.
+/// 3) Computing values of Z and M based on (2).
+static void
+interpolateMidpointZM(CoordinateXYZM& p1, const CircularArc& arc, size_t stop, const CoordinateXY& center)
+{
+    const auto start = arc.getCoordinatePosition();
+    const auto nPoints = stop - start + 1;
+    const CoordinateSequence& points = *arc.getCoordinateSequence();
+
+    // We have an even number of vertices. Calculate Z/M of the control
+    // point in the original arc.
+    CoordinateXYZM a, b;
+    points.getAt(start + nPoints / 2 - 1, a);
+    points.getAt(start + nPoints / 2, b);
+
+    const double thetaA = CircularArcs::getAngle(a, center);
+    const double theta0 = arc.theta0();
+    const double theta1 = CircularArcs::getAngle(p1, center);
+
+    // Assumption: point a has the same angle fraction over [p0, p1] that b has over [p2, p1]
+    const double f = arc.isCCW() ? Angle::fractionCCW(thetaA, theta0, theta1) : 1 - Angle::fractionCCW(thetaA, theta1, theta0);
+
+    const double z0 = points.getZ(start);
+    const double z2 = points.getZ(stop);
+
+    const double m0 = points.getM(start);
+    const double m2 = points.getM(stop);
+
+    p1.z = (a.z + b.z - z0*(1 - f) - z2*(1 - f)) / (2 * f);
+    p1.m = (a.m + b.m - m0*(1 - f) - m2*(1 - f)) / (2 * f);
+}
+
+/// Assigns Z and M values to the midpoint of an arc given points representing a linearized version of the arc.
+/// If the linearized version of the arc has an odd number of points, the Z and M values are taken directly from
+/// the central vertex of the linearized arc. If the linearized version of the arc has an even number of points,
+/// the Z and M values are calculated using the two vertices that bound the midpoint of the arc.
+static void
+getOrInterpolateMidPointZM(CoordinateXYZM& p1, const CircularArc& arc, size_t stop, const CoordinateXY& center) {
+    const auto start = arc.getCoordinatePosition();
+    const auto nPoints = stop - start + 1;
+    const CoordinateSequence& points = *arc.getCoordinateSequence();
+
+    if (nPoints % 2) {
+        // We have an odd number of vertices, so the central vertex should be the same
+        // as the control point in the original arc.
+        auto midpointIndex = start + nPoints / 2;
+        p1.z = points.getZ(midpointIndex);
+        p1.m = points.getM(midpointIndex);
+    } else {
+        interpolateMidpointZM(p1, arc, stop, center);
+    }
+}
+
+void
+CurveBuilder::addArc(const CircularArc& arc, std::size_t stop) {
+    finishLine();
+
+    const CoordinateSequence& points = *arc.getCoordinateSequence();
+    std::size_t start = arc.getCoordinatePosition();
+
+    double xSum = 0.0;
+    double ySum = 0.0;
+    std::size_t nArcApproximations = 0;
+
+    for (std::size_t i = start; i <= stop - 2; i++) {
+        CircularArc a(points, i);
+        const CoordinateXY& center = a.getCenter();
+
+        xSum += center.x;
+        ySum += center.y;
+        nArcApproximations++;
+    }
+
+    const CoordinateXY averageCenter = { xSum / static_cast<double>(nArcApproximations), ySum / static_cast<double>(nArcApproximations) };
+
+    CoordinateXYZM p0, p2;
+    points.getAt(start, p0);
+    points.getAt(stop, p2);
+
+    const double averageRadius = 0.5*(p0.distance(averageCenter) + p2.distance(averageCenter));
+
+    if (p0.equals2D(p2)) {
+        // Arc forms a complete circle
+        const bool isCCW = CircularArc(points, start).isCCW();
+
+        CoordinateXYZM p1(CircularArcs::getMidpoint(p0, p0, averageCenter, averageRadius, isCCW));
+
+        CoordinateXYZM p01(CircularArcs::getMidpoint(p0, p1, averageCenter, averageRadius, isCCW));
+        CoordinateXYZM p12(CircularArcs::getMidpoint(p1, p2, averageCenter, averageRadius, isCCW));
+
+        if (!arcCoords) {
+            // should always be the case
+            arcCoords = std::make_shared<CoordinateSequence>(0,  points.hasZ(), points.hasM());
+            arcCoords->reserve(5);
+            arcCoords->add(p0);
+        }
+
+        if (points.hasZ() || points.hasM()) {
+            auto nPoints = stop - start + 1;
+            if ((nPoints - 1) % 4 == 0) {
+                auto i01 = start + (nPoints - 1) / 4;
+                p01.z = points.getZ(i01);
+                p01.m = points.getM(i01);
+
+                auto i1 = start + (nPoints - 1) / 2;
+                p1.z = points.getZ(i1);
+                p1.m = points.getM(i1);
+
+                auto i12 = start + 3 * (nPoints - 1) / 4;
+                p12.z = points.getZ(i12);
+                p12.m = points.getM(i12);
+            } else {
+                getOrInterpolateMidPointZM(p1, arc, stop, averageCenter);
+                p01.z = 0.5*(p0.z + p1.z);
+                p01.m = 0.5*(p0.m + p1.m);
+                p12.z = 0.5*(p1.z + p2.z);
+                p12.m = 0.5*(p1.m + p2.m);
+            }
+        }
+
+        arcCoords->add(p01);
+        arcCoords->add(p1);
+        arcCoords->add(p12);
+        arcCoords->add(p2);
+    } else {
+        CoordinateXYZM p1(CircularArcs::getMidpoint(p0, p2, averageCenter, averageRadius, arc.isCCW()));
+
+        if (points.hasZ() || points.hasM()) {
+            getOrInterpolateMidPointZM(p1, arc, stop, averageCenter);
+        }
+
+        if (!arcCoords) {
+            arcCoords = std::make_shared<CoordinateSequence>(0,  points.hasZ(), points.hasM());
+            arcCoords->reserve(3);
+            arcCoords->add(p0);
+        }
+
+        arcCoords->add(p1);
+        arcCoords->add(p2);
+    }
+}
+
+}

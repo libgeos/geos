@@ -6,6 +6,11 @@
 
 #include <memory>
 
+#include <geos/algorithm/CurveToLineParams.h>
+#include <geos/algorithm/LineToCurveParams.h>
+
+using geos::algorithm::CurveToLineParams;
+using geos::algorithm::LineToCurveParams;
 
 namespace tut {
 //
@@ -179,6 +184,37 @@ void object::test<9>
     ensure(gc->hasDimension(geos::geom::Dimension::P));
     ensure(gc->hasDimension(geos::geom::Dimension::L));
     ensure(gc->hasDimension(geos::geom::Dimension::A));
+}
+
+template<>
+template<>
+void object::test<10>() {
+    set_test_name("getCurved()");
+
+    auto gc = readWKT("GEOMETRYCOLLECTION(POINT (3 7), CIRCULARSTRING (0 0, 1 1, 2 0), LINESTRING (1 1, 2 3))");
+
+    auto linearized = gc->getLinearized(CurveToLineParams::stepSizeDegrees(45));
+
+    auto expected = readWKT("GEOMETRYCOLLECTION(POINT (3 7), LINESTRING (0 0, 0.292893 0.707107, 1 1, 1.707107 0.707107, 2 0), LINESTRING (1 1, 2 3))");
+
+    ensure_equals_exact_geometry(linearized.get(), expected.get(), 1e-4);
+}
+
+template<>
+template<>
+void object::test<11>() {
+    set_test_name("getCurved()");
+
+    auto gc = readWKT("GEOMETRYCOLLECTION(POINT (3 7), LINESTRING (0 0, 0.292893 0.707107, 1 1, 1.707107 0.707107, 2 0), LINESTRING (1 1, 2 3))");
+
+    auto params = LineToCurveParams();
+    params.setRadiusTolerance(1e-3);
+
+    auto curved = gc->getCurved(params);
+
+    auto expected = readWKT("GEOMETRYCOLLECTION(POINT (3 7), CIRCULARSTRING (0 0, 1 1, 2 0), LINESTRING (1 1, 2 3))");
+
+    ensure_equals_exact_geometry(curved.get(), expected.get(), 1e-4);
 }
 
 } // namespace tut

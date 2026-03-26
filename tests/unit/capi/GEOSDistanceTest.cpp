@@ -171,15 +171,27 @@ template<>
 template<>
 void object::test<6>()
 {
+    set_test_name("curved inputs");
+
+    useContext();
+
     geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
-    geom2_ = fromWKT("LINESTRING (1 1.0001, 2 1)");
+    geom2_ = fromWKT("LINESTRING (2.0001 0, 3 0)");
 
     ensure(geom1_);
     ensure(geom2_);
 
     double dist;
-    int ret = GEOSDistance(geom1_, geom2_, &dist);
-    ensure_equals("curved geometry not supported", ret, 0);
+    ensure_equals(GEOSDistance_r(ctxt_, geom1_, geom2_, &dist), 0);
+    ensure_equals(GEOSDistanceIndexed_r(ctxt_, geom1_, geom2_, &dist), 0);
+
+    useCurveConversion();
+    ensure_equals(GEOSDistance_r(ctxt_, geom1_, geom2_, &dist), 1);
+    ensure_equals(dist, 0.0001);
+
+    dist = -1;
+    ensure_equals(GEOSDistanceIndexed_r(ctxt_, geom1_, geom2_, &dist), 1);
+    ensure_equals(dist, 0.0001);
 }
 
 template<>

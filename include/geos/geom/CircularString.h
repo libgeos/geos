@@ -15,6 +15,7 @@
 #pragma once
 
 #include <geos/geom/CircularArc.h>
+#include <geos/geom/LineString.h>
 #include <geos/geom/SimpleCurve.h>
 
 namespace geos {
@@ -55,6 +56,8 @@ public:
         return std::unique_ptr<CircularString>(reverseImpl());
     }
 
+    std::unique_ptr<Curve> getCurved(const algorithm::LineToCurveParams&) const;
+
 protected:
 
     /// \brief
@@ -75,6 +78,12 @@ protected:
     {
         envelope = computeEnvelopeInternal(false);
     }
+
+    CircularString* getCurvedImpl(const algorithm::LineToCurveParams&) const override {
+        return cloneImpl();
+    }
+
+    LineString* getLinearizedImpl(const algorithm::CurveToLineParams&) const override;
 
     int
     getSortIndex() const override

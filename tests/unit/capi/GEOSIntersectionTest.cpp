@@ -149,14 +149,24 @@ template<>
 template<>
 void object::test<8>()
 {
+    set_test_name("curved inputs, non-curved output");
+
+    useContext();
+
     geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
     geom2_ = fromWKT("LINESTRING (1 0, 2 1)");
 
     ensure(geom1_);
     ensure(geom2_);
 
-    result_ = GEOSIntersection(geom1_, geom2_);
+    result_ = GEOSIntersection_r(ctxt_, geom1_, geom2_);
     ensure("curved geometry not supported", result_ == nullptr);
+
+    useCurveConversion();
+    result_ = GEOSIntersection_r(ctxt_, geom1_, geom2_);
+    expected_ = fromWKT("POINT (1.7067836774 0.7067836774)");
+
+    ensure_geometry_equals(result_, expected_, 1e-6);
 }
 
 // https://github.com/libgeos/geos/issues/1074
@@ -173,6 +183,42 @@ void object::test<9>()
     ensure(result_ != nullptr);
     ensure("HasZ", GEOSHasZ(result_));
     ensure("HasM", GEOSHasM(result_));
+}
+
+template<>
+template<>
+void object::test<10>()
+{
+    set_test_name("curved inputs, curved output");
+
+    useContext();
+
+    geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    geom2_ = fromWKT("POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0))");
+
+    ensure(geom1_);
+    ensure(geom2_);
+    GEOSSetSRID_r(ctxt_, geom1_, 4326);
+
+    result_ = GEOSIntersection_r(ctxt_, geom1_, geom2_);
+    ensure("curved geometry not supported", result_ == nullptr);
+
+    GEOSCurveToLineParams_setTolerance_r(ctxt_, curveToLineParams_, GEOS_CURVETOLINE_STEP_DEGREES, 1);
+    GEOSContext_setCurveToLineParams_r(ctxt_, curveToLineParams_);
+
+    // Input converted to line, output not converted to curve
+    result_ = GEOSIntersection_r(ctxt_, geom1_, geom2_);
+    ensure(result_);
+    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_LINESTRING);
+    GEOSGeom_destroy_r(ctxt_, result_);
+
+    // Input converted to line, output converted to curve
+    GEOSContext_setLineToCurveParams_r(ctxt_, lineToCurveParams_);
+    result_ = GEOSIntersection_r(ctxt_, geom1_, geom2_);
+    expected_ = fromWKT("CIRCULARSTRING (0 0, 0.292893 0.707107, 1 1)");
+    ensure_geometry_equals(result_, expected_, 1e-6);
+
+    ensure_equals(GEOSGetSRID_r(ctxt_, result_), 4326);
 }
 
 } // namespace tut
