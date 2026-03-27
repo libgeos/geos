@@ -29,7 +29,7 @@ namespace overlayng { // geos.operation.overlayng
 /*public*/
 geom::Location
 IndexedPointOnLineLocator::locate(const geom::CoordinateXY* p) {
-    // TODO: optimize this with a segment index
+    // TODO: optimize this with a segment/arc index
     algorithm::PointLocator locator;
     return locator.locate(*p, &inputGeom);
 }

@@ -19,6 +19,8 @@
 
 #include <geos/algorithm/PointLocator.h>
 #include <geos/algorithm/PointLocation.h>
+#include <geos/geom/CircularString.h>
+#include <geos/geom/CompoundCurve.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/LineString.h>
@@ -31,7 +33,6 @@
 #include <geos/util/UnsupportedOperationException.h>
 
 #include <cassert>
-#include <typeinfo>
 
 using namespace geos::geom;
 
@@ -95,6 +96,16 @@ PointLocator::computeLocation(const CoordinateXY& p, const Geometry* geom)
         case GEOS_LINEARRING: {
             const LineString* ls = static_cast<const LineString*>(geom);
             updateLocationInfo(locate(p, ls));
+            break;
+        }
+        case GEOS_CIRCULARSTRING: {
+            const CircularString* cs = static_cast<const CircularString*>(geom);
+            updateLocationInfo(locate(p, cs));
+            break;
+        }
+        case GEOS_COMPOUNDCURVE: {
+            const CompoundCurve* cc = static_cast<const CompoundCurve*>(geom);
+            updateLocationInfo(locate(p, cc));
             break;
         }
         case GEOS_POLYGON: {
@@ -180,6 +191,73 @@ PointLocator::locate(const CoordinateXY& p, const LineString* l)
     if(PointLocation::isOnLine(p, seq)) {
         return Location::INTERIOR;
     }
+    return Location::EXTERIOR;
+}
+
+/* private */
+Location
+PointLocator::locate(const CoordinateXY& p, const CircularString* cs)
+{
+    if(!cs->getEnvelopeInternal()->intersects(p)) {
+        return Location::EXTERIOR;
+    }
+
+    if (cs->isClosed()) {
+        const CoordinateSequence* seq = cs->getCoordinatesRO();
+        if (p.equals2D(seq->front<CoordinateXY>())) {
+            return Location::BOUNDARY;
+        }
+        if (p.equals2D(seq->back<CoordinateXY>())) {
+            return Location::BOUNDARY;
+        }
+    }
+
+    for (const auto& arc : cs->getArcs()) {
+        if (arc.containsPoint(p)) {
+            return Location::INTERIOR;
+        }
+    }
+
+    return Location::EXTERIOR;
+}
+
+/* private */
+Location
+PointLocator::locate(const CoordinateXY& p, const CompoundCurve* cc)
+{
+    if(!cc->getEnvelopeInternal()->intersects(p)) {
+        return Location::EXTERIOR;
+    }
+
+    if (cc->isClosed()) {
+        const SimpleCurve* firstCurve = cc->getCurveN(0);
+        if (p.equals2D(firstCurve->getCoordinatesRO()->front<CoordinateXY>())) {
+            return Location::BOUNDARY;
+        }
+
+        const SimpleCurve* lastCurve = cc->getCurveN(cc->getNumCurves() - 1);
+        if (p.equals2D(lastCurve->getCoordinatesRO()->back<CoordinateXY>())) {
+            return Location::BOUNDARY;
+        }
+    }
+
+    for (std::size_t i = 0; i < cc->getNumCurves(); i++) {
+        const SimpleCurve* curve = cc->getCurveN(i);
+        if (curve->getGeometryTypeId() == GEOS_CIRCULARSTRING) {
+            const CircularString* cs = static_cast<const CircularString*>(curve);
+            for (const auto& arc : cs->getArcs()) {
+                if (arc.containsPoint(p)) {
+                    return Location::INTERIOR;
+                }
+            }
+        } else {
+            const CoordinateSequence* seq = curve->getCoordinatesRO();
+            if(PointLocation::isOnLine(p, seq)) {
+                return Location::INTERIOR;
+            }
+        }
+    }
+
     return Location::EXTERIOR;
 }
 

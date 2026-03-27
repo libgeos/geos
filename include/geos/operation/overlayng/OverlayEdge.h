@@ -61,6 +61,7 @@ private:
     * The label must be interpreted accordingly.
     */
     bool direction;
+    bool m_isCurved;
     CoordinateXY dirPt;
     OverlayLabel* label;
     bool m_isInResultArea;
@@ -81,10 +82,12 @@ public:
 
     OverlayEdge(const CoordinateXYZM& p_orig, const CoordinateXY& p_dirPt,
                 bool p_direction, OverlayLabel* p_label,
-                const std::shared_ptr<const CoordinateSequence>& p_pts)
+                const std::shared_ptr<const CoordinateSequence>& p_pts,
+                bool isCurved)
         : HalfEdge(p_orig)
         , pts(p_pts)
         , direction(p_direction)
+        , m_isCurved(isCurved)
         , dirPt(p_dirPt)
         , label(p_label)
         , m_isInResultArea(false)
@@ -102,6 +105,11 @@ public:
     {
         return direction;
     };
+
+    bool isCurved() const
+    {
+        return m_isCurved;
+    }
 
     const CoordinateXY& directionPt() const override
     {

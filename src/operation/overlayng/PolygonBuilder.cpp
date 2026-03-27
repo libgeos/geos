@@ -20,7 +20,7 @@
 #include <geos/util/TopologyException.h>
 
 
-using geos::geom::Polygon;
+using geos::geom::Surface;
 
 namespace geos {      // geos
 namespace operation { // geos.operation
@@ -28,7 +28,7 @@ namespace overlayng { // geos.operation.overlayng
 
 
 /*public*/
-std::vector<std::unique_ptr<Polygon>>
+std::vector<std::unique_ptr<Surface>>
 PolygonBuilder::getPolygons() const
 {
     return computePolygons(shellList);
@@ -42,14 +42,14 @@ PolygonBuilder::getShellRings() const
 }
 
 /*private*/
-std::vector<std::unique_ptr<Polygon>>
+std::vector<std::unique_ptr<Surface>>
 PolygonBuilder::computePolygons(const std::vector<OverlayEdgeRing*>& shells) const
 {
-    std::vector<std::unique_ptr<Polygon>> resultPolyList;
+    std::vector<std::unique_ptr<Surface>> resultPolyList;
     resultPolyList.reserve(shells.size());
     // add Polygons for all shells
     for (OverlayEdgeRing* er : shells) {
-        std::unique_ptr<Polygon> poly = er->toPolygon(geometryFactory);
+        std::unique_ptr<Surface> poly = er->toSurface(geometryFactory);
         resultPolyList.push_back(std::move(poly));
     }
     return resultPolyList;

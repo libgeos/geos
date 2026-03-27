@@ -6,12 +6,16 @@
 
 // geos
 #include <geos/operation/overlayng/OverlayNG.h>
+#include <geos/noding/SimpleNoder.h>
+#include <geos/algorithm/CircularArcIntersector.h>
+#include <geos/noding/ArcIntersectionAdder.h>
 
 // std
 #include <memory>
 
 using namespace geos::geom;
 using namespace geos::operation::overlayng;
+using namespace geos::noding;
 using geos::io::WKTReader;
 using geos::io::WKTWriter;
 
@@ -25,6 +29,13 @@ struct test_overlayng_data {
 
     WKTReader r;
     WKTWriter w;
+    double tol{0.0};
+
+    void
+    setEqualityTolerance(double d)
+    {
+        tol = d;
+    }
 
     void
     testOverlay(const std::string& a, const std::string& b, const std::string& expected, int opCode, double scaleFactor)
@@ -38,10 +49,25 @@ struct test_overlayng_data {
         std::unique_ptr<Geometry> geom_a = r.read(a);
         std::unique_ptr<Geometry> geom_b = r.read(b);
         std::unique_ptr<Geometry> geom_expected = r.read(expected);
-        std::unique_ptr<Geometry> geom_result = OverlayNG::overlay(geom_a.get(), geom_b.get(), opCode, pm.get());
-        // std::string wkt_result = w.write(geom_result.get());
-        // std::cout << std::endl << wkt_result << std::endl;
-        ensure_equals_geometry(geom_expected.get(), geom_result.get());
+
+
+        std::unique_ptr<Geometry> geom_result;
+        if (geom_a->hasCurvedComponents() || geom_b->hasCurvedComponents()) {
+            SimpleNoder noder;
+            geos::algorithm::CircularArcIntersector cai;
+            ArcIntersectionAdder aia(cai);
+
+            noder.setArcIntersector(aia);
+            OverlayNG ong(geom_a.get(), geom_b.get(), pm.get(), opCode);
+            ong.setNoder(&noder);
+
+            geom_result = ong.getResult();
+        } else {
+            geom_result = OverlayNG::overlay(geom_a.get(), geom_b.get(), opCode, pm.get());
+        }
+        //std::string wkt_result = w.write(geom_result.get());
+        //std::cout << std::endl << wkt_result << std::endl;
+        ensure_equals_geometry_xyzm(geom_result.get(), geom_expected.get(), tol);
     }
 
     void
@@ -59,7 +85,7 @@ struct test_overlayng_data {
         std::unique_ptr<Geometry> geom_result = OverlayNG::overlay(geom_a.get(), geom_b.get(), opCode, pm.get());
         // std::string wkt_result = w.write(geom_result.get());
         // std::cout << std::endl << wkt_result << std::endl;
-        ensure_equals_exact_geometry(geom_expected.get(), geom_result.get(), 0);
+        ensure_equals_exact_geometry(geom_expected.get(), geom_result.get(), tol);
     }
 
     void
@@ -580,6 +606,199 @@ void object::test<45> ()
     std::string b = "LINESTRING (20 50, 80 50)";
     std::string exp = "LINESTRING (20 50, 80 50)";
     testOverlay(a, b, exp, OverlayNG::INTERSECTION, 0);
+}
+
+template<>
+template<>
+void object::test<46> ()
+{
+    set_test_name("CurvePolygon/CurvePolygon intersection -> CurvePolygon");
+
+    std::string a = "CURVEPOLYGON (COMPOUNDCURVE((10 0, 0 0, 0 10, 10 10), CIRCULARSTRING (10 10, 15 5, 10 0)))";
+    std::string b = "CURVEPOLYGON (COMPOUNDCURVE((10 10, 20 10, 20 0, 10 0), CIRCULARSTRING (10 0, 5 5, 10 10)))";
+    std::string exp = "CURVEPOLYGON (CIRCULARSTRING (10 10, 15 5, 10 0, 5 5, 10 10))";
+    testOverlay(a, b, exp, OverlayNG::INTERSECTION, 0);
+}
+
+template<>
+template<>
+void object::test<47>()
+{
+    set_test_name("CurvePolygon/CurvePolygon symdifference -> MultiSurface");
+
+    std::string a = "CURVEPOLYGON (COMPOUNDCURVE((10 0, 0 0, 0 10, 10 10), CIRCULARSTRING (10 10, 15 5, 10 0)))";
+    std::string b = "CURVEPOLYGON (COMPOUNDCURVE((10 10, 20 10, 20 0, 10 0), CIRCULARSTRING (10 0, 5 5, 10 10)))";
+    std::string exp = "MULTISURFACE (CURVEPOLYGON (COMPOUNDCURVE ((10 0, 0 0, 0 10, 10 10), CIRCULARSTRING (10 10, 5 5, 10 0))), CURVEPOLYGON (COMPOUNDCURVE (CIRCULARSTRING (10 0, 15 5, 10 10), (10 10, 20 10, 20 0, 10 0))))";
+    testOverlay(a, b, exp, OverlayNG::SYMDIFFERENCE, 0);
+}
+
+template<>
+template<>
+void object::test<48>()
+{
+    set_test_name("Polygon/CircularString intersection -> CircularString");
+
+    std::string a = "POLYGON ((10 0, 10 10, 0 10, 0 0, 10 0))";
+    std::string b = "CIRCULARSTRING (5 0, 10 5, 15 0)";
+    std::string exp = "CIRCULARSTRING (5 0, 6.464466094067262 3.5355339059327378, 10 5)";
+
+    testOverlay(a, b, exp, OverlayNG::INTERSECTION, 0);
+}
+
+template<>
+template<>
+void object::test<49>()
+{
+    set_test_name("CircularString / CircularString intersection -> MultiPoint");
+
+    std::string a = "CIRCULARSTRING (-5 0, 0 5, 5 0)";
+    std::string b = "CIRCULARSTRING (-5 5, 0 0, 5 5)";
+    std::string exp = "MULTIPOINT ((4.330127018922194 2.5), (-4.330127018922194 2.5))";
+
+    testOverlay(a, b, exp, OverlayNG::INTERSECTION, 0);
+}
+
+template<>
+template<>
+void object::test<50>()
+{
+    set_test_name("CircularString / CircularString intersection -> MultiCurve");
+    std::string a = "CIRCULARSTRING (-5 0, 0 5, 5 0)";
+    std::string b = "CIRCULARSTRING (4 3, 0 -5, -4 3)";
+    std::string exp = "MULTICURVE (CIRCULARSTRING (-5 0, -4.743416490252569 1.58113883008419, -4 3), CIRCULARSTRING (4 3, 4.743416490252569 1.5811388300841898, 5 0))";
+
+    testOverlay(a, b, exp, OverlayNG::INTERSECTION, 0);
+}
+
+template<>
+template<>
+void object::test<51>()
+{
+    set_test_name("CircularString / CircularString difference -> CircularString");
+    std::string a = "CIRCULARSTRING (-5 0, 0 5, 5 0)";
+    std::string b = "CIRCULARSTRING (4 3, 0 -5, -4 3)";
+    std::string exp = "CIRCULARSTRING (-4 3, 0 5, 4 3)";
+
+    setEqualityTolerance(1e-15);
+    testOverlay(a, b, exp, OverlayNG::DIFFERENCE, 0);
+}
+
+template<>
+template<>
+void object::test<52>()
+{
+    set_test_name("CircularString / CircularString symdifference -> MultiCurve");
+    std::string a = "CIRCULARSTRING (-5 0, 0 5, 5 0)";
+    std::string b = "CIRCULARSTRING (4 3, 0 -5, -4 3)";
+    std::string exp = "MULTICURVE (CIRCULARSTRING (-4 3, 0 5, 4 3), CIRCULARSTRING (5 0, 0 -5, -5 0))";
+
+    setEqualityTolerance(1e-15);
+    testOverlay(a, b, exp, OverlayNG::SYMDIFFERENCE, 0);
+}
+
+template<>
+template<>
+void object::test<53>()
+{
+    set_test_name("CompoundCurves / LineString -> MultiPoint");
+
+    std::string a = "COMPOUNDCURVE ((-5 0, -1 0), CIRCULARSTRING (-1 0, 0 1, 1 0))";
+    std::string b = "LINESTRING (-3 -1, -4 1, 1 0)";
+    std::string exp = "MULTIPOINT ((-0.923076923076923 0.3846153846153846), (1 0), (-3.5 0))";
+
+    setEqualityTolerance(1e-15);
+    testOverlay(a, b, exp, OverlayNG::INTERSECTION, 0);
+}
+
+template<>
+template<>
+void object::test<54>()
+{
+    set_test_name("CircularString / CircularString -> Point (tangent)");
+
+    std::string a = "CIRCULARSTRING (5 3, 5 0, 0 -5, -5 0, 4 3)";
+    std::string b = "CIRCULARSTRING (-5 10, 0 15, 5 10, 4 7, -5 10)";
+    std::string exp = "POINT (0 5)";
+
+    testOverlay(a, b, exp, OverlayNG::INTERSECTION, 0);
+}
+
+template<>
+template<>
+void object::test<55>()
+{
+    set_test_name("Polygon / CurvePolygon -> CurvePolygon");
+
+    std::string a = "POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0))";
+    std::string b = "CURVEPOLYGON (CIRCULARSTRING (4 5, 5 6, 6 5, 5 4, 4 5))";
+    std::string exp = "CURVEPOLYGON ((0 0, 10 0, 10 10, 0 10, 0 0), CIRCULARSTRING (4 5, 5 6, 6 5, 5 4, 4 5))";
+
+    testOverlay(a, b, exp, OverlayNG::DIFFERENCE, 0);
+}
+
+template<>
+template<>
+void object::test<56>()
+{
+    set_test_name("CircularString / Point -> Point");
+
+    std::string a = "CIRCULARSTRING (-5 0, 0 5, 5 0)";
+    std::string b = "POINT (4 3)";
+    std::string exp = b;
+
+    testOverlay(a, b, exp, OverlayNG::INTERSECTION, 0);
+}
+
+template<>
+template<>
+void object::test<57>()
+{
+    set_test_name("CompoundCurve / MultiPoint -> MultiPoint");
+
+    std::string a = "COMPOUNDCURVE ((-10 5, -5 0), CIRCULARSTRING (-5 0, 0 5, 5 0))";
+    std::string b = "MULTIPOINT (4 3, -7 2, 0 0)";
+    std::string exp = "MULTIPOINT (4 3, -7 2)";
+
+    testOverlay(a, b, exp, OverlayNG::INTERSECTION, 0);
+}
+
+template<>
+template<>
+void object::test<58>()
+{
+    set_test_name("CurvePolygon / MultiPoint -> MultiPoint");
+
+    std::string a = "CURVEPOLYGON (COMPOUNDCURVE( CIRCULARSTRING(-5 0, 0 5, 5 0), (5 0, -5 0)))";
+    std::string b = "MULTIPOINT (0 0, 4 3, 2 2, 4 4)";
+    std::string exp = "MULTIPOINT (0 0, 4 3, 2 2)";
+    
+    testOverlay(a, b, exp, OverlayNG::INTERSECTION, 0);
+}
+
+template<>
+template<>
+void object::test<59>()
+{
+    set_test_name("MultiSurface / MultiPoint -> MultiPoint");
+
+    std::string a = "MULTISURFACE(CURVEPOLYGON (COMPOUNDCURVE( CIRCULARSTRING(-5 0, 0 5, 5 0), (5 0, -5 0))), ((4 4, 5 4, 5 5, 4 4)))";
+    std::string b = "MULTIPOINT (0 0, 4 3, 2 2, 4.5 4.1)";
+    std::string exp = b;
+
+    testOverlay(a, b, exp, OverlayNG::INTERSECTION, 0);
+}
+
+template<>
+template<>
+void object::test<60>()
+{
+    set_test_name("MultiSurface / MultiPoint -> MultiSurface");
+
+    std::string a = "MULTISURFACE(CURVEPOLYGON (COMPOUNDCURVE( CIRCULARSTRING(-5 0, 0 5, 5 0), (5 0, -5 0))), ((4 4, 5 4, 5 5, 4 4)))";
+    std::string b = "MULTIPOINT (0 0, 4 3, 2 2, 4.5 4.1)";
+    std::string exp = a;
+
+    testOverlay(a, b, exp, OverlayNG::UNION, 0);
 }
 
 } // namespace tut

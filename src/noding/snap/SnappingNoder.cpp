@@ -111,9 +111,8 @@ SnappingNoder::snap(const CoordinateSequence *cs)
     snapCoords->reserve(cs->size());
 
     cs->forEach<Coordinate>([&snapCoords, this](const Coordinate& origPt) {
-        const Coordinate& pt = snapIndex.snap(origPt);
+        const Coordinate& pt = origPt.isValid() ? snapIndex.snap(origPt) : origPt;
         snapCoords->add(pt, false); // Remove repeated points
-
     });
     return snapCoords;
 }

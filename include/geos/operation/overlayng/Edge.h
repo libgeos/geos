@@ -184,18 +184,6 @@ private:
 
 public:
 
-#if 0
-    Edge()
-        : aDim(OverlayLabel::DIM_UNKNOWN)
-        , aDepthDelta(0)
-        , aIsHole(false)
-        , bDim(OverlayLabel::DIM_UNKNOWN)
-        , bDepthDelta(0)
-        , bIsHole(false)
-        , pts(nullptr)
-        {};
-#endif
-
     Edge(const std::shared_ptr<const geom::CoordinateSequence>& p_pts, const EdgeSourceInfo* info, bool isCurved);
 
     friend std::ostream& operator<<(std::ostream& os, const Edge& e);

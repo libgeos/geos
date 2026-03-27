@@ -16,6 +16,7 @@
 
 #include <geos/operation/overlayng/InputGeometry.h>
 #include <geos/operation/overlayng/OverlayGraph.h>
+#include <geos/geom/CircularString.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/GeometryFactory.h>
@@ -279,8 +280,8 @@ OverlayUtil::isResultAreaConsistent(
 /*public static*/
 std::unique_ptr<Geometry>
 OverlayUtil::createResultGeometry(
-    std::vector<std::unique_ptr<Polygon>>& resultPolyList,
-    std::vector<std::unique_ptr<LineString>>& resultLineList,
+    std::vector<std::unique_ptr<Surface>>& resultPolyList,
+    std::vector<std::unique_ptr<Curve>>& resultLineList,
     std::vector<std::unique_ptr<Point>>& resultPointList,
     const GeometryFactory* geometryFactory)
 {
@@ -305,16 +306,22 @@ OverlayUtil::createResultGeometry(
 std::unique_ptr<Geometry>
 OverlayUtil::toLines(OverlayGraph* graph, bool isOutputEdges, const GeometryFactory* geomFact)
 {
-    std::vector<std::unique_ptr<LineString>> lines;
+    std::vector<std::unique_ptr<Geometry>> lines;
     std::vector<OverlayEdge*>& edges = graph->getEdges();
     for (OverlayEdge* edge : edges) {
       bool includeEdge = isOutputEdges || edge->isInResultArea();
       if (! includeEdge) continue;
 
       const auto& pts = edge->getCoordinatesOriented();
-      std::unique_ptr<LineString> line = geomFact->createLineString(pts);
+
+      std::unique_ptr<Geometry> edgeGeom;
+      if (edge->isCurved()) {
+        edgeGeom = geomFact->createCircularString(pts);
+      } else {
+        edgeGeom = geomFact->createLineString(pts);
+      }
       // line->setUserData(labelForResult(edge));
-      lines.push_back(std::move(line));
+      lines.push_back(std::move(edgeGeom));
     }
     return geomFact->buildGeometry(std::move(lines));
 }

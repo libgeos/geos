@@ -14,9 +14,11 @@
 
 #include <geos/operation/overlayng/OverlayGraph.h>
 
+#include <geos/algorithm/CircularArcs.h>
 #include <geos/operation/overlayng/Edge.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/CircularArc.h>
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -84,7 +86,7 @@ OverlayGraph::addEdge(Edge* edge)
 {
     // CoordinateSequence* pts = = edge->getCoordinates().release();
     std::shared_ptr<const CoordinateSequence> pts = edge->releaseCoordinates();
-    OverlayEdge* e = createEdgePair(pts, createOverlayLabel(edge));
+    OverlayEdge* e = createEdgePair(pts, createOverlayLabel(edge), edge->isCurved());
 #if GEOS_DEBUG
     std::cerr << "added edge: " << *e << std::endl;
 #endif
@@ -95,32 +97,52 @@ OverlayGraph::addEdge(Edge* edge)
 
 /*private*/
 OverlayEdge*
-OverlayGraph::createEdgePair(const std::shared_ptr<const CoordinateSequence>& pts, OverlayLabel *lbl)
+OverlayGraph::createEdgePair(const std::shared_ptr<const CoordinateSequence>& pts, OverlayLabel *lbl, bool isCurved)
 {
-    OverlayEdge* e0 = createOverlayEdge(pts, lbl, true);
-    OverlayEdge* e1 = createOverlayEdge(pts, lbl, false);
+    OverlayEdge* e0 = createOverlayEdge(pts, lbl, true, isCurved);
+    OverlayEdge* e1 = createOverlayEdge(pts, lbl, false, isCurved);
     e0->link(e1);
     return e0;
 }
 
+static CoordinateXY
+getDirectionPoint(const CoordinateSequence& pts, bool forward, bool isCurved)
+{
+    if (isCurved) {
+        assert(pts.size() >= 3);
+        if (forward) {
+            CircularArc arc(pts, 0);
+            return arc.getDirectionPoint();
+        } else {
+            CircularArc arc(pts, pts.size() - 3);
+            return algorithm::CircularArcs::getDirectionPoint(arc.getCenter(), arc.getRadius(), arc.theta2(), !arc.isCCW());
+        }
+    }
+
+    assert(pts.size() >= 2);
+    if (forward) {
+        return pts.getAt<CoordinateXY>(1);
+    }
+
+    return pts.getAt<CoordinateXY>(pts.size() - 2);
+}
+
 /*private*/
 OverlayEdge*
-OverlayGraph::createOverlayEdge(const std::shared_ptr<const CoordinateSequence>& pts, OverlayLabel* lbl, bool direction)
+OverlayGraph::createOverlayEdge(const std::shared_ptr<const CoordinateSequence>& pts, OverlayLabel* lbl, bool direction, bool isCurved)
 {
+    assert(pts->size() >= 2);
+
     CoordinateXYZM origin;
-    CoordinateXYZM dirPt;
+    const CoordinateXY dirPt = getDirectionPoint(*pts, direction, isCurved);
 
     if (direction) {
         pts->getAt(0, origin);
-        pts->getAt(1, dirPt);
     }
     else {
-        assert(pts->size() > 0);
-        std::size_t ilast = pts->size() - 1;
-        pts->getAt(ilast, origin);
-        pts->getAt(ilast-1, dirPt);
+        pts->getAt(pts->size() - 1, origin);
     }
-    ovEdgeQue.emplace_back(origin, dirPt, direction, lbl, pts);
+    ovEdgeQue.emplace_back(origin, dirPt, direction, lbl, pts, isCurved);
     OverlayEdge& ove = ovEdgeQue.back();
     return &ove;
 }
