@@ -77,6 +77,8 @@ public:
 
     virtual const SimpleCurve* getCurveN(std::size_t) const = 0;
 
+    std::unique_ptr<Curve> clone() const;
+
     std::unique_ptr<Curve> reverse() const;
 
 protected:

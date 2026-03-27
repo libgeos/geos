@@ -13,6 +13,7 @@
  **********************************************************************/
 
 #include <geos/operation/overlayng/InputGeometry.h>
+#include <geos/algorithm/locate/SimplePointInAreaLocator.h>
 
 namespace geos {      // geos
 namespace operation { // geos.operation
@@ -21,6 +22,7 @@ namespace overlayng { // geos.operation.overlayng
 using geos::geom::Location;
 using geos::geom::Geometry;
 using geos::geom::Envelope;
+using geos::algorithm::locate::SimplePointInAreaLocator;
 using geos::algorithm::locate::IndexedPointInAreaLocator;
 using geos::algorithm::locate::PointOnGeometryLocator;
 
@@ -166,13 +168,23 @@ PointOnGeometryLocator*
 InputGeometry::getLocator(uint8_t geomIndex)
 {
     if (geomIndex == 0) {
-        if (ptLocatorA == nullptr)
-            ptLocatorA.reset(new IndexedPointInAreaLocator(*getGeometry(geomIndex)));
+        if (ptLocatorA == nullptr) {
+            if (geom[0]->hasCurvedComponents()) {
+                ptLocatorA = std::make_unique<SimplePointInAreaLocator>(*getGeometry(geomIndex));
+            } else {
+                ptLocatorA = std::make_unique<IndexedPointInAreaLocator>(*getGeometry(geomIndex));
+            }
+        }
         return ptLocatorA.get();
     }
     else {
-        if (ptLocatorB == nullptr)
-            ptLocatorB.reset(new IndexedPointInAreaLocator(*getGeometry(geomIndex)));
+        if (ptLocatorB == nullptr) {
+            if (geom[1]->hasCurvedComponents()) {
+                ptLocatorB = std::make_unique<SimplePointInAreaLocator>(*getGeometry(geomIndex));
+            } else {
+                ptLocatorB = std::make_unique<IndexedPointInAreaLocator>(*getGeometry(geomIndex));
+            }
+        }
         return ptLocatorB.get();
     }
 }

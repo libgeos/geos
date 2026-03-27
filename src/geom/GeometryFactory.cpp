@@ -635,6 +635,13 @@ const
     return std::unique_ptr<CurvePolygon>(new CurvePolygon(std::move(shell), std::move(holes), *this));
 }
 
+static std::unique_ptr<LineString>
+linearRingToLineString(std::unique_ptr<Curve> linearRing)
+{
+    const std::shared_ptr<const CoordinateSequence> pts = detail::down_cast<const SimpleCurve*>(linearRing.get())->getSharedCoordinates();
+    return linearRing->getFactory()->createLineString(pts);
+}
+
 /* public */
 std::unique_ptr<Surface>
 GeometryFactory::createSurface(std::unique_ptr<Curve> && shell)
@@ -643,6 +650,10 @@ const
     if (shell->getGeometryTypeId() == GEOS_LINEARRING) {
         std::unique_ptr<LinearRing> shellLR(detail::down_cast<LinearRing*>(shell.release()));
         return createPolygon(std::move(shellLR));
+    }
+
+    if (shell->getGeometryTypeId() == GEOS_LINEARRING) {
+        shell = linearRingToLineString(std::move(shell));
     }
 
     return createCurvePolygon(std::move(shell));
@@ -666,6 +677,17 @@ const
         }
 
         return createPolygon(std::move(shellLR), std::move(holesLR));
+    }
+
+    // Purge LinearRings
+    if (shell->getGeometryTypeId() == GEOS_LINEARRING) {
+        shell = linearRingToLineString(std::move(shell));
+    }
+
+    for (std::size_t i = 0; i < holes.size(); i++) {
+        if (holes[i]->getGeometryTypeId() == GEOS_LINEARRING) {
+            holes[i] = linearRingToLineString(std::move(holes[i]));
+        }
     }
 
     return createCurvePolygon(std::move(shell), std::move(holes));

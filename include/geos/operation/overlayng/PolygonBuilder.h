@@ -29,7 +29,7 @@ namespace geos {
 namespace geom {
 class GeometryFactory;
 class Geometry;
-class Polygon;
+class Surface;
 }
 namespace operation {
 namespace overlayng {
@@ -55,7 +55,7 @@ private:
     // Storage
     std::vector<std::unique_ptr<OverlayEdgeRing>> vecOER;
 
-    std::vector<std::unique_ptr<geom::Polygon>> computePolygons(const std::vector<OverlayEdgeRing*>& shellList) const;
+    std::vector<std::unique_ptr<geom::Surface>> computePolygons(const std::vector<OverlayEdgeRing*>& shellList) const;
 
     void buildRings(const std::vector<OverlayEdge*>& resultAreaEdges);
 
@@ -138,7 +138,7 @@ public:
     PolygonBuilder& operator=(const PolygonBuilder&) = delete;
 
     // Methods
-    std::vector<std::unique_ptr<geom::Polygon>> getPolygons() const;
+    std::vector<std::unique_ptr<geom::Surface>> getPolygons() const;
     std::vector<OverlayEdgeRing*> getShellRings() const;
 
 
