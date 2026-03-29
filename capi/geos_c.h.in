@@ -3359,9 +3359,9 @@ extern char GEOS_DLL GEOSHasM(const GEOSGeometry* g);
 * A closed geometry is either:
 * - a non-empty LineString, CircularString, or CompoundCurve whose
 *   start and end points having the same XY values; or
-* - a non-empty MultiLineString or MultiCurve whose elements are 
+* - a non-empty MultiLineString or MultiCurve whose elements are
 *   all closed.
-*  
+*
 * Z and M values are not considered.
 *
 * \param g The geometry to test
@@ -3635,7 +3635,7 @@ extern GEOSGeometry GEOS_DLL *GEOSMinimumClearanceLine(const GEOSGeometry* g);
 * result in an invalid geometry being returned. Be sure
 * to check and repair validity.
 *
-* Z and M coordinate values are preserved but are not considered when 
+* Z and M coordinate values are preserved but are not considered when
 * determining if a point is repeated.
 *
 * \return A geometry with all points within the tolerance of each other removed.
@@ -4387,7 +4387,7 @@ extern void GEOS_DLL GEOSClusterInfo_destroy(GEOSClusterInfo* clusters);
 /**
 * Buffer a geometry.
 * The coordinates of the constructed geometry will not have Z or M values.
-* 
+*
 * \param g The input geometry to be buffered.
 * \param width The distance by which to expand the geometry (or contract)
 *        if the value is negative.
@@ -4501,7 +4501,7 @@ extern GEOSGeometry GEOS_DLL *GEOSBufferWithParams(
 /**
 * Generate a buffer using the provided style parameters.
 * The coordinates of the constructed geometry will not have Z or M values.
-* 
+*
 * \param g The geometry to buffer
 * \param width Width of the buffer
 * \param quadsegs Number of segments per quadrant
@@ -4918,8 +4918,8 @@ extern GEOSGeometry GEOS_DLL *GEOSConcaveHullByLength(
 *        This normalizes the Maximum Edge Length to be scale-free.
 *        A value of 1 produces the convex hull; a value of 0 produces
 *        the original polygons.
-* \param isHolesAllowed is the concave hull allowed to contain holes?
 * \param isTight does the hull follow the outer boundaries of the input polygons.
+* \param isHolesAllowed is the concave hull allowed to contain holes?
 * \return A newly allocated geometry of the concave hull. NULL on exception.
 *
 * Caller is responsible for freeing with GEOSGeom_destroy().
@@ -5184,7 +5184,7 @@ enum GEOSVoronoiFlags
 };
 
 /**
-* Returns the 2D Voronoi polygons or edges computed from the vertices 
+* Returns the 2D Voronoi polygons or edges computed from the vertices
 * of the given geometry.
 *
 * \param g the input geometry whose vertices will be used as sites.
