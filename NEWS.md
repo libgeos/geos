@@ -3,6 +3,7 @@
 2026-xx-xx
 
 - New things:
+  - Add GEOSCoverageEdges (Paul Ramsey)
   - Add new C API functions for Hausdorff distance (GH-1352, Sven Jensen)
   - Add GEOSSubdivideByGrid (GH-1232, Dan Baston)
 

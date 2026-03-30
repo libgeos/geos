@@ -1100,6 +1100,15 @@ extern "C" {
             handle, input);
     }
 
+    GEOSGeometry *
+    GEOSCoverageEdges(
+        const GEOSGeometry * input,
+        int edgetype)
+    {
+        return GEOSCoverageEdges_r(
+            handle, input, edgetype);
+    }
+
     Geometry*
     GEOSRemoveRepeatedPoints(
         const Geometry* g,

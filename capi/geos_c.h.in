@@ -938,6 +938,13 @@ GEOSCoverageSimplifyVW_r(
     double tolerance,
     int preserveBoundary);
 
+/** \see GEOSCoverageEdges */
+extern GEOSGeometry GEOS_DLL *
+GEOSCoverageEdges_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* input,
+    int edgetype);
+
 /** \see GEOSCoverageCleanParams_create */
 extern GEOSCoverageCleanParams GEOS_DLL *
 GEOSCoverageCleanParams_create_r(
@@ -4630,8 +4637,18 @@ extern GEOSGeometry GEOS_DLL * GEOSCoverageSimplifyVW(
     int preserveBoundary);
 
 /**
-* Create a default GEOSCoverageCleanParams object for controlling
-* the way invalid polygon interactions are repaired by \ref GEOSCoverageCleanWithParams.
+ * Returns a MultiLineString representing the unique edges of a polygonal coverage.
+ *
+ * \param input a GeometryCollection or MultiPolygon representing the coverage.
+ * \param edgetype selection type: 0 = ALL, 1 = INTERIOR (shared), 2 = EXTERIOR (non-shared).
+ * \return a MultiLineString of unique edges, or NULL on error.
+ *
+ * \since 3.15
+ */
+extern GEOSGeometry GEOS_DLL *GEOSCoverageEdges(const GEOSGeometry *input, int edgetype);
+
+/**
+ * Create a default GEOSCoverageCleanParams object for controlling* the way invalid polygon interactions are repaired by \ref GEOSCoverageCleanWithParams.
 * \return A newly allocated GEOSCoverageCleanParams. NULL on exception.
 * Caller is responsible for freeing with GEOSCoverageCleanParams_destroy().
 *

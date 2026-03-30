@@ -28,6 +28,7 @@
 #include <geos/algorithm/distance/DiscreteFrechetDistance.h>
 #include <geos/algorithm/hull/ConcaveHull.h>
 #include <geos/algorithm/hull/ConcaveHullOfPolygons.h>
+#include <geos/coverage/CoverageEdges.h>
 #include <geos/coverage/CoverageCleaner.h>
 #include <geos/coverage/CoverageSimplifier.h>
 #include <geos/coverage/CoverageUnion.h>
@@ -4817,5 +4818,16 @@ extern "C" {
         return GEOSCoverageCleanWithParams_r(extHandle, input, nullptr);
     }
 
+    GEOSGeometry *
+    GEOSCoverageEdges_r(GEOSContextHandle_t extHandle,
+        const GEOSGeometry* input,
+        int edgetype)
+    {
+        using geos::coverage::CoverageEdges;
+
+        return execute(extHandle, [&]() -> Geometry* {
+            return CoverageEdges::GetEdges(input, edgetype).release();
+        });
+    }
 
 } /* extern "C" */
