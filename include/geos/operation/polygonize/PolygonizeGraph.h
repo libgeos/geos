@@ -137,7 +137,7 @@ private:
 
     const geom::GeometryFactory* factory;
 
-    planargraph::Node* getNode(const geom::Coordinate& pt);
+    planargraph::Node* getNode(const geom::CoordinateXY& pt);
 
     void computeNextCWEdges();
 

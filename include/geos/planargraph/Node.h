@@ -45,7 +45,7 @@ class GEOS_DLL Node: public GraphComponent {
 protected:
 
     /// The location of this Node
-    geom::Coordinate pt;
+    geom::CoordinateXY pt;
 
     /// The collection of DirectedEdges that leave this Node
     DirectedEdgeStar* deStar;
@@ -65,7 +65,7 @@ public:
             Node* node1);
 
     /// Constructs a Node with the given location.
-    Node(const geom::Coordinate& newPt)
+    Node(const geom::CoordinateXY& newPt)
         :
         pt(newPt)
     {
@@ -92,7 +92,7 @@ public:
     /**
      * \brief Returns the location of this Node.
      */
-    geom::Coordinate&
+    geom::CoordinateXY&
     getCoordinate()
     {
         return pt;

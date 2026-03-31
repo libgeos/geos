@@ -154,7 +154,7 @@ public:
      * @return a Coordinate reference from <code>testPts</code> which is
      * not in <code>pts</code>, or <code>Coordinate::nullCoord</code>
      */
-    static const geom::Coordinate& ptNotInList(
+    static const geom::CoordinateXY& ptNotInList(
         const geom::CoordinateSequence* testPts,
         const geom::CoordinateSequence* pts);
 
@@ -166,7 +166,7 @@ public:
      * @param pts an array of Coordinate to test
      * @return <code>true</code> if the point is in the array
      */
-    static bool isInList(const geom::Coordinate& pt,
+    static bool isInList(const geom::CoordinateXY& pt,
                          const geom::CoordinateSequence* pts);
 
     explicit EdgeRing(const geom::GeometryFactory* newFactory);

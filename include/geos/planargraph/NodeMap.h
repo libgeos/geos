@@ -46,7 +46,7 @@ namespace planargraph { // geos.planargraph
  */
 class GEOS_DLL NodeMap {
 public:
-    typedef std::map<geom::Coordinate, Node*, geom::CoordinateLessThan> container;
+    typedef std::map<geom::CoordinateXY, Node*, geom::CoordinateLessThan> container;
 private:
     container nodeMap;
 public:
@@ -72,14 +72,14 @@ public:
      * Removes the Node at the given location, and returns it
      * (or null if no Node was there).
      */
-    Node* remove(geom::Coordinate& pt);
+    Node* remove(geom::CoordinateXY& pt);
 
     /**
      * \brief
      * Returns the Node at the given location,
      * or null if no Node was there.
      */
-    Node* find(const geom::Coordinate& coord);
+    Node* find(const geom::CoordinateXY& coord);
 
     /**
      * \brief

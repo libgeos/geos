@@ -104,7 +104,7 @@ public:
      *                         parent Edge (if any)
      */
     DirectedEdge(Node* newFrom, Node* newTo,
-                 const geom::Coordinate& directionPt,
+                 const geom::CoordinateXY& directionPt,
                  bool newEdgeDirection);
 
     /**
@@ -151,7 +151,7 @@ public:
      * \brief
      * Returns the coordinate of the from-node.
      */
-    geom::Coordinate& getCoordinate() const;
+    geom::CoordinateXY& getCoordinate() const;
 
     /**
      * \brief

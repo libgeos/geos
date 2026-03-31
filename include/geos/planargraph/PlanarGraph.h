@@ -123,7 +123,7 @@ public:
      * or null if no Node was there.
      */
     Node*
-    findNode(const geom::Coordinate& pt)
+    findNode(const geom::CoordinateXY& pt)
     {
         return nodeMap.find(pt);
     }

@@ -77,13 +77,13 @@ EdgeRing::findDirEdgesInRing(PolygonizeDirectedEdge* startDE) {
 }
 
 /*public static*/
-const Coordinate&
+const CoordinateXY&
 EdgeRing::ptNotInList(const CoordinateSequence* testPts,
                       const CoordinateSequence* pts)
 {
     const std::size_t npts = testPts->getSize();
     for(std::size_t i = 0; i < npts; ++i) {
-        const Coordinate& testPt = testPts->getAt(i);
+        const CoordinateXY& testPt = testPts->getAt<CoordinateXY>(i);
         if(!isInList(testPt, pts)) {
             return testPt;
         }
@@ -93,12 +93,12 @@ EdgeRing::ptNotInList(const CoordinateSequence* testPts,
 
 /*public static*/
 bool
-EdgeRing::isInList(const Coordinate& pt,
+EdgeRing::isInList(const CoordinateXY& pt,
                    const CoordinateSequence* pts)
 {
     const std::size_t npts = pts->getSize();
     for(std::size_t i = 0; i < npts; ++i) {
-        if(pt == pts->getAt(i)) {
+        if(pt == pts->getAt<CoordinateXY>(i)) {
             return true;
         }
     }

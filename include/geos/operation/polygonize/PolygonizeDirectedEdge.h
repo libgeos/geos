@@ -76,7 +76,7 @@ public:
      */
     PolygonizeDirectedEdge(planargraph::Node* newFrom,
                            planargraph::Node* newTo,
-                           const geom::Coordinate& newDirectionPt,
+                           const geom::CoordinateXY& newDirectionPt,
                            bool nEdgeDirection);
 
     /*

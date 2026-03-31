@@ -48,7 +48,7 @@ DirectedEdge::toEdges(std::vector<DirectedEdge*>& dirEdges)
 
 /*public*/
 DirectedEdge::DirectedEdge(Node* newFrom, Node* newTo,
-                           const Coordinate& directionPt, bool newEdgeDirection)
+                           const CoordinateXY& directionPt, bool newEdgeDirection)
 {
     from = newFrom;
     to = newTo;
@@ -112,7 +112,7 @@ DirectedEdge::getToNode() const
 }
 
 /*public*/
-Coordinate&
+CoordinateXY&
 DirectedEdge::getCoordinate() const
 {
     return from->getCoordinate();

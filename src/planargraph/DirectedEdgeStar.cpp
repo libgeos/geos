@@ -81,7 +81,7 @@ DirectedEdgeStar::end() const
 /*
  * Returns the coordinate for the node at which this star is based
  */
-Coordinate&
+CoordinateXY&
 DirectedEdgeStar::getCoordinate() const
 {
     if(outEdges.empty()) {

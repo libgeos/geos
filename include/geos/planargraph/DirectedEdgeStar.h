@@ -27,7 +27,7 @@
 // Forward declarations
 namespace geos {
 namespace geom {
-class Coordinate;
+class CoordinateXY;
 }
 namespace planargraph {
 class DirectedEdge;
@@ -104,7 +104,7 @@ public:
      * \brief Returns the coordinate for the node at which this
      * star is based
      */
-    geom::Coordinate& getCoordinate() const;
+    geom::CoordinateXY& getCoordinate() const;
 
     /**
      * \brief Returns the DirectedEdges, in ascending order

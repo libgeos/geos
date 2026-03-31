@@ -39,7 +39,7 @@ namespace polygonize { // geos.operation.polygonize
  *        opposite to that of the parent Edge (if any)
  */
 PolygonizeDirectedEdge::PolygonizeDirectedEdge(Node* newFrom,
-        Node* newTo, const Coordinate& newDirectionPt,
+        Node* newTo, const CoordinateXY& newDirectionPt,
         bool nEdgeDirection)
     :
     DirectedEdge(newFrom, newTo,

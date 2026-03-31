@@ -52,7 +52,7 @@ NodeMap::add(Node* n)
  * (or null if no Node was there).
  */
 Node*
-NodeMap::remove(geom::Coordinate& pt)
+NodeMap::remove(geom::CoordinateXY& pt)
 {
     Node* n = find(pt);
     nodeMap.erase(pt);
@@ -74,7 +74,7 @@ NodeMap::getNodes(std::vector<Node*>& values)
  * Returns the Node at the given location, or null if no Node was there.
  */
 Node*
-NodeMap::find(const geom::Coordinate& coord)
+NodeMap::find(const geom::CoordinateXY& coord)
 {
     container::iterator found = nodeMap.find(coord);
     if(found == nodeMap.end()) {

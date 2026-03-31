@@ -139,14 +139,14 @@ PolygonizeGraph::addEdge(const LineString* line)
         return;
     }
 
-    const Coordinate& startPt = linePts->getAt(0);
-    const Coordinate& endPt = linePts->getAt(linePts->getSize() - 1);
+    const CoordinateXY& startPt = linePts->getAt<CoordinateXY>(0);
+    const CoordinateXY& endPt = linePts->getAt<CoordinateXY>(linePts->getSize() - 1);
     Node* nStart = getNode(startPt);
     Node* nEnd = getNode(endPt);
     DirectedEdge* de0 = new PolygonizeDirectedEdge(nStart, nEnd, linePts->getAt(1), true);
     newDirEdges.push_back(de0);
     DirectedEdge* de1 = new PolygonizeDirectedEdge(nEnd, nStart,
-            linePts->getAt(linePts->getSize() - 2), false);
+            linePts->getAt<CoordinateXY>(linePts->getSize() - 2), false);
     newDirEdges.push_back(de1);
     Edge* edge = new PolygonizeEdge(line);
     newEdges.push_back(edge);
@@ -157,7 +157,7 @@ PolygonizeGraph::addEdge(const LineString* line)
 }
 
 Node*
-PolygonizeGraph::getNode(const Coordinate& pt)
+PolygonizeGraph::getNode(const CoordinateXY& pt)
 {
     Node* node = findNode(pt);
     if(node == nullptr) {
