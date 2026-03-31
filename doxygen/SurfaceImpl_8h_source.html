@@ -89,7 +89,7 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    SurfaceImpl(<span class="keyword">const</span> SurfaceImpl&amp; p)</div>
 <div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        :</div>
 <div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        Surface(p),</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>        shell(static_cast&lt;RingType*&gt;(p.shell-&gt;<a class="code hl_function" href="classgeos_1_1geom_1_1Geometry.html#ac27b5468991bdd6075df23253ec7440b">clone</a>().release())),</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>        shell(static_cast&lt;RingType*&gt;(p.shell-&gt;clone().release())),</div>
 <div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>        holes(p.holes.size())</div>
 <div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    {</div>
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>        <span class="keywordflow">for</span> (std::size_t i = 0; i &lt; holes.size(); ++i) {</div>
@@ -173,7 +173,6 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span> </div>
 <div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>}</div>
 <div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>}</div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1Geometry_html_ac27b5468991bdd6075df23253ec7440b"><div class="ttname"><a href="classgeos_1_1geom_1_1Geometry.html#ac27b5468991bdd6075df23253ec7440b">geos::geom::Geometry::clone</a></div><div class="ttdeci">std::unique_ptr&lt; Geometry &gt; clone() const</div><div class="ttdoc">Make a deep-copy of this Geometry.</div><div class="ttdef"><b>Definition</b> Geometry.h:212</div></div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition</b> geos.h:38</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
