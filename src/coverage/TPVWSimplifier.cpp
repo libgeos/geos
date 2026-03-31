@@ -47,10 +47,11 @@ typedef TPVWSimplifier::EdgeIndex EdgeIndex;
 std::unique_ptr<MultiLineString>
 TPVWSimplifier::simplify(
     const MultiLineString* lines,
-    double distanceTolerance)
+    double distanceTolerance,
+    const util::ProgressFunction& progressFunction)
 {
     TPVWSimplifier simp(lines, distanceTolerance);
-    std::unique_ptr<MultiLineString> result = simp.simplify();
+    std::unique_ptr<MultiLineString> result = simp.simplify(progressFunction);
     return result;
 }
 
@@ -61,12 +62,13 @@ TPVWSimplifier::simplify(
     const MultiLineString* p_lines,
     std::vector<bool>& p_freeRings,
     const MultiLineString* p_constraintLines,
-    double distanceTolerance)
+    double distanceTolerance,
+    const util::ProgressFunction& progressFunction)
 {
     TPVWSimplifier simp(p_lines, distanceTolerance);
     simp.setFreeRingIndices(p_freeRings);
     simp.setConstraints(p_constraintLines);
-    std::unique_ptr<MultiLineString> result = simp.simplify();
+    std::unique_ptr<MultiLineString> result = simp.simplify(progressFunction);
     return result;
 }
 
@@ -99,22 +101,42 @@ TPVWSimplifier::setFreeRingIndices(std::vector<bool>& freeRing)
 
 /* private */
 std::unique_ptr<MultiLineString>
-TPVWSimplifier::simplify()
+TPVWSimplifier::simplify(const util::ProgressFunction& progressFunction)
 {
     std::vector<bool> emptyList;
-    std::vector<Edge> edges = createEdges(inputLines, isFreeRing);
-    std::vector<Edge> constraintEdges = createEdges(constraintLines, emptyList);
+
+    constexpr double RATIO_FIRST_PASS = 0.8;
+
+    const double ratioInputLinesOverInputAndConstraint =
+        RATIO_FIRST_PASS *
+        static_cast<double>(inputLines ? inputLines->getNumGeometries() : 0) /
+        static_cast<double>(std::max<size_t>(1,
+            (inputLines ? inputLines->getNumGeometries() : 0) +
+            (constraintLines ? constraintLines->getNumGeometries() : 0)));
+
+    std::vector<Edge> edges = createEdges(inputLines, isFreeRing,
+        progressFunction.subProgress(0, ratioInputLinesOverInputAndConstraint));
+
+    std::vector<Edge> constraintEdges = createEdges(
+        constraintLines, emptyList,
+        progressFunction.subProgress(ratioInputLinesOverInputAndConstraint, RATIO_FIRST_PASS));
 
     EdgeIndex edgeIndex;
     edgeIndex.add(edges);
     edgeIndex.add(constraintEdges);
 
     std::vector<std::unique_ptr<LineString>> result;
+
+    util::ProgressContext progress(progressFunction.subProgress(RATIO_FIRST_PASS, 1.0), edges.size());
+
     for (auto& edge : edges) {
         std::unique_ptr<CoordinateSequence> ptsSimp = edge.simplify(edgeIndex);
         auto ls = geomFactory->createLineString(std::move(ptsSimp));
         result.emplace_back(ls.release());
+        progress.update();
     }
+
+    progress.finish();
     return geomFactory->createMultiLineString(std::move(result));
 }
 
@@ -122,18 +144,24 @@ TPVWSimplifier::simplify()
 std::vector<Edge>
 TPVWSimplifier::createEdges(
     const MultiLineString* lines,
-    std::vector<bool>& freeRing)
+    std::vector<bool>& freeRing,
+    const util::ProgressFunction& progressFunction)
 {
     std::vector<Edge> edges;
 
     if (lines == nullptr)
         return edges;
+    const size_t iterCount = lines->getNumGeometries();
 
-    for (std::size_t i = 0; i < lines->getNumGeometries(); i++) {
+    util::ProgressContext progress(progressFunction, lines->getNumGeometries());
+
+    for (size_t i = 0; i < iterCount; ++i) {
         const LineString* line = lines->getGeometryN(i);
         bool isFree = freeRing.empty() ? false : freeRing[i];
         edges.emplace_back(line, isFree, areaTolerance);
+        progress.update();
     }
+    progress.finish();
     return edges;
 }
 
