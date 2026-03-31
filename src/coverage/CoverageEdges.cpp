@@ -18,34 +18,29 @@
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/MultiLineString.h>
+#include <geos/geom/util/PolygonExtracter.h>
 
 namespace geos {      // geos
 namespace coverage { // geos::coverage
 
 /* public static */
 std::unique_ptr<geom::Geometry>
-CoverageEdges::GetEdges(const geom::Geometry* input, int type)
+CoverageEdges::GetEdges(const std::vector<const geom::Geometry*>& coverage, int type)
 {
-    std::vector<const geom::Geometry*> coverage;
-    if (input->getGeometryTypeId() == geom::GEOS_GEOMETRYCOLLECTION ||
-        input->getGeometryTypeId() == geom::GEOS_MULTIPOLYGON) {
-        for (std::size_t i = 0; i < input->getNumGeometries(); i++) {
-            coverage.push_back(input->getGeometryN(i));
-        }
-    }
-    else {
-        coverage.push_back(input);
+    if (coverage.empty()) {
+        return nullptr;
     }
 
+    const geom::GeometryFactory* factory = coverage[0]->getFactory();
     CoverageRingEdges cre(coverage);
     std::vector<CoverageEdge*> selectedEdges;
 
     for (auto* edge : cre.getEdges()) {
-        if (type == 1) { // INTERIOR
+        if (type == 2) { // INTERIOR
             if (edge->getRingCount() > 1)
                 selectedEdges.push_back(edge);
         }
-        else if (type == 2) { // EXTERIOR
+        else if (type == 1) { // EXTERIOR
             if (edge->getRingCount() == 1)
                 selectedEdges.push_back(edge);
         }
@@ -54,8 +49,28 @@ CoverageEdges::GetEdges(const geom::Geometry* input, int type)
         }
     }
 
-    return CoverageEdge::createLines(selectedEdges, input->getFactory());
+    return CoverageEdge::createLines(selectedEdges, factory);
 }
+
+/* public static */
+std::unique_ptr<geom::Geometry>
+CoverageEdges::GetEdges(const geom::Geometry* input, int type)
+{
+    std::vector<const geom::Polygon*> polygons;
+    geom::util::PolygonExtracter::getPolygons(*input, polygons);
+
+    if (polygons.empty()) {
+        return input->getFactory()->createMultiLineString();
+    }
+
+    std::vector<const geom::Geometry*> coverage;
+    for (const auto* poly : polygons) {
+        coverage.push_back(poly);
+    }
+
+    return GetEdges(coverage, type);
+}
+
 
 } // namespace geos::coverage
 } // namespace geos

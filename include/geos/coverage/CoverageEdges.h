@@ -40,8 +40,17 @@ public:
     /**
     * Returns a MultiLineString representing the unique edges of a polygonal coverage.
     *
+    * @param coverage a vector of polygons in the coverage
+    * @param type selection type: 0 = ALL, 1 = EXTERIOR (non-shared), 2 = INTERIOR (shared)
+    * @return a MultiLineString of unique edges
+    */
+    static std::unique_ptr<geom::Geometry> GetEdges(const std::vector<const geom::Geometry*>& coverage, int type = 0);
+
+    /**
+    * Returns a MultiLineString representing the unique edges of a polygonal coverage.
+    *
     * @param coverage a GeometryCollection or MultiPolygon representing the coverage
-    * @param type selection type: 0 = ALL, 1 = INTERIOR (shared), 2 = EXTERIOR (non-shared)
+    * @param type selection type: 0 = ALL, 1 = EXTERIOR (non-shared), 2 = INTERIOR (shared)
     * @return a MultiLineString of unique edges
     */
     static std::unique_ptr<geom::Geometry> GetEdges(const geom::Geometry* coverage, int type = 0);

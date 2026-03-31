@@ -61,7 +61,7 @@ void object::test<2> ()
 {
     checkEdges(
         "GEOMETRYCOLLECTION (POLYGON ((1 1, 1 6, 6 5, 9 6, 9 1, 1 1)), POLYGON ((1 9, 6 9, 6 5, 1 6, 1 9)))",
-        1,
+        2, // INTERIOR
         "MULTILINESTRING ((1 6, 6 5))"
     );
 }
@@ -73,7 +73,7 @@ void object::test<3> ()
 {
     checkEdges(
         "GEOMETRYCOLLECTION (POLYGON ((1 1, 1 6, 6 5, 9 6, 9 1, 1 1)), POLYGON ((1 9, 6 9, 6 5, 1 6, 1 9)))",
-        2,
+        1, // EXTERIOR
         "MULTILINESTRING ((1 6, 1 1, 9 1, 9 6, 6 5), (1 6, 1 9, 6 9, 6 5))"
     );
 }
@@ -84,8 +84,30 @@ template<>
 void object::test<4> ()
 {
     std::string wkt = "GEOMETRYCOLLECTION (POLYGON ((1 3, 2 3, 2 2, 1 2, 1 3)), POLYGON ((3 3, 3 2, 2 2, 2 3, 3 3)), POLYGON ((3 1, 2 1, 2 2, 3 2, 3 1)), POLYGON ((1 1, 1 2, 2 2, 2 1, 1 1)))";
-    checkEdges(wkt, 1,
+    checkEdges(wkt, 2, // INTERIOR
         "MULTILINESTRING ((1 2, 2 2), (2 1, 2 2), (2 2, 2 3), (2 2, 3 2))");
+}
+
+// testTouchingAtPointInterior
+template<>
+template<>
+void object::test<5> ()
+{
+    // Two polygons touching only at a point (1 1)
+    std::string wkt = "GEOMETRYCOLLECTION (POLYGON ((0 0, 0 1, 1 1, 1 0, 0 0)), POLYGON ((1 1, 1 2, 2 2, 2 1, 1 1)))";
+    checkEdges(wkt, 2, // INTERIOR
+        "MULTILINESTRING EMPTY");
+}
+
+// testTouchingAtPointExterior
+template<>
+template<>
+void object::test<6> ()
+{
+    // Two polygons touching only at a point (1 1)
+    std::string wkt = "GEOMETRYCOLLECTION (POLYGON ((0 0, 0 1, 1 1, 1 0, 0 0)), POLYGON ((1 1, 1 2, 2 2, 2 1, 1 1)))";
+    checkEdges(wkt, 1, // EXTERIOR
+        "MULTILINESTRING ((0 0, 0 1, 1 1, 1 0, 0 0), (1 1, 1 2, 2 2, 2 1, 1 1))");
 }
 
 } // namespace tut
