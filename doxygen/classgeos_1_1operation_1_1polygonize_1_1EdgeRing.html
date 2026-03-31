@@ -150,12 +150,12 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memitem:ae498a0356e239801a2e4ce9319348c74" id="r_ae498a0356e239801a2e4ce9319348c74"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; <a class="el" href="classgeos_1_1operation_1_1polygonize_1_1PolygonizeDirectedEdge.html">PolygonizeDirectedEdge</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1polygonize_1_1EdgeRing.html#ae498a0356e239801a2e4ce9319348c74">findDirEdgesInRing</a> (<a class="el" href="classgeos_1_1operation_1_1polygonize_1_1PolygonizeDirectedEdge.html">PolygonizeDirectedEdge</a> *startDE)</td></tr>
 <tr class="memdesc:ae498a0356e239801a2e4ce9319348c74"><td class="mdescLeft">&#160;</td><td class="mdescRight">Traverses a ring of DirectedEdges, accumulating them into a list.  <br /></td></tr>
 <tr class="separator:ae498a0356e239801a2e4ce9319348c74"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a78cd175e0b26029675ad7e14ce9a8033" id="r_a78cd175e0b26029675ad7e14ce9a8033"><td class="memItemLeft" align="right" valign="top">static const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1polygonize_1_1EdgeRing.html#a78cd175e0b26029675ad7e14ce9a8033">ptNotInList</a> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> *testPts, const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> *pts)</td></tr>
-<tr class="memdesc:a78cd175e0b26029675ad7e14ce9a8033"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds a point in a list of points which is not contained in another list of points.  <br /></td></tr>
-<tr class="separator:a78cd175e0b26029675ad7e14ce9a8033"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0c106b5c46736e37dcf99ca3383456cf" id="r_a0c106b5c46736e37dcf99ca3383456cf"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1polygonize_1_1EdgeRing.html#a0c106b5c46736e37dcf99ca3383456cf">isInList</a> (const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;pt, const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> *pts)</td></tr>
-<tr class="memdesc:a0c106b5c46736e37dcf99ca3383456cf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tests whether a given point is in an array of points. Uses a value-based test.  <br /></td></tr>
-<tr class="separator:a0c106b5c46736e37dcf99ca3383456cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adbccc4e524d26322988c30188d36216d" id="r_adbccc4e524d26322988c30188d36216d"><td class="memItemLeft" align="right" valign="top">static const geom::CoordinateXY &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1polygonize_1_1EdgeRing.html#adbccc4e524d26322988c30188d36216d">ptNotInList</a> (const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> *testPts, const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> *pts)</td></tr>
+<tr class="memdesc:adbccc4e524d26322988c30188d36216d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds a point in a list of points which is not contained in another list of points.  <br /></td></tr>
+<tr class="separator:adbccc4e524d26322988c30188d36216d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac470637a84f428f601c7b4232343828e" id="r_ac470637a84f428f601c7b4232343828e"><td class="memItemLeft" align="right" valign="top">static bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1polygonize_1_1EdgeRing.html#ac470637a84f428f601c7b4232343828e">isInList</a> (const geom::CoordinateXY &amp;pt, const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> *pts)</td></tr>
+<tr class="memdesc:ac470637a84f428f601c7b4232343828e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tests whether a given point is in an array of points. Uses a value-based test.  <br /></td></tr>
+<tr class="separator:ac470637a84f428f601c7b4232343828e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represents a ring of <a class="el" href="classgeos_1_1operation_1_1polygonize_1_1PolygonizeDirectedEdge.html" title="A DirectedEdge of a PolygonizeGraph, which represents an edge of a polygon formed by the graph.">PolygonizeDirectedEdge</a> which form a ring of a polygon. The ring may be either an outer shell or a hole. </p>
@@ -460,8 +460,8 @@ null if no containing <a class="el" href="classgeos_1_1operation_1_1polygonize_1
 
 </div>
 </div>
-<a id="a0c106b5c46736e37dcf99ca3383456cf" name="a0c106b5c46736e37dcf99ca3383456cf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0c106b5c46736e37dcf99ca3383456cf">&#9670;&#160;</a></span>isInList()</h2>
+<a id="ac470637a84f428f601c7b4232343828e" name="ac470637a84f428f601c7b4232343828e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac470637a84f428f601c7b4232343828e">&#9670;&#160;</a></span>isInList()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -472,7 +472,7 @@ null if no containing <a class="el" href="classgeos_1_1operation_1_1polygonize_1
         <tr>
           <td class="memname">static bool geos::operation::polygonize::EdgeRing::isInList </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;&#160;</td>
+          <td class="paramtype">const geom::CoordinateXY &amp;&#160;</td>
           <td class="paramname"><em>pt</em>, </td>
         </tr>
         <tr>
@@ -562,8 +562,8 @@ null if no containing <a class="el" href="classgeos_1_1operation_1_1polygonize_1
 
 </div>
 </div>
-<a id="a78cd175e0b26029675ad7e14ce9a8033" name="a78cd175e0b26029675ad7e14ce9a8033"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a78cd175e0b26029675ad7e14ce9a8033">&#9670;&#160;</a></span>ptNotInList()</h2>
+<a id="adbccc4e524d26322988c30188d36216d" name="adbccc4e524d26322988c30188d36216d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adbccc4e524d26322988c30188d36216d">&#9670;&#160;</a></span>ptNotInList()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -572,7 +572,7 @@ null if no containing <a class="el" href="classgeos_1_1operation_1_1polygonize_1
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname">static const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp; geos::operation::polygonize::EdgeRing::ptNotInList </td>
+          <td class="memname">static const geom::CoordinateXY &amp; geos::operation::polygonize::EdgeRing::ptNotInList </td>
           <td>(</td>
           <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> *&#160;</td>
           <td class="paramname"><em>testPts</em>, </td>
