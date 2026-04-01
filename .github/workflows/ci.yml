@@ -254,7 +254,7 @@ jobs:
 
     - name: Upload Coverage to Codecov
       if: ${{ matrix.ci.build_type == 'Coverage' && !cancelled() }}
-      uses: codecov/codecov-action@v5
+      uses: codecov/codecov-action@v6
       with:
         fail_ci_if_error: false
         files: build/coverage.info
