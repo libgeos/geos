@@ -252,6 +252,11 @@ std::unique_ptr&lt; CurvePolygon &gt;&#160;</td><td class="memItemRight" valign=
 <tr class="memitem:acc09aa3ba2702c18c1b149e32aff0423" id="r_acc09aa3ba2702c18c1b149e32aff0423"><td class="memItemLeft" align="right" valign="top"><a id="acc09aa3ba2702c18c1b149e32aff0423" name="acc09aa3ba2702c18c1b149e32aff0423"></a>
 std::unique_ptr&lt; CurvePolygon &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>createCurvePolygon</b> (std::unique_ptr&lt; Curve &gt; &amp;&amp;shell, std::vector&lt; std::unique_ptr&lt; Curve &gt; &gt; &amp;&amp;holes) const</td></tr>
 <tr class="separator:acc09aa3ba2702c18c1b149e32aff0423"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad1662078e20a370ac4b5efe6b6c19d94" id="r_ad1662078e20a370ac4b5efe6b6c19d94"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Surface.html">Surface</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html#ad1662078e20a370ac4b5efe6b6c19d94">createSurface</a> (std::unique_ptr&lt; Curve &gt; &amp;&amp;shell) const</td></tr>
+<tr class="separator:ad1662078e20a370ac4b5efe6b6c19d94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0de410110aeefe68673c82579eb2b8a5" id="r_a0de410110aeefe68673c82579eb2b8a5"><td class="memItemLeft" align="right" valign="top"><a id="a0de410110aeefe68673c82579eb2b8a5" name="a0de410110aeefe68673c82579eb2b8a5"></a>
+std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Surface.html">Surface</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>createSurface</b> (std::unique_ptr&lt; Curve &gt; &amp;&amp;shell, std::vector&lt; std::unique_ptr&lt; Curve &gt; &gt; &amp;&amp;holes) const</td></tr>
+<tr class="separator:a0de410110aeefe68673c82579eb2b8a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a58de9b1e234c5bba058781bf4a8d5a9a" id="r_a58de9b1e234c5bba058781bf4a8d5a9a"><td class="memItemLeft" align="right" valign="top"><a id="a58de9b1e234c5bba058781bf4a8d5a9a" name="a58de9b1e234c5bba058781bf4a8d5a9a"></a>
 std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1LineString.html">LineString</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>createLineString</b> (std::size_t coordinateDimension=2) const</td></tr>
 <tr class="memdesc:a58de9b1e234c5bba058781bf4a8d5a9a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Construct an EMPTY <a class="el" href="classgeos_1_1geom_1_1LineString.html">LineString</a>. <br /></td></tr>
@@ -780,6 +785,25 @@ template&lt;class T &gt; </div>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>an empty atomic geometry of given dimension </dd></dl>
+
+</div>
+</div>
+<a id="ad1662078e20a370ac4b5efe6b6c19d94" name="ad1662078e20a370ac4b5efe6b6c19d94"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1662078e20a370ac4b5efe6b6c19d94">&#9670;&#160;</a></span>createSurface()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Surface.html">Surface</a> &gt; geos::geom::GeometryFactory::createSurface </td>
+          <td>(</td>
+          <td class="paramtype">std::unique_ptr&lt; Curve &gt; &amp;&amp;&#160;</td>
+          <td class="paramname"><em>shell</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Construct a <a class="el" href="classgeos_1_1geom_1_1Surface.html">Surface</a>, taking ownership of given arguments If arguments are LinearRings, a <a class="el" href="classgeos_1_1geom_1_1Polygon.html" title="Represents a linear polygon, which may include holes.">Polygon</a> will be returned. Otherwise, a CurvePolygon will be returned. </p>
 
 </div>
 </div>
