@@ -78,15 +78,18 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a61a8606fd05649244acbb6227a147170" id="r_a61a8606fd05649244acbb6227a147170"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1polygonize_1_1PolygonizeGraph.html#a61a8606fd05649244acbb6227a147170">addEdge</a> (const <a class="el" href="classgeos_1_1geom_1_1LineString.html">geom::LineString</a> *line)</td></tr>
 <tr class="memdesc:a61a8606fd05649244acbb6227a147170"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a LineString forming an edge of the polygon graph.  <br /></td></tr>
 <tr class="separator:a61a8606fd05649244acbb6227a147170"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5940828e61754fa02b1e8a3f3062ed31" id="r_a5940828e61754fa02b1e8a3f3062ed31"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1polygonize_1_1PolygonizeGraph.html#a5940828e61754fa02b1e8a3f3062ed31">addEdge</a> (const geom::CircularString *geom)</td></tr>
+<tr class="memdesc:a5940828e61754fa02b1e8a3f3062ed31"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add a CircularString forming an edge of the polygon graph.  <br /></td></tr>
+<tr class="separator:a5940828e61754fa02b1e8a3f3062ed31"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a004c877e7b17942ec15fc2176dd89cf4" id="r_a004c877e7b17942ec15fc2176dd89cf4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1polygonize_1_1PolygonizeGraph.html#a004c877e7b17942ec15fc2176dd89cf4">getEdgeRings</a> (std::vector&lt; <a class="el" href="classgeos_1_1operation_1_1polygonize_1_1EdgeRing.html">EdgeRing</a> * &gt; &amp;edgeRingList)</td></tr>
 <tr class="memdesc:a004c877e7b17942ec15fc2176dd89cf4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the EdgeRings formed by the edges in this graph.  <br /></td></tr>
 <tr class="separator:a004c877e7b17942ec15fc2176dd89cf4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a0992fffa3d00e4f4084fbb2a78ad1988" id="r_a0992fffa3d00e4f4084fbb2a78ad1988"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1polygonize_1_1PolygonizeGraph.html#a0992fffa3d00e4f4084fbb2a78ad1988">deleteCutEdges</a> (std::vector&lt; const <a class="el" href="classgeos_1_1geom_1_1LineString.html">geom::LineString</a> * &gt; &amp;cutLines)</td></tr>
-<tr class="memdesc:a0992fffa3d00e4f4084fbb2a78ad1988"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds and removes all cut edges from the graph.  <br /></td></tr>
-<tr class="separator:a0992fffa3d00e4f4084fbb2a78ad1988"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af637ef4dcd1ce6d31a335b26d55bad5e" id="r_af637ef4dcd1ce6d31a335b26d55bad5e"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1polygonize_1_1PolygonizeGraph.html#af637ef4dcd1ce6d31a335b26d55bad5e">deleteDangles</a> (std::vector&lt; const <a class="el" href="classgeos_1_1geom_1_1LineString.html">geom::LineString</a> * &gt; &amp;dangleLines)</td></tr>
-<tr class="memdesc:af637ef4dcd1ce6d31a335b26d55bad5e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Marks all edges from the graph which are "dangles".  <br /></td></tr>
-<tr class="separator:af637ef4dcd1ce6d31a335b26d55bad5e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa97013b765d235c803bf15911f6d2c9b" id="r_aa97013b765d235c803bf15911f6d2c9b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1polygonize_1_1PolygonizeGraph.html#aa97013b765d235c803bf15911f6d2c9b">deleteCutEdges</a> (std::vector&lt; const geom::SimpleCurve * &gt; &amp;cutLines)</td></tr>
+<tr class="memdesc:aa97013b765d235c803bf15911f6d2c9b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Finds and removes all cut edges from the graph.  <br /></td></tr>
+<tr class="separator:aa97013b765d235c803bf15911f6d2c9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5a53f71402bb2aa03ef0077147f3c4d1" id="r_a5a53f71402bb2aa03ef0077147f3c4d1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1polygonize_1_1PolygonizeGraph.html#a5a53f71402bb2aa03ef0077147f3c4d1">deleteDangles</a> (std::vector&lt; const geom::SimpleCurve * &gt; &amp;dangleLines)</td></tr>
+<tr class="memdesc:a5a53f71402bb2aa03ef0077147f3c4d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Marks all edges from the graph which are "dangles".  <br /></td></tr>
+<tr class="separator:a5a53f71402bb2aa03ef0077147f3c4d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classgeos_1_1planargraph_1_1PlanarGraph"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classgeos_1_1planargraph_1_1PlanarGraph')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classgeos_1_1planargraph_1_1PlanarGraph.html">geos::planargraph::PlanarGraph</a></td></tr>
 <tr class="memitem:a01eaae76182f6582461a7a6e391269bc inherit pub_methods_classgeos_1_1planargraph_1_1PlanarGraph" id="r_a01eaae76182f6582461a7a6e391269bc"><td class="memItemLeft" align="right" valign="top">
 &#160;</td><td class="memItemRight" valign="bottom"><b>PlanarGraph</b> ()</td></tr>
@@ -195,8 +198,34 @@ std::vector&lt; <a class="el" href="classgeos_1_1planargraph_1_1DirectedEdge.htm
 <div class="textblock"><p>Represents a planar graph of edges that can be used to compute a polygonization, and implements the algorithms to compute the EdgeRings formed by the graph. </p>
 <p>The marked flag on DirectedEdge is used to indicate that a directed edge has be logically deleted from the graph. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="a5940828e61754fa02b1e8a3f3062ed31" name="a5940828e61754fa02b1e8a3f3062ed31"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5940828e61754fa02b1e8a3f3062ed31">&#9670;&#160;</a></span>addEdge() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void geos::operation::polygonize::PolygonizeGraph::addEdge </td>
+          <td>(</td>
+          <td class="paramtype">const geom::CircularString *&#160;</td>
+          <td class="paramname"><em>geom</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Add a CircularString forming an edge of the polygon graph. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">geom</td><td>the CircularString to add </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a61a8606fd05649244acbb6227a147170" name="a61a8606fd05649244acbb6227a147170"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a61a8606fd05649244acbb6227a147170">&#9670;&#160;</a></span>addEdge()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a61a8606fd05649244acbb6227a147170">&#9670;&#160;</a></span>addEdge() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -221,8 +250,8 @@ std::vector&lt; <a class="el" href="classgeos_1_1planargraph_1_1DirectedEdge.htm
 
 </div>
 </div>
-<a id="a0992fffa3d00e4f4084fbb2a78ad1988" name="a0992fffa3d00e4f4084fbb2a78ad1988"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0992fffa3d00e4f4084fbb2a78ad1988">&#9670;&#160;</a></span>deleteCutEdges()</h2>
+<a id="aa97013b765d235c803bf15911f6d2c9b" name="aa97013b765d235c803bf15911f6d2c9b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa97013b765d235c803bf15911f6d2c9b">&#9670;&#160;</a></span>deleteCutEdges()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -230,7 +259,7 @@ std::vector&lt; <a class="el" href="classgeos_1_1planargraph_1_1DirectedEdge.htm
         <tr>
           <td class="memname">void geos::operation::polygonize::PolygonizeGraph::deleteCutEdges </td>
           <td>(</td>
-          <td class="paramtype">std::vector&lt; const <a class="el" href="classgeos_1_1geom_1_1LineString.html">geom::LineString</a> * &gt; &amp;&#160;</td>
+          <td class="paramtype">std::vector&lt; const geom::SimpleCurve * &gt; &amp;&#160;</td>
           <td class="paramname"><em>cutLines</em></td><td>)</td>
           <td></td>
         </tr>
@@ -240,7 +269,7 @@ std::vector&lt; <a class="el" href="classgeos_1_1planargraph_1_1DirectedEdge.htm
 <p>Finds and removes all cut edges from the graph. </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">cutLines</td><td>: the list of the LineString forming the removed cut edges will be pushed here.</td></tr>
+    <tr><td class="paramname">cutLines</td><td>: the list of the geometries forming the removed cut edges will be pushed here.</td></tr>
   </table>
   </dd>
 </dl>
@@ -248,8 +277,8 @@ std::vector&lt; <a class="el" href="classgeos_1_1planargraph_1_1DirectedEdge.htm
 
 </div>
 </div>
-<a id="af637ef4dcd1ce6d31a335b26d55bad5e" name="af637ef4dcd1ce6d31a335b26d55bad5e"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af637ef4dcd1ce6d31a335b26d55bad5e">&#9670;&#160;</a></span>deleteDangles()</h2>
+<a id="a5a53f71402bb2aa03ef0077147f3c4d1" name="a5a53f71402bb2aa03ef0077147f3c4d1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a53f71402bb2aa03ef0077147f3c4d1">&#9670;&#160;</a></span>deleteDangles()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -257,7 +286,7 @@ std::vector&lt; <a class="el" href="classgeos_1_1planargraph_1_1DirectedEdge.htm
         <tr>
           <td class="memname">void geos::operation::polygonize::PolygonizeGraph::deleteDangles </td>
           <td>(</td>
-          <td class="paramtype">std::vector&lt; const <a class="el" href="classgeos_1_1geom_1_1LineString.html">geom::LineString</a> * &gt; &amp;&#160;</td>
+          <td class="paramtype">std::vector&lt; const geom::SimpleCurve * &gt; &amp;&#160;</td>
           <td class="paramname"><em>dangleLines</em></td><td>)</td>
           <td></td>
         </tr>
@@ -268,7 +297,7 @@ std::vector&lt; <a class="el" href="classgeos_1_1planargraph_1_1DirectedEdge.htm
 <p>Dangles are which are incident on a node with degree 1. This process is recursive, since removing a dangling edge may result in another edge becoming a dangle. In order to handle large recursion depths efficiently, an explicit recursion stack is used</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">dangleLines</td><td>: the LineStrings that formed dangles will be push_back'ed here </td></tr>
+    <tr><td class="paramname">dangleLines</td><td>: the geometries that formed dangles will be push_back'ed here </td></tr>
   </table>
   </dd>
 </dl>

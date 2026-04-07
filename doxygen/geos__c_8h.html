@@ -21013,7 +21013,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
 </div><div class="memdoc">
 <p>Polygonizes a set of Geometries which contain linework that represents the edges of a planar graph.</p>
 <p>All non-curved types of Geometry are accepted as input; the constituent linework is extracted as the edges to be polygonized.</p>
-<p>Z and M values from the input linework will be preserved.</p>
+<p>Z and M values from the input linework will be preserved. Curved geometries are supported since GEOS 3.15.</p>
 <p>The edges must be correctly noded; that is, they must only meet at their endpoints and not overlap anywhere. If your edges are not already noded, run them through <a class="el" href="geos__c_8h.html#aff0189281a68ba343406649d1b5fc17f">GEOSUnaryUnion()</a> first. Polygonization will accept incorrectly noded input but will not form polygons from non-noded edges, and reports them as errors.</p>
 <p>The Polygonizer reports the following kinds of errors:</p>
 <ul>
@@ -21025,7 +21025,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
 <p>The <a class="el" href="geos__c_8h.html#a1a2854a08c8d117dd58e96455f4308a1">GEOSPolygonize_valid()</a> variant allows extracting only polygons which form a valid polygonal result. The set of extracted polygons is guaranteed to be edge-disjoint. This is useful when it is known that the input lines form a valid polygonal geometry (which may include holes or nested polygons).</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">geoms</td><td>Array of linear geometries to polygons. Caller retains ownership of both array container and objects. </td></tr>
+    <tr><td class="paramname">geoms</td><td>Array of linear geometries to polygonize. Caller retains ownership of both array container and objects. </td></tr>
     <tr><td class="paramname">ngeoms</td><td>Size of the geoms array. </td></tr>
   </table>
   </dd>
@@ -21082,6 +21082,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
 </table>
 </div><div class="memdoc">
 <p>Perform the polygonization as <a class="el" href="geos__c_8h.html#a79cbe36e26561a02378f950907d6870a">GEOSPolygonize()</a> and return the polygonal result as well as all extra outputs.</p>
+<p>Z and M values from the input linework will be preserved. Curved geometries are supported since GEOS 3.15.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">input</td><td>A single geometry with all the input lines to polygonize. </td></tr>
@@ -21229,9 +21230,10 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
 </table>
 </div><div class="memdoc">
 <p>Has the same polygonizing behavior as <a class="el" href="geos__c_8h.html#a79cbe36e26561a02378f950907d6870a">GEOSPolygonize()</a>, but returns a result which is a valid polygonal geometry. The result will not contain any edge-adjacent elements.</p>
+<p>Z and M values from the input linework will be preserved. Curved geometries are supported since GEOS 3.15.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">geoms</td><td>Array of linear geometries to polygons. Caller retains ownership of both array container and objects. </td></tr>
+    <tr><td class="paramname">geoms</td><td>Array of linear geometries to polygonize. Caller retains ownership of both array container and objects. </td></tr>
     <tr><td class="paramname">ngeoms</td><td>Size of the geoms array. </td></tr>
   </table>
   </dd>
@@ -21321,9 +21323,10 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
 </table>
 </div><div class="memdoc">
 <p>Perform the polygonization as <a class="el" href="geos__c_8h.html#a79cbe36e26561a02378f950907d6870a">GEOSPolygonize()</a> but return only the "cut edges", the linear features that are connected at both ends, do <em>not</em> participate in the final polygon.</p>
+<p>Z and M values from the input linework will be preserved. Curved geometries are supported since GEOS 3.15.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">geoms</td><td>Array of linear geometries to polygons. Caller retains ownersihp of both array container and objects. </td></tr>
+    <tr><td class="paramname">geoms</td><td>Array of linear geometries to polygonize. Caller retains ownership of both array container and objects. </td></tr>
     <tr><td class="paramname">ngeoms</td><td>Size of the geoms array. </td></tr>
   </table>
   </dd>
