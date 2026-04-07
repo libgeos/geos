@@ -76,7 +76,7 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="keyword">class </span>GEOS_DLL NodableArcString : <span class="keyword">public</span> ArcString, <span class="keyword">public</span> NodablePath {</div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    NodableArcString(std::vector&lt;geom::CircularArc&gt; arcs, <span class="keyword">const</span> std::shared_ptr&lt;const geom::CoordinateSequence&gt;&amp; coords, <span class="keywordtype">bool</span> constructZ, <span class="keywordtype">bool</span> constructM, <span class="keywordtype">void</span>* context);</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>    NodableArcString(std::vector&lt;geom::CircularArc&gt; arcs, <span class="keyword">const</span> std::shared_ptr&lt;const geom::CoordinateSequence&gt;&amp; coords, <span class="keywordtype">bool</span> constructZ, <span class="keywordtype">bool</span> constructM, <span class="keyword">const</span> <span class="keywordtype">void</span>* context);</div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span> </div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    std::unique_ptr&lt;ArcString&gt; clone() <span class="keyword">const</span>;</div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>

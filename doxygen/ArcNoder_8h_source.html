@@ -95,12 +95,12 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
 <div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    std::vector&lt;std::unique_ptr&lt;SegmentString&gt;&gt; getNodedSubstrings() <span class="keyword">override</span>;</div>
 <div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    <span class="keyword">virtual</span> <span class="keywordtype">void</span> computePathNodes(<span class="keyword">const</span> std::vector&lt;PathString*&gt;&amp; inputPaths) = 0;</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    <span class="keywordtype">void</span> computePathNodes(<span class="keyword">const</span> std::vector&lt;PathString*&gt;&amp; inputPaths) <span class="keyword">override</span> = 0;</div>
 <div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    <span class="keyword">virtual</span> std::vector&lt;std::unique_ptr&lt;PathString&gt;&gt; getNodedPaths() = 0;</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    std::vector&lt;std::unique_ptr&lt;PathString&gt;&gt; getNodedPaths() <span class="keyword">override</span> = 0;</div>
 <div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
 <div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="keyword">protected</span>:</div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    ArcIntersector* m_intersector;</div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    ArcIntersector* m_intersector{<span class="keyword">nullptr</span>};</div>
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>};</div>
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>}</div>

@@ -68,12 +68,21 @@ Inheritance diagram for geos::noding::PathString:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a5dc6c4a4419e4626d181584b08bfe5b3" id="r_a5dc6c4a4419e4626d181584b08bfe5b3"><td class="memItemLeft" align="right" valign="top"><a id="a5dc6c4a4419e4626d181584b08bfe5b3" name="a5dc6c4a4419e4626d181584b08bfe5b3"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>PathString</b> (const void *p_context=nullptr)</td></tr>
+<tr class="separator:a5dc6c4a4419e4626d181584b08bfe5b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aec1e76bd9d38b4dde7bd35705c68be71" id="r_aec1e76bd9d38b4dde7bd35705c68be71"><td class="memItemLeft" align="right" valign="top"><a id="aec1e76bd9d38b4dde7bd35705c68be71" name="aec1e76bd9d38b4dde7bd35705c68be71"></a>
 virtual std::size_t&#160;</td><td class="memItemRight" valign="bottom"><b>getSize</b> () const =0</td></tr>
 <tr class="separator:aec1e76bd9d38b4dde7bd35705c68be71"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae75eca4dbb688bc0b7e56054aa44ae36" id="r_ae75eca4dbb688bc0b7e56054aa44ae36"><td class="memItemLeft" align="right" valign="top"><a id="ae75eca4dbb688bc0b7e56054aa44ae36" name="ae75eca4dbb688bc0b7e56054aa44ae36"></a>
 virtual double&#160;</td><td class="memItemRight" valign="bottom"><b>getLength</b> () const =0</td></tr>
 <tr class="separator:ae75eca4dbb688bc0b7e56054aa44ae36"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adeaf0314fa171e8305effb4c21107357" id="r_adeaf0314fa171e8305effb4c21107357"><td class="memItemLeft" align="right" valign="top">const void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1PathString.html#adeaf0314fa171e8305effb4c21107357">getData</a> () const</td></tr>
+<tr class="memdesc:adeaf0314fa171e8305effb4c21107357"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the user-defined data for this segment string.  <br /></td></tr>
+<tr class="separator:adeaf0314fa171e8305effb4c21107357"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a142451db837dd7d784a5edf619983b97" id="r_a142451db837dd7d784a5edf619983b97"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1PathString.html#a142451db837dd7d784a5edf619983b97">setData</a> (const void *data)</td></tr>
+<tr class="memdesc:a142451db837dd7d784a5edf619983b97"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the user-defined data for this segment string.  <br /></td></tr>
+<tr class="separator:a142451db837dd7d784a5edf619983b97"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3ee73c1da689fd535e79f23757503ff1" id="r_a3ee73c1da689fd535e79f23757503ff1"><td class="memItemLeft" align="right" valign="top">virtual const std::shared_ptr&lt; const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1PathString.html#a3ee73c1da689fd535e79f23757503ff1">getCoordinates</a> () const =0</td></tr>
 <tr class="memdesc:a3ee73c1da689fd535e79f23757503ff1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a pointer to the CoordinateSequence associated with this <a class="el" href="classgeos_1_1noding_1_1PathString.html">PathString</a>.  <br /></td></tr>
 <tr class="separator:a3ee73c1da689fd535e79f23757503ff1"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -113,6 +122,68 @@ static std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1PathString.htm
 <p>Return a pointer to the CoordinateSequence associated with this <a class="el" href="classgeos_1_1noding_1_1PathString.html">PathString</a>. </p>
 
 <p>Implemented in <a class="el" href="classgeos_1_1noding_1_1ArcString.html#af2b4967f18ee7659fbfac216633a99c0">geos::noding::ArcString</a>, and <a class="el" href="classgeos_1_1noding_1_1SegmentString.html#a20d16cced8bf865fc8662a4b2671ef75">geos::noding::SegmentString</a>.</p>
+
+</div>
+</div>
+<a id="adeaf0314fa171e8305effb4c21107357" name="adeaf0314fa171e8305effb4c21107357"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adeaf0314fa171e8305effb4c21107357">&#9670;&#160;</a></span>getData()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const void * geos::noding::PathString::getData </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Gets the user-defined data for this segment string. </p>
+<dl class="section return"><dt>Returns</dt><dd>the user-defined data </dd></dl>
+
+</div>
+</div>
+<a id="a142451db837dd7d784a5edf619983b97" name="a142451db837dd7d784a5edf619983b97"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a142451db837dd7d784a5edf619983b97">&#9670;&#160;</a></span>setData()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void geos::noding::PathString::setData </td>
+          <td>(</td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>data</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets the user-defined data for this segment string. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data</td><td>an Object containing user-defined data </td></tr>
+  </table>
+  </dd>
+</dl>
 
 </div>
 </div>

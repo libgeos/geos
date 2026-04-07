@@ -70,9 +70,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a461919a8e3066facc42e14d3b163ec98" id="r_a461919a8e3066facc42e14d3b163ec98"><td class="memItemLeft" align="right" valign="top"><a id="a461919a8e3066facc42e14d3b163ec98" name="a461919a8e3066facc42e14d3b163ec98"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>ArcString</b> (std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1CircularArc.html">geom::CircularArc</a> &gt; arcs)</td></tr>
 <tr class="separator:a461919a8e3066facc42e14d3b163ec98"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab87786d490579fd12cd6bcf5847807e5" id="r_ab87786d490579fd12cd6bcf5847807e5"><td class="memItemLeft" align="right" valign="top"><a id="ab87786d490579fd12cd6bcf5847807e5" name="ab87786d490579fd12cd6bcf5847807e5"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>ArcString</b> (std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1CircularArc.html">geom::CircularArc</a> &gt; arcs, const std::shared_ptr&lt; const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> &gt; &amp;seq, void *context)</td></tr>
-<tr class="separator:ab87786d490579fd12cd6bcf5847807e5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acfe9601be28539fe0a6f40c0bba15bd1" id="r_acfe9601be28539fe0a6f40c0bba15bd1"><td class="memItemLeft" align="right" valign="top"><a id="acfe9601be28539fe0a6f40c0bba15bd1" name="acfe9601be28539fe0a6f40c0bba15bd1"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>ArcString</b> (std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1CircularArc.html">geom::CircularArc</a> &gt; arcs, const std::shared_ptr&lt; const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> &gt; &amp;seq, const void *p_context)</td></tr>
+<tr class="separator:acfe9601be28539fe0a6f40c0bba15bd1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abcae342ac3be399aa650e77b236804da" id="r_abcae342ac3be399aa650e77b236804da"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1ArcString.html#abcae342ac3be399aa650e77b236804da">getSize</a> () const override</td></tr>
 <tr class="separator:abcae342ac3be399aa650e77b236804da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a12568e227af9bd60b11f5681d6056984" id="r_a12568e227af9bd60b11f5681d6056984"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1ArcString.html#a12568e227af9bd60b11f5681d6056984">getLength</a> () const override</td></tr>
@@ -89,6 +89,16 @@ auto&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> () const</td>
 <tr class="memitem:af2b4967f18ee7659fbfac216633a99c0" id="r_af2b4967f18ee7659fbfac216633a99c0"><td class="memItemLeft" align="right" valign="top">const std::shared_ptr&lt; const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1ArcString.html#af2b4967f18ee7659fbfac216633a99c0">getCoordinates</a> () const override</td></tr>
 <tr class="memdesc:af2b4967f18ee7659fbfac216633a99c0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a pointer to the CoordinateSequence associated with this <a class="el" href="classgeos_1_1noding_1_1PathString.html">PathString</a>.  <br /></td></tr>
 <tr class="separator:af2b4967f18ee7659fbfac216633a99c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classgeos_1_1noding_1_1PathString"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classgeos_1_1noding_1_1PathString')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classgeos_1_1noding_1_1PathString.html">geos::noding::PathString</a></td></tr>
+<tr class="memitem:a5dc6c4a4419e4626d181584b08bfe5b3 inherit pub_methods_classgeos_1_1noding_1_1PathString" id="r_a5dc6c4a4419e4626d181584b08bfe5b3"><td class="memItemLeft" align="right" valign="top">
+&#160;</td><td class="memItemRight" valign="bottom"><b>PathString</b> (const void *p_context=nullptr)</td></tr>
+<tr class="separator:a5dc6c4a4419e4626d181584b08bfe5b3 inherit pub_methods_classgeos_1_1noding_1_1PathString"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adeaf0314fa171e8305effb4c21107357 inherit pub_methods_classgeos_1_1noding_1_1PathString" id="r_adeaf0314fa171e8305effb4c21107357"><td class="memItemLeft" align="right" valign="top">const void *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1PathString.html#adeaf0314fa171e8305effb4c21107357">getData</a> () const</td></tr>
+<tr class="memdesc:adeaf0314fa171e8305effb4c21107357 inherit pub_methods_classgeos_1_1noding_1_1PathString"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the user-defined data for this segment string.  <br /></td></tr>
+<tr class="separator:adeaf0314fa171e8305effb4c21107357 inherit pub_methods_classgeos_1_1noding_1_1PathString"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a142451db837dd7d784a5edf619983b97 inherit pub_methods_classgeos_1_1noding_1_1PathString" id="r_a142451db837dd7d784a5edf619983b97"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1PathString.html#a142451db837dd7d784a5edf619983b97">setData</a> (const void *data)</td></tr>
+<tr class="memdesc:a142451db837dd7d784a5edf619983b97 inherit pub_methods_classgeos_1_1noding_1_1PathString"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets the user-defined data for this segment string.  <br /></td></tr>
+<tr class="separator:a142451db837dd7d784a5edf619983b97 inherit pub_methods_classgeos_1_1noding_1_1PathString"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
@@ -98,9 +108,6 @@ std::vector&lt; <a class="el" href="classgeos_1_1geom_1_1CircularArc.html">geom:
 <tr class="memitem:a42aa521b35cf31ab931a0f52333f4a36" id="r_a42aa521b35cf31ab931a0f52333f4a36"><td class="memItemLeft" align="right" valign="top"><a id="a42aa521b35cf31ab931a0f52333f4a36" name="a42aa521b35cf31ab931a0f52333f4a36"></a>
 std::shared_ptr&lt; const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>m_seq</b></td></tr>
 <tr class="separator:a42aa521b35cf31ab931a0f52333f4a36"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a85bdc6b789ff2fbedc7e0e9f00ede594" id="r_a85bdc6b789ff2fbedc7e0e9f00ede594"><td class="memItemLeft" align="right" valign="top"><a id="a85bdc6b789ff2fbedc7e0e9f00ede594" name="a85bdc6b789ff2fbedc7e0e9f00ede594"></a>
-void *&#160;</td><td class="memItemRight" valign="bottom"><b>m_context</b></td></tr>
-<tr class="separator:a85bdc6b789ff2fbedc7e0e9f00ede594"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="inherited" name="inherited"></a>
 Additional Inherited Members</h2></td></tr>

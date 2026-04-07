@@ -59,18 +59,72 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ab57ff512701c171e9375705162707825" id="r_ab57ff512701c171e9375705162707825"><td class="memItemLeft" align="right" valign="top"><a id="ab57ff512701c171e9375705162707825" name="ab57ff512701c171e9375705162707825"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>computePathNodes</b> (const std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1PathString.html">PathString</a> * &gt; &amp;inputSegmentStrings) override</td></tr>
+<tr class="memitem:ab57ff512701c171e9375705162707825" id="r_ab57ff512701c171e9375705162707825"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1SimpleNoder.html#ab57ff512701c171e9375705162707825">computePathNodes</a> (const std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1PathString.html">PathString</a> * &gt; &amp;inputSegmentStrings) override</td></tr>
 <tr class="separator:ab57ff512701c171e9375705162707825"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6c625269501d1b00fc00f141aee77705" id="r_a6c625269501d1b00fc00f141aee77705"><td class="memItemLeft" align="right" valign="top"><a id="a6c625269501d1b00fc00f141aee77705" name="a6c625269501d1b00fc00f141aee77705"></a>
-std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1noding_1_1PathString.html">PathString</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getNodedPaths</b> () override</td></tr>
+<tr class="memitem:a6c625269501d1b00fc00f141aee77705" id="r_a6c625269501d1b00fc00f141aee77705"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1noding_1_1PathString.html">PathString</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1noding_1_1SimpleNoder.html#a6c625269501d1b00fc00f141aee77705">getNodedPaths</a> () override</td></tr>
 <tr class="separator:a6c625269501d1b00fc00f141aee77705"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Nodes a set of <code><a class="el" href="classgeos_1_1noding_1_1SegmentString.html">SegmentString</a></code>s and/or <code><a class="el" href="classgeos_1_1noding_1_1ArcString.html">ArcString</a></code>s by performing a brute-force comparison of every segment to every other one. </p>
 <p>This has n^2 performance, so is too slow for use on large numbers of segments.</p>
 <dl class="section version"><dt>Version</dt><dd>1.7 </dd></dl>
-</div><hr/>The documentation for this class was generated from the following file:<ul>
+</div><h2 class="groupheader">Member Function Documentation</h2>
+<a id="ab57ff512701c171e9375705162707825" name="ab57ff512701c171e9375705162707825"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab57ff512701c171e9375705162707825">&#9670;&#160;</a></span>computePathNodes()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void geos::noding::SimpleNoder::computePathNodes </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; <a class="el" href="classgeos_1_1noding_1_1PathString.html">PathString</a> * &gt; &amp;&#160;</td>
+          <td class="paramname"><em>inputSegmentStrings</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="classgeos_1_1noding_1_1Noder.html">geos::noding::Noder</a>.</p>
+
+</div>
+</div>
+<a id="a6c625269501d1b00fc00f141aee77705" name="a6c625269501d1b00fc00f141aee77705"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c625269501d1b00fc00f141aee77705">&#9670;&#160;</a></span>getNodedPaths()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1noding_1_1PathString.html">PathString</a> &gt; &gt; geos::noding::SimpleNoder::getNodedPaths </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="classgeos_1_1noding_1_1Noder.html">geos::noding::Noder</a>.</p>
+
+</div>
+</div>
+<hr/>The documentation for this class was generated from the following file:<ul>
 <li><a class="el" href="SimpleNoder_8h_source.html">SimpleNoder.h</a></li>
 </ul>
 </div><!-- contents -->
