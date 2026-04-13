@@ -248,6 +248,15 @@ void object::test<16>
 }
 
 
+// See https://trac.osgeo.org/postgis/ticket/6065
+template<>
+template<>
+void object::test<17>
+()
+{
+    const std::string wkt("POLYGON((17.422075702665087 69.11091383235977,17.42207545158684 69.11091383590066,17.42207570266477 69.11091383235974,17.422075702665087 69.11091383235977))");
+    checkCCW(false, wkt);
+}
 
 
 } // namespace tut
