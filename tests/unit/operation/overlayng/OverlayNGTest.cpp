@@ -51,20 +51,8 @@ struct test_overlayng_data {
         std::unique_ptr<Geometry> geom_expected = r.read(expected);
 
 
-        std::unique_ptr<Geometry> geom_result;
-        if (geom_a->hasCurvedComponents() || geom_b->hasCurvedComponents()) {
-            SimpleNoder noder;
-            geos::algorithm::CircularArcIntersector cai;
-            ArcIntersectionAdder aia(cai);
+        auto geom_result = OverlayNG::overlay(geom_a.get(), geom_b.get(), opCode, pm.get());
 
-            noder.setArcIntersector(aia);
-            OverlayNG ong(geom_a.get(), geom_b.get(), pm.get(), opCode);
-            ong.setNoder(&noder);
-
-            geom_result = ong.getResult();
-        } else {
-            geom_result = OverlayNG::overlay(geom_a.get(), geom_b.get(), opCode, pm.get());
-        }
         //std::string wkt_result = w.write(geom_result.get());
         //std::cout << std::endl << wkt_result << std::endl;
         ensure_equals_geometry_xyzm(geom_result.get(), geom_expected.get(), tol);

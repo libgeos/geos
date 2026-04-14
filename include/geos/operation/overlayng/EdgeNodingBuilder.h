@@ -18,6 +18,7 @@
 
 #pragma once
 
+#include <geos/algorithm/CircularArcIntersector.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CircularArc.h>
@@ -28,6 +29,7 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/Polygon.h>
 #include <geos/geom/SimpleCurve.h>
+#include <geos/noding/ArcIntersectionAdder.h>
 #include <geos/noding/IntersectionAdder.h>
 #include <geos/noding/Noder.h>
 #include <geos/noding/SegmentString.h>
@@ -95,7 +97,9 @@ private:
 
     // For use in createFloatingPrecisionNoder()
     algorithm::LineIntersector lineInt;
+    algorithm::CircularArcIntersector arcInt;
     noding::IntersectionAdder intAdder;
+    noding::ArcIntersectionAdder arcIntAdder;
     std::unique_ptr<noding::Noder> internalNoder;
     std::unique_ptr<noding::Noder> spareInternalNoder;
     // EdgeSourceInfo*, Edge* owned by EdgeNodingBuilder, stored in deque
@@ -103,6 +107,7 @@ private:
     std::deque<Edge> edgeQue;
     bool inputHasZ;
     bool inputHasM;
+    bool inputHasCurves;
 
     /**
     * Gets a noder appropriate for the precision model supplied.
@@ -207,8 +212,10 @@ public:
         , hasEdges{{false,false}}
         , clipEnv(nullptr)
         , intAdder(lineInt)
+        , arcIntAdder(arcInt)
         , inputHasZ(false)
         , inputHasM(false)
+        , inputHasCurves(false)
         {};
 
     ~EdgeNodingBuilder();
