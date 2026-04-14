@@ -138,10 +138,10 @@ void object::test<3>()
 
     // Overlay
     ensure_THROW(cs_->Union(), geos::util::UnsupportedOperationException);
-    ensure_THROW(cs_->Union(cs_.get()), geos::util::UnsupportedOperationException);
-    ensure_THROW(cs_->difference(cs_.get()), geos::util::UnsupportedOperationException);
-    ensure_THROW(cs_->intersection(cs_.get()), geos::util::UnsupportedOperationException);
-    ensure_THROW(cs_->symDifference(cs_.get()), geos::util::UnsupportedOperationException);
+    ensure_equals_geometry(cs_->Union(cs_.get()).get(), static_cast<const Geometry*>(cs_.get()));
+    ensure(cs_->difference(cs_.get())->isEmpty());
+    ensure_equals_geometry(cs_->intersection(cs_.get()).get(), static_cast<const Geometry*>(cs_.get()));
+    ensure(cs_->symDifference(cs_.get())->isEmpty());
 
     // Distance
     ensure_equals(cs_->distance(cs_.get()), 0);

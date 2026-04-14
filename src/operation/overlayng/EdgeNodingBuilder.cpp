@@ -23,6 +23,7 @@
 #include <geos/noding/NodedSegmentString.h>
 #include <geos/noding/MCIndexNoder.h>
 #include <geos/noding/NodableArcString.h>
+#include <geos/noding/SimpleNoder.h>
 #include <geos/noding/snapround/SnapRoundingNoder.h>
 #include <geos/operation/overlayng/EdgeNodingBuilder.h>
 #include <geos/operation/overlayng/EdgeMerger.h>
@@ -43,6 +44,7 @@ using geos::noding::NodableArcString;
 using geos::noding::MCIndexNoder;
 using geos::noding::ValidatingNoder;
 using geos::noding::SegmentString;
+using geos::noding::SimpleNoder;
 using geos::noding::NodedSegmentString;
 using geos::noding::PathString;
 
@@ -83,16 +85,26 @@ EdgeNodingBuilder::createFixedPrecisionNoder(const PrecisionModel* p_pm)
 std::unique_ptr<Noder>
 EdgeNodingBuilder::createFloatingPrecisionNoder(bool doValidation)
 {
-    std::unique_ptr<MCIndexNoder> mcNoder(new MCIndexNoder());
-    mcNoder->setSegmentIntersector(&intAdder);
+    std::unique_ptr<Noder> ret;
 
-    if (doValidation) {
-        spareInternalNoder = std::move(mcNoder);
+    if (inputHasCurves) {
+        auto simpleNoder = std::make_unique<SimpleNoder>();
+        simpleNoder->setArcIntersector(arcIntAdder);
+        ret = std::move(simpleNoder);
+    } else {
+        auto mcNoder = std::make_unique<MCIndexNoder>();
+        mcNoder->setSegmentIntersector(&intAdder);
+        ret = std::move(mcNoder);
+    }
+
+    // TODO: Support arcs in ValidatingNoder
+    if (doValidation && !inputHasCurves) {
+        spareInternalNoder = std::move(ret);
         std::unique_ptr<Noder> validNoder(new ValidatingNoder(*spareInternalNoder));
         return validNoder;
     }
 
-    return std::unique_ptr<Noder>(mcNoder.release());
+    return ret;
 }
 
 /*public*/
@@ -110,6 +122,7 @@ EdgeNodingBuilder::build(const Geometry* geom0, const Geometry* geom1)
 {
     inputHasZ = geom0->hasZ() || (geom1 != nullptr && geom1->hasZ());
     inputHasM = geom0->hasM() || (geom1 != nullptr && geom1->hasM());
+    inputHasCurves = geom0->hasCurvedComponents() || (geom1 != nullptr && geom1->hasCurvedComponents());
 
     add(geom0, 0);
     add(geom1, 1);

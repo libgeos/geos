@@ -63,6 +63,8 @@ template<>
 template<>
 void object::test<3>()
 {
+    set_test_name("curved inputs");
+
     geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
     geom2_ = fromWKT("LINESTRING (1 0, 2 1)");
 
@@ -70,7 +72,11 @@ void object::test<3>()
     ensure(geom2_);
 
     result_ = GEOSDifference(geom1_, geom2_);
-    ensure("curved geometry not supported", result_ == nullptr);
+    ensure(result_);
+
+    expected_ = fromWKT("MULTICURVE (CIRCULARSTRING (1.7071067812 0.7071067812, 1.9238795325 0.3826834324, 2 0), CIRCULARSTRING (0 0, 0.6173165676 0.9238795325, 1.7071067812 0.7071067812))");
+
+    ensure_geometry_equals(result_, expected_, 1e-8);
 }
 
 } // namespace tut

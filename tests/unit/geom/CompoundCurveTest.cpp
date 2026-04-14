@@ -164,10 +164,11 @@ void object::test<3>()
 
     // Overlay
     ensure_THROW(cc_->Union(), geos::util::UnsupportedOperationException);
-    ensure_THROW(cc_->Union(cc_.get()), geos::util::UnsupportedOperationException);
-    ensure_THROW(cc_->difference(cc_.get()), geos::util::UnsupportedOperationException);
-    ensure_THROW(cc_->intersection(cc_.get()), geos::util::UnsupportedOperationException);
-    ensure_THROW(cc_->symDifference(cc_.get()), geos::util::UnsupportedOperationException);
+    // TODO: Prevent overlay from degrading CompoundCurve into MultiCurve
+    //ensure_equals_geometry(cc_->Union(cc_.get()).get(), static_cast<const Geometry*>(cc_.get()));
+    ensure(cc_->difference(cc_.get())->isEmpty());
+    //ensure_equals_geometry(cc_->intersection(cc_.get()).get(), static_cast<const Geometry*>(cc_.get()));
+    ensure(cc_->symDifference(cc_.get())->isEmpty());
 
     // Distance
     ensure_equals(cc_->distance(cc_.get()), 0);
