@@ -72,6 +72,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>geos::geom::Coordinat
 <tr class="memitem:ga29bb40e4a7b928f4c0f7f77884c83f55" id="r_ga29bb40e4a7b928f4c0f7f77884c83f55"><td class="memItemLeft" align="right" valign="top"><a id="ga29bb40e4a7b928f4c0f7f77884c83f55" name="ga29bb40e4a7b928f4c0f7f77884c83f55"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>geos::geom::CoordinateSequence::hasM</b> () const</td></tr>
 <tr class="separator:ga29bb40e4a7b928f4c0f7f77884c83f55"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ga9d4b298b2cd52c24f7f8b2fb229ef5e7" id="r_ga9d4b298b2cd52c24f7f8b2fb229ef5e7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="group__prop.html#ga9d4b298b2cd52c24f7f8b2fb229ef5e7">geos::geom::CoordinateSequence::setZM</a> (bool hasZ, bool hasM)</td></tr>
+<tr class="separator:ga9d4b298b2cd52c24f7f8b2fb229ef5e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ga9d18ad27b99881dcf2282a2b5ee7a003" id="r_ga9d18ad27b99881dcf2282a2b5ee7a003"><td class="memItemLeft" align="right" valign="top"><a id="ga9d18ad27b99881dcf2282a2b5ee7a003" name="ga9d18ad27b99881dcf2282a2b5ee7a003"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>geos::geom::CoordinateSequence::hasRepeatedPoints</b> () const</td></tr>
 <tr class="memdesc:ga9d18ad27b99881dcf2282a2b5ee7a003"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns true if contains any two consecutive points. <br /></td></tr>
@@ -167,6 +169,35 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>geos::geom::Coordinat
 
 <p>Tests whether an a <code><a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a></code> forms a ring, by checking length and closure. Self-intersection is not checked. </p>
 <dl class="section return"><dt>Returns</dt><dd>true if the coordinate form a ring. </dd></dl>
+
+</div>
+</div>
+<a id="ga9d4b298b2cd52c24f7f8b2fb229ef5e7" name="ga9d4b298b2cd52c24f7f8b2fb229ef5e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ga9d4b298b2cd52c24f7f8b2fb229ef5e7">&#9670;&#160;</a></span>setZM()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void geos::geom::CoordinateSequence::setZM </td>
+          <td>(</td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>hasZ</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool&#160;</td>
+          <td class="paramname"><em>hasM</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Set the dimensions of the <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html" title="The internal representation of a list of coordinates inside a Geometry.">CoordinateSequence</a>. May cause a reallocation, invalidating any references to coordinates within this sequence. </p>
 
 </div>
 </div>

@@ -58,6 +58,8 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:abfd6a451c78c2def1c5ed1388696cf81" id="r_abfd6a451c78c2def1c5ed1388696cf81"><td class="memItemLeft" align="right" valign="top">const std::array&lt; <a class="el" href="classgeos_1_1operation_1_1distance_1_1GeometryLocation.html">GeometryLocation</a>, 2 &gt; &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1distance_1_1DistanceOp.html#abfd6a451c78c2def1c5ed1388696cf81">nearestLocations</a> ()</td></tr>
+<tr class="separator:abfd6a451c78c2def1c5ed1388696cf81"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae4d61a1c477b4e0cf2a1ebbc3d74d0e6" id="r_ae4d61a1c477b4e0cf2a1ebbc3d74d0e6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1distance_1_1DistanceOp.html#ae4d61a1c477b4e0cf2a1ebbc3d74d0e6">DistanceOp</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *g0, const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *g1)</td></tr>
 <tr class="separator:ae4d61a1c477b4e0cf2a1ebbc3d74d0e6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa4cde507efc8613942d68b0fe59a01f4" id="r_aa4cde507efc8613942d68b0fe59a01f4"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1distance_1_1DistanceOp.html#aa4cde507efc8613942d68b0fe59a01f4">DistanceOp</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &amp;g0, const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &amp;g1)</td></tr>
@@ -364,6 +366,25 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="abfd6a451c78c2def1c5ed1388696cf81" name="abfd6a451c78c2def1c5ed1388696cf81"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abfd6a451c78c2def1c5ed1388696cf81">&#9670;&#160;</a></span>nearestLocations()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">const std::array&lt; <a class="el" href="classgeos_1_1operation_1_1distance_1_1GeometryLocation.html">GeometryLocation</a>, 2 &gt; &amp; geos::operation::distance::DistanceOp::nearestLocations </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Report the locations of the nearest points in the input geometries. The locations are presented in the same order as the input geometries.</p>
+<dl class="section return"><dt>Returns</dt><dd>a pair of <code><a class="el" href="classgeos_1_1operation_1_1distance_1_1GeometryLocation.html">GeometryLocation</a></code>s for the nearest points </dd></dl>
+
+</div>
+</div>
 <a id="aeb483657d8037ff0eb350057f44cbdcb" name="aeb483657d8037ff0eb350057f44cbdcb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aeb483657d8037ff0eb350057f44cbdcb">&#9670;&#160;</a></span>nearestPoints() <span class="overload">[1/2]</span></h2>
 
@@ -416,7 +437,7 @@ Static Public Member Functions</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Compute the the nearest points of two geometries.</p>
+<p>Compute the nearest points of two geometries.</p>
 <p>The points are presented in the same order as the input Geometries.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">

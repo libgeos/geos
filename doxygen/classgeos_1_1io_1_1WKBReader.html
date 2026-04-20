@@ -77,6 +77,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setFixStructure</b> (
 <tr class="memitem:aa9bf73cfe0dafa66310240cee5943b94" id="r_aa9bf73cfe0dafa66310240cee5943b94"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1io_1_1WKBReader.html#aa9bf73cfe0dafa66310240cee5943b94">readHEX</a> (std::istream &amp;is)</td></tr>
 <tr class="memdesc:aa9bf73cfe0dafa66310240cee5943b94"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads a Geometry from an istream in hex format.  <br /></td></tr>
 <tr class="separator:aa9bf73cfe0dafa66310240cee5943b94"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68894ba1fd93592630ab1371f491e74c" id="r_a68894ba1fd93592630ab1371f491e74c"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1io_1_1WKBReader.html#a68894ba1fd93592630ab1371f491e74c">readHEX</a> (const std::string &amp;hex)</td></tr>
+<tr class="memdesc:a68894ba1fd93592630ab1371f491e74c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reads a Geometry hex format.  <br /></td></tr>
+<tr class="separator:a68894ba1fd93592630ab1371f491e74c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -213,8 +216,42 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
+<a id="a68894ba1fd93592630ab1371f491e74c" name="a68894ba1fd93592630ab1371f491e74c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a68894ba1fd93592630ab1371f491e74c">&#9670;&#160;</a></span>readHEX() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &gt; geos::io::WKBReader::readHEX </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>hex</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Reads a Geometry hex format. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">hex</td><td>the string to read </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the Geometry read </dd></dl>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">IOException</td><td></td></tr>
+    <tr><td class="paramname"><a class="el" href="classgeos_1_1io_1_1ParseException.html" title="Notifies a parsing error.">ParseException</a></td><td></td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="aa9bf73cfe0dafa66310240cee5943b94" name="aa9bf73cfe0dafa66310240cee5943b94"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa9bf73cfe0dafa66310240cee5943b94">&#9670;&#160;</a></span>readHEX()</h2>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9bf73cfe0dafa66310240cee5943b94">&#9670;&#160;</a></span>readHEX() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
