@@ -15,6 +15,7 @@
 
 #pragma once
 
+#include <geos/export.h>
 #include <geos/index/intervalrtree/IntervalRTreeNode.h> // inherited
 
 
@@ -30,7 +31,7 @@ namespace geos {
 namespace index {
 namespace intervalrtree {
 
-class IntervalRTreeLeafNode : public IntervalRTreeNode {
+class GEOS_DLL IntervalRTreeLeafNode : public IntervalRTreeNode {
 private:
     /// externally owned
     void* item;

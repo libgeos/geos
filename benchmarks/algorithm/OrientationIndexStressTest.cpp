@@ -43,6 +43,11 @@ Two kinds of test generators are provided:
 
 #include <iomanip>
 
+// MSVC does not provide POSIX random(), Use rand() for compatibility
+#ifdef _MSC_VER
+#define random rand
+#endif
+
 using namespace geos::algorithm;
 using namespace geos::geom;
 using namespace geos::io;
