@@ -67,38 +67,99 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span> </div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span> </div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &lt;array&gt;</span></div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="preprocessor">#include &lt;geos/export.h&gt;</span></div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="preprocessor">#include &lt;geos/geom/Coordinate.h&gt;</span></div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="preprocessor">#include &lt;geos/geom/Envelope.h&gt;</span></div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span> </div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacegeos.html">geos</a> {</div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="keyword">namespace </span>algorithm {</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="keyword">class </span>GEOS_DLL CircularArcs {</div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    <span class="keyword">static</span> geom::CoordinateXY getCenter(<span class="keyword">const</span> geom::CoordinateXY&amp; p0, <span class="keyword">const</span> geom::CoordinateXY&amp; p1,</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>                                        <span class="keyword">const</span> geom::CoordinateXY&amp; p2);</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span> </div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    <span class="keyword">static</span> <span class="keywordtype">double</span> getAngle(<span class="keyword">const</span> geom::CoordinateXY&amp; pt, <span class="keyword">const</span> geom::CoordinateXY&amp; center);</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    <span class="keyword">static</span> geom::CoordinateXY getDirectionPoint(<span class="keyword">const</span> geom::CoordinateXY&amp; center, <span class="keywordtype">double</span> radius, <span class="keywordtype">double</span> theta, <span class="keywordtype">bool</span> isCCW);</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>    <span class="keyword">static</span> <span class="keywordtype">double</span> getMidpointAngle(<span class="keywordtype">double</span> theta0, <span class="keywordtype">double</span> theta2, <span class="keywordtype">bool</span> isCCW);</div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    <span class="keyword">static</span> geom::CoordinateXY getMidpoint(<span class="keyword">const</span> geom::CoordinateXY&amp; p0, <span class="keyword">const</span> geom::CoordinateXY&amp; p2, <span class="keyword">const</span> geom::CoordinateXY&amp; center, <span class="keywordtype">double</span> radius, <span class="keywordtype">bool</span> isCCW);</div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>    <span class="keyword">static</span> <span class="keywordtype">void</span> expandEnvelope(geom::Envelope&amp; e, <span class="keyword">const</span> geom::CoordinateXY&amp; p0, <span class="keyword">const</span> geom::CoordinateXY&amp; p1,</div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>                               <span class="keyword">const</span> geom::CoordinateXY&amp; p2);</div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <span class="keyword">static</span> geom::CoordinateXY createPoint(<span class="keyword">const</span> geom::CoordinateXY&amp; center, <span class="keywordtype">double</span> radius, <span class="keywordtype">double</span> theta);</div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
-<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>};</div>
-<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>}</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>}</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span><span class="preprocessor">#include &lt;geos/export.h&gt;</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#include &lt;geos/geom/Coordinate.h&gt;</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="preprocessor">#include &lt;geos/geom/Envelope.h&gt;</span></div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="preprocessor">#include &lt;array&gt;</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="preprocessor">#include &lt;optional&gt;</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span> </div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacegeos.html">geos</a> {</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="keyword">namespace </span>algorithm {</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="keyword">class </span>GEOS_DLL CircularArcs {</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <span class="keyword">static</span> geom::CoordinateXY getCenter(<span class="keyword">const</span> geom::CoordinateXY&amp; p0, <span class="keyword">const</span> geom::CoordinateXY&amp; p1,</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>                                        <span class="keyword">const</span> geom::CoordinateXY&amp; p2);</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span> </div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span>    <span class="keyword">static</span> <span class="keywordtype">double</span> getAngle(<span class="keyword">const</span> geom::CoordinateXY&amp; pt, <span class="keyword">const</span> geom::CoordinateXY&amp; center);</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span> </div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    <span class="keyword">static</span> geom::CoordinateXY getDirectionPoint(<span class="keyword">const</span> geom::CoordinateXY&amp; center, <span class="keywordtype">double</span> radius, <span class="keywordtype">double</span> theta, <span class="keywordtype">bool</span> isCCW);</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>    <span class="keyword">static</span> <span class="keywordtype">double</span> getMidpointAngle(<span class="keywordtype">double</span> theta0, <span class="keywordtype">double</span> theta2, <span class="keywordtype">bool</span> isCCW);</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    <span class="keyword">static</span> geom::CoordinateXY getMidpoint(<span class="keyword">const</span> geom::CoordinateXY&amp; p0, <span class="keyword">const</span> geom::CoordinateXY&amp; p2, <span class="keyword">const</span> geom::CoordinateXY&amp; center, <span class="keywordtype">double</span> radius, <span class="keywordtype">bool</span> isCCW);</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span>    <span class="keyword">static</span> <span class="keywordtype">void</span> expandEnvelope(geom::Envelope&amp; e, <span class="keyword">const</span> geom::CoordinateXY&amp; p0, <span class="keyword">const</span> geom::CoordinateXY&amp; p1,</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span>                               <span class="keyword">const</span> geom::CoordinateXY&amp; p2);</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    <span class="keyword">static</span> geom::CoordinateXY createPoint(<span class="keyword">const</span> geom::CoordinateXY&amp; center, <span class="keywordtype">double</span> radius, <span class="keywordtype">double</span> theta);</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    <span class="keyword">static</span> <span class="keywordtype">int</span></div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>    circleIntersectsSegment(<span class="keyword">const</span> geom::CoordinateXY&amp; center, <span class="keywordtype">double</span> r,</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>                            <span class="keyword">const</span> geom::CoordinateXY&amp; p0, <span class="keyword">const</span> geom::CoordinateXY&amp; p1,</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>                            geom::CoordinateXY&amp; isect0, geom::CoordinateXY&amp; isect1);</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <span class="keyword">static</span> <span class="keywordtype">bool</span></div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    containsAngle(<span class="keywordtype">double</span> t0, <span class="keywordtype">double</span> t2, <span class="keywordtype">bool</span> isCCW, <span class="keywordtype">double</span> theta);</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span> </div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    <span class="keyword">static</span> <span class="keywordtype">bool</span></div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>    containsPointOnCircle(<span class="keyword">const</span> geom::CoordinateXY&amp; center,</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>                          <span class="keyword">const</span> geom::CoordinateXY&amp; p0, <span class="keyword">const</span> geom::CoordinateXY&amp; p2, <span class="keywordtype">bool</span> isCCW,</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>                          <span class="keyword">const</span> geom::CoordinateXY&amp; q);</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span> </div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>    <span class="keyword">static</span> <span class="keywordtype">double</span></div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>    distanceArcPoint(<span class="keyword">const</span> geom::CoordinateXY&amp; c, <span class="keywordtype">double</span> r,</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>                     <span class="keyword">const</span> geom::CoordinateXY&amp; p0, <span class="keyword">const</span> geom::CoordinateXY&amp; p2, <span class="keywordtype">bool</span> isCCW,</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>                     <span class="keyword">const</span> geom::CoordinateXY&amp; q);</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span> </div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>    <span class="keyword">static</span> <span class="keywordtype">double</span></div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>    distanceArcSegment(<span class="keyword">const</span> geom::CoordinateXY&amp; c, <span class="keywordtype">double</span> r,</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>                       <span class="keyword">const</span> geom::CoordinateXY&amp; p0, <span class="keyword">const</span> geom::CoordinateXY&amp; p2, <span class="keywordtype">bool</span> isCCW,</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>                       <span class="keyword">const</span> geom::CoordinateXY&amp; q0, <span class="keyword">const</span> geom::CoordinateXY&amp; q1);</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span> </div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>    <span class="keyword">static</span> <span class="keywordtype">double</span></div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>    distanceArcArc(<span class="keyword">const</span> geom::CoordinateXY&amp; ca, <span class="keywordtype">double</span> ra,</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>                   <span class="keyword">const</span> geom::CoordinateXY&amp; a0, <span class="keyword">const</span> geom::CoordinateXY&amp; a2, <span class="keywordtype">bool</span> aCCW,</div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>                   <span class="keyword">const</span> geom::CoordinateXY&amp; cb, <span class="keywordtype">double</span> rb,</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>                   <span class="keyword">const</span> geom::CoordinateXY&amp; b0, <span class="keyword">const</span> geom::CoordinateXY&amp; b2, <span class="keywordtype">bool</span> bCCW);</div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span> </div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span>    <span class="keyword">static</span> geom::CoordinateXY</div>
+<div class="line"><a id="l00151" name="l00151"></a><span class="lineno">  151</span>    closestPointArcPoint(<span class="keyword">const</span> geom::CoordinateXY&amp; c, <span class="keywordtype">double</span> r,</div>
+<div class="line"><a id="l00152" name="l00152"></a><span class="lineno">  152</span>                         <span class="keyword">const</span> geom::CoordinateXY&amp; p0, <span class="keyword">const</span> geom::CoordinateXY&amp; p2,</div>
+<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>                         <span class="keywordtype">bool</span> isCCW, <span class="keyword">const</span> geom::CoordinateXY &amp;q);</div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span> </div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>    <span class="keyword">static</span> std::array&lt;geom::CoordinateXY, 2&gt;</div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>    closestPointsArcSegment(<span class="keyword">const</span> geom::CoordinateXY&amp; c, <span class="keywordtype">double</span> r,</div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>                            <span class="keyword">const</span> geom::CoordinateXY&amp; p0, <span class="keyword">const</span> geom::CoordinateXY&amp; p2, <span class="keywordtype">bool</span> isCCW, <span class="keyword">const</span> geom::CoordinateXY&amp; q0, <span class="keyword">const</span> geom::CoordinateXY&amp; q1);</div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span> </div>
+<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span> </div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>    <span class="keyword">static</span> std::array&lt;geom::CoordinateXY, 2&gt; closestPointsArcArc(<span class="keyword">const</span> geom::CoordinateXY&amp; ca,</div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>        <span class="keywordtype">double</span> ra,</div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>        <span class="keyword">const</span> geom::CoordinateXY&amp; a0,</div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>        <span class="keyword">const</span> geom::CoordinateXY&amp; a2,</div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>        <span class="keywordtype">bool</span> aCCW,</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>        <span class="keyword">const</span> geom::CoordinateXY&amp; cb,</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>        <span class="keywordtype">double</span> rb,</div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>        <span class="keyword">const</span> geom::CoordinateXY&amp; b0,</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>        <span class="keyword">const</span> geom::CoordinateXY&amp; b2,</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>        <span class="keywordtype">bool</span> bCCW);</div>
+<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span> </div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>    <span class="keyword">static</span> std::optional&lt;geom::CoordinateXY&gt;</div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>    cocircularArcsIntersectionPoint(<span class="keyword">const</span> geom::CoordinateXY&amp; center, <span class="keywordtype">double</span> radius,</div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>                                    <span class="keyword">const</span> geom::CoordinateXY&amp; a0, <span class="keyword">const</span> geom::CoordinateXY&amp; a2, <span class="keywordtype">bool</span> aCCW,</div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>                                    <span class="keyword">const</span> geom::CoordinateXY&amp; b0, <span class="keyword">const</span> geom::CoordinateXY&amp; b2, <span class="keywordtype">bool</span> bCCW);</div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span> </div>
+<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>    <span class="keyword">static</span> std::optional&lt;geom::CoordinateXY&gt;</div>
+<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>    arcIntersectionPoint(<span class="keyword">const</span> geom::CoordinateXY&amp; ca, <span class="keywordtype">double</span> ra,</div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>                         <span class="keyword">const</span> geom::CoordinateXY&amp; a0, <span class="keyword">const</span> geom::CoordinateXY&amp; a2, <span class="keywordtype">bool</span> aCCW,</div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>                         <span class="keyword">const</span> geom::CoordinateXY&amp; cb, <span class="keywordtype">double</span> rb,</div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>                         <span class="keyword">const</span> geom::CoordinateXY&amp; b0, <span class="keyword">const</span> geom::CoordinateXY&amp; b2, <span class="keywordtype">bool</span> bCCW);</div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span> </div>
+<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>};</div>
+<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>}</div>
+<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>}</div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition</b> geos.h:38</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
