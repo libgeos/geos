@@ -18,6 +18,7 @@
 
 #pragma once
 
+#include <geos/export.h>
 #include <geos/geom/LineSegment.h> // for composition
 
 namespace geos {
@@ -43,7 +44,7 @@ namespace distance { // geos::algorithm::distance
  *
  * Also computes two points which are separated by the distance.
  */
-class DistanceToPoint {
+class GEOS_DLL DistanceToPoint {
 public:
 
     DistanceToPoint() {}
