@@ -18,8 +18,8 @@
 #include <memory>
 
 namespace geos::geom {
+class Curve;
 class Geometry;
-class LineString;
 class Point;
 }
 
@@ -51,12 +51,14 @@ private:
     splitPolygonalWithEdge(const geom::Geometry& geom, const geom::Geometry& edge);
 
     static std::unique_ptr<geom::Geometry>
-    splitLineWithPoint(const geom::LineString& g, const geom::Point& point);
+    splitCurveWithPoint(const geom::Curve& g, const geom::Point& point);
 
     static std::unique_ptr<geom::Geometry>
     splitAtPoints(const geom::Geometry& geom, const geom::Geometry& splitPoints);
 
     class SplitWithPointTransformer;
+
+    static constexpr double POINT_TO_LINE_TOLERANCE = 1e-10;
 };
 
 }

@@ -15,6 +15,7 @@
 #include <geos/operation/split/GeometrySplitter.h>
 
 #include <geos/geom/CircularString.h>
+#include <geos/geom/CompoundCurve.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/GeometryFactory.h>
@@ -31,11 +32,13 @@
 #include <geos/operation/distance/DistanceOp.h>
 #include <geos/operation/distance/GeometryLocation.h>
 #include <geos/operation/polygonize/Polygonizer.h>
-#include <geos/operation/split/SplitGeometryAtVertex.h>
+#include <geos/operation/split/SplitLinealAtPoint.h>
 #include <geos/shape/random/RandomPointsBuilder.h>
+#include <geos/util/Assert.h>
 
 using geos::geom::CircularString;
 using geos::geom::CoordinateXY;
+using geos::geom::CompoundCurve;
 using geos::geom::Curve;
 using geos::geom::CurvePolygon;
 using geos::geom::Geometry;
@@ -45,6 +48,7 @@ using geos::geom::LineString;
 using geos::geom::MultiLineString;
 using geos::geom::MultiPoint;
 using geos::geom::Polygon;
+using geos::geom::SimpleCurve;
 using geos::geom::prep::PreparedGeometryFactory;
 using geos::geom::util::GeometryCombiner;
 using geos::geom::util::GeometryTransformer;
@@ -59,20 +63,27 @@ using geos::shape::random::RandomPointsBuilder;
 
 namespace geos::operation::split {
 
-class GeometrySplitter::SplitWithPointTransformer : public geom::util::GeometryTransformer {
+class GeometrySplitter::SplitWithPointTransformer : public GeometryTransformer {
 public:
-    SplitWithPointTransformer(const Point& pt) : m_pt(pt) {}
+    explicit SplitWithPointTransformer(const Point& pt) : m_pt(pt) {}
+
+protected:
+    std::unique_ptr<Geometry>
+    transformCircularString(const CircularString* geom, const Geometry* /*parent*/) override
+    {
+        return splitCurveWithPoint(*geom, m_pt);
+    }
 
     std::unique_ptr<Geometry>
-    transformCircularString(const CircularString*, const Geometry* /*parent*/) override
+    transformCompoundCurve(const CompoundCurve* geom, const Geometry* /*parent*/) override
     {
-        throw geos::util::UnsupportedOperationException("Splitting a CircularString with a point is not supported.");
+        return splitCurveWithPoint(*geom, m_pt);
     }
 
     std::unique_ptr<Geometry>
     transformLineString(const LineString* geom, const Geometry* /*parent*/) override
     {
-        return GeometrySplitter::splitLineWithPoint(*geom, m_pt);
+        return splitCurveWithPoint(*geom, m_pt);
     }
 
     std::unique_ptr<Geometry>
@@ -210,11 +221,10 @@ GeometrySplitter::split(const Geometry &geom, const Geometry &splitGeom)
     return splitLinealWithEdge(*toSplit, splitGeom);
 }
 
-std::unique_ptr<Geometry>
-GeometrySplitter::splitLineWithPoint(const geom::LineString& g, const Point& point)
-{
-    constexpr double tolerance = 1e-10;
 
+std::unique_ptr<Geometry>
+GeometrySplitter::splitCurveWithPoint(const Curve& g, const Point& point)
+{
     if (g.isEmpty()) {
         std::vector<std::unique_ptr<Geometry>> geoms;
         geoms.push_back(g.clone());
@@ -223,7 +233,7 @@ GeometrySplitter::splitLineWithPoint(const geom::LineString& g, const Point& poi
 
     DistanceOp distance(g, point);
 
-    if (distance.distance() > tolerance) {
+    if (distance.distance() > POINT_TO_LINE_TOLERANCE) {
         std::vector<std::unique_ptr<Geometry>> geoms;
         geoms.push_back(g.clone());
         return g.getFactory()->createGeometryCollection(std::move(geoms));
@@ -231,21 +241,25 @@ GeometrySplitter::splitLineWithPoint(const geom::LineString& g, const Point& poi
 
     const auto& nearestLoc = distance.nearestLocations()[0];
 
-    const auto* seq = detail::down_cast<const LineString*>(nearestLoc.getGeometryComponent())->getCoordinatesRO();
+    std::pair<std::unique_ptr<Curve>, std::unique_ptr<Curve>> split;
+    if (g.getGeometryTypeId() == geom::GEOS_COMPOUNDCURVE) {
+        const CompoundCurve& cc = static_cast<const CompoundCurve&>(g);
 
-    const CoordinateXY& p0 = seq->getAt<CoordinateXY>(nearestLoc.getSegmentIndex());
-    const CoordinateXY& p1 = seq->getAt<CoordinateXY>(nearestLoc.getSegmentIndex() + 1);
+        for (std::size_t i = 0 ; i < cc.getNumCurves(); i++) {
+            const auto* sc = cc.getCurveN(i);
 
-
-    std::pair<std::unique_ptr<LineString>, std::unique_ptr<LineString>> split;
-    if (nearestLoc.getCoordinate().equals2D(p0))  {
-        // no need to add a new point
-        split = SplitGeometryAtVertex::splitLineStringAtVertex(static_cast<const LineString&>(g), nearestLoc.getSegmentIndex());
-    } else if (nearestLoc.getCoordinate().equals2D(p1)) {
-        split = SplitGeometryAtVertex::splitLineStringAtVertex(static_cast<const LineString&>(g), nearestLoc.getSegmentIndex() + 1);
+            if (sc == nearestLoc.getGeometryComponent()) {
+                split = SplitLinealAtPoint::splitCompoundCurveAtPoint(cc, i, nearestLoc.getSegmentIndex(), nearestLoc.getCoordinate());
+                break;
+            }
+        }
     } else {
-        split = SplitGeometryAtVertex::splitLineStringAtPoint(static_cast<const LineString&>(g), nearestLoc.getSegmentIndex(), nearestLoc.getCoordinate());
+        const SimpleCurve& sc = static_cast<const SimpleCurve&>(g);
+        split = SplitLinealAtPoint::splitSimpleCurveAtPoint(sc, nearestLoc.getSegmentIndex(), nearestLoc.getCoordinate());
     }
+
+    util::Assert::isNotNull(split.first, "Split result first curve should not be null");
+    util::Assert::isNotNull(split.second, "Split result second curve should not be null");
 
     std::vector<std::unique_ptr<Geometry>> geoms;
     if (!split.first->isEmpty()) {

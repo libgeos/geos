@@ -20,7 +20,7 @@
 #include <geos/geom/CircularString.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/operation/BoundaryOp.h>
-#include <geos/operation/split/SplitGeometryAtVertex.h>
+#include <geos/operation/split/SplitLinealAtPoint.h>
 #include <geos/util.h>
 
 namespace geos {
@@ -379,7 +379,7 @@ CompoundCurve::normalizeClosed()
     } else if (minInd == curves[minCurve]->getNumPoints() - 1) {
         finalCurve = std::move(curves[minCurve]);
     } else {
-        auto split = operation::split::SplitGeometryAtVertex::splitSimpleCurveAtVertex(*curves[minCurve], minInd);
+        auto split = operation::split::SplitLinealAtPoint::splitSimpleCurveAtVertex(*curves[minCurve], minInd);
         newCurves.push_back(std::move(split.second));
         finalCurve = std::move(split.first);
     }

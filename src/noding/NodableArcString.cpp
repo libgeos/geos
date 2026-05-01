@@ -15,6 +15,8 @@
 #include <geos/noding/NodableArcString.h>
 #include <geos/algorithm/Angle.h>
 
+#include <algorithm>
+
 using geos::geom::CoordinateXYZM;
 using geos::geom::CircularArc;
 

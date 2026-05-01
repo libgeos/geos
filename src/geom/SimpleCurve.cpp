@@ -331,6 +331,12 @@ SimpleCurve::isEmpty() const
 }
 
 std::unique_ptr<SimpleCurve>
+SimpleCurve::clone() const
+{
+    return std::unique_ptr<SimpleCurve>(static_cast<SimpleCurve*>(cloneImpl()));
+}
+
+std::unique_ptr<SimpleCurve>
 SimpleCurve::reverse() const
 {
     return std::unique_ptr<SimpleCurve>(static_cast<SimpleCurve*>(reverseImpl()));

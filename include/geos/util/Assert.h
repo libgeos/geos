@@ -39,6 +39,13 @@ public:
         isTrue(assertion, std::string());
     }
 
+    template<typename T>
+    static void
+    isNotNull(const T& ptr, const std::string& message)
+    {
+        isTrue(ptr != nullptr, message);
+    }
+
 
     static void equals(const geom::CoordinateXY& expectedValue,
                        const geom::CoordinateXY& actualValue,
