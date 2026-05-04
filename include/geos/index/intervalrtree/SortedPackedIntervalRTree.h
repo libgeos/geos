@@ -15,6 +15,7 @@
 
 #pragma once
 
+#include <geos/export.h>
 #include <geos/index/intervalrtree/IntervalRTreeNode.h>
 #include <geos/index/intervalrtree/IntervalRTreeBranchNode.h>
 #include <geos/index/intervalrtree/IntervalRTreeLeafNode.h>
@@ -48,7 +49,7 @@ namespace intervalrtree {
  * @author Martin Davis
  *
  */
-class SortedPackedIntervalRTree {
+class GEOS_DLL SortedPackedIntervalRTree { 
 private:
     std::vector<IntervalRTreeLeafNode> leaves;
     std::vector<IntervalRTreeBranchNode> branches;
