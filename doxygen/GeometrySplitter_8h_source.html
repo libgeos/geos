@@ -71,8 +71,8 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span><span class="preprocessor">#include &lt;memory&gt;</span></div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacegeos_1_1geom.html">geos::geom</a> {</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="keyword">class </span>Geometry;</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="keyword">class </span>LineString;</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="keyword">class </span>Curve;</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="keyword">class </span>Geometry;</div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="keyword">class </span>Point;</div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>}</div>
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span> </div>
@@ -93,15 +93,17 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>    splitPolygonalWithEdge(<span class="keyword">const</span> geom::Geometry&amp; geom, <span class="keyword">const</span> geom::Geometry&amp; edge);</div>
 <div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
 <div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    <span class="keyword">static</span> std::unique_ptr&lt;geom::Geometry&gt;</div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    splitLineWithPoint(<span class="keyword">const</span> geom::LineString&amp; g, <span class="keyword">const</span> geom::Point&amp; point);</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    splitCurveWithPoint(<span class="keyword">const</span> geom::Curve&amp; g, <span class="keyword">const</span> geom::Point&amp; point);</div>
 <div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
 <div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    <span class="keyword">static</span> std::unique_ptr&lt;geom::Geometry&gt;</div>
 <div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    splitAtPoints(<span class="keyword">const</span> geom::Geometry&amp; geom, <span class="keyword">const</span> geom::Geometry&amp; splitPoints);</div>
 <div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span> </div>
 <div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    <span class="keyword">class </span>SplitWithPointTransformer;</div>
-<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>};</div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>}</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span> </div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span>    <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keywordtype">double</span> POINT_TO_LINE_TOLERANCE = 1e-10;</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>};</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>}</div>
 <div class="ttc" id="anamespacegeos_1_1geom_html"><div class="ttname"><a href="namespacegeos_1_1geom.html">geos::geom</a></div><div class="ttdef"><b>Definition</b> Angle.h:26</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
