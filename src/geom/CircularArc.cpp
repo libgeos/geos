@@ -14,6 +14,7 @@
 
 #include <geos/algorithm/CircularArcs.h>
 #include <geos/geom/CircularArc.h>
+#include <geos/geom/Envelope.h>
 #include <geos/triangulate/quadedge/TrianglePredicate.h>
 #include <sstream>
 

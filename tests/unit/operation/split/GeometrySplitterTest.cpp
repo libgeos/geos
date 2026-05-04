@@ -606,13 +606,11 @@ void object::test<49>()
              );
 }
 
-#if 0
 template<>
 template<>
 void object::test<50>()
 {
     set_test_name("split CircularString with point");
-    // not implemented yet: need curve support in DistanceOp
 
     testSplit("CIRCULARSTRING (-5 0, -4 3, 4 3)",
               "POINT (0 5)",
@@ -624,18 +622,27 @@ template<>
 void object::test<51>()
 {
     set_test_name("split CompoundCurve with point on curve");
-    // not implemented yet: need curve support in DistanceOp
 
     testSplit("COMPOUNDCURVE(CIRCULARSTRING (-5 0, -4 3, 4 3), (4 3, 0 0))",
               "POINT (0 5)",
-              "GEOMETRYCOLLECTION (CIRCULARSTRING (-5 0, -3.5355339059327373 3.5355339059327378, 0 5), CIRCULARSTRING (0 5, 2.2360679774997902 4.47213595499958, 4 3))");
+              "GEOMETRYCOLLECTION (CIRCULARSTRING (-5 0, -3.5355339059327373 3.5355339059327378, 0 5), COMPOUNDCURVE(CIRCULARSTRING (0 5, 2.2360679774997902 4.47213595499958, 4 3), (4 3, 0 0)))");
 }
-#endif
+
+template<>
+template<>
+void object::test<52>()
+{
+    set_test_name("split CompoundCurve with point on line");
+
+    testSplit("COMPOUNDCURVE(CIRCULARSTRING (-5 0, -4 3, 4 3), (4 3, 0 0))",
+              "POINT (2 1.5)",
+              "GEOMETRYCOLLECTION (COMPOUNDCURVE( CIRCULARSTRING (-5 0, -4 3, 4 3), (4 3, 2 1.5)), LINESTRING (2 1.5, 0 0))");
+}
 
 #if 0
 template<>
 template<>
-void object::test<52>()
+void object::test<53>()
 {
     set_test_name("nearly-collapsed Polygon (QGIS test #1)");
     // void TestQgsGeometry::splitGeometry()
@@ -651,7 +658,7 @@ void object::test<52>()
 
 template<>
 template<>
-void object::test<53>()
+void object::test<54>()
 {
     set_test_name("Z values of split edge are not used in interpolation; QGIS test #2");
     // See https://github.com/qgis/QGIS/issues/33489
@@ -663,7 +670,7 @@ void object::test<53>()
 
 template<>
 template<>
-void object::test<54>()
+void object::test<55>()
 {
     set_test_name("split CompoundCurve at an existing vertex; QGIS test #3");
 
@@ -674,7 +681,7 @@ void object::test<54>()
 
 template<>
 template<>
-void object::test<55>()
+void object::test<56>()
 {
     set_test_name("Split self-intersecting LineString at points; adaptation of QGIS test #4");
 
@@ -687,7 +694,7 @@ void object::test<55>()
 #if 0
 template<>
 template<>
-void object::test<56>()
+void object::test<57>()
 {
     set_test_name("do not split on self-intersections; QGIS test #4");
 
@@ -705,7 +712,7 @@ void object::test<56>()
 
 template<>
 template<>
-void object::test<57>()
+void object::test<58>()
 {
     set_test_name("do not split on self-intersections; QGIS test #5");
 
@@ -717,7 +724,7 @@ void object::test<57>()
 
 template<>
 template<>
-void object::test<58>()
+void object::test<59>()
 {
     set_test_name("split LineString Z on existing vertex; QGIS test #6");
 
@@ -729,7 +736,7 @@ void object::test<58>()
 
 template<>
 template<>
-void object::test<59>()
+void object::test<60>()
 {
     // Should not crash - https://github.com/qgis/QGIS/issues/50948
     testSplit("LINESTRING ( -63294.10966012725839391 -79156.27234554117603693, -63290.25259721937618451 -79162.78533450335089583, -63290.25259721936890855 -79162.78533450335089583)",
@@ -739,7 +746,7 @@ void object::test<59>()
 
 template<>
 template<>
-void object::test<60>()
+void object::test<61>()
 {
     // Should not split the first part - https://github.com/qgis/QGIS/issues/54155
     testSplit("MULTILINESTRING((0 1, 1 0), (0 2, 2 0))",
@@ -749,7 +756,7 @@ void object::test<60>()
 
 template<>
 template<>
-void object::test<61>()
+void object::test<62>()
 {
     set_test_name("cannot split Polygon with point");
 
@@ -761,7 +768,7 @@ void object::test<61>()
 
 template<>
 template<>
-void object::test<62>()
+void object::test<63>()
 {
     set_test_name("cannot split CurvePolygon with point");
 
@@ -769,6 +776,39 @@ void object::test<62>()
     auto splitGeom = reader_.read("POINT (0 0)");
 
     ensure_THROW(GeometrySplitter::split(*geom, *splitGeom), geos::util::IllegalArgumentException);
+}
+
+template<>
+template<>
+void object::test<64>()
+{
+    set_test_name("split LineString with disjoint point");
+
+    testSplit("LINESTRING (0 0, 10 0)",
+              "POINT (5 1)",
+              "GEOMETRYCOLLECTION (LINESTRING (0 0, 10 0))");
+}
+
+template<>
+template<>
+void object::test<65>()
+{
+    set_test_name("split LineString with empty point");
+
+    testSplit("LINESTRING (0 0, 10 0)",
+              "POINT EMPTY",
+              "GEOMETRYCOLLECTION (LINESTRING (0 0, 10 0))");
+}
+
+template<>
+template<>
+void object::test<66>()
+{
+    set_test_name("split LineString with invalid point");
+
+    testSplit("LINESTRING (0 0, 10 0)",
+              "POINT (6 NaN)",
+              "GEOMETRYCOLLECTION (LINESTRING (0 0, 10 0))");
 }
 
 }

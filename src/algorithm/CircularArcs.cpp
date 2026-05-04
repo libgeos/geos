@@ -20,6 +20,7 @@
 #include <geos/geom/Quadrant.h>
 #include <geos/math/DD.h>
 
+using geos::geom::CoordinateSequence;
 using geos::geom::CoordinateXY;
 using geos::geom::Envelope;
 using geos::geom::LineSegment;
@@ -73,6 +74,112 @@ CoordinateXY
 CircularArcs::createPoint(const CoordinateXY& center, double radius, double theta)
 {
     return { center.x + radius* std::cos(theta), center.y + radius* std::sin(theta) };
+}
+
+static double
+interpolateValue(double a1, double a2, double frac)
+{
+    frac = std::clamp(frac, 0.0, 1.0);
+    if (std::isnan(a1)) {
+        return a2;
+    }
+    if (std::isnan(a2)) {
+        return a1;
+    }
+    return a1 + frac * (a2 - a1);
+}
+
+void
+CircularArcs::interpolateZM(const CoordinateSequence& seq, std::size_t i0,
+                            const CoordinateXY &center, bool isCCW,
+                            CoordinateXY &pt, double &z, double &m)
+{
+    using geom::Ordinate;
+
+    const CoordinateXY& p0 = seq.getAt<CoordinateXY>(i0);
+    const CoordinateXY& p1 = seq.getAt<CoordinateXY>(i0 + 1);
+    const CoordinateXY& p2 = seq.getAt<CoordinateXY>(i0 + 2);
+
+    // Read Z, M from control point
+    double z1, m1;
+    seq.applyAt(i0 + 1, [&z1, &m1](const auto& arcPt) {
+        z1 = arcPt.template get<Ordinate::Z>();
+        m1 = arcPt.template get<Ordinate::M>();
+    });
+    // Test point = control point?
+    // Take Z, M from the control point
+    if (p1.equals2D(pt)) {
+        z = z1;
+        m = m1;
+        return;
+    }
+
+    // Read Z, M from start point
+    double z0, m0;
+    seq.applyAt(i0, [&z0, &m0](const auto& arcPt) {
+        z0 = arcPt.template get<Ordinate::Z>();
+        m0 = arcPt.template get<Ordinate::M>();
+    });
+    // Test point = start point?
+    // Take Z, M from the start point
+    if (p0.equals2D(pt)) {
+        z = z0;
+        m = m0;
+        return;
+    }
+
+    // Read Z, M from end point
+    double z2, m2;
+    seq.applyAt(i0 + 2, [&z2, &m2](const auto& arcPt) {
+        z2 = arcPt.template get<Ordinate::Z>();
+        m2 = arcPt.template get<Ordinate::M>();
+    });
+    // Test point = end point?
+    // Take Z, M from the end point
+    if (p2.equals2D(pt)) {
+        z = z2;
+        m = m2;
+        return;
+    }
+
+    double theta0 = getAngle(p0, center);
+    const double theta1 = getAngle(p1, center);
+    double theta2 = getAngle(p2, center);
+    const double theta = getAngle(pt, center);
+
+    if (!isCCW) {
+        std::swap(theta0, theta2);
+        std::swap(z0, z2);
+        std::swap(m0, m2);
+    }
+
+    if (std::isnan(z1)) {
+        // Interpolate between p0 /  p2
+        const double frac = Angle::fractionCCW(theta, theta0, theta2);
+        z = interpolateValue(z0, z2, frac);
+    } else if (Angle::isWithinCCW(theta, theta0, theta1)) {
+        // Interpolate between p0 / p1
+        const double frac = Angle::fractionCCW(theta, theta0, theta1);
+        z = interpolateValue(z0, z1, frac);
+    } else {
+        // Interpolate between p1 / p2
+        const double frac = Angle::fractionCCW(theta, theta1, theta2);
+        z = interpolateValue(z1, z2, frac);
+    }
+
+    if (std::isnan(m1)) {
+        // Interpolate between p0 /  p2
+        const double frac = Angle::fractionCCW(theta, theta0, theta2);
+        m = interpolateValue(m0, m2, frac);
+    } else if (Angle::isWithinCCW(theta, theta0, theta1)) {
+        // Interpolate between p0 / p1
+        const double frac = Angle::fractionCCW(theta, theta0, theta1);
+        m = interpolateValue(m0, m1, frac);
+    } else {
+        // Interpolate between p1 / p2
+        const double frac = Angle::fractionCCW(theta, theta1, theta2);
+        m = interpolateValue(m1, m2, frac);
+    }
 }
 
 template<typename T>

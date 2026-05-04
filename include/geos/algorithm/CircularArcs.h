@@ -16,10 +16,16 @@
 
 #include <geos/export.h>
 #include <geos/geom/Coordinate.h>
-#include <geos/geom/Envelope.h>
 
 #include <array>
 #include <optional>
+
+namespace geos {
+namespace geom {
+class CoordinateSequence;
+class Envelope;
+}
+}
 
 namespace geos {
 namespace algorithm {
@@ -45,6 +51,19 @@ public:
 
     /// Return the point defined by a circle center, radius, and angle
     static geom::CoordinateXY createPoint(const geom::CoordinateXY& center, double radius, double theta);
+
+    /** Interpolate Z/M values for a point added to an arc.
+     *
+     * @param seq CoordinateSequence containing the arc points
+     * @param i0 Index of the first point in the arc
+     * @param center The center point of the circle defining the arc
+     * @param isCCW Whether the arc is counterclockwise
+     * @param pt The point to interpolate Z/M values for
+     * @param z The interpolated Z value
+     * @param m The interpolated M value
+     */
+    static void interpolateZM(const geom::CoordinateSequence &seq, size_t i0, const geom::CoordinateXY &center, bool isCCW, geom::CoordinateXY &pt, double
+                              &z, double &m);
 
     /** Determines whether and where a circle intersects a line segment.
      *
