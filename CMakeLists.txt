@@ -406,6 +406,9 @@ if(BUILD_SHARED_LIBS)
     PRIVATE $<$<BOOL:${WIN32}>:GEOS_DLL_EXPORT>)
 
   set_target_properties(geos_c PROPERTIES VERSION ${CAPI_VERSION})
+  # See https://github.com/libgeos/geos/issues/1435
+  set_target_properties(geos_c PROPERTIES INSTALL_RPATH "\$ORIGIN")
+
   if(NOT WIN32 OR MINGW)
     set_target_properties(geos_c PROPERTIES SOVERSION ${CAPI_VERSION_MAJOR})
   endif()
