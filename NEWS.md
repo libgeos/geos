@@ -12,8 +12,8 @@
   - BufferOp returns POLYGON EMPTY when fed Inf/Nan coords (GH-1332)
   - Return Inf when calculating distance to an empty geometry (GH-1345, Even Rouault)
 
-
 - Fixes/Improvements:
+  - GEOSSnap: Recursively snap segments till nothing moves (#760, Sandro Santilli)
   - Buffer of Linestring includes spurious hole (GH-1217, Moritz Kirmse)
   - Preserve M values in GEOSInterpolate (GH-1390, Dan Baston)
   - Preserve M values in GEOSLineMerge (GH-1364, Dan Baston)
