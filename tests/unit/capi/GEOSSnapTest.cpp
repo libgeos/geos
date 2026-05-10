@@ -220,5 +220,26 @@ void object::test<11>()
     ensure("curved geometry not supported", result_ == nullptr);
 }
 
+template<>
+template<>
+void object::test<12>
+()
+{
+    set_test_name("POLYGON ZM snapped to Point");
+
+    geom1_ = fromWKT("POLYGON ZM ((0 0 4 3, 10 0 2 8, 10 10 6 1, 0 1 -3 4, 0 0 4 3))");
+    geom2_ = fromWKT("POINT (0.5 0)");
+    ensure(geom1_);
+    ensure(geom2_);
+
+    result_ = GEOSSnap(geom1_, geom2_, 1);
+    ensure(result_);
+
+    expected_ = fromWKT("POLYGON Z ((0.5 0 4, 10 0 2, 10 10 6, 0 1 -3, 0.5 0 4))");
+    ensure(expected_);
+
+    ensure_geometry_equals_identical(result_, expected_);
+}
+
 } // namespace tut
 

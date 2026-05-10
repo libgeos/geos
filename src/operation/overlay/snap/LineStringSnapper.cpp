@@ -153,7 +153,8 @@ LineStringSnapper::snapVertices(geom::CoordinateList& srcCoords,
 #if GEOS_DEBUG
         std::cerr << " Vertex to be snapped found, snapping" << std::endl;
 #endif
-        *vertpos = snapPt;
+        vertpos->x = snapPt.x;
+        vertpos->y = snapPt.y;
 
         // keep final closing point in synch (rings only)
         if(vertpos == srcCoords.begin() && isClosed) {
@@ -162,7 +163,8 @@ LineStringSnapper::snapVertices(geom::CoordinateList& srcCoords,
 #if GEOS_DEBUG
             std::cerr << " Snapped vertex was first in a closed line, also snapping last" << std::endl;
 #endif
-            *vertpos = snapPt;
+            vertpos->x = snapPt.x;
+            vertpos->y = snapPt.y;
         }
 
 #if GEOS_DEBUG
