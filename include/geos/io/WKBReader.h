@@ -146,6 +146,8 @@ private:
 
     std::array<double, 4> ordValues;
 
+    int parseDepth_ = 0;
+
     std::unique_ptr<geom::Geometry> readGeometry();
 
     std::unique_ptr<geom::Point> readPoint();

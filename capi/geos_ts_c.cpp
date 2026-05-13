@@ -948,7 +948,6 @@ extern "C" {
         });
     }
 
-
     Geometry*
     GEOSGeomFromWKT_r(GEOSContextHandle_t extHandle, const char* wkt)
     {

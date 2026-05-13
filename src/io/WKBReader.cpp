@@ -245,13 +245,22 @@ WKBReader::read(std::istream& is)
 std::unique_ptr<Geometry>
 WKBReader::read(const unsigned char* buf, size_t size)
 {
+    parseDepth_ = 0;
     dis = ByteOrderDataInStream(buf, size); // will default to machine endian
     return readGeometry();
 }
 
+static constexpr int MAX_PARSE_DEPTH = 100;
+
 std::unique_ptr<Geometry>
 WKBReader::readGeometry()
 {
+    if (parseDepth_ >= MAX_PARSE_DEPTH) {
+        throw ParseException("Input geometry exceeds nesting depth limit");
+    }
+    ++parseDepth_;
+    struct DepthGuard { int& d; ~DepthGuard() { --d; } } guard{parseDepth_};
+
     // determine byte order
     unsigned char byteOrder = dis.readByte();
 

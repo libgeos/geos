@@ -620,4 +620,21 @@ void object::test<40>
     ensure_equals(static_cast<size_t>(geom->getCoordinateDimension()), 3u);
 }
 
+// Deeply nested GeometryCollection should throw ParseException (not stack overflow)
+template<>
+template<>
+void object::test<41>
+()
+{
+    std::string geojson;
+    for (int i = 0; i < 200; i++) geojson += "{\"type\":\"GeometryCollection\",\"geometries\":[";
+    geojson += "{\"type\":\"Point\",\"coordinates\":[0,0]}";
+    for (int i = 0; i < 200; i++) geojson += "]}";
+
+    try {
+        geojsonreader.read(geojson);
+        fail("Expected ParseException for deeply nested GeoJSON");
+    } catch (const geos::io::ParseException&) {}
+}
+
 }

@@ -7,11 +7,13 @@
 
 // tut
 #include <tut/tut.hpp>
+#include <tut/tut_macros.hpp>
 // geos
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKBConstants.h>
 #include <geos/io/WKBWriter.h>
 #include <geos/io/WKTReader.h>
+#include <geos/io/ParseException.h>
 #include <geos/geom/CompoundCurve.h>
 #include <geos/geom/CurvePolygon.h>
 #include <geos/geom/PrecisionModel.h>
@@ -836,6 +838,25 @@ void object::test<36>
 {
     testParseError("01090000200E160000010000000101000000000000000000F03F000000000000F03F",
                    "ParseException: Expected SimpleCurve but got Point");
+}
+
+
+template<>
+template<>
+void object::test<37>
+()
+{
+    set_test_name("ParseException on deeply nested WKB collection avoid stack overflow");
+
+    // Each GeometryCollection header (NDR): byteOrder=01, type=07000000, numGeoms=01000000
+    const std::vector<unsigned char> header = {0x01, 0x07, 0x00, 0x00, 0x00, 0x01, 0x00, 0x00, 0x00};
+    // Innermost empty GeometryCollection: byteOrder=01, type=07000000, numGeoms=00000000
+    const std::vector<unsigned char> inner = {0x01, 0x07, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
+    std::vector<unsigned char> buf;
+    for (int i = 0; i < 200; i++) buf.insert(buf.end(), header.begin(), header.end());
+    buf.insert(buf.end(), inner.begin(), inner.end());
+
+    ensure_THROW(wkbreader.read(buf.data(), buf.size()), geos::io::ParseException);
 }
 
 } // namespace tut
