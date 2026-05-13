@@ -1109,6 +1109,7 @@ extern "C" {
         return execute(extHandle, [&]() {
             auto ids = clusters->getClusterIds(GEOS_CLUSTER_NONE);
             std::size_t* ids_buf = (size_t*) malloc(ids.size() * sizeof(std::size_t));
+            if (!ids_buf) return ids_buf;
             std::copy(ids.begin(), ids.end(), ids_buf);
             return ids_buf;
         });

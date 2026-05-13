@@ -3,6 +3,7 @@
 
 // tut
 #include <tut/tut.hpp>
+#include <tut/tut_macros.hpp>
 // geos
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKTWriter.h>
@@ -162,17 +163,7 @@ template<>
 void object::test<6>
 ()
 {
-    try {
-        wktreader.read("POLYGON( EMPTY, (1 1,2 2,1 2,1 1))");
-        fail("Did not get expected exception");
-    }
-    catch(const geos::util::IllegalArgumentException& ex) {
-        ensure("Got expected exception", true);
-        (void)(ex.what());
-    }
-    catch(...) {
-        fail("Got unexpected exception");
-    }
+    ensure_THROW(wktreader.read("POLYGON( EMPTY, (1 1,2 2,1 2,1 1))"), geos::util::IllegalArgumentException);
 }
 
 // POINT(0 0) http://trac.osgeo.org/geos/ticket/610
@@ -497,6 +488,19 @@ void object::test<25>
     ensure_parseexception("POINT Z M EMPTY");
     ensure_parseexception("LINESTRING Z M EMPTY");
     ensure_parseexception("POLYGON Z M EMPTY");
+}
+
+template<>
+template<>
+void object::test<26>
+()
+{
+    set_test_name("ParseException on deeply nested WKT collection avoid stack overflow");
+    std::string wkt;
+    for (int i = 0; i < 200; i++) wkt += "GEOMETRYCOLLECTION(";
+    wkt += "POINT(0 0)";
+    for (int i = 0; i < 200; i++) wkt += ")";
+    ensure_parseexception(wkt);
 }
 
 } // namespace tut

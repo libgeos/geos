@@ -40,12 +40,15 @@ using json = geos_nlohmann::json;
 namespace geos {
 namespace io { // geos.io
 
+static constexpr int MAX_PARSE_DEPTH = 100;
+
 GeoJSONReader::GeoJSONReader(): GeoJSONReader(*(GeometryFactory::getDefaultInstance())) {}
 
 GeoJSONReader::GeoJSONReader(const geom::GeometryFactory& gf) : geometryFactory(gf) {}
 
 std::unique_ptr<geom::Geometry> GeoJSONReader::read(const std::string& geoJsonText) const
 {
+    parseDepth_ = 0;
     try {
         const json& j = json::parse(geoJsonText);
         const std::string& type = j.at("type");
@@ -66,6 +69,7 @@ std::unique_ptr<geom::Geometry> GeoJSONReader::read(const std::string& geoJsonTe
 
 GeoJSONFeatureCollection GeoJSONReader::readFeatures(const std::string& geoJsonText) const
 {
+    parseDepth_ = 0;
     try {
         const json& j = json::parse(geoJsonText);
         const std::string& type = j.at("type");
@@ -121,6 +125,12 @@ std::map<std::string, GeoJSONValue> GeoJSONReader::readProperties(
 GeoJSONValue GeoJSONReader::readProperty(
     const geos_nlohmann::json& value) const
 {
+    if (parseDepth_ >= MAX_PARSE_DEPTH) {
+        throw ParseException("Input property exceeds nesting depth limit");
+    }
+    ++parseDepth_;
+    struct DepthGuard { int& d; ~DepthGuard() { --d; } } guard{parseDepth_};
+
     if (value.is_string()) {
         return GeoJSONValue { value.get<std::string>() };
     }
@@ -179,6 +189,12 @@ GeoJSONFeatureCollection GeoJSONReader::readFeatureCollection(
 std::unique_ptr<geom::Geometry> GeoJSONReader::readGeometry(
     const geos_nlohmann::json& j) const
 {
+    if (parseDepth_ >= MAX_PARSE_DEPTH) {
+        throw ParseException("Input geometry exceeds nesting depth limit");
+    }
+    ++parseDepth_;
+    struct DepthGuard { int& d; ~DepthGuard() { --d; } } guard{parseDepth_};
+
     const std::string& type = j.at("type");
     if (type == "Point") {
         return readPoint(j);
