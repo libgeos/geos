@@ -194,7 +194,6 @@ WKBReader::readHEX(const std::string& hex)
 void
 WKBReader::minMemSize(geom::GeometryTypeId geomType, uint64_t size) const
 {
-    uint64_t minSize = 0;
     constexpr uint64_t minCoordSize = 2 * sizeof(double);
     constexpr uint64_t minPtSize = (1+4) + minCoordSize;
     constexpr uint64_t minLineSize = (1+4+4); // empty line
@@ -202,35 +201,36 @@ WKBReader::minMemSize(geom::GeometryTypeId geomType, uint64_t size) const
     constexpr uint64_t minPolySize = (1+4+4); // empty polygon
     constexpr uint64_t minGeomSize = minLineSize;
 
+    uint64_t perElement = 0;
     switch(geomType) {
         case GEOS_LINESTRING:
         case GEOS_LINEARRING:
         case GEOS_CIRCULARSTRING:
         case GEOS_COMPOUNDCURVE:
         case GEOS_POINT:
-            minSize = size * minCoordSize;
+            perElement = minCoordSize;
             break;
         case GEOS_POLYGON:
         case GEOS_CURVEPOLYGON:
-            minSize = size * minRingSize;
+            perElement = minRingSize;
             break;
         case GEOS_MULTIPOINT:
-            minSize = size * minPtSize;
+            perElement = minPtSize;
             break;
         case GEOS_MULTILINESTRING:
         case GEOS_MULTICURVE:
-            minSize = size * minLineSize;
+            perElement = minLineSize;
             break;
         case GEOS_MULTIPOLYGON:
         case GEOS_MULTISURFACE:
-            minSize = size * minPolySize;
+            perElement = minPolySize;
             break;
         case GEOS_GEOMETRYCOLLECTION:
-            minSize = size * minGeomSize;
+            perElement = minGeomSize;
             break;
     }
 
-    if (dis.size() < minSize) {
+    if (perElement > 0 && size > dis.size() / perElement) {
         throw ParseException("Input buffer is smaller than requested object size");
     }
 }
