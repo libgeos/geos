@@ -857,11 +857,27 @@ void object::test<37>
     buf.insert(buf.end(), inner.begin(), inner.end());
 
     ensure_THROW(wkbreader.read(buf.data(), buf.size()), geos::io::ParseException);
+}
 
-    // try {
-    //     wkbreader.read(buf.data(), buf.size());
-    //     fail("Expected ParseException for deeply nested WKB");
-    // } catch (const geos::util::GEOSException&) {}
+// Claimed element count larger than buffer can hold should throw ParseException
+template<>
+template<>
+void object::test<38>
+()
+{
+    set_test_name("ParseException when WKB element count exceeds buffer capacity");
+
+    // NDR GeometryCollection with numGeoms = 0x00FFFFFF in a 20-byte buffer
+    // Header: byteOrder=01, type=07000000, numGeoms=FFFFFF00 (little-endian 0x00FFFFFF)
+    std::vector<unsigned char> buf = {
+        0x01,                         // NDR byte order
+        0x07, 0x00, 0x00, 0x00,       // type: GeometryCollection
+        0xFF, 0xFF, 0xFF, 0x00,       // numGeoms: 0x00FFFFFF (little-endian)
+        0x00, 0x00, 0x00, 0x00, 0x00, // padding to make buffer 20 bytes
+        0x00, 0x00, 0x00, 0x00, 0x00
+    };
+
+    ensure_THROW(wkbreader.read(buf.data(), buf.size()), geos::io::ParseException);
 }
 
 } // namespace tut
