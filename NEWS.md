@@ -9,6 +9,7 @@
   - Fix incorrect envelope calculation for arcs (GH-1314, Dan Baston)
   - Quiet FP_DIVBYZERO exception from CGAlgorithmsDD::intersection (GH-1235, Paul Ramsey)
   - Avoid crash on buffer of geometry with only invalid coordinates (GH-1335, Dan Baston)
+  - Guard against stack overflow in inputs (GH-1437, Paul Ramsey)
 
 ## Changes in 3.13.1
 2025-03-03
