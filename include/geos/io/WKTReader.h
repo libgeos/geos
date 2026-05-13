@@ -149,6 +149,7 @@ private:
     const geom::GeometryFactory* geometryFactory;
     const geom::PrecisionModel* precisionModel;
     bool fixStructure;
+    mutable int parseDepth_ = 0;
 
     void getPreciseCoordinate(io::StringTokenizer* tokenizer, OrdinateSet& ordinateFlags, geom::CoordinateXYZM&) const;
 

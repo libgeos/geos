@@ -49,9 +49,12 @@ using namespace geos::geom;
 namespace geos {
 namespace io { // geos.io
 
+static constexpr int MAX_PARSE_DEPTH = 100;
+
 std::unique_ptr<Geometry>
 WKTReader::read(const std::string& wellKnownText) const
 {
+    parseDepth_ = 0;
     CLocalizer clocale;
     StringTokenizer tokenizer(wellKnownText);
     OrdinateSet ordinateFlags = OrdinateSet::createXY();
@@ -302,6 +305,12 @@ WKTReader::getNextWord(StringTokenizer* tokenizer)
 std::unique_ptr<Geometry>
 WKTReader::readGeometryTaggedText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags, const GeometryTypeId* emptyType) const
 {
+    if (parseDepth_ >= MAX_PARSE_DEPTH) {
+        throw ParseException("Input geometry exceeds nesting depth limit");
+    }
+    ++parseDepth_;
+    struct DepthGuard { int& d; ~DepthGuard() { --d; } } guard{parseDepth_};
+
     std::string type = getNextWord(tokenizer);
 
     std::unique_ptr<Geometry> geom;

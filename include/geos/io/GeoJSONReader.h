@@ -75,6 +75,7 @@ public:
 private:
 
     const geom::GeometryFactory& geometryFactory;
+    mutable int parseDepth_ = 0;
 
     std::unique_ptr<geom::Geometry> readFeatureForGeometry(const geos_nlohmann::json& j) const;
 
