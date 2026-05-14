@@ -1692,6 +1692,26 @@ void object::test<84>()
     ensure_equals(cai.getPoint(0), XY{31.8, 68.2});
 }
 
+template<>
+template<>
+void object::test<85>()
+{
+    set_test_name("computed test points are independent of argument order");
+
+    auto arc0 = CircularArc::create(XY{0, 5}, XY{3, 4}, XY{4, 3});
+    auto arc1 = CircularArc::create(XY{3, 5}, XY{4, 4}, XY{2, 3});
+
+    CircularArcIntersector cai1;
+    cai1.intersects(arc0, arc1);
+    ensure_equals(cai1.getNumPoints(), 1u);
+
+    CircularArcIntersector cai2;
+    cai2.intersects(arc1, arc0);
+    ensure_equals(cai2.getNumPoints(), 1u);
+
+    ensure_equals(cai1.getPoint(0), cai2.getPoint(0));
+}
+
 
 // TODO: check Z values of arc result centerpoints
 // TODO: add tests for seg/seg

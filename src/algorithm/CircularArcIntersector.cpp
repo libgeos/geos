@@ -163,11 +163,15 @@ CircularArcIntersector::intersects(const CircularArc& arc1, const CircularArc& a
 
     reset();
 
-    const auto& c1 = arc1.getCenter();
-    const auto& c2 = arc2.getCenter();
+    // Normalize arguments such that the computed intersection points do not depend
+    // on the order of the input arcs
+    const bool swapArgs = arc1.getCenter().compareTo(arc2.getCenter()) > 0;
 
-    const auto r1 = arc1.getRadius();
-    const auto r2 = arc2.getRadius();
+    const auto c1 = swapArgs ? arc2.getCenter() : arc1.getCenter();
+    const auto c2 = swapArgs ? arc1.getCenter() : arc2.getCenter();
+
+    const auto r1 = swapArgs ? arc2.getRadius() : arc1.getRadius();
+    const auto r2 = swapArgs ? arc1.getRadius() : arc2.getRadius();
 
     const auto d = c1.distance(c2);
 
