@@ -338,6 +338,28 @@ OverlayUtil::round(const Point* pt, const PrecisionModel* pm, Coordinate& rsltCo
     return true;
 }
 
+CoordinateXY
+OverlayUtil::getDirectionPoint(const CoordinateSequence& pts, bool forward, bool isCurved)
+{
+    if (isCurved) {
+        assert(pts.size() >= 3);
+        if (forward) {
+            CircularArc arc(pts, 0);
+            return arc.getDirectionPoint();
+        } else {
+            CircularArc arc(pts, pts.size() - 3);
+            return algorithm::CircularArcs::getDirectionPoint(arc.getCenter(), arc.getRadius(), arc.theta2(), !arc.isCCW());
+        }
+    }
+
+    assert(pts.size() >= 2);
+    if (forward) {
+        return pts.getAt<CoordinateXY>(1);
+    }
+
+    return pts.getAt<CoordinateXY>(pts.size() - 2);
+}
+
 
 
 } // namespace geos.operation.overlayng
