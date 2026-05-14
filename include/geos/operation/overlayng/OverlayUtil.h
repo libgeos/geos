@@ -205,6 +205,9 @@ public:
     */
     static bool round(const Point* pt, const PrecisionModel* pm, Coordinate& rsltCoord);
 
+    static geom::CoordinateXY
+    getDirectionPoint(const CoordinateSequence& pts, bool forward, bool isCurved);
+
     template<typename T>
     static void moveGeometry(std::vector<std::unique_ptr<T>>& inGeoms, std::vector<std::unique_ptr<Geometry>>& outGeoms)
     {

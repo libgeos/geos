@@ -14,8 +14,8 @@
 
 #include <geos/operation/overlayng/OverlayGraph.h>
 
-#include <geos/algorithm/CircularArcs.h>
 #include <geos/operation/overlayng/Edge.h>
+#include <geos/operation/overlayng/OverlayUtil.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/CircularArc.h>
@@ -105,28 +105,6 @@ OverlayGraph::createEdgePair(const std::shared_ptr<const CoordinateSequence>& pt
     return e0;
 }
 
-static CoordinateXY
-getDirectionPoint(const CoordinateSequence& pts, bool forward, bool isCurved)
-{
-    if (isCurved) {
-        assert(pts.size() >= 3);
-        if (forward) {
-            CircularArc arc(pts, 0);
-            return arc.getDirectionPoint();
-        } else {
-            CircularArc arc(pts, pts.size() - 3);
-            return algorithm::CircularArcs::getDirectionPoint(arc.getCenter(), arc.getRadius(), arc.theta2(), !arc.isCCW());
-        }
-    }
-
-    assert(pts.size() >= 2);
-    if (forward) {
-        return pts.getAt<CoordinateXY>(1);
-    }
-
-    return pts.getAt<CoordinateXY>(pts.size() - 2);
-}
-
 /*private*/
 OverlayEdge*
 OverlayGraph::createOverlayEdge(const std::shared_ptr<const CoordinateSequence>& pts, OverlayLabel* lbl, bool direction, bool isCurved)
@@ -134,7 +112,7 @@ OverlayGraph::createOverlayEdge(const std::shared_ptr<const CoordinateSequence>&
     assert(pts->size() >= 2);
 
     CoordinateXYZM origin;
-    const CoordinateXY dirPt = getDirectionPoint(*pts, direction, isCurved);
+    const CoordinateXY dirPt = OverlayUtil::getDirectionPoint(*pts, direction, isCurved);
 
     if (direction) {
         pts->getAt(0, origin);
