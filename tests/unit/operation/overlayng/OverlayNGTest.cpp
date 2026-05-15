@@ -780,13 +780,42 @@ template<>
 template<>
 void object::test<60>()
 {
-    set_test_name("MultiSurface / MultiPoint -> MultiSurface");
+    set_test_name("Union of MultiSurface / MultiPoint -> MultiSurface");
 
     std::string a = "MULTISURFACE(CURVEPOLYGON (COMPOUNDCURVE( CIRCULARSTRING(-5 0, 0 5, 5 0), (5 0, -5 0))), ((4 4, 5 4, 5 5, 4 4)))";
     std::string b = "MULTIPOINT (0 0, 4 3, 2 2, 4.5 4.1)";
     std::string exp = a;
 
     testOverlay(a, b, exp, OverlayNG::UNION, 0);
+}
+
+template<>
+template<>
+void object::test<61>()
+{
+    set_test_name("Union of CurvePolygon / CurvePolygon -> CurvePolygon");
+
+    std::string a = "CURVEPOLYGON (CIRCULARSTRING (-5 0, 0 5, 5 0, 0 4, -5 0))";
+    std::string b = "CURVEPOLYGON (COMPOUNDCURVE((-5 0, 5 0), CIRCULARSTRING (5 0, 0 4, -5 0)))";
+
+    std::string exp = "CURVEPOLYGON (COMPOUNDCURVE (CIRCULARSTRING (-5 0, 0 5, 5 0), (5 0, -5 0)))";
+
+    testOverlay(a, b, exp, OverlayNG::UNION, 0);
+}
+
+template<>
+template<>
+void object::test<62>()
+{
+    set_test_name("CircularString self-union");
+
+    std::string a = "CIRCULARSTRING (0 0, 1 1, 2 0, 3 -1, 4 0)";
+
+    // Noding causes the CircularString to split at (2, 0)
+    // OverlayNG does not merge output lines, so we get a MultiCurve.
+    std::string exp = "MULTICURVE (CIRCULARSTRING (0 0, 1 1, 2 0), CIRCULARSTRING (2 0, 3 -1, 4 0))";
+
+    testOverlay(a, a, exp, OverlayNG::UNION, 0);
 }
 
 } // namespace tut
