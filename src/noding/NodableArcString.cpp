@@ -16,6 +16,7 @@
 #include <geos/algorithm/Angle.h>
 
 #include <algorithm>
+#include <iomanip>
 
 using geos::geom::CoordinateXYZM;
 using geos::geom::CircularArc;
@@ -26,7 +27,7 @@ static double
 pseudoAngleDiffCCW(double paStart, double pa) {
     double diff = pa - paStart;
 
-    if (diff <= 0) {
+    if (diff < 0) {
         diff += 4;
     }
 
@@ -45,31 +46,32 @@ std::vector<CoordinateXYZM> prepareArcPoints(const CircularArc& arc, std::vector
 {
     const bool isCCW = arc.getOrientation() == algorithm::Orientation::COUNTERCLOCKWISE;
     const geom::CoordinateXY& center = arc.getCenter();
-    const double paStart = geom::Quadrant::pseudoAngle(center, arc.p0());
+
+    // Some potential split points may be skipped, for example, if they would create an arc section that is
+    // too short to have a constructed midpoint. Because the results of this logic could depend on the
+    // direction in which the arc is processed, we reverse clockwise arcs and then reverse the list of
+    // retained points.
+    const double paStart = geom::Quadrant::pseudoAngle(center, isCCW ? arc.p0() : arc.p2());
 
     std::vector<CoordinateXYZM> retained;
     // Add starting point of input arc
     {
         CoordinateXYZM p0;
-        arc.getCoordinateSequence()->getAt(arc.getCoordinatePosition(), p0);
+        arc.getCoordinateSequence()->getAt(arc.getCoordinatePosition() + (isCCW ? 0 : 2), p0);
         retained.push_back(p0);
     }
 
-    std::sort(splitPoints.begin(), splitPoints.end(), [&center, paStart, isCCW](const auto& p0, const auto& p1) {
+    std::sort(splitPoints.begin(), splitPoints.end(), [&center, paStart](const auto& p0, const auto& p1) {
         double pa0 = geom::Quadrant::pseudoAngle(center, p0);
         double pa1 = geom::Quadrant::pseudoAngle(center, p1);
 
-        if (isCCW) {
-            return pseudoAngleDiffCCW(paStart, pa0) < pseudoAngleDiffCCW(paStart, pa1);
-        } else {
-            return pseudoAngleDiffCCW(paStart, pa0) > pseudoAngleDiffCCW(paStart, pa1);
-        }
+        return pseudoAngleDiffCCW(paStart, pa0) < pseudoAngleDiffCCW(paStart, pa1);
     });
 
     // Add ending point of input arc
     {
         CoordinateXYZM p2;
-        arc.getCoordinateSequence()->getAt(arc.getCoordinatePosition() + 2, p2);
+        arc.getCoordinateSequence()->getAt(arc.getCoordinatePosition() + (isCCW ? 2 : 0), p2);
         splitPoints.push_back(p2);
     }
 
@@ -90,23 +92,21 @@ std::vector<CoordinateXYZM> prepareArcPoints(const CircularArc& arc, std::vector
             continue;
         }
 
-        const auto p1 = algorithm::CircularArcs::getMidpoint(p0, p2, center, arc.getRadius(), isCCW);
+        // Calculate the midpoint of an arc between p0 and p2.
+        // We don't actually use the calculated point here, we just want to make sure that
+        // the arc from p0 to p2 is long enough to contain a midpoint.
+        const geom::CoordinateXY p1 = algorithm::CircularArcs::getMidpoint(p0, p2, center, arc.getRadius(), true);
 
         if (p1.equals2D(p0) || p1.equals2D(p2)) {
             continue;
         }
 
-        // Reject split point where sub-arc midpoint doesn't fall inside arc
-        if (!arc.containsPointOnCircle(p1)) {
-            continue;
-        }
-
         // Reject split point where computed doesn't fall between endpoints
-        const double t0 = algorithm::Angle::normalizePositive(arc.theta0());
+        const double t0 = algorithm::Angle::normalizePositive(isCCW ? arc.theta0() : arc.theta2());
         const double t1 = algorithm::Angle::normalizePositive(algorithm::CircularArcs::getAngle(p1, center));
-        const double t2 = algorithm::Angle::normalizePositive(algorithm::CircularArcs::getAngle(p2, center));
+        const double t2 = algorithm::Angle::normalizePositive(isCCW ? arc.theta2() : arc.theta0());
 
-        if (algorithm::Angle::isWithinCCW(t1, t0, t2) != isCCW) {
+        if (!algorithm::Angle::isWithinCCW(t1, t0, t2)) {
             continue;
         }
 
@@ -116,7 +116,7 @@ std::vector<CoordinateXYZM> prepareArcPoints(const CircularArc& arc, std::vector
     // Make sure that endpoint of split arc is unchanged
     {
         CoordinateXYZM p2;
-        arc.getCoordinateSequence()->getAt(arc.getCoordinatePosition() + 2, p2);
+        arc.getCoordinateSequence()->getAt(arc.getCoordinatePosition() + (isCCW ? 2 : 0), p2);
         CoordinateXYZM& back = retained.back();
 
         if (!back.equals2D(p2)) {
@@ -129,6 +129,10 @@ std::vector<CoordinateXYZM> prepareArcPoints(const CircularArc& arc, std::vector
         if (std::isnan(back.m) && !std::isnan(p2.m)) {
             back.m = p2.m;
         }
+    }
+
+    if (!isCCW) {
+        std::reverse(retained.begin(), retained.end());
     }
 
     return retained;
@@ -146,16 +150,19 @@ NodableArcString::getNoded(std::vector<std::unique_ptr<ArcString>>& splitArcs) {
         const int orientation = toSplit.getOrientation();
 
         bool arcIsSplit = true;
+        bool createArcString = true;
         const bool preserveControlPoint = true;
         std::vector<CoordinateXYZM> arcPoints;
         const auto it = m_adds.find(arcIndex);
         if (it == m_adds.end()) {
             arcIsSplit = false;
+            createArcString = false;
         } else {
             arcPoints = prepareArcPoints(toSplit, it->second);
 
             if (arcPoints.size() == 2) {
                 // All added nodes collapsed
+                // Still need to know if arc was split.
                 arcIsSplit = false;
             }
         }
@@ -167,6 +174,12 @@ NodableArcString::getNoded(std::vector<std::unique_ptr<ArcString>>& splitArcs) {
             dstSeq->add(*srcSeq, srcPos, srcPos + 2, false);
             std::size_t dstPos = dstSeq->getSize() - 3;
             arcs.emplace_back(*dstSeq, dstPos, center, radius, orientation);
+
+            if (createArcString) {
+                splitArcs.push_back(std::make_unique<NodableArcString>(std::move(arcs), std::move(dstSeq), m_constructZ, m_constructM, getData()));
+                dstSeq = std::make_unique<geom::CoordinateSequence>(0, m_constructZ, m_constructM);
+                arcs.clear();
+            }
 
             continue;
         }
