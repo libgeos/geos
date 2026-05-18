@@ -46,6 +46,36 @@ SimplePointInAreaLocator::isContained(const CoordinateXY& p, const Geometry* geo
     return Location::EXTERIOR != locate(p, geom);
 }
 
+bool
+SimplePointInAreaLocator::isAnyPointContained(const geom::Geometry& pt, const geom::Geometry& area)
+{
+    if (pt.getNumGeometries() > 1) {
+        for (size_t i = 0; i < pt.getNumGeometries(); i++ ) {
+            if (isAnyPointContained(*pt.getGeometryN(i), area)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    return isContained(*pt.getCoordinate(), &area);
+}
+
+bool
+SimplePointInAreaLocator::isEveryPointContained(const geom::Geometry &pt, const geom::Geometry &area)
+{
+    if (pt.getNumGeometries() > 1) {
+        for (size_t i = 0; i < pt.getNumGeometries(); i++ ) {
+            if (!isEveryPointContained(*pt.getGeometryN(i), area)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    return isContained(*pt.getCoordinate(), &area);
+}
+
 geom::Location
 SimplePointInAreaLocator::locateInGeometry(const CoordinateXY& p, const Geometry* geom)
 {

@@ -261,6 +261,10 @@ Geometry::getEnvelope() const
 bool
 Geometry::disjoint(const Geometry* g) const
 {
+    if (hasCurvedComponents() || g->hasCurvedComponents()) {
+        return !intersects(g);
+    }
+
 #if USE_RELATENG
     return operation::relateng::RelateNG::disjoint(this, g);
 #else
@@ -323,13 +327,13 @@ Geometry::intersects(const Geometry* g) const
         return predicate::RectangleIntersects::intersects(*p, *this);
     }
 
-    auto typ = getGeometryTypeId();
-    if (typ == GEOS_CURVEPOLYGON && g->getGeometryTypeId() == GEOS_POINT) {
-        auto loc = locate::SimplePointInAreaLocator::locatePointInSurface(*g->getCoordinate(), *detail::down_cast<const Surface*>(this));
-        return loc != Location::EXTERIOR;
-    } else if (typ == GEOS_POINT && g->getGeometryTypeId() == GEOS_CURVEPOLYGON) {
-        auto loc = locate::SimplePointInAreaLocator::locatePointInSurface(*getCoordinate(), *detail::down_cast<const Surface*>(g));
-        return loc != Location::EXTERIOR;
+    if (hasCurvedComponents() || g->hasCurvedComponents()) {
+        if (getDimension() == Dimension::A && g->getDimension() == Dimension::P) {
+            return locate::SimplePointInAreaLocator::isAnyPointContained(*g, *this);
+        }
+        if (g->getDimension() == Dimension::A && getDimension() == Dimension::P) {
+            return locate::SimplePointInAreaLocator::isAnyPointContained(*this, *g);
+        }
     }
 
 #if USE_RELATENG
@@ -426,6 +430,15 @@ Geometry::within(const Geometry* g) const
 bool
 Geometry::contains(const Geometry* g) const
 {
+    if (hasCurvedComponents() || g->hasCurvedComponents()) {
+        if (getDimension() == Dimension::A && g->getDimension() == Dimension::P) {
+            return locate::SimplePointInAreaLocator::isEveryPointContained(*g, *this);
+        }
+        if (g->getDimension() == Dimension::A && getDimension() == Dimension::P) {
+            return locate::SimplePointInAreaLocator::isEveryPointContained(*this, *g);
+        }
+    }
+
 #if USE_RELATENG
     return operation::relateng::RelateNG::contains(this, g);
 #else
