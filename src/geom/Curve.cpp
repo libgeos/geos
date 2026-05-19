@@ -48,6 +48,12 @@ Curve::apply_rw(GeometryFilter* filter)
     filter->filter_rw(this);
 }
 
+std::unique_ptr<Curve>
+Curve::clone() const
+{
+    return std::unique_ptr<Curve>(static_cast<Curve*>(Geometry::clone().release()));
+}
+
 bool
 Curve::isRing() const
 {

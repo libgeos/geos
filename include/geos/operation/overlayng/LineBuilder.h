@@ -77,7 +77,7 @@ private:
     const geom::GeometryFactory* geometryFactory;
     bool hasResultArea;
     int8_t inputAreaIndex;
-    std::vector<std::unique_ptr<geom::LineString>> lines;
+    std::vector<std::unique_ptr<geom::Curve>> lines;
 
     /**
     * Indicates whether intersections are allowed to produce
@@ -121,7 +121,7 @@ private:
     void addResultLines();
     void addResultLinesMerged();
 
-    std::unique_ptr<geom::LineString> toLine(OverlayEdge* edge) const;
+    std::unique_ptr<geom::Curve> toLine(OverlayEdge* edge) const;
 
     void addResultLinesForNodes();
 
@@ -143,7 +143,7 @@ private:
     * E.g. using the direction of the majority of segments,
     * or preferring the direction of the A edges.)
     */
-    std::unique_ptr<geom::LineString> buildLine(OverlayEdge* node);
+    std::unique_ptr<geom::Curve> buildLine(OverlayEdge* node) const;
 
     /*
     * Finds the next edge around a node which forms
@@ -173,7 +173,7 @@ public:
     LineBuilder(const LineBuilder&) = delete;
     LineBuilder& operator=(const LineBuilder&) = delete;
 
-    std::vector<std::unique_ptr<geom::LineString>> getLines();
+    std::vector<std::unique_ptr<geom::Curve>> getLines();
 
     void setStrictMode(bool p_isStrictResultMode)
     {

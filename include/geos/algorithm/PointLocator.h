@@ -25,6 +25,8 @@
 // Forward declarations
 namespace geos {
 namespace geom {
+class CircularString;
+class CompoundCurve;
 class CoordinateXY;
 class Curve;
 class Geometry;
@@ -97,6 +99,10 @@ private:
     geom::Location locate(const geom::CoordinateXY& p, const geom::Point* pt);
 
     geom::Location locate(const geom::CoordinateXY& p, const geom::LineString* l);
+
+    geom::Location locate(const geom::CoordinateXY& p, const geom::CircularString* cs);
+
+    geom::Location locate(const geom::CoordinateXY& p, const geom::CompoundCurve* cs);
 
     static geom::Location locateInPolygonRing(const geom::CoordinateXY& p, const geom::Curve* ring);
 

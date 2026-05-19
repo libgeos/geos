@@ -175,7 +175,7 @@ OverlayNG::getResult()
     }
     else if (! inputGeom.isSingle() &&  inputGeom.hasPoints()) {
         // handle Point-nonPoint inputs
-        result = OverlayMixedPoints::overlay(opCode, ig0, ig1, pm);
+        result = OverlayMixedPoints::overlay(opCode, ig0, ig1, pm, noder);
     }
     else {
         // handle case where both inputs are formed of edges (Lines and Polygons)
@@ -309,10 +309,10 @@ OverlayNG::extractResult(int p_opCode, OverlayGraph* graph)
     //--- Build polygons
     std::vector<OverlayEdge*> resultAreaEdges = graph->getResultAreaEdges();
     PolygonBuilder polyBuilder(resultAreaEdges, geomFact);
-    std::vector<std::unique_ptr<Polygon>> resultPolyList = polyBuilder.getPolygons();
+    std::vector<std::unique_ptr<Surface>> resultPolyList = polyBuilder.getPolygons();
     bool hasResultAreaComponents = (!resultPolyList.empty());
 
-    std::vector<std::unique_ptr<LineString>> resultLineList;
+    std::vector<std::unique_ptr<Curve>> resultLineList;
     std::vector<std::unique_ptr<Point>> resultPointList;
 
     GEOS_CHECK_FOR_INTERRUPTS();

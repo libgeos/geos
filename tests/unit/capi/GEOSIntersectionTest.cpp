@@ -149,14 +149,16 @@ template<>
 template<>
 void object::test<8>()
 {
+    set_test_name("curved input");
+
     geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
     geom2_ = fromWKT("LINESTRING (1 0, 2 1)");
 
-    ensure(geom1_);
-    ensure(geom2_);
-
     result_ = GEOSIntersection(geom1_, geom2_);
-    ensure("curved geometry not supported", result_ == nullptr);
+    ensure(result_);
+
+    expected_ = fromWKT("POINT (1.7071067812 0.7071067812)");
+    ensure_geometry_equals(result_, expected_, 1e-8);
 }
 
 // https://github.com/libgeos/geos/issues/1074

@@ -166,10 +166,10 @@ void object::test<3>()
 
     // Overlay
     ensure_THROW(cp_->Union(), geos::util::UnsupportedOperationException);
-    ensure_THROW(cp_->Union(cp_.get()), geos::util::UnsupportedOperationException);
-    ensure_THROW(cp_->difference(cp_.get()), geos::util::UnsupportedOperationException);
-    ensure_THROW(cp_->intersection(cp_.get()), geos::util::UnsupportedOperationException);
-    ensure_THROW(cp_->symDifference(cp_.get()), geos::util::UnsupportedOperationException);
+    ensure_equals(cp_->Union(cp_.get())->getLength(), cp_->getLength());
+    ensure(cp_->difference(cp_.get())->isEmpty());
+    ensure_equals(cp_->intersection(cp_.get())->getLength(), cp_->getLength());
+    ensure(cp_->symDifference(cp_.get())->isEmpty());
 
     // Distance
     ensure_equals(cp_->distance(cp_.get()), 0);

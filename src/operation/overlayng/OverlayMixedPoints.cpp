@@ -16,6 +16,7 @@
 
 #include <geos/algorithm/locate/IndexedPointInAreaLocator.h>
 #include <geos/algorithm/locate/PointOnGeometryLocator.h>
+#include <geos/algorithm/locate/SimplePointInAreaLocator.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateFilter.h>
@@ -38,6 +39,7 @@ namespace overlayng { // geos.operation.overlayng
 using namespace geos::geom;
 using geos::algorithm::locate::PointOnGeometryLocator;
 using geos::algorithm::locate::IndexedPointInAreaLocator;
+using geos::algorithm::locate::SimplePointInAreaLocator;
 
 /**
  * @brief Extracts and rounds coordinates from a geometry
@@ -76,10 +78,11 @@ private:
 };
 
 /*public*/
-OverlayMixedPoints::OverlayMixedPoints(int p_opCode, const Geometry* geom0, const Geometry* geom1, const PrecisionModel* p_pm)
+OverlayMixedPoints::OverlayMixedPoints(int p_opCode, const Geometry* geom0, const Geometry* geom1, const PrecisionModel* p_pm, Noder* p_noder)
     : opCode(p_opCode)
     , pm(p_pm ? p_pm : geom0->getPrecisionModel())
     , geometryFactory(geom0->getFactory())
+    , noder(p_noder)
     , resultDim(OverlayUtil::resultDimension(opCode, geom0->getDimension(), geom1->getDimension()))
 {
     // name the dimensional geometries
@@ -97,9 +100,9 @@ OverlayMixedPoints::OverlayMixedPoints(int p_opCode, const Geometry* geom0, cons
 
 /*public static*/
 std::unique_ptr<Geometry>
-OverlayMixedPoints::overlay(int opCode, const Geometry* geom0, const Geometry* geom1, const PrecisionModel* pm)
+OverlayMixedPoints::overlay(int opCode, const Geometry* geom0, const Geometry* geom1, const PrecisionModel* pm, Noder* p_noder)
 {
-    OverlayMixedPoints overlay(opCode, geom0, geom1, pm);
+    OverlayMixedPoints overlay(opCode, geom0, geom1, pm, p_noder);
     return overlay.getResult();
 }
 
@@ -137,8 +140,11 @@ std::unique_ptr<PointOnGeometryLocator>
 OverlayMixedPoints::createLocator(const Geometry* p_geomNonPoint)
 {
     if (geomNonPointDim == 2) {
-        std::unique_ptr<PointOnGeometryLocator> ipial(new IndexedPointInAreaLocator(*p_geomNonPoint));
-        return ipial;
+        if (p_geomNonPoint->hasCurvedComponents()) {
+            return std::make_unique<SimplePointInAreaLocator>(*p_geomNonPoint);
+        } else {
+            return std::make_unique<IndexedPointInAreaLocator>(*p_geomNonPoint);
+        }
     }
     else {
         std::unique_ptr<PointOnGeometryLocator> ipoll(new IndexedPointOnLineLocator(*p_geomNonPoint));
@@ -159,7 +165,7 @@ OverlayMixedPoints::prepareNonPoint(const Geometry* geomInput)
         return geomInput->clone();
     }
     // Node and round the non-point geometry for output
-    return OverlayNG::geomunion(geomInput, pm);
+    return OverlayNG::geomunion(geomInput, pm, noder);
 }
 
 /*private*/
@@ -175,11 +181,11 @@ std::unique_ptr<Geometry>
 OverlayMixedPoints::computeUnion(const CoordinateSequence* coords)
 {
     std::vector<std::unique_ptr<Point>> resultPointList = findPoints(false, coords);
-    std::vector<std::unique_ptr<LineString>> resultLineList;
+    std::vector<std::unique_ptr<Curve>> resultLineList;
     if (geomNonPointDim == 1) {
         resultLineList = extractLines(geomNonPoint.get());
     }
-    std::vector<std::unique_ptr<Polygon>> resultPolyList;
+    std::vector<std::unique_ptr<Surface>> resultPolyList;
     if (geomNonPointDim == 2) {
         resultPolyList = extractPolygons(geomNonPoint.get());
     }
@@ -274,7 +280,7 @@ OverlayMixedPoints::hasLocation(bool isCovered, const CoordinateXY& coord) const
 
 /*private*/
 std::unique_ptr<CoordinateSequence>
-OverlayMixedPoints::extractCoordinates(const Geometry* points, const PrecisionModel* p_pm) const
+OverlayMixedPoints::extractCoordinates(const Geometry* points, const PrecisionModel* p_pm)
 {
     auto coords = detail::make_unique<CoordinateSequence>(0u, points->hasZ(), points->hasM());
     coords->reserve(points->getNumPoints());
@@ -285,12 +291,12 @@ OverlayMixedPoints::extractCoordinates(const Geometry* points, const PrecisionMo
 }
 
 /*private*/
-std::vector<std::unique_ptr<Polygon>>
-OverlayMixedPoints::extractPolygons(const Geometry* geom) const
+std::vector<std::unique_ptr<Surface>>
+OverlayMixedPoints::extractPolygons(const Geometry* geom)
 {
-    std::vector<std::unique_ptr<Polygon>> list;
+    std::vector<std::unique_ptr<Surface>> list;
     for (std::size_t i = 0; i < geom->getNumGeometries(); i++) {
-        const Polygon* poly = static_cast<const Polygon*>(geom->getGeometryN(i));
+        const Surface* poly = static_cast<const Surface*>(geom->getGeometryN(i));
         if(!poly->isEmpty()) {
             list.emplace_back(poly->clone());
         }
@@ -299,12 +305,12 @@ OverlayMixedPoints::extractPolygons(const Geometry* geom) const
 }
 
 /*private*/
-std::vector<std::unique_ptr<LineString>>
-OverlayMixedPoints::extractLines(const Geometry* geom) const
+std::vector<std::unique_ptr<Curve>>
+OverlayMixedPoints::extractLines(const Geometry* geom)
 {
-    std::vector<std::unique_ptr<LineString>> list;
+    std::vector<std::unique_ptr<Curve>> list;
     for (std::size_t i = 0; i < geom->getNumGeometries(); i++) {
-        const LineString* line = static_cast<const LineString*>(geom->getGeometryN(i));
+        const Curve* line = static_cast<const Curve*>(geom->getGeometryN(i));
         if (! line->isEmpty()) {
             list.emplace_back(line->clone());
         }

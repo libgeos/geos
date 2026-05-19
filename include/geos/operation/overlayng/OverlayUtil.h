@@ -14,10 +14,10 @@
 
 #pragma once
 
-#include <geos/geom/Point.h>
-#include <geos/geom/Polygon.h>
-#include <geos/geom/LineString.h>
+#include <geos/geom/Curve.h>
 #include <geos/geom/Geometry.h>
+#include <geos/geom/Point.h>
+#include <geos/geom/Surface.h>
 
 #include <geos/export.h>
 
@@ -55,10 +55,10 @@ class GEOS_DLL OverlayUtil {
     using Geometry = geos::geom::Geometry;
     using Coordinate = geos::geom::Coordinate;
     using CoordinateSequence = geos::geom::CoordinateSequence;
+    using Curve = geos::geom::Curve;
     using Envelope = geos::geom::Envelope;
     using Point = geos::geom::Point;
-    using LineString = geos::geom::LineString;
-    using Polygon = geos::geom::Polygon;
+    using Surface = geos::geom::Surface;
     using GeometryFactory = geos::geom::GeometryFactory;
     using PrecisionModel = geos::geom::PrecisionModel;
 
@@ -172,8 +172,8 @@ public:
     * Creates an overlay result geometry for homogeneous or mixed components.
     */
     static std::unique_ptr<Geometry> createResultGeometry(
-        std::vector<std::unique_ptr<Polygon>>& resultPolyList,
-        std::vector<std::unique_ptr<LineString>>& resultLineList,
+        std::vector<std::unique_ptr<Surface>>& resultPolyList,
+        std::vector<std::unique_ptr<Curve>>& resultLineList,
         std::vector<std::unique_ptr<Point>>& resultPointList,
         const GeometryFactory* geometryFactory);
 
@@ -204,6 +204,9 @@ public:
     * Note: return value is only copied if rounding is performed.
     */
     static bool round(const Point* pt, const PrecisionModel* pm, Coordinate& rsltCoord);
+
+    static geom::CoordinateXY
+    getDirectionPoint(const CoordinateSequence& pts, bool forward, bool isCurved);
 
     template<typename T>
     static void moveGeometry(std::vector<std::unique_ptr<T>>& inGeoms, std::vector<std::unique_ptr<Geometry>>& outGeoms)

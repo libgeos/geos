@@ -17,8 +17,10 @@
 #include <geos/operation/overlayng/OverlayEdge.h>
 #include <geos/operation/overlayng/OverlayLabel.h>
 #include <geos/operation/overlayng/OverlayNG.h>
+#include <geos/geom/CircularString.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/util/CurveBuilder.h>
 
 
 
@@ -29,7 +31,7 @@ namespace overlayng { // geos.operation.overlayng
 using namespace geos::geom;
 
 /*public*/
-std::vector<std::unique_ptr<LineString>>
+std::vector<std::unique_ptr<Curve>>
 LineBuilder::getLines()
 {
     markResultLines();
@@ -174,19 +176,22 @@ LineBuilder::addResultLines()
     }
 }
 
-std::unique_ptr<LineString>
+std::unique_ptr<Curve>
 LineBuilder::toLine(OverlayEdge* edge) const
 {
     // bool isForward = edge->isForward();
     const auto* edgePts = edge->getCoordinatesRO();
 
-    std::unique_ptr<CoordinateSequence> pts(new CoordinateSequence(0u, edgePts->hasZ(), edgePts->hasM()));
+    auto pts = std::make_unique<CoordinateSequence>(0u, edgePts->hasZ(), edgePts->hasM());
     pts->reserve(edgePts->size());
     pts->add(edge->orig(), false);
     edge->addCoordinates(pts.get());
 
     assert(pts->size() == edgePts->size());
 
+    if (edge->isCurved()) {
+        return geometryFactory->createCircularString(std::move(pts));
+    }
     return geometryFactory->createLineString(std::move(pts));
 }
 
@@ -217,7 +222,7 @@ LineBuilder::addResultLinesForNodes()
         * This will find all lines originating at nodes
         */
         if (degreeOfLines(edge) != 2) {
-            std::unique_ptr<LineString> line = buildLine(edge);
+            auto line = buildLine(edge);
             lines.push_back(std::move(line));
         }
     }
@@ -241,20 +246,24 @@ LineBuilder::addResultLinesRings()
 }
 
 /*private*/
-std::unique_ptr<LineString>
-LineBuilder::buildLine(OverlayEdge* node)
+std::unique_ptr<Curve>
+LineBuilder::buildLine(OverlayEdge* node) const
 {
+    const bool constructZ = node->getCoordinatesRO()->hasZ();
+    const bool constructM = node->getCoordinatesRO()->hasM();
+    geom::util::CurveBuilder cb(*geometryFactory, constructZ, constructM);
+
     // assert: edgeStart degree = 1
     // assert: edgeStart direction = forward
-    std::unique_ptr<CoordinateSequence> pts(new CoordinateSequence());
-    pts->add(node->orig(), false);
+    cb.add(*node->getCoordinatesRO(), node->isCurved());
 
     bool isNodeForward = node->isForward();
 
     OverlayEdge* e = node;
     do {
         e->markVisitedBoth();
-        e->addCoordinates(pts.get());
+        CoordinateSequence& pts = cb.getSeq(e->isCurved());
+        e->addCoordinates(&pts);
 
         // end line if next vertex is a node
         if (degreeOfLines(e->symOE()) != 2) {
@@ -264,12 +273,14 @@ LineBuilder::buildLine(OverlayEdge* node)
         // e will be nullptr if next edge has been visited, which indicates a ring
     }
     while (e != nullptr);
+
     // reverse coordinates before constructing
+    auto geom = cb.getGeometry();
     if(!isNodeForward) {
-        pts->reverse();
+        return geom->reverse();
     }
 
-    return geometryFactory->createLineString(std::move(pts));
+    return geom;
 }
 
 /*private*/

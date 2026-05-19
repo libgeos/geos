@@ -64,6 +64,7 @@ private:
     int bDepthDelta = 0;
     bool bIsHole = false;
     std::shared_ptr<const geom::CoordinateSequence> pts;
+    bool ptsCurved;
 
     // Methods
 
@@ -183,24 +184,18 @@ private:
 
 public:
 
-    Edge()
-        : aDim(OverlayLabel::DIM_UNKNOWN)
-        , aDepthDelta(0)
-        , aIsHole(false)
-        , bDim(OverlayLabel::DIM_UNKNOWN)
-        , bDepthDelta(0)
-        , bIsHole(false)
-        , pts(nullptr)
-        {};
+    Edge(const std::shared_ptr<const geom::CoordinateSequence>& p_pts, const EdgeSourceInfo* info, bool isCurved);
 
     friend std::ostream& operator<<(std::ostream& os, const Edge& e);
 
     static bool isCollapsed(const geom::CoordinateSequence* pts);
 
-    Edge(const std::shared_ptr<const geom::CoordinateSequence>& p_pts, const EdgeSourceInfo* info);
+    bool isCurved() const {
+        return ptsCurved;
+    }
 
     // return a clone of the underlying points
-    std::unique_ptr<geom::CoordinateSequence> getCoordinates()
+    std::unique_ptr<geom::CoordinateSequence> getCoordinates() const
     {
         return pts->clone();
     };
@@ -235,25 +230,22 @@ public:
             throw util::GEOSException("Edge must have >= 2 points");
         }
 
-        const geom::Coordinate& p0 = pts->getAt(0);
-        const geom::Coordinate& p1 = pts->getAt(1);
-        const geom::Coordinate& pn0 = pts->getAt(pts->size() - 1);
-        const geom::Coordinate& pn1 = pts->getAt(pts->size() - 2);
+        const geom::CoordinateXY& p0 = getCoordinate(0);
+        const geom::CoordinateXY& pn0 = getCoordinate(pts->size() - 1);
 
-        int cmp = 0;
-        int cmp0 = p0.compareTo(pn0);
-        if (cmp0 != 0) cmp = cmp0;
-
-        if (cmp == 0) {
-            int cmp1 = p1.compareTo(pn1);
-            if (cmp1 != 0) cmp = cmp1;
+        const int cmp0 = p0.compareTo(pn0);
+        if (cmp0 != 0) {
+            return cmp0 == -1;
         }
 
-        if (cmp == 0) {
-            throw util::GEOSException("Edge direction cannot be determined because endpoints are equal");
+        const geom::CoordinateXY& p1 = getCoordinate(1);
+        const geom::CoordinateXY& pn1 = getCoordinate(pts->size() - 2);
+        const int cmp1 = p1.compareTo(pn1);
+        if (cmp1 != 0) {
+            return cmp1 == -1;
         }
 
-        return cmp == -1;
+        throw util::GEOSException("Edge direction cannot be determined because endpoints are equal");
     };
 
     /**
