@@ -59,7 +59,7 @@ public:
      */
     LineMergeDirectedEdge(planargraph::Node* from,
                           planargraph::Node* to,
-                          const geom::Coordinate& directionPt,
+                          const geom::CoordinateXY& directionPt,
                           bool edgeDirection);
 
     /**  \brief

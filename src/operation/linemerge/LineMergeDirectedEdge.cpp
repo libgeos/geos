@@ -33,7 +33,7 @@ namespace linemerge { // geos.operation.linemerge
 LineMergeDirectedEdge::LineMergeDirectedEdge(
     planargraph::Node* newFrom,
     planargraph::Node* newTo,
-    const Coordinate& newDirectionPt,
+    const CoordinateXY& newDirectionPt,
     bool nEdgeDirection)
     :
     planargraph::DirectedEdge(newFrom, newTo,

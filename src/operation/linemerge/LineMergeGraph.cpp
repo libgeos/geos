@@ -46,6 +46,8 @@ namespace geos {
 namespace operation { // geos.operation
 namespace linemerge { // geos.operation.linemerge
 
+LineMergeGraph::LineMergeGraph() = default;
+
 void
 LineMergeGraph::addEdge(const LineString* lineString)
 {
@@ -66,8 +68,8 @@ LineMergeGraph::addEdge(const LineString* lineString)
         return;
     }
 
-    const Coordinate& startCoordinate = coordinates->getAt(0);
-    const Coordinate& endCoordinate = coordinates->getAt(nCoords - 1);
+    const CoordinateXY& startCoordinate = coordinates->getAt<CoordinateXY>(0);
+    const CoordinateXY& endCoordinate = coordinates->getAt<CoordinateXY>(nCoords - 1);
 
     planargraph::Node* startNode = getNode(startCoordinate);
     planargraph::Node* endNode = getNode(endCoordinate);
@@ -76,18 +78,16 @@ LineMergeGraph::addEdge(const LineString* lineString)
     std::cerr << " endNode: " << *endNode << std::endl;
 #endif
 
-    planargraph::DirectedEdge* directedEdge0 = new LineMergeDirectedEdge(startNode,
-            endNode, coordinates->getAt(1),
-            true);
-    newDirEdges.push_back(directedEdge0);
+    const CoordinateXY& dirPt0 = coordinates->getAt<CoordinateXY>(1);
+    newDirEdges.push_back(std::make_unique<LineMergeDirectedEdge>(startNode, endNode, dirPt0, true));
+    auto* directedEdge0 = newDirEdges.back().get();
 
-    planargraph::DirectedEdge* directedEdge1 = new LineMergeDirectedEdge(endNode,
-            startNode, coordinates->getAt(nCoords - 2),
-            false);
-    newDirEdges.push_back(directedEdge1);
+    const CoordinateXY& dirPt1 = coordinates->getAt<CoordinateXY>(nCoords - 2);
+    newDirEdges.push_back(std::make_unique<LineMergeDirectedEdge>(endNode, startNode, dirPt1, false));
+    auto* directedEdge1 = newDirEdges.back().get();
 
-    planargraph::Edge* edge = new LineMergeEdge(lineString);
-    newEdges.push_back(edge);
+    newEdges.push_back(std::make_unique<LineMergeEdge>(lineString));
+    planargraph::Edge* edge = newEdges.back().get();
     edge->setDirectedEdges(directedEdge0, directedEdge1);
 
 #if GEOS_DEBUG
@@ -105,30 +105,18 @@ LineMergeGraph::addEdge(const LineString* lineString)
 }
 
 planargraph::Node*
-LineMergeGraph::getNode(const Coordinate& coordinate)
+LineMergeGraph::getNode(const CoordinateXY& coordinate)
 {
     planargraph::Node* node = findNode(coordinate);
     if(node == nullptr) {
-        node = new planargraph::Node(coordinate);
-        newNodes.push_back(node);
+        newNodes.push_back(std::make_unique<planargraph::Node>(coordinate));
+        node = newNodes.back().get();
         add(node);
     }
     return node;
 }
 
-LineMergeGraph::~LineMergeGraph()
-{
-    unsigned int i;
-    for(i = 0; i < newNodes.size(); i++) {
-        delete newNodes[i];
-    }
-    for(i = 0; i < newEdges.size(); i++) {
-        delete newEdges[i];
-    }
-    for(i = 0; i < newDirEdges.size(); i++) {
-        delete newDirEdges[i];
-    }
-}
+LineMergeGraph::~LineMergeGraph() = default;
 
 } // namespace geos.operation.linemerge
 } // namespace geos.operation

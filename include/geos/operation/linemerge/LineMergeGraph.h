@@ -23,6 +23,7 @@
 #include <geos/export.h>
 #include <geos/planargraph/PlanarGraph.h> // for inheritance
 
+#include <memory>
 #include <vector>
 
 #ifdef _MSC_VER
@@ -59,15 +60,17 @@ class GEOS_DLL LineMergeGraph: public planargraph::PlanarGraph {
 
 private:
 
-    planargraph::Node* getNode(const geom::Coordinate& coordinate);
+    planargraph::Node* getNode(const geom::CoordinateXY& coordinate);
 
-    std::vector<planargraph::Node*> newNodes;
+    std::vector<std::unique_ptr<planargraph::Node>> newNodes;
 
-    std::vector<planargraph::Edge*> newEdges;
+    std::vector<std::unique_ptr<planargraph::Edge>> newEdges;
 
-    std::vector<planargraph::DirectedEdge*> newDirEdges;
+    std::vector<std::unique_ptr<planargraph::DirectedEdge>> newDirEdges;
 
 public:
+
+    LineMergeGraph();
 
     /** \brief
      * Adds an Edge, DirectedEdges, and Nodes for the given
@@ -80,6 +83,12 @@ public:
     void addEdge(const geom::LineString* lineString);
 
     ~LineMergeGraph() override;
+
+private:
+    // Declared as non-copyable
+    LineMergeGraph(const LineMergeGraph& other) = delete;
+    LineMergeGraph& operator=(const LineMergeGraph& rhs) = delete;
+
 };
 } // namespace geos::operation::linemerge
 } // namespace geos::operation
