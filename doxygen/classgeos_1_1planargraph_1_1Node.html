@@ -73,14 +73,10 @@ Public Member Functions</h2></td></tr>
 &#160;</td><td class="memItemRight" valign="bottom"><b>Node</b> (const geom::CoordinateXY &amp;newPt)</td></tr>
 <tr class="memdesc:a2280e2dd1beea893b2698efd7c7a4262"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classgeos_1_1planargraph_1_1Node.html" title="A node in a PlanarGraph is a location where 0 or more Edge meet.">Node</a> with the given location. <br /></td></tr>
 <tr class="separator:a2280e2dd1beea893b2698efd7c7a4262"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c86e9c7a21420231ffe0b54c4359eb5" id="r_a5c86e9c7a21420231ffe0b54c4359eb5"><td class="memItemLeft" align="right" valign="top"><a id="a5c86e9c7a21420231ffe0b54c4359eb5" name="a5c86e9c7a21420231ffe0b54c4359eb5"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Node</b> (<a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;newPt, <a class="el" href="classgeos_1_1planargraph_1_1DirectedEdgeStar.html">DirectedEdgeStar</a> *newDeStar)</td></tr>
-<tr class="memdesc:a5c86e9c7a21420231ffe0b54c4359eb5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classgeos_1_1planargraph_1_1Node.html" title="A node in a PlanarGraph is a location where 0 or more Edge meet.">Node</a> with the given location and collection of outgoing DirectedEdges. Takes ownership of the given DirectedEdgeStar!! <br /></td></tr>
-<tr class="separator:a5c86e9c7a21420231ffe0b54c4359eb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8aaa836244b376c9592c61ceab466ed5" id="r_a8aaa836244b376c9592c61ceab466ed5"><td class="memItemLeft" align="right" valign="top"><a id="a8aaa836244b376c9592c61ceab466ed5" name="a8aaa836244b376c9592c61ceab466ed5"></a>
-geom::CoordinateXY &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getCoordinate</b> ()</td></tr>
-<tr class="memdesc:a8aaa836244b376c9592c61ceab466ed5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the location of this <a class="el" href="classgeos_1_1planargraph_1_1Node.html" title="A node in a PlanarGraph is a location where 0 or more Edge meet.">Node</a>. <br /></td></tr>
-<tr class="separator:a8aaa836244b376c9592c61ceab466ed5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89bbc3f771cf283e2d3e655a105931ea" id="r_a89bbc3f771cf283e2d3e655a105931ea"><td class="memItemLeft" align="right" valign="top"><a id="a89bbc3f771cf283e2d3e655a105931ea" name="a89bbc3f771cf283e2d3e655a105931ea"></a>
+const geom::CoordinateXY &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getCoordinate</b> () const</td></tr>
+<tr class="memdesc:a89bbc3f771cf283e2d3e655a105931ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the location of this <a class="el" href="classgeos_1_1planargraph_1_1Node.html" title="A node in a PlanarGraph is a location where 0 or more Edge meet.">Node</a>. <br /></td></tr>
+<tr class="separator:a89bbc3f771cf283e2d3e655a105931ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a98c84ddcbaeaec9eb3b3b348c5cb3d03" id="r_a98c84ddcbaeaec9eb3b3b348c5cb3d03"><td class="memItemLeft" align="right" valign="top"><a id="a98c84ddcbaeaec9eb3b3b348c5cb3d03" name="a98c84ddcbaeaec9eb3b3b348c5cb3d03"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>addOutEdge</b> (<a class="el" href="classgeos_1_1planargraph_1_1DirectedEdge.html">DirectedEdge</a> *de)</td></tr>
 <tr class="memdesc:a98c84ddcbaeaec9eb3b3b348c5cb3d03"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an outgoing <a class="el" href="classgeos_1_1planargraph_1_1DirectedEdge.html" title="Represents a directed edge in a PlanarGraph.">DirectedEdge</a> to this <a class="el" href="classgeos_1_1planargraph_1_1Node.html" title="A node in a PlanarGraph is a location where 0 or more Edge meet.">Node</a>. <br /></td></tr>
@@ -116,9 +112,10 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>getIndex</b> (<a class
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a3782a45409bc201546f702668ac58cdf" id="r_a3782a45409bc201546f702668ac58cdf"><td class="memItemLeft" align="right" valign="top">static std::vector&lt; <a class="el" href="classgeos_1_1planargraph_1_1Edge.html">Edge</a> * &gt; *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1planargraph_1_1Node.html#a3782a45409bc201546f702668ac58cdf">getEdgesBetween</a> (<a class="el" href="classgeos_1_1planargraph_1_1Node.html">Node</a> *node0, <a class="el" href="classgeos_1_1planargraph_1_1Node.html">Node</a> *node1)</td></tr>
-<tr class="memdesc:a3782a45409bc201546f702668ac58cdf"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns all Edges that connect the two nodes (which are assumed to be different).  <br /></td></tr>
-<tr class="separator:a3782a45409bc201546f702668ac58cdf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1829a8e93a203e0000337b62f64f27d1" id="r_a1829a8e93a203e0000337b62f64f27d1"><td class="memItemLeft" align="right" valign="top"><a id="a1829a8e93a203e0000337b62f64f27d1" name="a1829a8e93a203e0000337b62f64f27d1"></a>
+static std::vector&lt; <a class="el" href="classgeos_1_1planargraph_1_1Edge.html">Edge</a> * &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getEdgesBetween</b> (const <a class="el" href="classgeos_1_1planargraph_1_1Node.html">Node</a> *node0, const <a class="el" href="classgeos_1_1planargraph_1_1Node.html">Node</a> *node1)</td></tr>
+<tr class="memdesc:a1829a8e93a203e0000337b62f64f27d1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns all Edges that connect the two nodes (which are assumed to be different). <br /></td></tr>
+<tr class="separator:a1829a8e93a203e0000337b62f64f27d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_static_methods_classgeos_1_1planargraph_1_1GraphComponent"><td colspan="2" onclick="javascript:toggleInherit('pub_static_methods_classgeos_1_1planargraph_1_1GraphComponent')"><img src="closed.png" alt="-"/>&#160;Static Public Member Functions inherited from <a class="el" href="classgeos_1_1planargraph_1_1GraphComponent.html">geos::planargraph::GraphComponent</a></td></tr>
 <tr class="memitem:a0bea21bcb415113178929984e98d072f inherit pub_static_methods_classgeos_1_1planargraph_1_1GraphComponent" id="r_a0bea21bcb415113178929984e98d072f"><td class="memTemplParams" colspan="2">template&lt;typename T &gt; </td></tr>
 <tr class="memitem:a0bea21bcb415113178929984e98d072f inherit pub_static_methods_classgeos_1_1planargraph_1_1GraphComponent"><td class="memTemplItemLeft" align="right" valign="top">static void&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="classgeos_1_1planargraph_1_1GraphComponent.html#a0bea21bcb415113178929984e98d072f">setVisited</a> (T start, T end, bool visited)</td></tr>
@@ -143,10 +140,10 @@ Protected Attributes</h2></td></tr>
 geom::CoordinateXY&#160;</td><td class="memItemRight" valign="bottom"><b>pt</b></td></tr>
 <tr class="memdesc:a708590847a94fa84dedaa973530fe453"><td class="mdescLeft">&#160;</td><td class="mdescRight">The location of this <a class="el" href="classgeos_1_1planargraph_1_1Node.html" title="A node in a PlanarGraph is a location where 0 or more Edge meet.">Node</a>. <br /></td></tr>
 <tr class="separator:a708590847a94fa84dedaa973530fe453"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab7c54c5010c7d239bdc6e10d0165a89c" id="r_ab7c54c5010c7d239bdc6e10d0165a89c"><td class="memItemLeft" align="right" valign="top"><a id="ab7c54c5010c7d239bdc6e10d0165a89c" name="ab7c54c5010c7d239bdc6e10d0165a89c"></a>
-<a class="el" href="classgeos_1_1planargraph_1_1DirectedEdgeStar.html">DirectedEdgeStar</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>deStar</b></td></tr>
-<tr class="memdesc:ab7c54c5010c7d239bdc6e10d0165a89c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The collection of DirectedEdges that leave this <a class="el" href="classgeos_1_1planargraph_1_1Node.html" title="A node in a PlanarGraph is a location where 0 or more Edge meet.">Node</a>. <br /></td></tr>
-<tr class="separator:ab7c54c5010c7d239bdc6e10d0165a89c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a31dd43be8a1ca11c663be08e9a54edf5" id="r_a31dd43be8a1ca11c663be08e9a54edf5"><td class="memItemLeft" align="right" valign="top"><a id="a31dd43be8a1ca11c663be08e9a54edf5" name="a31dd43be8a1ca11c663be08e9a54edf5"></a>
+<a class="el" href="classgeos_1_1planargraph_1_1DirectedEdgeStar.html">DirectedEdgeStar</a>&#160;</td><td class="memItemRight" valign="bottom"><b>deStar</b></td></tr>
+<tr class="memdesc:a31dd43be8a1ca11c663be08e9a54edf5"><td class="mdescLeft">&#160;</td><td class="mdescRight">The collection of DirectedEdges that leave this <a class="el" href="classgeos_1_1planargraph_1_1Node.html" title="A node in a PlanarGraph is a location where 0 or more Edge meet.">Node</a>. <br /></td></tr>
+<tr class="separator:a31dd43be8a1ca11c663be08e9a54edf5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_attribs_classgeos_1_1planargraph_1_1GraphComponent"><td colspan="2" onclick="javascript:toggleInherit('pro_attribs_classgeos_1_1planargraph_1_1GraphComponent')"><img src="closed.png" alt="-"/>&#160;Protected Attributes inherited from <a class="el" href="classgeos_1_1planargraph_1_1GraphComponent.html">geos::planargraph::GraphComponent</a></td></tr>
 <tr class="memitem:a9e577ef12e6139e5ade4f7a543250141 inherit pro_attribs_classgeos_1_1planargraph_1_1GraphComponent" id="r_a9e577ef12e6139e5ade4f7a543250141"><td class="memItemLeft" align="right" valign="top">
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isMarkedVar</b></td></tr>
@@ -167,47 +164,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>A node in a <a class="el" href="classgeos_1_1planargraph_1_1PlanarGraph.html" title="Represents a directed graph which is embeddable in a planar surface.">PlanarGraph</a> is a location where 0 or more <a class="el" href="classgeos_1_1planargraph_1_1Edge.html" title="Represents an undirected edge of a PlanarGraph.">Edge</a> meet. </p>
 <p>A node is connected to each of its incident Edges via an outgoing <a class="el" href="classgeos_1_1planargraph_1_1DirectedEdge.html" title="Represents a directed edge in a PlanarGraph.">DirectedEdge</a>. Some clients using a <code><a class="el" href="classgeos_1_1planargraph_1_1PlanarGraph.html" title="Represents a directed graph which is embeddable in a planar surface.">PlanarGraph</a></code> may want to subclass <code><a class="el" href="classgeos_1_1planargraph_1_1Node.html" title="A node in a PlanarGraph is a location where 0 or more Edge meet.">Node</a></code> to add their own application-specific data and methods. </p>
-</div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a3782a45409bc201546f702668ac58cdf" name="a3782a45409bc201546f702668ac58cdf"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a3782a45409bc201546f702668ac58cdf">&#9670;&#160;</a></span>getEdgesBetween()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">static std::vector&lt; <a class="el" href="classgeos_1_1planargraph_1_1Edge.html">Edge</a> * &gt; * geos::planargraph::Node::getEdgesBetween </td>
-          <td>(</td>
-          <td class="paramtype"><a class="el" href="classgeos_1_1planargraph_1_1Node.html">Node</a> *&#160;</td>
-          <td class="paramname"><em>node0</em>, </td>
-        </tr>
-        <tr>
-          <td class="paramkey"></td>
-          <td></td>
-          <td class="paramtype"><a class="el" href="classgeos_1_1planargraph_1_1Node.html">Node</a> *&#160;</td>
-          <td class="paramname"><em>node1</em>&#160;</td>
-        </tr>
-        <tr>
-          <td></td>
-          <td>)</td>
-          <td></td><td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">static</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-
-<p>Returns all Edges that connect the two nodes (which are assumed to be different). </p>
-<p>Note: returned vector is newly allocated, ownership to the caller. </p>
-
-</div>
-</div>
-<hr/>The documentation for this class was generated from the following file:<ul>
+</div><hr/>The documentation for this class was generated from the following file:<ul>
 <li><a class="el" href="planargraph_2Node_8h_source.html">planargraph/Node.h</a></li>
 </ul>
 </div><!-- contents -->

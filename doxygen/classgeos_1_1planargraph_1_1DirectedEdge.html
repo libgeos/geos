@@ -105,26 +105,32 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setEdge</b> (<a class
 int&#160;</td><td class="memItemRight" valign="bottom"><b>getQuadrant</b> () const</td></tr>
 <tr class="memdesc:a906bf620f5ce5efd5270469c1970d900"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns 0, 1, 2, or 3, indicating the quadrant in which this <a class="el" href="classgeos_1_1planargraph_1_1DirectedEdge.html" title="Represents a directed edge in a PlanarGraph.">DirectedEdge</a>'s orientation lies. <br /></td></tr>
 <tr class="separator:a906bf620f5ce5efd5270469c1970d900"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8075c92e350b70d2590aba704d9fc904" id="r_a8075c92e350b70d2590aba704d9fc904"><td class="memItemLeft" align="right" valign="top"><a id="a8075c92e350b70d2590aba704d9fc904" name="a8075c92e350b70d2590aba704d9fc904"></a>
-const <a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getDirectionPt</b> () const</td></tr>
-<tr class="memdesc:a8075c92e350b70d2590aba704d9fc904"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a point to which an imaginary line is drawn from the from-node to specify this <a class="el" href="classgeos_1_1planargraph_1_1DirectedEdge.html" title="Represents a directed edge in a PlanarGraph.">DirectedEdge</a>'s orientation. <br /></td></tr>
-<tr class="separator:a8075c92e350b70d2590aba704d9fc904"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1460dd5cd60db7653ff28d1d7bddb292" id="r_a1460dd5cd60db7653ff28d1d7bddb292"><td class="memItemLeft" align="right" valign="top"><a id="a1460dd5cd60db7653ff28d1d7bddb292" name="a1460dd5cd60db7653ff28d1d7bddb292"></a>
+const geom::CoordinateXY &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getDirectionPt</b> () const</td></tr>
+<tr class="memdesc:a1460dd5cd60db7653ff28d1d7bddb292"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a point to which an imaginary line is drawn from the from-node to specify this <a class="el" href="classgeos_1_1planargraph_1_1DirectedEdge.html" title="Represents a directed edge in a PlanarGraph.">DirectedEdge</a>'s orientation. <br /></td></tr>
+<tr class="separator:a1460dd5cd60db7653ff28d1d7bddb292"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abc3d78ad3e2b069c6ef6060a571d73aa" id="r_abc3d78ad3e2b069c6ef6060a571d73aa"><td class="memItemLeft" align="right" valign="top"><a id="abc3d78ad3e2b069c6ef6060a571d73aa" name="abc3d78ad3e2b069c6ef6060a571d73aa"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>getEdgeDirection</b> () const</td></tr>
 <tr class="memdesc:abc3d78ad3e2b069c6ef6060a571d73aa"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether the direction of the parent <a class="el" href="classgeos_1_1planargraph_1_1Edge.html" title="Represents an undirected edge of a PlanarGraph.">Edge</a> (if any) is the same as that of this Directed <a class="el" href="classgeos_1_1planargraph_1_1Edge.html" title="Represents an undirected edge of a PlanarGraph.">Edge</a>. <br /></td></tr>
 <tr class="separator:abc3d78ad3e2b069c6ef6060a571d73aa"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a55ecd215f81492eadbd8a35569f993ea" id="r_a55ecd215f81492eadbd8a35569f993ea"><td class="memItemLeft" align="right" valign="top"><a id="a55ecd215f81492eadbd8a35569f993ea" name="a55ecd215f81492eadbd8a35569f993ea"></a>
-<a class="el" href="classgeos_1_1planargraph_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getFromNode</b> () const</td></tr>
-<tr class="memdesc:a55ecd215f81492eadbd8a35569f993ea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the node from which this <a class="el" href="classgeos_1_1planargraph_1_1DirectedEdge.html" title="Represents a directed edge in a PlanarGraph.">DirectedEdge</a> leaves. <br /></td></tr>
-<tr class="separator:a55ecd215f81492eadbd8a35569f993ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1fe1378158a7825c5e4a0a63575429a9" id="r_a1fe1378158a7825c5e4a0a63575429a9"><td class="memItemLeft" align="right" valign="top"><a id="a1fe1378158a7825c5e4a0a63575429a9" name="a1fe1378158a7825c5e4a0a63575429a9"></a>
-<a class="el" href="classgeos_1_1planargraph_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getToNode</b> () const</td></tr>
-<tr class="memdesc:a1fe1378158a7825c5e4a0a63575429a9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the node to which this <a class="el" href="classgeos_1_1planargraph_1_1DirectedEdge.html" title="Represents a directed edge in a PlanarGraph.">DirectedEdge</a> goes. <br /></td></tr>
-<tr class="separator:a1fe1378158a7825c5e4a0a63575429a9"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a238f76dcbffe36f5865a07d10ff72c9c" id="r_a238f76dcbffe36f5865a07d10ff72c9c"><td class="memItemLeft" align="right" valign="top"><a id="a238f76dcbffe36f5865a07d10ff72c9c" name="a238f76dcbffe36f5865a07d10ff72c9c"></a>
-geom::CoordinateXY &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getCoordinate</b> () const</td></tr>
-<tr class="memdesc:a238f76dcbffe36f5865a07d10ff72c9c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the coordinate of the from-node. <br /></td></tr>
-<tr class="separator:a238f76dcbffe36f5865a07d10ff72c9c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af40daa0992df961712e0f33c18da767d" id="r_af40daa0992df961712e0f33c18da767d"><td class="memItemLeft" align="right" valign="top"><a id="af40daa0992df961712e0f33c18da767d" name="af40daa0992df961712e0f33c18da767d"></a>
+const <a class="el" href="classgeos_1_1planargraph_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getFromNode</b> () const</td></tr>
+<tr class="memdesc:af40daa0992df961712e0f33c18da767d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the node from which this <a class="el" href="classgeos_1_1planargraph_1_1DirectedEdge.html" title="Represents a directed edge in a PlanarGraph.">DirectedEdge</a> leaves. <br /></td></tr>
+<tr class="separator:af40daa0992df961712e0f33c18da767d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a29359f1d312192641b1699c8c57d9f11" id="r_a29359f1d312192641b1699c8c57d9f11"><td class="memItemLeft" align="right" valign="top"><a id="a29359f1d312192641b1699c8c57d9f11" name="a29359f1d312192641b1699c8c57d9f11"></a>
+<a class="el" href="classgeos_1_1planargraph_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getFromNode</b> ()</td></tr>
+<tr class="separator:a29359f1d312192641b1699c8c57d9f11"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeb0a262b92c0acf415c7a12ced9e0486" id="r_aeb0a262b92c0acf415c7a12ced9e0486"><td class="memItemLeft" align="right" valign="top"><a id="aeb0a262b92c0acf415c7a12ced9e0486" name="aeb0a262b92c0acf415c7a12ced9e0486"></a>
+const <a class="el" href="classgeos_1_1planargraph_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getToNode</b> () const</td></tr>
+<tr class="memdesc:aeb0a262b92c0acf415c7a12ced9e0486"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the node to which this <a class="el" href="classgeos_1_1planargraph_1_1DirectedEdge.html" title="Represents a directed edge in a PlanarGraph.">DirectedEdge</a> goes. <br /></td></tr>
+<tr class="separator:aeb0a262b92c0acf415c7a12ced9e0486"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a37541ab295c3a5562fe330d4d754f518" id="r_a37541ab295c3a5562fe330d4d754f518"><td class="memItemLeft" align="right" valign="top"><a id="a37541ab295c3a5562fe330d4d754f518" name="a37541ab295c3a5562fe330d4d754f518"></a>
+<a class="el" href="classgeos_1_1planargraph_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>getToNode</b> ()</td></tr>
+<tr class="separator:a37541ab295c3a5562fe330d4d754f518"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7992790821a8660c257310115c246e3d" id="r_a7992790821a8660c257310115c246e3d"><td class="memItemLeft" align="right" valign="top"><a id="a7992790821a8660c257310115c246e3d" name="a7992790821a8660c257310115c246e3d"></a>
+const geom::CoordinateXY &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>getCoordinate</b> () const</td></tr>
+<tr class="memdesc:a7992790821a8660c257310115c246e3d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the coordinate of the from-node. <br /></td></tr>
+<tr class="separator:a7992790821a8660c257310115c246e3d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aadcbbdc365bc5db6a30030c652be41c3" id="r_aadcbbdc365bc5db6a30030c652be41c3"><td class="memItemLeft" align="right" valign="top"><a id="aadcbbdc365bc5db6a30030c652be41c3" name="aadcbbdc365bc5db6a30030c652be41c3"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>getAngle</b> () const</td></tr>
 <tr class="memdesc:aadcbbdc365bc5db6a30030c652be41c3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the angle that the start of this <a class="el" href="classgeos_1_1planargraph_1_1DirectedEdge.html" title="Represents a directed edge in a PlanarGraph.">DirectedEdge</a> makes with the positive x-axis, in radians. <br /></td></tr>
@@ -192,24 +198,24 @@ Protected Attributes</h2></td></tr>
 <tr class="memitem:a6dc43b9b2eedd6e99b5e5f278efecf56" id="r_a6dc43b9b2eedd6e99b5e5f278efecf56"><td class="memItemLeft" align="right" valign="top"><a id="a6dc43b9b2eedd6e99b5e5f278efecf56" name="a6dc43b9b2eedd6e99b5e5f278efecf56"></a>
 <a class="el" href="classgeos_1_1planargraph_1_1Edge.html">Edge</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>parentEdge</b></td></tr>
 <tr class="separator:a6dc43b9b2eedd6e99b5e5f278efecf56"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:abcf71b8519027a548d4f051cec28f49c" id="r_abcf71b8519027a548d4f051cec28f49c"><td class="memItemLeft" align="right" valign="top"><a id="abcf71b8519027a548d4f051cec28f49c" name="abcf71b8519027a548d4f051cec28f49c"></a>
-<a class="el" href="classgeos_1_1planargraph_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>from</b></td></tr>
-<tr class="separator:abcf71b8519027a548d4f051cec28f49c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7b2c4ad7117677eda246e7a285cb0cf1" id="r_a7b2c4ad7117677eda246e7a285cb0cf1"><td class="memItemLeft" align="right" valign="top"><a id="a7b2c4ad7117677eda246e7a285cb0cf1" name="a7b2c4ad7117677eda246e7a285cb0cf1"></a>
-<a class="el" href="classgeos_1_1planargraph_1_1Node.html">Node</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>to</b></td></tr>
-<tr class="separator:a7b2c4ad7117677eda246e7a285cb0cf1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a377854c4ba8980437b60ade85806089b" id="r_a377854c4ba8980437b60ade85806089b"><td class="memItemLeft" align="right" valign="top"><a id="a377854c4ba8980437b60ade85806089b" name="a377854c4ba8980437b60ade85806089b"></a>
-<a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&#160;</td><td class="memItemRight" valign="bottom"><b>p0</b></td></tr>
-<tr class="separator:a377854c4ba8980437b60ade85806089b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a00fc0bb0d82e9bf1cc55ffd4c1aee48f" id="r_a00fc0bb0d82e9bf1cc55ffd4c1aee48f"><td class="memItemLeft" align="right" valign="top"><a id="a00fc0bb0d82e9bf1cc55ffd4c1aee48f" name="a00fc0bb0d82e9bf1cc55ffd4c1aee48f"></a>
-<a class="el" href="classgeos_1_1geom_1_1Coordinate.html">geom::Coordinate</a>&#160;</td><td class="memItemRight" valign="bottom"><b>p1</b></td></tr>
-<tr class="separator:a00fc0bb0d82e9bf1cc55ffd4c1aee48f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9b1580bf4b4da974d5235c4129cc0ab0" id="r_a9b1580bf4b4da974d5235c4129cc0ab0"><td class="memItemLeft" align="right" valign="top"><a id="a9b1580bf4b4da974d5235c4129cc0ab0" name="a9b1580bf4b4da974d5235c4129cc0ab0"></a>
+<a class="el" href="classgeos_1_1planargraph_1_1Node.html">Node</a> *const&#160;</td><td class="memItemRight" valign="bottom"><b>from</b></td></tr>
+<tr class="separator:a9b1580bf4b4da974d5235c4129cc0ab0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08ee6ec650a3031ac789481c3f01a3ae" id="r_a08ee6ec650a3031ac789481c3f01a3ae"><td class="memItemLeft" align="right" valign="top"><a id="a08ee6ec650a3031ac789481c3f01a3ae" name="a08ee6ec650a3031ac789481c3f01a3ae"></a>
+<a class="el" href="classgeos_1_1planargraph_1_1Node.html">Node</a> *const&#160;</td><td class="memItemRight" valign="bottom"><b>to</b></td></tr>
+<tr class="separator:a08ee6ec650a3031ac789481c3f01a3ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a38132a3d4bcf857268359271c8b9e327" id="r_a38132a3d4bcf857268359271c8b9e327"><td class="memItemLeft" align="right" valign="top"><a id="a38132a3d4bcf857268359271c8b9e327" name="a38132a3d4bcf857268359271c8b9e327"></a>
+const geom::CoordinateXY&#160;</td><td class="memItemRight" valign="bottom"><b>p0</b></td></tr>
+<tr class="separator:a38132a3d4bcf857268359271c8b9e327"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d85b04dd74ae24a3bb641b4c1237150" id="r_a0d85b04dd74ae24a3bb641b4c1237150"><td class="memItemLeft" align="right" valign="top"><a id="a0d85b04dd74ae24a3bb641b4c1237150" name="a0d85b04dd74ae24a3bb641b4c1237150"></a>
+const geom::CoordinateXY&#160;</td><td class="memItemRight" valign="bottom"><b>p1</b></td></tr>
+<tr class="separator:a0d85b04dd74ae24a3bb641b4c1237150"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa2303c0f12397421241dabed7c977572" id="r_aa2303c0f12397421241dabed7c977572"><td class="memItemLeft" align="right" valign="top"><a id="aa2303c0f12397421241dabed7c977572" name="aa2303c0f12397421241dabed7c977572"></a>
 <a class="el" href="classgeos_1_1planargraph_1_1DirectedEdge.html">DirectedEdge</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>sym</b></td></tr>
 <tr class="separator:aa2303c0f12397421241dabed7c977572"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:acb3fd912bb8fc0d67dfef8ebc5f8b8cf" id="r_acb3fd912bb8fc0d67dfef8ebc5f8b8cf"><td class="memItemLeft" align="right" valign="top"><a id="acb3fd912bb8fc0d67dfef8ebc5f8b8cf" name="acb3fd912bb8fc0d67dfef8ebc5f8b8cf"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>edgeDirection</b></td></tr>
-<tr class="separator:acb3fd912bb8fc0d67dfef8ebc5f8b8cf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac60f65a15defdec840b83368d14381be" id="r_ac60f65a15defdec840b83368d14381be"><td class="memItemLeft" align="right" valign="top"><a id="ac60f65a15defdec840b83368d14381be" name="ac60f65a15defdec840b83368d14381be"></a>
+const bool&#160;</td><td class="memItemRight" valign="bottom"><b>edgeDirection</b></td></tr>
+<tr class="separator:ac60f65a15defdec840b83368d14381be"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0a73b6dfc7537bbc99a0cb44934c1e67" id="r_a0a73b6dfc7537bbc99a0cb44934c1e67"><td class="memItemLeft" align="right" valign="top"><a id="a0a73b6dfc7537bbc99a0cb44934c1e67" name="a0a73b6dfc7537bbc99a0cb44934c1e67"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>quadrant</b></td></tr>
 <tr class="separator:a0a73b6dfc7537bbc99a0cb44934c1e67"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -308,7 +314,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 <p>Returns 1 if this <a class="el" href="classgeos_1_1planargraph_1_1DirectedEdge.html" title="Represents a directed edge in a PlanarGraph.">DirectedEdge</a> has a greater angle with the positive x-axis than b", 0 if the DirectedEdges are collinear, and -1 otherwise. </p>
 <p>Using the obvious algorithm of simply computing the angle is not robust, since the angle calculation is susceptible to roundoff. A robust algorithm is:</p>
 <ul>
-<li>first compare the quadrants. If the quadrants are different, it it trivial to determine which std::vector is "greater".</li>
+<li>first compare the quadrants. If the quadrants are different, it is trivial to determine which std::vector is "greater".</li>
 <li>if the vectors lie in the same quadrant, the robust Orientation::index(Coordinate, Coordinate, Coordinate) function can be used to decide the relative orientation of the vectors. </li>
 </ul>
 
@@ -333,7 +339,7 @@ std::ostream &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operato
 <p>Returns 1 if this <a class="el" href="classgeos_1_1planargraph_1_1DirectedEdge.html" title="Represents a directed edge in a PlanarGraph.">DirectedEdge</a> has a greater angle with the positive x-axis than b", 0 if the DirectedEdges are collinear, and -1 otherwise. </p>
 <p>Using the obvious algorithm of simply computing the angle is not robust, since the angle calculation is susceptible to roundoff. A robust algorithm is:</p>
 <ul>
-<li>first compare the quadrants. If the quadrants are different, it it trivial to determine which std::vector is "greater".</li>
+<li>first compare the quadrants. If the quadrants are different, it is trivial to determine which std::vector is "greater".</li>
 <li>if the vectors lie in the same quadrant, the robust Orientation::index(Coordinate, Coordinate, Coordinate) function can be used to decide the relative orientation of the vectors. </li>
 </ul>
 
