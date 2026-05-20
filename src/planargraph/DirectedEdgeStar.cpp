@@ -97,7 +97,7 @@ DirectedEdgeStar::getCoordinate() const
  * the positive x-axis.
  */
 std::vector<DirectedEdge*>&
-DirectedEdgeStar::getEdges()
+DirectedEdgeStar::getEdges() const
 {
     sortEdges();
     return outEdges;
@@ -129,7 +129,7 @@ DirectedEdgeStar::sortEdges() const
  * ascending order by angle with the positive x-axis.
  */
 int
-DirectedEdgeStar::getIndex(const Edge* edge)
+DirectedEdgeStar::getIndex(const Edge* edge) const
 {
     sortEdges();
     for(unsigned int i = 0; i < outEdges.size(); ++i) {
@@ -146,7 +146,7 @@ DirectedEdgeStar::getIndex(const Edge* edge)
  * in ascending order by angle with the positive x-axis.
  */
 int
-DirectedEdgeStar::getIndex(const DirectedEdge* dirEdge)
+DirectedEdgeStar::getIndex(const DirectedEdge* dirEdge) const
 {
     sortEdges();
     for(unsigned int i = 0; i < outEdges.size(); ++i) {
@@ -178,7 +178,7 @@ DirectedEdgeStar::getIndex(int i) const
  * DirectedEdge (which must be a member of this DirectedEdgeStar).
  */
 DirectedEdge*
-DirectedEdgeStar::getNextEdge(DirectedEdge* dirEdge)
+DirectedEdgeStar::getNextEdge(DirectedEdge* dirEdge) const
 {
     int i = getIndex(dirEdge);
     return outEdges[getIndex(i + 1)];

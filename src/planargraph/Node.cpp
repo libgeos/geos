@@ -26,8 +26,8 @@ namespace planargraph {
 
 /* static public */
 /* UNUSED */
-std::vector<Edge*>*
-Node::getEdgesBetween(Node* node0, Node* node1)
+std::vector<Edge*>
+Node::getEdgesBetween(const Node* node0, const Node* node1)
 {
     std::vector<Edge*> edges0;
     DirectedEdge::toEdges(node0->getOutEdges()->getEdges(), edges0);
@@ -39,13 +39,13 @@ Node::getEdgesBetween(Node* node0, Node* node1)
     std::sort(edges0.begin(), edges0.end());
     std::sort(edges1.begin(), edges1.end());
 
-    std::vector<Edge*>* commonEdges = new std::vector<Edge*>();
+    std::vector<Edge*> commonEdges;
 
     // Intersect the two sets
     std::set_intersection(
         edges0.begin(), edges0.end(),
         edges1.begin(), edges1.end(),
-        commonEdges->end()
+        std::back_inserter(commonEdges)
     );
 
     return commonEdges;

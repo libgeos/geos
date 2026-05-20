@@ -57,21 +57,17 @@ public:
     /** \brief
      * Returns all Edges that connect the two nodes (which are
      * assumed to be different).
-     *
-     * Note: returned vector is newly allocated, ownership to
-     * the caller.
      */
-    static std::vector<Edge*>* getEdgesBetween(Node* node0,
-            Node* node1);
+    static std::vector<Edge*> getEdgesBetween(const Node* node0,
+            const Node* node1);
 
     /// Constructs a Node with the given location.
-    Node(const geom::CoordinateXY& newPt)
+    explicit Node(const geom::CoordinateXY& newPt)
         :
         pt(newPt)
     {}
 
-    ~Node() override
-    {}
+    ~Node() override = default;
 
     /**
      * \brief Returns the location of this Node.
