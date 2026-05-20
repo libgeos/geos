@@ -72,7 +72,7 @@ public:
      * Removes the Node at the given location, and returns it
      * (or null if no Node was there).
      */
-    Node* remove(geom::CoordinateXY& pt);
+    Node* remove(const geom::CoordinateXY& pt);
 
     /**
      * \brief

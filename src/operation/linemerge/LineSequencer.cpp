@@ -291,9 +291,9 @@ LineSequencer::addReverseSubpath(const planargraph::DirectedEdge* de,
     using planargraph::DirectedEdge;
 
     // trace an unvisited path *backwards* from this de
-    Node* endNode = de->getToNode();
+    const Node* endNode = de->getToNode();
 
-    Node* fromNode = nullptr;
+    const Node* fromNode = nullptr;
     while(true) {
         deList.insert(lit, de->getSym());
         de->getEdge()->setVisited(true);
@@ -365,8 +365,8 @@ LineSequencer::orient(planargraph::DirectedEdge::NonConstList* seq)
 
     const DirectedEdge* startEdge = seq->front();
     const DirectedEdge* endEdge = seq->back();
-    Node* startNode = startEdge->getFromNode();
-    Node* endNode = endEdge->getToNode();
+    const Node* startNode = startEdge->getFromNode();
+    const Node* endNode = endEdge->getToNode();
 
     bool flipSeq = false;
     bool hasDegree1Node = \

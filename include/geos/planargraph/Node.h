@@ -72,8 +72,8 @@ public:
     /**
      * \brief Returns the location of this Node.
      */
-    geom::CoordinateXY&
-    getCoordinate()
+    const geom::CoordinateXY&
+    getCoordinate() const
     {
         return pt;
     }

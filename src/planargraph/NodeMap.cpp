@@ -52,7 +52,7 @@ NodeMap::add(Node* n)
  * (or null if no Node was there).
  */
 Node*
-NodeMap::remove(geom::CoordinateXY& pt)
+NodeMap::remove(const geom::CoordinateXY& pt)
 {
     Node* n = find(pt);
     nodeMap.erase(pt);

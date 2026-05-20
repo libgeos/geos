@@ -48,13 +48,13 @@ DirectedEdge::toEdges(std::vector<DirectedEdge*>& dirEdges)
 
 /*public*/
 DirectedEdge::DirectedEdge(Node* newFrom, Node* newTo,
-                           const CoordinateXY& directionPt, bool newEdgeDirection)
+                           const CoordinateXY& directionPt, bool newEdgeDirection) :
+    from(newFrom),
+    to(newTo),
+    p0(from->getCoordinate()),
+    p1(directionPt),
+    edgeDirection(newEdgeDirection)
 {
-    from = newFrom;
-    to = newTo;
-    edgeDirection = newEdgeDirection;
-    p0 = from->getCoordinate();
-    p1 = directionPt;
     double dx = p1.x - p0.x;
     double dy = p1.y - p0.y;
     quadrant = geom::Quadrant::quadrant(dx, dy);
@@ -84,7 +84,7 @@ DirectedEdge::getQuadrant() const
 }
 
 /*public*/
-const Coordinate&
+const CoordinateXY&
 DirectedEdge::getDirectionPt() const
 {
     return p1;
@@ -98,21 +98,33 @@ DirectedEdge::getEdgeDirection() const
 }
 
 /*public*/
-Node*
+const Node*
 DirectedEdge::getFromNode() const
 {
     return from;
 }
 
-/*public*/
 Node*
+DirectedEdge::getFromNode()
+{
+    return from;
+}
+
+/*public*/
+const Node*
 DirectedEdge::getToNode() const
 {
     return to;
 }
 
+Node*
+DirectedEdge::getToNode()
+{
+    return to;
+}
+
 /*public*/
-CoordinateXY&
+const CoordinateXY&
 DirectedEdge::getCoordinate() const
 {
     return from->getCoordinate();

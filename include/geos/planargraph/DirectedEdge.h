@@ -54,11 +54,11 @@ public:
 
 protected:
     Edge* parentEdge;
-    Node* from;
-    Node* to;
-    geom::Coordinate p0, p1;
+    Node* const from;
+    Node* const to;
+    const geom::CoordinateXY p0, p1;
     DirectedEdge* sym;  // optional
-    bool edgeDirection;
+    const bool edgeDirection;
     int quadrant;
     double angle;
 public:
@@ -129,7 +129,7 @@ public:
      * \brief Returns a point to which an imaginary line is drawn
      * from the from-node to specify this DirectedEdge's orientation.
      */
-    const geom::Coordinate& getDirectionPt() const;
+    const geom::CoordinateXY& getDirectionPt() const;
 
     /**
      * \brief Returns whether the direction of the parent Edge (if any)
@@ -140,18 +140,20 @@ public:
     /**
      * \brief Returns the node from which this DirectedEdge leaves.
      */
-    Node* getFromNode() const;
+    const Node* getFromNode() const;
+    Node* getFromNode();
 
     /**
      * \brief Returns the node to which this DirectedEdge goes.
      */
-    Node* getToNode() const;
+    const Node* getToNode() const;
+    Node* getToNode();
 
     /**
      * \brief
      * Returns the coordinate of the from-node.
      */
-    geom::CoordinateXY& getCoordinate() const;
+    const geom::CoordinateXY& getCoordinate() const;
 
     /**
      * \brief
@@ -185,7 +187,7 @@ public:
      * A robust algorithm is:
      *
      * - first compare the quadrants.
-     *   If the quadrants are different, it it
+     *   If the quadrants are different, it is
      *   trivial to determine which std::vector is "greater".
      * - if the vectors lie in the same quadrant, the robust
      *   Orientation::index(Coordinate, Coordinate, Coordinate)
@@ -206,7 +208,7 @@ public:
      * A robust algorithm is:
      *
      * - first compare the quadrants.
-     *   If the quadrants are different, it it trivial to determine
+     *   If the quadrants are different, it is trivial to determine
      *   which std::vector is "greater".
      * - if the vectors lie in the same quadrant, the robust
      *   Orientation::index(Coordinate, Coordinate, Coordinate)
