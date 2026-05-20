@@ -31,8 +31,8 @@ namespace planargraph {
 void
 Edge::setDirectedEdges(DirectedEdge* de0, DirectedEdge* de1)
 {
-    dirEdge.push_back(de0);
-    dirEdge.push_back(de1);
+    dirEdge[0] = de0;
+    dirEdge[1] = de1;
     de0->setEdge(this);
     de1->setEdge(this);
     de0->setSym(de1);

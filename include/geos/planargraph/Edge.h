@@ -19,6 +19,7 @@
 
 #include <geos/planargraph/GraphComponent.h> // for inheritance
 
+#include <array>
 #include <vector> // for typedefs
 #include <set> // for typedefs
 #include <iosfwd> // ostream
@@ -72,7 +73,7 @@ public:
 protected:
 
     /** \brief The two DirectedEdges associated with this Edge */
-    std::vector<DirectedEdge*> dirEdge;
+    std::array<DirectedEdge*, 2> dirEdge;
 
 public:
 
