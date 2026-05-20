@@ -82,7 +82,7 @@ private:
 
     std::vector<std::unique_ptr<geom::LineString>> mergedLineStrings;
 
-    std::vector<EdgeString*> edgeStrings;
+    std::vector<std::unique_ptr<EdgeString>> edgeStrings;
 
     const geom::GeometryFactory* factory;
 
@@ -98,7 +98,7 @@ private:
 
     void buildEdgeStringsStartingAt(planargraph::Node* node);
 
-    EdgeString* buildEdgeStringStartingWith(LineMergeDirectedEdge* start);
+    std::unique_ptr<EdgeString> buildEdgeStringStartingWith(LineMergeDirectedEdge* start) const;
 
 public:
     LineMerger(bool directed = false);

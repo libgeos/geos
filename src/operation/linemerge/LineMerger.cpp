@@ -23,7 +23,6 @@
 #include <geos/planargraph/DirectedEdge.h>
 #include <geos/planargraph/Edge.h>
 #include <geos/planargraph/Node.h>
-//#include <geos/planargraph/GraphComponent.h>
 #include <geos/geom/GeometryComponentFilter.h>
 #include <geos/geom/LineString.h>
 #include <geos/util.h>
@@ -62,18 +61,12 @@ LineMerger::LineMerger(bool directed):
 {
 }
 
-LineMerger::~LineMerger()
-{
-    for(std::size_t i = 0, n = edgeStrings.size(); i < n; ++i) {
-        delete edgeStrings[i];
-    }
-}
-
+LineMerger::~LineMerger() = default;
 
 struct LMGeometryComponentFilter: public GeometryComponentFilter {
     LineMerger* lm;
 
-    LMGeometryComponentFilter(LineMerger* newLm): lm(newLm) {}
+    explicit LMGeometryComponentFilter(LineMerger* newLm): lm(newLm) {}
 
     void
     filter_ro(const Geometry* geom) override
@@ -122,9 +115,6 @@ LineMerger::merge()
     GraphComponent::setMarked(graph.edgeIterator(), graph.edgeEnd(),
                               false);
 
-    for(std::size_t i = 0, n = edgeStrings.size(); i < n; ++i) {
-        delete edgeStrings[i];
-    }
     edgeStrings.clear();
 
     buildEdgeStringsForObviousStartNodes();
@@ -132,8 +122,8 @@ LineMerger::merge()
 
     auto numEdgeStrings = edgeStrings.size();
     mergedLineStrings.reserve(numEdgeStrings);
-    for(std::size_t i = 0; i < numEdgeStrings; ++i) {
-        EdgeString* edgeString = edgeStrings[i];
+
+    for(const auto& edgeString : edgeStrings) {
         mergedLineStrings.emplace_back(edgeString->toLineString());
     }
 }
@@ -156,12 +146,9 @@ LineMerger::buildEdgeStringsForUnprocessedNodes()
 #if GEOS_DEBUG
     std::cerr << __FUNCTION__ << std::endl;
 #endif
-    typedef std::vector<Node*> Nodes;
-
-    Nodes nodes;
+    std::vector<Node*> nodes;
     graph.getNodes(nodes);
-    for(Nodes::size_type i = 0, in = nodes.size(); i < in; ++i) {
-        Node* node = nodes[i];
+    for(Node* node : nodes) {
 #if GEOS_DEBUG
         std::cerr << "Node " << i << ": " << *node << std::endl;
 #endif
@@ -182,12 +169,9 @@ LineMerger::buildEdgeStringsForNonDegree2Nodes()
 #if GEOS_DEBUG
     std::cerr << __FUNCTION__ << std::endl;
 #endif
-    typedef std::vector<Node*> Nodes;
-
-    Nodes nodes;
+    std::vector<Node*> nodes;
     graph.getNodes(nodes);
-    for(Nodes::size_type i = 0, in = nodes.size(); i < in; ++i) {
-        Node* node = nodes[i];
+    for(Node* node : nodes) {
 #if GEOS_DEBUG
         std::cerr << "Node " << i << ": " << *node << std::endl;
 #endif
@@ -215,10 +199,10 @@ void
 LineMerger::buildEdgeStringsStartingAt(Node* node)
 {
     std::vector<planargraph::DirectedEdge*>& edges = node->getOutEdges()->getEdges();
-    std::size_t size = edges.size();
-    for(std::size_t i = 0; i < size; i++) {
+
+    for(auto* edge : edges) {
         LineMergeDirectedEdge* directedEdge =
-                            detail::down_cast<LineMergeDirectedEdge*>(edges[i]);
+                            detail::down_cast<LineMergeDirectedEdge*>(edge);
         if(isDirected && !directedEdge->getEdgeDirection()) {
             continue;
         }
@@ -229,10 +213,10 @@ LineMerger::buildEdgeStringsStartingAt(Node* node)
     }
 }
 
-EdgeString*
-LineMerger::buildEdgeStringStartingWith(LineMergeDirectedEdge* start)
+std::unique_ptr<EdgeString>
+LineMerger::buildEdgeStringStartingWith(LineMergeDirectedEdge* start) const
 {
-    EdgeString* edgeString = new EdgeString(factory);
+    auto edgeString = std::make_unique<EdgeString>(factory);
     LineMergeDirectedEdge* current = start;
     do {
         edgeString->add(current);
