@@ -48,7 +48,7 @@ protected:
     geom::CoordinateXY pt;
 
     /// The collection of DirectedEdges that leave this Node
-    DirectedEdgeStar* deStar;
+    DirectedEdgeStar deStar;
 
 public:
 
@@ -68,25 +68,9 @@ public:
     Node(const geom::CoordinateXY& newPt)
         :
         pt(newPt)
-    {
-        deStar = new DirectedEdgeStar();
-    }
+    {}
 
     ~Node() override
-    {
-        delete deStar;
-    }
-
-    /**
-     * \brief
-     * Constructs a Node with the given location and
-     * collection of outgoing DirectedEdges.
-     * Takes ownership of the given DirectedEdgeStar!!
-     */
-    Node(geom::Coordinate& newPt, DirectedEdgeStar* newDeStar)
-        :
-        pt(newPt),
-        deStar(newDeStar)
     {}
 
     /**
@@ -104,7 +88,7 @@ public:
     void
     addOutEdge(DirectedEdge* de)
     {
-        deStar->add(de);
+        deStar.add(de);
     }
 
     /**
@@ -114,12 +98,13 @@ public:
     DirectedEdgeStar*
     getOutEdges()
     {
-        return deStar;
+        return &deStar;
     }
+
     const DirectedEdgeStar*
     getOutEdges() const
     {
-        return deStar;
+        return &deStar;
     }
 
     /**
@@ -128,7 +113,7 @@ public:
     size_t
     getDegree() const
     {
-        return deStar->getDegree();
+        return deStar.getDegree();
     }
 
     /**
@@ -139,7 +124,7 @@ public:
     int
     getIndex(Edge* edge)
     {
-        return deStar->getIndex(edge);
+        return deStar.getIndex(edge);
     }
 
 private:
