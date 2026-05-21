@@ -129,6 +129,9 @@ void object::test<2>()
     ensure_equals_geometry(static_cast<Geometry*>(cc_->getStartPoint().get()), wktreader_.read("POINT (0 0)").get());
     ensure_equals_geometry(static_cast<Geometry*>(cc_->getEndPoint().get()), wktreader_.read("POINT (2 2)").get());
 
+    ensure_equals("getStartCoordinate", cc_->getStartCoordinate(), CoordinateXY(0, 0));
+    ensure_equals("getEndCoordinate", cc_->getEndCoordinate(), CoordinateXY(2, 2));
+
     ensure_equals_geometry(cc_->getStartPoint().get(), factory_->createPoint(CoordinateXY{0, 0}).get());
     ensure_equals_geometry(cc_->getEndPoint().get(), factory_->createPoint(CoordinateXY{2, 2}).get());
     ensure_equals_geometry(cc_->getPointN(4).get(), factory_->createPoint(CoordinateXY{2, 2}).get());

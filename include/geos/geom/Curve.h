@@ -52,6 +52,8 @@ public:
         return Dimension::L; // line
     }
 
+    virtual const CoordinateXY& getEndCoordinate() const = 0;
+
     /// \brief
     /// Return the end point of the Curve
     /// or NULL if this is an EMPTY Curve.
@@ -61,6 +63,8 @@ public:
     /// Return the n'th point of the Curve
     /// or NULL if this is an EMPTY Curve.
     virtual std::unique_ptr<Point> getPointN(std::size_t n) const = 0;
+
+    virtual const CoordinateXY& getStartCoordinate() const = 0;
 
     /// \brief
     /// Return the start point of the Curve

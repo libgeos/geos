@@ -246,6 +246,15 @@ SimpleCurve::getCurveN(std::size_t) const
     return this;
 }
 
+const CoordinateXY&
+SimpleCurve::getEndCoordinate() const
+{
+    if (isEmpty()) {
+        return CoordinateXY::getNull();
+    }
+    return points->back<CoordinateXY>();
+}
+
 std::unique_ptr<Point>
 SimpleCurve::getEndPoint() const
 {
@@ -277,6 +286,15 @@ SimpleCurve::getPointN(std::size_t n) const
     return points->applyAt(n, [this](const auto& c) {
         return getFactory()->createPoint(c);
     });
+}
+
+const CoordinateXY&
+SimpleCurve::getStartCoordinate() const
+{
+    if (isEmpty()) {
+        return CoordinateXY::getNull();
+    }
+    return points->front<CoordinateXY>();
 }
 
 std::unique_ptr<Point>

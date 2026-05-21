@@ -66,6 +66,8 @@ public:
 
     const SimpleCurve* getCurveN(std::size_t) const override;
 
+    const CoordinateXY& getEndCoordinate() const override;
+
     /// \brief
     /// Return the end point of the LineString
     /// or NULL if this is an EMPTY LineString.
@@ -82,6 +84,8 @@ public:
     std::size_t getNumPoints() const override;
 
     std::unique_ptr<Point> getPointN(std::size_t n) const override;
+
+    const CoordinateXY& getStartCoordinate() const override;
 
     /// \brief
     /// Return the start point of the LineString

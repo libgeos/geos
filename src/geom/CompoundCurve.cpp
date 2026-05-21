@@ -205,6 +205,18 @@ CompoundCurve::getCurveN(std::size_t i) const
     return curves[i].get();
 }
 
+const CoordinateXY&
+CompoundCurve::getEndCoordinate() const
+{
+    for (std::size_t i = curves.size(); i != 0; i--) {
+        if (!curves[i-1]->isEmpty()) {
+            return curves[i-1]->getCoordinatesRO()->back<CoordinateXY>();
+        }
+    }
+
+    return CoordinateXY::getNull();
+}
+
 std::unique_ptr<Point>
 CompoundCurve::getEndPoint() const
 {
@@ -253,6 +265,18 @@ CompoundCurve::getNumPoints() const
         n += curve->getNumPoints();
     }
     return n;
+}
+
+const CoordinateXY&
+CompoundCurve::getStartCoordinate() const
+{
+    for (const auto& curve : curves) {
+        if (!curve->isEmpty()) {
+            return curve->getCoordinatesRO()->front<CoordinateXY>();
+        }
+    }
+
+    return CoordinateXY::getNull();
 }
 
 std::unique_ptr<Point>

@@ -180,6 +180,9 @@ void object::test<4>()
     ensure("getStartPoint", cs_->getStartPoint()->equalsIdentical(wktreader_.read("POINT (0 0)").get()));
     ensure("getEndPoint", cs_->getEndPoint()->equalsIdentical(wktreader_.read("POINT (4 0)").get()));
 
+    ensure_equals("getStartCoordinate", cs_->getStartCoordinate(), XY(0, 0));
+    ensure_equals("getEndCoordinate", cs_->getEndCoordinate(), XY(4, 0));
+
     ensure("getCoordinatesRO", cs_->getCoordinatesRO()->getSize() == 5u);
     ensure("isClosed", !cs_->isClosed());
     XY pt(4, 0);
