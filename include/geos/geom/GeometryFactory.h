@@ -41,6 +41,7 @@ class Coordinate;
 class CircularString;
 class CompoundCurve;
 class CoordinateSequence;
+class Curve;
 class Envelope;
 class Geometry;
 class GeometryCollection;
@@ -190,6 +191,9 @@ public:
     /// Construct a MultiLineString taking ownership of given arguments
     std::unique_ptr<MultiLineString> createMultiLineString(
             std::vector<std::unique_ptr<LineString>> && fromLines) const;
+
+    std::unique_ptr<MultiLineString> createMultiLineString(
+            std::vector<std::unique_ptr<Curve>> && fromLines) const;
 
     std::unique_ptr<MultiLineString> createMultiLineString(
             std::vector<std::unique_ptr<Geometry>> && fromLines) const;
@@ -415,6 +419,8 @@ public:
     std::unique_ptr<Geometry> buildGeometry(std::vector<std::unique_ptr<LineString>> && geoms) const;
 
     std::unique_ptr<Geometry> buildGeometry(std::vector<std::unique_ptr<Polygon>> && geoms) const;
+
+    std::unique_ptr<Geometry> buildGeometry(std::vector<std::unique_ptr<Curve>> && geoms) const;
 
     /// See buildGeometry(std::vector<Geometry *>&) for semantics
     //

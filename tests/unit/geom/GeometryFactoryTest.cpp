@@ -1514,4 +1514,47 @@ void object::test<42>
 
 }
 
+template<>
+template<>
+void object::test<43>()
+{
+    set_test_name("buildGeometry with Curve vector");
+
+    {
+        std::vector<std::unique_ptr<geos::geom::Curve>> curves;
+        curves.push_back(reader_.read<geos::geom::Curve>("LINESTRING(0 0, 10 10)"));
+
+        auto g = factory_->buildGeometry(std::move(curves));
+        ensure_equals(g->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
+    }
+
+    {
+        std::vector<std::unique_ptr<geos::geom::Curve>> curves;
+        curves.push_back(reader_.read<geos::geom::Curve>("LINESTRING(0 0, 10 10)"));
+        curves.push_back(reader_.read<geos::geom::Curve>("LINESTRING(10 10, 20 20)"));
+
+        auto g = factory_->buildGeometry(std::move(curves));
+        ensure_equals(g->getGeometryTypeId(), geos::geom::GEOS_MULTILINESTRING);
+        ensure_equals(g->getNumGeometries(), 2u);
+    }
+
+    {
+        std::vector<std::unique_ptr<geos::geom::Curve>> curves;
+        curves.push_back(reader_.read<geos::geom::Curve>("CIRCULARSTRING(0 0, 1 1, 2 0)"));
+
+        auto g = factory_->buildGeometry(std::move(curves));
+        ensure_equals(g->getGeometryTypeId(), geos::geom::GEOS_CIRCULARSTRING);
+    }
+
+    {
+        std::vector<std::unique_ptr<geos::geom::Curve>> curves;
+        curves.push_back(reader_.read<geos::geom::Curve>("CIRCULARSTRING(0 0, 1 1, 2 0)"));
+        curves.push_back(reader_.read<geos::geom::Curve>("LINESTRING (3 3, 4 4)"));
+
+        auto g = factory_->buildGeometry(std::move(curves));
+        ensure_equals(g->getGeometryTypeId(), geos::geom::GEOS_MULTICURVE);
+        ensure_equals(g->getNumGeometries(), 2u);
+    }
+}
+    
 } // namespace tut

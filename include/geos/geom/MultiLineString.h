@@ -124,6 +124,9 @@ protected:
     MultiLineString(std::vector<std::unique_ptr<Geometry>> && newLines,
                     const GeometryFactory& newFactory);
 
+    MultiLineString(std::vector<std::unique_ptr<Curve>> && newLines,
+                    const GeometryFactory& newFactory);
+
     MultiLineString(const MultiLineString& mp)
         : GeometryCollection(mp)
         {};

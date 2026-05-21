@@ -41,6 +41,7 @@
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/util.h>
 
+#include <algorithm>
 #include <cassert>
 #include <vector>
 #include <typeinfo>
@@ -306,6 +307,12 @@ const
 
 std::unique_ptr<MultiLineString>
 GeometryFactory::createMultiLineString(std::vector<std::unique_ptr<LineString>> && fromLines) const {
+    // Can't use make_unique because constructor is protected
+    return std::unique_ptr<MultiLineString>(new MultiLineString(std::move(fromLines), *this));
+}
+
+std::unique_ptr<MultiLineString>
+GeometryFactory::createMultiLineString(std::vector<std::unique_ptr<Curve>> && fromLines) const {
     // Can't use make_unique because constructor is protected
     return std::unique_ptr<MultiLineString>(new MultiLineString(std::move(fromLines), *this));
 }
@@ -954,6 +961,29 @@ GeometryFactory::buildGeometry(std::vector<std::unique_ptr<Polygon>> && geoms) c
     }
 
     return createMultiPolygon(std::move(geoms));
+}
+
+std::unique_ptr<Geometry>
+GeometryFactory::buildGeometry(std::vector<std::unique_ptr<Curve>> && geoms) const
+{
+    if (geoms.empty()) {
+        return createGeometryCollection();
+    }
+
+    if (geoms.size() == 1) {
+        return std::move(geoms[0]);
+    }
+
+    const bool hasCurves = std::any_of(geoms.begin(), geoms.end(), [](const auto& geom) {
+        const auto typeId = geom->getGeometryTypeId();
+        return typeId == GEOS_COMPOUNDCURVE || typeId == GEOS_CIRCULARSTRING;
+    });
+
+    if (hasCurves) {
+        return createMultiCurve(std::move(geoms));
+    } else {
+        return createMultiLineString(std::move(geoms));
+    }
 }
 
 /*public*/
