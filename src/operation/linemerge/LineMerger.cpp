@@ -71,7 +71,7 @@ struct LMGeometryComponentFilter: public GeometryComponentFilter {
     void
     filter_ro(const Geometry* geom) override
     {
-        const LineString* ls = dynamic_cast<const LineString*>(geom);
+        const Curve* ls = dynamic_cast<const Curve*>(geom);
         if(ls) {
             lm->add(ls);
         }
@@ -87,25 +87,23 @@ struct LMGeometryComponentFilter: public GeometryComponentFilter {
 void
 LineMerger::add(const Geometry* geometry)
 {
-    util::ensureNoCurvedComponents(geometry);
-
     LMGeometryComponentFilter lmgcf(this);
     geometry->apply_ro(&lmgcf);
 }
 
 void
-LineMerger::add(const LineString* lineString)
+LineMerger::add(const Curve* curve)
 {
     if(factory == nullptr) {
-        factory = lineString->getFactory();
+        factory = curve->getFactory();
     }
-    graph.addEdge(lineString);
+    graph.addEdge(curve);
 }
 
 void
 LineMerger::merge()
 {
-    if(!mergedLineStrings.empty()) {
+    if(!mergedGeometries.empty()) {
         return;
     }
 
@@ -121,10 +119,10 @@ LineMerger::merge()
     buildEdgeStringsForIsolatedLoops();
 
     auto numEdgeStrings = edgeStrings.size();
-    mergedLineStrings.reserve(numEdgeStrings);
+    mergedGeometries.reserve(numEdgeStrings);
 
     for(const auto& edgeString : edgeStrings) {
-        mergedLineStrings.emplace_back(edgeString->toLineString());
+        mergedGeometries.emplace_back(edgeString->getGeometry());
     }
 }
 
@@ -236,10 +234,26 @@ LineMerger::getMergedLineStrings()
     merge();
 
     // Explicitly give ownership to the caller.
-    auto ret = std::move(mergedLineStrings);
-    mergedLineStrings.clear();
-    return ret;
+    std::vector<std::unique_ptr<LineString>> mergedLineStrings;
+    mergedLineStrings.reserve(mergedGeometries.size());
+    for (auto& geom : mergedGeometries) {
+        if (geom->getGeometryTypeId() == GEOS_LINESTRING || geom->getGeometryTypeId() == GEOS_LINEARRING) {
+            mergedLineStrings.emplace_back(detail::down_cast<LineString*>(geom.release()));
+        }
+    }
+
+    mergedGeometries.clear();
+    return mergedLineStrings;
 }
+
+std::vector<std::unique_ptr<Curve>>
+LineMerger::getMergedCurves()
+{
+    merge();
+
+    return std::move(mergedGeometries);
+}
+
 
 } // namespace geos.operation.linemerge
 } // namespace geos.operation

@@ -13,6 +13,7 @@
 #include <geos/io/WKTWriter.h>
 #include <geos/util/IllegalArgumentException.h>
 // std
+#include <cmath>
 #include <memory>
 #include <string>
 #include <vector>
@@ -76,9 +77,9 @@ struct test_linemerger_data {
         readWKT(expectedWKT, expGeoms);
 
         lineMerger.add(&inpGeoms);
-        auto mrgGeoms = lineMerger.getMergedLineStrings();
-        compare(expGeoms, mrgGeoms, compareDirections);
+        auto mrgGeoms = lineMerger.getMergedCurves();
 
+        compare(expGeoms, mrgGeoms, compareDirections);
     }
 
     template <class TargetContainer>
@@ -109,7 +110,7 @@ struct test_linemerger_data {
     {
         for(const auto& e : actualGeometries) {
             Geom* element = dynamic_cast<Geom*>(e.get());
-            if(exact && element->equalsExact(g)) {
+            if(exact && element->equalsIdentical(g)) {
                 return true;
             }
             if(!exact && element->equals(g)) {
@@ -521,6 +522,49 @@ void object::test<20>
     auto expected = wktreader.read("LINESTRING ZM (0 0 0 NaN, 1 2 3 NaN, 2 4 6 7, 10 9 2 8, 11 12 15 NaN)");
 
     ensure_equals_exact_geometry_xyzm(merged.front().get(), expected.get(), 0.0);
+}
+
+template<>
+template<>
+void object::test<21>()
+{
+    set_test_name("basic curved example");
+
+    const char* inpWKT[] = {
+        "LINESTRING (-10 0, -5 0)",
+        "LINESTRING (10 0, 5 0)",
+        "CIRCULARSTRING (-5 0, 0 5, 5 0)",
+        "CIRCULARSTRING (20 0, 25 5, 30 0)",
+        "CIRCULARSTRING (40 0, 35 -5, 30 0)",
+        nullptr
+    };
+    const char* expWKT[] = {
+        "COMPOUNDCURVE ((-10 0, -5 0), CIRCULARSTRING (-5 0, 0 5, 5 0), (5 0, 10 0))",
+        "CIRCULARSTRING (20 0, 25 5, 30 0, 35 -5, 40 0)",
+        nullptr
+    };
+
+    doTest(inpWKT, expWKT);
+}
+
+template<>
+template<>
+void object::test<22>()
+{
+    set_test_name("mixed-dimensionality curves");
+
+    const char* inpWKT[] = {
+        "LINESTRING (0 0, 1 1)",
+        "CIRCULARSTRING Z (1 1 5, 2 2 6, 3 1 7)",
+        nullptr
+    };
+
+    const char* expWKT[] = {
+        "COMPOUNDCURVE Z ((0 0 NaN, 1 1 5), CIRCULARSTRING (1 1 5, 2 2 6, 3 1 7))",
+        nullptr
+    };
+
+    doTest(inpWKT, expWKT);
 }
 
 } // namespace tut

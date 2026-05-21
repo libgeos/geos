@@ -80,7 +80,7 @@ private:
 
     bool isDirected;
 
-    std::vector<std::unique_ptr<geom::LineString>> mergedLineStrings;
+    std::vector<std::unique_ptr<geom::Curve>> mergedGeometries;
 
     std::vector<std::unique_ptr<EdgeString>> edgeStrings;
 
@@ -132,7 +132,9 @@ public:
      */
     std::vector<std::unique_ptr<geom::LineString>> getMergedLineStrings();
 
-    void add(const geom::LineString* lineString);
+    std::vector<std::unique_ptr<geom::Curve>> getMergedCurves();
+
+    void add(const geom::Curve* curve);
 
     // Declare type as noncopyable
     LineMerger(const LineMerger& other) = delete;

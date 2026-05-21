@@ -5444,6 +5444,8 @@ extern GEOSGeometry GEOS_DLL *GEOSDensify(
 * values differ at the points where two lines are joined, the values
 * from one of the points will be selected.
 *
+* Curved geometry types are supported since GEOS 3.15.
+*
 * \param g The input linework
 * \return The merged linework.
 * Caller is responsible for freeing with GEOSGeom_destroy().
@@ -5478,6 +5480,8 @@ extern size_t GEOS_DLL *GEOSMinimumSpanningTree(const GEOSGeometry * const geoms
 * Z and M values from the input will be preserved. If the Z and M
 * values differ at the points where two lines are joined, the values
 * from one of the points will be selected.
+*
+* Curved geometry types are supported since GEOS 3.15.
 *
 * \param g The input linework
 * \return The merged linework.

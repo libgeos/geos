@@ -2742,7 +2742,7 @@ extern "C" {
             LineMerger lmrgr;
             lmrgr.add(g);
 
-            auto lines = lmrgr.getMergedLineStrings();
+            auto lines = lmrgr.getMergedCurves();
 
             auto out = gf->buildGeometry(std::move(lines));
             out->setSRID(g->getSRID());
@@ -2802,7 +2802,7 @@ extern "C" {
             LineMerger lmrgr(true);
             lmrgr.add(g);
 
-            auto lines = lmrgr.getMergedLineStrings();
+            auto lines = lmrgr.getMergedCurves();
 
             auto out = gf->buildGeometry(std::move(lines));
             out->setSRID(g->getSRID());

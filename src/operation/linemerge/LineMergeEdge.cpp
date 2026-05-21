@@ -25,20 +25,13 @@ namespace geos {
 namespace operation { // geos.operation
 namespace linemerge { // geos.operation.linemerge
 
-/**
- * Constructs a LineMergeEdge with vertices given by the specified LineString.
- */
-LineMergeEdge::LineMergeEdge(const LineString* newLine):
-    line(newLine)
+LineMergeEdge::LineMergeEdge(const Curve* newCurve):
+    line(newCurve)
 {
-    //line=newLine;
 }
 
-/**
- * Returns the LineString specifying the vertices of this edge.
- */
-const LineString*
-LineMergeEdge::getLine() const
+const Curve*
+LineMergeEdge::getCurve() const
 {
     return line;
 }

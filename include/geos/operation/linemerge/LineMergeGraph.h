@@ -34,7 +34,7 @@
 // Forward declarations
 namespace geos {
 namespace geom {
-class LineString;
+class Curve;
 class Coordinate;
 }
 namespace planargraph {
@@ -74,13 +74,13 @@ public:
 
     /** \brief
      * Adds an Edge, DirectedEdges, and Nodes for the given
-     * LineString representation of an edge.
+     * LineString/CircularString/CompoundCurve representation of an edge.
      *
      * Empty lines or lines with all coordinates equal are not added.
      *
-     * @param lineString the linestring to add to the graph
+     * @param curve the curve to add to the graph
      */
-    void addEdge(const geom::LineString* lineString);
+    void addEdge(const geom::Curve* curve);
 
     ~LineMergeGraph() override;
 

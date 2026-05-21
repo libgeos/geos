@@ -32,6 +32,7 @@
 // Forward declarations
 namespace geos {
 namespace geom {
+class Curve;
 class GeometryFactory;
 class CoordinateSequence;
 class LineString;
@@ -56,7 +57,6 @@ class GEOS_DLL EdgeString {
 private:
     const geom::GeometryFactory* factory;
     std::vector<LineMergeDirectedEdge*> directedEdges;
-    std::unique_ptr<geom::CoordinateSequence> getCoordinates() const;
 public:
     /**
      * \brief
@@ -73,9 +73,9 @@ public:
     void add(LineMergeDirectedEdge* directedEdge);
 
     /**
-     * Converts this EdgeString into a LineString.
+     * Converts this EdgeString into a Curve.
      */
-    std::unique_ptr<geom::LineString> toLineString() const;
+    std::unique_ptr<geom::Curve> getGeometry() const;
 };
 
 } // namespace geos::operation::linemerge

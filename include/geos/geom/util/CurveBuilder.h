@@ -58,6 +58,14 @@ public:
         return m_hasM;
     }
 
+    bool hasActiveSequence() const {
+        return m_pts != nullptr;
+    }
+
+    bool isCurved() const {
+        return m_isCurved;
+    }
+
     void setOutputLinearRing(bool outputLinearRing) {
         m_outputLinearRing = outputLinearRing;
     }

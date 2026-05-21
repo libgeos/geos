@@ -24,8 +24,10 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/LineString.h>
+#include <geos/geom/util/CurveBuilder.h>
 #include <geos/util.h>
 
+#include <cmath>
 #include <vector>
 
 
@@ -54,8 +56,38 @@ EdgeString::add(LineMergeDirectedEdge* directedEdge)
     directedEdges.push_back(directedEdge);
 }
 
-std::unique_ptr<CoordinateSequence>
-EdgeString::getCoordinates() const
+static void
+addCoordinates(geom::util::CurveBuilder& curveBuilder, const SimpleCurve* curve, bool forward)
+{
+    if (curve->isEmpty()) {
+        return;
+    }
+
+    const CoordinateSequence& srcCoords = *curve->getCoordinatesRO();
+
+    // Patch Z value in last coordinate, if needed
+    if (curveBuilder.hasActiveSequence() && curve->hasZ()) {
+        CoordinateSequence& dstCoords = curveBuilder.getSeq(curveBuilder.isCurved());
+        if (std::isnan(dstCoords.getZ(dstCoords.getSize() - 1))) {
+            dstCoords.setZ(dstCoords.getSize() - 1, forward ? srcCoords.getZ(0) : srcCoords.getZ(srcCoords.getSize() - 1));
+        }
+    }
+
+    // Patch M value in last coordinate, if needed
+    if (curveBuilder.hasActiveSequence() && curve->hasM()) {
+        CoordinateSequence& dstCoords = curveBuilder.getSeq(curveBuilder.isCurved());
+        if (std::isnan(dstCoords.getM(dstCoords.getSize() - 1))) {
+            dstCoords.setM(dstCoords.getSize() - 1, forward ? srcCoords.getM(0) : srcCoords.getM(srcCoords.getSize() - 1));
+        }
+    }
+
+    const bool isCurved = curve->getGeometryTypeId() == GEOS_CIRCULARSTRING;
+    CoordinateSequence& dstCoords = curveBuilder.getSeq(isCurved);
+    dstCoords.add(srcCoords, false, forward);
+}
+
+std::unique_ptr<Curve>
+EdgeString::getGeometry() const
 {
     int forwardDirectedEdges = 0;
     int reverseDirectedEdges = 0;
@@ -66,17 +98,17 @@ EdgeString::getCoordinates() const
     for (const LineMergeDirectedEdge* directedEdge : directedEdges) {
         const LineMergeEdge* lme = detail::down_cast<LineMergeEdge*>(directedEdge->getEdge());
 
-        resultHasZ |= lme->getLine()->hasZ();
-        resultHasM |= lme->getLine()->hasM();
+        resultHasZ |= lme->getCurve()->hasZ();
+        resultHasM |= lme->getCurve()->hasM();
     }
 
-    auto coordinates = std::make_unique<CoordinateSequence>(0, resultHasZ, resultHasM);
-
-    bool lastPointMissingZ = false;
-    bool lastPointMissingM = false;
+    geom::util::CurveBuilder curveBuilder(*factory, resultHasZ, resultHasM);
+    curveBuilder.setOutputLinearRing(false);
 
     for (const LineMergeDirectedEdge* directedEdge : directedEdges) {
-        if(directedEdge->getEdgeDirection()) {
+        const bool isForward = directedEdge->getEdgeDirection();
+
+        if (isForward) {
             forwardDirectedEdges++;
         }
         else {
@@ -84,39 +116,33 @@ EdgeString::getCoordinates() const
         }
 
         const LineMergeEdge* lme = detail::down_cast<LineMergeEdge*>(directedEdge->getEdge());
-        const CoordinateSequence* seq = lme->getLine()->getCoordinatesRO();
+        const Curve* curve = lme->getCurve();
 
-        if (lastPointMissingZ && seq->hasZ()) {
-            const double z = directedEdge->getEdgeDirection() ? seq->getZ(0) : seq->getZ(seq->getSize() - 1);
-            coordinates->setZ(coordinates->getSize() - 1, z);
+        if (curve->getGeometryTypeId() == geom::GEOS_COMPOUNDCURVE) {
+            if (isForward) {
+                for (std::size_t i = 0; i < curve->getNumCurves(); i++) {
+                    const SimpleCurve* sc = curve->getCurveN(i);
+                    addCoordinates(curveBuilder, sc, isForward);
+                }
+            } else {
+                for (std::size_t i = curve->getNumCurves(); i > 0; i--) {
+                    const SimpleCurve* sc = curve->getCurveN(i - 1);
+                    addCoordinates(curveBuilder, sc, isForward);
+                }
+            }
+        } else {
+            const SimpleCurve* sc = detail::down_cast<const SimpleCurve*>(curve);
+            addCoordinates(curveBuilder, sc, directedEdge->getEdgeDirection());
         }
-        if (lastPointMissingM && seq->hasM()) {
-            const double m = directedEdge->getEdgeDirection() ? seq->getM(0) : seq->getM(seq->getSize() - 1);
-            coordinates->setM(coordinates->getSize() - 1, m);
-        }
-
-        coordinates->add(*seq,
-                         false,
-                         directedEdge->getEdgeDirection());
-
-        lastPointMissingZ = resultHasZ && !seq->hasZ();
-        lastPointMissingM = resultHasM && !seq->hasM();
     }
+
+    auto result = curveBuilder.getGeometry();
 
     if(reverseDirectedEdges > forwardDirectedEdges) {
-        coordinates->reverse();
+        return result->reverse();
     }
 
-    return coordinates;
-}
-
-/*
- * Converts this EdgeString into a new LineString.
- */
-std::unique_ptr<LineString>
-EdgeString::toLineString() const
-{
-    return factory->createLineString(getCoordinates());
+    return result;
 }
 
 } // namespace geos.operation.linemerge

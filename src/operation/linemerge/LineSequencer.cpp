@@ -208,16 +208,16 @@ LineSequencer::buildSequencedGeometry(const Sequences& sequences)
                 i2End = seq.end(); i2 != i2End; ++i2) {
             const planargraph::DirectedEdge* de = *i2;
             LineMergeEdge* e = detail::down_cast<LineMergeEdge* >(de->getEdge());
-            const LineString* line = e->getLine();
+            const auto* curve = e->getCurve();
 
             // lineToAdd will be a *copy* of input things
-            std::unique_ptr<LineString> lineToAdd;
+            std::unique_ptr<Geometry> lineToAdd;
 
-            if(! de->getEdgeDirection() && ! line->isClosed()) {
-                lineToAdd = line->reverse();
+            if(! de->getEdgeDirection() && ! curve->isClosed()) {
+                lineToAdd = curve->reverse();
             }
             else {
-                lineToAdd = line->clone();
+                lineToAdd = curve->clone();
             }
 
             lines.push_back(std::move(lineToAdd));

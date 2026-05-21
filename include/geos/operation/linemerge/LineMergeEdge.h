@@ -26,7 +26,7 @@
 // Forward declarations
 namespace geos {
 namespace geom {
-class LineString;
+class Curve;
 }
 }
 
@@ -41,18 +41,18 @@ namespace linemerge { // geos::operation::linemerge
  */
 class GEOS_DLL LineMergeEdge: public planargraph::Edge {
 private:
-    const geom::LineString* line;
+    const geom::Curve* line;
 public:
     /**
      * Constructs a LineMergeEdge with vertices given by the specified
-     * LineString.
+     * Curve.
      */
-    LineMergeEdge(const geom::LineString* newLine);
+    LineMergeEdge(const geom::Curve* newCurve);
 
     /**
-     * Returns the LineString specifying the vertices of this edge.
+     * Returns the Curve specifying the vertices of this edge.
      */
-    const geom::LineString* getLine() const;
+    const geom::Curve* getCurve() const;
 };
 
 
