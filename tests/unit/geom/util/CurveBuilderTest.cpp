@@ -96,6 +96,24 @@ template<>
 template<>
 void object::test<4>()
 {
+    set_test_name("closed LineString result");
+
+    builder_.setOutputLinearRing(false);
+
+    add("LINESTRING (0 0, 1 0, 1 1)");
+    add("LINESTRING (1 1, 0 1, 0 0)");
+
+    auto result = builder_.getGeometry();
+
+    auto expected = reader_.read("LINESTRING (0 0, 1 0, 1 1, 0 1, 0 0)");
+
+    ensure_equals_geometry(static_cast<const Geometry*>(result.get()), expected.get());
+}
+
+template<>
+template<>
+void object::test<5>()
+{
     set_test_name("empty component");
 
     add("LINESTRING (0 0, 1 1)");
@@ -111,7 +129,7 @@ void object::test<4>()
 
 template<>
 template<>
-void object::test<5>()
+void object::test<6>()
 {
     set_test_name("disjoint curves");
 
@@ -123,7 +141,7 @@ void object::test<5>()
 
 template<>
 template<>
-void object::test<6>()
+void object::test<7>()
 {
     set_test_name("closeRing after arc");
 
@@ -141,7 +159,7 @@ void object::test<6>()
 
 template<>
 template<>
-void object::test<7>()
+void object::test<8>()
 {
     set_test_name("closeRing after line");
 

@@ -50,6 +50,18 @@ public:
     // coordinates are currently being added.
     CoordinateSequence& getSeq(bool isCurved);
 
+    bool hasZ() const {
+        return m_hasZ;
+    }
+
+    bool hasM() const {
+        return m_hasM;
+    }
+
+    void setOutputLinearRing(bool outputLinearRing) {
+        m_outputLinearRing = outputLinearRing;
+    }
+
 private:
     void finishCurve();
     void finishLine();
@@ -59,6 +71,7 @@ private:
     const GeometryFactory& m_gfact;
     const bool m_hasZ;
     const bool m_hasM;
+    bool m_outputLinearRing{true};
     bool m_isCurved{false};
 };
 

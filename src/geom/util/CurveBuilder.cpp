@@ -106,7 +106,7 @@ CurveBuilder::getGeometry()
             finishCurve();
         } else {
 
-            if (m_curves.empty() && m_pts->isRing()) {
+            if (m_outputLinearRing && m_curves.empty() && m_pts->isRing()) {
                 m_curves.push_back(m_gfact.createLinearRing(std::move(m_pts)));
             } else {
                 finishLine();
