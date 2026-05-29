@@ -17,11 +17,7 @@
  **********************************************************************/
 
 #include <geos/algorithm/CircularArcIntersector.h>
-#include <geos/noding/GeometryNoder.h>
-#include <geos/noding/SegmentString.h>
-#include <geos/noding/NodedSegmentString.h>
-#include <geos/noding/OrientedCoordinateArray.h>
-#include <geos/noding/Noder.h>
+
 #include <geos/geom/Geometry.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -32,18 +28,23 @@
 #include <geos/geom/LineString.h>
 
 #include <geos/noding/ArcIntersectionAdder.h>
+#include <geos/noding/GeometryNoder.h>
 #include <geos/noding/IteratedNoder.h>
+#include <geos/noding/MCIndexNoder.h>
 #include <geos/noding/NodableArcString.h>
+#include <geos/noding/NodedSegmentString.h>
+#include <geos/noding/Noder.h>
+#include <geos/noding/OrientedCoordinateArray.h>
+#include <geos/noding/SegmentString.h>
 #include <geos/noding/SimpleNoder.h>
 
-#include <geos/algorithm/LineIntersector.h>
-#include <geos/noding/IntersectionAdder.h>
-#include <geos/noding/MCIndexNoder.h>
-
-#include <geos/noding/snapround/MCIndexSnapRounder.h>
+#include <geos/util/Assert.h>
 
 #include <memory> // for unique_ptr
-#include <iostream>
+
+using geos::geom::CoordinateXY;
+using geos::geom::SimpleCurve;
+using geos::geom::Geometry;
 
 
 namespace geos {
@@ -58,16 +59,19 @@ class PathStringExtractor: public geom::GeometryComponentFilter {
 public:
     PathStringExtractor(std::vector<std::unique_ptr<PathString>> & to,
                            bool constructZ,
-                           bool constructM,
-                           const void* context)
+                           bool constructM)
         : _to(to)
         , _constructZ(constructZ)
         , _constructM(constructM)
-        , _context(context)
+        , _foundCompoundCurve(false)
     {}
 
+    bool foundCompoundCurve() const {
+        return _foundCompoundCurve;
+    }
+
     void
-    filter_ro(const geom::Geometry* g) override
+    filter_ro(const Geometry* g) override
     {
         if (g->isEmpty()) {
             return;
@@ -75,15 +79,16 @@ public:
 
         if(const auto* ls = dynamic_cast<const geom::LineString*>(g)) {
             auto coord = ls->getSharedCoordinates();
-            auto ss = std::make_unique<NodedSegmentString>(coord, _constructZ, _constructM, _context);
+            auto ss = std::make_unique<NodedSegmentString>(coord, _constructZ, _constructM, ls);
             _to.push_back(std::move(ss));
         } else if (const auto* cs = dynamic_cast<const geom::CircularString*>(g)) {
             const auto& coords = cs->getSharedCoordinates();
             auto arcs = cs->getArcs();
 
-            auto as = std::make_unique<NodableArcString>(std::move(arcs), coords, _constructZ, _constructM, _context);
+            auto as = std::make_unique<NodableArcString>(std::move(arcs), coords, _constructZ, _constructM, cs);
             _to.push_back(std::move(as));
         } else if (const auto* cc = dynamic_cast<const geom::CompoundCurve*>(g)) {
+            _foundCompoundCurve = true;
             for (std::size_t i = 0; i < cc->getNumCurves(); i++) {
                 filter_ro(cc->getCurveN(i));
             }
@@ -93,10 +98,169 @@ private:
     std::vector<std::unique_ptr<PathString>>& _to;
     bool _constructZ;
     bool _constructM;
-    const void* _context;
+    bool _foundCompoundCurve;
 
     PathStringExtractor(PathStringExtractor const&); /*= delete*/
     PathStringExtractor& operator=(PathStringExtractor const&); /*= delete*/
+};
+
+/** Class to construct a geometry from a set of PathStrings, given the
+ *  geometry from which they originated. This allows CompoundCurves to
+ *  be reconstructed. Unlike CurveBuilder, PathStrings will not be
+ *  joined into SimpleCurves.
+ */
+class CurveRebuilder {
+
+public:
+    explicit CurveRebuilder(const Geometry& g) : m_srcGeom(g) {}
+
+    // Register a PathString with the rebuilder
+    // The context of the PathString will be set to nullptr during computation.
+    void add(PathString* path)
+    {
+        const auto& coords = path->getCoordinates();
+
+        m_pathForStartPoint[coords->front<CoordinateXY>()].push_back(path);
+        m_pathForContext[path->getData()].push_back(path);
+    }
+
+    // Prevent reconstruction of CompoundCurve across the starting
+    // or ending nodes of a specified PathString.
+    void disableNodes(const PathString* path)
+    {
+        const CoordinateXY& startPoint = path->getCoordinates()->front<CoordinateXY>();
+        const CoordinateXY& endPoint = path->getCoordinates()->back<CoordinateXY>();
+
+        doNotContinueFromNode(startPoint);
+        doNotContinueFromNode(endPoint);
+    }
+
+    std::unique_ptr<Geometry> getGeometry()
+    {
+        collectGeoms(m_srcGeom);
+
+        return m_srcGeom.getFactory()->buildGeometry(std::move(m_resultGeoms));
+    }
+
+private:
+    void doNotContinueFromNode(const CoordinateXY& p) {
+        m_pathForStartPoint.erase(p);
+    }
+
+    void collectGeoms(const Geometry& g)
+    {
+        if (dynamic_cast<const geom::GeometryCollection*>(&g)) {
+            for (std::size_t i = 0; i < g.getNumGeometries(); i++) {
+                collectGeoms(*g.getGeometryN(i));
+            }
+            return;
+        }
+
+        const auto geomType = g.getGeometryTypeId();
+
+        if (geomType == geom::GEOS_LINESTRING) {
+            auto it = m_pathForContext.find(&g);
+            util::Assert::isTrue(it != m_pathForContext.end());
+
+            for (auto& path : it->second) {
+                m_resultGeoms.push_back(getFactory().createLineString(path->getCoordinates()));
+            }
+        } else if (geomType == geom::GEOS_CIRCULARSTRING) {
+            auto it = m_pathForContext.find(&g);
+            util::Assert::isTrue(it != m_pathForContext.end());
+
+            for (auto& path : it->second) {
+                m_resultGeoms.push_back(getFactory().createCircularString(path->getCoordinates()));
+            }
+        } else if (geomType == geom::GEOS_COMPOUNDCURVE) {
+            collectCompoundCurveGeoms(*detail::down_cast<const geom::CompoundCurve *>(&g));
+        } else {
+            throw util::UnsupportedOperationException("Unsupported geometry type: " + g.getGeometryType());
+        }
+    }
+
+    void collectCompoundCurveGeoms(const geom::CompoundCurve& cc)
+    {
+        for (std::size_t i = 0; i < cc.getNumCurves(); i++) {
+            std::vector<std::unique_ptr<SimpleCurve>> curves;
+
+            const SimpleCurve* sc = cc.getCurveN(i);
+            const CoordinateXY& originalEndPoint = sc->getCoordinatesRO()->back<CoordinateXY>();
+
+            auto it = m_pathForContext.find(sc);
+            util::Assert::isTrue(it != m_pathForContext.end());
+
+            const auto& pathsForCurve = it->second;
+
+            for (auto& path : pathsForCurve) {
+                if (path->getData() == nullptr) {
+                    continue;
+                }
+                path->setData(nullptr);
+
+                const CoordinateXY& endPoint = path->getCoordinates()->back<CoordinateXY>();
+                std::unique_ptr<SimpleCurve> geom = getPathGeometry(*path);
+
+                if (endPoint == originalEndPoint) {
+                    curves.push_back(std::move(geom));
+                } else {
+                    m_resultGeoms.push_back(std::move(geom));
+                }
+            }
+
+            if (!curves.empty()) {
+                auto it2 = m_pathForStartPoint.find(originalEndPoint);
+                while (it2 != m_pathForStartPoint.end()) {
+                    const auto& next = it2->second;
+                    it2 = m_pathForStartPoint.end();
+
+                    if (next.size() == 1) {
+                        PathString* path = next[0];
+
+                        auto nextIndex = i + curves.size();
+                        if (nextIndex < cc.getNumCurves() && path->getData() == cc.getCurveN(nextIndex)) {
+                            curves.push_back(getPathGeometry(*path));
+                            path->setData(nullptr);
+
+                            const CoordinateXY& endPoint = path->getCoordinates()->back<CoordinateXY>();
+                            it2 = m_pathForStartPoint.find(endPoint);
+                        }
+                    }
+                }
+
+                if (curves.size() == 1) {
+                    m_resultGeoms.push_back(std::move(curves[0]));
+                } else {
+                    m_resultGeoms.push_back(getFactory().createCompoundCurve(std::move(curves)));
+                }
+            }
+        }
+    }
+
+    std::unique_ptr<SimpleCurve>
+    getPathGeometry(const PathString& path) const
+    {
+        const bool isLinear = dynamic_cast<const SegmentString*>(&path);
+
+        if (isLinear) {
+            return getFactory().createLineString(path.getCoordinates());
+        }
+
+        return getFactory().createCircularString(path.getCoordinates());
+    }
+
+    const geom::GeometryFactory&
+    getFactory() const
+    {
+        return *m_srcGeom.getFactory();
+    }
+
+    const Geometry& m_srcGeom;
+
+    std::map<CoordinateXY, std::vector<PathString*>> m_pathForStartPoint;
+    std::map<const void*, std::vector<PathString*>> m_pathForContext;
+
+    std::vector<std::unique_ptr<Geometry>> m_resultGeoms;
 };
 
 }
@@ -123,7 +287,9 @@ GeometryNoder::GeometryNoder(const geom::Geometry& g)
     argGeom1(&g),
     argGeom2(nullptr),
     argGeomHasCurves(g.hasCurvedComponents()),
-    onlyFirstGeomEdges(false)
+    argGeomHasCompoundCurves(false),
+    onlyFirstGeomEdges(false),
+    preserveCompoundCurves(false)
 {}
 
 GeometryNoder::GeometryNoder(const geom::Geometry& g1, const geom::Geometry& g2)
@@ -131,10 +297,18 @@ GeometryNoder::GeometryNoder(const geom::Geometry& g1, const geom::Geometry& g2)
     argGeom1(&g1),
     argGeom2(&g2),
     argGeomHasCurves(g1.hasCurvedComponents() || g2.hasCurvedComponents()),
-    onlyFirstGeomEdges(false)
+    argGeomHasCompoundCurves(false),
+    onlyFirstGeomEdges(false),
+    preserveCompoundCurves(false)
 {}
 
 GeometryNoder::~GeometryNoder() = default;
+
+bool
+GeometryNoder::isInResult(const PathString& ps) const
+{
+    return !onlyFirstGeomEdges || ps.getData() != nullptr;
+}
 
 /* private */
 std::unique_ptr<geom::Geometry>
@@ -144,31 +318,59 @@ GeometryNoder::toGeometry(std::vector<std::unique_ptr<PathString>>& nodedEdges) 
 
     std::set< OrientedCoordinateArray > ocas;
 
-    // Create a geometry out of the noded substrings.
-    std::vector<std::unique_ptr<geom::Geometry>> lines;
-    lines.reserve(nodedEdges.size());
+    std::vector<PathString*> pathsToKeep;
 
-    bool resultArcs = false;
-    for(auto& path :  nodedEdges) {
-        if (onlyFirstGeomEdges && path->getData() != argGeom1) {
+
+
+    for(auto& path : nodedEdges) {
+        if (!isInResult(*path)) {
             continue;
         }
 
         const auto& coords = path->getCoordinates();
-
-        bool isLinear = dynamic_cast<SegmentString*>(path.get());
-
-        // TODO: Make OrientedCoordinateArray not require strict equality of arc control points
-
         OrientedCoordinateArray oca1(*coords);
+
         // Check if an equivalent edge is known
         if(ocas.insert(oca1).second) {
-            if (isLinear) {
-                lines.push_back(geomFact->createLineString(coords));
-            } else {
-                resultArcs = true;
-                lines.push_back(geomFact->createCircularString(coords));
+            pathsToKeep.push_back(path.get());
+        }
+    }
+
+    if (preserveCompoundCurves && argGeomHasCompoundCurves) {
+        util::Assert::isTrue(onlyFirstGeomEdges);
+
+        CurveRebuilder rebuilder(*argGeom1);
+
+        for (auto& path : pathsToKeep) {
+            rebuilder.add(path);
+        }
+
+        // Any edge that begins at a point where a geomB edge starts/ends is not
+        // eligible for merging.
+        for (auto& path : nodedEdges) {
+            if (!isInResult(*path)) {
+                rebuilder.disableNodes(path.get());
             }
+        }
+
+        return rebuilder.getGeometry();
+    }
+
+    // Create a geometry out of the noded substrings.
+    std::vector<std::unique_ptr<geom::Geometry>> lines;
+    lines.reserve(nodedEdges.size());
+    bool resultArcs = false;
+
+    for (const auto& path : pathsToKeep) {
+        const auto& coords = path->getCoordinates();
+
+        const bool isLinear = dynamic_cast<const SegmentString*>(path);
+
+        if (isLinear) {
+            lines.push_back(geomFact->createLineString(coords));
+        } else {
+            resultArcs = true;
+            lines.push_back(geomFact->createCircularString(coords));
         }
     }
 
@@ -190,7 +392,12 @@ GeometryNoder::getNoded()
 
     extractPathStrings(*argGeom1, lineList);
     if (argGeom2 != nullptr) {
-        extractPathStrings(*argGeom2, lineList);
+        std::vector<std::unique_ptr<PathString>> lineList2;
+        extractPathStrings(*argGeom2, lineList2);
+        for (auto& path : lineList2) {
+            path->setData(nullptr); // prevent from appearing in result
+            lineList.push_back(std::move(path));
+        }
     }
 
     Noder& p_noder = getNoder();
@@ -207,8 +414,9 @@ void
 GeometryNoder::extractPathStrings(const geom::Geometry& g,
                                   std::vector<std::unique_ptr<PathString>>& to)
 {
-    PathStringExtractor ex(to, g.hasZ(), g.hasM(), &g);
+    PathStringExtractor ex(to, g.hasZ(), g.hasM());
     g.apply_ro(&ex);
+    argGeomHasCompoundCurves |= ex.foundCompoundCurve();
 }
 
 /* private */
@@ -234,6 +442,12 @@ void
 GeometryNoder::setOnlyFirstGeomEdges(bool p_onlyFirstGeomEdges)
 {
     onlyFirstGeomEdges = p_onlyFirstGeomEdges;
+}
+
+void
+GeometryNoder::setPreserveCompoundCurves(bool preserve)
+{
+    preserveCompoundCurves = preserve;
 }
 
 } // namespace geos.noding

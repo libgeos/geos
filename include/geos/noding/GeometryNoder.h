@@ -57,23 +57,28 @@ public:
 
     void setOnlyFirstGeomEdges(bool onlyFirstGeomEdges);
 
+    void setPreserveCompoundCurves(bool preserve);
+
     // Declare type as noncopyable
     GeometryNoder(GeometryNoder const&) = delete;
     GeometryNoder& operator=(GeometryNoder const&) = delete;
 
 private:
 
+    bool isInResult(const PathString& ps) const;
+
     const geom::Geometry* argGeom1;
     const geom::Geometry* argGeom2;
     const bool argGeomHasCurves;
+    bool argGeomHasCompoundCurves;
     bool onlyFirstGeomEdges;
+    bool preserveCompoundCurves;
 
     std::unique_ptr<Noder> noder;
     std::unique_ptr<algorithm::CircularArcIntersector> m_cai;
     std::unique_ptr<ArcIntersectionAdder> m_aia;
 
-    static void extractPathStrings(const geom::Geometry& g,
-                                   std::vector<std::unique_ptr<PathString>>& to);
+    void extractPathStrings(const geom::Geometry& g, std::vector<std::unique_ptr<PathString>>& to);
 
     Noder& getNoder();
 
@@ -83,4 +88,3 @@ private:
 
 } // namespace geos.noding
 } // namespace geos
-
