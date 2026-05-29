@@ -66,9 +66,9 @@ Inheritance diagram for geos::operation::linemerge::LineMergeGraph:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a9f986a3373947b64ff8655fd2f04ec3c" id="r_a9f986a3373947b64ff8655fd2f04ec3c"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1linemerge_1_1LineMergeGraph.html#a9f986a3373947b64ff8655fd2f04ec3c">addEdge</a> (const <a class="el" href="classgeos_1_1geom_1_1LineString.html">geom::LineString</a> *lineString)</td></tr>
-<tr class="memdesc:a9f986a3373947b64ff8655fd2f04ec3c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an Edge, DirectedEdges, and Nodes for the given LineString representation of an edge.  <br /></td></tr>
-<tr class="separator:a9f986a3373947b64ff8655fd2f04ec3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa533d9b97687208f4f90aa86a03f0479" id="r_aa533d9b97687208f4f90aa86a03f0479"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1linemerge_1_1LineMergeGraph.html#aa533d9b97687208f4f90aa86a03f0479">addEdge</a> (const geom::Curve *curve)</td></tr>
+<tr class="memdesc:aa533d9b97687208f4f90aa86a03f0479"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds an Edge, DirectedEdges, and Nodes for the given LineString/CircularString/CompoundCurve representation of an edge.  <br /></td></tr>
+<tr class="separator:aa533d9b97687208f4f90aa86a03f0479"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classgeos_1_1planargraph_1_1PlanarGraph"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classgeos_1_1planargraph_1_1PlanarGraph')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classgeos_1_1planargraph_1_1PlanarGraph.html">geos::planargraph::PlanarGraph</a></td></tr>
 <tr class="memitem:a01eaae76182f6582461a7a6e391269bc inherit pub_methods_classgeos_1_1planargraph_1_1PlanarGraph" id="r_a01eaae76182f6582461a7a6e391269bc"><td class="memItemLeft" align="right" valign="top">
 &#160;</td><td class="memItemRight" valign="bottom"><b>PlanarGraph</b> ()</td></tr>
@@ -170,8 +170,8 @@ std::vector&lt; <a class="el" href="classgeos_1_1planargraph_1_1DirectedEdge.htm
 <div class="textblock"><p>A planar graph of edges that is analyzed to sew the edges together. </p>
 <p>The <code>marked</code> flag on <a class="el" href="classgeos_1_1planargraph_1_1Edge.html" title="Represents an undirected edge of a PlanarGraph.">planargraph::Edge</a> and <a class="el" href="classgeos_1_1planargraph_1_1Node.html" title="A node in a PlanarGraph is a location where 0 or more Edge meet.">planargraph::Node</a> indicates whether they have been logically deleted from the graph. </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a9f986a3373947b64ff8655fd2f04ec3c" name="a9f986a3373947b64ff8655fd2f04ec3c"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9f986a3373947b64ff8655fd2f04ec3c">&#9670;&#160;</a></span>addEdge()</h2>
+<a id="aa533d9b97687208f4f90aa86a03f0479" name="aa533d9b97687208f4f90aa86a03f0479"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa533d9b97687208f4f90aa86a03f0479">&#9670;&#160;</a></span>addEdge()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -179,18 +179,18 @@ std::vector&lt; <a class="el" href="classgeos_1_1planargraph_1_1DirectedEdge.htm
         <tr>
           <td class="memname">void geos::operation::linemerge::LineMergeGraph::addEdge </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1LineString.html">geom::LineString</a> *&#160;</td>
-          <td class="paramname"><em>lineString</em></td><td>)</td>
+          <td class="paramtype">const geom::Curve *&#160;</td>
+          <td class="paramname"><em>curve</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
-<p>Adds an Edge, DirectedEdges, and Nodes for the given LineString representation of an edge. </p>
+<p>Adds an Edge, DirectedEdges, and Nodes for the given LineString/CircularString/CompoundCurve representation of an edge. </p>
 <p>Empty lines or lines with all coordinates equal are not added.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">lineString</td><td>the linestring to add to the graph </td></tr>
+    <tr><td class="paramname">curve</td><td>the curve to add to the graph </td></tr>
   </table>
   </dd>
 </dl>

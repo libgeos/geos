@@ -67,10 +67,10 @@ Inheritance diagram for geos::operation::linemerge::LineMergeEdge:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a6a44978a121b58af519b08d42fed72d1" id="r_a6a44978a121b58af519b08d42fed72d1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1linemerge_1_1LineMergeEdge.html#a6a44978a121b58af519b08d42fed72d1">LineMergeEdge</a> (const <a class="el" href="classgeos_1_1geom_1_1LineString.html">geom::LineString</a> *newLine)</td></tr>
-<tr class="separator:a6a44978a121b58af519b08d42fed72d1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5e540e2fc7a6b5274416aff5cd504706" id="r_a5e540e2fc7a6b5274416aff5cd504706"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="classgeos_1_1geom_1_1LineString.html">geom::LineString</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1linemerge_1_1LineMergeEdge.html#a5e540e2fc7a6b5274416aff5cd504706">getLine</a> () const</td></tr>
-<tr class="separator:a5e540e2fc7a6b5274416aff5cd504706"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8644c6bfa1c1281e17cb9cf46b87f6d9" id="r_a8644c6bfa1c1281e17cb9cf46b87f6d9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1linemerge_1_1LineMergeEdge.html#a8644c6bfa1c1281e17cb9cf46b87f6d9">LineMergeEdge</a> (const geom::Curve *newCurve)</td></tr>
+<tr class="separator:a8644c6bfa1c1281e17cb9cf46b87f6d9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aca075eb9db8897b82bcbe5dfa8bbbba0" id="r_aca075eb9db8897b82bcbe5dfa8bbbba0"><td class="memItemLeft" align="right" valign="top">const geom::Curve *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1linemerge_1_1LineMergeEdge.html#aca075eb9db8897b82bcbe5dfa8bbbba0">getCurve</a> () const</td></tr>
+<tr class="separator:aca075eb9db8897b82bcbe5dfa8bbbba0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classgeos_1_1planargraph_1_1Edge"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classgeos_1_1planargraph_1_1Edge')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classgeos_1_1planargraph_1_1Edge.html">geos::planargraph::Edge</a></td></tr>
 <tr class="memitem:a3af12e9de07e5cbe721b6cb6f20aaaf6 inherit pub_methods_classgeos_1_1planargraph_1_1Edge" id="r_a3af12e9de07e5cbe721b6cb6f20aaaf6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1planargraph_1_1Edge.html#a3af12e9de07e5cbe721b6cb6f20aaaf6">Edge</a> ()</td></tr>
 <tr class="memdesc:a3af12e9de07e5cbe721b6cb6f20aaaf6 inherit pub_methods_classgeos_1_1planargraph_1_1Edge"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructs a <a class="el" href="classgeos_1_1planargraph_1_1Edge.html" title="Represents an undirected edge of a PlanarGraph.">Edge</a> whose DirectedEdges are not yet set.  <br /></td></tr>
@@ -160,8 +160,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isVisitedVar</b></td>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>An edge of a <a class="el" href="classgeos_1_1operation_1_1linemerge_1_1LineMergeGraph.html" title="A planar graph of edges that is analyzed to sew the edges together.">LineMergeGraph</a>. The <code>marked</code> field indicates whether this Edge has been logically deleted from the graph. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
-<a id="a6a44978a121b58af519b08d42fed72d1" name="a6a44978a121b58af519b08d42fed72d1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6a44978a121b58af519b08d42fed72d1">&#9670;&#160;</a></span>LineMergeEdge()</h2>
+<a id="a8644c6bfa1c1281e17cb9cf46b87f6d9" name="a8644c6bfa1c1281e17cb9cf46b87f6d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8644c6bfa1c1281e17cb9cf46b87f6d9">&#9670;&#160;</a></span>LineMergeEdge()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -169,32 +169,32 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>isVisitedVar</b></td>
         <tr>
           <td class="memname">geos::operation::linemerge::LineMergeEdge::LineMergeEdge </td>
           <td>(</td>
-          <td class="paramtype">const <a class="el" href="classgeos_1_1geom_1_1LineString.html">geom::LineString</a> *&#160;</td>
-          <td class="paramname"><em>newLine</em></td><td>)</td>
+          <td class="paramtype">const geom::Curve *&#160;</td>
+          <td class="paramname"><em>newCurve</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Constructs a <a class="el" href="classgeos_1_1operation_1_1linemerge_1_1LineMergeEdge.html" title="An edge of a LineMergeGraph. The marked field indicates whether this Edge has been logically deleted ...">LineMergeEdge</a> with vertices given by the specified LineString. </p>
+<p>Constructs a <a class="el" href="classgeos_1_1operation_1_1linemerge_1_1LineMergeEdge.html" title="An edge of a LineMergeGraph. The marked field indicates whether this Edge has been logically deleted ...">LineMergeEdge</a> with vertices given by the specified Curve. </p>
 
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
-<a id="a5e540e2fc7a6b5274416aff5cd504706" name="a5e540e2fc7a6b5274416aff5cd504706"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5e540e2fc7a6b5274416aff5cd504706">&#9670;&#160;</a></span>getLine()</h2>
+<a id="aca075eb9db8897b82bcbe5dfa8bbbba0" name="aca075eb9db8897b82bcbe5dfa8bbbba0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aca075eb9db8897b82bcbe5dfa8bbbba0">&#9670;&#160;</a></span>getCurve()</h2>
 
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const <a class="el" href="classgeos_1_1geom_1_1LineString.html">geom::LineString</a> * geos::operation::linemerge::LineMergeEdge::getLine </td>
+          <td class="memname">const geom::Curve * geos::operation::linemerge::LineMergeEdge::getCurve </td>
           <td>(</td>
           <td class="paramname"></td><td>)</td>
           <td> const</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns the LineString specifying the vertices of this edge. </p>
+<p>Returns the Curve specifying the vertices of this edge. </p>
 
 </div>
 </div>
