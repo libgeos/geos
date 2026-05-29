@@ -31,8 +31,10 @@
 #include <geos/geom/Location.h>
 
 #include <geos/algorithm/locate/SimplePointInAreaLocator.h>
+#include <geos/util.h>
 
 #include <memory>
+
 
 //using namespace geos::geom::util;
 
@@ -282,6 +284,8 @@ public:
 bool
 RectangleIntersects::intersects(const geom::Geometry& geom)
 {
+    util::ensureNoCurvedComponents(geom);
+
     if(!rectEnv.intersects(geom.getEnvelopeInternal())) {
         return false;
     }
