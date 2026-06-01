@@ -256,5 +256,18 @@ void object::test<13>()
     ensure_equals(GEOSIntersects(geom2_, geom1_), 0);
 }
 
+template<>
+template<>
+void object::test<14>()
+{
+    set_test_name("curved geometries not supported by RectangleIntersects");
+
+    geom1_ = fromWKT("POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0))");
+    geom2_ = fromWKT("CIRCULARSTRING (5 0, 10 5, 15 0)");
+
+    ensure_equals(GEOSIntersects(geom1_, geom2_), 2);
+    ensure_equals(GEOSIntersects(geom2_, geom1_), 2);
+}
+
 } // namespace tut
 
