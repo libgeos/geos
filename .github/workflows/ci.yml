@@ -197,7 +197,7 @@ jobs:
         python3 -m pip install --disable-pip-version-check --user cmake==${{ matrix.ci.cmake }}
         echo "$(python3 -m site --user-base)/bin" >> $GITHUB_PATH
 
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v6.0.2
 
     - name: Retrieve build cache
       uses: actions/cache/restore@v5
@@ -281,7 +281,7 @@ jobs:
         build_type: ['Debug', 'Release']
 
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v6.0.2
 
     - name: 'Setup'
       uses: msys2/setup-msys2@v2
@@ -337,7 +337,7 @@ jobs:
             arch: arm64
   
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v6.0.2
 
     # ccache not supported for this generator and/or Debug
 
@@ -378,7 +378,7 @@ jobs:
     runs-on: ${{ matrix.ci.os }}
     steps:
 
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v6.0.2
 
     - name: Retrieve build cache
       uses: actions/cache/restore@v5
@@ -459,7 +459,7 @@ jobs:
         which clang++
         clang++ --version
 
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v6.0.2
 
     - name: Retrieve build cache
       uses: actions/cache/restore@v5
@@ -495,7 +495,7 @@ jobs:
     name: FreeBSD
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v6.0.2
 
     - name: Retrieve build cache
       uses: actions/cache/restore@v5
@@ -506,7 +506,7 @@ jobs:
         restore-keys: freebsd
 
     - name: Build and test
-      uses: vmactions/freebsd-vm@v1
+      uses: vmactions/freebsd-vm@v1.4.5
       with:
         release: "15.0"
         envs: CCACHE_COMPRESS CCACHE_COMPRESSLEVEL CCACHE_MAXSIZE
@@ -540,7 +540,7 @@ jobs:
         sudo -E apt-get autopurge -y needrestart
         sudo -E apt-get -yq --no-install-suggests --no-install-recommends install make cmake emscripten ccache
 
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v6.0.2
 
     - name: Retrieve build cache
       uses: actions/cache/restore@v5
@@ -582,7 +582,7 @@ jobs:
         sudo -E apt-get -yq --no-install-suggests --no-install-recommends install cppcheck
         python3 -m pip install --disable-pip-version-check --user codespell
 
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v6.0.2
 
     - name: 'cppcheck'
       run: ./tools/cppcheck.sh
@@ -605,7 +605,7 @@ jobs:
         python3 -m pip install --disable-pip-version-check --user cmake==3.15.*
         echo "$(python3 -m site --user-base)/bin" >> $GITHUB_PATH
 
-    - uses: actions/checkout@v6
+    - uses: actions/checkout@v6.0.2
       with:
         path: geos
 
