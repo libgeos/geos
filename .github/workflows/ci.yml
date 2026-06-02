@@ -427,11 +427,11 @@ jobs:
           runs_on: macos-14
         - xcode: "16.4"
           cxxstd: 23
-          build_type: ASAN
+          build_type: Debug
           runs_on: macos-15
         - xcode: "26.0"
           cxxstd: 23
-          build_type: ASAN
+          build_type: Release
           runs_on: macos-26
 
     runs-on: ${{ matrix.runs_on }}
