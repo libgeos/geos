@@ -96,6 +96,15 @@ jobs:
           cmake: 3.31.*
           os: ubuntu-24.04
 
+        - cxx_compiler: g++-15
+          c_compiler: gcc-15
+          build_type: Debug
+          cxxstd: 20
+          arch: 64
+          packages: 'g++-15-multilib gcc-15-multilib'
+          cmake: 4.2.*
+          os: ubuntu-24.04
+
           # clang 10 and lower are not supported
           # in ubuntu 22.04 and higher
 
@@ -172,6 +181,15 @@ jobs:
           arch: 64
           packages: 'clang-19'
           cmake: 3.30.*
+          os: ubuntu-24.04
+
+        - cxx_compiler: clang++-20
+          c_compiler: clang-20
+          build_type: Debug
+          cxxstd: 20
+          arch: 64
+          packages: 'clang-20'
+          cmake: 4.2.*
           os: ubuntu-24.04
 
 
