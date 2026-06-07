@@ -235,55 +235,39 @@ CircularArcIntersector::intersects(const CircularArc& arc1, const CircularArc& a
     if (a == 0 || (d == 0 && r1 == r2)) {
         computeCocircularIntersection(arc1, arc2);
     } else {
-        // Explicitly add endpoint intersections that may be missed or inexactly computed.
-        if (arc1.p0().equals2D(arc2.p0()) && !hasIntersection(arc1.p0())) {
-            addArcArcIntersectionPoint(arc1.p0(), arc1, arc2);
+        // Compute interior intersection points.
+        const double dx = c2.x-c1.x;
+        const double dy = c2.y-c1.y;
+
+        // point where a line between the two circle center points intersects
+        // the radical line
+        CoordinateXY p{c1.x + a* dx/d, c1.y+a* dy/d};
+
+        // distance from p to the intersection points
+        const double h = std::sqrt(r1*r1 - a*a);
+
+        CoordinateXY isect0{p.x + h* dy/d, p.y - h* dx/d };
+        CoordinateXY isect1{p.x - h* dy/d, p.y + h* dx/d };
+
+        // Check to see if computed intersection points are inexact versions of an endpoint intersection
+        const CoordinateXY& ap0 = arc1.p0();
+        const CoordinateXY& ap2 = arc1.p2();
+        const CoordinateXY& bp0 = arc2.p0();
+        const CoordinateXY& bp2 = arc2.p2();
+
+        if (ap0 == bp0 || ap0 == bp2) {
+            closestPoint(isect0, isect1, 2, ap0) = ap0;
         }
-        if (arc1.p0().equals2D(arc2.p2()) && !hasIntersection(arc1.p0())) {
-            addArcArcIntersectionPoint(arc1.p0(), arc1, arc2);
-        }
-        if (arc1.p2().equals2D(arc2.p0()) && !hasIntersection(arc1.p2())) {
-            addArcArcIntersectionPoint(arc1.p2(), arc1, arc2);
-        }
-        if (arc1.p2().equals2D(arc2.p2()) && !hasIntersection(arc1.p2())) {
-            addArcArcIntersectionPoint(arc1.p2(), arc1, arc2);
+        if (ap2 == bp0 || ap2 == bp2) {
+            closestPoint(isect0, isect1, 2, ap2) = ap2;
         }
 
-        if (nPt < 2) {
-            // Compute interior intersection points.
-            const double dx = c2.x-c1.x;
-            const double dy = c2.y-c1.y;
+        if (arc1.containsPointOnCircle(isect0) && arc2.containsPointOnCircle(isect0)) {
+            addArcArcIntersectionPoint(isect0, arc1, arc2);
+        }
 
-            // point where a line between the two circle center points intersects
-            // the radical line
-            CoordinateXY p{c1.x + a* dx/d, c1.y+a* dy/d};
-
-            // distance from p to the intersection points
-            const double h = std::sqrt(r1*r1 - a*a);
-
-            CoordinateXY isect0{p.x + h* dy/d, p.y - h* dx/d };
-            CoordinateXY isect1{p.x - h* dy/d, p.y + h* dx/d };
-
-            // One of the computed intersection points may be an inexact version of an endpoint.
-            // If we already have an endpoint intersection, we need to process the farther-away
-            // computed point first.
-            if (nPt == 1 && intPt[0].distance(isect0) < intPt[0].distance(isect1)) {
-                std::swap(isect0, isect1);
-            }
-
-            for (const CoordinateXY& computedIntPt : {isect0, isect1}) {
-                if (nPt > 0 && computedIntPt.equals2D(intPt[0])) {
-                    continue;
-                }
-
-                if (nPt > 1) {
-                    continue;
-                }
-
-                if (arc1.containsPointOnCircle(computedIntPt) && arc2.containsPointOnCircle(computedIntPt)) {
-                    addArcArcIntersectionPoint(computedIntPt, arc1, arc2);
-                }
-            }
+        if (isect1 != isect0 && arc1.containsPointOnCircle(isect1) && arc2.containsPointOnCircle(isect1)) {
+            addArcArcIntersectionPoint(isect1, arc1, arc2);
         }
     }
 
