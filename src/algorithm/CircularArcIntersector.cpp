@@ -427,38 +427,46 @@ CircularArcIntersector::addCocircularIntersection(double startAngle, double endA
     CoordinateXYZM computedMidPt(CircularArcs::createPoint(center, radius, theta1));
     CoordinateXYZM computedEndPt(CircularArcs::createPoint(center, radius, endAngle));
 
-    if (precisionModel) {
-        precisionModel->makePrecise(computedStartPt);
-        precisionModel->makePrecise(computedMidPt);
-        precisionModel->makePrecise(computedEndPt);
-    }
-
     // Check to see if the endpoints of the intersection match the endpoints of either of
     // the input arcs. Use angles for the check to avoid missing an endpoint intersection from
     // inaccuracy in the point construction.
-    if (startAngle == arc1.theta0()) {
+    if (startAngle == Angle::normalizePositive(arc1.theta0())) {
+        computedStartPt = arc1.p0();
         setFromEndpoint(computedStartPt, arc1, 0);
-    } else if (startAngle == arc1.theta2()) {
+    } else if (startAngle == Angle::normalizePositive(arc1.theta2())) {
+        computedStartPt = arc1.p2();
         setFromEndpoint(computedStartPt, arc1, 2);
-    } else if (startAngle == arc2.theta0()) {
+    } else if (startAngle == Angle::normalizePositive(arc2.theta0())) {
+        computedStartPt = arc2.p0();
         setFromEndpoint(computedStartPt, arc2, 0);
-    } else if (startAngle == arc2.theta2()) {
+    } else if (startAngle == Angle::normalizePositive(arc2.theta2())) {
+        computedStartPt = arc2.p2();
         setFromEndpoint(computedStartPt, arc2, 2);
     }
 
-    if (endAngle == arc1.theta0()) {
+    if (endAngle == Angle::normalizePositive(arc1.theta0())) {
+        computedEndPt = arc1.p0();
         setFromEndpoint(computedEndPt, arc1, 0);
-    } else if (endAngle == arc1.theta2()) {
+    } else if (endAngle == Angle::normalizePositive(arc1.theta2())) {
+        computedEndPt = arc1.p2();
         setFromEndpoint(computedEndPt, arc1, 2);
-    } else if (endAngle == arc2.theta0()) {
+    } else if (endAngle == Angle::normalizePositive(arc2.theta0())) {
+        computedEndPt = arc2.p0();
         setFromEndpoint(computedEndPt, arc2, 0);
-    } else if (endAngle == arc2.theta2()) {
+    } else if (endAngle == Angle::normalizePositive(arc2.theta2())) {
+        computedEndPt = arc2.p2();
         setFromEndpoint(computedEndPt, arc2, 2);
     }
 
     interpolateZM(arc1, arc2, computedStartPt);
     interpolateZM(arc1, arc2, computedMidPt);
     interpolateZM(arc1, arc2, computedEndPt);
+
+    if (precisionModel) {
+        precisionModel->makePrecise(computedStartPt);
+        precisionModel->makePrecise(computedMidPt);
+        precisionModel->makePrecise(computedEndPt);
+    }
 
     auto seq = std::make_unique<CoordinateSequence>(3, constructZ, constructM);
     seq->setAt(computedStartPt, 0);

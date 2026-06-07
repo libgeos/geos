@@ -1733,6 +1733,26 @@ void object::test<86>()
 }
 
 
+template<>
+template<>
+void object::test<87>()
+{
+    set_test_name("arc intersected with itself yields arc with identical endpoints");
+
+    CircularArcIntersector cai;
+
+    auto arc = CircularArc::create(XY{0, 0}, XY{2, 0}, XY{2, 1});
+
+    cai.intersects(arc, arc);
+
+    ensure_equals(cai.getNumArcs(), 1u);
+
+    const CircularArc& arcOut = cai.getArc(0);
+
+    ensure_equals(arc.p0(), arcOut.p0());
+    ensure_equals(arc.p2(), arcOut.p2());
+}
+
 // TODO: check Z values of arc result centerpoints
 // TODO: add tests for seg/seg
 
