@@ -65,6 +65,21 @@ public:
     static void interpolateZM(const geom::CoordinateSequence &seq, size_t i0, const geom::CoordinateXY &center, bool isCCW, geom::CoordinateXY &pt, double
                               &z, double &m);
 
+    /** Determines whether and where a circle intersects a line.
+     *
+     * @param center The center point of the circle
+     * @param r The radius of the circle
+     * @param p0 One point defining a line of infinite length
+     * @param p1 Second point defining a line of infinite length
+     * @param isect0 Set to the first intersection point, if it exists
+     * @param isect1 Set to the second intersection point, if it exists
+     * @return The number of intersection points
+     */
+    static int
+    circleIntersectsLine(const geom::CoordinateXY& center, double r,
+                         const geom::CoordinateXY& p0, const geom::CoordinateXY& p1,
+                         geom::CoordinateXY& isect0, geom::CoordinateXY& isect1);
+
     /** Determines whether and where a circle intersects a line segment.
      *
      * @param center The center point of the circle

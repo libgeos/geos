@@ -309,21 +309,25 @@ CircularArcs::expandEnvelope(geom::Envelope& e, const geom::CoordinateXY& p0, co
 }
 
 int
-CircularArcs::circleIntersectsSegment(const CoordinateXY& center, double r,
-                                      const CoordinateXY& p0, const CoordinateXY& p1,
-                                      CoordinateXY& ret0, CoordinateXY& ret1)
+CircularArcs::circleIntersectsLine(const geom::CoordinateXY& center, double r,
+                        const geom::CoordinateXY& p0, const geom::CoordinateXY& p1,
+                        geom::CoordinateXY& isect0, geom::CoordinateXY& isect1)
 {
     const double& x0 = center.x;
     const double& y0 = center.y;
 
-    Envelope segEnv(p0, p1);
-
-    CoordinateXY isect0, isect1;
-    int n = 0;
-
     if (p1.x == p0.x) {
         // vertical line
         double x = p1.x;
+
+        if (p1.x > x0 + r || p1.x < x0 - r) {
+            return 0;
+        }
+
+        if (p1.x == x0 + r || p1.x == x0 - r) {
+            isect0 = {p1.x, y0};
+            return 1;
+        }
 
         double A = 1;
         double B = -2*y0;
@@ -335,41 +339,73 @@ CircularArcs::circleIntersectsSegment(const CoordinateXY& center, double r,
 
         isect0 = {x, Y1};
         isect1 = {x, Y2};
+
+        return 2;
     }
-    else {
-        double m = (p1.y - p0.y) / (p1.x - p0.x);
-        double b = p1.y - p1.x*m;
 
-        // Ax^2 + Bx + C = 0
-        double A = 1 + m*m;
-        double B = -2*x0 + 2*m*b - 2*m*y0;
-        double C = x0*x0 + b*b - 2*b*y0 + y0*y0 - r*r;
+    const double m = (p1.y - p0.y) / (p1.x - p0.x);
+    const double b = p1.y - p1.x*m;
 
-        double d = std::sqrt(B*B - 4*A*C);
-        double X1 = (-B + d)/(2*A);
-        double X2 = (-B - d)/(2*A);
+    // Take equation defining circle: (x - x0)^2 + (y - y0)^2 = r^2
+    // Substitute in equation defining line: y = mx + b
+    // Rearrange into standard quadratic form:  Ax^2 + Bx + C = 0
+    const double A = 1 + m*m;
+    const double B = -2*x0 + 2*m*b - 2*m*y0;
+    const double C = x0*x0 + b*b - 2*b*y0 + y0*y0 - r*r;
 
-        // TODO use robust quadratic solver such as https://github.com/archermarx/quadratic ?
-        // auto [X1, X2] = quadratic::solve(A, B, C);
+    const double dd = B*B - 4*A*C;
 
-        isect0 = {X1, m* X1 + b};
-        isect1 = {X2, m* X2 + b};
+    if (dd < 0) {
+        return 0;
     }
+
+    // TODO use robust quadratic solver such as https://github.com/archermarx/quadratic ?
+    // auto [X1, X2] = quadratic::solve(A, B, C);
+
+    const double d = std::sqrt(dd);
+    const double X1 = (-B + d)/(2*A);
+    const double X2 = (-B - d)/(2*A);
+
+    isect0 = {X1, m* X1 + b};
+    if (d == 0) {
+        return 1;
+    }
+
+    isect1 = {X2, m* X2 + b};
+    return 2;
+}
+
+int
+CircularArcs::circleIntersectsSegment(const CoordinateXY& center, double r,
+                                      const CoordinateXY& p0, const CoordinateXY& p1,
+                                      CoordinateXY& ret0, CoordinateXY& ret1)
+{
+    CoordinateXY isect0, isect1;
+
+    auto n = circleIntersectsLine(center, r, p0, p1, isect0, isect1);
+
+    if (n == 0) {
+        return 0;
+    }
+
+    Envelope segEnv(p0, p1);
 
     if (segEnv.intersects(isect0)) {
         ret0 = isect0;
-        if (segEnv.intersects(isect1) && !isect1.equals2D(isect0)) {
+        if (n > 1 && segEnv.intersects(isect1)) {
             ret1 = isect1;
-            n = 2;
-        } else {
-            n = 1;
+            return 2;
         }
-    } else if (segEnv.intersects(isect1)) {
-        ret0 = isect1;
-        n = 1;
+
+        return 1;
     }
 
-    return n;
+    if (segEnv.intersects(isect1)) {
+        ret0 = isect1;
+        return 1;
+    }
+
+    return 0;
 }
 
 bool

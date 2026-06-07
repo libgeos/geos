@@ -101,6 +101,23 @@ CircularArcIntersector::hasIntersection(const geom::CoordinateXY &p) const {
     return false;
 }
 
+static CoordinateXY&
+closestPoint(CoordinateXY& p0, CoordinateXY& p1, int n, const CoordinateXY& q)
+{
+    if (n < 2) {
+        return p0;
+    }
+
+    const double d0 = p0.distance(q);
+    const double d1 = p1.distance(q);
+
+    if (d0 < d1) {
+        return p0;
+    }
+
+    return p1;
+}
+
 void
 CircularArcIntersector::intersects(const CircularArc& arc, const CoordinateSequence& seq, std::size_t segPos0, std::size_t segPos1, bool useSegEndpoints)
 {
@@ -117,14 +134,35 @@ CircularArcIntersector::intersects(const CircularArc& arc, const CoordinateSeque
     const CoordinateXY& c = arc.getCenter();
     const double r = arc.getRadius();
 
-    CoordinateXYZM isect0, isect1;
-    auto n = CircularArcs::circleIntersectsSegment(c, r, seq.getAt<CoordinateXY>(segPos0), seq.getAt<CoordinateXY>(segPos1), isect0, isect1);
+    CoordinateXY isect0, isect1;
+    const auto nPointsIntersectingLine = CircularArcs::circleIntersectsLine(c, r, seq.getAt<CoordinateXY>(segPos0), seq.getAt<CoordinateXY>(segPos1), isect0, isect1);
 
-    if (n > 0 && arc.containsPointOnCircle(isect0)) {
+    if (nPointsIntersectingLine == 0) {
+        result = NO_INTERSECTION;
+        return;
+    }
+
+    // Check for exact endpoint-endpoint intersections
+    // If found, replace the computed intersection points with an exact endpoint
+    const CoordinateXY& ap0 = arc.p0<CoordinateXY>();
+    const CoordinateXY& ap2 = arc.p2<CoordinateXY>();
+    const CoordinateXY& bp0 = seq.getAt<CoordinateXY>(segPos0);
+    const CoordinateXY& bp1 = seq.getAt<CoordinateXY>(segPos1);
+
+    if (ap0 == bp0 || ap0 == bp1) {
+        closestPoint(isect0, isect1, nPointsIntersectingLine, ap0) = ap0;
+    }
+    if (ap2 == bp0 || ap2 == bp1) {
+        closestPoint(isect0, isect1, nPointsIntersectingLine, ap2) = ap2;
+    }
+
+    Envelope segEnv(bp0, bp1);
+
+    if (nPointsIntersectingLine > 0 && segEnv.contains(isect0) && arc.containsPointOnCircle(isect0)) {
         addArcSegmentIntersectionPoint(isect0, arc, seq, segPos0, segPos1, useSegEndpoints);
     }
 
-    if (n > 1  && arc.containsPointOnCircle(isect1)) {
+    if (nPointsIntersectingLine > 1 && segEnv.contains(isect1) && arc.containsPointOnCircle(isect1)) {
         addArcSegmentIntersectionPoint(isect1, arc, seq, segPos0, segPos1, useSegEndpoints);
     }
 

@@ -1712,6 +1712,26 @@ void object::test<85>()
     ensure_equals(cai1.getPoint(0), cai2.getPoint(0));
 }
 
+template<>
+template<>
+void object::test<86>()
+{
+    // arc/segment with single endpoint intersection
+
+    CircularArcIntersector cai;
+
+    auto arc = CircularArc::create(XY{-0.84333168960872817, -0.1241204385865409}, XY{-0.96461319189094762, -0.20729352391791989}, XY{-1.1087328289561522, -0.23655946199558511});
+
+    CoordinateSequence seg{
+     XY{-1.277492733105557, 0.28999497465537871}, XY{-0.84333168960872817, -0.1241204385865409}};
+
+    cai.intersects(arc, seg, 0, 1, false);
+
+    ensure_equals(cai.getNumPoints(), 1u);
+    // ensure endpoint intersection is represented exactly, not with distance() == 0
+    ensure_equals(cai.getPoint(0), seg.getAt<CoordinateXY>(1));
+}
+
 
 // TODO: check Z values of arc result centerpoints
 // TODO: add tests for seg/seg
