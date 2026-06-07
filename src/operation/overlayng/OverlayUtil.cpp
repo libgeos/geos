@@ -348,7 +348,7 @@ OverlayUtil::getDirectionPoint(const CoordinateSequence& pts, bool forward, bool
             return arc.getDirectionPoint();
         } else {
             CircularArc arc(pts, pts.size() - 3);
-            return algorithm::CircularArcs::getDirectionPoint(arc.getCenter(), arc.getRadius(), arc.theta2(), !arc.isCCW());
+            return arc.getReverseDirectionPoint();
         }
     }
 

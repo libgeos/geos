@@ -110,6 +110,8 @@ public:
     /// line tangent to the arc at the origin point.
     CoordinateXY getDirectionPoint() const;
 
+    CoordinateXY getReverseDirectionPoint() const;
+
     Envelope getEnvelope() const;
 
     /// Return the length of the arc

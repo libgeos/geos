@@ -317,6 +317,16 @@ CircularArc::getDirectionPoint() const
     return CircularArcs::getDirectionPoint(getCenter(), getRadius(), theta0(), getOrientation() == algorithm::Orientation::COUNTERCLOCKWISE);
 }
 
+CoordinateXY
+CircularArc::getReverseDirectionPoint() const
+{
+    if (isLinear()) {
+        return p0();
+    }
+
+    return CircularArcs::getDirectionPoint(getCenter(), getRadius(), theta2(), getOrientation() != algorithm::Orientation::COUNTERCLOCKWISE);
+}
+
 Envelope
 CircularArc::getEnvelope() const
 {
