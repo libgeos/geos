@@ -21,6 +21,8 @@
 using geos::geom::CoordinateXYZM;
 using geos::geom::CircularArc;
 
+#define DEBUG_NODABLE_ARC_STRING 0
+
 namespace geos::noding {
 
 static double
@@ -41,11 +43,21 @@ NodableArcString::NodableArcString(std::vector<geom::CircularArc> arcs, const st
 {
 }
 
-static
-std::vector<CoordinateXYZM> prepareArcPoints(const CircularArc& arc, std::vector<CoordinateXYZM> splitPoints)
+struct SplitPoints {
+
+    std::vector<CoordinateXYZM> points{};
+    bool splitStart{false};
+    bool splitEnd{false};
+};
+
+static SplitPoints
+prepareArcPoints(const CircularArc& arc, std::vector<CoordinateXYZM> splitPoints)
 {
     const bool isCCW = arc.getOrientation() == algorithm::Orientation::COUNTERCLOCKWISE;
     const geom::CoordinateXY& center = arc.getCenter();
+
+    bool splitStart = false;
+    bool splitEnd = false;
 
     // Some potential split points may be skipped, for example, if they would create an arc section that is
     // too short to have a constructed midpoint. Because the results of this logic could depend on the
@@ -65,7 +77,17 @@ std::vector<CoordinateXYZM> prepareArcPoints(const CircularArc& arc, std::vector
         double pa0 = geom::Quadrant::pseudoAngle(center, p0);
         double pa1 = geom::Quadrant::pseudoAngle(center, p1);
 
-        return pseudoAngleDiffCCW(paStart, pa0) < pseudoAngleDiffCCW(paStart, pa1);
+        double diff0 = pseudoAngleDiffCCW(paStart, pa0);
+        double diff1 = pseudoAngleDiffCCW(paStart, pa1);
+
+        if (diff0 < diff1) {
+            return true;
+        }
+        if (diff0 > diff1) {
+            return false;
+        }
+
+        return p0 < p1;
     });
 
     // Add ending point of input arc
@@ -75,20 +97,50 @@ std::vector<CoordinateXYZM> prepareArcPoints(const CircularArc& arc, std::vector
         splitPoints.push_back(p2);
     }
 
+#if DEBUG_NODABLE_ARC_STRING
+    std::cout << std::setprecision(17);
+    std::cout << std::endl;
+    std::cout << "Edge from " << arc.p0() << " to " << arc.p2() << " has " << splitPoints.size() << " potential split points:" << std::endl;
+    std::cout << "Edge is CIRCULARSTRING " << *arc.getCoordinateSequence() << std::endl;
+    std::cout << "Start point is " << retained.back() << " pa " << paStart << std::endl;
+    std::cout << "Potential split points:" << std::endl;
+    for (std::size_t i = 0; i < splitPoints.size(); i++) {
+        std::cout << "  " << splitPoints[i] << " paDiff " << pseudoAngleDiffCCW(paStart, geom::Quadrant::pseudoAngle(center, splitPoints[i]));
+        if (i > 0) {
+            std::cout << "     " << splitPoints[i].distance(splitPoints[i-1]);
+        }
+        std::cout << std::endl;
+    }
+#endif
+
     for (const auto& p2 : splitPoints) {
         auto& p0 = retained.back();
 
+#if DEBUG_NODABLE_ARC_STRING
+        std::cout << "p0 = " << p0 << std::endl;
+#endif
+
         if (p2.equals2D(p0)) {
+#if DEBUG_NODABLE_ARC_STRING
+            std::cout << "Split point " << p2 << " equal to start point " << p0 << std::endl;
+#endif
             if (std::isnan(p0.z) && !std::isnan(p2.z)) {
                 p0.z = p2.z;
             }
             if (std::isnan(p0.m) && !std::isnan(p2.m)) {
                 p0.m = p2.m;
             }
+
+            if (retained.size() == 1) {
+                splitStart = true;
+            }
             continue;
         }
 
         if (!arc.containsPointOnCircle(p2)) {
+#if DEBUG_NODABLE_ARC_STRING
+            std::cout << "Skipping split point " << p2 << " because it is outside of the arc" << std::endl;
+#endif
             continue;
         }
 
@@ -98,6 +150,22 @@ std::vector<CoordinateXYZM> prepareArcPoints(const CircularArc& arc, std::vector
         const geom::CoordinateXY p1 = algorithm::CircularArcs::getMidpoint(p0, p2, center, arc.getRadius(), true);
 
         if (p1.equals2D(p0) || p1.equals2D(p2)) {
+#if DEBUG_NODABLE_ARC_STRING
+            std::cout << "Skipping split point " << p2 << " because the calculated arc midpoint " << p1 << " equals one of the endpoints" << std::endl;
+#endif
+            if (retained.size() == 1) {
+                splitStart = true;
+            }
+            continue;
+        }
+
+        if (algorithm::Orientation::index(p1, p0, p2) == algorithm::Orientation::COLLINEAR) {
+#if DEBUG_NODABLE_ARC_STRING
+            std::cout << "Skipping split point " << p2 << " because the calculated arc midpoint " << p1 << " is collinear with the endpoints" << std::endl;
+#endif
+            if (retained.size() == 1) {
+                splitStart = true;
+            }
             continue;
         }
 
@@ -106,10 +174,19 @@ std::vector<CoordinateXYZM> prepareArcPoints(const CircularArc& arc, std::vector
         const double t1 = algorithm::Angle::normalizePositive(algorithm::CircularArcs::getAngle(p1, center));
         const double t2 = algorithm::Angle::normalizePositive(isCCW ? arc.theta2() : arc.theta0());
 
-        if (!algorithm::Angle::isWithinCCW(t1, t0, t2)) {
+        if (!algorithm::Angle::isWithinCCW(t1, t0, t2)) { // != isCCW) {
+#if DEBUG_NODABLE_ARC_STRING
+            std::cout << "Skipping split point " << p2 << " because the calculated arc midpoint " << p1 << " does not fall within the arc from " << p0 << " to " << p2 << std::endl;
+#endif
+            if (retained.size() == 1) {
+                splitStart = true;
+            }
             continue;
         }
 
+#if DEBUG_NODABLE_ARC_STRING
+        std::cout << "Keeping split point " << p2 << std::endl;
+#endif
         retained.push_back(p2);
     }
 
@@ -120,6 +197,7 @@ std::vector<CoordinateXYZM> prepareArcPoints(const CircularArc& arc, std::vector
         CoordinateXYZM& back = retained.back();
 
         if (!back.equals2D(p2)) {
+            splitEnd = true;
             back.x = p2.x;
             back.y = p2.y;
         }
@@ -133,15 +211,75 @@ std::vector<CoordinateXYZM> prepareArcPoints(const CircularArc& arc, std::vector
 
     if (!isCCW) {
         std::reverse(retained.begin(), retained.end());
+        std::swap(splitStart, splitEnd);
     }
 
-    return retained;
+#if DEBUG_NODABLE_ARC_STRING
+    std::cout << "Retained split points:" << std::endl;
+    for (std::size_t i = 0; i < retained.size(); i++) {
+        std::cout << "  " << retained[i] << " paDiff " << pseudoAngleDiffCCW(paStart, geom::Quadrant::pseudoAngle(center, retained[i]));
+        if (i > 0) {
+            std::cout << "     " << retained[i].distance(retained[i-1]);
+        }
+        std::cout << std::endl;
+    }
+#endif
+
+    return SplitPoints{std::move(retained), splitStart, splitEnd};
 }
+
+class ArcBuilder {
+
+public:
+
+    ArcBuilder(std::vector<std::unique_ptr<ArcString>>& splitArcs, const void* data, bool constructZ, bool constructM) :
+        m_data(data),
+        m_splitArcs(splitArcs),
+        m_constructZ(constructZ),
+        m_constructM(constructM) {}
+
+    void addArc(const CoordinateXYZM& p0, const CoordinateXYZM& p1, const CoordinateXYZM& p2, const geom::CoordinateXY& center, double radius, int orientation) {
+        if (!m_coords) {
+            m_coords = std::make_unique<geom::CoordinateSequence>(0, m_constructZ, m_constructM);
+        }
+
+        m_coords->add(p0, false);
+        m_coords->add(p1, false);
+        m_coords->add(p2, false);
+
+        m_arcs.emplace_back(*m_coords, m_coords->getSize() - 3, center, radius, orientation);
+    }
+
+    void addArc(const geom::CoordinateSequence& seq, std::size_t pos, const geom::CoordinateXY& center, double radius, int orientation) {
+        if (!m_coords) {
+            m_coords = std::make_unique<geom::CoordinateSequence>(0, m_constructZ, m_constructM);
+        }
+
+        m_coords->add(seq, pos, pos + 2, false);
+        m_arcs.emplace_back(*m_coords, m_coords->getSize() - 3, center, radius, orientation);
+    }
+
+    void finish() {
+        if (m_arcs.empty()) {
+            return;
+        }
+
+        m_splitArcs.push_back(std::make_unique<NodableArcString>(std::move(m_arcs), std::move(m_coords), m_constructZ, m_constructM, m_data));
+        m_arcs = std::vector<CircularArc>();
+    }
+
+private:
+    const void* m_data;
+    std::vector<std::unique_ptr<ArcString>>& m_splitArcs;
+    std::vector<CircularArc> m_arcs;
+    std::unique_ptr<geom::CoordinateSequence> m_coords;
+    const bool m_constructZ;
+    const bool m_constructM;
+};
 
 void
 NodableArcString::getNoded(std::vector<std::unique_ptr<ArcString>>& splitArcs) {
-    auto dstSeq = std::make_unique<geom::CoordinateSequence>(0, m_constructZ, m_constructM);
-    std::vector<geom::CircularArc> arcs;
+    ArcBuilder builder(splitArcs, getData(), m_constructZ, m_constructM);
 
     for (size_t arcIndex = 0; arcIndex < m_arcs.size(); arcIndex++) {
         const CircularArc& toSplit = m_arcs[arcIndex];
@@ -149,36 +287,28 @@ NodableArcString::getNoded(std::vector<std::unique_ptr<ArcString>>& splitArcs) {
         const double radius = toSplit.getRadius();
         const int orientation = toSplit.getOrientation();
 
-        bool arcIsSplit = true;
-        bool createArcString = true;
-        const bool preserveControlPoint = true;
-        std::vector<CoordinateXYZM> arcPoints;
-        const auto it = m_adds.find(arcIndex);
-        if (it == m_adds.end()) {
-            arcIsSplit = false;
-            createArcString = false;
-        } else {
-            arcPoints = prepareArcPoints(toSplit, it->second);
+        SplitPoints split;
 
-            if (arcPoints.size() == 2) {
-                // All added nodes collapsed
-                // Still need to know if arc was split.
-                arcIsSplit = false;
-            }
+        const bool preserveControlPoint = true;
+
+        const auto it = m_adds.find(arcIndex);
+        if (it != m_adds.end()) {
+            split = prepareArcPoints(toSplit, it->second);
         }
 
-        if (preserveControlPoint && !arcIsSplit) {
+        if (split.splitStart) {
+            builder.finish();
+        }
+
+        if (preserveControlPoint && split.points.size() <= 2) {
             // No nodes added, just copy the coordinates into the sequence.
             const geom::CoordinateSequence* srcSeq = m_arcs[arcIndex].getCoordinateSequence();
             std::size_t srcPos = m_arcs[arcIndex].getCoordinatePosition();
-            dstSeq->add(*srcSeq, srcPos, srcPos + 2, false);
-            std::size_t dstPos = dstSeq->getSize() - 3;
-            arcs.emplace_back(*dstSeq, dstPos, center, radius, orientation);
 
-            if (createArcString) {
-                splitArcs.push_back(std::make_unique<NodableArcString>(std::move(arcs), std::move(dstSeq), m_constructZ, m_constructM, getData()));
-                dstSeq = std::make_unique<geom::CoordinateSequence>(0, m_constructZ, m_constructM);
-                arcs.clear();
+            builder.addArc(*srcSeq, srcPos, center, radius, orientation);
+
+            if (split.splitEnd) {
+                builder.finish();
             }
 
             continue;
@@ -186,9 +316,9 @@ NodableArcString::getNoded(std::vector<std::unique_ptr<ArcString>>& splitArcs) {
 
         const bool isCCW = orientation == algorithm::Orientation::COUNTERCLOCKWISE;
 
-        for (std::size_t i = 1; i < arcPoints.size(); i++) {
-            const CoordinateXYZM& p0 = arcPoints[i - 1];
-            const CoordinateXYZM& p2 = arcPoints[i];
+        for (std::size_t i = 1; i < split.points.size(); i++) {
+            const CoordinateXYZM& p0 = split.points[i - 1];
+            const CoordinateXYZM& p2 = split.points[i];
 
             // TODO: Check if control point of original arc falls into this section,
             // and use it instead of calculating a midpoint here?
@@ -196,28 +326,18 @@ NodableArcString::getNoded(std::vector<std::unique_ptr<ArcString>>& splitArcs) {
             p1.z = (p0.z + p2.z) / 2;
             p1.m = (p0.m + p2.m) / 2;
 
-            if (dstSeq->isEmpty()) {
-                dstSeq->add(p0);
-            }
-            dstSeq->add(p1);
-            dstSeq->add(p2);
-
-            const std::size_t dstPos = dstSeq->getSize() - 3;
-            arcs.emplace_back(*dstSeq, dstPos, center, radius, orientation);
+            builder.addArc(p0, p1, p2, center, radius, orientation);
 
             // Finish the ArcString, start a new one.
-            const bool isSplitPoint = i != arcPoints.size() - 1;
+            const bool isSplitPoint = (i < split.points.size() - 1) || split.splitEnd;
             if (isSplitPoint) {
-                splitArcs.push_back(std::make_unique<NodableArcString>(std::move(arcs), std::move(dstSeq), m_constructZ, m_constructM, getData()));
-                dstSeq = std::make_unique<geom::CoordinateSequence>(0, m_constructZ, m_constructM);
-                arcs.clear();
+                builder.finish();
+
             }
         }
     }
 
-    if (!arcs.empty()) {
-        splitArcs.push_back(std::make_unique<NodableArcString>(std::move(arcs), std::move(dstSeq), m_constructZ, m_constructM, getData()));
-    }
+    builder.finish();
 }
 
 }
