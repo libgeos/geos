@@ -284,7 +284,7 @@ OverlayEdgeRing::isPointInOrOut(const OverlayEdgeRing& otherRing) const {
     struct PointTester : public geom::CoordinateFilter {
 
     public:
-        explicit PointTester(const OverlayEdgeRing* p_ring) : m_er(p_ring), m_result(false) {}
+        explicit PointTester(const OverlayEdgeRing* p_ring) : m_er(p_ring) {}
 
         void filter_ro(const CoordinateXY* pt) override {
             Location loc = m_er->locate(*pt);
@@ -311,7 +311,7 @@ OverlayEdgeRing::isPointInOrOut(const OverlayEdgeRing& otherRing) const {
     private:
         const OverlayEdgeRing* m_er;
         bool m_done{false};
-        bool m_result;
+        bool m_result{false};
     };
 
     PointTester tester(this);

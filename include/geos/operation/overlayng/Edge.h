@@ -64,7 +64,7 @@ private:
     int bDepthDelta = 0;
     bool bIsHole = false;
     std::shared_ptr<const geom::CoordinateSequence> pts;
-    bool ptsCurved;
+    const bool ptsCurved;
 
     // Methods
 
