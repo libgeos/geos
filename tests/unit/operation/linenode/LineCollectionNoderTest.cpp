@@ -42,7 +42,7 @@ struct test_linecollectionnoder_data {
 
 typedef test_group<test_linecollectionnoder_data> group;
 typedef group::object object;
-group test_linecollectionnoder_group("operation::linenode::LineCollectionNoder");
+group test_linecollectionnoder_group("geos::operation::linenode::LineCollectionNoder");
 
 // Two crossing linestrings: each split at the crossing point
 template<> template<> void object::test<1>()
