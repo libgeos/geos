@@ -1214,6 +1214,12 @@ extern GEOSGeometry GEOS_DLL *GEOSNode_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry* g);
 
+/** \see GEOSNodeCollection */
+extern GEOSGeometry GEOS_DLL *GEOSNodeCollection_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* input,
+    double gridSize);
+
 /** \see GEOSSplit */
 extern GEOSGeometry GEOS_DLL *GEOSSplit_r(
     GEOSContextHandle_t handle,
@@ -5561,6 +5567,34 @@ extern GEOSGeometry GEOS_DLL * GEOSVoronoiDiagram(
 * \since 3.4
 */
 extern GEOSGeometry GEOS_DLL *GEOSNode(const GEOSGeometry* g);
+
+/**
+* Nodes a collection of linear geometries against each other,
+* returning a collection of the same size where each member has been
+* split into a MultiLineString at all interior node points.
+*
+* Unlike GEOSNode(), which collects all edges into a single flattened
+* MultiLineString, this function preserves the per-member structure of
+* the input, returning one MultiLineString per input element.
+* Linework shared between members is not dissolved.
+*
+* Input members must be linear (LineString, MultiLineString, or
+* GeometryCollection of linear types). Non-linear components are
+* ignored; their output slot will be an empty MultiLineString.
+*
+* \param input A GeometryCollection of linear geometries.
+* \param gridSize Snap-rounding grid size for robust noding of inputs
+*        with near-coincident coordinates, or 0.0 for standard noding.
+* \return A GeometryCollection of the same size as the input, with each
+*         member returned as a noded MultiLineString, or NULL on error.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+* \see geos::operation::linenode::LineCollectionNoder::node
+*
+* \since 3.14
+*/
+extern GEOSGeometry GEOS_DLL *GEOSNodeCollection(
+    const GEOSGeometry* input,
+    double gridSize);
 
 
 /** Split a linear or polygonal input 

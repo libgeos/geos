@@ -87,6 +87,7 @@
 #include <geos/operation/grid/Grid.h>
 #include <geos/operation/grid/GridIntersection.h>
 #include <geos/operation/linemerge/LineMerger.h>
+#include <geos/operation/linenode/LineCollectionNoder.h>
 #include <geos/operation/spanning/SpanningTree.h>
 #include <geos/operation/split/GeometrySplitter.h>
 #include <geos/operation/intersection/Rectangle.h>
@@ -2039,6 +2040,33 @@ extern "C" {
             auto g3 = geos::noding::GeometryNoder::node(*g);
             g3->setSRID(g->getSRID());
             return g3.release();
+        });
+    }
+
+    Geometry*
+    GEOSNodeCollection_r(GEOSContextHandle_t extHandle,
+        const Geometry* input,
+        double gridSize)
+    {
+        using geos::operation::linenode::LineCollectionNoder;
+
+        return execute(extHandle, [&]() -> Geometry* {
+            const GeometryCollection* col =
+                dynamic_cast<const GeometryCollection*>(input);
+            if (!col) return nullptr;
+
+            std::vector<const Geometry*> geoms;
+            geoms.reserve(col->getNumGeometries());
+            for (std::size_t i = 0; i < col->getNumGeometries(); i++)
+                geoms.push_back(col->getGeometryN(i));
+
+            LineCollectionNoder lcn(geoms);
+            auto result = lcn.node(gridSize);
+
+            const GeometryFactory* gf = input->getFactory();
+            auto r = gf->createGeometryCollection(std::move(result));
+            r->setSRID(input->getSRID());
+            return r.release();
         });
     }
 
