@@ -15,6 +15,7 @@
 
 #pragma once
 
+#include <geos/export.h>
 #include <geos/constants.h>
 #include <vector>
 #include <limits>
@@ -31,7 +32,7 @@ namespace geos {
 namespace index {
 namespace intervalrtree {
 
-class IntervalRTreeNode {
+class GEOS_DLL IntervalRTreeNode {
 private:
 protected:
     double min;
