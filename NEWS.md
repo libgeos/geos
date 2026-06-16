@@ -7,6 +7,16 @@
   - Add GEOSCoverageEdges (Paul Ramsey)
   - Add new C API functions for Hausdorff distance (GH-1352, Sven Jensen)
   - Add GEOSSubdivideByGrid (GH-1232, Dan Baston)
+  - Add support for curved geometries to the following operations:
+    - BoundaryOp (GH-1394, Dan Baston)
+    - DistanceOp (GH-1428, Dan Baston)
+    - GeometryNoder (GH-1347, Dan Baston)
+    - GeometryPrecisionReducer (pointwise only, GH-1402; Dan Baston)
+    - LineMerger (GH-1441, Dan Baston)
+    - Normalize (GH-1397, Dan Baston)
+    - OverlayNG (GH-1427, Dan Baston)
+    - Polygonizer (GH-1420, Dan Baston)
+  - Add GeometrySplitter (GH-1424, Dan Baston)
 
 - Breaking Changes:
   - BufferOp returns POLYGON EMPTY when fed Inf/Nan coords (GH-1332)
@@ -21,11 +31,12 @@
   - Preserve M values in GEOSDensify (GH-1319, Dan Baston)
   - Preserve M values in GEOSSimplify (GH-1317, Dan Baston)
   - Preserve M values in GEOSPolygonize (GH-1363 Dan Baston)
-  - Fix some cases of dropped M values in overlay (GH-1364/GH-1388, Dan Baston)
+  - Fix some cases of dropped M values in overlay (GH-1364,GH-1388,GH-1407,GH-1408; Dan Baston)
   - Support curved inputs in GEOSNode (GH-1347, Dan Baston)
   - GEOSClusterDBSCAN fix unsassigned clusters with minPoints <= 1 (GH-1386, Dan Baston)
   - Fix crash in GEOSConvexHull (GH-1358, Dan Baston)
   - Overlay performance improvements (GH-1353, arriopolis, Martin Davis)
+  - Fix unintended ring rotation in Overlay results (GH-1412, Dan Baston)
 
 ## Changes in 3.14.0
 2025-08-21
