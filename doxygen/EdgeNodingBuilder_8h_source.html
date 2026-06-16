@@ -71,140 +71,159 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span> </div>
 <div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span><span class="preprocessor">#pragma once</span></div>
 <div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="preprocessor">#include &lt;geos/algorithm/LineIntersector.h&gt;</span></div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="preprocessor">#include &lt;geos/geom/CoordinateSequence.h&gt;</span></div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="preprocessor">#include &lt;geos/geom/Envelope.h&gt;</span></div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="preprocessor">#include &lt;geos/geom/Geometry.h&gt;</span></div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="preprocessor">#include &lt;geos/geom/GeometryCollection.h&gt;</span></div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="preprocessor">#include &lt;geos/geom/LinearRing.h&gt;</span></div>
-<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="preprocessor">#include &lt;geos/geom/LineString.h&gt;</span></div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="preprocessor">#include &lt;geos/geom/Polygon.h&gt;</span></div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="preprocessor">#include &lt;geos/noding/IntersectionAdder.h&gt;</span></div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="preprocessor">#include &lt;geos/noding/Noder.h&gt;</span></div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="preprocessor">#include &lt;geos/noding/SegmentString.h&gt;</span></div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="preprocessor">#include &lt;geos/operation/overlayng/Edge.h&gt;</span></div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="preprocessor">#include &lt;geos/operation/overlayng/EdgeSourceInfo.h&gt;</span></div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="preprocessor">#include &lt;geos/operation/overlayng/LineLimiter.h&gt;</span></div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="preprocessor">#include &lt;geos/operation/overlayng/RingClipper.h&gt;</span></div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span> </div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span> </div>
-<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="preprocessor">#include &lt;geos/export.h&gt;</span></div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="preprocessor">#include &lt;array&gt;</span></div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="preprocessor">#include &lt;memory&gt;</span></div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="preprocessor">#include &lt;deque&gt;</span></div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span> </div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
-<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
-<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacegeos.html">geos</a> {      <span class="comment">// geos.</span></div>
-<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span><span class="keyword">namespace </span>operation { <span class="comment">// geos.operation</span></div>
-<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span><span class="keyword">namespace </span>overlayng { <span class="comment">// geos.operation.overlayng</span></div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="preprocessor">#include &lt;geos/algorithm/CircularArcIntersector.h&gt;</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="preprocessor">#include &lt;geos/algorithm/LineIntersector.h&gt;</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="preprocessor">#include &lt;geos/geom/CoordinateSequence.h&gt;</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="preprocessor">#include &lt;geos/geom/CircularArc.h&gt;</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="preprocessor">#include &lt;geos/geom/Envelope.h&gt;</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="preprocessor">#include &lt;geos/geom/Geometry.h&gt;</span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="preprocessor">#include &lt;geos/geom/GeometryCollection.h&gt;</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="preprocessor">#include &lt;geos/geom/LinearRing.h&gt;</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="preprocessor">#include &lt;geos/geom/LineString.h&gt;</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="preprocessor">#include &lt;geos/geom/Polygon.h&gt;</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="preprocessor">#include &lt;geos/geom/SimpleCurve.h&gt;</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="preprocessor">#include &lt;geos/noding/ArcIntersectionAdder.h&gt;</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="preprocessor">#include &lt;geos/noding/IntersectionAdder.h&gt;</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="preprocessor">#include &lt;geos/noding/Noder.h&gt;</span></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="preprocessor">#include &lt;geos/noding/SegmentString.h&gt;</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="preprocessor">#include &lt;geos/operation/overlayng/Edge.h&gt;</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="preprocessor">#include &lt;geos/operation/overlayng/EdgeSourceInfo.h&gt;</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="preprocessor">#include &lt;geos/operation/overlayng/LineLimiter.h&gt;</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span><span class="preprocessor">#include &lt;geos/operation/overlayng/RingClipper.h&gt;</span></div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span> </div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="preprocessor">#include &lt;geos/export.h&gt;</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="preprocessor">#include &lt;array&gt;</span></div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span><span class="preprocessor">#include &lt;memory&gt;</span></div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span><span class="preprocessor">#include &lt;deque&gt;</span></div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span> </div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span> </div>
 <div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
-<div class="foldopen" id="foldopen00064" data-start="{" data-end="};">
-<div class="line"><a id="l00064" name="l00064"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder.html">   64</a></span><span class="keyword">class </span>GEOS_DLL <a class="code hl_class" href="classgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder.html">EdgeNodingBuilder</a> {</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    <span class="keyword">using </span><a class="code hl_class" href="classgeos_1_1geom_1_1PrecisionModel.html">PrecisionModel</a> = <a class="code hl_class" href="classgeos_1_1geom_1_1PrecisionModel.html">geos::geom::PrecisionModel</a>;</div>
-<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    <span class="keyword">using </span><a class="code hl_class" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a> = <a class="code hl_class" href="classgeos_1_1geom_1_1Envelope.html">geos::geom::Envelope</a>;</div>
-<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>    <span class="keyword">using </span><a class="code hl_class" href="classgeos_1_1geom_1_1GeometryCollection.html">GeometryCollection</a> = <a class="code hl_class" href="classgeos_1_1geom_1_1GeometryCollection.html">geos::geom::GeometryCollection</a>;</div>
-<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>    <span class="keyword">using </span><a class="code hl_class" href="classgeos_1_1geom_1_1Polygon.html">Polygon</a> = <a class="code hl_class" href="classgeos_1_1geom_1_1Polygon.html">geos::geom::Polygon</a>;</div>
-<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    <span class="keyword">using </span><a class="code hl_class" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> = <a class="code hl_class" href="classgeos_1_1geom_1_1CoordinateSequence.html">geos::geom::CoordinateSequence</a>;</div>
-<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    <span class="keyword">using </span><a class="code hl_class" href="classgeos_1_1geom_1_1LinearRing.html">LinearRing</a> = <a class="code hl_class" href="classgeos_1_1geom_1_1LinearRing.html">geos::geom::LinearRing</a>;</div>
-<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    <span class="keyword">using </span><a class="code hl_class" href="classgeos_1_1geom_1_1LineString.html">LineString</a> = <a class="code hl_class" href="classgeos_1_1geom_1_1LineString.html">geos::geom::LineString</a>;</div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <span class="keyword">using </span><a class="code hl_class" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> = <a class="code hl_class" href="classgeos_1_1geom_1_1Geometry.html">geos::geom::Geometry</a>;</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
-<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    <span class="comment">// Constants</span></div>
-<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keywordtype">int</span> MIN_LIMIT_PTS = 20;</div>
-<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keywordtype">bool</span> IS_NODING_VALIDATED = <span class="keyword">true</span>;</div>
-<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span> </div>
-<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    <span class="comment">// Members</span></div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1PrecisionModel.html">PrecisionModel</a>* pm;</div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>    std::unique_ptr&lt;std::vector&lt;noding::SegmentString*&gt;&gt; inputEdges;</div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    <a class="code hl_class" href="classgeos_1_1noding_1_1Noder.html">noding::Noder</a>* customNoder;</div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    std::array&lt;bool, 2&gt; hasEdges;</div>
-<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a>* clipEnv;</div>
-<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>    std::unique_ptr&lt;RingClipper&gt; clipper;</div>
-<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>    std::unique_ptr&lt;LineLimiter&gt; limiter;</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacegeos.html">geos</a> {      <span class="comment">// geos.</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span><span class="keyword">namespace </span>operation { <span class="comment">// geos.operation</span></div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span><span class="keyword">namespace </span>overlayng { <span class="comment">// geos.operation.overlayng</span></div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
+<div class="foldopen" id="foldopen00068" data-start="{" data-end="};">
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder.html">   68</a></span><span class="keyword">class </span>GEOS_DLL <a class="code hl_class" href="classgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder.html">EdgeNodingBuilder</a> {</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span>    <span class="keyword">using </span><a class="code hl_class" href="classgeos_1_1geom_1_1PrecisionModel.html">PrecisionModel</a> = <a class="code hl_class" href="classgeos_1_1geom_1_1PrecisionModel.html">geos::geom::PrecisionModel</a>;</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    <span class="keyword">using </span><a class="code hl_class" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a> = <a class="code hl_class" href="classgeos_1_1geom_1_1Envelope.html">geos::geom::Envelope</a>;</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    <span class="keyword">using </span><a class="code hl_class" href="classgeos_1_1geom_1_1GeometryCollection.html">GeometryCollection</a> = <a class="code hl_class" href="classgeos_1_1geom_1_1GeometryCollection.html">geos::geom::GeometryCollection</a>;</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    <span class="keyword">using </span><a class="code hl_class" href="classgeos_1_1geom_1_1Surface.html">Surface</a> = <a class="code hl_class" href="classgeos_1_1geom_1_1Surface.html">geos::geom::Surface</a>;</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    <span class="keyword">using </span><a class="code hl_class" href="classgeos_1_1geom_1_1Polygon.html">Polygon</a> = <a class="code hl_class" href="classgeos_1_1geom_1_1Polygon.html">geos::geom::Polygon</a>;</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    <span class="keyword">using </span><a class="code hl_class" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> = <a class="code hl_class" href="classgeos_1_1geom_1_1CoordinateSequence.html">geos::geom::CoordinateSequence</a>;</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    <span class="keyword">using </span>CompoundCurve = geos::geom::CompoundCurve;</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    <span class="keyword">using </span>CircularString = geos::geom::CircularString;</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    <span class="keyword">using </span><a class="code hl_class" href="classgeos_1_1geom_1_1LinearRing.html">LinearRing</a> = <a class="code hl_class" href="classgeos_1_1geom_1_1LinearRing.html">geos::geom::LinearRing</a>;</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    <span class="keyword">using </span><a class="code hl_class" href="classgeos_1_1geom_1_1LineString.html">LineString</a> = <a class="code hl_class" href="classgeos_1_1geom_1_1LineString.html">geos::geom::LineString</a>;</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>    <span class="keyword">using </span><a class="code hl_class" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> = <a class="code hl_class" href="classgeos_1_1geom_1_1Geometry.html">geos::geom::Geometry</a>;</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>    <span class="keyword">using </span>SimpleCurve = geos::geom::SimpleCurve;</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    <span class="keyword">using </span>Curve = geos::geom::Curve;</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span> </div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    <span class="comment">// Constants</span></div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>    <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keywordtype">int</span> MIN_LIMIT_PTS = 20;</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>    <span class="keyword">static</span> <span class="keyword">constexpr</span> <span class="keywordtype">bool</span> IS_NODING_VALIDATED = <span class="keyword">true</span>;</div>
 <div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span> </div>
-<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    <span class="comment">// For use in createFloatingPrecisionNoder()</span></div>
-<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>    <a class="code hl_class" href="classgeos_1_1algorithm_1_1LineIntersector.html">algorithm::LineIntersector</a> lineInt;</div>
-<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>    <a class="code hl_class" href="classgeos_1_1noding_1_1IntersectionAdder.html">noding::IntersectionAdder</a> intAdder;</div>
-<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>    std::unique_ptr&lt;noding::Noder&gt; internalNoder;</div>
-<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>    std::unique_ptr&lt;noding::Noder&gt; spareInternalNoder;</div>
-<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    <span class="comment">// EdgeSourceInfo*, Edge* owned by EdgeNodingBuilder, stored in deque</span></div>
-<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>    std::deque&lt;EdgeSourceInfo&gt; edgeSourceInfoQue;</div>
-<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    std::deque&lt;Edge&gt; edgeQue;</div>
-<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>    <span class="keywordtype">bool</span> inputHasZ;</div>
-<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    <span class="keywordtype">bool</span> inputHasM;</div>
-<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span> </div>
-<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>    <a class="code hl_class" href="classgeos_1_1noding_1_1Noder.html">noding::Noder</a>* getNoder();</div>
-<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>    <span class="keyword">static</span> std::unique_ptr&lt;noding::Noder&gt; createFixedPrecisionNoder(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1PrecisionModel.html">PrecisionModel</a>* pm);</div>
-<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>    std::unique_ptr&lt;noding::Noder&gt; createFloatingPrecisionNoder(<span class="keywordtype">bool</span> doValidation);</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    <span class="comment">// Members</span></div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>    <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1PrecisionModel.html">PrecisionModel</a>* pm;</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span>    std::vector&lt;noding::PathString*&gt; inputEdges;</div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>    <a class="code hl_class" href="classgeos_1_1noding_1_1Noder.html">noding::Noder</a>* customNoder;</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span>    std::array&lt;bool, 2&gt; hasEdges;</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a>* clipEnv;</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>    std::unique_ptr&lt;RingClipper&gt; clipper;</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    std::unique_ptr&lt;LineLimiter&gt; limiter;</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span> </div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    <span class="comment">// For use in createFloatingPrecisionNoder()</span></div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>    <a class="code hl_class" href="classgeos_1_1algorithm_1_1LineIntersector.html">algorithm::LineIntersector</a> lineInt;</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>    algorithm::CircularArcIntersector arcInt;</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>    <a class="code hl_class" href="classgeos_1_1noding_1_1IntersectionAdder.html">noding::IntersectionAdder</a> intAdder;</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>    noding::ArcIntersectionAdder arcIntAdder;</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>    std::unique_ptr&lt;noding::Noder&gt; internalNoder;</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>    std::unique_ptr&lt;noding::Noder&gt; spareInternalNoder;</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    <span class="comment">// EdgeSourceInfo*, Edge* owned by EdgeNodingBuilder, stored in deque</span></div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>    std::deque&lt;EdgeSourceInfo&gt; edgeSourceInfoQue;</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>    std::deque&lt;Edge&gt; edgeQue;</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>    <span class="keywordtype">bool</span> inputHasZ;</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>    <span class="keywordtype">bool</span> inputHasM;</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>    <span class="keywordtype">bool</span> inputHasCurves;</div>
 <div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span> </div>
-<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span> </div>
-<div class="line"><a id="l00113" name="l00113"></a><span class="lineno">  113</span>    <span class="keywordtype">void</span> addCollection(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1GeometryCollection.html">GeometryCollection</a>* gc, uint8_t geomIndex);</div>
-<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    <span class="keywordtype">void</span> addGeometryCollection(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1GeometryCollection.html">GeometryCollection</a>* gc, uint8_t geomIndex, <span class="keywordtype">int</span> expectedDim);</div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>    <span class="keywordtype">void</span> addPolygon(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Polygon.html">Polygon</a>* poly, uint8_t geomIndex);</div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>    <span class="keywordtype">void</span> addPolygonRing(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1LinearRing.html">LinearRing</a>* ring, <span class="keywordtype">bool</span> isHole, uint8_t geomIndex);</div>
-<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>    <span class="keywordtype">void</span> addLine(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1LineString.html">LineString</a>* line, uint8_t geomIndex);</div>
-<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span>    <span class="keywordtype">void</span> addLine(std::unique_ptr&lt;CoordinateSequence&gt;&amp; pts, uint8_t geomIndex);</div>
-<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span>    <span class="keywordtype">void</span> addEdge(std::unique_ptr&lt;CoordinateSequence&gt;&amp; cas, <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1operation_1_1overlayng_1_1EdgeSourceInfo.html">EdgeSourceInfo</a>* info);</div>
-<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span> </div>
-<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>    <span class="comment">// Create a EdgeSourceInfo* owned by EdgeNodingBuilder</span></div>
-<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>    <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1operation_1_1overlayng_1_1EdgeSourceInfo.html">EdgeSourceInfo</a>* createEdgeSourceInfo(uint8_t index, <span class="keywordtype">int</span> depthDelta, <span class="keywordtype">bool</span> isHole);</div>
-<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>    <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1operation_1_1overlayng_1_1EdgeSourceInfo.html">EdgeSourceInfo</a>* createEdgeSourceInfo(uint8_t index);</div>
+<div class="line"><a id="l00120" name="l00120"></a><span class="lineno">  120</span>    <a class="code hl_class" href="classgeos_1_1noding_1_1Noder.html">noding::Noder</a>* getNoder();</div>
+<div class="line"><a id="l00121" name="l00121"></a><span class="lineno">  121</span>    <span class="keyword">static</span> std::unique_ptr&lt;noding::Noder&gt; createFixedPrecisionNoder(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1PrecisionModel.html">PrecisionModel</a>* pm);</div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>    std::unique_ptr&lt;noding::Noder&gt; createFloatingPrecisionNoder(<span class="keywordtype">bool</span> doValidation);</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span> </div>
 <div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span> </div>
-<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>    <span class="keywordtype">bool</span> isClippedCompletely(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a>* env) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span> </div>
-<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>    <span class="keywordtype">bool</span> isToBeLimited(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1LineString.html">LineString</a>* line) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span>    <span class="keywordtype">void</span> addCollection(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1GeometryCollection.html">GeometryCollection</a>* gc, uint8_t geomIndex);</div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>    <span class="keywordtype">void</span> addGeometryCollection(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1GeometryCollection.html">GeometryCollection</a>* gc, uint8_t geomIndex, <span class="keywordtype">int</span> expectedDim);</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span>    <span class="keywordtype">void</span> addPolygon(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Surface.html">Surface</a>* poly, uint8_t geomIndex);</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span>    <span class="keywordtype">void</span> addPolygonRing(<span class="keyword">const</span> Curve* ring, <span class="keywordtype">bool</span> isHole, uint8_t geomIndex);</div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>    <span class="keywordtype">void</span> addSimpleCurve(<span class="keyword">const</span> SimpleCurve* line, uint8_t geomIndex);</div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>    <span class="keywordtype">void</span> addCompoundCurve(<span class="keyword">const</span> CompoundCurve* line, uint8_t geomIndex);</div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span> </div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>    <span class="keywordtype">void</span> addCurve(<span class="keyword">const</span> std::shared_ptr&lt;const CoordinateSequence&gt;&amp; pts, <span class="keyword">const</span> std::vector&lt;geom::CircularArc&gt;&amp; arcs, uint8_t geomIndex);</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>    <span class="keywordtype">void</span> addLine(<span class="keyword">const</span> std::shared_ptr&lt;const CoordinateSequence&gt;&amp; pts, uint8_t geomIndex);</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span> </div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>    <span class="keywordtype">void</span> addEdge(<span class="keyword">const</span> std::shared_ptr&lt;const CoordinateSequence&gt;&amp; cas, <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1operation_1_1overlayng_1_1EdgeSourceInfo.html">EdgeSourceInfo</a>* info);</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span>    <span class="keywordtype">void</span> addCurvedEdge(<span class="keyword">const</span> std::shared_ptr&lt;const CoordinateSequence&gt;&amp; cas, <span class="keyword">const</span> std::vector&lt;geom::CircularArc&gt;&amp; arcs, <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1operation_1_1overlayng_1_1EdgeSourceInfo.html">EdgeSourceInfo</a>* info);</div>
 <div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span> </div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>    std::vector&lt;std::unique_ptr&lt;CoordinateSequence&gt;&gt;&amp; limit(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1LineString.html">LineString</a>* line) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span> </div>
-<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>    std::unique_ptr&lt;CoordinateSequence&gt; clip(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1LinearRing.html">LinearRing</a>* line);</div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span> </div>
-<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>    <span class="keyword">static</span> std::unique_ptr&lt;CoordinateSequence&gt; removeRepeatedPoints(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1LineString.html">LineString</a>* line);</div>
-<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span> </div>
-<div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>    <span class="keyword">static</span> <span class="keywordtype">int</span> computeDepthDelta(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1LinearRing.html">LinearRing</a>* ring, <span class="keywordtype">bool</span> isHole);</div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno">  171</span> </div>
-<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span>    <span class="keywordtype">void</span> add(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* g, uint8_t geomIndex);</div>
-<div class="line"><a id="l00173" name="l00173"></a><span class="lineno">  173</span> </div>
-<div class="line"><a id="l00180" name="l00180"></a><span class="lineno">  180</span>    std::vector&lt;Edge*&gt; node(<span class="keyword">const</span> std::vector&lt;noding::SegmentString*&gt;&amp; segStrings);</div>
-<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>    std::vector&lt;Edge*&gt; createEdges(std::vector&lt;std::unique_ptr&lt;noding::SegmentString&gt;&gt; &amp;segStrings);</div>
-<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span> </div>
-<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span> </div>
-<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span> </div>
-<div class="foldopen" id="foldopen00191" data-start="{" data-end="}">
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder.html#aeda0bfeceab8927e9b6fd841387c5223">  191</a></span>    <a class="code hl_function" href="classgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder.html#aeda0bfeceab8927e9b6fd841387c5223">EdgeNodingBuilder</a>(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1PrecisionModel.html">PrecisionModel</a>* p_pm, <a class="code hl_class" href="classgeos_1_1noding_1_1Noder.html">noding::Noder</a>* p_customNoder)</div>
-<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>        : pm(p_pm)</div>
-<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>        , inputEdges(new std::vector&lt;noding::SegmentString*&gt;)</div>
-<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span>        , customNoder(p_customNoder)</div>
-<div class="line"><a id="l00195" name="l00195"></a><span class="lineno">  195</span>        , hasEdges{{<span class="keyword">false</span>,<span class="keyword">false</span>}}</div>
-<div class="line"><a id="l00196" name="l00196"></a><span class="lineno">  196</span>        , clipEnv(<span class="keyword">nullptr</span>)</div>
-<div class="line"><a id="l00197" name="l00197"></a><span class="lineno">  197</span>        , intAdder(lineInt)</div>
-<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>        , inputHasZ(<span class="keyword">false</span>)</div>
-<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>        , inputHasM(<span class="keyword">false</span>)</div>
-<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span>        {};</div>
-</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span> </div>
+<div class="line"><a id="l00139" name="l00139"></a><span class="lineno">  139</span>    <span class="comment">// Create a EdgeSourceInfo* owned by EdgeNodingBuilder</span></div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>    <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1operation_1_1overlayng_1_1EdgeSourceInfo.html">EdgeSourceInfo</a>* createEdgeSourceInfo(uint8_t index, <span class="keywordtype">int</span> depthDelta, <span class="keywordtype">bool</span> isHole);</div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span>    <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1operation_1_1overlayng_1_1EdgeSourceInfo.html">EdgeSourceInfo</a>* createEdgeSourceInfo(uint8_t index);</div>
+<div class="line"><a id="l00142" name="l00142"></a><span class="lineno">  142</span> </div>
+<div class="line"><a id="l00147" name="l00147"></a><span class="lineno">  147</span>    <span class="keywordtype">bool</span> isClippedCompletely(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Envelope.html">Envelope</a>* env) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00148" name="l00148"></a><span class="lineno">  148</span> </div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>    <span class="keywordtype">bool</span> isToBeLimited(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1LineString.html">LineString</a>* line) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span> </div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>    std::vector&lt;std::unique_ptr&lt;CoordinateSequence&gt;&gt;&amp; limit(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1LineString.html">LineString</a>* line) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span> </div>
+<div class="line"><a id="l00177" name="l00177"></a><span class="lineno">  177</span>    std::shared_ptr&lt;const CoordinateSequence&gt; clip(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1LineString.html">LineString</a>* ring) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00178" name="l00178"></a><span class="lineno">  178</span> </div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>    <span class="keyword">static</span> std::shared_ptr&lt;const CoordinateSequence&gt; removeRepeatedPoints(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1LineString.html">LineString</a>* line);</div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span> </div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>    <span class="keyword">static</span> <span class="keywordtype">int</span> computeDepthDelta(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a>* ringCoords, <span class="keywordtype">bool</span> isHole);</div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span> </div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>    <span class="keywordtype">void</span> add(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* g, uint8_t geomIndex);</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span> </div>
+<div class="line"><a id="l00198" name="l00198"></a><span class="lineno">  198</span>    std::vector&lt;Edge*&gt; node(<span class="keyword">const</span> std::vector&lt;noding::PathString*&gt;&amp; segStrings);</div>
+<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span>    std::vector&lt;Edge*&gt; createEdges(std::vector&lt;std::unique_ptr&lt;noding::PathString&gt;&gt; &amp;segStrings);</div>
+<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span> </div>
 <div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span> </div>
-<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>    ~EdgeNodingBuilder();</div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span><span class="keyword">public</span>:</div>
 <div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span> </div>
-<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span>    <span class="keywordtype">void</span> setClipEnvelope(<span class="keyword">const</span> Envelope* clipEnv);</div>
-<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span> </div>
-<div class="line"><a id="l00216" name="l00216"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder.html#a0a4733e7f6228d85d6c2d9eb1dadeac4">  216</a></span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder.html#a0a4733e7f6228d85d6c2d9eb1dadeac4">hasEdgesFor</a>(uint8_t geomIndex) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span> </div>
-<div class="line"><a id="l00229" name="l00229"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder.html#ac437230c96c23983cb9168626d70d57b">  229</a></span>    std::vector&lt;Edge*&gt; <a class="code hl_function" href="classgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder.html#ac437230c96c23983cb9168626d70d57b">build</a>(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* geom0, <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* geom1);</div>
-<div class="line"><a id="l00230" name="l00230"></a><span class="lineno">  230</span> </div>
-<div class="line"><a id="l00231" name="l00231"></a><span class="lineno">  231</span>    <span class="comment">// Declare type as noncopyable</span></div>
-<div class="line"><a id="l00232" name="l00232"></a><span class="lineno">  232</span>    <a class="code hl_class" href="classgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder.html">EdgeNodingBuilder</a>(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder.html">EdgeNodingBuilder</a>&amp; other) = <span class="keyword">delete</span>;</div>
-<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>    <a class="code hl_class" href="classgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder.html">EdgeNodingBuilder</a>&amp; operator=(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder.html">EdgeNodingBuilder</a>&amp; rhs) = <span class="keyword">delete</span>;</div>
-<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span>};</div>
+<div class="foldopen" id="foldopen00209" data-start="{" data-end="}">
+<div class="line"><a id="l00209" name="l00209"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder.html#aeda0bfeceab8927e9b6fd841387c5223">  209</a></span>    <a class="code hl_function" href="classgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder.html#aeda0bfeceab8927e9b6fd841387c5223">EdgeNodingBuilder</a>(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1PrecisionModel.html">PrecisionModel</a>* p_pm, <a class="code hl_class" href="classgeos_1_1noding_1_1Noder.html">noding::Noder</a>* p_customNoder)</div>
+<div class="line"><a id="l00210" name="l00210"></a><span class="lineno">  210</span>        : pm(p_pm)</div>
+<div class="line"><a id="l00211" name="l00211"></a><span class="lineno">  211</span>        , customNoder(p_customNoder)</div>
+<div class="line"><a id="l00212" name="l00212"></a><span class="lineno">  212</span>        , hasEdges{{<span class="keyword">false</span>,<span class="keyword">false</span>}}</div>
+<div class="line"><a id="l00213" name="l00213"></a><span class="lineno">  213</span>        , clipEnv(<span class="keyword">nullptr</span>)</div>
+<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>        , intAdder(lineInt)</div>
+<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span>        , arcIntAdder(arcInt)</div>
+<div class="line"><a id="l00216" name="l00216"></a><span class="lineno">  216</span>        , inputHasZ(<span class="keyword">false</span>)</div>
+<div class="line"><a id="l00217" name="l00217"></a><span class="lineno">  217</span>        , inputHasM(<span class="keyword">false</span>)</div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>        , inputHasCurves(<span class="keyword">false</span>)</div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>        {};</div>
 </div>
-<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span> </div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span> </div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>    ~EdgeNodingBuilder();</div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span> </div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span>    <span class="keywordtype">void</span> setClipEnvelope(<span class="keyword">const</span> Envelope* clipEnv);</div>
+<div class="line"><a id="l00224" name="l00224"></a><span class="lineno">  224</span> </div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder.html#a0a4733e7f6228d85d6c2d9eb1dadeac4">  235</a></span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder.html#a0a4733e7f6228d85d6c2d9eb1dadeac4">hasEdgesFor</a>(uint8_t geomIndex) <span class="keyword">const</span>;</div>
 <div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span> </div>
-<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span>} <span class="comment">// namespace geos.operation.overlayng</span></div>
-<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>} <span class="comment">// namespace geos.operation</span></div>
-<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>} <span class="comment">// namespace geos</span></div>
-<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span> </div>
+<div class="line"><a id="l00248" name="l00248"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder.html#ac437230c96c23983cb9168626d70d57b">  248</a></span>    std::vector&lt;Edge*&gt; <a class="code hl_function" href="classgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder.html#ac437230c96c23983cb9168626d70d57b">build</a>(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* geom0, <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a>* geom1);</div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span> </div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span>    <span class="comment">// Declare type as noncopyable</span></div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span>    <a class="code hl_class" href="classgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder.html">EdgeNodingBuilder</a>(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder.html">EdgeNodingBuilder</a>&amp; other) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span>    <a class="code hl_class" href="classgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder.html">EdgeNodingBuilder</a>&amp; operator=(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder.html">EdgeNodingBuilder</a>&amp; rhs) = <span class="keyword">delete</span>;</div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>};</div>
+</div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span> </div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span> </div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span>} <span class="comment">// namespace geos.operation.overlayng</span></div>
+<div class="line"><a id="l00257" name="l00257"></a><span class="lineno">  257</span>} <span class="comment">// namespace geos.operation</span></div>
+<div class="line"><a id="l00258" name="l00258"></a><span class="lineno">  258</span>} <span class="comment">// namespace geos</span></div>
+<div class="line"><a id="l00259" name="l00259"></a><span class="lineno">  259</span> </div>
 <div class="ttc" id="aclassgeos_1_1algorithm_1_1LineIntersector_html"><div class="ttname"><a href="classgeos_1_1algorithm_1_1LineIntersector.html">geos::algorithm::LineIntersector</a></div><div class="ttdoc">A LineIntersector is an algorithm that can both test whether two line segments intersect and compute ...</div><div class="ttdef"><b>Definition</b> LineIntersector.h:53</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1CoordinateSequence_html"><div class="ttname"><a href="classgeos_1_1geom_1_1CoordinateSequence.html">geos::geom::CoordinateSequence</a></div><div class="ttdoc">The internal representation of a list of coordinates inside a Geometry.</div><div class="ttdef"><b>Definition</b> CoordinateSequence.h:56</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Envelope_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Envelope.html">geos::geom::Envelope</a></div><div class="ttdoc">An Envelope defines a rectangulare region of the 2D coordinate plane.</div><div class="ttdef"><b>Definition</b> Envelope.h:59</div></div>
@@ -214,12 +233,13 @@ $(document).ready(function() { init_codefold(0); });
 <div class="ttc" id="aclassgeos_1_1geom_1_1LinearRing_html"><div class="ttname"><a href="classgeos_1_1geom_1_1LinearRing.html">geos::geom::LinearRing</a></div><div class="ttdoc">Models an OGC SFS LinearRing. A LinearRing is a LineString which is both closed and simple.</div><div class="ttdef"><b>Definition</b> LinearRing.h:54</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Polygon_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Polygon.html">geos::geom::Polygon</a></div><div class="ttdoc">Represents a linear polygon, which may include holes.</div><div class="ttdef"><b>Definition</b> Polygon.h:61</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1PrecisionModel_html"><div class="ttname"><a href="classgeos_1_1geom_1_1PrecisionModel.html">geos::geom::PrecisionModel</a></div><div class="ttdoc">Specifies the precision model of the Coordinate in a Geometry.</div><div class="ttdef"><b>Definition</b> PrecisionModel.h:87</div></div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1Surface_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Surface.html">geos::geom::Surface</a></div><div class="ttdef"><b>Definition</b> Surface.h:27</div></div>
 <div class="ttc" id="aclassgeos_1_1noding_1_1IntersectionAdder_html"><div class="ttname"><a href="classgeos_1_1noding_1_1IntersectionAdder.html">geos::noding::IntersectionAdder</a></div><div class="ttdoc">Computes the intersections between two line segments in SegmentString and adds them to each string.</div><div class="ttdef"><b>Definition</b> IntersectionAdder.h:54</div></div>
 <div class="ttc" id="aclassgeos_1_1noding_1_1Noder_html"><div class="ttname"><a href="classgeos_1_1noding_1_1Noder.html">geos::noding::Noder</a></div><div class="ttdoc">Computes all intersections between segments in a set of SegmentString.</div><div class="ttdef"><b>Definition</b> Noder.h:45</div></div>
-<div class="ttc" id="aclassgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder_html"><div class="ttname"><a href="classgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder.html">geos::operation::overlayng::EdgeNodingBuilder</a></div><div class="ttdef"><b>Definition</b> EdgeNodingBuilder.h:64</div></div>
+<div class="ttc" id="aclassgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder_html"><div class="ttname"><a href="classgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder.html">geos::operation::overlayng::EdgeNodingBuilder</a></div><div class="ttdef"><b>Definition</b> EdgeNodingBuilder.h:68</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder_html_a0a4733e7f6228d85d6c2d9eb1dadeac4"><div class="ttname"><a href="classgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder.html#a0a4733e7f6228d85d6c2d9eb1dadeac4">geos::operation::overlayng::EdgeNodingBuilder::hasEdgesFor</a></div><div class="ttdeci">bool hasEdgesFor(uint8_t geomIndex) const</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder_html_ac437230c96c23983cb9168626d70d57b"><div class="ttname"><a href="classgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder.html#ac437230c96c23983cb9168626d70d57b">geos::operation::overlayng::EdgeNodingBuilder::build</a></div><div class="ttdeci">std::vector&lt; Edge * &gt; build(const Geometry *geom0, const Geometry *geom1)</div></div>
-<div class="ttc" id="aclassgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder_html_aeda0bfeceab8927e9b6fd841387c5223"><div class="ttname"><a href="classgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder.html#aeda0bfeceab8927e9b6fd841387c5223">geos::operation::overlayng::EdgeNodingBuilder::EdgeNodingBuilder</a></div><div class="ttdeci">EdgeNodingBuilder(const PrecisionModel *p_pm, noding::Noder *p_customNoder)</div><div class="ttdef"><b>Definition</b> EdgeNodingBuilder.h:191</div></div>
+<div class="ttc" id="aclassgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder_html_aeda0bfeceab8927e9b6fd841387c5223"><div class="ttname"><a href="classgeos_1_1operation_1_1overlayng_1_1EdgeNodingBuilder.html#aeda0bfeceab8927e9b6fd841387c5223">geos::operation::overlayng::EdgeNodingBuilder::EdgeNodingBuilder</a></div><div class="ttdeci">EdgeNodingBuilder(const PrecisionModel *p_pm, noding::Noder *p_customNoder)</div><div class="ttdef"><b>Definition</b> EdgeNodingBuilder.h:209</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1overlayng_1_1EdgeSourceInfo_html"><div class="ttname"><a href="classgeos_1_1operation_1_1overlayng_1_1EdgeSourceInfo.html">geos::operation::overlayng::EdgeSourceInfo</a></div><div class="ttdef"><b>Definition</b> EdgeSourceInfo.h:38</div></div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition</b> geos.h:38</div></div>
 </div><!-- fragment --></div><!-- contents -->
