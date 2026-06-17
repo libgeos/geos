@@ -228,7 +228,7 @@ extern "C" {
     }
 
     int
-    GEOSCurveToLineParams_setTolerance(GEOSCurveToLineParams* params, int toleranceType, double toleranceValue)
+    GEOSCurveToLineParams_setTolerance(GEOSCurveToLineParams* params, enum GEOSCurveToLineTolerance toleranceType, double toleranceValue)
     {
         return GEOSCurveToLineParams_setTolerance_r(handle, params, toleranceType, toleranceValue);
     }

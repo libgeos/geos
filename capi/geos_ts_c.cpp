@@ -3819,7 +3819,7 @@ extern "C" {
 
     int
     GEOSCurveToLineParams_setTolerance_r(GEOSContextHandle_t extHandle, GEOSCurveToLineParams* params,
-                                         int toleranceType, double toleranceValue)
+                                         GEOSCurveToLineTolerance toleranceType, double toleranceValue)
     {
         return execute(extHandle, 0, [&]() {
             params->setTolerance(static_cast<GEOSCurveToLineParams::TOLERANCE_TYPE>(toleranceType), toleranceValue);

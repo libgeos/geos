@@ -1884,7 +1884,7 @@ extern GEOSGeometry GEOS_DLL *GEOSCurveToLine_r(
 extern int GEOS_DLL GEOSCurveToLineParams_setTolerance_r(
     GEOSContextHandle_t extHandle,
     GEOSCurveToLineParams* params,
-    int toleranceType,
+    enum GEOSCurveToLineTolerance toleranceType,
     double toleranceValue);
 
 /** \see GEOSLineToCurve */
@@ -6019,6 +6019,8 @@ extern void GEOS_DLL GEOSCurveToLineParams_destroy(GEOSCurveToLineParams* params
 
 /** Set the tolerance type and value to use when converting curves to lines.
 *
+*   Any existing tolerance type and value will be overwritten.
+*
 *   \param params parameters to use in the conversion.
 *   \param toleranceType \see GEOSCurveToLineTolerance
 *   \param toleranceValue the value to use with toleranceType
@@ -6028,7 +6030,7 @@ extern void GEOS_DLL GEOSCurveToLineParams_destroy(GEOSCurveToLineParams* params
 */ 
 extern int GEOS_DLL GEOSCurveToLineParams_setTolerance(
     GEOSCurveToLineParams* params,
-    int toleranceType,
+    enum GEOSCurveToLineTolerance toleranceType,
     double toleranceValue);
 
 /** Replace line segments in the geometry with circular arcs, where possible.
