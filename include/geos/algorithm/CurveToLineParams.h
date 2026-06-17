@@ -64,7 +64,12 @@ public:
         }
 
         if (toleranceType == TOLERANCE_TYPE::MAX_DEVIATION) {
-            return std::acos(1 - toleranceValue / arc.getRadius()) * 360 / MATH_PI;
+            const double ratio = 1 - toleranceValue / arc.getRadius();
+            if (ratio < 0) {
+                return 180;
+            }
+
+            return std::acos(ratio) * 360 / MATH_PI;
         }
 
         throw util::IllegalArgumentException("Invalid tolerance type");
