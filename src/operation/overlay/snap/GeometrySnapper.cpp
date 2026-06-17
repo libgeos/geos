@@ -203,8 +203,8 @@ GeometrySnapper::snap(const geom::Geometry& g0,
     GeometrySnapper snapper1(g1);
     snapGeom.second = snapper1.snapTo(*snapGeom.first, snapTolerance);
 
-//	std::size_t << *snapGeom.first << std::endl;
-//	std::size_t << *snapGeom.second << std::endl;
+//	std::cout << *snapGeom.first << std::endl;
+//	std::cout << *snapGeom.second << std::endl;
 
 }
 
@@ -222,4 +222,3 @@ GeometrySnapper::snapToSelf(const geom::Geometry& g,
 } // namespace geos.operation.overlay
 } // namespace geos.operation
 } // namespace geos
-
