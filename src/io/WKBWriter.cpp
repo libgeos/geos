@@ -42,6 +42,10 @@
 
 #undef DEBUG_WKB_WRITER
 
+#if DEBUG_WKB_READER
+#include <iostream>
+#endif
+
 
 using namespace geos::geom;
 
@@ -380,7 +384,7 @@ void
 WKBWriter::writeCoordinate(const CoordinateSequence& cs, std::size_t idx)
 {
 #if DEBUG_WKB_WRITER
-    std::size_t << "writeCoordinate: X:" << cs.getX(idx) << " Y:" << cs.getY(idx) << std::endl;
+    std::cout << "writeCoordinate: X:" << cs.getX(idx) << " Y:" << cs.getY(idx) << std::endl;
 #endif
     assert(outStream);
 
@@ -442,4 +446,3 @@ WKBWriter::getWkbType(const Geometry& g) {
 
 } // namespace geos.io
 } // namespace geos
-

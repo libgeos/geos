@@ -46,6 +46,9 @@
 
 //#define DEBUG_WKB_READER 1
 
+#if DEBUG_WKB_READER
+#include <iostream>
+#endif
 
 using namespace geos::geom;
 
@@ -174,7 +177,7 @@ WKBReader::readHEX(std::istream& is)
             static_cast<unsigned char>((result_high << 4) + result_low);
 
 #if DEBUG_HEX_READER
-        std::size_t << "HEX " << high << low << " -> DEC " << (int)value << std::endl;
+        std::cout << "HEX " << high << low << " -> DEC " << (int)value << std::endl;
 #endif
         // write the value to the output stream
         os << value;
@@ -272,7 +275,7 @@ WKBReader::readGeometry()
     unsigned char byteOrder = dis.readByte();
 
 #if DEBUG_WKB_READER
-    std::size_t << "WKB byteOrder: " << (int)byteOrder << std::endl;
+    std::cout << "WKB byteOrder: " << (int)byteOrder << std::endl;
 #endif
 
     // default is machine endian
@@ -295,7 +298,7 @@ WKBReader::readGeometry()
     int sfsqlHasM = (typeInt & 0x40000000) != 0;
 
 #if DEBUG_WKB_READER
-    std::size_t << "WKB geometryType: " << geometryType << std::endl;
+    std::cout << "WKB geometryType: " << geometryType << std::endl;
 #endif
 
     hasZ = sfsqlHasZ || isoHasZ;
@@ -311,17 +314,17 @@ WKBReader::readGeometry()
     }
 
 #if DEBUG_WKB_READER
-    std::size_t << "WKB hasZ: " << hasZ << std::endl;
+    std::cout << "WKB hasZ: " << hasZ << std::endl;
 #endif
 
 #if DEBUG_WKB_READER
-    std::size_t << "WKB dimensions: " << inputDimension << std::endl;
+    std::cout << "WKB dimensions: " << inputDimension << std::endl;
 #endif
 
     bool hasSRID = ((typeInt & 0x20000000) != 0);
 
 #if DEBUG_WKB_READER
-    std::size_t << "WKB hasSRID: " << hasSRID << std::endl;
+    std::cout << "WKB hasSRID: " << hasSRID << std::endl;
 #endif
 
     int SRID = 0;
@@ -398,7 +401,7 @@ WKBReader::readLineString()
     uint32_t size = dis.readUnsigned();
     minMemSize(GEOS_LINESTRING, size);
 #if DEBUG_WKB_READER
-    std::size_t << "WKB npoints: " << size << std::endl;
+    std::cout << "WKB npoints: " << size << std::endl;
 #endif
     auto pts = readCoordinateSequence(size);
     return factory.createLineString(std::move(pts));
@@ -410,7 +413,7 @@ WKBReader::readLinearRing()
     uint32_t size = dis.readUnsigned();
     minMemSize(GEOS_LINEARRING, size);
 #if DEBUG_WKB_READER
-    std::size_t << "WKB npoints: " << size << std::endl;
+    std::cout << "WKB npoints: " << size << std::endl;
 #endif
     auto pts = readCoordinateSequence(size);
     // Replace unclosed ring with closed
@@ -451,7 +454,7 @@ WKBReader::readPolygon()
     minMemSize(GEOS_POLYGON, numRings);
 
 #if DEBUG_WKB_READER
-    std::size_t << "WKB numRings: " << numRings << std::endl;
+    std::cout << "WKB numRings: " << numRings << std::endl;
 #endif
 
     std::unique_ptr<LinearRing> shell;
@@ -481,7 +484,7 @@ WKBReader::readCurvePolygon()
     minMemSize(GEOS_POLYGON, numRings);
 
 #if DEBUG_WKB_READER
-    std::size_t << "WKB numRings: " << numRings << std::endl;
+    std::cout << "WKB numRings: " << numRings << std::endl;
 #endif
 
     if (numRings == 0) {
@@ -624,7 +627,7 @@ WKBReader::readCoordinate()
         }
     }
 #if DEBUG_WKB_READER
-    std::size_t << "WKB coordinate: " << ordValues[0] << "," << ordValues[1] << std::endl;
+    std::cout << "WKB coordinate: " << ordValues[0] << "," << ordValues[1] << std::endl;
 #endif
 }
 
