@@ -1,5 +1,5 @@
 //
-// Test Suite for C-API GEOSEquals
+// Test Suite for C-API GEOSEqualsExact
 
 #include <tut/tut.hpp>
 // geos

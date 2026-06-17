@@ -72,7 +72,7 @@ template<>
 template<>
 void object::test<4>()
 {
-   set_test_name("curved inputs");
+    set_test_name("curved inputs");
     useContext();
 
     input_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE (CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 0 0)))");

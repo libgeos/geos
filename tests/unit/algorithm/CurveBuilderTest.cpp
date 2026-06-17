@@ -27,8 +27,6 @@ struct test_algorithm_curvebuilder_data {
         auto outCurve = linearized->getCurved(ltcParams);
         auto expected = reader_.read(wkt_expected);
 
-        std::cout << outCurve->toString() << std::endl;
-
         double distanceTolerance = 1e-4;
 
         ensure_equals_exact_geometry_xyzm(outCurve.get(), expected.get(), distanceTolerance);

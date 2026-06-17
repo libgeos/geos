@@ -98,7 +98,7 @@ void object::test<6>()
 
     auto params = geos::algorithm::LineToCurveParams();
 
-    // Tolerance to small to allow conversion to MultiSurface
+    // Tolerance too small to allow conversion to MultiSurface
     params.setRadiusTolerance(1e-12);
     ensure_equals(input->getCurved(params)->getGeometryTypeId(), geos::geom::GeometryTypeId::GEOS_MULTIPOLYGON);
 

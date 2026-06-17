@@ -3,6 +3,7 @@
 #include <tut/tut_macros.hpp>
 
 #include <geos/algorithm/CurveToLineParams.h>
+#include <geos/algorithm/LineToCurveParams.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateFilter.h>
 #include <geos/geom/GeometryFactory.h>
@@ -14,7 +15,6 @@
 #include <geos/operation/valid/RepeatedPointTester.h>
 #include <geos/util.h>
 
-#include "geos/algorithm/LineToCurveParams.h"
 
 
 using geos::algorithm::CurveToLineParams;
@@ -429,8 +429,8 @@ void object::test<12>()
     auto ls = cc->getLinearized(CurveToLineParams::stepSizeDegrees(90.0 / 4));
 
     ensure_equals(ls->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
-    ensure_equals(static_cast<geos::geom::Curve*>(cc.get())->getLinearized(CurveToLineParams::stepSizeDegrees(90.0 / 4))->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
-    ensure_equals(static_cast<CompoundCurve*>(ls.get())->getLinearized(CurveToLineParams::stepSizeDegrees(90.0 / 4))->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
+    ensure_equals(static_cast<Curve*>(cc.get())->getLinearized(CurveToLineParams::stepSizeDegrees(90.0 / 4))->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
+    ensure_equals(static_cast<LineString*>(ls.get())->getLinearized(CurveToLineParams::stepSizeDegrees(90.0 / 4))->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
 
     geos::operation::valid::RepeatedPointTester rpt;
     ensure(!rpt.hasRepeatedPoint(ls.get()));

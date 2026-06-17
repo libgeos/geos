@@ -4,7 +4,6 @@
 #include <tut/tut.hpp>
 // geos
 #include <geos_c.h>
-#include <iostream>
 
 #include "capi_test_utils.h"
 
@@ -202,18 +201,21 @@ void object::test<3>()
 
     {
         GEOSClusterInfo* clusters = GEOSClusterDBSCAN_r(ctxt_, input_, 0.9, 0);
+        ensure(clusters);
         ensure_equals("DBSCAN", GEOSClusterInfo_getNumClusters_r(ctxt_, clusters), 3u);
         GEOSClusterInfo_destroy_r(ctxt_, clusters);
     }
 
     {
         GEOSClusterInfo* clusters = GEOSClusterGeometryDistance_r(ctxt_, input_, 0.9);
+        ensure(clusters);
         ensure_equals("GeometryDistance", GEOSClusterInfo_getNumClusters_r(ctxt_, clusters), 3u);
         GEOSClusterInfo_destroy_r(ctxt_, clusters);
     }
 
     {
         GEOSClusterInfo* clusters = GEOSClusterGeometryIntersects_r(ctxt_, input_);
+        ensure(clusters);
         ensure_equals("GeometryIntersects", GEOSClusterInfo_getNumClusters_r(ctxt_, clusters), 3u);
         GEOSClusterInfo_destroy_r(ctxt_, clusters);
     }

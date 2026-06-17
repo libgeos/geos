@@ -442,9 +442,13 @@ void object::test<20>() {
 template<>
 template<>
 void object::test<21>() {
-    //set_test_name("liblwgeom: ticket #4058, big radius, small tolerance");
-    //checkLinearizeMaxDeviation("CIRCULARSTRING(2696000.553 1125699.831999999936670, 2695950.552000000141561 1125749.833000000100583, 2695865.195999999996275 1125835.189000)",
-    //"LINESTRING(2696000 1125700,2695932 1125768,2695866 1125836)", 0.0001);
+    set_test_name("liblwgeom: ticket #4058, big radius, small tolerance");
+
+    const auto params = CurveToLineParams::maxDeviation(0.0001);
+    auto g = wktreader_.read("CIRCULARSTRING(2696000.553 1125699.831999999936670, 2695950.552000000141561 1125749.833000000100583, 2695865.195999999996275 1125835.189000)");
+
+    auto ls = g->getLinearized(params);
+    ensure_equals("length is not equal", g->getLength(), ls->getLength(), 1e-3);
 }
 
 template<>
