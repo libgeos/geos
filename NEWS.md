@@ -10,6 +10,7 @@
   - Fix crash in GEOSConvexHull (GH-1358, Dan Baston)
   - Guard against stack overflow in inputs (GH-1437, Paul Ramsey)
   - Avoid overflow risk in WKB reader (Paul Ramsey)
+  - GEOSNode: fix crash on collection with empty components (GH-1406, Dan Baston)
 
 ## Changes in 3.14.1
 2025-10-27
