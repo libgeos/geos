@@ -28,13 +28,13 @@ struct test_kdtree_data {
         std::vector<Coordinate> expectedCoord;
         csExpected->toVector(expectedCoord);
         // Read tree into vector of coordinates
-        std::unique_ptr<std::vector<Coordinate>> result = KdTree::toCoordinates(*(index.query(queryEnv)), includeRepeated);
+        auto result = KdTree::toCoordinates(index.query(queryEnv), includeRepeated);
 
-        std::sort(result->begin(), result->end());
+        std::sort(result.begin(), result.end());
         std::sort(expectedCoord.begin(), expectedCoord.end());
 
-        ensure("Result count not equal to expected count", result->size() == expectedCoord.size());
-        ensure("Expected result coordinates not found", *result == expectedCoord);
+        ensure("Result count not equal to expected count", result.size() == expectedCoord.size());
+        ensure("Expected result coordinates not found", result == expectedCoord);
     }
 
     void testQuery(std::string& wktInput, double tolerance, const Envelope& queryEnv, std::string& wktExpected) {
@@ -67,11 +67,11 @@ void object::test<1> ()
     ensure("Inserting 2 identical points should create one node", node1 == node2);
 
     Envelope queryEnv(0, 10, 0, 10);
-    std::unique_ptr<std::vector<KdNode*>> result = index.query(queryEnv);
+    std::vector<KdNode*> result = index.query(queryEnv);
 
-    ensure("query should return 1 result", result->size() == 1);
+    ensure("query should return 1 result", result.size() == 1);
 
-    KdNode* node = result->at(0);
+    KdNode* node = result.at(0);
     ensure("node should have two entries", node->getCount() == 2);
     ensure("node should be repeated", node->isRepeated());
 }
@@ -180,11 +180,11 @@ void object::test<8> ()
     ensure("Inserting 2 identical points should create one node", node1 == node2);
 
     Envelope queryEnv(0, 10, 0, 10);
-    std::unique_ptr<std::vector<KdNode*>> result = index.query(queryEnv);
+    std::vector<KdNode*> result = index.query(queryEnv);
 
-    ensure(result->size() == 1);
+    ensure(result.size() == 1);
 
-    KdNode* node = (KdNode*)(*result)[0];
+    KdNode* node = result[0];
     ensure(node->getCount() == 2);
     ensure(node->isRepeated());
 }

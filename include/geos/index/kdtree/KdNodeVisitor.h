@@ -35,6 +35,7 @@ public:
     KdNodeVisitor() {};
     virtual void visit(KdNode *node) = 0;
 
+    virtual ~KdNodeVisitor() = default;
 
 };
 

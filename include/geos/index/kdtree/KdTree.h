@@ -19,9 +19,7 @@
 #include <geos/index/kdtree/KdNodeVisitor.h>
 #include <geos/index/kdtree/KdNode.h>
 
-#include <memory>
 #include <vector>
-#include <string>
 #include <deque>
 
 #ifdef _MSC_VER
@@ -64,8 +62,8 @@ private:
     KdNode* findBestMatchNode(const geom::Coordinate& p);
     KdNode* insertExact(const geom::Coordinate& p, void* data);
 
-    void queryNode(KdNode* currentNode, const geom::Envelope& queryEnv, bool odd, KdNodeVisitor& visitor);
-    KdNode* queryNodePoint(KdNode* currentNode, const geom::Coordinate& queryPt, bool odd);
+    static void queryNode(KdNode* currentNode, const geom::Envelope& queryEnv, bool odd, KdNodeVisitor& visitor);
+    static KdNode* queryNodePoint(KdNode* currentNode, const geom::Coordinate& queryPt, bool odd);
 
     /**
     * Create a node on a locally managed deque to allow easy
@@ -85,15 +83,16 @@ private:
         KdNode* getNode();
         void visit(KdNode* node) override;
 
+        // Declare type as noncopyable
+        BestMatchVisitor(const BestMatchVisitor& other) = delete;
+        BestMatchVisitor& operator=(const BestMatchVisitor& rhs) = delete;
+
     private:
         // Members
         double tolerance;
         KdNode* matchNode;
         double matchDist;
         const geom::Coordinate& p;
-        // Declare type as noncopyable
-        BestMatchVisitor(const BestMatchVisitor& other);
-        BestMatchVisitor& operator=(const BestMatchVisitor& rhs);
     };
 
     /**
@@ -102,16 +101,17 @@ private:
     */
     class AccumulatingVisitor : public KdNodeVisitor {
     public:
-        AccumulatingVisitor(std::vector<KdNode*>& p_nodeList) :
+        explicit AccumulatingVisitor(std::vector<KdNode*>& p_nodeList) :
             nodeList(p_nodeList) {};
         void visit(KdNode* node) override { nodeList.push_back(node); }
+
+        // Declare type as noncopyable
+        AccumulatingVisitor(const AccumulatingVisitor& other) = delete;
+        AccumulatingVisitor& operator=(const AccumulatingVisitor& rhs) = delete;
 
     private:
         // Members
         std::vector<KdNode*>& nodeList;
-        // Declare type as noncopyable
-        AccumulatingVisitor(const AccumulatingVisitor& other);
-        AccumulatingVisitor& operator=(const AccumulatingVisitor& rhs);
     };
 
 
@@ -121,10 +121,10 @@ public:
     /**
     * Converts a collection of {@link KdNode}s to an vector of {@link geom::Coordinate}s.
     *
-    * @param kdnodes a collection of nodes
-    * @return an vector of the coordinates represented by the nodes
+    * @param kdNodes a collection of nodes
+    * @return a vector of the coordinates represented by the nodes
     */
-    static std::unique_ptr<std::vector<geom::Coordinate>> toCoordinates(std::vector<KdNode*>& kdnodes);
+    static std::vector<geom::Coordinate> toCoordinates(const std::vector<KdNode*>& kdNodes);
 
     /**
     * Converts a collection of {@link KdNode}s
@@ -132,12 +132,12 @@ public:
     * specifying whether repeated nodes should be represented
     * by multiple coordinates.
     *
-    * @param kdnodes a collection of nodes
+    * @param kdNodes a collection of nodes
     * @param includeRepeated true if repeated nodes should
     *   be included multiple times
-    * @return an vector of the coordinates represented by the nodes
+    * @return a vector of the coordinates represented by the nodes
     */
-    static std::unique_ptr<std::vector<geom::Coordinate>> toCoordinates(std::vector<KdNode*>& kdnodes, bool includeRepeated);
+    static std::vector<geom::Coordinate> toCoordinates(const std::vector<KdNode*>& kdNodes, bool includeRepeated);
 
     KdTree() :
         root(nullptr),
@@ -145,7 +145,7 @@ public:
         tolerance(0.0)
         {};
 
-    KdTree(double p_tolerance) :
+    explicit KdTree(double p_tolerance) :
         root(nullptr),
         numberOfNodes(0),
         tolerance(p_tolerance)
@@ -167,7 +167,7 @@ public:
     /**
     * Performs a range search of the points in the index.
     */
-    std::unique_ptr<std::vector<KdNode*>> query(const geom::Envelope& queryEnv);
+    std::vector<KdNode*> query(const geom::Envelope& queryEnv);
 
     /**
     * Performs a range search of the points in the index.
