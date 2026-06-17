@@ -54,6 +54,9 @@ public:
 
     /** Interpolate Z/M values for a point added to an arc.
      *
+     * Interpolation will be performed between [p0, p1] or [p1, p2] depending on
+     * the position of the supplied point.
+     *
      * @param seq CoordinateSequence containing the arc points
      * @param i0 Index of the first point in the arc
      * @param center The center point of the circle defining the arc
