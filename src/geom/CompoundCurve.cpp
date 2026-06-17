@@ -265,9 +265,9 @@ CompoundCurve::getLinearizedImpl(const algorithm::CurveToLineParams& params) con
         }
 
         if (curve->isCurved()) {
-            for (std::size_t i = 0; i < curveSeq->size() - 2; i += 2)
-            {
-                CircularArc arc(*curveSeq, i);
+            const CircularString* cs = detail::down_cast<const CircularString*>(curve.get());
+
+            for (const auto& arc : cs->getArcs()) {
                 arc.addLinearizedPoints(*seq, params);
             }
         } else {

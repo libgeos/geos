@@ -15,6 +15,8 @@
 #pragma once
 
 #include <geos/export.h>
+#include <geos/constants.h>
+#include <geos/util/IllegalArgumentException.h>
 
 namespace geos::algorithm {
 
@@ -30,7 +32,7 @@ public:
 
     void setRadiusTolerance(double tol) {
         if (!(tol > 0)) {
-            throw util::IllegalArgumentException("Radius tolerance must be positive");
+            throw geos::util::IllegalArgumentException("Radius tolerance must be positive");
         }
         radiusTolerance = tol;
     }
@@ -41,7 +43,7 @@ public:
 
     void setMaxExteriorAngleDifferenceRadians(double tol) {
         if (!(tol > 0)) {
-            throw util::IllegalArgumentException("Angle tolerance must be positive");
+            throw geos::util::IllegalArgumentException("Angle tolerance must be positive");
         }
         maxExteriorAngleDifferenceRadians = tol;
     }

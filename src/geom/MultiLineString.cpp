@@ -18,6 +18,7 @@
  *
  **********************************************************************/
 
+#include <geos/algorithm/LineToCurveParams.h>
 #include <geos/geomgraph/GeometryGraph.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/MultiCurve.h>
@@ -27,7 +28,6 @@
 
 #include <vector>
 
-#include "geos/algorithm/LineToCurveParams.h"
 
 using geos::geom::GeometryFactory;
 using geos::geom::MultiLineString;

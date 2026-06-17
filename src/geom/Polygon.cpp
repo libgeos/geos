@@ -19,6 +19,7 @@
  **********************************************************************/
 
 #include <geos/algorithm/Area.h>
+#include <geos/algorithm/CurveToLineParams.h>
 #include <geos/algorithm/Orientation.h>
 #include <geos/util.h>
 #include <geos/geom/Coordinate.h>
@@ -37,13 +38,9 @@
 #include <algorithm>
 #include <memory>
 
-#include "geos/algorithm/CurveToLineParams.h"
-
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
 #endif
-
-//using namespace geos::algorithm;
 
 namespace geos {
 namespace geom { // geos::geom

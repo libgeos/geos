@@ -13,6 +13,7 @@
  **********************************************************************/
 
 #include <geos/algorithm/Area.h>
+#include <geos/algorithm/CurveToLineParams.h>
 #include <geos/geom/Curve.h>
 #include <geos/geom/CurvePolygon.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -21,8 +22,6 @@
 #include <geos/geom/MultiCurve.h>
 #include <geos/geom/SimpleCurve.h>
 #include <geos/util/UnsupportedOperationException.h>
-
-#include "geos/algorithm/CurveToLineParams.h"
 
 namespace geos {
 namespace geom {
