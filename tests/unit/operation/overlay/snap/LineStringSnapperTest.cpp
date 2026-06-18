@@ -355,4 +355,46 @@ void object::test<9>
     ensure_equals(ret->operator[](4), snp_a); //  0 0
 }
 
+  // Recursive snap of segments
+  // See https://trac.osgeo.org/geos/ticket/760
+  template<>
+  template<>
+  void object::test<10>()
+  {
+    using geos::geom::Coordinate;
+    using geos::operation::overlay::snap::LineStringSnapper;
+
+    typedef std::auto_ptr<Coordinate::Vect> CoordsVectAptr;
+
+
+    // Source: (0 0,0 20)
+    Coordinate src_a(0, 0);
+    Coordinate src_b(0, 20);
+    Coordinate::Vect srcCoords;
+    srcCoords.push_back(src_a);
+    srcCoords.push_back(src_b);
+
+    // Snap: (1.5 17,1 18,0.5 19)
+    Coordinate snp_a(1.5, 17);
+    Coordinate snp_b(1, 18);
+    Coordinate snp_c(0.5, 19);
+    Coordinate::ConstVect snpCoords;
+    snpCoords.push_back( &snp_a );
+    snpCoords.push_back( &snp_b );
+    snpCoords.push_back( &snp_c );
+
+    // Snap with tolerance of 0.8
+    // (both first and second point could be snapped)
+    LineStringSnapper snapper(srcCoords, 0.8);
+
+    // Expect: (0 0,1.5 17,1 18,0.5 19,0 20)
+    CoordsVectAptr ret(snapper.snapTo(snpCoords));
+    ensure_equals(ret->size(), 5u);
+    ensure_equals(ret->operator[](0), src_a); //  0 0
+    ensure_equals(ret->operator[](1), snp_a); //  1.5 17
+    ensure_equals(ret->operator[](2), snp_b); //  1 18
+    ensure_equals(ret->operator[](3), snp_c); //  0.5 19
+    ensure_equals(ret->operator[](4), src_b); //  0 20
+  }
+
 } // namespace tut
