@@ -226,6 +226,11 @@ KdTree::queryNode(KdNode* currentNode, const geom::Envelope& queryEnv, bool odd,
     }
 }
 
+#if defined(_MSC_VER) && _MSC_FULL_VER > 195035734
+// Avoid segfault with MSVC 19.51.36246.0
+// See https://github.com/libgeos/geos/issues/1449
+#pragma optimize("", off)
+#endif
 /*private*/
 KdNode*
 KdTree::queryNodePoint(KdNode* currentNode, const geom::Coordinate& queryPt, bool odd)
@@ -257,7 +262,9 @@ KdTree::queryNodePoint(KdNode* currentNode, const geom::Coordinate& queryPt, boo
     }
     return nullptr;
 }
-
+#if defined(_MSC_VER) && _MSC_FULL_VER > 195035734
+#pragma optimize("", on)
+#endif
 
 /*public*/
 void
