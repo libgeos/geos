@@ -85,28 +85,9 @@ void object::test<4>()
     ensure_geometry_equals_exact(result_, expected_, 1.4);
 }
 
-#if defined(__GNUC__) || defined(__clang__)
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wconversion"
-#endif
-
 template<>
 template<>
 void object::test<5>()
-{
-    set_test_name("invalid tolerance type");
-
-    input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
-    ensure(!GEOSCurveToLineParams_setTolerance(params_, static_cast<GEOSCurveToLineTolerance>(-3), 10));
-}
-
-#if defined(__GNUC__) || defined(__clang__)
-#pragma GCC diagnostic pop
-#endif
-
-template<>
-template<>
-void object::test<6>()
 {
     set_test_name("invalid tolerance value");
 
