@@ -42,15 +42,15 @@ public:
     KdNode(double p_x, double p_y, void* p_data);
     KdNode(const geom::Coordinate& p_p, void* p_data);
 
-    double getX() { return p.x; }
-    double getY() { return p.y; }
-    const geom::Coordinate& getCoordinate() { return p; }
+    double getX() const { return p.x; }
+    double getY() const { return p.y; }
+    const geom::Coordinate& getCoordinate() const { return p; }
     void* getData() { return data; }
     KdNode* getLeft() { return left; }
     KdNode* getRight() { return right; }
     void increment() { count++; }
-    std::size_t getCount() { return count; }
-    bool isRepeated() { return count > 1; }
+    std::size_t getCount() const { return count; }
+    bool isRepeated() const { return count > 1; }
     void setLeft(KdNode* p_left) { left = p_left; }
     void setRight(KdNode* p_right) { right = p_right; }
 

@@ -119,7 +119,7 @@ private:
 public:
 
     /**
-    * Converts a collection of {@link KdNode}s to an vector of {@link geom::Coordinate}s.
+    * Converts a collection of {@link KdNode}s to a vector of {@link geom::Coordinate}s.
     *
     * @param kdNodes a collection of nodes
     * @return a vector of the coordinates represented by the nodes
@@ -128,7 +128,7 @@ public:
 
     /**
     * Converts a collection of {@link KdNode}s
-    * to an vector of {@link geom::Coordinate}s,
+    * to a vector of {@link geom::Coordinate}s,
     * specifying whether repeated nodes should be represented
     * by multiple coordinates.
     *
