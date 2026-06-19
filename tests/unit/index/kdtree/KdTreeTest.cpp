@@ -189,6 +189,24 @@ void object::test<8> ()
     ensure(node->isRepeated());
 }
 
+template<>
+template<>
+void object::test<9>()
+{
+    set_test_name("query by point");
+    // minimal test for https://github.com/libgeos/geos/issues/1449
+
+    KdTree index;
+    ensure(index.query({ 6, 8 }) == nullptr);
+
+    const KdNode* node68 = index.insert({ 6, 8 });
+    ensure(node68);
+    ensure_equals(index.query({ 6, 8 }), node68);
+
+    const KdNode* node28 = index.insert({ 2, 8 });
+    ensure(node28);
+    ensure_equals(index.query({ 2, 8 }), node28);
+}
 
 
 
