@@ -30,15 +30,26 @@ public:
         return radiusTolerance;
     }
 
+    // Get the maximum angle in degrees between successive vertices, measured from the circle center.
+    double getMaxAngleDegrees() const {
+        return maxAngleRadians * 180 / MATH_PI;
+    }
+
+    // Get the maximum angle in radians between two successive vertices, measured from the circle center.
+    double getMaxAngleRadians() const {
+        return maxAngleRadians;
+    }
+
+    // Get the maximum angle difference in radians (p[0], p[1], p[2]) between successive sections of the same arc.
+    double getMaxExteriorAngleDifferenceRadians() const {
+        return maxExteriorAngleDifferenceRadians;
+    }
+
     void setRadiusTolerance(double tol) {
         if (!(tol > 0)) {
             throw geos::util::IllegalArgumentException("Radius tolerance must be positive");
         }
         radiusTolerance = tol;
-    }
-
-    double getMaxExteriorAngleDifferenceRadians() const {
-        return maxExteriorAngleDifferenceRadians;
     }
 
     void setMaxExteriorAngleDifferenceRadians(double tol) {
@@ -50,15 +61,6 @@ public:
 
     void setMaxExteriorAngleDifferenceDegrees(double tol) {
         setMaxExteriorAngleDifferenceRadians(tol * MATH_PI / 180.0);
-    }
-
-    // Get the maximum angle step.
-    double getMaxAngleDegrees() const {
-        return maxAngleRadians * 180 / MATH_PI;
-    }
-
-    double getMaxAngleRadians() const {
-        return maxAngleRadians;
     }
 
     void setMaxStepDegrees(double tol) {
