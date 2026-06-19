@@ -40,6 +40,9 @@ public:
     // Add all coordinates in the provided sequence
     void add(const CoordinateSequence& seq, bool isCurved);
 
+    // Add coordinates between the specified indices (inclusive)
+    void add(const CoordinateSequence& seq, std::size_t from, std::size_t to, bool isCurved);
+
     // Close the ring, if necessary, using a linear segment
     void closeRing();
 

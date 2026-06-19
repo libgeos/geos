@@ -13,7 +13,7 @@
  **********************************************************************/
 
 #include <geos/algorithm/Angle.h>
-#include <geos/algorithm/CurveBuilder.h>
+#include <geos/algorithm/LineToCurveConverter.h>
 
 #include <geos/geom/CircularArc.h>
 #include <geos/geom/CircularString.h>
@@ -32,17 +32,21 @@ using geom::CoordinateXYZM;
 using geom::GeometryFactory;
 using geom::LineString;
 
-CurveBuilder::CurveBuilder(const GeometryFactory &p_factory)
-    : factory(p_factory) {}
+LineToCurveConverter::LineToCurveConverter(const GeometryFactory &factory, bool outputZ, bool outputM)
+    : curveBuilder(factory, outputZ, outputM)
+{
+    // CurvePolygon uses a closed LineString rather than LinearRing
+    curveBuilder.setOutputLinearRing(false);
+}
 
 std::unique_ptr<geom::Curve>
-CurveBuilder::getCurved(const LineString &ls, const LineToCurveParams& params) {
-    CurveBuilder cb(*ls.getFactory());
+LineToCurveConverter::getCurved(const LineString &ls, const LineToCurveParams& params) {
+    LineToCurveConverter cb(*ls.getFactory(), ls.hasZ(), ls.hasM());
     return cb.compute(ls, params);
 }
 
 std::unique_ptr<geom::Curve>
-CurveBuilder::compute(const LineString& ls, const LineToCurveParams& params) {
+LineToCurveConverter::compute(const LineString& ls, const LineToCurveParams& params) {
     if (ls.isEmpty()) {
         return ls.clone();
     }
@@ -121,44 +125,13 @@ CurveBuilder::compute(const LineString& ls, const LineToCurveParams& params) {
 
     }
 
-    finishArc();
-    finishLine();
-
-    if (curves.size() == 1) {
-        return std::move(curves.front());
-    }
-
-    return factory.createCompoundCurve(std::move(curves));
+    return curveBuilder.getGeometry();
 }
 
 void
-CurveBuilder::addLineCoords(const CoordinateSequence& points, std::size_t from, std::size_t to)
+LineToCurveConverter::addLineCoords(const CoordinateSequence& points, std::size_t from, std::size_t to)
 {
-    finishArc();
-
-    if (lineCoords) {
-        lineCoords->add(points, from + 1, to);
-    } else {
-        lineCoords = std::make_shared<CoordinateSequence>(0, points.hasZ(), points.hasM());
-        lineCoords->add(points, from, to);
-    }
-}
-
-void
-CurveBuilder::finishArc()
-{
-    if (arcCoords) {
-        curves.push_back(factory.createCircularString(arcCoords));
-        arcCoords.reset();
-    }
-}
-
-void
-CurveBuilder::finishLine() {
-    if (lineCoords) {
-        curves.push_back(factory.createLineString(lineCoords));
-        lineCoords.reset();
-    }
+    curveBuilder.add(points, from, to, false);
 }
 
 /// Interpolates Z and M values from the midpoint of the arc, by:
@@ -219,11 +192,11 @@ getOrInterpolateMidPointZM(CoordinateXYZM& p1, const CircularArc& arc, size_t st
 }
 
 void
-CurveBuilder::addArc(const CircularArc& arc, std::size_t stop) {
-    finishLine();
-
+LineToCurveConverter::addArc(const CircularArc& arc, std::size_t stop) {
     const CoordinateSequence& points = *arc.getCoordinateSequence();
     std::size_t start = arc.getCoordinatePosition();
+
+    CoordinateSequence& dstCoords = curveBuilder.getSeq(true);
 
     double xSum = 0.0;
     double ySum = 0.0;
@@ -255,12 +228,7 @@ CurveBuilder::addArc(const CircularArc& arc, std::size_t stop) {
         CoordinateXYZM p01(CircularArcs::getMidpoint(p0, p1, averageCenter, averageRadius, isCCW));
         CoordinateXYZM p12(CircularArcs::getMidpoint(p1, p2, averageCenter, averageRadius, isCCW));
 
-        if (!arcCoords) {
-            // should always be the case
-            arcCoords = std::make_shared<CoordinateSequence>(0,  points.hasZ(), points.hasM());
-            arcCoords->reserve(5);
-            arcCoords->add(p0);
-        }
+        dstCoords.add(p0);
 
         if (points.hasZ() || points.hasM()) {
             auto nPoints = stop - start + 1;
@@ -285,10 +253,10 @@ CurveBuilder::addArc(const CircularArc& arc, std::size_t stop) {
             }
         }
 
-        arcCoords->add(p01);
-        arcCoords->add(p1);
-        arcCoords->add(p12);
-        arcCoords->add(p2);
+        dstCoords.add(p01);
+        dstCoords.add(p1);
+        dstCoords.add(p12);
+        dstCoords.add(p2);
     } else {
         CoordinateXYZM p1(CircularArcs::getMidpoint(p0, p2, averageCenter, averageRadius, arc.isCCW()));
 
@@ -296,14 +264,9 @@ CurveBuilder::addArc(const CircularArc& arc, std::size_t stop) {
             getOrInterpolateMidPointZM(p1, arc, stop, averageCenter);
         }
 
-        if (!arcCoords) {
-            arcCoords = std::make_shared<CoordinateSequence>(0,  points.hasZ(), points.hasM());
-            arcCoords->reserve(3);
-            arcCoords->add(p0);
-        }
-
-        arcCoords->add(p1);
-        arcCoords->add(p2);
+        dstCoords.add(p0, false);
+        dstCoords.add(p1);
+        dstCoords.add(p2);
     }
 }
 

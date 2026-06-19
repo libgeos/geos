@@ -51,6 +51,12 @@ CurveBuilder::add(const CoordinateSequence& coords, bool isCurved)
 }
 
 void
+CurveBuilder::add(const CoordinateSequence& coords, std::size_t from, std::size_t to, bool isCurved)
+{
+    getSeq(isCurved).add(coords, from, to, false);
+}
+
+void
 CurveBuilder::closeRing()
 {
     if (m_curves.empty() && (m_pts == nullptr || m_pts->isEmpty())) {

@@ -20,7 +20,7 @@
 
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/algorithm/CircularArcs.h>
-#include <geos/algorithm/CurveBuilder.h>
+#include <geos/algorithm/LineToCurveConverter.h>
 #include <geos/algorithm/Length.h>
 #include <geos/algorithm/Orientation.h>
 #include <geos/geom/CircularArc.h>
@@ -39,6 +39,7 @@
 #include <geos/geom/MultiPoint.h> // for getBoundary
 #include <geos/geom/Envelope.h>
 #include <geos/operation/BoundaryOp.h>
+#include <geos/util/IllegalArgumentException.h>
 #include <geos/util.h>
 
 #include <algorithm>
@@ -102,7 +103,7 @@ LineString::validateConstruction()
     }
 
     if(points->size() == 1) {
-        throw util::IllegalArgumentException("point array must contain 0 or >1 elements\n");
+        throw geos::util::IllegalArgumentException("point array must contain 0 or >1 elements\n");
     }
 }
 
@@ -115,7 +116,7 @@ LineString::getCurvedImpl(const algorithm::LineToCurveParams& params) const
 std::unique_ptr<Curve>
 LineString::getCurved(const algorithm::LineToCurveParams& params) const
 {
-    return CurveBuilder::getCurved(*this, params);
+    return LineToCurveConverter::getCurved(*this, params);
 }
 
 std::string

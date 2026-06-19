@@ -15,6 +15,7 @@
 #pragma once
 
 #include <geos/export.h>
+#include <geos/geom/util/CurveBuilder.h>
 
 #include <memory>
 
@@ -33,21 +34,26 @@ namespace geos::geom {
 
 namespace geos::algorithm {
 
-class GEOS_DLL CurveBuilder {
+class GEOS_DLL LineToCurveConverter {
 
 public:
 
+    /** Construct a curved geometry from the provided LineString. The provided LineToCurveParams will be used
+     *  to determine when successive vertices of the LineString can be interpreted as a circular arc.
+     */
     static std::unique_ptr<geom::Curve> getCurved(const geom::LineString& ls, const LineToCurveParams& params);
 
 private:
 
-    explicit CurveBuilder(const geom::GeometryFactory& factory);
+    explicit LineToCurveConverter(const geom::GeometryFactory& factory, bool outputZ, bool outputM);
 
     std::unique_ptr<geom::Curve> compute(const geom::LineString& ls, const LineToCurveParams& params);
 
     void addArc(const geom::CircularArc& arc, std::size_t stop);
 
     void addLineCoords(const geom::CoordinateSequence& points, std::size_t from, std::size_t to);
+
+    /*
 
     void finishArc();
 
@@ -57,10 +63,12 @@ private:
     std::shared_ptr<geom::CoordinateSequence> arcCoords;
     std::vector<std::unique_ptr<geom::SimpleCurve>> curves;
     const geom::GeometryFactory& factory;
+    */
+    geom::util::CurveBuilder curveBuilder;
 
     /// Declared as non-copyable
-    CurveBuilder(const CurveBuilder& other);
-    CurveBuilder& operator=(const CurveBuilder& rhs);
+    LineToCurveConverter(const LineToCurveConverter& other);
+    LineToCurveConverter& operator=(const LineToCurveConverter& rhs);
 };
 
 }
