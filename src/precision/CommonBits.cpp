@@ -14,6 +14,7 @@
  **********************************************************************/
 
 #include <geos/precision/CommonBits.h>
+#include <limits>
 
 namespace geos {
 namespace precision { // geos.precision
@@ -71,6 +72,11 @@ CommonBits::CommonBits()
 void
 CommonBits::add(double num)
 {
+    if (num > static_cast<double>(std::numeric_limits<std::int64_t>::max())) {
+        commonBits = 0;
+        return;
+    }
+
     int64_t numBits = (int64_t) num;
     if(isFirst) {
         commonBits = numBits;
