@@ -102,12 +102,11 @@ LineToCurveConverter::compute(const LineString& ls, const LineToCurveParams& par
                 break;
             }
 
-            // Check that the angle p[stop-2] /_ p[stop-1] /_ p[stop] is consistent with that in the
-            // original section of the arc.
-            const double prevExtAngle = Angle::angleBetween(arc.p0(), arc.p1(), arc.p2());
-            const double currExtAngle = Angle::angleBetween(prev2, prev1, pt);
-
-            if (std::abs(currExtAngle - prevExtAngle) > params.getMaxExteriorAngleDifferenceRadians()) {
+            // Check that angle p[stop-1] /_ center /_ p[stop] is consistent with that in the
+            // original section of the arc. This is a different formulation than PostGIS, which
+            // performs the test on the exterior angle p[stop-2] /_ p[stop-1] /_ p[stop].
+            const double prevAngle = std::abs(Angle::angleBetweenOriented(prev2, arc.getCenter(), prev1));
+            if (std::abs(currAngle - prevAngle) > params.getMaxAngleDifferenceRadians()) {
                 break;
             }
 

@@ -3840,7 +3840,7 @@ extern "C" {
     GEOSLineToCurveParams_setMaxAngleDifferenceDegrees_r(GEOSContextHandle_t extHandle, GEOSLineToCurveParams* params, double tolerance)
     {
         return execute(extHandle, 0, [&]() {
-            params->setMaxExteriorAngleDifferenceDegrees(tolerance);
+            params->setMaxAngleDifferenceDegrees(tolerance);
             return 1;
         });
     }

@@ -40,9 +40,9 @@ public:
         return maxAngleRadians;
     }
 
-    // Get the maximum angle difference in radians (p[0], p[1], p[2]) between successive sections of the same arc.
-    double getMaxExteriorAngleDifferenceRadians() const {
-        return maxExteriorAngleDifferenceRadians;
+    // Get the maximum difference in sequentially calculated angles along the same arc.
+    double getMaxAngleDifferenceRadians() const {
+        return maxAngleDifferenceRadians;
     }
 
     void setRadiusTolerance(double tol) {
@@ -52,15 +52,15 @@ public:
         radiusTolerance = tol;
     }
 
-    void setMaxExteriorAngleDifferenceRadians(double tol) {
+    void setMaxAngleDifferenceRadians(double tol) {
         if (!(tol > 0)) {
             throw geos::util::IllegalArgumentException("Angle tolerance must be positive");
         }
-        maxExteriorAngleDifferenceRadians = tol;
+        maxAngleDifferenceRadians = tol;
     }
 
-    void setMaxExteriorAngleDifferenceDegrees(double tol) {
-        setMaxExteriorAngleDifferenceRadians(tol * MATH_PI / 180.0);
+    void setMaxAngleDifferenceDegrees(double tol) {
+        setMaxAngleDifferenceRadians(tol * MATH_PI / 180.0);
     }
 
     void setMaxStepDegrees(double tol) {
@@ -73,7 +73,7 @@ public:
 private:
     double radiusTolerance{1e-6};
     double maxAngleRadians{45.01 * MATH_PI / 180.0};
-    double maxExteriorAngleDifferenceRadians{0.01};
+    double maxAngleDifferenceRadians{0.01};
 };
 
 }
