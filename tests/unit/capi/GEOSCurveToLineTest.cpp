@@ -64,7 +64,7 @@ void object::test<3>()
 
     input_ = fromWKT("CIRCULARSTRING (0 0, 100 100, 200 0)");
 
-    ensure(GEOSCurveToLineParams_setTolerance(params_, GEOS_CURVETOLINE_STEP_DEGREES, 30));
+    ensure(GEOSCurveToLineParams_setMaxStepDegrees(params_, 30));
     result_ = GEOSCurveToLine(input_, params_);
     expected_ = fromWKT("LINESTRING(0 0,13.3975 50,50 86.6025,100 100,150 86.6025,186.6025 50,200 0)");
 
@@ -78,7 +78,8 @@ void object::test<4>()
     set_test_name("CircularString, maximum deviation");
 
     input_ = fromWKT("CIRCULARSTRING (0 0, 100 100, 200 0)");
-    ensure(GEOSCurveToLineParams_setTolerance(params_, GEOS_CURVETOLINE_MAX_DEVIATION, 10));
+    ensure(GEOSCurveToLineParams_setMaxStepDegrees(params_, 90));
+    ensure(GEOSCurveToLineParams_setMaxDeviation(params_, 10));
     result_ = GEOSCurveToLine(input_, params_);
     expected_ = fromWKT("LINESTRING(0 0,30 70,100 100,170 70,200 0)");
 
@@ -92,8 +93,11 @@ void object::test<5>()
     set_test_name("invalid tolerance value");
 
     input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
-    ensure(!GEOSCurveToLineParams_setTolerance(params_, GEOS_CURVETOLINE_STEP_DEGREES, -1));
-    ensure(!GEOSCurveToLineParams_setTolerance(params_, GEOS_CURVETOLINE_STEP_DEGREES, std::numeric_limits<double>::quiet_NaN()));
+    ensure(!GEOSCurveToLineParams_setMaxStepDegrees(params_, -1));
+    ensure(!GEOSCurveToLineParams_setMaxStepDegrees(params_, std::numeric_limits<double>::quiet_NaN()));
+
+    ensure(!GEOSCurveToLineParams_setMaxDeviation(params_, -1));
+    ensure(!GEOSCurveToLineParams_setMaxDeviation(params_, std::numeric_limits<double>::quiet_NaN()));
 }
 
 } // namespace tut

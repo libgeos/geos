@@ -303,7 +303,7 @@ void object::test<17>()
     result_ = GEOSClipByRect_r(ctxt_, input_, 0, 0, 1, 1);
     ensure(result_ == nullptr);
 
-    GEOSCurveToLineParams_setTolerance_r(ctxt_, curveToLineParams_, GEOS_CURVETOLINE_STEP_DEGREES, 1);
+    GEOSCurveToLineParams_setMaxStepDegrees_r(ctxt_, curveToLineParams_, 1);
     GEOSContext_setCurveToLineParams_r(ctxt_, curveToLineParams_);
 
     // Input converted to line, output not converted to curve

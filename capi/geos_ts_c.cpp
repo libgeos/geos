@@ -3818,11 +3818,21 @@ extern "C" {
     }
 
     int
-    GEOSCurveToLineParams_setTolerance_r(GEOSContextHandle_t extHandle, GEOSCurveToLineParams* params,
-                                         GEOSCurveToLineTolerance toleranceType, double toleranceValue)
+    GEOSCurveToLineParams_setMaxStepDegrees_r(GEOSContextHandle_t extHandle, GEOSCurveToLineParams* params,
+                                              double toleranceValue)
     {
         return execute(extHandle, 0, [&]() {
-            params->setTolerance(static_cast<GEOSCurveToLineParams::TOLERANCE_TYPE>(toleranceType), toleranceValue);
+            params->setMaxStepDegrees(toleranceValue);
+            return 1;
+        });
+    }
+
+    int
+    GEOSCurveToLineParams_setMaxDeviation_r(GEOSContextHandle_t extHandle, GEOSCurveToLineParams* params,
+                                            double toleranceValue)
+    {
+        return execute(extHandle, 0, [&]() {
+            params->setMaxDeviation(toleranceValue);
             return 1;
         });
     }

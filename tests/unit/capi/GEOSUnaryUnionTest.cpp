@@ -231,7 +231,7 @@ void object::test<12>()
     result_ = GEOSUnaryUnion_r(ctxt_, input_);
     ensure(result_ == nullptr);
 
-    GEOSCurveToLineParams_setTolerance_r(ctxt_, curveToLineParams_, GEOS_CURVETOLINE_STEP_DEGREES, 1);
+    GEOSCurveToLineParams_setMaxStepDegrees_r(ctxt_, curveToLineParams_, 1);
     GEOSContext_setCurveToLineParams_r(ctxt_, curveToLineParams_);
 
     // Input converted to line, output not converted to curve

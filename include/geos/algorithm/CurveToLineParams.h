@@ -22,63 +22,54 @@ namespace geos::algorithm {
 class GEOS_DLL CurveToLineParams {
 
 public:
-    enum class TOLERANCE_TYPE {
-        STEP_DEGREES,
-        MAX_DEVIATION,
-    };
 
-    CurveToLineParams() : CurveToLineParams(TOLERANCE_TYPE::STEP_DEGREES, 4.0) {}
+    CurveToLineParams() :
+      m_maxStepDegrees(4.0),
+      m_maxDeviation(DoubleInfinity) {}
 
-    CurveToLineParams(TOLERANCE_TYPE tolType, double tolValue) {
-        setTolerance(tolType, tolValue);
-    }
-
-    void setTolerance(TOLERANCE_TYPE tolType, double tolValue) {
-        if (tolType == TOLERANCE_TYPE::STEP_DEGREES) {
-            if (!(tolValue > 0)) {
-                throw util::IllegalArgumentException("Step size must be positive");
-            }
-        } else if (tolType == TOLERANCE_TYPE::MAX_DEVIATION) {
-            if (!(tolValue > 0)) {
-                throw util::IllegalArgumentException("Max deviation must be positive");
-            }
-        } else {
-            throw util::IllegalArgumentException("Invalid tolerance type");
+    CurveToLineParams& setMaxStepDegrees(double value) {
+        if (!(value > 0)) {
+            throw util::IllegalArgumentException("Step size must be positive");
         }
 
-        toleranceType = tolType;
-        toleranceValue = tolValue;
+        m_maxStepDegrees = value;
+
+        return *this;
+    }
+
+    CurveToLineParams& setMaxDeviation(double value) {
+        if (!(value > 0)) {
+            throw util::IllegalArgumentException("Max deviation must be positive");
+        }
+
+        m_maxDeviation = value;
+
+        return *this;
     }
 
     static CurveToLineParams maxDeviation(double dev) {
-        return CurveToLineParams(TOLERANCE_TYPE::MAX_DEVIATION, dev);
+        return CurveToLineParams()
+          .setMaxStepDegrees(DoubleInfinity)
+          .setMaxDeviation(dev);
     }
 
     static CurveToLineParams stepSizeDegrees(double stepSize) {
-        return CurveToLineParams(TOLERANCE_TYPE::STEP_DEGREES, stepSize);
+        return CurveToLineParams()
+          .setMaxStepDegrees(stepSize)
+          .setMaxDeviation(DoubleInfinity);
     }
 
     double getStepSizeDegrees(const geom::CircularArc& arc) const {
-        if (toleranceType == TOLERANCE_TYPE::STEP_DEGREES) {
-            return toleranceValue;
-        }
+        const double deviationRatio = 1 - m_maxDeviation / arc.getRadius();
+        const double maxStepFromDeviation = deviationRatio < 0 ? 180 : std::acos(deviationRatio) * 360 / MATH_PI;
 
-        if (toleranceType == TOLERANCE_TYPE::MAX_DEVIATION) {
-            const double ratio = 1 - toleranceValue / arc.getRadius();
-            if (ratio < 0) {
-                return 180;
-            }
-
-            return std::acos(ratio) * 360 / MATH_PI;
-        }
-
-        throw util::IllegalArgumentException("Invalid tolerance type");
+        return std::min(m_maxStepDegrees, maxStepFromDeviation);
     }
 
 private:
 
-    TOLERANCE_TYPE toleranceType;
-    double toleranceValue;
+    double m_maxStepDegrees;
+    double m_maxDeviation;
 
 };
 

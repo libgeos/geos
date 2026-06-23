@@ -228,9 +228,15 @@ extern "C" {
     }
 
     int
-    GEOSCurveToLineParams_setTolerance(GEOSCurveToLineParams* params, enum GEOSCurveToLineTolerance toleranceType, double toleranceValue)
+    GEOSCurveToLineParams_setMaxStepDegrees(GEOSCurveToLineParams* params, double tolerance)
     {
-        return GEOSCurveToLineParams_setTolerance_r(handle, params, toleranceType, toleranceValue);
+        return GEOSCurveToLineParams_setMaxStepDegrees_r(handle, params, tolerance);
+    }
+
+    int
+    GEOSCurveToLineParams_setMaxDeviation(GEOSCurveToLineParams* params, double tolerance)
+    {
+        return GEOSCurveToLineParams_setMaxDeviation_r(handle, params, tolerance);
     }
 
     void

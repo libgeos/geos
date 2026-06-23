@@ -1864,28 +1864,23 @@ extern double GEOS_DLL GEOSGeom_getPrecision_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry *g);
 
-/**
-* Curve-to-line tolerance types.
-*/
-enum GEOSCurveToLineTolerance {
-    /** Maximum angle between successive vertices of a linearized arc */
-    GEOS_CURVETOLINE_STEP_DEGREES = 0,
-    /** Maximum distance between an arc and its linearized approximation */
-    GEOS_CURVETOLINE_MAX_DEVIATION = 1
-};
-
 /** \see GEOSCurveToLine */
 extern GEOSGeometry GEOS_DLL *GEOSCurveToLine_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry* g,
     const GEOSCurveToLineParams* params);
 
-/** \see GEOSCurveToLineParams_setTolerance */
-extern int GEOS_DLL GEOSCurveToLineParams_setTolerance_r(
+/** \see GEOSCurveToLineParams_setMaxStepDegrees */
+extern int GEOS_DLL GEOSCurveToLineParams_setMaxStepDegrees_r(
     GEOSContextHandle_t extHandle,
     GEOSCurveToLineParams* params,
-    enum GEOSCurveToLineTolerance toleranceType,
-    double toleranceValue);
+    double tolerance);
+
+/** \see GEOSCurveToLineParams_setMaxDeviation */
+extern int GEOS_DLL GEOSCurveToLineParams_setMaxDeviation_r(
+    GEOSContextHandle_t extHandle,
+    GEOSCurveToLineParams* params,
+    double tolerance);
 
 /** \see GEOSLineToCurve */
 extern GEOSGeometry GEOS_DLL *GEOSLineToCurve_r(
@@ -6017,21 +6012,29 @@ extern GEOSCurveToLineParams GEOS_DLL *GEOSCurveToLineParams_create();
 
 extern void GEOS_DLL GEOSCurveToLineParams_destroy(GEOSCurveToLineParams* params);
 
-/** Set the tolerance type and value to use when converting curves to lines.
-*
-*   Any existing tolerance type and value will be overwritten.
+/** Set the maximum step (in degrees) between subsequent points.
 *
 *   \param params parameters to use in the conversion.
-*   \param toleranceType \see GEOSCurveToLineTolerance
-*   \param toleranceValue the value to use with toleranceType
-*   \return 1 if the operation succeeded, 0 otherwise*
+*   \param tolerance the maximum step size
+*   \return 1 if the operation succeeded, 0 otherwise
 *
 *   \since 3.15
 */ 
-extern int GEOS_DLL GEOSCurveToLineParams_setTolerance(
+extern int GEOS_DLL GEOSCurveToLineParams_setMaxStepDegrees(
     GEOSCurveToLineParams* params,
-    enum GEOSCurveToLineTolerance toleranceType,
-    double toleranceValue);
+    double tolerance);
+
+/** Set the maximum deviation between an arc and its linear approximate.
+*
+*   \param params parameters to use in the conversion.
+*   \param tolerance the maximum deviation
+*   \return 1 if the operation succeeded, 0 otherwise
+*
+*   \since 3.15
+*/ 
+extern int GEOS_DLL GEOSCurveToLineParams_setMaxDeviation(
+    GEOSCurveToLineParams* params,
+    double tolerance);
 
 /** Replace line segments in the geometry with circular arcs, where possible.
 *
@@ -6071,7 +6074,7 @@ extern int GEOS_DLL GEOSLineToCurveParams_setRadiusTolerance(
 *   A point may be considered to continue a circular arc if the angle between
 *   the point and the final point in the arc is less than the specified
 *   tolerance. Because of round-off errors, this value should be slightly
-*   greater than the one used in \ref GEOSCurveToLineParams_setTolerance.
+*   greater than the one used in \ref GEOSCurveToLineParams_setMaxStepDegrees.
 * 
 *   \param params the parameters object
 *   \param tolerance the tolerance value
