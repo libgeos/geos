@@ -6,8 +6,8 @@
 
 #include "geos_c.h"
 
-static int initialized = 0;
-FILE * flogOut;
+static FILE * flogOut;
+static GEOSGeoJSONReader *reader;
 
 void
 notice(const char *fmt, ...) {
@@ -29,11 +29,17 @@ log_and_exit(const char *fmt, ...) {
     fprintf( flogOut, "\n" );
 }
 
+int LLVMFuzzerInitialize(int *argc, char ***argv) {
+    (void)argc; (void)argv;
+    flogOut = fopen("/dev/null", "wb");
+    initGEOS(notice, log_and_exit);
+    reader = GEOSGeoJSONReader_create();
+    return 0;
+}
+
 int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
-    if (initialized == 0) {
-        flogOut = fopen("/dev/null", "wb");
-        initGEOS(notice, log_and_exit);
-        initialized = 1;
+    if (reader == NULL) {
+        return 0;
     }
 
     char *json = (char *) malloc(Size + 1);
@@ -43,13 +49,9 @@ int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size) {
     memcpy(json, Data, Size);
     json[Size] = '\0';
 
-    GEOSGeoJSONReader *reader = GEOSGeoJSONReader_create();
-    if (reader != NULL) {
-        GEOSGeometry *g = GEOSGeoJSONReader_readGeometry(reader, json);
-        if (g != NULL) {
-            GEOSGeom_destroy(g);
-        }
-        GEOSGeoJSONReader_destroy(reader);
+    GEOSGeometry *g = GEOSGeoJSONReader_readGeometry(reader, json);
+    if (g != NULL) {
+        GEOSGeom_destroy(g);
     }
 
     free(json);
