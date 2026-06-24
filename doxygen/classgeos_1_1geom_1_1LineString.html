@@ -85,6 +85,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aa0e836b36b7343b7fecb257b0b523dbe" id="r_aa0e836b36b7343b7fecb257b0b523dbe"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1LineString.html#aa0e836b36b7343b7fecb257b0b523dbe">getLength</a> () const override</td></tr>
 <tr class="memdesc:aa0e836b36b7343b7fecb257b0b523dbe"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the length of this <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a>.  <br /></td></tr>
 <tr class="separator:aa0e836b36b7343b7fecb257b0b523dbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adfcf53e191e1e766cd8513c90afc19eb" id="r_adfcf53e191e1e766cd8513c90afc19eb"><td class="memItemLeft" align="right" valign="top"><a id="adfcf53e191e1e766cd8513c90afc19eb" name="adfcf53e191e1e766cd8513c90afc19eb"></a>
+std::unique_ptr&lt; Curve &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getCurved</b> (const algorithm::LineToCurveParams &amp;) const</td></tr>
+<tr class="separator:adfcf53e191e1e766cd8513c90afc19eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5e94d17eeeb26e2b342785741256f2de" id="r_a5e94d17eeeb26e2b342785741256f2de"><td class="memItemLeft" align="right" valign="top"><a id="a5e94d17eeeb26e2b342785741256f2de" name="a5e94d17eeeb26e2b342785741256f2de"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>isCurved</b> () const override</td></tr>
 <tr class="separator:a5e94d17eeeb26e2b342785741256f2de"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -106,6 +109,10 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:a46eea02558dd848cbb8c2b2a9eb28ec4" id="r_a46eea02558dd848cbb8c2b2a9eb28ec4"><td class="memItemLeft" align="right" valign="top"><a id="a46eea02558dd848cbb8c2b2a9eb28ec4" name="a46eea02558dd848cbb8c2b2a9eb28ec4"></a>
 &#160;</td><td class="memItemRight" valign="bottom"><b>LineString</b> (const std::shared_ptr&lt; const <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &gt; &amp;pts, const <a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html">GeometryFactory</a> &amp;newFactory)</td></tr>
 <tr class="separator:a46eea02558dd848cbb8c2b2a9eb28ec4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a403020f67be2172eff3c15a1f5013eb5" id="r_a403020f67be2172eff3c15a1f5013eb5"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgeos_1_1geom_1_1LineString.html">LineString</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1LineString.html#a403020f67be2172eff3c15a1f5013eb5">getLinearizedImpl</a> (const algorithm::CurveToLineParams &amp;) const override</td></tr>
+<tr class="separator:a403020f67be2172eff3c15a1f5013eb5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7c527676c105bd1759ee3cfff38a0304" id="r_a7c527676c105bd1759ee3cfff38a0304"><td class="memItemLeft" align="right" valign="top">Curve *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1LineString.html#a7c527676c105bd1759ee3cfff38a0304">getCurvedImpl</a> (const algorithm::LineToCurveParams &amp;) const override</td></tr>
+<tr class="separator:a7c527676c105bd1759ee3cfff38a0304"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a464fd3a1efff40a01f42419fbd7a5fea" id="r_a464fd3a1efff40a01f42419fbd7a5fea"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgeos_1_1geom_1_1LineString.html">LineString</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1LineString.html#a464fd3a1efff40a01f42419fbd7a5fea">cloneImpl</a> () const override</td></tr>
 <tr class="memdesc:a464fd3a1efff40a01f42419fbd7a5fea"><td class="mdescLeft">&#160;</td><td class="mdescRight">Make a deep-copy of this <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a>.  <br /></td></tr>
 <tr class="separator:a464fd3a1efff40a01f42419fbd7a5fea"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -215,6 +222,34 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>GeometryFactory</b><
 
 </div>
 </div>
+<a id="a7c527676c105bd1759ee3cfff38a0304" name="a7c527676c105bd1759ee3cfff38a0304"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c527676c105bd1759ee3cfff38a0304">&#9670;&#160;</a></span>getCurvedImpl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Curve * geos::geom::LineString::getCurvedImpl </td>
+          <td>(</td>
+          <td class="paramtype">const algorithm::LineToCurveParams &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geos::geom::Geometry</a>.</p>
+
+</div>
+</div>
 <a id="abc4825532f335163b059e3150590a88d" name="abc4825532f335163b059e3150590a88d"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#abc4825532f335163b059e3150590a88d">&#9670;&#160;</a></span>getGeometryType()</h2>
 
@@ -299,6 +334,34 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>GeometryFactory</b><
 <p>Returns the length of this <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a>. </p>
 
 <p>Reimplemented from <a class="el" href="classgeos_1_1geom_1_1Geometry.html#a4ca62adbe92b7f9abfbf9884fdd6cd5a">geos::geom::Geometry</a>.</p>
+
+</div>
+</div>
+<a id="a403020f67be2172eff3c15a1f5013eb5" name="a403020f67be2172eff3c15a1f5013eb5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a403020f67be2172eff3c15a1f5013eb5">&#9670;&#160;</a></span>getLinearizedImpl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgeos_1_1geom_1_1LineString.html">LineString</a> * geos::geom::LineString::getLinearizedImpl </td>
+          <td>(</td>
+          <td class="paramtype">const algorithm::CurveToLineParams &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geos::geom::Geometry</a>.</p>
 
 </div>
 </div>

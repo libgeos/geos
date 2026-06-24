@@ -82,6 +82,10 @@ Typedefs</h2></td></tr>
 <tr class="separator:ac946f544f45cb387b16cb9deedbb738d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab41b5f06e26ec612a7638c91dcb278b7" id="r_ab41b5f06e26ec612a7638c91dcb278b7"><td class="memItemLeft" align="right" valign="top">typedef struct GEOSClusterInfo_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#ab41b5f06e26ec612a7638c91dcb278b7">GEOSClusterInfo</a></td></tr>
 <tr class="separator:ab41b5f06e26ec612a7638c91dcb278b7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a430bcb2ccb2f8467ca7d5351c7c70da1" id="r_a430bcb2ccb2f8467ca7d5351c7c70da1"><td class="memItemLeft" align="right" valign="top">typedef struct GEOSCurveToLineParams_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a430bcb2ccb2f8467ca7d5351c7c70da1">GEOSCurveToLineParams</a></td></tr>
+<tr class="separator:a430bcb2ccb2f8467ca7d5351c7c70da1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a115e69ee706b7079befc203bf94215ff" id="r_a115e69ee706b7079befc203bf94215ff"><td class="memItemLeft" align="right" valign="top">typedef struct GEOSLineToCurveParams_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a115e69ee706b7079befc203bf94215ff">GEOSLineToCurveParams</a></td></tr>
+<tr class="separator:a115e69ee706b7079befc203bf94215ff"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2ab5a825d72dc424872fdc8549ace85d" id="r_a2ab5a825d72dc424872fdc8549ace85d"><td class="memItemLeft" align="right" valign="top">typedef void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a2ab5a825d72dc424872fdc8549ace85d">GEOSQueryCallback</a>) (void *item, void *userdata)</td></tr>
 <tr class="separator:a2ab5a825d72dc424872fdc8549ace85d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1a131618ec3c617e1ac7467864f6f261" id="r_a1a131618ec3c617e1ac7467864f6f261"><td class="memItemLeft" align="right" valign="top">typedef int(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a1a131618ec3c617e1ac7467864f6f261">GEOSDistanceCallback</a>) (const void *item1, const void *item2, double *distance, void *userdata)</td></tr>
@@ -200,6 +204,10 @@ Functions</h2></td></tr>
 <tr class="separator:a25d9d123caff86aba6994d44308a482e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a68b1a9f6da8fc95c4eea5433768afa50" id="r_a68b1a9f6da8fc95c4eea5433768afa50"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a0d2ed9d92d065c3ad5f21210f105a586">GEOSMessageHandler_r</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a68b1a9f6da8fc95c4eea5433768afa50">GEOSContext_setErrorMessageHandler_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> extHandle, <a class="el" href="geos__c_8h.html#a0d2ed9d92d065c3ad5f21210f105a586">GEOSMessageHandler_r</a> ef, void *userData)</td></tr>
 <tr class="separator:a68b1a9f6da8fc95c4eea5433768afa50"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a22c3296a216c54d8bacb4ff3d6d6c633" id="r_a22c3296a216c54d8bacb4ff3d6d6c633"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a22c3296a216c54d8bacb4ff3d6d6c633">GEOSContext_setCurveToLineParams_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> extHandle, const <a class="el" href="geos__c_8h.html#a430bcb2ccb2f8467ca7d5351c7c70da1">GEOSCurveToLineParams</a> *params)</td></tr>
+<tr class="separator:a22c3296a216c54d8bacb4ff3d6d6c633"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a142c64f563db5ebb6a67fd5b38376966" id="r_a142c64f563db5ebb6a67fd5b38376966"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a142c64f563db5ebb6a67fd5b38376966">GEOSContext_setLineToCurveParams_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> extHandle, const <a class="el" href="geos__c_8h.html#a115e69ee706b7079befc203bf94215ff">GEOSLineToCurveParams</a> *params)</td></tr>
+<tr class="separator:a142c64f563db5ebb6a67fd5b38376966"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aee2765143dde1ed42d88a849f5ce5cc9" id="r_aee2765143dde1ed42d88a849f5ce5cc9"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a20364ac461610266953754281d93408a">GEOSCoordSequence</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#aee2765143dde1ed42d88a849f5ce5cc9">GEOSCoordSeq_create_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle, unsigned int size, unsigned int dims)</td></tr>
 <tr class="separator:aee2765143dde1ed42d88a849f5ce5cc9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a596eccb94c16d14335a84a38956de021" id="r_a596eccb94c16d14335a84a38956de021"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a20364ac461610266953754281d93408a">GEOSCoordSequence</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a596eccb94c16d14335a84a38956de021">GEOSCoordSeq_createWithDimensions_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle, unsigned int size, int hasZ, int hasM)</td></tr>
@@ -598,6 +606,20 @@ Functions</h2></td></tr>
 <tr class="separator:a23768722371a99a4181d878867be10a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa768b1fa7d28aca9dd0446ee64015499" id="r_aa768b1fa7d28aca9dd0446ee64015499"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#aa768b1fa7d28aca9dd0446ee64015499">GEOSGeom_getPrecision_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle, const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g)</td></tr>
 <tr class="separator:aa768b1fa7d28aca9dd0446ee64015499"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abb69f98daa032b1871fc7238a7147292" id="r_abb69f98daa032b1871fc7238a7147292"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#abb69f98daa032b1871fc7238a7147292">GEOSCurveToLine_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle, const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g, const <a class="el" href="geos__c_8h.html#a430bcb2ccb2f8467ca7d5351c7c70da1">GEOSCurveToLineParams</a> *params)</td></tr>
+<tr class="separator:abb69f98daa032b1871fc7238a7147292"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ecbb216e5f839eb3bdaf7b6e6dc86d7" id="r_a5ecbb216e5f839eb3bdaf7b6e6dc86d7"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a5ecbb216e5f839eb3bdaf7b6e6dc86d7">GEOSCurveToLineParams_setMaxStepDegrees_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> extHandle, <a class="el" href="geos__c_8h.html#a430bcb2ccb2f8467ca7d5351c7c70da1">GEOSCurveToLineParams</a> *params, double tolerance)</td></tr>
+<tr class="separator:a5ecbb216e5f839eb3bdaf7b6e6dc86d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeee325e4a42cb5a4530481c505be3aa6" id="r_aeee325e4a42cb5a4530481c505be3aa6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#aeee325e4a42cb5a4530481c505be3aa6">GEOSCurveToLineParams_setMaxDeviation_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> extHandle, <a class="el" href="geos__c_8h.html#a430bcb2ccb2f8467ca7d5351c7c70da1">GEOSCurveToLineParams</a> *params, double tolerance)</td></tr>
+<tr class="separator:aeee325e4a42cb5a4530481c505be3aa6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab1cd4b32d5283a3826146904b1c899dd" id="r_ab1cd4b32d5283a3826146904b1c899dd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#ab1cd4b32d5283a3826146904b1c899dd">GEOSLineToCurve_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle, const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g, const <a class="el" href="geos__c_8h.html#a115e69ee706b7079befc203bf94215ff">GEOSLineToCurveParams</a> *params)</td></tr>
+<tr class="separator:ab1cd4b32d5283a3826146904b1c899dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad50dccf81390eae39d8e31b3a95696b1" id="r_ad50dccf81390eae39d8e31b3a95696b1"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#ad50dccf81390eae39d8e31b3a95696b1">GEOSLineToCurveParams_setRadiusTolerance_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> extHandle, <a class="el" href="geos__c_8h.html#a115e69ee706b7079befc203bf94215ff">GEOSLineToCurveParams</a> *params, double tolerance)</td></tr>
+<tr class="separator:ad50dccf81390eae39d8e31b3a95696b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3b645e64e392f591ef684f6d8fbc889" id="r_ad3b645e64e392f591ef684f6d8fbc889"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#ad3b645e64e392f591ef684f6d8fbc889">GEOSLineToCurveParams_setMaxStepDegrees_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> extHandle, <a class="el" href="geos__c_8h.html#a115e69ee706b7079befc203bf94215ff">GEOSLineToCurveParams</a> *params, double tolerance)</td></tr>
+<tr class="separator:ad3b645e64e392f591ef684f6d8fbc889"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a08e354db512842266f892422022e0b3f" id="r_a08e354db512842266f892422022e0b3f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a08e354db512842266f892422022e0b3f">GEOSLineToCurveParams_setMaxAngleDifferenceDegrees_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> extHandle, <a class="el" href="geos__c_8h.html#a115e69ee706b7079befc203bf94215ff">GEOSLineToCurveParams</a> *params, double tolerance)</td></tr>
+<tr class="separator:a08e354db512842266f892422022e0b3f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8b350fec50e6828539bddaf8939a6ff5" id="r_a8b350fec50e6828539bddaf8939a6ff5"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a8b350fec50e6828539bddaf8939a6ff5">GEOSGetNumInteriorRings_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle, const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g)</td></tr>
 <tr class="separator:a8b350fec50e6828539bddaf8939a6ff5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abe6e211a0e25289ca5164cece5d5cde8" id="r_abe6e211a0e25289ca5164cece5d5cde8"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#abe6e211a0e25289ca5164cece5d5cde8">GEOSGeomGetNumPoints_r</a> (<a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a> handle, const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g)</td></tr>
@@ -1165,6 +1187,35 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>GEOSCoverageCleanParam
 <tr class="separator:aedd689ea6ef757f39d9e7d6231ab848c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3342d56522977ef605234ac1a576c01c" id="r_a3342d56522977ef605234ac1a576c01c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a3342d56522977ef605234ac1a576c01c">GEOSGeom_setPrecision</a> (const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g, double gridSize, int flags)</td></tr>
 <tr class="separator:a3342d56522977ef605234ac1a576c01c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr><td colspan="2"><div class="groupHeader">Line/Curve conversion</div></td></tr>
+<tr><td colspan="2"><div class="groupText"><p>Functions for converting between curved and linear geometry types. </p>
+</div></td></tr>
+<tr class="memitem:a861cac57193c419be556ac7e225b95c1" id="r_a861cac57193c419be556ac7e225b95c1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a861cac57193c419be556ac7e225b95c1">GEOSCurveToLine</a> (const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g, const <a class="el" href="geos__c_8h.html#a430bcb2ccb2f8467ca7d5351c7c70da1">GEOSCurveToLineParams</a> *params)</td></tr>
+<tr class="separator:a861cac57193c419be556ac7e225b95c1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a363e1e4d71e251e464fd44778d52a801" id="r_a363e1e4d71e251e464fd44778d52a801"><td class="memItemLeft" align="right" valign="top"><a id="a363e1e4d71e251e464fd44778d52a801" name="a363e1e4d71e251e464fd44778d52a801"></a>
+<a class="el" href="geos__c_8h.html#a430bcb2ccb2f8467ca7d5351c7c70da1">GEOSCurveToLineParams</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>GEOSCurveToLineParams_create</b> ()</td></tr>
+<tr class="separator:a363e1e4d71e251e464fd44778d52a801"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aba8b9762b986c6241e0727211432d297" id="r_aba8b9762b986c6241e0727211432d297"><td class="memItemLeft" align="right" valign="top"><a id="aba8b9762b986c6241e0727211432d297" name="aba8b9762b986c6241e0727211432d297"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>GEOSCurveToLineParams_destroy</b> (<a class="el" href="geos__c_8h.html#a430bcb2ccb2f8467ca7d5351c7c70da1">GEOSCurveToLineParams</a> *params)</td></tr>
+<tr class="separator:aba8b9762b986c6241e0727211432d297"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2518dcf4caa84ccd1d84521025081bcf" id="r_a2518dcf4caa84ccd1d84521025081bcf"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a2518dcf4caa84ccd1d84521025081bcf">GEOSCurveToLineParams_setMaxStepDegrees</a> (<a class="el" href="geos__c_8h.html#a430bcb2ccb2f8467ca7d5351c7c70da1">GEOSCurveToLineParams</a> *params, double tolerance)</td></tr>
+<tr class="separator:a2518dcf4caa84ccd1d84521025081bcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad3a41b895e7ce06a48e54b3989ff6ec6" id="r_ad3a41b895e7ce06a48e54b3989ff6ec6"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#ad3a41b895e7ce06a48e54b3989ff6ec6">GEOSCurveToLineParams_setMaxDeviation</a> (<a class="el" href="geos__c_8h.html#a430bcb2ccb2f8467ca7d5351c7c70da1">GEOSCurveToLineParams</a> *params, double tolerance)</td></tr>
+<tr class="separator:ad3a41b895e7ce06a48e54b3989ff6ec6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abfa218620139cdb567747a16b5d0fb3c" id="r_abfa218620139cdb567747a16b5d0fb3c"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#abfa218620139cdb567747a16b5d0fb3c">GEOSLineToCurve</a> (const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *g, const <a class="el" href="geos__c_8h.html#a115e69ee706b7079befc203bf94215ff">GEOSLineToCurveParams</a> *params)</td></tr>
+<tr class="separator:abfa218620139cdb567747a16b5d0fb3c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99385c4758f1a4a05df43479d2ffa7bd" id="r_a99385c4758f1a4a05df43479d2ffa7bd"><td class="memItemLeft" align="right" valign="top"><a id="a99385c4758f1a4a05df43479d2ffa7bd" name="a99385c4758f1a4a05df43479d2ffa7bd"></a>
+<a class="el" href="geos__c_8h.html#a115e69ee706b7079befc203bf94215ff">GEOSLineToCurveParams</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>GEOSLineToCurveParams_create</b> ()</td></tr>
+<tr class="separator:a99385c4758f1a4a05df43479d2ffa7bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad7750ba8add57173ad4b35318eeae5e4" id="r_ad7750ba8add57173ad4b35318eeae5e4"><td class="memItemLeft" align="right" valign="top"><a id="ad7750ba8add57173ad4b35318eeae5e4" name="ad7750ba8add57173ad4b35318eeae5e4"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>GEOSLineToCurveParams_destroy</b> (<a class="el" href="geos__c_8h.html#a115e69ee706b7079befc203bf94215ff">GEOSLineToCurveParams</a> *params)</td></tr>
+<tr class="separator:ad7750ba8add57173ad4b35318eeae5e4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad8da81589c3c9f7b0879a54659a91499" id="r_ad8da81589c3c9f7b0879a54659a91499"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#ad8da81589c3c9f7b0879a54659a91499">GEOSLineToCurveParams_setRadiusTolerance</a> (<a class="el" href="geos__c_8h.html#a115e69ee706b7079befc203bf94215ff">GEOSLineToCurveParams</a> *params, double tolerance)</td></tr>
+<tr class="separator:ad8da81589c3c9f7b0879a54659a91499"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a107fc52300559e746999be8114dbb83f" id="r_a107fc52300559e746999be8114dbb83f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a107fc52300559e746999be8114dbb83f">GEOSLineToCurveParams_setMaxStepDegrees</a> (<a class="el" href="geos__c_8h.html#a115e69ee706b7079befc203bf94215ff">GEOSLineToCurveParams</a> *params, double tolerance)</td></tr>
+<tr class="separator:a107fc52300559e746999be8114dbb83f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1ff3c71d96daba6e4a7caac432c3050d" id="r_a1ff3c71d96daba6e4a7caac432c3050d"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a1ff3c71d96daba6e4a7caac432c3050d">GEOSLineToCurveParams_setMaxAngleDifferenceDegrees</a> (<a class="el" href="geos__c_8h.html#a115e69ee706b7079befc203bf94215ff">GEOSLineToCurveParams</a> *params, double tolerance)</td></tr>
+<tr class="separator:a1ff3c71d96daba6e4a7caac432c3050d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Spatial Predicates</div></td></tr>
 <tr><td colspan="2"><div class="groupText"><p>Functions computing binary spatial predicates using the DE-9IM topology model. </p>
 </div></td></tr>
@@ -1599,6 +1650,23 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>GEOSCoverageCleanParam
 
 </div>
 </div>
+<a id="a430bcb2ccb2f8467ca7d5351c7c70da1" name="a430bcb2ccb2f8467ca7d5351c7c70da1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a430bcb2ccb2f8467ca7d5351c7c70da1">&#9670;&#160;</a></span>GEOSCurveToLineParams</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef struct GEOSCurveToLineParams_t <a class="el" href="geos__c_8h.html#a430bcb2ccb2f8467ca7d5351c7c70da1">GEOSCurveToLineParams</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Parameter object for curve-to-line conversion </p><dl class="section see"><dt>See also</dt><dd>GEOSCurveToLineParams_create() </dd>
+<dd>
+GEOSCurveToLineParams_destroy() </dd></dl>
+
+</div>
+</div>
 <a id="a1a131618ec3c617e1ac7467864f6f261" name="a1a131618ec3c617e1ac7467864f6f261"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1a131618ec3c617e1ac7467864f6f261">&#9670;&#160;</a></span>GEOSDistanceCallback</h2>
 
@@ -1701,6 +1769,23 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>GEOSCoverageCleanParam
 <a class="el" href="geos__c_8h.html#ad9878b3096d557bd38648699829cb660">GEOS_interruptRequest</a> </dd>
 <dd>
 <a class="el" href="geos__c_8h.html#a49d835008e2341b2b0b8a7c5358ec07d">GEOS_interruptCancel</a> </dd></dl>
+
+</div>
+</div>
+<a id="a115e69ee706b7079befc203bf94215ff" name="a115e69ee706b7079befc203bf94215ff"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a115e69ee706b7079befc203bf94215ff">&#9670;&#160;</a></span>GEOSLineToCurveParams</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef struct GEOSLineToCurveParams_t <a class="el" href="geos__c_8h.html#a115e69ee706b7079befc203bf94215ff">GEOSLineToCurveParams</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Parameter object for line-to-curve conversion </p><dl class="section see"><dt>See also</dt><dd>GEOSLineToCurveParams_create() </dd>
+<dd>
+GEOSLineToCurveParams_destroy() </dd></dl>
 
 </div>
 </div>
@@ -2952,6 +3037,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </table>
 </div><div class="memdoc">
 <p>Buffer a geometry. The coordinates of the constructed geometry will not have Z or M values.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The input geometry to be buffered. </td></tr>
@@ -3605,7 +3691,9 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Generates a buffer using the special parameters in the GEOSBufferParams </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Generates a buffer using the special parameters in the GEOSBufferParams</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The geometry to buffer </td></tr>
     <tr><td class="paramname">p</td><td>The parameters to apply to the buffer process </td></tr>
@@ -3725,6 +3813,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </table>
 </div><div class="memdoc">
 <p>Generate a buffer using the provided style parameters. The coordinates of the constructed geometry will not have Z or M values.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The geometry to buffer </td></tr>
@@ -3931,7 +4020,9 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Intersection optimized for a rectangular clipping polygon. Supposed to be faster than using <a class="el" href="geos__c_8h.html#a93b9e47337bf4961f008fa4d5e680b00">GEOSIntersection()</a>. Not guaranteed to return valid results. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Intersection optimized for a rectangular clipping polygon. Supposed to be faster than using <a class="el" href="geos__c_8h.html#a93b9e47337bf4961f008fa4d5e680b00">GEOSIntersection()</a>. Not guaranteed to return valid results.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail. This function outputs linear geometry types only. If line-to-curve conversion parameters are registered with the context, and a curved input was provided, outputs will be automatically converted to curved types.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The input geometry to be clipped </td></tr>
     <tr><td class="paramname">xmin</td><td>Left bound of clipping rectangle </td></tr>
@@ -4050,6 +4141,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 
 <p>GEOSClusterDBSCAN. </p>
 <p>Cluster geometries using the DBSCAN algorithm</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>a collection of geometries to be clustered </td></tr>
@@ -4147,6 +4239,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 
 <p>GEOSClusterEnvelopeDistance. </p>
 <p>Cluster geometries according to an envelope distance threshold</p>
+<p>This function supports curved geometry types.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>a collection of geometries to be clustered </td></tr>
@@ -4227,6 +4320,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 
 <p>GEOSClusterEnvelopeIntersects. </p>
 <p>Cluster geometries whose envelopes intersect</p>
+<p>This function supports curved geometry types.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td></td></tr>
@@ -4310,6 +4404,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 
 <p>GEOSClusterGeometryDistance. </p>
 <p>Cluster geometries according to a distance threshold</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>a collection of geometries to be clustered </td></tr>
@@ -4390,6 +4485,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 
 <p>GEOSClusterGeometryIntersects. </p>
 <p>Cluster geometries that intersect</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>a collection of geometries to be clustered </td></tr>
@@ -4876,6 +4972,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 <p>Returns a "concave hull" of a geometry. A concave hull is a polygon which contains all the points of the input, but is a better approximation than the convex hull to the area occupied by the input. Frequently used to convert a multi-point into a polygonal area. that contains all the points in the input Geometry.</p>
 <p>Z values in the input coordinates will be preserved. M values in the input coordinates will not be preserved.</p>
 <p>A set of points has a sequence of hulls of increasing concaveness, determined by a numeric target parameter. The concave hull is constructed by removing the longest outer edges of the Delaunay Triangulation of the space between the polygons, until the target criterion parameter is reached. This can be expressed as a ratio between the lengths of the longest and shortest edges. 1 produces the convex hull; 0 produces a hull with maximum concaveness</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The input geometry </td></tr>
@@ -4987,7 +5084,8 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </div><div class="memdoc">
 <p>Returns a "concave hull" of a geometry. A concave hull is a polygon which contains all the points of the input, but is a better approximation than the convex hull to the area occupied by the input. Frequently used to convert a multi-point into a polygonal area. that contains all the points in the input Geometry.</p>
 <p>Z values in the input coordinates will be preserved. M values in the input coordinates will not be preserved.</p>
-<p>A set of points has a sequence of hulls of increasing concaveness, determined by a numeric target parameter. The concave hull is constructed by removing the longest outer edges of the Delaunay Triangulation of the space between the polygons, until the specified maximm edge length is reached. A large value produces the convex hull, 0 produces the hull of maximum concaveness.</p>
+<p>A set of points has a sequence of hulls of increasing concaveness, determined by a numeric target parameter. The concave hull is constructed by removing the longest outer edges of the Delaunay Triangulation of the space between the polygons, until the specified maximum edge length is reached. A large value produces the convex hull, 0 produces the hull of maximum concaveness.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The input geometry </td></tr>
@@ -5107,6 +5205,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 <p>A concave hull is a (possibly) non-convex polygon containing all the input polygons. The computed hull "fills the gap" between the polygons, and does not intersect their interior. A set of polygons has a sequence of hulls of increasing concaveness, determined by a numeric target parameter.</p>
 <p>The concave hull is constructed by removing the longest outer edges of the Delaunay Triangulation of the space between the polygons, until the target criterion parameter is reached. The "Maximum Edge Length" parameter limits the length of the longest edge between polygons to be no larger than this value. This can be expressed as a ratio between the lengths of the longest and shortest edges.</p>
 <p>The input polygons <em>must</em> be a <em>valid</em> MultiPolygon (i.e. they must be non-overlapping).</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>the valid MultiPolygon geometry to process </td></tr>
@@ -5207,6 +5306,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </div><div class="memdoc">
 <p>Return a constrained Delaunay triangulation of the vertices of the given polygon(s). For non-polygonal inputs, returns an empty geometry collection.</p>
 <p>Z values from the input points will be propagated to the generated polygons. M values from the input points will be ignored.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>the input geometry whose rings will be used as input </td></tr>
@@ -5341,6 +5441,52 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </table>
 </div><div class="memdoc">
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#a5ec681a1db4f13175ad51eccdb99e05f">GEOSContains</a> </dd></dl>
+
+</div>
+</div>
+<a id="a22c3296a216c54d8bacb4ff3d6d6c633" name="a22c3296a216c54d8bacb4ff3d6d6c633"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22c3296a216c54d8bacb4ff3d6d6c633">&#9670;&#160;</a></span>GEOSContext_setCurveToLineParams_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void GEOSContext_setCurveToLineParams_r </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>&#160;</td>
+          <td class="paramname"><em>extHandle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="geos__c_8h.html#a430bcb2ccb2f8467ca7d5351c7c70da1">GEOSCurveToLineParams</a> *&#160;</td>
+          <td class="paramname"><em>params</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Set parameters to use for converting input curves to lines.</p>
+<p>These parameters will be used with this context whenever a curved geometry is provided to a function that only supports linear types. If <code>params</code> is NULL, no automatic conversion will be performed.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">extHandle</td><td>the GEOS context </td></tr>
+    <tr><td class="paramname">params</td><td>the curve conversion parameters</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section since"><dt>Since</dt><dd>3.15 </dd></dl>
 
 </div>
 </div>
@@ -5496,6 +5642,52 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 
 </div>
 </div>
+<a id="a142c64f563db5ebb6a67fd5b38376966" name="a142c64f563db5ebb6a67fd5b38376966"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a142c64f563db5ebb6a67fd5b38376966">&#9670;&#160;</a></span>GEOSContext_setLineToCurveParams_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void GEOSContext_setLineToCurveParams_r </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>&#160;</td>
+          <td class="paramname"><em>extHandle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="geos__c_8h.html#a115e69ee706b7079befc203bf94215ff">GEOSLineToCurveParams</a> *&#160;</td>
+          <td class="paramname"><em>params</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Set parameters to use for converting output lines to curves.</p>
+<p>These parameters will be used with this context whenever a curved geometry is provided to a function that only supports linear types. If <code>params</code> is NULL, no automatic conversion will be performed.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">extHandle</td><td>the GEOS context </td></tr>
+    <tr><td class="paramname">params</td><td>the curve conversion parameters</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section since"><dt>Since</dt><dd>3.15 </dd></dl>
+
+</div>
+</div>
 <a id="a50ce12ecba0305b1f488cb34ff42e686" name="a50ce12ecba0305b1f488cb34ff42e686"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a50ce12ecba0305b1f488cb34ff42e686">&#9670;&#160;</a></span>GEOSContext_setNoticeHandler_r()</h2>
 
@@ -5618,6 +5810,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </div><div class="memdoc">
 <p>Returns the convex hull of a geometry. The smallest convex Geometry that contains all the points in the input Geometry</p>
 <p>Z values in the input coordinates will be preserved. M values in the input coordinates will not be preserved.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The input geometry </td></tr>
@@ -8851,6 +9044,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </div><div class="memdoc">
 <p>Operates on a list of polygonal geometry with "exactly matching" edge geometry, to fix cases where the geometry does not in fact exactly match.</p>
 <p>The input is a collection of polygons, and the output is a collection with the same number of cleaned polygons, in the same order as the input. Polygons that have collapsed during cleaning will be returned as empties.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail. This function outputs linear geometry types only. If line-to-curve conversion parameters are registered with the context, and a curved input was provided, outputs will be automatically converted to curved types.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">input</td><td>The dirty polygonal coverage, stored in a geometry collection. All members must be POLYGON or MULTIPOLYGON. </td></tr>
@@ -9035,6 +9229,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </table>
 </div><div class="memdoc">
 <p>Analyze a coverage (represented as a collection of polygonal geometry with exactly matching edge geometry) to find places where the assumption of exactly matching edges is not met.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">input</td><td>The polygonal coverage to access, stored in a geometry collection. All members must be POLYGON or MULTIPOLYGON. </td></tr>
@@ -9137,6 +9332,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </table>
 </div><div class="memdoc">
 <p>Operates on a coverage (represented as a list of polygonal geometry with exactly matching edge geometry) to apply a Visvalingam–Whyatt simplification to the edges, reducing complexity in proportion with the provided tolerance, while retaining a valid coverage (no edges will cross or touch after the simplification). Geometries never disappear, but they may be simplified down to just a triangle. Also, some invalid geoms (such as Polygons which have too few non-repeated points) will be returned unchanged. If the input dataset is not a valid coverage due to overlaps, it will still be simplified, but invalid topology such as crossing edges will still be invalid.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail. This function outputs linear geometry types only. If line-to-curve conversion parameters are registered with the context, and a curved input was provided, outputs will be automatically converted to curved types.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">input</td><td>The polygonal coverage to access, stored in a geometry collection. All members must be POLYGON or MULTIPOLYGON. </td></tr>
@@ -9222,7 +9418,9 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Optimized union algorithm for polygonal inputs that are correctly noded and do not overlap. It may generate an error (return NULL) for inputs that do not satisfy this constraint, however this is not guaranteed. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Optimized union algorithm for polygonal inputs that are correctly noded and do not overlap. It may generate an error (return NULL) for inputs that do not satisfy this constraint, however this is not guaranteed.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail. This function outputs linear geometry types only. If line-to-curve conversion parameters are registered with the context, and a curved input was provided, outputs will be automatically converted to curved types.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The input geometry </td></tr>
   </table>
@@ -9537,6 +9735,272 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 
 </div>
 </div>
+<a id="a861cac57193c419be556ac7e225b95c1" name="a861cac57193c419be556ac7e225b95c1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a861cac57193c419be556ac7e225b95c1">&#9670;&#160;</a></span>GEOSCurveToLine()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> * GEOSCurveToLine </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td>
+          <td class="paramname"><em>g</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="geos__c_8h.html#a430bcb2ccb2f8467ca7d5351c7c70da1">GEOSCurveToLineParams</a> *&#160;</td>
+          <td class="paramname"><em>params</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Approximate all circular arcs in a geometry using line segments. If the input has no circular arcs, a copy will be returned. </p><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">g</td><td>the geometry to convert </td></tr>
+    <tr><td class="paramname">params</td><td>parameters to use in the linearization. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The linearized geometry. Caller must free with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a> NULL on exception</dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.15 </dd></dl>
+
+</div>
+</div>
+<a id="abb69f98daa032b1871fc7238a7147292" name="abb69f98daa032b1871fc7238a7147292"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abb69f98daa032b1871fc7238a7147292">&#9670;&#160;</a></span>GEOSCurveToLine_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> * GEOSCurveToLine_r </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>&#160;</td>
+          <td class="paramname"><em>handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td>
+          <td class="paramname"><em>g</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="geos__c_8h.html#a430bcb2ccb2f8467ca7d5351c7c70da1">GEOSCurveToLineParams</a> *&#160;</td>
+          <td class="paramname"><em>params</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#a861cac57193c419be556ac7e225b95c1">GEOSCurveToLine</a> </dd></dl>
+
+</div>
+</div>
+<a id="ad3a41b895e7ce06a48e54b3989ff6ec6" name="ad3a41b895e7ce06a48e54b3989ff6ec6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3a41b895e7ce06a48e54b3989ff6ec6">&#9670;&#160;</a></span>GEOSCurveToLineParams_setMaxDeviation()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int GEOSCurveToLineParams_setMaxDeviation </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a430bcb2ccb2f8467ca7d5351c7c70da1">GEOSCurveToLineParams</a> *&#160;</td>
+          <td class="paramname"><em>params</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>tolerance</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Set the maximum deviation between an arc and its linear approximate.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">params</td><td>parameters to use in the conversion. </td></tr>
+    <tr><td class="paramname">tolerance</td><td>the maximum deviation </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>1 if the operation succeeded, 0 otherwise</dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.15 </dd></dl>
+
+</div>
+</div>
+<a id="aeee325e4a42cb5a4530481c505be3aa6" name="aeee325e4a42cb5a4530481c505be3aa6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeee325e4a42cb5a4530481c505be3aa6">&#9670;&#160;</a></span>GEOSCurveToLineParams_setMaxDeviation_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int GEOSCurveToLineParams_setMaxDeviation_r </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>&#160;</td>
+          <td class="paramname"><em>extHandle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a430bcb2ccb2f8467ca7d5351c7c70da1">GEOSCurveToLineParams</a> *&#160;</td>
+          <td class="paramname"><em>params</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>tolerance</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#ad3a41b895e7ce06a48e54b3989ff6ec6">GEOSCurveToLineParams_setMaxDeviation</a> </dd></dl>
+
+</div>
+</div>
+<a id="a2518dcf4caa84ccd1d84521025081bcf" name="a2518dcf4caa84ccd1d84521025081bcf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2518dcf4caa84ccd1d84521025081bcf">&#9670;&#160;</a></span>GEOSCurveToLineParams_setMaxStepDegrees()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int GEOSCurveToLineParams_setMaxStepDegrees </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a430bcb2ccb2f8467ca7d5351c7c70da1">GEOSCurveToLineParams</a> *&#160;</td>
+          <td class="paramname"><em>params</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>tolerance</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Set the maximum step (in degrees) between subsequent points.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">params</td><td>parameters to use in the conversion. </td></tr>
+    <tr><td class="paramname">tolerance</td><td>the maximum step size </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>1 if the operation succeeded, 0 otherwise</dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.15 </dd></dl>
+
+</div>
+</div>
+<a id="a5ecbb216e5f839eb3bdaf7b6e6dc86d7" name="a5ecbb216e5f839eb3bdaf7b6e6dc86d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ecbb216e5f839eb3bdaf7b6e6dc86d7">&#9670;&#160;</a></span>GEOSCurveToLineParams_setMaxStepDegrees_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int GEOSCurveToLineParams_setMaxStepDegrees_r </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>&#160;</td>
+          <td class="paramname"><em>extHandle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a430bcb2ccb2f8467ca7d5351c7c70da1">GEOSCurveToLineParams</a> *&#160;</td>
+          <td class="paramname"><em>params</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>tolerance</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#a2518dcf4caa84ccd1d84521025081bcf">GEOSCurveToLineParams_setMaxStepDegrees</a> </dd></dl>
+
+</div>
+</div>
 <a id="a50071cd0761b1f8d32d5a8aab682fab8" name="a50071cd0761b1f8d32d5a8aab682fab8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a50071cd0761b1f8d32d5a8aab682fab8">&#9670;&#160;</a></span>GEOSDelaunayTriangulation()</h2>
 
@@ -9578,6 +10042,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </div><div class="memdoc">
 <p>Return a Delaunay triangulation of the vertices of the given geometry.</p>
 <p>Z values from the input points will be propagated to the generated polygons. M values from the input points will be ignored.</p>
+<p>Curved geometries are supported since GEOS 3.15. For curved geometries, the control point and endpoints of each arc will be used as input vertices.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>the input geometry whose vertices will be used as "sites" </td></tr>
@@ -9673,7 +10138,9 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Densifies a geometry using a given distance tolerance. Additional vertices will be added to every line segment that is greater this tolerance; these vertices will evenly subdivide that segment. Z and M values of added vertices will be interpolated. Only linear components of input geometry are densified. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Densifies a geometry using a given distance tolerance. Additional vertices will be added to every line segment that is greater this tolerance; these vertices will evenly subdivide that segment. Z and M values of added vertices will be interpolated. Only linear components of input geometry are densified.</p>
+<p>Curved geometries are not supported, unless curve-to-line parameters are registered with the context handle. Output geometries will not contain curves.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The geometry to densify </td></tr>
     <tr><td class="paramname">tolerance</td><td>the distance tolerance to densify </td></tr>
@@ -9761,7 +10228,9 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns the difference of two geometries A and B: the set of points that fall within A but <b>not</b> within B. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Returns the difference of two geometries A and B: the set of points that fall within A but <b>not</b> within B.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail. This function outputs linear geometry types only. If line-to-curve conversion parameters are registered with the context, and a curved input was provided, outputs will be automatically converted to curved types.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">ga</td><td>the base geometry </td></tr>
     <tr><td class="paramname">gb</td><td>the geometry to subtract from it </td></tr>
@@ -10031,7 +10500,9 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Optimized union algorithm for inputs that can be divided into subsets that do not intersect. If there is only one such subset, performance can be expected to be worse than GEOSUnionaryUnion. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Optimized union algorithm for inputs that can be divided into subsets that do not intersect. If there is only one such subset, performance can be expected to be worse than GEOSUnionaryUnion.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail. This function outputs linear geometry types only. If line-to-curve conversion parameters are registered with the context, and a curved input was provided, outputs will be automatically converted to curved types.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The input geometry </td></tr>
   </table>
@@ -10119,6 +10590,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </table>
 </div><div class="memdoc">
 <p>Calculate the distance between two geometries. Distance is calculated in the XY plane; Z and M values are ignored.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">g1</td><td>Input geometry </td></tr>
@@ -10220,7 +10692,9 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Calculate the distance between two geometries, using the indexed facet distance, which first indexes the geometries internally, then calculates the distance. Useful when one or both geometries is very large. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Calculate the distance between two geometries, using the indexed facet distance, which first indexes the geometries internally, then calculates the distance. Useful when one or both geometries is very large.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">g1</td><td>Input geometry </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">g2</td><td>Input geometry </td></tr>
@@ -10323,6 +10797,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </table>
 </div><div class="memdoc">
 <p>Test whether the distance between two geometries is within the given dist. Distance is calculated in the XY plane; Z and M values are ignored.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g1</td><td>Input geometry </td></tr>
@@ -10781,7 +11256,9 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Calculate the <a href="https://en.wikipedia.org/wiki/Fr%C3%A9chet_distance">Frechet distance</a> between two geometries, a similarity measure for linear features. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Calculate the <a href="https://en.wikipedia.org/wiki/Fr%C3%A9chet_distance">Frechet distance</a> between two geometries, a similarity measure for linear features.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">g1</td><td>Input geometry </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">g2</td><td>Input geometry </td></tr>
@@ -10889,7 +11366,9 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Calculate the <a href="https://en.wikipedia.org/wiki/Fr%C3%A9chet_distance">Frechet distance</a> between two geometries, a similarity measure for linear features. The inputs can be densified to provide a more accurate result. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Calculate the <a href="https://en.wikipedia.org/wiki/Fr%C3%A9chet_distance">Frechet distance</a> between two geometries, a similarity measure for linear features. The inputs can be densified to provide a more accurate result.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">g1</td><td>Input geometry </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">g2</td><td>Input geometry </td></tr>
@@ -15833,7 +16312,9 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns a 2D point at the center of mass of the input. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Returns a 2D point at the center of mass of the input.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The input geometry </td></tr>
   </table>
@@ -16486,7 +16967,9 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Determine the fraction of each cell in a rectangular grid that is covered by a polygon. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Determine the fraction of each cell in a rectangular grid that is covered by a polygon.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The input geometry </td></tr>
     <tr><td class="paramname">xmin</td><td>Left bound of grd </td></tr>
@@ -16764,7 +17247,9 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Calculate the Hausdorff distance between two geometries. <a href="https://en.wikipedia.org/wiki/Hausdorff_distance">Hausdorff distance</a> is the largest distance between two geometries. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Calculate the Hausdorff distance between two geometries. <a href="https://en.wikipedia.org/wiki/Hausdorff_distance">Hausdorff distance</a> is the largest distance between two geometries.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">g1</td><td>Input geometry </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">g2</td><td>Input geometry </td></tr>
@@ -16872,7 +17357,9 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Calculate a more precise Hausdorff distance between two geometries, by densifying the inputs before computation. <a href="https://en.wikipedia.org/wiki/Hausdorff_distance">Hausdorff distance</a> is the largest distance between two geometries. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Calculate a more precise Hausdorff distance between two geometries, by densifying the inputs before computation. <a href="https://en.wikipedia.org/wiki/Hausdorff_distance">Hausdorff distance</a> is the largest distance between two geometries.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">g1</td><td>Input geometry </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">g2</td><td>Input geometry </td></tr>
@@ -17011,7 +17498,9 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Calculate a more precise Hausdorff distance between two geometries, by densifying the inputs before computation and return the points that determine the distance. <a href="https://en.wikipedia.org/wiki/Hausdorff_distance">Hausdorff distance</a> is the largest distance between two geometries. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Calculate a more precise Hausdorff distance between two geometries, by densifying the inputs before computation and return the points that determine the distance. <a href="https://en.wikipedia.org/wiki/Hausdorff_distance">Hausdorff distance</a> is the largest distance between two geometries.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">g1</td><td>Input geometry </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">g2</td><td>Input geometry </td></tr>
@@ -17172,7 +17661,9 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Calculate the Hausdorff distance between two geometries and return the coordinates of the points that determine the distance. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Calculate the Hausdorff distance between two geometries and return the coordinates of the points that determine the distance.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">g1</td><td>Input geometry </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">g2</td><td>Input geometry </td></tr>
@@ -17308,7 +17799,9 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Calculate the <a href="https://en.wikipedia.org/wiki/Hilbert_curve">Hilbert code</a> of the centroid of a geometry relative to an extent. This allows sorting geometries in a deterministic way, such that similar Hilbert codes are likely to be near each other in two-dimensional space. The caller must ensure that the geometry is contained within the extent. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Calculate the <a href="https://en.wikipedia.org/wiki/Hilbert_curve">Hilbert code</a> of the center of a geometry's bounding box relative to a larger extent. This allows sorting geometries in a deterministic way, such that similar Hilbert codes are likely to be near each other in two-dimensional space. The caller must ensure that the geometry is contained within the extent.</p>
+<p>Curved geometries are supported since GEOS 3.13.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">geom</td><td>Input geometry, must be non-empty </td></tr>
     <tr><td class="paramdir">[in]</td><td class="paramname">extent</td><td>Extent within which to calculate the Hilbert code for geom </td></tr>
@@ -17412,7 +17905,8 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </div><div class="memdoc">
 <p>Return the point that is the specified 2D distance along a LineString from the start.</p>
 <p>If applicable, the Z value of the returned point will be interpolated from the input line. Since GEOS 3.15, the M value will also be interpolated.</p>
-<p>If the input is not a LineString, NULL will be returned.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
+<p>If the (converted) input is not a LineString, NULL will be returned.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">line</td><td>linear target of projection </td></tr>
@@ -17503,7 +17997,8 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </div><div class="memdoc">
 <p>Measuring from start of a LineString, return the point at the specified fraction of the total length.</p>
 <p>If applicable, the Z value of the returned point will be interpolated from the input line. Since GEOS 3.15, the M value will also be interpolated.</p>
-<p>If the input is not a LineString, NULL will be returned.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
+<p>If the (converted) input is not a LineString, NULL will be returned.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">line</td><td>linear target of projection </td></tr>
@@ -17592,7 +18087,9 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns the intersection of two geometries: the set of points that fall within <b>both</b> geometries. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Returns the intersection of two geometries: the set of points that fall within <b>both</b> geometries.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail. This function outputs linear geometry types only. If line-to-curve conversion parameters are registered with the context, and a curved input was provided, outputs will be automatically converted to curved types.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g1</td><td>one of the geometries </td></tr>
     <tr><td class="paramname">g2</td><td>the other geometry </td></tr>
@@ -18080,7 +18577,9 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Tests whether the input geometry is "simple". Mostly relevant for linestrings. A "simple" linestring has no self-intersections. Z and M values are not considered. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Tests whether the input geometry is "simple". Mostly relevant for linestrings. A "simple" linestring has no self-intersections. Z and M values are not considered.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The geometry to test </td></tr>
   </table>
@@ -18168,6 +18667,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </table>
 </div><div class="memdoc">
 <p>In one step, calculate and return whether a geometry is simple and one more more points at which the geometry self-intersects at interior points. Caller has the responsibility to destroy 'location' with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a></p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The geometry to test </td></tr>
@@ -18260,6 +18760,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 <li>Multi-polygon components may not touch or overlap.</li>
 </ul>
 <p>Z and M values are not considered.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The geometry to test </td></tr>
@@ -18354,7 +18855,9 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>In one step, calculate and return the validity, the human readable validity reason and a point at which validity rules are broken. Caller has the responsibility to destroy 'reason' with <a class="el" href="geos__c_8h.html#af441d2a4d72e592e197505e919a02fd7">GEOSFree()</a> and 'location' with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a> </p><dl class="params"><dt>Parameters</dt><dd>
+<p>In one step, calculate and return the validity, the human readable validity reason and a point at which validity rules are broken. Caller has the responsibility to destroy 'reason' with <a class="el" href="geos__c_8h.html#af441d2a4d72e592e197505e919a02fd7">GEOSFree()</a> and 'location' with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a></p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The geometry to test </td></tr>
     <tr><td class="paramname">flags</td><td>A value from the <a class="el" href="geos__c_8h.html#a6059c0606d6ecb3d60a3b4124edb7e10">GEOSValidFlags</a> enum </td></tr>
@@ -18446,7 +18949,9 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Return the human readable reason a geometry is invalid, "Valid Geometry" string otherwise, or NULL on exception. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Return the human readable reason a geometry is invalid, "Valid Geometry" string otherwise, or NULL on exception.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The geometry to test </td></tr>
   </table>
@@ -18533,10 +19038,11 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Constructs the "largest empty circle" (LEC) for a set of obstacle geometries and within a polygonal boundary, with accuracy to to a specified distance tolerance. The obstacles may be any collection of points, lines and polygons. The LEC is the largest circle whose interior does not intersect with any obstacle. and which has its <b>center</b> inside the given boundary. If no boundary is provided, the convex hull of the obstacles is used. The LEC center is the point in the interior of the boundary which has the farthest distance from the obstacles (up to the given distance tolerance). The LEC is determined by the center point and a point indicating the circle radius (which will lie on an obstacle). <br  />
-To compute an LEC which lies <b>wholly</b> within a polygonal boundary, include the boundary of the polygon(s) as a linear obstacle. <br  />
-The implementation uses a successive-approximation technique over a grid of square cells covering the obstacles and boundary. The grid is refined using a branch-and-bound algorithm. Point containment and distance are computed in a performant way by using spatial indexes. <br  />
-Returns the LEC radius as a two-point linestring, with the start point at the center of the inscribed circle and the end on the boundary of the circle.</p>
+<p>Constructs the "largest empty circle" (LEC) for a set of obstacle geometries and within a polygonal boundary, with accuracy to to a specified distance tolerance. The obstacles may be any collection of points, lines and polygons. The LEC is the largest circle whose interior does not intersect with any obstacle. and which has its <b>center</b> inside the given boundary. If no boundary is provided, the convex hull of the obstacles is used. The LEC center is the point in the interior of the boundary which has the farthest distance from the obstacles (up to the given distance tolerance). The LEC is determined by the center point and a point indicating the circle radius (which will lie on an obstacle).</p>
+<p>To compute an LEC which lies <b>wholly</b> within a polygonal boundary, include the boundary of the polygon(s) as a linear obstacle.</p>
+<p>The implementation uses a successive-approximation technique over a grid of square cells covering the obstacles and boundary. The grid is refined using a branch-and-bound algorithm. Point containment and distance are computed in a performant way by using spatial indexes.</p>
+<p>Returns the LEC radius as a two-point linestring, with the start point at the center of the inscribed circle and the end on the boundary of the circle.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">obstacles</td><td>The geometries that the LEC must not cross </td></tr>
@@ -18943,6 +19449,365 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
 
 </div>
 </div>
+<a id="abfa218620139cdb567747a16b5d0fb3c" name="abfa218620139cdb567747a16b5d0fb3c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#abfa218620139cdb567747a16b5d0fb3c">&#9670;&#160;</a></span>GEOSLineToCurve()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> * GEOSLineToCurve </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td>
+          <td class="paramname"><em>g</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="geos__c_8h.html#a115e69ee706b7079befc203bf94215ff">GEOSLineToCurveParams</a> *&#160;</td>
+          <td class="paramname"><em>params</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Replace line segments in the geometry with circular arcs, where possible.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">g</td><td>the geometry to convert </td></tr>
+    <tr><td class="paramname">params</td><td>parameters to use in the conversion. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>The converted geometry. Caller must free with <a class="el" href="geos__c_8h.html#a1c5aea48a324cac75be80445d26c0fd5">GEOSGeom_destroy()</a> NULL on exception</dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.15 </dd></dl>
+
+</div>
+</div>
+<a id="ab1cd4b32d5283a3826146904b1c899dd" name="ab1cd4b32d5283a3826146904b1c899dd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab1cd4b32d5283a3826146904b1c899dd">&#9670;&#160;</a></span>GEOSLineToCurve_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> * GEOSLineToCurve_r </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>&#160;</td>
+          <td class="paramname"><em>handle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td>
+          <td class="paramname"><em>g</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="geos__c_8h.html#a115e69ee706b7079befc203bf94215ff">GEOSLineToCurveParams</a> *&#160;</td>
+          <td class="paramname"><em>params</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#abfa218620139cdb567747a16b5d0fb3c">GEOSLineToCurve</a> </dd></dl>
+
+</div>
+</div>
+<a id="a1ff3c71d96daba6e4a7caac432c3050d" name="a1ff3c71d96daba6e4a7caac432c3050d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ff3c71d96daba6e4a7caac432c3050d">&#9670;&#160;</a></span>GEOSLineToCurveParams_setMaxAngleDifferenceDegrees()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int GEOSLineToCurveParams_setMaxAngleDifferenceDegrees </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a115e69ee706b7079befc203bf94215ff">GEOSLineToCurveParams</a> *&#160;</td>
+          <td class="paramname"><em>params</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>tolerance</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Set the maximum angle difference used in line-to-curve conversion</p>
+<p>A point may be considered to continue a circular arc if the angle between the point and the final point in the arc is within the specified tolerance of the angle calculated when the final point in the arc was added. This tolerance can be used to ensure that the step spacing is regular, which is an indication of a line that was generated by linearizing a curve.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">params</td><td>the parameters object </td></tr>
+    <tr><td class="paramname">tolerance</td><td>the tolerance value </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>1 on success, 0 on failure </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.15 </dd></dl>
+
+</div>
+</div>
+<a id="a08e354db512842266f892422022e0b3f" name="a08e354db512842266f892422022e0b3f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a08e354db512842266f892422022e0b3f">&#9670;&#160;</a></span>GEOSLineToCurveParams_setMaxAngleDifferenceDegrees_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int GEOSLineToCurveParams_setMaxAngleDifferenceDegrees_r </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>&#160;</td>
+          <td class="paramname"><em>extHandle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a115e69ee706b7079befc203bf94215ff">GEOSLineToCurveParams</a> *&#160;</td>
+          <td class="paramname"><em>params</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>tolerance</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#a1ff3c71d96daba6e4a7caac432c3050d">GEOSLineToCurveParams_setMaxAngleDifferenceDegrees</a> </dd></dl>
+
+</div>
+</div>
+<a id="a107fc52300559e746999be8114dbb83f" name="a107fc52300559e746999be8114dbb83f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a107fc52300559e746999be8114dbb83f">&#9670;&#160;</a></span>GEOSLineToCurveParams_setMaxStepDegrees()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int GEOSLineToCurveParams_setMaxStepDegrees </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a115e69ee706b7079befc203bf94215ff">GEOSLineToCurveParams</a> *&#160;</td>
+          <td class="paramname"><em>params</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>tolerance</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Set the maximum angle spacing used in line-to-curve conversion.</p>
+<p>A point may be considered to continue a circular arc if the angle between the point and the final point in the arc is less than the specified tolerance. Because of round-off errors, this value should be slightly greater than the one used in <a class="el" href="geos__c_8h.html#a2518dcf4caa84ccd1d84521025081bcf">GEOSCurveToLineParams_setMaxStepDegrees</a>.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">params</td><td>the parameters object </td></tr>
+    <tr><td class="paramname">tolerance</td><td>the tolerance value </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>1 on success, 0 on failure </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.15 </dd></dl>
+
+</div>
+</div>
+<a id="ad3b645e64e392f591ef684f6d8fbc889" name="ad3b645e64e392f591ef684f6d8fbc889"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3b645e64e392f591ef684f6d8fbc889">&#9670;&#160;</a></span>GEOSLineToCurveParams_setMaxStepDegrees_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int GEOSLineToCurveParams_setMaxStepDegrees_r </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>&#160;</td>
+          <td class="paramname"><em>extHandle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a115e69ee706b7079befc203bf94215ff">GEOSLineToCurveParams</a> *&#160;</td>
+          <td class="paramname"><em>params</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>tolerance</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#a107fc52300559e746999be8114dbb83f">GEOSLineToCurveParams_setMaxStepDegrees</a> </dd></dl>
+
+</div>
+</div>
+<a id="ad8da81589c3c9f7b0879a54659a91499" name="ad8da81589c3c9f7b0879a54659a91499"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad8da81589c3c9f7b0879a54659a91499">&#9670;&#160;</a></span>GEOSLineToCurveParams_setRadiusTolerance()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int GEOSLineToCurveParams_setRadiusTolerance </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a115e69ee706b7079befc203bf94215ff">GEOSLineToCurveParams</a> *&#160;</td>
+          <td class="paramname"><em>params</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>tolerance</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Set the radius tolerance used in line-to-curve conversion.</p>
+<p>A vertex may be considered to continue a circular arc if its distance to the previously-computed circle center is within the specified fraction of the circle radius.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">params</td><td>the parameters object </td></tr>
+    <tr><td class="paramname">tolerance</td><td>the tolerance value </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>1 on success, 0 on failure </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.15 </dd></dl>
+
+</div>
+</div>
+<a id="ad50dccf81390eae39d8e31b3a95696b1" name="ad50dccf81390eae39d8e31b3a95696b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad50dccf81390eae39d8e31b3a95696b1">&#9670;&#160;</a></span>GEOSLineToCurveParams_setRadiusTolerance_r()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int GEOSLineToCurveParams_setRadiusTolerance_r </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>&#160;</td>
+          <td class="paramname"><em>extHandle</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#a115e69ee706b7079befc203bf94215ff">GEOSLineToCurveParams</a> *&#160;</td>
+          <td class="paramname"><em>params</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>tolerance</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#ad8da81589c3c9f7b0879a54659a91499">GEOSLineToCurveParams_setRadiusTolerance</a> </dd></dl>
+
+</div>
+</div>
 <a id="a8fdc932062ae67b088ad3989602d1ed8" name="a8fdc932062ae67b088ad3989602d1ed8"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8fdc932062ae67b088ad3989602d1ed8">&#9670;&#160;</a></span>GEOSMakeValid()</h2>
 
@@ -18966,7 +19831,9 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Repair an invalid geometry, returning a valid output. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Repair an invalid geometry, returning a valid output.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail. This function outputs linear geometry types only. If line-to-curve conversion parameters are registered with the context, and a curved input was provided, outputs will be automatically converted to curved types.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The geometry to repair </td></tr>
   </table>
@@ -19338,7 +20205,9 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Repair an invalid geometry, returning a valid output, using the indicated GEOSMakeValidMethods algorithm and options. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Repair an invalid geometry, returning a valid output, using the indicated GEOSMakeValidMethods algorithm and options.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail. This function outputs linear geometry types only. If line-to-curve conversion parameters are registered with the context, and a curved input was provided, outputs will be automatically converted to curved types.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>is the geometry to test. </td></tr>
     <tr><td class="paramname">makeValidParams</td><td>is a GEOSMakeValidParams with the desired parameters set on it. </td></tr>
@@ -19433,7 +20302,9 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Constructs the "maximum inscribed circle" (MIC) for a polygonal geometry, up to a specified tolerance. The MIC is determined by a point in the interior of the area which has the farthest distance from the area boundary, along with a boundary point at that distance. In the context of geography the center of the MIC is known as the "pole of inaccessibility". A cartographic use case is to determine a suitable point to place a map label within a polygon. The radius length of the MIC is a measure of how "narrow" a polygon is. It is the distance at which the negative buffer becomes empty. The class supports polygons with holes and multipolygons. The implementation uses a successive-approximation technique over a grid of square cells covering the area geometry. The grid is refined using a branch-and-bound algorithm. Point containment and distance are computed in a performant way by using spatial indexes. Returns a two-point linestring, with one point at the center of the inscribed circle and the other on the boundary of the inscribed circle. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Constructs the "maximum inscribed circle" (MIC) for a polygonal geometry, up to a specified tolerance. The MIC is determined by a point in the interior of the area which has the farthest distance from the area boundary, along with a boundary point at that distance. In the context of geography the center of the MIC is known as the "pole of inaccessibility". A cartographic use case is to determine a suitable point to place a map label within a polygon. The radius length of the MIC is a measure of how "narrow" a polygon is. It is the distance at which the negative buffer becomes empty. The class supports polygons with holes and multipolygons. The implementation uses a successive-approximation technique over a grid of square cells covering the area geometry. The grid is refined using a branch-and-bound algorithm. Point containment and distance are computed in a performant way by using spatial indexes. Returns a two-point linestring, with one point at the center of the inscribed circle and the other on the boundary of the inscribed circle.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>Input geometry </td></tr>
     <tr><td class="paramname">tolerance</td><td>Stop the algorithm when the search area is smaller than this tolerance </td></tr>
@@ -19528,7 +20399,9 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns a 2D geometry which represents the "minimum bounding circle", the smallest circle that contains the input. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Returns a 2D geometry which represents the "minimum bounding circle", the smallest circle that contains the input.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">g</td><td>The input geometry </td></tr>
     <tr><td class="paramdir">[out]</td><td class="paramname">radius</td><td>Pointer will be filled with output radius. </td></tr>
@@ -19630,6 +20503,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
 <li>No vertex is closer than 'eps' to a line segment of which it is not an endpoint.</li>
 </ul>
 <p>If the minimum clearance cannot be defined for a geometry (such as with a single point, or a multipoint whose points are identical, a value of Infinity will be calculated.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>the input geometry </td></tr>
@@ -19710,6 +20584,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
 </table>
 </div><div class="memdoc">
 <p>Returns a 2D LineString whose endpoints define the minimum clearance of a geometry. If the geometry has no minimum clearance, an empty LineString will be returned.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>the input geometry </td></tr>
@@ -19782,7 +20657,9 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns the minimum rotated rectangular POLYGON which encloses the input geometry. The rectangle has width equal to the minimum diameter, and a longer length. If the convex hill of the input is degenerate (a line or point) a linestring or point is returned. The minimum rotated rectangle can be used as an extremely generalized representation for the given geometry. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Returns the minimum rotated rectangular POLYGON which encloses the input geometry. The rectangle has width equal to the minimum diameter, and a longer length. If the convex hill of the input is degenerate (a line or point) a linestring or point is returned. The minimum rotated rectangle can be used as an extremely generalized representation for the given geometry.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The input geometry </td></tr>
   </table>
@@ -19943,7 +20820,9 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns a linestring geometry which represents the minimum diameter of the geometry. The minimum diameter is defined to be the width of the smallest band that contains the geometry, where a band is a strip of the plane defined by two parallel lines. This can be thought of as the smallest hole that the geometry can be moved through, with a single rotation. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Returns a linestring geometry which represents the minimum diameter of the geometry. The minimum diameter is defined to be the width of the smallest band that contains the geometry, where a band is a strip of the plane defined by two parallel lines. This can be thought of as the smallest hole that the geometry can be moved through, with a single rotation.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The input geometry </td></tr>
   </table>
@@ -20026,6 +20905,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
 </table>
 </div><div class="memdoc">
 <p>The closest points of the two geometries. The first point comes from g1 geometry and the second point comes from g2. Returned points will not have Z or M values.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramdir">[in]</td><td class="paramname">g1</td><td>Input geometry </td></tr>
@@ -20288,6 +21168,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
 </table>
 </div><div class="memdoc">
 <p>Generates offset curve line(s) for a geometry. Handles all non-curved geometry types as input. The coordinates of the constructed geometry will not have Z or M values.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
 <ul>
 <li>For a LineString the result is a LineString.</li>
 <li>For a Point the result is an empty LineString.</li>
@@ -20712,7 +21593,9 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns a 2D point that is inside the boundary of a polygonal geometry. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Returns a 2D point that is inside the boundary of a polygonal geometry.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The input geometry </td></tr>
   </table>
@@ -20801,6 +21684,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
 </table>
 </div><div class="memdoc">
 <p>Computes a boundary-respecting hull of a polygonal geometry, with hull shape determined by a target parameter specifying the fraction of the input vertices retained in the result. Larger values produce less concave results. A value of 1 produces the convex hull; a value of 0 produces the original geometry. An outer hull is computed if the parameter is positive, an inner hull is computed if it is negative.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail. This function outputs linear geometry types only. If line-to-curve conversion parameters are registered with the context, and a curved input was provided, outputs will be automatically converted to curved types.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>the polygonal geometry to process </td></tr>
@@ -20910,6 +21794,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
 </table>
 </div><div class="memdoc">
 <p>Computes a topology-preserving simplified hull of a polygonal geometry, with hull shape determined by the parameter, controlled by a parameter mode, which is one defined in <a class="el" href="geos__c_8h.html#a8a1d073c91a1594d1b29c5ee722e0a8e">GEOSPolygonHullParameterModes</a>. Larger values compute less concave results and a value of 0 produces the original geometry. Either outer or inner hulls can be computed.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail. This function outputs linear geometry types only. If line-to-curve conversion parameters are registered with the context, and a curved input was provided, outputs will be automatically converted to curved types.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>the polygonal geometry to process </td></tr>
@@ -23144,7 +24029,9 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Distance of point projected onto line from the start of the line. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Distance of point projected onto line from the start of the line.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">line</td><td>linear target of projection </td></tr>
     <tr><td class="paramname">point</td><td>point to be projected onto 'g' </td></tr>
@@ -23233,7 +24120,9 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Project point to line and calculate the <b>proportion</b> of the line the point is from the start. For example, a point that projects to the middle of a line would be return 0.5. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Project point to line and calculate the <b>proportion</b> of the line the point is from the start. For example, a point that projects to the middle of a line would be return 0.5.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">line</td><td>linear target of projection </td></tr>
     <tr><td class="paramname">point</td><td>the point to project </td></tr>
@@ -24155,6 +25044,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
 <li>first element is a MultiLineString containing shared paths having the <em>same</em> direction on both inputs</li>
 <li>second element is a MultiLineString containing shared paths having the <em>opposite</em> direction on the two inputs</li>
 </ul>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g1</td><td>An input geometry </td></tr>
@@ -25543,7 +26433,9 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Compute the intersection of a geometry with each polygon in a rectangular grid. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Compute the intersection of a geometry with each polygon in a rectangular grid.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail. This function outputs linear geometry types only. If line-to-curve conversion parameters are registered with the context, and a curved input was provided, outputs will be automatically converted to curved types.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The input geometry to be clipped </td></tr>
     <tr><td class="paramname">xmin</td><td>Left bound of grd </td></tr>
@@ -25675,7 +26567,9 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns the symmetric difference of two geometries A and B: the set of points that fall in A but <b>not</b> within B and the set of points that fall in B but <b>not</b> in A. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Returns the symmetric difference of two geometries A and B: the set of points that fall in A but <b>not</b> within B and the set of points that fall in B but <b>not</b> in A.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail. This function outputs linear geometry types only. If line-to-curve conversion parameters are registered with the context, and a curved input was provided, outputs will be automatically converted to curved types.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">ga</td><td>geometry A </td></tr>
     <tr><td class="paramname">gb</td><td>geometry B </td></tr>
@@ -26034,7 +26928,9 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns the union of all components of a single geometry. Usually used to convert a collection into the smallest set of polygons that cover the same area. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Returns the union of all components of a single geometry. Usually used to convert a collection into the smallest set of polygons that cover the same area.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail. This function outputs linear geometry types only. If line-to-curve conversion parameters are registered with the context, and a curved input was provided, outputs will be automatically converted to curved types.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>The input geometry </td></tr>
   </table>
@@ -26205,7 +27101,9 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Returns the union of two geometries A and B: the set of points that fall in A <b>or</b> within B. </p><dl class="params"><dt>Parameters</dt><dd>
+<p>Returns the union of two geometries A and B: the set of points that fall in A <b>or</b> within B.</p>
+<p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail. This function outputs linear geometry types only. If line-to-curve conversion parameters are registered with the context, and a curved input was provided, outputs will be automatically converted to curved types.</p>
+<dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">ga</td><td>geometry A </td></tr>
     <tr><td class="paramname">gb</td><td>geometry B </td></tr>
@@ -26501,6 +27399,7 @@ Returns the LEC radius as a two-point linestring, with the start point at the ce
 </table>
 </div><div class="memdoc">
 <p>Returns the 2D Voronoi polygons or edges computed from the vertices of the given geometry.</p>
+<p>Curved geometries are supported since GEOS 3.15. For curved geometries, the control point and endpoints of each arc will be used as input vertices.</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">g</td><td>the input geometry whose vertices will be used as sites. </td></tr>

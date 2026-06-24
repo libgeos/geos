@@ -160,6 +160,12 @@ const_iterator&#160;</td><td class="memItemRight" valign="bottom"><b>end</b> () 
 <tr class="memitem:ad72892e0efeb775e0fd274a779b53d69 inherit pub_methods_classgeos_1_1geom_1_1GeometryCollection" id="r_ad72892e0efeb775e0fd274a779b53d69"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1GeometryCollection.html#ad72892e0efeb775e0fd274a779b53d69">getNumGeometries</a> () const override</td></tr>
 <tr class="memdesc:ad72892e0efeb775e0fd274a779b53d69 inherit pub_methods_classgeos_1_1geom_1_1GeometryCollection"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of geometries in this collection.  <br /></td></tr>
 <tr class="separator:ad72892e0efeb775e0fd274a779b53d69 inherit pub_methods_classgeos_1_1geom_1_1GeometryCollection"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afc3e5cea11c176170d592b4d3ad95f01 inherit pub_methods_classgeos_1_1geom_1_1GeometryCollection" id="r_afc3e5cea11c176170d592b4d3ad95f01"><td class="memItemLeft" align="right" valign="top">
+std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1GeometryCollection.html">GeometryCollection</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getCurved</b> (const algorithm::LineToCurveParams &amp;params)</td></tr>
+<tr class="separator:afc3e5cea11c176170d592b4d3ad95f01 inherit pub_methods_classgeos_1_1geom_1_1GeometryCollection"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3deec2acccb498f09b3d883c25ba85b0 inherit pub_methods_classgeos_1_1geom_1_1GeometryCollection" id="r_a3deec2acccb498f09b3d883c25ba85b0"><td class="memItemLeft" align="right" valign="top">
+std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1GeometryCollection.html">GeometryCollection</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getLinearized</b> (const algorithm::CurveToLineParams &amp;params)</td></tr>
+<tr class="separator:a3deec2acccb498f09b3d883c25ba85b0 inherit pub_methods_classgeos_1_1geom_1_1GeometryCollection"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a713f371ea98f88fd53eb25bca61b7587 inherit pub_methods_classgeos_1_1geom_1_1GeometryCollection" id="r_a713f371ea98f88fd53eb25bca61b7587"><td class="memItemLeft" align="right" valign="top">std::vector&lt; std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt; &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1GeometryCollection.html#a713f371ea98f88fd53eb25bca61b7587">releaseGeometries</a> ()</td></tr>
 <tr class="memdesc:a713f371ea98f88fd53eb25bca61b7587 inherit pub_methods_classgeos_1_1geom_1_1GeometryCollection"><td class="mdescLeft">&#160;</td><td class="mdescRight">Take ownership of the sub-geometries managed by this <a class="el" href="classgeos_1_1geom_1_1GeometryCollection.html" title="Represents a collection of heterogeneous Geometry objects.">GeometryCollection</a>. After releasing the sub-geometries, the collection should be considered in a moved-from state and should not be accessed.  <br /></td></tr>
 <tr class="separator:a713f371ea98f88fd53eb25bca61b7587 inherit pub_methods_classgeos_1_1geom_1_1GeometryCollection"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -196,6 +202,10 @@ const <a class="el" href="classgeos_1_1geom_1_1PrecisionModel.html">PrecisionMod
 <tr class="memitem:a9f9ed9b0d9f21742cdea71d64d87edab inherit pub_methods_classgeos_1_1geom_1_1Geometry" id="r_a9f9ed9b0d9f21742cdea71d64d87edab"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a9f9ed9b0d9f21742cdea71d64d87edab">isSimple</a> () const</td></tr>
 <tr class="memdesc:a9f9ed9b0d9f21742cdea71d64d87edab inherit pub_methods_classgeos_1_1geom_1_1Geometry"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns false if the <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a> not simple.  <br /></td></tr>
 <tr class="separator:a9f9ed9b0d9f21742cdea71d64d87edab inherit pub_methods_classgeos_1_1geom_1_1Geometry"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ade2b4cd1f8a45994dd7ae602af697c3f inherit pub_methods_classgeos_1_1geom_1_1Geometry" id="r_ade2b4cd1f8a45994dd7ae602af697c3f"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#ade2b4cd1f8a45994dd7ae602af697c3f">getLinearized</a> (const algorithm::CurveToLineParams &amp;params) const</td></tr>
+<tr class="separator:ade2b4cd1f8a45994dd7ae602af697c3f inherit pub_methods_classgeos_1_1geom_1_1Geometry"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a68973892edc9a418e325e171c6be3507 inherit pub_methods_classgeos_1_1geom_1_1Geometry" id="r_a68973892edc9a418e325e171c6be3507"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a68973892edc9a418e325e171c6be3507">getCurved</a> (const algorithm::LineToCurveParams &amp;params) const</td></tr>
+<tr class="separator:a68973892edc9a418e325e171c6be3507 inherit pub_methods_classgeos_1_1geom_1_1Geometry"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8271652ee0da40678d59c04f40e57344 inherit pub_methods_classgeos_1_1geom_1_1Geometry" id="r_a8271652ee0da40678d59c04f40e57344"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a8271652ee0da40678d59c04f40e57344">isValid</a> () const</td></tr>
 <tr class="memdesc:a8271652ee0da40678d59c04f40e57344 inherit pub_methods_classgeos_1_1geom_1_1Geometry"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tests the validity of this <code><a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a></code>.  <br /></td></tr>
 <tr class="separator:a8271652ee0da40678d59c04f40e57344 inherit pub_methods_classgeos_1_1geom_1_1Geometry"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -348,6 +358,10 @@ Protected Member Functions</h2></td></tr>
 <tr class="memitem:adf83fcaf47aa13d94dabce0535c30326" id="r_adf83fcaf47aa13d94dabce0535c30326"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgeos_1_1geom_1_1MultiPolygon.html">MultiPolygon</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1MultiPolygon.html#adf83fcaf47aa13d94dabce0535c30326">cloneImpl</a> () const override</td></tr>
 <tr class="memdesc:adf83fcaf47aa13d94dabce0535c30326"><td class="mdescLeft">&#160;</td><td class="mdescRight">Make a deep-copy of this <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a>.  <br /></td></tr>
 <tr class="separator:adf83fcaf47aa13d94dabce0535c30326"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a003e9ee616d53e503e1273385c14269e" id="r_a003e9ee616d53e503e1273385c14269e"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgeos_1_1geom_1_1GeometryCollection.html">GeometryCollection</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1MultiPolygon.html#a003e9ee616d53e503e1273385c14269e">getCurvedImpl</a> (const algorithm::LineToCurveParams &amp;) const override</td></tr>
+<tr class="separator:a003e9ee616d53e503e1273385c14269e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5ebc266876a183d65e4b70463ba0236f" id="r_a5ebc266876a183d65e4b70463ba0236f"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgeos_1_1geom_1_1MultiPolygon.html">MultiPolygon</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1MultiPolygon.html#a5ebc266876a183d65e4b70463ba0236f">getLinearizedImpl</a> (const algorithm::CurveToLineParams &amp;) const override</td></tr>
+<tr class="separator:a5ebc266876a183d65e4b70463ba0236f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab7570a597efc33607298022196bf5889" id="r_ab7570a597efc33607298022196bf5889"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgeos_1_1geom_1_1MultiPolygon.html">MultiPolygon</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1MultiPolygon.html#ab7570a597efc33607298022196bf5889">reverseImpl</a> () const override</td></tr>
 <tr class="memdesc:ab7570a597efc33607298022196bf5889"><td class="mdescLeft">&#160;</td><td class="mdescRight">Make a geometry with coordinates in reverse order.  <br /></td></tr>
 <tr class="separator:ab7570a597efc33607298022196bf5889"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -618,6 +632,34 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>SRID</b></td></tr>
 
 </div>
 </div>
+<a id="a003e9ee616d53e503e1273385c14269e" name="a003e9ee616d53e503e1273385c14269e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a003e9ee616d53e503e1273385c14269e">&#9670;&#160;</a></span>getCurvedImpl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgeos_1_1geom_1_1GeometryCollection.html">GeometryCollection</a> * geos::geom::MultiPolygon::getCurvedImpl </td>
+          <td>(</td>
+          <td class="paramtype">const algorithm::LineToCurveParams &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="classgeos_1_1geom_1_1GeometryCollection.html">geos::geom::GeometryCollection</a>.</p>
+
+</div>
+</div>
 <a id="a19e7932d657e76ace128b32f1381b0e6" name="a19e7932d657e76ace128b32f1381b0e6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a19e7932d657e76ace128b32f1381b0e6">&#9670;&#160;</a></span>getDimension()</h2>
 
@@ -732,6 +774,34 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>SRID</b></td></tr>
 <p>Return an integer representation of this <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a> type. </p>
 
 <p>Reimplemented from <a class="el" href="classgeos_1_1geom_1_1GeometryCollection.html#a7004410b8382d1772a9aac803afbdc96">geos::geom::GeometryCollection</a>.</p>
+
+</div>
+</div>
+<a id="a5ebc266876a183d65e4b70463ba0236f" name="a5ebc266876a183d65e4b70463ba0236f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ebc266876a183d65e4b70463ba0236f">&#9670;&#160;</a></span>getLinearizedImpl()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgeos_1_1geom_1_1MultiPolygon.html">MultiPolygon</a> * geos::geom::MultiPolygon::getLinearizedImpl </td>
+          <td>(</td>
+          <td class="paramtype">const algorithm::CurveToLineParams &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">protected</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reimplemented from <a class="el" href="classgeos_1_1geom_1_1GeometryCollection.html">geos::geom::GeometryCollection</a>.</p>
 
 </div>
 </div>

@@ -109,6 +109,8 @@ CoordinateXY&#160;</td><td class="memItemRight" valign="bottom"><b>getReverseDir
 double&#160;</td><td class="memItemRight" valign="bottom"><b>getLength</b> () const</td></tr>
 <tr class="memdesc:a9fee5feedacdf946f0216240da24958d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the length of the arc. <br /></td></tr>
 <tr class="separator:a9fee5feedacdf946f0216240da24958d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f329c2161dac493f3981d63e7dba6fd" id="r_a6f329c2161dac493f3981d63e7dba6fd"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CircularArc.html#a6f329c2161dac493f3981d63e7dba6fd">addLinearizedPoints</a> (<a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &amp;seq, const algorithm::CurveToLineParams &amp;params) const</td></tr>
+<tr class="separator:a6f329c2161dac493f3981d63e7dba6fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4ef6e8fae1d79921332e946674b5571e" id="r_a4ef6e8fae1d79921332e946674b5571e"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1CircularArc.html#a4ef6e8fae1d79921332e946674b5571e">getOrientation</a> () const</td></tr>
 <tr class="separator:a4ef6e8fae1d79921332e946674b5571e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abb131eb596ab79803b2e6cdab652b6bd" id="r_abb131eb596ab79803b2e6cdab652b6bd"><td class="memItemLeft" align="right" valign="top"><a id="abb131eb596ab79803b2e6cdab652b6bd" name="abb131eb596ab79803b2e6cdab652b6bd"></a>
@@ -300,6 +302,35 @@ static <a class="el" href="classgeos_1_1geom_1_1CircularArc.html">CircularArc</a
 </div>
 </div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a6f329c2161dac493f3981d63e7dba6fd" name="a6f329c2161dac493f3981d63e7dba6fd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f329c2161dac493f3981d63e7dba6fd">&#9670;&#160;</a></span>addLinearizedPoints()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void geos::geom::CircularArc::addLinearizedPoints </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">CoordinateSequence</a> &amp;&#160;</td>
+          <td class="paramname"><em>seq</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const algorithm::CurveToLineParams &amp;&#160;</td>
+          <td class="paramname"><em>params</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Add linearized points representing this arc to the provided <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html" title="The internal representation of a list of coordinates inside a Geometry.">CoordinateSequence</a>. The origin point of the arc will NOT be added. </p>
+
+</div>
+</div>
 <a id="ac442ec0fd1aef248fd26dba5d5697ac6" name="ac442ec0fd1aef248fd26dba5d5697ac6"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac442ec0fd1aef248fd26dba5d5697ac6">&#9670;&#160;</a></span>containsPoint()</h2>
 
