@@ -289,11 +289,17 @@ GeometrySplitter::splitLinealWithEdge(const Geometry &geom, const Geometry &edge
     noder.setOnlyFirstGeomEdges(true);
     noder.setPreserveCompoundCurves(true);
 
-    auto nodedMLS = noder.getNoded();
+    auto noded = noder.getNoded();
 
-    auto nodedGC = geom.getFactory()->createGeometryCollection(detail::down_cast<GeometryCollection*>(nodedMLS.get())->releaseGeometries());
+    // Already a collection type? Convert to a generic GeometryCollection and return.
+    if (auto* coll = dynamic_cast<GeometryCollection*>(noded.get())) {
+        return geom.getFactory()->createGeometryCollection(coll->releaseGeometries());
+    }
 
-    return nodedGC;
+    // Promote single-part geometries to a collection type
+    std::vector<std::unique_ptr<Geometry>> geoms;
+    geoms.push_back(std::move(noded));
+    return geom.getFactory()->createGeometryCollection(std::move(geoms));
 }
 
 static std::unique_ptr<Point>

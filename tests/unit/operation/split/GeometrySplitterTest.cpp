@@ -848,4 +848,26 @@ void object::test<69>()
         "GEOMETRYCOLLECTION (LINESTRING (-10 0, -8 0), LINESTRING (-8 0, -5 0), COMPOUNDCURVE (CIRCULARSTRING (-5 0, 0 5, 5 0), (5 0, 8 0)), LINESTRING (8 0, 10 0), CIRCULARSTRING (10 0, 15 -5, 20 0))");
 }
 
+template<>
+template<>
+void object::test<70>()
+{
+    set_test_name("split CompoundCurve with disjoint LineString");
+
+    testSplit("COMPOUNDCURVE ((-10 0, -5 0), CIRCULARSTRING (-5 0, 0 5, 5 0), (5 0, 10 0))",
+              "LINESTRING (0 0, 0 4)",
+              "GEOMETRYCOLLECTION(COMPOUNDCURVE ((-10 0, -5 0), CIRCULARSTRING (-5 0, 0 5, 5 0), (5 0, 10 0)))");
+}
+
+template<>
+template<>
+void object::test<71>()
+{
+    set_test_name("split CompoundCurve with disjoint Point");
+
+    testSplit("COMPOUNDCURVE ((-10 0, -5 0), CIRCULARSTRING (-5 0, 0 5, 5 0), (5 0, 10 0))",
+              "POINT (0 0)",
+              "GEOMETRYCOLLECTION(COMPOUNDCURVE ((-10 0, -5 0), CIRCULARSTRING (-5 0, 0 5, 5 0), (5 0, 10 0)))");
+}
+
 }
