@@ -17,4 +17,8 @@ if(DEFINED ENV{LIB_FUZZING_ENGINE})
   add_executable(fuzz_geojson fuzz_geojson.c)
   target_include_directories(fuzz_geojson PUBLIC $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>)
   target_link_libraries(fuzz_geojson geos_c $ENV{LIB_FUZZING_ENGINE})
+
+  add_executable(fuzz_geo_ops fuzz_geo_ops.c)
+  target_include_directories(fuzz_geo_ops PUBLIC $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/include>)
+  target_link_libraries(fuzz_geo_ops geos_c $ENV{LIB_FUZZING_ENGINE})
 endif()
