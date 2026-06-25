@@ -184,4 +184,30 @@ void object::test<6>
     ensure_equals(length, 1);
 }
 
+template<>
+template<>
+void object::test<7>()
+{
+    set_test_name("GEOSGetNumCurves / GEOSGetCurveN");
+
+    input_ = fromWKT("LINESTRING (1 1, 2 2)");
+
+    ensure_equals(GEOSGetNumCurves(input_), 1);
+
+    ensure(GEOSGetCurveN(input_, -1) == nullptr);
+    ensure(GEOSGetCurveN(input_, 0) == input_);
+}
+
+template<>
+template<>
+void object::test<8>()
+{
+    set_test_name("GEOSGetNumCurves(LINESTRING EMPTY)");
+
+    input_ = fromWKT("LINESTRING EMPTY");
+
+    ensure_equals(GEOSGetNumCurves(input_), 0);
+}
+
+
 } // namespace tut

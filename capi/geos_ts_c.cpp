@@ -2311,6 +2311,36 @@ extern "C" {
         });
     }
 
+    int
+    GEOSGetNumCurves_r(GEOSContextHandle_t extHandle, const Geometry* g1)
+    {
+        return execute<NotInterruptible>(extHandle, -1, [&]() {
+            const Curve* curve = dynamic_cast<const Curve*>(g1);
+            if (curve) {
+                return static_cast<int>(curve->getNumCurves());
+            }
+
+            return 0;
+        });
+    }
+
+    const GEOSGeometry*
+    GEOSGetCurveN_r(GEOSContextHandle_t extHandle, const Geometry* g, int n)
+    {
+        return execute<NotInterruptible>(extHandle, [&]() -> const Geometry* {
+            if(n < 0) {
+                throw IllegalArgumentException("Index must be non-negative.");
+            }
+
+            const Curve* curve = dynamic_cast<const Curve*>(g);
+            if (curve) {
+                return curve->getCurveN(static_cast<std::size_t>(n));
+            }
+
+            return nullptr;
+        });
+    }
+
     /*
      * Call only on LineString, CircularString, or CompoundCurve
      * Returns NULL on exception

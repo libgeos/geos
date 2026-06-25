@@ -181,7 +181,7 @@ namespace capitest {
         }
 
         void
-        ensure_geometry_equals_identical(GEOSGeometry* g1, GEOSGeometry* g2)
+        ensure_geometry_equals_identical(const GEOSGeometry* g1, const GEOSGeometry* g2)
         {
             char rslt;
             if (g1 == nullptr || g2 == nullptr) {
@@ -222,7 +222,7 @@ namespace capitest {
         }
 
         void
-        report_not_equal(const char* tag, GEOSGeometry* g1, GEOSGeometry* g2, double tolerance, char rslt)
+        report_not_equal(const char* tag, const GEOSGeometry* g1, const GEOSGeometry* g2, double tolerance, char rslt)
         {
             if (rslt == 1) return;
             //TODO: handle rslt exception value

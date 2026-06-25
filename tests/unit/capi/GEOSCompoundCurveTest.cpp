@@ -142,4 +142,20 @@ void object::test<8>()
     ensure_equals(length, geos::MATH_PI*1.5*5 + 5);
 }
 
+template<>
+template<>
+void object::test<9>()
+{
+    set_test_name("GEOSGetNumCurves / GEOSGetCurveN");
+
+    ensure_equals(GEOSGetNumCurves(cc_), 2);
+
+    geom1_ = fromWKT("CIRCULARSTRING ZM (-5 0 6 7, 4 3 7 8 , 0 -5 8 9)");
+    geom2_ = fromWKT("LINESTRING (0 -5 8 9, -5 -5 9 10)");
+
+    ensure(GEOSGetCurveN(cc_, -1) == nullptr);
+    ensure_geometry_equals_identical(GEOSGetCurveN(cc_, 0), geom1_);
+    ensure_geometry_equals_identical(GEOSGetCurveN(cc_, 1), geom2_);
+}
+
 } // namespace tut

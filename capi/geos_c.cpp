@@ -899,6 +899,18 @@ extern "C" {
         return GEOSGetGeometryN_r(handle, g, n);
     }
 
+    int
+    GEOSGetNumCurves(const Geometry* g)
+    {
+        return GEOSGetNumCurves_r(handle, g);
+    }
+
+    const Geometry*
+    GEOSGetCurveN(const Geometry* g, int n)
+    {
+        return GEOSGetCurveN_r(handle, g, n);
+    }
+
     /*
      * Call only on LINESTRING
      * Returns NULL on exception

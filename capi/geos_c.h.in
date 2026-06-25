@@ -1828,6 +1828,16 @@ extern const GEOSGeometry GEOS_DLL *GEOSGetGeometryN_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry* g, int n);
 
+/** \see GEOSGetNumCurves */
+extern int GEOS_DLL GEOSGetNumCurves_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* g);
+
+/** \see GEOSGetCurveN */
+extern const GEOSGeometry GEOS_DLL *GEOSGetCurveN_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* g, int n);
+
 /** \see GEOSNormalize */
 extern int GEOS_DLL GEOSNormalize_r(
     GEOSContextHandle_t handle,
@@ -3143,6 +3153,33 @@ extern int GEOS_DLL GEOSGetNumGeometries(const GEOSGeometry* g);
 * \since 2.2
 */
 extern const GEOSGeometry GEOS_DLL *GEOSGetGeometryN(
+    const GEOSGeometry* g,
+    int n);
+
+/**
+* Returns the number of simple curves in a CompoundCurve.
+* Returns 1 for a non-empty LineString/CircularString, and 0 
+* for other inputs.
+* \param g Input geometry
+* \return Number of child curves in this geometry
+* \since 3.15
+*/
+extern int GEOS_DLL GEOSGetNumCurves(const GEOSGeometry* g);
+
+/**
+* Returns the specified sub-curve of a geometry. For a simple curve type
+* (LineString/CircularString), returns a pointer to the input.
+* Returns NULL for non-curve types (dimension != 1).
+*
+* Returned object is a pointer to internal storage and must NOT be destroyed
+* directly.
+
+* \param g Input geometry
+* \param n Sub-curve index, zero-based
+* \return A const \ref GEOSGeometry, or NULL
+* \since 3.15
+*/
+extern const GEOSGeometry GEOS_DLL *GEOSGetCurveN(
     const GEOSGeometry* g,
     int n);
 
