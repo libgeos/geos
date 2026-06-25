@@ -267,7 +267,7 @@ SimpleCurve::getEndPoint() const
 std::size_t
 SimpleCurve::getNumCurves() const
 {
-    return 1;
+    return isEmpty() ? 0 : 1;
 }
 
 std::size_t
