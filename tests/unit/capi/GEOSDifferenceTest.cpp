@@ -73,7 +73,7 @@ void object::test<3>()
     result_ = GEOSDifference(geom1_, geom2_);
     ensure(result_);
 
-    expected_ = fromWKT("MULTICURVE (CIRCULARSTRING (1.7071067812 0.7071067812, 1.9238795325 0.3826834324, 2 0), CIRCULARSTRING (0 0, 0.6173165676 0.9238795325, 1.7071067812 0.7071067812))");
+    expected_ = fromWKT("CIRCULARSTRING (0 0, 0.6173165676 0.9238795325, 1.7071067812 0.7071067812, 1.9238795325 0.3826834324, 2 0)");
 
     ensure_geometry_equals(result_, expected_, 1e-8);
 }
