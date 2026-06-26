@@ -316,7 +316,7 @@ GeometryNoder::toGeometry(std::vector<std::unique_ptr<PathString>>& nodedEdges) 
 {
     const geom::GeometryFactory* geomFact = argGeom1->getFactory();
 
-    std::set< OrientedCoordinateArray > ocas;
+    EdgeDeduplicator dedup;
 
     std::vector<PathString*> pathsToKeep;
 
@@ -327,11 +327,8 @@ GeometryNoder::toGeometry(std::vector<std::unique_ptr<PathString>>& nodedEdges) 
             continue;
         }
 
-        const auto& coords = path->getCoordinates();
-        OrientedCoordinateArray oca1(*coords);
-
         // Check if an equivalent edge is known
-        if(ocas.insert(oca1).second) {
+        if(dedup.add(*path->getCoordinates())) {
             pathsToKeep.push_back(path.get());
         }
     }

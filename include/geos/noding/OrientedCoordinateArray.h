@@ -21,6 +21,7 @@
 #include <geos/export.h>
 
 #include <cstddef>
+#include <set>
 
 // Forward declarations
 namespace geos {
@@ -107,6 +108,36 @@ operator< (const OrientedCoordinateArray& oca1,
 {
     return oca1.compareTo(oca2) < 0;
 }
+
+/** \brief
+ * Deduplicates coordinate sequences in an orientation-independent way.
+ *
+ * Tracks the set of sequences seen so far (as OrientedCoordinateArrays)
+ * and reports whether each newly offered sequence is novel. Used by
+ * noders to drop edges that are geometrically identical regardless of
+ * direction.
+ *
+ * NOTE: like OrientedCoordinateArray, this stores only pointers to the
+ * sequences offered to add(). Every sequence passed in must outlive the
+ * EdgeDeduplicator.
+ */
+class GEOS_DLL EdgeDeduplicator {
+public:
+
+    /**
+     * @param seq a coordinate sequence; must outlive this object
+     * @return true if seq was not equivalent to any previously added
+     *         sequence (and is now recorded), false if it is a duplicate
+     */
+    bool add(const geom::CoordinateSequence& seq) {
+        return m_seen.insert(OrientedCoordinateArray(seq)).second;
+    }
+
+private:
+
+    std::set<OrientedCoordinateArray> m_seen;
+
+};
 
 } // namespace geos.noding
 } // namespace geos

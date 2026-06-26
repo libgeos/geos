@@ -40,7 +40,7 @@ using geos::geom::PrecisionModel;
 using geos::noding::IteratedNoder;
 using geos::noding::NodedSegmentString;
 using geos::noding::Noder;
-using geos::noding::OrientedCoordinateArray;
+using geos::noding::EdgeDeduplicator;
 using geos::noding::SegmentString;
 using geos::noding::snapround::SnapRoundingNoder;
 
@@ -108,14 +108,13 @@ LineCollectionNoder::buildResult(
 {
     const void* tag = reinterpret_cast<const void*>(static_cast<uintptr_t>(index));
 
-    std::set<OrientedCoordinateArray> seen;
+    EdgeDeduplicator dedup;
     std::vector<std::unique_ptr<Geometry>> lines;
 
     for (const auto& ss : nodedSegs) {
         if (ss->getData() != tag) continue;
         const auto& coords = ss->getCoordinates();
-        OrientedCoordinateArray oca(*coords);
-        if (seen.insert(oca).second) {
+        if (dedup.add(*coords)) {
             lines.push_back(m_geomFactory->createLineString(coords));
         }
     }
