@@ -150,6 +150,15 @@ GeometryCollection::setFlags() const {
         return;
     }
 
+    // Reset before accumulating, otherwise stale values (e.g. carried over
+    // by a clone) would never clear once flagsCalculated is invalidated.
+    flags.hasPoints = false;
+    flags.hasLines = false;
+    flags.hasPolygons = false;
+    flags.hasM = false;
+    flags.hasZ = false;
+    flags.hasCurves = false;
+
     for (const auto& geom : geometries) {
         flags.hasPoints |= geom->hasDimension(Dimension::P);
         flags.hasLines |= geom->hasDimension(Dimension::L);
