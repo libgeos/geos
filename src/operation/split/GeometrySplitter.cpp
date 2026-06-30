@@ -131,22 +131,24 @@ class RemoveCoordinateZM : public geom::CoordinateSequenceFilter {
 
 public:
 
-    void filter_rw(geom::CoordinateSequence& seq, std::size_t) override {
-        seq.setZM(false, false);
-        m_done = true;
+    void filter_rw(geom::CoordinateSequence& seq, std::size_t i) override {
+        // setZM rewrites the entire sequence, so we only need to act once
+        // per sequence (at the first coordinate).
+        if (i == 0) {
+            seq.setZM(false, false);
+        }
     }
 
     bool isDone() const override {
-        return m_done;
-    }
-
-    bool isGeometryChanged() const override {
-        // We didn't change the XY coords; no need to update the envelope.
+        // We must visit every sequence in the geometry, so never stop early.
         return false;
     }
 
-private:
-    bool m_done{false};
+    bool isGeometryChanged() const override {
+        // We dropped the Z/M dimensions, so cached dimensional flags
+        // must be recomputed.
+        return true;
+    }
 };
 
 std::unique_ptr<Geometry>

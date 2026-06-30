@@ -875,11 +875,11 @@ template<>
 template<>
 void object::test<72>()
 {
-    set_test_name("split CompoundCurve with disjoint Point");
+    set_test_name("split LineString with 3D MultiLineString edge");
 
     testSplit("LINESTRING(-11.1111111 70,70 -11.1111111)",
               "MULTILINESTRING((-10 40 1,-9 41 1),(-9 41 1,-8 42 2),(-10 65 1,-9 66 1),(-9 66 1,-8 67 2),(10 40 1,11 41 1),(11 41 1,12 42 2),(10 65 1,11 66 1),(11 66 1,12 67 2),(30 40 1,31 41 1),(31 41 1,32 42 2),(30 65 1,31 66 1),(31 66 1,32 67 2),(50 40 1,51 41 1),(51 41 1,52 42 2),(50 65 1,51 66 1),(51 66 1,52 67 2))",
-              "LINESTRING(0 0, 1 1)");
+              "GEOMETRYCOLLECTION (LINESTRING (-11.1111111 70, -8.055555550000001 66.94444445), LINESTRING (-8.055555550000001 66.94444445, 70 -11.1111111))");
 }
 
 

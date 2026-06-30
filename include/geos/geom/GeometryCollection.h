@@ -265,6 +265,7 @@ protected:
 
     void geometryChangedAction() override {
         envelope.setToNull();
+        flags.flagsCalculated = false;
     }
 
     int compareToSameClass(const Geometry* gc) const override;
