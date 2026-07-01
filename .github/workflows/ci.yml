@@ -373,7 +373,7 @@ jobs:
           arch: x64
         - os: windows-11-arm
           cxxstd: 20
-          arch: arm64
+          arch: x86_arm64
 
     runs-on: ${{ matrix.ci.os }}
     steps:
@@ -392,7 +392,7 @@ jobs:
       run: choco install ccache ninja
 
     - name: Activate MSVC
-      uses: ilammy/msvc-dev-cmd@v1.13.0
+      uses: TheMrMilchmann/setup-msvc-dev@v4
       with:
         arch: ${{ matrix.ci.arch }}
 
