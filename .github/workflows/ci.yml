@@ -392,7 +392,7 @@ jobs:
       run: choco install ccache ninja
 
     - name: Activate MSVC
-      uses: ilammy/msvc-dev-cmd@v1
+      uses: ilammy/msvc-dev-cmd@v1.13.0
       with:
         arch: ${{ matrix.ci.arch }}
 
