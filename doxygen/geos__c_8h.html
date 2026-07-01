@@ -188,8 +188,6 @@ Functions</h2></td></tr>
 <tr class="separator:aeb13efade416e581cefd1061430bb463"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad9878b3096d557bd38648699829cb660" id="r_ad9878b3096d557bd38648699829cb660"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#ad9878b3096d557bd38648699829cb660">GEOS_interruptRequest</a> (void)</td></tr>
 <tr class="separator:ad9878b3096d557bd38648699829cb660"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa8ecc25984c768b447775a70303a3016" id="r_aa8ecc25984c768b447775a70303a3016"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#aa8ecc25984c768b447775a70303a3016">GEOS_interruptThread</a> (void)</td></tr>
-<tr class="separator:aa8ecc25984c768b447775a70303a3016"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a49d835008e2341b2b0b8a7c5358ec07d" id="r_a49d835008e2341b2b0b8a7c5358ec07d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a49d835008e2341b2b0b8a7c5358ec07d">GEOS_interruptCancel</a> (void)</td></tr>
 <tr class="separator:a49d835008e2341b2b0b8a7c5358ec07d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a30f811be4f94eca255d6741f361969c1" id="r_a30f811be4f94eca255d6741f361969c1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a8fbe3d578fe2ba147a7a6a0c7a3d8f85">GEOSContextHandle_t</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a30f811be4f94eca255d6741f361969c1">GEOS_init_r</a> (void)</td></tr>
@@ -2625,34 +2623,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Request safe interruption of operations. The next thread to check for an interrupt will be interrupted. To request interruption of a specific thread, instead call <a class="el" href="geos__c_8h.html#aa8ecc25984c768b447775a70303a3016">GEOS_interruptThread()</a> from a callback executed by that thread. </p><dl class="section since"><dt>Since</dt><dd>3.4 </dd></dl>
-
-</div>
-</div>
-<a id="aa8ecc25984c768b447775a70303a3016" name="aa8ecc25984c768b447775a70303a3016"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa8ecc25984c768b447775a70303a3016">&#9670;&#160;</a></span>GEOS_interruptThread()</h2>
-
-<div class="memitem">
-<div class="memproto">
-<table class="mlabels">
-  <tr>
-  <td class="mlabels-left">
-      <table class="memname">
-        <tr>
-          <td class="memname">void GEOS_interruptThread </td>
-          <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
-          <td></td>
-        </tr>
-      </table>
-  </td>
-  <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
-  </tr>
-</table>
-</div><div class="memdoc">
-<p>Interrupt the current thread. </p><dl class="section since"><dt>Since</dt><dd>3.14 </dd></dl>
+<p>Request safe interruption of operations. The next thread to check for an interrupt will be interrupted. To request interruption of a specific thread, instead call GEOS_interruptThread() from a callback executed by that thread. </p><dl class="section since"><dt>Since</dt><dd>3.4 </dd></dl>
 
 </div>
 </div>
