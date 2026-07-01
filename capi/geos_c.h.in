@@ -421,12 +421,6 @@ extern GEOSContextInterruptCallback GEOS_DLL *GEOSContext_setInterruptCallback_r
 extern void GEOS_DLL GEOS_interruptRequest(void);
 
 /**
-* Interrupt the current thread.
-* \since 3.14
-*/
-extern void GEOS_DLL GEOS_interruptThread(void);
-
-/**
 * Cancel a pending interruption request
 * \since 3.4
 */
