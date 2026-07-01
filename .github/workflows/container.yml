@@ -24,7 +24,7 @@ jobs:
 
     steps:
 
-    - uses: actions/checkout@v6.0.2
+    - uses: actions/checkout@v7.0.0
 
     - name: Docker meta
       id: meta
@@ -54,7 +54,7 @@ jobs:
         cp tools/ci/geosop/Dockerfile .
 
     - name: Build and Push
-      uses: docker/build-push-action@v7
+      uses: docker/build-push-action@v7.3.0
       with:
         context: .
         push: true

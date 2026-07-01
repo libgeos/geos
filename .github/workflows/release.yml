@@ -32,7 +32,7 @@ jobs:
         uname -a
         sudo -E apt-get -yq --no-install-suggests --no-install-recommends install make doxygen
 
-    - uses: actions/checkout@v6.0.2
+    - uses: actions/checkout@v7.0.0
 
     - name: Get tag
       id: tag
