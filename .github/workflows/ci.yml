@@ -373,7 +373,7 @@ jobs:
           arch: x64
         - os: windows-11-arm
           cxxstd: 20
-          arch: amd64_arm64
+          arch: arm64
 
     runs-on: ${{ matrix.ci.os }}
     steps:
