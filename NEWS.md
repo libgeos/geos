@@ -16,6 +16,7 @@
     - Normalize (GH-1397, Dan Baston)
     - OverlayNG (GH-1427, Dan Baston)
     - Polygonizer (GH-1420, Dan Baston)
+  - Add GEOSLineToCurve, GEOSCurveToLine (GH-1382, Dan Baston)
   - Add GeometrySplitter (GH-1424, Dan Baston)
 
 - Breaking Changes:
