@@ -129,11 +129,13 @@ template<>
 template<>
 void object::test<5> ()
 {
+  set_test_name("testLineOverlapUnion");
+
   checkUnion("LINESTRING (0 0 0, 10 10 10)", "LINESTRING (5 5 990, 15 15 999)",
-      "MULTILINESTRING Z((0 0 0, 5 5 990), (5 5 990, 10 10 10), (10 10 10, 15 15 999))");
+      "LINESTRING Z(0 0 0, 5 5 990, 10 10 10, 15 15 999)");
 
   checkUnion("LINESTRING M (0 0 0, 10 10 10)", "LINESTRING M (5 5 990, 15 15 999)",
-      "MULTILINESTRING M((0 0 0, 5 5 990), (5 5 990, 10 10 10), (10 10 10, 15 15 999))");
+      "LINESTRING M(0 0 0, 5 5 990, 10 10 10, 15 15 999)");
 }
 
 // testLineLineXYDifferenceLineInterpolated

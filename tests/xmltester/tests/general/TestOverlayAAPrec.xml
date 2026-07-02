@@ -115,9 +115,7 @@
   </b>
 <test>
   <op name="intersection" arg1="A" arg2="B">
-    MULTILINESTRING(
-      (10 30, 10 10),
-      (10 10, 30 10))
+    LINESTRING (10 30, 10 10, 30 10)
   </op>
 </test>
 <test>
@@ -273,9 +271,7 @@
   </b>
 <test>
   <op name="intersection" arg1="A" arg2="B">
-    MULTILINESTRING(
-      (10 30, 10 10),
-      (10 10, 30 10))
+    LINESTRING (10 30, 10 10, 30 10)
   </op>
 </test>
 <test>
@@ -317,9 +313,7 @@
   </b>
 <test>
   <op name="intersection" arg1="A" arg2="B">
-    MULTILINESTRING(
-      (10 30, 10 10),
-      (10 10, 30 10))
+    LINESTRING(10 30, 10 10, 30 10)
   </op>
 </test>
 <test>
@@ -361,9 +355,7 @@
   </b>
 <test>
   <op name="intersection" arg1="A" arg2="B">
-    MULTILINESTRING(
-      (10 30, 10 10),
-      (10 10, 30 10))
+    LINESTRING(10 30, 10 10, 30 10)
   </op>
 </test>
 <test>
@@ -606,9 +598,7 @@ GEOMETRYCOLLECTION(
   </b>
 <test>
   <op name="intersection" arg1="A" arg2="B">
-    MULTILINESTRING(
-      (160 140, 160 120),
-      (160 120, 160 100))
+    LINESTRING(160 140, 160 120, 160 100)
   </op>
 </test>
 <test>
@@ -719,8 +709,7 @@ GEOMETRYCOLLECTION(
 <test>
   <op name="symdifference" arg1="A" arg2="B">
     GEOMETRYCOLLECTION(
-      LINESTRING(78 39, 83 39),
-      LINESTRING(83 33, 83 39),
+      LINESTRING(78 39, 83 39, 83 33),
       POLYGON(
         (83 39, 62 402, 68 402, 83 39)),
       POLYGON(

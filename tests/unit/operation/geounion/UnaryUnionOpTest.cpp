@@ -78,6 +78,7 @@ struct test_unaryuniontest_data {
         GeomPtr b2 = normalize(b);
         bool eq = a2->equalsExact(b2.get());
         if(! eq) {
+            cout << "EXPECTED: " << wktwriter.write(a2.get()) << endl;
             cout << "OBTAINED: " << wktwriter.write(b2.get()) << endl;
         }
         return eq;
@@ -184,6 +185,8 @@ template<>
 void object::test<6>
 ()
 {
+    set_test_name("non-simple LineString");
+
     static char const* const geoms[] = {
         "LINESTRING (0 0, 10 0, 5 -5, 5 5)",
         nullptr

@@ -234,10 +234,12 @@ template<>
 template<>
 void object::test<13> ()
 {
+    set_test_name("testAreaLineIntersection");
+
     std::string a = "POLYGON ((360 200, 220 200, 220 180, 300 180, 300 160, 300 140, 360 200))";
     std::string b = "MULTIPOLYGON (((280 180, 280 160, 300 160, 300 180, 280 180)), ((220 230, 240 230, 240 180, 220 180, 220 230)))";
     // std::string exp = "POLYGON ((220 200, 240 200, 240 180, 220 180, 220 200))";
-    std::string exp = "GEOMETRYCOLLECTION (LINESTRING (280 180, 300 180), LINESTRING (300 160, 300 180), POLYGON ((220 180, 220 200, 240 200, 240 180, 220 180)))";
+    std::string exp = "GEOMETRYCOLLECTION (LINESTRING (280 180, 300 180, 300 160), POLYGON ((220 180, 220 200, 240 200, 240 180, 220 180)))";
     testOverlay(a, b, exp, OverlayNG::INTERSECTION, 1);
 }
 
@@ -500,9 +502,11 @@ template<>
 template<>
 void object::test<37> ()
 {
+    set_test_name("testCollapseTriBoxUnion");
+
     std::string a = "POLYGON ((1 3.3, 1.3 1.4, 3.1 1.4, 3.1 0.9, 1.3 0.9, 1 -0.2, 0.8 1.3, 1 3.3))";
     std::string b = "POLYGON ((1 2.9, 2.9 2.9, 2.9 1.3, 1.7 1, 1.3 0.9, 1 0.4, 1 2.9))";
-    std::string exp = "MULTILINESTRING ((1 1, 1 0), (1 3, 1 1), (1 1, 2 1), (2 1, 3 1))";
+    std::string exp = "MULTILINESTRING ((1 1, 1 0), (1 3, 1 1), (1 1, 2 1, 3 1))";
     testOverlay(a, b, exp, OverlayNG::INTERSECTION, 1);
 }
 
@@ -808,9 +812,7 @@ void object::test<62>()
 
     std::string a = "CIRCULARSTRING (0 0, 1 1, 2 0, 3 -1, 4 0)";
 
-    // Noding causes the CircularString to split at (2, 0)
-    // OverlayNG does not merge output lines, so we get a MultiCurve.
-    std::string exp = "MULTICURVE (CIRCULARSTRING (0 0, 1 1, 2 0), CIRCULARSTRING (2 0, 3 -1, 4 0))";
+    std::string exp = "CIRCULARSTRING (0 0, 1 1, 2 0, 3 -1, 4 0)";
 
     testOverlay(a, a, exp, OverlayNG::UNION, 0);
 }
