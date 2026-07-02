@@ -248,6 +248,36 @@ void object::test<16>
 }
 
 
+// See https://trac.osgeo.org/postgis/ticket/6065
+template<>
+template<>
+void object::test<17>
+()
+{
+    const std::string wkt("POLYGON ((2 1, 2 0, 0 2, 0 0,0 2, 2 1))");
+    checkCCW(false, wkt);
+}
+
+
+// See https://trac.osgeo.org/postgis/ticket/6065
+template<>
+template<>
+void object::test<18>
+()
+{
+    const std::string wkt("POLYGON ((0 0,0 2, 2 1, 2 0, 0 2, 0 0))");
+    checkCCW(false, wkt);
+}
+//
+// See https://trac.osgeo.org/postgis/ticket/6065
+template<>
+template<>
+void object::test<19>
+()
+{
+    const std::string wkt("POLYGON ((-1 0,0 2, 2 1, 2 0, 0 2, 0 0, -1 0))");
+    checkCCW(false, wkt);
+}
 
 
 } // namespace tut
