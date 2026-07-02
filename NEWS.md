@@ -21,6 +21,8 @@
 - Breaking Changes:
   - BufferOp returns POLYGON EMPTY when fed Inf/Nan coords (GH-1332)
   - Return Inf when calculating distance to an empty geometry (GH-1345, Even Rouault)
+  - Overlay operations now produce a LineString geometry in cases that would previously
+    produce a MultiLineString with contiguous sub-geometries. (GH-1459, Dan Baston)
 
 
 - Fixes/Improvements:
