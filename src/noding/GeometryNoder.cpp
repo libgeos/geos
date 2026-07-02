@@ -37,6 +37,7 @@
 #include <geos/noding/OrientedCoordinateArray.h>
 #include <geos/noding/SegmentString.h>
 #include <geos/noding/SimpleNoder.h>
+#include <geos/noding/snapround/SnapRoundingNoder.h>
 
 #include <geos/util/Assert.h>
 
@@ -281,6 +282,14 @@ GeometryNoder::node(const geom::Geometry& geom1, const geom::Geometry& geom2)
     return noder.getNoded();
 }
 
+/* public static */
+std::vector<std::unique_ptr<geom::Geometry>>
+GeometryNoder::nodeCollection(const std::vector<const geom::Geometry*>& geoms, double gridSize)
+{
+    GeometryNoder noder(geoms, gridSize);
+    return noder.getNodedCollection();
+}
+
 /* public */
 GeometryNoder::GeometryNoder(const geom::Geometry& g)
     :
@@ -302,6 +311,32 @@ GeometryNoder::GeometryNoder(const geom::Geometry& g1, const geom::Geometry& g2)
     preserveCompoundCurves(false)
 {}
 
+/* private static */
+bool
+GeometryNoder::collectionHasCurves(const std::vector<const geom::Geometry*>& geoms)
+{
+    for (const auto* g : geoms) {
+        if (g != nullptr && g->hasCurvedComponents())
+            return true;
+    }
+    return false;
+}
+
+GeometryNoder::GeometryNoder(const std::vector<const geom::Geometry*>& geoms, double gridSize)
+    :
+    // argGeom1 points at the first member purely so factory/precision-model
+    // lookups have a geometry to reach through; collection mode drives output
+    // off argColl, not argGeom1.
+    argGeom1(geoms.empty() ? nullptr : geoms.front()),
+    argGeom2(nullptr),
+    argGeomHasCurves(collectionHasCurves(geoms)),
+    argGeomHasCompoundCurves(false),
+    onlyFirstGeomEdges(false),
+    preserveCompoundCurves(false),
+    argColl(&geoms),
+    m_gridSize(gridSize)
+{}
+
 GeometryNoder::~GeometryNoder() = default;
 
 bool
@@ -312,45 +347,35 @@ GeometryNoder::isInResult(const PathString& ps) const
 
 /* private */
 std::unique_ptr<geom::Geometry>
-GeometryNoder::toGeometry(std::vector<std::unique_ptr<PathString>>& nodedEdges) const
+GeometryNoder::buildSlot(
+    const std::vector<PathString*>& selected,
+    const std::vector<PathString*>& blockers,
+    const geom::Geometry& srcGeom) const
 {
-    const geom::GeometryFactory* geomFact = argGeom1->getFactory();
+    const geom::GeometryFactory* geomFact = srcGeom.getFactory();
 
-    std::set< OrientedCoordinateArray > ocas;
-
+    // Deduplicate equivalent edges (orientation-independent).
+    std::set<OrientedCoordinateArray> ocas;
     std::vector<PathString*> pathsToKeep;
-
-
-
-    for(auto& path : nodedEdges) {
-        if (!isInResult(*path)) {
-            continue;
-        }
-
-        const auto& coords = path->getCoordinates();
-        OrientedCoordinateArray oca1(*coords);
-
-        // Check if an equivalent edge is known
-        if(ocas.insert(oca1).second) {
-            pathsToKeep.push_back(path.get());
+    pathsToKeep.reserve(selected.size());
+    for (auto* path : selected) {
+        OrientedCoordinateArray oca(*path->getCoordinates());
+        if (ocas.insert(oca).second) {
+            pathsToKeep.push_back(path);
         }
     }
 
     if (preserveCompoundCurves && argGeomHasCompoundCurves) {
-        util::Assert::isTrue(onlyFirstGeomEdges);
+        CurveRebuilder rebuilder(srcGeom);
 
-        CurveRebuilder rebuilder(*argGeom1);
-
-        for (auto& path : pathsToKeep) {
+        for (auto* path : pathsToKeep) {
             rebuilder.add(path);
         }
 
-        // Any edge that begins at a point where a geomB edge starts/ends is not
-        // eligible for merging.
-        for (auto& path : nodedEdges) {
-            if (!isInResult(*path)) {
-                rebuilder.disableNodes(path.get());
-            }
+        // Any edge that begins at a point where another slot's edge
+        // starts/ends is not eligible for merging.
+        for (auto* path : blockers) {
+            rebuilder.disableNodes(path);
         }
 
         return rebuilder.getGeometry();
@@ -358,10 +383,10 @@ GeometryNoder::toGeometry(std::vector<std::unique_ptr<PathString>>& nodedEdges) 
 
     // Create a geometry out of the noded substrings.
     std::vector<std::unique_ptr<geom::Geometry>> lines;
-    lines.reserve(nodedEdges.size());
+    lines.reserve(pathsToKeep.size());
     bool resultArcs = false;
 
-    for (const auto& path : pathsToKeep) {
+    for (auto* path : pathsToKeep) {
         const auto& coords = path->getCoordinates();
 
         const bool isLinear = dynamic_cast<const SegmentString*>(path);
@@ -379,6 +404,73 @@ GeometryNoder::toGeometry(std::vector<std::unique_ptr<PathString>>& nodedEdges) 
     } else {
         return geomFact->createMultiLineString(std::move(lines));
     }
+}
+
+/* private */
+std::unique_ptr<geom::Geometry>
+GeometryNoder::toGeometry(std::vector<std::unique_ptr<PathString>>& nodedEdges) const
+{
+    std::vector<PathString*> selected;
+    std::vector<PathString*> blockers;
+
+    for (auto& path : nodedEdges) {
+        if (isInResult(*path)) {
+            selected.push_back(path.get());
+        } else {
+            blockers.push_back(path.get());
+        }
+    }
+
+    if (preserveCompoundCurves && argGeomHasCompoundCurves) {
+        util::Assert::isTrue(onlyFirstGeomEdges);
+    }
+
+    return buildSlot(selected, blockers, *argGeom1);
+}
+
+/* private */
+std::vector<std::unique_ptr<geom::Geometry>>
+GeometryNoder::toGeometryCollection(std::vector<std::unique_ptr<PathString>>& nodedEdges) const
+{
+    const std::size_t n = argColl->size();
+
+    // Partition the noded paths by the source member they originated from.
+    std::vector<std::vector<PathString*>> byMember(n);
+    for (auto& path : nodedEdges) {
+        auto it = m_contextToMember.find(path->getData());
+        if (it != m_contextToMember.end()) {
+            byMember[it->second].push_back(path.get());
+        }
+    }
+
+    std::vector<std::unique_ptr<geom::Geometry>> result;
+    result.reserve(n);
+
+    for (std::size_t i = 0; i < n; i++) {
+        const geom::Geometry* member = (*argColl)[i];
+
+        if (byMember[i].empty()) {
+            // No linear/curved component: empty result in this slot.
+            result.push_back(member->getFactory()->createMultiLineString());
+            continue;
+        }
+
+        // Edges from every other member block compound-curve merging
+        // across foreign nodes (only needed when reconstructing curves).
+        std::vector<PathString*> blockers;
+        if (preserveCompoundCurves && argGeomHasCompoundCurves) {
+            for (auto& path : nodedEdges) {
+                auto it = m_contextToMember.find(path->getData());
+                if (it == m_contextToMember.end() || it->second != i) {
+                    blockers.push_back(path.get());
+                }
+            }
+        }
+
+        result.push_back(buildSlot(byMember[i], blockers, *member));
+    }
+
+    return result;
 }
 
 /* public */
@@ -409,6 +501,42 @@ GeometryNoder::getNoded()
     return noded;
 }
 
+/* public */
+std::vector<std::unique_ptr<geom::Geometry>>
+GeometryNoder::getNodedCollection()
+{
+    const std::size_t n = argColl->size();
+
+    std::vector<std::unique_ptr<geom::Geometry>> result;
+    if (n == 0)
+        return result;
+
+    // Extract paths from every member into one list, recording which
+    // member each path (identified by its context pointer) came from.
+    std::vector<std::unique_ptr<PathString>> lineList;
+    for (std::size_t i = 0; i < n; i++) {
+        std::size_t before = lineList.size();
+        extractPathStrings(*(*argColl)[i], lineList);
+        for (std::size_t j = before; j < lineList.size(); j++) {
+            m_contextToMember[lineList[j]->getData()] = i;
+        }
+    }
+
+    // No linear/curved content anywhere: an empty result for each slot.
+    if (lineList.empty()) {
+        result.reserve(n);
+        for (std::size_t i = 0; i < n; i++)
+            result.push_back((*argColl)[i]->getFactory()->createMultiLineString());
+        return result;
+    }
+
+    Noder& p_noder = getNoder();
+    p_noder.computePathNodes(PathString::toRawPointerVector(lineList));
+    auto nodedEdges = p_noder.getNodedPaths();
+
+    return toGeometryCollection(nodedEdges);
+}
+
 /* private static */
 void
 GeometryNoder::extractPathStrings(const geom::Geometry& g,
@@ -426,11 +554,16 @@ GeometryNoder::getNoder()
     if(!noder) {
         const geom::PrecisionModel* pm = argGeom1->getFactory()->getPrecisionModel();
         if (argGeomHasCurves) {
+            // Snap-rounding cannot node arcs; curved input always uses
+            // exact arc noding and ignores any requested gridSize.
             noder = std::make_unique<SimpleNoder>();
 
             m_cai = std::make_unique<algorithm::CircularArcIntersector>(argGeom1->getPrecisionModel());
             m_aia = std::make_unique<ArcIntersectionAdder>(*m_cai);
             detail::down_cast<SimpleNoder*>(noder.get())->setArcIntersector(*m_aia);
+        } else if (m_gridSize > 0.0) {
+            m_pm = std::make_unique<geom::PrecisionModel>(1.0 / m_gridSize);
+            noder = std::make_unique<snapround::SnapRoundingNoder>(m_pm.get());
         } else {
             noder = std::make_unique<IteratedNoder>(pm);
         }
