@@ -1,6 +1,6 @@
 ---
 title: "Download and Build"
-date: 2025-08-21
+date: 2025-07-07
 draft: false
 ---
 
@@ -8,6 +8,7 @@ draft: false
 
 | Release | Release Date | First Release | Final Release | Download Link | Changes |
 | :--: | :--:| :--: |:--: | :--: | :--: |
+|  **3.15.0beta1** | 2026/07/07 | 2026/07/07 | *2030/10/01* | [geos-3.15.0beta1.tar.bz2](https://download.osgeo.org/geos/geos-3.15.0beta1.tar.bz2) | [Changes](https://github.com/libgeos/geos/blob/3.15.0beta1/NEWS.md) |
 |  **3.14.1** | 2025/10/27 | 2025/08/21 | *2029/10/01* | [geos-3.14.1.tar.bz2](https://download.osgeo.org/geos/geos-3.14.1.tar.bz2) | [Changes](https://github.com/libgeos/geos/blob/3.14.1/NEWS.md) |
 |  **3.13.1** | 2025/03/03 | 2024/09/06 | *2028/10/01* | [geos-3.13.1.tar.bz2](https://download.osgeo.org/geos/geos-3.13.1.tar.bz2) | [Changes](https://github.com/libgeos/geos/blob/3.13.1/NEWS.md) |
 |  **3.12.3** | 2025/03/03 | 2023/06/27 | *2027/07/01* | [geos-3.12.3.tar.bz2](https://download.osgeo.org/geos/geos-3.12.3.tar.bz2) | [Changes](https://github.com/libgeos/geos/blob/3.12.3/NEWS.md) |
@@ -61,7 +62,7 @@ They are specified on the `cmake` cmdline as `-DVAR=VALUE`.
 | :------------------: | :--------: | :---: |
 | CMAKE_BUILD_TYPE     | Release    | Use `Debug` to build with debug flags and optimizations off. Use `Release` for packaging and production installs. Use `RelWithDebInfo` for optimized build with debug symbols. Use `ASAN` to enable memory usage checking. |
 | CMAKE_INSTALL_PREFIX | /usr/local | Set to install root. Libraries end up in `./lib` or `./lib64`, headers in `./include`, executables in `./bin` |
-| BUILD_DOCUMENTATION  | ON         | Attempt to find `doxygen` executable and build API docs |
+| BUILD_DOCUMENTATION  | OFF        | Attempt to find `doxygen` executable and build API docs |
 | BUILD_SHARED_LIBS    | ON         | Build dynamically linkable libraries |
 | BUILD_TESTING        | ON         | Build unit tests |
 | BUILD_BENCHMARKS     | OFF        | Build benchmark tests |

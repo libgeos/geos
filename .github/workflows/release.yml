@@ -62,7 +62,7 @@ jobs:
         mkdir _build && cd _build
         cmake -DBUILD_DOCUMENTATION=YES ..
         cmake --version
-        cmake --build . --target distcheck
+        cmake --build . --target distcheck -j $(nproc)
 
     - name: Create Release
       if: ${{ steps.tag.outputs.tag == steps.version.outputs.geosversion }}
