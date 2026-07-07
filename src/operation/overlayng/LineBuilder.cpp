@@ -35,7 +35,7 @@ std::vector<std::unique_ptr<Curve>>
 LineBuilder::getLines()
 {
     markResultLines();
-    addResultLines();
+    addResultLinesMerged();
 
     // Transfer ownership of all the lines to the
     // caller
@@ -252,10 +252,10 @@ LineBuilder::buildLine(OverlayEdge* node) const
     const bool constructZ = node->getCoordinatesRO()->hasZ();
     const bool constructM = node->getCoordinatesRO()->hasM();
     geom::util::CurveBuilder cb(*geometryFactory, constructZ, constructM);
+    cb.setOutputLinearRing(false);
 
     // assert: edgeStart degree = 1
     // assert: edgeStart direction = forward
-    cb.add(*node->getCoordinatesRO(), node->isCurved());
 
     bool isNodeForward = node->isForward();
 

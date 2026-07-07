@@ -157,7 +157,7 @@ void object::test<9> ()
 {
     checkUnion(
         "MULTILINESTRING ((1 1, 5 1), (9 1, 5 1))",
-        "MULTILINESTRING ((1 1, 5 1), (5 1, 9 1))");
+        "LINESTRING (1 1, 5 1, 9 1)");
 }
 
 /**
@@ -169,7 +169,7 @@ void object::test<10> ()
 {
     checkUnion(
         "MULTILINESTRING ((1 1, 2 1, 3 1), (4 1, 3 1, 2 1))",
-        "MULTILINESTRING ((1 1, 2 1), (2 1, 3 1), (3 1, 4 1))");
+        "LINESTRING (1 1, 2 1, 3 1, 4 1)");
 }
 
 /**
@@ -181,27 +181,29 @@ void object::test<11> ()
 {
     checkUnion(
         "MULTILINESTRING ((1 9, 3.1 8, 5 7, 7 8, 9 9), (5 7, 5 3, 4 3, 2 3), (9 5, 7 4, 5 3, 8 1))",
-        "MULTILINESTRING ((1 9, 3.1 8), (2 3, 4 3), (3.1 8, 5 7), (4 3, 5 3), (5 3, 5 7), (5 3, 7 4), (5 3, 8 1), (5 7, 7 8), (7 4, 9 5), (7 8, 9 9))");
+        "MULTILINESTRING ((1 9, 3.1 8, 5 7), (2 3, 4 3, 5 3), (5 3, 5 7), (5 3, 7 4, 9 5), (5 3, 8 1), (5 7, 7 8, 9 9))");
 }
 
-// Z values preserved in linear inpuuts
+// Z values preserved in linear inputs
 template<>
 template<>
 void object::test<12> ()
 {
+    // TODO: Should Z values be averaged?
     checkUnion(
         "MULTILINESTRING Z ((1 1 8, 5 1 9), (9 1 6, 5 1 2))",
-        "MULTILINESTRING Z ((1 1 8, 5 1 9), (5 1 2, 9 1 6))");
+        "LINESTRING Z (1 1 8, 5 1 9, 9 1 6)");
 }
 
-// M values preserved in linear inpuuts
+// M values preserved in linear inputs
 template<>
 template<>
 void object::test<13> ()
 {
+    // TODO: Should M values be averaged?
     checkUnion(
         "MULTILINESTRING M ((1 1 8, 5 1 9), (9 1 6, 5 1 2))",
-        "MULTILINESTRING M ((1 1 8, 5 1 9), (5 1 2, 9 1 6))");
+        "LINESTRING M (1 1 8, 5 1 9, 9 1 6)");
 }
 
 // Mixed Z/M values handled in linear inputs
@@ -210,8 +212,9 @@ template<>
 template<>
 void object::test<14>()
 {
+    // TODO: Should M values be coalesced?
     checkUnion("GEOMETRYCOLLECTION (LINESTRING Z(1 1 8, 5 1 9), LINESTRING M(9 1 6, 5 1 2))",
-               "MULTILINESTRING ZM ((1 1 8 NaN, 5 1 9 NaN), (5 1 9 2, 9 1 8.5 6))");
+               "LINESTRING ZM (1 1 8 NaN, 5 1 9 NaN, 9 1 8.5 6)");
 }
 
 // Z values preserved in polygonal inputs

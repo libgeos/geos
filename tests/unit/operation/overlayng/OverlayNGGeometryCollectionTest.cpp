@@ -131,10 +131,12 @@ template<>
 template<>
 void object::test<6> ()
 {
+    set_test_name("testSimpleL_AA");
+
     std::string a = "LINESTRING (0 0, 10 10)";
     std::string b = "GEOMETRYCOLLECTION ( POLYGON ((1 1, 1 5, 5 5, 5 1, 1 1)), POLYGON ((9 9, 9 5, 5 5, 5 9, 9 9)) )";
     testIntersection(a, b,
-        "MULTILINESTRING ((1 1, 5 5), (5 5, 9 9))");
+        "LINESTRING (1 1, 5 5, 9 9)");
     testUnion(a, b,
         "GEOMETRYCOLLECTION (LINESTRING (0 0, 1 1), LINESTRING (9 9, 10 10), POLYGON ((1 1, 1 5, 5 5, 5 1, 1 1)), POLYGON ((5 5, 5 9, 9 9, 9 5, 5 5)))");
     }

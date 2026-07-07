@@ -159,8 +159,10 @@ template<>
 template<>
 void object::test<13> ()
 {
+    set_test_name("testCollapsedNodedLine");
+
     checkReduce("LINESTRING(1 1, 3 3, 9 9, 5.1 5, 2.1 2)",
-        1, "MULTILINESTRING ((1 1, 2 2), (2 2, 3 3), (3 3, 5 5), (5 5, 9 9))");
+        1, "LINESTRING (1 1, 2 2, 3 3, 5 5, 9 9)");
 }
 
 //

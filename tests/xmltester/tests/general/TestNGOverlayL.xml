@@ -44,10 +44,10 @@ POINT (15 15)
 MULTILINESTRING ((10 10, 15 15), (15 15, 20 20), (10 20, 15 15), (15 15, 20 10))
   </op></test>
 <test>  <op name="differenceNG" arg1="A" arg2="B">
-MULTILINESTRING ((10 10, 15 15), (15 15, 20 20))
+LINESTRING (10 10, 15 15, 20 20)
   </op></test>
 <test>  <op name="differenceNG" arg1="B" arg2="A">
-MULTILINESTRING ((10 20, 15 15), (15 15, 20 10))
+LINESTRING (10 20, 15 15, 20 10)
   </op></test>
 <test>  <op name="symdifferenceNG" arg1="A" arg2="B">
 MULTILINESTRING ((10 10, 15 15), (15 15, 20 20), (10 20, 15 15), (15 15, 20 10))
@@ -75,7 +75,7 @@ LINESTRING (10 10, 20 20)
 LINESTRING (20 20, 30 30)
   </op></test>
 <test>  <op name="symdifferenceNG" arg1="A" arg2="B">
-MULTILINESTRING ((20 20, 30 30), (10 10, 20 20))
+LINESTRING (10 10, 20 20, 30 30)
   </op></test>
 </case>
 
@@ -150,7 +150,7 @@ MULTILINESTRING ((0 10, 10 10, 20 20), (30 30, 40 30))
 MULTILINESTRING ((20 0, 20 20), (30 30, 30 40))
   </op></test>
 <test>  <op name="symdifferenceNG" arg1="A" arg2="B">
-MULTILINESTRING ((0 10, 10 10, 20 20), (20 0, 20 20), (30 30, 30 40), (30 30, 40 30))
+MULTILINESTRING ((0 10, 10 10, 20 20, 20 0), (40 30, 30 30, 30 40))
   </op></test>
 </case>
 
@@ -169,13 +169,13 @@ GEOMETRYCOLLECTION (LINESTRING (0 0, 3 3), POINT (5 5))
 MULTILINESTRING ((5 5, 1 9), (0 0, 3 3), (5 5, 10 10), (3 3, 8 2, 5 5), (3 3, 5 5))
   </op></test>
 <test>  <op name="differenceNG" arg1="A" arg2="B">
-MULTILINESTRING ((5 5, 10 10), (3 3, 5 5))
+LINESTRING (3 3, 5 5, 10 10)
   </op></test>
 <test>  <op name="differenceNG" arg1="B" arg2="A">
-MULTILINESTRING ((5 5, 1 9), (3 3, 8 2, 5 5))
+LINESTRING (3 3, 8 2, 5 5, 1 9)
   </op></test>
 <test>  <op name="symdifferenceNG" arg1="A" arg2="B">
-MULTILINESTRING ((5 5, 1 9), (5 5, 10 10), (3 3, 8 2, 5 5), (3 3, 5 5))
+MULTILINESTRING ((5 5, 1 9), (5 5, 10 10), (5 5, 3 3, 8 2, 5 5))
   </op></test>
 </case>
 
@@ -194,10 +194,10 @@ POINT (150 150)
 MULTILINESTRING ((150 150, 200 200, 300 300, 400 200), (100 100, 150 150), (190 110, 150 150), (150 150, 120 180))
   </op></test>
 <test>  <op name="differenceNG" arg1="A" arg2="B">
-MULTILINESTRING ((150 150, 200 200, 300 300, 400 200), (100 100, 150 150))
+LINESTRING (100 100, 150 150, 200 200, 300 300, 400 200)
   </op></test>
 <test>  <op name="differenceNG" arg1="B" arg2="A">
-MULTILINESTRING ((190 110, 150 150), (150 150, 120 180))
+LINESTRING (190 110, 150 150, 120 180)
   </op></test>
 <test>  <op name="symdifferenceNG" arg1="A" arg2="B">
 MULTILINESTRING ((150 150, 200 200, 300 300, 400 200), (100 100, 150 150), (190 110, 150 150), (150 150, 120 180))

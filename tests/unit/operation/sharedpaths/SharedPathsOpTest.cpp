@@ -324,9 +324,8 @@ void object::test<16>
     forwDir.clear();
     backDir.clear();
     SharedPathsOp::sharedPathsOp(*g0, *g1, forwDir, backDir);
-    ensure_equals(forwDir.size(), 2u);
-    ensure_equals(wktwriter.write(forwDir[0]), "LINESTRING (0 0, 5 10)");
-    ensure_equals(wktwriter.write(forwDir[1]), "LINESTRING (5 10, 10 10)");
+    ensure_equals(forwDir.size(), 1u);
+    ensure_equals(wktwriter.write(forwDir[0]), "LINESTRING (0 0, 5 10, 10 10)");
     SharedPathsOp::clearEdges(forwDir);
 
     ensure(backDir.empty());
@@ -343,9 +342,8 @@ void object::test<17>
     forwDir.clear();
     backDir.clear();
     SharedPathsOp::sharedPathsOp(*g0, *g1, forwDir, backDir);
-    ensure_equals(backDir.size(), 2u);
-    ensure_equals(wktwriter.write(backDir[0]), "LINESTRING (0 0, 5 10)");
-    ensure_equals(wktwriter.write(backDir[1]), "LINESTRING (5 10, 10 10)");
+    ensure_equals(backDir.size(), 1u);
+    ensure_equals(wktwriter.write(backDir[0]), "LINESTRING (0 0, 5 10, 10 10)");
     SharedPathsOp::clearEdges(backDir);
 
     ensure(forwDir.empty());

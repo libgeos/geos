@@ -43,6 +43,7 @@
 #include <geos/operation/buffer/BufferParameters.h>
 #include <geos/operation/buffer/BufferOp.h>
 #include <geos/operation/polygonize/BuildArea.h>
+#include <geos/operation/split/GeometrySplitter.h>
 #include <geos/operation/valid/MakeValid.h>
 #include <geos/precision/MinimumClearance.h>
 #include <geos/simplify/TopologyPreservingSimplifier.h>
@@ -1394,6 +1395,10 @@ void Test::executeOp(Geometry* gA, Geometry* gB)
     {
         double tolerance = std::atof(opArg2.c_str());
         checkResult( *geos::simplify::TopologyPreservingSimplifier::simplify(gA, tolerance) );
+    }
+    else if (opName == "split")
+    {
+        checkResult(*geos::operation::split::GeometrySplitter::split(*gA, *gB));
     }
     else {
         //TODO: error out here?
