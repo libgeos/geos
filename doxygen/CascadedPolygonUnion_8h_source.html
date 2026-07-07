@@ -78,130 +78,136 @@ $(document).ready(function() { init_codefold(0); });
 <div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="preprocessor">#include &lt;geos/export.h&gt;</span></div>
 <div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="preprocessor">#include &lt;geos/operation/union/UnionStrategy.h&gt;</span></div>
-<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
-<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="comment">// Forward declarations</span></div>
-<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacegeos.html">geos</a> {</div>
-<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="keyword">namespace </span>geom {</div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="keyword">class </span>GeometryFactory;</div>
-<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="keyword">class </span>Geometry;</div>
-<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="keyword">class </span>Polygon;</div>
-<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="keyword">class </span>MultiPolygon;</div>
-<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="keyword">class </span>Envelope;</div>
-<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>}</div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="preprocessor">#include &lt;geos/util/Progress.h&gt;</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span> </div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="comment">// Forward declarations</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacegeos.html">geos</a> {</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="keyword">namespace </span>geom {</div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="keyword">class </span>GeometryFactory;</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="keyword">class </span>Geometry;</div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="keyword">class </span>Polygon;</div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="keyword">class </span>MultiPolygon;</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="keyword">class </span>Envelope;</div>
 <div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>}</div>
-<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
-<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacegeos.html">geos</a> {</div>
-<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="keyword">namespace </span>operation { <span class="comment">// geos::operation</span></div>
-<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="keyword">namespace </span>geounion {  <span class="comment">// geos::operation::geounion</span></div>
-<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>}</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span><span class="keyword">namespace </span><a class="code hl_namespace" href="namespacegeos.html">geos</a> {</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span><span class="keyword">namespace </span>operation { <span class="comment">// geos::operation</span></div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span><span class="keyword">namespace </span>geounion {  <span class="comment">// geos::operation::geounion</span></div>
 <div class="line"><a id="l00044" name="l00044"></a><span class="lineno">   44</span> </div>
-<div class="foldopen" id="foldopen00050" data-start="{" data-end="};">
-<div class="line"><a id="l00050" name="l00050"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1geounion_1_1ClassicUnionStrategy.html">   50</a></span><span class="keyword">class </span>GEOS_DLL <a class="code hl_class" href="classgeos_1_1operation_1_1geounion_1_1ClassicUnionStrategy.html">ClassicUnionStrategy</a> : <span class="keyword">public</span> <a class="code hl_class" href="classgeos_1_1operation_1_1geounion_1_1UnionStrategy.html">UnionStrategy</a> {</div>
-<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
-<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span> </div>
-<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    <a class="code hl_class" href="classgeos_1_1operation_1_1geounion_1_1ClassicUnionStrategy.html">ClassicUnionStrategy</a>() {};</div>
-<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
-<div class="line"><a id="l00061" name="l00061"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1geounion_1_1ClassicUnionStrategy.html#adb390b8d76ee4f6f8adaf541078e2ae0">   61</a></span>    std::unique_ptr&lt;geom::Geometry&gt; <a class="code hl_function" href="classgeos_1_1operation_1_1geounion_1_1ClassicUnionStrategy.html#adb390b8d76ee4f6f8adaf541078e2ae0">Union</a>(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>*, <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>*) <span class="keyword">override</span>;</div>
-<div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span> </div>
-<div class="line"><a id="l00072" name="l00072"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1geounion_1_1ClassicUnionStrategy.html#a07f71016f25be506ea16a2d1c18417ed">   72</a></span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classgeos_1_1operation_1_1geounion_1_1ClassicUnionStrategy.html#a07f71016f25be506ea16a2d1c18417ed">isFloatingPrecision</a>() <span class="keyword">const override</span>;</div>
-<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span> </div>
-<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
-<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    std::unique_ptr&lt;geom::Geometry&gt; unionPolygonsByBuffer(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* g0, <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* g1);</div>
-<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span> </div>
-<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>};</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span> </div>
+<div class="foldopen" id="foldopen00051" data-start="{" data-end="};">
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1geounion_1_1ClassicUnionStrategy.html">   51</a></span><span class="keyword">class </span>GEOS_DLL <a class="code hl_class" href="classgeos_1_1operation_1_1geounion_1_1ClassicUnionStrategy.html">ClassicUnionStrategy</a> : <span class="keyword">public</span> <a class="code hl_class" href="classgeos_1_1operation_1_1geounion_1_1UnionStrategy.html">UnionStrategy</a> {</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span> </div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    <a class="code hl_class" href="classgeos_1_1operation_1_1geounion_1_1ClassicUnionStrategy.html">ClassicUnionStrategy</a>() {};</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1geounion_1_1ClassicUnionStrategy.html#adb390b8d76ee4f6f8adaf541078e2ae0">   62</a></span>    std::unique_ptr&lt;geom::Geometry&gt; <a class="code hl_function" href="classgeos_1_1operation_1_1geounion_1_1ClassicUnionStrategy.html#adb390b8d76ee4f6f8adaf541078e2ae0">Union</a>(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>*, <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>*) <span class="keyword">override</span>;</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1geounion_1_1ClassicUnionStrategy.html#a07f71016f25be506ea16a2d1c18417ed">   73</a></span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="classgeos_1_1operation_1_1geounion_1_1ClassicUnionStrategy.html#a07f71016f25be506ea16a2d1c18417ed">isFloatingPrecision</a>() <span class="keyword">const override</span>;</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span> </div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span> </div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>    std::unique_ptr&lt;geom::Geometry&gt; unionPolygonsByBuffer(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* g0, <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* g1);</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span> </div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>};</div>
 </div>
-<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
 <div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
 <div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span> </div>
-<div class="foldopen" id="foldopen00103" data-start="{" data-end="};">
-<div class="line"><a id="l00103" name="l00103"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html">  103</a></span><span class="keyword">class </span>GEOS_DLL <a class="code hl_class" href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html">CascadedPolygonUnion</a> {</div>
-<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    std::vector&lt;geom::Polygon*&gt;* inputPolys;</div>
-<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>    <a class="code hl_class" href="classgeos_1_1geom_1_1GeometryFactory.html">geom::GeometryFactory</a> <span class="keyword">const</span>* geomFactory;</div>
-<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span> </div>
-<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>    <span class="keyword">static</span> <span class="keywordtype">int</span> <span class="keyword">const</span> STRTREE_NODE_CAPACITY = 4;</div>
-<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span> </div>
-<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>    <span class="keyword">static</span> std::unique_ptr&lt;geom::Geometry&gt; restrictToPolygons(std::unique_ptr&lt;geom::Geometry&gt; g);</div>
-<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span> </div>
-<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span><span class="keyword">public</span>:</div>
-<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span>    <a class="code hl_class" href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html">CascadedPolygonUnion</a>();</div>
-<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span> </div>
-<div class="line"><a id="l00142" name="l00142"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html#a9e19c8c5cfcbf63e7417d88b99839322">  142</a></span>    <span class="keyword">static</span> std::unique_ptr&lt;geom::Geometry&gt; <a class="code hl_function" href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html#a9e19c8c5cfcbf63e7417d88b99839322">Union</a>(std::vector&lt;geom::Polygon*&gt;* polys);</div>
-<div class="line"><a id="l00143" name="l00143"></a><span class="lineno">  143</span>    <span class="keyword">static</span> std::unique_ptr&lt;geom::Geometry&gt; Union(std::vector&lt;geom::Polygon*&gt;* polys, <a class="code hl_class" href="classgeos_1_1operation_1_1geounion_1_1UnionStrategy.html">UnionStrategy</a>* unionFun);</div>
-<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span> </div>
-<div class="line"><a id="l00153" name="l00153"></a><span class="lineno">  153</span>    <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;</div>
-<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>    <span class="keyword">static</span> std::unique_ptr&lt;geom::Geometry&gt;</div>
-<div class="foldopen" id="foldopen00155" data-start="{" data-end="}">
-<div class="line"><a id="l00155" name="l00155"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html#a312f8922d4a8d6343a200da80acf9d5e">  155</a></span>    <a class="code hl_function" href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html#a312f8922d4a8d6343a200da80acf9d5e">Union</a>(T start, T end, <a class="code hl_class" href="classgeos_1_1operation_1_1geounion_1_1UnionStrategy.html">UnionStrategy</a> *unionStrategy)</div>
-<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>    {</div>
-<div class="line"><a id="l00157" name="l00157"></a><span class="lineno">  157</span>        std::vector&lt;geom::Polygon*&gt; polys;</div>
-<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>        <span class="keywordflow">for</span>(T i = start; i != end; ++i) {</div>
-<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>            <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Polygon.html">geom::Polygon</a>* p = <span class="keyword">dynamic_cast&lt;</span><span class="keyword">const </span><a class="code hl_class" href="classgeos_1_1geom_1_1Polygon.html">geom::Polygon</a>*<span class="keyword">&gt;</span>(*i);</div>
-<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>            polys.push_back(<span class="keyword">const_cast&lt;</span><a class="code hl_class" href="classgeos_1_1geom_1_1Polygon.html">geom::Polygon</a>*<span class="keyword">&gt;</span>(p));</div>
-<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>        }</div>
-<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>        <span class="keywordflow">return</span> Union(&amp;polys, unionStrategy);</div>
-<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>    }</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span> </div>
+<div class="foldopen" id="foldopen00104" data-start="{" data-end="};">
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html">  104</a></span><span class="keyword">class </span>GEOS_DLL <a class="code hl_class" href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html">CascadedPolygonUnion</a> {</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>    std::vector&lt;geom::Polygon*&gt;* inputPolys;</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>    <a class="code hl_class" href="classgeos_1_1geom_1_1GeometryFactory.html">geom::GeometryFactory</a> <span class="keyword">const</span>* geomFactory;</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span> </div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span>    <span class="keyword">static</span> <span class="keywordtype">int</span> <span class="keyword">const</span> STRTREE_NODE_CAPACITY = 4;</div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span> </div>
+<div class="line"><a id="l00132" name="l00132"></a><span class="lineno">  132</span>    <span class="keyword">static</span> std::unique_ptr&lt;geom::Geometry&gt; restrictToPolygons(std::unique_ptr&lt;geom::Geometry&gt; g);</div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span> </div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>    <a class="code hl_class" href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html">CascadedPolygonUnion</a>();</div>
+<div class="line"><a id="l00136" name="l00136"></a><span class="lineno">  136</span> </div>
+<div class="line"><a id="l00143" name="l00143"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html#a9e19c8c5cfcbf63e7417d88b99839322">  143</a></span>    <span class="keyword">static</span> std::unique_ptr&lt;geom::Geometry&gt; <a class="code hl_function" href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html#a9e19c8c5cfcbf63e7417d88b99839322">Union</a>(std::vector&lt;geom::Polygon*&gt;* polys);</div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>    <span class="keyword">static</span> std::unique_ptr&lt;geom::Geometry&gt; Union(std::vector&lt;geom::Polygon*&gt;* polys, <a class="code hl_class" href="classgeos_1_1operation_1_1geounion_1_1UnionStrategy.html">UnionStrategy</a>* unionFun, <a class="code hl_typedef" href="namespacegeos_1_1util.html#ae90fe2a4fedfd3f4a690b4937f600cea">geos::util::ProgressFunction</a>* progressFunction);</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span> </div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span>    <span class="keyword">template</span> &lt;<span class="keyword">class</span> T&gt;</div>
+<div class="line"><a id="l00156" name="l00156"></a><span class="lineno">  156</span>    <span class="keyword">static</span> std::unique_ptr&lt;geom::Geometry&gt;</div>
+<div class="foldopen" id="foldopen00157" data-start="{" data-end="}">
+<div class="line"><a id="l00157" name="l00157"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html#a2f54765584573511b1d6fa0d2a9a75d3">  157</a></span>    <a class="code hl_function" href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html#a2f54765584573511b1d6fa0d2a9a75d3">Union</a>(T start, T end, <a class="code hl_class" href="classgeos_1_1operation_1_1geounion_1_1UnionStrategy.html">UnionStrategy</a> *unionStrategy, <a class="code hl_typedef" href="namespacegeos_1_1util.html#ae90fe2a4fedfd3f4a690b4937f600cea">geos::util::ProgressFunction</a>* progressFunction)</div>
+<div class="line"><a id="l00158" name="l00158"></a><span class="lineno">  158</span>    {</div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>        std::vector&lt;geom::Polygon*&gt; polys;</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span>        <span class="keywordflow">for</span>(T i = start; i != end; ++i) {</div>
+<div class="line"><a id="l00161" name="l00161"></a><span class="lineno">  161</span>            <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Polygon.html">geom::Polygon</a>* p = <span class="keyword">dynamic_cast&lt;</span><span class="keyword">const </span><a class="code hl_class" href="classgeos_1_1geom_1_1Polygon.html">geom::Polygon</a>*<span class="keyword">&gt;</span>(*i);</div>
+<div class="line"><a id="l00162" name="l00162"></a><span class="lineno">  162</span>            polys.push_back(<span class="keyword">const_cast&lt;</span><a class="code hl_class" href="classgeos_1_1geom_1_1Polygon.html">geom::Polygon</a>*<span class="keyword">&gt;</span>(p));</div>
+<div class="line"><a id="l00163" name="l00163"></a><span class="lineno">  163</span>        }</div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>        <span class="keywordflow">return</span> Union(&amp;polys, unionStrategy, progressFunction);</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>    }</div>
 </div>
-<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span> </div>
-<div class="line"><a id="l00171" name="l00171"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html#af918e21c5680b361b365137c702baa0a">  171</a></span>    <span class="keyword">static</span> std::unique_ptr&lt;geom::Geometry&gt; <a class="code hl_function" href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html#af918e21c5680b361b365137c702baa0a">Union</a>(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1MultiPolygon.html">geom::MultiPolygon</a>* polys);</div>
-<div class="line"><a id="l00172" name="l00172"></a><span class="lineno">  172</span> </div>
-<div class="foldopen" id="foldopen00180" data-start="{" data-end="}">
-<div class="line"><a id="l00180" name="l00180"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html#a056d0965591c58d015e1bc5b924a9999">  180</a></span>    <a class="code hl_function" href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html#a056d0965591c58d015e1bc5b924a9999">CascadedPolygonUnion</a>(std::vector&lt;geom::Polygon*&gt;* polys)</div>
-<div class="line"><a id="l00181" name="l00181"></a><span class="lineno">  181</span>        : inputPolys(polys)</div>
-<div class="line"><a id="l00182" name="l00182"></a><span class="lineno">  182</span>        , geomFactory(nullptr)</div>
-<div class="line"><a id="l00183" name="l00183"></a><span class="lineno">  183</span>        , unionFunction(&amp;defaultUnionFunction)</div>
-<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>    {}</div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span> </div>
+<div class="line"><a id="l00174" name="l00174"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html#ae51a8fb7a9e589819c3ac078e2734a71">  174</a></span>    <span class="keyword">static</span> std::unique_ptr&lt;geom::Geometry&gt; <a class="code hl_function" href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html#ae51a8fb7a9e589819c3ac078e2734a71">Union</a>(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1MultiPolygon.html">geom::MultiPolygon</a>* polys, <a class="code hl_typedef" href="namespacegeos_1_1util.html#ae90fe2a4fedfd3f4a690b4937f600cea">geos::util::ProgressFunction</a>* progressFunction);</div>
+<div class="line"><a id="l00175" name="l00175"></a><span class="lineno">  175</span> </div>
+<div class="foldopen" id="foldopen00183" data-start="{" data-end="}">
+<div class="line"><a id="l00183" name="l00183"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html#a056d0965591c58d015e1bc5b924a9999">  183</a></span>    <a class="code hl_function" href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html#a056d0965591c58d015e1bc5b924a9999">CascadedPolygonUnion</a>(std::vector&lt;geom::Polygon*&gt;* polys)</div>
+<div class="line"><a id="l00184" name="l00184"></a><span class="lineno">  184</span>        : inputPolys(polys)</div>
+<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span>        , geomFactory(nullptr)</div>
+<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>        , unionFunction(&amp;defaultUnionFunction)</div>
+<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>    {}</div>
 </div>
-<div class="line"><a id="l00185" name="l00185"></a><span class="lineno">  185</span> </div>
-<div class="line"><a id="l00186" name="l00186"></a><span class="lineno">  186</span>    <a class="code hl_class" href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html">CascadedPolygonUnion</a>(std::vector&lt;geom::Polygon*&gt;* polys, <a class="code hl_class" href="classgeos_1_1operation_1_1geounion_1_1UnionStrategy.html">UnionStrategy</a>* unionFun)</div>
-<div class="line"><a id="l00187" name="l00187"></a><span class="lineno">  187</span>        : inputPolys(polys)</div>
-<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span>        , geomFactory(nullptr)</div>
-<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>        , unionFunction(unionFun)</div>
-<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>    {}</div>
-<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span> </div>
-<div class="line"><a id="l00198" name="l00198"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html#ad78831ccd5af1316856a0875a271b09d">  198</a></span>    std::unique_ptr&lt;geom::Geometry&gt; <a class="code hl_function" href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html#ad78831ccd5af1316856a0875a271b09d">Union</a>();</div>
-<div class="line"><a id="l00199" name="l00199"></a><span class="lineno">  199</span> </div>
-<div class="line"><a id="l00200" name="l00200"></a><span class="lineno">  200</span><span class="keyword">private</span>:</div>
-<div class="line"><a id="l00201" name="l00201"></a><span class="lineno">  201</span> </div>
-<div class="line"><a id="l00202" name="l00202"></a><span class="lineno">  202</span>    <a class="code hl_class" href="classgeos_1_1operation_1_1geounion_1_1UnionStrategy.html">UnionStrategy</a>* unionFunction;</div>
-<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span>    <a class="code hl_class" href="classgeos_1_1operation_1_1geounion_1_1ClassicUnionStrategy.html">ClassicUnionStrategy</a> defaultUnionFunction;</div>
-<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span> </div>
-<div class="line"><a id="l00214" name="l00214"></a><span class="lineno">  214</span>    std::unique_ptr&lt;geom::Geometry&gt; binaryUnion(<span class="keyword">const</span> std::vector&lt;const geom::Geometry*&gt; &amp; geoms, std::size_t start, std::size_t end);</div>
-<div class="line"><a id="l00215" name="l00215"></a><span class="lineno">  215</span> </div>
-<div class="line"><a id="l00225" name="l00225"></a><span class="lineno">  225</span>    std::unique_ptr&lt;geom::Geometry&gt; unionSafe(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* g0, <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* g1) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00226" name="l00226"></a><span class="lineno">  226</span> </div>
-<div class="line"><a id="l00227" name="l00227"></a><span class="lineno">  227</span>    std::unique_ptr&lt;geom::Geometry&gt; unionSafe(std::unique_ptr&lt;geom::Geometry&gt; &amp;&amp;, std::unique_ptr&lt;geom::Geometry&gt; &amp;&amp;);</div>
-<div class="line"><a id="l00228" name="l00228"></a><span class="lineno">  228</span> </div>
-<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span>    std::unique_ptr&lt;geom::Geometry&gt; unionActual(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* g0, <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* g1) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00237" name="l00237"></a><span class="lineno">  237</span> </div>
-<div class="line"><a id="l00238" name="l00238"></a><span class="lineno">  238</span>    std::unique_ptr&lt;geom::Geometry&gt; unionActual(std::unique_ptr&lt;geom::Geometry&gt; &amp;&amp;, std::unique_ptr&lt;geom::Geometry&gt; &amp;&amp;) <span class="keyword">const</span>;</div>
-<div class="line"><a id="l00239" name="l00239"></a><span class="lineno">  239</span>};</div>
+<div class="line"><a id="l00188" name="l00188"></a><span class="lineno">  188</span> </div>
+<div class="line"><a id="l00189" name="l00189"></a><span class="lineno">  189</span>    <a class="code hl_class" href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html">CascadedPolygonUnion</a>(std::vector&lt;geom::Polygon*&gt;* polys, <a class="code hl_class" href="classgeos_1_1operation_1_1geounion_1_1UnionStrategy.html">UnionStrategy</a>* unionFun)</div>
+<div class="line"><a id="l00190" name="l00190"></a><span class="lineno">  190</span>        : inputPolys(polys)</div>
+<div class="line"><a id="l00191" name="l00191"></a><span class="lineno">  191</span>        , geomFactory(nullptr)</div>
+<div class="line"><a id="l00192" name="l00192"></a><span class="lineno">  192</span>        , unionFunction(unionFun)</div>
+<div class="line"><a id="l00193" name="l00193"></a><span class="lineno">  193</span>    {}</div>
+<div class="line"><a id="l00194" name="l00194"></a><span class="lineno">  194</span> </div>
+<div class="line"><a id="l00202" name="l00202"></a><span class="lineno"><a class="line" href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html#a8986ab8a27279d8932a99ff42dc02e7f">  202</a></span>    std::unique_ptr&lt;geom::Geometry&gt; <a class="code hl_function" href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html#a8986ab8a27279d8932a99ff42dc02e7f">Union</a>(<a class="code hl_typedef" href="namespacegeos_1_1util.html#ae90fe2a4fedfd3f4a690b4937f600cea">geos::util::ProgressFunction</a>* progressFunction);</div>
+<div class="line"><a id="l00203" name="l00203"></a><span class="lineno">  203</span> </div>
+<div class="line"><a id="l00204" name="l00204"></a><span class="lineno">  204</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00205" name="l00205"></a><span class="lineno">  205</span> </div>
+<div class="line"><a id="l00206" name="l00206"></a><span class="lineno">  206</span>    <a class="code hl_class" href="classgeos_1_1operation_1_1geounion_1_1UnionStrategy.html">UnionStrategy</a>* unionFunction;</div>
+<div class="line"><a id="l00207" name="l00207"></a><span class="lineno">  207</span>    <a class="code hl_class" href="classgeos_1_1operation_1_1geounion_1_1ClassicUnionStrategy.html">ClassicUnionStrategy</a> defaultUnionFunction;</div>
+<div class="line"><a id="l00208" name="l00208"></a><span class="lineno">  208</span> </div>
+<div class="line"><a id="l00218" name="l00218"></a><span class="lineno">  218</span>    std::unique_ptr&lt;geom::Geometry&gt; binaryUnion(</div>
+<div class="line"><a id="l00219" name="l00219"></a><span class="lineno">  219</span>        <span class="keyword">const</span> std::vector&lt;const geom::Geometry*&gt; &amp; geoms,</div>
+<div class="line"><a id="l00220" name="l00220"></a><span class="lineno">  220</span>        std::size_t start,</div>
+<div class="line"><a id="l00221" name="l00221"></a><span class="lineno">  221</span>        std::size_t end,</div>
+<div class="line"><a id="l00222" name="l00222"></a><span class="lineno">  222</span>        std::function&lt;<span class="keywordtype">void</span>()&gt;* unitProgress);</div>
+<div class="line"><a id="l00223" name="l00223"></a><span class="lineno">  223</span> </div>
+<div class="line"><a id="l00233" name="l00233"></a><span class="lineno">  233</span>    std::unique_ptr&lt;geom::Geometry&gt; unionSafe(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* g0, <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* g1) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00234" name="l00234"></a><span class="lineno">  234</span> </div>
+<div class="line"><a id="l00235" name="l00235"></a><span class="lineno">  235</span>    std::unique_ptr&lt;geom::Geometry&gt; unionSafe(std::unique_ptr&lt;geom::Geometry&gt; &amp;&amp;, std::unique_ptr&lt;geom::Geometry&gt; &amp;&amp;);</div>
+<div class="line"><a id="l00236" name="l00236"></a><span class="lineno">  236</span> </div>
+<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span>    std::unique_ptr&lt;geom::Geometry&gt; unionActual(<span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* g0, <span class="keyword">const</span> <a class="code hl_class" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a>* g1) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span> </div>
+<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>    std::unique_ptr&lt;geom::Geometry&gt; unionActual(std::unique_ptr&lt;geom::Geometry&gt; &amp;&amp;, std::unique_ptr&lt;geom::Geometry&gt; &amp;&amp;) <span class="keyword">const</span>;</div>
+<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>};</div>
 </div>
-<div class="line"><a id="l00240" name="l00240"></a><span class="lineno">  240</span> </div>
-<div class="line"><a id="l00241" name="l00241"></a><span class="lineno">  241</span> </div>
-<div class="line"><a id="l00242" name="l00242"></a><span class="lineno">  242</span> </div>
-<div class="line"><a id="l00243" name="l00243"></a><span class="lineno">  243</span> </div>
-<div class="line"><a id="l00244" name="l00244"></a><span class="lineno">  244</span> </div>
-<div class="line"><a id="l00245" name="l00245"></a><span class="lineno">  245</span>} <span class="comment">// namespace geos::operation::union</span></div>
-<div class="line"><a id="l00246" name="l00246"></a><span class="lineno">  246</span>} <span class="comment">// namespace geos::operation</span></div>
-<div class="line"><a id="l00247" name="l00247"></a><span class="lineno">  247</span>} <span class="comment">// namespace geos</span></div>
 <div class="line"><a id="l00248" name="l00248"></a><span class="lineno">  248</span> </div>
+<div class="line"><a id="l00249" name="l00249"></a><span class="lineno">  249</span> </div>
+<div class="line"><a id="l00250" name="l00250"></a><span class="lineno">  250</span> </div>
+<div class="line"><a id="l00251" name="l00251"></a><span class="lineno">  251</span> </div>
+<div class="line"><a id="l00252" name="l00252"></a><span class="lineno">  252</span> </div>
+<div class="line"><a id="l00253" name="l00253"></a><span class="lineno">  253</span>} <span class="comment">// namespace geos::operation::union</span></div>
+<div class="line"><a id="l00254" name="l00254"></a><span class="lineno">  254</span>} <span class="comment">// namespace geos::operation</span></div>
+<div class="line"><a id="l00255" name="l00255"></a><span class="lineno">  255</span>} <span class="comment">// namespace geos</span></div>
+<div class="line"><a id="l00256" name="l00256"></a><span class="lineno">  256</span> </div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1GeometryFactory_html"><div class="ttname"><a href="classgeos_1_1geom_1_1GeometryFactory.html">geos::geom::GeometryFactory</a></div><div class="ttdoc">Supplies a set of utility methods for building Geometry objects from CoordinateSequence or other Geom...</div><div class="ttdef"><b>Definition</b> GeometryFactory.h:72</div></div>
-<div class="ttc" id="aclassgeos_1_1geom_1_1Geometry_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Geometry.html">geos::geom::Geometry</a></div><div class="ttdoc">Basic implementation of Geometry, constructed and destructed by GeometryFactory.</div><div class="ttdef"><b>Definition</b> Geometry.h:200</div></div>
+<div class="ttc" id="aclassgeos_1_1geom_1_1Geometry_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Geometry.html">geos::geom::Geometry</a></div><div class="ttdoc">Basic implementation of Geometry, constructed and destructed by GeometryFactory.</div><div class="ttdef"><b>Definition</b> Geometry.h:201</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1MultiPolygon_html"><div class="ttname"><a href="classgeos_1_1geom_1_1MultiPolygon.html">geos::geom::MultiPolygon</a></div><div class="ttdef"><b>Definition</b> MultiPolygon.h:57</div></div>
 <div class="ttc" id="aclassgeos_1_1geom_1_1Polygon_html"><div class="ttname"><a href="classgeos_1_1geom_1_1Polygon.html">geos::geom::Polygon</a></div><div class="ttdoc">Represents a linear polygon, which may include holes.</div><div class="ttdef"><b>Definition</b> Polygon.h:61</div></div>
-<div class="ttc" id="aclassgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion_html"><div class="ttname"><a href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html">geos::operation::geounion::CascadedPolygonUnion</a></div><div class="ttdoc">Provides an efficient method of unioning a collection of polygonal geometries.</div><div class="ttdef"><b>Definition</b> CascadedPolygonUnion.h:103</div></div>
-<div class="ttc" id="aclassgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion_html_a056d0965591c58d015e1bc5b924a9999"><div class="ttname"><a href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html#a056d0965591c58d015e1bc5b924a9999">geos::operation::geounion::CascadedPolygonUnion::CascadedPolygonUnion</a></div><div class="ttdeci">CascadedPolygonUnion(std::vector&lt; geom::Polygon * &gt; *polys)</div><div class="ttdoc">Creates a new instance to union the given collection of Geometrys.</div><div class="ttdef"><b>Definition</b> CascadedPolygonUnion.h:180</div></div>
-<div class="ttc" id="aclassgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion_html_a312f8922d4a8d6343a200da80acf9d5e"><div class="ttname"><a href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html#a312f8922d4a8d6343a200da80acf9d5e">geos::operation::geounion::CascadedPolygonUnion::Union</a></div><div class="ttdeci">static std::unique_ptr&lt; geom::Geometry &gt; Union(T start, T end, UnionStrategy *unionStrategy)</div><div class="ttdoc">Computes the union of a set of polygonal Geometrys.</div><div class="ttdef"><b>Definition</b> CascadedPolygonUnion.h:155</div></div>
+<div class="ttc" id="aclassgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion_html"><div class="ttname"><a href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html">geos::operation::geounion::CascadedPolygonUnion</a></div><div class="ttdoc">Provides an efficient method of unioning a collection of polygonal geometries.</div><div class="ttdef"><b>Definition</b> CascadedPolygonUnion.h:104</div></div>
+<div class="ttc" id="aclassgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion_html_a056d0965591c58d015e1bc5b924a9999"><div class="ttname"><a href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html#a056d0965591c58d015e1bc5b924a9999">geos::operation::geounion::CascadedPolygonUnion::CascadedPolygonUnion</a></div><div class="ttdeci">CascadedPolygonUnion(std::vector&lt; geom::Polygon * &gt; *polys)</div><div class="ttdoc">Creates a new instance to union the given collection of Geometrys.</div><div class="ttdef"><b>Definition</b> CascadedPolygonUnion.h:183</div></div>
+<div class="ttc" id="aclassgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion_html_a2f54765584573511b1d6fa0d2a9a75d3"><div class="ttname"><a href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html#a2f54765584573511b1d6fa0d2a9a75d3">geos::operation::geounion::CascadedPolygonUnion::Union</a></div><div class="ttdeci">static std::unique_ptr&lt; geom::Geometry &gt; Union(T start, T end, UnionStrategy *unionStrategy, geos::util::ProgressFunction *progressFunction)</div><div class="ttdoc">Computes the union of a set of polygonal Geometrys.</div><div class="ttdef"><b>Definition</b> CascadedPolygonUnion.h:157</div></div>
+<div class="ttc" id="aclassgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion_html_a8986ab8a27279d8932a99ff42dc02e7f"><div class="ttname"><a href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html#a8986ab8a27279d8932a99ff42dc02e7f">geos::operation::geounion::CascadedPolygonUnion::Union</a></div><div class="ttdeci">std::unique_ptr&lt; geom::Geometry &gt; Union(geos::util::ProgressFunction *progressFunction)</div><div class="ttdoc">Computes the union of the input geometries.</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion_html_a9e19c8c5cfcbf63e7417d88b99839322"><div class="ttname"><a href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html#a9e19c8c5cfcbf63e7417d88b99839322">geos::operation::geounion::CascadedPolygonUnion::Union</a></div><div class="ttdeci">static std::unique_ptr&lt; geom::Geometry &gt; Union(std::vector&lt; geom::Polygon * &gt; *polys)</div><div class="ttdoc">Computes the union of a collection of polygonal Geometrys.</div></div>
-<div class="ttc" id="aclassgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion_html_ad78831ccd5af1316856a0875a271b09d"><div class="ttname"><a href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html#ad78831ccd5af1316856a0875a271b09d">geos::operation::geounion::CascadedPolygonUnion::Union</a></div><div class="ttdeci">std::unique_ptr&lt; geom::Geometry &gt; Union()</div><div class="ttdoc">Computes the union of the input geometries.</div></div>
-<div class="ttc" id="aclassgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion_html_af918e21c5680b361b365137c702baa0a"><div class="ttname"><a href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html#af918e21c5680b361b365137c702baa0a">geos::operation::geounion::CascadedPolygonUnion::Union</a></div><div class="ttdeci">static std::unique_ptr&lt; geom::Geometry &gt; Union(const geom::MultiPolygon *polys)</div><div class="ttdoc">Computes the union of a collection of polygonal Geometrys.</div></div>
-<div class="ttc" id="aclassgeos_1_1operation_1_1geounion_1_1ClassicUnionStrategy_html"><div class="ttname"><a href="classgeos_1_1operation_1_1geounion_1_1ClassicUnionStrategy.html">geos::operation::geounion::ClassicUnionStrategy</a></div><div class="ttdoc">Implementation of UnionStrategy that provides overlay using the first generation overlay routines.</div><div class="ttdef"><b>Definition</b> CascadedPolygonUnion.h:50</div></div>
+<div class="ttc" id="aclassgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion_html_ae51a8fb7a9e589819c3ac078e2734a71"><div class="ttname"><a href="classgeos_1_1operation_1_1geounion_1_1CascadedPolygonUnion.html#ae51a8fb7a9e589819c3ac078e2734a71">geos::operation::geounion::CascadedPolygonUnion::Union</a></div><div class="ttdeci">static std::unique_ptr&lt; geom::Geometry &gt; Union(const geom::MultiPolygon *polys, geos::util::ProgressFunction *progressFunction)</div><div class="ttdoc">Computes the union of a collection of polygonal Geometrys.</div></div>
+<div class="ttc" id="aclassgeos_1_1operation_1_1geounion_1_1ClassicUnionStrategy_html"><div class="ttname"><a href="classgeos_1_1operation_1_1geounion_1_1ClassicUnionStrategy.html">geos::operation::geounion::ClassicUnionStrategy</a></div><div class="ttdoc">Implementation of UnionStrategy that provides overlay using the first generation overlay routines.</div><div class="ttdef"><b>Definition</b> CascadedPolygonUnion.h:51</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1geounion_1_1ClassicUnionStrategy_html_a07f71016f25be506ea16a2d1c18417ed"><div class="ttname"><a href="classgeos_1_1operation_1_1geounion_1_1ClassicUnionStrategy.html#a07f71016f25be506ea16a2d1c18417ed">geos::operation::geounion::ClassicUnionStrategy::isFloatingPrecision</a></div><div class="ttdeci">bool isFloatingPrecision() const override</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1geounion_1_1ClassicUnionStrategy_html_adb390b8d76ee4f6f8adaf541078e2ae0"><div class="ttname"><a href="classgeos_1_1operation_1_1geounion_1_1ClassicUnionStrategy.html#adb390b8d76ee4f6f8adaf541078e2ae0">geos::operation::geounion::ClassicUnionStrategy::Union</a></div><div class="ttdeci">std::unique_ptr&lt; geom::Geometry &gt; Union(const geom::Geometry *, const geom::Geometry *) override</div></div>
 <div class="ttc" id="aclassgeos_1_1operation_1_1geounion_1_1UnionStrategy_html"><div class="ttname"><a href="classgeos_1_1operation_1_1geounion_1_1UnionStrategy.html">geos::operation::geounion::UnionStrategy</a></div><div class="ttdef"><b>Definition</b> UnionStrategy.h:40</div></div>
+<div class="ttc" id="anamespacegeos_1_1util_html_ae90fe2a4fedfd3f4a690b4937f600cea"><div class="ttname"><a href="namespacegeos_1_1util.html#ae90fe2a4fedfd3f4a690b4937f600cea">geos::util::ProgressFunction</a></div><div class="ttdeci">std::function&lt; void(double, const char *)&gt; ProgressFunction</div><div class="ttdef"><b>Definition</b> Progress.h:29</div></div>
 <div class="ttc" id="anamespacegeos_html"><div class="ttname"><a href="namespacegeos.html">geos</a></div><div class="ttdoc">Basic namespace for all GEOS functionalities.</div><div class="ttdef"><b>Definition</b> geos.h:38</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->

@@ -282,8 +282,11 @@ virtual std::string&#160;</td><td class="memItemRight" valign="bottom"><b>toText
 <tr class="memitem:ac253575aeff0e82e44eb5292ab2ea9b8" id="r_ac253575aeff0e82e44eb5292ab2ea9b8"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#ac253575aeff0e82e44eb5292ab2ea9b8">Union</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> *other) const</td></tr>
 <tr class="memdesc:ac253575aeff0e82e44eb5292ab2ea9b8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a> representing all the points in this <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a> and other.  <br /></td></tr>
 <tr class="separator:ac253575aeff0e82e44eb5292ab2ea9b8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aa05c85b488d3181fe35017b2276573a1" id="r_aa05c85b488d3181fe35017b2276573a1"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a57c6acd6bb0a8371356897f40247ed33">Ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#aa05c85b488d3181fe35017b2276573a1">Union</a> () const</td></tr>
-<tr class="memdesc:aa05c85b488d3181fe35017b2276573a1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the union of all the elements of this geometry. Heterogeneous <a class="el" href="classgeos_1_1geom_1_1GeometryCollection.html">GeometryCollections</a> are fully supported.  <br /></td></tr>
+<tr class="memitem:a2cf090f394ee852bef06104c5d35f456" id="r_a2cf090f394ee852bef06104c5d35f456"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a57c6acd6bb0a8371356897f40247ed33">Ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a2cf090f394ee852bef06104c5d35f456">Union</a> (<a class="el" href="namespacegeos_1_1util.html#ae90fe2a4fedfd3f4a690b4937f600cea">geos::util::ProgressFunction</a> *progressFunction) const</td></tr>
+<tr class="memdesc:a2cf090f394ee852bef06104c5d35f456"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the union of all the elements of this geometry. Heterogeneous <a class="el" href="classgeos_1_1geom_1_1GeometryCollection.html">GeometryCollections</a> are fully supported.  <br /></td></tr>
+<tr class="separator:a2cf090f394ee852bef06104c5d35f456"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa05c85b488d3181fe35017b2276573a1" id="r_aa05c85b488d3181fe35017b2276573a1"><td class="memItemLeft" align="right" valign="top"><a id="aa05c85b488d3181fe35017b2276573a1" name="aa05c85b488d3181fe35017b2276573a1"></a>
+<a class="el" href="classgeos_1_1geom_1_1Geometry.html#a57c6acd6bb0a8371356897f40247ed33">Ptr</a>&#160;</td><td class="memItemRight" valign="bottom"><b>Union</b> () const</td></tr>
 <tr class="separator:aa05c85b488d3181fe35017b2276573a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa238c8f5e1713cbee4ab271695341010" id="r_aa238c8f5e1713cbee4ab271695341010"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#aa238c8f5e1713cbee4ab271695341010">difference</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">Geometry</a> *other) const</td></tr>
 <tr class="memdesc:aa238c8f5e1713cbee4ab271695341010"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns a <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a> representing the points making up this <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a> that do not make up other.  <br /></td></tr>
@@ -2219,34 +2222,8 @@ next lower dimension."</p>
 
 </div>
 </div>
-<a id="aa05c85b488d3181fe35017b2276573a1" name="aa05c85b488d3181fe35017b2276573a1"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aa05c85b488d3181fe35017b2276573a1">&#9670;&#160;</a></span>Union() <span class="overload">[1/2]</span></h2>
-
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a57c6acd6bb0a8371356897f40247ed33">Ptr</a> geos::geom::Geometry::Union </td>
-          <td>(</td>
-          <td class="paramname"></td><td>)</td>
-          <td> const</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-
-<p>Computes the union of all the elements of this geometry. Heterogeneous <a class="el" href="classgeos_1_1geom_1_1GeometryCollection.html">GeometryCollections</a> are fully supported. </p>
-<p>The result obeys the following contract:</p>
-<ul>
-<li>Unioning a set of <a class="el" href="classgeos_1_1geom_1_1LineString.html">LineStrings</a> has the effect of fully noding and dissolving the linework.</li>
-<li>Unioning a set of <a class="el" href="classgeos_1_1geom_1_1Polygon.html">Polygons</a> will always return a polygonal geometry (unlike <a class="el" href="classgeos_1_1geom_1_1Geometry.html#ac253575aeff0e82e44eb5292ab2ea9b8" title="Returns a Geometry representing all the points in this Geometry and other.">Geometry::Union(const Geometry* other) const</a>), which may return geometries of lower dimension if a topology collapse occurred.</li>
-</ul>
-<dl class="section return"><dt>Returns</dt><dd>the union geometry</dd></dl>
-<dl class="section see"><dt>See also</dt><dd>UnaryUnionOp </dd></dl>
-
-</div>
-</div>
 <a id="ac253575aeff0e82e44eb5292ab2ea9b8" name="ac253575aeff0e82e44eb5292ab2ea9b8"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ac253575aeff0e82e44eb5292ab2ea9b8">&#9670;&#160;</a></span>Union() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ac253575aeff0e82e44eb5292ab2ea9b8">&#9670;&#160;</a></span>Union() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -2269,6 +2246,33 @@ next lower dimension."</p>
   </table>
   </dd>
 </dl>
+
+</div>
+</div>
+<a id="a2cf090f394ee852bef06104c5d35f456" name="a2cf090f394ee852bef06104c5d35f456"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2cf090f394ee852bef06104c5d35f456">&#9670;&#160;</a></span>Union() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a57c6acd6bb0a8371356897f40247ed33">Ptr</a> geos::geom::Geometry::Union </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacegeos_1_1util.html#ae90fe2a4fedfd3f4a690b4937f600cea">geos::util::ProgressFunction</a> *&#160;</td>
+          <td class="paramname"><em>progressFunction</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Computes the union of all the elements of this geometry. Heterogeneous <a class="el" href="classgeos_1_1geom_1_1GeometryCollection.html">GeometryCollections</a> are fully supported. </p>
+<p>The result obeys the following contract:</p>
+<ul>
+<li>Unioning a set of <a class="el" href="classgeos_1_1geom_1_1LineString.html">LineStrings</a> has the effect of fully noding and dissolving the linework.</li>
+<li>Unioning a set of <a class="el" href="classgeos_1_1geom_1_1Polygon.html">Polygons</a> will always return a polygonal geometry (unlike <a class="el" href="classgeos_1_1geom_1_1Geometry.html#ac253575aeff0e82e44eb5292ab2ea9b8" title="Returns a Geometry representing all the points in this Geometry and other.">Geometry::Union(const Geometry* other) const</a>), which may return geometries of lower dimension if a topology collapse occurred.</li>
+</ul>
+<dl class="section return"><dt>Returns</dt><dd>the union geometry</dd></dl>
+<dl class="section see"><dt>See also</dt><dd>UnaryUnionOp </dd></dl>
 
 </div>
 </div>

@@ -61,18 +61,18 @@ Public Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a0b78c317a173604d74014002bad7617a" id="r_a0b78c317a173604d74014002bad7617a"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1MultiLineString.html">MultiLineString</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1coverage_1_1TPVWSimplifier.html#a0b78c317a173604d74014002bad7617a">simplify</a> (const <a class="el" href="classgeos_1_1geom_1_1MultiLineString.html">MultiLineString</a> *lines, double distanceTolerance)</td></tr>
-<tr class="separator:a0b78c317a173604d74014002bad7617a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5b0bb748e0df9e0f77293a191e2c54df" id="r_a5b0bb748e0df9e0f77293a191e2c54df"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1MultiLineString.html">MultiLineString</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1coverage_1_1TPVWSimplifier.html#a5b0bb748e0df9e0f77293a191e2c54df">simplify</a> (const <a class="el" href="classgeos_1_1geom_1_1MultiLineString.html">MultiLineString</a> *lines, std::vector&lt; bool &gt; &amp;freeRings, const <a class="el" href="classgeos_1_1geom_1_1MultiLineString.html">MultiLineString</a> *constraintLines, double distanceTolerance)</td></tr>
-<tr class="separator:a5b0bb748e0df9e0f77293a191e2c54df"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4b9eb1fab7d91215c76c90ad6727451c" id="r_a4b9eb1fab7d91215c76c90ad6727451c"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1MultiLineString.html">MultiLineString</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1coverage_1_1TPVWSimplifier.html#a4b9eb1fab7d91215c76c90ad6727451c">simplify</a> (const <a class="el" href="classgeos_1_1geom_1_1MultiLineString.html">MultiLineString</a> *lines, double distanceTolerance, <a class="el" href="namespacegeos_1_1util.html#ae90fe2a4fedfd3f4a690b4937f600cea">geos::util::ProgressFunction</a> *progressFunction)</td></tr>
+<tr class="separator:a4b9eb1fab7d91215c76c90ad6727451c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e7fe514081cefedd1a8ab564f20e3c8" id="r_a9e7fe514081cefedd1a8ab564f20e3c8"><td class="memItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1MultiLineString.html">MultiLineString</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1coverage_1_1TPVWSimplifier.html#a9e7fe514081cefedd1a8ab564f20e3c8">simplify</a> (const <a class="el" href="classgeos_1_1geom_1_1MultiLineString.html">MultiLineString</a> *lines, std::vector&lt; bool &gt; &amp;freeRings, const <a class="el" href="classgeos_1_1geom_1_1MultiLineString.html">MultiLineString</a> *constraintLines, double distanceTolerance, <a class="el" href="namespacegeos_1_1util.html#ae90fe2a4fedfd3f4a690b4937f600cea">geos::util::ProgressFunction</a> *progressFunction)</td></tr>
+<tr class="separator:a9e7fe514081cefedd1a8ab564f20e3c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Computes a Topology-Preserving Visvalingam-Whyatt simplification of a set of input lines. The simplified lines will contain no more intersections than are present in the original input. Line and ring endpoints are preserved, except for rings which are flagged as "free".</p>
 <p>The amount of simplification is determined by a tolerance value, which is a non-zero quantity. It is the square root of the area tolerance used in the Visvalingam-Whyatt algorithm. This equates roughly to the maximum distance by which a simplified line can change from the original.</p>
 <dl class="section author"><dt>Author</dt><dd>mdavis </dd></dl>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a0b78c317a173604d74014002bad7617a" name="a0b78c317a173604d74014002bad7617a"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a0b78c317a173604d74014002bad7617a">&#9670;&#160;</a></span>simplify() <span class="overload">[1/2]</span></h2>
+<a id="a4b9eb1fab7d91215c76c90ad6727451c" name="a4b9eb1fab7d91215c76c90ad6727451c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4b9eb1fab7d91215c76c90ad6727451c">&#9670;&#160;</a></span>simplify() <span class="overload">[1/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -90,7 +90,13 @@ Static Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>distanceTolerance</em>&#160;</td>
+          <td class="paramname"><em>distanceTolerance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacegeos_1_1util.html#ae90fe2a4fedfd3f4a690b4937f600cea">geos::util::ProgressFunction</a> *&#160;</td>
+          <td class="paramname"><em>progressFunction</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -109,6 +115,7 @@ Static Public Member Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">lines</td><td>the lines to simplify </td></tr>
     <tr><td class="paramname">distanceTolerance</td><td>the simplification tolerance </td></tr>
+    <tr><td class="paramname">progressFunction</td><td>Progress function, or nullptr. </td></tr>
   </table>
   </dd>
 </dl>
@@ -116,8 +123,8 @@ Static Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="a5b0bb748e0df9e0f77293a191e2c54df" name="a5b0bb748e0df9e0f77293a191e2c54df"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a5b0bb748e0df9e0f77293a191e2c54df">&#9670;&#160;</a></span>simplify() <span class="overload">[2/2]</span></h2>
+<a id="a9e7fe514081cefedd1a8ab564f20e3c8" name="a9e7fe514081cefedd1a8ab564f20e3c8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e7fe514081cefedd1a8ab564f20e3c8">&#9670;&#160;</a></span>simplify() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -147,7 +154,13 @@ Static Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">double&#160;</td>
-          <td class="paramname"><em>distanceTolerance</em>&#160;</td>
+          <td class="paramname"><em>distanceTolerance</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacegeos_1_1util.html#ae90fe2a4fedfd3f4a690b4937f600cea">geos::util::ProgressFunction</a> *&#160;</td>
+          <td class="paramname"><em>progressFunction</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -168,6 +181,7 @@ Static Public Member Functions</h2></td></tr>
     <tr><td class="paramname">freeRings</td><td>flags indicating which ring edges do not have node endpoints </td></tr>
     <tr><td class="paramname">constraintLines</td><td>the linear constraints </td></tr>
     <tr><td class="paramname">distanceTolerance</td><td>the simplification tolerance </td></tr>
+    <tr><td class="paramname">progressFunction</td><td>Progress function, or nullptr. </td></tr>
   </table>
   </dd>
 </dl>

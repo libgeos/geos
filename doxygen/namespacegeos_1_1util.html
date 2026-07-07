@@ -45,6 +45,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
+<a href="#typedef-members">Typedefs</a> &#124;
 <a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">geos::util Namespace Reference</div></div>
 </div><!--header-->
@@ -79,6 +80,11 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1util_1_1UnsupportedOperationException.html">UnsupportedOperationException</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Indicates that the requested operation is unsupported.  <a href="classgeos_1_1util_1_1UnsupportedOperationException.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="typedef-members" name="typedef-members"></a>
+Typedefs</h2></td></tr>
+<tr class="memitem:ae90fe2a4fedfd3f4a690b4937f600cea" id="r_ae90fe2a4fedfd3f4a690b4937f600cea"><td class="memItemLeft" align="right" valign="top">typedef std::function&lt; void(double, const char *)&gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacegeos_1_1util.html#ae90fe2a4fedfd3f4a690b4937f600cea">ProgressFunction</a></td></tr>
+<tr class="separator:ae90fe2a4fedfd3f4a690b4937f600cea"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
 Functions</h2></td></tr>
@@ -116,6 +122,10 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>rint_vc</b> (double
 double&#160;</td><td class="memItemRight" valign="bottom"><b>clamp</b> (double x, double min, double max)</td></tr>
 <tr class="memdesc:a8255f83b1195d491a0771f739d43bf8d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Equivalent to std::clamp() in C++17. <br /></td></tr>
 <tr class="separator:a8255f83b1195d491a0771f739d43bf8d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25c2cb2b761c5402f77592137b2ecde0" id="r_a25c2cb2b761c5402f77592137b2ecde0"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacegeos_1_1util.html#a25c2cb2b761c5402f77592137b2ecde0">ProgressFunctionIteration</a> (<a class="el" href="namespacegeos_1_1util.html#ae90fe2a4fedfd3f4a690b4937f600cea">ProgressFunction</a> &amp;progressFunction, size_t i, size_t iterCount, size_t &amp;iNotify, size_t notificationInterval)</td></tr>
+<tr class="separator:a25c2cb2b761c5402f77592137b2ecde0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af563b9a300fbc8e3ebebc9e33ab30ee0" id="r_af563b9a300fbc8e3ebebc9e33ab30ee0"><td class="memItemLeft" align="right" valign="top"><a class="el" href="namespacegeos_1_1util.html#ae90fe2a4fedfd3f4a690b4937f600cea">ProgressFunction</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespacegeos_1_1util.html#af563b9a300fbc8e3ebebc9e33ab30ee0">CreateScaledProgressFunction</a> (double ratioMin, double ratioMax, <a class="el" href="namespacegeos_1_1util.html#ae90fe2a4fedfd3f4a690b4937f600cea">ProgressFunction</a> &amp;progressFunction)</td></tr>
+<tr class="separator:af563b9a300fbc8e3ebebc9e33ab30ee0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5c7958ead627e098eb77f018d53bedcf" id="r_a5c7958ead627e098eb77f018d53bedcf"><td class="memItemLeft" align="right" valign="top"><a id="a5c7958ead627e098eb77f018d53bedcf" name="a5c7958ead627e098eb77f018d53bedcf"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>endsWith</b> (const std::string &amp;s, const std::string &amp;suffix)</td></tr>
 <tr class="separator:a5c7958ead627e098eb77f018d53bedcf"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -134,7 +144,140 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>toUpper</b> (std::str
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Utility classes for GEOS. </p>
-</div><h2 class="groupheader">Function Documentation</h2>
+</div><h2 class="groupheader">Typedef Documentation</h2>
+<a id="ae90fe2a4fedfd3f4a690b4937f600cea" name="ae90fe2a4fedfd3f4a690b4937f600cea"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae90fe2a4fedfd3f4a690b4937f600cea">&#9670;&#160;</a></span>ProgressFunction</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">typedef std::function&lt;void(double, const char*)&gt; <a class="el" href="namespacegeos_1_1util.html#ae90fe2a4fedfd3f4a690b4937f600cea">geos::util::ProgressFunction</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Signature of a progression function.</p>
+<p>Such function takes a progression ratio (between 0 and 1), and an optional message. </p>
+
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="af563b9a300fbc8e3ebebc9e33ab30ee0" name="af563b9a300fbc8e3ebebc9e33ab30ee0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af563b9a300fbc8e3ebebc9e33ab30ee0">&#9670;&#160;</a></span>CreateScaledProgressFunction()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="namespacegeos_1_1util.html#ae90fe2a4fedfd3f4a690b4937f600cea">ProgressFunction</a> geos::util::CreateScaledProgressFunction </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>ratioMin</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>ratioMax</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespacegeos_1_1util.html#ae90fe2a4fedfd3f4a690b4937f600cea">ProgressFunction</a> &amp;&#160;</td>
+          <td class="paramname"><em>progressFunction</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Create a scaled progress function.</p>
+<p>Sometimes when an operation wants to report progress, it actually invokes several subprocesses which also take a ProgressFunction, and it is desirable to map the progress of each sub operation into a portion of 0.0 to 1.0 progress of the overall process. The scaled progress function can be used for this.</p>
+<p>For each subsection a scaled progress function is created and instead of passing the overall progress func down to the sub functions, the scale progress function is passed instead.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">ratioMin</td><td>the value to which 0.0 in the sub operation is mapped. </td></tr>
+    <tr><td class="paramname">ratioMax</td><td>the value to which 1.0 is the sub operation is mapped. </td></tr>
+    <tr><td class="paramname">progressFunction</td><td>the overall progress function.</td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>scaled progress function. </dd></dl>
+
+</div>
+</div>
+<a id="a25c2cb2b761c5402f77592137b2ecde0" name="a25c2cb2b761c5402f77592137b2ecde0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25c2cb2b761c5402f77592137b2ecde0">&#9670;&#160;</a></span>ProgressFunctionIteration()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void geos::util::ProgressFunctionIteration </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespacegeos_1_1util.html#ae90fe2a4fedfd3f4a690b4937f600cea">ProgressFunction</a> &amp;&#160;</td>
+          <td class="paramname"><em>progressFunction</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>i</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>iterCount</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t &amp;&#160;</td>
+          <td class="paramname"><em>iNotify</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>notificationInterval</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Do progress function related processing for an iteration loop of iterCount iterations.</p>
+<p>This function will invoke (*progressFunction) every notificationInterval iteration.</p>
+<p>This function will return, or throw a geos::util::InterruptedException.</p>
+<p>A typical use is: </p><div class="fragment"><div class="line"><span class="keyword">const</span> <span class="keywordtype">size_t</span> notificationInterval = std::max&lt;size_t&gt;(1, iterCount / 100);</div>
+<div class="line"><span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0, iNotify = 0; i &lt; iterCount; ++i) {</div>
+<div class="line">    <span class="comment">// do something useful</span></div>
+<div class="line">    <span class="keywordflow">if</span> (progressFunction) {</div>
+<div class="line">        <a class="code hl_function" href="namespacegeos_1_1util.html#a25c2cb2b761c5402f77592137b2ecde0">geos::util::ProgressFunctionIteration</a>(*progressFunction, i, iterCount, iNotify, notificationInterval);</div>
+<div class="line">    }</div>
+<div class="line">}</div>
+<div class="line"><span class="keywordflow">if</span> (progressFunction) {</div>
+<div class="line">  (*progressFunction)(1.0, <span class="keyword">nullptr</span>);</div>
+<div class="line">}</div>
+<div class="ttc" id="anamespacegeos_1_1util_html_a25c2cb2b761c5402f77592137b2ecde0"><div class="ttname"><a href="namespacegeos_1_1util.html#a25c2cb2b761c5402f77592137b2ecde0">geos::util::ProgressFunctionIteration</a></div><div class="ttdeci">void ProgressFunctionIteration(ProgressFunction &amp;progressFunction, size_t i, size_t iterCount, size_t &amp;iNotify, size_t notificationInterval)</div></div>
+</div><!-- fragment --><dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">progressFunction</td><td>Progress function </td></tr>
+    <tr><td class="paramname">i</td><td>Current index of loop iteration. </td></tr>
+    <tr><td class="paramname">iterCount</td><td>Total number of loop iteration. </td></tr>
+    <tr><td class="paramname">iNotify</td><td>Notification counter, updated by this function. Must be set by the caller (before the loop) to 0. </td></tr>
+    <tr><td class="paramname">notificationInterval</td><td>Notification interval (e.g. iterCount / 100). </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a1256b1acb67c87ad2062787e617e25b0" name="a1256b1acb67c87ad2062787e617e25b0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a1256b1acb67c87ad2062787e617e25b0">&#9670;&#160;</a></span>round()</h2>
 

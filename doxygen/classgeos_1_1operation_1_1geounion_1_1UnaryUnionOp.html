@@ -72,9 +72,9 @@ template&lt;class T &gt; </td></tr>
 <tr class="memitem:ac448013e376f4b851ac4a959c0d10973" id="r_ac448013e376f4b851ac4a959c0d10973"><td class="memItemLeft" align="right" valign="top"><a id="ac448013e376f4b851ac4a959c0d10973" name="ac448013e376f4b851ac4a959c0d10973"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setUnionFunction</b> (<a class="el" href="classgeos_1_1operation_1_1geounion_1_1UnionStrategy.html">UnionStrategy</a> *unionFun)</td></tr>
 <tr class="separator:ac448013e376f4b851ac4a959c0d10973"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1fad477b0275a427fe3b27fd9b4a56ae" id="r_a1fad477b0275a427fe3b27fd9b4a56ae"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1geounion_1_1UnaryUnionOp.html#a1fad477b0275a427fe3b27fd9b4a56ae">Union</a> ()</td></tr>
-<tr class="memdesc:a1fad477b0275a427fe3b27fd9b4a56ae"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the union of the input geometries.  <br /></td></tr>
-<tr class="separator:a1fad477b0275a427fe3b27fd9b4a56ae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:af9a5d0d5cc94cb10235bf93e650b6746" id="r_af9a5d0d5cc94cb10235bf93e650b6746"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1geounion_1_1UnaryUnionOp.html#af9a5d0d5cc94cb10235bf93e650b6746">Union</a> (<a class="el" href="namespacegeos_1_1util.html#ae90fe2a4fedfd3f4a690b4937f600cea">geos::util::ProgressFunction</a> *progressFunction)</td></tr>
+<tr class="memdesc:af9a5d0d5cc94cb10235bf93e650b6746"><td class="mdescLeft">&#160;</td><td class="mdescRight">Gets the union of the input geometries.  <br /></td></tr>
+<tr class="separator:af9a5d0d5cc94cb10235bf93e650b6746"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -86,9 +86,9 @@ template&lt;typename T &gt; </td></tr>
 template&lt;class T &gt; </td></tr>
 <tr class="memitem:a0069e79e71df781a9d30b02b2c2cdd33"><td class="memTemplItemLeft" align="right" valign="top">static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &gt;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>Union</b> (const T &amp;geoms, <a class="el" href="classgeos_1_1geom_1_1GeometryFactory.html">geom::GeometryFactory</a> &amp;geomFact)</td></tr>
 <tr class="separator:a0069e79e71df781a9d30b02b2c2cdd33"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaa4396842a00c903214cd7bfe9402aae" id="r_aaa4396842a00c903214cd7bfe9402aae"><td class="memItemLeft" align="right" valign="top"><a id="aaa4396842a00c903214cd7bfe9402aae" name="aaa4396842a00c903214cd7bfe9402aae"></a>
-static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Union</b> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &amp;geom)</td></tr>
-<tr class="separator:aaa4396842a00c903214cd7bfe9402aae"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa91e1cb4a4836a0d34b08b2aebc0f848" id="r_aa91e1cb4a4836a0d34b08b2aebc0f848"><td class="memItemLeft" align="right" valign="top"><a id="aa91e1cb4a4836a0d34b08b2aebc0f848" name="aa91e1cb4a4836a0d34b08b2aebc0f848"></a>
+static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>Union</b> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &amp;geom, <a class="el" href="namespacegeos_1_1util.html#ae90fe2a4fedfd3f4a690b4937f600cea">geos::util::ProgressFunction</a> *progressFunction)</td></tr>
+<tr class="separator:aa91e1cb4a4836a0d34b08b2aebc0f848"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Unions a collection of Geometry or a single Geometry (which may be a collection) together. </p>
@@ -101,8 +101,8 @@ static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.htm
 </ul>
 <p><code>UnaryUnion</code> always operates on the individual components of MultiGeometries. So it is possible to use it to "clean" invalid self-intersecting MultiPolygons (although the polygon components must all still be individually valid.) </p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="a1fad477b0275a427fe3b27fd9b4a56ae" name="a1fad477b0275a427fe3b27fd9b4a56ae"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a1fad477b0275a427fe3b27fd9b4a56ae">&#9670;&#160;</a></span>Union()</h2>
+<a id="af9a5d0d5cc94cb10235bf93e650b6746" name="af9a5d0d5cc94cb10235bf93e650b6746"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af9a5d0d5cc94cb10235bf93e650b6746">&#9670;&#160;</a></span>Union()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -110,7 +110,8 @@ static std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.htm
         <tr>
           <td class="memname">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> &gt; geos::operation::geounion::UnaryUnionOp::Union </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype"><a class="el" href="namespacegeos_1_1util.html#ae90fe2a4fedfd3f4a690b4937f600cea">geos::util::ProgressFunction</a> *&#160;</td>
+          <td class="paramname"><em>progressFunction</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
