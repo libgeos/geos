@@ -154,11 +154,10 @@ void object::test<3>()
     ensure("equalsIdentical", mc_->equalsIdentical(cc2.get()));
 
     // Overlay
-    ensure_THROW(mc_->Union(), geos::util::UnsupportedOperationException);
-    // TODO: Prevent overlay from degrading CompoundCurve into MultiCurve
-    //ensure_equals_geometry(mc_->Union(mc_.get()).get(), static_cast<const Geometry*>(mc_.get()));
+    ensure_equals_geometry(mc_->Union().get(), static_cast<const Geometry*>(mc_.get()));
+    ensure_equals_geometry(mc_->Union(mc_.get()).get(), static_cast<const Geometry*>(mc_.get()));
     ensure(mc_->difference(mc_.get())->isEmpty());
-    //ensure_equals_geometry(mc_->intersection(mc_.get()).get(), static_cast<const Geometry*>(mc_.get()));
+    ensure_equals_geometry(mc_->intersection(mc_.get()).get(), static_cast<const Geometry*>(mc_.get()));
     ensure(mc_->symDifference(mc_.get())->isEmpty());
 
     // Distance

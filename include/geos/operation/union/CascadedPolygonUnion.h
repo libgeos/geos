@@ -32,7 +32,7 @@ namespace geos {
 namespace geom {
 class GeometryFactory;
 class Geometry;
-class Polygon;
+class Surface;
 class MultiPolygon;
 class Envelope;
 }
@@ -103,7 +103,7 @@ private:
  */
 class GEOS_DLL CascadedPolygonUnion {
 private:
-    std::vector<geom::Polygon*>* inputPolys;
+    const std::vector<const geom::Surface*>& inputPolys;
     geom::GeometryFactory const* geomFactory;
 
     /**
@@ -116,23 +116,23 @@ private:
     static int const STRTREE_NODE_CAPACITY = 4;
 
     /** \brief
-     * Computes a [Geometry](@ref geom::Geometry) containing only polygonal components.
+     * Computes a [Geometry](@ref geom::Geometry) containing only
+     * surface components (dimension == 2).
      *
-     * Extracts the [Polygons](@ref geom::Polygon) from the input
+     * Extracts the [Surfaces](@ref geom::Surface) from the input
      * and returns them as an appropriate polygonal geometry.
      *
-     * If the input is already `Polygonal`, it is returned unchanged.
+     * If the input is already a surface, it is returned unchanged.
      *
-     * A particular use case is to filter out non-polygonal components
+     * A particular use case is to filter out non-surface components
      * returned from an overlay operation.
      *
      * @param g the geometry to filter
-     * @return a Polygonal geometry
+     * @return a Surface geometry
      */
-    static std::unique_ptr<geom::Geometry> restrictToPolygons(std::unique_ptr<geom::Geometry> g);
+    static std::unique_ptr<geom::Geometry> restrictToSurfaces(std::unique_ptr<geom::Geometry> g);
 
 public:
-    CascadedPolygonUnion();
 
     /** \brief
      * Computes the union of a collection of polygonal [Geometrys](@ref geom::Geometry).
@@ -140,13 +140,13 @@ public:
      * @param polys a collection of polygonal [Geometrys](@ref geom::Geometry).
      *              ownership of elements *and* vector are left to caller.
      */
-    static std::unique_ptr<geom::Geometry> Union(std::vector<geom::Polygon*>* polys);
-    static std::unique_ptr<geom::Geometry> Union(std::vector<geom::Polygon*>* polys, UnionStrategy* unionFun, geos::util::ProgressFunction* progressFunction);
+    static std::unique_ptr<geom::Geometry> Union(const std::vector<const geom::Surface*>& polys);
+    static std::unique_ptr<geom::Geometry> Union(const std::vector<const geom::Surface*>& polys, UnionStrategy* unionFun, geos::util::ProgressFunction* progressFunction);
 
     /** \brief
-     * Computes the union of a set of polygonal [Geometrys](@ref geom::Geometry).
+     * Computes the union of a set of surfface [Geometrys](@ref geom::Geometry).
      *
-     * @tparam T an iterator yielding something castable to const Polygon *
+     * @tparam T an iterator yielding something castable to const Surface*
      * @param start start iterator
      * @param end end iterator
      * @param unionStrategy strategy to apply
@@ -156,12 +156,12 @@ public:
     static std::unique_ptr<geom::Geometry>
     Union(T start, T end, UnionStrategy *unionStrategy, geos::util::ProgressFunction* progressFunction)
     {
-        std::vector<geom::Polygon*> polys;
+        std::vector<const geom::Surface*> polys;
         for(T i = start; i != end; ++i) {
-            const geom::Polygon* p = dynamic_cast<const geom::Polygon*>(*i);
-            polys.push_back(const_cast<geom::Polygon*>(p));
+            const auto* p = dynamic_cast<const geom::Surface*>(*i);
+            polys.push_back(p);
         }
-        return Union(&polys, unionStrategy, progressFunction);
+        return Union(polys, unionStrategy, progressFunction);
     }
 
     /** \brief
@@ -177,16 +177,16 @@ public:
      * Creates a new instance to union the given collection of
      * [Geometrys](@ref geom::Geometry).
      *
-     * @param polys a collection of polygonal [Geometrys](@ref geom::Geometry).
+     * @param polys a collection of surface [Geometrys](@ref geom::Geometry).
      *              Ownership of elements *and* vector are left to caller.
      */
-    CascadedPolygonUnion(std::vector<geom::Polygon*>* polys)
+    explicit CascadedPolygonUnion(const std::vector<const geom::Surface*>& polys)
         : inputPolys(polys)
         , geomFactory(nullptr)
         , unionFunction(&defaultUnionFunction)
     {}
 
-    CascadedPolygonUnion(std::vector<geom::Polygon*>* polys, UnionStrategy* unionFun)
+    CascadedPolygonUnion(const std::vector<const geom::Surface*>& polys, UnionStrategy* unionFun)
         : inputPolys(polys)
         , geomFactory(nullptr)
         , unionFunction(unionFun)
@@ -232,7 +232,7 @@ private:
      */
     std::unique_ptr<geom::Geometry> unionSafe(const geom::Geometry* g0, const geom::Geometry* g1) const;
 
-    std::unique_ptr<geom::Geometry> unionSafe(std::unique_ptr<geom::Geometry> &&, std::unique_ptr<geom::Geometry> &&);
+    std::unique_ptr<geom::Geometry> unionSafe(std::unique_ptr<geom::Geometry> &&, std::unique_ptr<geom::Geometry> &&) const;
 
     /**
      * Encapsulates the actual unioning of two polygonal geometries.

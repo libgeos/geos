@@ -169,7 +169,7 @@ void object::test<3>()
     ensure("equalsIdentical", cs_->equalsIdentical(cs2.get()));
 
     // Overlay
-    ensure_THROW(cs_->Union(), geos::util::UnsupportedOperationException);
+    ensure_equals_geometry(cs_->Union().get(), static_cast<const Geometry*>(cs_.get()));
     ensure_equals(cs_->Union(cs_.get())->getLength(), cs_->getLength());
     ensure(cs_->difference(cs_.get())->isEmpty());
     ensure_equals(cs_->intersection(cs_.get())->getLength(), cs_->getLength());

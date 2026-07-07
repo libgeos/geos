@@ -143,7 +143,7 @@ void object::test<3>()
     ensure("equalsIdentical", ms_->equalsIdentical(cp2.get()));
 
     // Overlay
-    ensure_THROW(ms_->Union(), geos::util::UnsupportedOperationException);
+    ensure_equals_geometry(ms_->Union().get(), static_cast<const Geometry*>(ms_.get()));
     ensure_equals_geometry(ms_->Union(ms_.get()).get(), static_cast<const Geometry*>(ms_.get()));
     ensure(ms_->difference(ms_.get())->isEmpty());
     ensure_equals_geometry(ms_->intersection(ms_.get()).get(), static_cast<const Geometry*>(ms_.get()));

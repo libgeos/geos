@@ -171,21 +171,7 @@ private:
         }
     }
 
-    void
-    extract(const geom::Geometry& geom)
-    {
-        util::ensureNoCurvedComponents(geom);
-
-        using namespace geom::util;
-
-        if(! geomFact) {
-            geomFact = geom.getFactory();
-        }
-
-        GeometryExtracter::extract<geom::Polygon>(geom, polygons);
-        GeometryExtracter::extract<geom::LineString>(geom, lines);
-        GeometryExtracter::extract<geom::Point>(geom, points);
-    }
+    void extract(const geom::Geometry& geom);
 
     /**
      * Computes a unary union with no extra optimization,
@@ -217,14 +203,14 @@ private:
      * @return the union of the input(s)
      * @return null if both inputs are null
      */
-    std::unique_ptr<geom::Geometry> unionWithNull(
+    static std::unique_ptr<geom::Geometry> unionWithNull(
         std::unique_ptr<geom::Geometry> g0,
         std::unique_ptr<geom::Geometry> g1
         );
 
     // Members
-    std::vector<const geom::Polygon*> polygons;
-    std::vector<const geom::LineString*> lines;
+    std::vector<const geom::Surface*> polygons;
+    std::vector<const geom::Curve*> lines;
     std::vector<const geom::Point*> points;
 
     const geom::GeometryFactory* geomFact;
