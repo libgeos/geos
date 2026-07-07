@@ -18,6 +18,7 @@
     - Polygonizer (GH-1420, Dan Baston)
   - Add GEOSLineToCurve, GEOSCurveToLine (GH-1382, Dan Baston)
   - Add GeometrySplitter (GH-1424, Dan Baston)
+  - Add progress reporting to GEOSCoverageSimplify, GEOSUnaryUnion (GH-1466, Even Rouault / Dan Baston)
 
 - Breaking Changes:
   - BufferOp returns POLYGON EMPTY when fed Inf/Nan coords (GH-1332)
