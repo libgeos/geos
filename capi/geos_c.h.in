@@ -1108,6 +1108,16 @@ extern GEOSGeometry GEOS_DLL *GEOSPolygonHullSimplify_r(
     unsigned int isOuter,
     double vertexNumFraction);
 
+/**
+* Controls the behavior of the GEOSPolygonHullSimplify parameter.
+*/
+enum GEOSPolygonHullParameterModes {
+    /** Fraction of input vertices retained */
+    GEOSHULL_PARAM_VERTEX_RATIO = 1,
+    /** Ratio of simplified hull area to input area */
+    GEOSHULL_PARAM_AREA_RATIO = 2
+};
+
 /** \see GEOSPolygonHullSimplifyMode */
 extern GEOSGeometry GEOS_DLL *GEOSPolygonHullSimplifyMode_r(
     GEOSContextHandle_t handle,
@@ -1370,6 +1380,17 @@ extern GEOSGeometry GEOS_DLL * GEOSDelaunayTriangulation_r(
 extern GEOSGeometry GEOS_DLL * GEOSConstrainedDelaunayTriangulation_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry *g);
+
+/** Change behaviour of \ref GEOSVoronoiDiagram */
+enum GEOSVoronoiFlags
+{
+    /** Return only edges of the Voronoi cells, as a MultiLineString **/
+    GEOS_VORONOI_ONLY_EDGES = 1,
+    /** Preserve order of inputs, such that the nth cell in the result corresponds
+     *  to the nth vertex in the input. If this cannot be done, such as for inputs
+     *  that contain repeated points, \ref GEOSVoronoiDiagram will return NULL. **/
+    GEOS_VORONOI_PRESERVE_ORDER = 2
+};
 
 /** \see GEOSVoronoiDiagram */
 extern GEOSGeometry GEOS_DLL * GEOSVoronoiDiagram_r(
@@ -5283,16 +5304,6 @@ extern GEOSGeometry GEOS_DLL *GEOSPolygonHullSimplify(
 
 
 /**
-* Controls the behavior of the GEOSPolygonHullSimplify parameter.
-*/
-enum GEOSPolygonHullParameterModes {
-    /** Fraction of input vertices retained */
-    GEOSHULL_PARAM_VERTEX_RATIO = 1,
-    /** Ratio of simplified hull area to input area */
-    GEOSHULL_PARAM_AREA_RATIO = 2
-};
-
-/**
 * Computes a topology-preserving simplified hull of a polygonal geometry,
 * with hull shape determined by the parameter, controlled by a parameter
 * mode, which is one defined in \ref GEOSPolygonHullParameterModes.
@@ -5520,17 +5531,6 @@ extern GEOSGeometry GEOS_DLL * GEOSDelaunayTriangulation(
 */
 extern GEOSGeometry GEOS_DLL * GEOSConstrainedDelaunayTriangulation(
     const GEOSGeometry *g);
-
-/** Change behaviour of \ref GEOSVoronoiDiagram */
-enum GEOSVoronoiFlags
-{
-    /** Return only edges of the Voronoi cells, as a MultiLineString **/
-    GEOS_VORONOI_ONLY_EDGES = 1,
-    /** Preserve order of inputs, such that the nth cell in the result corresponds
-     *  to the nth vertex in the input. If this cannot be done, such as for inputs
-     *  that contain repeated points, \ref GEOSVoronoiDiagram will return NULL. **/
-    GEOS_VORONOI_PRESERVE_ORDER = 2
-};
 
 /**
 * Returns the 2D Voronoi polygons or edges computed from the vertices
