@@ -2194,5 +2194,4 @@ extern "C" {
         return GEOSCoverageSimplifyVW_r(handle, input, tolerance, preserveBoundary);
     }
 
-
 } /* extern "C" */

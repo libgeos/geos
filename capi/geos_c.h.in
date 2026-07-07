@@ -117,6 +117,21 @@ typedef void (*GEOSMessageHandler)(GEOS_PRINTF_FORMAT const char *fmt, ...)
 */
 typedef void (*GEOSMessageHandler_r)(const char *message, void *userdata);
 
+
+/**
+ * A GEOS progress callback function.
+ *
+ * Such function takes a progress ratio (0 to 1), and an optional message.
+ *
+ * \param progressRatio Progression ratio (between 0 and 1)
+ * \param message Information message (can be NULL)
+ * \param userdata the user data pointer that was passed to GEOS together with
+ * this callback.
+ */
+typedef void (GEOSProgressCallback)(double progressRatio,
+                                    const char* message, void* userdata);
+
+
 /*
 * When we're included by geos_c.cpp, these types are #defined to the
 * C++ definitions via preprocessor. We don't touch them to allow the
@@ -425,6 +440,23 @@ extern void GEOS_DLL GEOS_interruptRequest(void);
 * \since 3.4
 */
 extern void GEOS_DLL GEOS_interruptCancel(void);
+
+/* ========== Progress monitoring ========== */
+
+/**
+* Register a function to be called with progress updates
+*
+* \param extHandle the context returned by \ref GEOS_init_r.
+* \param cb Callback function to invoke
+* \param userData optional data to be pe provided as argument to callback
+* \return the previously registered callback, or NULL
+* \see GEOSProgressCallback
+* \since 3.15
+*/
+extern GEOSProgressCallback GEOS_DLL *GEOSContext_setProgressCallback_r(
+       GEOSContextHandle_t extHandle,
+       GEOSProgressCallback* cb,
+       void* userData);
 
 /* ========== Initialization and Cleanup ========== */
 

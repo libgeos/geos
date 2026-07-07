@@ -341,7 +341,8 @@ GeometryFixer::unionGeometry(std::vector<const Geometry*>& polys) const
     }
 
     UnaryUnionOp op(polys);
-    return op.Union();
+    geos::util::ProgressFunction* progressFunction = nullptr;
+    return op.Union(progressFunction);
     // return OverlayNGRobust::Union(polys);
 }
 

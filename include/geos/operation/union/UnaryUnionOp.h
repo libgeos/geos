@@ -28,6 +28,7 @@
 #include <geos/geom/Polygon.h>
 #include <geos/geom/util/GeometryExtracter.h>
 #include <geos/operation/union/CascadedPolygonUnion.h>
+#include <geos/util/Progress.h>
 
 #include <geos/util.h>
 
@@ -93,7 +94,8 @@ public:
     Union(const T& geoms)
     {
         UnaryUnionOp op(geoms);
-        return op.Union();
+        geos::util::ProgressFunction* progressFunction = nullptr;
+        return op.Union(progressFunction);
     }
 
     template <class T>
@@ -102,14 +104,15 @@ public:
           geom::GeometryFactory& geomFact)
     {
         UnaryUnionOp op(geoms, geomFact);
-        return op.Union();
+        geos::util::ProgressFunction* progressFunction = nullptr;
+        return op.Union(progressFunction);
     }
 
     static std::unique_ptr<geom::Geometry>
-    Union(const geom::Geometry& geom)
+    Union(const geom::Geometry& geom, geos::util::ProgressFunction* progressFunction)
     {
         UnaryUnionOp op(geom);
-        return op.Union();
+        return op.Union(progressFunction);
     }
 
     template <class T>
@@ -150,7 +153,7 @@ public:
      * @return an empty GEOMETRYCOLLECTION if no geometries were provided
      *         in the input
      */
-    std::unique_ptr<geom::Geometry> Union();
+    std::unique_ptr<geom::Geometry> Union(geos::util::ProgressFunction* progressFunction);
 
 private:
 

@@ -5,6 +5,7 @@
 // geos
 #include <geos_c.h>
 // std
+#include <algorithm>
 #include <cstring>
 
 #include "capi_test_utils.h"
@@ -252,6 +253,60 @@ void object::test<12>()
     ensure_equals("length does not match", result_length, input_length, 1e-5);
 }
 
+template<>
+template<>
+void object::test<13>()
+{
+    set_test_name("progress callback invoked (cascaded union)");
+    useContext();
+
+    std::vector<GEOSGeometry*> geoms;
+    for (int i = 0; i < 10; i++) {
+        GEOSGeometry* pt = GEOSGeom_createPointFromXY_r(ctxt_, static_cast<double>(i), static_cast<double>(i));
+        GEOSGeometry* circle = GEOSBuffer_r(ctxt_, pt, 3, 8);
+        geoms.push_back(circle);
+        GEOSGeom_destroy_r(ctxt_, pt);
+    }
+    input_ = GEOSGeom_createCollection_r(ctxt_, GEOS_GEOMETRYCOLLECTION, geoms.data(), static_cast<unsigned>(geoms.size()));
+
+    std::vector<double> fracs;
+
+    auto progress = [](double f, const char*, void* userData) {
+        static_cast<std::vector<double>*>(userData)->push_back(f);
+    };
+
+    GEOSContext_setProgressCallback_r(ctxt_, progress, &fracs);
+    result_ = GEOSUnaryUnion_r(ctxt_, input_);
+
+    ensure(fracs.size() > 3); // arbitrary
+
+    // progress reported in-order
+    ensure(std::is_sorted(fracs.begin(), fracs.end()));
+
+    // no duplicate progress values
+    ensure(std::adjacent_find(fracs.begin(), fracs.end()) == fracs.end());
+}
+
+template<>
+template<>
+void object::test<14>() {
+    set_test_name("progress callback invoked (input already unioned)");
+    useContext();
+
+    input_ = fromWKT("POINT (1 1)");
+
+    std::vector<double> fracs;
+
+    auto progress = [](double f, const char*, void* userData) {
+        static_cast<std::vector<double>*>(userData)->push_back(f);
+    };
+
+    GEOSContext_setProgressCallback_r(ctxt_, progress, &fracs);
+    result_ = GEOSUnaryUnion_r(ctxt_, input_);
+
+    ensure_equals(fracs.size(), 1u);
+    ensure_equals(fracs[0], 1.0);
+}
 
 } // namespace tut
 

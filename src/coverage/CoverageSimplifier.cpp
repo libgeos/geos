@@ -26,7 +26,7 @@
 using geos::geom::Geometry;
 using geos::geom::GeometryFactory;
 using geos::geom::MultiLineString;
-
+using geos::util::ProgressFunction;
 
 namespace geos {     // geos
 namespace coverage { // geos.coverage
@@ -35,23 +35,25 @@ namespace coverage { // geos.coverage
 std::vector<std::unique_ptr<Geometry>>
 CoverageSimplifier::simplify(
     std::vector<const Geometry*>& coverage,
-    double tolerance)
+    double tolerance,
+    ProgressFunction* progressFunction)
 {
     CoverageSimplifier simplifier(coverage);
-    return simplifier.simplify(tolerance);
+    return simplifier.simplify(tolerance, progressFunction);
 }
 
 /* public static */
 std::vector<std::unique_ptr<Geometry>>
 CoverageSimplifier::simplify(
     const std::vector<std::unique_ptr<Geometry>>& coverage,
-    double tolerance)
+    double tolerance,
+    ProgressFunction* progressFunction)
 {
     std::vector<const Geometry*> geoms;
     for (auto& geom : coverage) {
         geoms.push_back(geom.get());
     }
-    return simplify(geoms, tolerance);
+    return simplify(geoms, tolerance, progressFunction);
 }
 
 
@@ -59,10 +61,11 @@ CoverageSimplifier::simplify(
 std::vector<std::unique_ptr<Geometry>>
 CoverageSimplifier::simplifyInner(
     std::vector<const Geometry*>& coverage,
-    double tolerance)
+    double tolerance,
+    ProgressFunction* progressFunction)
 {
     CoverageSimplifier simplifier(coverage);
-    return simplifier.simplifyInner(tolerance);
+    return simplifier.simplifyInner(tolerance, progressFunction);
 }
 
 
@@ -70,13 +73,14 @@ CoverageSimplifier::simplifyInner(
 std::vector<std::unique_ptr<Geometry>>
 CoverageSimplifier::simplifyInner(
     const std::vector<std::unique_ptr<Geometry>>& coverage,
-    double tolerance)
+    double tolerance,
+    ProgressFunction* progressFunction)
 {
     std::vector<const Geometry*> geoms;
     for (auto& geom : coverage) {
         geoms.push_back(geom.get());
     }
-    return simplifyInner(geoms, tolerance);
+    return simplifyInner(geoms, tolerance, progressFunction);
 }
 
 
@@ -94,23 +98,25 @@ CoverageSimplifier::CoverageSimplifier(const std::vector<const Geometry*>& cover
 
 /* public */
 std::vector<std::unique_ptr<Geometry>>
-CoverageSimplifier::simplify(double tolerance)
+CoverageSimplifier::simplify(double tolerance,
+                             ProgressFunction* progressFunction)
 {
     CoverageRingEdges cov(m_input);
-    simplifyEdges(cov.getEdges(), nullptr, tolerance);
+    simplifyEdges(cov.getEdges(), nullptr, tolerance, progressFunction);
     return cov.buildCoverage();
 }
 
 /* public */
 std::vector<std::unique_ptr<Geometry>>
-CoverageSimplifier::simplifyInner(double tolerance)
+CoverageSimplifier::simplifyInner(double tolerance,
+                                  ProgressFunction* progressFunction)
 {
     CoverageRingEdges cov(m_input);
     std::vector<CoverageEdge*> innerEdges = cov.selectEdges(2);
     std::vector<CoverageEdge*> outerEdges = cov.selectEdges(1);
     std::unique_ptr<MultiLineString> constraintEdges = CoverageEdge::createLines(outerEdges, m_geomFactory);
 
-    simplifyEdges(innerEdges, constraintEdges.get(), tolerance);
+    simplifyEdges(innerEdges, constraintEdges.get(), tolerance, progressFunction);
     return cov.buildCoverage();
 }
 
@@ -119,11 +125,12 @@ void
 CoverageSimplifier::simplifyEdges(
     std::vector<CoverageEdge*> edges,
     const MultiLineString* constraints,
-    double tolerance)
+    double tolerance,
+    ProgressFunction* progressFunction)
 {
     std::unique_ptr<MultiLineString> lines = CoverageEdge::createLines(edges, m_geomFactory);
     std::vector<bool> freeRings = getFreeRings(edges);
-    std::unique_ptr<MultiLineString> linesSimp = TPVWSimplifier::simplify(lines.get(), freeRings, constraints, tolerance);
+    std::unique_ptr<MultiLineString> linesSimp = TPVWSimplifier::simplify(lines.get(), freeRings, constraints, tolerance, progressFunction);
     //Assert: mlsSimp.getNumGeometries = edges.length
 
     setCoordinates(edges, linesSimp.get());

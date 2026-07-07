@@ -84,6 +84,7 @@
 #include <geos/operation/cluster/GeometryIntersectsClusterFinder.h>
 #include <geos/operation/distance/DistanceOp.h>
 #include <geos/operation/distance/IndexedFacetDistance.h>
+#include <geos/operation/union/UnaryUnionOp.h>
 #include <geos/operation/grid/Grid.h>
 #include <geos/operation/grid/GridIntersection.h>
 #include <geos/operation/linemerge/LineMerger.h>
@@ -122,6 +123,7 @@
 #include <geos/util/Interrupt.h>
 #include <geos/util/UniqueCoordinateArrayFilter.h>
 #include <geos/util/Machine.h>
+#include <geos/util/Progress.h>
 #include <geos/version.h>
 
 // This should go away
@@ -255,6 +257,8 @@ typedef struct GEOSContextHandle_HS {
     GEOSMessageHandler_r errorMessageNew;
     GEOSContextInterruptCallback* interrupt_cb;
     void* interrupt_cb_data;
+    GEOSProgressCallback* progress_cb;
+    void* progress_cb_data;
     void* errorData;
     uint8_t WKBOutputDims;
     int WKBByteOrder;
@@ -262,6 +266,7 @@ typedef struct GEOSContextHandle_HS {
     std::unique_ptr<Point> point2d;
     std::optional<GEOSLineToCurveParams> lineToCurveParams;
     std::optional<GEOSCurveToLineParams> curveToLineParams;
+    geos::util::ProgressFunction progressFunction;
 
     GEOSContextHandle_HS()
         :
@@ -273,6 +278,8 @@ typedef struct GEOSContextHandle_HS {
         errorMessageNew(nullptr),
         interrupt_cb(nullptr),
         interrupt_cb_data(nullptr),
+        progress_cb(nullptr),
+        progress_cb_data(nullptr),
         errorData(nullptr),
         point2d(nullptr)
     {
@@ -284,6 +291,13 @@ typedef struct GEOSContextHandle_HS {
         setNoticeHandler(nullptr);
         setErrorHandler(nullptr);
         initialized = 1;
+
+        progressFunction = [this](double progress, const char* message)
+        {
+            if (progress_cb) {
+                (*progress_cb)(progress, message, progress_cb_data);
+            }
+        };
     }
 
     GEOSMessageHandler
@@ -336,6 +350,15 @@ typedef struct GEOSContextHandle_HS {
         auto old = interrupt_cb;
         interrupt_cb = cb;
         interrupt_cb_data = userData;
+        return old;
+    }
+
+    GEOSProgressCallback*
+    setProgressCallback(GEOSProgressCallback* cb, void* userData)
+    {
+        auto old = progress_cb;
+        progress_cb = cb;
+        progress_cb_data = userData;
         return old;
     }
 
@@ -548,17 +571,49 @@ struct InterruptManager {
 };
 
 struct NotInterruptible {
-    NotInterruptible(GEOSContextHandle_t handle) {
+    explicit NotInterruptible(GEOSContextHandle_t handle) {
         (void) handle;
     }
 };
+
+using Interruptible = InterruptManager;
+
+// RAII construct that ensures a progress callback is called at completion of an operation,
+// even if that operation does not support progress reporting.
+struct DefaultProgress {
+    explicit DefaultProgress(GEOSContextHandle_t handle)
+        : cb(handle->progress_cb)
+        , cb_data(handle->progress_cb_data)
+    {}
+
+    ~DefaultProgress() {
+        if (cb) {
+            (*cb)(1.0, "", cb_data);
+        }
+    }
+
+    GEOSProgressCallback* cb;
+    void* cb_data;
+};
+
+// Construct that avoids automatic progress reporting.
+// Used for functions that have progress reporting implemented.
+struct ReportsProgress {
+    explicit ReportsProgress(GEOSContextHandle_t handle) {
+        (void) handle;
+    }
+};
+
+// Construct for trivial functions that avoids automatic progress
+// reporting.
+using NoProgress = ReportsProgress;
 
 } // namespace anonymous
 
 // Execute a lambda, using the given context handle to process errors.
 // Return errval on error.
 // Errval should be of the type returned by f, unless f returns a bool in which case we promote to char.
-template<typename InterruptManagerType=InterruptManager, typename F>
+template<typename InterruptManagerType=InterruptManager, typename ProgressManagerType=DefaultProgress, typename F>
 inline auto execute(
         GEOSContextHandle_t extHandle,
         typename std::conditional<std::is_same<decltype(std::declval<F>()()),bool>::value,
@@ -575,6 +630,7 @@ inline auto execute(
     }
 
     InterruptManagerType ic(handle);
+    ProgressManagerType pc(handle);
 
     try {
         return f();
@@ -589,7 +645,7 @@ inline auto execute(
 
 // Execute a lambda, using the given context handle to process errors.
 // Return nullptr on error.
-template<typename InterruptManagerType=InterruptManager, typename F, typename std::enable_if<!std::is_void<decltype(std::declval<F>()())>::value, std::nullptr_t>::type = nullptr>
+template<typename InterruptManagerType=InterruptManager, typename ProgressManagerType=DefaultProgress, typename F, typename std::enable_if<!std::is_void<decltype(std::declval<F>()())>::value, std::nullptr_t>::type = nullptr>
 inline auto execute(GEOSContextHandle_t extHandle, F&& f) -> decltype(f()) {
     if (extHandle == nullptr) {
         throw std::runtime_error("context handle is uninitialized, call initGEOS");
@@ -601,6 +657,7 @@ inline auto execute(GEOSContextHandle_t extHandle, F&& f) -> decltype(f()) {
     }
 
     InterruptManagerType ic(handle);
+    ProgressManagerType pc(handle);
 
     try {
         return f();
@@ -615,7 +672,7 @@ inline auto execute(GEOSContextHandle_t extHandle, F&& f) -> decltype(f()) {
 
 // Execute a lambda, using the given context handle to process errors.
 // No return value.
-template<typename InterruptManagerType=InterruptManager, typename F, typename std::enable_if<std::is_void<decltype(std::declval<F>()())>::value, std::nullptr_t>::type = nullptr>
+template<typename InterruptManagerType=InterruptManager, typename ProgressManagerType=DefaultProgress, typename F, typename std::enable_if<std::is_void<decltype(std::declval<F>()())>::value, std::nullptr_t>::type = nullptr>
 inline void execute(GEOSContextHandle_t extHandle, F&& f) {
     GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
 
@@ -653,10 +710,10 @@ Geometry* convertCurvesAndExecute(GEOSContextHandle_t extHandle, const Geometry*
     });
 }
 
-template<typename F>
+template<typename InterruptManagerType=InterruptManager, typename ProgressManagerType=DefaultProgress, typename F>
 Geometry* convertCurvesAndExecute(GEOSContextHandle_t extHandle, const Geometry* g1, F&& f)
 {
-    return execute(extHandle, [&]() {
+    return execute<InterruptManagerType, ProgressManagerType>(extHandle, [&]() {
         const auto geom1 = convertToLineIfNeeded(extHandle, g1);
 
         auto g3 = f(geom1.get());
@@ -748,6 +805,16 @@ extern "C" {
         }
 
         return handle->setInterruptHandler(cb, userData);
+    }
+
+    GEOSProgressCallback*
+    GEOSContext_setProgressCallback_r(GEOSContextHandle_t extHandle, GEOSProgressCallback* cb, void* userData)
+    {
+        if(0 == extHandle->initialized) {
+            return nullptr;
+        }
+
+        return extHandle->setProgressCallback(cb, userData);
     }
 
     void GEOSContext_setCurveToLineParams_r(GEOSContextHandle_t extHandle, const GEOSCurveToLineParams* params)
@@ -1241,7 +1308,7 @@ extern "C" {
     int
     GEOSArea_r(GEOSContextHandle_t extHandle, const Geometry* g, double* area)
     {
-        return execute<NotInterruptible>(extHandle, 0, [&]() {
+        return execute<NotInterruptible, NoProgress>(extHandle, 0, [&]() {
             *area = g->getArea();
             return 1;
         });
@@ -1250,7 +1317,7 @@ extern "C" {
     int
     GEOSLength_r(GEOSContextHandle_t extHandle, const Geometry* g, double* length)
     {
-        return execute<NotInterruptible>(extHandle, 0, [&]() {
+        return execute<NotInterruptible, NoProgress>(extHandle, 0, [&]() {
             *length = g->getLength();
             return 1;
         });
@@ -2006,7 +2073,8 @@ extern "C" {
     Geometry*
     GEOSUnaryUnion_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
-        return convertCurvesAndExecute(extHandle, g, [&](const Geometry* input1) {
+        return convertCurvesAndExecute<Interruptible, ReportsProgress>(extHandle, g, [&](const Geometry* input1) {
+            return geos::operation::geounion::UnaryUnionOp::Union(*input1, &extHandle->progressFunction);
             return input1->Union();
         });
     }
@@ -2014,7 +2082,7 @@ extern "C" {
     Geometry*
     GEOSUnaryUnionPrec_r(GEOSContextHandle_t extHandle, const Geometry* g1, double gridSize)
     {
-        return execute(extHandle, [&]() {
+        return execute<Interruptible, DefaultProgress>(extHandle, [&]() {
 
             std::unique_ptr<PrecisionModel> pm;
             if(gridSize != 0) {
@@ -2276,7 +2344,7 @@ extern "C" {
     int
     GEOSGetNumInteriorRings_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
-        return execute<NotInterruptible>(extHandle, -1, [&]() {
+        return execute<NotInterruptible, NoProgress>(extHandle, -1, [&]() {
             const Surface* p = dynamic_cast<const Surface*>(g1);
             if(!p) {
                 throw IllegalArgumentException("Argument is not a Surface");
@@ -2290,7 +2358,7 @@ extern "C" {
     int
     GEOSGetNumGeometries_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
-        return execute<NotInterruptible>(extHandle, -1, [&]() {
+        return execute<NotInterruptible, NoProgress>(extHandle, -1, [&]() {
             return static_cast<int>(g1->getNumGeometries());
         });
     }
@@ -2303,7 +2371,7 @@ extern "C" {
     const Geometry*
     GEOSGetGeometryN_r(GEOSContextHandle_t extHandle, const Geometry* g1, int n)
     {
-        return execute<NotInterruptible>(extHandle, [&]() {
+        return execute<NotInterruptible, NoProgress>(extHandle, [&]() {
             if(n < 0) {
                 throw IllegalArgumentException("Index must be non-negative.");
             }
@@ -2314,7 +2382,7 @@ extern "C" {
     int
     GEOSGetNumCurves_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
-        return execute<NotInterruptible>(extHandle, -1, [&]() {
+        return execute<NotInterruptible, NoProgress>(extHandle, -1, [&]() {
             const Curve* curve = dynamic_cast<const Curve*>(g1);
             if (curve) {
                 return static_cast<int>(curve->getNumCurves());
@@ -2327,7 +2395,7 @@ extern "C" {
     const GEOSGeometry*
     GEOSGetCurveN_r(GEOSContextHandle_t extHandle, const Geometry* g, int n)
     {
-        return execute<NotInterruptible>(extHandle, [&]() -> const Geometry* {
+        return execute<NotInterruptible, NoProgress>(extHandle, [&]() -> const Geometry* {
             if(n < 0) {
                 throw IllegalArgumentException("Index must be non-negative.");
             }
@@ -2528,7 +2596,7 @@ extern "C" {
     const Geometry*
     GEOSGetExteriorRing_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
-        return execute<NotInterruptible>(extHandle, [&]() {
+        return execute<NotInterruptible, NoProgress>(extHandle, [&]() {
             const Surface* p = dynamic_cast<const Surface*>(g1);
             if(!p) {
                 throw IllegalArgumentException("Invalid argument (must be a Surface)");
@@ -2544,7 +2612,7 @@ extern "C" {
     const Geometry*
     GEOSGetInteriorRingN_r(GEOSContextHandle_t extHandle, const Geometry* g1, int n)
     {
-        return execute<NotInterruptible>(extHandle, [&]() {
+        return execute<NotInterruptible, NoProgress>(extHandle, [&]() {
             const Surface* p = dynamic_cast<const Surface*>(g1);
             if(!p) {
                 throw IllegalArgumentException("Invalid argument (must be a Surface)");
@@ -3374,7 +3442,7 @@ extern "C" {
     GEOSCoordSeq_setOrdinate_r(GEOSContextHandle_t extHandle, CoordinateSequence* cs,
                                unsigned int idx, unsigned int dim, double val)
     {
-        return execute<NotInterruptible>(extHandle, 0, [&]() {
+        return execute<NotInterruptible, NoProgress>(extHandle, 0, [&]() {
             cs->setOrdinate(idx, dim, val);
             return 1;
         });
@@ -3407,7 +3475,7 @@ extern "C" {
     int
     GEOSCoordSeq_setXY_r(GEOSContextHandle_t extHandle, CoordinateSequence* cs, unsigned int idx, double x, double y)
     {
-        return execute<NotInterruptible>(extHandle, 0, [&]() {
+        return execute<NotInterruptible, NoProgress>(extHandle, 0, [&]() {
             cs->setAt(CoordinateXY{x, y}, idx);
             return 1;
         });
@@ -3416,7 +3484,7 @@ extern "C" {
     int
     GEOSCoordSeq_setXYZ_r(GEOSContextHandle_t extHandle, CoordinateSequence* cs, unsigned int idx, double x, double y, double z)
     {
-        return execute<NotInterruptible>(extHandle, 0, [&]() {
+        return execute<NotInterruptible, NoProgress>(extHandle, 0, [&]() {
             cs->setAt(Coordinate{x, y, z}, idx);
             return 1;
         });
@@ -3434,7 +3502,7 @@ extern "C" {
     GEOSCoordSeq_getOrdinate_r(GEOSContextHandle_t extHandle, const CoordinateSequence* cs,
                                unsigned int idx, unsigned int dim, double* val)
     {
-        return execute<NotInterruptible>(extHandle, 0, [&]() {
+        return execute<NotInterruptible, NoProgress>(extHandle, 0, [&]() {
             *val = cs->getOrdinate(idx, dim);
             return 1;
         });
@@ -3467,7 +3535,7 @@ extern "C" {
     int
     GEOSCoordSeq_getXY_r(GEOSContextHandle_t extHandle, const CoordinateSequence* cs, unsigned int idx, double* x, double* y)
     {
-        return execute<NotInterruptible>(extHandle, 0, [&]() {
+        return execute<NotInterruptible, NoProgress>(extHandle, 0, [&]() {
             auto& c = cs->getAt<CoordinateXY>(idx);
             *x = c.x;
             *y = c.y;
@@ -3478,7 +3546,7 @@ extern "C" {
     int
     GEOSCoordSeq_getXYZ_r(GEOSContextHandle_t extHandle, const CoordinateSequence* cs, unsigned int idx, double* x, double* y, double* z)
     {
-        return execute<NotInterruptible>(extHandle, 0, [&]() {
+        return execute<NotInterruptible, NoProgress>(extHandle, 0, [&]() {
             auto& c = cs->getAt(idx);
             *x = c.x;
             *y = c.y;
@@ -3490,7 +3558,7 @@ extern "C" {
     int
     GEOSCoordSeq_getSize_r(GEOSContextHandle_t extHandle, const CoordinateSequence* cs, unsigned int* size)
     {
-        return execute<NotInterruptible>(extHandle, 0, [&]() {
+        return execute<NotInterruptible, NoProgress>(extHandle, 0, [&]() {
             const std::size_t sz = cs->getSize();
             *size = static_cast<unsigned int>(sz);
             return 1;
@@ -3500,7 +3568,7 @@ extern "C" {
     int
     GEOSCoordSeq_getDimensions_r(GEOSContextHandle_t extHandle, const CoordinateSequence* cs, unsigned int* dims)
     {
-        return execute<NotInterruptible>(extHandle, 0, [&]() {
+        return execute<NotInterruptible, NoProgress>(extHandle, 0, [&]() {
             const std::size_t dim = cs->getDimension();
             *dims = static_cast<unsigned int>(dim);
 
@@ -5100,11 +5168,11 @@ extern "C" {
     GEOSCoverageSimplifyVW_r(GEOSContextHandle_t extHandle,
         const Geometry* input,
         double tolerance,
-        int preserveBoundary)
-    {
+        int preserveBoundary) {
+
         using geos::coverage::CoverageSimplifier;
 
-        return convertCurvesAndExecute(extHandle, input, [&](const Geometry* linearized) -> std::unique_ptr<Geometry> {
+        return convertCurvesAndExecute<Interruptible, ReportsProgress>(extHandle, input, [&](const Geometry* linearized) -> std::unique_ptr<Geometry> {
             const GeometryCollection* col = dynamic_cast<const GeometryCollection*>(linearized);
             if (!col)
                 return nullptr;
@@ -5116,10 +5184,10 @@ extern "C" {
             CoverageSimplifier cov(coverage);
             std::vector<std::unique_ptr<Geometry>> simple;
             if (preserveBoundary == 1) {
-                simple = cov.simplifyInner(tolerance);
+                simple = cov.simplifyInner(tolerance, &extHandle->progressFunction);
             }
             else if (preserveBoundary == 0) {
-                simple = cov.simplify(tolerance);
+                simple = cov.simplify(tolerance, &extHandle->progressFunction);
             }
             else return nullptr;
 
