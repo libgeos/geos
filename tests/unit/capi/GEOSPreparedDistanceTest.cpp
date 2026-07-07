@@ -213,5 +213,18 @@ void object::test<14>
     );
 }
 
+template<>
+template<>
+void object::test<15>()
+{
+    set_test_name("curved second geometry argument");
+
+    checkDistance(
+        "LINESTRING (0 0, 0 5)",
+        "CIRCULARSTRING (-5 0, 0 -5, 5 0)",
+        5
+    );
+}
+
 } // namespace tut
 
