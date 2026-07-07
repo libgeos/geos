@@ -4461,7 +4461,7 @@ extern "C" {
                            const PreparedGeometry* pg, const Geometry* g)
     {
         return execute(extHandle, 2, [&]() {
-            return pg->contains(g);
+            return pg->contains(convertToLineIfNeeded(extHandle, g));
         });
     }
 
@@ -4479,7 +4479,7 @@ extern "C" {
                                    const PreparedGeometry* pg, const Geometry* g)
     {
         return execute(extHandle, 2, [&]() {
-            return pg->containsProperly(g);
+            return pg->containsProperly(convertToLineIfNeeded(extHandle, g));
         });
     }
 
@@ -4488,7 +4488,7 @@ extern "C" {
                             const PreparedGeometry* pg, const Geometry* g)
     {
         return execute(extHandle, 2, [&]() {
-            return pg->coveredBy(g);
+            return pg->coveredBy(convertToLineIfNeeded(extHandle, g));
         });
     }
 
@@ -4497,7 +4497,7 @@ extern "C" {
                          const PreparedGeometry* pg, const Geometry* g)
     {
         return execute(extHandle, 2, [&]() {
-            return pg->covers(g);
+            return pg->covers(convertToLineIfNeeded(extHandle, g));
         });
     }
 
@@ -4506,7 +4506,7 @@ extern "C" {
                           const PreparedGeometry* pg, const Geometry* g)
     {
         return execute(extHandle, 2, [&]() {
-            return pg->crosses(g);
+            return pg->crosses(convertToLineIfNeeded(extHandle, g));
         });
     }
 
@@ -4515,7 +4515,7 @@ extern "C" {
                            const PreparedGeometry* pg, const Geometry* g)
     {
         return execute(extHandle, 2, [&]() {
-            return pg->disjoint(g);
+            return pg->disjoint(convertToLineIfNeeded(extHandle, g));
         });
     }
 
@@ -4524,7 +4524,7 @@ extern "C" {
                              const PreparedGeometry* pg, const Geometry* g)
     {
         return execute(extHandle, 2, [&]() {
-            return pg->intersects(g);
+            return pg->intersects(convertToLineIfNeeded(extHandle, g));
         });
     }
 
@@ -4542,7 +4542,7 @@ extern "C" {
                            const PreparedGeometry* pg, const Geometry* g)
     {
         return execute(extHandle, 2, [&]() {
-            return pg->overlaps(g);
+            return pg->overlaps(convertToLineIfNeeded(extHandle, g));
         });
     }
 
@@ -4551,7 +4551,7 @@ extern "C" {
                           const PreparedGeometry* pg, const Geometry* g)
     {
         return execute(extHandle, 2, [&]() {
-            return pg->touches(g);
+            return pg->touches(convertToLineIfNeeded(extHandle, g));
         });
     }
 
@@ -4560,7 +4560,7 @@ extern "C" {
                          const PreparedGeometry* pg, const Geometry* g)
     {
         return execute(extHandle, 2, [&]() {
-            return pg->within(g);
+            return pg->within(convertToLineIfNeeded(extHandle, g));
         });
     }
 
@@ -4569,7 +4569,7 @@ extern "C" {
                          const PreparedGeometry* pg, const Geometry* g)
     {
         return execute(extHandle, [&]() -> char * {
-            return gstrdup(pg->relate(g)->toString());
+            return gstrdup(pg->relate(convertToLineIfNeeded(extHandle, g))->toString());
         });
     }
 
@@ -4578,7 +4578,7 @@ extern "C" {
                          const PreparedGeometry* pg, const Geometry* g, const char* imPattern)
     {
         return execute(extHandle, 2, [&]() {
-            return pg->relate(g, std::string(imPattern));
+            return pg->relate(convertToLineIfNeeded(extHandle, g), std::string(imPattern));
         });
     }
 
