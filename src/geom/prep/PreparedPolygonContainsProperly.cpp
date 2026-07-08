@@ -27,6 +27,7 @@
 #include <geos/noding/SegmentString.h>
 #include <geos/noding/SegmentStringUtil.h>
 #include <geos/noding/FastSegmentSetIntersectionFinder.h>
+#include <geos/util/Assert.h>
 
 namespace geos {
 namespace geom { // geos.geom
@@ -45,6 +46,8 @@ namespace prep { // geos.geom.prep
 bool
 PreparedPolygonContainsProperly::containsProperly(const geom::Geometry* geom)
 {
+    geos::util::ensureNoCurvedComponents(geom);
+
     // Do point-in-poly tests first, since they are cheaper and may result
     // in a quick negative result.
     // If a point of any test components does not lie in target,

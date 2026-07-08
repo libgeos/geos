@@ -482,5 +482,91 @@ void object::test<17>()
     GEOSFree(r2);
 }
 
+template<>
+template<>
+void object::test<18>()
+{
+    set_test_name("Polygon first argument, CurvePolygon second argument");
+    useContext();
+
+    geom1_ = fromWKT("POLYGON ((0 0, 2 0, 2 8, 8 8, 8 0, 10 0, 10 10, 0 10, 0 0))");
+    geom2_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE(CIRCULARSTRING (5 1, 6 2, 7 1), (7 1, 5 1)))");
+    geom3_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE((-100 100, -100 -100, 100 -100, 100 100), CIRCULARSTRING (100 100, 0 200, -100 100)))");
+
+    prepGeom1_ = GEOSPrepare_r(ctxt_, geom1_);
+
+    // No curve-to-line params; all functions return 2 (error)
+    ensure_equals("contains", GEOSPreparedContains_r(ctxt_, prepGeom1_, geom2_), 2);
+    ensure_equals("contains properly", GEOSPreparedContainsProperly_r(ctxt_, prepGeom1_, geom2_), 2);
+    ensure_equals("crosses", GEOSPreparedCrosses_r(ctxt_, prepGeom1_, geom2_), 2);
+    ensure_equals("covered by", GEOSPreparedCoveredBy_r(ctxt_, prepGeom1_, geom3_), 2);
+    ensure_equals("touches", GEOSPreparedTouches_r(ctxt_, prepGeom1_, geom2_), 2);
+    ensure_equals("overlaps", GEOSPreparedOverlaps_r(ctxt_, prepGeom1_, geom2_), 2);
+    ensure_equals("intersects", GEOSPreparedIntersects_r(ctxt_, prepGeom1_, geom2_), 2);
+    ensure_equals("disjoint", GEOSPreparedDisjoint_r(ctxt_, prepGeom1_, geom2_), 2);
+    ensure_equals("relate pattern", GEOSPreparedRelatePattern_r(ctxt_, prepGeom1_, geom2_, "T********"), 2);
+    ensure_equals("within", GEOSPreparedWithin_r(ctxt_, prepGeom1_, geom3_), 2);
+    ensure(GEOSPreparedRelate_r(ctxt_, prepGeom1_, geom2_) == nullptr);
+
+    GEOSContext_setCurveToLineParams_r(ctxt_, curveToLineParams_);
+
+    ensure_equals("contains", GEOSPreparedContains_r(ctxt_, prepGeom1_, geom2_), 0);
+    ensure_equals("contains properly", GEOSPreparedContainsProperly_r(ctxt_, prepGeom1_, geom2_), 0);
+    ensure_equals("crosses", GEOSPreparedCrosses_r(ctxt_, prepGeom1_, geom2_), 0);
+    ensure_equals("covered by", GEOSPreparedCoveredBy_r(ctxt_, prepGeom1_, geom3_), 1);
+    ensure_equals("touches", GEOSPreparedTouches_r(ctxt_, prepGeom1_, geom2_), 0);
+    ensure_equals("overlaps", GEOSPreparedOverlaps_r(ctxt_, prepGeom1_, geom2_), 0);
+    ensure_equals("intersects", GEOSPreparedIntersects_r(ctxt_, prepGeom1_, geom2_), 0);
+    ensure_equals("disjoint", GEOSPreparedDisjoint_r(ctxt_, prepGeom1_, geom2_), 1);
+    ensure_equals("relate pattern", GEOSPreparedRelatePattern_r(ctxt_, prepGeom1_, geom2_, "T********"), 0);
+    ensure_equals("within", GEOSPreparedWithin_r(ctxt_, prepGeom1_, geom3_), 1);
+
+    str_ = GEOSPreparedRelate_r(ctxt_, prepGeom1_, geom2_);
+    ensure(str_);
+}
+
+template<>
+template<>
+void object::test<19>()
+{
+    set_test_name("LineString first argument, CircularString second argument");
+    useContext();
+
+    geom1_ = fromWKT("LINESTRING (-10 -10, 10 10)");
+    geom2_ = fromWKT("CIRCULARSTRING (-5 0, 0 5, 5 0)");
+    geom3_ = fromWKT("CIRCULARSTRING (-100 -100, 0 100, 100 0)");
+
+    prepGeom1_ = GEOSPrepare_r(ctxt_, geom1_);
+
+    // No curve-to-line params; all functions return 2 (error)
+    ensure_equals("contains", GEOSPreparedContains_r(ctxt_, prepGeom1_, geom2_), 2);
+    ensure_equals("contains properly", GEOSPreparedContainsProperly_r(ctxt_, prepGeom1_, geom2_), 2);
+    ensure_equals("crosses", GEOSPreparedCrosses_r(ctxt_, prepGeom1_, geom2_), 2);
+    ensure_equals("covered by", GEOSPreparedCoveredBy_r(ctxt_, prepGeom1_, geom3_), 2);
+    ensure_equals("touches", GEOSPreparedTouches_r(ctxt_, prepGeom1_, geom2_), 2);
+    ensure_equals("overlaps", GEOSPreparedOverlaps_r(ctxt_, prepGeom1_, geom2_), 2);
+    ensure_equals("intersects", GEOSPreparedIntersects_r(ctxt_, prepGeom1_, geom2_), 2);
+    ensure_equals("disjoint", GEOSPreparedDisjoint_r(ctxt_, prepGeom1_, geom2_), 2);
+    ensure_equals("relate pattern", GEOSPreparedRelatePattern_r(ctxt_, prepGeom1_, geom2_, "T********"), 2);
+    ensure_equals("within", GEOSPreparedWithin_r(ctxt_, prepGeom1_, geom3_), 2);
+    ensure(GEOSPreparedRelate_r(ctxt_, prepGeom1_, geom2_) == nullptr);
+
+    GEOSContext_setCurveToLineParams_r(ctxt_, curveToLineParams_);
+
+    ensure_equals("contains", GEOSPreparedContains_r(ctxt_, prepGeom1_, geom2_), 0);
+    ensure_equals("contains properly", GEOSPreparedContainsProperly_r(ctxt_, prepGeom1_, geom2_), 0);
+    ensure_equals("crosses", GEOSPreparedCrosses_r(ctxt_, prepGeom1_, geom2_), 1);
+    ensure_equals("covered by", GEOSPreparedCoveredBy_r(ctxt_, prepGeom1_, geom3_), 0);
+    ensure_equals("touches", GEOSPreparedTouches_r(ctxt_, prepGeom1_, geom2_), 0);
+    ensure_equals("overlaps", GEOSPreparedOverlaps_r(ctxt_, prepGeom1_, geom2_), 0);
+    ensure_equals("intersects", GEOSPreparedIntersects_r(ctxt_, prepGeom1_, geom2_), 1);
+    ensure_equals("disjoint", GEOSPreparedDisjoint_r(ctxt_, prepGeom1_, geom2_), 0);
+    ensure_equals("relate pattern", GEOSPreparedRelatePattern_r(ctxt_, prepGeom1_, geom2_, "T********"), 1);
+    ensure_equals("within", GEOSPreparedWithin_r(ctxt_, prepGeom1_, geom3_), 0);
+
+    str_ = GEOSPreparedRelate_r(ctxt_, prepGeom1_, geom2_);
+    ensure(str_);
+}
+
 } // namespace tut
 
