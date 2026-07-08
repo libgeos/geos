@@ -153,5 +153,19 @@ void object::test<6>
     );
 }
 
+template<>
+template<>
+void object::test<7>()
+{
+    set_test_name("curved second geometry argument");
+
+    checkNearestPoints(
+        "LINESTRING (3 0, 4 0)",
+        "CIRCULARSTRING (0 0, 1 1, 2 0)",
+        3, 0, 2, 0
+    );
+}
+
+
 } // namespace tut
 

@@ -4587,6 +4587,10 @@ extern "C" {
                          const PreparedGeometry* pg, const Geometry* g)
     {
         return execute(extHandle, [&]() -> geos::geom::CoordinateSequence* {
+            if (g->hasCurvedComponents()) {
+                geos::operation::distance::DistanceOp dop(pg->getGeometry(), *g);
+                return dop.nearestPoints().release();
+            }
             return pg->nearestPoints(g).release();
         });
     }
@@ -4597,7 +4601,11 @@ extern "C" {
                          const Geometry* g, double* dist)
     {
         return execute(extHandle, 0, [&]() {
-            *dist = pg->distance(g);
+            if (g->hasCurvedComponents()) {
+                *dist = pg->getGeometry().distance(g);
+            } else {
+                *dist = pg->distance(g);
+            }
             return 1;
         });
     }
@@ -4608,9 +4616,13 @@ extern "C" {
                          const Geometry* g, double dist)
     {
         return execute(extHandle, 2, [&]() {
+            if (g->hasCurvedComponents()) {
+                return pg->getGeometry().isWithinDistance(g, dist);
+            }
             return pg->isWithinDistance(g, dist);
         });
     }
+
 
 //-----------------------------------------------------------------
 // STRtree
