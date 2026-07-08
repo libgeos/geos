@@ -45,5 +45,23 @@ void object::test<2>()
     ensure_geometry_equals(result_, expected_, 1e-8);
 }
 
+template<>
+template<>
+void object::test<3>()
+{
+    set_test_name("curved input is not linearized when CurveToLineParams registered with a context");
+    useContext();
+
+    geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    geom2_ = fromWKT("POINT (2 0)");
+
+    GEOSCurveToLineParams_setMaxStepDegrees_r(ctxt_, curveToLineParams_, 45);
+    GEOSContext_setCurveToLineParams_r(ctxt_, curveToLineParams_);
+
+    result_ = GEOSSymDifference_r(ctxt_, geom1_, geom2_);
+
+    ensure_geometry_equals(result_, geom1_, 1e-8);
+}
+
 } // namespace tut
 
