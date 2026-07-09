@@ -177,5 +177,23 @@ void object::test<9>()
     ensure("HasM", GEOSHasM(result_));
 }
 
+template<>
+template<>
+void object::test<10>()
+{
+    set_test_name("curved input is not linearized when CurveToLineParams registered with a context");
+    useContext();
+
+    geom1_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+    geom2_ = fromWKT("POLYGON ((0 0, 2 0, 2 2, 0 2, 0 0))");
+
+    GEOSCurveToLineParams_setMaxStepDegrees_r(ctxt_, curveToLineParams_, 45);
+    GEOSContext_setCurveToLineParams_r(ctxt_, curveToLineParams_);
+
+    result_ = GEOSIntersection_r(ctxt_, geom1_, geom2_);
+
+    ensure_geometry_equals(result_, geom1_, 1e-8);
+}
+
 } // namespace tut
 

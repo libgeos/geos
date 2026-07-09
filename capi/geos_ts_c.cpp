@@ -1636,8 +1636,10 @@ extern "C" {
     Geometry*
     GEOSIntersection_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
-        return convertCurvesAndExecute(extHandle, g1, g2, [](const Geometry* geom1, const Geometry* geom2) {
-            return geom1->intersection(geom2);
+        return execute(extHandle, [&]() {
+            auto g3 = g1->intersection(g2);
+            g3->setSRID(g1->getSRID());
+            return g3.release();
         });
     }
 
@@ -2028,8 +2030,10 @@ extern "C" {
     Geometry*
     GEOSUnion_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2)
     {
-        return convertCurvesAndExecute(extHandle, g1, g2, [&](const Geometry* input1, const Geometry* input2) {
-            return input1->Union(input2);
+        return execute(extHandle, [&]() {
+            auto g3 = g1->Union(g2);
+            g3->setSRID(g1->getSRID());
+            return g3.release();
         });
     }
 
