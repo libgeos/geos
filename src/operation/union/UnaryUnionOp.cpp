@@ -34,8 +34,9 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/util/GeometryCombiner.h>
 #include <geos/algorithm/PointLocator.h>
+#include <geos/util.h>
 
-#include "geos/util.h"
+using geos::geom::util::GeometryExtracter;
 
 namespace geos {
 namespace operation { // geos::operation
@@ -60,6 +61,18 @@ UnaryUnionOp::unionWithNull(std::unique_ptr<geom::Geometry> g0,
 
     ret = g0->Union(g1.get());
     return ret;
+}
+
+void
+UnaryUnionOp::extract(const geom::Geometry& geom)
+{
+    if(! geomFact) {
+        geomFact = geom.getFactory();
+    }
+
+    GeometryExtracter::extract<geom::Surface>(geom, polygons);
+    GeometryExtracter::extract<geom::Curve>(geom, lines);
+    GeometryExtracter::extract<geom::Point>(geom, points);
 }
 
 /*public*/

@@ -42,13 +42,12 @@ typedef group::object object;
 group test_cascadedpolygonuniontest_group("geos::operation::geounion::CascadedPolygonUnion");
 
 // test runner
-geos::geom::Geometry*
-unionIterated(
-    std::vector<geos::geom::Polygon*>* geoms)
+std::unique_ptr<geos::geom::Geometry>
+unionIterated(const std::vector<const geos::geom::Surface*>& geoms)
 {
     std::unique_ptr<geos::geom::Geometry> unionAll;
 
-    for(const auto& p : *geoms) {
+    for(const auto& p : geoms) {
         if(unionAll == nullptr) {
             unionAll = p->clone();
         }
@@ -56,32 +55,25 @@ unionIterated(
             unionAll = unionAll->Union(p);
         }
     }
-    return unionAll.release();
+    return unionAll;
 }
 
 std::unique_ptr<geos::geom::Geometry>
 unionCascaded(
-    std::vector<geos::geom::Polygon*>* geoms)
+    const std::vector<const geos::geom::Surface*>& geoms)
 {
     using geos::operation::geounion::CascadedPolygonUnion;
     return CascadedPolygonUnion::Union(geoms);
 }
 
 void
-p_test_runner(
-              std::vector<geos::geom::Polygon*>* geoms)
+p_test_runner(const std::vector<const geos::geom::Surface*>& geoms)
 {
     std::unique_ptr<geos::geom::Geometry> union1(unionIterated(geoms));
     std::unique_ptr<geos::geom::Geometry> union2(unionCascaded(geoms));
     union1->normalize();
     union2->normalize();
     ensure_equals_geometry(union1.get(), union2.get(), 0.000001);
-}
-
-void
-delete_geometry(geos::geom::Geometry* g)
-{
-    delete g;
 }
 
 //
@@ -100,7 +92,7 @@ void object::test<1>
         nullptr
     };
 
-    std::vector<geos::geom::Polygon*> g;
+    std::vector<const geos::geom::Surface*> g;
     for(char const * const* p = polygons; *p != nullptr; ++p) {
         std::string wkt(*p);
         geos::geom::Polygon* geom =
@@ -108,9 +100,11 @@ void object::test<1>
         g.push_back(geom);
     }
 
-    p_test_runner(&g);
+    p_test_runner(g);
 
-    for_each(g.begin(), g.end(), delete_geometry);
+    for (auto& p : g) {
+        delete p;
+    }
 }
 
 void

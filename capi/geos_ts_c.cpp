@@ -2077,9 +2077,10 @@ extern "C" {
     Geometry*
     GEOSUnaryUnion_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
-        return convertCurvesAndExecute<Interruptible, ReportsProgress>(extHandle, g, [&](const Geometry* input1) {
-            return geos::operation::geounion::UnaryUnionOp::Union(*input1, &extHandle->progressFunction);
-            return input1->Union();
+        return execute<Interruptible, ReportsProgress>(extHandle, [&]() {
+            auto g3 = geos::operation::geounion::UnaryUnionOp::Union(*g, &extHandle->progressFunction);
+            g3->setSRID(g->getSRID());
+            return g3.release();
         });
     }
 

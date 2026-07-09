@@ -220,37 +220,15 @@ template<>
 template<>
 void object::test<12>()
 {
-    set_test_name("curved inputs");
-    useContext();
+    set_test_name("curved dim=1 inputs -> CompoundCurve");
 
-    input_ = fromWKT("MULTICURVE (CIRCULARSTRING (-5 0, 0 5, 5 0), (-5 3, 5 3))");
-    ensure(input_);
-    GEOSSetSRID_r(ctxt_, input_, 4326);
-    double input_length = -1;
-    ensure(GEOSLength_r(ctxt_, input_, &input_length));
+    input_ = fromWKT("MULTICURVE (CIRCULARSTRING (-5 0, 0 5, 5 0), (5 0, 5 3))");
 
-    result_ = GEOSUnaryUnion_r(ctxt_, input_);
-    ensure(result_ == nullptr);
-
-    GEOSCurveToLineParams_setMaxStepDegrees_r(ctxt_, curveToLineParams_, 1);
-    GEOSContext_setCurveToLineParams_r(ctxt_, curveToLineParams_);
-
-    // Input converted to line, output not converted to curve
-    result_ = GEOSUnaryUnion_r(ctxt_, input_);
+    result_ = GEOSUnaryUnion(input_);
     ensure(result_);
-    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_MULTILINESTRING);
-    ensure_equals(GEOSGetSRID_r(ctxt_, result_), 4326);
-    GEOSGeom_destroy_r(ctxt_, result_);
 
-    // Input converted to line, output converted to curve
-    GEOSContext_setLineToCurveParams_r(ctxt_, lineToCurveParams_);
-    result_ = GEOSUnaryUnion_r(ctxt_, input_);
-    ensure_equals(GEOSGeomTypeId_r(ctxt_, result_), GEOS_MULTICURVE);
-    double result_length = -1;
-    ensure(GEOSLength_r(ctxt_, result_, &result_length));
-
-    ensure_equals(GEOSGetSRID_r(ctxt_, result_), 4326);
-    ensure_equals("length does not match", result_length, input_length, 1e-5);
+    expected_ = fromWKT("COMPOUNDCURVE (CIRCULARSTRING (-5 0, 0 5, 5 0), (5 0, 5 3))");
+    ensure_geometry_equals(result_, expected_);
 }
 
 template<>
@@ -306,6 +284,53 @@ void object::test<14>() {
 
     ensure_equals(fracs.size(), 1u);
     ensure_equals(fracs[0], 1.0);
+}
+
+template<>
+template<>
+void object::test<15>()
+{
+    set_test_name("curved polygonal inputs");
+
+    input_ = fromWKT("MULTISURFACE (CURVEPOLYGON (COMPOUNDCURVE ((5 0, 0 0, 0 5, 5 5), CIRCULARSTRING (5 5, 2.5 2.5, 5 0))), CURVEPOLYGON (COMPOUNDCURVE (CIRCULARSTRING (5 0, 1.5 2.5, 5 5), (5 5, 10 5, 10 0, 5 0))))");
+
+    result_ = GEOSUnaryUnion(input_);
+    ensure(result_);
+
+    expected_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE ((0 0, 0 5, 3.2857142857 5), CIRCULARSTRING (3.2857142857 5, 4.1428571429 5.1428571429, 5 5), (5 5, 10 5, 10 0, 5 0), CIRCULARSTRING (5 0, 4.1428571429 -0.1428571429, 3.2857142857 0), (3.2857142857 0, 0 0)))");
+    ensure_geometry_equals(result_, expected_, 1e-6);
+}
+
+template<>
+template<>
+void object::test<16>()
+{
+    set_test_name("curved dim=1 inputs -> MultiCurve");
+
+    input_ = fromWKT("MULTICURVE (CIRCULARSTRING (-5 0, 0 5, 5 0), (0 0, 5 5))");
+
+    result_ = GEOSUnaryUnion(input_);
+    ensure(result_);
+
+    expected_ = fromWKT("MULTICURVE (CIRCULARSTRING (3.5355339059 3.5355339059, 4.6193976626 1.9134171618, 5 0), CIRCULARSTRING (-5 0, -1.9134171618 4.6193976626, 3.5355339059 3.5355339059), (3.5355339059 3.5355339059, 5 5), (0 0, 3.5355339059 3.5355339059))");
+    ensure_geometry_equals(result_, expected_, 1e-6);
+}
+
+template<>
+template<>
+void object::test<17>()
+{
+    set_test_name("curved input is not linearized when CurveToLineParams registered with a context");
+    useContext();
+
+    input_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0)");
+
+    GEOSCurveToLineParams_setMaxStepDegrees_r(ctxt_, curveToLineParams_, 45);
+    GEOSContext_setCurveToLineParams_r(ctxt_, curveToLineParams_);
+
+    result_ = GEOSUnaryUnion_r(ctxt_, input_);
+
+    ensure_geometry_equals(result_, input_, 1e-8);
 }
 
 } // namespace tut

@@ -21,13 +21,13 @@
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/MultiPolygon.h>
+#include <geos/geom/MultiSurface.h>
 #include <geos/geom/Polygon.h>
 #include <geos/index/strtree/TemplateSTRtree.h>
 #include <geos/operation/overlayng/OverlayNG.h>
 #include <geos/operation/overlayng/OverlayNGRobust.h>
 #include <geos/operation/union/CascadedPolygonUnion.h>
 #include <geos/operation/valid/IsValidOp.h>
-#include <geos/operation/valid/IsSimpleOp.h>
 #include <geos/util/TopologyException.h>
 
 // std
@@ -44,7 +44,7 @@ namespace geounion {  // geos.operation.geounion
 
 // ////////////////////////////////////////////////////////////////////////////
 std::unique_ptr<geom::Geometry>
-CascadedPolygonUnion::Union(std::vector<geom::Polygon*>* polys)
+CascadedPolygonUnion::Union(const std::vector<const geom::Surface*>& polys)
 {
     CascadedPolygonUnion op(polys);
     geos::util::ProgressFunction* progressFunction = nullptr;
@@ -52,7 +52,7 @@ CascadedPolygonUnion::Union(std::vector<geom::Polygon*>* polys)
 }
 
 std::unique_ptr<geom::Geometry>
-CascadedPolygonUnion::Union(std::vector<geom::Polygon*>* polys, UnionStrategy* unionFun, geos::util::ProgressFunction* progressFunction)
+CascadedPolygonUnion::Union(const std::vector<const geom::Surface*>& polys, UnionStrategy* unionFun, geos::util::ProgressFunction* progressFunction)
 {
     CascadedPolygonUnion op(polys, unionFun);
     return op.Union(progressFunction);
@@ -61,24 +61,24 @@ CascadedPolygonUnion::Union(std::vector<geom::Polygon*>* polys, UnionStrategy* u
 std::unique_ptr<geom::Geometry>
 CascadedPolygonUnion::Union(const geom::MultiPolygon* multipoly, geos::util::ProgressFunction* progressFunction)
 {
-    std::vector<geom::Polygon*> polys;
+    std::vector<const geom::Surface*> polys;
 
     for(const auto& g : *multipoly) {
         polys.push_back(dynamic_cast<geom::Polygon*>(g.get()));
     }
 
-    CascadedPolygonUnion op(&polys);
+    CascadedPolygonUnion op(polys);
     return op.Union(progressFunction);
 }
 
 std::unique_ptr<geom::Geometry>
 CascadedPolygonUnion::Union(geos::util::ProgressFunction* progressFunction)
 {
-    if(inputPolys->empty()) {
+    if(inputPolys.empty()) {
         return nullptr;
     }
 
-    geomFactory = inputPolys->front()->getFactory();
+    geomFactory = inputPolys.front()->getFactory();
 
     /*
      * A spatial index to organize the collection
@@ -87,8 +87,8 @@ CascadedPolygonUnion::Union(geos::util::ProgressFunction* progressFunction)
      * to be eliminated on each round.
      */
 
-    index::strtree::TemplateSTRtree<const geom::Geometry*> index(10, inputPolys->size());
-    for (const auto& p : *inputPolys) {
+    index::strtree::TemplateSTRtree<const geom::Geometry*> index(10, inputPolys.size());
+    for (const auto& p : inputPolys) {
         index.insert(p);
     }
 
@@ -153,7 +153,7 @@ CascadedPolygonUnion::unionSafe(const geom::Geometry* g0, const geom::Geometry* 
 }
 
 std::unique_ptr<geom::Geometry>
-CascadedPolygonUnion::unionSafe(std::unique_ptr<geom::Geometry> && g0, std::unique_ptr<geom::Geometry> && g1)
+CascadedPolygonUnion::unionSafe(std::unique_ptr<geom::Geometry> && g0, std::unique_ptr<geom::Geometry> && g1) const
 {
     if(g0 == nullptr && g1 == nullptr) {
         return nullptr;
@@ -174,7 +174,7 @@ CascadedPolygonUnion::unionActual(const geom::Geometry* g0, const geom::Geometry
 {
     std::unique_ptr<geom::Geometry> ug;
     ug = unionFunction->Union(g0, g1);
-    return restrictToPolygons(std::move(ug));
+    return restrictToSurfaces(std::move(ug));
 }
 
 std::unique_ptr<geom::Geometry>
@@ -182,11 +182,11 @@ CascadedPolygonUnion::unionActual(std::unique_ptr<geom::Geometry> && g0, std::un
 {
     std::unique_ptr<geom::Geometry> ug;
     ug = unionFunction->Union(std::move(g0), std::move(g1));
-    return restrictToPolygons(std::move(ug));
+    return restrictToSurfaces(std::move(ug));
 }
 
 std::unique_ptr<geom::Geometry>
-CascadedPolygonUnion::restrictToPolygons(std::unique_ptr<geom::Geometry> g)
+CascadedPolygonUnion::restrictToSurfaces(std::unique_ptr<geom::Geometry> g)
 {
     using namespace geom;
 
@@ -199,12 +199,19 @@ CascadedPolygonUnion::restrictToPolygons(std::unique_ptr<geom::Geometry> g)
 
     auto coll = dynamic_cast<GeometryCollection*>(g.get());
     if (coll) {
-        // Release polygons from the collection and re-form into MultiPolygon
+        // Release polygons from the collection and re-form into Surface
         auto components = coll->releaseGeometries();
         components.erase(std::remove_if(components.begin(), components.end(), [](const std::unique_ptr<Geometry> & cmp) {
             return !cmp->isPolygonal();
         }), components.end());
 
+        const bool hasCurves = std::any_of(components.begin(), components.end(), [](const auto & cmp) {
+            return cmp->hasCurvedComponents();
+        });
+
+        if (hasCurves) {
+            return gfact->createMultiSurface(std::move(components));
+        }
         return gfact->createMultiPolygon(std::move(components));
     } else {
         // Not polygonal and not a collection? No polygons here.
