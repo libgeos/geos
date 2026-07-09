@@ -375,9 +375,12 @@ EdgeNodingBuilder::clip(const LineString* ring) const
 
     /**
      * If no clipper or ring is completely contained then no need to clip.
+     * We also cannot clip if any input contains curves, because curved
+     * rings are not currently clipped and clipping only some rings could
+     * disrupt the polygon topology.
      * But repeated points must be removed to ensure correct noding.
      */
-    if (clipper == nullptr || clipEnv->covers(env)) {
+    if (clipper == nullptr || clipEnv->covers(env) || inputHasCurves) {
         return removeRepeatedPoints(ring);
     }
 
