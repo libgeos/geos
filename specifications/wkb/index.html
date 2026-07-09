@@ -73,7 +73,7 @@ Standard WKB Extended WKB ISO WKB When reading WKB, GEOS will transparently dete
       "url" : "https://libgeos.org/specifications/wkb/",
       "headline": "Well-Known Binary (WKB)",
       "description": "“Well-known binary” is a scheme for writing a simple features geometry into a platform-independent array of bytes, usually for transport between systems or between programs. By using WKB, systems can avoid exposing their particular internal implementation of geometry storage, for greater overall interoperability.\nGEOS can read and write three “flavours” of WKB:\nStandard WKB Extended WKB ISO WKB When reading WKB, GEOS will transparently detect the flavour of WKB and automatically read it.",
-      "wordCount" : "1188",
+      "wordCount" : "1299",
       "inLanguage": "en",
       "isFamilyFriendly": "true",
       "mainEntityOfPage": {
@@ -1597,16 +1597,21 @@ with each ordinate value set to an IEEE-754 quiet NaN value
     </h3>
 </div>
 <p>GEOS only supports the seven original simple features geometry types.</p>
-<pre tabindex="0"><code>enum wkbGeometryType {
+<pre tabindex="0"><code>enum wkbType {
     wkbPoint = 1,
     wkbLineString = 2,
     wkbPolygon = 3,
     wkbMultiPoint = 4,
     wkbMultiLineString = 5,
     wkbMultiPolygon = 6,
-    wkbGeometryCollection = 7
+    wkbGeometryCollection = 7,
+    wkbCircularString = 8,
+    wkbCompoundCurve = 9,
+    wkbCurvePolygon = 10,
+    wkbMultiCurve = 11,
+    wkbMultiSurface = 12
 };
-</code></pre><p>Other systems (eg PostGIS) support a wider range of types (for example, CircularString, CurvePolygon), and hence more geometry type numbers, but GEOS is currently unable to consume those geometries.</p>
+</code></pre><p>Other systems (eg PostGIS) support a wider range of types (for example, PolyhedralSurface, TIN), and hence even more geometry type numbers, but GEOS is cannot consume those geometries.</p>
 <pre tabindex="0"><code>WKBPoint {
     byte    byteOrder;
     uint32  wkbType; // 1
@@ -1641,7 +1646,7 @@ WKBMultiLineString {
     WKBLineString WKBLineStrings[numWkbLineStrings];
 }
 
-wkbMultiPolygon {
+WKBMultiPolygon {
     byte    byteOrder;
     uint32  wkbType; // 6
     uint32  numWkbPolygons;
@@ -1665,6 +1670,56 @@ WKBGeometryCollection {
     uint32  wkbType; // 7
     uint32  numWkbGeometries;
     WKBGeometry wkbGeometries[numWkbGeometries];
+}
+
+WKBCurve {
+    union {
+        WKBLineString linestring;
+        WKBCircularString circstring;
+        WKBCompoundCurve compound;
+    }
+}
+
+WKBCircularString {
+    byte    byteOrder;
+    uint32  wkbType; // 8
+    uint32  numPoints;
+    Point   points[numPoints];
+}
+
+WKBCompoundCurve {
+    byte    byteOrder;
+    uint32  wkbType; // 9
+    uint32  numCurves;
+    WKBCurve   curves[numCurves]; // start/end points must match
+}
+
+WKBCurvePolygon {
+    byte    byteOrder;
+    uint32  wkbType; // 10
+    uint32  numRings;
+    WKBCurve   rings[numRings]; // rings must be closed
+}
+
+WKBSurface {
+    union {
+        WKBPolygon polygon;
+        WKBCurvePolygon curvepoly;
+    }
+}
+
+WKBMultiCurve {
+    byte    byteOrder;
+    uint32  wkbType; // 11
+    uint32  numCurves;
+    WKBCurve   curves[numCurves];
+}
+
+WKBMultiSurface {
+    byte    byteOrder;
+    uint32  wkbType; // 12
+    uint32  numSurfaces;
+    WKBSurface   surfaces[numSurfaces];
 }
 </code></pre><div class="gdoc-page__anchorwrap">
     <h3 id="example"
