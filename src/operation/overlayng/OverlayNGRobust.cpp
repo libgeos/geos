@@ -120,6 +120,10 @@ OverlayNGRobust::Overlay(const Geometry* geom0, const Geometry* geom1, int opCod
         return result;
     }
     catch (const std::runtime_error &ex) {
+        if (geom0->hasCurvedComponents() || geom1->hasCurvedComponents()) {
+            // Snapping strategies do not support curved geometries.
+            throw;
+        }
         /**
         * Capture original exception,
         * so it can be rethrown if the remaining strategies all fail.
@@ -129,6 +133,7 @@ OverlayNGRobust::Overlay(const Geometry* geom0, const Geometry* geom1, int opCod
         std::cerr << "Floating point overlay FAILURE: " << ex.what() << std::endl;
 #endif
     }
+
 
     /**
      * On failure retry using snapping noding with a "safe" tolerance.
