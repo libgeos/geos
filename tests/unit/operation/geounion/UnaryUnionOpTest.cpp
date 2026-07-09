@@ -76,7 +76,7 @@ struct test_unaryuniontest_data {
         using std::endl;
         GeomPtr a2 = normalize(a);
         GeomPtr b2 = normalize(b);
-        bool eq = a2->equalsExact(b2.get());
+        bool eq = a2->equalsIdentical(b2.get());
         if(! eq) {
             cout << "EXPECTED: " << wktwriter.write(a2.get()) << endl;
             cout << "OBTAINED: " << wktwriter.write(b2.get()) << endl;
@@ -204,6 +204,20 @@ void object::test<7>
         nullptr
     };
     doTest(geoms, "LINESTRING EMPTY");
+}
+
+template<>
+template<>
+void object::test<8>() {
+    static char const* const geoms[] = {
+        "POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0))",
+        "POINT M (12 13 14)",
+        "POINT Z (12 13 8)",
+        "POINT M (12 13 16)",
+        nullptr
+    };
+
+    doTest(geoms, "GEOMETRYCOLLECTION (POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0)), POINT M (12 13 14))");
 }
 
 } // namespace tut
