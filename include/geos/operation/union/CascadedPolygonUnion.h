@@ -144,7 +144,7 @@ public:
     static std::unique_ptr<geom::Geometry> Union(const std::vector<const geom::Surface*>& polys, UnionStrategy* unionFun, geos::util::ProgressFunction* progressFunction);
 
     /** \brief
-     * Computes the union of a set of surfface [Geometrys](@ref geom::Geometry).
+     * Computes the union of a set of surface [Geometrys](@ref geom::Geometry).
      *
      * @tparam T an iterator yielding something castable to const Surface*
      * @param start start iterator
