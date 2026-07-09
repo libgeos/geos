@@ -85,18 +85,23 @@ with each ordinate value set to an IEEE-754 quiet NaN value
 GEOS only supports the seven original simple features geometry types.
 
 ```
-enum wkbGeometryType {
+enum wkbType {
     wkbPoint = 1,
     wkbLineString = 2,
     wkbPolygon = 3,
     wkbMultiPoint = 4,
     wkbMultiLineString = 5,
     wkbMultiPolygon = 6,
-    wkbGeometryCollection = 7
+    wkbGeometryCollection = 7,
+    wkbCircularString = 8,
+    wkbCompoundCurve = 9,
+    wkbCurvePolygon = 10,
+    wkbMultiCurve = 11,
+    wkbMultiSurface = 12
 };
 ```
 
-Other systems (eg PostGIS) support a wider range of types (for example, CircularString, CurvePolygon), and hence more geometry type numbers, but GEOS is currently unable to consume those geometries.
+Other systems (eg PostGIS) support a wider range of types (for example, PolyhedralSurface, TIN), and hence even more geometry type numbers, but GEOS is cannot consume those geometries.
 
 ```
 WKBPoint {
@@ -133,7 +138,7 @@ WKBMultiLineString {
     WKBLineString WKBLineStrings[numWkbLineStrings];
 }
 
-wkbMultiPolygon {
+WKBMultiPolygon {
     byte    byteOrder;
     uint32  wkbType; // 6
     uint32  numWkbPolygons;
@@ -158,7 +163,58 @@ WKBGeometryCollection {
     uint32  numWkbGeometries;
     WKBGeometry wkbGeometries[numWkbGeometries];
 }
+
+WKBCurve {
+    union {
+        WKBLineString linestring;
+        WKBCircularString circstring;
+        WKBCompoundCurve compound;
+    }
+}
+
+WKBCircularString {
+    byte    byteOrder;
+    uint32  wkbType; // 8
+    uint32  numPoints;
+    Point   points[numPoints];
+}
+
+WKBCompoundCurve {
+    byte    byteOrder;
+    uint32  wkbType; // 9
+    uint32  numCurves;
+    WKBCurve   curves[numCurves]; // start/end points must match
+}
+
+WKBCurvePolygon {
+    byte    byteOrder;
+    uint32  wkbType; // 10
+    uint32  numRings;
+    WKBCurve   rings[numRings]; // rings must be closed
+}
+
+WKBSurface {
+    union {
+        WKBPolygon polygon;
+        WKBCurvePolygon curvepoly;
+    }
+}
+
+WKBMultiCurve {
+    byte    byteOrder;
+    uint32  wkbType; // 11
+    uint32  numCurves;
+    WKBCurve   curves[numCurves];
+}
+
+WKBMultiSurface {
+    byte    byteOrder;
+    uint32  wkbType; // 12
+    uint32  numSurfaces;
+    WKBSurface   surfaces[numSurfaces];
+}
 ```
+
 
 ### Example
 
