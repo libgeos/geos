@@ -2,6 +2,12 @@
 ## Changes in 3.15.0
 2026-xx-xx
 
+- Breaking Changes:
+  - BufferOp returns POLYGON EMPTY when fed Inf/Nan coords (GH-1332)
+  - Return Inf when calculating distance to an empty geometry (GH-1345, Even Rouault)
+  - Overlay operations now produce a LineString geometry in cases that would previously
+    produce a MultiLineString with contiguous sub-geometries. (GH-1459, Dan Baston)
+
 - New things:
   - Add GEOSMinimumSpanningTree (Paul Ramsey)
   - Add GEOSCoverageEdges (Paul Ramsey)
@@ -20,13 +26,6 @@
   - Add GeometrySplitter (GH-1424, Dan Baston)
   - Add progress reporting to GEOSCoverageSimplify, GEOSUnaryUnion (GH-1466, Even Rouault / Dan Baston)
 
-- Breaking Changes:
-  - BufferOp returns POLYGON EMPTY when fed Inf/Nan coords (GH-1332)
-  - Return Inf when calculating distance to an empty geometry (GH-1345, Even Rouault)
-  - Overlay operations now produce a LineString geometry in cases that would previously
-    produce a MultiLineString with contiguous sub-geometries. (GH-1459, Dan Baston)
-
-
 - Fixes/Improvements:
   - Buffer of Linestring includes spurious hole (GH-1217, Moritz Kirmse)
   - Preserve M values in GEOSInterpolate (GH-1390, Dan Baston)
@@ -41,6 +40,7 @@
   - Fix crash in GEOSConvexHull (GH-1358, Dan Baston)
   - Overlay performance improvements (GH-1353, arriopolis, Martin Davis)
   - Fix unintended ring rotation in Overlay results (GH-1412, Dan Baston)
+
 
 ## Changes in 3.14.0
 2025-08-21
