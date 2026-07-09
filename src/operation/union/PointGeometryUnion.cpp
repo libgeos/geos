@@ -43,7 +43,7 @@ PointGeometryUnion::Union() const
 
     PointLocator locater;
     // use a set to eliminate duplicates, as required for union
-    std::set<Coordinate> exteriorCoords;
+    std::set<CoordinateXYZM> exteriorCoords;
 
     for(std::size_t i = 0, n = pointGeom.getNumGeometries(); i < n; ++i) {
         const Point* point = dynamic_cast<const Point*>(pointGeom.getGeometryN(i));
@@ -53,10 +53,12 @@ PointGeometryUnion::Union() const
             continue;
         }
 
-        const Coordinate* coord = static_cast<const Coordinate*>(point->getCoordinate());
+        const CoordinateXY* coord = point->getCoordinate();
         Location loc = locater.locate(*coord, &otherGeom);
         if(loc == Location::EXTERIOR) {
-            exteriorCoords.insert(*coord);
+            CoordinateXYZM ptZM;
+            point->getCoordinatesRO()->getAt(0, ptZM);
+            exteriorCoords.insert(ptZM);
         }
     }
 
