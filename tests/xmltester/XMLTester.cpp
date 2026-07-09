@@ -510,28 +510,10 @@ XMLTester::parseGeometry(const std::string& in, const char* label)
 
     std::unique_ptr<geom::Geometry> ret;
 
-    switch(first_char) {
-    case '0':
-    case '1':
-    case '2':
-    case '3':
-    case '4':
-    case '5':
-    case '6':
-    case '7':
-    case '8':
-    case '9':
-    case 'A':
-    case 'B':
-    case 'C':
-    case 'D':
-    case 'E':
-    case 'F':
+    if (first_char == '0') {
         ret = wkbreader->readHEX(is);
-        break;
-    default:
+    } else {
         ret = wktreader->read(in);
-        break;
     }
 
     if(testValidInput) {
@@ -690,16 +672,20 @@ bool
 Test::checkOverlaySuccess(Geometry const& gExpected, Geometry const& gActual)
 {
     double tol = operation::overlay::snap::GeometrySnapper::computeSizeBasedSnapTolerance(gExpected);
-    //-- BUG: this allows all empties to test equal
-    if(gExpected.equals(&gActual)) {
-        return 1;
+
+    if (!gExpected.hasCurvedComponents()) {
+        //-- BUG: this allows all empties to test equal
+        if(gExpected.equals(&gActual)) {
+            return true;
+        }
     }
+
     //TODO: is this needed by any tests?
     std::cerr << "Using an overlay tolerance of " << tol << std::endl;
     if(gExpected.equalsExact(&gActual, tol)) {
-        return 1;
+        return true;
     }
-    return 0;
+    return false;
 }
 
 /* static */
