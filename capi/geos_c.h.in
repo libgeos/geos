@@ -4979,18 +4979,22 @@ GEOSCoverageCleanParams_destroy(
     GEOSCoverageCleanParams* params);
 
 /**
+* Set the snapping distance to use when cleaning a coverage.
+*
 * Snapping to nearby vertices and line segment snapping
 * is used to improve noding robustness
-* and eliminate small errors in an efficient way,
+* and eliminate small errors in an efficient way.
+*
 * By default this uses a very small snapping distance
 * based on the extent of the input data.
-* The snapping distance may be specified explicitly.
-* This can reduce the number of overlaps and gaps that need to be merged,
-* and reduce the risk of spikes formed by merging gaps.
-* However, a large snapping distance may introduce undesirable
+*
+* Specifying a larger snapping distance can reduce the number of overlaps and
+* gaps that need to be merged, and reduce the risk of spikes formed by merging
+* gaps. However, a large snapping distance can also introduce undesirable
 * data alteration.
 *
 * A distance of zero prevents snapping from being used.
+*
 * \see geos::coverage::CoverageCleaner::setSnappingDistance
 * \param params The GEOSCoverageCleanParams to operate on
 * \param snappingDistance Set to 0.0 for no snapping.
@@ -5004,19 +5008,22 @@ GEOSCoverageCleanParams_setSnappingDistance(
     double snappingDistance);
 
 /**
-* Gaps which are wider than a given distance are merged with an adjacent polygon.
-* Polygon width is determined as twice the radius of the MaximumInscribedCircle
-* of the gap polygon.
-* Gaps are merged with the adjacent polygon with longest shared border.
+* Set the maximum width of gaps to merge when cleaning a coverage.
+*
+* Gaps which are wider than the given distance are merged with an adjacent polygon.
+*
+* Gaps are defined as enclosed empty areas with width less than a distance tolerance.
 * Empty holes in input polygons are treated as gaps, and may be filled in.
 * Gaps which are not fully enclosed ("inlets") are not removed.
 *
-* The width of a gap is twice the radius of the Maximum Inscribed Circle in the gap polygon,
+* Width is computed as the diameter of the Maximum Inscribed Circle of the gap polygon.
 * A width of zero prevents gaps from being merged.
+*
+* Gaps are merged with the adjacent polygon with longest shared border.
 *
 * \see geos::coverage::CoverageCleaner::setGapMaximumWidth
 * \param params The GEOSCoverageCleanParams to operate on
-* \param gapMaximumWidth Set to 0.0 for no snapping.
+* \param gapMaximumWidth Set to 0.0 for no gap merging.
 * \return 0 on exception, 1 on success.
 *
 * \since 3.14
@@ -5026,21 +5033,23 @@ GEOSCoverageCleanParams_setGapMaximumWidth(
     GEOSCoverageCleanParams* params,
     double gapMaximumWidth);
 
-/*
+/**
 * Sets the overlap merge strategy to use, using one from \ref GEOSOverlapMerge.
-* Overlaps are merged with an adjacent polygon chosen according to a specified merge strategy.
-* The supported strategies are:
 *
-*   * **Longest Border**: (default) merge with the polygon with longest shared border (GEOS_MERGE_LONGEST_BORDER.)
-*   * **Maximum/Minimum Area**: merge with the polygon with largest or smallest area (GEOS_MERGE_MAX_AREA, GEOS_MERGE_MIN_AREA.)
-*   * **Minimum Index**: merge with the polygon with the lowest index in the input array (GEOS_MERGE_MIN_INDEX.)
+* Overlaps are merged with an adjacent polygon chosen according to a specified
+* merge strategy. The supported strategies are:
 *
-* This allows sorting the input according to some criteria to provide a priority
-* for merging gaps.
+* - **Longest Border**: (default) merge with the polygon with longest shared
+*   border (GEOS_MERGE_LONGEST_BORDER.)
+* - **Maximum/Minimum Area**: merge with the polygon with largest or smallest
+*   area (GEOS_MERGE_MAX_AREA, GEOS_MERGE_MIN_AREA.)
+* - **Minimum Index**: merge with the polygon with the lowest index in the
+*   input array (GEOS_MERGE_MIN_INDEX.). This allows sorting the input
+*   according to some criteria to provide a priority for merging gaps.
 *
 * The default is GEOS_MERGE_LONGEST_BORDER.
 *
-* \see geos::coverage::CoverageCleaner::setGapMaximumWidth
+* \see geos::coverage::CoverageCleaner::setOverlapMergeStrategy
 * \param params The GEOSCoverageCleanParams to operate on
 * \param overlapMergeStrategy One of \ref GEOSOverlapMerge strategies
 * \return 0 on exception, 1 on success.
@@ -5053,9 +5062,11 @@ GEOSCoverageCleanParams_setOverlapMergeStrategy(
     int overlapMergeStrategy);
 
 /**
+* Clean a coverage.
+*
 * Operates on a list of polygonal geometry with "exactly matching"
-* edge geometry, to fix cases where the geometry does not in fact
-* exactly match.
+* edge geometry. Removes any overlaps and fixes cases where the geometry
+* does not in fact exactly match.
 *
 * The input is a collection of polygons, and the output is a collection
 * with the same number of cleaned polygons, in the same order as

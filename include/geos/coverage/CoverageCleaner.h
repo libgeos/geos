@@ -288,7 +288,7 @@ public:
 
     /**
      * Sets the maximum width of the gaps that will be filled and merged.
-     * The width of a gap is twice the radius of the Maximum Inscribed Circle in the gap polygon,
+     * The width of a gap is the diameter of the Maximum Inscribed Circle in the gap polygon.
      * A width of zero prevents gaps from being merged.
      *
      * @param maxWidth the maximum gap width to merge
