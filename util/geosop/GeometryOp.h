@@ -154,8 +154,24 @@ public:
     static GeometryOp* createAgg(std::string name,
                     std::string cat,
                     std::string desc,
+                    int resType,
+                    geomFunSig_G fun) {
+        return new GeometryOp(name, cat, desc, true, resType, fun);
+    }
+
+    static GeometryOp* createAgg(std::string name,
+                    std::string cat,
+                    std::string desc,
                     geomFunSig_GD fun) {
         return new GeometryOp(name, cat, desc, true, Result::typeGeometry, fun);
+    }
+
+    static GeometryOp* createAgg(std::string name,
+                    std::string cat,
+                    std::string desc,
+                    int resType,
+                    geomFunSig_GD fun) {
+        return new GeometryOp(name, cat, desc, true, resType, fun);
     }
 
     static GeometryOp* find(std::string name);

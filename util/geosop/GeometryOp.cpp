@@ -183,6 +183,7 @@ std::vector<GeometryOpCreator> opRegistry {
 {"lineMerge",  [](std::string name) { return GeometryOp::create(name,
     catGeom,
     "merge the lines of geometry",
+    Result::typeGeomList,
         [](const Geometry& geom) {
             geos::operation::linemerge::LineMerger lmrgr;
             lmrgr.add(&geom);
@@ -554,6 +555,7 @@ std::vector<GeometryOpCreator> opRegistry {
 {"polygonize", [](std::string name) { return GeometryOp::create(name,
     catConst,
     "polygonize lines",
+    Result::typeGeomList,
     [](const Geometry& geom) {
         geos::operation::polygonize::Polygonizer p;
         p.add(&geom);
@@ -569,6 +571,7 @@ std::vector<GeometryOpCreator> opRegistry {
 {"polygonizeValid", [](std::string name) { return GeometryOp::create(name,
     catConst,
     "polygonize lines into a valid polygonal geometry",
+    Result::typeGeomList,
     [](const Geometry& geom) {
         geos::operation::polygonize::Polygonizer p(true);
         p.add(&geom);
@@ -992,6 +995,7 @@ std::vector<GeometryOpCreator> opRegistry {
 
 {"coverageClean", [](std::string name) { return GeometryOp::createAgg(name,
     catCoverage, "cleans a coverage, merging gaps narrower than a given width",
+    Result::typeGeomList,
     [](const Geometry& geom, double gapWidth) {
         std::vector<const Geometry*> coverage = toList(geom);
         std::vector<std::unique_ptr<Geometry>> result
@@ -1006,6 +1010,7 @@ std::vector<GeometryOpCreator> opRegistry {
 }},
 {"coverageSimplify", [](std::string name) { return GeometryOp::createAgg(name,
     catCoverage, "simplify a polygonal coverage by a distance tolerance",
+    Result::typeGeomList,
     [](const Geometry& geom, double d) {
         std::vector<const Geometry*> coverage = toList(geom);
         std::vector<std::unique_ptr<Geometry>> result
@@ -1032,6 +1037,7 @@ std::vector<GeometryOpCreator> opRegistry {
 }},
 {"coverageValidate", [](std::string name) { return GeometryOp::createAgg(name,
     catCoverage, "validate a polygonal coverage",
+    Result::typeGeomList,
     [](const Geometry& geom) {
         std::vector<const Geometry*> coverage = toList(geom);
         std::vector<std::unique_ptr<Geometry>> invalidList
