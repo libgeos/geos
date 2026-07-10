@@ -1015,6 +1015,7 @@ void Test::execute(Geometry* geomA, Geometry* geomB)
         else {
             std::cerr << "EXCEPTION in " << tester.testcaseRef() << ": " << e.what()
                       << std::endl;
+            isSuccess = false;
             actualResultStr = e.what();
         }
     }
@@ -1022,6 +1023,7 @@ void Test::execute(Geometry* geomA, Geometry* geomB)
         std::cerr << "Unknown EXCEPTION in "
                   << tester.testcaseRef()
                   << std::endl;
+        isSuccess = false;
         actualResultStr = "Unknown exception thrown";
     }
 }
