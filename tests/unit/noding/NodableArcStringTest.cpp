@@ -1,11 +1,13 @@
 #include <tut/tut.hpp>
 #include "utility.h"
 
+#include <geos/geom/CircularString.h>
 #include <geos/noding/NodableArcString.h>
 
 using geos::algorithm::Orientation;
 using geos::geom::CircularArc;
 using geos::geom::Ordinate;
+using geos::geom::CircularString;
 using geos::geom::CoordinateXY;
 using geos::geom::CoordinateXYZM;
 using geos::noding::ArcString;
@@ -58,9 +60,29 @@ struct test_nodablearcstring_data {
         }
     }
 
+    void checkSplit(const std::string& wkt, const CoordinateXY& splitPt, std::size_t pathIndex, const std::vector<std::string>& expected_wkt)
+    {
+        const auto g = reader_.read<CircularString>(wkt);
+        const auto& gfact = *g->getFactory();
+
+        NodableArcString nas(g->getArcs(), g->getSharedCoordinates(), false, false, nullptr);
+        nas.addIntersection(splitPt, pathIndex);
+
+        std::vector<std::unique_ptr<ArcString>> noded;
+        nas.getNoded(noded);
+        ensure_equals(noded.size(), expected_wkt.size());
+
+        for (std::size_t i = 0; i < noded.size(); i++) {
+            std::unique_ptr<Geometry> actual = gfact.createCircularString(noded[i]->getCoordinates());
+            std::unique_ptr<Geometry> expected = reader_.read(expected_wkt[i]);
+        }
+    }
+
     static void ensure_arc_equals(const CircularArc& actual, const CircularArc& expected, double tol) {
         ensure(actual.toString() + " does not equal expected " + expected.toString() ,actual.equals(expected, tol));
     }
+
+    geos::io::WKTReader reader_;
 };
 
 typedef test_group<test_nodablearcstring_data> group;
@@ -168,6 +190,37 @@ void object::test<4>()
     ensure_arc_equals(arc1, CircularArc::create(intPt, p2, arc.getCenter(), arc.getRadius(), arc.getOrientation()), 1e-8);
     ensure_equals(arc1.p1<CoordinateXYZM>().z, (intPt.z + p2.z) / 2);
     ensure_equals(arc1.p1<CoordinateXYZM>().m, (intPt.m + p2.m) / 2);
+}
+
+template<>
+template<>
+void object::test<5>()
+{
+    set_test_name("splits at arc endpoints");
+
+    checkSplit("CIRCULARSTRING (100 0, 50 50, 0 0, -50 50, 0 100, 50 80, 100 100, 150 50, 100 0)",
+                {0, 0}, 0, {
+                 "CIRCULARSTRING (100 0, 50 50, 0 0)",
+                 "CIRCULARSTRING (0 0, -50 50, 0 100, 50 80, 100 100, 150 50, 100 0)"
+                });
+
+    checkSplit("CIRCULARSTRING (100 0, 50 50, 0 0, -50 50, 0 100, 50 80, 100 100, 150 50, 100 0)",
+                {0, 0}, 1, {
+                 "CIRCULARSTRING (100 0, 50 50, 0 0)",
+                 "CIRCULARSTRING (0 0, -50 50, 0 100, 50 80, 100 100, 150 50, 100 0)"
+                });
+
+    checkSplit("CIRCULARSTRING (100 0, 50 50, 0 0, -50 50, 0 100, 50 80, 100 100, 150 50, 100 0)",
+                {100, 100}, 2, {
+                 "CIRCULARSTRING (100 0, 50 50, 0 0)",
+                 "CIRCULARSTRING (0 0, -50 50, 0 100, 50 80, 100 100, 150 50, 100 0)"
+                });
+
+    checkSplit("CIRCULARSTRING (100 0, 50 50, 0 0, -50 50, 0 100, 50 80, 100 100, 150 50, 100 0)",
+                {100, 100}, 3, {
+                 "CIRCULARSTRING (100 0, 50 50, 0 0)",
+                 "CIRCULARSTRING (0 0, -50 50, 0 100, 50 80, 100 100, 150 50, 100 0)"
+                });
 }
 
 }

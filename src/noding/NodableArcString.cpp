@@ -287,7 +287,7 @@ NodableArcString::getNoded(std::vector<std::unique_ptr<ArcString>>& splitArcs) {
 
     for (size_t arcIndex = 0; arcIndex < m_arcs.size(); arcIndex++) {
 #if DEBUG_NODABLE_ARC_STRING
-        std::cout << "arc " << arcIndex + 1 << " / " << m_arcs.size();
+        std::cout << "arc " << arcIndex + 1 << " / " << m_arcs.size() << std::endl;
 #endif
         const CircularArc& toSplit = m_arcs[arcIndex];
         const geom::CoordinateXY& center = toSplit.getCenter();
