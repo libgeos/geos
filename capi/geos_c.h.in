@@ -5010,7 +5010,9 @@ GEOSCoverageCleanParams_setSnappingDistance(
 /**
 * Set the maximum width of gaps to merge when cleaning a coverage.
 *
-* Gaps which are wider than the given distance are merged with an adjacent polygon.
+* Gaps wider than the given distance are merged with the adjacent polygon
+* having the longest shared border with the gap. (The overlap merge strategy
+* is not used.)
 *
 * Gaps are defined as enclosed empty areas with width less than a distance tolerance.
 * Empty holes in input polygons are treated as gaps, and may be filled in.
@@ -5018,8 +5020,6 @@ GEOSCoverageCleanParams_setSnappingDistance(
 *
 * Width is computed as the diameter of the Maximum Inscribed Circle of the gap polygon.
 * A width of zero prevents gaps from being merged.
-*
-* Gaps are merged with the adjacent polygon with longest shared border.
 *
 * \see geos::coverage::CoverageCleaner::setGapMaximumWidth
 * \param params The GEOSCoverageCleanParams to operate on
