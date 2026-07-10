@@ -1150,8 +1150,7 @@ Functions</h2></td></tr>
 <tr class="separator:ab119b8c33cd9ecbd47ac318ac35ffa20"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a421d8416ac5d08cfedd7e40e3e1e7572" id="r_a421d8416ac5d08cfedd7e40e3e1e7572"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a421d8416ac5d08cfedd7e40e3e1e7572">GEOSCoverageCleanParams_setGapMaximumWidth</a> (<a class="el" href="geos__c_8h.html#afa9d6f8f426c726455446a8e27dba4aa">GEOSCoverageCleanParams</a> *params, double gapMaximumWidth)</td></tr>
 <tr class="separator:a421d8416ac5d08cfedd7e40e3e1e7572"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae353e812768e8218f940f18449d0899f" id="r_ae353e812768e8218f940f18449d0899f"><td class="memItemLeft" align="right" valign="top"><a id="ae353e812768e8218f940f18449d0899f" name="ae353e812768e8218f940f18449d0899f"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>GEOSCoverageCleanParams_setOverlapMergeStrategy</b> (<a class="el" href="geos__c_8h.html#afa9d6f8f426c726455446a8e27dba4aa">GEOSCoverageCleanParams</a> *params, int overlapMergeStrategy)</td></tr>
+<tr class="memitem:ae353e812768e8218f940f18449d0899f" id="r_ae353e812768e8218f940f18449d0899f"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#ae353e812768e8218f940f18449d0899f">GEOSCoverageCleanParams_setOverlapMergeStrategy</a> (<a class="el" href="geos__c_8h.html#afa9d6f8f426c726455446a8e27dba4aa">GEOSCoverageCleanParams</a> *params, int overlapMergeStrategy)</td></tr>
 <tr class="separator:ae353e812768e8218f940f18449d0899f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a076baf0d35b348f9c8b781375775ecc6" id="r_a076baf0d35b348f9c8b781375775ecc6"><td class="memItemLeft" align="right" valign="top"><a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a076baf0d35b348f9c8b781375775ecc6">GEOSCoverageCleanWithParams</a> (const <a class="el" href="geos__c_8h.html#a3109c0fe2dc30842f0403c1f67618047">GEOSGeometry</a> *input, const <a class="el" href="geos__c_8h.html#afa9d6f8f426c726455446a8e27dba4aa">GEOSCoverageCleanParams</a> *params)</td></tr>
 <tr class="separator:a076baf0d35b348f9c8b781375775ecc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -2169,7 +2168,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Overlap repair strategies. </p><dl class="section see"><dt>See also</dt><dd>GEOSCoverageCleanParams_setOverlapMergeStrategy </dd></dl>
+<p>Overlap repair strategies. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#ae353e812768e8218f940f18449d0899f">GEOSCoverageCleanParams_setOverlapMergeStrategy</a> </dd></dl>
 <table class="fieldtable">
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a476bd1666daca010d237dbde2a8319d2adad8f797a79cee54be47bfc09ee930d6" name="a476bd1666daca010d237dbde2a8319d2adad8f797a79cee54be47bfc09ee930d6"></a>GEOS_MERGE_LONGEST_BORDER&#160;</td><td class="fielddoc"><p>Merge strategy that chooses polygon with longest common border </p>
 </td></tr>
@@ -8878,13 +8877,15 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Gaps which are wider than a given distance are merged with an adjacent polygon. Polygon width is determined as twice the radius of the MaximumInscribedCircle of the gap polygon. Gaps are merged with the adjacent polygon with longest shared border. Empty holes in input polygons are treated as gaps, and may be filled in. Gaps which are not fully enclosed ("inlets") are not removed.</p>
-<p>The width of a gap is twice the radius of the Maximum Inscribed Circle in the gap polygon, A width of zero prevents gaps from being merged.</p>
+<p>Set the maximum width of gaps to merge when cleaning a coverage.</p>
+<p>Gaps wider than the given distance are merged with the adjacent polygon having the longest shared border with the gap. (The overlap merge strategy is not used.)</p>
+<p>Gaps are defined as enclosed empty areas with width less than a distance tolerance. Empty holes in input polygons are treated as gaps, and may be filled in. Gaps which are not fully enclosed ("inlets") are not removed.</p>
+<p>Width is computed as the diameter of the Maximum Inscribed Circle of the gap polygon. A width of zero prevents gaps from being merged.</p>
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1coverage_1_1CoverageCleaner.html#a1895b1d4b9b8d89747f3369e4fdd2bab">geos::coverage::CoverageCleaner::setGapMaximumWidth</a> </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">params</td><td>The GEOSCoverageCleanParams to operate on </td></tr>
-    <tr><td class="paramname">gapMaximumWidth</td><td>Set to 0.0 for no snapping. </td></tr>
+    <tr><td class="paramname">gapMaximumWidth</td><td>Set to 0.0 for no gap merging. </td></tr>
   </table>
   </dd>
 </dl>
@@ -8936,6 +8937,60 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 
 </div>
 </div>
+<a id="ae353e812768e8218f940f18449d0899f" name="ae353e812768e8218f940f18449d0899f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae353e812768e8218f940f18449d0899f">&#9670;&#160;</a></span>GEOSCoverageCleanParams_setOverlapMergeStrategy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int GEOSCoverageCleanParams_setOverlapMergeStrategy </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="geos__c_8h.html#afa9d6f8f426c726455446a8e27dba4aa">GEOSCoverageCleanParams</a> *&#160;</td>
+          <td class="paramname"><em>params</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>overlapMergeStrategy</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Sets the overlap merge strategy to use, using one from <a class="el" href="geos__c_8h.html#a476bd1666daca010d237dbde2a8319d2">GEOSOverlapMerge</a>.</p>
+<p>Overlaps are merged with an adjacent polygon chosen according to a specified merge strategy. The supported strategies are:</p>
+<ul>
+<li><b>Longest Border</b>: (default) merge with the polygon with longest shared border (GEOS_MERGE_LONGEST_BORDER.)</li>
+<li><b>Maximum/Minimum Area</b>: merge with the polygon with largest or smallest area (GEOS_MERGE_MAX_AREA, GEOS_MERGE_MIN_AREA.)</li>
+<li><b>Minimum Index</b>: merge with the polygon with the lowest index in the input array (GEOS_MERGE_MIN_INDEX.). This allows sorting the input according to some criteria to provide a priority for merging gaps.</li>
+</ul>
+<p>The default is GEOS_MERGE_LONGEST_BORDER.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1coverage_1_1CoverageCleaner.html#a9585ba72afcb393eea6d8f0164473d2b">geos::coverage::CoverageCleaner::setOverlapMergeStrategy</a> </dd></dl>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">params</td><td>The GEOSCoverageCleanParams to operate on </td></tr>
+    <tr><td class="paramname">overlapMergeStrategy</td><td>One of <a class="el" href="geos__c_8h.html#a476bd1666daca010d237dbde2a8319d2">GEOSOverlapMerge</a> strategies </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>0 on exception, 1 on success.</dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.14 </dd></dl>
+
+</div>
+</div>
 <a id="a0ed7df71588595e958c62cc29a683c37" name="a0ed7df71588595e958c62cc29a683c37"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a0ed7df71588595e958c62cc29a683c37">&#9670;&#160;</a></span>GEOSCoverageCleanParams_setOverlapMergeStrategy_r()</h2>
 
@@ -8975,7 +9030,7 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<dl class="section see"><dt>See also</dt><dd>GEOSCoverageCleanParams_setOverlapMergeStrategy </dd></dl>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#ae353e812768e8218f940f18449d0899f">GEOSCoverageCleanParams_setOverlapMergeStrategy</a> </dd></dl>
 
 </div>
 </div>
@@ -9012,8 +9067,12 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Snapping to nearby vertices and line segment snapping is used to improve noding robustness and eliminate small errors in an efficient way, By default this uses a very small snapping distance based on the extent of the input data. The snapping distance may be specified explicitly. This can reduce the number of overlaps and gaps that need to be merged, and reduce the risk of spikes formed by merging gaps. However, a large snapping distance may introduce undesirable data alteration.</p>
-<p>A distance of zero prevents snapping from being used. </p><dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1coverage_1_1CoverageCleaner.html#af007284c400a3bc61ef8784df4ab5f7c">geos::coverage::CoverageCleaner::setSnappingDistance</a> </dd></dl>
+<p>Set the snapping distance to use when cleaning a coverage.</p>
+<p>Snapping to nearby vertices and line segment snapping is used to improve noding robustness and eliminate small errors in an efficient way.</p>
+<p>By default this uses a very small snapping distance based on the extent of the input data.</p>
+<p>Specifying a larger snapping distance can reduce the number of overlaps and gaps that need to be merged, and reduce the risk of spikes formed by merging gaps. However, a large snapping distance can also introduce undesirable data alteration.</p>
+<p>A distance of zero prevents snapping from being used.</p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classgeos_1_1coverage_1_1CoverageCleaner.html#af007284c400a3bc61ef8784df4ab5f7c">geos::coverage::CoverageCleaner::setSnappingDistance</a> </dd></dl>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">params</td><td>The GEOSCoverageCleanParams to operate on </td></tr>
@@ -9102,7 +9161,8 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
   </tr>
 </table>
 </div><div class="memdoc">
-<p>Operates on a list of polygonal geometry with "exactly matching" edge geometry, to fix cases where the geometry does not in fact exactly match.</p>
+<p>Clean a coverage.</p>
+<p>Operates on a list of polygonal geometry with "exactly matching" edge geometry. Removes any overlaps and fixes cases where the geometry does not in fact exactly match.</p>
 <p>The input is a collection of polygons, and the output is a collection with the same number of cleaned polygons, in the same order as the input. Polygons that have collapsed during cleaning will be returned as empties.</p>
 <p>This function does not support curved types directly. If curve-to-line conversion parameters are registered with the context, curved inputs will be automatically converted to lines. Otherwise, the operation will fail. This function outputs linear geometry types only. If line-to-curve conversion parameters are registered with the context, and a curved input was provided, outputs will be automatically converted to curved types.</p>
 <dl class="params"><dt>Parameters</dt><dd>
