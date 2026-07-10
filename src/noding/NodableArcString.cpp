@@ -94,14 +94,18 @@ prepareArcPoints(const CircularArc& arc, std::vector<CoordinateXYZM> splitPoints
     {
         CoordinateXYZM p2;
         arc.getCoordinateSequence()->getAt(arc.getCoordinatePosition() + (isCCW ? 2 : 0), p2);
+        if (!splitPoints.empty() && splitPoints.back().equals2D(p2)) {
+            splitEnd = true;
+        }
         splitPoints.push_back(p2);
     }
 
 #if DEBUG_NODABLE_ARC_STRING
     std::cout << std::setprecision(17);
     std::cout << std::endl;
-    std::cout << "Edge from " << arc.p0() << " to " << arc.p2() << " has " << splitPoints.size() << " potential split points:" << std::endl;
-    std::cout << "Edge is CIRCULARSTRING " << *arc.getCoordinateSequence() << std::endl;
+    std::cout << "Arc from " << arc.p0() << " to " << arc.p2() << " has " << splitPoints.size() << " potential split points:" << std::endl;
+    std::cout << "Arc is CIRCULARSTRING " << *arc.getCoordinateSequence() << std::endl;
+    std::cout << "Reversed? " << !isCCW << std::endl;
     std::cout << "Start point is " << retained.back() << " pa " << paStart << std::endl;
     std::cout << "Potential split points:" << std::endl;
     for (std::size_t i = 0; i < splitPoints.size(); i++) {
@@ -215,7 +219,7 @@ prepareArcPoints(const CircularArc& arc, std::vector<CoordinateXYZM> splitPoints
     }
 
 #if DEBUG_NODABLE_ARC_STRING
-    std::cout << "Retained split points:" << std::endl;
+    std::cout << "Retained split points: (splitStart " << splitStart << " " << " splitEnd " << splitEnd << ")" << std::endl;
     for (std::size_t i = 0; i < retained.size(); i++) {
         std::cout << "  " << retained[i] << " paDiff " << pseudoAngleDiffCCW(paStart, geom::Quadrant::pseudoAngle(center, retained[i]));
         if (i > 0) {
@@ -282,6 +286,9 @@ NodableArcString::getNoded(std::vector<std::unique_ptr<ArcString>>& splitArcs) {
     ArcBuilder builder(splitArcs, getData(), m_constructZ, m_constructM);
 
     for (size_t arcIndex = 0; arcIndex < m_arcs.size(); arcIndex++) {
+#if DEBUG_NODABLE_ARC_STRING
+        std::cout << "arc " << arcIndex + 1 << " / " << m_arcs.size();
+#endif
         const CircularArc& toSplit = m_arcs[arcIndex];
         const geom::CoordinateXY& center = toSplit.getCenter();
         const double radius = toSplit.getRadius();
@@ -332,7 +339,6 @@ NodableArcString::getNoded(std::vector<std::unique_ptr<ArcString>>& splitArcs) {
             const bool isSplitPoint = (i < split.points.size() - 1) || split.splitEnd;
             if (isSplitPoint) {
                 builder.finish();
-
             }
         }
     }
