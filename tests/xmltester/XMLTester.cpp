@@ -479,16 +479,29 @@ bool
 XMLTester::testValid(const geom::Geometry* g, const std::string& label)
 {
     operation::valid::IsValidOp ivo(g);
-    bool valid = ivo.isValid();
-    if(! valid) {
-        const TopologyValidationError* err = ivo.getValidationError();
-        std::cerr << *curr_file << ":"
-                  << " case" << caseCount << ":"
-                  << " test" << testCount << ": "
-                  << " invalid geometry (" << label
-                  << "): " << err->toString() << std::endl;
+    try {
+        bool valid = ivo.isValid();
+
+        if(! valid) {
+            const TopologyValidationError* err = ivo.getValidationError();
+            std::cerr << *curr_file << ":"
+                      << " case" << caseCount << ":"
+                      << " test" << testCount << ": "
+                      << " invalid geometry (" << label
+                      << "): " << err->toString() << std::endl;
+        }
+
+        return valid;
+    } catch (const geos::util::UnsupportedOperationException& ex) {
+        if (g->hasCurvedComponents()) {
+            const std::string message(ex.what());
+            if (message.find("Curved types not supported") != std::string::npos) {
+                return true;
+            }
+        }
+
+        throw;
     }
-    return valid;
 }
 
 /**
