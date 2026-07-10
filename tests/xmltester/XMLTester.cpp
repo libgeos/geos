@@ -419,11 +419,17 @@ XMLTester::parseRun(const tinyxml2::XMLNode* node)
     wkbwriter.reset(new io::WKBWriter());
 
     const tinyxml2::XMLNode* casenode;
+
+    int icase = 1;
+
     for(casenode = node->FirstChildElement("case");
             casenode;
             casenode = casenode->NextSiblingElement("case")) {
         try {
-            parseCase(casenode);
+            if (caseNum == 0 || icase == caseNum) {
+                parseCase(casenode);
+            }
+            icase++;
         }
         catch(const std::exception& exc) {
             std::cerr << exc.what() << std::endl;
@@ -579,12 +585,16 @@ XMLTester::parseCase(const tinyxml2::XMLNode* node)
 
     ++caseCount;
     testCount = 0;
+    int itest = 1;
 
     const tinyxml2::XMLNode* testnode;
     for(testnode = node->FirstChildElement("test");
             testnode;
             testnode = testnode->NextSiblingElement("test")) {
-       runTest(testnode);
+        if (testNum == 0 || itest == testNum) {
+            runTest(testnode);
+        }
+        itest++;
     }
 
     totalTestCount += testCount;
@@ -1405,7 +1415,9 @@ usage(char* me, int exitcode, std::ostream& os)
        << "--test-valid-output  Test output validity" << std::endl
        << "--test-valid-input   Test input validity" << std::endl
        << "--sql-output         Produce SQL output" << std::endl
-       << "--wkb-output         Print Geometries as HEXWKB" << std::endl;
+       << "--wkb-output         Print Geometries as HEXWKB" << std::endl
+       << "--case-index [n]     Run only the specified case number (1-indexed)" << std::endl
+       << "--test-index [n]     Run only the specified test number (1-indexed)" << std::endl;
 
     std::exit(exitcode);
 }
@@ -1459,6 +1471,16 @@ main(int argC, char* argV[])
             }
             if(! std::strcmp(argV[i], "--test-valid-input")) {
                 tester.setTestInputValidity(true);
+                continue;
+            }
+            if (!std::strcmp(argV[i], "--case-index")) {
+                int caseNum = std::atoi(argV[++i]);
+                tester.setCaseNumber(caseNum);
+                continue;
+            }
+            if (!std::strcmp(argV[i], "--test-index")) {
+                int opNum = std::atoi(argV[++i]);
+                tester.setTestNumber(opNum);
                 continue;
             }
 
