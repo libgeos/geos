@@ -846,11 +846,17 @@ Test::areaDelta(const geom::Geometry* a, const geom::Geometry* b, std::string& r
 void
 Test::checkResult( const Geometry& result )
 {
-    checkResult( result,
-    [](Geometry& expected, Geometry& actual) -> bool {
-        //TODO: change to equalsExact, since compareTo doesn't check empty type
-        return expected.compareTo(&actual) == 0;
-    });
+    if (result.hasCurvedComponents()) {
+        checkResult(result, [](Geometry& expected, Geometry& actual) -> bool {
+            return checkOverlaySuccess(expected, actual);
+        });
+    } else {
+        checkResult( result,
+        [](Geometry& expected, Geometry& actual) -> bool {
+            //TODO: change to equalsExact, since compareTo doesn't check empty type
+            return expected.compareTo(&actual) == 0;
+        });
+    }
 }
 
 void
