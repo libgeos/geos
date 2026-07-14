@@ -393,21 +393,6 @@ CircularArc::addLinearizedPoints(CoordinateSequence& seq, const algorithm::Curve
     seq.add(*getCoordinateSequence(), getCoordinatePosition() + 2, getCoordinatePosition() + 2);
 }
 
-bool
-CircularArc::isUpwardAtPoint(const CoordinateXY& q) const
-{
-    auto quad = geom::Quadrant::quadrant(getCenter(), q);
-    bool isUpward;
-
-    if (getOrientation() == algorithm::Orientation::CLOCKWISE) {
-        isUpward = (quad == geom::Quadrant::SW || quad == geom::Quadrant::NW);
-    } else {
-        isUpward = (quad == geom::Quadrant::SE || quad == geom::Quadrant::NE);
-    }
-
-    return isUpward;
-}
-
 CircularArc
 CircularArc::reverse() const
 {

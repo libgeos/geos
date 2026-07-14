@@ -102,7 +102,7 @@ RayCrossingCounter::processSequence(const geom::CoordinateSequence& seq, bool is
 
     if (isLinear) {
         for(std::size_t i = 1; i < seq.size(); i++) {
-            const geom::CoordinateXY& p1 = seq.getAt<geom::CoordinateXY>(i-1);;
+            const geom::CoordinateXY& p1 = seq.getAt<geom::CoordinateXY>(i-1);
             const geom::CoordinateXY& p2 = seq.getAt<geom::CoordinateXY>(i);
 
             countSegment(p1, p2);
@@ -190,21 +190,34 @@ RayCrossingCounter::countSegment(const geom::CoordinateXY& p1,
 
 bool
 RayCrossingCounter::shouldCountCrossing(const geom::CircularArc& arc, const geom::CoordinateXY& q) {
+    const auto& c = arc.getCenter();
+
     // To avoid double-counting shared vertices, we count an intersection point if
     // a) is in the interior of the arc
     // b) is at the starting point of the arc, and the arc is directed upward at that point
     // c) is at the ending point of the arc is directed downward at that point
     if (q.equals2D(arc.p0())) {
-        return arc.isUpwardAtPoint(q);
+        if (arc.isCCW()) {
+            return q.x > c.x || (q.x == c.x && q.y < c.y);
+        } else {
+            return q.x < c.x || (q.x == c.x && q.y < c.y);
+        }
     } else if (q.equals2D(arc.p2())) {
-        return !arc.isUpwardAtPoint(q);
+        if (arc.isCCW()) {
+            return q.x < c.x || (q.x == c.x && q.y < c.y);
+        } else {
+            return q.x > c.x || (q.x == c.x && q.y < c.y);
+        }
     } else {
-        return true;
+        // Ignore rays tangent to the arc interior. This is topologically equivalent
+        // to the ray intersecting adjacent upward and downward segments, which would
+        // cancel out.
+        return q.x != arc.getCenter().x;
     }
 }
 
-/// Return an array of 0-2 intersection points between an arc and a horizontal
-/// ray extending righward from a point. If fewer than 2 intersection points exist,
+/// Return an array of 0-2 unique intersection points between an arc and a horizontal
+/// ray extending rightward from a point. If fewer than 2 intersection points exist,
 /// some Coordinates in the returned array will be equal to CoordinateXY::getNull().
 std::array<geom::CoordinateXY, 2>
 RayCrossingCounter::pointsIntersectingHorizontalRay(const geom::CircularArc& arc, const geom::CoordinateXY& origin) {
@@ -241,7 +254,7 @@ RayCrossingCounter::pointsIntersectingHorizontalRay(const geom::CircularArc& arc
     if (intPt1.x >= origin.x && arc.containsPointOnCircle(intPt1)) {
         ret[pos++] = intPt1;
     }
-    if (intPt2.x >= origin.x && arc.containsPointOnCircle(intPt2)) {
+    if (intPt2 != intPt1 && intPt2.x >= origin.x && arc.containsPointOnCircle(intPt2)) {
         ret[pos++] = intPt2;
     }
 
@@ -270,7 +283,7 @@ RayCrossingCounter::countArc(const geom::CircularArc& arc)
         return;
     }
 
-    // Evaluate all arcs whose enveleope is to the right of the test point.
+    // Evaluate all arcs whose envelope is to the right of the test point.
     if (arcEnvelope.getMaxY() >= point.y && arcEnvelope.getMinY() <= point.y) {
         if (arc.containsPoint(point)) {
             isPointOnSegment = true;

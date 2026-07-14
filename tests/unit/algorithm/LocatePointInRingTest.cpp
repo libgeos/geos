@@ -295,6 +295,71 @@ void object::test<12>()
     runPtLocator(Location::BOUNDARY, CoordinateXY(11.230120879533454, 62.84897119848748), wkt);
 }
 
+template<>
+template<>
+void object::test<13>()
+{
+    std::string wkt = "CURVEPOLYGON(COMPOUNDCURVE ("
+        "(220 140, 60 140, 60 260, 220 240),"
+        "CIRCULARSTRING (220 240, 230 230, 220 220, 190 230, 160 220, 155 210, 160 200, 174.18861169915812 207.4341649025257, 190 210),"
+        "(190 210, 190 180, 160 180, 160 160, 220 160, 220 140)))";
+
+    for (int y = 195; y <= 245; y++) {
+        runPtLocator(Location::INTERIOR, {80, static_cast<double>(y)}, wkt);
+    }
+}
+
+template<>
+template<>
+void object::test<14>()
+{
+    std::string wkt = "CURVEPOLYGON(COMPOUNDCURVE ((-10 100, 0 110, 10 100), CIRCULARSTRING (10 100, 35 75, 10 50, 35 25, 10 0), (10 0, 0 -10, -10 0), CIRCULARSTRING (-10 0, -35 25, -10 50, -35 75, -10 100)))";
+
+    runPtLocator(Location::EXTERIOR, {-20, 0},  wkt);
+    runPtLocator(Location::INTERIOR, {0, 0},  wkt);
+    runPtLocator(Location::EXTERIOR, {-20, 0},  wkt);
+
+    runPtLocator(Location::EXTERIOR, {-20, 50},  wkt);
+    runPtLocator(Location::INTERIOR, {0, 50},  wkt);
+    runPtLocator(Location::EXTERIOR, {-20, 50},  wkt);
+
+    runPtLocator(Location::EXTERIOR, {-20, 100},  wkt);
+    runPtLocator(Location::INTERIOR, {0, 100},  wkt);
+    runPtLocator(Location::EXTERIOR, {-20, 100},  wkt);
+}
+
+template<>
+template<>
+void object::test<15>()
+{
+    std::string wkt = "CURVEPOLYGON(COMPOUNDCURVE (CIRCULARSTRING(0 0, 10 10, 20 0), (20 0, 30 10, 40 0), CIRCULARSTRING (40 0, 50 -10, 60 0), (60 0, 70 -10, 80 0), CIRCULARSTRING (80 0, 70 10, 80 20), (80 20, 100 20), CIRCULARSTRING (100 20, 120 0, 100 -20), (100 -20, 100 0), CIRCULARSTRING (100 0, 50 -50, 0 0)))";
+
+    // scanline at y = 0
+    runPtLocator(Location::EXTERIOR, {-10, 0}, wkt);
+    runPtLocator(Location::INTERIOR, {10, 0}, wkt);
+    runPtLocator(Location::INTERIOR, {30, 0}, wkt);
+    runPtLocator(Location::EXTERIOR, {50, 0}, wkt);
+    runPtLocator(Location::EXTERIOR, {70, 0}, wkt);
+    runPtLocator(Location::INTERIOR, {90, 0}, wkt);
+    runPtLocator(Location::INTERIOR, {110, 0}, wkt);
+    runPtLocator(Location::EXTERIOR, {130, 0}, wkt);
+
+    // scanline at y = 5
+    runPtLocator(Location::EXTERIOR, {0, 5}, wkt);
+    runPtLocator(Location::INTERIOR, {10, 5}, wkt);
+    runPtLocator(Location::EXTERIOR, {20, 5}, wkt);
+    runPtLocator(Location::INTERIOR, {30, 5}, wkt);
+    runPtLocator(Location::EXTERIOR, {40, 5}, wkt);
+    runPtLocator(Location::EXTERIOR, {50, 5}, wkt);
+    runPtLocator(Location::EXTERIOR, {60, 5}, wkt);
+    runPtLocator(Location::EXTERIOR, {70, 5}, wkt);
+    runPtLocator(Location::INTERIOR, {75, 5}, wkt);
+    runPtLocator(Location::INTERIOR, {80, 5}, wkt);
+    runPtLocator(Location::INTERIOR, {100, 5}, wkt);
+    runPtLocator(Location::INTERIOR, {110, 5}, wkt);
+    runPtLocator(Location::EXTERIOR, {120, 5}, wkt);
+    runPtLocator(Location::EXTERIOR, {125, 5}, wkt);
+}
 
 } // namespace tut
 

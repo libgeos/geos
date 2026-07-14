@@ -209,11 +209,6 @@ public:
     double distance(const CoordinateXY& p1, const CoordinateXY& p2) const;
     double distance(const CircularArc& other) const;
 
-    /// Return true if the arc is pointing positive in the y direction
-    /// at the location of a specified point. The point is assumed to
-    /// be on the arc.
-    bool isUpwardAtPoint(const CoordinateXY& q) const;
-
     CircularArc reverse() const;
 
     // Split an arc at a specified point.

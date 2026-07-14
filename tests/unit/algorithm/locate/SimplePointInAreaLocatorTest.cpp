@@ -37,7 +37,6 @@ void object::test<1>()
     checkLocation(*g, {1, 1}, Location::BOUNDARY); // vertex of hole
     checkLocation(*g, {2, 1}, Location::BOUNDARY); // boundary of hole
     checkLocation(*g, {2.5, 1.5}, Location::EXTERIOR); // inside hole
-
 }
 
 }
