@@ -56,6 +56,9 @@ private:
     int testFileCount;
     int totalTestCount;
 
+    int caseNum = 0;
+    int testNum = 0;
+
     const std::string* curr_file;
     std::string curr_case_desc;
 
@@ -88,6 +91,14 @@ public:
      * Return previously set verbosity level
      */
     int setVerbosityLevel(int val);
+
+    void setCaseNumber(int num) {
+        caseNum = num;
+    }
+
+    void setTestNumber(int num) {
+        testNum = num;
+    }
 
     void setTestOutputValidity(bool val)
     {
