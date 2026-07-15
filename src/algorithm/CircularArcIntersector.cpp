@@ -142,14 +142,18 @@ CircularArcIntersector::intersects(const CircularArc& arc, const CoordinateSeque
         return;
     }
 
-    // Check for exact endpoint-endpoint intersections
+    // Check for exact endpoint-endpoint or endpoint-control point intersections
     // If found, replace the computed intersection points with an exact endpoint
     const CoordinateXY& ap0 = arc.p0<CoordinateXY>();
+    const CoordinateXY& ap1 = arc.p1<CoordinateXY>();
     const CoordinateXY& ap2 = arc.p2<CoordinateXY>();
     const CoordinateXY& bp0 = seq.getAt<CoordinateXY>(segPos0);
     const CoordinateXY& bp1 = seq.getAt<CoordinateXY>(segPos1);
 
     if (ap0 == bp0 || ap0 == bp1) {
+        closestPoint(isect0, isect1, nPointsIntersectingLine, ap0) = ap0;
+    }
+    if (ap1 == bp0 || ap0 == bp1) {
         closestPoint(isect0, isect1, nPointsIntersectingLine, ap0) = ap0;
     }
     if (ap2 == bp0 || ap2 == bp1) {
@@ -251,14 +255,19 @@ CircularArcIntersector::intersects(const CircularArc& arc1, const CircularArc& a
 
         // Check to see if computed intersection points are inexact versions of an endpoint intersection
         const CoordinateXY& ap0 = arc1.p0();
+        const CoordinateXY& ap1 = arc1.p1();
         const CoordinateXY& ap2 = arc1.p2();
         const CoordinateXY& bp0 = arc2.p0();
+        const CoordinateXY& bp1 = arc2.p1();
         const CoordinateXY& bp2 = arc2.p2();
 
-        if (ap0 == bp0 || ap0 == bp2) {
+        if (ap0 == bp0 || ap0 == bp1 || ap0 == bp2) {
             closestPoint(isect0, isect1, 2, ap0) = ap0;
         }
-        if (ap2 == bp0 || ap2 == bp2) {
+        if (ap1 == bp0 || ap1 == bp1 || ap1 == bp2) {
+            closestPoint(isect0, isect1, 2, ap1) = ap1;
+        }
+        if (ap2 == bp0 || ap2 == bp1 || ap2 == bp2) {
             closestPoint(isect0, isect1, 2, ap2) = ap2;
         }
 
