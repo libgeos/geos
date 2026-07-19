@@ -882,6 +882,30 @@ void object::test<72>()
               "GEOMETRYCOLLECTION (LINESTRING (-11.1111111 70, -8.055555550000001 66.94444445), LINESTRING (-8.055555550000001 66.94444445, 70 -11.1111111))");
 }
 
+template<>
+template<>
+void object::test<73>()
+{
+    set_test_name("split PolygonZ with LineString");
+    // https://github.com/libgeos/geos/issues/1483
+
+    testSplit("POLYGONZ ((0 5 10, 0 10 20, 10 10 30, 10 5 20, 0 5 10))",
+              "LINESTRING(1 11, 1 5)",
+              "GEOMETRYCOLLECTION Z (POLYGON Z ((0 5 10, 0 10 20, 1 10 21, 1 5 11, 0 5 10)), POLYGON Z ((1 10 21, 10 10 30, 10 5 20, 1 5 11, 1 10 21)))");
+}
+
+template<>
+template<>
+void object::test<74>()
+{
+    set_test_name("split MultiPolygonZM with LineString");
+
+    testSplit(
+        "MULTIPOLYGON ZM (((1000000 6800000 0 0, 1000000 6800100 1 1, 1000200 6800100 2 2, 1000200 6800000 0 0, 1000000 6800000 0 0)))",
+        "LINESTRING( 1000135 6800130, 1000135 6799975)",
+        "GEOMETRYCOLLECTION ZM (POLYGON ZM ((1000000 6800000 0 0, 1000000 6800100 1 1, 1000135 6800100 1.675 1.675, 1000135 6800000 0 0, 1000000 6800000 0 0)), POLYGON ZM ((1000135 6800100 1.675 1.675, 1000200 6800100 2 2, 1000200 6800000 0 0, 1000135 6800000 0 0, 1000135 6800100 1.675 1.675)))"
+    );
+}
 
 
 }
