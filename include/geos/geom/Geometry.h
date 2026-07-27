@@ -313,8 +313,12 @@ public:
     /// Return a string representation of this Geometry type
     virtual std::string getGeometryType() const = 0; //Abstract
 
-    /// Returns whether the Geometry contains curved components
+    /// Returns whether the Geometry contains arcs
     virtual bool hasCurvedComponents() const;
+
+    /// Returns whether the Geometry contains curved geometry types,
+    /// regardless of whether they actually contain any arcs.
+    virtual bool hasCurvedTypes() const;
 
     /// Return an integer representation of this Geometry type
     virtual GeometryTypeId getGeometryTypeId() const = 0; //Abstract

@@ -897,11 +897,11 @@ GeometryTypeId commonType(const T& geoms) {
         return geoms[0]->getGeometryTypeId();
     }
 
-    bool hasCurvedComponents = geoms[0]->hasCurvedComponents();
+    bool curvedType = geoms[0]->hasCurvedTypes();
 
     const Dimension::DimensionType dim = geoms[0]->getDimension();
     for (std::size_t i = 1; i < geoms.size(); i++) {
-        hasCurvedComponents |= geoms[i]->hasCurvedComponents();
+        curvedType |= geoms[i]->hasCurvedTypes();
 
         if (geoms[i]->getDimension() != dim) {
             return GEOS_GEOMETRYCOLLECTION;
@@ -913,9 +913,9 @@ GeometryTypeId commonType(const T& geoms) {
         case GEOS_COMPOUNDCURVE:
         case GEOS_CIRCULARSTRING: return GEOS_MULTICURVE;
         case GEOS_LINEARRING:
-        case GEOS_LINESTRING: return hasCurvedComponents ? GEOS_MULTICURVE : GEOS_MULTILINESTRING;
+        case GEOS_LINESTRING: return curvedType ? GEOS_MULTICURVE : GEOS_MULTILINESTRING;
         case GEOS_CURVEPOLYGON: return GEOS_MULTISURFACE;
-        case GEOS_POLYGON: return hasCurvedComponents ? GEOS_MULTISURFACE : GEOS_MULTIPOLYGON;
+        case GEOS_POLYGON: return curvedType ? GEOS_MULTISURFACE : GEOS_MULTIPOLYGON;
         default: return GEOS_GEOMETRYCOLLECTION;
     }
 }
@@ -1020,7 +1020,7 @@ GeometryFactory::buildGeometry(const std::vector<const Geometry*>& fromGeoms) co
         return fromGeoms[0]->clone();
     }
 
-    auto resultType = commonType(fromGeoms);
+    const auto resultType = commonType(fromGeoms);
 
     switch(resultType) {
         case GEOS_MULTIPOINT: return createMultiPoint(fromGeoms);

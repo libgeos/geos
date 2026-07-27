@@ -806,6 +806,11 @@ Geometry::hasCurvedComponents() const {
     return false;
 }
 
+bool
+Geometry::hasCurvedTypes() const {
+    return false;
+}
+
 } // namespace geos::geom
 } // namespace geos
 

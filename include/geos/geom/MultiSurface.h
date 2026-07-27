@@ -53,6 +53,10 @@ public:
         return std::unique_ptr<MultiPolygon>(getLinearizedImpl(params));
     }
 
+    bool hasCurvedTypes() const override {
+        return true;
+    }
+
     bool hasDimension(Dimension::DimensionType d) const override
     {
         return d == Dimension::A;
