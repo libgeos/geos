@@ -16,6 +16,7 @@
 
 #include <geos/geom/CircularString.h>
 #include <geos/geom/CompoundCurve.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/GeometryFactory.h>
@@ -289,6 +290,12 @@ GeometrySplitter::splitLinealWithEdge(const Geometry &geom, const Geometry &edge
         std::vector<std::unique_ptr<Geometry>> geoms;
         geoms.push_back(geom.clone());
         return geom.getFactory()->createGeometryCollection(std::move(geoms));
+    }
+
+    if (!geom.hasCurvedComponents() && !geom.isSimple()) {
+        auto splitPoints = geom.intersection(&edge)->getCoordinates();
+        auto splitPointsGeom = geom.getFactory()->createMultiPoint(*splitPoints);
+        return splitAtPoints(geom, *splitPointsGeom);
     }
 
     GeometryNoder noder(geom, edge);

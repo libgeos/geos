@@ -691,24 +691,17 @@ void object::test<56>()
               "GEOMETRYCOLLECTION (LINESTRING (0 0, 10 0, 10 1), LINESTRING (10 1, 10 2, 6 2, 6 1), LINESTRING (6 1, 6 -1), LINESTRING (6 -1, 6 -2, 3 -2, 3 -1), LINESTRING (3 -1, 3 1), LINESTRING (3 1, 3 2, 0 2, 0 1), LINESTRING (0 1, 0 0))");
 }
 
-#if 0
 template<>
 template<>
 void object::test<57>()
 {
     set_test_name("do not split on self-intersections; QGIS test #4");
 
-    // Need to either
-    // a) do as QGIS does, and use Geometry::intersection to get intersection points, then node on those
-    // b) update GeometryNoder / SegmentIntersector classes with an ignoreSelfIntersections flag that would
-    //    ignore PathStrings with the same context.
-
     // Do not split on self-intersections - https://github.com/qgis/QGIS/issues/14070
     testSplit("LINESTRING (0 0, 10 0, 10 2, 6 2, 6 -2, 3 -2, 3 2, 0 2, 0 0)",
               "LINESTRING (0 1, 11 1, 11 -1, 0 -1)",
               "GEOMETRYCOLLECTION (LINESTRING (0 0, 10 0, 10 1), LINESTRING (10 1, 10 2, 6 2, 6 1), LINESTRING (6 1, 6 -1), LINESTRING (6 -1, 6 -2, 3 -2, 3 -1), LINESTRING (3 -1, 3 1), LINESTRING (3 1, 3 2, 0 2, 0 1), LINESTRING (0 1, 0 0))");
 }
-#endif
 
 template<>
 template<>
