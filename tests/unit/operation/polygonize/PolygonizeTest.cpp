@@ -459,5 +459,27 @@ void object::test<14>()
     doTest(input, expected, true, POLYGONS);
 }
 
+template<>
+template<>
+void object::test<15>()
+{
+    set_test_name("mixed dimension inputs");
+
+    std::vector<std::string> input{
+        "LINESTRING (0 0, 1 0)",
+        "LINESTRING Z (1 0 6, 2 2 9)",
+        "LINESTRING M (2 2 8, 0 0 7)"};
+
+    std::vector<std::string> expected{
+        "POLYGON ZM ((0 0 NaN 7, 1 0 6 NaN, 2 2 9 8, 0 0 NaN 7))",
+    };
+
+    doTest(input, expected, false, POLYGONS);
+
+    std::reverse(input.begin(), input.end());
+
+    doTest(input, expected, false, POLYGONS);
+}
+
 } // namespace tut
 

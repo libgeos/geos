@@ -328,17 +328,29 @@ EdgeRing::getRingOwnership()
 
 /*private*/
 void
-EdgeRing::addEdge(const CoordinateSequence* coords, bool isForward,
-                  CoordinateSequence* coordList)
+EdgeRing::addEdge(const CoordinateSequence* srcCoords, bool isForward,
+                  CoordinateSequence* dstCoords)
 {
-    const std::size_t npts = coords->getSize();
+    const std::size_t npts = srcCoords->getSize();
+
+    if (!dstCoords->isEmpty() && !srcCoords->isEmpty()) {
+        // Patch Z value in last coordinate, if needed
+        if (srcCoords->hasZ() && std::isnan(dstCoords->getZ(dstCoords->size() - 1))) {
+            dstCoords->setZ(dstCoords->size() - 1, isForward ? srcCoords->getZ(0) : srcCoords->getZ(srcCoords->getSize() - 1));
+        }
+        // Patch M value in last coordinate, if needed
+        if (srcCoords->hasM() && std::isnan(dstCoords->getM(dstCoords->size() - 1))) {
+            dstCoords->setM(dstCoords->size() - 1, isForward ? srcCoords->getM(0) : srcCoords->getM(srcCoords->getSize() - 1));
+        }
+    }
+
     if(isForward) {
-        coordList->add(*coords, 0, npts - 1, false);
+        dstCoords->add(*srcCoords, 0, npts - 1, false);
     }
     else {
         for(std::size_t i = npts; i > 0; --i) {
-            coords->applyAt(i-1, [coordList](const auto& coord) {
-                coordList->add(coord, false);
+            srcCoords->applyAt(i-1, [&dstCoords](const auto& coord) {
+                dstCoords->add(coord, false);
             });
         }
     }
