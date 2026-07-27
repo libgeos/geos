@@ -3,6 +3,7 @@
 
 
 #include <tut/tut.hpp>
+#include <tut/tut_macros.hpp>
 #include <utility.h>
 
 // geos
@@ -47,7 +48,7 @@ struct test_issimpleop_data {
     {}
 
     void checkIsSimple(
-        std::string& wkt,
+        const std::string& wkt,
         const BoundaryNodeRule& bnRule,
         bool expectedResult)
     {
@@ -55,7 +56,7 @@ struct test_issimpleop_data {
     }
 
     void checkIsSimple(
-        std::string& wkt,
+        const std::string& wkt,
         const BoundaryNodeRule& bnRule,
         bool expectedResult,
         Coordinate expectedLocation)
@@ -233,5 +234,24 @@ void object::test<10> ()
     checkIsSimpleAll(a, BoundaryNodeRule::getBoundaryRuleMod2(), b);
 }
 
+template<>
+template<>
+void object::test<11>()
+{
+    set_test_name("CompoundCurve with linear components");
+
+    checkIsSimple( "COMPOUNDCURVE ((0 0, 10 10, 0 10), (0 10, 10 0))", BoundaryNodeRule::getBoundaryRuleMod2(), false, Coordinate(5, 5));
+}
+
+template<>
+template<>
+void object::test<12>()
+{
+    set_test_name("CompoundCurve with curved component");
+
+    auto g = reader_.read("COMPOUNDCURVE ((1 1, 0 0, -1 0), CIRCULARSTRING (-1 0, 0 1, 1 0))");
+
+    ensure_THROW(IsSimpleOp::isSimple(*g), geos::util::UnsupportedOperationException);
+}
 
 } // namespace tut

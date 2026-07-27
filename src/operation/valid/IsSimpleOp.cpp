@@ -19,6 +19,7 @@
 
 #include <geos/algorithm/BoundaryNodeRule.h>
 #include <geos/algorithm/LineIntersector.h>
+#include <geos/geom/CompoundCurve.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryCollection.h>
@@ -128,8 +129,13 @@ IsSimpleOp::computeSimple(const Geometry& geom)
             return isSimplePolygonal(geom);
         case GEOS_GEOMETRYCOLLECTION:
             return isSimpleGeometryCollection(geom);
-        case GEOS_CIRCULARSTRING:
         case GEOS_COMPOUNDCURVE:
+            if (!geom.hasCurvedComponents()) {
+                return isSimpleLinearGeometry(geom);
+            } else {
+                throw util::UnsupportedOperationException("Curved types not supported in IsSimpleOp.");
+            }
+        case GEOS_CIRCULARSTRING:
         case GEOS_MULTICURVE:
         case GEOS_CURVEPOLYGON:
         case GEOS_MULTISURFACE:
@@ -229,14 +235,17 @@ IsSimpleOp::removeRepeatedPts(const Geometry& geom)
 {
     std::vector<std::shared_ptr<const CoordinateSequence>> coordseqs;
     for (std::size_t i = 0, sz = geom.getNumGeometries(); i < sz; i++) {
-        const LineString* line = dynamic_cast<const LineString*>(geom.getGeometryN(i));
-        if (line) {
-            auto pts = line->getSharedCoordinates();
-            if (pts->hasRepeatedPoints()) {
-                pts = RepeatedPointRemover::removeRepeatedPoints(line->getCoordinatesRO());
+        const Curve* c = detail::down_cast<const Curve*>(geom.getGeometryN(i));
+        for (std::size_t j = 0; j < c->getNumCurves(); j++) {
+            const LineString* line = dynamic_cast<const LineString*>(c->getCurveN(j));
+            if (line) {
+                const auto& pts = line->getSharedCoordinates();
+                if (pts->hasRepeatedPoints()) {
+                    coordseqs.push_back(RepeatedPointRemover::removeRepeatedPoints(pts.get()));
+                } else {
+                    coordseqs.push_back(pts);
+                }
             }
-
-            coordseqs.push_back(pts);
         }
     }
     return coordseqs;
