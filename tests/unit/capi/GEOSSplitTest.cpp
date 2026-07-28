@@ -44,8 +44,27 @@ void object::test<2>()
 {
     geom1_ = fromWKT("POINT (3 7)");
     geom2_ = fromWKT("LINESTRING (3 7, 3 8)");
+    geom3_ = fromWKT("POINT (3 7)");
 
     result_ = GEOSSplit(geom1_, geom2_); // cannot split a point geometry
+    ensure(!result_);
+
+    result_ = GEOSSplit(geom1_, geom3_); // cannot split a point geometry
+    ensure(!result_);
+}
+
+template<>
+template<>
+void object::test<3>()
+{
+    geom1_ = fromWKT("GEOMETRYCOLLECTION (POINT (3 7), LINESTRING (3 7, 3 8))");
+    geom2_ = fromWKT("LINESTRING (3 7, 3 8)");
+    geom3_ = fromWKT("POINT (3 7)");
+
+    result_ = GEOSSplit(geom1_, geom2_); // cannot split collection with a point geometry
+    ensure(!result_);
+
+    result_ = GEOSSplit(geom1_, geom3_); // cannot split collection with a point geometry
     ensure(!result_);
 }
 
