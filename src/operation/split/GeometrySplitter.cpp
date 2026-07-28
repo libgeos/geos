@@ -173,6 +173,10 @@ GeometrySplitter::splitAtPoints(const Geometry& geom, const Geometry& splitPoint
 std::unique_ptr<Geometry>
 GeometrySplitter::split(const Geometry &geom, const Geometry &splitGeom)
 {
+    if (geom.hasDimension(geom::Dimension::P)) {
+        throw util::IllegalArgumentException("Input geometry must be linear or polygonal.");
+    }
+
     if (geom.isEmpty() || splitGeom.isEmpty()) {
         std::vector<std::unique_ptr<Geometry>> geoms;
         geoms.push_back(geom.clone());
