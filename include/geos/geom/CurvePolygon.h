@@ -44,6 +44,10 @@ public:
 
     bool hasCurvedComponents() const override;
 
+    bool hasCurvedTypes() const override {
+        return true;
+    }
+
     void normalize() override;
 
 protected:

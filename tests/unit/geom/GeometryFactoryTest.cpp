@@ -1129,6 +1129,17 @@ void object::test<34>
         ensure_equals(factory_->buildGeometry(std::move(geoms))->getGeometryTypeId(), geos::geom::GEOS_MULTICURVE);
     }
 
+    // MultiCurve (2)
+    {
+        std::vector<std::unique_ptr<Geometry>> geoms;
+        geoms.push_back(reader_.read("LINESTRING (3 3, 4 4)"));
+        geoms.push_back(reader_.read("COMPOUNDCURVE((0 0, 1 1, 2 0))"));
+
+        auto g = factory_->buildGeometry(std::move(geoms));
+        ensure_equals(g->getGeometryTypeId(), geos::geom::GEOS_MULTICURVE);
+        ensure_equals(g->getNumGeometries(), 2u);
+    }
+
     // MultiLineString
     {
         std::vector<std::unique_ptr<Geometry>> geoms;
@@ -1150,6 +1161,14 @@ void object::test<34>
         std::vector<std::unique_ptr<Geometry>> geoms;
         geoms.push_back(poly->clone());
         geoms.push_back(curvepoly->clone());
+        ensure_equals(factory_->buildGeometry(std::move(geoms))->getGeometryTypeId(), geos::geom::GEOS_MULTISURFACE);
+    }
+
+    // MultiSurface (2)
+    {
+        std::vector<std::unique_ptr<Geometry>> geoms;
+        geoms.push_back(poly->clone());
+        geoms.push_back(reader_.read("CURVEPOLYGON ((100 100, 200 100, 200 200, 100 100))"));
         ensure_equals(factory_->buildGeometry(std::move(geoms))->getGeometryTypeId(), geos::geom::GEOS_MULTISURFACE);
     }
 }

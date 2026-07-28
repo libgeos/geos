@@ -45,6 +45,11 @@ public:
         return true;
     }
 
+    bool hasCurvedTypes() const override
+    {
+        return true;
+    }
+
     bool isCurved() const override {
         return true;
     }
