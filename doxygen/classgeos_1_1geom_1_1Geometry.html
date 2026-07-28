@@ -135,8 +135,10 @@ const <a class="el" href="classgeos_1_1geom_1_1PrecisionModel.html">PrecisionMod
 <tr class="memdesc:a4290decd50c0d21fd976d34ab418ef0f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return a string representation of this <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a> type.  <br /></td></tr>
 <tr class="separator:a4290decd50c0d21fd976d34ab418ef0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a682b1a34ab2003cbc47e858668a8c9c9" id="r_a682b1a34ab2003cbc47e858668a8c9c9"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a682b1a34ab2003cbc47e858668a8c9c9">hasCurvedComponents</a> () const</td></tr>
-<tr class="memdesc:a682b1a34ab2003cbc47e858668a8c9c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether the <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a> contains curved components.  <br /></td></tr>
+<tr class="memdesc:a682b1a34ab2003cbc47e858668a8c9c9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns whether the <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a> contains arcs.  <br /></td></tr>
 <tr class="separator:a682b1a34ab2003cbc47e858668a8c9c9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7022b1a4ddede83326b3b7a2b19799e3" id="r_a7022b1a4ddede83326b3b7a2b19799e3"><td class="memItemLeft" align="right" valign="top">virtual bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a7022b1a4ddede83326b3b7a2b19799e3">hasCurvedTypes</a> () const</td></tr>
+<tr class="separator:a7022b1a4ddede83326b3b7a2b19799e3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3680d76fcb2b2f8e2336ea3a2de5cbf8" id="r_a3680d76fcb2b2f8e2336ea3a2de5cbf8"><td class="memItemLeft" align="right" valign="top">virtual <a class="el" href="namespacegeos_1_1geom.html#ae613a409fcf8fc6d957848aafbd67c63">GeometryTypeId</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1geom_1_1Geometry.html#a3680d76fcb2b2f8e2336ea3a2de5cbf8">getGeometryTypeId</a> () const =0</td></tr>
 <tr class="memdesc:a3680d76fcb2b2f8e2336ea3a2de5cbf8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return an integer representation of this <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a> type.  <br /></td></tr>
 <tr class="separator:a3680d76fcb2b2f8e2336ea3a2de5cbf8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -1758,9 +1760,35 @@ next lower dimension."</p>
 </table>
 </div><div class="memdoc">
 
-<p>Returns whether the <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a> contains curved components. </p>
+<p>Returns whether the <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a> contains arcs. </p>
 
 <p>Reimplemented in <a class="el" href="classgeos_1_1geom_1_1GeometryCollection.html#a6ca8b4adb4958564cc7e7afd57264e16">geos::geom::GeometryCollection</a>, <a class="el" href="classgeos_1_1geom_1_1MultiLineString.html#acce12bc2f192f2ade36eda9bbc0501cd">geos::geom::MultiLineString</a>, <a class="el" href="classgeos_1_1geom_1_1MultiPoint.html#a49afe98b77df57a3eff19cd87c332c4a">geos::geom::MultiPoint</a>, and <a class="el" href="classgeos_1_1geom_1_1MultiPolygon.html#aabf52d1bd1308aadb21cf956bbda863d">geos::geom::MultiPolygon</a>.</p>
+
+</div>
+</div>
+<a id="a7022b1a4ddede83326b3b7a2b19799e3" name="a7022b1a4ddede83326b3b7a2b19799e3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7022b1a4ddede83326b3b7a2b19799e3">&#9670;&#160;</a></span>hasCurvedTypes()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual bool geos::geom::Geometry::hasCurvedTypes </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns whether the <a class="el" href="classgeos_1_1geom_1_1Geometry.html" title="Basic implementation of Geometry, constructed and destructed by GeometryFactory.">Geometry</a> contains curved geometry types, regardless of whether they actually contain any arcs. </p>
 
 </div>
 </div>
