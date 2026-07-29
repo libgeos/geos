@@ -47,15 +47,23 @@ template<>
 template<>
 void object::test<3>()
 {
-    set_test_name("single-element collection");
+    set_test_name("single-element generic collection");
 
     testHomogenize("GEOMETRYCOLLECTION (POINT (0 2))", "POINT (0 2)");
-    testHomogenize("MULTIPOINT ((8 2))", "POINT (8 2)");
 }
 
 template<>
 template<>
 void object::test<4>()
+{
+    set_test_name("single-element typed collection");
+
+    testHomogenize("MULTIPOINT ((8 2))", "POINT (8 2)");
+}
+
+template<>
+template<>
+void object::test<5>()
 {
     set_test_name("homogeneous collection");
 
@@ -65,7 +73,7 @@ void object::test<4>()
 
 template<>
 template<>
-void object::test<5>()
+void object::test<6>()
 {
     set_test_name("empty collection");
 
@@ -74,7 +82,7 @@ void object::test<5>()
 
 template<>
 template<>
-void object::test<6>()
+void object::test<7>()
 {
     set_test_name("nested homogeneous collection");
 
@@ -84,7 +92,7 @@ void object::test<6>()
 
 template<>
 template<>
-void object::test<7>()
+void object::test<8>()
 {
     set_test_name("nested non-homogeneous collection");
 
