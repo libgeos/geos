@@ -2762,7 +2762,7 @@ extern "C" {
 
             GeometryCollection *col = dynamic_cast<GeometryCollection*>(collection);
             if (!col) {
-                handle->ERROR_MESSAGE("Parameter collection of GEOSGeom_releaseCollection_r must not be a collection");
+                handle->ERROR_MESSAGE("Parameter collection of GEOSGeom_releaseCollection_r must be a collection");
             } else {
                 *ngeoms = static_cast<unsigned int>(col->getNumGeometries());
             }
