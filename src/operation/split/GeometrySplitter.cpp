@@ -373,7 +373,16 @@ GeometrySplitter::splitPolygonalWithEdge(const Geometry &geom, const Geometry &e
         return geom.getFactory()->createEmptyGeometry(geom::GEOS_GEOMETRYCOLLECTION, geom.hasZ(), geom.hasM());
     }
 
-    return geom.getFactory()->createGeometryCollection(std::move(keep));
+    auto result =  geom.getFactory()->createGeometryCollection(std::move(keep));
+
+    const double inputArea = geom.getArea();
+    const double resultArea = result->getArea();
+
+    if (inputArea > 0 && std::abs(inputArea - resultArea) / inputArea > 1e-6) {
+        throw util::GEOSException("Splitting polygonal geometry failed to preserve area");
+    }
+
+    return result;
 }
 
 }
