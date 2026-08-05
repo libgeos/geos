@@ -160,7 +160,7 @@ int
 EdgeEnd::compareDirection(const EdgeEnd* e) const
 {
     assert(e);
-    if(dx == e->dx && dy == e->dy) {
+    if(p1.equals2D(e->p1)) {
         return 0;
     }
 
