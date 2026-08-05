@@ -41,6 +41,8 @@
 #include <geos/util/Assert.h>
 
 #include <memory> // for unique_ptr
+#include <set>
+#include <unordered_set>
 
 using geos::geom::CoordinateXY;
 using geos::geom::SimpleCurve;
@@ -310,6 +312,80 @@ GeometryNoder::isInResult(const PathString& ps) const
     return !onlyFirstGeomEdges || ps.getData() != nullptr;
 }
 
+static bool
+arcStringsSame(const ArcString& as1, const ArcString& as2, bool reverse)
+{
+    using geom::CircularArc;
+
+    const auto nArcs = as1.getSize();
+
+    if (as2.getSize() != nArcs) {
+        return false;
+    }
+
+    for (std::size_t i = 0; i < nArcs; i++) {
+        const CircularArc& arc1 = as1.getArc(i);
+        const CircularArc& arc2 = as2.getArc(reverse ? nArcs - i - 1: i);
+
+        if (reverse) {
+            const bool arc1Linear = arc1.getOrientation() == algorithm::Orientation::COLLINEAR;
+            const bool arc2Linear = arc2.getOrientation() == algorithm::Orientation::COLLINEAR;
+
+            if (arc1Linear != arc2Linear) {
+                return false;
+            }
+
+            if (!arc1Linear && arc1.getOrientation() == arc2.getOrientation()) {
+                return false;
+            }
+            if (arc1.p0() != arc2.p2() || arc1.p2() != arc2.p0()) {
+                return false;
+            }
+        } else {
+            if (arc1.getOrientation() != arc2.getOrientation()) {
+                return false;
+            }
+            if (arc1.p0() != arc2.p0() || arc1.p2() != arc2.p2()) {
+                return false;
+            }
+        }
+
+        if (!arc1.isLinear() && arc1.getCenter() != arc2.getCenter()) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+struct ArcStringDirectionIndependentEqual {
+
+    bool operator()(const ArcString* as1, const ArcString* as2) const
+    {
+        return arcStringsSame(*as1, *as2, false) || arcStringsSame(*as1, *as2, true);
+    }
+};
+
+struct ArcStringDirectionIndependentHash
+{
+    inline std::size_t operator()(const ArcString* as) const
+    {
+        const CoordinateXY* c1 = &as->getArc(0).p0();
+        const CoordinateXY* c2 = &as->getArc(as->getSize() - 1).p2();
+
+        if (c2->compareTo(*c1) < 0) {
+            std::swap(c1, c2);
+        }
+
+        size_t h = std::hash<double>{}(c1->x);
+        h ^= std::hash<double>{}(c1->y) << 1;
+        h ^= std::hash<double>{}(c2->x) << 1;
+        h ^= std::hash<double>{}(c2->y) << 1;
+
+        return h;
+    };
+};
+
 /* private */
 std::unique_ptr<geom::Geometry>
 GeometryNoder::toGeometry(std::vector<std::unique_ptr<PathString>>& nodedEdges) const
@@ -317,22 +393,28 @@ GeometryNoder::toGeometry(std::vector<std::unique_ptr<PathString>>& nodedEdges) 
     const geom::GeometryFactory* geomFact = argGeom1->getFactory();
 
     std::set< OrientedCoordinateArray > ocas;
+    std::unordered_set<const ArcString*, ArcStringDirectionIndependentHash, ArcStringDirectionIndependentEqual> arcStrings;
 
     std::vector<PathString*> pathsToKeep;
-
-
 
     for(auto& path : nodedEdges) {
         if (!isInResult(*path)) {
             continue;
         }
 
-        const auto& coords = path->getCoordinates();
-        OrientedCoordinateArray oca1(*coords);
+        if (const auto* as = dynamic_cast<const ArcString*>(path.get())) {
+            // Check if an equivalent arc is known
+            if (arcStrings.insert(as).second) {
+                pathsToKeep.push_back(path.get());
+            }
+        } else {
+            const auto& coords = path->getCoordinates();
+            OrientedCoordinateArray oca1(*coords);
 
-        // Check if an equivalent edge is known
-        if(ocas.insert(oca1).second) {
-            pathsToKeep.push_back(path.get());
+            // Check if an equivalent edge is known
+            if(ocas.insert(oca1).second) {
+                pathsToKeep.push_back(path.get());
+            }
         }
     }
 

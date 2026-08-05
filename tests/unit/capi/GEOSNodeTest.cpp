@@ -284,8 +284,6 @@ void object::test<12>()
     expected_ = fromWKT("MULTICURVE ("
                         "CIRCULARSTRING (-5 0, -4.7434164902525691 1.5811388300841900, -4 3),"
                         "CIRCULARSTRING (-4 3, 0 5, 4 3),"
-                        "CIRCULARSTRING (-4 3, 0 5, 4 3)," // FIXME this component is not removed by OrientedCoordinateArray because
-                                                           // its control point differs slightly from the previous one
                         "CIRCULARSTRING (4 3, 4.7434164902525691 1.5811388300841898, 5 0))");
 
     ensure_equals_geometry_xyzm(reinterpret_cast<Geometry*>(result_),
@@ -396,6 +394,24 @@ void object::test<18>()
     ensure_equals_exact_geometry_xyzm(reinterpret_cast<Geometry*>(result_),
                                       reinterpret_cast<Geometry*>(expected_), 1e-4);
 
+}
+
+template<>
+template<>
+void object::test<19>()
+{
+    set_test_name("two collinear CircularStrings");
+
+    input_ = fromWKT("MULTICURVE (CIRCULARSTRING (0 0, 1 1, 2 2), CIRCULARSTRING (2 2, 1 1, 0 0))");
+
+    result_ = GEOSNode(input_);
+    ensure(result_);
+
+    ensure_equals(GEOSGetNumGeometries(result_), 1);
+    expected_ = fromWKT("MULTICURVE(CIRCULARSTRING (0 0, 1 1, 2 2))");
+
+    ensure_equals_exact_geometry_xyzm(reinterpret_cast<Geometry*>(result_),
+                                      reinterpret_cast<Geometry*>(expected_), 1e-4);
 }
 
 } // namespace tut
