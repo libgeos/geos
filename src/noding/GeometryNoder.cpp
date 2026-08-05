@@ -29,6 +29,7 @@
 
 #include <geos/noding/ArcIntersectionAdder.h>
 #include <geos/noding/GeometryNoder.h>
+#include <geos/noding/DirectionIndependentArcString.h>
 #include <geos/noding/IteratedNoder.h>
 #include <geos/noding/MCIndexNoder.h>
 #include <geos/noding/NodableArcString.h>
@@ -41,6 +42,8 @@
 #include <geos/util/Assert.h>
 
 #include <memory> // for unique_ptr
+#include <set>
+#include <unordered_set>
 
 using geos::geom::CoordinateXY;
 using geos::geom::SimpleCurve;
@@ -317,22 +320,28 @@ GeometryNoder::toGeometry(std::vector<std::unique_ptr<PathString>>& nodedEdges) 
     const geom::GeometryFactory* geomFact = argGeom1->getFactory();
 
     std::set< OrientedCoordinateArray > ocas;
+    std::unordered_set<DirectionIndependentArcString> arcStrings;
 
     std::vector<PathString*> pathsToKeep;
-
-
 
     for(auto& path : nodedEdges) {
         if (!isInResult(*path)) {
             continue;
         }
 
-        const auto& coords = path->getCoordinates();
-        OrientedCoordinateArray oca1(*coords);
+        if (const auto* as = dynamic_cast<const ArcString*>(path.get())) {
+            // Check if an equivalent arc is known
+            if (arcStrings.emplace(*as).second) {
+                pathsToKeep.push_back(path.get());
+            }
+        } else {
+            const auto& coords = path->getCoordinates();
+            OrientedCoordinateArray oca1(*coords);
 
-        // Check if an equivalent edge is known
-        if(ocas.insert(oca1).second) {
-            pathsToKeep.push_back(path.get());
+            // Check if an equivalent edge is known
+            if(ocas.insert(oca1).second) {
+                pathsToKeep.push_back(path.get());
+            }
         }
     }
 

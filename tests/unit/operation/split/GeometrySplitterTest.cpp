@@ -906,11 +906,10 @@ void object::test<75>()
 {
     set_test_name("GH-1497");
 
-    auto geom = reader_.read("CURVEPOLYGON (COMPOUNDCURVE((5 0, 0 0, 0 5, 5 5), CIRCULARSTRING(5 5, 7 1, 5 0)))");
-    auto edge = reader_.read("CURVEPOLYGON (COMPOUNDCURVE((5 0, 0 0, 5 5), CIRCULARSTRING(5 5, 7 4, 5 0)))");
-
-    // This case is not currently handled correctly by the GeometrySplitter. Throw an error instead of returning an incorrect result.
-    ensure_THROW(GeometrySplitter::split(*geom, *edge), geos::util::GEOSException);
+    testSplit(
+    "CURVEPOLYGON (COMPOUNDCURVE((5 0, 0 0, 0 5, 5 5), CIRCULARSTRING(5 5, 7 1, 5 0)))",
+    "CURVEPOLYGON (COMPOUNDCURVE((5 0, 0 0, 5 5), CIRCULARSTRING(5 5, 7 4, 5 0)))",
+        "GEOMETRYCOLLECTION (CURVEPOLYGON (COMPOUNDCURVE ((5 0, 0 0, 5 5), CIRCULARSTRING (5 5, 7 1, 5 0))), POLYGON ((0 0, 0 5, 5 5, 0 0)))");
 }
 
 }
