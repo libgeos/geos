@@ -183,6 +183,27 @@ jobs:
           cmake: 4.2.*
           os: ubuntu-24.04
 
+          # clang 21 and lower are not supported
+          # in ubuntu 26.04 and higher
+
+        - cxx_compiler: clang++-21
+          c_compiler: clang-21
+          build_type: Debug
+          cxxstd: 20
+          arch: 64
+          packages: 'clang-21'
+          cmake: 4.3.*
+          os: ubuntu-26.04
+
+        - cxx_compiler: clang++-22
+          c_compiler: clang-22
+          build_type: Debug
+          cxxstd: 20
+          arch: 64
+          packages: 'clang-22'
+          cmake: 4.4.*
+          os: ubuntu-26.04
+
 
     runs-on: ${{ matrix.ci.os }}
     steps:
