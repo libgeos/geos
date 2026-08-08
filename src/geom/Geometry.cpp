@@ -432,10 +432,10 @@ Geometry::contains(const Geometry* g) const
 {
     if (hasCurvedComponents() || g->hasCurvedComponents()) {
         if (getDimension() == Dimension::A && g->getDimension() == Dimension::P) {
-            return locate::SimplePointInAreaLocator::isEveryPointContained(*g, *this);
+            return locate::SimplePointInAreaLocator::isAreaContainingPoints(*g, *this);
         }
         if (g->getDimension() == Dimension::A && getDimension() == Dimension::P) {
-            return locate::SimplePointInAreaLocator::isEveryPointContained(*this, *g);
+            return locate::SimplePointInAreaLocator::isAreaContainingPoints(*this, *g);
         }
     }
 

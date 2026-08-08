@@ -300,5 +300,19 @@ void object::test<16>()
     ensure_equals(GEOSIntersects(geom2_, geom1_), 0);
 }
 
+
+template<>
+template<>
+void object::test<17>()
+{
+    set_test_name("Boundary point intersects CurvePolygon");
+
+    geom1_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE(CIRCULARSTRING(0 0, 1 1, 2 0), (2 0, 0 0)))");
+    geom2_ = fromWKT("POINT (0 0)");
+
+    ensure_equals(GEOSIntersects(geom1_, geom2_), 1);
+    ensure_equals(GEOSIntersects(geom2_, geom1_), 1);
+}
+
 } // namespace tut
 

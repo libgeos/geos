@@ -91,6 +91,13 @@ public:
 
     static bool isEveryPointContained(const geom::Geometry& pt, const geom::Geometry& areaGeom);
 
+    /**
+     * DE-9IM Contains for areal vs point geometry:
+     * non-empty, no exterior points, and at least one interior point.
+     * Boundary-only point sets return false (unlike Covers).
+     */
+    static bool isAreaContainingPoints(const geom::Geometry& pt, const geom::Geometry& areaGeom);
+
     SimplePointInAreaLocator(const geom::Geometry* p_g)
         : g(p_g)
     { }
