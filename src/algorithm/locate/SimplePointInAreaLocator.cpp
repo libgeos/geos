@@ -46,6 +46,52 @@ SimplePointInAreaLocator::isContained(const CoordinateXY& p, const Geometry* geo
     return Location::EXTERIOR != locate(p, geom);
 }
 
+bool
+SimplePointInAreaLocator::isAnyPointContained(const geom::Geometry& pt, const geom::Geometry& area)
+{
+    // Empty point sets do not intersect any area.
+    if (pt.isEmpty()) {
+        return false;
+    }
+    if (pt.getNumGeometries() > 1) {
+        for (size_t i = 0; i < pt.getNumGeometries(); i++ ) {
+            if (isAnyPointContained(*pt.getGeometryN(i), area)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    const CoordinateXY* c = pt.getCoordinate();
+    if (c == nullptr) {
+        return false;
+    }
+    return isContained(*c, &area);
+}
+
+bool
+SimplePointInAreaLocator::isEveryPointContained(const geom::Geometry &pt, const geom::Geometry &area)
+{
+    // Vacuous truth: every point of an empty set is contained.
+    if (pt.isEmpty()) {
+        return true;
+    }
+    if (pt.getNumGeometries() > 1) {
+        for (size_t i = 0; i < pt.getNumGeometries(); i++ ) {
+            if (!isEveryPointContained(*pt.getGeometryN(i), area)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    const CoordinateXY* c = pt.getCoordinate();
+    if (c == nullptr) {
+        return true;
+    }
+    return isContained(*c, &area);
+}
+
 geom::Location
 SimplePointInAreaLocator::locateInGeometry(const CoordinateXY& p, const Geometry* geom)
 {
