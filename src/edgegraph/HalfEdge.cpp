@@ -179,17 +179,12 @@ HalfEdge::findLowest() const
 int
 HalfEdge::compareAngularDirection(const HalfEdge* e) const
 {
-    double dx = directionX();
-    double dy = directionY();
-    double dx2 = e->directionX();
-    double dy2 = e->directionY();
-
     // same vector
-    if (dx == dx2 && dy == dy2)
+    if (directionPt().equals2D(e->directionPt()))
         return 0;
 
-    int quadrant = geom::Quadrant::quadrant(dx, dy);
-    int quadrant2 = geom::Quadrant::quadrant(dx2, dy2);
+    int quadrant = geom::Quadrant::quadrant(directionX(), directionY());
+    int quadrant2 = geom::Quadrant::quadrant(e->directionX(), e->directionY());
 
     /**
     * If the direction vectors are in different quadrants,

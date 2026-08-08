@@ -61,6 +61,17 @@ struct test_overlayngrobust_data {
         ensure_NO_THROW( OverlayNGRobust::Overlay(geom_a.get(), geom_b.get(), opCode) );
     }
 
+    void
+    checkOverlaySymmetricArea(const std::string& a, const std::string& b, int opCode, double expectedArea)
+    {
+        std::unique_ptr<Geometry> geom_a = r.read(a);
+        std::unique_ptr<Geometry> geom_b = r.read(b);
+        double areaAB = OverlayNGRobust::Overlay(geom_a.get(), geom_b.get(), opCode)->getArea();
+        double areaBA = OverlayNGRobust::Overlay(geom_b.get(), geom_a.get(), opCode)->getArea();
+        ensure_equals("overlay is not commutative", areaAB, areaBA, 1e-12);
+        ensure_equals("unexpected overlay area", areaAB, expectedArea, 1e-12);
+    }
+
     std::unique_ptr<Geometry>
     double2geom(const std::vector<double>& x, const std::vector<double>& y)
     {
@@ -109,7 +120,26 @@ void object::test<2> ()
     checkOverlaySuccess(a, b, OverlayNG::INTERSECTION);
 }
 
+// 2026-08-05 Intersection of polygons isn't commutative (https://github.com/libgeos/geos/issues/1405)
+template<>
+template<>
+void object::test<3> ()
+{
+    set_test_name("Intersection of triangles with an extremely similar edge");
+    const std::string a = "POLYGON ((1 1, 0 0.5, 0 0, 1 1))";
+    const std::string b = "POLYGON ((1 1, 0 0.49999999999999994, 0 1, 1 1))";
+    checkOverlaySymmetricArea(a, b, OverlayNG::INTERSECTION, 0.0);
+}
 
+template<>
+template<>
+void object::test<4> ()
+{
+    set_test_name("Union of triangles with an extremely similar edge");
+    const std::string a = "POLYGON ((1 1, 0 0.5, 0 0, 1 1))";
+    const std::string b = "POLYGON ((1 1, 0 0.49999999999999994, 0 1, 1 1))";
+    checkOverlaySymmetricArea(a, b, OverlayNG::UNION, 0.5);
+}
 
 #if 0
 /**
