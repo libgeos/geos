@@ -46,6 +46,98 @@ SimplePointInAreaLocator::isContained(const CoordinateXY& p, const Geometry* geo
     return Location::EXTERIOR != locate(p, geom);
 }
 
+bool
+SimplePointInAreaLocator::isAnyPointContained(const geom::Geometry& pt, const geom::Geometry& area)
+{
+    // Empty point sets do not intersect any area.
+    if (pt.isEmpty()) {
+        return false;
+    }
+    if (pt.getNumGeometries() > 1) {
+        for (size_t i = 0; i < pt.getNumGeometries(); i++ ) {
+            if (isAnyPointContained(*pt.getGeometryN(i), area)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    const CoordinateXY* c = pt.getCoordinate();
+    if (c == nullptr) {
+        return false;
+    }
+    return isContained(*c, &area);
+}
+
+bool
+SimplePointInAreaLocator::isEveryPointContained(const geom::Geometry &pt, const geom::Geometry &area)
+{
+    // Vacuous truth: every point of an empty set is contained.
+    if (pt.isEmpty()) {
+        return true;
+    }
+    if (pt.getNumGeometries() > 1) {
+        for (size_t i = 0; i < pt.getNumGeometries(); i++ ) {
+            if (!isEveryPointContained(*pt.getGeometryN(i), area)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    const CoordinateXY* c = pt.getCoordinate();
+    if (c == nullptr) {
+        return true;
+    }
+    return isContained(*c, &area);
+}
+
+bool
+SimplePointInAreaLocator::isAreaContainingPoints(const geom::Geometry& pt, const geom::Geometry& area)
+{
+    // Contains requires II=T; empty point geometry cannot satisfy that.
+    if (pt.isEmpty()) {
+        return false;
+    }
+
+    bool anyInterior = false;
+    const std::size_t n = pt.getNumGeometries();
+
+    if (n > 1) {
+        for (std::size_t i = 0; i < n; i++) {
+            const geom::Geometry* gi = pt.getGeometryN(i);
+            if (gi->isEmpty()) {
+                continue;
+            }
+            if (gi->getNumGeometries() > 1) {
+                if (!isAreaContainingPoints(*gi, area)) {
+                    return false;
+                }
+                anyInterior = true;
+                continue;
+            }
+            const CoordinateXY* c = gi->getCoordinate();
+            if (c == nullptr) {
+                continue;
+            }
+            const Location loc = locate(*c, &area);
+            if (loc == Location::EXTERIOR) {
+                return false;
+            }
+            if (loc == Location::INTERIOR) {
+                anyInterior = true;
+            }
+        }
+        return anyInterior;
+    }
+
+    const CoordinateXY* c = pt.getCoordinate();
+    if (c == nullptr) {
+        return false;
+    }
+    return locate(*c, &area) == Location::INTERIOR;
+}
+
 geom::Location
 SimplePointInAreaLocator::locateInGeometry(const CoordinateXY& p, const Geometry* geom)
 {

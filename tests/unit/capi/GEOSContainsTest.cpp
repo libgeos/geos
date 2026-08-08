@@ -207,5 +207,102 @@ void object::test<6>()
     ensure_equals(GEOSContains_r(ctxt_, geom2_, geom1_), 0);
 }
 
+template<>
+template<>
+void object::test<7>()
+{
+    set_test_name("Single-point multipoint contained by MultiSurface");
+
+    geom1_ = fromWKT("MULTISURFACE(POLYGON ((100 100, 200 100, 200 200, 100 100)), CURVEPOLYGON (COMPOUNDCURVE(CIRCULARSTRING(0 0, 1 1, 2 0), (2 0, 0 0))))");
+    geom2_ = fromWKT("MULTIPOINT ((0.1556955 0.5355459))");
+
+    ensure_equals(GEOSContains(geom1_, geom2_), 1);
+}
+
+template<>
+template<>
+void object::test<8>()
+{
+    set_test_name("Only 1 part of 2-point MultiPoint contained by MultiSurface");
+
+    geom1_ = fromWKT("MULTISURFACE(POLYGON ((100 100, 200 100, 200 200, 100 100)), CURVEPOLYGON (COMPOUNDCURVE(CIRCULARSTRING(0 0, 1 1, 2 0), (2 0, 0 0))))");
+    geom2_ = fromWKT("MULTIPOINT ((0.1556955 0.5355459), (500 500))");
+
+    ensure_equals(GEOSContains(geom1_, geom2_), 0);
+}
+
+template<>
+template<>
+void object::test<9>()
+{
+    set_test_name("MultiPoint contained by MultiSurface");
+
+    geom1_ = fromWKT("MULTISURFACE(POLYGON ((100 100, 200 100, 200 200, 100 100)), CURVEPOLYGON (COMPOUNDCURVE(CIRCULARSTRING(0 0, 1 1, 2 0), (2 0, 0 0))))");
+    geom2_ = fromWKT("MULTIPOINT ((0.1556955 0.5355459), (199 101))");
+
+    ensure_equals(GEOSContains(geom1_, geom2_), 1);
+}
+
+
+template<>
+template<>
+void object::test<10>()
+{
+    set_test_name("Empty MultiPoint is not contained by MultiSurface (II requires T)");
+
+    geom1_ = fromWKT("MULTISURFACE(CURVEPOLYGON (COMPOUNDCURVE(CIRCULARSTRING(0 0, 1 1, 2 0), (2 0, 0 0))))");
+    geom2_ = fromWKT("MULTIPOINT EMPTY");
+
+    ensure_equals(GEOSContains(geom1_, geom2_), 0);
+}
+
+template<>
+template<>
+void object::test<11>()
+{
+    set_test_name("Empty Point is not contained by CurvePolygon (II requires T)");
+
+    geom1_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE(CIRCULARSTRING(0 0, 1 1, 2 0), (2 0, 0 0)))");
+    geom2_ = fromWKT("POINT EMPTY");
+
+    ensure_equals(GEOSContains(geom1_, geom2_), 0);
+}
+
+template<>
+template<>
+void object::test<12>()
+{
+    set_test_name("Boundary point is not contained by CurvePolygon");
+
+    geom1_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE(CIRCULARSTRING(0 0, 1 1, 2 0), (2 0, 0 0)))");
+    geom2_ = fromWKT("POINT (0 0)");
+
+    ensure_equals(GEOSContains(geom1_, geom2_), 0);
+}
+
+template<>
+template<>
+void object::test<13>()
+{
+    set_test_name("Boundary + interior MultiPoint is contained");
+
+    geom1_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE(CIRCULARSTRING(0 0, 1 1, 2 0), (2 0, 0 0)))");
+    geom2_ = fromWKT("MULTIPOINT ((0 0), (0.1556955 0.5355459))");
+
+    ensure_equals(GEOSContains(geom1_, geom2_), 1);
+}
+
+template<>
+template<>
+void object::test<14>()
+{
+    set_test_name("Boundary-only MultiPoint is not contained");
+
+    geom1_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE(CIRCULARSTRING(0 0, 1 1, 2 0), (2 0, 0 0)))");
+    geom2_ = fromWKT("MULTIPOINT ((0 0), (2 0))");
+
+    ensure_equals(GEOSContains(geom1_, geom2_), 0);
+}
+
 } // namespace tut
 
