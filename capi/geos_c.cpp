@@ -790,6 +790,12 @@ extern "C" {
     }
 
     Geometry*
+    GEOSNodeCollection(const Geometry* input, double gridSize)
+    {
+        return GEOSNodeCollection_r(handle, input, gridSize);
+    }
+
+    Geometry*
     GEOSSplit(const Geometry* g, const Geometry* edge)
     {
         return GEOSSplit_r(handle, g, edge);

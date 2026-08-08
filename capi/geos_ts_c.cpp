@@ -2116,6 +2116,26 @@ extern "C" {
     }
 
     Geometry*
+    GEOSNodeCollection_r(GEOSContextHandle_t extHandle, const Geometry* input, double gridSize)
+    {
+        return execute(extHandle, [&]() {
+            // Each member of the input collection is noded against the
+            // others; the result is a collection of the same size, member
+            // i being the noded form of input member i.
+            std::vector<const Geometry*> geoms(input->getNumGeometries());
+            for (std::size_t i = 0; i < geoms.size(); i++) {
+                geoms[i] = input->getGeometryN(i);
+            }
+
+            auto noded = geos::noding::GeometryNoder::nodeCollection(geoms, gridSize);
+
+            auto out = input->getFactory()->createGeometryCollection(std::move(noded));
+            out->setSRID(input->getSRID());
+            return out.release();
+        });
+    }
+
+    Geometry*
     GEOSSplit_r(GEOSContextHandle_t extHandle, const Geometry* g, const Geometry* edge)
     {
         return execute(extHandle, [&]() {

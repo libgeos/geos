@@ -1250,6 +1250,12 @@ extern GEOSGeometry GEOS_DLL *GEOSNode_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry* g);
 
+/** \see GEOSNodeCollection */
+extern GEOSGeometry GEOS_DLL *GEOSNodeCollection_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* input,
+    double gridSize);
+
 /** \see GEOSSplit */
 extern GEOSGeometry GEOS_DLL *GEOSSplit_r(
     GEOSContextHandle_t handle,
@@ -5598,6 +5604,47 @@ extern GEOSGeometry GEOS_DLL * GEOSVoronoiDiagram(
 * \since 3.4
 */
 extern GEOSGeometry GEOS_DLL *GEOSNode(const GEOSGeometry* g);
+
+
+/**
+* Nodes a collection of geometries against each other, returning a
+* GeometryCollection of the same size in which member i is the noded
+* form of input member i.
+*
+* Unlike GEOSNode(), which collects all edges into a single flattened
+* result, this preserves the per-member structure of the input:
+* linework shared (or nearly shared) between members is not dissolved,
+* and every member that touches a node is split there.
+*
+* Each output member is a MultiLineString (or a MultiCurve, when the
+* corresponding input contributed curved components). Areal members are
+* reduced to their boundary linework — a polygon's rings are noded like
+* any other lines — so a polygon member yields its noded boundary. Point
+* members (and any member with no linear or areal component) yield an
+* empty MultiLineString.
+*
+* A non-collection input (for example a single LineString or Polygon) is
+* treated as a one-member collection, producing a one-member result.
+*
+* When \p gridSize is 0.0 (or any non-positive value), exact noding is
+* used. When \p gridSize is greater than 0.0, snap-rounding to that grid
+* is used for robust output on inputs with near-coincident coordinates.
+* Snap-rounding is linear-only: if the input contains curved components,
+* \p gridSize is ignored and exact arc noding is used.
+*
+* \param input A collection of geometries to node against each other.
+* \param gridSize Snap-rounding grid size when greater than 0; any
+*        non-positive value selects exact noding.
+* \return A GeometryCollection of the same size as the input, or NULL on
+*         exception. Caller is responsible for freeing with
+*         GEOSGeom_destroy().
+* \see geos::noding::GeometryNoder::nodeCollection
+*
+* \since 3.15
+*/
+extern GEOSGeometry GEOS_DLL *GEOSNodeCollection(
+    const GEOSGeometry* input,
+    double gridSize);
 
 
 /** Split a linear or polygonal input 
