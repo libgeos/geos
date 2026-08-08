@@ -236,8 +236,8 @@ template<>
 template<>
 void object::test<12>()
 {
-    geom1_ = fromWKT("CURVEPOLYGON (COMPOUNDCURVE(CIRCULARSTRING(0 0, 1 1, 2 0), (2 0, 0 0)))");
-    geom2_ = fromWKT("POINT (0.1556955 0.5355459)");
+    geom1_ = fromWKT("MULTISURFACE(POLYGON ((100 100, 200 100, 200 200, 100 100)), CURVEPOLYGON (COMPOUNDCURVE(CIRCULARSTRING(0 0, 1 1, 2 0), (2 0, 0 0))))");
+    geom2_ = fromWKT("MULTIPOINT ((5000 5000), (0.1556955 0.5355459))");
 
     // PostGIS would return false here because geom2 is inside geom1
     // but outside the linearized form of geom1
@@ -282,8 +282,23 @@ void object::test<15>()
     geom2_ = fromWKT("POINT (25492818 6677399.98)");
 
     ensure_equals(GEOSIntersects(geom1_, geom2_), 1);
+    ensure_equals(GEOSIntersects(geom2_, geom1_), 1);
 }
 
+
+
+template<>
+template<>
+void object::test<16>()
+{
+    set_test_name("Empty MultiPoint does not intersect MultiSurface");
+
+    geom1_ = fromWKT("MULTISURFACE(CURVEPOLYGON (COMPOUNDCURVE(CIRCULARSTRING(0 0, 1 1, 2 0), (2 0, 0 0))))");
+    geom2_ = fromWKT("MULTIPOINT EMPTY");
+
+    ensure_equals(GEOSIntersects(geom1_, geom2_), 0);
+    ensure_equals(GEOSIntersects(geom2_, geom1_), 0);
+}
 
 } // namespace tut
 
