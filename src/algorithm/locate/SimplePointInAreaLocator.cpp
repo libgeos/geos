@@ -92,6 +92,52 @@ SimplePointInAreaLocator::isEveryPointContained(const geom::Geometry &pt, const 
     return isContained(*c, &area);
 }
 
+bool
+SimplePointInAreaLocator::isAreaContainingPoints(const geom::Geometry& pt, const geom::Geometry& area)
+{
+    // Contains requires II=T; empty point geometry cannot satisfy that.
+    if (pt.isEmpty()) {
+        return false;
+    }
+
+    bool anyInterior = false;
+    const std::size_t n = pt.getNumGeometries();
+
+    if (n > 1) {
+        for (std::size_t i = 0; i < n; i++) {
+            const geom::Geometry* gi = pt.getGeometryN(i);
+            if (gi->isEmpty()) {
+                continue;
+            }
+            if (gi->getNumGeometries() > 1) {
+                if (!isAreaContainingPoints(*gi, area)) {
+                    return false;
+                }
+                anyInterior = true;
+                continue;
+            }
+            const CoordinateXY* c = gi->getCoordinate();
+            if (c == nullptr) {
+                continue;
+            }
+            const Location loc = locate(*c, &area);
+            if (loc == Location::EXTERIOR) {
+                return false;
+            }
+            if (loc == Location::INTERIOR) {
+                anyInterior = true;
+            }
+        }
+        return anyInterior;
+    }
+
+    const CoordinateXY* c = pt.getCoordinate();
+    if (c == nullptr) {
+        return false;
+    }
+    return locate(*c, &area) == Location::INTERIOR;
+}
+
 geom::Location
 SimplePointInAreaLocator::locateInGeometry(const CoordinateXY& p, const Geometry* geom)
 {
