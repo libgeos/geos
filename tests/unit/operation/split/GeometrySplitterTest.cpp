@@ -900,5 +900,16 @@ void object::test<74>()
     );
 }
 
+template<>
+template<>
+void object::test<75>()
+{
+    set_test_name("GH-1497");
+
+    testSplit(
+    "CURVEPOLYGON (COMPOUNDCURVE((5 0, 0 0, 0 5, 5 5), CIRCULARSTRING(5 5, 7 1, 5 0)))",
+    "CURVEPOLYGON (COMPOUNDCURVE((5 0, 0 0, 5 5), CIRCULARSTRING(5 5, 7 4, 5 0)))",
+        "GEOMETRYCOLLECTION (CURVEPOLYGON (COMPOUNDCURVE ((5 0, 0 0, 5 5), CIRCULARSTRING (5 5, 7 1, 5 0))), POLYGON ((0 0, 0 5, 5 5, 0 0)))");
+}
 
 }
