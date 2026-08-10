@@ -17,10 +17,9 @@
  **********************************************************************/
 
 #include <cmath>
-#include <limits>
 #include <vector>
 
-#include <geos/algorithm/Distance.h>
+#include <geos/algorithm/CGAlgorithmsDD.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/algorithm/Orientation.h>
 #include <geos/algorithm/PointLocation.h>
@@ -45,36 +44,26 @@ PointLocation::isOnSegment(const geom::CoordinateXY& p, const geom::CoordinateXY
     if (p.equals2D(p0) || p.equals2D(p1))
         return true;
 
-    // Double-precision collinearity (segment-origin determinant).
-    // This can report exact 0 for points that DD orientation later rejects;
-    // trusting FP-zero here keeps covers/within aligned with DistanceOp's
-    // double arithmetic (GEOS #968 / PostGIS #5563; suggested by @dr-jts).
-    const double dx = p1.x - p0.x;
-    const double dy = p1.y - p0.y;
-    const double det = dx * (p.y - p0.y) - dy * (p.x - p0.x);
-    if (det == 0.0) {
+    // GEOS #968 / PostGIS #5563:
+    // Orientation::index uses an Ozaki filter then DD.  For decimal-collinear
+    // points (e.g. LINESTRING(1 0,0 2) / POINT(0.9 0.2)) the filter is
+    // uncertain and DD reports non-collinear, so covers/within fail even though
+    // the point is collinear under ordinary double residual.
+    //
+    // For on-segment membership only: trust the filter when it is certain;
+    // when uncertain (FAILURE), treat as on-segment rather than escalating to
+    // DD.  Topology predicates that need DD separation still use
+    // Orientation::index directly.
+    //
+    // Suggested direction matches @dr-jts on #968 (prefer FP collinearity for
+    // this decision).  Updates RobustLineIntersector testA where FP is
+    // uncertain on a huge segment that DD separates.
+    const int filt = CGAlgorithmsDD::orientationIndexFilter(
+        p0.x, p0.y, p1.x, p1.y, p.x, p.y);
+    if (filt == CGAlgorithmsDD::FAILURE) {
         return true;
     }
-
-    if (Orientation::COLLINEAR == Orientation::index(p0, p1, p)) {
-        return true;
-    }
-
-    // When the orientation filter is uncertain, DD can declare non-collinear
-    // while double distance is still 0 or within 1 ulp of the segment length
-    // (decimal-collinear encodings such as (1,0)-(0,2) with (0.9,0.2)).
-    // Accept those as on-segment so covers/within match geometric intent of
-    // binary64 distance, without a broad absolute tolerance.
-    const double d = Distance::pointToSegment(p, p0, p1);
-    if (d == 0.0) {
-        return true;
-    }
-    const double len = std::sqrt(dx * dx + dy * dy);
-    if (len > 0.0 && d <= len * std::numeric_limits<double>::epsilon()) {
-        return true;
-    }
-
-    return false;
+    return filt == CGAlgorithmsDD::STRAIGHT;
 }
 
 /* public static */
