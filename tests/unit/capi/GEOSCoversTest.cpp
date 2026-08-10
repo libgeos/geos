@@ -51,5 +51,29 @@ void object::test<2>()
     ensure_equals(GEOSCovers_r(ctxt_, geom2_, geom1_), 0);
 }
 
+// GEOS #968 — Line covers Point with float-collinear coordinates
+template<>
+template<>
+void object::test<3>()
+{
+    set_test_name("GEOSCovers Line/Point float collinear (#968)");
+
+    geom1_ = fromWKT("LINESTRING (1 0, 0 2)");
+    geom2_ = fromWKT("POINT (0.9 0.2)");
+    geom3_ = fromWKT("POINT (0.1 1.8)");
+    ensure(geom1_);
+    ensure(geom2_);
+    ensure(geom3_);
+
+    ensure_equals("covers (0.9 0.2)", 1, GEOSCovers(geom1_, geom2_));
+    ensure_equals("covers (0.1 1.8)", 1, GEOSCovers(geom1_, geom3_));
+    // scaled 10x also works (control case from the issue)
+    GEOSGeom_destroy(geom1_);
+    GEOSGeom_destroy(geom2_);
+    geom1_ = fromWKT("LINESTRING (10 0, 0 20)");
+    geom2_ = fromWKT("POINT (9 2)");
+    ensure_equals("covers scaled", 1, GEOSCovers(geom1_, geom2_));
+}
+
 } // namespace tut
 

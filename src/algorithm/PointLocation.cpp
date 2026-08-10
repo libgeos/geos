@@ -17,8 +17,10 @@
  **********************************************************************/
 
 #include <cmath>
+#include <limits>
 #include <vector>
 
+#include <geos/algorithm/Distance.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/algorithm/Orientation.h>
 #include <geos/algorithm/PointLocation.h>
@@ -34,16 +36,45 @@ namespace algorithm { // geos.algorithm
 
 /* public static */
 bool
-PointLocation::isOnSegment(const geom::CoordinateXY& p, const geom::CoordinateXY& p0, const geom::CoordinateXY& p1) 
+PointLocation::isOnSegment(const geom::CoordinateXY& p, const geom::CoordinateXY& p0, const geom::CoordinateXY& p1)
 {
     //-- test envelope first since it's faster
     if (! geom::Envelope::intersects(p0, p1, p))
         return false;
-    //-- handle zero-length segments
-    if (p.equals2D(p0))
+    //-- handle endpoints and zero-length segments
+    if (p.equals2D(p0) || p.equals2D(p1))
         return true;
-    bool isOnLine = Orientation::COLLINEAR == Orientation::index(p0, p1, p);
-    return isOnLine;
+
+    // Double-precision collinearity (segment-origin determinant).
+    // This can report exact 0 for points that DD orientation later rejects;
+    // trusting FP-zero here keeps covers/within aligned with DistanceOp's
+    // double arithmetic (GEOS #968 / PostGIS #5563; suggested by @dr-jts).
+    const double dx = p1.x - p0.x;
+    const double dy = p1.y - p0.y;
+    const double det = dx * (p.y - p0.y) - dy * (p.x - p0.x);
+    if (det == 0.0) {
+        return true;
+    }
+
+    if (Orientation::COLLINEAR == Orientation::index(p0, p1, p)) {
+        return true;
+    }
+
+    // When the orientation filter is uncertain, DD can declare non-collinear
+    // while double distance is still 0 or within 1 ulp of the segment length
+    // (decimal-collinear encodings such as (1,0)-(0,2) with (0.9,0.2)).
+    // Accept those as on-segment so covers/within match geometric intent of
+    // binary64 distance, without a broad absolute tolerance.
+    const double d = Distance::pointToSegment(p, p0, p1);
+    if (d == 0.0) {
+        return true;
+    }
+    const double len = std::sqrt(dx * dx + dy * dy);
+    if (len > 0.0 && d <= len * std::numeric_limits<double>::epsilon()) {
+        return true;
+    }
+
+    return false;
 }
 
 /* public static */
