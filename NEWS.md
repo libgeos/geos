@@ -34,7 +34,7 @@
   - Preserve M values in GEOSDensify (GH-1319, Dan Baston)
   - Preserve M values in GEOSSimplify (GH-1317, Dan Baston)
   - Preserve M values in GEOSPolygonize (GH-1363 Dan Baston)
-  - Fix some cases of dropped M values in overlay (GH-1364,GH-1388,GH-1407,GH-1408; Dan Baston)
+  - Fix some cases of dropped M values in overlay (GH-1364,GH-1388,GH-1407,GH-1408,GH-1474; Dan Baston)
   - Support curved inputs in GEOSNode (GH-1347, Dan Baston)
   - GEOSClusterDBSCAN fix unsassigned clusters with minPoints <= 1 (GH-1386, Dan Baston)
   - Fix crash in GEOSConvexHull (GH-1358, Dan Baston)
