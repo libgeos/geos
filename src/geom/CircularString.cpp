@@ -126,7 +126,7 @@ CircularString::normalizeClosed() {
 
     std::size_t minInd = 0;
     const CoordinateXY* minPt = &ringCoords->getAt<CoordinateXY>(minInd);
-    for (std::size_t i = 2; i < ringCoords->size() - 2; i++) {
+    for (std::size_t i = 2; i < ringCoords->size() - 2; i += 2) {
         const CoordinateXY& pt = ringCoords->getAt<CoordinateXY>(i);
         if (pt.compareTo(*minPt) < 0) {
             minInd = i;
