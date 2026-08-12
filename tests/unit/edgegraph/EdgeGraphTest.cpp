@@ -170,6 +170,25 @@ void object::test<5> ()
     checkNextPrev(*graph);
 }
 
+// testSimilarEdgesDirection
+template<>
+template<>
+void object::test<6> ()
+{
+    EdgeGraph graph;
+    HalfEdge* e1 = addEdge(graph, 1, 1, 0, 0.5);
+    addEdge(graph, 1, 1, 0, 0.49999999999999994);
+    addEdge(graph, 1, 1, 0, 1);
+
+    HalfEdge* eUpper = findEdge(graph, 1, 1, 0, 0.5);
+    HalfEdge* eLower = findEdge(graph, 1, 1, 0, 0.49999999999999994);
+    ensure("edges with distinct direction points must not compare equal", eUpper->compareTo(eLower) != 0);
+    ensure("edge comparison must be antisymmetric", eUpper->compareTo(eLower) == -eLower->compareTo(eUpper));
+
+    checkNodeValid(e1);
+    checkNextPrev(graph);
+}
+
 
 
 } // namespace tut

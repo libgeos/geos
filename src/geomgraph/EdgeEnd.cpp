@@ -160,7 +160,9 @@ int
 EdgeEnd::compareDirection(const EdgeEnd* e) const
 {
     assert(e);
-    if(dx == e->dx && dy == e->dy) {
+    assert(p0.equals2D(e->p0));
+
+    if(p1.equals2D(e->p1)) {
         return 0;
     }
 
@@ -215,4 +217,3 @@ operator<< (std::ostream& os, const EdgeEnd& ee)
 
 } // namespace geos.geomgraph
 } // namespace geos
-
