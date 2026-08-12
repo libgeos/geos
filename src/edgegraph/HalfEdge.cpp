@@ -179,6 +179,8 @@ HalfEdge::findLowest() const
 int
 HalfEdge::compareAngularDirection(const HalfEdge* e) const
 {
+    assert(orig().equals2D(e->orig()));
+
     // same vector
     if (directionPt().equals2D(e->directionPt()))
         return 0;
@@ -267,5 +269,3 @@ HalfEdge::toStringNode(const HalfEdge* he, std::ostream& os)
 
 } // namespace geos.edgegraph
 } // namespace geos
-
-
