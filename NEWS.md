@@ -40,6 +40,7 @@
   - Fix crash in GEOSConvexHull (GH-1358, Dan Baston)
   - Overlay performance improvements (GH-1353, arriopolis, Martin Davis)
   - Fix unintended ring rotation in Overlay results (GH-1412, Dan Baston)
+  - Fix intersection result for slightly overlapping polygons (GH-1499, Petr Belohlavek)
 
 
 ## Changes in 3.14.0
