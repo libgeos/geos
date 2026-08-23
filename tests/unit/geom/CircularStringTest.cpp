@@ -390,7 +390,7 @@ template<>
 template<>
 void object::test<15>() {
     set_test_name("liblwgeom: 10 segments per quadrant - circular");
-    auto cs = wktreader_.read<CircularString>("CIRCULARSTRING (0 0, 1 0, 0 0)");
+    auto cs = wktreader_.read<CircularString>("CIRCULARSTRING (0 0, 0.5 0.5, 1 0, 0.5 -0.5, 0 0)");
     auto ls = cs->getLinearized(CurveToLineParams::stepSizeDegrees(90.0 / 10));
     ensure_equals(ls->getNumPoints(), 41u); // PostGIS test has 40, but this is incorrect
     const auto* seq = ls->getCoordinatesRO();
@@ -533,6 +533,58 @@ void object::test<27>()
 
     // line point 5 is 30 degrees from end of the arc. Z/M interpolated from CircularString points 1 and 2
     ensure_equals_xyzm(seq->getAt<XYZM>(5), XYZM{2.5, -4.33, 6 + (30.0 - 6)*(2.0/3), 8 + (40.0 - 8)*(2.0/3)}, 1e-3);
+}
+
+template<>
+template<>
+void object::test<28>()
+{
+    set_test_name("closed four-control CIRCULARSTRING(A, B, C, A) is accepted");
+
+    auto cs = wktreader_.read<CircularString>("CIRCULARSTRING (-5 0, 0 5, 5 0, -5 0)");
+    ensure_equals(cs->getNumPoints(), 4u);
+    ensure(cs->isClosed());
+
+    auto pts = std::make_shared<CoordinateSequence>();
+    pts->add(-5.0, 0.0);
+    pts->add(0.0, 5.0);
+    pts->add(5.0, 0.0);
+    pts->add(-5.0, 0.0);
+    ensure_NO_THROW(factory_->createCircularString(pts));
+}
+
+template<>
+template<>
+void object::test<29>()
+{
+    set_test_name("open even leftover is rejected");
+
+    ensure_THROW(wktreader_.read("CIRCULARSTRING (0 0, 1 1, 2 0, 3 1)"), geos::util::GEOSException);
+}
+
+template<>
+template<>
+void object::test<30>()
+{
+    set_test_name("closed even-length CircularString is accepted");
+
+    auto cs4 = wktreader_.read<CircularString>("CIRCULARSTRING (0 0, 1 0, 2 0, 0 0)");
+    ensure_equals(cs4->getNumPoints(), 4u);
+    ensure(cs4->isClosed());
+
+    auto cs6 = wktreader_.read<CircularString>("CIRCULARSTRING (0 0, 1 1, 2 0, 3 -1, 4 0, 0 0)");
+    ensure_equals(cs6->getNumPoints(), 6u);
+    ensure(cs6->isClosed());
+}
+
+template<>
+template<>
+void object::test<31>()
+{
+    set_test_name("first and third points of any arc must be different");
+
+    ensure_THROW(wktreader_.read("CIRCULARSTRING (0 0, 1 0, 0 0)"), geos::util::GEOSException);
+    ensure_THROW(wktreader_.read("CIRCULARSTRING (0 0, 1 1, 0 0, 1 -1, 2 0)"), geos::util::GEOSException);
 }
 
 }

@@ -21,6 +21,11 @@
 namespace geos {
 namespace geom {
 
+/// A curve of circular arcs encoded as control points.
+///
+/// A CircularString is empty or has at least 3 control points.
+/// Even length is valid only when closed (first = last).
+/// The first and third points of any arc must be different.
 class GEOS_DLL CircularString : public SimpleCurve {
 
 public:
@@ -98,6 +103,7 @@ protected:
 
     CircularString* reverseImpl() const override;
 
+    /// Throws if the control-point count or per-arc endpoints are invalid.
     void validateConstruction();
 
 private:
