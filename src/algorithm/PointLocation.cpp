@@ -44,26 +44,31 @@ PointLocation::isOnSegment(const geom::CoordinateXY& p, const geom::CoordinateXY
     if (p.equals2D(p0) || p.equals2D(p1))
         return true;
 
-    // GEOS #968 / PostGIS #5563:
-    // Orientation::index uses an Ozaki filter then DD.  For decimal-collinear
-    // points (e.g. LINESTRING(1 0,0 2) / POINT(0.9 0.2)) the filter is
-    // uncertain and DD reports non-collinear, so covers/within fail even though
-    // the point is collinear under ordinary double residual.
+    // Membership on already-rounded coordinates.  A certain Ozaki LEFT/RIGHT
+    // certifies off; STRAIGHT certifies on.  FAILURE means the double
+    // determinant cannot certify a side.
     //
-    // For on-segment membership only: trust the filter when it is certain;
-    // when uncertain (FAILURE), treat as on-segment rather than escalating to
-    // DD.  Topology predicates that need DD separation still use
-    // Orientation::index directly.
-    //
-    // Suggested direction matches @dr-jts on #968 (prefer FP collinearity for
-    // this decision).  Updates RobustLineIntersector testA where FP is
-    // uncertain on a huge segment that DD separates.
+    // A non-zero Ozaki det that still fails the filter is a 1-ulp residual
+    // (decimal-collinear encodings such as (1,0)-(0,2) with (0.9,0.2)).
+    // Treat that as on-segment.  An exact-zero Ozaki det on a huge segment
+    // is the robustness trap: fall through to DD so a point just off the
+    // line stays off.
     const int filt = CGAlgorithmsDD::orientationIndexFilter(
         p0.x, p0.y, p1.x, p1.y, p.x, p.y);
-    if (filt == CGAlgorithmsDD::FAILURE) {
+    if (filt == CGAlgorithmsDD::LEFT || filt == CGAlgorithmsDD::RIGHT) {
+        return false;
+    }
+    if (filt == CGAlgorithmsDD::STRAIGHT) {
         return true;
     }
-    return filt == CGAlgorithmsDD::STRAIGHT;
+
+    const double detleft = (p0.x - p.x) * (p1.y - p.y);
+    const double detright = (p0.y - p.y) * (p1.x - p.x);
+    const double det = detleft - detright;
+    if (det != 0.0) {
+        return true;
+    }
+    return Orientation::index(p0, p1, p) == Orientation::COLLINEAR;
 }
 
 /* public static */

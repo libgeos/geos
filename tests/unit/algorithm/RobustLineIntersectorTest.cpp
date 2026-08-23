@@ -234,10 +234,6 @@ void object::test<12>
 }
 
 // 13 - testA
-// Huge-coordinate segment: DD orientation separates q from the line (RIGHT),
-// but the Ozaki double filter is uncertain.  PointLocation::isOnSegment now
-// trusts the filter for #968 (uncertain ⇒ on-segment), so isOnLine/intersects
-// follow float membership; Orientation::index remains DD-backed.
 template<>
 template<>
 void object::test<13>
@@ -256,12 +252,12 @@ void object::test<13>
     cs->add(p1);
     cs->add(p2);
 
-    ensure(PointLocation::isOnLine(q, cs.get()));
+    ensure(!PointLocation::isOnLine(q, cs.get()));
     ensure_equals(Orientation::index(p1, p2, q), -1);
 
     auto l = factory->createLineString(std::move(cs));
     GeomPtr p(factory->createPoint(q));
-    ensure(l->intersects(p.get()));
+    ensure(!l->intersects(p.get()));
 }
 
 // Test intersects: point on segment with FLOAT PM
