@@ -12,6 +12,7 @@
  *
  **********************************************************************/
 
+#include <geos/algorithm/CircularArcs.h>
 #include <geos/geom/CircularArc.h>
 #include <geos/geom/CircularString.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -192,6 +193,22 @@ CircularString::reverseImpl() const
     return getFactory()->createCircularString(std::move(seq)).release();
 }
 
+bool
+CircularString::isValidControlCount(const CoordinateSequence& seq)
+{
+    const std::size_t n = seq.size();
+    if (n == 0) {
+        return true;
+    }
+    if (n < 3) {
+        return false;
+    }
+    if (n % 2 == 1) {
+        return true;
+    }
+    return algorithm::CircularArcs::threePointCircleCloseMid(seq).has_value();
+}
+
 void
 CircularString::validateConstruction()
 {
@@ -200,27 +217,8 @@ CircularString::validateConstruction()
         return;
     }
 
-    const std::size_t n = points->size();
-    if (n == 0) {
-        return;
-    }
-    if (n < 3) {
-        throw util::IllegalArgumentException(
-            "point array size must be 0 or at least 3");
-    }
-
-    const bool closed = points->front<CoordinateXY>().equals2D(
-                            points->back<CoordinateXY>());
-    if (n % 2 == 0 && !closed) {
-        throw util::IllegalArgumentException(
-            "even-length CircularString is valid only when closed (first = last)");
-    }
-
-    for (std::size_t i = 0; i + 2 < n; i += 2) {
-        if (points->getAt<CoordinateXY>(i).equals2D(points->getAt<CoordinateXY>(i + 2))) {
-            throw util::IllegalArgumentException(
-                "first and third points of any arc must be different");
-        }
+    if (points->size() == 1) {
+        throw util::IllegalArgumentException("point array must contain 0 or >1 elements\n");
     }
 }
 

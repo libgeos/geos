@@ -19,6 +19,7 @@
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/LinearRing.h>
+#include <geos/geom/CircularString.h>
 #include <geos/geom/Location.h>
 #include <geos/geom/MultiPoint.h>
 #include <geos/geom/MultiPolygon.h>
@@ -94,6 +95,8 @@ IsValidOp::isValidGeometry(const Geometry* g)
             return isValid(static_cast<const LinearRing*>(g));
         case GEOS_LINESTRING:
             return isValid(static_cast<const LineString*>(g));
+        case GEOS_CIRCULARSTRING:
+            return isValid(static_cast<const CircularString*>(g));
         case GEOS_POLYGON:
             return isValid(static_cast<const Polygon*>(g));
         case GEOS_MULTIPOLYGON:
@@ -102,7 +105,6 @@ IsValidOp::isValidGeometry(const Geometry* g)
             return isValid(static_cast<const GeometryCollection*>(g));
         case GEOS_GEOMETRYCOLLECTION:
             return isValid(static_cast<const GeometryCollection*>(g));
-        case GEOS_CIRCULARSTRING:
         case GEOS_COMPOUNDCURVE:
         case GEOS_CURVEPOLYGON:
         case GEOS_MULTICURVE:
@@ -151,6 +153,24 @@ IsValidOp::isValid(const LineString* g)
 
     checkTooFewPoints(g, MIN_SIZE_LINESTRING);
     if (hasInvalidError()) return false;
+
+    return true;
+}
+
+
+/* private */
+bool
+IsValidOp::isValid(const CircularString* g)
+{
+    checkCoordinatesValid(g->getCoordinatesRO());
+    if (hasInvalidError()) return false;
+
+    if (!CircularString::isValidControlCount(*g->getCoordinatesRO())) {
+        const CoordinateXY* pt = g->getCoordinate();
+        logInvalid(TopologyValidationError::eTooFewPoints,
+                   pt ? *pt : CoordinateXY());
+        return false;
+    }
 
     return true;
 }

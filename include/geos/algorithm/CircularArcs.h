@@ -271,6 +271,17 @@ public:
                          const geom::CoordinateXY& cb, double rb,
                          const geom::CoordinateXY& b0, const geom::CoordinateXY& b2, bool bCCW);
 
+    /// Point-reflection of hint through the circumcenter of (from, hint, to).
+    /// Null if the triple does not define a unique circle.
+    static std::optional<geom::CoordinateXY>
+    complementaryArcMid(const geom::CoordinateXY& from, const geom::CoordinateXY& hint,
+                        const geom::CoordinateXY& to);
+
+    /// Complementary-close mid of closed four-control CIRCULARSTRING(A, B, C, A).
+    /// Null unless that shape defines a circumcircle.
+    static std::optional<geom::CoordinateXY>
+    threePointCircleCloseMid(const geom::CoordinateSequence& seq);
+
 };
 }
 }

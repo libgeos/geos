@@ -181,7 +181,7 @@ void object::test<3>()
 
     // Valid / Simple
     ensure_THROW(cs_->isSimple(), geos::util::UnsupportedOperationException);
-    ensure_THROW(cs_->isValid(), geos::util::UnsupportedOperationException);
+    ensure(cs_->isValid());
 
     // Operations
     ensure_THROW(cs_->convexHull(), geos::util::UnsupportedOperationException);
@@ -228,19 +228,23 @@ void object::test<5>()
     set_test_name("invalid number of points");
 
     auto pts = std::make_shared<CoordinateSequence>();
-    ensure_NO_THROW(factory_->createCircularString(pts));
+    auto empty = factory_->createCircularString(pts);
+    ensure(empty->isValid());
 
     pts->add(0.0, 0.0);
     ensure_THROW(factory_->createCircularString(pts), geos::util::GEOSException);
 
     pts->add(1.0, 1.0);
-    ensure_THROW(factory_->createCircularString(pts), geos::util::GEOSException);
+    auto two = factory_->createCircularString(pts);
+    ensure(!two->isValid());
 
     pts->add(2.0, 0.0);
-    ensure_NO_THROW(factory_->createCircularString(pts));
+    auto three = factory_->createCircularString(pts);
+    ensure(three->isValid());
 
     pts->add(3.0, -1.0);
-    ensure_THROW(factory_->createCircularString(pts), geos::util::GEOSException);
+    auto fourOpen = factory_->createCircularString(pts);
+    ensure(!fourOpen->isValid());
 }
 
 template<>
@@ -390,7 +394,7 @@ template<>
 template<>
 void object::test<15>() {
     set_test_name("liblwgeom: 10 segments per quadrant - circular");
-    auto cs = wktreader_.read<CircularString>("CIRCULARSTRING (0 0, 0.5 0.5, 1 0, 0.5 -0.5, 0 0)");
+    auto cs = wktreader_.read<CircularString>("CIRCULARSTRING (0 0, 1 0, 0 0)");
     auto ls = cs->getLinearized(CurveToLineParams::stepSizeDegrees(90.0 / 10));
     ensure_equals(ls->getNumPoints(), 41u); // PostGIS test has 40, but this is incorrect
     const auto* seq = ls->getCoordinatesRO();
@@ -539,52 +543,49 @@ template<>
 template<>
 void object::test<28>()
 {
-    set_test_name("closed four-control CIRCULARSTRING(A, B, C, A) is accepted");
+    set_test_name("closed four-control CIRCULARSTRING(A, B, C, A) is valid");
 
     auto cs = wktreader_.read<CircularString>("CIRCULARSTRING (-5 0, 0 5, 5 0, -5 0)");
     ensure_equals(cs->getNumPoints(), 4u);
     ensure(cs->isClosed());
-
-    auto pts = std::make_shared<CoordinateSequence>();
-    pts->add(-5.0, 0.0);
-    pts->add(0.0, 5.0);
-    pts->add(5.0, 0.0);
-    pts->add(-5.0, 0.0);
-    ensure_NO_THROW(factory_->createCircularString(pts));
+    ensure(cs->isValid());
+    ensure(CircularString::isValidControlCount(*cs->getCoordinatesRO()));
 }
 
 template<>
 template<>
 void object::test<29>()
 {
-    set_test_name("open even leftover is rejected");
+    set_test_name("open even leftover is ingestible and invalid");
 
-    ensure_THROW(wktreader_.read("CIRCULARSTRING (0 0, 1 1, 2 0, 3 1)"), geos::util::GEOSException);
+    auto cs = wktreader_.read<CircularString>("CIRCULARSTRING (0 0, 1 1, 2 0, 3 1)");
+    ensure(!cs->isValid());
 }
 
 template<>
 template<>
 void object::test<30>()
 {
-    set_test_name("closed even-length CircularString is accepted");
+    set_test_name("even leftover is not a four-control circumcircle");
 
-    auto cs4 = wktreader_.read<CircularString>("CIRCULARSTRING (0 0, 1 0, 2 0, 0 0)");
-    ensure_equals(cs4->getNumPoints(), 4u);
-    ensure(cs4->isClosed());
+    auto collinear = wktreader_.read<CircularString>("CIRCULARSTRING (0 0, 1 0, 2 0, 0 0)");
+    ensure(collinear->isClosed());
+    ensure(!collinear->isValid());
 
-    auto cs6 = wktreader_.read<CircularString>("CIRCULARSTRING (0 0, 1 1, 2 0, 3 -1, 4 0, 0 0)");
-    ensure_equals(cs6->getNumPoints(), 6u);
-    ensure(cs6->isClosed());
+    auto six = wktreader_.read<CircularString>("CIRCULARSTRING (0 0, 1 1, 2 0, 3 -1, 4 0, 0 0)");
+    ensure(six->isClosed());
+    ensure(!six->isValid());
 }
 
 template<>
 template<>
 void object::test<31>()
 {
-    set_test_name("first and third points of any arc must be different");
+    set_test_name("three-point CIRCULARSTRING(A, B, A) is ingestible");
 
-    ensure_THROW(wktreader_.read("CIRCULARSTRING (0 0, 1 0, 0 0)"), geos::util::GEOSException);
-    ensure_THROW(wktreader_.read("CIRCULARSTRING (0 0, 1 1, 0 0, 1 -1, 2 0)"), geos::util::GEOSException);
+    auto cs = wktreader_.read<CircularString>("CIRCULARSTRING (0 0, 1 0, 0 0)");
+    ensure_equals(cs->getNumPoints(), 3u);
+    ensure(cs->isValid());
 }
 
 }

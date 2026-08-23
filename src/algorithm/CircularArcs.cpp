@@ -15,6 +15,7 @@
 #include <geos/algorithm/Angle.h>
 #include <geos/algorithm/CircularArcs.h>
 #include <geos/algorithm/Orientation.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/LineSegment.h>
 #include <geos/geom/Quadrant.h>
@@ -765,6 +766,38 @@ CircularArcs::arcIntersectionPoint(const CoordinateXY& ca, double ra,
     }
 
     return std::nullopt;
+}
+
+std::optional<CoordinateXY>
+CircularArcs::complementaryArcMid(const CoordinateXY& from, const CoordinateXY& hint,
+                                  const CoordinateXY& to)
+{
+    CoordinateXY center = getCenter(from, hint, to);
+    if (!std::isfinite(center.x) || !std::isfinite(center.y)) {
+        return std::nullopt;
+    }
+    CoordinateXY mid{2.0 * center.x - hint.x, 2.0 * center.y - hint.y};
+    if (!std::isfinite(mid.x) || !std::isfinite(mid.y)
+            || mid.equals2D(from) || mid.equals2D(to)) {
+        return std::nullopt;
+    }
+    return mid;
+}
+
+std::optional<CoordinateXY>
+CircularArcs::threePointCircleCloseMid(const CoordinateSequence& seq)
+{
+    if (seq.size() != 4) {
+        return std::nullopt;
+    }
+    const CoordinateXY& a = seq.getAt<CoordinateXY>(0);
+    const CoordinateXY& b = seq.getAt<CoordinateXY>(1);
+    const CoordinateXY& c = seq.getAt<CoordinateXY>(2);
+    const CoordinateXY& a2 = seq.getAt<CoordinateXY>(3);
+    if (!a.equals2D(a2)) {
+        return std::nullopt;
+    }
+    return complementaryArcMid(c, b, a);
 }
 
 }

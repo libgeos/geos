@@ -31,6 +31,7 @@ class Point;
 class MultiPoint;
 class LineString;
 class LinearRing;
+class CircularString;
 class Polygon;
 class MultiPolygon;
 class GeometryCollection;
@@ -97,6 +98,12 @@ private:
      * Almost anything goes for linestrings!
      */
     bool isValid(const geom::LineString* g);
+
+    /**
+     * Tests control-count validity of a CircularString.
+     * Empty, odd count >= 3, or closed four-control circumcircle.
+     */
+    bool isValid(const geom::CircularString* g);
 
     /**
      * Tests validity of a LinearRing.

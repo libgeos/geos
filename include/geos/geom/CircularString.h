@@ -23,15 +23,18 @@ namespace geom {
 
 /// A curve of circular arcs encoded as control points.
 ///
-/// A CircularString is empty or has at least 3 control points.
-/// Even length is valid only when closed (first = last).
-/// The first and third points of any arc must be different.
+/// Empty CircularStrings are valid. A non-empty string is valid when it
+/// has an odd control count of at least 3, or when it is the closed
+/// four-control form CIRCULARSTRING(A, B, C, A) that defines a circumcircle.
 class GEOS_DLL CircularString : public SimpleCurve {
 
 public:
     using SimpleCurve::SimpleCurve;
 
     friend class GeometryFactory;
+
+    /// Empty, odd count >= 3, or closed four-control circumcircle.
+    static bool isValidControlCount(const CoordinateSequence& seq);
 
     ~CircularString() override;
 
@@ -103,7 +106,6 @@ protected:
 
     CircularString* reverseImpl() const override;
 
-    /// Throws if the control-point count or per-arc endpoints are invalid.
     void validateConstruction();
 
 private:
