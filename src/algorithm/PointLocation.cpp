@@ -48,11 +48,12 @@ PointLocation::isOnSegment(const geom::CoordinateXY& p, const geom::CoordinateXY
     // certifies off; STRAIGHT certifies on.  FAILURE means the double
     // determinant cannot certify a side.
     //
-    // A non-zero Ozaki det that still fails the filter is a 1-ulp residual
-    // (decimal-collinear encodings such as (1,0)-(0,2) with (0.9,0.2)).
-    // Treat that as on-segment.  An exact-zero Ozaki det on a huge segment
-    // is the robustness trap: fall through to DD so a point just off the
-    // line stays off.
+    // Do not treat every nonzero FAILURE as on-segment: at large magnitude
+    // the filter can fail while |det| is huge and DD correctly separates
+    // (LINESTRING (0 0, 1e16 1e16) / POINT (5e15, 5e15+1), |det| ~ 9e15).
+    // Only a tiny nonzero det is a binary64 rounding residual (#968:
+    // (1,0)-(0,2) with (0.9,0.2), |det| ~ 5.55e-17).  Exact-zero det on a
+    // huge segment is the testA trap — fall through to DD.
     const int filt = CGAlgorithmsDD::orientationIndexFilter(
         p0.x, p0.y, p1.x, p1.y, p.x, p.y);
     if (filt == CGAlgorithmsDD::LEFT || filt == CGAlgorithmsDD::RIGHT) {
@@ -65,7 +66,10 @@ PointLocation::isOnSegment(const geom::CoordinateXY& p, const geom::CoordinateXY
     const double detleft = (p0.x - p.x) * (p1.y - p.y);
     const double detright = (p0.y - p.y) * (p1.x - p.x);
     const double det = detleft - detright;
-    if (det != 0.0) {
+    // Explicit absolute bound on |2*signed triangle area|.  #968 residuals
+    // sit near 1e-16; the large-scale off-line counterexample is ~1e16.
+    static constexpr double kOnSegmentDetTol = 1e-12;
+    if (det != 0.0 && std::fabs(det) <= kOnSegmentDetTol) {
         return true;
     }
     return Orientation::index(p0, p1, p) == Orientation::COLLINEAR;

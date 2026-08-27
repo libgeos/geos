@@ -75,5 +75,20 @@ void object::test<3>()
     ensure_equals("covers scaled", 1, GEOSCovers(geom1_, geom2_));
 }
 
+// Large-scale off-line point: Ozaki FAILURE + huge det must not cover.
+template<>
+template<>
+void object::test<4>()
+{
+    set_test_name("GEOSCovers Line/Point large-scale off-line");
+
+    geom1_ = fromWKT("LINESTRING (0 0, 10000000000000000 10000000000000000)");
+    geom2_ = fromWKT("POINT (5000000000000000 5000000000000001)");
+    ensure(geom1_);
+    ensure(geom2_);
+
+    ensure_equals("covers large-scale off-line", 0, GEOSCovers(geom1_, geom2_));
+}
+
 } // namespace tut
 
