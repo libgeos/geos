@@ -27,6 +27,12 @@
   - Add progress reporting to GEOSCoverageSimplify, GEOSUnaryUnion (GH-1466, Even Rouault / Dan Baston)
 
 - Fixes/Improvements:
+  - MakeValid groups MultiPolygon parts into envelope-connected components and
+    processes each independently, so a single invalid part no longer forces all
+    parts through the whole-geometry polygonal algorithm (GH-1504, Artem Kulyk).
+    Components made entirely of valid parts are passed through unchanged,
+    keeping their original coordinates, including Z and M values, instead of
+    being rebuilt by overlay.
   - Buffer of Linestring includes spurious hole (GH-1217, Moritz Kirmse)
   - Preserve M values in GEOSInterpolate (GH-1390, Dan Baston)
   - Preserve M values in GEOSLineMerge (GH-1364, Dan Baston)

@@ -26,14 +26,16 @@
 #include <geos/operation/overlayng/OverlayNGRobust.h>
 #include <geos/operation/polygonize/BuildArea.h>
 #include <geos/operation/union/UnaryUnionOp.h>
+#include <geos/geom/Envelope.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryCollection.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LineString.h>
-#include <geos/geom/Point.h>
-#include <geos/geom/Polygon.h>
 #include <geos/geom/MultiLineString.h>
 #include <geos/geom/MultiPolygon.h>
+#include <geos/geom/Point.h>
+#include <geos/geom/Polygon.h>
+#include <geos/operation/cluster/UnionFind.h>
 #include <geos/util/Interrupt.h>
 #include <geos/util/UniqueCoordinateArrayFilter.h>
 #include <geos/util/UnsupportedOperationException.h>
@@ -42,6 +44,7 @@
 // std
 #include <cassert>
 #include <algorithm>
+#include <cmath>
 #include <utility>
 #include <vector>
 
@@ -303,6 +306,248 @@ static std::unique_ptr<geom::Geometry> MakeValidCollection(const geom::GeometryC
     return coll->getFactory()->createGeometryCollection(std::move(validGeoms));
 }
 
+namespace {
+
+bool
+isNonInteractingEnv(const geom::Envelope& env)
+{
+    return env.isNull() ||
+           ! (std::isfinite(env.getMinX()) && std::isfinite(env.getMaxX()) &&
+              std::isfinite(env.getMinY()) && std::isfinite(env.getMaxY()));
+}
+
+/*
+ * Partition the polygons of a MultiPolygon into groups whose envelopes
+ * are connected (envelopes intersecting, touching included).
+ *
+ * Polygons whose envelope is empty or not finite cannot interact with any
+ * other polygon, so they are excluded from the sweep and returned as
+ * single-element groups. This also keeps the sort comparator away from
+ * envelopes without well-defined ordinates.
+ *
+ * Only polygons in different groups may be processed independently:
+ * polygons sharing an envelope may still touch or overlap and must be
+ * made valid together.
+ */
+std::vector<std::vector<std::size_t>>
+envelopeConnectedComponents(const geom::MultiPolygon* mp)
+{
+    std::size_t n = mp->getNumGeometries();
+    cluster::UnionFind sets(n);
+
+    std::vector<const geom::Envelope*> envs(n);
+    for(std::size_t i = 0; i < n; i++) {
+        envs[i] = mp->getGeometryN(i)->getEnvelopeInternal();
+    }
+
+    // Sweep polygons sorted by envelope minimum X, maintaining the subset
+    // whose envelopes extend at or beyond the current minimum X. Only items
+    // in that window can intersect the current one. The number of envelope
+    // tests is proportional to the number of intersecting pairs, so the
+    // sweep is fast when parts are spatially separated and degrades
+    // quadratically when very many envelopes overlap.
+    //
+    // A spatial-index clustering such as operation::cluster::
+    // EnvelopeIntersectsClusterFinder would also be correct, but for the
+    // many tiny disjoint envelopes this operation is aimed at it builds
+    // and queries an STRtree and materializes (and sorts) every candidate
+    // hit per part, while the sweep below only ever looks at the active
+    // window. Non-finite envelopes must be excluded either way, which is
+    // done up front so the sort never sees them.
+    std::vector<std::size_t> order;
+    order.reserve(n);
+    for(std::size_t i = 0; i < n; i++) {
+        if(!isNonInteractingEnv(*envs[i])) {
+            order.push_back(i);
+        }
+    }
+
+    std::sort(order.begin(), order.end(),
+              [&envs](std::size_t a, std::size_t b)
+    {
+        if(envs[a]->getMinX() != envs[b]->getMinX()) {
+            return envs[a]->getMinX() < envs[b]->getMinX();
+        }
+        return envs[a]->getMinY() < envs[b]->getMinY();
+    });
+
+    std::size_t lo = 0; // first still-active item in order
+    for(std::size_t hi = 0; hi < order.size(); hi++) {
+        std::size_t i = order[hi];
+        while(lo < hi && envs[order[lo]]->getMaxX() < envs[i]->getMinX()) {
+            lo++;
+        }
+        for(std::size_t k = lo; k < hi; k++) {
+            std::size_t j = order[k];
+            if(envs[i]->intersects(envs[j])) {
+                sets.join(i, j);
+            }
+        }
+    }
+
+    // Group indices by cluster root, preserving polygon order within groups
+    // and ordering groups by first appearance.
+    std::vector<std::size_t> groupId(n, n); // n = "unassigned"
+    std::vector<std::vector<std::size_t>> components;
+    for(std::size_t i = 0; i < n; i++) {
+        std::size_t root = sets.find(i);
+        if(groupId[root] == n) {
+            groupId[root] = components.size();
+            components.emplace_back();
+        }
+        components[groupId[root]].push_back(i);
+    }
+
+    return components;
+}
+
+/*
+ * Move g into one of the result buckets by dimension, flattening
+ * multi-geometries and collections. Ownership of g is consumed, and
+ * children of multi-geometries are moved out via releaseGeometries()
+ * rather than cloned. Empty elements are dropped; MakeValidPoly never
+ * emits them.
+ */
+void
+collectResult(std::unique_ptr<geom::Geometry> g,
+              std::vector<std::unique_ptr<geom::Polygon>>& areas,
+              std::vector<std::unique_ptr<geom::LineString>>& cutEdges,
+              std::vector<std::unique_ptr<geom::Point>>& collapsePoints)
+{
+    if(! g || g->isEmpty()) {
+        return;
+    }
+
+    switch(g->getGeometryTypeId()) {
+        case GEOS_POLYGON: {
+            areas.emplace_back(static_cast<geom::Polygon*>(g.release()));
+            break;
+        }
+        case GEOS_MULTIPOLYGON:
+        case GEOS_MULTILINESTRING:
+        case GEOS_MULTIPOINT:
+        case GEOS_GEOMETRYCOLLECTION: {
+            // All collection types: move the children out and classify
+            // each one. Children of MultiPolygon/MultiLineString/
+            // MultiPoint are exactly Polygon/LineString/Point.
+            auto coll = detail::down_cast<geom::GeometryCollection*>(g.get());
+            auto elems = coll->releaseGeometries();
+            for(auto& e : elems) {
+                collectResult(std::move(e), areas, cutEdges, collapsePoints);
+            }
+            break;
+        }
+        case GEOS_LINESTRING: {
+            cutEdges.emplace_back(static_cast<geom::LineString*>(g.release()));
+            break;
+        }
+        case GEOS_POINT: {
+            collapsePoints.emplace_back(static_cast<geom::Point*>(g.release()));
+            break;
+        }
+        default: {
+            throw util::UnsupportedOperationException();
+        }
+    }
+}
+
+/*
+ * Make valid a MultiPolygon whose polygons fall into several
+ * envelope-connected components.
+ *
+ * Polygons from different components have disjoint envelopes, so they
+ * cannot interact: each component is made valid independently, a valid
+ * component being returned as-is by the usual fast path.
+ *
+ * The per-component results are then merged back into the same
+ * area/cut-edges/collapse-points structure MakeValidPoly would have
+ * returned for the whole MultiPolygon.
+ */
+std::unique_ptr<geom::Geometry>
+MakeValidMultiPolygonComponents(const geom::MultiPolygon* mp,
+                                std::vector<std::vector<std::size_t>>& components)
+{
+    const GeometryFactory* factory = mp->getFactory();
+
+    std::vector<std::unique_ptr<geom::Polygon>> areas;
+    std::vector<std::unique_ptr<geom::LineString>> cutEdges;
+    std::vector<std::unique_ptr<geom::Point>> collapsePoints;
+
+    for(const auto& component : components) {
+        GEOS_CHECK_FOR_INTERRUPTS();
+
+        if(component.size() == 1) {
+            // Single polygon: read it directly from the input. A valid
+            // polygon still needs a clone for the result, but an invalid
+            // one can be handed to MakeValidPoly through a const pointer
+            // without copying it first.
+            const geom::Geometry* src = mp->getGeometryN(component[0]);
+            assert(src->getGeometryTypeId() == GEOS_POLYGON);
+
+            IsValidOp ivo(src);
+            if(ivo.getValidationError() == nullptr) {
+                collectResult(src->clone(), areas, cutEdges, collapsePoints);
+            } else {
+                collectResult(MakeValidPoly(src), areas, cutEdges, collapsePoints);
+            }
+        } else {
+            // Several interacting polygons must be made valid together;
+            // they are moved into an owned MultiPolygon for that.
+            std::vector<std::unique_ptr<geom::Polygon>> polys;
+            polys.reserve(component.size());
+            for(std::size_t idx : component) {
+                polys.push_back(detail::down_cast<const geom::Polygon*>(
+                    mp->getGeometryN(idx))->clone());
+            }
+            auto part = factory->createMultiPolygon(std::move(polys));
+
+            // Valid components pass through unchanged, invalid ones go
+            // through the polygonal MakeValid algorithm.
+            IsValidOp ivo(part.get());
+            if(ivo.getValidationError() == nullptr) {
+                collectResult(std::move(part), areas, cutEdges, collapsePoints);
+            } else {
+                collectResult(MakeValidPoly(part.get()),
+                              areas, cutEdges, collapsePoints);
+            }
+        }
+    }
+
+    std::vector<std::unique_ptr<Geometry>> vgeoms(3);
+    unsigned int nvgeoms = 0;
+
+    if(! areas.empty()) {
+        if(areas.size() == 1) {
+            vgeoms[nvgeoms++] = std::move(areas[0]);
+        } else {
+            vgeoms[nvgeoms++] = factory->createMultiPolygon(std::move(areas));
+        }
+    }
+    if(! cutEdges.empty()) {
+        if(cutEdges.size() == 1) {
+            vgeoms[nvgeoms++] = std::move(cutEdges[0]);
+        } else {
+            vgeoms[nvgeoms++] = factory->createMultiLineString(std::move(cutEdges));
+        }
+    }
+    if(! collapsePoints.empty()) {
+        if(collapsePoints.size() == 1) {
+            vgeoms[nvgeoms++] = std::move(collapsePoints[0]);
+        } else {
+            vgeoms[nvgeoms++] = factory->createMultiPoint(std::move(collapsePoints));
+        }
+    }
+
+    if(nvgeoms == 1) {
+        return std::move(vgeoms[0]);
+    }
+
+    vgeoms.resize(nvgeoms);
+    return factory->createGeometryCollection(std::move(vgeoms));
+}
+
+} // namespace
+
 /** Return a valid version of the input geometry. */
 std::unique_ptr<geom::Geometry> MakeValid::build(const geom::Geometry* geom)
 {
@@ -321,9 +566,17 @@ std::unique_ptr<geom::Geometry> MakeValid::build(const geom::Geometry* geom)
         auto mls = detail::down_cast<const MultiLineString*>(geom);
         return MakeValidMultiLine(mls);
     }
-    if( typeId == GEOS_POLYGON ||
-        typeId == GEOS_MULTIPOLYGON ) {
+    if( typeId == GEOS_POLYGON ) {
         return MakeValidPoly(geom);
+    }
+    if( typeId == GEOS_MULTIPOLYGON ) {
+        auto mp = detail::down_cast<const MultiPolygon*>(geom);
+        auto components = envelopeConnectedComponents(mp);
+        if( components.size() == 1 ) {
+            // All polygons potentially interact: process as a whole.
+            return MakeValidPoly(geom);
+        }
+        return MakeValidMultiPolygonComponents(mp, components);
     }
     if( typeId == GEOS_GEOMETRYCOLLECTION ) {
         auto coll = detail::down_cast<const GeometryCollection*>(geom);
