@@ -694,4 +694,53 @@ void object::test<20>()
     ensure("the valid part should keep its M values", sawM);
 }
 
+// A long-X, Y-disjoint invalid sentinel must not pull envelope-disjoint
+// valid squares into the same component. The squares stay pass-through
+// clones; the bowtie is repaired on its own. (Complexity of the sweep
+// for this shape is covered by perf_makevalid sentinel.)
+template<>
+template<>
+void object::test<21>()
+{
+    auto gf = GeometryFactory::getDefaultInstance();
+    geos::io::WKTReader reader(gf);
+    MakeValid mv;
+
+    std::vector<std::unique_ptr<Geometry>> parts;
+    // Invalid bowtie spanning X=[0, 20] at Y=100, Y-disjoint from the squares.
+    parts.push_back(reader.read(
+        "POLYGON ((0 100, 20 101, 20 100, 0 101, 0 100))"));
+
+    std::vector<std::unique_ptr<Geometry>> squares;
+    for(double x = 0; x <= 16; x += 4) {
+        auto cs = std::make_unique<CoordinateSequence>();
+        cs->add(x, 0.0);
+        cs->add(x + 1, 0.0);
+        cs->add(x + 1, 1.0);
+        cs->add(x, 1.0);
+        cs->add(x, 0.0);
+        squares.push_back(gf->createPolygon(gf->createLinearRing(std::move(cs))));
+        parts.push_back(squares.back()->clone());
+    }
+    auto mp = gf->createMultiPolygon(std::move(parts));
+
+    auto result = mv.build(mp.get());
+
+    ensure(result->isValid());
+    ensure_equals(result->getGeometryTypeId(), GEOS_MULTIPOLYGON);
+    // Five valid squares kept as-is, plus two bowtie lobes.
+    ensure_equals(result->getNumGeometries(), std::size_t(7));
+    for(const auto& sq : squares) {
+        bool found = false;
+        for(std::size_t i = 0; i < result->getNumGeometries(); i++) {
+            if(result->getGeometryN(i)->equalsExact(sq.get())) {
+                found = true;
+                break;
+            }
+        }
+        ensure("each valid square must come out with identical coordinates",
+               found);
+    }
+}
+
 } // namespace tut

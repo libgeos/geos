@@ -28,6 +28,11 @@
  *                 adversarial: cannot be split)
  *   bigbowtie <n> ~n small valid polygons + one huge invalid bowtie with
  *                 ~n vertices (mimics issue #1504 real data shape)
+ *   sentinel <n>  n valid unit squares at Y=0 spaced 2 apart + 1 invalid
+ *                 bowtie spanning the whole row at Y=100 (long-X,
+ *                 Y-disjoint). Clustering must expire by maxX; a minX
+ *                 prefix window is N(N+1)/2 envelope tests. To confirm
+ *                 linear scaling run n=16000 / 32000 / 64000.
  *
  * An optional 4th argument "coll" runs the same parts as a
  * GeometryCollection, which MakeValid processes member-wise; it provides
@@ -38,7 +43,7 @@
  * KiB on Linux/BSD, which is normalized below. On platforms without
  * getrusage (e.g. Windows) peak RSS is reported as unavailable.
  *
- * Usage: perf_makevalid <grid|chain|overlap|bigbowtie> [n] [reps] [coll]
+ * Usage: perf_makevalid <grid|chain|overlap|bigbowtie|sentinel> [n] [reps] [coll]
  **********************************************************************/
 
 #include <geos/geom/Coordinate.h>
@@ -203,6 +208,31 @@ makeBigBowtie(std::size_t n)
     return {std::move(mp), "bigbowtie"};
 }
 
+// n disjoint unit squares at Y=0 spaced 2 apart, plus one invalid bowtie
+// spanning the whole row at Y=100 (long X, Y-disjoint). Expiry must be
+// by maxX; a minX-prefix active window compares every pair.
+Fixture
+makeSentinel(std::size_t n)
+{
+    auto gf = GeometryFactory::getDefaultInstance();
+    std::vector<std::unique_ptr<Geometry>> polys;
+    polys.reserve(n + 1);
+    for (std::size_t i = 0; i < n; i++) {
+        polys.push_back(square(gf, 2.0 * static_cast<double>(i), 0.0));
+    }
+    double span = n == 0 ? 1.0 : 2.0 * static_cast<double>(n) - 1.0;
+    auto cs = std::make_unique<CoordinateSequence>();
+    cs->add(0.0, 100.0);
+    cs->add(span, 101.0);
+    cs->add(span, 100.0);
+    cs->add(0.0, 101.0);
+    cs->add(0.0, 100.0);
+    auto ring = gf->createLinearRing(std::move(cs));
+    polys.push_back(gf->createPolygon(std::move(ring)));
+    auto mp = gf->createMultiPolygon(std::move(polys));
+    return {std::move(mp), "sentinel"};
+}
+
 void
 runCase(const Fixture& fix, bool useCollection, std::size_t reps)
 {
@@ -258,7 +288,7 @@ int
 main(int argc, char** argv)
 {
     if (argc < 2) {
-        std::cerr << "usage: perf_makevalid <grid|chain|overlap|bigbowtie>"
+        std::cerr << "usage: perf_makevalid <grid|chain|overlap|bigbowtie|sentinel>"
                      " [n] [reps] [coll]\n";
         return 1;
     }
@@ -279,6 +309,9 @@ main(int argc, char** argv)
         }
         if (cs == "bigbowtie") {
             return makeBigBowtie(n);
+        }
+        if (cs == "sentinel") {
+            return makeSentinel(n);
         }
         std::cerr << "unknown case: " << cs << "\n";
         std::exit(1);

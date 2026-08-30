@@ -340,19 +340,20 @@ envelopeConnectedComponents(const geom::MultiPolygon* mp)
         envs[i] = mp->getGeometryN(i)->getEnvelopeInternal();
     }
 
-    // Sweep polygons sorted by envelope minimum X, maintaining the subset
-    // whose envelopes extend at or beyond the current minimum X. Only items
-    // in that window can intersect the current one. The number of envelope
-    // tests is proportional to the number of intersecting pairs, so the
-    // sweep is fast when parts are spatially separated and degrades
-    // quadratically when very many envelopes overlap.
+    // Sweep polygons sorted by envelope minimum X, keeping an active set of
+    // envelopes that still extend to the current minimum X. Expiry is by
+    // maxX, independently of position in the minX-sorted order: a long-span
+    // envelope must not pin expired neighbors in the window. Only the X-live
+    // set can intersect the current polygon, so the number of envelope tests
+    // is proportional to true X-overlapping pairs (fast when parts are
+    // spatially separated; quadratic when very many envelopes overlap).
     //
     // A spatial-index clustering such as operation::cluster::
     // EnvelopeIntersectsClusterFinder would also be correct, but for the
     // many tiny disjoint envelopes this operation is aimed at it builds
     // and queries an STRtree and materializes (and sorts) every candidate
-    // hit per part, while the sweep below only ever looks at the active
-    // window. Non-finite envelopes must be excluded either way, which is
+    // hit per part, while the sweep below only ever looks at the X-live
+    // set. Non-finite envelopes must be excluded either way, which is
     // done up front so the sort never sees them.
     std::vector<std::size_t> order;
     order.reserve(n);
@@ -371,18 +372,26 @@ envelopeConnectedComponents(const geom::MultiPolygon* mp)
         return envs[a]->getMinY() < envs[b]->getMinY();
     });
 
-    std::size_t lo = 0; // first still-active item in order
+    std::vector<std::size_t> active;
+    active.reserve(order.size());
     for(std::size_t hi = 0; hi < order.size(); hi++) {
         std::size_t i = order[hi];
-        while(lo < hi && envs[order[lo]]->getMaxX() < envs[i]->getMinX()) {
-            lo++;
+        const double minX = envs[i]->getMinX();
+        // Drop envelopes whose maxX is strictly left of the current minX.
+        // Touching (maxX == minX) stays, matching Envelope::intersects.
+        std::size_t w = 0;
+        for(std::size_t k = 0; k < active.size(); k++) {
+            if(envs[active[k]]->getMaxX() >= minX) {
+                active[w++] = active[k];
+            }
         }
-        for(std::size_t k = lo; k < hi; k++) {
-            std::size_t j = order[k];
+        active.resize(w);
+        for(std::size_t j : active) {
             if(envs[i]->intersects(envs[j])) {
                 sets.join(i, j);
             }
         }
+        active.push_back(i);
     }
 
     // Group indices by cluster root, preserving polygon order within groups
