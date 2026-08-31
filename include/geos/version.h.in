@@ -30,6 +30,15 @@
 #define GEOS_VERSION "@VERSION@"
 #endif
 
+/* Revision-level version information */
+#ifndef GEOS_REVISION
+#define GEOS_REVISION "@GEOS_REVISION@"
+#endif
+
+#ifndef GEOS_REVISION_DIRTY
+#define GEOS_REVISION_DIRTY "@GEOS_REVISION_DIRTY@"
+#endif
+
 #ifndef GEOS_JTS_PORT
 #define GEOS_JTS_PORT "@JTS_PORT@"
 #endif
