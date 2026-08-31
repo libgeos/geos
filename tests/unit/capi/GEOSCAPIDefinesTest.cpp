@@ -60,5 +60,14 @@ void object::test<3>
     ensure_equals(GEOS_CAPI_VERSION, std::string(GEOSversion()));
 }
 
+// Make sure revision define is consistent with function
+template<>
+template<>
+void object::test<4>
+()
+{
+    ensure_equals(GEOS_REVISION, std::string(GEOSrevision()));
+}
+
 } // namespace tut
 
