@@ -1,12 +1,14 @@
 
 ## Changes in 3.15.0
-2026-xx-xx
+2026-09-01
 
 - Breaking Changes:
   - BufferOp returns POLYGON EMPTY when fed Inf/Nan coords (GH-1332)
   - Return Inf when calculating distance to an empty geometry (GH-1345, Even Rouault)
   - Overlay operations now produce a LineString geometry in cases that would previously
     produce a MultiLineString with contiguous sub-geometries. (GH-1459, Dan Baston)
+  - Overlay operations that previously rotated rings by one vertex no longer do so
+    (GH-1412, Dan Baston)
 
 - New things:
   - Add GEOSMinimumSpanningTree (Paul Ramsey)
@@ -35,11 +37,9 @@
   - Preserve M values in GEOSSimplify (GH-1317, Dan Baston)
   - Preserve M values in GEOSPolygonize (GH-1363 Dan Baston)
   - Fix some cases of dropped M values in overlay (GH-1364,GH-1388,GH-1407,GH-1408,GH-1474; Dan Baston)
-  - Support curved inputs in GEOSNode (GH-1347, Dan Baston)
   - GEOSClusterDBSCAN fix unsassigned clusters with minPoints <= 1 (GH-1386, Dan Baston)
   - Fix crash in GEOSConvexHull (GH-1358, Dan Baston)
   - Overlay performance improvements (GH-1353, arriopolis, Martin Davis)
-  - Fix unintended ring rotation in Overlay results (GH-1412, Dan Baston)
   - Fix intersection result for slightly overlapping polygons (GH-1499, Petr Belohlavek)
 
 
