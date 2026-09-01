@@ -1,6 +1,6 @@
 ---
 title: "Download and Build"
-date: 2025-07-07
+date: 2025-09-01
 draft: false
 ---
 
@@ -8,7 +8,7 @@ draft: false
 
 | Release | Release Date | First Release | Final Release | Download Link | Changes |
 | :--: | :--:| :--: |:--: | :--: | :--: |
-|  **3.15.0rc1** | 2026/08/20 | 2026/07/07 | *2030/10/01* | [geos-3.15.0rc1.tar.bz2](https://download.osgeo.org/geos/geos-3.15.0rc1.tar.bz2) | [Changes](https://github.com/libgeos/geos/blob/3.15.0rc1/NEWS.md) |
+|  **3.15.0** | 2026/09/01 | 2026/07/07 | *2030/10/01* | [geos-3.15.0.tar.bz2](https://download.osgeo.org/geos/geos-3.15.0.tar.bz2) | [Changes](https://github.com/libgeos/geos/blob/3.15.0/NEWS.md) |
 |  **3.14.1** | 2025/10/27 | 2025/08/21 | *2029/10/01* | [geos-3.14.1.tar.bz2](https://download.osgeo.org/geos/geos-3.14.1.tar.bz2) | [Changes](https://github.com/libgeos/geos/blob/3.14.1/NEWS.md) |
 |  **3.13.1** | 2025/03/03 | 2024/09/06 | *2028/10/01* | [geos-3.13.1.tar.bz2](https://download.osgeo.org/geos/geos-3.13.1.tar.bz2) | [Changes](https://github.com/libgeos/geos/blob/3.13.1/NEWS.md) |
 |  **3.12.3** | 2025/03/03 | 2023/06/27 | *2027/07/01* | [geos-3.12.3.tar.bz2](https://download.osgeo.org/geos/geos-3.12.3.tar.bz2) | [Changes](https://github.com/libgeos/geos/blob/3.12.3/NEWS.md) |
