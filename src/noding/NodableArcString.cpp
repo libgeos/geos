@@ -151,8 +151,32 @@ prepareArcPoints(const CircularArc& arc, std::vector<CoordinateXYZM> splitPoints
         // Calculate the midpoint of an arc between p0 and p2.
         // We don't actually use the calculated point here, we just want to make sure that
         // the arc from p0 to p2 is long enough to contain a midpoint.
-        const geom::CoordinateXY p1 = algorithm::CircularArcs::getMidpoint(p0, p2, center, arc.getRadius(), true);
+        const double t0 = algorithm::CircularArcs::getAngle(p0, center);
+        const double t2 = algorithm::CircularArcs::getAngle(p2, center);
+        if (t0 == t2) {
+#if DEBUG_NODABLE_ARC_STRING
+            std::cout << "Skipping split point " << p2 << " because the arc endpoints have the same angle" << std::endl;
+#endif
+            if (retained.size() == 1) {
+                splitStart = true;
+            }
+            continue;
+        }
 
+        const double t1 = t0 == t2 ? t0 : algorithm::CircularArcs::getMidpointAngle(t0, t2, true);
+
+        // Reject split point where computed angle doesn't fall between endpoints
+        if (!algorithm::Angle::isWithinCCW(t1, t0, t2)) {
+#if DEBUG_NODABLE_ARC_STRING
+            std::cout << "Skipping split point " << p2 << " because the calculated arc midpoint angle " << t1 << " does not fall within the arc from " << t0 << " to " << t2 << std::endl;
+#endif
+            if (retained.size() == 1) {
+                splitStart = true;
+            }
+            continue;
+        }
+
+        const geom::CoordinateXY p1 = algorithm::CircularArcs::createPoint(center, arc.getRadius(), t1);
         if (p1.equals2D(p0) || p1.equals2D(p2)) {
 #if DEBUG_NODABLE_ARC_STRING
             std::cout << "Skipping split point " << p2 << " because the calculated arc midpoint " << p1 << " equals one of the endpoints" << std::endl;
@@ -166,21 +190,6 @@ prepareArcPoints(const CircularArc& arc, std::vector<CoordinateXYZM> splitPoints
         if (algorithm::Orientation::index(p1, p0, p2) == algorithm::Orientation::COLLINEAR) {
 #if DEBUG_NODABLE_ARC_STRING
             std::cout << "Skipping split point " << p2 << " because the calculated arc midpoint " << p1 << " is collinear with the endpoints" << std::endl;
-#endif
-            if (retained.size() == 1) {
-                splitStart = true;
-            }
-            continue;
-        }
-
-        // Reject split point where computed doesn't fall between endpoints
-        const double t0 = algorithm::Angle::normalizePositive(isCCW ? arc.theta0() : arc.theta2());
-        const double t1 = algorithm::Angle::normalizePositive(algorithm::CircularArcs::getAngle(p1, center));
-        const double t2 = algorithm::Angle::normalizePositive(isCCW ? arc.theta2() : arc.theta0());
-
-        if (!algorithm::Angle::isWithinCCW(t1, t0, t2)) { // != isCCW) {
-#if DEBUG_NODABLE_ARC_STRING
-            std::cout << "Skipping split point " << p2 << " because the calculated arc midpoint " << p1 << " does not fall within the arc from " << p0 << " to " << p2 << std::endl;
 #endif
             if (retained.size() == 1) {
                 splitStart = true;
