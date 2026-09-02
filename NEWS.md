@@ -30,7 +30,7 @@
     - OverlayNG (GH-1427, Dan Baston)
     - Polygonizer (GH-1420, Dan Baston)
   - Add GEOSLineToCurve, GEOSCurveToLine (GH-1382, Dan Baston)
-  - Add GeometrySplitter (GH-1424, Dan Baston)
+  - Add GeometrySplitter / GEOSSplit (GH-1424, Dan Baston)
   - Add progress reporting to GEOSCoverageSimplify, GEOSUnaryUnion (GH-1466, Even Rouault / Dan Baston)
 
 - Fixes/Improvements:
