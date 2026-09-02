@@ -845,4 +845,15 @@ void object::test<64>()
     testOverlay(a, b, exp, OverlayNG::UNION, 0);
 }
 
+template<>
+template<>
+void object::test<65>()
+{
+    set_test_name("Intersection of circular CurvePolygon with itself");
+
+    std::string a = "CURVEPOLYGON (CIRCULARSTRING (-1 0,0 1,1 0,0 -1,-1 0))";
+
+    testOverlay(a, a, a, OverlayNG::INTERSECTION, 0);
+}
+
 } // namespace tut
