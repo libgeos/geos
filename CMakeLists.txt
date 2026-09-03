@@ -78,6 +78,38 @@ message(STATUS "GEOS: Version ${GEOS_VERSION}")
 message(STATUS "GEOS: C API Version ${CAPI_VERSION}")
 message(STATUS "GEOS: JTS port ${JTS_PORT}")
 
+# Generate revision information from git
+execute_process(
+  COMMAND git describe --tags --always
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  OUTPUT_VARIABLE _git_describe
+  ERROR_VARIABLE _git_describe_err
+)
+# Strip any trailing newline/whitespace from the description
+string(STRIP "${_git_describe}" _git_describe_stripped)
+set(GEOS_REVISION "${_git_describe_stripped}" CACHE STRING "git describe output")
+set(GEOS_REVISION_DIRTY "0" CACHE STRING "1 if the working tree has local modifications")
+
+# Check if the working tree is dirty
+execute_process(
+  COMMAND git diff --quiet
+  WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+  RESULT_VARIABLE _diff_rc
+)
+if(NOT _diff_rc EQUAL 0)
+  set(GEOS_REVISION_DIRTY "1" CACHE STRING "1 if the working tree has local modifications")
+else()
+  # Also check for untracked files
+  execute_process(
+    COMMAND git status --porcelain
+    WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+    OUTPUT_VARIABLE _status
+  )
+  if(_status MATCHES "\\?\\?")
+    set(GEOS_REVISION_DIRTY "1" CACHE STRING "1 if the working tree has local modifications")
+  endif()
+endif()
+
 if(CMAKE_VERSION VERSION_LESS 3.21)
   if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
     set(PROJECT_IS_TOP_LEVEL ON)
