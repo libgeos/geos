@@ -944,6 +944,11 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createRectangle_r(
     double xmin, double ymin,
     double xmax, double ymax);
 
+/** \see GEOSGeom_homogenize */
+extern GEOSGeometry GEOS_DLL * GEOSGeom_homogenize_r(
+    GEOSContextHandle_t handle,
+    GEOSGeometry * g);
+
 /** \see GEOSGeom_clone */
 extern GEOSGeometry GEOS_DLL *GEOSGeom_clone_r(
     GEOSContextHandle_t handle,
@@ -3106,6 +3111,22 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCollection(int type);
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createRectangle(
     double xmin, double ymin,
     double xmax, double ymax);
+
+/**
+* Returns the most specific representation of a geometry.
+*
+* If the input is a multi-element GeometryCollection whose elements all have
+* the same type, then the input will be destroyed and a new collection
+* of an appropriate type returned (MultiLineString, MultiPolygon, etc.) If the
+* input is a single-element GeometryCollection, then the input will be
+* destroyed and the single element returned.  If the elements are not
+* homogeneous, or if the input is not a collection, it will be returned
+* unmodified. Nested collections are collapsed during processing.
+*
+* \since 3.15
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeom_homogenize(
+    GEOSGeometry* g);
 
 /**
 * Create a new copy of the input geometry.

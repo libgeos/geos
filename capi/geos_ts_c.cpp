@@ -3861,6 +3861,18 @@ extern "C" {
     }
 
     Geometry*
+    GEOSGeom_homogenize_r(GEOSContextHandle_t extHandle, Geometry* g)
+    {
+        return execute(extHandle, [&]() -> Geometry* {
+            const int srid = g->getSRID();
+
+            auto g3 = geos::operation::cluster::GeometryFlattener::flatten(std::unique_ptr<Geometry>(g));
+            g3->setSRID(srid);
+            return g3.release();
+        });
+    }
+
+    Geometry*
     GEOSGeom_clone_r(GEOSContextHandle_t extHandle, const Geometry* g)
     {
         return execute(extHandle, [&]() {
