@@ -102,6 +102,22 @@ public:
     /// \return the nearest points
     std::unique_ptr<geom::CoordinateSequence> nearestPoints(const geom::Geometry* g) const;
 
+    /// \brief Computes the nearest point on the target facets to a coordinate.
+    ///
+    /// Supporting method for DirectedHausdorffDistance (JTS 1182).
+    geom::Coordinate nearestPoint(const geom::CoordinateXY& p) const;
+
+    /// \brief Distance from a coordinate to the target facets.
+    double distance(const geom::CoordinateXY& p) const;
+
+    /// \brief Distance from a segment to the target facets.
+    double distance(const geom::CoordinateXY& p0, const geom::CoordinateXY& p1) const;
+
+    /// \brief Nearest facet location to a coordinate (JTS nearestLocation).
+    ///
+    /// Supporting method for DirectedHausdorffDistance identical/collinear skip.
+    FacetNearestLocation nearestLocation(const geom::CoordinateXY& p) const;
+
 
 private:
     struct FacetDistance {

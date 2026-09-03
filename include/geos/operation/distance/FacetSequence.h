@@ -31,6 +31,17 @@ namespace geos {
 namespace operation {
 namespace distance {
 
+/// Location on a CoordinateSequence segment (JTS CoordinateSequenceLocation).
+/// Used by DirectedHausdorffDistance to skip bisection of identical/collinear
+/// zero-distance segments.
+struct FacetNearestLocation {
+    const geom::CoordinateSequence* seq = nullptr;
+    std::size_t index = 0;
+    geom::Coordinate pt;
+
+    bool isSameSegment(const FacetNearestLocation& other) const;
+};
+
 class FacetSequence {
 
 private:
@@ -85,6 +96,9 @@ public:
      * @return a pair of {@link Coordinate}s for the nearest points
      */
     std::vector<geom::Coordinate> nearestLocations(const FacetSequence& facetSeq) const;
+
+    /// Nearest segment location on this facet to a point (JTS 1182).
+    FacetNearestLocation nearestLocation(const geom::CoordinateXY& p) const;
 
 };
 

@@ -16,6 +16,7 @@
  *
  **********************************************************************/
 
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/LineSegment.h>
 #include <geos/algorithm/Distance.h>
@@ -227,5 +228,88 @@ const Coordinate*
 FacetSequence::getCoordinate(std::size_t index) const
 {
     return &(pts->getAt(start + index));
+}
+
+namespace {
+
+bool
+isNextSegment(std::size_t index, std::size_t index1, const CoordinateSequence& seq)
+{
+    if (index1 == index + 1) {
+        return true;
+    }
+    // Last segment of a ring is adjacent to segment 0.
+    // JTS isNext writes `index1 == 0 && isRing && index1 == size-1`, which
+    // is unreachable; this is the documented ring intent.
+    if (seq.isRing() && index1 == 0 && index + 1 == seq.size() - 1) {
+        return true;
+    }
+    return false;
+}
+
+std::size_t
+normalizeRingIndex(const CoordinateSequence& seq, std::size_t index)
+{
+    if (seq.isRing() && index >= seq.size() - 1) {
+        return 0;
+    }
+    return index;
+}
+
+} // namespace
+
+bool
+FacetNearestLocation::isSameSegment(const FacetNearestLocation& other) const
+{
+    if (seq != other.seq || !seq) {
+        return false;
+    }
+    if (index == other.index) {
+        return true;
+    }
+    if (isNextSegment(index, other.index, *seq)) {
+        return other.pt.equals2D(seq->getAt(index + 1));
+    }
+    if (isNextSegment(other.index, index, *seq)) {
+        return pt.equals2D(seq->getAt(index + 1));
+    }
+    return false;
+}
+
+FacetNearestLocation
+FacetSequence::nearestLocation(const CoordinateXY& p) const
+{
+    if (isPoint()) {
+        return FacetNearestLocation{pts, start, pts->getAt(start)};
+    }
+
+    double minDistance = DoubleInfinity;
+    std::size_t locIndex = start;
+    Coordinate nearestPt;
+
+    const Coordinate queryPt(p);
+    for (std::size_t i = start; i < end - 1; i++) {
+        const Coordinate& q0 = pts->getAt(i);
+        const Coordinate& q1 = pts->getAt(i + 1);
+        double dist = Distance::pointToSegment(queryPt, q0, q1);
+        if (dist < minDistance) {
+            minDistance = dist;
+            LineSegment seg(q0, q1);
+            seg.closestPoint(queryPt, nearestPt);
+            locIndex = i;
+            // segments are half-open: 2nd endpoint belongs to the next
+            // segment except for the last segment of a non-closed sequence
+            if (dist == 0.0 && queryPt.equals2D(q1)) {
+                if (locIndex < pts->size() - 1) {
+                    locIndex++;
+                }
+                locIndex = normalizeRingIndex(*pts, locIndex);
+            }
+            if (minDistance <= 0.0) {
+                break;
+            }
+        }
+    }
+    return FacetNearestLocation{pts, locIndex, nearestPt};
 }
 

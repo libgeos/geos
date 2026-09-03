@@ -2143,6 +2143,36 @@ extern int GEOS_DLL GEOSHausdorffDistanceDensifyWithPoints_r(
     double *p1x, double *p1y,
     double *p2x, double *p2y);
 
+/** \see GEOSDirectedHausdorffDistance */
+extern int GEOS_DLL GEOSDirectedHausdorffDistance_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry *g1,
+    const GEOSGeometry *g2,
+    double *dist);
+
+/** \see GEOSDirectedHausdorffDistanceWithPoints */
+extern int GEOS_DLL GEOSDirectedHausdorffDistanceWithPoints_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry *g1,
+    const GEOSGeometry *g2,
+    double *dist,
+    double *p1x, double *p1y,
+    double *p2x, double *p2y);
+
+/** \see GEOSDirectedHausdorffDistanceWithin */
+extern int GEOS_DLL GEOSDirectedHausdorffDistanceWithin_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry *g1,
+    const GEOSGeometry *g2,
+    double maxDistance);
+
+/** \see GEOSSymmetricHausdorffDistance */
+extern int GEOS_DLL GEOSSymmetricHausdorffDistance_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry *g1,
+    const GEOSGeometry *g2,
+    double *dist);
+
 /** \see GEOSFrechetDistance */
 extern int GEOS_DLL GEOSFrechetDistance_r(
     GEOSContextHandle_t handle,
@@ -4106,6 +4136,79 @@ extern int GEOS_DLL GEOSHausdorffDistanceDensifyWithPoints(
     double *dist,
     double* p1x, double* p1y,
     double* p2x, double* p2y);
+
+/**
+* Calculate the directed Hausdorff distance h(A,B): the maximum
+* distance from any point of g1 to g2 (locus max-min, not vertex-only).
+* Empty inputs write NaN. This is not GEOSHausdorffDistance
+* (that API is discrete since 3.2).
+*
+* Uses automatic map-unit tolerance (query envelope diameter / 1e4).
+* Map-unit tolerance overloads exist only on the C++ class.
+*
+* @INPUT_CURVES_CONVERTED_TO_LINES@
+*
+* \param[in] g1 Query geometry A
+* \param[in] g2 Target geometry B
+* \param[out] dist Pointer to be filled in with distance result
+* \return 1 on success, 0 on exception.
+* \see geos::algorithm::distance::DirectedHausdorffDistance
+* \since 3.16
+*/
+extern int GEOS_DLL GEOSDirectedHausdorffDistance(
+    const GEOSGeometry *g1,
+    const GEOSGeometry *g2,
+    double *dist);
+
+/**
+* Directed Hausdorff distance h(A,B) and a realizing point pair
+* [point on A, nearest point on B]. Automatic map-unit tolerance only
+* (see GEOSDirectedHausdorffDistance).
+*
+* @INPUT_CURVES_CONVERTED_TO_LINES@
+*
+* \return 1 on success, 0 on exception.
+* \see geos::algorithm::distance::DirectedHausdorffDistance
+* \since 3.16
+*/
+extern int GEOS_DLL GEOSDirectedHausdorffDistanceWithPoints(
+    const GEOSGeometry *g1,
+    const GEOSGeometry *g2,
+    double *dist,
+    double *p1x, double *p1y,
+    double *p2x, double *p2y);
+
+/**
+* True if every point of g1 lies within maxDistance of g2
+* (equivalently, h(A,B) <= maxDistance). Empty query is not within.
+* Automatic map-unit tolerance only (see GEOSDirectedHausdorffDistance).
+*
+* @INPUT_CURVES_CONVERTED_TO_LINES@
+*
+* \return 1 if fully within, 0 if not, 2 on exception.
+* \see geos::algorithm::distance::DirectedHausdorffDistance
+* \since 3.16
+*/
+extern int GEOS_DLL GEOSDirectedHausdorffDistanceWithin(
+    const GEOSGeometry *g1,
+    const GEOSGeometry *g2,
+    double maxDistance);
+
+/**
+* Symmetric Hausdorff distance max(h(A,B), h(B,A)).
+* New name so it cannot steal GEOSHausdorffDistance (discrete).
+* Automatic map-unit tolerance only (see GEOSDirectedHausdorffDistance).
+*
+* @INPUT_CURVES_CONVERTED_TO_LINES@
+*
+* \return 1 on success, 0 on exception.
+* \see geos::algorithm::distance::DirectedHausdorffDistance
+* \since 3.16
+*/
+extern int GEOS_DLL GEOSSymmetricHausdorffDistance(
+    const GEOSGeometry *g1,
+    const GEOSGeometry *g2,
+    double *dist);
 
 /**
 * Calculate the

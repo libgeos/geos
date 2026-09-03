@@ -405,6 +405,30 @@ extern "C" {
     }
 
     int
+    GEOSDirectedHausdorffDistance(const Geometry* g1, const Geometry* g2, double* dist)
+    {
+        return GEOSDirectedHausdorffDistance_r(handle, g1, g2, dist);
+    }
+
+    int
+    GEOSDirectedHausdorffDistanceWithPoints(const Geometry* g1, const Geometry* g2, double* dist, double* p1x, double* p1y, double* p2x, double* p2y)
+    {
+        return GEOSDirectedHausdorffDistanceWithPoints_r(handle, g1, g2, dist, p1x, p1y, p2x, p2y);
+    }
+
+    int
+    GEOSDirectedHausdorffDistanceWithin(const Geometry* g1, const Geometry* g2, double maxDistance)
+    {
+        return GEOSDirectedHausdorffDistanceWithin_r(handle, g1, g2, maxDistance);
+    }
+
+    int
+    GEOSSymmetricHausdorffDistance(const Geometry* g1, const Geometry* g2, double* dist)
+    {
+        return GEOSSymmetricHausdorffDistance_r(handle, g1, g2, dist);
+    }
+
+    int
     GEOSFrechetDistance(const Geometry* g1, const Geometry* g2, double* dist)
     {
         return GEOSFrechetDistance_r(handle, g1, g2, dist);

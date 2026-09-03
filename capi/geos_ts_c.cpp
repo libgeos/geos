@@ -27,6 +27,7 @@
 #include <geos/algorithm/construct/MaximumInscribedCircle.h>
 #include <geos/algorithm/construct/LargestEmptyCircle.h>
 #include <geos/algorithm/distance/DiscreteHausdorffDistance.h>
+#include <geos/algorithm/distance/DirectedHausdorffDistance.h>
 #include <geos/algorithm/distance/DiscreteFrechetDistance.h>
 #include <geos/algorithm/hull/ConcaveHull.h>
 #include <geos/algorithm/hull/ConcaveHullOfPolygons.h>
@@ -135,6 +136,7 @@
 #include <cstring>
 #include <fstream>
 #include <iostream>
+#include <limits>
 #include <optional>
 #include <sstream>
 #include <string>
@@ -226,6 +228,7 @@ using geos::io::GeoJSONWriter;
 
 using geos::algorithm::distance::DiscreteFrechetDistance;
 using geos::algorithm::distance::DiscreteHausdorffDistance;
+using geos::algorithm::distance::DirectedHausdorffDistance;
 using geos::algorithm::hull::ConcaveHull;
 using geos::algorithm::hull::ConcaveHullOfPolygons;
 
@@ -1276,6 +1279,66 @@ extern "C" {
             *p1y = pts[0].y;
             *p2x = pts[1].x;
             *p2y = pts[1].y;
+            return 1;
+        });
+    }
+
+    int
+    GEOSDirectedHausdorffDistance_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2, double* dist)
+    {
+        return execute(extHandle, 0, [&]() {
+            const auto input1 = convertToLineIfNeeded(extHandle, g1);
+            const auto input2 = convertToLineIfNeeded(extHandle, g2);
+
+            *dist = DirectedHausdorffDistance::distance(*input1, *input2);
+            return 1;
+        });
+    }
+
+    int
+    GEOSDirectedHausdorffDistanceWithPoints_r(GEOSContextHandle_t extHandle,
+        const Geometry* g1, const Geometry* g2,
+        double* dist, double* p1x, double* p1y,
+        double* p2x, double* p2y)
+    {
+        return execute(extHandle, 0, [&]() {
+            const auto input1 = convertToLineIfNeeded(extHandle, g1);
+            const auto input2 = convertToLineIfNeeded(extHandle, g2);
+
+            auto pts = DirectedHausdorffDistance::distancePoints(*input1, *input2);
+            if (!pts) {
+                *dist = std::numeric_limits<double>::quiet_NaN();
+                *p1x = *p1y = *p2x = *p2y = std::numeric_limits<double>::quiet_NaN();
+                return 1;
+            }
+            *dist = (*pts)[0].distance((*pts)[1]);
+            *p1x = (*pts)[0].x;
+            *p1y = (*pts)[0].y;
+            *p2x = (*pts)[1].x;
+            *p2y = (*pts)[1].y;
+            return 1;
+        });
+    }
+
+    int
+    GEOSDirectedHausdorffDistanceWithin_r(GEOSContextHandle_t extHandle,
+        const Geometry* g1, const Geometry* g2, double maxDistance)
+    {
+        return execute(extHandle, 2, [&]() {
+            const auto input1 = convertToLineIfNeeded(extHandle, g1);
+            const auto input2 = convertToLineIfNeeded(extHandle, g2);
+            return DirectedHausdorffDistance::isFullyWithinDistance(*input1, *input2, maxDistance) ? 1 : 0;
+        });
+    }
+
+    int
+    GEOSSymmetricHausdorffDistance_r(GEOSContextHandle_t extHandle, const Geometry* g1, const Geometry* g2, double* dist)
+    {
+        return execute(extHandle, 0, [&]() {
+            const auto input1 = convertToLineIfNeeded(extHandle, g1);
+            const auto input2 = convertToLineIfNeeded(extHandle, g2);
+
+            *dist = DirectedHausdorffDistance::hausdorffDistance(*input1, *input2);
             return 1;
         });
     }
