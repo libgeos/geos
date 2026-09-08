@@ -912,4 +912,17 @@ void object::test<75>()
         "GEOMETRYCOLLECTION (CURVEPOLYGON (COMPOUNDCURVE ((5 0, 0 0, 5 5), CIRCULARSTRING (5 5, 7 1, 5 0))), POLYGON ((0 0, 0 5, 5 5, 0 0)))");
 }
 
+template<>
+template<>
+void object::test<76>()
+{
+    set_test_name("split very narrow Polygon with LineString");
+
+    auto poly = reader_.read("POLYGON ((492980.38648063864093274 7082334.45244149677455425, 493082.65415841294452548 7082319.87918917648494244, 492980.38648063858272508 7082334.45244149677455425, 492980.38648063864093274 7082334.45244149677455425))");
+    auto line = reader_.read("LINESTRING (493825.46541286131832749 7082214.02779923938214779, 492955.04876351181883365 7082338.06309300474822521)");
+
+    // Fails because split polygon does not preserve area (precision issue)
+    ensure_THROW(GeometrySplitter::split(*poly, *line), geos::util::GEOSException);
+}
+
 }
