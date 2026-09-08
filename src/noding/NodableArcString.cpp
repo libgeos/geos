@@ -163,7 +163,7 @@ prepareArcPoints(const CircularArc& arc, std::vector<CoordinateXYZM> splitPoints
             continue;
         }
 
-        const double t1 = t0 == t2 ? t0 : algorithm::CircularArcs::getMidpointAngle(t0, t2, true);
+        const double t1 = algorithm::CircularArcs::getMidpointAngle(t0, t2, true);
 
         // Reject split point where computed angle doesn't fall between endpoints
         if (!algorithm::Angle::isWithinCCW(t1, t0, t2)) {
