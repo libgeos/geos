@@ -186,14 +186,13 @@ LineStringMapBuilderFilter::filter_ro(const Geometry* geom)
 
     auto ls = static_cast<const LineString*>(geom);
     std::size_t minSize = ls->isClosed() ? 4 : 2;
-    TaggedLineString* taggedLine = new TaggedLineString(ls, minSize, isRing);
+    auto taggedLine = std::make_unique<TaggedLineString>(ls, minSize, isRing);
 
     // Duplicated Geometry pointers shouldn't happen
-    if(! linestringMap.insert(std::make_pair(geom, taggedLine)).second) {
-        delete taggedLine;
+    if(! linestringMap.insert(std::make_pair(geom, taggedLine.get())).second) {
         throw util::GEOSException("Duplicated Geometry components detected");
     }
-    tlsVector.push_back(taggedLine);
+    tlsVector.push_back(taggedLine.release());
 }
 
 

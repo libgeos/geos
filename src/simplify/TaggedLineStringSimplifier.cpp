@@ -89,101 +89,112 @@ TaggedLineStringSimplifier::simplify(TaggedLineString* nLine, double distanceTol
     }
 }
 
+struct Section {
+std::size_t i;
+std::size_t j;
+std::size_t depth;
+};
+
 /*private*/
 void
-TaggedLineStringSimplifier::simplifySection(std::size_t i,
-        std::size_t j, std::size_t depth, double distanceTolerance)
+TaggedLineStringSimplifier::simplifySection(std::size_t init_i,
+        std::size_t init_j, std::size_t init_depth, double distanceTolerance)
 {
-    depth += 1;
+    std::stack<Section> stack;
+    stack.push({init_i, init_j, init_depth + 1});
 
-#if GEOS_DEBUG
-    std::cerr << "TaggedLineStringSimplifier[" << this << "] "
-              << " simplifying section " << i << "-" << j
-              << std::endl;
-#endif
+    while (!stack.empty()) {
+        const auto [i, j, depth] = stack.top();
+        stack.pop();
 
-    if((i + 1) == j) {
-
-#if GEOS_DEBUG
-        std::cerr << "single segment, no flattening"
+    #if GEOS_DEBUG
+        std::cerr << "TaggedLineStringSimplifier[" << this << "] "
+                  << " simplifying section " << i << "-" << j
                   << std::endl;
-#endif
-        std::unique_ptr<TaggedLineSegment> newSeg(new
-                                             TaggedLineSegment(*(line->getSegment(i))));
+    #endif
 
-        line->addToResult(std::move(newSeg));
-        // leave this segment in the input index, for efficiency
-        return;
-    }
+        if((i + 1) == j) {
 
-    bool isValidToSimplify = true;
+    #if GEOS_DEBUG
+            std::cerr << "single segment, no flattening"
+                      << std::endl;
+    #endif
+            auto newSeg = std::make_unique<TaggedLineSegment>(*(line->getSegment(i)));
 
-    /*
-     * Following logic ensures that there is enough points in the
-     * output line.
-     * If there is already more points than the minimum, there's
-     * nothing to check.
-     * Otherwise, if in the worst case there wouldn't be enough points,
-     * don't flatten this segment (which avoids the worst case scenario)
-     */
-    if(line->getResultSize() < line->getMinimumSize()) {
-        std::size_t worstCaseSize = depth + 1;
-        if(worstCaseSize < line->getMinimumSize()) {
+            line->addToResult(std::move(newSeg));
+            // leave this segment in the input index, for efficiency
+            continue;
+        }
+
+        bool isValidToSimplify = true;
+
+        /*
+         * Following logic ensures that there is enough points in the
+         * output line.
+         * If there is already more points than the minimum, there's
+         * nothing to check.
+         * Otherwise, if in the worst case there wouldn't be enough points,
+         * don't flatten this segment (which avoids the worst case scenario)
+         */
+        if(line->getResultSize() < line->getMinimumSize()) {
+            std::size_t worstCaseSize = depth + 1;
+            if(worstCaseSize < line->getMinimumSize()) {
+                isValidToSimplify = false;
+            }
+        }
+
+        double distance;
+
+        // pass distance by ref
+        std::size_t furthestPtIndex = findFurthestPoint(linePts, i, j, distance);
+
+    #if GEOS_DEBUG
+        std::cerr << "furthest point " << furthestPtIndex
+                  << " at distance " << distance
+                  << std::endl;
+    #endif
+
+        if (distance < 0) {
+            // negative distance indicates that we could not compute distance to the
+            // farthest point, probably because of infinite or large-magnitude coordinates.
+            // avoid trying to simplify this section.
+            for (std::size_t k = i; k < j; k++) {
+                auto newSeg = std::make_unique<TaggedLineSegment>(*(line->getSegment(k)));
+                line->addToResult(std::move(newSeg));
+            }
+
+            continue;
+        }
+
+        // flattening must be less than distanceTolerance
+        if(distance > distanceTolerance) {
             isValidToSimplify = false;
         }
-    }
 
-    double distance;
-
-    // pass distance by ref
-    std::size_t furthestPtIndex = findFurthestPoint(linePts, i, j, distance);
-
-#if GEOS_DEBUG
-    std::cerr << "furthest point " << furthestPtIndex
-              << " at distance " << distance
-              << std::endl;
-#endif
-
-    if (distance < 0) {
-        // negative distance indicates that we could not compute distance to the
-        // farthest point, probably because of infinite or large-magnitude coordinates.
-        // avoid trying to simplify this section.
-        for (std::size_t k = i; k < j; k++) {
-            auto newSeg = std::make_unique<TaggedLineSegment>(*(line->getSegment(k)));
-            line->addToResult(std::move(newSeg));
+        if (isValidToSimplify) {
+            // test if flattened section would cause intersection or jump
+            LineSegment flatSeg(linePts->getAt(i), linePts->getAt(j));
+            isValidToSimplify = isTopologyValid(line, i, j, flatSeg);
         }
 
-        return;
+        if(isValidToSimplify) {
+
+            std::unique_ptr<TaggedLineSegment> newSeg = flatten(i, j);
+
+    #if GEOS_DEBUG
+            std::cerr << "isValidToSimplify, adding seg "
+                      << newSeg->p0 << ", " << newSeg->p1
+                      << " to TaggedLineSegment[" << line << "] result "
+                      << std::endl;
+    #endif
+
+            line->addToResult(std::move(newSeg));
+            continue;
+        }
+
+        stack.push({furthestPtIndex, j, depth+1});
+        stack.push({i, furthestPtIndex, depth+1});
     }
-
-    // flattening must be less than distanceTolerance
-    if(distance > distanceTolerance) {
-        isValidToSimplify = false;
-    }
-
-    if (isValidToSimplify) {
-        // test if flattened section would cause intersection or jump
-        LineSegment flatSeg(linePts->getAt(i), linePts->getAt(j));
-        isValidToSimplify = isTopologyValid(line, i, j, flatSeg);
-    }
-
-    if(isValidToSimplify) {
-
-        std::unique_ptr<TaggedLineSegment> newSeg = flatten(i, j);
-
-#if GEOS_DEBUG
-        std::cerr << "isValidToSimplify, adding seg "
-                  << newSeg->p0 << ", " << newSeg->p1
-                  << " to TaggedLineSegment[" << line << "] result "
-                  << std::endl;
-#endif
-
-        line->addToResult(std::move(newSeg));
-        return;
-    }
-
-    simplifySection(i, furthestPtIndex, depth, distanceTolerance);
-    simplifySection(furthestPtIndex, j, depth, distanceTolerance);
 }
 
 /*private*/
