@@ -230,12 +230,12 @@ target_compile_features(geos_cxx_flags INTERFACE cxx_std_17)
 target_compile_options(geos_cxx_flags INTERFACE
 	"$<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:-ffp-contract=off>"
 	"$<$<CXX_COMPILER_ID:GNU>:-ffp-contract=off>"
-	"$<$<BOOL:${MSVC}>:/fp:precise>"
+	"$<$<CXX_COMPILER_ID:MSVC>:/fp:precise>"
 	)
 
 # Use -ffloat-store for 32-bit builds (needed to make some tests pass)
 target_compile_options(geos_cxx_flags INTERFACE
-  $<$<AND:$<CXX_COMPILER_ID:GNU>,$<EQUAL:4,${CMAKE_SIZEOF_VOID_P}>>:-ffloat-store>
+  $<$<AND:$<CXX_COMPILER_ID:GNU>,$<EQUAL:4,$<TARGET_PROPERTY:SIZEOF_VOID_P>>>:-ffloat-store>
 )
 
 # Make sure NDEBUG is defined so that assert() is disabled for
@@ -255,11 +255,6 @@ else()
 endif()
 
 check_cxx_compiler_flag(${SIMD_FLAGS} COMPILER_HAS_SIMD)
-if(COMPILER_HAS_SIMD)
-  target_compile_options(geos_cxx_flags INTERFACE ${SIMD_FLAGS})
-  target_compile_definitions(geos_cxx_flags INTERFACE HAVE_OPEN_SIMD)
-endif()
-
 
 #-----------------------------------------------------------------------------
 # Target geos_developer_cxx_flags: developer mode compilation flags
@@ -362,6 +357,11 @@ add_library(GEOS::geos ALIAS geos)
 target_link_libraries(geos PUBLIC geos_cxx_flags PRIVATE $<BUILD_INTERFACE:ryu>)
 # ryu is an object library, nothing is actually being linked here. The BUILD_INTERFACE
 # switch was necessary to build on AppVeyor (CMake 3.16.2) but not locally (CMake 3.16.3)
+
+if(COMPILER_HAS_SIMD)
+  target_compile_options(geos PRIVATE ${SIMD_FLAGS})
+  target_compile_definitions(geos PRIVATE HAVE_OPEN_SIMD)
+endif()
 
 # Leave install with an RPATH approach to linking
 #if(APPLE AND BUILD_SHARED_LIBS)
