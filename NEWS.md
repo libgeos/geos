@@ -2,7 +2,7 @@
 2027-xx-xx
 
 - Fixes/Improvements:
-  -
+  - Detect overlay location inversions near collapsed edges of nearly collinear rings
 
 ## Changes in 3.15.0
 2026-09-01

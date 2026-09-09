@@ -856,4 +856,20 @@ void object::test<65>()
     testOverlay(a, a, a, OverlayNG::INTERSECTION, 0);
 }
 
+// Precision reduction may legitimately change an edge's location relative
+// to the original hole. Do not apply floating location checks here.
+template<>
+template<>
+void object::test<66>()
+{
+    std::string a = "POLYGON ((8 3.6, 6 4, 1.83 2.28, 8 3.6))";
+    std::string b = "POLYGON ((-10 -10, 20 -10, 20 20, -10 20, -10 -10), (0.3 1.5, 5 3.4, 1 1, 0.3 1.5))";
+    std::string expected = "MULTIPOLYGON (((5 3, 6 4, 8 4, 5 3)), ((2 2, 4 3, 3 2, 2 2)))";
+    ensure("valid A", r.read(a)->isValid());
+    ensure("valid B", r.read(b)->isValid());
+    testOverlay(a, b, expected, OverlayNG::INTERSECTION, 1);
+    testOverlay(b, a, expected, OverlayNG::INTERSECTION, 1);
+    testOverlay(a, b, "POLYGON EMPTY", OverlayNG::DIFFERENCE, 1);
+}
+
 } // namespace tut

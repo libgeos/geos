@@ -22,6 +22,7 @@
 #include <geos/util/Assert.h>
 #include <geos/util/TopologyException.h>
 
+#include <cmath>
 #include <sstream>
 
 
@@ -50,6 +51,86 @@ OverlayLabeller::computeLabelling()
     labelConnectedLinearEdges();
 
     labelDisconnectedEdges();
+}
+
+/*public*/
+void
+OverlayLabeller::checkCollapseNodeLocations() const
+{
+    const auto nodes = graph->getNodeEdges();
+    for (OverlayEdge* nodeEdge : nodes) {
+        for (uint8_t geomIndex = 0; geomIndex < 2; geomIndex++) {
+            if (! inputGeometry->isArea(geomIndex))
+                continue;
+            //-- limit this heuristic to nodes where noding has collapsed an edge
+            bool hasCollapse = false;
+            OverlayEdge* e = nodeEdge;
+            do {
+                if (e->getLabel()->isCollapse(geomIndex)) {
+                    hasCollapse = true;
+                    break;
+                }
+                e = e->oNextOE();
+            } while (e != nodeEdge);
+            if (! hasCollapse)
+                continue;
+            e = nodeEdge;
+            do {
+                checkEdgeLocation(e, geomIndex);
+                e = e->oNextOE();
+            } while (e != nodeEdge);
+        }
+    }
+}
+
+/*private*/
+void
+OverlayLabeller::checkEdgeLocation(OverlayEdge* edge, uint8_t geomIndex) const
+{
+    const OverlayLabel* label = edge->getLabel();
+    //-- boundary edges carry their own (ring-derived) locations
+    if (label->isBoundary(geomIndex) || edge->isCurved())
+        return;
+    //-- a collapsed edge lies on degenerate geometry, where a point-in-area
+    //-- test is itself unreliable, so its location is not checkable
+    if (label->isCollapse(geomIndex))
+        return;
+    Location lineLoc = label->getLineLocation(geomIndex);
+    if (lineLoc != Location::INTERIOR && lineLoc != Location::EXTERIOR)
+        return;
+    /**
+    * The edge endpoints are noded points, which may lie exactly on
+    * degenerate elements of the geometry, so the location is checked at a
+    * sample point on the longest segment. This reduces sensitivity to
+    * rounding near a node, but is not a complete test of edge location.
+    */
+    const CoordinateSequence* pts = edge->getCoordinatesRO();
+    double lenMax = 0.0;
+    CoordinateXY mid = edge->orig();
+    for (std::size_t i = 0; i + 1 < pts->size(); i++) {
+        const CoordinateXY& p0 = pts->getAt<CoordinateXY>(i);
+        const CoordinateXY& p1 = pts->getAt<CoordinateXY>(i + 1);
+        double len = p0.distance(p1);
+        // Halve first to avoid overflowing the sum of large ordinates.
+        CoordinateXY candidate(p0.x / 2 + p1.x / 2, p0.y / 2 + p1.y / 2);
+        if (len > lenMax && std::isfinite(candidate.x) && std::isfinite(candidate.y)
+                && !candidate.equals2D(p0) && !candidate.equals2D(p1)) {
+            lenMax = len;
+            mid = candidate;
+        }
+    }
+    if (lenMax == 0.0)
+        return;
+    Location locActual = inputGeometry->locatePointInArea(geomIndex, mid);
+    //-- a point on the geometry boundary decides nothing
+    if (locActual == Location::BOUNDARY || locActual == Location::NONE)
+        return;
+    if (locActual != lineLoc) {
+        std::stringstream ss;
+        ss << "collapse location conflict at ";
+        ss << mid.toString();
+        throw util::TopologyException(ss.str());
+    }
 }
 
 

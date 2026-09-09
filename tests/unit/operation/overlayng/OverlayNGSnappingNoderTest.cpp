@@ -7,6 +7,7 @@
 // geos
 #include <geos/operation/overlayng/OverlayNG.h>
 #include <geos/noding/snap/SnappingNoder.h>
+#include <geos/noding/snapround/SnapRoundingNoder.h>
 #include <geos/noding/ValidatingNoder.h>
 
 // std
@@ -108,5 +109,24 @@ void object::test<5> ()
     testOverlay(a, b, exp, OverlayNG::UNION, 0.1);
 }
 
+
+// A supplied noder can reduce precision even with a floating overlay PM.
+// Checking only the overlay precision model would reject this valid result.
+template<>
+template<>
+void object::test<6>()
+{
+    auto a = r.read("POLYGON ((8 3.6, 6 4, 1.83 2.28, 8 3.6))");
+    auto b = r.read("POLYGON ((-10 -10, 20 -10, 20 20, -10 20, -10 -10), (0.3 1.5, 5 3.4, 1 1, 0.3 1.5))");
+    auto expected = r.read("MULTIPOLYGON (((5 3, 6 4, 8 4, 5 3)), ((2 2, 4 3, 3 2, 2 2)))");
+    PrecisionModel pm(1);
+    for (bool reverse : {false, true}) {
+        geos::noding::snapround::SnapRoundingNoder snapNoder(&pm);
+        geos::noding::ValidatingNoder validNoder(snapNoder);
+        auto result = OverlayNG::overlay(reverse ? b.get() : a.get(),
+            reverse ? a.get() : b.get(), OverlayNG::INTERSECTION, &validNoder);
+        ensure_equals_geometry(expected.get(), result.get());
+    }
+}
 
 } // namespace tut
