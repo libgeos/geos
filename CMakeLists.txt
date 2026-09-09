@@ -233,11 +233,6 @@ target_compile_options(geos_cxx_flags INTERFACE
 	"$<$<CXX_COMPILER_ID:MSVC>:/fp:precise>"
 	)
 
-# Use -ffloat-store for 32-bit builds (needed to make some tests pass)
-target_compile_options(geos_cxx_flags INTERFACE
-  $<$<AND:$<CXX_COMPILER_ID:GNU>,$<EQUAL:4,$<TARGET_PROPERTY:SIZEOF_VOID_P>>>:-ffloat-store>
-)
-
 # Make sure NDEBUG is defined so that assert() is disabled for
 # any non-debug build. Use a generator expression so that this
 # works with multi-configuration generators.
@@ -362,6 +357,11 @@ if(COMPILER_HAS_SIMD)
   target_compile_options(geos PRIVATE ${SIMD_FLAGS})
   target_compile_definitions(geos PRIVATE HAVE_OPEN_SIMD)
 endif()
+
+# Use -ffloat-store for 32-bit builds (needed to make some tests pass)
+target_compile_options(geos PRIVATE
+  $<$<AND:$<CXX_COMPILER_ID:GNU>,$<EQUAL:4,${CMAKE_SIZEOF_VOID_P}>>:-ffloat-store>
+)
 
 # Leave install with an RPATH approach to linking
 #if(APPLE AND BUILD_SHARED_LIBS)
