@@ -445,6 +445,44 @@ jobs:
       working-directory: build
       run: ctest --output-on-failure -C Release
 
+  windows-msvc-clang-consumer:
+    name: 'Windows (MSVC MSBuild + Clang Ninja, x64, windows-2022)'
+    runs-on: windows-2022
+    steps:
+    - uses: actions/checkout@v7.0.1
+      with:
+        path: geos
+
+    - name: 'Build & install GEOS with MSVC'
+      shell: cmd
+      run: |
+        cmake --version
+        cmake ^
+          -G "Visual Studio 17 2022" ^
+          -A x64 ^
+          -D CMAKE_BUILD_TYPE=Release ^
+          -D BUILD_TESTING=OFF ^
+          -D CMAKE_INSTALL_PREFIX=%GITHUB_WORKSPACE%\geos-install ^
+          -S geos -B geos-build
+        IF %ERRORLEVEL% NEQ 0 exit /B 1
+        cmake --build geos-build --config Release --target install -j 4
+        IF %ERRORLEVEL% NEQ 0 exit /B 1
+
+    - name: 'Build examples with clang against MSVC-built GEOS'
+      shell: cmd
+      run: |
+        clang++ --version
+        cmake ^
+          -G Ninja ^
+          -D CMAKE_C_COMPILER=clang ^
+          -D CMAKE_CXX_COMPILER=clang++ ^
+          -D CMAKE_BUILD_TYPE=Release ^
+          -D CMAKE_PREFIX_PATH=%GITHUB_WORKSPACE%\geos-install ^
+          -S geos\examples -B examples-build
+        IF %ERRORLEVEL% NEQ 0 exit /B 1
+        cmake --build examples-build --config Release -j 4
+        IF %ERRORLEVEL% NEQ 0 exit /B 1
+
   macos:
     name: 'macOS clang'
     strategy:
