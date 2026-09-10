@@ -2,6 +2,7 @@
 2027-xx-xx
 
 - Fixes/Improvements:
+  - Fix CoverageCleaner merging adjacent polygons when snapping is disabled
   -
 
 ## Changes in 3.15.0

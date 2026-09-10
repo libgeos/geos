@@ -463,4 +463,47 @@ void object::test<20> ()
 
 
 
+// An extra vertex on a shared edge must be noded even with snapping disabled.
+template<>
+template<>
+void object::test<21>()
+{
+    auto input = readArray({
+        "POLYGON ((1 0, 1 1, 1 3, 4 0, 1 0))",
+        "POLYGON ((0 4, 1 3, 1 0, 0 4))"
+    });
+    auto expected = readArray({
+        "POLYGON ((1 0, 1 1, 1 3, 4 0, 1 0))",
+        "POLYGON ((0 4, 1 3, 1 1, 1 0, 0 4))"
+    });
+    auto cov = toArray(input);
+    auto expectedArr = toArray(expected);
+    for (const auto* g : cov) {
+        ensure("valid input polygon", g->isValid());
+    }
+    ensure("input edges need matching", !CoverageValidator::isValid(cov));
+    for (int order = 0; order < 2; ++order) {
+        for (int strategy : {CoverageCleaner::MERGE_LONGEST_BORDER,
+                             CoverageCleaner::MERGE_MAX_AREA,
+                             CoverageCleaner::MERGE_MIN_AREA,
+                             CoverageCleaner::MERGE_MIN_INDEX}) {
+            for (double tolerance : {0.0, -1.0}) {
+                CoverageCleaner cleaner(cov);
+                cleaner.setSnappingDistance(tolerance);
+                cleaner.setGapMaximumWidth(0);
+                cleaner.setOverlapMergeStrategy(strategy);
+                cleaner.clean();
+                ensure("no overlaps", cleaner.getOverlaps().empty());
+                ensure("no merged gaps", cleaner.getMergedGaps().empty());
+                auto result = cleaner.getResult();
+                auto actual = toArray(result);
+                checkValidCoverage(actual, 0);
+                checkEqual(expectedArr, actual);
+            }
+        }
+        std::swap(cov[0], cov[1]);
+        std::swap(expectedArr[0], expectedArr[1]);
+    }
+}
+
 } // namespace tut
