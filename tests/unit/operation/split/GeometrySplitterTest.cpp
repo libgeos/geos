@@ -912,4 +912,15 @@ void object::test<75>()
         "GEOMETRYCOLLECTION (CURVEPOLYGON (COMPOUNDCURVE ((5 0, 0 0, 5 5), CIRCULARSTRING (5 5, 7 1, 5 0))), POLYGON ((0 0, 0 5, 5 5, 0 0)))");
 }
 
+template<>
+template<>
+void object::test<77>()
+{
+    set_test_name("split MultiSurface with LineString");
+
+    testSplit("MULTISURFACE(CURVEPOLYGON (COMPOUNDCURVE((5 0, 0 0, 0 5, 5 5), CIRCULARSTRING(5 5, 7 1, 5 0))))",
+        "LINESTRING(3 6, 3 -1)",
+        "GEOMETRYCOLLECTION (CURVEPOLYGON (COMPOUNDCURVE ((5 0, 3 0, 3 5, 5 5), CIRCULARSTRING (5 5, 7 1, 5 0))), POLYGON ((3 0, 0 0, 0 5, 3 5, 3 0)))");
+}
+
 }

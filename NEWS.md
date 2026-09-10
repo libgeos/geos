@@ -3,6 +3,7 @@
 
 - Fixes/Improvements:
   - Fix arc noding failure with endpoint intersections (GH-1513, Dan Baston)
+  - Make GeometrySplitter able to split MultiSurface inputs (GH-1518, Dan Baston)
 
 ## Changes in 3.15.0
 2026-09-01

@@ -14,6 +14,7 @@
 
 #include <geos/operation/split/GeometrySplitter.h>
 
+#include <geos/algorithm/locate/SimplePointInAreaLocator.h>
 #include <geos/geom/CircularString.h>
 #include <geos/geom/CompoundCurve.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -363,7 +364,7 @@ GeometrySplitter::splitPolygonalWithEdge(const Geometry &geom, const Geometry &e
         for (auto& surface : surfaces)
         {
             const auto testPoint = getInteriorPoint(*surface);
-            if (geom.intersects(testPoint.get())) {
+            if (algorithm::locate::SimplePointInAreaLocator::isContained(*testPoint->getCoordinate(), &geom)) {
                 keep.push_back(std::move(surface));
             }
         }
