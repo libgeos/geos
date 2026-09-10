@@ -60,16 +60,19 @@ SnappingIntersectionAdder::processIntersections(SegmentString* seg0, std::size_t
     if (!isAdjacent(seg0, segIndex0, seg1, segIndex1)) {
         li.computeIntersection(p00, p01, p10, p11);
         /**
-         * Process single point intersections only.
-         * Two-point (collinear) ones are handled by the near-vertex code
+         * With a positive tolerance, two-point (collinear) intersections
+         * are handled by the near-vertex code.  At zero tolerance that
+         * code does not add nodes, so process both overlap endpoints here.
          */
-        if (li.hasIntersection() && li.getIntersectionNum() == 1) {
+        if (li.hasIntersection() && (li.getIntersectionNum() == 1 || snapTolerance == 0)) {
+            for (std::size_t i = 0; i < li.getIntersectionNum(); ++i) {
 
-            const auto& intPt = li.getIntersection(0);
-            const auto& snapPt = snapPointIndex.snap(intPt);
+                const auto& intPt = li.getIntersection(i);
+                const auto& snapPt = snapPointIndex.snap(intPt);
 
-            static_cast<NodedSegmentString*>(seg0)->addIntersection(snapPt, segIndex0);
-            static_cast<NodedSegmentString*>(seg1)->addIntersection(snapPt, segIndex1);
+                static_cast<NodedSegmentString*>(seg0)->addIntersection(snapPt, segIndex0);
+                static_cast<NodedSegmentString*>(seg1)->addIntersection(snapPt, segIndex1);
+            }
         }
     }
 
