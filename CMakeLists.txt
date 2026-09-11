@@ -405,11 +405,6 @@ if(COMPILER_HAS_SIMD)
   target_compile_definitions(geos PRIVATE HAVE_OPEN_SIMD)
 endif()
 
-# Use -ffloat-store for 32-bit builds (needed to make some tests pass)
-target_compile_options(geos PRIVATE
-  $<$<AND:$<CXX_COMPILER_ID:GNU>,$<EQUAL:4,${CMAKE_SIZEOF_VOID_P}>>:-ffloat-store>
-)
-
 # Leave install with an RPATH approach to linking
 #if(APPLE AND BUILD_SHARED_LIBS)
 #  set_target_properties(geos PROPERTIES
