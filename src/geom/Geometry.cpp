@@ -131,6 +131,21 @@ Geometry::Geometry(const Geometry& geom)
     _factory->addRef();
 }
 
+Geometry&
+Geometry::operator=(const Geometry& geom)
+{
+    if(this != &geom) {
+        if(_factory != geom._factory) {
+            _factory->dropRef();
+            _factory = geom._factory;
+            _factory->addRef();
+        }
+        SRID = geom.SRID;
+        _userData = nullptr;
+    }
+    return *this;
+}
+
 bool
 Geometry::hasNullElements(const CoordinateSequence* list)
 {

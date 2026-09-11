@@ -113,6 +113,8 @@ protected:
 
     SimpleCurve(const SimpleCurve& other);
 
+    SimpleCurve& operator=(const SimpleCurve& other);
+
     SimpleCurve(const std::shared_ptr<const CoordinateSequence>& newCoords,
                 bool isLinear,
                 const GeometryFactory& factory);
