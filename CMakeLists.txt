@@ -352,9 +352,9 @@ endif ()
 
 target_compile_definitions(geos_developer_cxx_flags
   INTERFACE
-    $<$<BOOL:${MSVC}>:_CRT_NONSTDC_NO_DEPRECATE>
-    $<$<BOOL:${MSVC}>:_SCL_SECURE_NO_DEPRECATE>
-    $<$<BOOL:${MSVC}>:_CRT_SECURE_NO_WARNINGS>
+    $<$<BOOL:${WIN32}>:_CRT_NONSTDC_NO_DEPRECATE>
+    $<$<BOOL:${WIN32}>:_SCL_SECURE_NO_DEPRECATE>
+    $<$<BOOL:${WIN32}>:_CRT_SECURE_NO_WARNINGS>
     $<$<BOOL:${WIN32}>:NOMINMAX>)
 
 target_compile_options(geos_developer_cxx_flags
