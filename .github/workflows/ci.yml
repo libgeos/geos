@@ -475,6 +475,36 @@ jobs:
       working-directory: build
       run: ctest --output-on-failure -C Release
 
+  windows-clang:
+    name: 'Windows (Clang, x64, windows-2022)'
+    runs-on: windows-2022
+    steps:
+    - uses: actions/checkout@v7.0.1
+
+    - name: Activate MSVC
+      uses: TheMrMilchmann/setup-msvc-dev@v4
+      with:
+        arch: x64
+
+    - name: 'Build'
+      shell: cmd
+      run: |
+        cmake --version
+        cmake ^
+          -G Ninja ^
+          -D CMAKE_C_COMPILER=clang ^
+          -D CMAKE_CXX_COMPILER=clang++ ^
+          -D CMAKE_BUILD_TYPE=Release ^
+          -D GEOS_BUILD_DEVELOPER=OFF ^
+          -S . -B build
+        IF %ERRORLEVEL% NEQ 0 exit /B 1
+        cmake --build build --config Release -j 4
+        IF %ERRORLEVEL% NEQ 0 exit /B 1
+
+    - name: 'Test'
+      working-directory: build
+      run: ctest --output-on-failure -C Release
+
   macos:
     name: 'macOS clang'
     strategy:
