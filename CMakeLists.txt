@@ -297,10 +297,11 @@ endif()
 
 
 #-----------------------------------------------------------------------------
-# Target geos_developer_cxx_flags: developer mode compilation flags
+# Developer mode compilation flags
 #-----------------------------------------------------------------------------
-# Do NOT install this target for end-users!
-add_library(geos_developer_cxx_flags INTERFACE)
+# PRIVATE to geos: never apply to consumers!
+set(geos_developer_cxx_flags)
+set(geos_developer_cxx_definitions)
 
 if(GEOS_BUILD_DEVELOPER)
   message(STATUS "GEOS: Developer mode ENABLED")
@@ -338,15 +339,13 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "IntelLLVM")
 endif ()
 
 
-target_compile_definitions(geos_developer_cxx_flags
-  INTERFACE
+list(APPEND geos_developer_cxx_definitions
     $<$<BOOL:${MSVC}>:_CRT_NONSTDC_NO_DEPRECATE>
     $<$<BOOL:${MSVC}>:_SCL_SECURE_NO_DEPRECATE>
     $<$<BOOL:${MSVC}>:_CRT_SECURE_NO_WARNINGS>
     $<$<BOOL:${WIN32}>:NOMINMAX>)
 
-target_compile_options(geos_developer_cxx_flags
-  INTERFACE
+list(APPEND geos_developer_cxx_flags
     $<$<CXX_COMPILER_ID:MSVC>:-W4>  # consider -analyze
     $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:-Werror -pedantic -Wall -Wextra -Wno-long-long -Wcast-align -Wconversion -Wsign-conversion -Wchar-subscripts -Wdouble-promotion -Wpointer-arith -Wformat -Wformat-security -Wshadow -Wuninitialized -Wunused-parameter -fno-common>
     $<$<CXX_COMPILER_ID:GNU>:-fno-implicit-inline-templates -Wno-psabi -Wsuggest-attribute=format>
@@ -354,7 +353,7 @@ target_compile_options(geos_developer_cxx_flags
     )
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 9.2)
-  target_compile_options(geos_developer_cxx_flags INTERFACE -Wsuggest-override)
+  list(APPEND geos_developer_cxx_flags -Wsuggest-override)
 endif()
 
 #-----------------------------------------------------------------------------
@@ -393,7 +392,8 @@ target_compile_definitions(geos
   )
 
 if(GEOS_BUILD_DEVELOPER)
-  target_link_libraries(geos PRIVATE $<BUILD_INTERFACE:geos_developer_cxx_flags>)
+  target_compile_options(geos PRIVATE ${geos_developer_cxx_flags})
+  target_compile_definitions(geos PRIVATE ${geos_developer_cxx_definitions})
 endif()
 
 target_link_libraries(geos PRIVATE $<BUILD_INTERFACE:ryu>)
@@ -514,7 +514,7 @@ endif()
 # Generate targets file for importing directly from GEOS build tree
 #-----------------------------------------------------------------------------
 
-export(TARGETS ryu geos geos_developer_cxx_flags
+export(TARGETS ryu geos
        NAMESPACE GEOS::
        FILE "geos-targets.cmake")
 
