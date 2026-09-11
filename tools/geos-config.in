@@ -12,6 +12,7 @@ Usage: geos-config [OPTIONS]
 Options:
      [--prefix]
      [--version]
+     [--revision]
      [--libs]
      [--clibs]
      [--cclibs]
@@ -40,6 +41,9 @@ while test $# -gt 0; do
       ;;
     --version)
       echo @VERSION@
+      ;;
+    --revision)
+      echo "@GEOS_REVISION@"
       ;;
     --libs)
       # TODO: make an alias for --clibs

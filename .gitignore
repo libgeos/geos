@@ -3,6 +3,7 @@
 aclocal.m4
 Makefile.in
 Makefile
+Testing
 .libs
 .deps
 .vimrc
@@ -53,6 +54,7 @@ src/cmake_install.cmake
 src/deps/cmake_install.cmake
 tests/CTestTestfile.cmake
 tests/cmake_install.cmake
+tests/fuzz/cmake_install.cmake
 tests/unit/CTestTestfile.cmake
 tests/unit/cmake_install.cmake
 tests/xmltester/CTestTestfile.cmake

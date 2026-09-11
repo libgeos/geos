@@ -3190,6 +3190,13 @@ extern "C" {
         return version;
     }
 
+    const char* GEOSrevision()
+    {
+        static char rev[256];
+        snprintf(rev, 256, "%s", GEOS_REVISION);
+        return rev;
+    }
+
     const char* GEOSjtsport()
     {
         return GEOS_JTS_PORT;
