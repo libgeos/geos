@@ -18,7 +18,7 @@ if (benchmark_FOUND)
             $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
             $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/benchmarks>)
     target_link_libraries(perf_distance PRIVATE
-            benchmark::benchmark geos geos_cxx_flags)
+            benchmark::benchmark geos)
 
     add_executable(perf_coverage_union CoverageUnionPerfTest.cpp)
     target_include_directories(perf_coverage_union PUBLIC
@@ -26,7 +26,7 @@ if (benchmark_FOUND)
             $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
             $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/benchmarks>)
     target_link_libraries(perf_coverage_union PRIVATE
-            benchmark::benchmark geos geos_cxx_flags)
+            benchmark::benchmark geos)
 
     add_executable(perf_grid_intersection GridIntersectionPerfTest.cpp)
     target_include_directories(perf_grid_intersection PUBLIC
@@ -34,5 +34,5 @@ if (benchmark_FOUND)
             $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
             $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/benchmarks>)
     target_link_libraries(perf_grid_intersection
-            benchmark::benchmark geos geos_cxx_flags)
+            benchmark::benchmark geos)
 endif()

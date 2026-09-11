@@ -17,7 +17,10 @@ IF(benchmark_FOUND)
             $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
             $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>)
     target_link_libraries(perf_envelope PRIVATE
-            benchmark::benchmark geos_cxx_flags)
+            benchmark::benchmark)
+    target_compile_features(perf_envelope PRIVATE cxx_std_17)
+    target_compile_options(perf_envelope PRIVATE ${geos_cxx_private_flags} ${geos_cxx_interface_flags})
+    target_compile_definitions(perf_envelope PRIVATE ${geos_cxx_private_definitions} ${geos_cxx_interface_definitions})
 endif()
 
 IF(benchmark_FOUND)
@@ -29,7 +32,10 @@ IF(benchmark_FOUND)
             $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
             $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>)
     target_link_libraries(perf_coordseq PRIVATE
-            benchmark::benchmark geos_cxx_flags)
+            benchmark::benchmark)
+    target_compile_features(perf_coordseq PRIVATE cxx_std_17)
+    target_compile_options(perf_coordseq PRIVATE ${geos_cxx_private_flags} ${geos_cxx_interface_flags})
+    target_compile_definitions(perf_coordseq PRIVATE ${geos_cxx_private_definitions} ${geos_cxx_interface_definitions})
 endif()
 
 add_executable(perf_topo_predicate
