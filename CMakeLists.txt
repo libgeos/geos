@@ -354,9 +354,9 @@ endif ()
 
 
 list(APPEND geos_developer_cxx_definitions
-    $<$<BOOL:${MSVC}>:_CRT_NONSTDC_NO_DEPRECATE>
-    $<$<BOOL:${MSVC}>:_SCL_SECURE_NO_DEPRECATE>
-    $<$<BOOL:${MSVC}>:_CRT_SECURE_NO_WARNINGS>
+    $<$<BOOL:${WIN32}>:_CRT_NONSTDC_NO_DEPRECATE>
+    $<$<BOOL:${WIN32}>:_SCL_SECURE_NO_DEPRECATE>
+    $<$<BOOL:${WIN32}>:_CRT_SECURE_NO_WARNINGS>
     $<$<BOOL:${WIN32}>:NOMINMAX>)
 
 list(APPEND geos_developer_cxx_flags
