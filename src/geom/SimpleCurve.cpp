@@ -38,6 +38,17 @@ SimpleCurve::SimpleCurve(const SimpleCurve& other)
 {
 }
 
+SimpleCurve&
+SimpleCurve::operator=(const SimpleCurve& other)
+{
+    if(this != &other) {
+        Curve::operator=(other);
+        points = other.points->clone();
+        envelope = other.envelope;
+    }
+    return *this;
+}
+
 SimpleCurve::SimpleCurve(const std::shared_ptr<const CoordinateSequence>& newCoords,
                          bool isLinear,
                          const GeometryFactory& factory)
