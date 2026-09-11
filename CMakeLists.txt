@@ -215,8 +215,8 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 #-----------------------------------------------------------------------------
 # C++ compilation flags
 #-----------------------------------------------------------------------------
-set(geos_cxx_interface_flags)
-set(geos_cxx_interface_definitions USE_UNSTABLE_GEOS_CPP_API)
+set(geos_cxx_public_flags)
+set(geos_cxx_public_definitions USE_UNSTABLE_GEOS_CPP_API)
 
 set(geos_cxx_private_flags)
 set(geos_cxx_private_definitions)
@@ -348,16 +348,16 @@ check_include_file_cxx(cfenv HAVE_FENV_H)
 add_library(geos "")
 add_library(GEOS::geos ALIAS geos)
 
-target_compile_features(geos INTERFACE cxx_std_17)
+target_compile_features(geos PUBLIC cxx_std_17)
 
 target_compile_options(geos
   PRIVATE ${geos_cxx_private_flags}
-  PUBLIC ${geos_cxx_interface_flags}
+  PUBLIC ${geos_cxx_public_flags}
   )
 
 target_compile_definitions(geos
   PRIVATE ${geos_cxx_private_definitions}
-  PUBLIC ${geos_cxx_interface_definitions}
+  PUBLIC ${geos_cxx_public_definitions}
   )
 
 if(GEOS_BUILD_DEVELOPER)
