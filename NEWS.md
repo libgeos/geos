@@ -2,7 +2,7 @@
 2027-xx-xx
 
 - Fixes/Improvements:
-  -
+  - Detect overlay location inversions near collapsed edges of nearly collinear rings
 
 - New things:
   - Expose code revision: GEOS_REVISION, GEOSrevision, geos-config --revision

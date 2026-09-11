@@ -290,6 +290,14 @@ OverlayNG::labelGraph(OverlayGraph* graph)
 {
     OverlayLabeller labeller(graph, &inputGeom);
     labeller.computeLabelling();
+    // Validate against the original inputs only for default floating noding.
+    // A supplied noder may snap even when the precision model is floating.
+    // Curved edges require a different sampling strategy.
+    if (OverlayUtil::isFloating(pm) && noder == nullptr
+            && !inputGeom.getGeometry(0)->hasCurvedComponents()
+            && (inputGeom.isSingle() || !inputGeom.getGeometry(1)->hasCurvedComponents())) {
+        labeller.checkCollapseNodeLocations();
+    }
     labeller.markResultAreaEdges(opCode);
     labeller.unmarkDuplicateEdgesFromResultArea();
 }
