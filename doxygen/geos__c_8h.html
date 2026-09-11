@@ -808,6 +808,8 @@ Functions</h2></td></tr>
 <tr class="separator:a3b98ffcae80a76acbcb7189005b71f40"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3ebd9a52d9ac5e3df266276341971026" id="r_a3ebd9a52d9ac5e3df266276341971026"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#a3ebd9a52d9ac5e3df266276341971026">GEOSversion</a> (void)</td></tr>
 <tr class="separator:a3ebd9a52d9ac5e3df266276341971026"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afcb047986cff31cc7aac7059275ec882" id="r_afcb047986cff31cc7aac7059275ec882"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="geos__c_8h.html#afcb047986cff31cc7aac7059275ec882">GEOSrevision</a> (void)</td></tr>
+<tr class="separator:afcb047986cff31cc7aac7059275ec882"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr><td colspan="2"><div class="groupHeader">Library and Memory Management</div></td></tr>
 <tr><td colspan="2"><div class="groupText"><p>Functions to initialize and tear down the library, and deallocate memory. </p>
 </div></td></tr>
@@ -25003,6 +25005,34 @@ GEOSContext_setNoticeMessageHandler </dd></dl>
 </table>
 </div><div class="memdoc">
 <dl class="section see"><dt>See also</dt><dd><a class="el" href="geos__c_8h.html#a87ce00815b6f7c487282adfe32400845">GEOSReverse</a> </dd></dl>
+
+</div>
+</div>
+<a id="afcb047986cff31cc7aac7059275ec882" name="afcb047986cff31cc7aac7059275ec882"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afcb047986cff31cc7aac7059275ec882">&#9670;&#160;</a></span>GEOSrevision()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const char * GEOSrevision </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">extern</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the current GEOS revision string. eg: "3.15.0rc1-3-g952699419 (dirty)" This function does not have a reentrant variant and is available if <code>GEOS_USE_ONLY_R_API</code> is defined. </p><dl class="section return"><dt>Returns</dt><dd>revision string </dd></dl>
+<dl class="section since"><dt>Since</dt><dd>3.15 </dd></dl>
 
 </div>
 </div>
