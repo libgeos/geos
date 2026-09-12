@@ -146,9 +146,12 @@ LineMerger::buildEdgeStringsForUnprocessedNodes()
 #endif
     std::vector<Node*> nodes;
     graph.getNodes(nodes);
+#if GEOS_DEBUG
+    size_t i = 0;
+#endif
     for(Node* node : nodes) {
 #if GEOS_DEBUG
-        std::cerr << "Node " << i << ": " << *node << std::endl;
+        std::cerr << "Node " << i++ << ": " << *node << std::endl;
 #endif
         if(!node->isMarked()) {
             assert(node->getDegree() == 2);
@@ -169,9 +172,12 @@ LineMerger::buildEdgeStringsForNonDegree2Nodes()
 #endif
     std::vector<Node*> nodes;
     graph.getNodes(nodes);
+#if GEOS_DEBUG
+    size_t i = 0;
+#endif
     for(Node* node : nodes) {
 #if GEOS_DEBUG
-        std::cerr << "Node " << i << ": " << *node << std::endl;
+        std::cerr << "Node " << i++ << ": " << *node << std::endl;
 #endif
         bool isStartNode = (node->getDegree() != 2);
 
