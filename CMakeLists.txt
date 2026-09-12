@@ -245,10 +245,13 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 #-----------------------------------------------------------------------------
-# Target geos_cxx_flags: common compilation flags
+# C++ compilation flags
 #-----------------------------------------------------------------------------
-add_library(geos_cxx_flags INTERFACE)
-target_compile_features(geos_cxx_flags INTERFACE cxx_std_17)
+set(geos_cxx_public_flags)
+set(geos_cxx_public_definitions USE_UNSTABLE_GEOS_CPP_API)
+
+set(geos_cxx_private_flags)
+set(geos_cxx_private_definitions)
 
 #-----------------------------------------------------------------------------
 # Add flags to prevent 'fused multiply-add' operations on targets (ARM64)
@@ -259,21 +262,21 @@ target_compile_features(geos_cxx_flags INTERFACE cxx_std_17)
 #   https://gcc.gnu.org/bugzilla/show_bug.cgi?id=98207
 #-----------------------------------------------------------------------------
 
-target_compile_options(geos_cxx_flags INTERFACE
+list(APPEND geos_cxx_private_flags
 	"$<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:-ffp-contract=off>"
 	"$<$<CXX_COMPILER_ID:GNU>:-ffp-contract=off>"
-	"$<$<BOOL:${MSVC}>:/fp:precise>"
+	"$<$<CXX_COMPILER_ID:MSVC>:/fp:precise>"
 	)
 
 # Use -ffloat-store for 32-bit builds (needed to make some tests pass)
-target_compile_options(geos_cxx_flags INTERFACE
+list(APPEND geos_cxx_private_flags
   $<$<AND:$<CXX_COMPILER_ID:GNU>,$<EQUAL:4,${CMAKE_SIZEOF_VOID_P}>>:-ffloat-store>
 )
 
 # Make sure NDEBUG is defined so that assert() is disabled for
 # any non-debug build. Use a generator expression so that this
 # works with multi-configuration generators.
-target_compile_definitions(geos_cxx_flags INTERFACE $<$<NOT:$<CONFIG:Debug>>:NDEBUG>)
+list(APPEND geos_cxx_private_definitions $<$<NOT:$<CONFIG:Debug>>:NDEBUG>)
 
 # OpenMP SIMD
 include(CheckCXXCompilerFlag)
@@ -288,35 +291,21 @@ endif()
 
 check_cxx_compiler_flag(${SIMD_FLAGS} COMPILER_HAS_SIMD)
 if(COMPILER_HAS_SIMD)
-  target_compile_options(geos_cxx_flags INTERFACE ${SIMD_FLAGS})
-  target_compile_definitions(geos_cxx_flags INTERFACE HAVE_OPEN_SIMD)
+  list(APPEND geos_cxx_private_flags ${SIMD_FLAGS})
+  list(APPEND geos_cxx_private_definitions HAVE_OPEN_SIMD)
 endif()
 
 
 #-----------------------------------------------------------------------------
-# Target geos_developer_cxx_flags: developer mode compilation flags
+# Developer mode compilation flags
 #-----------------------------------------------------------------------------
-# Do NOT install this target for end-users!
-add_library(geos_developer_cxx_flags INTERFACE)
+# PRIVATE to geos: never apply to consumers!
+set(geos_developer_cxx_flags)
+set(geos_developer_cxx_definitions)
 
 if(GEOS_BUILD_DEVELOPER)
   message(STATUS "GEOS: Developer mode ENABLED")
 endif()
-
-# geos_cxx_flags inherits properties from geos_developer_cxx_flags when
-# building as part of the GEOS repository or on explicit request for
-# developer compilation mode, as GEOS contributor.
-# The flags are intended only for GEOS itself and are not part of
-# usage requirements needed by GEOS consumers.
-if(GEOS_BUILD_DEVELOPER)
-  target_link_libraries(geos_cxx_flags
-    INTERFACE
-      $<BUILD_INTERFACE:geos_developer_cxx_flags>)
-endif()
-
-target_compile_definitions(geos_cxx_flags
-  INTERFACE
-    USE_UNSTABLE_GEOS_CPP_API)
 
 # Deal with Intel Compiler
 if (CMAKE_CXX_COMPILER_ID STREQUAL "IntelLLVM")
@@ -324,7 +313,7 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "IntelLLVM")
   check_cxx_compiler_flag(-fno-fast-math HAVE_FLAG_NO_FAST_MATH)
   if (HAVE_FLAG_NO_FAST_MATH)
     # Intel CXX compiler, based on clang, defaults to -ffast-math, which breaks a lot of things
-    target_compile_options(geos_cxx_flags INTERFACE "-fno-fast-math")
+    list(APPEND geos_cxx_private_flags "-fno-fast-math")
   endif ()
 
   set(TEST_LINK_STDCPP_SOURCE_CODE
@@ -350,15 +339,13 @@ if (CMAKE_CXX_COMPILER_ID STREQUAL "IntelLLVM")
 endif ()
 
 
-target_compile_definitions(geos_developer_cxx_flags
-  INTERFACE
+list(APPEND geos_developer_cxx_definitions
     $<$<BOOL:${MSVC}>:_CRT_NONSTDC_NO_DEPRECATE>
     $<$<BOOL:${MSVC}>:_SCL_SECURE_NO_DEPRECATE>
     $<$<BOOL:${MSVC}>:_CRT_SECURE_NO_WARNINGS>
     $<$<BOOL:${WIN32}>:NOMINMAX>)
 
-target_compile_options(geos_developer_cxx_flags
-  INTERFACE
+list(APPEND geos_developer_cxx_flags
     $<$<CXX_COMPILER_ID:MSVC>:-W4>  # consider -analyze
     $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>>:-Werror -pedantic -Wall -Wextra -Wno-long-long -Wcast-align -Wconversion -Wsign-conversion -Wchar-subscripts -Wdouble-promotion -Wpointer-arith -Wformat -Wformat-security -Wshadow -Wuninitialized -Wunused-parameter -fno-common>
     $<$<CXX_COMPILER_ID:GNU>:-fno-implicit-inline-templates -Wno-psabi -Wsuggest-attribute=format>
@@ -366,7 +353,7 @@ target_compile_options(geos_developer_cxx_flags
     )
 
 if (CMAKE_CXX_COMPILER_ID STREQUAL "GNU" AND CMAKE_CXX_COMPILER_VERSION VERSION_GREATER_EQUAL 9.2)
-  target_compile_options(geos_developer_cxx_flags INTERFACE -Wsuggest-override)
+  list(APPEND geos_developer_cxx_flags -Wsuggest-override)
 endif()
 
 #-----------------------------------------------------------------------------
@@ -391,9 +378,32 @@ check_include_file_cxx(cfenv HAVE_FENV_H)
 #-----------------------------------------------------------------------------
 add_library(geos "")
 add_library(GEOS::geos ALIAS geos)
-target_link_libraries(geos PUBLIC geos_cxx_flags PRIVATE $<BUILD_INTERFACE:ryu>)
+
+target_compile_features(geos PUBLIC cxx_std_17)
+
+target_compile_options(geos
+  PRIVATE ${geos_cxx_private_flags}
+  PUBLIC ${geos_cxx_public_flags}
+  )
+
+target_compile_definitions(geos
+  PRIVATE ${geos_cxx_private_definitions}
+  PUBLIC ${geos_cxx_public_definitions}
+  )
+
+if(GEOS_BUILD_DEVELOPER)
+  target_compile_options(geos PRIVATE ${geos_developer_cxx_flags})
+  target_compile_definitions(geos PRIVATE ${geos_developer_cxx_definitions})
+endif()
+
+target_link_libraries(geos PRIVATE $<BUILD_INTERFACE:ryu>)
 # ryu is an object library, nothing is actually being linked here. The BUILD_INTERFACE
 # switch was necessary to build on AppVeyor (CMake 3.16.2) but not locally (CMake 3.16.3)
+
+if(COMPILER_HAS_SIMD)
+  target_compile_options(geos PRIVATE ${SIMD_FLAGS})
+  target_compile_definitions(geos PRIVATE HAVE_OPEN_SIMD)
+endif()
 
 # Leave install with an RPATH approach to linking
 #if(APPLE AND BUILD_SHARED_LIBS)
@@ -504,7 +514,7 @@ endif()
 # Generate targets file for importing directly from GEOS build tree
 #-----------------------------------------------------------------------------
 
-export(TARGETS ryu geos geos_c geos_cxx_flags geos_developer_cxx_flags
+export(TARGETS ryu geos
        NAMESPACE GEOS::
        FILE "geos-targets.cmake")
 
@@ -521,7 +531,7 @@ configure_file("${CMAKE_CURRENT_SOURCE_DIR}/cmake/geos-config.cmake"
   "${CMAKE_CURRENT_BINARY_DIR}/geos-config.cmake"
   COPYONLY)
 
-install(TARGETS geos geos_cxx_flags
+install(TARGETS geos
   EXPORT geos-targets
   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
   ARCHIVE DESTINATION ${CMAKE_INSTALL_LIBDIR}
