@@ -151,4 +151,34 @@ void object::test<7> ()
 
 
 
+// Zero tolerance must still node the endpoints of collinear overlaps.
+template<>
+template<>
+void object::test<8>()
+{
+    std::string expected = "MULTILINESTRING ((1 0, 1 1), (1 1, 1 3), (1 3, 1 1), (1 1, 1 0))";
+    checkRounding("LINESTRING (1 0, 1 1, 1 3)",
+                  "LINESTRING (1 3, 1 0)", 0, expected);
+}
+
+// Both endpoints of a contained segment must split the containing segment.
+template<>
+template<>
+void object::test<9>()
+{
+    std::string expected = "MULTILINESTRING ((0 0, 1 1), (1 1, 3 3), (3 3, 4 4), (3 3, 1 1))";
+    checkRounding("LINESTRING (0 0, 4 4)",
+                  "LINESTRING (3 3, 1 1)", 0, expected);
+}
+
+// Zero tolerance must not snap nearby, non-intersecting linework.
+template<>
+template<>
+void object::test<10>()
+{
+    std::string expected = "MULTILINESTRING ((0 0, 4 0), (1 0.000000001, 3 0.000000001))";
+    checkRounding("LINESTRING (0 0, 4 0)",
+                  "LINESTRING (1 0.000000001, 3 0.000000001)", 0, expected);
+}
+
 } // namespace tut
