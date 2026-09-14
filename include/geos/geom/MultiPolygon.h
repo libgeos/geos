@@ -129,6 +129,8 @@ protected:
         : GeometryCollection(mp)
         {};
 
+    MultiPolygon& operator=(const MultiPolygon& mp) = default;
+
     MultiPolygon* cloneImpl() const override { return new MultiPolygon(*this); }
 
     GeometryCollection* getCurvedImpl(const algorithm::LineToCurveParams&) const override;
