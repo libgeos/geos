@@ -549,6 +549,8 @@ protected:
      */
     GeometryFactory(const GeometryFactory& gf);
 
+    GeometryFactory& operator=(const GeometryFactory& gf) = delete;
+
     /// Destructor
     virtual ~GeometryFactory();
 
