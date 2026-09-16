@@ -64,4 +64,31 @@ void object::test<3>()
     ensure_equals(result, 0);
 }
 
+template<>
+template<>
+void object::test<4>()
+{
+    set_test_name("values outside the geometry bounding box are set to zero");
+
+    input_ = fromWKT("POLYGON ((0.5 0.5, 2.5 0.5, 2.5 2.5, 0.5 2.5, 0.5 0.5))");
+
+    const unsigned nx = 5;
+    const unsigned ny = 5;
+    const float init_value = 99999;
+
+    std::vector<float> result_vec(nx * ny, init_value);
+    int result = GEOSGridIntersectionFractions(input_, 0, 0, nx, ny, nx, ny, result_vec.data());
+    ensure_equals(result, 1);
+
+    std::vector<float> expected = {
+        0,      0,    0, 0, 0,
+        0,      0,    0, 0, 0,
+        0.25, 0.5, 0.25, 0, 0,
+        0.5,  1.0,  0.5, 0, 0,
+        0.25, 0.5, 0.25, 0, 0
+    };
+
+    ensure(result_vec == expected);
+}
+
 }
