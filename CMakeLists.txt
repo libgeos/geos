@@ -354,10 +354,10 @@ endif ()
 
 
 list(APPEND geos_developer_cxx_definitions
-    $<$<BOOL:${WIN32}>:_CRT_NONSTDC_NO_DEPRECATE>
-    $<$<BOOL:${WIN32}>:_SCL_SECURE_NO_DEPRECATE>
-    $<$<BOOL:${WIN32}>:_CRT_SECURE_NO_WARNINGS>
-    $<$<BOOL:${WIN32}>:NOMINMAX>)
+    $<$<PLATFORM_ID:Windows>:_CRT_NONSTDC_NO_DEPRECATE>
+    $<$<PLATFORM_ID:Windows>:_SCL_SECURE_NO_DEPRECATE>
+    $<$<PLATFORM_ID:Windows>:_CRT_SECURE_NO_WARNINGS>
+    $<$<PLATFORM_ID:Windows>:NOMINMAX>)
 
 list(APPEND geos_developer_cxx_flags
     $<$<CXX_COMPILER_ID:MSVC>:-W4>  # consider -analyze
