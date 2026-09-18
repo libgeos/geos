@@ -12,12 +12,14 @@
  *
  **********************************************************************
  *
- * Last port: operation/distance/IndexedFacetDistance.java (f6187ee2 JTS-1.14)
+ * Last port: operation/distance/IndexedFacetDistance.java
+ * (locationtech/jts DirectedHausdorffDistance)
  *
  **********************************************************************/
 
 #pragma once
 
+#include <geos/operation/distance/CoordinateSequenceLocation.h>
 #include <geos/operation/distance/FacetSequenceTreeBuilder.h>
 
 namespace geos {
@@ -102,21 +104,20 @@ public:
     /// \return the nearest points
     std::unique_ptr<geom::CoordinateSequence> nearestPoints(const geom::Geometry* g) const;
 
-    /// \brief Computes the nearest point on the target facets to a coordinate.
-    ///
-    /// Supporting method for DirectedHausdorffDistance (JTS 1182).
+    /**
+     * Computes the nearest point on the target geometry
+     * to a point.
+     *
+     * @param p the point coordinate
+     * @return the nearest point on the target geometry
+     */
     geom::Coordinate nearestPoint(const geom::CoordinateXY& p) const;
 
-    /// \brief Distance from a coordinate to the target facets.
     double distance(const geom::CoordinateXY& p) const;
 
-    /// \brief Distance from a segment to the target facets.
     double distance(const geom::CoordinateXY& p0, const geom::CoordinateXY& p1) const;
 
-    /// \brief Nearest facet location to a coordinate (JTS nearestLocation).
-    ///
-    /// Supporting method for DirectedHausdorffDistance identical/collinear skip.
-    FacetNearestLocation nearestLocation(const geom::CoordinateXY& p) const;
+    CoordinateSequenceLocation nearestLocation(const geom::CoordinateXY& p) const;
 
 
 private:

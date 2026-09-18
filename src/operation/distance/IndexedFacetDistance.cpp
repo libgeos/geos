@@ -12,7 +12,8 @@
  *
  **********************************************************************
  *
- * Last port: operation/distance/IndexedFacetDistance.java (f6187ee2 JTS-1.14)
+ * Last port: operation/distance/IndexedFacetDistance.java
+ * (locationtech/jts DirectedHausdorffDistance)
  *
  **********************************************************************/
 
@@ -108,9 +109,10 @@ IndexedFacetDistance::isWithinDistance(const Geometry* g, double maxDistance) co
     return cachedTree->isWithinDistance<FacetDistance>(*tree2, maxDistance);
 }
 
-FacetNearestLocation
+CoordinateSequenceLocation
 IndexedFacetDistance::nearestLocation(const geom::CoordinateXY& p) const
 {
+    // JTS wraps p in a CoordinateArraySequence; GEOS CoordinateSequence is the equivalent.
     CoordinateSequence seq{CoordinateXY(p.x, p.y)};
     FacetSequence query(&seq, 0, 1);
     FacetDistance itemDist;
@@ -125,7 +127,7 @@ IndexedFacetDistance::nearestLocation(const geom::CoordinateXY& p) const
 geom::Coordinate
 IndexedFacetDistance::nearestPoint(const geom::CoordinateXY& p) const
 {
-    return nearestLocation(p).pt;
+    return nearestLocation(p).getCoordinate();
 }
 
 double

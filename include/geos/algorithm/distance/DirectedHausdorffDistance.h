@@ -14,7 +14,7 @@
  **********************************************************************
  *
  * Last port: algorithm/distance/DirectedHausdorffDistance.java
- * (locationtech/jts#1182)
+ * (locationtech/jts DirectedHausdorffDistance)
  *
  **********************************************************************/
 
@@ -29,7 +29,7 @@
 
 #ifdef _MSC_VER
 #pragma warning(push)
-#pragma warning(disable: 4251)
+#pragma warning(disable: 4251) // warning C4251: needs to have dll-interface to be used by clients of class
 #endif
 
 namespace geos {
@@ -44,61 +44,170 @@ namespace algorithm {
 namespace distance {
 
 /**
- * Computes the directed Hausdorff distance from a query geometry A
- * to a target geometry B.
- *
+ * Computes the directed Hausdorff distance from one geometry to another.
  * The directed Hausdorff distance is the maximum distance any point
- * on A can be from B:
+ * on a query geometry A can be from a target geometry B.
+ * Equivalently, every point in the query geometry is within that distance
+ * of the target geometry.
+ * The class can compute a pair of points at which the distance is attained:
+ * [ farthest A point, nearest B point ].
  *
- *     h(A,B) = max_{a in A} min_{b in B} distance(a, b)
+ * The directed Hausdorff distance (DHD) is defined as:
  *
- * It is asymmetric. The symmetric Hausdorff distance is
- * max(h(A,B), h(B,A)).
+ *     DHD(A,B) = max a ∈ A (max b ∈ B (distance(a, b) )
  *
- * Empty operands yield NaN (and a missing realizing pair).
- * A negative tolerance throws IllegalArgumentException.
- * Zero tolerance is allowed (zero-size input).
+ * DHD is asymmetric: DHD(A,B) may not be equal to DHD(B,A).
+ * Hence it is not a distance metric.
+ * The Hausdorff distance is a symmetric distance metric defined as:
  *
- * This is the locus (continuous) algorithm from JTS 1182.
- * Do not confuse it with DiscreteHausdorffDistance, which only
- * samples vertices (optionally densified). GEOSHausdorffDistance
- * remains the discrete C API.
+ *     HD(A,B) = max(DHD(A,B), DHD(B,A))
  *
- * The class-comment formula in JTS that writes max_a (max_b ...)
- * is farthest-pair; the algorithm implemented here is max-min.
- * farthestPoints keeps the JTS name but returns the max-min realizing pair.
+ * This can be computed via the
+ * hausdorffDistancePoints(Geometry, Geometry) function.
  *
- * Mixed-dimension collections follow JTS: only getDimension() == P
- * routes to computeForPoints. A GeometryCollection of points and
- * lines drops the points (JTS TODO: handle mixed geoms with points).
+ * Points, lines and polygons are supported as input.
+ * If the query geometry is polygonal,
+ * the point at maximum distance may occur in the interior of a query polygon.
+ * For a polygonal target geometry the point always lies on the boundary.
+ *
+ * The directed Hausdorff distance can be used to test
+ * whether a geometry lies fully within a given distance of another one.
+ * The isFullyWithinDistance(Geometry, double) function
+ * is provided to execute this test efficiently.
+ * It implements heuristic checks and short-circuiting to improve performance.
+ *
+ * The class can be used in prepared mode.
+ * Creating an instance on a target geometry caches indexes for that geometry.
+ * Then farthestPoints(Geometry)
+ * or isFullyWithinDistance(Geometry, double)
+ * can be called efficiently for multiple query geometries.
+ *
+ * If the Hausdorff distance is attained at a non-vertex of the query geometry,
+ * the location must be approximated.
+ * The algorithm uses a distance tolerance to control the approximation accuracy.
+ * The tolerance is automatically determined to balance between accuracy and performance.
+ * If more accuracy is desired some function signatures are provided
+ * which allow specifying a distance tolerance.
+ *
+ * This algorithm is easier to use, more accurate,
+ * and much faster than DiscreteHausdorffDistance.
  *
  * \author Martin Davis
- * \author Jeroen Bloemscheer (GEOS port)
  */
 class GEOS_DLL DirectedHausdorffDistance {
 public:
+    /// JTS returns Coordinate[]; std::array is the C++ equivalent pair.
     using PointPair = std::array<geom::CoordinateXY, 2>;
 
+    /**
+     * Computes the directed Hausdorff distance
+     * of a query geometry A from a target one B.
+     *
+     * @param a the query geometry
+     * @param b the target geometry
+     * @return the directed Hausdorff distance,
+     * or NaN if an input is empty
+     */
     static double distance(const geom::Geometry& a, const geom::Geometry& b);
+
+    /**
+     * Computes the directed Hausdorff distance
+     * of a query geometry A from a target one B,
+     * up to a given distance accuracy.
+     *
+     * @param a the query geometry
+     * @param b the target geometry
+     * @param tolerance the accuracy distance tolerance
+     * @return the directed Hausdorff distance,
+     * or NaN if an input is empty
+     */
     static double distance(const geom::Geometry& a, const geom::Geometry& b,
                            double tolerance);
 
+    /**
+     * Computes a line containing a pair of points which attain the directed Hausdorff distance
+     * of a query geometry A from a target one B.
+     *
+     * @param a the query geometry
+     * @param b the target geometry
+     * @return a pair of points [ptA, ptB] demonstrating the distance,
+     * or empty if an input is empty
+     */
     static std::optional<PointPair> distancePoints(
         const geom::Geometry& a, const geom::Geometry& b);
+
+    /**
+     * Computes a line containing a pair of points which attain the directed Hausdorff distance
+     * of a query geometry A from a target one B, up to a given distance accuracy.
+     *
+     * @param a the query geometry
+     * @param b the target geometry
+     * @param tolerance the accuracy distance tolerance
+     * @return a pair of points [ptA, ptB] demonstrating the distance,
+     * or empty if an input is empty
+     */
     static std::optional<PointPair> distancePoints(
         const geom::Geometry& a, const geom::Geometry& b, double tolerance);
 
+    /**
+     * Computes the symmetric Hausdorff distance between two geometries.
+     * This the maximum of the two directed Hausdorff distances.
+     *
+     * @param a a geometry
+     * @param b a geometry
+     * @return the Hausdorff distance, or NaN if an input is empty
+     */
     static double hausdorffDistance(const geom::Geometry& a, const geom::Geometry& b);
+
+    /**
+     * Computes a pair of points which attain the symmetric Hausdorff distance
+     * between two geometries.
+     * This the maximum of the two directed Hausdorff distances.
+     *
+     * @param a a geometry
+     * @param b a geometry
+     * @return a pair of points [ptA, ptB] demonstrating the Hausdorff distance,
+     * or empty if an input is empty
+     */
     static std::optional<PointPair> hausdorffDistancePoints(
         const geom::Geometry& a, const geom::Geometry& b);
 
+    /**
+     * Computes whether a query geometry lies fully within a give distance of a target geometry.
+     * Equivalently, detects whether any point of the query geometry is farther
+     * from the target than the specified distance.
+     * This is the case if DHD(A, B) > maxDistance.
+     *
+     * @param a the query geometry
+     * @param b the target geometry
+     * @param maxDistance the distance limit
+     * @return true if the query geometry lies fully within the distance of the target
+     */
     static bool isFullyWithinDistance(
         const geom::Geometry& a, const geom::Geometry& b, double maxDistance);
+
+    /**
+     * Computes whether a query geometry lies fully within a give distance of a target geometry,
+     * up to a given distance accuracy.
+     * Equivalently, detects whether any point of the query geometry is farther
+     * from the target than the specified distance.
+     * This is the case if DHD(A, B) > maxDistance.
+     *
+     * @param a the query geometry
+     * @param b the target geometry
+     * @param maxDistance the distance limit
+     * @param tolerance the accuracy distance tolerance
+     * @return true if the query geometry lies fully within the distance of the target
+     */
     static bool isFullyWithinDistance(
         const geom::Geometry& a, const geom::Geometry& b,
         double maxDistance, double tolerance);
 
-    /** Prepared instance: indexes the target once. */
+    /**
+     * Create a new instance for a target geometry.
+     *
+     * @param geom the geometry to compute the distance from
+     */
     explicit DirectedHausdorffDistance(const geom::Geometry& geom);
 
     DirectedHausdorffDistance(const DirectedHausdorffDistance&) = delete;
@@ -106,10 +215,54 @@ public:
 
     ~DirectedHausdorffDistance();
 
+    /**
+     * Computes a pair of points which attain the directed Hausdorff distance
+     * of a query geometry A from the target B.
+     * If either geometry is empty the result is empty.
+     *
+     * @param geom the query geometry
+     * @return a pair of points [ptA, ptB] attaining the distance,
+     * or empty if an input is empty
+     */
     std::optional<PointPair> farthestPoints(const geom::Geometry& geom);
+
+    /**
+     * Computes a pair of points which attain the directed Hausdorff distance
+     * of a query geometry A from the target B,
+     * up to a given distance accuracy.
+     * If either geometry is empty the result is empty.
+     *
+     * @param geom the query geometry
+     * @param tolerance the approximation distance tolerance
+     * @return a pair of points [ptA, ptB] attaining the distance,
+     * or empty if an input is empty
+     */
     std::optional<PointPair> farthestPoints(const geom::Geometry& geom, double tolerance);
 
+    /**
+     * Tests whether a query geometry lies fully within a give distance of the target geometry.
+     * Equivalently, detects whether any point of the query geometry is farther
+     * from the target than the specified distance.
+     * This is the case if DHD(A, B) > maxDistance.
+     *
+     * @param geom the query geometry
+     * @param maxDistance the distance limit
+     * @return true if the query geometry lies fully within the distance of the target
+     */
     bool isFullyWithinDistance(const geom::Geometry& geom, double maxDistance);
+
+    /**
+     * Tests whether a query geometry lies fully within a give distance of the target geometry,
+     * up to a given distance accuracy.
+     * Equivalently, detects whether any point of the query geometry is farther
+     * from the target than the specified distance.
+     * This is the case if DHD(A, B) > maxDistance.
+     *
+     * @param geom the query geometry
+     * @param maxDistance the distance limit
+     * @param tolerance the accuracy distance tolerance
+     * @return true if the query geometry lies fully within the distance of the target
+     */
     bool isFullyWithinDistance(
         const geom::Geometry& geom, double maxDistance, double tolerance);
 

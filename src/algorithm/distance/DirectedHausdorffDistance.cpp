@@ -14,7 +14,7 @@
  **********************************************************************
  *
  * Last port: algorithm/distance/DirectedHausdorffDistance.java
- * (locationtech/jts#1182)
+ * (locationtech/jts DirectedHausdorffDistance)
  *
  **********************************************************************/
 
