@@ -151,7 +151,7 @@ public:
 
     /**
      * Computes the symmetric Hausdorff distance between two geometries.
-     * This the maximum of the two directed Hausdorff distances.
+     * This is the maximum of the two directed Hausdorff distances.
      *
      * @param a a geometry
      * @param b a geometry
@@ -162,7 +162,7 @@ public:
     /**
      * Computes a pair of points which attain the symmetric Hausdorff distance
      * between two geometries.
-     * This the maximum of the two directed Hausdorff distances.
+     * This is the maximum of the two directed Hausdorff distances.
      *
      * @param a a geometry
      * @param b a geometry
@@ -173,7 +173,7 @@ public:
         const geom::Geometry& a, const geom::Geometry& b);
 
     /**
-     * Computes whether a query geometry lies fully within a give distance of a target geometry.
+     * Computes whether a query geometry lies fully within a given distance of a target geometry.
      * Equivalently, detects whether any point of the query geometry is farther
      * from the target than the specified distance.
      * This is the case if DHD(A, B) > maxDistance.
@@ -187,7 +187,7 @@ public:
         const geom::Geometry& a, const geom::Geometry& b, double maxDistance);
 
     /**
-     * Computes whether a query geometry lies fully within a give distance of a target geometry,
+     * Computes whether a query geometry lies fully within a given distance of a target geometry,
      * up to a given distance accuracy.
      * Equivalently, detects whether any point of the query geometry is farther
      * from the target than the specified distance.
@@ -240,7 +240,7 @@ public:
     std::optional<PointPair> farthestPoints(const geom::Geometry& geom, double tolerance);
 
     /**
-     * Tests whether a query geometry lies fully within a give distance of the target geometry.
+     * Tests whether a query geometry lies fully within a given distance of the target geometry.
      * Equivalently, detects whether any point of the query geometry is farther
      * from the target than the specified distance.
      * This is the case if DHD(A, B) > maxDistance.
@@ -252,7 +252,7 @@ public:
     bool isFullyWithinDistance(const geom::Geometry& geom, double maxDistance);
 
     /**
-     * Tests whether a query geometry lies fully within a give distance of the target geometry,
+     * Tests whether a query geometry lies fully within a given distance of the target geometry,
      * up to a given distance accuracy.
      * Equivalently, detects whether any point of the query geometry is farther
      * from the target than the specified distance.

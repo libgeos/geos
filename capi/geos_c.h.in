@@ -4138,12 +4138,11 @@ extern int GEOS_DLL GEOSHausdorffDistanceDensifyWithPoints(
     double* p2x, double* p2y);
 
 /**
-* Computes the directed Hausdorff distance from g1 to g2:
-* the maximum distance from any point of g1 to g2.
+* Calculate the directed Hausdorff distance from g1 to g2,
+* the largest distance from any point of g1 to g2.
 * Empty inputs write NaN.
 *
-* The result is approximated using a tolerance of the query
-* envelope diameter divided by 1e4.
+* Approximated using a tolerance of the query envelope diameter / 1e4.
 *
 * @INPUT_CURVES_CONVERTED_TO_LINES@
 *
@@ -4159,13 +4158,13 @@ extern int GEOS_DLL GEOSDirectedHausdorffDistance(
     double *dist);
 
 /**
-* Computes the directed Hausdorff distance from g1 to g2
-* and a pair of points at which that distance is attained
+* Calculate the directed Hausdorff distance from g1 to g2,
+* the largest distance from any point of g1 to g2,
+* and the coordinates of a point pair that realizes the distance
 * (a point of g1 and the nearest point of g2).
 * Empty inputs write NaN.
 *
-* The result is approximated using a tolerance of the query
-* envelope diameter divided by 1e4.
+* Approximated using a tolerance of the query envelope diameter / 1e4.
 *
 * @INPUT_CURVES_CONVERTED_TO_LINES@
 *
@@ -4187,11 +4186,9 @@ extern int GEOS_DLL GEOSDirectedHausdorffDistanceWithPoints(
     double *p2x, double *p2y);
 
 /**
-* Tests whether every point of g1 lies within maxDistance of g2.
-* Equivalent to the directed Hausdorff distance from g1 to g2
-* being at most maxDistance. Empty inputs return 0.
-*
-* Uses an automatic approximation tolerance.
+* Test whether every point of g1 lies within maxDistance of g2.
+* Empty inputs return 0.
+* Uses the same automatic approximation tolerance as GEOSDirectedHausdorffDistance.
 *
 * @INPUT_CURVES_CONVERTED_TO_LINES@
 *
@@ -4207,17 +4204,16 @@ extern int GEOS_DLL GEOSDirectedHausdorffDistanceWithin(
     double maxDistance);
 
 /**
-* Computes the Hausdorff distance between g1 and g2:
-* the maximum of the two directed Hausdorff distances.
+* Calculate the Hausdorff distance between g1 and g2,
+* the larger of the two directed Hausdorff distances.
 * Empty inputs write NaN.
 *
-* The result is approximated using a tolerance of the query
-* envelope diameter divided by 1e4.
+* Approximated using a tolerance of the query envelope diameter / 1e4.
 *
 * @INPUT_CURVES_CONVERTED_TO_LINES@
 *
-* \param[in] g1 a geometry
-* \param[in] g2 a geometry
+* \param[in] g1 Input geometry
+* \param[in] g2 Input geometry
 * \param[out] dist Pointer to be filled in with distance result
 * \return 1 on success, 0 on exception.
 * \since 3.16
