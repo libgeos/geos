@@ -60,6 +60,31 @@ get_cell(Matrix<std::unique_ptr<Cell>>& cells, const Grid<infinite_extent>& ex, 
     return cells(row, col).get();
 }
 
+static Grid<infinite_extent>
+getSubgrid(const Envelope& box, const Grid<infinite_extent>& geometry_grid)
+{
+    Envelope cropped_ring_extent = geometry_grid.getExtent().intersection(box);
+    return geometry_grid.shrinkToFit(cropped_ring_extent);
+}
+
+static Grid<infinite_extent>
+getSubgrid(const Geometry& ls, const Grid<infinite_extent>& geometry_grid)
+{
+    return getSubgrid(*ls.getEnvelopeInternal(), geometry_grid);
+}
+
+
+template<typename T>
+static void
+initialize(const T& geom, const Grid<infinite_extent> geom_grid, Matrix<float>* cov)
+{
+    const auto subgrid = getSubgrid(geom, geom_grid);
+
+    if (subgrid.getNumRows() < geom_grid.getNumRows() || subgrid.getNumCols() < geom_grid.getNumCols()) {
+        cov->fill(0);
+    }
+}
+
 Envelope
 GridIntersection::processingRegion(const Envelope& raster_extent, const Geometry& g)
 {
@@ -96,6 +121,10 @@ GridIntersection::GridIntersection(const Grid<bounded_extent>& raster_grid, cons
     }
 
     if (!m_geometry_grid.isEmpty()) {
+        if (cov) {
+            initialize(g, m_geometry_grid, cov.get());
+        }
+
         process(g);
     }
 }
@@ -107,6 +136,10 @@ GridIntersection::GridIntersection(const Grid<bounded_extent>& raster_grid, cons
   , m_areal{ false }
 {
     if (!m_geometry_grid.isEmpty()) {
+        if (cov) {
+            initialize(box, m_geometry_grid, cov.get());
+        }
+
         processRectangularRing(box, true);
     }
 }
@@ -140,19 +173,6 @@ GridIntersection::process(const Geometry& g)
     }
 }
 
-static Grid<infinite_extent>
-get_box_grid(const Envelope& box, const Grid<infinite_extent>& geometry_grid)
-{
-    Envelope cropped_ring_extent = geometry_grid.getExtent().intersection(box);
-    return geometry_grid.shrinkToFit(cropped_ring_extent);
-}
-
-static Grid<infinite_extent>
-get_ring_grid(const Geometry& ls, const Grid<infinite_extent>& geometry_grid)
-{
-    return get_box_grid(*ls.getEnvelopeInternal(), geometry_grid);
-}
-
 void
 GridIntersection::processRectangularRing(const Envelope& box, bool exterior_ring)
 {
@@ -160,7 +180,7 @@ GridIntersection::processRectangularRing(const Envelope& box, bool exterior_ring
         return;
     }
 
-    auto ring_grid = get_box_grid(box, m_geometry_grid);
+    auto ring_grid = getSubgrid(box, m_geometry_grid);
 
     auto row_min = ring_grid.getRow(box.getMaxY());
     auto row_max = ring_grid.getRow(box.getMinY());
@@ -406,7 +426,7 @@ GridIntersection::processLine(const LineString& ls, bool exterior_ring)
         }
     }
 
-    Grid<infinite_extent> ring_grid = get_ring_grid(ls, m_geometry_grid);
+    Grid<infinite_extent> ring_grid = getSubgrid(ls, m_geometry_grid);
 
     size_t rows = ring_grid.getNumRows();
     size_t cols = ring_grid.getNumCols();
