@@ -141,6 +141,10 @@ class Matrix
         return m_data.get() + m_rows * m_cols;
     }
 
+    void fill(const T& val) {
+        std::fill(m_data.get(), m_data.get() + m_rows * m_cols, val);
+    }
+
 #ifdef MATRIX_CHECK_BOUNDS
     void check(size_t row, size_t col) const
     {
