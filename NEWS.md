@@ -2,7 +2,9 @@
 2027-xx-xx
 
 - Fixes/Improvements:
-  -
+  - Curve overlay robustness improvements (GH-1513, Dan Baston)
+  - GeometrySplitter: Allow splitting a MultiSurface (GH-1520, Dan Baston)
+  - GEOSGridIntersectionFractions: Set cells outside geometry bounding box to zero (GH-1532, Dan Baston)
 
 - New things:
   - Expose code revision: GEOS_REVISION, GEOSrevision, geos-config --revision
