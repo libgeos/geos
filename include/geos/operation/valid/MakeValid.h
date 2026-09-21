@@ -51,6 +51,12 @@ namespace valid { // geos::operation::valid
  * In case of full or partial dimensional collapses, the output geometry may be a collection of lower-to-equal dimension geometries or a geometry of lower dimension.
  *
  * Single polygons may become multi-geometries in case of self-intersections.
+ *
+ * For MultiPolygons, parts whose envelopes are disjoint cannot interact
+ * topologically. Parts are grouped into envelope-connected components and
+ * each component is made valid independently, with valid components passed
+ * through unchanged. Already-valid parts therefore keep their original
+ * coordinates (including Z and M values) rather than being rebuilt by overlay.
  */
 class GEOS_DLL MakeValid {
 
