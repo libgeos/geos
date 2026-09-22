@@ -67,7 +67,7 @@ private:
          *
          * @param comps the container to extract into (will push_back to it)
          */
-        Extracter(TargetContainer& comps) : comps_(comps) {}
+        explicit Extracter(TargetContainer& comps) : comps_(comps) {}
 
         TargetContainer& comps_;
 
