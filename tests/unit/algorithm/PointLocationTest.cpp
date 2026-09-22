@@ -122,6 +122,31 @@ void object::test<6> ()
     checkOnSegment(1, 2, "LINESTRING(1 1, 1 1)", false);
 }
 
+// testOnSegmentFloatCollinear — GEOS #968 / PostGIS #5563
+// Line (1,0)-(0,2) is parametrically (1-t, 2t). Points at t=0.1 and t=0.9
+// are collinear in reals but their binary64 encodings can fail DD orientation.
+template<>
+template<>
+void object::test<7> ()
+{
+    checkOnSegment(0.9, 0.2, "LINESTRING (1 0, 0 2)", true);
+    checkOnSegment(0.1, 1.8, "LINESTRING (1 0, 0 2)", true);
+    checkOnSegment(0.5, 1.0, "LINESTRING (1 0, 0 2)", true);
+    // clearly off-line still rejected
+    checkOnSegment(0.5, 0.5, "LINESTRING (1 0, 0 2)", false);
+}
+
+// Off-line at large integer scale (review of libgeos/geos#1505).
+// Ozaki FAILURE with a huge nonzero det must not count as membership:
+// POINT (5e15, 5e15+1) is one unit above y=x; DD separates it.
+template<>
+template<>
+void object::test<8> ()
+{
+    checkOnSegment(5000000000000000.0, 5000000000000001.0,
+        "LINESTRING (0 0, 10000000000000000 10000000000000000)", false);
+}
+
 
 } // namespace tut
 
