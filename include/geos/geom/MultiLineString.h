@@ -135,6 +135,8 @@ protected:
         : GeometryCollection(mp)
         {};
 
+    MultiLineString& operator=(const MultiLineString& mp) = default;
+
     MultiLineString* cloneImpl() const override { return new MultiLineString(*this); }
 
     MultiLineString* reverseImpl() const override;

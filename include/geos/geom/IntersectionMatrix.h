@@ -74,10 +74,10 @@ public:
      * Copy constructor.
      *
      * Creates an IntersectionMatrix with the same elements as other.
-     *
-     * \todo Add assignment operator to make this class fully copyable.
      */
     IntersectionMatrix(const IntersectionMatrix& other);
+
+    IntersectionMatrix& operator=(const IntersectionMatrix& other) = default;
 
     /** \brief
      * Returns whether the elements of this IntersectionMatrix

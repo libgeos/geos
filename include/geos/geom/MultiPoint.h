@@ -122,6 +122,8 @@ protected:
 
     MultiPoint(const MultiPoint& mp): GeometryCollection(mp) {}
 
+    MultiPoint& operator=(const MultiPoint& mp) = default;
+
     MultiPoint* cloneImpl() const override { return new MultiPoint(*this); }
 
     MultiPoint* reverseImpl() const override { return new MultiPoint(*this); }

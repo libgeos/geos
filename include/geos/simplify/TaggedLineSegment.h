@@ -64,6 +64,8 @@ public:
 
     TaggedLineSegment(const TaggedLineSegment& ls);
 
+    TaggedLineSegment& operator=(const TaggedLineSegment& ls) = default;
+
     const geom::Geometry* getParent() const;
 
     std::size_t getIndex() const;

@@ -1000,6 +1000,8 @@ protected:
 
     Geometry(const Geometry& geom);
 
+    Geometry& operator=(const Geometry& geom);
+
     /** \brief
      * Construct a geometry with the given GeometryFactory.
      *
