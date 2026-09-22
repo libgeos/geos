@@ -12,13 +12,17 @@
  *
  **********************************************************************
  *
- * Last port: operation/distance/IndexedFacetDistance.java (f6187ee2 JTS-1.14)
+ * Last port: operation/distance/IndexedFacetDistance.java
+ * (locationtech/jts DirectedHausdorffDistance)
  *
  **********************************************************************/
 
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/index/strtree/STRtree.h>
 #include <geos/operation/distance/IndexedFacetDistance.h>
+#include <geos/operation/distance/FacetSequence.h>
+#include <geos/util/GEOSException.h>
 
 using namespace geos::geom;
 using namespace geos::index::strtree;
@@ -103,6 +107,48 @@ IndexedFacetDistance::isWithinDistance(const Geometry* g, double maxDistance) co
 
     auto tree2 = FacetSequenceTreeBuilder::build(g);
     return cachedTree->isWithinDistance<FacetDistance>(*tree2, maxDistance);
+}
+
+CoordinateSequenceLocation
+IndexedFacetDistance::nearestLocation(const geom::CoordinateXY& p) const
+{
+    // JTS wraps p in a CoordinateArraySequence; GEOS CoordinateSequence is the equivalent.
+    CoordinateSequence seq{CoordinateXY(p.x, p.y)};
+    FacetSequence query(&seq, 0, 1);
+    FacetDistance itemDist;
+    const FacetSequence* nearest = cachedTree->nearestNeighbour<FacetDistance>(
+        *query.getEnvelope(), &query, itemDist);
+    if (!nearest) {
+        throw util::GEOSException("Cannot calculate IndexedFacetDistance on empty geometries.");
+    }
+    return nearest->nearestLocation(p);
+}
+
+geom::Coordinate
+IndexedFacetDistance::nearestPoint(const geom::CoordinateXY& p) const
+{
+    return nearestLocation(p).getCoordinate();
+}
+
+double
+IndexedFacetDistance::distance(const geom::CoordinateXY& p) const
+{
+    return p.distance(nearestPoint(p));
+}
+
+double
+IndexedFacetDistance::distance(const geom::CoordinateXY& p0, const geom::CoordinateXY& p1) const
+{
+    CoordinateSequence seq{CoordinateXY(p0.x, p0.y), CoordinateXY(p1.x, p1.y)};
+    FacetSequence query(&seq, 0, 2);
+    FacetDistance itemDist;
+    const FacetSequence* nearest = cachedTree->nearestNeighbour<FacetDistance>(
+        *query.getEnvelope(), &query, itemDist);
+    if (!nearest) {
+        throw util::GEOSException("Cannot calculate IndexedFacetDistance on empty geometries.");
+    }
+    auto locs = nearest->nearestLocations(query);
+    return locs[0].distance(locs[1]);
 }
 
 

@@ -1,6 +1,11 @@
 ## Changes in 3.16.0
 2027-xx-xx
 
+- New things:
+  - Add DirectedHausdorffDistance and C API GEOSDirectedHausdorffDistance /
+    GEOSSymmetricHausdorffDistance (full geometry; existing discrete GEOSHausdorffDistance
+    unchanged) (Martin Davis, Jeroen Bloemscheer)
+
 - Fixes/Improvements:
   - Curve overlay robustness improvements (GH-1513, Dan Baston)
   - GeometrySplitter: Allow splitting a MultiSurface (GH-1520, Dan Baston)

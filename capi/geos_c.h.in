@@ -2146,6 +2146,36 @@ extern int GEOS_DLL GEOSHausdorffDistanceDensifyWithPoints_r(
     double *p1x, double *p1y,
     double *p2x, double *p2y);
 
+/** \see GEOSDirectedHausdorffDistance */
+extern int GEOS_DLL GEOSDirectedHausdorffDistance_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry *g1,
+    const GEOSGeometry *g2,
+    double *dist);
+
+/** \see GEOSDirectedHausdorffDistanceWithPoints */
+extern int GEOS_DLL GEOSDirectedHausdorffDistanceWithPoints_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry *g1,
+    const GEOSGeometry *g2,
+    double *dist,
+    double *p1x, double *p1y,
+    double *p2x, double *p2y);
+
+/** \see GEOSDirectedHausdorffDistanceWithin */
+extern int GEOS_DLL GEOSDirectedHausdorffDistanceWithin_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry *g1,
+    const GEOSGeometry *g2,
+    double maxDistance);
+
+/** \see GEOSSymmetricHausdorffDistance */
+extern int GEOS_DLL GEOSSymmetricHausdorffDistance_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry *g1,
+    const GEOSGeometry *g2,
+    double *dist);
+
 /** \see GEOSFrechetDistance */
 extern int GEOS_DLL GEOSFrechetDistance_r(
     GEOSContextHandle_t handle,
@@ -4118,6 +4148,92 @@ extern int GEOS_DLL GEOSHausdorffDistanceDensifyWithPoints(
     double *dist,
     double* p1x, double* p1y,
     double* p2x, double* p2y);
+
+/**
+* Calculate the directed Hausdorff distance from g1 to g2,
+* the largest distance from any point of g1 to g2.
+* Empty inputs write NaN.
+*
+* Approximated using a tolerance of the query envelope diameter / 1e4.
+*
+* @INPUT_CURVES_CONVERTED_TO_LINES@
+*
+* \param[in] g1 Query geometry
+* \param[in] g2 Target geometry
+* \param[out] dist Pointer to be filled in with distance result
+* \return 1 on success, 0 on exception.
+* \since 3.16
+*/
+extern int GEOS_DLL GEOSDirectedHausdorffDistance(
+    const GEOSGeometry *g1,
+    const GEOSGeometry *g2,
+    double *dist);
+
+/**
+* Calculate the directed Hausdorff distance from g1 to g2,
+* the largest distance from any point of g1 to g2,
+* and the coordinates of a point pair that realizes the distance
+* (a point of g1 and the nearest point of g2).
+* Empty inputs write NaN.
+*
+* Approximated using a tolerance of the query envelope diameter / 1e4.
+*
+* @INPUT_CURVES_CONVERTED_TO_LINES@
+*
+* \param[in] g1 Query geometry
+* \param[in] g2 Target geometry
+* \param[out] dist Pointer to be filled in with distance result
+* \param[out] p1x X coordinate of point on g1
+* \param[out] p1y Y coordinate of point on g1
+* \param[out] p2x X coordinate of point on g2
+* \param[out] p2y Y coordinate of point on g2
+* \return 1 on success, 0 on exception.
+* \since 3.16
+*/
+extern int GEOS_DLL GEOSDirectedHausdorffDistanceWithPoints(
+    const GEOSGeometry *g1,
+    const GEOSGeometry *g2,
+    double *dist,
+    double *p1x, double *p1y,
+    double *p2x, double *p2y);
+
+/**
+* Test whether every point of g1 lies within maxDistance of g2.
+* Empty inputs return 0.
+* Uses the same automatic approximation tolerance as GEOSDirectedHausdorffDistance.
+*
+* @INPUT_CURVES_CONVERTED_TO_LINES@
+*
+* \param[in] g1 Query geometry
+* \param[in] g2 Target geometry
+* \param[in] maxDistance the distance limit
+* \return 1 if fully within, 0 if not, 2 on exception.
+* \since 3.16
+*/
+extern int GEOS_DLL GEOSDirectedHausdorffDistanceWithin(
+    const GEOSGeometry *g1,
+    const GEOSGeometry *g2,
+    double maxDistance);
+
+/**
+* Calculate the Hausdorff distance between g1 and g2,
+* the larger of the two directed Hausdorff distances.
+* Empty inputs write NaN.
+*
+* Approximated using a tolerance of the query envelope diameter / 1e4.
+*
+* @INPUT_CURVES_CONVERTED_TO_LINES@
+*
+* \param[in] g1 Input geometry
+* \param[in] g2 Input geometry
+* \param[out] dist Pointer to be filled in with distance result
+* \return 1 on success, 0 on exception.
+* \since 3.16
+*/
+extern int GEOS_DLL GEOSSymmetricHausdorffDistance(
+    const GEOSGeometry *g1,
+    const GEOSGeometry *g2,
+    double *dist);
 
 /**
 * Calculate the

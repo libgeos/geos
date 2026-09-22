@@ -12,10 +12,12 @@
  *
  **********************************************************************
  *
- * Last port: operation/distance/FacetSequence.java (f6187ee2 JTS-1.14)
+ * Last port: operation/distance/FacetSequence.java
+ * (locationtech/jts DirectedHausdorffDistance)
  *
  **********************************************************************/
 
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/LineSegment.h>
 #include <geos/algorithm/Distance.h>
@@ -227,5 +229,59 @@ const Coordinate*
 FacetSequence::getCoordinate(std::size_t index) const
 {
     return &(pts->getAt(start + index));
+}
+
+std::size_t
+FacetSequence::normalize(const CoordinateSequence& pts, std::size_t index)
+{
+    if (index >= pts.size() - 1 && pts.isRing()) {
+        return 0;
+    }
+    return index;
+}
+
+CoordinateSequenceLocation
+FacetSequence::nearestLocation(const CoordinateXY& p) const
+{
+    if (isPoint()) {
+        // JTS uses index 0 / pts[0]; use start so a one-point facet
+        // that is a subsequence of a longer CoordinateSequence is correct.
+        return CoordinateSequenceLocation(pts, start, pts->getAt(start));
+    }
+    return nearestLocationOnLine(p);
+}
+
+CoordinateSequenceLocation
+FacetSequence::nearestLocationOnLine(const CoordinateXY& pt) const
+{
+    double minDistance = DoubleInfinity;
+    std::size_t index = start;
+    Coordinate nearestPt;
+
+    const Coordinate queryPt(pt);
+    for (std::size_t i = start; i < end - 1; i++) {
+        const Coordinate& q0 = pts->getAt(i);
+        const Coordinate& q1 = pts->getAt(i + 1);
+        double dist = Distance::pointToSegment(queryPt, q0, q1);
+        if (dist < minDistance) {
+            minDistance = dist;
+            LineSegment seg(q0, q1);
+            seg.closestPoint(queryPt, nearestPt);
+            index = i;
+            //-- segments are half-open, so 2nd endpoint belongs to next segment
+            //-- except for last segment on non-closed sequence
+            if (dist == 0.0 && queryPt.equals2D(q1)) {
+                if (index < pts->size() - 1) {
+                    index++;
+                }
+                //-- normalize index for a ring
+                index = normalize(*pts, index);
+            }
+            if (minDistance <= 0.0) {
+                break;
+            }
+        }
+    }
+    return CoordinateSequenceLocation(pts, index, nearestPt);
 }
 

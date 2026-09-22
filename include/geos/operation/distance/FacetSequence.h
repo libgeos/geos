@@ -12,7 +12,8 @@
  *
  **********************************************************************
  *
- * Last port: operation/distance/FacetSequence.java (f6187ee2 JTS-1.14)
+ * Last port: operation/distance/FacetSequence.java
+ * (locationtech/jts DirectedHausdorffDistance)
  *
  **********************************************************************/
 
@@ -20,6 +21,9 @@
 
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/operation/distance/CoordinateSequenceLocation.h>
+
+#include <vector>
 
 namespace geos {
 namespace geom {
@@ -61,6 +65,10 @@ private:
                                         const geom::Coordinate& q0, const geom::Coordinate &q1,
                                         std::vector<geom::Coordinate> *locs) const;
 
+    CoordinateSequenceLocation nearestLocationOnLine(const geom::CoordinateXY& pt) const;
+
+    static std::size_t normalize(const geom::CoordinateSequence& pts, std::size_t index);
+
     void computeEnvelope();
 
 public:
@@ -86,9 +94,17 @@ public:
      */
     std::vector<geom::Coordinate> nearestLocations(const FacetSequence& facetSeq) const;
 
+    /**
+     * Computes the location of the nearest point of this sequence
+     * to a query point.
+     *
+     * @param p the query point
+     * @return the nearest location on this sequence
+     */
+    CoordinateSequenceLocation nearestLocation(const geom::CoordinateXY& p) const;
+
 };
 
 }
 }
 }
-
