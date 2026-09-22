@@ -473,4 +473,23 @@ void object::test<36>()
     }
 }
 
+template<>
+template<>
+void object::test<37>()
+{
+    set_test_name("no stack overflow with large number of repeated vertices");
+
+    const std::size_t n = 10000;
+    auto seq = std::make_shared<CoordinateSequence>(n, false, false);
+    for (std::size_t i = 0; i < n; i++) {
+        seq->setAt(geos::geom::CoordinateXY{1, 1}, i);
+    }
+
+    auto input = gf->createLineString(seq);
+
+    auto simplified = TopologyPreservingSimplifier::simplify(input.get(), 1e-3);
+
+    // No crash
+}
+
 } // namespace tut
