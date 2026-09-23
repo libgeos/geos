@@ -11,6 +11,7 @@
 #include <geos/noding/SegmentString.h>
 #include <geos/noding/NodedSegmentString.h>
 #include <geos/noding/snapround/SnapRoundingNoder.h>
+#include <geos/noding/snapround/SnapRoundingIntersectionAdder.h>
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKTWriter.h>
 #include <geos/geom/Geometry.h>
@@ -303,5 +304,85 @@ void object::test<19> ()
     checkRounding(wkt, 1, expected); // intersection point of (3 1.25) is snapped to (3 1) but M interpolation is done at (3 1.25)
 }
 
+
+// A proper intersection falls just past a half-grid boundary. Converting it
+// to double before rounding puts it in the neighboring hot pixel and leaves
+// the snapped polygon boundaries crossing without a node.
+template<>
+template<>
+void object::test<20>()
+{
+    set_test_name("Near-half-grid intersection is noded at fixed precision");
+    std::string wkt = "GEOMETRYCOLLECTION (POLYGON ((-48.404225529999998 -5.0067209500000001, -48.404226645700533 -5.0066261829361647, -48.404226071884779 -5.0066747824165594, -48.404225529999998 -5.0067209500000001)), POLYGON ((-48.404225526798065 -5.006720954048145, -48.404228013904287 -5.0065102959894476, -48.404975132381281 -5.0041457218802918, -48.404225526798065 -5.006720954048145)))";
+    std::string expected;
+    checkRounding(wkt, 1e12, expected);
+}
+
+// A scale of 0.1 uses a 10-unit grid. The negative half-grid tie must round
+// to zero, using the grid size rather than the binary approximation of 0.1.
+template<>
+template<>
+void object::test<21>()
+{
+    set_test_name("Negative half-grid intersection uses the grid-size tie rule");
+    auto geom = r.read("MULTILINESTRING ((-1000000000000006 -10, -1000000000000004 10), (-1000000000000006 10, -1000000000000004 -10))");
+    std::vector<const LineString*> lines;
+    LinearComponentExtracter::getLines(*geom, lines);
+    NodedSegmentString a(lines[0]->getCoordinates(), false, false, nullptr);
+    NodedSegmentString b(lines[1]->getCoordinates(), false, false, nullptr);
+    PrecisionModel pm(0.1);
+    ensure_equals("half-grid tie", pm.makePrecise(-1000000000000005.0), -1000000000000000.0);
+    SnapRoundingIntersectionAdder adder(&pm, 0.1);
+    adder.processIntersections(&a, 0, &b, 0);
+    auto intersections = adder.getIntersections();
+    ensure_equals("one intersection", intersections.size(), std::size_t(1));
+    ensure_equals("chosen cell", pm.makePrecise(intersections.getAt<CoordinateXYZM>(0).x),
+                  -1000000000000000.0);
+}
+
+// Correcting an intersection's cell must preserve its interpolated attributes.
+template<>
+template<>
+void object::test<22>()
+{
+    set_test_name("Corrected grid cell preserves intersection Z and M");
+    auto geom = r.read("GEOMETRYCOLLECTION (POLYGON ZM ((-48.404225529999998 -5.0067209500000001 0 100, -48.404226645700533 -5.0066261829361647 10 120, -48.404226071884779 -5.0066747824165594 10 120, -48.404225529999998 -5.0067209500000001 0 100)), POLYGON ZM ((-48.404225526798065 -5.006720954048145 20 200, -48.404228013904287 -5.0065102959894476 30 220, -48.404975132381281 -5.0041457218802918 30 220, -48.404225526798065 -5.006720954048145 20 200)))");
+    std::vector<const LineString*> lines;
+    LinearComponentExtracter::getLines(*geom, lines);
+    NodedSegmentString a(lines[0]->getCoordinates(), true, true, nullptr);
+    NodedSegmentString b(lines[1]->getCoordinates(), true, true, nullptr);
+    PrecisionModel pm(1e12);
+    SnapRoundingIntersectionAdder adder(&pm, 1e-14);
+    adder.processIntersections(&a, 0, &b, 0);
+    auto intersections = adder.getIntersections();
+    ensure_equals("one intersection", intersections.size(), std::size_t(1));
+    const auto& coord = intersections.getAt<CoordinateXYZM>(0);
+    ensure_equals("corrected cell", pm.makePrecise(coord.x), -48.4042266457);
+    ensure_equals("Z at corrected node", coord.z, 17.2494, 1e-4);
+    ensure_equals("M at corrected node", coord.m, 164.4988, 1e-4);
+}
+
+// The exact intersection is just left of -0.5, though its nearest double is
+// the half-grid tie itself. The correction must apply even at a coarse scale.
+template<>
+template<>
+void object::test<23>()
+{
+    set_test_name("Intersection hidden below a half-grid double rounds left");
+    auto geom = r.read("MULTILINESTRING ((-1 -1, 0 1), (-1 1, 0 -1.0000000000000002))");
+    std::vector<const LineString*> lines;
+    LinearComponentExtracter::getLines(*geom, lines);
+    NodedSegmentString a(lines[0]->getCoordinates(), false, false, nullptr);
+    NodedSegmentString b(lines[1]->getCoordinates(), false, false, nullptr);
+    PrecisionModel pm(1);
+    SnapRoundingIntersectionAdder adder(&pm, 0.01);
+    adder.processIntersections(&a, 0, &b, 0);
+    auto intersections = adder.getIntersections();
+    ensure_equals("one intersection", intersections.size(), std::size_t(1));
+    ensure_equals("chosen cell", pm.makePrecise(intersections.getAt<CoordinateXYZM>(0).x), -1.0);
+    SnapRoundingNoder noder(&pm);
+    auto result = geos::NodingTestUtil::nodeValidated(geom.get(), nullptr, &noder);
+    ensure("noded result", !result->isEmpty());
+}
 
 } // namespace tut

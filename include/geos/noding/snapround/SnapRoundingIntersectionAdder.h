@@ -67,7 +67,7 @@ private:
 
     algorithm::LineIntersector li;
     geom::CoordinateSequence intersections;
-    // const geom::PrecisionModel* pm;
+    const geom::PrecisionModel* pm;
     double nearnessTol;
 
     /**
@@ -93,9 +93,10 @@ private:
 
 public:
 
-    SnapRoundingIntersectionAdder(double p_nearnessTol)
+    SnapRoundingIntersectionAdder(const geom::PrecisionModel* p_pm, double p_nearnessTol)
         : SegmentIntersector()
         , intersections(geom::CoordinateSequence::XYZM(0))
+        , pm(p_pm)
         , nearnessTol(p_nearnessTol)
     {}
 
@@ -123,4 +124,3 @@ public:
 } // namespace geos::noding::snapround
 } // namespace geos::noding
 } // namespace geos
-

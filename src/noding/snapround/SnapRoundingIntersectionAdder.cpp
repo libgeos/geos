@@ -22,16 +22,78 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/algorithm/Distance.h>
+#include <geos/math/DD.h>
 #include <geos/util.h>
 
 #include <vector>
 #include <exception>
 #include <iostream>
 #include <cassert>
+#include <algorithm>
+#include <cmath>
 
 
 using namespace geos::algorithm;
 using namespace geos::geom;
+
+namespace {
+
+double
+coordinateInCell(double ordinate, double rounded, const geos::geom::PrecisionModel& pm)
+{
+    if (pm.makePrecise(ordinate) == rounded) {
+        return ordinate;
+    }
+    // The exact intersection may straddle a grid boundary hidden by the
+    // final double conversion. Move by at most one representable value so
+    // the original intersection location changes as little as possible.
+    double adjacent = std::nextafter(ordinate, rounded);
+    return pm.makePrecise(adjacent) == rounded ? adjacent : ordinate;
+}
+
+double
+roundIntersectionOrdinate(const geos::math::DD& ordinate,
+                          const geos::geom::PrecisionModel& pm)
+{
+    using geos::math::DD;
+    if (pm.getGridSize() > 1) {
+        DD gridSize(pm.getGridSize());
+        return (((ordinate / gridSize) + DD(0.5)).floor() * gridSize).ToDouble();
+    }
+    DD scale(pm.getScale());
+    return (((ordinate * scale) + DD(0.5)).floor() / scale).ToDouble();
+}
+
+CoordinateXY
+roundedIntersection(const CoordinateXY& p0, const CoordinateXY& p1,
+                    const CoordinateXY& q0, const CoordinateXY& q1,
+                    const geos::geom::PrecisionModel& pm)
+{
+    using geos::math::DD;
+    DD rx = DD(p1.x) - DD(p0.x);
+    DD ry = DD(p1.y) - DD(p0.y);
+    DD sx = DD(q1.x) - DD(q0.x);
+    DD sy = DD(q1.y) - DD(q0.y);
+    DD qpx = DD(q0.x) - DD(p0.x);
+    DD qpy = DD(q0.y) - DD(p0.y);
+    DD denominator = rx * sy - ry * sx;
+    if (denominator.isZero()) {
+        return CoordinateXY::getNull();
+    }
+    DD t = (qpx * sy - qpy * sx) / denominator;
+    DD x = DD(p0.x) + t * rx;
+    DD y = DD(p0.y) + t * ry;
+    if (x < DD(std::max(std::min(p0.x, p1.x), std::min(q0.x, q1.x))) ||
+        x > DD(std::min(std::max(p0.x, p1.x), std::max(q0.x, q1.x))) ||
+        y < DD(std::max(std::min(p0.y, p1.y), std::min(q0.y, q1.y))) ||
+        y > DD(std::min(std::max(p0.y, p1.y), std::max(q0.y, q1.y)))) {
+        return CoordinateXY::getNull();
+    }
+    return {roundIntersectionOrdinate(x, pm),
+            roundIntersectionOrdinate(y, pm)};
+}
+
+}
 
 namespace geos {
 namespace noding { // geos.noding
@@ -56,10 +118,26 @@ SnapRoundingIntersectionAdder::processIntersections(
         if (li.isInteriorIntersection()) {
             for (std::size_t intIndex = 0, intNum = li.getIntersectionNum(); intIndex < intNum; intIndex++) {
                 // Take a copy of the intersection coordinate
-                intersections.add(li.getIntersection(intIndex));
+                CoordinateXYZM intPt(li.getIntersection(intIndex));
+                if (li.isProper()) {
+                    // Round the intersection before converting it to double.
+                    // Conversion can move a near-half-grid
+                    // intersection into the wrong hot pixel.
+                    CoordinateXY rounded = roundedIntersection(
+                        seq0.getAt<CoordinateXY>(segIndex0),
+                        seq0.getAt<CoordinateXY>(segIndex0 + 1),
+                        seq1.getAt<CoordinateXY>(segIndex1),
+                        seq1.getAt<CoordinateXY>(segIndex1 + 1),
+                        *pm);
+                    if (!rounded.isNull()) {
+                        intPt.x = coordinateInCell(intPt.x, rounded.x, *pm);
+                        intPt.y = coordinateInCell(intPt.y, rounded.y, *pm);
+                    }
+                }
+                intersections.add(intPt);
+                static_cast<NodedSegmentString*>(e0)->addIntersection(intPt, segIndex0);
+                static_cast<NodedSegmentString*>(e1)->addIntersection(intPt, segIndex1);
             }
-            static_cast<NodedSegmentString*>(e0)->addIntersections(&li, segIndex0, 0);
-            static_cast<NodedSegmentString*>(e1)->addIntersections(&li, segIndex1, 1);
             return;
         }
     }

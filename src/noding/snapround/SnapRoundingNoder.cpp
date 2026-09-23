@@ -77,7 +77,7 @@ void
 SnapRoundingNoder::addIntersectionPixels(const std::vector<SegmentString*>& segStrings)
 {
     double tolerance = 1.0 / pm->getScale() / INTERSECTION_NEARNESS_FACTOR;
-    SnapRoundingIntersectionAdder intAdder(tolerance);
+    SnapRoundingIntersectionAdder intAdder(pm, tolerance);
     MCIndexNoder noder(&intAdder, tolerance);
     noder.computeNodes(segStrings);
     const auto& intPts = intAdder.getIntersections();

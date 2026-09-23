@@ -9,6 +9,7 @@
 
 // std
 #include <memory>
+#include <utility>
 
 using namespace geos::geom;
 using namespace geos::operation::overlayng;
@@ -854,6 +855,37 @@ void object::test<65>()
     std::string a = "CURVEPOLYGON (CIRCULARSTRING (-1 0,0 1,1 0,0 -1,-1 0))";
 
     testOverlay(a, a, a, OverlayNG::INTERSECTION, 0);
+}
+
+template<>
+template<>
+void object::test<66>()
+{
+    set_test_name("Intersection succeeds at a near-half-grid fixed precision");
+    auto a = r.read("POLYGON ((-48.404225529999998 -5.0067209500000001, -48.404226645700533 -5.0066261829361647, -48.404226071884779 -5.0066747824165594, -48.404225529999998 -5.0067209500000001))");
+    auto b = r.read("POLYGON ((-48.404225526798065 -5.006720954048145, -48.404228013904287 -5.0065102959894476, -48.404975132381281 -5.0041457218802918, -48.404225526798065 -5.006720954048145))");
+    ensure(a->isValid() && b->isValid());
+    PrecisionModel pm(1e12);
+    // These three intersections form the area boundary after independent
+    // rounding to the requested grid. Lower-dimensional contact is allowed.
+    auto expectedArea = r.read("POLYGON ((-48.404225530085 -5.006720942755, -48.4042266457 -5.006626183023, -48.404226066361 -5.006675253063, -48.404225530085 -5.006720942755))");
+    for (const auto& operands : {std::pair<const Geometry*, const Geometry*>(a.get(), b.get()),
+                                 std::pair<const Geometry*, const Geometry*>(b.get(), a.get())}) {
+        auto result = OverlayNG::overlay(operands.first, operands.second, OverlayNG::INTERSECTION, &pm);
+        ensure(result->isValid());
+        const Geometry* area = nullptr;
+        std::size_t areaCount = 0;
+        for (std::size_t i = 0; i < result->getNumGeometries(); ++i) {
+            const Geometry* part = result->getGeometryN(i);
+            if (part->getDimension() == 2) {
+                area = part;
+                ++areaCount;
+            }
+        }
+        ensure_equals("one area component", areaCount, std::size_t(1));
+        ensure_equals_geometry(area, expectedArea.get());
+        ensure_equals("intersection area", area->getArea(), 7.7367851274e-14, 2e-18);
+    }
 }
 
 } // namespace tut
