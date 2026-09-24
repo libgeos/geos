@@ -81,6 +81,13 @@ private:
     * but may be more efficient and accurate to do it here.)
     */
     void labelCollapsedEdges();
+
+    /**
+    * Verifies a propagated (non-boundary) edge location for a geometry
+    * against the original input geometry, at a point in the interior of
+    * the edge.  Throws TopologyException on a mismatch.
+    */
+    void checkEdgeLocation(OverlayEdge* edge, uint8_t geomIndex) const;
     static void labelCollapsedEdge(OverlayEdge* edge, uint8_t geomIndex);
 
     /**
@@ -170,6 +177,17 @@ public:
     * Computes the topological labelling for the edges in the graph->
     */
     void computeLabelling();
+
+    /**
+    * Checks for inconsistent propagated locations at nodes incident on
+    * collapsed edges, by sampling non-boundary edges in the input areas.
+    * This is a heuristic for detecting topology inversions introduced by
+    * floating-point noding, not a complete validation of the labelling.
+    * Must only be used for unsnapped linear overlay: snapping and precision
+    * reduction can legitimately change locations relative to the inputs.
+    * Throws TopologyException on a mismatch so robust overlay can retry.
+    */
+    void checkCollapseNodeLocations() const;
 
     /**
     * Scans around a node CCW, propagating the side labels

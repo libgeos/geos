@@ -14,6 +14,8 @@
 // geos
 #include <geos/operation/overlayng/OverlayNGRobust.h>
 #include <geos/operation/overlayng/OverlayNG.h>
+#include <geos/noding/snap/SnappingNoder.h>
+#include <geos/util/TopologyException.h>
 
 // std
 #include <memory>
@@ -184,5 +186,45 @@ void object::test<3> ()
 }
 
 #endif
+
+// A nearly collinear triangular hole has nonzero area, but its two
+// crossings with A round to one node and invert the remaining triangle.
+template<>
+template<>
+void object::test<5> ()
+{
+    auto a = r.read("POLYGON ((379.694383 3423, 382 3423, 382 3428, 379.694383 3428, 379.694383 3423))");
+    auto b = r.read("POLYGON ((380 3428.3, 382 3429, 388 3422, 377 3422, 378 3427, 380 3428.3), (379.153701 3427.199712952367, 380.736005 3427.1997128766443, 379.777158 3427.199712922531, 379.153701 3427.199712952367))");
+    ensure("valid A", a->isValid());
+    ensure("valid B", b->isValid());
+
+    for (bool reverse : {false, true}) {
+        const Geometry* g0 = reverse ? b.get() : a.get();
+        const Geometry* g1 = reverse ? a.get() : b.get();
+        for (int op : {OverlayNG::INTERSECTION, OverlayNG::DIFFERENCE}) {
+            // Floating overlay must report the inconsistency to its caller.
+            bool caught = false;
+            try {
+                OverlayNG::overlay(g0, g1, op);
+            }
+            catch (const geos::util::TopologyException&) {
+                caught = true;
+            }
+            ensure("floating overlay must detect inversion", caught);
+
+            double expectedArea = op == OverlayNG::INTERSECTION ? a->getArea()
+                : (reverse ? b->getArea() - a->getArea() : 0.0);
+            auto result = OverlayNGRobust::Overlay(g0, g1, op);
+            ensure("valid robust result", result->isValid());
+            ensure_equals("robust result area", result->getArea(), expectedArea, 1e-9);
+
+            // Exercise the first retry strategy explicitly as well.
+            geos::noding::snap::SnappingNoder noder(1e-8);
+            auto snapped = OverlayNG::overlay(g0, g1, op, &noder);
+            ensure("valid snapped result", snapped->isValid());
+            ensure_equals("snapped result area", snapped->getArea(), expectedArea, 1e-9);
+        }
+    }
+}
 
 } // namespace tut
