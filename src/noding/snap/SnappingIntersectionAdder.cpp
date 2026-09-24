@@ -20,12 +20,10 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/algorithm/Distance.h>
+#include <geos/algorithm/PointLocation.h>
 #include <geos/util.h>
 
-#include <vector>
-#include <exception>
 #include <cmath>
-#include <iostream>
 
 using namespace geos::algorithm;
 using namespace geos::geom;
@@ -60,19 +58,16 @@ SnappingIntersectionAdder::processIntersections(SegmentString* seg0, std::size_t
     if (!isAdjacent(seg0, segIndex0, seg1, segIndex1)) {
         li.computeIntersection(p00, p01, p10, p11);
         /**
-         * With a positive tolerance, two-point (collinear) intersections
-         * are handled by the near-vertex code.  At zero tolerance that
-         * code does not add nodes, so process both overlap endpoints here.
+         * Process single point intersections only.
+         * Two-point (collinear) ones are handled by the near-vertex code
          */
-        if (li.hasIntersection() && (li.getIntersectionNum() == 1 || snapTolerance == 0)) {
-            for (std::size_t i = 0; i < li.getIntersectionNum(); ++i) {
+        if (li.hasIntersection() && li.getIntersectionNum() == 1) {
 
-                const auto& intPt = li.getIntersection(i);
-                const auto& snapPt = snapPointIndex.snap(intPt);
+            const auto& intPt = li.getIntersection(0);
+            const auto& snapPt = snapPointIndex.snap(intPt);
 
-                static_cast<NodedSegmentString*>(seg0)->addIntersection(snapPt, segIndex0);
-                static_cast<NodedSegmentString*>(seg1)->addIntersection(snapPt, segIndex1);
-            }
+            static_cast<NodedSegmentString*>(seg0)->addIntersection(snapPt, segIndex0);
+            static_cast<NodedSegmentString*>(seg1)->addIntersection(snapPt, segIndex1);
         }
     }
 
@@ -91,22 +86,40 @@ void
 SnappingIntersectionAdder::processNearVertex(SegmentString* srcSS, std::size_t srcIndex, const geom::Coordinate& p,
         SegmentString* ss, std::size_t segIndex, const geom::Coordinate& p0, const geom::Coordinate& p1)
 {
+    if (! isNearSegmentInterior(p, p0, p1)) return;
+
+    // add node to target segment
+    static_cast<NodedSegmentString*>(ss)->addIntersection(p, segIndex);
+    // add node at vertex to source SS
+    static_cast<NodedSegmentString*>(srcSS)->addIntersection(p, srcIndex);
+}
+
+
+/*private*/
+bool
+SnappingIntersectionAdder::isNearSegmentInterior(const geom::Coordinate& p,
+        const geom::Coordinate& p0, const geom::Coordinate& p1) const
+{
+    /**
+     * With no snap tolerance, only a vertex lying exactly in the segment
+     * interior is near it. This is decided with the robust orientation
+     * predicate which LineIntersector also uses, so the two agree.
+     */
+    if (snapTolerance <= 0) {
+        if (p.equals2D(p0) || p.equals2D(p1)) return false;
+        return PointLocation::isOnSegment(p, p0, p1);
+    }
     /**
     * Don't add intersection if candidate vertex is near endpoints of segment.
     * This avoids creating "zig-zag" linework
     * (since the vertex could actually be outside the segment envelope).
     * Also, this should have already been snapped.
     */
-    if (p.distance(p0) < snapTolerance) return;
-    if (p.distance(p1) < snapTolerance) return;
+    if (p.distance(p0) < snapTolerance) return false;
+    if (p.distance(p1) < snapTolerance) return false;
 
     double distSeg = algorithm::Distance::pointToSegment(p, p0, p1);
-    if (distSeg < snapTolerance) {
-        // add node to target segment
-        static_cast<NodedSegmentString*>(ss)->addIntersection(p, segIndex);
-        // add node at vertex to source SS
-        static_cast<NodedSegmentString*>(srcSS)->addIntersection(p, srcIndex);
-    }
+    return distSeg < snapTolerance;
 }
 
 

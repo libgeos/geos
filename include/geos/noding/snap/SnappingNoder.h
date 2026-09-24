@@ -62,6 +62,14 @@ namespace snap {   // geos::noding::snap
  * So far no failure cases have been found,
  * given a small enough snap tolerance.
  *
+ * A snap tolerance of zero (or less) disables snapping, and no vertex is moved.
+ * Crossing points are then added as nodes without snapping,
+ * and a vertex becomes a node of another segment
+ * only if it lies exactly on that segment,
+ * as at the ends of collinear overlaps.
+ * Without snapping the output may not be fully noded
+ * where several segments cross at nearly the same point.
+ *
  * The correctness of the output is not verified by this noder.
  * If required this can be done by {@link noding::ValidatingNoder}.
  */
@@ -99,7 +107,8 @@ public:
 
     /**
      * Creates a snapping noder using the given snap distance tolerance.
-     * @param p_snapTolerance points are snapped if within this distance
+     * @param p_snapTolerance points are snapped if within this distance;
+     *        zero (or less) disables snapping
      */
     SnappingNoder(double p_snapTolerance)
         : snapTolerance(p_snapTolerance)

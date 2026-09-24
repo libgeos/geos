@@ -5,7 +5,8 @@
   - Curve overlay robustness improvements (GH-1513, Dan Baston)
   - GeometrySplitter: Allow splitting a MultiSurface (GH-1520, Dan Baston)
   - GEOSGridIntersectionFractions: Set cells outside geometry bounding box to zero (GH-1532, Dan Baston)
-  - Fix CoverageCleaner merging adjacent polygons when snapping is disabled
+  - SnappingNoder: Node collinear overlaps at zero snap tolerance, fixing CoverageCleaner
+    merging adjacent polygons when snapping is disabled (GH-1525, d-hage)
 
 - New things:
   - Expose code revision: GEOS_REVISION, GEOSrevision, geos-config --revision

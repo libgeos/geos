@@ -5006,6 +5006,10 @@ GEOSCoverageCleanParams_destroy(
 * data alteration.
 *
 * A distance of zero prevents snapping from being used.
+* No vertex is then moved, but a vertex lying exactly on the edge
+* of another polygon is still noded, including at the ends of collinear overlaps.
+* Where several edges cross at nearly the same point,
+* a small snapping distance may be needed for correct noding.
 *
 * \see geos::coverage::CoverageCleaner::setSnappingDistance
 * \param params The GEOSCoverageCleanParams to operate on
