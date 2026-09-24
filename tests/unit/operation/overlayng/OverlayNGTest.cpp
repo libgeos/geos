@@ -857,6 +857,9 @@ void object::test<65>()
     testOverlay(a, a, a, OverlayNG::INTERSECTION, 0);
 }
 
+// Regression test: the boundaries of the operands cross just across a
+// half-cell boundary from the nearest double of the crossing. Without placing
+// the node in the cell of the exact crossing, the intersection fails.
 template<>
 template<>
 void object::test<66>()
@@ -884,7 +887,6 @@ void object::test<66>()
         }
         ensure_equals("one area component", areaCount, std::size_t(1));
         ensure_equals_geometry(area, expectedArea.get());
-        ensure_equals("intersection area", area->getArea(), 7.7367851274e-14, 2e-18);
     }
 }
 

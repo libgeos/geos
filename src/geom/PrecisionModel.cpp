@@ -19,6 +19,7 @@
 
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/math/DD.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/util/math.h>
 #include <geos/util.h>
@@ -27,7 +28,6 @@
 #include <string>
 #include <cmath>
 #include <iostream>
-#include <iomanip> 
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -43,35 +43,80 @@ namespace geom { // geos::geom
 */
 const double PrecisionModel::maximumPreciseValue = 9007199254740992.0;
 
-/*public*/
+namespace {
+
+/*
+ * The index of the grid cell containing a value expressed in grid units,
+ * rounding half-cell ties towards positive infinity.
+ * The double-double index stays in double-double: an index of 2^53 or more
+ * is not exactly representable as a double.
+ */
 double
-PrecisionModel::makePrecise(double val) const
+cellIndex(double val)
+{
+    return util::round(val);
+}
+
+math::DD
+cellIndex(const math::DD& val)
+{
+    return (val + 0.5).floor();
+}
+
+double
+toDouble(double val)
+{
+    return val;
+}
+
+double
+toDouble(const math::DD& val)
+{
+    return val.ToDouble();
+}
+
+} // anonymous namespace
+
+/*private*/
+template<typename T>
+double
+PrecisionModel::roundToGrid(const T& val) const
 {
 #if GEOS_DEBUG
     std::cerr << "PrecisionModel[" << this << "]::makePrecise called" << std::endl;
 #endif
 
     if(modelType == FLOATING_SINGLE) {
-        float floatSingleVal = static_cast<float>(val);
+        float floatSingleVal = static_cast<float>(toDouble(val));
         return static_cast<double>(floatSingleVal);
     }
     if(modelType == FIXED) {
         //-- make arithmetic robust by using integral value if available
         if (gridSize > 1) {
-//double v2 = util::round(val / gridSize) * gridSize;
-//std::cout << std::setprecision(16) << "GS[" << gridSize << "] " << val << " -> "  << v2 << std::endl;
-            return util::round(val / gridSize) * gridSize;
+            return toDouble(cellIndex(val / gridSize) * gridSize);
         }
         //-- since grid size is <= 1, scale must be >= 1 OR 0
         //-- if scale == 0, this is a no-op (should never happen)
         else if (scale != 0.0) {
-//double v2 = util::round(val * scale) / scale;
-//std::cout << std::setprecision(16) << "SC[" << scale << "] " << val << " -> " << "SC " << v2 << std::endl;
-            return util::round(val * scale) / scale;
+            return toDouble(cellIndex(val * scale) / scale);
         }
     }
     // modelType == FLOATING - no rounding necessary
-    return val;
+    return toDouble(val);
+}
+
+/*public*/
+double
+PrecisionModel::makePrecise(double val) const
+{
+    return roundToGrid(val);
+}
+
+/*public*/
+double
+PrecisionModel::makePrecise(const math::DD& val) const
+{
+    return roundToGrid(val);
 }
 
 /*public*/

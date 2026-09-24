@@ -12,6 +12,7 @@
 #include <geos/noding/NodedSegmentString.h>
 #include <geos/noding/snapround/SnapRoundingNoder.h>
 #include <geos/noding/snapround/SnapRoundingIntersectionAdder.h>
+#include <geos/algorithm/LineIntersector.h>
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKTWriter.h>
 #include <geos/geom/Geometry.h>
@@ -60,6 +61,22 @@ struct test_snaproundingnoder_data {
         // std::cout << std::endl << w.write(expected.get()) << std::endl;
 
         ensure_equals_geometry_xyzm(result.get(), expected.get());
+    }
+
+    // Runs SnapRoundingIntersectionAdder on the first segments of the first
+    // two lines in wkt, with the nearness tolerance of SnapRoundingNoder
+    // (a hundredth of a grid cell), and returns the recorded intersections.
+    CoordinateSequence
+    addIntersections(const std::string& wkt, const PrecisionModel& pm)
+    {
+        std::unique_ptr<Geometry> geom = r.read(wkt);
+        std::vector<const LineString*> lines;
+        LinearComponentExtracter::getLines(*geom, lines);
+        NodedSegmentString a(lines[0]->getCoordinates(), geom->hasZ(), geom->hasM(), nullptr);
+        NodedSegmentString b(lines[1]->getCoordinates(), geom->hasZ(), geom->hasM(), nullptr);
+        SnapRoundingIntersectionAdder adder(pm, 1.0 / pm.getScale() / 100.0);
+        adder.processIntersections(&a, 0, &b, 0);
+        return adder.getIntersections();
     }
 
 
@@ -305,84 +322,172 @@ void object::test<19> ()
 }
 
 
-// A proper intersection falls just past a half-grid boundary. Converting it
-// to double before rounding puts it in the neighboring hot pixel and leaves
-// the snapped polygon boundaries crossing without a node.
+// Regression test: a proper intersection lies just across a half-cell boundary
+// from its nearest double. Rounding the nearest double puts the hot pixel and the
+// segment nodes in the neighbouring cell, and the snapped polygon boundaries cross
+// without a node, which the validating noder reports.
 template<>
 template<>
 void object::test<20>()
 {
     set_test_name("Near-half-grid intersection is noded at fixed precision");
     std::string wkt = "GEOMETRYCOLLECTION (POLYGON ((-48.404225529999998 -5.0067209500000001, -48.404226645700533 -5.0066261829361647, -48.404226071884779 -5.0066747824165594, -48.404225529999998 -5.0067209500000001)), POLYGON ((-48.404225526798065 -5.006720954048145, -48.404228013904287 -5.0065102959894476, -48.404975132381281 -5.0041457218802918, -48.404225526798065 -5.006720954048145)))";
-    std::string expected;
+    std::string expected = "MULTILINESTRING ((-48.40422553 -5.00672095, -48.404225530085 -5.006720942756), (-48.404225530085 -5.006720942756, -48.404225530085 -5.006720942755), (-48.404225530085 -5.006720942755, -48.4042266457 -5.006626183023), (-48.4042266457 -5.006626183023, -48.404226645701 -5.006626182936), (-48.404226645701 -5.006626182936, -48.4042266457 -5.006626183023), (-48.4042266457 -5.006626183023, -48.404226071885 -5.006674782417, -48.404226066361 -5.006675253063), (-48.404226066361 -5.006675253063, -48.404225530085 -5.006720942755), (-48.404225530085 -5.006720942755, -48.404225530085 -5.006720942756), (-48.404225530085 -5.006720942756, -48.40422553 -5.00672095), (-48.404225526798 -5.006720954048, -48.404226066361 -5.006675253063), (-48.404226066361 -5.006675253063, -48.4042266457 -5.006626183023), (-48.4042266457 -5.006626183023, -48.404226645701 -5.006626182936), (-48.404226645701 -5.006626182936, -48.404228013904 -5.006510295989, -48.404975132381 -5.00414572188, -48.404225530085 -5.006720942755), (-48.404225530085 -5.006720942755, -48.404225530085 -5.006720942756), (-48.404225530085 -5.006720942756, -48.404225526798 -5.006720954048))";
     checkRounding(wkt, 1e12, expected);
 }
 
-// A scale of 0.1 uses a 10-unit grid. The negative half-grid tie must round
-// to zero, using the grid size rather than the binary approximation of 0.1.
+// Unit test of the grid-size rounding of an intersection. A scale of 0.1 is a
+// grid size of 10. The intersection lies exactly on the negative half-cell
+// boundary -1000000000000005, which rounds towards positive infinity, as
+// PrecisionModel::makePrecise rounds it. Rounding with the scale 0.1, whose
+// double is slightly more than 0.1, would give -1000000000000010 instead.
+// The nearest double is the tie itself, so the result is the same without
+// the cell correction.
 template<>
 template<>
 void object::test<21>()
 {
     set_test_name("Negative half-grid intersection uses the grid-size tie rule");
-    auto geom = r.read("MULTILINESTRING ((-1000000000000006 -10, -1000000000000004 10), (-1000000000000006 10, -1000000000000004 -10))");
-    std::vector<const LineString*> lines;
-    LinearComponentExtracter::getLines(*geom, lines);
-    NodedSegmentString a(lines[0]->getCoordinates(), false, false, nullptr);
-    NodedSegmentString b(lines[1]->getCoordinates(), false, false, nullptr);
     PrecisionModel pm(0.1);
-    ensure_equals("half-grid tie", pm.makePrecise(-1000000000000005.0), -1000000000000000.0);
-    SnapRoundingIntersectionAdder adder(&pm, 0.1);
-    adder.processIntersections(&a, 0, &b, 0);
-    auto intersections = adder.getIntersections();
+    ensure_equals("half-grid tie", pm.makePrecise(-1000000000000005.0), -1000000000000000.0, 0.0);
+    auto intersections = addIntersections("MULTILINESTRING ((-1000000000000006 -10, -1000000000000004 10), (-1000000000000006 10, -1000000000000004 -10))", pm);
     ensure_equals("one intersection", intersections.size(), std::size_t(1));
     ensure_equals("chosen cell", pm.makePrecise(intersections.getAt<CoordinateXYZM>(0).x),
-                  -1000000000000000.0);
+                  -1000000000000000.0, 0.0);
 }
 
-// Correcting an intersection's cell must preserve its interpolated attributes.
+// Regression test: moving an intersection into the cell of the exact
+// intersection keeps the Z and M values interpolated by LineIntersector.
 template<>
 template<>
 void object::test<22>()
 {
     set_test_name("Corrected grid cell preserves intersection Z and M");
-    auto geom = r.read("GEOMETRYCOLLECTION (POLYGON ZM ((-48.404225529999998 -5.0067209500000001 0 100, -48.404226645700533 -5.0066261829361647 10 120, -48.404226071884779 -5.0066747824165594 10 120, -48.404225529999998 -5.0067209500000001 0 100)), POLYGON ZM ((-48.404225526798065 -5.006720954048145 20 200, -48.404228013904287 -5.0065102959894476 30 220, -48.404975132381281 -5.0041457218802918 30 220, -48.404225526798065 -5.006720954048145 20 200)))");
-    std::vector<const LineString*> lines;
-    LinearComponentExtracter::getLines(*geom, lines);
-    NodedSegmentString a(lines[0]->getCoordinates(), true, true, nullptr);
-    NodedSegmentString b(lines[1]->getCoordinates(), true, true, nullptr);
     PrecisionModel pm(1e12);
-    SnapRoundingIntersectionAdder adder(&pm, 1e-14);
-    adder.processIntersections(&a, 0, &b, 0);
-    auto intersections = adder.getIntersections();
+    auto intersections = addIntersections("GEOMETRYCOLLECTION (POLYGON ZM ((-48.404225529999998 -5.0067209500000001 0 100, -48.404226645700533 -5.0066261829361647 10 120, -48.404226071884779 -5.0066747824165594 10 120, -48.404225529999998 -5.0067209500000001 0 100)), POLYGON ZM ((-48.404225526798065 -5.006720954048145 20 200, -48.404228013904287 -5.0065102959894476 30 220, -48.404975132381281 -5.0041457218802918 30 220, -48.404225526798065 -5.006720954048145 20 200)))", pm);
     ensure_equals("one intersection", intersections.size(), std::size_t(1));
     const auto& coord = intersections.getAt<CoordinateXYZM>(0);
-    ensure_equals("corrected cell", pm.makePrecise(coord.x), -48.4042266457);
+    ensure_equals("corrected cell", pm.makePrecise(coord.x), -48.4042266457, 0.0);
     ensure_equals("Z at corrected node", coord.z, 17.2494, 1e-4);
     ensure_equals("M at corrected node", coord.m, 164.4988, 1e-4);
 }
 
-// The exact intersection is just left of -0.5, though its nearest double is
-// the half-grid tie itself. The correction must apply even at a coarse scale.
+// Pins the cell of an intersection at a coarse scale. The exact intersection
+// is just left of -0.5, but its nearest double is the half-cell boundary -0.5
+// itself, which rounds to 0. The node is placed in the cell of the exact
+// intersection, -1. Without the correction the geometry is also noded validly,
+// with the node at (0 0), so this test pins the choice of cell rather than
+// preventing a noding failure.
 template<>
 template<>
 void object::test<23>()
 {
     set_test_name("Intersection hidden below a half-grid double rounds left");
-    auto geom = r.read("MULTILINESTRING ((-1 -1, 0 1), (-1 1, 0 -1.0000000000000002))");
+    std::string wkt = "MULTILINESTRING ((-1 -1, 0 1), (-1 1, 0 -1.0000000000000002))";
+    PrecisionModel pm(1);
+    auto intersections = addIntersections(wkt, pm);
+    ensure_equals("one intersection", intersections.size(), std::size_t(1));
+    ensure_equals("chosen cell", pm.makePrecise(intersections.getAt<CoordinateXYZM>(0).x), -1.0, 0.0);
+    std::string expected = "MULTILINESTRING ((-1 -1, -1 0), (-1 0, 0 1), (-1 1, -1 0), (-1 0, 0 -1))";
+    checkRounding(wkt, 1, expected);
+}
+
+// Regression test: along a horizontal or vertical segment the intersection is
+// rounded as the segment's own vertices are. The segment's ordinate
+// 377804.96362807497 lies below the half-cell boundary 377804.963628075, but
+// PrecisionModel::makePrecise rounds it up to 377804.96362808, because the
+// product with the scale rounds onto the boundary in double arithmetic.
+// Moving the node into the cell below would bend the snapped segment into a V.
+template<>
+template<>
+void object::test<24>()
+{
+    set_test_name("Horizontal and vertical segments stay straight through a node");
+    std::string horizontal = "MULTILINESTRING ((123456.25 377804.593628075, 123456.75 377805.33362807496), (123455 377804.96362807497, 123458 377804.96362807497))";
+    std::string horizontalExpected = "MULTILINESTRING ((123456.25 377804.59362808, 123456.5 377804.96362808), (123456.5 377804.96362808, 123456.75 377805.33362808), (123455 377804.96362808, 123456.5 377804.96362808), (123456.5 377804.96362808, 123458 377804.96362808))";
+    checkRounding(horizontal, 1e8, horizontalExpected);
+    std::string vertical = "MULTILINESTRING ((377804.593628075 123456.25, 377805.33362807496 123456.75), (377804.96362807497 123455, 377804.96362807497 123458))";
+    std::string verticalExpected = "MULTILINESTRING ((377804.59362808 123456.25, 377804.96362808 123456.5), (377804.96362808 123456.5, 377805.33362808 123456.75), (377804.96362808 123455, 377804.96362808 123456.5), (377804.96362808 123456.5, 377804.96362808 123458))";
+    checkRounding(vertical, 1e8, verticalExpected);
+}
+
+// Regression test: an intersection with a horizontal or vertical segment is
+// moved into the cell of the exact intersection along that segment, and keeps
+// the segment's own ordinate across it. The exact intersection with y = 0 is
+// just left of x = -0.5, whose nearest double -0.5 rounds to 0.
+template<>
+template<>
+void object::test<25>()
+{
+    set_test_name("Intersection with an axis-parallel segment is moved along it");
+    PrecisionModel pm(1);
+
+    auto horizontal = addIntersections("MULTILINESTRING ((-1 -1, 0 1.0000000000000002), (-1 0, 0 0))", pm);
+    ensure_equals("one intersection with horizontal", horizontal.size(), std::size_t(1));
+    const auto& h = horizontal.getAt<CoordinateXYZM>(0);
+    ensure_equals("x in exact cell", pm.makePrecise(h.x), -1.0, 0.0);
+    ensure_equals("y on horizontal segment", h.y, 0.0, 0.0);
+
+    auto vertical = addIntersections("MULTILINESTRING ((-1 -1, 1.0000000000000002 0), (0 -1, 0 0))", pm);
+    ensure_equals("one intersection with vertical", vertical.size(), std::size_t(1));
+    const auto& v = vertical.getAt<CoordinateXYZM>(0);
+    ensure_equals("x on vertical segment", v.x, 0.0, 0.0);
+    ensure_equals("y in exact cell", pm.makePrecise(v.y), -1.0, 0.0);
+}
+
+// Regression test with a grid size. A scale of 0.1 is a grid size of 10.
+// The exact intersection is just left of x = 1005, whose nearest double 1005
+// rounds to 1010. The node belongs to the cell at 1000.
+template<>
+template<>
+void object::test<26>()
+{
+    set_test_name("Near-half-grid intersection is noded with a grid size");
+    std::string wkt = "MULTILINESTRING ((1000 -100, 1010 100), (1000 100, 1010 -100.00000000000001))";
+    std::string expected = "MULTILINESTRING ((1000 -100, 1000 0), (1000 0, 1010 100), (1000 100, 1000 0), (1000 0, 1010 -100))";
+    checkRounding(wkt, 0.1, expected);
+}
+
+// Unit test of the case in which one representable double is not enough.
+// The exact intersection lies in the cell at -13.45017351223. Its nearest double
+// -13.4501735122295 and the next double below both round to -13.450173512229,
+// because their products with the scale round onto the half-cell boundary.
+// The intersection is then recorded exactly as LineIntersector computed it.
+template<>
+template<>
+void object::test<27>()
+{
+    set_test_name("Intersection is kept when one double does not reach its cell");
+    PrecisionModel pm(1e12);
+    std::string wkt = "MULTILINESTRING ((48.00000000000059 -13.450173512243548, 48.0000000000005 -13.450173512223339), (48.00000000000589 -13.450173512245257, 47.99999999997482 -13.450173512153995))";
+    auto intersections = addIntersections(wkt, pm);
+    ensure_equals("one intersection", intersections.size(), std::size_t(1));
+    const auto& recorded = intersections.getAt<CoordinateXYZM>(0);
+
+    auto geom = r.read(wkt);
     std::vector<const LineString*> lines;
     LinearComponentExtracter::getLines(*geom, lines);
-    NodedSegmentString a(lines[0]->getCoordinates(), false, false, nullptr);
-    NodedSegmentString b(lines[1]->getCoordinates(), false, false, nullptr);
-    PrecisionModel pm(1);
-    SnapRoundingIntersectionAdder adder(&pm, 0.01);
-    adder.processIntersections(&a, 0, &b, 0);
-    auto intersections = adder.getIntersections();
+    geos::algorithm::LineIntersector li;
+    li.computeIntersection(*lines[0]->getCoordinatesRO(), 0, *lines[1]->getCoordinatesRO(), 0);
+    ensure("proper intersection", li.isProper());
+    ensure_equals("x as computed", recorded.x, li.getIntersection(0).x, 0.0);
+    ensure_equals("y as computed", recorded.y, li.getIntersection(0).y, 0.0);
+}
+
+// Regression test for a grid finer than a double: at a scale of 1e12 near
+// x = 5e5, the cell index is about 5e17, beyond 2^53, so it is not exactly
+// representable as a double. The x-ordinate of this crossing rounds to
+// 501606.63344328245, the nearest double to the grid value of the exact
+// cell, and must not be moved to a neighbouring double.
+template<>
+template<>
+void object::test<28>()
+{
+    set_test_name("Intersection keeps its cell on a grid finer than a double");
+    PrecisionModel pm(1e12);
+    auto intersections = addIntersections("MULTILINESTRING ((501628.9755162752 6000739.718938188, 501606.2368510821 6000711.289381552), (501608.39187310886 6000711.1006511, 501591.03273743734 6000717.85878518))", pm);
     ensure_equals("one intersection", intersections.size(), std::size_t(1));
-    ensure_equals("chosen cell", pm.makePrecise(intersections.getAt<CoordinateXYZM>(0).x), -1.0);
-    SnapRoundingNoder noder(&pm);
-    auto result = geos::NodingTestUtil::nodeValidated(geom.get(), nullptr, &noder);
-    ensure("noded result", !result->isEmpty());
+    ensure_equals("x in exact cell", pm.makePrecise(intersections.getAt<CoordinateXYZM>(0).x), 501606.63344328245, 0.0);
 }
 
 } // namespace tut
