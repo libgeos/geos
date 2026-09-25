@@ -73,6 +73,12 @@ namespace coverage { // geos.coverage
  * and reduce the risk of spikes formed by merging gaps.
  * However, a large snapping distance may introduce undesirable
  * data alteration.
+ * Snapping is disabled if a zero snapping distance is specified.
+ * No vertex is then moved, and nearly coincident linework is not merged.
+ * A vertex lying exactly on the edge of another polygon is still noded,
+ * including at the ends of collinear overlaps.
+ * Where several edges cross at nearly the same point,
+ * a small snapping distance may be needed for correct noding.
  *
  * ** Overlap Merging **
  *
@@ -273,6 +279,10 @@ public:
      * Sets the snapping distance tolerance.
      * The default is to use a small fraction of the input extent diameter.
      * A distance of zero prevents snapping from being used.
+     * No vertex is then moved, but a vertex lying exactly on the edge
+     * of another polygon is still noded, including at the ends of collinear overlaps.
+     * Where several edges cross at nearly the same point,
+     * a small snapping distance may be needed for correct noding.
      *
      * @param snapDistance the snapping distance tolerance
      */

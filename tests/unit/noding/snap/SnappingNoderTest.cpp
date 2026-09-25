@@ -1,5 +1,5 @@
 //
-// Test Suite for geos::noding::snapround::SnapRoundingNoder class.
+// Test Suite for geos::noding::snap::SnappingNoder class.
 
 #include <tut/tut.hpp>
 #include <utility.h>
@@ -150,5 +150,54 @@ void object::test<7> ()
 
 
 
+
+//  testZeroToleranceCollinearOverlap
+//  Zero tolerance must still node the endpoints of collinear overlaps.
+//  A negative tolerance behaves as zero.
+template<>
+template<>
+void object::test<8>()
+{
+    std::string expected = "MULTILINESTRING ((1 0, 1 1), (1 1, 1 3), (1 3, 1 1), (1 1, 1 0))";
+    checkRounding("LINESTRING (1 0, 1 1, 1 3)",
+                  "LINESTRING (1 3, 1 0)", 0, expected);
+    checkRounding("LINESTRING (1 0, 1 1, 1 3)",
+                  "LINESTRING (1 3, 1 0)", -1, expected);
+}
+
+//  testZeroToleranceContainedSegment
+//  Both endpoints of a contained segment must split the containing segment.
+template<>
+template<>
+void object::test<9>()
+{
+    std::string expected = "MULTILINESTRING ((0 0, 1 1), (1 1, 3 3), (3 3, 4 4), (3 3, 1 1))";
+    checkRounding("LINESTRING (0 0, 4 4)",
+                  "LINESTRING (3 3, 1 1)", 0, expected);
+}
+
+//  testZeroToleranceNearbyLinesNotSnapped
+//  Zero tolerance must not snap nearby, non-intersecting linework.
+template<>
+template<>
+void object::test<10>()
+{
+    std::string expected = "MULTILINESTRING ((0 0, 4 0), (1 0.000000001, 3 0.000000001))";
+    checkRounding("LINESTRING (0 0, 4 0)",
+                  "LINESTRING (1 0.000000001, 3 0.000000001)", 0, expected);
+}
+
+//  testZeroToleranceFoldBack
+//  Zero tolerance must node the collinear overlap of adjacent segments
+//  of one line which folds back on itself.
+//  A negative tolerance behaves as zero.
+template<>
+template<>
+void object::test<11>()
+{
+    std::string expected = "MULTILINESTRING ((0 0, 1 0), (1 0, 3 0), (3 0, 1 0))";
+    checkRounding("LINESTRING (0 0, 3 0, 1 0)", "", 0, expected);
+    checkRounding("LINESTRING (0 0, 3 0, 1 0)", "", -1, expected);
+}
 
 } // namespace tut

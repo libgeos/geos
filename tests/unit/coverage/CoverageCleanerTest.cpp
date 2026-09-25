@@ -1,5 +1,5 @@
 //
-// Test Suite for geos::coverage::CoverageGapFinderTest class.
+// Test Suite for geos::coverage::CoverageCleaner class.
 
 #include <tut/tut.hpp>
 #include <utility.h>
@@ -462,5 +462,34 @@ void object::test<20> ()
 
 
 
+
+// testZeroSnappingUnmatchedSharedEdgeVertex
+// An unmatched vertex on a shared edge must be noded even with snapping disabled,
+// so that each polygon keeps its own area in either input order.
+template<>
+template<>
+void object::test<21>()
+{
+    checkCleanSnap(
+        {
+            "POLYGON ((1 0, 1 1, 1 3, 4 0, 1 0))",
+            "POLYGON ((0 4, 1 3, 1 0, 0 4))"
+        },
+        0,
+        {
+            "POLYGON ((1 0, 1 1, 1 3, 4 0, 1 0))",
+            "POLYGON ((0 4, 1 3, 1 1, 1 0, 0 4))"
+        });
+    checkCleanSnap(
+        {
+            "POLYGON ((0 4, 1 3, 1 0, 0 4))",
+            "POLYGON ((1 0, 1 1, 1 3, 4 0, 1 0))"
+        },
+        0,
+        {
+            "POLYGON ((0 4, 1 3, 1 1, 1 0, 0 4))",
+            "POLYGON ((1 0, 1 1, 1 3, 4 0, 1 0))"
+        });
+}
 
 } // namespace tut
