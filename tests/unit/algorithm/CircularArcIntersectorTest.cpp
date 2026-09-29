@@ -29,8 +29,18 @@ struct test_circulararcintersector_data {
     using XYZM = CoordinateXYZM;
 
     static constexpr double NaN = geos::DoubleNotANumber;
+    double eps = 1e-8;
+    bool toleranceIsDistance = true;
 
     using ArcOrPoint = std::variant<XY, XYZ, XYM, XYZM, CircularArc>;
+
+    void setTolerance(double value) {
+        eps = value;
+    }
+
+    void setToleranceIsDistance(bool value) {
+        toleranceIsDistance = value;
+    }
 
     static std::string to_string(CircularArcIntersector::intersection_type t)
     {
@@ -96,11 +106,11 @@ struct test_circulararcintersector_data {
     }
 
     template<typename C1, typename C2>
-    static void checkIntersection(C1 p0, C1 p1, C1 p2,
-                                  C2 q0, C2 q1, C2 q2,
-                                  CircularArcIntersector::intersection_type result,
-                                  const ArcOrPoint& i0 = CoordinateXYZM::getNull(),
-                                  const ArcOrPoint& i1 = CoordinateXYZM::getNull())
+    void checkIntersection(C1 p0, C1 p1, C1 p2,
+                           C2 q0, C2 q1, C2 q2,
+                           CircularArcIntersector::intersection_type result,
+                           const ArcOrPoint& i0 = CoordinateXYZM::getNull(),
+                           const ArcOrPoint& i1 = CoordinateXYZM::getNull())
     {
         CoordinateSequence cs1(3, C1::template has<Ordinate::Z>(), C1::template has<Ordinate::M>());
         cs1.setAt(p0, 0);
@@ -119,11 +129,11 @@ struct test_circulararcintersector_data {
     }
 
     template<typename C1, typename C2>
-    static void checkIntersectionArcSeg(C1 p0, C1 p1, C1 p2,
-                                        C2 q0, C2 q1,
-                                        CircularArcIntersector::intersection_type result,
-                                        const ArcOrPoint& i0 = CoordinateXYZM::getNull(),
-                                        const ArcOrPoint& i1 = CoordinateXYZM::getNull())
+    void checkIntersectionArcSeg(C1 p0, C1 p1, C1 p2,
+                                 C2 q0, C2 q1,
+                                 CircularArcIntersector::intersection_type result,
+                                 const ArcOrPoint& i0 = CoordinateXYZM::getNull(),
+                                 const ArcOrPoint& i1 = CoordinateXYZM::getNull())
     {
         CoordinateSequence cs1(3, C1::template has<Ordinate::Z>(), C1::template has<Ordinate::M>());
         cs1.setAt(p0, 0);
@@ -140,11 +150,11 @@ struct test_circulararcintersector_data {
     }
 
     template<typename C1, typename C2>
-    static void checkIntersectionSegArc(C1 p0, C1 p1,
-                                        C2 q0, C2 q1, C2 q2,
-                                        CircularArcIntersector::intersection_type result,
-                                        const ArcOrPoint& i0 = CoordinateXYZM::getNull(),
-                                        const ArcOrPoint& i1 = CoordinateXYZM::getNull())
+    void checkIntersectionSegArc(C1 p0, C1 p1,
+                                 C2 q0, C2 q1, C2 q2,
+                                 CircularArcIntersector::intersection_type result,
+                                 const ArcOrPoint& i0 = CoordinateXYZM::getNull(),
+                                 const ArcOrPoint& i1 = CoordinateXYZM::getNull())
     {
         CoordinateSequence seg(2, C1::template has<Ordinate::Z>(), C1::template has<Ordinate::M>());
         seg.setAt(p0, 0);
@@ -161,11 +171,11 @@ struct test_circulararcintersector_data {
     }
 
     template<typename C1, typename C2>
-    static void checkIntersectionSegSeg(C1 p0, C1 p1,
-                                        C2 q0, C2 q1,
-                                        CircularArcIntersector::intersection_type result,
-                                        const ArcOrPoint& i0 = CoordinateXYZM::getNull(),
-                                        const ArcOrPoint& i1 = CoordinateXYZM::getNull())
+    void checkIntersectionSegSeg(C1 p0, C1 p1,
+                                 C2 q0, C2 q1,
+                                 CircularArcIntersector::intersection_type result,
+                                 const ArcOrPoint& i0 = CoordinateXYZM::getNull(),
+                                 const ArcOrPoint& i1 = CoordinateXYZM::getNull())
     {
         CoordinateSequence seg0(2, C1::template has<Ordinate::Z>(), C1::template has<Ordinate::M>());
         seg0.setAt(p0, 0);
@@ -179,7 +189,7 @@ struct test_circulararcintersector_data {
     }
 
 
-    static bool pointWithinTolerance(const CoordinateXYZM& actual, const CoordinateXYZM& expected, double tol)
+    static bool pointWithinTolerance(const CoordinateXYZM& actual, const CoordinateXYZM& expected, double eps, bool isDistance)
     {
         if (std::isnan(actual.z) != std::isnan(expected.z)) {
             return false;
@@ -189,23 +199,23 @@ struct test_circulararcintersector_data {
             return false;
         }
 
-        if (!std::isnan(expected.z) && std::abs(actual.z - expected.z) > tol * std::abs(expected.z)) {
+        if (!std::isnan(expected.z) && std::abs(actual.z - expected.z) > eps * std::abs(expected.z)) {
             return false;
         }
 
-        if (!std::isnan(expected.m) && std::abs(actual.m - expected.m) > tol * std::abs(expected.m)) {
+        if (!std::isnan(expected.m) && std::abs(actual.m - expected.m) > eps * std::abs(expected.m)) {
             return false;
         }
 
-        if (actual.distance(expected) < tol) {
+        if (isDistance && actual.distance(expected) < eps) {
             return true;
         }
 
-        if (std::abs(actual.x - expected.x) > tol * std::abs(expected.x)) {
+        if (std::abs(actual.x - expected.x) > eps * std::abs(expected.x)) {
             return false;
         }
 
-        if (std::abs(actual.y - expected.y) > tol * std::abs(expected.y)) {
+        if (std::abs(actual.y - expected.y) > eps * std::abs(expected.y)) {
             return false;
         }
 
@@ -213,7 +223,7 @@ struct test_circulararcintersector_data {
     }
 
     template<typename T1, typename T2>
-    static void checkIntersection(const T1& a0,
+    void checkIntersection(const T1& a0,
                                   const T2& a1,
                                   CircularArcIntersector::intersection_type result,
                                   const ArcOrPoint& p0 = CoordinateXYZM::getNull(),
@@ -292,11 +302,9 @@ struct test_circulararcintersector_data {
             equal = false;
         }
 
-        constexpr double eps = 1e-8;
-
         if (equal) {
             for (std::size_t i = 0; i < actualPoints.size(); i++) {
-                if (!pointWithinTolerance(actualPoints[i], expectedPoints[i], eps)) {
+                if (!pointWithinTolerance(actualPoints[i], expectedPoints[i], eps, toleranceIsDistance)) {
                     equal = false;
                 }
             }
@@ -309,7 +317,7 @@ struct test_circulararcintersector_data {
                     equal = false;
                 }
 
-                if (!pointWithinTolerance(XYZM(actualArcs[i].getCenter()), XYZM(expectedArcs[i].getCenter()), eps)) {
+                if (!pointWithinTolerance(XYZM(actualArcs[i].getCenter()), XYZM(expectedArcs[i].getCenter()), eps, toleranceIsDistance)) {
                     equal = false;
                 }
 
@@ -317,7 +325,7 @@ struct test_circulararcintersector_data {
                 actualArcs[i].getCoordinateSequence()->getAt(actualArcs[i].getCoordinatePosition(), actual0);
                 expectedArcs[i].getCoordinateSequence()->getAt(expectedArcs[i].getCoordinatePosition(), expected0);
 
-                if (!pointWithinTolerance(actual0, expected0, eps)) {
+                if (!pointWithinTolerance(actual0, expected0, eps, toleranceIsDistance)) {
                     equal = false;
                 }
 
@@ -325,7 +333,7 @@ struct test_circulararcintersector_data {
                 actualArcs[i].getCoordinateSequence()->getAt(actualArcs[i].getCoordinatePosition(), actual2);
                 expectedArcs[i].getCoordinateSequence()->getAt(expectedArcs[i].getCoordinatePosition(), expected2);
 
-                if (!pointWithinTolerance(actual2, expected2, eps)) {
+                if (!pointWithinTolerance(actual2, expected2, eps, toleranceIsDistance)) {
                     equal = false;
                 }
             }
@@ -1751,6 +1759,56 @@ void object::test<87>()
 
     ensure_equals(arc.p0(), arcOut.p0());
     ensure_equals(arc.p2(), arcOut.p2());
+}
+
+template<>
+template<>
+void object::test<88>()
+{
+    // From https://github.com/libgeos/geos/issues/1539
+    set_test_name("arc endpoint intersects interior of horizontal line");
+    setTolerance(0);
+    setToleranceIsDistance(false);
+
+    // clockwise arc
+    checkIntersectionArcSeg(XY{1, 10}, XY{3, 7}, XY{1, 5},
+                            XY{0, 10}, XY{10, 10},
+                            CircularArcIntersector::ONE_POINT_INTERSECTION,
+                            XY{1, 10});
+
+    // counter-clockwise arc
+    checkIntersectionArcSeg(XY{1, 5}, XY{3, 7}, XY{1, 10},
+                            XY{0, 10}, XY{10, 10},
+                            CircularArcIntersector::ONE_POINT_INTERSECTION,
+                            XY{1, 10});
+}
+
+template<>
+template<>
+void object::test<89>()
+{
+    set_test_name("arc endpoint intersects interior of vertical line");
+    setTolerance(0);
+    setToleranceIsDistance(false);
+
+    checkIntersectionArcSeg(XY{-7, 3}, XY{8, 11}, XY{1043, 6},
+                            XY{-7, 0}, XY{-7, 5},
+                            CircularArcIntersector::ONE_POINT_INTERSECTION,
+                            XY{-7, 3});
+}
+
+template<>
+template<>
+void object::test<90>()
+{
+    set_test_name("arc control point intersects interior of diagonal line");
+    setTolerance(0);
+    setToleranceIsDistance(false);
+
+    checkIntersectionArcSeg(XY{0 , 0}, XY{208, 22}, XY{140355444245, 3882200024},
+                            XY{104, 11}, XY{2080, 220},
+                            CircularArcIntersector::ONE_POINT_INTERSECTION,
+                            XY{208, 22});
 }
 
 // TODO: check Z values of arc result centerpoints

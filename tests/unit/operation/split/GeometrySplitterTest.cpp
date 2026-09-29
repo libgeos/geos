@@ -936,4 +936,15 @@ void object::test<77>()
         "GEOMETRYCOLLECTION (CURVEPOLYGON (COMPOUNDCURVE ((5 0, 3 0, 3 5, 5 5), CIRCULARSTRING (5 5, 7 1, 5 0))), POLYGON ((3 0, 0 0, 0 5, 3 5, 3 0)))");
 }
 
+template<>
+template<>
+void object::test<78>()
+{
+    set_test_name("split Polygon with CircularString (#1539)");
+
+    testSplit("POLYGON ((0 5, 0 10, 10 10, 10 5, 0 5))",
+        "CIRCULARSTRING (1 10, 3 7, 1 5)",
+        "GEOMETRYCOLLECTION (CURVEPOLYGON (COMPOUNDCURVE ((0 5, 0 10, 1 10), CIRCULARSTRING (1 10, 3 7, 1 5), (1 5, 0 5))), CURVEPOLYGON (COMPOUNDCURVE ((1 10, 10 10, 10 5, 1 5), CIRCULARSTRING (1 5, 3 7, 1 10))))");
+}
+
 }

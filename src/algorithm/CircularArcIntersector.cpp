@@ -142,21 +142,21 @@ CircularArcIntersector::intersects(const CircularArc& arc, const CoordinateSeque
         return;
     }
 
-    // Check for exact endpoint-endpoint or endpoint-control point intersections
-    // If found, replace the computed intersection points with an exact endpoint
+    // Check if an endpoint or control point of the arc is exactly on the line.
+    // If found, replace the computed intersection point with the exact control point.
     const CoordinateXY& ap0 = arc.p0<CoordinateXY>();
     const CoordinateXY& ap1 = arc.p1<CoordinateXY>();
     const CoordinateXY& ap2 = arc.p2<CoordinateXY>();
     const CoordinateXY& bp0 = seq.getAt<CoordinateXY>(segPos0);
     const CoordinateXY& bp1 = seq.getAt<CoordinateXY>(segPos1);
 
-    if (ap0 == bp0 || ap0 == bp1) {
+    if (Orientation::index(bp0, bp1, ap0) == Orientation::COLLINEAR) {
         closestPoint(isect0, isect1, nPointsIntersectingLine, ap0) = ap0;
     }
-    if (ap1 == bp0 || ap1 == bp1) {
+    if (Orientation::index(bp0, bp1, ap1) == Orientation::COLLINEAR) {
         closestPoint(isect0, isect1, nPointsIntersectingLine, ap1) = ap1;
     }
-    if (ap2 == bp0 || ap2 == bp1) {
+    if (Orientation::index(bp0, bp1, ap2) == Orientation::COLLINEAR) {
         closestPoint(isect0, isect1, nPointsIntersectingLine, ap2) = ap2;
     }
 
