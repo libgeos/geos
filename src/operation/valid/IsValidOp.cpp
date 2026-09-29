@@ -346,7 +346,7 @@ IsValidOp::checkTooFewPoints(const LineString* line, std::size_t minSize)
     if (! isNonRepeatedSizeAtLeast(line, minSize) ) {
         CoordinateXY pt = line->getNumPoints() >= 1
                         ? line->getCoordinatesRO()->getAt<CoordinateXY>(0)
-                        : Coordinate();
+                        : CoordinateXY();
         logInvalid(TopologyValidationError::eTooFewPoints, pt);
     }
 }
@@ -372,7 +372,7 @@ IsValidOp::isNonRepeatedSizeAtLeast(const LineString* line, std::size_t minSize)
 
 /* private */
 void
-IsValidOp::checkAreaIntersections(PolygonTopologyAnalyzer& areaAnalyzer)
+IsValidOp::checkAreaIntersections(const PolygonTopologyAnalyzer& areaAnalyzer)
 {
     if (areaAnalyzer.hasInvalidIntersection()) {
         logInvalid(areaAnalyzer.getInvalidCode(),

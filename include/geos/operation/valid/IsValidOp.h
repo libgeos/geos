@@ -148,9 +148,9 @@ private:
      * @param minSize the minimum line size
      * @return true if the line has the required number of non-repeated points
      */
-    bool isNonRepeatedSizeAtLeast(const geom::LineString* line, std::size_t minSize);
+    static bool isNonRepeatedSizeAtLeast(const geom::LineString* line, std::size_t minSize);
 
-    void checkAreaIntersections(PolygonTopologyAnalyzer& areaAnalyzer);
+    void checkAreaIntersections(const PolygonTopologyAnalyzer& areaAnalyzer);
 
     /**
      * Check whether a ring self-intersects (except at its endpoints).
@@ -183,7 +183,7 @@ private:
      * @param shell the polygon shell to test against
      * @return a hole point outside the shell, or null if it is inside
      */
-    const CoordinateXY* findHoleOutsideShellPoint(
+    static const CoordinateXY* findHoleOutsideShellPoint(
         const geom::LinearRing* hole,
         const geom::LinearRing* shell);
 

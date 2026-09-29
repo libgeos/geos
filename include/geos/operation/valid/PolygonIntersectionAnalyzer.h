@@ -23,8 +23,6 @@
 
 #include <geos/export.h>
 
-#include <memory>
-
 // Forward declarations
 namespace geos {
 namespace noding {
@@ -53,7 +51,7 @@ private:
         const SegmentString* ss0, std::size_t segIndex0,
         const SegmentString* ss1, std::size_t segIndex1);
 
-    bool addDoubleTouch(
+    static bool addDoubleTouch(
         const SegmentString* ss0, const SegmentString* ss1,
         const CoordinateXY& intPt);
 
@@ -62,11 +60,11 @@ private:
         const CoordinateXY* e00, const CoordinateXY* e01,
         const CoordinateXY* e10, const CoordinateXY* e11);
 
-    const CoordinateXY& prevCoordinateInRing(
-        const SegmentString* ringSS, std::size_t segIndex) const;
+    static const CoordinateXY& prevCoordinateInRing(
+        const SegmentString* ringSS, std::size_t segIndex);
 
-    bool isAdjacentInRing(const SegmentString* ringSS,
-        std::size_t segIndex0, std::size_t segIndex1) const;
+    static bool isAdjacentInRing(const SegmentString* ringSS,
+        std::size_t segIndex0, std::size_t segIndex1);
 
 
 public:
@@ -74,7 +72,7 @@ public:
     /**
     * Creates a new finder, allowing for the mode where inverted rings are valid.
     *
-    * @param isInvertedRingValid true if inverted rings are valid.
+    * @param p_isInvertedRingValid true if inverted rings are valid.
     */
     PolygonIntersectionAnalyzer(bool p_isInvertedRingValid)
         : isInvertedRingValid(p_isInvertedRingValid)

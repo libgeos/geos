@@ -19,8 +19,6 @@
 #include <geos/geom/Coordinate.h>
 
 
-#include <memory>
-
 // Forward declarations
 namespace geos {
 namespace operation {

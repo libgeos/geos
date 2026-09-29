@@ -18,8 +18,6 @@
 #include <geos/export.h>
 #include <geos/index/strtree/TemplateSTRtree.h>
 
-#include <memory>
-
 // Forward declarations
 namespace geos {
 namespace geom {
@@ -61,7 +59,7 @@ public:
     *
     * @return a point on a nested hole, or null if none are nested
     */
-    const CoordinateXY& getNestedPoint() { return nestedPt; }
+    const CoordinateXY& getNestedPoint() const { return nestedPt; }
 
     /**
     * Tests if any hole is nested (contained) within another hole.

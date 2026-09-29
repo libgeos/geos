@@ -44,7 +44,7 @@ bool
 IndexedNestedHoleTester::isNested()
 {
     for (std::size_t i = 0; i < polygon->getNumInteriorRing(); i++) {
-        const LinearRing* hole = static_cast<const LinearRing*>(polygon->getInteriorRingN(i));
+        const LinearRing* hole = polygon->getInteriorRingN(i);
 
         std::vector<const LinearRing*> results;
         index.query(*(hole->getEnvelopeInternal()), results);

@@ -14,7 +14,6 @@
  **********************************************************************/
 
 #include <geos/algorithm/Orientation.h>
-#include <geos/algorithm/PolygonNodeTopology.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/LinearRing.h>
 #include <geos/operation/valid/PolygonRing.h>
@@ -59,7 +58,7 @@ PolygonRing::addTouch(PolygonRing* ring0, PolygonRing* ring1, const CoordinateXY
 
 /* public static */
 const CoordinateXY*
-PolygonRing::findHoleCycleLocation(std::vector<PolygonRing*> polyRings)
+PolygonRing::findHoleCycleLocation(const std::vector<PolygonRing*>& polyRings)
 {
     for (PolygonRing* polyRing : polyRings) {
         if (! polyRing->isInTouchSet()) {
@@ -73,9 +72,9 @@ PolygonRing::findHoleCycleLocation(std::vector<PolygonRing*> polyRings)
 
 /* public static */
 const CoordinateXY*
-PolygonRing::findInteriorSelfNode(std::vector<PolygonRing*> polyRings)
+PolygonRing::findInteriorSelfNode(const std::vector<PolygonRing*>& polyRings)
 {
-    for (PolygonRing* polyRing : polyRings) {
+    for (const PolygonRing* polyRing : polyRings) {
         const CoordinateXY* interiorSelfNode = polyRing->findInteriorSelfNode();
         if (interiorSelfNode != nullptr) {
             return interiorSelfNode;
@@ -161,7 +160,7 @@ PolygonRing::findHoleCycleLocation()
     init(root, touchStack);
 
     while (! touchStack.empty()) {
-        PolygonRingTouch* touch = touchStack.top();
+        const PolygonRingTouch* touch = touchStack.top();
         touchStack.pop();
         const CoordinateXY* holeCyclePt = scanForHoleCycle(touch, root, touchStack);
         if (holeCyclePt != nullptr) {
@@ -185,11 +184,11 @@ PolygonRing::init(PolygonRing* root, std::stack<PolygonRingTouch*>& touchStack)
 
 /* private */
 const CoordinateXY*
-PolygonRing::scanForHoleCycle(PolygonRingTouch* currentTouch,
+PolygonRing::scanForHoleCycle(const PolygonRingTouch* currentTouch,
     PolygonRing* root,
     std::stack<PolygonRingTouch*>& touchStack)
 {
-    PolygonRing* polyRing = currentTouch->getRing();
+    const PolygonRing* polyRing = currentTouch->getRing();
     const CoordinateXY* currentPt = currentTouch->getCoordinate();
 
     /**
@@ -229,7 +228,7 @@ PolygonRing::scanForHoleCycle(PolygonRingTouch* currentTouch,
 
 /* public */
 const CoordinateXY*
-PolygonRing::findInteriorSelfNode()
+PolygonRing::findInteriorSelfNode() const
 {
     if (selfNodes.empty()) return nullptr;
 

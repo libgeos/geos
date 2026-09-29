@@ -43,7 +43,7 @@ namespace valid {     // geos.operation.valid
 PolygonTopologyAnalyzer::PolygonTopologyAnalyzer(const Geometry* geom, bool p_isInvertedRingValid)
     : isInvertedRingValid(p_isInvertedRingValid)
     , segInt(p_isInvertedRingValid)
-    , disconnectionPt(Coordinate::getNull())
+    , disconnectionPt(CoordinateXY::getNull())
 {
     if (geom->isEmpty()){
         return;
@@ -68,7 +68,7 @@ PolygonTopologyAnalyzer::findSelfIntersection(const LinearRing* ring)
     PolygonTopologyAnalyzer ata(ring, false);
     if (ata.hasInvalidIntersection())
         return ata.getInvalidLocation();
-    return Coordinate::getNull();
+    return CoordinateXY::getNull();
 }
 
 /* public static */
@@ -178,7 +178,6 @@ std::size_t
 PolygonTopologyAnalyzer::intersectingSegIndex(const CoordinateSequence* ringPts,
     const CoordinateXY* pt)
 {
-    algorithm::LineIntersector li;
     for (std::size_t i = 0; i < ringPts->size() - 1; i++) {
       if ( algorithm::PointLocation::isOnSegment(*pt, ringPts->getAt<CoordinateXY>(i), ringPts->getAt<CoordinateXY>(i+1)) ) {
         //-- check if pt is the start point of the next segment

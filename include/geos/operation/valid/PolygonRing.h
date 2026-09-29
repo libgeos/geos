@@ -21,7 +21,6 @@
 #include <geos/export.h>
 
 
-#include <memory>
 #include <map>
 
 // Forward declarations
@@ -77,7 +76,7 @@ private:
     * Tests if this ring touches a given ring at
     * the single point specified.
     *
-    * @param ring the other PolygonRing
+    * @param polyRing the other PolygonRing
     * @param pt the touch point
     * @return true if the rings touch only at the given point
     */
@@ -93,7 +92,7 @@ private:
     */
     const CoordinateXY* findHoleCycleLocation();
 
-    void init(PolygonRing* root, std::stack<PolygonRingTouch*>& touchStack);
+    static void init(PolygonRing* root, std::stack<PolygonRingTouch*>& touchStack);
 
     /**
     * Scans for a hole cycle starting at a given touch.
@@ -103,7 +102,7 @@ private:
     * @param touchStack the stack of touches to scan
     * @return a vertex in a hole cycle if found, or null
     */
-    const CoordinateXY* scanForHoleCycle(PolygonRingTouch* currentTouch,
+    static const CoordinateXY* scanForHoleCycle(const PolygonRingTouch* currentTouch,
         PolygonRing* root,
         std::stack<PolygonRingTouch*>& touchStack);
 
@@ -183,7 +182,7 @@ public:
     * @param polyRings the list of rings to check
     * @return a vertex contained in a ring cycle, or null if none is found
     */
-    static const CoordinateXY* findHoleCycleLocation(std::vector<PolygonRing*> polyRings);
+    static const CoordinateXY* findHoleCycleLocation(const std::vector<PolygonRing*>& polyRings);
 
     /**
     * Finds a location of an interior self-touch in a list of rings,
@@ -194,7 +193,7 @@ public:
     * @param polyRings the list of rings to check
     * @return the location of an interior self-touch node, or null if there are none
     */
-    static const CoordinateXY* findInteriorSelfNode(std::vector<PolygonRing*> polyRings);
+    static const CoordinateXY* findInteriorSelfNode(const std::vector<PolygonRing*>& polyRings);
 
     bool isSamePolygon(const PolygonRing* polyRing) const
     {
@@ -216,7 +215,7 @@ public:
     *
     * @return the location of an interior self-touch node, or null if there are none
     */
-    const CoordinateXY* findInteriorSelfNode();
+    const CoordinateXY* findInteriorSelfNode() const;
 
 
 };

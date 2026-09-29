@@ -191,7 +191,7 @@ PolygonIntersectionAnalyzer::addSelfTouch(
 /* private */
 const CoordinateXY&
 PolygonIntersectionAnalyzer::prevCoordinateInRing(
-    const SegmentString* ringSS, std::size_t segIndex) const
+    const SegmentString* ringSS, std::size_t segIndex)
 {
     std::size_t prevIndex;
     if (segIndex == 0) {
@@ -206,7 +206,7 @@ PolygonIntersectionAnalyzer::prevCoordinateInRing(
 /* private */
 bool
 PolygonIntersectionAnalyzer::isAdjacentInRing(const SegmentString* ringSS,
-    std::size_t segIndex0, std::size_t segIndex1) const
+    std::size_t segIndex0, std::size_t segIndex1)
 {
     std::size_t delta = segIndex0 > segIndex1
                         ? segIndex0 - segIndex1

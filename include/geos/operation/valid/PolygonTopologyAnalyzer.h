@@ -22,8 +22,6 @@
 #include <geos/operation/valid/PolygonRing.h>
 #include <geos/noding/BasicSegmentString.h>
 
-#include <memory>
-
 // Forward declarations
 namespace geos {
 namespace geom {
@@ -102,7 +100,7 @@ private:
 
     std::vector<SegmentString*> createSegmentStrings(const Geometry* geom, bool isInvertedRingValid);
 
-    std::vector<PolygonRing*> getPolygonRings(const std::vector<SegmentString*>& segStrings);
+    static std::vector<PolygonRing*> getPolygonRings(const std::vector<SegmentString*>& segStrings);
 
     SegmentString* createSegString(const LinearRing* ring, const PolygonRing* polyRing);
 
@@ -145,15 +143,15 @@ public:
     isRingNested(const LinearRing* test,
         const LinearRing* target);
 
-    bool hasInvalidIntersection() {
+    bool hasInvalidIntersection() const {
         return segInt.isInvalid();
     }
 
-    int getInvalidCode() {
+    int getInvalidCode() const {
         return segInt.getInvalidCode();
     }
 
-    const CoordinateXY& getInvalidLocation() {
+    const CoordinateXY& getInvalidLocation() const {
         return segInt.getInvalidLocation();
     }
 
