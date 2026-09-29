@@ -560,7 +560,7 @@ std::vector<GeometryOpCreator> opRegistry {
         geos::operation::polygonize::Polygonizer p;
         p.add(&geom);
 
-        std::vector<std::unique_ptr<Polygon>> polys = p.getPolygons();
+        auto polys = p.getSurfaces();
         std::vector<std::unique_ptr<const Geometry>> geoms;
         for(unsigned int i = 0; i < polys.size(); i++) {
             geoms.push_back( std::move(polys[i]) );
@@ -576,7 +576,7 @@ std::vector<GeometryOpCreator> opRegistry {
         geos::operation::polygonize::Polygonizer p(true);
         p.add(&geom);
 
-        std::vector<std::unique_ptr<Polygon>> polys = p.getPolygons();
+        auto polys = p.getSurfaces();
         std::vector<std::unique_ptr<const Geometry>> geoms;
         for(unsigned int i = 0; i < polys.size(); i++) {
             geoms.push_back( std::move(polys[i]) );
