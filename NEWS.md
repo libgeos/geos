@@ -9,6 +9,7 @@
 - New things:
   - Expose code revision: GEOS_REVISION, GEOSrevision, geos-config --revision
     (GH-1446 Sandro Santilli)
+  - GEOSisSimpleWithParams (GH-1543 Sandro Santilli)
 
 ## Changes in 3.15.0
 2026-09-01

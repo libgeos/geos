@@ -220,7 +220,15 @@ typedef struct GEOSCurveToLineParams_t GEOSCurveToLineParams;
 */
 typedef struct GEOSLineToCurveParams_t GEOSLineToCurveParams;
 
-#endif
+/**
+* Parameter object for simplicity check.
+* \see GEOSisSimpleParams_create()
+* \see GEOSisSimpleParams_destroy()
+*/
+typedef struct GEOSisSimpleParams_t GEOSisSimpleParams;
+
+#endif /* ndef GEOSGeometry */
+
 
 /** \cond */
 
@@ -1677,6 +1685,36 @@ extern char GEOS_DLL GEOSisEmpty_r(
 extern char GEOS_DLL GEOSisSimple_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry* g);
+
+/** \see GEOSIsSimpleParams_create */
+extern GEOSisSimpleParams GEOS_DLL *
+GEOSisSimpleParams_create_r(
+    GEOSContextHandle_t handle);
+
+/** \see GEOSIsSimpleParams_destroy */
+extern void GEOS_DLL
+GEOSisSimpleParams_destroy_r(
+    GEOSContextHandle_t handle,
+    GEOSisSimpleParams* params);
+
+/** \see GEOSisSimpleParams_setFindAllLocations */
+extern void GEOS_DLL GEOSisSimpleParams_setFindAllLocations_r(
+    GEOSContextHandle_t handle,
+    GEOSisSimpleParams* params,
+    int findAllLocations);
+
+/** \see GEOSisSimpleParams_setBoundaryNodeRule */
+extern void GEOS_DLL GEOSisSimpleParams_setBoundaryNodeRule_r(
+    GEOSContextHandle_t handle,
+    GEOSisSimpleParams* params,
+    int bnr);
+
+/** \see GEOSisSimpleWithParams */
+extern char GEOS_DLL GEOSisSimpleWithParams_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* g,
+    const GEOSisSimpleParams* params,
+    GEOSGeometry** location);
 
 /** \see GEOSisRing */
 extern char GEOS_DLL GEOSisRing_r(
@@ -3678,6 +3716,71 @@ extern char GEOS_DLL GEOSisSimple(const GEOSGeometry* g);
 extern char GEOS_DLL GEOSisSimpleDetail(
     const GEOSGeometry* g,
     int findAllLocations,
+    GEOSGeometry** locations);
+
+/**
+* Create a GEOSisSimpleParams to hold the desired parameters
+* to control the algorithm and behavior of the simplicity check process.
+* \return a parameter object configured to find all intersection
+*                            and use Mod2 boundary node rule
+* \see GEOSisSimpleWithParams
+*
+* \since 3.16
+*/
+extern GEOSisSimpleParams GEOS_DLL *GEOSisSimpleParams_create(void);
+
+/**
+* Destroy a GEOSisSimpleParams.
+* \param params the object to destroy
+* \see GEOSisSimpleWithParams
+*
+* \since 3.16
+*/
+extern void GEOS_DLL GEOSisSimpleParams_destroy(GEOSisSimpleParams* params);
+
+/**
+* Set whether to return all self-intersection locations or just one
+* \param params the object to modify
+* \param findAllLocations Whether to return all self-intersection locations, or just one
+* \see GEOSisSimpleWithParams
+*
+* \since 3.16
+*/
+extern void GEOS_DLL GEOSisSimpleParams_setFindAllLocations(
+    GEOSisSimpleParams* params,
+    int findAllLocations);
+
+/**
+* Set BoundaryNodeRule to use with the simplicity check
+* \param params the object to modify
+* \param bnr A member of the \ref GEOSRelateBoundaryNodeRules enum
+* \see GEOSisSimpleWithParams
+*
+* \since 3.16
+*/
+extern void GEOS_DLL GEOSisSimpleParams_setBoundaryNodeRule(
+    GEOSisSimpleParams* params,
+    int bnr);
+
+/**
+* In one step, calculate and return whether a geometry is simple
+* and one more more points at which the geometry self-intersects
+* at interior points.
+* Caller has the responsibility to destroy 'location' with
+* GEOSGeom_destroy()
+*
+* @INPUT_CURVES_CONVERTED_TO_LINES@
+*
+* \param g The geometry to test
+* \param params various parameters for the operation
+* \param locations A pointer in which the location GEOSGeometry will be placed
+* \return 1 when simple, 0 when non-simple, 2 on exception
+*
+* \since 3.16
+*/
+extern char GEOS_DLL GEOSisSimpleWithParams(
+    const GEOSGeometry* g,
+    const GEOSisSimpleParams* params,
     GEOSGeometry** locations);
 
 /**

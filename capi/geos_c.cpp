@@ -69,6 +69,11 @@ typedef struct {
     int keepCollapsed;
 } GEOSMakeValidParams;
 
+// Implementation struct for the GEOSisSimpleParams object
+typedef struct {
+    bool findAllLocations;
+    int boundaryNodeRule;
+} GEOSisSimpleParams;
 
 #include "geos_c.h"
 
@@ -544,6 +549,36 @@ extern "C" {
     GEOSisSimpleDetail(const Geometry* g, int returnAllPoints, Geometry** result)
     {
         return GEOSisSimpleDetail_r(handle, g, returnAllPoints, result);
+    }
+
+    GEOSisSimpleParams*
+    GEOSisSimpleParams_create(void)
+    {
+        return GEOSisSimpleParams_create_r(handle);
+    }
+
+    void
+    GEOSisSimpleParams_destroy(GEOSisSimpleParams* parms)
+    {
+        return GEOSisSimpleParams_destroy_r(handle, parms);
+    }
+
+    void
+    GEOSisSimpleParams_setFindAllLocations(GEOSisSimpleParams* params, int val)
+    {
+        return GEOSisSimpleParams_setFindAllLocations_r(handle, params, val);
+    }
+
+    void
+    GEOSisSimpleParams_setBoundaryNodeRule(GEOSisSimpleParams* params, int bnr)
+    {
+        return GEOSisSimpleParams_setBoundaryNodeRule_r(handle, params, bnr);
+    }
+
+    char
+    GEOSisSimpleWithParams(const Geometry *g, const GEOSisSimpleParams* params, Geometry** result)
+    {
+        return GEOSisSimpleWithParams_r(handle, g, params, result);
     }
 
     char
