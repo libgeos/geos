@@ -177,6 +177,12 @@ typedef struct {
     int keepCollapsed;
 } GEOSMakeValidParams;
 
+// Implementation struct for the GEOSisSimpleParams object
+typedef struct {
+    bool findAllLocations;
+    int boundaryNodeRule;
+} GEOSisSimpleParams;
+
 #include "geos_c.h"
 
 // Intentional, to allow non-standard C elements like C99 functions to be
@@ -1550,6 +1556,10 @@ extern "C" {
         });
     }
 
+/************************************************************************
+ * IsSimpleOp {
+ */
+
     char
     GEOSisSimple_r(GEOSContextHandle_t extHandle, const Geometry* g1)
     {
@@ -1582,6 +1592,92 @@ extern "C" {
             return simple;
         });
     }
+
+    GEOSisSimpleParams*
+    GEOSisSimpleParams_create_r(GEOSContextHandle_t extHandle)
+    {
+        using geos::algorithm::BoundaryNodeRule;
+
+        return execute(extHandle, [&]() {
+            GEOSisSimpleParams* p = new GEOSisSimpleParams();
+            p->findAllLocations = false;
+            p->boundaryNodeRule = GEOSRELATE_BNR_MOD2;
+            return p;
+        });
+    }
+
+    void
+    GEOSisSimpleParams_destroy_r(GEOSContextHandle_t extHandle, GEOSisSimpleParams* parms)
+    {
+        (void)extHandle;
+        delete parms;
+    }
+
+    void
+    GEOSisSimpleParams_setFindAllLocations_r(GEOSContextHandle_t extHandle, GEOSisSimpleParams* params, int val)
+    {
+        (void)extHandle;
+        params->findAllLocations = val;
+    }
+
+    void
+    GEOSisSimpleParams_setBoundaryNodeRule_r(GEOSContextHandle_t extHandle, GEOSisSimpleParams* params, int bnr)
+    {
+        (void)extHandle;
+        params->boundaryNodeRule = bnr;
+    }
+
+
+    char
+    GEOSisSimpleWithParams_r(GEOSContextHandle_t extHandle, const Geometry* g1, const GEOSisSimpleParams* params, Geometry** result)
+    {
+        using geos::algorithm::BoundaryNodeRule;
+        using geos::operation::valid::IsSimpleOp;
+
+        return execute(extHandle, 2, [&]() {
+            const auto inputGeom = convertToLineIfNeeded(extHandle, g1);
+            std::unique_ptr<IsSimpleOp> op;
+
+            switch ( params->boundaryNodeRule ) {
+                case GEOSRELATE_BNR_MOD2: /* same as OGC */
+                    op = std::make_unique<IsSimpleOp>(*inputGeom, BoundaryNodeRule::getBoundaryRuleMod2());
+                    break;
+                case GEOSRELATE_BNR_ENDPOINT:
+                    op = std::make_unique<IsSimpleOp>(*inputGeom, BoundaryNodeRule::getBoundaryEndPoint());
+                    break;
+                case GEOSRELATE_BNR_MULTIVALENT_ENDPOINT:
+                    op = std::make_unique<IsSimpleOp>(*inputGeom, BoundaryNodeRule::getBoundaryMultivalentEndPoint());
+                    break;
+                case GEOSRELATE_BNR_MONOVALENT_ENDPOINT:
+                    op = std::make_unique<IsSimpleOp>(*inputGeom, BoundaryNodeRule::getBoundaryMonovalentEndPoint());
+                    break;
+                default:
+                    std::ostringstream ss;
+                    ss << "Invalid boundary node rule " << params->boundaryNodeRule;
+                    throw std::runtime_error(ss.str());
+            }
+
+            op->setFindAllLocations( params->findAllLocations );
+
+            *result = nullptr;
+
+            bool simple = op->isSimple();
+            if (!simple) {
+                auto locations = op->getNonSimpleLocations();
+                if (locations.size() == 1 || ! params->findAllLocations ) {
+                    *result = extHandle->geomFactory->createPoint(locations.front()).release();
+                } else {
+                    *result = extHandle->geomFactory->createMultiPoint(locations).release();
+                }
+            }
+
+            return simple;
+        });
+    }
+
+/*
+ * IsSimpleOp }
+ ************************************************************************/
 
     char
     GEOSisRing_r(GEOSContextHandle_t extHandle, const Geometry* g)
