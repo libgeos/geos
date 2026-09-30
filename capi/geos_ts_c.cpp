@@ -4773,8 +4773,8 @@ extern "C" {
     {
         return execute(extHandle, -1.0, [&]() {
             const Point* point = dynamic_cast<const Point*>(p);
-            if(!point) {
-                throw std::runtime_error("third argument of GEOSProject_r must be Point");
+            if(!point || point->isEmpty()) {
+                throw IllegalArgumentException("third argument of GEOSProject_r must be non-empty Point");
             }
             const geos::geom::Coordinate inputPt(*p->getCoordinate());
             const auto inputLine = convertToLineIfNeeded(extHandle, g);
