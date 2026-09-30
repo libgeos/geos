@@ -60,8 +60,7 @@ jobs:
         pwd
         set -e
         mkdir _build && cd _build
-        cmake -DBUILD_DOCUMENTATION=YES ..
-        cmake --version
+        cmake --log-level VERBOSE -D BUILD_DOCUMENTATION=YES ..
         cmake --build . --target distcheck -j $(nproc)
 
     - name: Create Release

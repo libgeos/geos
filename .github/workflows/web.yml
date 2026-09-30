@@ -40,8 +40,7 @@ jobs:
         set -e
         mkdir build.cmake
         cd build.cmake
-        cmake --version
-        cmake -DBUILD_DOCUMENTATION=YES ..
+        cmake --log-level VERBOSE -D BUILD_DOCUMENTATION=YES ..
         cmake --build . --target docs
 
     - name: 'Bundle 🛠'

@@ -31,6 +31,8 @@ env:
 jobs:
   linux:
     name: 'Linux'
+    env:
+      GEOS_INSTALL: ${{ github.workspace }}/inst
     strategy:
       fail-fast: false
       matrix:
@@ -38,10 +40,9 @@ jobs:
         - cxx_compiler: g++
           c_compiler: gcc
           build_type: Coverage
+          library_type: shared
           cxxstd: 17
-          arch: 64
-          packages: g++
-          cmake: 3.15.*
+          packages: g++ lcov libbenchmark-dev
           cmake_extra: -D BUILD_BENCHMARKS=ON
           os: ubuntu-latest
 
@@ -51,28 +52,25 @@ jobs:
         - cxx_compiler: g++-10
           c_compiler: gcc-10
           build_type: Release
+          library_type: shared
           cxxstd: 17
-          arch: 64
-          packages: 'g++-10-multilib gcc-10-multilib'
-          cmake: 3.15.*
+          packages: g++-10 gcc-10
           os: ubuntu-22.04
 
         - cxx_compiler: g++-11
           c_compiler: gcc-11
           build_type: Release
+          library_type: static
           cxxstd: 17
-          arch: 64
-          packages: 'g++-11-multilib gcc-11-multilib'
-          cmake: 3.17.*
+          packages: g++-11 gcc-11
           os: ubuntu-22.04
 
         - cxx_compiler: g++-12
           c_compiler: gcc-12
           build_type: Release
+          library_type: shared
           cxxstd: 20
-          arch: 64
-          packages: 'g++-12-multilib gcc-12-multilib'
-          cmake: 3.20.*
+          packages: g++-12 gcc-12
           os: ubuntu-22.04
 
           # gcc 12 and lower are not supported
@@ -81,19 +79,17 @@ jobs:
         - cxx_compiler: g++-13
           c_compiler: gcc-13
           build_type: Release
+          library_type: static
           cxxstd: 20
-          arch: 64
-          packages: 'g++-13-multilib gcc-13-multilib'
-          cmake: 3.25.*
+          packages: g++-13 gcc-13
           os: ubuntu-24.04
 
         - cxx_compiler: g++-14
           c_compiler: gcc-14
           build_type: Debug
+          library_type: shared
           cxxstd: 20
-          arch: 64
-          packages: 'g++-14-multilib gcc-14-multilib'
-          cmake: 3.31.*
+          packages: g++-14 gcc-14 valgrind
           os: ubuntu-24.04
 
           # clang 10 and lower are not supported
@@ -102,37 +98,33 @@ jobs:
         - cxx_compiler: clang++-12
           c_compiler: clang-12
           build_type: ASAN
+          library_type: static
           cxxstd: 14
-          arch: 64
           packages: 'clang-12'
-          cmake: 3.17.*
           os: ubuntu-22.04
 
         - cxx_compiler: clang++-13
           c_compiler: clang-13
           build_type: ASAN
+          library_type: shared
           cxxstd: 17
-          arch: 64
           packages: 'clang-13'
-          cmake: 3.20.*
           os: ubuntu-22.04
 
         - cxx_compiler: clang++-14
           c_compiler: clang-14
           build_type: ASAN
+          library_type: static
           cxxstd: 20
-          arch: 64
           packages: 'clang-14'
-          cmake: 3.22.*
           os: ubuntu-22.04
 
         - cxx_compiler: clang++-15
           c_compiler: clang-15
           build_type: ASAN
+          library_type: shared
           cxxstd: 20
-          arch: 64
           packages: 'clang-15'
-          cmake: 3.24.*
           os: ubuntu-22.04
 
           # clang 15 and lower are not supported
@@ -141,46 +133,41 @@ jobs:
         - cxx_compiler: clang++-16
           c_compiler: clang-16
           build_type: ASAN
+          library_type: static
           cxxstd: 20
-          arch: 64
           packages: 'clang-16'
-          cmake: 3.26.*
           os: ubuntu-24.04
 
         - cxx_compiler: clang++-17
           c_compiler: clang-17
           build_type: ASAN
+          library_type: shared
           cxxstd: 20
-          arch: 64
           packages: 'clang-17'
-          cmake: 3.28.*
           os: ubuntu-24.04
 
         - cxx_compiler: clang++-18
           c_compiler: clang-18
           build_type: ASAN
+          library_type: static
           cxxstd: 20
-          arch: 64
           packages: 'clang-18'
-          cmake: 3.30.*
           os: ubuntu-24.04
 
         - cxx_compiler: clang++-19
           c_compiler: clang-19
           build_type: Debug
+          library_type: shared
           cxxstd: 20
-          arch: 64
-          packages: 'clang-19'
-          cmake: 3.30.*
+          packages: clang-19 valgrind
           os: ubuntu-24.04
 
         - cxx_compiler: clang++-20
           c_compiler: clang-20
           build_type: Debug
+          library_type: static
           cxxstd: 20
-          arch: 64
-          packages: 'clang-20'
-          cmake: 4.2.*
+          packages: clang-20 valgrind
           os: ubuntu-24.04
 
           # clang 21 and lower are not supported
@@ -189,19 +176,17 @@ jobs:
         - cxx_compiler: clang++-21
           c_compiler: clang-21
           build_type: Debug
+          library_type: shared
           cxxstd: 20
-          arch: 64
-          packages: 'clang-21'
-          cmake: 4.3.*
+          packages: clang-21 valgrind
           os: ubuntu-26.04
 
         - cxx_compiler: clang++-22
           c_compiler: clang-22
           build_type: Debug
+          library_type: static
           cxxstd: 20
-          arch: 64
-          packages: 'clang-22'
-          cmake: 4.4.*
+          packages: clang-22 valgrind
           os: ubuntu-26.04
 
 
@@ -211,12 +196,19 @@ jobs:
     - name: 'Install'
       run: |
         set -e
-        uname -a
         sudo -E apt-get update
         sudo -E apt-get autopurge -y needrestart
-        sudo -E apt-get -yq --no-install-suggests --no-install-recommends install make doxygen lcov python3-pip ccache valgrind ${{ matrix.ci.packages }}
-        python3 -m pip install --disable-pip-version-check --user cmake==${{ matrix.ci.cmake }}
-        echo "$(python3 -m site --user-base)/bin" >> $GITHUB_PATH
+        sudo -E apt-get -yq --no-install-suggests --no-install-recommends install doxygen ccache ${{ matrix.ci.packages }}
+
+    - name: Install CMake minimum required
+      if: matrix.ci.c_compiler == 'gcc-10'
+      run: |
+        set -e
+        cmake_minimum_required=3.15.4
+        wget -q https://github.com/Kitware/CMake/releases/download/v${cmake_minimum_required}/cmake-${cmake_minimum_required}-Linux-x86_64.tar.gz
+        mkdir -p $HOME/.local
+        tar xf cmake-${cmake_minimum_required}-Linux-x86_64.tar.gz --strip-components=1 -C $HOME/.local
+        echo "$HOME/.local/bin" >> $GITHUB_PATH
 
     - uses: actions/checkout@v7.0.1
 
@@ -225,21 +217,21 @@ jobs:
       id: restore-cache
       with:
         path: .ccache
-        key: ${{ matrix.ci.os }}-${{ matrix.ci.cxx_compiler }}-${{ matrix.ci.build_type}}-${{ matrix.ci.cxxstd }}-${{ matrix.ci.arch }}-${{ github.ref_name }}-${{ github.run_id }}
-        restore-keys: ${{ matrix.ci.os }}-${{ matrix.ci.cxx_compiler }}-${{ matrix.ci.build_type}}-${{ matrix.ci.cxxstd }}-${{ matrix.ci.arch }}
+        key: ${{ matrix.ci.os }}-${{ matrix.ci.build_type}}-${{ matrix.ci.library_type }}-${{ matrix.ci.cxx_compiler }}-${{ matrix.ci.cxxstd }}-${{ github.ref_name }}-${{ github.run_id }}
+        restore-keys: ${{ matrix.ci.os }}-${{ matrix.ci.build_type}}-${{ matrix.ci.library_type }}-${{ matrix.ci.cxx_compiler }}-${{ matrix.ci.cxxstd }}
 
     - name: 'Build'
-      env:
-        CFLAGS: "-m${{ matrix.ci.arch }}"
-        CXXFLAGS: "-m${{ matrix.ci.arch }}"
       run: |
         set -e
+        which cmake
         cmake --version
-        cmake ${{ matrix.ci.cmake_extra }} \
+        cmake --log-level VERBOSE ${{ matrix.ci.cmake_extra }} \
           -D CMAKE_BUILD_TYPE=${{ matrix.ci.build_type }} \
+          -D BUILD_SHARED_LIBS=${{ matrix.ci.library_type == 'shared' && 'ON' || 'OFF' }} \
           -D CMAKE_C_COMPILER=${{ matrix.ci.c_compiler }} \
           -D CMAKE_CXX_COMPILER=${{ matrix.ci.cxx_compiler }} \
           -D CMAKE_CXX_STANDARD=${{ matrix.ci.cxxstd }} \
+          -D CMAKE_INSTALL_PREFIX=$GEOS_INSTALL \
           -D BUILD_DOCUMENTATION=YES \
           -D USE_CCACHE=ON \
           -S . -B build
@@ -256,6 +248,9 @@ jobs:
     - name: Test
       working-directory: ./build
       run: ctest --output-on-failure
+
+    - name: Install
+      run: cmake --install build
 
     # Run the all-unit-tests under
     # the memory checker when we have Debug symbols
@@ -292,6 +287,8 @@ jobs:
 
   windows-mingw:
     name: 'Windows (mingw-w64, x86_64, windows-2022)'
+    env:
+      GEOS_INSTALL: ${{ github.workspace }}\inst
     runs-on: windows-2022
     defaults:
       run:
@@ -300,6 +297,7 @@ jobs:
       fail-fast: false
       matrix:
         build_type: ['Debug', 'Release']
+        library_type: [shared, static]
 
     steps:
     - uses: actions/checkout@v7.0.1
@@ -320,17 +318,18 @@ jobs:
       id: restore-cache
       with:
         path: .ccache
-        key: windows-mingw-${{ matrix.build_type}}-${{ github.ref_name }}-${{ github.run_id }}
-        restore-keys: windows-mingw-${{ matrix.build_type}}
+        key: windows-mingw-${{ matrix.build_type}}-${{ matrix.library_type}}-${{ github.ref_name }}-${{ github.run_id }}
+        restore-keys: windows-mingw-${{ matrix.build_type}}-${{ matrix.library_type}}
 
     - name: 'Build'
       env:
         CCACHE_DIR: ${{ github.workspace }}\.ccache
       run: |
-        cmake --version
-        cmake \
+        cmake --log-level VERBOSE \
           -G "MSYS Makefiles" \
           -D CMAKE_BUILD_TYPE=${{ matrix.build_type}} \
+          -D BUILD_SHARED_LIBS=${{ matrix.library_type == 'shared' && 'ON' || 'OFF' }} \
+          -D CMAKE_INSTALL_PREFIX=$GEOS_INSTALL \
           -D USE_CCACHE=ON \
           -S . -B build
         cmake --build build -j 4
@@ -346,16 +345,25 @@ jobs:
       working-directory: ./build
       run: ctest --output-on-failure
 
+    - name: Install
+      run: cmake --install build
+
   windows-msvc-msbuild:
     name: Windows (MSVC MSBuild)
+    env:
+      GEOS_INSTALL: ${{ github.workspace }}\inst
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         include:
           - os: windows-2022
+            generator: Visual Studio 17 2022
             arch: x64
-          - os: windows-11-arm
+            library_type: shared
+          - os: windows-11-vs2026-arm
+            generator: Visual Studio 18 2026
             arch: arm64
+            library_type: static
   
     steps:
     - uses: actions/checkout@v7.0.1
@@ -365,13 +373,13 @@ jobs:
     - name: 'Build'
       shell: cmd
       run: |
-        cmake --version
-        cmake ^
-          -G "Visual Studio 17 2022" ^
+        cmake --log-level VERBOSE ^
+          -G "${{ matrix.generator }}" ^
           -A ${{ matrix.arch }} ^
           -D CMAKE_BUILD_TYPE=Debug ^
+          -D CMAKE_INSTALL_PREFIX=%GEOS_INSTALL% ^
           -D CMAKE_CXX_STANDARD=17 ^
-          -D BUILD_SHARED_LIBS=ON ^
+          -D BUILD_SHARED_LIBS=${{ matrix.library_type == 'shared' && 'ON' || 'OFF' }} ^
           -S . -B build
         IF %ERRORLEVEL% NEQ 0 exit /B 1
         cmake --build build --config Debug -j 4 -- /p:CL_MPcount=4
@@ -380,19 +388,27 @@ jobs:
       working-directory: build
       run: ctest --output-on-failure -C Debug
 
+    - name: Install
+      run: cmake --install build --config Debug
+
   windows-msvc-ninja:
     name: Windows (MSVC Ninja)
+    env:
+      GEOS_INSTALL: ${{ github.workspace }}\inst
     strategy:
       fail-fast: false
       matrix:
         ci:
         - os: windows-2022
+          library_type: shared
           cxxstd: 20
           arch: x64
         - os: windows-2025
+          library_type: static
           cxxstd: 20
           arch: x64
         - os: windows-11-arm
+          library_type: shared
           cxxstd: 20
           arch: arm64
 
@@ -406,8 +422,8 @@ jobs:
       id: restore-cache
       with:
         path: .ccache
-        key: msvc-ninja-${{ matrix.ci.os }}-${{ matrix.ci.cxxstd }}-${{ matrix.ci.arch }}-${{ github.ref_name }}-${{ github.run_id }}
-        restore-keys: msvc-ninja-${{ matrix.ci.os }}-${{ matrix.ci.cxxstd }}-${{ matrix.ci.arch }}
+        key: msvc-ninja-${{ matrix.ci.os }}-${{ matrix.ci.library_type}}-${{ matrix.ci.cxxstd }}-${{ matrix.ci.arch }}-${{ github.ref_name }}-${{ github.run_id }}
+        restore-keys: msvc-ninja-${{ matrix.ci.os }}-${{ matrix.ci.library_type}}-${{ matrix.ci.cxxstd }}-${{ matrix.ci.arch }}
 
     - name: 'Setup'
       run: choco install ccache ninja
@@ -422,16 +438,17 @@ jobs:
         CCACHE_DIR: ${{ github.workspace }}\.ccache
       shell: cmd
       run: |
-        cmake --version
-        cmake ^
+        cmake --log-level VERBOSE ^
           -G Ninja ^
           -D CMAKE_BUILD_TYPE=Release ^
+          -D CMAKE_INSTALL_PREFIX=%GEOS_INSTALL% ^
+          -D BUILD_SHARED_LIBS=${{ matrix.ci.library_type == 'shared' && 'ON' || 'OFF' }} ^
           -D CMAKE_CXX_STANDARD=${{ matrix.ci.cxxstd }} ^
           -D BUILD_SHARED_LIBS=ON ^
           -D USE_CCACHE=ON ^
           -S . -B build
         IF %ERRORLEVEL% NEQ 0 exit /B 1
-        cmake --build build --config Release -j 4
+        cmake --build build -j 4
         IF %ERRORLEVEL% NEQ 0 exit /B 1
         ccache --show-stats --verbose
 
@@ -443,10 +460,15 @@ jobs:
 
     - name: 'Test'
       working-directory: build
-      run: ctest --output-on-failure -C Release
+      run: ctest --output-on-failure
+
+    - name: Install
+      run: cmake --install build
 
   macos:
     name: 'macOS clang'
+    env:
+      GEOS_INSTALL: ${{ github.workspace }}/inst
     strategy:
       fail-fast: false
       matrix:
@@ -454,14 +476,17 @@ jobs:
         - xcode: "15.4"
           cxxstd: 20
           build_type: Release
+          library_type: shared
           runs_on: macos-14
         - xcode: "16.4"
           cxxstd: 23
           build_type: Debug
+          library_type: shared
           runs_on: macos-15
         - xcode: "26.0"
           cxxstd: 23
           build_type: Release
+          library_type: static
           runs_on: macos-26
 
     runs-on: ${{ matrix.runs_on }}
@@ -487,15 +512,16 @@ jobs:
       id: restore-cache
       with:
         path: .ccache
-        key: ${{ runner.os }}-${{ matrix.xcode }}-${{ matrix.build_type}}-${{ matrix.cxxstd }}-${{ github.ref_name }}-${{ github.run_id }}
-        restore-keys: ${{ runner.os }}-${{ matrix.xcode }}-${{ matrix.build_type}}-${{ matrix.cxxstd }}
+        key: ${{ runner.os }}-${{ matrix.xcode }}-${{ matrix.build_type}}-${{ matrix.library_type}}-${{ matrix.cxxstd }}-${{ github.ref_name }}-${{ github.run_id }}
+        restore-keys: ${{ runner.os }}-${{ matrix.xcode }}-${{ matrix.build_type}}-${{ matrix.library_type}}-${{ matrix.cxxstd }}
 
     - name: 'Build'
       run: |
         set -e
-        cmake --version
-        cmake \
+        cmake --log-level VERBOSE \
           -D CMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+          -D BUILD_SHARED_LIBS=${{ matrix.library_type == 'shared' && 'ON' || 'OFF' }} \
+          -D CMAKE_INSTALL_PREFIX=$GEOS_INSTALL \
           -D CMAKE_CXX_STANDARD=${{ matrix.cxxstd }} \
           -D USE_CCACHE=ON \
           -S . -B build
@@ -512,6 +538,9 @@ jobs:
       working-directory: ./build
       run: ctest -V --output-on-failure -C ${{ matrix.build_type }}
 
+    - name: Install
+      run: cmake --install build --config ${{ matrix.build_type }}
+
   freebsd:
     name: FreeBSD
     runs-on: ubuntu-latest
@@ -526,7 +555,7 @@ jobs:
         key: freebsd-${{ github.ref_name }}-${{ github.run_id }}
         restore-keys: freebsd
 
-    - name: Build and test
+    - name: Build, test, install
       uses: vmactions/freebsd-vm@v1.5.5
       with:
         release: "15.0"
@@ -537,12 +566,16 @@ jobs:
         run: |
           set -e
           export CCACHE_DIR=$PWD/.ccache
-          cmake --version
-          cmake -S . -B build -D USE_CCACHE=ON
+          cmake --log-level VERBOSE \
+            -D CMAKE_INSTALL_PREFIX=/tmp/inst \
+            -D USE_CCACHE=ON \
+            -S . -B build
           cmake --build build -j $(nproc)
           ccache --show-stats
-          (cd build && ctest --output-on-failure)
+          ctest --test-dir build --output-on-failure
+          cmake --install build
           rm -rf build
+          rm -rf /tmp/inst
 
     - name: Save build cache
       uses: actions/cache/save@v6.1.0
@@ -559,7 +592,7 @@ jobs:
         set -e
         sudo -E apt-get update
         sudo -E apt-get autopurge -y needrestart
-        sudo -E apt-get -yq --no-install-suggests --no-install-recommends install make cmake emscripten ccache
+        sudo -E apt-get -yq --no-install-suggests --no-install-recommends install emscripten ccache
 
     - uses: actions/checkout@v7.0.1
 
@@ -574,8 +607,7 @@ jobs:
     - name: Build
       run: |
         set -e
-        cmake --version
-        emcmake cmake \
+        emcmake cmake --log-level VERBOSE \
           -D BUILD_SHARED_LIBS=OFF \
           -D USE_CCACHE=ON \
           -S . -B build
@@ -601,31 +633,19 @@ jobs:
         set -e
         sudo -E apt-get update
         sudo -E apt-get -yq --no-install-suggests --no-install-recommends install cppcheck
-        python3 -m pip install --disable-pip-version-check --user codespell
 
     - uses: actions/checkout@v7.0.1
 
     - name: 'cppcheck'
       run: ./tools/cppcheck.sh
 
-    - name: codespell
-      run: codespell
+    - uses: codespell-project/actions-codespell@v2
       # false-positives can be added to tools/codespell.ignore
 
   cmake-subproject:
     name: 'CMake Subproject'
     runs-on: ubuntu-latest
     steps:
-    - name: 'Install'
-      run: |
-        set -e
-        uname -a
-        sudo -E apt-get update
-        sudo -E apt-get autopurge -y needrestart
-        sudo -E apt-get -yq --no-install-suggests --no-install-recommends install make python3-pip g++
-        python3 -m pip install --disable-pip-version-check --user cmake==3.15.*
-        echo "$(python3 -m site --user-base)/bin" >> $GITHUB_PATH
-
     - uses: actions/checkout@v7.0.1
       with:
         path: geos
@@ -635,9 +655,8 @@ jobs:
         set -e
         cp geos/tests/superbuild.CMakeLists.txt ./CMakeLists.txt
         cp geos/examples/capi_read.c .
-        cmake --version
-        cmake -S . -B build
+        cmake --log-level VERBOSE -S . -B build
         cmake --build build -j $(nproc)
         build/capi_read
         test ! -f build/geos/bin/test_geos_unit || { echo "Error: GEOS tests were built" 1>&2 ; exit 1; }
-  
+
