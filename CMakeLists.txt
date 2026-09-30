@@ -12,6 +12,14 @@
 cmake_minimum_required(VERSION 3.15)
 
 #-----------------------------------------------------------------------------
+# Diagnostic info, shown with: cmake --log-level VERBOSE ...
+#-----------------------------------------------------------------------------
+message(VERBOSE "CMAKE_VERSION: ${CMAKE_VERSION}")
+message(VERBOSE "CMAKE_GENERATOR: ${CMAKE_GENERATOR}")
+message(VERBOSE "CMAKE_C_COMPILER: ${CMAKE_C_COMPILER}")
+message(VERBOSE "CMAKE_CXX_COMPILER: ${CMAKE_CXX_COMPILER}")
+
+#-----------------------------------------------------------------------------
 # Version
 #-----------------------------------------------------------------------------
 file(READ Version.txt _version_txt)
@@ -153,6 +161,12 @@ include(CMakeDependentOption)
 
 ## CMake global variables
 option(BUILD_SHARED_LIBS "Build GEOS with shared libraries" ON)
+if(BUILD_SHARED_LIBS)
+  message(STATUS "GEOS: Building shared libraries")
+else()
+  message(STATUS "GEOS: Building static libraries")
+endif()
+
 set(CMAKE_CXX_STANDARD 17 CACHE STRING "C++ standard version to use (minimum requirement is c++17)")
 
 ## GEOS custom variables
