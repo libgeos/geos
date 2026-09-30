@@ -193,7 +193,7 @@ jobs:
     runs-on: ${{ matrix.ci.os }}
     steps:
 
-    - name: 'Install'
+    - name: 'Install Dependencies'
       run: |
         set -e
         sudo -E apt-get update
