@@ -1671,6 +1671,7 @@ extern "C" {
                 } else {
                     *result = extHandle->geomFactory->createMultiPoint(locations).release();
                 }
+                (*result)->setSRID(inputGeom->getSRID());
             }
 
             return simple;
