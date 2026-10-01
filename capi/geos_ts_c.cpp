@@ -1578,15 +1578,17 @@ extern "C" {
             geos::operation::valid::IsSimpleOp iso(inputGeom);
             iso.setFindAllLocations(returnAllPoints);
 
-            *result = nullptr;
-
             bool simple = iso.isSimple();
-            if (!simple) {
-                auto locations = iso.getNonSimpleLocations();
-                if (locations.size() == 1 || !returnAllPoints) {
-                    *result = extHandle->geomFactory->createPoint(locations.front()).release();
-                } else {
-                    *result = extHandle->geomFactory->createMultiPoint(locations).release();
+            if ( result ) {
+                *result = nullptr;
+                if (!simple) {
+                    auto locations = iso.getNonSimpleLocations();
+                    if (locations.size() == 1 || !returnAllPoints) {
+                        *result = extHandle->geomFactory->createPoint(locations.front()).release();
+                    } else {
+                        *result = extHandle->geomFactory->createMultiPoint(locations).release();
+                    }
+                    (*result)->setSRID(inputGeom->getSRID());
                 }
             }
 
