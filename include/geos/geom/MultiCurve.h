@@ -116,6 +116,8 @@ protected:
         : GeometryCollection(mp)
     {}
 
+    MultiCurve& operator=(const MultiCurve& mp) = default;
+
     MultiCurve* cloneImpl() const override
     {
         return new MultiCurve(*this);
