@@ -1035,6 +1035,7 @@ extern "C" {
         using geos::operation::relate::RelateOp;
         using geos::geom::IntersectionMatrix;
         using geos::algorithm::BoundaryNodeRule;
+        using geos::util::IllegalArgumentException;
 
         return execute(extHandle, [&]() -> char* {
             std::unique_ptr<IntersectionMatrix> im;
@@ -1061,7 +1062,7 @@ extern "C" {
                 default:
                     std::ostringstream ss;
                     ss << "Invalid boundary node rule " << bnr;
-                    throw std::runtime_error(ss.str());
+                    throw IllegalArgumentException(ss.str());
             }
 
             if(!im) {
@@ -1633,6 +1634,7 @@ extern "C" {
     {
         using geos::algorithm::BoundaryNodeRule;
         using geos::operation::valid::IsSimpleOp;
+        using geos::util::IllegalArgumentException;
 
         return execute(extHandle, 2, [&]() {
             const auto inputGeom = convertToLineIfNeeded(extHandle, g1);
@@ -1654,7 +1656,7 @@ extern "C" {
                 default:
                     std::ostringstream ss;
                     ss << "Invalid boundary node rule " << params->boundaryNodeRule;
-                    throw std::runtime_error(ss.str());
+                    throw IllegalArgumentException(ss.str());
             }
 
             op->setFindAllLocations( params->findAllLocations );
