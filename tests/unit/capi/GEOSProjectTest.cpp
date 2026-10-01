@@ -143,4 +143,40 @@ void object::test<6>
     ensure_equals("GEOSProjectNormalized result does not match", dist_norm, 0.5, 1e-3);
 }
 
+// Empty point as second argument returns -1.0 instead of crashing
+// https://github.com/libgeos/geos/issues/1534
+template<>
+template<>
+void object::test<7>
+()
+{
+    geom1_ = GEOSGeomFromWKT("LINESTRING (0 0, 0 2)");
+    geom2_ = GEOSGeomFromWKT("POINT EMPTY");
+
+    ensure_equals(GEOSProject(geom1_, geom2_), -1.0);
+    ensure_equals(GEOSProjectNormalized(geom1_, geom2_), -1.0);
+}
+
+// Invalid second argument reports IllegalArgumentException
+// https://github.com/libgeos/geos/issues/1534
+template<>
+template<>
+void object::test<8>
+()
+{
+    useContext();
+
+    geom1_ = fromWKT("LINESTRING (0 0, 0 2)");
+    geom2_ = fromWKT("LINESTRING (0 0, 0 2)");
+
+    std::string errorMsg;
+    GEOSContext_setErrorMessageHandler_r(ctxt_, [](const char* message, void* userdata) {
+        static_cast<std::string*>(userdata)->append(message);
+    }, &errorMsg);
+
+    ensure_equals(GEOSProject_r(ctxt_, geom1_, geom2_), -1.0);
+    ensure("error message contains IllegalArgumentException",
+           errorMsg.find("IllegalArgumentException") != std::string::npos);
+}
+
 } // namespace tut
