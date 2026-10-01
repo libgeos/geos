@@ -1686,12 +1686,12 @@ extern char GEOS_DLL GEOSisSimple_r(
     GEOSContextHandle_t handle,
     const GEOSGeometry* g);
 
-/** \see GEOSIsSimpleParams_create */
+/** \see GEOSisSimpleParams_create */
 extern GEOSisSimpleParams GEOS_DLL *
 GEOSisSimpleParams_create_r(
     GEOSContextHandle_t handle);
 
-/** \see GEOSIsSimpleParams_destroy */
+/** \see GEOSisSimpleParams_destroy */
 extern void GEOS_DLL
 GEOSisSimpleParams_destroy_r(
     GEOSContextHandle_t handle,
