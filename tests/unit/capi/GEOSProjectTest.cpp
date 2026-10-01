@@ -164,10 +164,10 @@ template<>
 void object::test<8>
 ()
 {
-    geom1_ = GEOSGeomFromWKT("LINESTRING (0 0, 0 2)");
-    geom2_ = GEOSGeomFromWKT("LINESTRING (0 0, 0 2)");
-
     useContext();
+
+    geom1_ = fromWKT("LINESTRING (0 0, 0 2)");
+    geom2_ = fromWKT("LINESTRING (0 0, 0 2)");
 
     std::string errorMsg;
     GEOSContext_setErrorMessageHandler_r(ctxt_, [](const char* message, void* userdata) {
