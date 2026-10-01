@@ -271,6 +271,10 @@ readWKTFile(std::string src, int limit, int offset) {
         return readWKTFile( std::cin, limit, offset );
     }
     std::ifstream f( src );
+    if (!f.is_open()) {
+        std::cerr << "Cannot open file: " << src << std::endl;
+        exit(1);
+    }
     auto geoms = readWKTFile( f, limit, offset );
     f.close();
     return geoms;
@@ -299,6 +303,10 @@ readWKBFile(std::string src, int limit, int offset) {
         return readWKBFile( std::cin, limit, offset );
     }
     std::ifstream f( src );
+    if (!f.is_open()) {
+        std::cerr << "Cannot open file: " << src << std::endl;
+        exit(1);
+    }
     auto geoms = readWKBFile( f, limit, offset );
     f.close();
     return geoms;
