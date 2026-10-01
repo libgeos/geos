@@ -1661,17 +1661,19 @@ extern "C" {
 
             op->setFindAllLocations( params->findAllLocations );
 
-            *result = nullptr;
 
             bool simple = op->isSimple();
-            if (!simple) {
-                auto locations = op->getNonSimpleLocations();
-                if (locations.size() == 1 || ! params->findAllLocations ) {
-                    *result = extHandle->geomFactory->createPoint(locations.front()).release();
-                } else {
-                    *result = extHandle->geomFactory->createMultiPoint(locations).release();
+            if ( result ) {
+                *result = nullptr;
+                if (!simple) {
+                    auto locations = op->getNonSimpleLocations();
+                    if (locations.size() == 1 || ! params->findAllLocations ) {
+                        *result = extHandle->geomFactory->createPoint(locations.front()).release();
+                    } else {
+                        *result = extHandle->geomFactory->createMultiPoint(locations).release();
+                    }
+                    (*result)->setSRID(inputGeom->getSRID());
                 }
-                (*result)->setSRID(inputGeom->getSRID());
             }
 
             return simple;

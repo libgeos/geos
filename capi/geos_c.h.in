@@ -3708,7 +3708,8 @@ extern char GEOS_DLL GEOSisSimple(const GEOSGeometry* g);
 *
 * \param g The geometry to test
 * \param findAllLocations Whether to return all self-intersection locations, or just one
-* \param locations A pointer in which the location GEOSGeometry will be placed
+* \param locations A pointer in which the location GEOSGeometry will be placed, if any.
+*                  Pass null if you don't want locations.
 * \return 1 when simple, 0 when non-simple, 2 on exception
 *
 * \since 3.14
