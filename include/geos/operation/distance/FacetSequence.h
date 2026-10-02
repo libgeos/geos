@@ -89,7 +89,7 @@ public:
      * and another sequence.
      * The locations are presented in the same order as the input sequences.
      *
-     * @return a pair of {@link Coordinate}s for the nearest points
+     * @return a pair of Coordinates for the nearest points
      */
     std::vector<geom::Coordinate> nearestLocations(const FacetSequence& facetSeq) const;
 
