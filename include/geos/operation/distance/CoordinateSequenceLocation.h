@@ -34,7 +34,7 @@ namespace operation {
 namespace distance {
 
 /**
- * A location on a {@link FacetSequence}.
+ * A location on a FacetSequence.
  *
  * Location indexes are always the index of a sequence segment.
  * Thus they are always less than the number of vertices
