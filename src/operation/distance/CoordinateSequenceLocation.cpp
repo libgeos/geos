@@ -20,7 +20,7 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/operation/distance/CoordinateSequenceLocation.h>
 
-using geos::geom::Coordinate;
+using geos::geom::CoordinateXY;
 using geos::geom::CoordinateSequence;
 
 namespace geos {
@@ -28,7 +28,7 @@ namespace operation {
 namespace distance {
 
 CoordinateSequenceLocation::CoordinateSequenceLocation(
-    const CoordinateSequence* p_seq, std::size_t p_index, const Coordinate& p_pt)
+    const CoordinateSequence* p_seq, std::size_t p_index, const CoordinateXY& p_pt)
     : seq(p_seq)
     , index(p_index)
     , pt(p_pt)
@@ -38,7 +38,7 @@ CoordinateSequenceLocation::CoordinateSequenceLocation(
     }
 }
 
-const Coordinate&
+const CoordinateXY&
 CoordinateSequenceLocation::getCoordinate() const
 {
     return pt;
@@ -61,11 +61,11 @@ CoordinateSequenceLocation::isSameSegment(const CoordinateSequenceLocation& f) c
     }
     //-- check for end pt same as start point of next segment
     if (isNext(index, f.index)) {
-        const Coordinate& endPt = seq->getAt(index + 1);
+        const CoordinateXY& endPt = seq->getAt<CoordinateXY>(index + 1);
         return f.pt.equals2D(endPt);
     }
     if (isNext(f.index, index)) {
-        const Coordinate& endPt = f.seq->getAt(index + 1);
+        const CoordinateXY& endPt = f.seq->getAt<CoordinateXY>(index + 1);
         return pt.equals2D(endPt);
     }
     return false;
@@ -85,13 +85,13 @@ CoordinateSequenceLocation::isNext(std::size_t p_index, std::size_t index1) cons
     return false;
 }
 
-Coordinate
+const CoordinateXY&
 CoordinateSequenceLocation::getEndPoint(int i) const
 {
     if (i == 0) {
-        return seq->getAt(index);
+        return seq->getAt<CoordinateXY>(index);
     }
-    return seq->getAt(index + 1);
+    return seq->getAt<CoordinateXY>(index + 1);
 }
 
 std::size_t

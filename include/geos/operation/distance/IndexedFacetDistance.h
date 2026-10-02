@@ -111,7 +111,7 @@ public:
      * @param p the point coordinate
      * @return the nearest point on the target geometry
      */
-    geom::Coordinate nearestPoint(const geom::CoordinateXY& p) const;
+    geom::CoordinateXY nearestPoint(const geom::CoordinateXY& p) const;
 
     double distance(const geom::CoordinateXY& p) const;
 

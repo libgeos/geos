@@ -124,7 +124,7 @@ IndexedFacetDistance::nearestLocation(const geom::CoordinateXY& p) const
     return nearest->nearestLocation(p);
 }
 
-geom::Coordinate
+geom::CoordinateXY
 IndexedFacetDistance::nearestPoint(const geom::CoordinateXY& p) const
 {
     return nearestLocation(p).getCoordinate();

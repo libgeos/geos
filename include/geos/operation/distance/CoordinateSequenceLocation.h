@@ -51,15 +51,15 @@ public:
 
     CoordinateSequenceLocation(const geom::CoordinateSequence* seq,
                                std::size_t index,
-                               const geom::Coordinate& pt);
+                               const geom::CoordinateXY& pt);
 
-    const geom::Coordinate& getCoordinate() const;
+    const geom::CoordinateXY& getCoordinate() const;
 
     std::size_t getIndex() const;
 
     bool isSameSegment(const CoordinateSequenceLocation& f) const;
 
-    geom::Coordinate getEndPoint(int i) const;
+    const geom::CoordinateXY& getEndPoint(int i) const;
 
     std::size_t normalize(std::size_t index) const;
 
@@ -67,7 +67,7 @@ private:
 
     const geom::CoordinateSequence* seq;
     std::size_t index;
-    geom::Coordinate pt;
+    geom::CoordinateXY pt;
 
     bool isNext(std::size_t index, std::size_t index1) const;
 };
