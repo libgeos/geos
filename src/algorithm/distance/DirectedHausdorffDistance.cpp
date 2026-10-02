@@ -571,23 +571,41 @@ DirectedHausdorffDistance::computeForEdges(
         DHDSegment segMaxBound = segQueue.top();
         segQueue.pop();
 
+        // Save if segment point is farther than current farthest
         if (!segMaxDist || segMaxBound.getMaxDistance() > segMaxDist->getMaxDistance()) {
             segMaxDist = segMaxBound;
         }
+
+        // Stop searching if remaining items in queue must all be closer
+        // than the current maximum distance.
         if (segMaxBound.getMaxDistanceBound() <= segMaxDist->getMaxDistance()) {
             break;
         }
+
+        // If maxDistanceLimit is specified, can stop searching if:
+        // - if segment distance bound is less than distance limit, no other segment can be farther
+        // - if a point of segment is farther than limit, isFullyWithin must be false
         if (isValidLimit(maxDistanceLimit)) {
             if (isWithinLimit(segMaxBound.getMaxDistanceBound(), maxDistanceLimit)
                 || isBeyondLimit(segMaxBound.getMaxDistance(), maxDistanceLimit)) {
                 break;
             }
         }
+
+        // Check for equal or collinear segments.
+        // If so, don't bisect the segment further.
+        // This greatly improves performance when the inputs
+        // have identical or collinear segments
+        // (in particular, the case when the inputs are identical).
         if (segMaxBound.getMaxDistance() == 0.0
             && targetDistance->isSameOrCollinear(
                 segMaxBound.getEndpoint(0), segMaxBound.getEndpoint(1))) {
             continue;
         }
+
+        // If segment is longer than tolerance
+        // it might provide a better max distance point,
+        // so bisect and keep searching.
         if (tolerance > 0 && segMaxBound.getLength() > tolerance) {
             auto bisects = segMaxBound.bisect(*targetDistance);
             filter.addNonInterior(bisects[0]);
@@ -595,10 +613,17 @@ DirectedHausdorffDistance::computeForEdges(
         }
     }
 
+    // A segment at maximum distance was found.
+    // Return the farthest point pair
     if (segMaxDist) {
         return segMaxDist->getMaxDistPts();
     }
-    const CoordinateXY* maxPt = geom.getCoordinate();
+
+    // No DHD segment was found.
+    // This must be because all were inside the target.
+    // In this case distance is zero.
+    // Return a single coordinate of the input as a representative point
+    const CoordinateXY *maxPt = geom.getCoordinate();
     if (!maxPt) {
         return std::nullopt;
     }
