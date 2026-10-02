@@ -3,8 +3,7 @@
 
 - New things:
   - Add DirectedHausdorffDistance and C API GEOSDirectedHausdorffDistance /
-    GEOSSymmetricHausdorffDistance (full geometry; existing discrete GEOSHausdorffDistance
-    unchanged) (Martin Davis, Jeroen Bloemscheer)
+    GEOSSymmetricHausdorffDistance (Martin Davis, Jeroen Bloemscheer, Dan Baston)
 
 - Fixes/Improvements:
   -
