@@ -224,7 +224,7 @@ public:
      * @return a pair of points [ptA, ptB] attaining the distance,
      * or empty if an input is empty
      */
-    std::optional<PointPair> farthestPoints(const geom::Geometry& geom);
+    std::optional<PointPair> farthestPoints(const geom::Geometry& geom) const;
 
     /**
      * Computes a pair of points which attain the directed Hausdorff distance
@@ -237,7 +237,7 @@ public:
      * @return a pair of points [ptA, ptB] attaining the distance,
      * or empty if an input is empty
      */
-    std::optional<PointPair> farthestPoints(const geom::Geometry& geom, double tolerance);
+    std::optional<PointPair> farthestPoints(const geom::Geometry& geom, double tolerance) const;
 
     /**
      * Tests whether a query geometry lies fully within a given distance of the target geometry.
@@ -249,7 +249,7 @@ public:
      * @param maxDistance the distance limit
      * @return true if the query geometry lies fully within the distance of the target
      */
-    bool isFullyWithinDistance(const geom::Geometry& geom, double maxDistance);
+    bool isFullyWithinDistance(const geom::Geometry& geom, double maxDistance) const;
 
     /**
      * Tests whether a query geometry lies fully within a given distance of the target geometry,
@@ -264,7 +264,7 @@ public:
      * @return true if the query geometry lies fully within the distance of the target
      */
     bool isFullyWithinDistance(
-        const geom::Geometry& geom, double maxDistance, double tolerance);
+        const geom::Geometry& geom, double maxDistance, double tolerance) const;
 
 private:
     class TargetDistance;
@@ -280,13 +280,13 @@ private:
     static bool isWithinLimit(double maxDist, double maxDistanceLimit);
 
     std::optional<PointPair> computeDistancePoints(
-        const geom::Geometry& geom, double tolerance, double maxDistanceLimit);
+        const geom::Geometry& geom, double tolerance, double maxDistanceLimit) const;
     std::optional<PointPair> computeForPoints(
-        const geom::Geometry& geom, double maxDistanceLimit);
+        const geom::Geometry& geom, double maxDistanceLimit) const;
     std::optional<PointPair> computeForEdges(
-        const geom::Geometry& geom, double tolerance, double maxDistanceLimit);
+        const geom::Geometry& geom, double tolerance, double maxDistanceLimit) const;
     std::optional<PointPair> computeForAreaInterior(
-        const geom::Geometry& geom, double tolerance);
+        const geom::Geometry& geom, double tolerance) const;
 
     const geom::Geometry& target;
     std::unique_ptr<TargetDistance> targetDistance;

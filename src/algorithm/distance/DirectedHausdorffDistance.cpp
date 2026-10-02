@@ -76,13 +76,13 @@ public:
         }
     }
 
-    CoordinateXY nearestFacetPoint(const CoordinateXY& p)
+    CoordinateXY nearestFacetPoint(const CoordinateXY& p) const
     {
         CoordinateXY np = distanceToFacets.nearestPoint(p);
         return np;
     }
 
-    CoordinateXY nearestPoint(const CoordinateXY& p)
+    CoordinateXY nearestPoint(const CoordinateXY& p) const
     {
         if (ptInArea) {
             if (ptInArea->locate(&p) != Location::EXTERIOR) {
@@ -92,7 +92,7 @@ public:
         return distanceToFacets.nearestPoint(p);
     }
 
-    bool isInterior(const CoordinateXY& p)
+    bool isInterior(const CoordinateXY& p) const
     {
         if (!isArea) {
             return false;
@@ -100,7 +100,7 @@ public:
         return ptInArea->locate(&p) == Location::INTERIOR;
     }
 
-    bool isInterior(const CoordinateXY& p0, const CoordinateXY& p1)
+    bool isInterior(const CoordinateXY& p0, const CoordinateXY& p1) const
     {
         if (!isArea) {
             return false;
@@ -113,10 +113,10 @@ public:
     }
 
     /// JTS isSameOrCollinear: both endpoints project onto the same target segment.
-    bool isSameOrCollinear(const CoordinateXY& p0, const CoordinateXY& p1)
+    bool isSameOrCollinear(const CoordinateXY& p0, const CoordinateXY& p1) const
     {
-        auto f0 = distanceToFacets.nearestLocation(p0);
-        auto f1 = distanceToFacets.nearestLocation(p1);
+        const auto f0 = distanceToFacets.nearestLocation(p0);
+        const auto f1 = distanceToFacets.nearestLocation(p1);
         return f0.isSameSegment(f1);
     }
 
@@ -388,7 +388,7 @@ DirectedHausdorffDistance::~DirectedHausdorffDistance() = default;
 
 bool
 DirectedHausdorffDistance::isFullyWithinDistance(
-    const Geometry& geom, double maxDistance)
+    const Geometry& geom, double maxDistance) const
 {
     double tolerance = maxDistance / FULLY_WITHIN_TOLERANCE_FACTOR;
     return isFullyWithinDistance(geom, maxDistance, tolerance);
@@ -396,7 +396,7 @@ DirectedHausdorffDistance::isFullyWithinDistance(
 
 bool
 DirectedHausdorffDistance::isFullyWithinDistance(
-    const Geometry& geom, double maxDistance, double tolerance)
+    const Geometry& geom, double maxDistance, double tolerance) const
 {
     if (geom.isEmpty() || target.isEmpty()) {
         return false;
@@ -412,20 +412,20 @@ DirectedHausdorffDistance::isFullyWithinDistance(
 }
 
 std::optional<DirectedHausdorffDistance::PointPair>
-DirectedHausdorffDistance::farthestPoints(const Geometry& geom)
+DirectedHausdorffDistance::farthestPoints(const Geometry& geom) const
 {
     return farthestPoints(geom, computeTolerance(geom));
 }
 
 std::optional<DirectedHausdorffDistance::PointPair>
-DirectedHausdorffDistance::farthestPoints(const Geometry& geom, double tolerance)
+DirectedHausdorffDistance::farthestPoints(const Geometry& geom, double tolerance) const
 {
     return computeDistancePoints(geom, tolerance, -1.0);
 }
 
 std::optional<DirectedHausdorffDistance::PointPair>
 DirectedHausdorffDistance::computeDistancePoints(
-    const Geometry& geom, double tolerance, double maxDistanceLimit)
+    const Geometry& geom, double tolerance, double maxDistanceLimit) const
 {
     if (tolerance < 0.0) {
         throw util::IllegalArgumentException("Tolerance must be non-negative");
@@ -453,7 +453,7 @@ DirectedHausdorffDistance::computeDistancePoints(
 
 std::optional<DirectedHausdorffDistance::PointPair>
 DirectedHausdorffDistance::computeForPoints(
-    const Geometry& geom, double maxDistanceLimit)
+    const Geometry& geom, double maxDistanceLimit) const
 {
     double maxDist = -1.0;
     std::optional<PointPair> maxDistPtsAB;
@@ -508,7 +508,7 @@ DirectedHausdorffDistance::computeForPoints(
 
 std::optional<DirectedHausdorffDistance::PointPair>
 DirectedHausdorffDistance::computeForEdges(
-    const Geometry& geom, double tolerance, double maxDistanceLimit)
+    const Geometry& geom, double tolerance, double maxDistanceLimit) const
 {
     std::priority_queue<DHDSegment> segQueue;
 
@@ -538,7 +538,7 @@ DirectedHausdorffDistance::computeForEdges(
             }
         }
 
-        void addNonInterior(const DHDSegment& segment)
+        void addNonInterior(const DHDSegment& segment) const
         {
             if (segment.getMaxDistance() > 0.0) {
                 segQueue.push(segment);
@@ -609,7 +609,7 @@ DirectedHausdorffDistance::computeForEdges(
 
 std::optional<DirectedHausdorffDistance::PointPair>
 DirectedHausdorffDistance::computeForAreaInterior(
-    const Geometry& geom, double tolerance)
+    const Geometry& geom, double tolerance) const
 {
     if (tolerance <= 0.0) {
         return std::nullopt;
