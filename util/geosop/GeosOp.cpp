@@ -25,6 +25,7 @@
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKBStreamReader.h>
 #include <geos/io/WKBWriter.h>
+#include <geos/util/GEOSException.h>
 
 #if !defined(MISSING_FENV)
 #define HAVE_FENV
@@ -181,8 +182,15 @@ int main(int argc, char** argv) {
         }
     }
 
-    GeosOp geosop(cmdArgs);
-    geosop.run(opArgs);
+    try {
+        GeosOp geosop(cmdArgs);
+        geosop.run(opArgs);
+    }
+    catch (const std::exception& ex) {
+        std::cerr << ex.what() << std::endl;
+        return 1;
+    }
+    return 0;
 }
 
 GeosOp::GeosOp(GeosOpArgs& arg)
@@ -271,6 +279,9 @@ readWKTFile(std::string src, int limit, int offset) {
         return readWKTFile( std::cin, limit, offset );
     }
     std::ifstream f( src );
+    if (!f.is_open()) {
+        throw util::GEOSException("Cannot open file: " + src);
+    }
     auto geoms = readWKTFile( f, limit, offset );
     f.close();
     return geoms;
@@ -299,6 +310,9 @@ readWKBFile(std::string src, int limit, int offset) {
         return readWKBFile( std::cin, limit, offset );
     }
     std::ifstream f( src );
+    if (!f.is_open()) {
+        throw util::GEOSException("Cannot open file: " + src);
+    }
     auto geoms = readWKBFile( f, limit, offset );
     f.close();
     return geoms;
