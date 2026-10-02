@@ -12,8 +12,7 @@
  *
  **********************************************************************
  *
- * Last port: operation/distance/FacetSequence.java
- * (locationtech/jts DirectedHausdorffDistance)
+ * Last port: operation/distance/FacetSequence.java (aff11591)
  *
  **********************************************************************/
 
