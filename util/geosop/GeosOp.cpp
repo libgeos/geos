@@ -383,7 +383,7 @@ GeosOp::loadInput(std::string name, std::string src, int limit, int offset) {
     try {
       geoms = readInput( name, src, limit, offset );
     } catch (geos::util::GEOSException & e) {
-      std::cout << e.what() << std::endl;
+      std::cerr << e.what() << std::endl;
       exit(1);
     }
 
