@@ -134,6 +134,29 @@ public:
     static geom::CoordinateXY intersection(const geom::CoordinateXY& p1, const geom::CoordinateXY& p2,
                                            const geom::CoordinateXY& q1, const geom::CoordinateXY& q2);
 
+    /** \brief
+     * Computes the intersection point of two lines in double-double
+     * arithmetic.
+     *
+     * This is the computation of intersection(), which returns the
+     * nearest double to each ordinate computed here.
+     * A caller that needs more of the intersection point than its
+     * nearest double, for example the grid cell it lies in,
+     * can use this value and still agree with intersection().
+     *
+     * @param p1 an endpoint of line 1
+     * @param p2 an endpoint of line 1
+     * @param q1 an endpoint of line 2
+     * @param q2 an endpoint of line 2
+     * @param x set to the x-ordinate of the intersection point
+     * @param y set to the y-ordinate of the intersection point
+     * @return true if the lines intersect in a single point,
+     * false if they are parallel or collinear (x and y are then unchanged)
+     */
+    static bool intersectionDD(const geom::CoordinateXY& p1, const geom::CoordinateXY& p2,
+                               const geom::CoordinateXY& q1, const geom::CoordinateXY& q2,
+                               DD& x, DD& y);
+
     static int signOfDet2x2(double dx1, double dy1, double dx2, double dy2);
 
     static DD detDD(double x1, double y1, double x2, double y2);
