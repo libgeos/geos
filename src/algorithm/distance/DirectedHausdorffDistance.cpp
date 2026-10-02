@@ -464,19 +464,17 @@ DirectedHausdorffDistance::computeForPoints(
             : targetDistance(td), maxDist(md), maxDistPtsAB(pts), maxDistanceLimit(limit), done(false)
         {}
 
+        bool isDone() override {
+            return done;
+        }
+
         void filter_ro(const Geometry* geomElem) override
         {
-            if (done) {
+            if (geomElem->getGeometryTypeId() != geom::GEOS_POINT) {
                 return;
             }
-            const Point* pt = dynamic_cast<const Point*>(geomElem);
-            if (!pt || pt->isEmpty()) {
-                return;
-            }
-            const CoordinateXY* pA = pt->getCoordinate();
-            if (!pA) {
-                return;
-            }
+
+            const CoordinateXY* pA = geomElem->getCoordinate();
             CoordinateXY pB = targetDistance.nearestPoint(*pA);
             double dist = pA->distance(pB);
             bool interior = dist > 0 && targetDistance.isInterior(*pA);
