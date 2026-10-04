@@ -473,11 +473,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-        - xcode: "15.4"
-          cxxstd: 20
-          build_type: Release
-          library_type: shared
-          runs_on: macos-14
         - xcode: "16.4"
           cxxstd: 23
           build_type: Debug
@@ -488,6 +483,11 @@ jobs:
           build_type: Release
           library_type: static
           runs_on: macos-26
+        - xcode: "26.6"
+          cxxstd: 26
+          build_type: Release
+          library_type: shared
+          runs_on: macos-26-intel
 
     runs-on: ${{ matrix.runs_on }}
     steps:
