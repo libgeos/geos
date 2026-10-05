@@ -103,7 +103,11 @@ struct test_envelope_data {
         //ensure("FE_INEXACT raised", !std::fetestexcept(FE_INEXACT));
 //#endif
 #ifdef FE_INVALID
+        // Skip FE_INVALID check on FreeBSD and OpenBSD due to platform-specific behavior
+        // See: https://github.com/libgeos/geos/issues/1206
+#if !defined(__FreeBSD__) && !defined(__OpenBSD__)
         ensure("FE_INVALID raised", !std::fetestexcept(FE_INVALID));
+#endif
 #endif
 #ifdef FE_OVERFLOW
         ensure("FE_OVERFLOW raised", !std::fetestexcept(FE_OVERFLOW));
