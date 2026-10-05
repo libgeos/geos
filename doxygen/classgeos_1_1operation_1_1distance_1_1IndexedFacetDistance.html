@@ -70,6 +70,17 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0f74cfece82435b6bbe1d08a68d3ff6a" id="r_a0f74cfece82435b6bbe1d08a68d3ff6a"><td class="memItemLeft" align="right" valign="top">std::unique_ptr&lt; <a class="el" href="classgeos_1_1geom_1_1CoordinateSequence.html">geom::CoordinateSequence</a> &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1distance_1_1IndexedFacetDistance.html#a0f74cfece82435b6bbe1d08a68d3ff6a">nearestPoints</a> (const <a class="el" href="classgeos_1_1geom_1_1Geometry.html">geom::Geometry</a> *g) const</td></tr>
 <tr class="memdesc:a0f74cfece82435b6bbe1d08a68d3ff6a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Computes the nearest points on the base geometry and the given geometry.  <br /></td></tr>
 <tr class="separator:a0f74cfece82435b6bbe1d08a68d3ff6a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac81b59437038369c634e44d2bf5e2eb4" id="r_ac81b59437038369c634e44d2bf5e2eb4"><td class="memItemLeft" align="right" valign="top">geom::CoordinateXY&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1operation_1_1distance_1_1IndexedFacetDistance.html#ac81b59437038369c634e44d2bf5e2eb4">nearestPoint</a> (const geom::CoordinateXY &amp;p) const</td></tr>
+<tr class="separator:ac81b59437038369c634e44d2bf5e2eb4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aed762c036679d71f1faf637d58ae0ed4" id="r_aed762c036679d71f1faf637d58ae0ed4"><td class="memItemLeft" align="right" valign="top"><a id="aed762c036679d71f1faf637d58ae0ed4" name="aed762c036679d71f1faf637d58ae0ed4"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>distance</b> (const geom::CoordinateXY &amp;p) const</td></tr>
+<tr class="separator:aed762c036679d71f1faf637d58ae0ed4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a07d0f87b009446001f386b504cf6d38f" id="r_a07d0f87b009446001f386b504cf6d38f"><td class="memItemLeft" align="right" valign="top"><a id="a07d0f87b009446001f386b504cf6d38f" name="a07d0f87b009446001f386b504cf6d38f"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>distance</b> (const geom::CoordinateXY &amp;p0, const geom::CoordinateXY &amp;p1) const</td></tr>
+<tr class="separator:a07d0f87b009446001f386b504cf6d38f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a8f7baf79c9605b9a31044fee0c5ed4ba" id="r_a8f7baf79c9605b9a31044fee0c5ed4ba"><td class="memItemLeft" align="right" valign="top"><a id="a8f7baf79c9605b9a31044fee0c5ed4ba" name="a8f7baf79c9605b9a31044fee0c5ed4ba"></a>
+<a class="el" href="classgeos_1_1operation_1_1distance_1_1CoordinateSequenceLocation.html">CoordinateSequenceLocation</a>&#160;</td><td class="memItemRight" valign="bottom"><b>nearestLocation</b> (const geom::CoordinateXY &amp;p) const</td></tr>
+<tr class="separator:a8f7baf79c9605b9a31044fee0c5ed4ba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -239,6 +250,32 @@ static bool&#160;</td><td class="memItemRight" valign="bottom"><b>isWithinDistan
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true of the geometry lies within the specified distance </dd></dl>
+
+</div>
+</div>
+<a id="ac81b59437038369c634e44d2bf5e2eb4" name="ac81b59437038369c634e44d2bf5e2eb4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac81b59437038369c634e44d2bf5e2eb4">&#9670;&#160;</a></span>nearestPoint()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">geom::CoordinateXY geos::operation::distance::IndexedFacetDistance::nearestPoint </td>
+          <td>(</td>
+          <td class="paramtype">const geom::CoordinateXY &amp;&#160;</td>
+          <td class="paramname"><em>p</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Computes the nearest point on the target geometry to a point.</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">p</td><td>the point coordinate </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>the nearest point on the target geometry </dd></dl>
 
 </div>
 </div>
