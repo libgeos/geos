@@ -32,6 +32,7 @@
 #include <geos/algorithm/MinimumDiameter.h>
 #include <geos/algorithm/MinimumBoundingCircle.h>
 #include <geos/algorithm/distance/DiscreteHausdorffDistance.h>
+#include <geos/algorithm/distance/DirectedHausdorffDistance.h>
 #include <geos/algorithm/distance/DiscreteFrechetDistance.h>
 #include <geos/algorithm/hull/ConcaveHull.h>
 #include <geos/geom/util/Densifier.h>
@@ -641,6 +642,22 @@ std::vector<GeometryOpCreator> opRegistry {
     Result::typeDouble,
     [](const Geometry& geom, const Geometry& geomB) {
         return new Result( geos::algorithm::distance::DiscreteHausdorffDistance::distance(geom, geomB ) );
+    });
+    }},
+{"directedHausdorffDistance", [](std::string name) { return GeometryOp::create(name,
+    catDist,
+    "compute directed (locus) Hausdorff distance from geometry A to B",
+    Result::typeDouble,
+    [](const Geometry& geom, const Geometry& geomB) {
+        return new Result( geos::algorithm::distance::DirectedHausdorffDistance::distance(geom, geomB ) );
+    });
+    }},
+{"symmetricHausdorffDistance", [](std::string name) { return GeometryOp::create(name,
+    catDist,
+    "compute symmetric (locus) Hausdorff distance between geometry A and B",
+    Result::typeDouble,
+    [](const Geometry& geom, const Geometry& geomB) {
+        return new Result( geos::algorithm::distance::DirectedHausdorffDistance::hausdorffDistance(geom, geomB ) );
     });
     }},
     /*
