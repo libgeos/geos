@@ -556,7 +556,7 @@ jobs:
         restore-keys: freebsd
 
     - name: Build, test, install
-      uses: vmactions/freebsd-vm@v1.5.5
+      uses: vmactions/freebsd-vm@v1.5.7
       with:
         release: "15.0"
         envs: CCACHE_COMPRESS CCACHE_COMPRESSLEVEL CCACHE_MAXSIZE
