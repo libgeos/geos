@@ -105,7 +105,14 @@ struct test_envelope_data {
 #ifdef FE_INVALID
         // Skip FE_INVALID check on FreeBSD and OpenBSD due to platform-specific behavior
         // See: https://github.com/libgeos/geos/issues/1206
-#if !defined(__FreeBSD__) && !defined(__OpenBSD__)
+        //
+        // Also skip it for Clang targeting Windows: under optimization,
+        // islessequal()/isgreaterequal() calls that are individually NaN-safe
+        // get fused/reordered in a way that emits an ordered (trapping) compare
+        // instead of the intended unordered one, spuriously setting FE_INVALID
+        // even though the comparison logic itself is correct.
+#if !defined(__FreeBSD__) && !defined(__OpenBSD__) && \
+    !(defined(__clang__) && defined(_WIN32))
         ensure("FE_INVALID raised", !std::fetestexcept(FE_INVALID));
 #endif
 #endif

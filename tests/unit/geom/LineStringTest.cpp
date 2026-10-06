@@ -64,6 +64,20 @@ struct test_linestring_data {
     }
 };
 
+// LineString::operator= is protected, like its copy constructor, to force
+// external callers through clone() rather than direct copying/slicing. This
+// accessor exposes it (and a matching public constructor) so the assignment
+// operator's own behavior can be exercised directly in tests, without
+// changing its access level for real callers.
+struct LineStringAssignAccessor : public geos::geom::LineString {
+    LineStringAssignAccessor(std::shared_ptr<const geos::geom::CoordinateSequence> pts,
+                              const geos::geom::GeometryFactory& factory)
+        : geos::geom::LineString(std::move(pts), factory)
+    {}
+
+    using geos::geom::LineString::operator=;
+};
+
 typedef test_group<test_linestring_data> group;
 typedef group::object object;
 
@@ -678,6 +692,100 @@ void object::test<37>()
     auto expected = reader.read("COMPOUNDCURVE (CIRCULARSTRING (2 2, 3 3, 4 2), (4 2, 2 2))");
 
     ensure_equals_exact_geometry_xyzm(curved.get(), expected.get(), 1e-6);
+}
+
+// Copy-assignment must deep-clone the coordinate sequence, matching the
+// copy constructor, rather than aliasing it (GH-1528 follow-up).
+template<>
+template<>
+void object::test<38>()
+{
+    set_test_name("operator= deep-clones coordinates");
+
+    auto csA = geos::detail::make_unique<geos::geom::CoordinateSequence>(2u, false, false);
+    csA->setAt(geos::geom::Coordinate{0, 0}, 0);
+    csA->setAt(geos::geom::Coordinate{1, 1}, 1);
+    LineStringAssignAccessor a(std::move(csA), *factory_);
+
+    auto csB = geos::detail::make_unique<geos::geom::CoordinateSequence>(3u, false, false);
+    csB->setAt(geos::geom::Coordinate{5, 5}, 0);
+    csB->setAt(geos::geom::Coordinate{6, 6}, 1);
+    csB->setAt(geos::geom::Coordinate{7, 7}, 2);
+    LineStringAssignAccessor b(std::move(csB), *factory_);
+
+    a = b;
+
+    ensure_equals_exact_geometry_xyzm(&a, &b, 0);
+
+    // a and b must not share the same underlying CoordinateSequence:
+    // operator= must clone it, not alias the shared_ptr.
+    ensure("a and b must not alias the same CoordinateSequence after assignment",
+           a.getCoordinatesRO() != b.getCoordinatesRO());
+}
+
+// Copy-assignment across geometries from different GeometryFactory
+// instances must adopt the source's factory and correctly manage the
+// old factory's refcount rather than leaving a dangling reference
+// (GH-1528 follow-up).
+template<>
+template<>
+void object::test<39>()
+{
+    set_test_name("operator= across different GeometryFactory instances");
+
+    geos::geom::PrecisionModel pmA(1000);
+    geos::geom::PrecisionModel pmB(1000);
+
+    auto factoryA = geos::geom::GeometryFactory::create(&pmA, 1);
+    auto factoryB = geos::geom::GeometryFactory::create(&pmB, 2);
+
+    auto csA = geos::detail::make_unique<geos::geom::CoordinateSequence>(2u, false, false);
+    csA->setAt(geos::geom::Coordinate{0, 0}, 0);
+    csA->setAt(geos::geom::Coordinate{1, 1}, 1);
+    LineStringAssignAccessor a(std::move(csA), *factoryA);
+
+    auto csB = geos::detail::make_unique<geos::geom::CoordinateSequence>(2u, false, false);
+    csB->setAt(geos::geom::Coordinate{9, 9}, 0);
+    csB->setAt(geos::geom::Coordinate{10, 10}, 1);
+    LineStringAssignAccessor b(std::move(csB), *factoryB);
+
+    // Drop the local Ptrs: each geometry is now the sole owner of its
+    // factory's reference count.
+    factoryA.reset();
+    factoryB.reset();
+
+    a = b;
+
+    ensure("a must adopt b's factory", a.getFactory() == b.getFactory());
+    ensure_equals(a.getSRID(), 2);
+    ensure_equals_exact_geometry_xyzm(&a, &b, 0);
+
+    // a no longer references its original factory; using it further
+    // must not crash (would indicate a dangling/deleted factory).
+    a.getFactory()->getSRID();
+}
+
+// Self-assignment must not corrupt the object or double-free anything.
+template<>
+template<>
+void object::test<40>()
+{
+    set_test_name("operator= self-assignment");
+
+    auto cs = geos::detail::make_unique<geos::geom::CoordinateSequence>(3u, false, false);
+    cs->setAt(geos::geom::Coordinate{0, 0}, 0);
+    cs->setAt(geos::geom::Coordinate{1, 1}, 1);
+    cs->setAt(geos::geom::Coordinate{2, 2}, 2);
+    LineStringAssignAccessor a(std::move(cs), *factory_);
+    auto original = a.clone();
+
+    // Route through a reference so the compiler doesn't statically flag
+    // this as an obviously-self-assigning expression; the point is to
+    // exercise the runtime self-assignment guard in operator=.
+    LineStringAssignAccessor& aref = a;
+    a = aref;
+
+    ensure_equals_exact_geometry_xyzm(&a, original.get(), 0);
 }
 
 

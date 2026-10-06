@@ -63,6 +63,8 @@ public:
 
     LinearRing(const LinearRing& lr);
 
+    LinearRing& operator=(const LinearRing& lr) = default;
+
     /**
      * \brief Constructs a LinearRing with the given points.
      *

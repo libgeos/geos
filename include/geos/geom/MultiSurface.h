@@ -84,6 +84,8 @@ protected:
         : GeometryCollection(mp)
     {};
 
+    MultiSurface& operator=(const MultiSurface& mp) = default;
+
     MultiSurface* cloneImpl() const override
     {
         return new MultiSurface(*this);
