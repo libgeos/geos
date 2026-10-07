@@ -21,6 +21,10 @@
 namespace geos {
 namespace geom {
 class Geometry;
+class Polygon;
+}
+namespace coverage {
+class CoveragePolygon;
 }
 }
 
@@ -71,7 +75,8 @@ private:
 
     std::unique_ptr<Geometry> validate(
         const Geometry* targetGeom,
-        TemplateSTRtree<const Geometry*>& index);
+        TemplateSTRtree<const Geometry*>& index,
+        std::unordered_map<const geos::geom::Polygon*, std::unique_ptr<CoveragePolygon>>* polyCache = nullptr);
 
 
 public:

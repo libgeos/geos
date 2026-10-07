@@ -68,14 +68,29 @@ CoveragePolygonValidator::validate(const Geometry* targetPolygon, std::vector<co
     return v.validate();
 }
 
+/* public static */
+std::unique_ptr<Geometry>
+CoveragePolygonValidator::validate(
+    const Geometry* targetPolygon,
+    std::vector<const Geometry*>& adjPolygons,
+    double gapWidth,
+    std::unordered_map<const Polygon*, std::unique_ptr<CoveragePolygon>>* polyCache)
+{
+    CoveragePolygonValidator v(targetPolygon, adjPolygons, polyCache);
+    v.setGapWidth(gapWidth);
+    return v.validate();
+}
+
 
 /* public */
 CoveragePolygonValidator::CoveragePolygonValidator(
     const Geometry* geom,
-    std::vector<const Geometry*>& p_adjGeoms)
+    std::vector<const Geometry*>& p_adjGeoms,
+    std::unordered_map<const Polygon*, std::unique_ptr<CoveragePolygon>>* polyCache)
     : targetGeom(geom)
     , adjGeoms(p_adjGeoms)
     , geomFactory(geom->getFactory())
+    , m_polyCache(polyCache)
 {}
 
 
@@ -109,12 +124,30 @@ CoveragePolygonValidator::validate()
     return createInvalidLines(targetRings);
 }
 
-/* private static */
-std::vector<std::unique_ptr<CoveragePolygon>> 
-CoveragePolygonValidator::toCoveragePolygons(const std::vector<const Polygon*> polygons) {
-    std::vector<std::unique_ptr<CoveragePolygon>> covPolys;
-    for (const Polygon* poly : polygons) {
-        covPolys.push_back( std::make_unique<CoveragePolygon>(poly) );
+/* private */
+std::vector<CoveragePolygon*> 
+CoveragePolygonValidator::toCoveragePolygons(const std::vector<const Polygon*>& polygons) {
+    std::vector<CoveragePolygon*> covPolys;
+    covPolys.reserve(polygons.size());
+    if (m_polyCache != nullptr) {
+        for (const Polygon* poly : polygons) {
+            auto it = m_polyCache->find(poly);
+            if (it == m_polyCache->end()) {
+                auto newPoly = std::make_unique<CoveragePolygon>(poly);
+                auto ptr = newPoly.get();
+                (*m_polyCache)[poly] = std::move(newPoly);
+                covPolys.push_back(ptr);
+            } else {
+                covPolys.push_back(it->second.get());
+            }
+        }
+    } else {
+        m_localCovPolygons.reserve(polygons.size());
+        for (const Polygon* poly : polygons) {
+            auto newPoly = std::make_unique<CoveragePolygon>(poly);
+            covPolys.push_back(newPoly.get());
+            m_localCovPolygons.push_back(std::move(newPoly));
+        }
     }
     return covPolys;
 }
@@ -257,7 +290,7 @@ CoveragePolygonValidator::markInvalidInteractingSegments(
 void
 CoveragePolygonValidator::markInvalidInteriorSegments(
     std::vector<CoverageRing*>& targetRings,
-    std::vector<std::unique_ptr<CoveragePolygon>>& adjCovPolygons )
+    const std::vector<CoveragePolygon*>& adjCovPolygons )
 {
     for (CoverageRing* ring : targetRings) {
         std::size_t stride = 1000;  //--  RING_SECTION_STRIDE;
@@ -276,15 +309,15 @@ CoveragePolygonValidator::markInvalidInteriorSection(
     CoverageRing& ring,
     std::size_t iStart, 
     std::size_t iEnd, 
-    std::vector<std::unique_ptr<CoveragePolygon>>& adjCovPolygons )
+    const std::vector<CoveragePolygon*>& adjCovPolygons )
 {
     Envelope sectionEnv = ring.getEnvelope(iStart, iEnd);
     //TODO: is it worth indexing polygons?
-    for (auto& adjPoly : adjCovPolygons) {
+    for (auto* adjPoly : adjCovPolygons) {
         if (adjPoly->intersectsEnv(sectionEnv)) {
             //-- test vertices in section
             for (auto i = iStart; i < iEnd; i++) {
-                markInvalidInteriorSegment(ring, i, adjPoly.get());
+                markInvalidInteriorSegment(ring, i, adjPoly);
             }
         }
     }

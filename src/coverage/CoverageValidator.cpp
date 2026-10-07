@@ -76,6 +76,10 @@ CoverageValidator::validate(std::vector<const Geometry*>& coverage, double gapWi
 }
 
 
+#include <geos/coverage/CoveragePolygon.h>
+#include <geos/geom/Polygon.h>
+#include <unordered_map>
+
 /* public */
 std::vector<std::unique_ptr<Geometry>>
 CoverageValidator::validate()
@@ -89,9 +93,11 @@ CoverageValidator::validate()
         invalidLines.emplace_back(nullptr);
     }
 
+    std::unordered_map<const geos::geom::Polygon*, std::unique_ptr<CoveragePolygon>> polyCache;
+
     for (std::size_t i = 0; i < m_coverage.size(); i++) {
         const Geometry* geom = m_coverage[i];
-        std::unique_ptr<Geometry> result = validate(geom, index);
+        std::unique_ptr<Geometry> result = validate(geom, index, &polyCache);
         invalidLines[i].reset(result.release());
     }
     return invalidLines;
@@ -99,7 +105,10 @@ CoverageValidator::validate()
 
 /* private */
 std::unique_ptr<Geometry>
-CoverageValidator::validate(const Geometry* targetGeom, TemplateSTRtree<const Geometry*>& index)
+CoverageValidator::validate(
+    const Geometry* targetGeom,
+    TemplateSTRtree<const Geometry*>& index,
+    std::unordered_map<const geos::geom::Polygon*, std::unique_ptr<CoveragePolygon>>* polyCache)
 {
     Envelope queryEnv = *(targetGeom->getEnvelopeInternal());
     queryEnv.expandBy(m_gapWidth);
@@ -117,7 +126,7 @@ CoverageValidator::validate(const Geometry* targetGeom, TemplateSTRtree<const Ge
     }
 
     // Geometry[] nearGeoms = GeometryFactory.toGeometryArray(nearGeoms);
-    std::unique_ptr<Geometry> result = CoveragePolygonValidator::validate(targetGeom, nearGeoms, m_gapWidth);
+    std::unique_ptr<Geometry> result = CoveragePolygonValidator::validate(targetGeom, nearGeoms, m_gapWidth, polyCache);
     if (result->isEmpty())
         return nullptr;
     else

@@ -202,7 +202,9 @@ private:
     //std::vector<const Polygon*> m_adjPolygons;
     const GeometryFactory* geomFactory;
     double gapWidth = 0.0;
-    std::vector<std::unique_ptr<CoveragePolygon>> m_adjCovPolygons;
+    std::unordered_map<const Polygon*, std::unique_ptr<CoveragePolygon>>* m_polyCache = nullptr;
+    std::vector<std::unique_ptr<CoveragePolygon>> m_localCovPolygons;
+    std::vector<CoveragePolygon*> m_adjCovPolygons;
     std::deque<CoverageRing> coverageRingStore;
     std::deque<CoverageRingSegment> coverageRingSegmentStore;
 
@@ -245,6 +247,24 @@ public:
         double gapWidth);
 
     /**
+    * Validates that a polygon is coverage-valid against the
+    * surrounding polygons in a polygonal coverage,
+    * and forms no gaps narrower than a specified width,
+    * with an optional cache of CoveragePolygon wrappers.
+    *
+    * @param targetPolygon the polygon to validate
+    * @param adjPolygons a collection of the adjacent polygons
+    * @param gapWidth the maximum width of invalid gaps
+    * @param polyCache optional shared polygon index cache
+    * @return a linear geometry containing the segments causing invalidity (if any)
+    */
+    static std::unique_ptr<Geometry> validate(
+        const Geometry* targetPolygon,
+        std::vector<const Geometry*>& adjPolygons,
+        double gapWidth,
+        std::unordered_map<const Polygon*, std::unique_ptr<CoveragePolygon>>* polyCache);
+
+    /**
     * Create a new validator.
     *
     * If the gap width is specified, the set of surrounding polygons
@@ -253,10 +273,12 @@ public:
     *
     * @param targetPolygon the geometry to validate
     * @param adjPolygons the adjacent polygons in the polygonal coverage
+    * @param polyCache optional shared polygon cache
     */
     CoveragePolygonValidator(
         const Geometry* targetPolygon,
-        std::vector<const Geometry*>& adjPolygons);
+        std::vector<const Geometry*>& adjPolygons,
+        std::unordered_map<const Polygon*, std::unique_ptr<CoveragePolygon>>* polyCache = nullptr);
 
     /**
     * Sets the maximum gap width, if narrow gaps are to be detected.
@@ -275,8 +297,8 @@ public:
 
 private:
 
-    static std::vector<std::unique_ptr<CoveragePolygon>> 
-        toCoveragePolygons(const std::vector<const Polygon*> polygons);
+    std::vector<CoveragePolygon*> 
+        toCoveragePolygons(const std::vector<const Polygon*>& polygons);
     static std::vector<const Polygon*> extractPolygons(std::vector<const Geometry*>& geoms);
 
     /* private */
@@ -344,13 +366,13 @@ private:
     */
     void markInvalidInteriorSegments(
         std::vector<CoverageRing*>& targetRings,
-        std::vector<std::unique_ptr<CoveragePolygon>>& adjCovPolygons);
+        const std::vector<CoveragePolygon*>& adjCovPolygons);
 
     void markInvalidInteriorSection(
         CoverageRing& ring,
         std::size_t iStart, 
         std::size_t iEnd, 
-        std::vector<std::unique_ptr<CoveragePolygon>>& adjCovPolygons );
+        const std::vector<CoveragePolygon*>& adjCovPolygons );
 
     void markInvalidInteriorSegment(
         CoverageRing& ring, std::size_t i, CoveragePolygon* adjPoly);
