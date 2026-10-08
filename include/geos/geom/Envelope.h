@@ -600,12 +600,6 @@ public:
                 std::islessequal(other.y, maxy) && std::isgreaterequal(other.y,  miny));
     }
 
-#if defined(__OPTIMIZE__) && defined(__clang__) && (__clang_major__ >= 15) && defined(__x86_64__)
-#define DISABLE_OPT_FOR_ENVELOPE
-/* Disable some optimizations to avoid FE_INVALID; see unit-geom-Envelope test */
-#pragma clang optimize off
-#endif  /* defined(__OPTIMIZE__) && defined(__clang__) ... */
-
     /** \brief
      *  Check if the point (x, y) intersects (lies inside) the region of this Envelope.
      *
@@ -615,15 +609,14 @@ public:
      */
     bool intersects(double x, double y) const
     {
+        if(std::isnan(x) || std::isnan(maxx)) {
+            return false;
+        }
         return std::islessequal(x, maxx) &&
                std::isgreaterequal(x, minx) &&
                std::islessequal(y, maxy) &&
                std::isgreaterequal(y, miny);
     }
-
-#ifdef DISABLE_OPT_FOR_ENVELOPE
-#pragma clang optimize on
-#endif  /* DISABLE_OPT_FOR_ENVELOPE */
 
     /** \brief
      * Check if the region defined by other Envelope intersects the region of this Envelope.
@@ -661,10 +654,6 @@ public:
         return !intersects(other);
     }
 
-#ifdef DISABLE_OPT_FOR_ENVELOPE
-#pragma clang optimize off
-#endif  /* DISABLE_OPT_FOR_ENVELOPE */
-
     /** \brief
      * Tests if the given point lies in or on the envelope.
      *
@@ -673,15 +662,14 @@ public:
      * @return `true` if `(x, y)` lies in the interior or on the boundary of this Envelope.
      */
     bool covers(double x, double y) const {
+        if(std::isnan(x) || std::isnan(minx)) {
+            return false;
+        }
         return std::isgreaterequal(x,  minx) &&
                std::islessequal(x, maxx) &&
                std::isgreaterequal(y, miny) &&
                std::islessequal(y,  maxy);
     }
-
-#ifdef DISABLE_OPT_FOR_ENVELOPE
-#pragma clang optimize on
-#endif  /* DISABLE_OPT_FOR_ENVELOPE */
 
     /** \brief
      * Tests if the given point lies in or on the envelope.
