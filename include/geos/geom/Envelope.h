@@ -609,6 +609,9 @@ public:
      */
     bool intersects(double x, double y) const
     {
+        if(std::isnan(x) || std::isnan(maxx)) {
+            return false;
+        }
         return std::islessequal(x, maxx) &&
                std::isgreaterequal(x, minx) &&
                std::islessequal(y, maxy) &&
@@ -659,6 +662,9 @@ public:
      * @return `true` if `(x, y)` lies in the interior or on the boundary of this Envelope.
      */
     bool covers(double x, double y) const {
+        if(std::isnan(x) || std::isnan(minx)) {
+            return false;
+        }
         return std::isgreaterequal(x,  minx) &&
                std::islessequal(x, maxx) &&
                std::isgreaterequal(y, miny) &&
