@@ -11,6 +11,13 @@
 add_subdirectory(buffer)
 add_subdirectory(predicate)
 
+add_executable(perf_makevalid MakeValidPerfTest.cpp)
+target_include_directories(perf_makevalid PUBLIC
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+        $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>
+        $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/benchmarks>)
+target_link_libraries(perf_makevalid PRIVATE geos geos_cxx_flags)
+
 if (benchmark_FOUND)
     add_executable(perf_distance DistancePerfTest.cpp)
     target_include_directories(perf_distance PUBLIC
