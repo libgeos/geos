@@ -15,6 +15,7 @@
 #pragma once
 
 #include <geos/index/strtree/TemplateSTRtree.h>
+#include <unordered_map>
 
 
 // Forward declarations
