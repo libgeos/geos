@@ -609,9 +609,11 @@ public:
      */
     bool intersects(double x, double y) const
     {
+#if defined(__OPTIMIZE__) && defined(__x86_64__) && defined(__clang__) && (__clang_major__ >= 15)
         if(std::isnan(x) || std::isnan(maxx)) {
             return false;
         }
+#endif  /* defined(__OPTIMIZE__) && defined(__clang__) ... */
         return std::islessequal(x, maxx) &&
                std::isgreaterequal(x, minx) &&
                std::islessequal(y, maxy) &&
@@ -662,9 +664,11 @@ public:
      * @return `true` if `(x, y)` lies in the interior or on the boundary of this Envelope.
      */
     bool covers(double x, double y) const {
+#if defined(__OPTIMIZE__) && defined(__x86_64__) && defined(__clang__) && (__clang_major__ >= 15)
         if(std::isnan(x) || std::isnan(minx)) {
             return false;
         }
+#endif  /* defined(__OPTIMIZE__) && defined(__clang__) ... */
         return std::isgreaterequal(x,  minx) &&
                std::islessequal(x, maxx) &&
                std::isgreaterequal(y, miny) &&
