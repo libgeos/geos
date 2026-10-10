@@ -147,8 +147,6 @@ public:
     void
     process()
     {
-        std::vector<double> crossings;
-
         /*
          * This results in returning a null Coordinate
          */
@@ -158,13 +156,31 @@ public:
          */
         interiorPoint = *polygon.getCoordinate();
 
-        const LinearRing* shell = polygon.getExteriorRing();
-        scanRing(*shell, crossings);
-        for (std::size_t i = 0; i < polygon.getNumInteriorRing(); i++) {
-            const LinearRing* hole = polygon.getInteriorRingN(i);
-            scanRing(*hole, crossings);
+        scanAtY(interiorPointY);
+
+        double envWidth = polygon.getEnvelopeInternal()->getWidth();
+        double threshold = std::max(1e-10, envWidth * 1e-6);
+
+        if (interiorSectionWidth <= threshold) {
+            // The primary scan line yielded negligible or zero interior width (e.g. it fell on a zero-width
+            // collapsed segment, spike, or notch). Try candidate scan lines bisecting
+            // all pairs of adjacent unique vertex Y ordinates.
+            std::vector<double> yValues;
+            addYValues(*polygon.getExteriorRing(), yValues);
+            for (std::size_t i = 0; i < polygon.getNumInteriorRing(); i++) {
+                addYValues(*polygon.getInteriorRingN(i), yValues);
+            }
+            std::sort(yValues.begin(), yValues.end());
+            yValues.erase(std::unique(yValues.begin(), yValues.end()), yValues.end());
+
+            for (std::size_t i = 0; i + 1 < yValues.size(); i++) {
+                double candY = avg(yValues[i], yValues[i + 1]);
+                scanAtY(candY);
+                if (interiorSectionWidth > threshold) {
+                    break;
+                }
+            }
         }
-        findBestMidpoint(crossings);
     }
 
 private:
@@ -173,17 +189,37 @@ private:
     double interiorSectionWidth = 0.0;
     CoordinateXY interiorPoint;
 
-    void scanRing(const LinearRing& ring, std::vector<double>& crossings)
+    static void addYValues(const LineString& line, std::vector<double>& yValues)
+    {
+        const CoordinateSequence* seq = line.getCoordinatesRO();
+        for (std::size_t i = 0, s = seq->size(); i < s; i++) {
+            yValues.push_back(seq->getY(i));
+        }
+    }
+
+    void scanAtY(double scanY)
+    {
+        std::vector<double> crossings;
+        const LinearRing* shell = polygon.getExteriorRing();
+        scanRing(*shell, scanY, crossings);
+        for (std::size_t i = 0; i < polygon.getNumInteriorRing(); i++) {
+            const LinearRing* hole = polygon.getInteriorRingN(i);
+            scanRing(*hole, scanY, crossings);
+        }
+        findBestMidpoint(crossings, scanY);
+    }
+
+    void scanRing(const LinearRing& ring, double scanY, std::vector<double>& crossings)
     {
         // skip rings which don't cross scan line
-        if (! intersectsHorizontalLine(ring.getEnvelopeInternal(), interiorPointY))
+        if (! intersectsHorizontalLine(ring.getEnvelopeInternal(), scanY))
             return;
 
         const CoordinateSequence* seq = ring.getCoordinatesRO();
         for (std::size_t i = 1; i < seq->size(); i++) {
             const CoordinateXY& ptPrev = seq->getAt<CoordinateXY>(i - 1);
             const CoordinateXY& pt = seq->getAt<CoordinateXY>(i);
-            addEdgeCrossing(ptPrev, pt, interiorPointY, crossings);
+            addEdgeCrossing(ptPrev, pt, scanY, crossings);
         }
     }
 
@@ -200,7 +236,7 @@ private:
         crossings.push_back(xInt);
     }
 
-    void findBestMidpoint(std::vector<double>& crossings)
+    void findBestMidpoint(std::vector<double>& crossings, double scanY)
     {
         // zero-area polygons will have no crossings
         if (crossings.empty()) return;
@@ -221,7 +257,7 @@ private:
             if (width > interiorSectionWidth) {
                 interiorSectionWidth = width;
                 double interiorPointX = avg(x1, x2);
-                interiorPoint = Coordinate(interiorPointX, interiorPointY);
+                interiorPoint = Coordinate(interiorPointX, scanY);
             }
         }
     }
