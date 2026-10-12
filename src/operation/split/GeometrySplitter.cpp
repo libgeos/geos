@@ -369,11 +369,12 @@ GeometrySplitter::splitPolygonalWithEdge(const Geometry &geom, const Geometry &e
         }
     }
 
+    std::unique_ptr<Geometry> result;
     if (keep.empty()) {
-        return geom.getFactory()->createEmptyGeometry(geom::GEOS_GEOMETRYCOLLECTION, geom.hasZ(), geom.hasM());
+        result = geom.getFactory()->createEmptyGeometry(geom::GEOS_GEOMETRYCOLLECTION, geom.hasZ(), geom.hasM());
+    } else {
+        result =  geom.getFactory()->createGeometryCollection(std::move(keep));
     }
-
-    auto result =  geom.getFactory()->createGeometryCollection(std::move(keep));
 
     const double inputArea = geom.getArea();
     const double resultArea = result->getArea();
