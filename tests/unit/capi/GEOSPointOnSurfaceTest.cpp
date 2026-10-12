@@ -7,7 +7,6 @@
 #include <geos_c.h>
 
 #include "capi_test_utils.h"
-#include <iostream>
 
 namespace tut {
 //
@@ -267,7 +266,7 @@ void object::test<12>()
 
     result_ = GEOSPointOnSurface(input_);
     ensure(result_);
-    ensure_equals(static_cast<int>(GEOSIntersects(input_, result_)), 1);
+    ensure_equals(GEOSContains(input_, result_), 1);
 }
 
 } // namespace tut
