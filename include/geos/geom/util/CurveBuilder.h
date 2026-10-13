@@ -40,6 +40,9 @@ public:
     // Add all coordinates in the provided sequence
     void add(const CoordinateSequence& seq, bool isCurved);
 
+    // Add all coordinates in the provided sequence (optionally reversed)
+    void add(const CoordinateSequence& seq, bool isCurved, bool isForward);
+
     // Add coordinates between the specified indices (inclusive)
     void add(const CoordinateSequence& seq, std::size_t from, std::size_t to, bool isCurved);
 
@@ -62,28 +65,29 @@ public:
     }
 
     bool hasActiveSequence() const {
-        return m_pts != nullptr;
+        return !m_pts.empty();
     }
 
     bool isCurved() const {
-        return m_isCurved;
+        return hasActiveSequence() && m_pts.back().second;
     }
 
     void setOutputLinearRing(bool outputLinearRing) {
         m_outputLinearRing = outputLinearRing;
     }
 
-private:
-    void finishCurve();
-    void finishLine();
+    void matchRingZM();
 
-    std::vector<std::unique_ptr<SimpleCurve>> m_curves;
-    std::unique_ptr<CoordinateSequence> m_pts{nullptr};
+    // Declare type as noncopyable
+    CurveBuilder(const CurveBuilder& other) = delete;
+    CurveBuilder& operator=(const CurveBuilder& rhs) = delete;
+
+private:
+    std::vector<std::pair<std::unique_ptr<CoordinateSequence>, bool>> m_pts;
     const GeometryFactory& m_gfact;
     const bool m_hasZ;
     const bool m_hasM;
     bool m_outputLinearRing{true};
-    bool m_isCurved{false};
 };
 
 }

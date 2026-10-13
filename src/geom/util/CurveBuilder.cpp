@@ -20,6 +20,9 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LineString.h>
+#include <geos/util/GEOSException.h>
+
+#include <cmath>
 
 namespace geos::geom::util {
 
@@ -47,108 +50,186 @@ CurveBuilder::add(const Curve& geom)
 void
 CurveBuilder::add(const CoordinateSequence& coords, bool isCurved)
 {
-    getSeq(isCurved).add(coords, false);
+    add(coords, isCurved, true);
 }
 
 void
-CurveBuilder::add(const CoordinateSequence& coords, std::size_t from, std::size_t to, bool isCurved)
+CurveBuilder::add(const CoordinateSequence& coords, bool isCurved, bool isForward)
 {
-    getSeq(isCurved).add(coords, from, to, false);
+    if (coords.isEmpty()) {
+        return;
+    }
+
+    if (isForward) {
+        add(coords, 0, coords.size() - 1, isCurved);
+    } else {
+        add(coords, coords.size() - 1, 0, isCurved);
+    }
+}
+
+void
+CurveBuilder::add(const CoordinateSequence& src, std::size_t from, std::size_t to, bool isCurved)
+{
+    CoordinateSequence& dst = getSeq(isCurved);
+    const std::size_t insertionPos = dst.size();
+
+    if (from > to) {
+        for(std::size_t i = from + 1; i > to; --i) {
+            src.applyAt(i-1, [&dst](const auto& coord) {
+                dst.add(coord, false);
+            });
+        }
+    } else {
+        dst.add(src, from, to, false);
+    }
+
+    // When adding a sequence whose initial point is the same as the current final point, we may need to
+    // copy Z/M values from the initial point to the final point, or vice-versa.
+
+    if (!m_hasZ && !m_hasM) {
+        return;
+    }
+
+    if (insertionPos == 0 && m_pts.size() == 1) {
+        return;
+    }
+
+    CoordinateSequence& prev = insertionPos == 0 ? *m_pts[m_pts.size() - 2].first : dst;
+    std::size_t prevPos = insertionPos == 0 ? prev.size() - 1 : insertionPos - 1;
+    std::size_t currPos = insertionPos == 0 ? 0 : insertionPos - 1;
+
+    const bool firstPointEqualsLast = prev.getAt<CoordinateXY>(prevPos).equals2D(src.getAt<CoordinateXY>(from));
+
+    if (!firstPointEqualsLast) {
+        return;
+    }
+
+    if (m_hasZ) {
+        const double currZ = src.getZ(from);
+        const double prevZ = prev.getZ(prevPos);
+
+        if (std::isnan(prevZ) && !std::isnan(currZ)) {
+            prev.setZ(prevPos, currZ);
+        }
+        if (std::isnan(currZ) && !std::isnan(prevZ)) {
+            dst.setZ(currPos, prevZ);
+        }
+    }
+
+    if (m_hasM) {
+        const double currM = src.getM(from);
+        const double prevM = prev.getM(prevPos);
+
+        if (std::isnan(prevM) && !std::isnan(currM)) {
+            prev.setM(prevPos, currM);
+        }
+        if (std::isnan(currM) && !std::isnan(prevM)) {
+            dst.setM(currPos, prevM);
+        }
+    }
+}
+
+void
+CurveBuilder::matchRingZM()
+{
+    if (m_pts.empty()) {
+        return;
+    }
+
+    CoordinateSequence& firstSeq = *m_pts.front().first;
+    CoordinateSequence& lastSeq = *m_pts.back().first;
+
+    if (!firstSeq.front<CoordinateXY>().equals2D(lastSeq.back<CoordinateXY>())) {
+        throw geos::util::GEOSException("CurveBuilder::matchRingZM called on non-ring");
+    }
+
+    if (m_hasZ) {
+        const double firstZ = firstSeq.getZ(0);
+        const double lastZ = lastSeq.getZ(lastSeq.size() - 1);
+
+        if (std::isnan(firstZ) && !std::isnan(lastZ)) {
+            firstSeq.setZ(0, lastZ);
+        }
+        if (std::isnan(lastZ) && !std::isnan(firstZ)) {
+            lastSeq.setZ(lastSeq.size() - 1, firstZ);
+        }
+    }
+
+    if (m_hasM) {
+        const double firstM = firstSeq.getM(0);
+        const double lastM = lastSeq.getM(lastSeq.size() - 1);
+
+        if (std::isnan(firstM) && !std::isnan(lastM)) {
+            firstSeq.setM(0, lastM);
+        }
+        if (std::isnan(lastM) && !std::isnan(firstM)) {
+            lastSeq.setM(lastSeq.size() - 1, firstM);
+        }
+    }
 }
 
 void
 CurveBuilder::closeRing()
 {
-    if (m_curves.empty() && (m_pts == nullptr || m_pts->isEmpty())) {
+    if (m_pts.empty()) {
         return;
     }
 
     CoordinateXYZM first;
-    if (!m_curves.empty()) {
-        m_curves.front()->getCoordinatesRO()->getAt(0, first);
-    } else {
-        m_pts->getAt(0, first);
-    }
+    m_pts.front().first->getAt(0, first);
 
     CoordinateXYZM last;
-    if (m_pts && !m_pts->isEmpty()) {
-        m_pts->getAt(m_pts->size() - 1, last);
-    } else {
-        const auto* seq = m_curves.back()->getCoordinatesRO();
-        seq->getAt(seq->size() - 1, last);
-    }
+    m_pts.back().first->getAt(m_pts.back().first->size() - 1, last);
 
     if (first.equals2D(last)) {
+        matchRingZM();
         return;
     }
 
-    if (m_pts && m_isCurved) {
-        finishCurve();
+    if (isCurved()) {
         getSeq(false).add(last);
     }
-
     getSeq(false).add(first);
-}
-
-void
-CurveBuilder::finishCurve()
-{
-    m_curves.push_back(m_gfact.createCircularString(std::move(m_pts)));
-    m_pts = nullptr;
-}
-
-void
-CurveBuilder::finishLine()
-{
-    m_curves.push_back(m_gfact.createLineString(std::move(m_pts)));
-    m_pts = nullptr;
 }
 
 std::unique_ptr<Curve>
 CurveBuilder::getGeometry()
 {
-    if (m_pts) {
-        if (m_isCurved) {
-            finishCurve();
-        } else {
+    if (m_pts.empty()) {
+        return m_gfact.createLineString(std::make_unique<CoordinateSequence>(0, m_hasZ, m_hasM));
+    }
 
-            if (m_outputLinearRing && m_curves.empty() && m_pts->isRing()) {
-                m_curves.push_back(m_gfact.createLinearRing(std::move(m_pts)));
-            } else {
-                finishLine();
-            }
+    if (m_pts.size() == 1) {
+        auto& [pts, isCurve] = m_pts.front();
+        if (isCurve) {
+            return m_gfact.createCircularString(std::move(pts));
+        }
+        if (m_outputLinearRing && pts->isRing()) {
+            return m_gfact.createLinearRing(std::move(pts));
+        }
+        return m_gfact.createLineString(std::move(pts));
+    }
+
+    std::vector<std::unique_ptr<SimpleCurve>> curves;
+    for (auto& [pts, isCurve] : m_pts) {
+        if (isCurve) {
+            curves.push_back(m_gfact.createCircularString(std::move(pts)));
+        } else {
+            curves.push_back(m_gfact.createLineString(std::move(pts)));
         }
     }
 
-    if (m_curves.empty()) {
-        auto seq = std::make_unique<CoordinateSequence>(0, m_hasZ, m_hasM);
-        return m_gfact.createLineString(std::move(seq));
-    }
-
-    if (m_curves.size() == 1) {
-        return std::move(m_curves[0]);
-    }
-
-    return m_gfact.createCompoundCurve(std::move(m_curves));
+    return m_gfact.createCompoundCurve(std::move(curves));
 }
 
 CoordinateSequence&
 CurveBuilder::getSeq(bool isCurved)
 {
-    if (m_pts) {
-        if (m_isCurved && !isCurved) {
-            finishCurve();
-        } else if (isCurved && !m_isCurved) {
-            finishLine();
-        }
+    if (m_pts.empty() || m_pts.back().second != isCurved) {
+        m_pts.emplace_back(std::make_unique<CoordinateSequence>(0, m_hasZ, m_hasM), isCurved);
     }
 
-    if (!m_pts) {
-        m_pts = std::make_unique<CoordinateSequence>(0, m_hasZ, m_hasM);
-        m_isCurved = isCurved;
-    }
-
-    return *m_pts;
+    return *m_pts.back().first;
 }
 
 }

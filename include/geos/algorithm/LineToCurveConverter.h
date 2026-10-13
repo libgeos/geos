@@ -53,17 +53,6 @@ private:
 
     void addLineCoords(const geom::CoordinateSequence& points, std::size_t from, std::size_t to);
 
-    /*
-
-    void finishArc();
-
-    void finishLine();
-
-    std::shared_ptr<geom::CoordinateSequence> lineCoords;
-    std::shared_ptr<geom::CoordinateSequence> arcCoords;
-    std::vector<std::unique_ptr<geom::SimpleCurve>> curves;
-    const geom::GeometryFactory& factory;
-    */
     geom::util::CurveBuilder curveBuilder;
 
     /// Declared as non-copyable

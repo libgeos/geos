@@ -82,10 +82,6 @@ private:
         return *getRingInternal()->getEnvelopeInternal();
     }
 
-    static void addEdge(const geom::CoordinateSequence* coords,
-                        bool isForward,
-                        geom::CoordinateSequence* coordList);
-
     algorithm::locate::PointOnGeometryLocator* getLocator() const;
 
     bool contains(const EdgeRing& otherRing) const;

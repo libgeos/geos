@@ -305,13 +305,12 @@ EdgeRing::getRingInternal() const
         for(const auto& de : deList) {
             const auto edge = detail::down_cast<PolygonizeEdge*>(de->getEdge());
             const bool isCurved = edge->getLine()->getGeometryTypeId() == GEOS_CIRCULARSTRING;
+            const bool isForward = de->getEdgeDirection();
 
-            CoordinateSequence& ringPts = builder.getSeq(isCurved);
-
-            addEdge(edge->getLine()->getCoordinatesRO(),
-                    de->getEdgeDirection(), &ringPts);
+            builder.add(*edge->getLine()->getCoordinatesRO(), isCurved, isForward);
         }
 
+        builder.matchRingZM();
         ring = builder.getGeometry();
     }
 
@@ -324,36 +323,6 @@ EdgeRing::getRingOwnership()
 {
     getRingInternal(); // active lazy generation
     return std::move(ring);
-}
-
-/*private*/
-void
-EdgeRing::addEdge(const CoordinateSequence* srcCoords, bool isForward,
-                  CoordinateSequence* dstCoords)
-{
-    const std::size_t npts = srcCoords->getSize();
-
-    if (!dstCoords->isEmpty() && !srcCoords->isEmpty()) {
-        // Patch Z value in last coordinate, if needed
-        if (srcCoords->hasZ() && std::isnan(dstCoords->getZ(dstCoords->size() - 1))) {
-            dstCoords->setZ(dstCoords->size() - 1, isForward ? srcCoords->getZ(0) : srcCoords->getZ(srcCoords->getSize() - 1));
-        }
-        // Patch M value in last coordinate, if needed
-        if (srcCoords->hasM() && std::isnan(dstCoords->getM(dstCoords->size() - 1))) {
-            dstCoords->setM(dstCoords->size() - 1, isForward ? srcCoords->getM(0) : srcCoords->getM(srcCoords->getSize() - 1));
-        }
-    }
-
-    if(isForward) {
-        dstCoords->add(*srcCoords, 0, npts - 1, false);
-    }
-    else {
-        for(std::size_t i = npts; i > 0; --i) {
-            srcCoords->applyAt(i-1, [&dstCoords](const auto& coord) {
-                dstCoords->add(coord, false);
-            });
-        }
-    }
 }
 
 EdgeRing*

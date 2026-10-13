@@ -62,8 +62,8 @@ struct test_polygonizetest_data {
     void
     printAll(std::ostream& os, T& cnt)
     {
-        for(typename T::iterator i = cnt.begin(), e = cnt.end(); i != e; ++i) {
-            os << **i << std::endl;
+        for(auto& geom : cnt) {
+            os << geom->toString() << std::endl;
         }
     }
 
@@ -71,9 +71,8 @@ struct test_polygonizetest_data {
     bool
     contains(T& cnt, const Geom* g)
     {
-        for(typename T::iterator i = cnt.begin(), e = cnt.end(); i != e; ++i) {
-            const auto& element = *i;
-            if(element->equalsExact(g)) {
+        for(const auto& element : cnt) {
+            if(element->equalsIdentical(g)) {
                 return true;
             }
         }
@@ -92,9 +91,9 @@ struct test_polygonizetest_data {
                  << ob.size() << endl;
             return false;
         }
-        for(typename T::iterator i = ex.begin(), e = ex.end(); i != e; ++i) {
-            if(! contains(ob, i->get())) {
-                cout << "Expected " << wktwriter.write(i->get())
+        for(const auto& expected : ex) {
+            if(! contains(ob, expected.get())) {
+                cout << "Expected " << wktwriter.write(expected.get())
                      << " not found" << endl;
                 return false;
             }
@@ -395,7 +394,7 @@ void object::test<11>()
         },
         {
           "POLYGON ZM ((0 0 0 0, 0 10 1 2, 10 10 2 3, 10 0 3 4, 0 0 0 0))",
-          "POLYGON ZM ((10 0 3 4, 10 10 2 3, 20 0 NaN 9, 10 0 3 4))"
+          "POLYGON ZM ((10 0 3 4, 10 10 2 3, 20 0 NaN 9, 10 0 3 8))"
         },
         false,
         POLYGONS);
@@ -477,6 +476,24 @@ void object::test<15>()
     doTest(input, expected, false, POLYGONS);
 
     std::reverse(input.begin(), input.end());
+
+    doTest(input, expected, false, POLYGONS);
+}
+
+template<>
+template<>
+void object::test<16>()
+{
+    set_test_name("mixed-dimension curved and linear inputs");
+
+    std::vector<std::string> input{
+        "LINESTRING Z (-5 0 10, 5 0 20)",
+        "CIRCULARSTRING (-5 0, 0 5, 5 0)"
+    };
+
+    std::vector<std::string> expected{
+        "CURVEPOLYGON Z (COMPOUNDCURVE((-5 0 10, 5 0 20), CIRCULARSTRING (5 0 20, 0 5 NaN, -5 0 10)))"
+    };
 
     doTest(input, expected, false, POLYGONS);
 }

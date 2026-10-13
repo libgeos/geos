@@ -6,6 +6,7 @@
   - Make GeometrySplitter able to split MultiSurface inputs (GH-1518, Dan Baston)
   - GEOSGridIntersectionFractions: Set cells outside geometry bounding box to zero (GH-1532, Dan Baston)
   - Avoid raising `FE_INVALID` from Envelope (GH-1555, Mike Taves)
+  - Polygonize / LineMerge: Copy Z/M values at shared endpoints of mixed-dimension inputs (GH-1545, Dan Baston)
 
 ## Changes in 3.15.0
 2026-09-01

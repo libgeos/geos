@@ -174,4 +174,86 @@ void object::test<8>()
     ensure_equals_geometry(static_cast<const Geometry*>(result.get()), expected.get());
 }
 
+template<>
+template<>
+void object::test<9>()
+{
+    set_test_name("Z/M matched when combining mixed-dimension sequences");
+
+    CurveBuilder builder(*factory_, true, true);
+    builder.add(*reader_.read<LineString>("LINESTRING (0 0, 1 1)"));
+    // Patch Z Linear <- Linear
+    builder.add(*reader_.read<LineString>("LINESTRING Z (1 1 5, 2 2 4)"));
+    // Patch Z Linear -> Linear
+    builder.add(*reader_.read<LineString>("LINESTRING (2 2, 5 0)"));
+    // Patch M Linear <- Curve
+    builder.add(*reader_.read<CircularString>("CIRCULARSTRING M (5 0 8, 6 1 7, 7 0 8)"));
+    // Patch M Curve -> Curve
+    builder.add(*reader_.read<CircularString>("CIRCULARSTRING (7 0, 8 -1, 9 0)"));
+    // Patch Z Curve <- Linear
+    builder.add(*reader_.read<LineString>("LINESTRING (9 0 11, 10 20 12)"));
+
+    auto result = builder.getGeometry();
+
+    auto expected = reader_.read("COMPOUNDCURVE ZM ((0 0 NaN NaN, 1 1 5 NaN, 2 2 4 NaN, 5 0 NaN 8), CIRCULARSTRING ZM (5 0 NaN 8, 6 1 NaN 7, 7 0 NaN 8, 8 -1 NaN NaN, 9 0 11 NaN), (9 0 11 NaN, 10 20 12 NaN))");
+
+    ensure_equals_geometry_xyzm(static_cast<const Geometry*>(result.get()), expected.get());
+}
+
+template<>
+template<>
+void object::test<10>()
+{
+    set_test_name("Z/M matched when calling closeRing on open CircularString");
+
+    CurveBuilder builder(*factory_, true, true);
+    builder.add(*reader_.read<CircularString>("CIRCULARSTRING ZM (0 0 100 200, 1 1 200 400, 2 0 300 600)"));
+    builder.closeRing();
+
+    auto result = builder.getGeometry();
+
+    auto expected = reader_.read("COMPOUNDCURVE ZM (CIRCULARSTRING(0 0 100 200, 1 1 200 400, 2 0 300 600), (2 0 300 600, 0 0 100 200))");
+
+    ensure_equals_geometry_xyzm(static_cast<const Geometry*>(result.get()), expected.get());
+}
+
+template<>
+template<>
+void object::test<11>()
+{
+    set_test_name("Z/M matched when calling closeRing on closed CircularString ZM -> LineString");
+
+    CurveBuilder builder(*factory_, true, true);
+    builder.add(*reader_.read<CircularString>("CIRCULARSTRING ZM (0 0 100 200, 1 1 200 400, 2 0 300 600)"));
+    builder.add(*reader_.read<LineString>("LINESTRING (2 0, 0 0)"));
+
+    builder.closeRing();
+
+    auto result = builder.getGeometry();
+
+    auto expected = reader_.read("COMPOUNDCURVE ZM (CIRCULARSTRING(0 0 100 200, 1 1 200 400, 2 0 300 600), (2 0 300 600, 0 0 100 200))");
+
+    ensure_equals_geometry_xyzm(static_cast<const Geometry*>(result.get()), expected.get());
+}
+
+template<>
+template<>
+void object::test<12>()
+{
+    set_test_name("Z/M matched when calling closeRing on closed CircularString -> LineString ZM");
+
+    CurveBuilder builder(*factory_, true, true);
+    builder.add(*reader_.read<CircularString>("CIRCULARSTRING (0 0, 1 1, 2 0)"));
+    builder.add(*reader_.read<LineString>("LINESTRING ZM (2 0 300 600, 0 0 100 200)"));
+
+    builder.closeRing();
+
+    auto result = builder.getGeometry();
+
+    auto expected = reader_.read("COMPOUNDCURVE ZM (CIRCULARSTRING(0 0 100 200, 1 1 NaN NaN, 2 0 300 600), (2 0 300 600, 0 0 100 200))");
+
+    ensure_equals_geometry_xyzm(static_cast<const Geometry*>(result.get()), expected.get());
+}
+
+
 } // namespace tut

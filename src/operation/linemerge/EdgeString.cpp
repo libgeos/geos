@@ -64,26 +64,9 @@ addCoordinates(geom::util::CurveBuilder& curveBuilder, const SimpleCurve* curve,
     }
 
     const CoordinateSequence& srcCoords = *curve->getCoordinatesRO();
-
-    // Patch Z value in last coordinate, if needed
-    if (curveBuilder.hasActiveSequence() && curve->hasZ()) {
-        CoordinateSequence& dstCoords = curveBuilder.getSeq(curveBuilder.isCurved());
-        if (std::isnan(dstCoords.getZ(dstCoords.getSize() - 1))) {
-            dstCoords.setZ(dstCoords.getSize() - 1, forward ? srcCoords.getZ(0) : srcCoords.getZ(srcCoords.getSize() - 1));
-        }
-    }
-
-    // Patch M value in last coordinate, if needed
-    if (curveBuilder.hasActiveSequence() && curve->hasM()) {
-        CoordinateSequence& dstCoords = curveBuilder.getSeq(curveBuilder.isCurved());
-        if (std::isnan(dstCoords.getM(dstCoords.getSize() - 1))) {
-            dstCoords.setM(dstCoords.getSize() - 1, forward ? srcCoords.getM(0) : srcCoords.getM(srcCoords.getSize() - 1));
-        }
-    }
-
     const bool isCurved = curve->getGeometryTypeId() == GEOS_CIRCULARSTRING;
-    CoordinateSequence& dstCoords = curveBuilder.getSeq(isCurved);
-    dstCoords.add(srcCoords, false, forward);
+
+    curveBuilder.add(srcCoords, isCurved, forward);
 }
 
 std::unique_ptr<Curve>
