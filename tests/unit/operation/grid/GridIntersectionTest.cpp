@@ -998,4 +998,19 @@ void object::test<53>() {
     ensure(subd->getGeometryN(1)->equals(outside.get()));
 }
 
+template<>
+template<>
+void object::test<54>()
+{
+    Envelope e(0, 10, 0, 10);
+    Grid<bounded_extent> ext(e, 0.1, 0.1);
+
+    auto g = wkt_reader_.read("POLYGON ((0.3 0.3, 4.7 0.3, 2.5 6.2, 0.3 0.3))");
+
+    auto fracs = GridIntersection::getIntersectionFractions(ext, *g);
+    auto tot = std::accumulate(fracs->begin(), fracs->end(), 0.0);
+
+    ensure_equals("check area", tot/100, g->getArea(), 1e-6);
+}
+
 }
