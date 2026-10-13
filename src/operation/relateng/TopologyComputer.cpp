@@ -18,19 +18,24 @@
 #include <geos/geom/Location.h>
 #include <geos/geom/Position.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/Envelope.h>
 #include <geos/geom/Geometry.h>
 #include <geos/operation/relateng/TopologyComputer.h>
 #include <geos/operation/relateng/TopologyPredicate.h>
 #include <geos/operation/relateng/RelateGeometry.h>
 #include <geos/operation/relateng/RelateNode.h>
 #include <geos/operation/relateng/NodeSection.h>
+#include <geos/operation/relateng/RelateSegmentString.h>
 #include <geos/util/IllegalStateException.h>
+#include <algorithm>
+#include <functional>
 #include <sstream>
 
 
 using geos::algorithm::PolygonNodeTopology;
 using geos::geom::Coordinate;
 using geos::geom::CoordinateXY;
+using geos::geom::Envelope;
 using geos::geom::Geometry;
 using geos::geom::Dimension;
 using geos::geom::Location;
@@ -291,6 +296,57 @@ TopologyComputer::addNodeSections(NodeSection* ns0, NodeSection* ns1)
 
 /* public */
 void
+TopologyComputer::addCollinearOverlap(
+    const RelateSegmentString* ssA, std::size_t segIndexA,
+    const RelateSegmentString* ssB, std::size_t segIndexB)
+{
+    //-- a section in a segment interior has the segment start as its first vertex
+    const CoordinateXY& startA = ssA->getCoordinate(segIndexA);
+    const CoordinateXY& startB = ssB->getCoordinate(segIndexB);
+    overlapSegments.push_back({&startA, ssB, segIndexB});
+    overlapSegments.push_back({&startB, ssA, segIndexA});
+}
+
+/* private */
+void
+TopologyComputer::addOverlapSections(NodeSections* nodeSections)
+{
+    if (overlapSegments.empty())
+        return;
+
+    auto isStartLess = [](const OverlapSegment& os0, const OverlapSegment& os1) {
+        return std::less<const CoordinateXY*>()(os0.otherStart, os1.otherStart);
+    };
+    const CoordinateXY* nodePt = nodeSections->getCoordinate();
+    std::vector<NodeSection*> overlapSections;
+    for (const std::unique_ptr<NodeSection>& ns : nodeSections->getSections()) {
+        //-- only a node in a segment interior can be in the interior of an overlap
+        if (ns->isNodeAtVertex())
+            continue;
+        if (! isOverlapSegmentsSorted) {
+            std::sort(overlapSegments.begin(), overlapSegments.end(), isStartLess);
+            isOverlapSegmentsSorted = true;
+        }
+        OverlapSegment key = { ns->getVertex(0), nullptr, 0 };
+        auto range = std::equal_range(overlapSegments.begin(), overlapSegments.end(), key, isStartLess);
+        for (auto it = range.first; it != range.second; ++it) {
+            const CoordinateXY& p0 = it->ss->getCoordinate(it->segIndex);
+            const CoordinateXY& p1 = it->ss->getCoordinate(it->segIndex + 1);
+            //-- a node at a segment endpoint is an overlap endpoint, so already has the section
+            if (nodePt->equals2D(p0) || nodePt->equals2D(p1))
+                continue;
+            if (Envelope::intersects(p0, p1, *nodePt)) {
+                overlapSections.push_back(it->ss->createNodeSection(it->segIndex, *nodePt));
+            }
+        }
+    }
+    for (NodeSection* ns : overlapSections) {
+        nodeSections->addNodeSection(ns);
+    }
+}
+
+/* public */
+void
 TopologyComputer::addPointOnPointInterior(const CoordinateXY* pt)
 {
     (void)pt;
@@ -547,6 +603,7 @@ TopologyComputer::evaluateNodes()
 void
 TopologyComputer::evaluateNode(NodeSections* nodeSections)
 {
+    addOverlapSections(nodeSections);
     const CoordinateXY* p = nodeSections->getCoordinate();
     std::unique_ptr<RelateNode> node = nodeSections->createNode();
     //-- Node must have edges for geom, but may also be in interior of a overlapping GC

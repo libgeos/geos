@@ -76,6 +76,11 @@ public:
 
     const CoordinateXY* getCoordinate() const;
 
+    const std::vector<std::unique_ptr<NodeSection>>& getSections() const
+    {
+        return sections;
+    };
+
     void addNodeSection(NodeSection* e);
 
     bool hasInteractionAB() const;

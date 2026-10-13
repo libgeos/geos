@@ -27,6 +27,7 @@ namespace relateng {
     class NodeSection;
     class RelateGeometry;
     class RelateNode;
+    class RelateSegmentString;
     class TopologyPredicate;
 }
 }
@@ -44,9 +45,17 @@ class GEOS_DLL TopologyComputer {
     using NodeSections = geos::operation::relateng::NodeSections;
     using RelateGeometry = geos::operation::relateng::RelateGeometry;
     using RelateNode = geos::operation::relateng::RelateNode;
+    using RelateSegmentString = geos::operation::relateng::RelateSegmentString;
     using TopologyPredicate = geos::operation::relateng::TopologyPredicate;
 
 private:
+
+    // A segment in a collinear overlap, keyed by the start vertex of the segment it overlaps
+    struct OverlapSegment {
+        const CoordinateXY* otherStart;
+        const RelateSegmentString* ss;
+        std::size_t segIndex;
+    };
 
     // Members
     TopologyPredicate& predicate;
@@ -54,6 +63,8 @@ private:
     RelateGeometry& geomB;
     std::map<CoordinateXY, NodeSections*> nodeMap;
     std::deque<std::unique_ptr<NodeSections>> nodeSectionsStore;
+    std::vector<OverlapSegment> overlapSegments;
+    bool isOverlapSegmentsSorted = false;
 
     // Methods
 
@@ -122,6 +133,18 @@ private:
 
     void addAreaVertexOnLine(bool isAreaA, Location locArea, Location locTarget, const CoordinateXY* pt);
 
+    /**
+     * Adds sections for segments which overlap a segment
+     * having the node in its interior.
+     * Mutual noding does not compute nodes in the interior of a collinear overlap,
+     * so if a node is created there by some other edge
+     * (e.g. a hole vertex touching a shell segment)
+     * the overlapping segments are missing from it.
+     *
+     * @param nodeSections the sections at the node
+     */
+    void addOverlapSections(NodeSections* nodeSections);
+
     void evaluateNode(NodeSections* nodeSections);
 
     void evaluateNodeEdges(const RelateNode* node);
@@ -174,6 +197,18 @@ public:
     void finish();
 
     void addIntersection(NodeSection* a, NodeSection* b);
+
+    /**
+     * Records a collinear overlap between a segment of A and a segment of B.
+     *
+     * @param ssA the segment string of A
+     * @param segIndexA the index of the segment of A
+     * @param ssB the segment string of B
+     * @param segIndexB the index of the segment of B
+     */
+    void addCollinearOverlap(
+        const RelateSegmentString* ssA, std::size_t segIndexA,
+        const RelateSegmentString* ssB, std::size_t segIndexB);
 
     void addPointOnPointInterior(const CoordinateXY* pt);
 

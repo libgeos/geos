@@ -103,6 +103,10 @@ EdgeSegmentIntersector::addIntersections(
             topoComputer.addIntersection(nsa, nsb);
         }
     }
+    //-- record collinear overlaps, since nodes in their interior lack the overlapping segments
+    if (li.getIntersectionNum() == 2) {
+        topoComputer.addCollinearOverlap(ssA, segIndexA, ssB, segIndexB);
+    }
 }
 
 
