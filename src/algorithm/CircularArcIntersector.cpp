@@ -229,16 +229,16 @@ CircularArcIntersector::intersects(const CircularArc& arc1, const CircularArc& a
         return;
     }
 
-    // a: the distance from c1 to the "radical line", which connects the two intersection points
-    // Expression rewritten by Herbie, https://herbie.uwplse.org/demo/
-    // const double a = (d*d + r1*r1 - r2*r2) / (2*d);
-    const double a = std::fma(r1-r2, (r1 + r2) / (d+d), d*0.5);
-
     // TODO because the circle center calculation is inexact we need some kind of tolerance here.
     // Take a PrecisionModel like LineIntersector?
-    if (a == 0 || (d == 0 && r1 == r2)) {
+    if (d == 0 && r1 == r2) {
         computeCocircularIntersection(arc1, arc2);
     } else {
+        // a: the distance from c1 to the "radical line", which connects the two intersection points
+        // Expression rewritten by Herbie, https://herbie.uwplse.org/demo/
+        // const double a = (d*d + r1*r1 - r2*r2) / (2*d);
+        const double a = std::fma(r1-r2, (r1 + r2) / (d+d), d*0.5);
+
         // Compute interior intersection points.
         const double dx = c2.x-c1.x;
         const double dy = c2.y-c1.y;

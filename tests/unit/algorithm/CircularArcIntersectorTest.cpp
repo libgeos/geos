@@ -1811,6 +1811,18 @@ void object::test<90>()
                             XY{208, 22});
 }
 
+template<>
+template<>
+void object::test<91>()
+{
+    set_test_name("two arcs with interior intersection at control point");
+
+    checkIntersection(XY{-5, 0}, XY{0, 5}, XY{5, 0},
+                      XY{-7, 0}, XY{-3, 4}, XY{1, 0},
+                      CircularArcIntersector::ONE_POINT_INTERSECTION,
+                      XY{-3, 4});
+}
+
 // TODO: check Z values of arc result centerpoints
 // TODO: add tests for seg/seg
 
