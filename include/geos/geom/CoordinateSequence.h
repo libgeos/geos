@@ -25,6 +25,7 @@
 #include <iostream>
 #include <iosfwd> // ostream
 #include <memory> // for unique_ptr typedef
+#include <type_traits> // for add_const
 
 // Forward declarations
 namespace geos {
