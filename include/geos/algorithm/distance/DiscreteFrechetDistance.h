@@ -20,6 +20,7 @@
 #include <geos/geom/CoordinateSequenceFilter.h>
 #include <geos/util/math.h>
 
+#include <algorithm> // for lower_bound
 #include <cstdint>
 #include <unordered_map>
 #include <array>
