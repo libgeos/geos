@@ -117,6 +117,19 @@ CoordinateXY
 CGAlgorithmsDD::intersection(const CoordinateXY& p1, const CoordinateXY& p2,
                              const CoordinateXY& q1, const CoordinateXY& q2)
 {
+    DD xInt;
+    DD yInt;
+    if (!intersectionDD(p1, p2, q1, q2, xInt, yInt))
+        return CoordinateXY::getNull();
+
+    return {xInt.ToDouble(), yInt.ToDouble()};
+}
+
+bool
+CGAlgorithmsDD::intersectionDD(const CoordinateXY& p1, const CoordinateXY& p2,
+                               const CoordinateXY& q1, const CoordinateXY& q2,
+                               DD& xInt, DD& yInt)
+{
     DD q1x(q1.x);
     DD q1y(q1.y);
     DD q2x(q2.x);
@@ -140,11 +153,11 @@ CGAlgorithmsDD::intersection(const CoordinateXY& p1, const CoordinateXY& p2,
     DD w = (px * qy) - (qx * py);
 
     if (w.isZero())
-        return CoordinateXY::getNull();
+        return false;
 
-    double xInt = (x / w).ToDouble();
-    double yInt = (y / w).ToDouble();
-    return {xInt, yInt};
+    xInt = x / w;
+    yInt = y / w;
+    return true;
 }
 
 /* public static */
