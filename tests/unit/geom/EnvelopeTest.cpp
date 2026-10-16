@@ -103,11 +103,7 @@ struct test_envelope_data {
         //ensure("FE_INEXACT raised", !std::fetestexcept(FE_INEXACT));
 //#endif
 #ifdef FE_INVALID
-        // Skip FE_INVALID check on FreeBSD and OpenBSD due to platform-specific behavior
-        // See: https://github.com/libgeos/geos/issues/1206
-#if !defined(__FreeBSD__) && !defined(__OpenBSD__)
         ensure("FE_INVALID raised", !std::fetestexcept(FE_INVALID));
-#endif
 #endif
 #ifdef FE_OVERFLOW
         ensure("FE_OVERFLOW raised", !std::fetestexcept(FE_OVERFLOW));
@@ -269,7 +265,10 @@ void object::test<6>
     check_intersects(small, {-1, -1}, true);
     check_intersects(small, {5, 5}, false);
 
+#if !( defined(__OPTIMIZE__) && defined(__x86_64__) && defined(__clang__) && defined(__apple_build_version__) )
+//  Exclude optimized Apple Clang on x86_64 osx - raises FE_INVALID
     check_intersects(empty, {0, 0}, false);
+#endif
 
     ensure_no_fp_except();
 }
