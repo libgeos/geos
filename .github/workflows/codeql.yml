@@ -13,6 +13,9 @@ permissions:
 
 jobs:
   analyze:
+    # Switch-off this action for maintanence branches
+    if: false
+
     name: Analyze
     # Runner size impacts CodeQL analysis time. To learn more, please see:
     #   - https://gh.io/recommended-hardware-resources-for-running-codeql
