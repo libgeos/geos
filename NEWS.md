@@ -11,6 +11,7 @@
   - Avoid crash on buffer of geometry with only invalid coordinates (GH-1335, Dan Baston)
   - Guard against stack overflow in inputs (GH-1437, Paul Ramsey)
   - Avoid overflow risk in WKB reader (Paul Ramsey)
+  - Skip testing FE_INVALID from unit-geom-Envelope for some Clang builds (GH-1555, Mike Taves)
 
 ## Changes in 3.13.1
 2025-03-03
