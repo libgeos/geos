@@ -1823,6 +1823,18 @@ void object::test<91>()
                       XY{-3, 4});
 }
 
+template<>
+template<>
+void object::test<92>()
+{
+    set_test_name("arcs intersect at shared vertex when inexact distance calculation says they cannot");
+
+    checkIntersection(XY{5, 0}, XY{6.530331962423936, 32.9099081287533}, XY{39.1383458646334, 37.61324718856101},
+                      XY{5, 0}, XY{-13.013189892510923, 476.4218618845866}, XY{426.8482396243887, 660.3353967726679},
+                      CircularArcIntersector::ONE_POINT_INTERSECTION,
+                      XY{5, 0});
+}
+
 // TODO: check Z values of arc result centerpoints
 // TODO: add tests for seg/seg
 
