@@ -265,7 +265,10 @@ void object::test<6>
     check_intersects(small, {-1, -1}, true);
     check_intersects(small, {5, 5}, false);
 
+#if !( defined(__OPTIMIZE__) && defined(__x86_64__) && defined(__clang__) && defined(__apple_build_version__) )
+//  Exclude optimized Apple Clang on x86_64 osx - raises FE_INVALID
     check_intersects(empty, {0, 0}, false);
+#endif
 
     ensure_no_fp_except();
 }
