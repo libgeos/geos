@@ -7,6 +7,9 @@
   - GEOSGridIntersectionFractions: Set cells outside geometry bounding box to zero (GH-1532, Dan Baston)
   - Avoid raising `FE_INVALID` from Envelope (GH-1555, Mike Taves)
   - Polygonize / LineMerge: Copy Z/M values at shared endpoints of mixed-dimension inputs (GH-1545, Dan Baston)
+  - CircularArcIntersector: Use Orient2D to check for arc control points on line (GH-1546, Dan Baston)
+  - CircularArcIntersector: Avoid incorrectly classifying intersections as cocircular (GH-1549, Dan Baston)
+  - GEOSProject: Throw IllegalArgumentException on invalid input (GH-1547, Mohd Quamar Tyagi)
 
 ## Changes in 3.15.0
 2026-09-01
