@@ -32,6 +32,7 @@
 #include <geos/operation/relateng/RelateSegmentString.h>
 #include <geos/operation/relateng/DimensionLocation.h>
 #include <geos/operation/valid/RepeatedPointRemover.h>
+#include <geos/util.h>
 
 #include <sstream>
 
@@ -59,8 +60,10 @@ hasPolygonWithHoles(const Geometry* geometry)
         return false;
     }
     switch (geometry->getGeometryTypeId()) {
-    case GEOS_POLYGON:
-        return geometry->getNumInteriorRing() > 0;
+    case GEOS_POLYGON: {
+        const Polygon* poly = detail::down_cast<const Polygon*>(geometry);
+        return poly->getNumInteriorRing() > 0;
+    }
     case GEOS_MULTIPOLYGON:
     case GEOS_GEOMETRYCOLLECTION:
         for (std::size_t i = 0; i < geometry->getNumGeometries(); i++) {
