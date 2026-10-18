@@ -50,6 +50,31 @@ namespace geos {      // geos
 namespace operation { // geos.operation
 namespace relateng {  // geos.operation.relateng
 
+namespace {
+
+bool
+hasPolygonWithHoles(const Geometry* geometry)
+{
+    if (geometry->isEmpty()) {
+        return false;
+    }
+    switch (geometry->getGeometryTypeId()) {
+    case GEOS_POLYGON:
+        return geometry->getNumInteriorRing() > 0;
+    case GEOS_MULTIPOLYGON:
+    case GEOS_GEOMETRYCOLLECTION:
+        for (std::size_t i = 0; i < geometry->getNumGeometries(); i++) {
+            if (hasPolygonWithHoles(geometry->getGeometryN(i))) {
+                return true;
+            }
+        }
+        return false;
+    default:
+        return false;
+    }
+}
+
+} // namespace
 
 RelateGeometry::RelateGeometry(const Geometry* input, bool isPrepared, const BoundaryNodeRule& bnRule)
     : geom(input)
@@ -240,15 +265,18 @@ RelateGeometry::isSelfNodingRequired() const
 {
     GeometryTypeId typeId = geom->getGeometryTypeId();
     if (typeId == GEOS_POINT
-        || typeId == GEOS_MULTIPOINT
-        || typeId == GEOS_POLYGON
-        || typeId == GEOS_MULTIPOLYGON)
+        || typeId == GEOS_MULTIPOINT)
     {
          return false;
      }
+    if (typeId == GEOS_POLYGON
+        || typeId == GEOS_MULTIPOLYGON) {
+        return hasPolygonWithHoles(geom);
+    }
     //-- a GC with a single polygon does not need noding
-    if (hasAreas && geom->getNumGeometries() == 1)
-        return false;
+    if (hasAreas && geom->getNumGeometries() == 1) {
+        return hasPolygonWithHoles(geom);
+    }
     return true;
 }
 

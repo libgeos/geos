@@ -925,5 +925,19 @@ void object::test<64> ()
     checkRelate(b, a, "102F01FF2");
 }
 
+// github.com/libgeos/geos/issues/1558
+template<>
+template<>
+void object::test<65> ()
+{
+    std::string a = "POLYGON ((0 0,4 0,4 4,0 4,0 0),(2 0,1 1,3 1,2 0))";
+    std::string b = "POLYGON ((0 0,4 0,4 4,0 4,0 0))";
+    checkRelate(a, b, "2FF11F2F2");
+    checkRelate(b, a, "212F1FFF2");
+    checkContainsWithin(b, a, true);
+    checkCoversCoveredBy(b, a, true);
+    checkOverlaps(a, b, false);
+}
+
 
 } // namespace tut
