@@ -5,7 +5,7 @@
   - Fix arc noding failure with endpoint intersections (GH-1513, Dan Baston)
   - Make GeometrySplitter able to split MultiSurface inputs (GH-1518, Dan Baston)
   - GEOSGridIntersectionFractions: Set cells outside geometry bounding box to zero (GH-1532, Dan Baston)
-  - Avoid raising `FE_INVALID` from Envelope (GH-1555, Mike Taves)
+  - Skip testing FE_INVALID from unit-geom-Envelope for some Clang builds (GH-1555, Mike Taves)
   - Polygonize / LineMerge: Copy Z/M values at shared endpoints of mixed-dimension inputs (GH-1545, Dan Baston)
   - CircularArcIntersector: Use Orient2D to check for arc control points on line (GH-1546, Dan Baston)
   - CircularArcIntersector: Avoid incorrectly classifying intersections as cocircular (GH-1549, Dan Baston)
