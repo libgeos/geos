@@ -6,6 +6,7 @@
   - Fix DepthSegment comparison logic (really this time) (GH-1266, Martin Davis)
   - Change CoverageGapFinder to return polygons (Martin Davis)
   - Avoid crash on buffer of geometry with only invalid coordinates (GH-1335, Dan Baston)
+  - Skip testing FE_INVALID from unit-geom-Envelope for some Clang builds (GH-1555, Mike Taves)
 
 ## Changes in 3.12.3
 2025-03-03
