@@ -137,6 +137,9 @@ TopologyComputer::isSelfNodingRequired() const
     
     if (geomA.isSelfNodingRequired()) 
       return true;
+
+    if (geomB.isSelfNodingRequired())
+      return true;
     
     //-- if B is a mixed GC with A and L require full noding
     if (geomB.hasAreaAndLine())
