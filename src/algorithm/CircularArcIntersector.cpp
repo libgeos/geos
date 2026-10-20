@@ -182,6 +182,30 @@ CircularArcIntersector::intersects(const CircularArc& arc, const CoordinateSeque
     }
 }
 
+static std::vector<CoordinateXY>
+getCommonPoints(const CircularArc& arc1, const CircularArc& arc2)
+{
+    std::vector<CoordinateXY> ret;
+    const CoordinateXY& ap0 = arc1.p0();
+    const CoordinateXY& ap1 = arc1.p1();
+    const CoordinateXY& ap2 = arc1.p2();
+    const CoordinateXY& bp0 = arc2.p0();
+    const CoordinateXY& bp1 = arc2.p1();
+    const CoordinateXY& bp2 = arc2.p2();
+
+    if (ap0 == bp0 || ap0 == bp1 || ap0 == bp2) {
+        ret.push_back(ap0);
+    }
+    if (ap1 == bp0 || ap1 == bp1 || ap1 == bp2) {
+        ret.push_back(ap1);
+    }
+    if (ap2 == bp0 || ap2 == bp1 || ap2 == bp2) {
+        ret.push_back(ap2);
+    }
+
+    return ret;
+}
+
 void
 CircularArcIntersector::intersects(const CircularArc& arc1, const CircularArc& arc2)
 {
@@ -217,16 +241,20 @@ CircularArcIntersector::intersects(const CircularArc& arc1, const CircularArc& a
 
     const auto d = c1.distance(c2);
 
-    if (d > r1 + r2) {
-        // Circles are disjoint
-        result = NO_INTERSECTION;
-        return;
-    }
+    auto commonPoints = getCommonPoints(arc1, arc2);
 
-    if (d < std::abs(r1-r2)) {
-        // One circle contained within the other; arcs cannot intersect
-        result = NO_INTERSECTION;
-        return;
+    if (commonPoints.empty()) {
+        if (d > r1 + r2) {
+            // Circles are disjoint
+            result = NO_INTERSECTION;
+            return;
+        }
+
+        if (d < std::abs(r1-r2)) {
+            // One circle contained within the other; arcs cannot intersect
+            result = NO_INTERSECTION;
+            return;
+        }
     }
 
     // TODO because the circle center calculation is inexact we need some kind of tolerance here.
@@ -253,22 +281,8 @@ CircularArcIntersector::intersects(const CircularArc& arc1, const CircularArc& a
         CoordinateXY isect0{p.x + h* dy/d, p.y - h* dx/d };
         CoordinateXY isect1{p.x - h* dy/d, p.y + h* dx/d };
 
-        // Check to see if computed intersection points are inexact versions of an endpoint intersection
-        const CoordinateXY& ap0 = arc1.p0();
-        const CoordinateXY& ap1 = arc1.p1();
-        const CoordinateXY& ap2 = arc1.p2();
-        const CoordinateXY& bp0 = arc2.p0();
-        const CoordinateXY& bp1 = arc2.p1();
-        const CoordinateXY& bp2 = arc2.p2();
-
-        if (ap0 == bp0 || ap0 == bp1 || ap0 == bp2) {
-            closestPoint(isect0, isect1, 2, ap0) = ap0;
-        }
-        if (ap1 == bp0 || ap1 == bp1 || ap1 == bp2) {
-            closestPoint(isect0, isect1, 2, ap1) = ap1;
-        }
-        if (ap2 == bp0 || ap2 == bp1 || ap2 == bp2) {
-            closestPoint(isect0, isect1, 2, ap2) = ap2;
+        for (const auto& pt : commonPoints) {
+            closestPoint(isect0, isect1, 2 , pt) = pt;
         }
 
         if (arc1.containsPointOnCircle(isect0) && arc2.containsPointOnCircle(isect0)) {
