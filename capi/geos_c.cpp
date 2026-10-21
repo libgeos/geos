@@ -1570,6 +1570,12 @@ extern "C" {
     }
 
     Geometry*
+    GEOSGeom_homogenize(Geometry* g)
+    {
+        return GEOSGeom_homogenize_r(handle, g);
+    }
+
+    Geometry*
     GEOSGeom_clone(const Geometry* g)
     {
         return GEOSGeom_clone_r(handle, g);
