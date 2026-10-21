@@ -44,32 +44,23 @@ PointLocation::isOnSegment(const geom::CoordinateXY& p, const geom::CoordinateXY
     if (p.equals2D(p0) || p.equals2D(p1))
         return true;
 
-    // Membership on already-rounded coordinates.  A certain Ozaki LEFT/RIGHT
-    // certifies off; STRAIGHT certifies on.  FAILURE means the double
-    // determinant cannot certify a side.
-    //
-    // Do not treat every nonzero FAILURE as on-segment: at large magnitude
-    // the filter can fail while |det| is huge and DD correctly separates
-    // (LINESTRING (0 0, 1e16 1e16) / POINT (5e15, 5e15+1), |det| ~ 9e15).
-    // Only a tiny nonzero det is a binary64 rounding residual (#968:
-    // (1,0)-(0,2) with (0.9,0.2), |det| ~ 5.55e-17).  Exact-zero det on a
-    // huge segment is the testA trap — fall through to DD.
-    const int filt = CGAlgorithmsDD::orientationIndexFilter(
+    // Ozaki LEFT/RIGHT is off the segment and STRAIGHT is on it.
+    // A FAILURE is on the segment only when the determinant is a
+    // small nonzero residual. Larger values are decided by DD orientation.
+    const int orient = CGAlgorithmsDD::orientationIndexFilter(
         p0.x, p0.y, p1.x, p1.y, p.x, p.y);
-    if (filt == CGAlgorithmsDD::LEFT || filt == CGAlgorithmsDD::RIGHT) {
+    if (orient == CGAlgorithmsDD::LEFT || orient == CGAlgorithmsDD::RIGHT) {
         return false;
     }
-    if (filt == CGAlgorithmsDD::STRAIGHT) {
+    if (orient == CGAlgorithmsDD::STRAIGHT) {
         return true;
     }
 
     const double detleft = (p0.x - p.x) * (p1.y - p.y);
     const double detright = (p0.y - p.y) * (p1.x - p.x);
     const double det = detleft - detright;
-    // Explicit absolute bound on |2*signed triangle area|.  #968 residuals
-    // sit near 1e-16; the large-scale off-line counterexample is ~1e16.
-    static constexpr double kOnSegmentDetTol = 1e-12;
-    if (det != 0.0 && std::fabs(det) <= kOnSegmentDetTol) {
+    static constexpr double ON_SEGMENT_DET_TOL = 1e-12;
+    if (det != 0.0 && std::fabs(det) <= ON_SEGMENT_DET_TOL) {
         return true;
     }
     return Orientation::index(p0, p1, p) == Orientation::COLLINEAR;
