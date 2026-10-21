@@ -32,6 +32,9 @@ namespace io {
 namespace geom {
 class Coordinate;
 }
+namespace math {
+class DD;
+}
 }
 
 namespace geos {
@@ -177,6 +180,27 @@ public:
      * which is not suitable for precision operations elsewhere in JTS.
      */
     double makePrecise(double val) const;
+
+    /** \brief
+     * Rounds a double-double value to the PrecisionModel grid.
+     *
+     * The rounding rule is the one of makePrecise(double), including
+     * the choice between grid size and scale and the rounding of
+     * half-cell ties towards positive infinity.
+     * The grid cell is determined in double-double arithmetic,
+     * so a value that lies just across a half-cell boundary from
+     * its nearest double is rounded into its own cell.
+     * The grid value of that cell is also computed in double-double
+     * arithmetic and rounded once to the nearest double.
+     * For a cell index below 2^53, makePrecise(double) returns the
+     * nearest double to the same grid value, so both methods return the
+     * same double for the same cell. From 2^53 on, the cell index is not
+     * exactly representable as a double, and only this method keeps it.
+     *
+     * @param val the value to round
+     * @return the grid value of the cell containing val
+     */
+    double makePrecise(const math::DD& val) const;
 
     /// Rounds the given Coordinate to the PrecisionModel grid.
     void makePrecise(CoordinateXY& coord) const
@@ -343,6 +367,16 @@ private:
      */
     void setScale(double newScale);
     // throw IllegalArgumentException
+
+    /** \brief
+     * The grid rounding rule shared by makePrecise(double) and
+     * makePrecise(const math::DD&).
+     *
+     * Only the arithmetic that finds the grid cell index depends on
+     * the type of the value.
+     */
+    template<typename T>
+    double roundToGrid(const T& val) const;
 
     /** \brief
      * Snaps a value to nearest integer, if within tolerance.
