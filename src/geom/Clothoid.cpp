@@ -25,6 +25,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <limits>
 #include <memory>
 #include <utility>
 #include <vector>
@@ -57,8 +58,6 @@ identicalDouble(double a, double b)
 
 // Relative gap allowed when testing a similarity frame.
 constexpr double SIMILARITY_RELATIVE = 1e-12;
-// Skip the axis search past this many half-revolutions.
-constexpr double ENVELOPE_MAX_HALF_TURNS = 100000.0;
 
 // 8-point Gauss–Legendre nodes and weights on [-1, 1].
 constexpr int GL_N = 8;
@@ -634,9 +633,6 @@ Clothoid::computeClothoidEnvelope() const
         thetaMin = std::min(thetaOf(tLo), thetaOf(tHi));
         thetaMax = std::max(thetaOf(tLo), thetaOf(tHi));
     }
-    if ((thetaMax - thetaMin) / MATH_PI > ENVELOPE_MAX_HALF_TURNS) {
-        return env;
-    }
 
     auto addIfInterior = [&](double t) {
         if (t > tLo && t < tHi) {
@@ -658,10 +654,20 @@ Clothoid::computeClothoidEnvelope() const
         }
         const double alpha = std::atan2(coeffSin, coeffCos);
         const double base = alpha + MATH_PI / 2.0;
-        const int n0 = static_cast<int>(std::floor((thetaMin - base) / MATH_PI)) - 1;
-        const int n1 = static_cast<int>(std::ceil((thetaMax - base) / MATH_PI)) + 1;
-        for (int n = n0; n <= n1; ++n) {
-            const double theta = base + static_cast<double>(n) * MATH_PI;
+        // The net turn is at most MAX_TURN_RADIANS. Absolute constructive
+        // heading is not, so the half-turn index does not fit in int.
+        // Walk the window [thetaMin, thetaMax] instead of casting it.
+        const double halfTurns = (thetaMax - thetaMin) / MATH_PI;
+        const double first = std::floor((thetaMin - base) / MATH_PI) - 1.0;
+        if (!std::isfinite(halfTurns) || !std::isfinite(first)
+                || halfTurns < 0.0
+                || halfTurns > static_cast<double>(std::numeric_limits<int>::max() - 5)) {
+            throw util::IllegalArgumentException(
+                "Clothoid turn is too large to integrate");
+        }
+        const int steps = static_cast<int>(std::ceil(halfTurns)) + 5;
+        for (int i = 0; i < steps; ++i) {
+            const double theta = base + (first + static_cast<double>(i)) * MATH_PI;
             if (theta < thetaMin || theta > thetaMax) {
                 continue;
             }
