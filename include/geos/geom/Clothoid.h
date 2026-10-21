@@ -117,6 +117,9 @@ public:
     /// apply_rw throws; the reference frame is not a coordinate sequence.
     void apply_rw(const CoordinateFilter* filter) override;
 
+    void addLinearizedPoints(CoordinateSequence& seq,
+                             const algorithm::CurveToLineParams& params) const override;
+
     void apply_rw(CoordinateSequenceFilter& filter) override;
 
     bool equalsExact(const Geometry* other, double tolerance = 0) const override;
@@ -166,6 +169,10 @@ protected:
 private:
 
     void pointOnCurve(double travel, double& x, double& y, double& z, double& m) const;
+
+    void appendLinearizedPoints(CoordinateSequence& seq,
+                                const algorithm::CurveToLineParams& params,
+                                std::size_t first) const;
 
     Envelope computeClothoidEnvelope() const;
 

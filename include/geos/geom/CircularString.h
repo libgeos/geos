@@ -63,6 +63,9 @@ public:
 
     std::unique_ptr<Curve> getCurved(const algorithm::LineToCurveParams&) const;
 
+    void addLinearizedPoints(CoordinateSequence& seq,
+                             const algorithm::CurveToLineParams& params) const override;
+
 protected:
 
     /// \brief

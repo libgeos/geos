@@ -547,11 +547,13 @@ Clothoid::compareToSameClass(const Geometry* geom) const
     return 0;
 }
 
-LineString*
-Clothoid::getLinearizedImpl(const algorithm::CurveToLineParams& params) const
+void
+Clothoid::appendLinearizedPoints(CoordinateSequence& seq,
+                                 const algorithm::CurveToLineParams& params,
+                                 std::size_t first) const
 {
     if (isEmpty()) {
-        return getFactory()->createLineString(hasZ(), hasM()).release();
+        return;
     }
 
     const double stepRadians = params.getMaxStepDegrees() * MATH_PI / 180.0;
@@ -569,8 +571,7 @@ Clothoid::getLinearizedImpl(const algorithm::CurveToLineParams& params) const
         segments = 1;
     }
 
-    auto seq = std::make_unique<CoordinateSequence>(segments + 1, hasZ(), hasM());
-    for (std::size_t i = 0; i <= segments; ++i) {
+    for (std::size_t i = first; i <= segments; ++i) {
         const double s = curve.length * (static_cast<double>(i) / static_cast<double>(segments));
         double x = 0.0;
         double y = 0.0;
@@ -580,8 +581,26 @@ Clothoid::getLinearizedImpl(const algorithm::CurveToLineParams& params) const
         CoordinateXYZM ordinate(x, y,
                                 hasZ() ? z : DoubleNotANumber,
                                 hasM() ? m : DoubleNotANumber);
-        seq->setAt(ordinate, i);
+        seq.add(ordinate);
     }
+}
+
+void
+Clothoid::addLinearizedPoints(CoordinateSequence& seq,
+                              const algorithm::CurveToLineParams& params) const
+{
+    appendLinearizedPoints(seq, params, 1);
+}
+
+LineString*
+Clothoid::getLinearizedImpl(const algorithm::CurveToLineParams& params) const
+{
+    if (isEmpty()) {
+        return getFactory()->createLineString(hasZ(), hasM()).release();
+    }
+
+    auto seq = std::make_unique<CoordinateSequence>(0, hasZ(), hasM());
+    appendLinearizedPoints(*seq, params, 0);
     return getFactory()->createLineString(std::move(seq)).release();
 }
 

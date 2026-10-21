@@ -15,10 +15,8 @@
 #include <sstream>
 
 #include <geos/algorithm/Orientation.h>
-#include <geos/geom/CircularArc.h>
 #include <geos/geom/CompoundCurve.h>
 #include <geos/geom/CoordinateFilter.h>
-#include <geos/geom/CircularString.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/operation/BoundaryOp.h>
 #include <geos/operation/split/SplitLinealAtPoint.h>
@@ -258,28 +256,11 @@ CompoundCurve::getLinearizedImpl(const algorithm::CurveToLineParams& params) con
 {
     auto seq = std::make_shared<CoordinateSequence>(0, hasZ(), hasM());
     for (const auto& curve : curves) {
-        const CoordinateSequence* curveSeq = curve->getCoordinatesRO();
-
         if (seq->isEmpty()) {
+            const CoordinateSequence* curveSeq = curve->getCoordinatesRO();
             seq->add(*curveSeq, static_cast<size_t>(0), 0);
         }
-
-        if (curve->getGeometryTypeId() == GEOS_CLOTHOID) {
-            const std::unique_ptr<Geometry> lin = curve->getLinearized(params);
-            const auto* line = detail::down_cast<const LineString*>(lin.get());
-            const CoordinateSequence* linSeq = line->getCoordinatesRO();
-            if (linSeq->size() > 1) {
-                seq->add(*linSeq, 1, linSeq->size() - 1);
-            }
-        } else if (curve->isCurved()) {
-            const CircularString* cs = detail::down_cast<const CircularString*>(curve.get());
-
-            for (const auto& arc : cs->getArcs()) {
-                arc.addLinearizedPoints(*seq, params);
-            }
-        } else {
-            seq->add(*curveSeq, 1, curveSeq->size() - 1);
-        }
+        curve->addLinearizedPoints(*seq, params);
     }
     return getFactory()->createLineString(std::move(seq)).release();
 }

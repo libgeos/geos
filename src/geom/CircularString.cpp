@@ -161,20 +161,26 @@ CircularString::getCurved(const algorithm::LineToCurveParams&) const
 
 
 LineString*
-CircularString::getLinearizedImpl(const algorithm::CurveToLineParams& params) const {
+CircularString::getLinearizedImpl(const algorithm::CurveToLineParams& params) const
+{
     if (isEmpty()) {
         return getFactory()->createLineString().release();
     }
 
     auto seq = std::make_shared<CoordinateSequence>(0, hasZ(), hasM());
     seq->add(*getCoordinatesRO(), static_cast<std::size_t>(0), 0);
-
-    for (const CircularArc& arc : getArcs())
-    {
-        arc.addLinearizedPoints(*seq, params);
-    }
+    addLinearizedPoints(*seq, params);
 
     return getFactory()->createLineString(seq).release();
+}
+
+void
+CircularString::addLinearizedPoints(CoordinateSequence& seq,
+                                    const algorithm::CurveToLineParams& params) const
+{
+    for (const CircularArc& arc : getArcs()) {
+        arc.addLinearizedPoints(seq, params);
+    }
 }
 
 CircularString*
