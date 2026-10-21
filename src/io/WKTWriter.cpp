@@ -23,6 +23,7 @@
 #include <geos/io/CLocalizer.h>
 #include <geos/io/CheckOrdinatesFilter.h>
 #include <geos/geom/CircularString.h>
+#include <geos/geom/Clothoid.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequenceFilter.h>
 #include <geos/geom/CompoundCurve.h>
@@ -239,6 +240,7 @@ WKTWriter::appendGeometryTaggedText(const Geometry& geometry,
         case GEOS_LINESTRING:
         case GEOS_LINEARRING:
         case GEOS_CIRCULARSTRING: appendSimpleCurveTaggedText(static_cast<const SimpleCurve&>(geometry), outputOrdinates, level, writer); break;
+        case GEOS_CLOTHOID: appendClothoidTaggedText(static_cast<const Clothoid&>(geometry), outputOrdinates, level, writer); break;
         case GEOS_COMPOUNDCURVE: appendCompoundCurveTaggedText(static_cast<const CompoundCurve&>(geometry), outputOrdinates, level, writer); break;
         case GEOS_CURVEPOLYGON:
         case GEOS_POLYGON:    appendSurfaceTaggedText(static_cast<const Surface&>(geometry), outputOrdinates, level, writer); break;
@@ -315,6 +317,8 @@ WKTWriter::appendCurveText(const Curve& curve, OrdinateSet outputOrdinates, int 
 
     if (curve.getGeometryTypeId() == GEOS_COMPOUNDCURVE) {
         appendCompoundCurveTaggedText(static_cast<const CompoundCurve&>(curve), outputOrdinates, level, writer);
+    } else if (curve.getGeometryTypeId() == GEOS_CLOTHOID) {
+        appendClothoidTaggedText(static_cast<const Clothoid&>(curve), outputOrdinates, level, writer);
     } else {
         appendSimpleCurveText(static_cast<const SimpleCurve&>(curve), outputOrdinates, level, false, writer);
     }
@@ -328,9 +332,67 @@ WKTWriter::appendSimpleCurveText(const SimpleCurve& curve, OrdinateSet outputOrd
 
     if (curve.getGeometryTypeId() == GEOS_CIRCULARSTRING) {
         appendSimpleCurveTaggedText(curve, outputOrdinates, level, writer);
+    } else if (curve.getGeometryTypeId() == GEOS_CLOTHOID) {
+        appendClothoidTaggedText(static_cast<const Clothoid&>(curve), outputOrdinates, level, writer);
     } else {
         appendSequenceText(*curve.getCoordinatesRO(), outputOrdinates, level, false, writer);
     }
+}
+
+void
+WKTWriter::appendClothoidTaggedText(const Clothoid& clothoid, OrdinateSet outputOrdinates, int level, Writer& writer) const
+{
+    (void) level;
+    appendTag(clothoid, outputOrdinates, writer);
+    if (clothoid.isEmpty()) {
+        writer.write("EMPTY");
+        return;
+    }
+
+    const bool hasZ = outputOrdinates.hasZ();
+    const bool hasM = outputOrdinates.hasM();
+    const ClothoidReferenceLocation loc = clothoid.getReferenceLocation();
+
+    auto component = [&](const char* keyword, double x, double y, double z) {
+        writer.write(keyword);
+        writer.write(" ");
+        if (hasZ) {
+            writer.write("Z ");
+        }
+        writer.write("(");
+        writer.write(writeNumber(x));
+        writer.write(" ");
+        writer.write(writeNumber(y));
+        if (hasZ) {
+            writer.write(" ");
+            writer.write(writeNumber(z));
+        }
+        writer.write(")");
+    };
+
+    writer.write("(REFERENCELOCATION AFFINEPLACEMENT ");
+    if (hasZ) {
+        writer.write("Z ");
+    }
+    writer.write("(");
+    component("LOCATION", loc.x, loc.y, loc.z);
+    writer.write(", REFERENCEDIRECTIONS (");
+    component("VECTOR", loc.ux, loc.uy, loc.uz);
+    writer.write(", ");
+    component("VECTOR", loc.vx, loc.vy, loc.vz);
+    writer.write(")), SCALEFACTOR ");
+    writer.write(writeNumber(clothoid.getScaleFactor()));
+    writer.write(", STARTDISTANCE ");
+    writer.write(writeNumber(clothoid.getStartDistance()));
+    writer.write(", ENDDISTANCE ");
+    writer.write(writeNumber(clothoid.getEndDistance()));
+    if (hasM) {
+        writer.write(", STARTM ");
+        writer.write(writeNumber(clothoid.getStartM()));
+        writer.write(", ENDM ");
+        writer.write(writeNumber(clothoid.getEndM()));
+    }
+    writer.write(")");
 }
 
 

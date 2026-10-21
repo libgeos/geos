@@ -113,6 +113,27 @@ public:
         return static_cast<size_t>(end - buf);
     };
 
+    int getOrder() const
+    {
+        return byteOrder;
+    }
+
+    unsigned char peekByte(std::size_t offset) const
+    {
+        if (size() < offset + 1) {
+            throw ParseException("Unexpected EOF parsing WKB");
+        }
+        return buf[offset];
+    }
+
+    uint32_t peekUnsigned(std::size_t offset, int order) const
+    {
+        if (size() < offset + 4) {
+            throw ParseException("Unexpected EOF parsing WKB");
+        }
+        return ByteOrderValues::getUnsigned(buf + offset, order);
+    }
+
 
 private:
     int byteOrder;

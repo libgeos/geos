@@ -2,6 +2,7 @@
 2027-xx-xx
 
 - New things:
+  - Add ST_Clothoid WKT/WKB (ISO/IEC 13249-3 type 22) (Jeroen Bloemscheer)
   - Add DirectedHausdorffDistance and C API GEOSDirectedHausdorffDistance /
     GEOSSymmetricHausdorffDistance (Martin Davis, Jeroen Bloemscheer, Dan Baston)
 

@@ -98,6 +98,9 @@ PointLocator::computeLocation(const CoordinateXY& p, const Geometry* geom)
             updateLocationInfo(locate(p, ls));
             break;
         }
+        case GEOS_CLOTHOID:
+            throw util::UnsupportedOperationException(
+                "Clothoid point location is not implemented");
         case GEOS_CIRCULARSTRING: {
             const CircularString* cs = static_cast<const CircularString*>(geom);
             updateLocationInfo(locate(p, cs));

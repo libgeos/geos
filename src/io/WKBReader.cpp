@@ -21,6 +21,7 @@
 #include <geos/io/ByteOrderValues.h>
 #include <geos/io/ParseException.h>
 #include <geos/geom/CircularString.h>
+#include <geos/geom/Clothoid.h>
 #include <geos/geom/CompoundCurve.h>
 #include <geos/geom/CurvePolygon.h>
 #include <geos/geom/Geometry.h>
@@ -210,6 +211,7 @@ WKBReader::minMemSize(geom::GeometryTypeId geomType, uint64_t size) const
         case GEOS_LINEARRING:
         case GEOS_CIRCULARSTRING:
         case GEOS_COMPOUNDCURVE:
+        case GEOS_CLOTHOID:
         case GEOS_POINT:
             perElement = minCoordSize;
             break;
@@ -344,6 +346,13 @@ WKBReader::readGeometry()
     case WKBConstants::wkbCircularString :
         result = readCircularString();
         break;
+    case WKBConstants::wkbCircle :
+        throw ParseException("WKB type 18 is not implemented");
+    case WKBConstants::wkbSpiralCurve :
+        throw ParseException("WKB type 23 is not implemented");
+    case WKBConstants::wkbClothoid :
+        result = readClothoid();
+        break;
     case WKBConstants::wkbCompoundCurve :
         result = readCompoundCurve();
         break;
@@ -430,6 +439,114 @@ WKBReader::readCircularString()
     minMemSize(GEOS_CIRCULARSTRING, size);
     auto pts = readCoordinateSequence(size);
     return factory.createCircularString(std::move(pts));
+}
+
+namespace {
+
+bool
+isGeometryWkbType(uint32_t base)
+{
+    switch (base) {
+    case WKBConstants::wkbPoint:
+    case WKBConstants::wkbLineString:
+    case WKBConstants::wkbPolygon:
+    case WKBConstants::wkbMultiPoint:
+    case WKBConstants::wkbMultiLineString:
+    case WKBConstants::wkbMultiPolygon:
+    case WKBConstants::wkbGeometryCollection:
+    case WKBConstants::wkbCircularString:
+    case WKBConstants::wkbCompoundCurve:
+    case WKBConstants::wkbCurvePolygon:
+    case WKBConstants::wkbMultiCurve:
+    case WKBConstants::wkbMultiSurface:
+    case WKBConstants::wkbCircle:
+    case WKBConstants::wkbClothoid:
+    case WKBConstants::wkbSpiralCurve:
+        return true;
+    default:
+        return false;
+    }
+}
+
+} // namespace
+
+std::unique_ptr<Clothoid>
+WKBReader::readClothoid()
+{
+    // Empty omits the reference-location body. A following geometry also
+    // starts with a byte order and a type word, so that header is not consumed.
+    const int clothoidOrder = dis.getOrder();
+    if (dis.size() < 5) {
+        return factory.createClothoid(hasZ, hasM);
+    }
+
+    const unsigned char nextOrderByte = dis.peekByte(0);
+    if (nextOrderByte != WKBConstants::wkbXDR && nextOrderByte != WKBConstants::wkbNDR) {
+        throw ParseException("CLOTHOID WKB requires an affine placement");
+    }
+    const int nextOrder = (nextOrderByte == WKBConstants::wkbNDR)
+        ? ByteOrderValues::ENDIAN_LITTLE
+        : ByteOrderValues::ENDIAN_BIG;
+    const uint32_t nextType = dis.peekUnsigned(1, nextOrder);
+    const uint32_t nextBase = (nextType & 0xffffu) % 1000u;
+    if (nextBase != static_cast<uint32_t>(WKBConstants::wkbAffinePlacement)) {
+        if (isGeometryWkbType(nextBase)) {
+            return factory.createClothoid(hasZ, hasM);
+        }
+        throw ParseException("CLOTHOID WKB requires an affine placement");
+    }
+
+    dis.readByte();
+    dis.setOrder(nextOrder);
+    const uint32_t placementType = dis.readUnsigned();
+    const uint32_t placementRange = (placementType & 0xffffu) / 1000u;
+    const bool placementZ = (placementRange == 1u) || ((placementType & 0x80000000u) != 0);
+    const bool placementM = (placementRange == 2u) || (placementRange == 3u)
+        || ((placementType & 0x40000000u) != 0);
+    if ((placementType & 0x20000000u) != 0 || placementM || placementZ != hasZ || placementRange > 1u) {
+        throw ParseException(
+            "CLOTHOID reference location must be affine placement type 102 or 1102");
+    }
+
+    const PrecisionModel& pm = *factory.getPrecisionModel();
+    ClothoidReferenceLocation location;
+    location.x = pm.makePrecise(dis.readDouble());
+    location.y = pm.makePrecise(dis.readDouble());
+    location.z = 0.0;
+    if (hasZ) {
+        location.z = dis.readDouble();
+    }
+    const uint32_t directionCount = dis.readUnsigned();
+    if (directionCount != 2u) {
+        throw ParseException(
+            "CLOTHOID reference location requires exactly 2 reference directions");
+    }
+    location.ux = dis.readDouble();
+    location.uy = dis.readDouble();
+    location.uz = 0.0;
+    if (hasZ) {
+        location.uz = dis.readDouble();
+    }
+    location.vx = dis.readDouble();
+    location.vy = dis.readDouble();
+    location.vz = 0.0;
+    if (hasZ) {
+        location.vz = dis.readDouble();
+    }
+
+    // Scale and distances use the clothoid byte order, not the placement's.
+    dis.setOrder(clothoidOrder);
+    const double scale = dis.readDouble();
+    const double startDistance = dis.readDouble();
+    const double endDistance = dis.readDouble();
+    double startM = 0.0;
+    double endM = 0.0;
+    if (hasM) {
+        startM = dis.readDouble();
+        endM = dis.readDouble();
+    }
+    return factory.createClothoid(
+        location, scale, startDistance, endDistance, hasZ, hasM, startM, endM);
 }
 
 std::unique_ptr<CompoundCurve>

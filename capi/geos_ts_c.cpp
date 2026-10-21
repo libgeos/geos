@@ -485,6 +485,7 @@ private:
 static bool
 isCurvedType (geos::geom::GeometryTypeId typ) {
     return typ == geos::geom::GeometryTypeId::GEOS_CIRCULARSTRING ||
+        typ == geos::geom::GeometryTypeId::GEOS_CLOTHOID ||
         typ == geos::geom::GeometryTypeId::GEOS_COMPOUNDCURVE ||
         typ == geos::geom::GeometryTypeId::GEOS_CURVEPOLYGON ||
         typ == geos::geom::GeometryTypeId::GEOS_MULTICURVE ||

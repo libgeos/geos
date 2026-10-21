@@ -22,6 +22,7 @@
 #include <geos/io/CheckOrdinatesFilter.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/Clothoid.h>
 #include <geos/geom/CompoundCurve.h>
 #include <geos/geom/CurvePolygon.h>
 #include <geos/geom/Point.h>
@@ -117,6 +118,7 @@ WKBWriter::write(const Geometry& g, std::ostream& os)
         case GEOS_LINESTRING:
         case GEOS_LINEARRING:
         case GEOS_CIRCULARSTRING: writeSimpleCurve(static_cast<const SimpleCurve&>(g)); break;
+        case GEOS_CLOTHOID: writeClothoid(static_cast<const Clothoid&>(g)); break;
         case GEOS_COMPOUNDCURVE: writeCompoundCurve(static_cast<const CompoundCurve&>(g)); break;
         case GEOS_POLYGON: writePolygon(static_cast<const Polygon&>(g)); break;
         case GEOS_CURVEPOLYGON: writeCurvePolygon(static_cast<const CurvePolygon&>(g)); break;
@@ -174,6 +176,73 @@ WKBWriter::writeSimpleCurve(const SimpleCurve& g)
 }
 
 void
+WKBWriter::writeDouble(double value)
+{
+    ByteOrderValues::putDouble(value, buf, byteOrder);
+    outStream->write(reinterpret_cast<char*>(buf), 8);
+}
+
+void
+WKBWriter::writeClothoid(const Clothoid& g)
+{
+    // Type word is 22 / 1022 / 2022 / 3022. EWKB high Z/M bits are not used.
+    writeByteOrder();
+
+    int typeId = WKBConstants::wkbClothoid;
+    if (outputOrdinates.hasZ()) {
+        typeId += 1000;
+    }
+    if (outputOrdinates.hasM()) {
+        typeId += 2000;
+    }
+    if (includeSRID && g.getSRID() != 0 && flavor == WKBConstants::wkbExtended) {
+        typeId |= 0x20000000;
+    }
+    writeInt(typeId);
+    writeSRID(g.getSRID());
+
+    // Empty omits the reference-location body.
+    if (g.isEmpty()) {
+        return;
+    }
+
+    const ClothoidReferenceLocation loc = g.getReferenceLocation();
+    const bool hasZ = outputOrdinates.hasZ();
+
+    // Nested affine placement: own byte order, type 102 or 1102, raw doubles.
+    writeByteOrder();
+    int placementType = WKBConstants::wkbAffinePlacement;
+    if (hasZ) {
+        placementType += 1000;
+    }
+    writeInt(placementType);
+    writeDouble(loc.x);
+    writeDouble(loc.y);
+    if (hasZ) {
+        writeDouble(loc.z);
+    }
+    writeInt(2);
+    writeDouble(loc.ux);
+    writeDouble(loc.uy);
+    if (hasZ) {
+        writeDouble(loc.uz);
+    }
+    writeDouble(loc.vx);
+    writeDouble(loc.vy);
+    if (hasZ) {
+        writeDouble(loc.vz);
+    }
+
+    writeDouble(g.getScaleFactor());
+    writeDouble(g.getStartDistance());
+    writeDouble(g.getEndDistance());
+    if (outputOrdinates.hasM()) {
+        writeDouble(g.getStartM());
+        writeDouble(g.getEndM());
+    }
+}
+
+void
 WKBWriter::writeCompoundCurve(const CompoundCurve& g)
 {
     writeByteOrder();
@@ -188,7 +257,13 @@ WKBWriter::writeCompoundCurve(const CompoundCurve& g)
 
     for (std::size_t i = 0; i < g.getNumCurves(); i++) {
         const SimpleCurve& section = *g.getCurveN(i);
-        writeSimpleCurve(section);
+        if (section.getGeometryTypeId() == GEOS_CLOTHOID) {
+            const OrdinateSet savedOrdinates = outputOrdinates;
+            write(section, *outStream);
+            outputOrdinates = savedOrdinates;
+        } else {
+            writeSimpleCurve(section);
+        }
     }
 
     includeSRID = orig_includeSRID;
@@ -428,6 +503,7 @@ WKBWriter::getWkbType(const Geometry& g) {
         case GEOS_LINESTRING:
         case GEOS_LINEARRING: return WKBConstants::wkbLineString;
         case GEOS_CIRCULARSTRING: return WKBConstants::wkbCircularString;
+        case GEOS_CLOTHOID: return WKBConstants::wkbClothoid;
         case GEOS_COMPOUNDCURVE: return WKBConstants::wkbCompoundCurve;
         case GEOS_POLYGON: return WKBConstants::wkbPolygon;
         case GEOS_CURVEPOLYGON: return WKBConstants::wkbCurvePolygon;

@@ -264,7 +264,14 @@ CompoundCurve::getLinearizedImpl(const algorithm::CurveToLineParams& params) con
             seq->add(*curveSeq, static_cast<size_t>(0), 0);
         }
 
-        if (curve->isCurved()) {
+        if (curve->getGeometryTypeId() == GEOS_CLOTHOID) {
+            const std::unique_ptr<Geometry> lin = curve->getLinearized(params);
+            const auto* line = detail::down_cast<const LineString*>(lin.get());
+            const CoordinateSequence* linSeq = line->getCoordinatesRO();
+            if (linSeq->size() > 1) {
+                seq->add(*linSeq, 1, linSeq->size() - 1);
+            }
+        } else if (curve->isCurved()) {
             const CircularString* cs = detail::down_cast<const CircularString*>(curve.get());
 
             for (const auto& arc : cs->getArcs()) {
