@@ -28,8 +28,7 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/Polygon.h>
 #include <geos/util/IllegalArgumentException.h>
-
-#include <limits>
+#include <geos/constants.h>
 #include <geos/export.h>
 
 #include <vector>
@@ -380,7 +379,7 @@ public:
         const CoordinateXYZM& start,
         bool hasZ, bool hasM,
         double theta0, double k0, double k1, double length,
-        double endM = std::numeric_limits<double>::quiet_NaN()) const;
+        double endM = DoubleNotANumber) const;
 
     /// Construct an EMPTY CompoundCurve
     std::unique_ptr<CompoundCurve> createCompoundCurve() const;
