@@ -14,7 +14,7 @@
 
 #include <geos/geom/Clothoid.h>
 
-#include <geos/algorithm/Clothoid.h>
+#include <algorithm/ClothoidMath.h>
 #include <geos/algorithm/CurveToLineParams.h>
 #include <geos/constants.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -55,18 +55,23 @@ identicalDouble(double a, double b)
     return a == b;
 }
 
+// Relative gap allowed when testing a similarity frame.
+constexpr double SIMILARITY_RELATIVE = 1e-12;
+// Skip the axis search past this many half-revolutions.
+constexpr double ENVELOPE_MAX_HALF_TURNS = 100000.0;
+
 // 8-point Gauss–Legendre nodes and weights on [-1, 1].
 constexpr int GL_N = 8;
 constexpr double GL_X[GL_N] = {
     -0.96028985649753623168,
-    -0.79666647741362673959,
-    -0.52553240991632898582,
-    -0.18343464249564980494,
-    0.18343464249564980494,
-    0.52553240991632898582,
-    0.79666647741362673959,
-    0.96028985649753623168
-};
+        -0.79666647741362673959,
+        -0.52553240991632898582,
+        -0.18343464249564980494,
+        0.18343464249564980494,
+        0.52553240991632898582,
+        0.79666647741362673959,
+        0.96028985649753623168
+    };
 constexpr double GL_W[GL_N] = {
     0.10122853629037625915,
     0.22238103445337447054,
@@ -78,28 +83,10 @@ constexpr double GL_W[GL_N] = {
     0.10122853629037625915
 };
 
-void
-fresnelOffset(double t, double a2, double& x, double& y, double& headingDt)
+CoordinateXY
+fresnelOffset(double t, double a2)
 {
-    headingDt = (t * t) / (2.0 * a2);
-    if (t == 0.0) {
-        x = 0.0;
-        y = 0.0;
-        return;
-    }
-    const double len = std::abs(t);
-    algorithm::clothoid::Parameters curve;
-    curve.x0 = 0.0;
-    curve.y0 = 0.0;
-    curve.theta0 = 0.0;
-    curve.k0 = 0.0;
-    curve.k1 = len / a2;
-    curve.length = len;
-    algorithm::clothoid::position(curve, len, x, y);
-    if (t < 0.0) {
-        x = -x;
-        y = -y;
-    }
+    return algorithm::clothoid::constructiveOffset(t, a2);
 }
 
 struct Frame {
@@ -116,15 +103,15 @@ frameOf(const ClothoidReferenceLocation& location,
         double scale, double t0, double t1, double startM, double endM)
 {
     Frame frame;
-    frame.locX = location.x;
-    frame.locY = location.y;
-    frame.locZ = location.z;
-    frame.ux = location.ux;
-    frame.uy = location.uy;
-    frame.uz = location.uz;
-    frame.vx = location.vx;
-    frame.vy = location.vy;
-    frame.vz = location.vz;
+    frame.locX = location.origin.x;
+    frame.locY = location.origin.y;
+    frame.locZ = location.origin.z;
+    frame.ux = location.u.x;
+    frame.uy = location.u.y;
+    frame.uz = location.u.z;
+    frame.vx = location.v.x;
+    frame.vy = location.v.y;
+    frame.vz = location.v.z;
     frame.scale = scale;
     frame.t0 = t0;
     frame.t1 = t1;
@@ -138,13 +125,11 @@ loadConstructiveFrame(const Frame& frame, algorithm::clothoid::Parameters& curve
 {
     // A negative scale is stored for round-trip and evaluated as |A|.
     const double a2 = frame.scale * frame.scale;
-    double x0 = 0.0;
-    double y0 = 0.0;
-    double headingDt = 0.0;
-    fresnelOffset(frame.t0, a2, x0, y0, headingDt);
+    const CoordinateXY offset = fresnelOffset(frame.t0, a2);
+    const double headingDt = (frame.t0 * frame.t0) / (2.0 * a2);
     const double direction = (frame.t1 >= frame.t0) ? 1.0 : -1.0;
-    curve.x0 = x0;
-    curve.y0 = y0;
+    curve.x0 = offset.x;
+    curve.y0 = offset.y;
     curve.theta0 = (direction > 0.0) ? headingDt : headingDt + MATH_PI;
     curve.length = std::abs(frame.t1 - frame.t0);
     curve.k0 = direction * frame.t0 / a2;
@@ -168,7 +153,9 @@ pointOnFrame(const Frame& frame, double travel, double& x, double& y, double& z,
     double yc = curve.y0;
     if (curve.length > 0.0 && travel > 0.0) {
         const double s = std::min(travel, curve.length);
-        algorithm::clothoid::position(curve, s, xc, yc);
+        const CoordinateXY at = algorithm::clothoid::position(curve, s);
+        xc = at.x;
+        yc = at.y;
     }
     mapAffine(frame, xc, yc, x, y, z);
     if (!(curve.length > 0.0)) {
@@ -190,7 +177,7 @@ similarityScale(const Frame& frame, double& scale, int& orientation)
     if (!(uLen > 0.0) || !(vLen > 0.0)) {
         return false;
     }
-    const double tol = 1e-12 * std::max(1.0, uLen);
+    const double tol = SIMILARITY_RELATIVE * std::max(1.0, uLen);
     if (std::abs(uLen - vLen) > tol || std::abs(dot) > tol * uLen) {
         return false;
     }
@@ -233,16 +220,18 @@ integrateSpeed(const Frame& frame)
         return 0.0;
     }
     const double dTheta = std::abs(tHi * tHi - tLo * tLo) / (2.0 * a2);
-    int panels = static_cast<int>(std::ceil(dTheta / 0.25));
-    if (panels < 1) {
-        panels = 1;
+    if (!std::isfinite(dTheta)) {
+        throw util::IllegalArgumentException("Clothoid turn is too large to integrate");
     }
-    if (panels > 4096) {
-        panels = 4096;
+    const double panelCount = std::ceil(dTheta / algorithm::clothoid::QUADRATURE_PANEL_RADIANS);
+    if (!(panelCount <= static_cast<double>(algorithm::clothoid::QUADRATURE_MAX_PANELS))) {
+        throw util::IllegalArgumentException("Clothoid turn is too large to integrate");
     }
+    const std::size_t panels = std::max<std::size_t>(
+                                   1, panelCount > 0.0 ? static_cast<std::size_t>(panelCount) : 1);
     const double width = (tHi - tLo) / static_cast<double>(panels);
     double sum = 0.0;
-    for (int p = 0; p < panels; ++p) {
+    for (std::size_t p = 0; p < panels; ++p) {
         const double a = tLo + width * static_cast<double>(p);
         const double mid = a + 0.5 * width;
         const double half = 0.5 * width;
@@ -325,15 +314,9 @@ Clothoid::Clothoid(const ClothoidReferenceLocation& location,
                                        hasM ? startM : 0.0, hasM ? endM : 0.0),
                                hasZ, hasM),
                   false, factory),
-      m_locX(location.x),
-      m_locY(location.y),
-      m_locZ(hasZ ? location.z : 0.0),
-      m_ux(location.ux),
-      m_uy(location.uy),
-      m_uz(hasZ ? location.uz : 0.0),
-      m_vx(location.vx),
-      m_vy(location.vy),
-      m_vz(hasZ ? location.vz : 0.0),
+      m_origin(location.origin.x, location.origin.y, hasZ ? location.origin.z : 0.0),
+      m_u(location.u.x, location.u.y, hasZ ? location.u.z : 0.0),
+      m_v(location.v.x, location.v.y, hasZ ? location.v.z : 0.0),
       m_scale(scaleFactor),
       m_t0(startDistance),
       m_t1(endDistance),
@@ -346,15 +329,9 @@ Clothoid::Clothoid(const ClothoidReferenceLocation& location,
 
 Clothoid::Clothoid(bool hasZ, bool hasM, const GeometryFactory& factory)
     : SimpleCurve(std::make_unique<CoordinateSequence>(static_cast<std::size_t>(0), hasZ, hasM), false, factory),
-      m_locX(0.0),
-      m_locY(0.0),
-      m_locZ(0.0),
-      m_ux(0.0),
-      m_uy(0.0),
-      m_uz(0.0),
-      m_vx(0.0),
-      m_vy(0.0),
-      m_vz(0.0),
+      m_origin(0.0, 0.0, 0.0),
+      m_u(0.0, 0.0, 0.0),
+      m_v(0.0, 0.0, 0.0),
       m_scale(0.0),
       m_t0(0.0),
       m_t1(0.0),
@@ -397,7 +374,7 @@ Clothoid::getLength() const
 }
 
 double
-Clothoid::getStartTangent() const
+Clothoid::getStartHeading() const
 {
     if (isEmpty()) {
         return 0.0;
@@ -424,7 +401,7 @@ Clothoid::getEndCurvature() const
 }
 
 double
-Clothoid::getEndTangent() const
+Clothoid::getEndHeading() const
 {
     if (isEmpty()) {
         return 0.0;
@@ -436,15 +413,9 @@ ClothoidReferenceLocation
 Clothoid::getReferenceLocation() const
 {
     ClothoidReferenceLocation location;
-    location.x = m_locX;
-    location.y = m_locY;
-    location.z = m_locZ;
-    location.ux = m_ux;
-    location.uy = m_uy;
-    location.uz = m_uz;
-    location.vx = m_vx;
-    location.vy = m_vy;
-    location.vz = m_vz;
+    location.origin = m_origin;
+    location.u = m_u;
+    location.v = m_v;
     return location;
 }
 
@@ -454,12 +425,9 @@ Clothoid::hasCurvedComponents() const
     if (isEmpty() || !(std::abs(m_t1 - m_t0) > 0.0)) {
         return false;
     }
-    if (m_t0 == 0.0 && m_t1 == 0.0) {
-        return false;
-    }
-    const double cross = m_ux * m_vy - m_uy * m_vx;
-    const double crossZ = m_uy * m_vz - m_uz * m_vy;
-    const double crossY = m_uz * m_vx - m_ux * m_vz;
+    const double cross = m_u.x * m_v.y - m_u.y * m_v.x;
+    const double crossZ = m_u.y * m_v.z - m_u.z * m_v.y;
+    const double crossY = m_u.z * m_v.x - m_u.x * m_v.z;
     return cross != 0.0 || crossZ != 0.0 || crossY != 0.0;
 }
 
@@ -473,31 +441,15 @@ Clothoid::normalize()
         std::unique_ptr<Clothoid> reversed(reverseImpl());
         points = reversed->points;
         envelope = reversed->envelope;
-        m_locX = reversed->m_locX;
-        m_locY = reversed->m_locY;
-        m_locZ = reversed->m_locZ;
-        m_ux = reversed->m_ux;
-        m_uy = reversed->m_uy;
-        m_uz = reversed->m_uz;
-        m_vx = reversed->m_vx;
-        m_vy = reversed->m_vy;
-        m_vz = reversed->m_vz;
+        m_origin = reversed->m_origin;
+        m_u = reversed->m_u;
+        m_v = reversed->m_v;
         m_scale = reversed->m_scale;
         m_t0 = reversed->m_t0;
         m_t1 = reversed->m_t1;
         m_startM = reversed->m_startM;
         m_endM = reversed->m_endM;
     }
-}
-
-std::unique_ptr<Geometry>
-Clothoid::convexHull() const
-{
-    if (hasCurvedComponents()) {
-        throw util::UnsupportedOperationException(
-            "Clothoid convex hull is not implemented. Call getLinearized first.");
-    }
-    return Geometry::convexHull();
 }
 
 void
@@ -524,20 +476,20 @@ Clothoid::equalsExact(const Geometry* other, double tolerance) const
     auto near = [tolerance](double a, double b) {
         return std::abs(a - b) <= tolerance;
     };
-    return near(m_locX, clothoid->m_locX)
-        && near(m_locY, clothoid->m_locY)
-        && near(m_locZ, clothoid->m_locZ)
-        && near(m_ux, clothoid->m_ux)
-        && near(m_uy, clothoid->m_uy)
-        && near(m_uz, clothoid->m_uz)
-        && near(m_vx, clothoid->m_vx)
-        && near(m_vy, clothoid->m_vy)
-        && near(m_vz, clothoid->m_vz)
-        && near(m_scale, clothoid->m_scale)
-        && near(m_t0, clothoid->m_t0)
-        && near(m_t1, clothoid->m_t1)
-        && near(m_startM, clothoid->m_startM)
-        && near(m_endM, clothoid->m_endM);
+    return near(m_origin.x, clothoid->m_origin.x)
+           && near(m_origin.y, clothoid->m_origin.y)
+           && near(m_origin.z, clothoid->m_origin.z)
+           && near(m_u.x, clothoid->m_u.x)
+           && near(m_u.y, clothoid->m_u.y)
+           && near(m_u.z, clothoid->m_u.z)
+           && near(m_v.x, clothoid->m_v.x)
+           && near(m_v.y, clothoid->m_v.y)
+           && near(m_v.z, clothoid->m_v.z)
+           && near(m_scale, clothoid->m_scale)
+           && near(m_t0, clothoid->m_t0)
+           && near(m_t1, clothoid->m_t1)
+           && near(m_startM, clothoid->m_startM)
+           && near(m_endM, clothoid->m_endM);
 }
 
 bool
@@ -547,20 +499,20 @@ Clothoid::equalsIdentical(const Geometry* other) const
         return false;
     }
     const auto& clothoid = static_cast<const Clothoid&>(*other);
-    return identicalDouble(m_locX, clothoid.m_locX)
-        && identicalDouble(m_locY, clothoid.m_locY)
-        && identicalDouble(m_locZ, clothoid.m_locZ)
-        && identicalDouble(m_ux, clothoid.m_ux)
-        && identicalDouble(m_uy, clothoid.m_uy)
-        && identicalDouble(m_uz, clothoid.m_uz)
-        && identicalDouble(m_vx, clothoid.m_vx)
-        && identicalDouble(m_vy, clothoid.m_vy)
-        && identicalDouble(m_vz, clothoid.m_vz)
-        && identicalDouble(m_scale, clothoid.m_scale)
-        && identicalDouble(m_t0, clothoid.m_t0)
-        && identicalDouble(m_t1, clothoid.m_t1)
-        && identicalDouble(m_startM, clothoid.m_startM)
-        && identicalDouble(m_endM, clothoid.m_endM);
+    return identicalDouble(m_origin.x, clothoid.m_origin.x)
+           && identicalDouble(m_origin.y, clothoid.m_origin.y)
+           && identicalDouble(m_origin.z, clothoid.m_origin.z)
+           && identicalDouble(m_u.x, clothoid.m_u.x)
+           && identicalDouble(m_u.y, clothoid.m_u.y)
+           && identicalDouble(m_u.z, clothoid.m_u.z)
+           && identicalDouble(m_v.x, clothoid.m_v.x)
+           && identicalDouble(m_v.y, clothoid.m_v.y)
+           && identicalDouble(m_v.z, clothoid.m_v.z)
+           && identicalDouble(m_scale, clothoid.m_scale)
+           && identicalDouble(m_t0, clothoid.m_t0)
+           && identicalDouble(m_t1, clothoid.m_t1)
+           && identicalDouble(m_startM, clothoid.m_startM)
+           && identicalDouble(m_endM, clothoid.m_endM);
 }
 
 int
@@ -572,15 +524,15 @@ Clothoid::compareToSameClass(const Geometry* geom) const
         return base;
     }
     const double fields[][2] = {
-        {m_locX, clothoid->m_locX},
-        {m_locY, clothoid->m_locY},
-        {m_locZ, clothoid->m_locZ},
-        {m_ux, clothoid->m_ux},
-        {m_uy, clothoid->m_uy},
-        {m_uz, clothoid->m_uz},
-        {m_vx, clothoid->m_vx},
-        {m_vy, clothoid->m_vy},
-        {m_vz, clothoid->m_vz},
+        {m_origin.x, clothoid->m_origin.x},
+        {m_origin.y, clothoid->m_origin.y},
+        {m_origin.z, clothoid->m_origin.z},
+        {m_u.x, clothoid->m_u.x},
+        {m_u.y, clothoid->m_u.y},
+        {m_u.z, clothoid->m_u.z},
+        {m_v.x, clothoid->m_v.x},
+        {m_v.y, clothoid->m_v.y},
+        {m_v.z, clothoid->m_v.z},
         {m_scale, clothoid->m_scale},
         {m_t0, clothoid->m_t0},
         {m_t1, clothoid->m_t1},
@@ -613,7 +565,7 @@ Clothoid::getLinearizedImpl(const algorithm::CurveToLineParams& params) const
         deviation /= sigma;
     }
     std::size_t segments = algorithm::clothoid::linearizeSegmentCount(
-        curve, stepRadians, deviation);
+                               curve, stepRadians, deviation);
     if (segments == 0) {
         segments = 1;
     }
@@ -641,8 +593,8 @@ Clothoid::reverseImpl() const
         return cloneImpl();
     }
     return getFactory()->createClothoid(
-        getReferenceLocation(), m_scale, m_t1, m_t0,
-        hasZ(), hasM(), m_endM, m_startM).release();
+               getReferenceLocation(), m_scale, m_t1, m_t0,
+               hasZ(), hasM(), m_endM, m_startM).release();
 }
 
 Envelope
@@ -682,16 +634,15 @@ Clothoid::computeClothoidEnvelope() const
         thetaMin = std::min(thetaOf(tLo), thetaOf(tHi));
         thetaMax = std::max(thetaOf(tLo), thetaOf(tHi));
     }
-    if ((thetaMax - thetaMin) / MATH_PI > 100000.0) {
+    if ((thetaMax - thetaMin) / MATH_PI > ENVELOPE_MAX_HALF_TURNS) {
         return env;
     }
 
     auto addIfInterior = [&](double t) {
         if (t > tLo && t < tHi) {
-            double xc = 0.0;
-            double yc = 0.0;
-            double heading = 0.0;
-            fresnelOffset(t, a2, xc, yc, heading);
+            const CoordinateXY constructive = fresnelOffset(t, a2);
+            const double xc = constructive.x;
+            const double yc = constructive.y;
             double px = 0.0;
             double py = 0.0;
             double pz = 0.0;
@@ -726,15 +677,17 @@ Clothoid::computeClothoidEnvelope() const
             addIfInterior(-root);
         }
     };
-    solveAxis(m_ux, m_vx);
-    solveAxis(m_uy, m_vy);
+    solveAxis(m_u.x, m_v.x);
+    solveAxis(m_u.y, m_v.y);
     return env;
 }
 
 void
 Clothoid::validateConstruction() const
 {
-    if (!std::isfinite(m_scale) || m_scale == 0.0) {
+    if (!std::isfinite(m_scale)
+            || !(std::abs(m_scale) >= algorithm::clothoid::MIN_ABS_SCALE)
+            || !(std::abs(m_scale) <= algorithm::clothoid::MAX_ABS_SCALE)) {
         throw util::IllegalArgumentException(
             "Clothoid scale factor must be finite and non-zero");
     }
@@ -742,8 +695,15 @@ Clothoid::validateConstruction() const
         throw util::IllegalArgumentException(
             "Clothoid start and end distance must be finite");
     }
+    const double a2 = m_scale * m_scale;
+    const double turn = std::abs(m_t1 * m_t1 - m_t0 * m_t0) / (2.0 * a2);
+    if (!std::isfinite(turn) || turn > algorithm::clothoid::MAX_TURN_RADIANS) {
+        throw util::IllegalArgumentException("Clothoid turn is too large to integrate");
+    }
     const double coords[] = {
-        m_locX, m_locY, m_locZ, m_ux, m_uy, m_uz, m_vx, m_vy, m_vz
+        m_origin.x, m_origin.y, m_origin.z,
+        m_u.x, m_u.y, m_u.z,
+        m_v.x, m_v.y, m_v.z
     };
     for (double value : coords) {
         if (!std::isfinite(value)) {
@@ -755,13 +715,6 @@ Clothoid::validateConstruction() const
         throw util::IllegalArgumentException(
             "Clothoid STARTM and ENDM must both be finite");
     }
-}
-
-void
-Clothoid::loadConstructive(algorithm::clothoid::Parameters& curve) const
-{
-    loadConstructiveFrame(
-        frameOf(getReferenceLocation(), m_scale, m_t0, m_t1, m_startM, m_endM), curve);
 }
 
 void

@@ -14,6 +14,8 @@
 
 #pragma once
 
+#include <geos/export.h>
+#include <geos/geom/Coordinate.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/SimpleCurve.h>
 
@@ -27,15 +29,9 @@ namespace geom {
 
 /// Affine reference location: origin and the images of the constructive axes.
 struct GEOS_DLL ClothoidReferenceLocation {
-    double x;
-    double y;
-    double z;
-    double ux;
-    double uy;
-    double uz;
-    double vx;
-    double vy;
-    double vz;
+    Coordinate origin;
+    Coordinate u;
+    Coordinate v;
 };
 
 /**
@@ -64,13 +60,13 @@ public:
 
     double getLength() const override;
 
-    double getStartTangent() const;
+    double getStartHeading() const;
 
     double getStartCurvature() const;
 
     double getEndCurvature() const;
 
-    double getEndTangent() const;
+    double getEndHeading() const;
 
     double getScaleFactor() const
     {
@@ -118,8 +114,7 @@ public:
         return std::unique_ptr<Clothoid>(reverseImpl());
     }
 
-    std::unique_ptr<Geometry> convexHull() const override;
-
+    /// apply_rw throws; the reference frame is not a coordinate sequence.
     void apply_rw(const CoordinateFilter* filter) override;
 
     void apply_rw(CoordinateSequenceFilter& filter) override;
@@ -170,8 +165,6 @@ protected:
 
 private:
 
-    void loadConstructive(algorithm::clothoid::Parameters& curve) const;
-
     void pointOnCurve(double travel, double& x, double& y, double& z, double& m) const;
 
     Envelope computeClothoidEnvelope() const;
@@ -182,15 +175,9 @@ private:
 
     double travelCurvature(double constructiveDistance) const;
 
-    double m_locX;
-    double m_locY;
-    double m_locZ;
-    double m_ux;
-    double m_uy;
-    double m_uz;
-    double m_vx;
-    double m_vy;
-    double m_vz;
+    Coordinate m_origin;
+    Coordinate m_u;
+    Coordinate m_v;
     double m_scale;
     double m_t0;
     double m_t1;

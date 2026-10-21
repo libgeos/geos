@@ -185,20 +185,8 @@ WKBWriter::writeDouble(double value)
 void
 WKBWriter::writeClothoid(const Clothoid& g)
 {
-    // Type word is 22 / 1022 / 2022 / 3022. EWKB high Z/M bits are not used.
     writeByteOrder();
-
-    int typeId = WKBConstants::wkbClothoid;
-    if (outputOrdinates.hasZ()) {
-        typeId += 1000;
-    }
-    if (outputOrdinates.hasM()) {
-        typeId += 2000;
-    }
-    if (includeSRID && g.getSRID() != 0 && flavor == WKBConstants::wkbExtended) {
-        typeId |= 0x20000000;
-    }
-    writeInt(typeId);
+    writeGeometryType(WKBConstants::wkbClothoid, g.getSRID());
     writeSRID(g.getSRID());
 
     // Empty omits the reference-location body.
@@ -216,21 +204,21 @@ WKBWriter::writeClothoid(const Clothoid& g)
         placementType += 1000;
     }
     writeInt(placementType);
-    writeDouble(loc.x);
-    writeDouble(loc.y);
+    writeDouble(loc.origin.x);
+    writeDouble(loc.origin.y);
     if (hasZ) {
-        writeDouble(loc.z);
+        writeDouble(loc.origin.z);
     }
     writeInt(2);
-    writeDouble(loc.ux);
-    writeDouble(loc.uy);
+    writeDouble(loc.u.x);
+    writeDouble(loc.u.y);
     if (hasZ) {
-        writeDouble(loc.uz);
+        writeDouble(loc.u.z);
     }
-    writeDouble(loc.vx);
-    writeDouble(loc.vy);
+    writeDouble(loc.v.x);
+    writeDouble(loc.v.y);
     if (hasZ) {
-        writeDouble(loc.vz);
+        writeDouble(loc.v.z);
     }
 
     writeDouble(g.getScaleFactor());

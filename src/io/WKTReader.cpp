@@ -491,13 +491,13 @@ WKTReader::readClothoidText(StringTokenizer* tokenizer, OrdinateSet& ordinateFla
     };
 
     ClothoidReferenceLocation location;
-    readComponents("LOCATION", location.x, location.y, location.z, true);
+    readComponents("LOCATION", location.origin.x, location.origin.y, location.origin.z, true);
     expect(",");
     expect("REFERENCEDIRECTIONS");
     expect("(");
-    readComponents("VECTOR", location.ux, location.uy, location.uz, false);
+    readComponents("VECTOR", location.u.x, location.u.y, location.u.z, false);
     expect(",");
-    readComponents("VECTOR", location.vx, location.vy, location.vz, false);
+    readComponents("VECTOR", location.v.x, location.v.y, location.v.z, false);
     expect(")");
     expect(")");
 

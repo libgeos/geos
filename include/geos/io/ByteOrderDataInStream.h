@@ -37,7 +37,11 @@ namespace io {
  * istream, with the representation being in either common byte ordering.
  *
  */
+class WKBReader;
+
 class GEOS_DLL ByteOrderDataInStream {
+
+    friend class WKBReader;
 
 public:
 
@@ -118,6 +122,8 @@ public:
         return byteOrder;
     }
 
+private:
+
     unsigned char peekByte(std::size_t offset) const
     {
         if (size() < offset + 1) {
@@ -134,8 +140,6 @@ public:
         return ByteOrderValues::getUnsigned(buf + offset, order);
     }
 
-
-private:
     int byteOrder;
     const unsigned char* buf;
     const unsigned char* end;

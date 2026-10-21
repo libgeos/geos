@@ -129,6 +129,10 @@ Area::ofClosedCurve(const geom::Curve& ring) {
 
         const geom::CoordinateSequence& coords = *section.getCoordinatesRO();
 
+        if (section.getGeometryTypeId() == geom::GEOS_CLOTHOID) {
+            throw util::UnsupportedOperationException("Clothoid area is not implemented");
+        }
+
         if (section.isCurved()) {
             const auto* cs = detail::down_cast<const geom::CircularString*>(&section);
 

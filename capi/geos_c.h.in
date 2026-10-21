@@ -270,7 +270,7 @@ enum GEOSGeomTypes {
     GEOS_CURVEPOLYGON,
     GEOS_MULTICURVE,
     GEOS_MULTISURFACE,
-    GEOS_CLOTHOID = 22,
+    GEOS_CLOTHOID,
 };
 
 /**
@@ -968,6 +968,10 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createCircularString_r(
 
 /** \see GEOSGeom_createEmptyCircularString */
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCircularString_r(
+    GEOSContextHandle_t handle);
+
+/** \see GEOSGeom_createEmptyClothoid */
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyClothoid_r(
     GEOSContextHandle_t handle);
 
 /** \see GEOSGeom_createCompoundCurve */
@@ -3080,6 +3084,13 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createCircularString(GEOSCoordSequence* s
 * \since 3.13
 */
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCircularString(void);
+
+/**
+* Creates an empty Clothoid geometry.
+* \return A newly allocated Clothoid geometry. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyClothoid(void);
 
 /**
 * Creates a CompoundCurve geometry.

@@ -375,11 +375,11 @@ WKTWriter::appendClothoidTaggedText(const Clothoid& clothoid, OrdinateSet output
         writer.write("Z ");
     }
     writer.write("(");
-    component("LOCATION", loc.x, loc.y, loc.z);
+    component("LOCATION", loc.origin.x, loc.origin.y, loc.origin.z);
     writer.write(", REFERENCEDIRECTIONS (");
-    component("VECTOR", loc.ux, loc.uy, loc.uz);
+    component("VECTOR", loc.u.x, loc.u.y, loc.u.z);
     writer.write(", ");
-    component("VECTOR", loc.vx, loc.vy, loc.vz);
+    component("VECTOR", loc.v.x, loc.v.y, loc.v.z);
     writer.write(")), SCALEFACTOR ");
     writer.write(writeNumber(clothoid.getScaleFactor()));
     writer.write(", STARTDISTANCE ");

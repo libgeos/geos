@@ -97,7 +97,7 @@ enum GeometryTypeId : int {
     GEOS_CURVEPOLYGON,
     GEOS_MULTICURVE,
     GEOS_MULTISURFACE,
-    GEOS_CLOTHOID = 22,
+    GEOS_CLOTHOID,
 };
 
 enum GeometrySortIndex {

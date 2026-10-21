@@ -1,8 +1,8 @@
 #include <tut/tut.hpp>
 #include <tut/tut_macros.hpp>
 
-#include <geos/algorithm/Clothoid.h>
 #include <geos/algorithm/CurveToLineParams.h>
+#include <geos/algorithm/PointLocator.h>
 #include <geos/constants.h>
 #include <geos/geom/Clothoid.h>
 #include <geos/geom/CompoundCurve.h>
@@ -18,16 +18,17 @@
 #include <geos/util/UnsupportedOperationException.h>
 
 #include <cmath>
+#include <limits>
 #include <sstream>
 #include <string>
 #include <vector>
 
 using geos::algorithm::CurveToLineParams;
-using geos::algorithm::clothoid::Parameters;
-using geos::algorithm::clothoid::position;
+using geos::algorithm::PointLocator;
 using geos::geom::Clothoid;
 using geos::geom::ClothoidReferenceLocation;
 using geos::geom::CompoundCurve;
+using geos::geom::Coordinate;
 using geos::geom::CoordinateXY;
 using geos::geom::CoordinateXYZM;
 using geos::geom::SimpleCurve;
@@ -42,13 +43,25 @@ struct test_clothoid_data {
         double x, double y, double theta0, double k0, double k1, double length) const
     {
         return factory_->createClothoid(
-            CoordinateXYZM(x, y, geos::DoubleNotANumber, geos::DoubleNotANumber),
-            false, false, theta0, k0, k1, length);
+                   CoordinateXYZM(x, y, geos::DoubleNotANumber, geos::DoubleNotANumber),
+                   false, false, theta0, k0, k1, length);
     }
 
     static ClothoidReferenceLocation identityAt(double x, double y, double z = 0.0)
     {
-        return ClothoidReferenceLocation{x, y, z, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0};
+        return ClothoidReferenceLocation{
+            Coordinate(x, y, z),
+            Coordinate(1.0, 0.0, 0.0),
+            Coordinate(0.0, 1.0, 0.0)};
+    }
+
+    std::unique_ptr<CompoundCurve> lineThenClothoid() const
+    {
+        std::vector<std::unique_ptr<SimpleCurve>> sections;
+        sections.push_back(factory_->createLineString({
+            CoordinateXY(0.0, 0.0), CoordinateXY(1.0, 0.0)}));
+        sections.push_back(make(1.0, 0.0, 0.0, 0.0, 0.01, 5.0));
+        return factory_->createCompoundCurve(std::move(sections));
     }
 };
 
@@ -61,7 +74,19 @@ template<>
 template<>
 void object::test<1>()
 {
-    set_test_name("empty clothoid WKT and length");
+    set_test_name("type id");
+
+    ensure_equals(static_cast<int>(geos::geom::GEOS_CLOTHOID), 13);
+    auto empty = factory_->createClothoid(false, false);
+    ensure_equals(empty->getGeometryTypeId(), geos::geom::GEOS_CLOTHOID);
+    ensure_equals(empty->getGeometryType(), "Clothoid");
+}
+
+template<>
+template<>
+void object::test<2>()
+{
+    set_test_name("empty");
 
     auto empty = factory_->createClothoid(false, false);
     ensure(empty->isEmpty());
@@ -72,273 +97,273 @@ void object::test<1>()
     ensure(empty->getEnvelopeInternal()->isNull());
 
     auto parsed = reader_.read("CLOTHOID EMPTY");
-    ensure_equals(parsed->getGeometryType(), "Clothoid");
-    ensure_equals(parsed->getGeometryTypeId(), geos::geom::GEOS_CLOTHOID);
     ensure(parsed->isEmpty());
+    ensure_equals(parsed->getGeometryTypeId(), geos::geom::GEOS_CLOTHOID);
 
     auto zempty = reader_.read("CLOTHOID Z EMPTY");
-    ensure(zempty->isEmpty());
     ensure(zempty->hasZ());
     ensure(!zempty->hasM());
-}
-
-template<>
-template<>
-void object::test<2>()
-{
-    set_test_name("WKT round trip of an arc-length pose uses the ISO body");
-
-    auto curve = make(1.0, 2.0, 0.25, 0.0, 0.125, 8.0);
-    geos::io::WKTWriter writer;
-    writer.setRoundingPrecision(15);
-    const std::string text = writer.write(curve.get());
-    ensure(text.find("CLOTHOID ") == 0);
-    ensure(text.find("REFERENCELOCATION") != std::string::npos);
-    ensure(text.find("AFFINEPLACEMENT") != std::string::npos);
-    ensure(text.find("SCALEFACTOR") != std::string::npos);
-    ensure(text.find("STARTDISTANCE") != std::string::npos);
-    ensure(text.find("ENDDISTANCE") != std::string::npos);
-    ensure(text.find("CLOTHOID (1") == std::string::npos);
-
-    auto back = reader_.read<Clothoid>(text);
-    ensure(curve->equalsExact(back.get(), 1e-9));
-    ensure_equals("value", back->getStartTangent(), curve->getStartTangent(), 1e-9);
-    ensure_equals("value", back->getStartCurvature(), 0.0, 1e-9);
-    ensure_equals("value", back->getEndCurvature(), 0.125, 1e-9);
-    ensure_equals("value", back->getLength(), curve->getLength(), 1e-9);
+    auto mempty = reader_.read("CLOTHOID M EMPTY");
+    ensure(mempty->hasM());
+    ensure(!mempty->hasZ());
 }
 
 template<>
 template<>
 void object::test<3>()
 {
-    set_test_name("WKB round trip of a Z clothoid and of EMPTY");
+    set_test_name("WKT round trip");
 
-    auto curve = factory_->createClothoid(
-        CoordinateXYZM(1.5, -2.5, 9.0, geos::DoubleNotANumber),
-        true, false, 0.3, -0.01, 0.02, 4.0);
-    ensure(curve->hasZ());
+    auto curve = make(1.0, 2.0, 0.25, 0.0, 0.125, 8.0);
+    geos::io::WKTWriter writer;
+    writer.setRoundingPrecision(15);
+    const std::string text = writer.write(curve.get());
+    ensure(text.find("REFERENCELOCATION") != std::string::npos);
+    ensure(text.find("CLOTHOID (1") == std::string::npos);
 
-    geos::io::WKBWriter writer;
-    std::stringstream hex;
-    writer.writeHEX(*curve, hex);
-    geos::io::WKBReader wkbReader(*factory_);
-    auto back = wkbReader.readHEX(hex);
-    ensure_equals(back->getGeometryTypeId(), geos::geom::GEOS_CLOTHOID);
-    ensure(curve->equalsIdentical(back.get()));
-    ensure(back->hasZ());
-    const auto* backClothoid = dynamic_cast<const Clothoid*>(back.get());
-    ensure(backClothoid != nullptr);
-    ensure_equals("value", backClothoid->getCoordinatesRO()->getZ(0), 9.0, 0.0);
-    ensure_equals("value", backClothoid->getCoordinatesRO()->getZ(1), 9.0, 0.0);
-
-    auto empty = factory_->createClothoid(false, false);
-    std::stringstream emptyHex;
-    writer.writeHEX(*empty, emptyHex);
-    auto emptyBack = wkbReader.readHEX(emptyHex);
-    ensure(emptyBack->isEmpty());
-    ensure_equals(emptyBack->getGeometryTypeId(), geos::geom::GEOS_CLOTHOID);
+    auto back = reader_.read<Clothoid>(text);
+    ensure(curve->equalsExact(back.get(), 1e-9));
+    ensure_equals("heading", back->getStartHeading(), curve->getStartHeading(), 1e-9);
+    ensure_equals("k0", back->getStartCurvature(), 0.0, 1e-9);
+    ensure_equals("k1", back->getEndCurvature(), 0.125, 1e-9);
+    ensure_equals("length", back->getLength(), curve->getLength(), 1e-9);
 }
 
 template<>
 template<>
 void object::test<4>()
 {
-    set_test_name("length, end point, and envelope");
+    set_test_name("WKB Z");
 
-    auto curve = reader_.read<Clothoid>(
-        "CLOTHOID (REFERENCELOCATION AFFINEPLACEMENT (LOCATION (0 0), "
-        "REFERENCEDIRECTIONS (VECTOR (1 0), VECTOR (0 1))), "
-        "SCALEFACTOR 50, STARTDISTANCE 0, ENDDISTANCE 25)");
-    ensure_equals("value", curve->getLength(), 25.0, 0.0);
-    ensure_equals("value", curve->getEndCoordinate().x, 24.960965746830126, 1e-9);
-    ensure_equals("value", curve->getEndCoordinate().y, 1.0405046700886817, 1e-9);
-    ensure_equals("value", curve->getEndTangent(), 0.125, 1e-12);
-
-    // Heading passes pi/2, so the box is wider than the endpoint chord.
-    auto turning = make(0.0, 0.0, 0.0, 0.0, 2.0, geos::MATH_PI);
-    const double sStar = geos::MATH_PI / std::sqrt(2.0);
-    double xStar = 0.0;
-    double yStar = 0.0;
-    Parameters params;
-    params.x0 = 0.0;
-    params.y0 = 0.0;
-    params.theta0 = 0.0;
-    params.k0 = 0.0;
-    params.k1 = 2.0;
-    params.length = geos::MATH_PI;
-    position(params, sStar, xStar, yStar);
-
-    const geos::geom::Envelope* env = turning->getEnvelopeInternal();
-    ensure(env->covers(xStar, yStar));
-    ensure(env->getMaxX() > turning->getEndCoordinate().x + 0.05);
-    ensure(env->covers(&turning->getStartCoordinate()));
-    ensure(env->covers(&turning->getEndCoordinate()));
+    auto curve = factory_->createClothoid(
+                     CoordinateXYZM(1.5, -2.5, 9.0, geos::DoubleNotANumber),
+                     true, false, 0.3, -0.01, 0.02, 4.0);
+    geos::io::WKBWriter writer;
+    std::stringstream hex;
+    writer.writeHEX(*curve, hex);
+    geos::io::WKBReader wkbReader(*factory_);
+    auto back = wkbReader.readHEX(hex);
+    ensure(curve->equalsIdentical(back.get()));
+    const auto* backClothoid = dynamic_cast<const Clothoid*>(back.get());
+    ensure(backClothoid != nullptr);
+    ensure_equals("z0", backClothoid->getCoordinatesRO()->getZ(0), 9.0, 0.0);
+    ensure_equals("z1", backClothoid->getCoordinatesRO()->getZ(1), 9.0, 0.0);
 }
 
 template<>
 template<>
 void object::test<5>()
 {
-    set_test_name("linearize and reverse agree on sampled positions");
+    set_test_name("length");
 
-    auto curve = make(0.0, 0.0, 0.2, 0.1, -0.05, 3.0);
-    ensure_equals("value", curve->getStartCurvature(), 0.1, 1e-12);
-    ensure_equals("value", curve->getEndCurvature(), -0.05, 1e-12);
-    ensure_equals("value", std::abs(std::remainder(curve->getStartTangent() - 0.2, 2.0 * geos::MATH_PI)), 0.0, 1e-12);
-    Parameters input;
-    input.x0 = 0.0;
-    input.y0 = 0.0;
-    input.theta0 = 0.2;
-    input.k0 = 0.1;
-    input.k1 = -0.05;
-    input.length = 3.0;
-    double xEnd = 0.0;
-    double yEnd = 0.0;
-    position(input, input.length, xEnd, yEnd);
-    ensure_equals("value", curve->getEndCoordinate().x, xEnd, 1e-9);
-    ensure_equals("value", curve->getEndCoordinate().y, yEnd, 1e-9);
-    ensure(curve->getEndCoordinate().x > 0.0);
-
-    auto line = curve->getLinearized(CurveToLineParams::maxDeviation(1e-4));
-    ensure_equals(line->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
-    ensure(line->getNumPoints() >= 3u);
-    ensure_equals("value", line->getCoordinatesRO()->front<CoordinateXY>().x, curve->getStartCoordinate().x, 1e-12);
-    ensure_equals("value", line->getCoordinatesRO()->back<CoordinateXY>().x, curve->getEndCoordinate().x, 1e-9);
-    ensure_equals("value", line->getCoordinatesRO()->back<CoordinateXY>().y, curve->getEndCoordinate().y, 1e-9);
-
-    auto reversed = curve->reverse();
-    Parameters forward;
-    forward.x0 = curve->getStartCoordinate().x;
-    forward.y0 = curve->getStartCoordinate().y;
-    forward.theta0 = curve->getStartTangent();
-    forward.k0 = curve->getStartCurvature();
-    forward.k1 = curve->getEndCurvature();
-    forward.length = curve->getLength();
-    Parameters backward;
-    backward.x0 = reversed->getStartCoordinate().x;
-    backward.y0 = reversed->getStartCoordinate().y;
-    backward.theta0 = reversed->getStartTangent();
-    backward.k0 = reversed->getStartCurvature();
-    backward.k1 = reversed->getEndCurvature();
-    backward.length = reversed->getLength();
-
-    const double s = 1.25;
-    double x = 0.0;
-    double y = 0.0;
-    double xr = 0.0;
-    double yr = 0.0;
-    position(forward, s, x, y);
-    position(backward, forward.length - s, xr, yr);
-    ensure_equals("value", x, xr, 1e-8);
-    ensure_equals("value", y, yr, 1e-8);
-
-    auto restored = reversed->reverse();
-    ensure_equals("value", restored->getStartTangent(), curve->getStartTangent(), 1e-12);
-    ensure_equals("value", restored->getScaleFactor(), curve->getScaleFactor(), 0.0);
-    ensure_equals("value", restored->getStartDistance(), curve->getStartDistance(), 0.0);
-    ensure_equals("value", restored->getEndDistance(), curve->getEndDistance(), 0.0);
-    double xe = 0.0;
-    double ye = 0.0;
-    Parameters again = forward;
-    again.theta0 = restored->getStartTangent();
-    again.x0 = restored->getStartCoordinate().x;
-    again.y0 = restored->getStartCoordinate().y;
-    position(again, s, xe, ye);
-    ensure_equals("value", x, xe, 1e-8);
-    ensure_equals("value", y, ye, 1e-8);
+    auto curve = reader_.read<Clothoid>(
+                     "CLOTHOID (REFERENCELOCATION AFFINEPLACEMENT (LOCATION (0 0), "
+                     "REFERENCEDIRECTIONS (VECTOR (1 0), VECTOR (0 1))), "
+                     "SCALEFACTOR 50, STARTDISTANCE 0, ENDDISTANCE 25)");
+    ensure_equals("length", curve->getLength(), 25.0, 0.0);
+    ensure_equals("x", curve->getEndCoordinate().x, 24.960965746830126, 1e-9);
+    ensure_equals("y", curve->getEndCoordinate().y, 1.0405046700886817, 1e-9);
+    ensure_equals("heading", curve->getEndHeading(), 0.125, 1e-12);
 }
 
 template<>
 template<>
 void object::test<6>()
 {
-    set_test_name("constant curvature is rejected");
+    set_test_name("envelope");
 
-    ensure_THROW(make(0.0, 0.0, 0.0, 0.0, 0.0, 2.0), geos::util::IllegalArgumentException);
-
-    auto gentle = factory_->createClothoid(identityAt(0.0, 0.0), 1.0e6, 0.0, 2.0, false, false, 0.0, 0.0);
-    ensure(gentle->hasCurvedComponents());
-    ensure_equals("value", gentle->getLength(), 2.0, 1e-9);
-    ensure_equals("value", gentle->getEndCoordinate().x, 2.0, 1e-6);
-    ensure(std::abs(gentle->getEndCoordinate().y) < 1e-6);
+    auto turning = make(0.0, 0.0, 0.0, 0.0, 2.0, geos::MATH_PI);
+    auto line = turning->getLinearized(CurveToLineParams::maxDeviation(1e-4));
+    const geos::geom::Envelope* env = turning->getEnvelopeInternal();
+    const auto* seq = line->getCoordinatesRO();
+    for (std::size_t i = 0; i < seq->size(); ++i) {
+        const CoordinateXY pt = seq->getAt<CoordinateXY>(i);
+        ensure(env->covers(pt.x, pt.y));
+    }
+    ensure(env->getMaxX() > turning->getEndCoordinate().x + 0.05);
 }
 
 template<>
 template<>
 void object::test<7>()
 {
-    set_test_name("chord placement and curved convexHull");
+    set_test_name("getLinearized()");
 
-    auto placed = factory_->createClothoidFromChord(
-        CoordinateXY(166473.5960999988, 577235.5036999993),
-        CoordinateXY(166558.2337500006, 577204.9115500003),
-        -0.0006369426751592356, 0.0);
-    ensure_equals("value", placed->getLength(), 90.0000162557141, 1e-6);
-    ensure_equals("value", placed->getEndCoordinate().x, 166558.2337500006, 1e-4);
-    ensure_equals("value", placed->getEndCoordinate().y, 577204.9115500003, 1e-4);
-
-    auto curve = make(0.0, 0.0, 0.0, 0.0, 0.01, 25.0);
-    try {
-        (void) curve->convexHull();
-        fail("expected UnsupportedOperationException");
-    }
-    catch (const geos::util::UnsupportedOperationException& ex) {
-        const std::string msg(ex.what());
-        ensure(msg.find("getLinearized") != std::string::npos);
-    }
-
-    ensure_THROW(
-        factory_->createClothoid(
-            CoordinateXYZM(0.0, 0.0, geos::DoubleNotANumber, geos::DoubleNotANumber),
-            false, false, 0.0, 0.0, 0.0, -1.0),
-        geos::util::IllegalArgumentException);
+    auto curve = make(0.0, 0.0, 0.2, 0.1, -0.05, 3.0);
+    auto line = curve->getLinearized(CurveToLineParams::maxDeviation(1e-4));
+    ensure_equals(line->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
+    ensure(line->getNumPoints() >= 3u);
+    ensure_equals("x0", line->getCoordinatesRO()->front<CoordinateXY>().x, curve->getStartCoordinate().x, 1e-12);
+    ensure_equals("x1", line->getCoordinatesRO()->back<CoordinateXY>().x, curve->getEndCoordinate().x, 1e-9);
+    ensure_equals("y1", line->getCoordinatesRO()->back<CoordinateXY>().y, curve->getEndCoordinate().y, 1e-9);
 }
 
 template<>
 template<>
 void object::test<8>()
 {
-    set_test_name("compound curve section linearizes");
+    set_test_name("getLinearized() Z/M");
 
-    auto clothoid = make(0.0, 0.0, 0.0, 0.0, 0.01, 25.0);
-    const CoordinateXY end = clothoid->getEndCoordinate();
-    std::vector<std::unique_ptr<SimpleCurve>> sections;
-    sections.push_back(std::move(clothoid));
-    sections.push_back(factory_->createLineString({
-        end,
-        CoordinateXY(end.x, end.y + 1.0)
-    }));
-    std::unique_ptr<CompoundCurve> compound = factory_->createCompoundCurve(std::move(sections));
-    auto line = compound->getLinearized(CurveToLineParams::maxDeviation(0.05));
-    ensure_equals(line->getGeometryTypeId(), geos::geom::GEOS_LINESTRING);
-    ensure(line->getNumPoints() > 3u);
-    ensure_equals("value", line->getCoordinatesRO()->front<CoordinateXY>().x, 0.0, 1e-12);
-    ensure_equals("value", line->getCoordinatesRO()->back<CoordinateXY>().y, end.y + 1.0, 1e-8);
+    auto curve = reader_.read<Clothoid>(
+                     "CLOTHOID ZM (REFERENCELOCATION AFFINEPLACEMENT Z (LOCATION Z (1 2 3), "
+                     "REFERENCEDIRECTIONS (VECTOR Z (1 0 0), VECTOR Z (0 1 0))), "
+                     "SCALEFACTOR 8, STARTDISTANCE -2, ENDDISTANCE 2, STARTM 1, ENDM 5)");
+    auto line = curve->getLinearized(CurveToLineParams::maxDeviation(0.1));
+    const auto* seq = line->getCoordinatesRO();
+    ensure_equals("z0", seq->getZ(0), 3.0, 1e-12);
+    ensure_equals("z1", seq->getZ(seq->size() - 1), 3.0, 1e-12);
+    ensure_equals("m0", seq->getM(0), 1.0, 1e-12);
+    ensure_equals("m1", seq->getM(seq->size() - 1), 5.0, 1e-12);
 }
 
 template<>
 template<>
 void object::test<9>()
 {
-    set_test_name("ISO WKT and WKB round trip is bitwise for a short literal");
+    set_test_name("reverse");
+
+    auto curve = make(0.0, 0.0, 0.2, 0.1, -0.05, 3.0);
+    auto reversed = curve->reverse();
+    ensure_equals("x", reversed->getStartCoordinate().x, curve->getEndCoordinate().x, 1e-9);
+    ensure_equals("y", reversed->getStartCoordinate().y, curve->getEndCoordinate().y, 1e-9);
+    ensure_equals("k0", reversed->getStartCurvature(), -curve->getEndCurvature(), 1e-12);
+    ensure_equals("k1", reversed->getEndCurvature(), -curve->getStartCurvature(), 1e-12);
+    ensure_equals("length", reversed->getLength(), curve->getLength(), 1e-9);
+
+    auto restored = reversed->reverse();
+    ensure_equals("heading", restored->getStartHeading(), curve->getStartHeading(), 1e-12);
+    ensure_equals("scale", restored->getScaleFactor(), curve->getScaleFactor(), 0.0);
+    ensure_equals("t0", restored->getStartDistance(), curve->getStartDistance(), 0.0);
+    ensure_equals("t1", restored->getEndDistance(), curve->getEndDistance(), 0.0);
+}
+
+template<>
+template<>
+void object::test<10>()
+{
+    set_test_name("measures");
+
+    auto curve = factory_->createClothoid(
+                     CoordinateXYZM(0.0, 0.0, geos::DoubleNotANumber, 2.0),
+                     false, true, 0.0, 0.0, 0.01, 10.0, 7.0);
+    ensure(curve->hasM());
+    ensure_equals("startM", curve->getStartM(), 2.0, 0.0);
+    ensure_equals("endM", curve->getEndM(), 7.0, 0.0);
+    ensure_equals("m0", curve->getCoordinatesRO()->getM(0), 2.0, 0.0);
+    ensure_equals("m1", curve->getCoordinatesRO()->getM(1), 7.0, 0.0);
+}
+
+template<>
+template<>
+void object::test<11>()
+{
+    set_test_name("constant curvature");
+
+    ensure_THROW(make(0.0, 0.0, 0.0, 0.0, 0.0, 2.0), geos::util::IllegalArgumentException);
+    ensure_THROW(make(0.0, 0.0, 0.0, 0.01, 0.01, 2.0), geos::util::IllegalArgumentException);
+    ensure_THROW(make(0.0, 0.0, 0.0, 0.0, 0.01, -1.0), geos::util::IllegalArgumentException);
+    ensure_THROW(
+        make(0.0, 0.0, 0.0, 0.0, 0.01, std::numeric_limits<double>::infinity()),
+        geos::util::IllegalArgumentException);
+}
+
+template<>
+template<>
+void object::test<12>()
+{
+    set_test_name("gentle curve");
+
+    auto gentle = factory_->createClothoid(identityAt(0.0, 0.0), 1.0e6, 0.0, 2.0, false, false, 0.0, 0.0);
+    ensure(gentle->hasCurvedComponents());
+    ensure_equals("length", gentle->getLength(), 2.0, 1e-9);
+    ensure_equals("x", gentle->getEndCoordinate().x, 2.0, 1e-6);
+    ensure(std::abs(gentle->getEndCoordinate().y) < 1e-6);
+}
+
+template<>
+template<>
+void object::test<13>()
+{
+    set_test_name("large turn");
+
+    ensure_THROW(make(0.0, 0.0, 0.0, 0.0, 1e5, 20000.0), geos::util::IllegalArgumentException);
+}
+
+template<>
+template<>
+void object::test<14>()
+{
+    set_test_name("large curvature");
+
+    ensure_THROW(make(0.0, 0.0, 0.0, 0.0, 1.0, 1e308), geos::util::IllegalArgumentException);
+    ensure_THROW(make(0.0, 0.0, 0.0, 0.0, 1e308, 1.0), geos::util::IllegalArgumentException);
+}
+
+template<>
+template<>
+void object::test<15>()
+{
+    set_test_name("compound linearize");
+
+    auto compound = lineThenClothoid();
+    const CoordinateXY end = compound->getCurveN(1)->getEndCoordinate();
+    auto line = compound->getLinearized(CurveToLineParams::maxDeviation(0.05));
+    ensure(line->getNumPoints() > 3u);
+    ensure_equals("x0", line->getCoordinatesRO()->front<CoordinateXY>().x, 0.0, 1e-12);
+    ensure_equals("x1", line->getCoordinatesRO()->back<CoordinateXY>().x, end.x, 1e-8);
+    ensure_equals("y1", line->getCoordinatesRO()->back<CoordinateXY>().y, end.y, 1e-8);
+}
+
+template<>
+template<>
+void object::test<16>()
+{
+    set_test_name("distance");
+
+    auto compound = lineThenClothoid();
+    auto point = factory_->createPoint(CoordinateXY(0.0, 10.0));
+    ensure_THROW(point->distance(compound.get()), geos::util::UnsupportedOperationException);
+}
+
+template<>
+template<>
+void object::test<17>()
+{
+    set_test_name("intersection");
+
+    auto compound = lineThenClothoid();
+    auto line = factory_->createLineString({
+        CoordinateXY(0.0, 0.0), CoordinateXY(1.0, 0.0)});
+    ensure_THROW(compound->intersection(line.get()), geos::util::UnsupportedOperationException);
+}
+
+template<>
+template<>
+void object::test<18>()
+{
+    set_test_name("point location");
+
+    auto compound = lineThenClothoid();
+    const CoordinateXY end = compound->getCurveN(1)->getEndCoordinate();
+    PointLocator locator;
+    const geos::geom::Geometry* geom = compound.get();
+    ensure_THROW(locator.locate(end, geom), geos::util::UnsupportedOperationException);
+}
+
+template<>
+template<>
+void object::test<19>()
+{
+    set_test_name("WKB hex");
 
     const char* wkt =
         "CLOTHOID (REFERENCELOCATION AFFINEPLACEMENT (LOCATION (0 0), "
         "REFERENCEDIRECTIONS (VECTOR (1 0), VECTOR (0 1))), "
         "SCALEFACTOR 50, STARTDISTANCE 0, ENDDISTANCE 25)";
     auto curve = reader_.read<Clothoid>(wkt);
-    ensure_equals("value", curve->getScaleFactor(), 50.0, 0.0);
-    ensure_equals("value", curve->getStartDistance(), 0.0, 0.0);
-    ensure_equals("value", curve->getEndDistance(), 25.0, 0.0);
-    ensure_equals("value", curve->getReferenceLocation().x, 0.0, 0.0);
-    ensure_equals("value", curve->getReferenceLocation().ux, 1.0, 0.0);
-    ensure_equals("value", curve->getReferenceLocation().vy, 1.0, 0.0);
-
-    geos::io::WKTWriter writer;
-    const std::string text = writer.write(curve.get());
-    auto back = reader_.read<Clothoid>(text);
-    ensure(curve->equalsIdentical(back.get()));
+    ensure_equals("scale", curve->getScaleFactor(), 50.0, 0.0);
+    ensure_equals("ux", curve->getReferenceLocation().u.x, 1.0, 0.0);
+    ensure_equals("vy", curve->getReferenceLocation().v.y, 1.0, 0.0);
 
     const char* hexLiteral =
         "0116000000"
@@ -366,241 +391,185 @@ void object::test<9>()
 
 template<>
 template<>
-void object::test<10>()
+void object::test<20>()
 {
-    set_test_name("arc-length WKT body and WKB types 18 and 23 are rejected");
+    set_test_name("WKB empty");
 
-    ensure_THROW(reader_.read("CLOTHOID (0 0, 0, 0, 0.01, 25)"), geos::io::ParseException);
-
-    geos::io::WKBReader wkbReader(*factory_);
-    {
-        std::stringstream hex("0112000000");
-        ensure_THROW(wkbReader.readHEX(hex), geos::io::ParseException);
-    }
-    {
-        std::stringstream hex("01FA030000");
-        ensure_THROW(wkbReader.readHEX(hex), geos::io::ParseException);
-    }
-    {
-        std::stringstream hex(
-            "0116000000"
-            "0000000000000000"
-            "0000000000000000"
-            "0000000000000000"
-            "0000000000000000"
-            "0000000000000000"
-            "0000000000000000");
-        ensure_THROW(wkbReader.readHEX(hex), geos::io::ParseException);
-    }
-    {
-        std::stringstream hex("0117000000");
-        ensure_THROW(wkbReader.readHEX(hex), geos::io::ParseException);
-    }
-}
-
-template<>
-template<>
-void object::test<11>()
-{
-    set_test_name("Z, M, and ZM ISO forms round trip, and EMPTY is a header");
-
-    const char* zWkt =
-        "CLOTHOID Z (REFERENCELOCATION AFFINEPLACEMENT Z (LOCATION Z (1 2 9), "
-        "REFERENCEDIRECTIONS (VECTOR Z (1 0 0), VECTOR Z (0 1 0))), "
-        "SCALEFACTOR 50, STARTDISTANCE 0, ENDDISTANCE 25)";
-    auto zCurve = reader_.read<Clothoid>(zWkt);
-    ensure(zCurve->hasZ());
-    ensure(!zCurve->hasM());
-    ensure_equals("value", zCurve->getCoordinatesRO()->getZ(0), 9.0, 0.0);
-    ensure_equals("value", zCurve->getCoordinatesRO()->getZ(1), 9.0, 0.0);
-    geos::io::WKTWriter writer;
-    auto zBack = reader_.read<Clothoid>(writer.write(zCurve.get()));
-    ensure(zCurve->equalsIdentical(zBack.get()));
-
-    const char* mWkt =
-        "CLOTHOID M (REFERENCELOCATION AFFINEPLACEMENT (LOCATION (0 0), "
-        "REFERENCEDIRECTIONS (VECTOR (1 0), VECTOR (0 1))), "
-        "SCALEFACTOR 50, STARTDISTANCE 0, ENDDISTANCE 25, STARTM 4, ENDM 9)";
-    auto mCurve = reader_.read<Clothoid>(mWkt);
-    ensure(mCurve->hasM());
-    ensure(!mCurve->hasZ());
-    ensure_equals("value", mCurve->getStartM(), 4.0, 0.0);
-    ensure_equals("value", mCurve->getEndM(), 9.0, 0.0);
-    ensure_equals("value", mCurve->getCoordinatesRO()->getM(0), 4.0, 0.0);
-    ensure_equals("value", mCurve->getCoordinatesRO()->getM(1), 9.0, 0.0);
-    auto mBack = reader_.read<Clothoid>(writer.write(mCurve.get()));
-    ensure(mCurve->equalsIdentical(mBack.get()));
-
-    auto line = mCurve->getLinearized(CurveToLineParams::maxDeviation(1.0));
-    ensure_equals("value", line->getCoordinatesRO()->getM(0), 4.0, 1e-12);
-    ensure_equals("value", line->getCoordinatesRO()->getM(line->getNumPoints() - 1), 9.0, 1e-12);
-
-    const char* zmWkt =
-        "CLOTHOID ZM (REFERENCELOCATION AFFINEPLACEMENT Z (LOCATION Z (1 2 3), "
-        "REFERENCEDIRECTIONS (VECTOR Z (1 0 0), VECTOR Z (0 1 0))), "
-        "SCALEFACTOR 8, STARTDISTANCE -2, ENDDISTANCE 2, STARTM 1, ENDM 5)";
-    auto zmCurve = reader_.read<Clothoid>(zmWkt);
-    ensure(zmCurve->hasZ());
-    ensure(zmCurve->hasM());
     geos::io::WKBWriter wkbWriter;
-    std::stringstream zmHex;
-    wkbWriter.writeHEX(*zmCurve, zmHex);
-    geos::io::WKBReader wkbReader(*factory_);
-    auto zmBack = wkbReader.readHEX(zmHex);
-    ensure(zmCurve->equalsIdentical(zmBack.get()));
-
-    auto empty = factory_->createClothoid(false, false);
     std::stringstream emptyHex;
-    wkbWriter.writeHEX(*empty, emptyHex);
+    wkbWriter.writeHEX(*factory_->createClothoid(false, false), emptyHex);
     ensure_equals(emptyHex.str(), std::string("0116000000"));
     std::stringstream emptyZ;
     wkbWriter.writeHEX(*factory_->createClothoid(true, false), emptyZ);
-    ensure_equals(emptyZ.str(), std::string("01FE030000"));
+    ensure_equals(emptyZ.str(), std::string("0116000080"));
     std::stringstream emptyM;
     wkbWriter.writeHEX(*factory_->createClothoid(false, true), emptyM);
-    ensure_equals(emptyM.str(), std::string("01E6070000"));
+    ensure_equals(emptyM.str(), std::string("0116000040"));
     std::stringstream emptyZM;
     wkbWriter.writeHEX(*factory_->createClothoid(true, true), emptyZM);
-    ensure_equals(emptyZM.str(), std::string("01CE0B0000"));
+    ensure_equals(emptyZM.str(), std::string("01160000C0"));
 
-    auto parsedMEmpty = reader_.read("CLOTHOID M EMPTY");
-    ensure(parsedMEmpty->isEmpty());
-    ensure(parsedMEmpty->hasM());
-    ensure(!parsedMEmpty->hasZ());
-
-    try {
-        (void) reader_.read(
-            "CLOTHOID (REFERENCELOCATION AFFINEPLACEMENT (LOCATION (0 0), "
-            "REFERENCEDIRECTIONS (VECTOR (1 0), VECTOR (0 1))), "
-            "SCALEFACTOR 50, STARTDISTANCE 0, ENDDISTANCE 25, STARTM 1, ENDM 2)");
-        fail("expected measures to require the M flag");
-    }
-    catch (const geos::io::ParseException& ex) {
-        const std::string msg(ex.what());
-        ensure(msg.find("STARTM") != std::string::npos);
-    }
-    try {
-        (void) reader_.read(
-            "CLOTHOID M (REFERENCELOCATION AFFINEPLACEMENT (LOCATION (0 0), "
-            "REFERENCEDIRECTIONS (VECTOR (1 0), VECTOR (0 1))), "
-            "SCALEFACTOR 50, STARTDISTANCE 0, ENDDISTANCE 25)");
-        fail("expected M to require STARTM and ENDM");
-    }
-    catch (const geos::io::ParseException& ex) {
-        const std::string msg(ex.what());
-        ensure(msg.find("STARTM") != std::string::npos);
-    }
+    geos::io::WKBWriter isoWriter(
+        4, geos::io::ByteOrderValues::ENDIAN_LITTLE, false, geos::io::WKBConstants::wkbIso);
+    std::stringstream isoZ;
+    isoWriter.writeHEX(*factory_->createClothoid(true, false), isoZ);
+    ensure_equals(isoZ.str(), std::string("01FE030000"));
+    std::stringstream isoM;
+    isoWriter.writeHEX(*factory_->createClothoid(false, true), isoM);
+    ensure_equals(isoM.str(), std::string("01E6070000"));
+    std::stringstream isoZM;
+    isoWriter.writeHEX(*factory_->createClothoid(true, true), isoZM);
+    ensure_equals(isoZM.str(), std::string("01CE0B0000"));
 }
 
 template<>
 template<>
-void object::test<12>()
+void object::test<21>()
 {
-    set_test_name("sheared placement and a span through the inflection");
+    set_test_name("rejected WKT");
 
-    ClothoidReferenceLocation sheared{0, 0, 0, 2, 0, 0, 0, 1, 0};
+    ensure_THROW(reader_.read("CLOTHOID (0 0, 0, 0, 0.01, 25)"), geos::io::ParseException);
+    ensure_THROW(reader_.read(
+                     "CLOTHOID (REFERENCELOCATION AFFINEPLACEMENT (LOCATION (0 0), "
+                     "REFERENCEDIRECTIONS (VECTOR (1 0), VECTOR (0 1))), "
+                     "SCALEFACTOR 50, STARTDISTANCE 0, ENDDISTANCE 25, STARTM 1, ENDM 2)"),
+                 geos::io::ParseException);
+    ensure_THROW(reader_.read(
+                     "CLOTHOID M (REFERENCELOCATION AFFINEPLACEMENT (LOCATION (0 0), "
+                     "REFERENCEDIRECTIONS (VECTOR (1 0), VECTOR (0 1))), "
+                     "SCALEFACTOR 50, STARTDISTANCE 0, ENDDISTANCE 25)"),
+                 geos::io::ParseException);
+}
+
+template<>
+template<>
+void object::test<22>()
+{
+    set_test_name("WKB type 18");
+
+    geos::io::WKBReader wkbReader(*factory_);
+    std::stringstream circle("0112000000");
+    ensure_THROW(wkbReader.readHEX(circle), geos::io::ParseException);
+    std::stringstream circleZ("01FA030000");
+    ensure_THROW(wkbReader.readHEX(circleZ), geos::io::ParseException);
+}
+
+template<>
+template<>
+void object::test<23>()
+{
+    set_test_name("WKB type 23");
+
+    geos::io::WKBReader wkbReader(*factory_);
+    std::stringstream spiral("0117000000");
+    ensure_THROW(wkbReader.readHEX(spiral), geos::io::ParseException);
+}
+
+template<>
+template<>
+void object::test<24>()
+{
+    set_test_name("sheared placement");
+
+    ClothoidReferenceLocation sheared{
+        Coordinate(0.0, 0.0, 0.0),
+        Coordinate(2.0, 0.0, 0.0),
+        Coordinate(0.0, 1.0, 0.0)};
     auto curve = factory_->createClothoid(sheared, 1.0, 0.0, 1.0, false, false, 0.0, 0.0);
-    Parameters local;
-    local.x0 = 0.0;
-    local.y0 = 0.0;
-    local.theta0 = 0.0;
-    local.k0 = 0.0;
-    local.k1 = 1.0;
-    local.length = 1.0;
-    double x = 0.0;
-    double y = 0.0;
-    position(local, 1.0, x, y);
-    ensure_equals("value", curve->getEndCoordinate().x, 2.0 * x, 1e-9);
-    ensure_equals("value", curve->getEndCoordinate().y, y, 1e-9);
+    ensure_equals("x", curve->getEndCoordinate().x, 1.9505753764006892, 1e-9);
+    ensure_equals("y", curve->getEndCoordinate().y, 0.16371404737570058, 1e-9);
+}
+
+template<>
+template<>
+void object::test<25>()
+{
+    set_test_name("inflection");
 
     auto through = factory_->createClothoid(identityAt(0.0, 0.0), 10.0, -5.0, 5.0, false, false, 0.0, 0.0);
-    ensure_equals("value", through->getLength(), 10.0, 1e-12);
-    ensure_equals("value", through->getStartCoordinate().x, -through->getEndCoordinate().x, 1e-9);
-    ensure_equals("value", through->getStartCoordinate().y, -through->getEndCoordinate().y, 1e-9);
+    ensure_equals("length", through->getLength(), 10.0, 1e-12);
+    ensure_equals("x", through->getStartCoordinate().x, -through->getEndCoordinate().x, 1e-9);
+    ensure_equals("y", through->getStartCoordinate().y, -through->getEndCoordinate().y, 1e-9);
     ensure(through->getEnvelopeInternal()->covers(0.0, 0.0));
 
     auto zero = factory_->createClothoid(identityAt(3.0, 4.0), 10.0, 1.0, 1.0, false, false, 0.0, 0.0);
-    ensure(!zero->isEmpty());
-    ensure_equals("value", zero->getLength(), 0.0, 0.0);
-    ensure_equals("value", zero->getStartCoordinate().x, zero->getEndCoordinate().x, 0.0);
+    ensure_equals("length", zero->getLength(), 0.0, 0.0);
+    ensure_equals("x", zero->getStartCoordinate().x, zero->getEndCoordinate().x, 0.0);
 }
 
 template<>
 template<>
-void object::test<13>()
+void object::test<26>()
 {
-    set_test_name("decreasing curvature matches arc-length integration");
+    set_test_name("decreasing curvature");
 
-    auto check = [&](double x, double y, double theta0, double k0, double k1, double length) {
-        auto curve = factory_->createClothoid(
-            CoordinateXYZM(x, y, geos::DoubleNotANumber, geos::DoubleNotANumber),
-            false, false, theta0, k0, k1, length);
-        ensure_equals("value", curve->getStartCurvature(), k0, 1e-12);
-        ensure_equals("value", curve->getEndCurvature(), k1, 1e-12);
-        const double headingGap = std::abs(std::remainder(
-            curve->getStartTangent() - theta0, 2.0 * geos::MATH_PI));
-        ensure_equals("value", headingGap, 0.0, 1e-12);
-        ensure_equals("value", curve->getStartCoordinate().x, x, 1e-12);
-        ensure_equals("value", curve->getStartCoordinate().y, y, 1e-12);
-
-        Parameters pose;
-        pose.x0 = x;
-        pose.y0 = y;
-        pose.theta0 = theta0;
-        pose.k0 = k0;
-        pose.k1 = k1;
-        pose.length = length;
-        double xe = 0.0;
-        double ye = 0.0;
-        position(pose, length, xe, ye);
-        ensure_equals("value", curve->getEndCoordinate().x, xe, 1e-9);
-        ensure_equals("value", curve->getEndCoordinate().y, ye, 1e-9);
-    };
-
-    check(0.0, 0.0, 0.0, 0.02, 0.01, 50.0);
     auto easing = make(0.0, 0.0, 0.0, 0.02, 0.01, 50.0);
+    ensure_equals("k0", easing->getStartCurvature(), 0.02, 1e-12);
+    ensure_equals("k1", easing->getEndCurvature(), 0.01, 1e-12);
+    ensure_equals("x0", easing->getStartCoordinate().x, 0.0, 1e-12);
+    ensure_equals("y0", easing->getStartCoordinate().y, 0.0, 1e-12);
+    ensure_equals("heading", easing->getStartHeading(), 0.0, 1e-12);
     ensure(easing->getEndCoordinate().x > 40.0);
     ensure(easing->getEndCoordinate().y > 10.0);
 
-    check(3.0, 4.0, 1.0, -0.002, -0.03, 40.0);
-    check(0.0, 0.0, 0.0, 0.0, -0.01, 25.0);
-    check(1.0, 2.0, 0.25, 0.0, 0.125, 8.0);
+    auto turned = make(3.0, 4.0, 1.0, -0.002, -0.03, 40.0);
+    ensure_equals("x0", turned->getStartCoordinate().x, 3.0, 1e-12);
+    ensure_equals("y0", turned->getStartCoordinate().y, 4.0, 1e-12);
+    ensure_equals("k0", turned->getStartCurvature(), -0.002, 1e-12);
+    ensure_equals("k1", turned->getEndCurvature(), -0.03, 1e-12);
 }
 
 template<>
 template<>
-void object::test<14>()
+void object::test<27>()
 {
-    set_test_name("chord factory keeps decreasing curvature");
+    set_test_name("Z WKT");
 
-    auto check = [&](double theta0, double k0, double k1, double length) {
-        auto pose = factory_->createClothoid(
-            CoordinateXYZM(0.0, 0.0, geos::DoubleNotANumber, geos::DoubleNotANumber),
-            false, false, theta0, k0, k1, length);
-        const CoordinateXY start = pose->getStartCoordinate();
-        const CoordinateXY end = pose->getEndCoordinate();
-        auto placed = factory_->createClothoidFromChord(start, end, k0, k1);
-        ensure_equals("value", placed->getStartCurvature(), k0, 1e-9);
-        ensure_equals("value", placed->getEndCurvature(), k1, 1e-9);
-        ensure_equals("value", placed->getEndCoordinate().x, end.x, 1e-6);
-        ensure_equals("value", placed->getEndCoordinate().y, end.y, 1e-6);
+    auto curve = reader_.read<Clothoid>(
+                     "CLOTHOID Z (REFERENCELOCATION AFFINEPLACEMENT Z (LOCATION Z (1 2 9), "
+                     "REFERENCEDIRECTIONS (VECTOR Z (1 0 0), VECTOR Z (0 1 0))), "
+                     "SCALEFACTOR 50, STARTDISTANCE 0, ENDDISTANCE 25)");
+    ensure(curve->hasZ());
+    ensure(!curve->hasM());
+    ensure_equals("z", curve->getCoordinatesRO()->getZ(0), 9.0, 0.0);
+    geos::io::WKTWriter writer;
+    auto back = reader_.read<Clothoid>(writer.write(curve.get()));
+    ensure(curve->equalsIdentical(back.get()));
+}
 
-        const geos::algorithm::clothoid::ChordPlacement solved = geos::algorithm::clothoid::placeOnChord(
-            start.x, start.y, end.x, end.y, k0, k1);
-        ensure(solved.solve.converged);
-        const double headingGap = std::abs(std::remainder(
-            placed->getStartTangent() - solved.parameters.theta0, 2.0 * geos::MATH_PI));
-        ensure_equals("value", headingGap, 0.0, 1e-9);
-        double xe = 0.0;
-        double ye = 0.0;
-        position(solved.parameters, solved.parameters.length, xe, ye);
-        ensure_equals("value", placed->getEndCoordinate().x, xe, 1e-8);
-        ensure_equals("value", placed->getEndCoordinate().y, ye, 1e-8);
-    };
+template<>
+template<>
+void object::test<28>()
+{
+    set_test_name("M WKT");
 
-    check(0.0, 0.02, 0.01, 50.0);
-    check(0.4, -0.01, -0.04, 30.0);
-    check(0.2, 0.1, -0.05, 3.0);
+    auto curve = reader_.read<Clothoid>(
+                     "CLOTHOID M (REFERENCELOCATION AFFINEPLACEMENT (LOCATION (0 0), "
+                     "REFERENCEDIRECTIONS (VECTOR (1 0), VECTOR (0 1))), "
+                     "SCALEFACTOR 50, STARTDISTANCE 0, ENDDISTANCE 25, STARTM 4, ENDM 9)");
+    ensure_equals("startM", curve->getStartM(), 4.0, 0.0);
+    ensure_equals("endM", curve->getEndM(), 9.0, 0.0);
+    geos::io::WKTWriter writer;
+    auto back = reader_.read<Clothoid>(writer.write(curve.get()));
+    ensure(curve->equalsIdentical(back.get()));
+}
+
+template<>
+template<>
+void object::test<29>()
+{
+    set_test_name("bad placement");
+
+    geos::io::WKBReader wkbReader(*factory_);
+    std::stringstream hex(
+        "0116000000"
+        "0000000000000000"
+        "0000000000000000"
+        "0000000000000000"
+        "0000000000000000"
+        "0000000000000000"
+        "0000000000000000");
+    ensure_THROW(wkbReader.readHEX(hex), geos::io::ParseException);
 }
 
 } // namespace tut

@@ -21,6 +21,7 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LineString.h>
 #include <geos/util/GEOSException.h>
+#include <geos/util/UnsupportedOperationException.h>
 
 #include <cmath>
 
@@ -35,6 +36,10 @@ CurveBuilder::CurveBuilder(const GeometryFactory& gfact, bool hasZ, bool hasM)
 void
 CurveBuilder::add(const Curve& geom)
 {
+    if (geom.getGeometryTypeId() == GEOS_CLOTHOID) {
+        throw geos::util::UnsupportedOperationException("Clothoid curves are not supported");
+    }
+
     if (geom.getGeometryTypeId() == GEOS_COMPOUNDCURVE) {
         const CompoundCurve& cc = static_cast<const CompoundCurve&>(geom);
         for (std::size_t i = 0; i < cc.getNumCurves(); i++) {

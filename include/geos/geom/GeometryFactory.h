@@ -28,6 +28,8 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/Polygon.h>
 #include <geos/util/IllegalArgumentException.h>
+
+#include <limits>
 #include <geos/export.h>
 
 #include <vector>
@@ -373,16 +375,12 @@ public:
         double startM, double endM) const;
 
     /// Construct a clothoid from an arc-length pose. Constant curvature is rejected.
+    /// When hasM is set, endM is stored separately from start.m.
     std::unique_ptr<Clothoid> createClothoid(
         const CoordinateXYZM& start,
         bool hasZ, bool hasM,
-        double theta0, double k0, double k1, double length) const;
-
-    /// Construct a clothoid on a chord. Throws if the Halley solve does not converge.
-    std::unique_ptr<Clothoid> createClothoidFromChord(
-        const CoordinateXY& start,
-        const CoordinateXY& end,
-        double k0, double k1) const;
+        double theta0, double k0, double k1, double length,
+        double endM = std::numeric_limits<double>::quiet_NaN()) const;
 
     /// Construct an EMPTY CompoundCurve
     std::unique_ptr<CompoundCurve> createCompoundCurve() const;

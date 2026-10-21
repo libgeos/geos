@@ -346,10 +346,6 @@ WKBReader::readGeometry()
     case WKBConstants::wkbCircularString :
         result = readCircularString();
         break;
-    case WKBConstants::wkbCircle :
-        throw ParseException("WKB type 18 is not implemented");
-    case WKBConstants::wkbSpiralCurve :
-        throw ParseException("WKB type 23 is not implemented");
     case WKBConstants::wkbClothoid :
         result = readClothoid();
         break;
@@ -510,28 +506,28 @@ WKBReader::readClothoid()
 
     const PrecisionModel& pm = *factory.getPrecisionModel();
     ClothoidReferenceLocation location;
-    location.x = pm.makePrecise(dis.readDouble());
-    location.y = pm.makePrecise(dis.readDouble());
-    location.z = 0.0;
+    location.origin.x = pm.makePrecise(dis.readDouble());
+    location.origin.y = pm.makePrecise(dis.readDouble());
+    location.origin.z = 0.0;
     if (hasZ) {
-        location.z = dis.readDouble();
+        location.origin.z = dis.readDouble();
     }
     const uint32_t directionCount = dis.readUnsigned();
     if (directionCount != 2u) {
         throw ParseException(
             "CLOTHOID reference location requires exactly 2 reference directions");
     }
-    location.ux = dis.readDouble();
-    location.uy = dis.readDouble();
-    location.uz = 0.0;
+    location.u.x = dis.readDouble();
+    location.u.y = dis.readDouble();
+    location.u.z = 0.0;
     if (hasZ) {
-        location.uz = dis.readDouble();
+        location.u.z = dis.readDouble();
     }
-    location.vx = dis.readDouble();
-    location.vy = dis.readDouble();
-    location.vz = 0.0;
+    location.v.x = dis.readDouble();
+    location.v.y = dis.readDouble();
+    location.v.z = 0.0;
     if (hasZ) {
-        location.vz = dis.readDouble();
+        location.v.z = dis.readDouble();
     }
 
     // Scale and distances use the clothoid byte order, not the placement's.
