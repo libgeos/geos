@@ -77,9 +77,6 @@ constexpr double FRESNEL_ARGUMENT_LIMIT = 1e3;
 constexpr double MIN_FRESNEL_PHASE = 1e-10;
 // Halley step is rejected when the denominator is this small.
 constexpr double HALLEY_DENOM = 1e-20;
-// Residual tolerance for the chord-length solve, relative to d^2.
-constexpr double LENGTH_TOLERANCE = 1e-13;
-constexpr int LENGTH_MAX_ITERATIONS = 50;
 // Segment counts past this are not a useful linearization.
 constexpr double MAX_SEGMENT_COUNT = 1.0e7;
 
