@@ -771,13 +771,6 @@ Clothoid::snapEndpoint(std::size_t index, const CoordinateXY& target)
     envelope.expandToInclude(target);
 }
 
-void
-Clothoid::pointOnCurve(double travel, double& x, double& y, double& z, double& m) const
-{
-    pointOnFrame(frameOf(getReferenceLocation(), m_scale, m_t0, m_t1, m_startM, m_endM),
-                 travel, x, y, z, m);
-}
-
 double
 Clothoid::travelHeading(double constructiveDistance) const
 {

@@ -169,8 +169,6 @@ protected:
 
 private:
 
-    void pointOnCurve(double travel, double& x, double& y, double& z, double& m) const;
-
     void appendLinearizedPoints(CoordinateSequence& seq,
                                 const algorithm::CurveToLineParams& params,
                                 std::size_t first) const;

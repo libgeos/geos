@@ -26,40 +26,6 @@ namespace geos {
 namespace algorithm {
 namespace clothoid {
 
-class LengthSolve {
-public:
-    double length = 0.0;
-    int iterations = 0;
-
-    bool succeeded() const
-    {
-        return m_converged;
-    }
-
-    void invalidate()
-    {
-        m_converged = false;
-    }
-
-    static LengthSolve make(double lengthIn, int iterationsIn, bool convergedIn)
-    {
-        LengthSolve result;
-        result.length = lengthIn;
-        result.iterations = iterationsIn;
-        result.m_converged = convergedIn;
-        return result;
-    }
-
-private:
-    // Not part of any caller-visible result.
-    bool m_converged = false;
-};
-
-struct ChordPlacement {
-    Parameters parameters;
-    LengthSolve solve;
-};
-
 namespace {
 
 constexpr int FRESNEL_GL_N = 16;
@@ -75,8 +41,6 @@ constexpr double TAYLOR_TURN = 1e-8;
 constexpr double FRESNEL_ARGUMENT_LIMIT = 1e3;
 // alpha*L^2 below this is straight at double precision.
 constexpr double MIN_FRESNEL_PHASE = 1e-10;
-// Halley step is rejected when the denominator is this small.
-constexpr double HALLEY_DENOM = 1e-20;
 // Segment counts past this are not a useful linearization.
 constexpr double MAX_SEGMENT_COUNT = 1.0e7;
 
@@ -117,79 +81,6 @@ constexpr double FRESNEL_WI[FRESNEL_GL_N] = {
     9.51585116824925914e-02,
     6.22535239386477063e-02,
     2.71524594117540374e-02
-};
-
-// 32-point Gauss-Legendre nodes and weights on [0, 1].
-constexpr int MOMENT_N = 32;
-
-constexpr double MOMENT_T[MOMENT_N] = {
-    1.36806907525921506e-03,
-    7.19424422736580915e-03,
-    1.76188722062468051e-02,
-    3.25469620311301666e-02,
-    5.18394221169739544e-02,
-    7.53161931337150148e-02,
-    1.02758102016028807e-01,
-    1.33908940629855144e-01,
-    1.68477866534892384e-01,
-    2.06142121379618848e-01,
-    2.46550045533885320e-01,
-    2.89324361934682361e-01,
-    3.34065698858936166e-01,
-    3.80356318873931454e-01,
-    4.27764019208601742e-01,
-    4.75846167156130817e-01,
-    5.24153832843869183e-01,
-    5.72235980791398258e-01,
-    6.19643681126068491e-01,
-    6.65934301141063889e-01,
-    7.10675638065317639e-01,
-    7.53449954466114624e-01,
-    7.93857878620381152e-01,
-    8.31522133465107616e-01,
-    8.66091059370144856e-01,
-    8.97241897983971137e-01,
-    9.24683806866285041e-01,
-    9.48160577883025990e-01,
-    9.67453037968869833e-01,
-    9.82381127793753195e-01,
-    9.92805755772634191e-01,
-    9.98631930924740785e-01
-};
-
-constexpr double MOMENT_W[MOMENT_N] = {
-    3.50930500473525288e-03,
-    8.13719736545287162e-03,
-    1.26960326546310120e-02,
-    1.71369314565108823e-02,
-    2.14179490111134178e-02,
-    2.54990296311880457e-02,
-    2.93420467392677825e-02,
-    3.29111113881808415e-02,
-    3.61728970544241690e-02,
-    3.90969478935351139e-02,
-    4.16559621134733535e-02,
-    4.38260465022018916e-02,
-    4.55869393478818899e-02,
-    4.69221995404022554e-02,
-    4.78193600396373542e-02,
-    4.82700442573638297e-02,
-    4.82700442573638297e-02,
-    4.78193600396373542e-02,
-    4.69221995404022554e-02,
-    4.55869393478818899e-02,
-    4.38260465022018916e-02,
-    4.16559621134733535e-02,
-    3.90969478935351139e-02,
-    3.61728970544241690e-02,
-    3.29111113881808415e-02,
-    2.93420467392677825e-02,
-    2.54990296311880457e-02,
-    2.14179490111134178e-02,
-    1.71369314565108823e-02,
-    1.26960326546310120e-02,
-    8.13719736545287162e-03,
-    3.50930500473525288e-03
 };
 
 double
@@ -386,12 +277,6 @@ fresnelReductionIsStable(const Parameters& curve, double s, double alpha)
     return std::isfinite(v0) && std::isfinite(vs);
 }
 
-LengthSolve
-finishUnconverged(double length, int iterations)
-{
-    return LengthSolve::make(length, iterations, false);
-}
-
 } // namespace
 
 double
@@ -447,120 +332,6 @@ constructiveOffset(double t, double a2)
         throw util::IllegalArgumentException("Clothoid scale is too small to evaluate");
     }
     return geom::CoordinateXY(amplitude * fresnelC2(argument), amplitude * fresnelS2(argument));
-}
-
-struct Moments {
-    double P;
-    double Q;
-    double R;
-    double T;
-    double S2c;
-    double S2s;
-};
-
-Moments
-moments(double length, double k0, double k1)
-{
-    const double half = 0.5 * (k1 - k0);
-    Moments m{0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-    for (int i = 0; i < MOMENT_N; ++i) {
-        const double t = MOMENT_T[i];
-        const double w = MOMENT_W[i];
-        const double psi = k0 * t + half * t * t;
-        const double phase = length * psi;
-        const double c = std::cos(phase);
-        const double s = std::sin(phase);
-        m.P += w * c;
-        m.Q += w * s;
-        m.R += w * psi * c;
-        m.T += w * psi * s;
-        m.S2c += w * psi * psi * c;
-        m.S2s += w * psi * psi * s;
-    }
-    return m;
-}
-
-LengthSolve
-solveLengthHalley(
-    double x0, double y0, double x1, double y1,
-    double k0, double k1,
-    double tolerance, int maxIterations)
-{
-    const double cx = x1 - x0;
-    const double cy = y1 - y0;
-    const double d2 = cx * cx + cy * cy;
-    const double d = std::sqrt(d2);
-    if (!(d > 0.0) || !std::isfinite(d) || !std::isfinite(k0) || !std::isfinite(k1)) {
-        const bool converged = std::isfinite(d) && d == 0.0 && std::isfinite(k0) && std::isfinite(k1);
-        return LengthSolve::make(0.0, 0, converged);
-    }
-
-    double length = d;
-    const int budget = std::max(maxIterations, 0);
-    for (int it = 1; it <= budget; ++it) {
-        if (!std::isfinite(length)) {
-            return finishUnconverged(length, it);
-        }
-        const Moments m = moments(length, k0, k1);
-        const double r2 = m.P * m.P + m.Q * m.Q;
-        const double qrpt = m.Q * m.R - m.P * m.T;
-        const double f = length * length * r2 - d2;
-        const double fp = 2.0 * length * r2 + 2.0 * length * length * qrpt;
-        const double fpp = 2.0 * r2 + 8.0 * length * qrpt
-                           + 2.0 * length * length * (m.R * m.R + m.T * m.T - m.P * m.S2c - m.Q * m.S2s);
-        const double scale = std::max(d2, 1.0);
-        if (std::abs(f) < tolerance * scale) {
-            return LengthSolve::make(length, it, true);
-        }
-        const double denom = 2.0 * fp * fp - f * fpp;
-        if (std::abs(denom) < HALLEY_DENOM || !(fp > 0.0)) {
-            length *= 1.5;
-            continue;
-        }
-        const double step = 2.0 * f * fp / denom;
-        double next = length - step;
-        if (!(next > 0.0)) {
-            next = 0.5 * length;
-        }
-        length = next;
-    }
-    return finishUnconverged(length, budget);
-}
-
-ChordPlacement
-placeOnChord(
-    double x0, double y0, double x1, double y1,
-    double k0, double k1,
-    double tolerance, int maxIterations)
-{
-    ChordPlacement placed;
-    placed.solve = solveLengthHalley(x0, y0, x1, y1, k0, k1, tolerance, maxIterations);
-    placed.parameters.x0 = x0;
-    placed.parameters.y0 = y0;
-    placed.parameters.k0 = k0;
-    placed.parameters.k1 = k1;
-    placed.parameters.length = placed.solve.length;
-    placed.parameters.theta0 = 0.0;
-
-    if (!placed.solve.succeeded() || !(placed.solve.length > 0.0)) {
-        const double chord = std::atan2(y1 - y0, x1 - x0);
-        placed.parameters.theta0 = std::isfinite(chord) ? chord : 0.0;
-        return placed;
-    }
-
-    Parameters local = placed.parameters;
-    local.x0 = 0.0;
-    local.y0 = 0.0;
-    local.theta0 = 0.0;
-    const geom::CoordinateXY localEnd = position(local, local.length);
-    if (!(std::hypot(localEnd.x, localEnd.y) > 0.0)) {
-        placed.solve.invalidate();
-        return placed;
-    }
-    const double chord = std::atan2(y1 - y0, x1 - x0);
-    const double localAngle = std::atan2(localEnd.y, localEnd.x);
-    placed.parameters.theta0 = chord - localAngle;
-    return placed;
 }
 
 std::size_t
