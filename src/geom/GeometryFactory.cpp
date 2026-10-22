@@ -790,8 +790,12 @@ GeometryFactory::createClothoid(
     algorithm::clothoid::halfSquarePhase(t0, scale, cosDt, sinDt);
     const double cos0 = std::cos(theta0);
     const double sin0 = std::sin(theta0);
-    const double c = cos0 * cosDt + (reflected ? -sin0 * sinDt : sin0 * sinDt);
-    const double s = sin0 * cosDt + (reflected ? cos0 * sinDt : -cos0 * sinDt);
+    // cos and sin of the one reduced angle keep the direction unit length to
+    // an ulp, which the similarity length scale * |t1 - t0| relies on.
+    const double alpha = std::atan2(sin0 * cosDt + (reflected ? cos0 * sinDt : -cos0 * sinDt),
+                                    cos0 * cosDt + (reflected ? -sin0 * sinDt : sin0 * sinDt));
+    const double c = std::cos(alpha);
+    const double s = std::sin(alpha);
 
     ClothoidReferenceLocation location;
     location.u = Coordinate(c, s, 0.0);
