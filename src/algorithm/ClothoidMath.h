@@ -37,9 +37,10 @@ constexpr double MIN_ABS_SCALE = 1e-100;
 // |A| above this overflows a unit constructive coordinate.
 constexpr double MAX_ABS_SCALE = 1e100;
 
-// |t / A| past this squares out of range. Only a zero-length clothoid gets
-// that far: any turn of at most 1024 rad keeps |t / A| below about 2e9.
-constexpr double MAX_FRESNEL_ARGUMENT = 1e150;
+// Past this |t / A| the heading (t / A)^2 / 2 is beyond the 159-bit 2 pi
+// used to reduce it. Only a zero-length clothoid gets that far: any turn
+// of at most 1024 rad keeps |t / A| below about 2e9.
+constexpr double MAX_FRESNEL_ARGUMENT = 1e15;
 
 struct Parameters {
     double k0;

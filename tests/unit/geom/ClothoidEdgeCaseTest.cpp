@@ -214,10 +214,10 @@ void object::test<5>()
     ensure_NO_THROW(iso(loc, 1.0, 0.0, 45.25));
     ensure_THROW(iso(loc, 1.0, 0.0, 45.26), IllegalArgumentException);
     ensure_THROW(iso(loc, 1.0, -45.26, 0.0), IllegalArgumentException);
-    // Past 1e150 the squared distance overflows; only a point gets that far.
-    ensure_NO_THROW(iso(loc, 1.0, 1e149, 1e149));
-    ensure_THROW(iso(loc, 1.0, 1e151, 1e151), IllegalArgumentException);
-    ensure_THROW(iso(loc, 1e-100, -1e51, -1e51), IllegalArgumentException);
+    // Past 1e15 A the heading cannot be reduced; only a point gets that far.
+    ensure_NO_THROW(iso(loc, 1.0, 1e15, 1e15));
+    ensure_THROW(iso(loc, 1.0, 1.01e15, 1.01e15), IllegalArgumentException);
+    ensure_THROW(iso(loc, 1e-100, -1e-84, -1e-84), IllegalArgumentException);
     ensure_THROW(iso(at(nan, 0.0), 1.0, 0.0, 1.0), IllegalArgumentException);
     ensure_THROW(iso(at(0.0, 0.0, inf, 0.0), 1.0, 0.0, 1.0), IllegalArgumentException);
     ensure_THROW(factory_->createClothoid(loc, 1.0, 0.0, 1.0, false, true, nan, 1.0),

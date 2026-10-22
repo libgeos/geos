@@ -43,6 +43,10 @@ constexpr double FRESNEL_PANEL_PHASE = 2.0;
 constexpr double SERIES_TERM_RELATIVE = 1e-18;
 // Segment counts past this are not a useful linearization.
 constexpr double MAX_SEGMENT_COUNT = 1.0e7;
+// 2 pi as a sum of three doubles, 159 bits.
+constexpr double TWO_PI_HI = 6.283185307179586;
+constexpr double TWO_PI_MID = 2.4492935982947064e-16;
+constexpr double TWO_PI_LO = -5.989539619436679e-33;
 
 // 16-point Gauss–Legendre nodes and weights on [-1, 1].
 constexpr double FRESNEL_XI[FRESNEL_GL_N] = {
@@ -196,6 +200,64 @@ fresnelFar(double x, double cosPhase, double sinPhase, double& c, double& s)
     s = half - f * cosPhase - g * sinPhase;
 }
 
+// Error-free product p + e = a b (Dekker), without relying on a correctly
+// rounded std::fma.
+void
+twoProduct(double a, double b, double& product, double& error)
+{
+    constexpr double SPLIT = 134217729.0; // 2^27 + 1
+    product = a * b;
+    const double ca = SPLIT * a;
+    const double aHead = ca - (ca - a);
+    const double aTail = a - aHead;
+    const double cb = SPLIT * b;
+    const double bHead = cb - (cb - b);
+    const double bTail = b - bHead;
+    error = ((aHead * bHead - product) + aHead * bTail + aTail * bHead) + aTail * bTail;
+}
+
+void
+twoSum(double a, double b, double& sum, double& error)
+{
+    sum = a + b;
+    const double bb = sum - a;
+    error = (a - (sum - bb)) + (b - bb);
+}
+
+// (hi + lo) mod 2 pi. Some libm reduce large arguments with too short a pi
+// (x87 fsin and fcos keep 66 bits), so reduce here: k 2 pi is subtracted in
+// three parts with exact products, leaving an angle cos and sin take as is.
+double
+reduceTwoPi(double hi, double lo)
+{
+    for (int pass = 0; pass < 3; ++pass) {
+        const double k = std::nearbyint(hi / TWO_PI_HI);
+        if (k == 0.0) {
+            break;
+        }
+        double p = 0.0;
+        double pError = 0.0;
+        twoProduct(k, TWO_PI_HI, p, pError);
+        double q = 0.0;
+        double qError = 0.0;
+        twoProduct(k, TWO_PI_MID, q, qError);
+        // hi and p are within a factor 2, so this is exact.
+        const double d = hi - p;
+        double s1 = 0.0;
+        double e1 = 0.0;
+        twoSum(d, -pError, s1, e1);
+        double s2 = 0.0;
+        double e2 = 0.0;
+        twoSum(s1, -q, s2, e2);
+        double s3 = 0.0;
+        double e3 = 0.0;
+        twoSum(s2, lo, s3, e3);
+        hi = s3;
+        lo = e1 + e2 + e3 - qError - k * TWO_PI_LO;
+    }
+    return hi + lo;
+}
+
 } // namespace
 
 void
@@ -205,15 +267,17 @@ halfSquarePhase(double t, double scale, double& c, double& s)
     // parts, so that theta keeps its low digits at any distance.
     const double a = std::abs(scale);
     const double x = t / a;
-    const double r = std::fma(-x, a, t) / a;
-    const double hi = x * x;
-    const double lo = std::fma(x, x, -hi) + 2.0 * x * r;
-    const double cosHi = std::cos(0.5 * hi);
-    const double sinHi = std::sin(0.5 * hi);
-    const double cosLo = std::cos(0.5 * lo);
-    const double sinLo = std::sin(0.5 * lo);
-    c = cosHi * cosLo - sinHi * sinLo;
-    s = sinHi * cosLo + cosHi * sinLo;
+    double xa = 0.0;
+    double xaError = 0.0;
+    twoProduct(x, a, xa, xaError);
+    const double r = ((t - xa) - xaError) / a;
+    double hi = 0.0;
+    double hiError = 0.0;
+    twoProduct(x, x, hi, hiError);
+    const double lo = hiError + 2.0 * x * r;
+    const double theta = reduceTwoPi(0.5 * hi, 0.5 * lo);
+    c = std::cos(theta);
+    s = std::sin(theta);
 }
 
 geom::CoordinateXY
