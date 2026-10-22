@@ -88,9 +88,9 @@ constexpr double GL_W[GL_N] = {
 };
 
 CoordinateXY
-fresnelOffset(double t, double a2)
+fresnelOffset(double t, double scale)
 {
-    return algorithm::clothoid::constructiveOffset(t, a2);
+    return algorithm::clothoid::constructiveOffset(t, scale);
 }
 
 struct Frame {
@@ -129,12 +129,7 @@ loadConstructiveFrame(const Frame& frame, algorithm::clothoid::Parameters& curve
 {
     // A negative scale is stored for round-trip and evaluated as |A|.
     const double a2 = frame.scale * frame.scale;
-    const CoordinateXY offset = fresnelOffset(frame.t0, a2);
-    const double headingDt = (frame.t0 * frame.t0) / (2.0 * a2);
     const double direction = (frame.t1 >= frame.t0) ? 1.0 : -1.0;
-    curve.x0 = offset.x;
-    curve.y0 = offset.y;
-    curve.theta0 = (direction > 0.0) ? headingDt : headingDt + MATH_PI;
     curve.length = std::abs(frame.t1 - frame.t0);
     curve.k0 = direction * frame.t0 / a2;
     curve.k1 = direction * frame.t1 / a2;
@@ -151,22 +146,24 @@ mapAffine(const Frame& frame, double xc, double yc, double& x, double& y, double
 void
 pointOnFrame(const Frame& frame, double travel, double& x, double& y, double& z, double& m)
 {
-    algorithm::clothoid::Parameters curve;
-    loadConstructiveFrame(frame, curve);
-    double xc = curve.x0;
-    double yc = curve.y0;
-    if (curve.length > 0.0 && travel > 0.0) {
-        const double s = std::min(travel, curve.length);
-        const CoordinateXY at = algorithm::clothoid::position(curve, s);
-        xc = at.x;
-        yc = at.y;
+    // Each point is evaluated at its own distance rather than stepped from
+    // the start, so no error accumulates along the curve.
+    const double length = std::abs(frame.t1 - frame.t0);
+    const double direction = (frame.t1 >= frame.t0) ? 1.0 : -1.0;
+    double t = frame.t0;
+    if (travel >= length) {
+        t = frame.t1;
     }
-    mapAffine(frame, xc, yc, x, y, z);
-    if (!(curve.length > 0.0)) {
+    else if (travel > 0.0) {
+        t = frame.t0 + direction * travel;
+    }
+    const CoordinateXY at = fresnelOffset(t, frame.scale);
+    mapAffine(frame, at.x, at.y, x, y, z);
+    if (!(length > 0.0)) {
         m = frame.startM;
         return;
     }
-    const double frac = std::min(1.0, std::max(0.0, travel / curve.length));
+    const double frac = std::min(1.0, std::max(0.0, travel / length));
     m = frame.startM + (frame.endM - frame.startM) * frac;
 }
 
@@ -204,10 +201,9 @@ operatorNorm(const Frame& frame)
 double
 speedAt(const Frame& frame, double t)
 {
-    const double a2 = frame.scale * frame.scale;
-    const double theta = (t * t) / (2.0 * a2);
-    const double c = std::cos(theta);
-    const double s = std::sin(theta);
+    double c = 0.0;
+    double s = 0.0;
+    algorithm::clothoid::halfSquarePhase(t, frame.scale, c, s);
     const double dx = c * frame.ux + s * frame.vx;
     const double dy = c * frame.uy + s * frame.vy;
     const double dz = c * frame.uz + s * frame.vz;
@@ -249,10 +245,9 @@ integrateSpeed(const Frame& frame)
 double
 headingOf(const Frame& frame, double t)
 {
-    const double a2 = frame.scale * frame.scale;
-    const double theta = (t * t) / (2.0 * a2);
-    const double c = std::cos(theta);
-    const double s = std::sin(theta);
+    double c = 0.0;
+    double s = 0.0;
+    algorithm::clothoid::halfSquarePhase(t, frame.scale, c, s);
     double dx = c * frame.ux + s * frame.vx;
     double dy = c * frame.uy + s * frame.vy;
     if (frame.t1 < frame.t0) {
@@ -660,7 +655,7 @@ Clothoid::computeClothoidEnvelope() const
 
     auto addIfInterior = [&](double t) {
         if (t > tLo && t < tHi) {
-            const CoordinateXY constructive = fresnelOffset(t, a2);
+            const CoordinateXY constructive = fresnelOffset(t, m_scale);
             const double xc = constructive.x;
             const double yc = constructive.y;
             double px = 0.0;
@@ -724,6 +719,11 @@ Clothoid::validateConstruction() const
     if (!std::isfinite(m_t0) || !std::isfinite(m_t1)) {
         throw util::IllegalArgumentException(
             "Clothoid start and end distance must be finite");
+    }
+    const double reach = std::max(std::abs(m_t0), std::abs(m_t1)) / std::abs(m_scale);
+    if (!(reach <= algorithm::clothoid::MAX_FRESNEL_ARGUMENT)) {
+        throw util::IllegalArgumentException(
+            "Clothoid distance is too far from the inflection to evaluate");
     }
     const double a2 = m_scale * m_scale;
     const double turn = std::abs(m_t1 * m_t1 - m_t0 * m_t0) / (2.0 * a2);

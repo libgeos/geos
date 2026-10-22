@@ -37,18 +37,22 @@ constexpr double MIN_ABS_SCALE = 1e-100;
 // |A| above this overflows a unit constructive coordinate.
 constexpr double MAX_ABS_SCALE = 1e100;
 
+// |t / A| past this squares out of range. Only a zero-length clothoid gets
+// that far: any turn of at most 1024 rad keeps |t / A| below about 2e9.
+constexpr double MAX_FRESNEL_ARGUMENT = 1e150;
+
 struct Parameters {
-    double x0;
-    double y0;
-    double theta0;
     double k0;
     double k1;
     double length;
 };
 
-geom::CoordinateXY position(const Parameters& curve, double s);
+/// cos and sin of the constructive heading (t / A)^2 / 2, to about one ulp
+/// at any |t / A| up to MAX_FRESNEL_ARGUMENT.
+void halfSquarePhase(double t, double scale, double& c, double& s);
 
-geom::CoordinateXY constructiveOffset(double t, double a2);
+/// A (C2(t / A), S2(t / A)) with C2(x) = int_0^x cos(tau^2 / 2) d tau.
+geom::CoordinateXY constructiveOffset(double t, double scale);
 
 std::size_t linearizeSegmentCount(
     const Parameters& curve,

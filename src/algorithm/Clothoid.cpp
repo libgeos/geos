@@ -29,18 +29,18 @@ namespace clothoid {
 namespace {
 
 constexpr int FRESNEL_GL_N = 16;
-// Power series is accurate on this window; panels are used outside it.
-constexpr double FRESNEL_SERIES_LIMIT = 5.0;
-// Panel width for the Fresnel integral outside the series window.
+// Power series is accurate on this window. Past it the terms reach
+// e^(x^2 / 2) before they cancel.
+constexpr double FRESNEL_SERIES_LIMIT = 3.0;
+// Asymptotic expansion is accurate past this: its smallest term is
+// about e^(-x^2 / 2), below 1e-17 here.
+constexpr double FRESNEL_ASYMPTOTIC_LIMIT = 9.0;
+// Widest Gauss panel between the two windows.
 constexpr double FRESNEL_PANEL = 0.5;
-// Stop the series when the next term is this small relative to the sum.
+// Phase change allowed across one Gauss panel.
+constexpr double FRESNEL_PANEL_PHASE = 2.0;
+// Stop a series when the next term is this small relative to the sum.
 constexpr double SERIES_TERM_RELATIVE = 1e-18;
-// Heading change below which the constant-curvature closed form cancels.
-constexpr double TAYLOR_TURN = 1e-8;
-// Completed-square Fresnel argument past which the shift cancels.
-constexpr double FRESNEL_ARGUMENT_LIMIT = 1e3;
-// alpha*L^2 below this is straight at double precision.
-constexpr double MIN_FRESNEL_PHASE = 1e-10;
 // Segment counts past this are not a useful linearization.
 constexpr double MAX_SEGMENT_COUNT = 1.0e7;
 
@@ -137,31 +137,22 @@ fresnelPanel(double a, double b, double& c, double& s)
     s = ss;
 }
 
+// C2 and S2 for 0 <= x < FRESNEL_ASYMPTOTIC_LIMIT.
 void
-fresnelIncrement(double a, double b, double& c, double& s)
+fresnelNear(double x, double& c, double& s)
 {
-    if (b < a) {
-        fresnelIncrement(b, a, c, s);
-        c = -c;
-        s = -s;
+    if (x <= FRESNEL_SERIES_LIMIT) {
+        c = fresnelSeriesC(x);
+        s = fresnelSeriesS(x);
         return;
     }
-    if (!(b > a)) {
-        c = 0.0;
-        s = 0.0;
-        return;
-    }
-    if (std::abs(a) <= FRESNEL_SERIES_LIMIT && std::abs(b) <= FRESNEL_SERIES_LIMIT) {
-        c = fresnelSeriesC(b) - fresnelSeriesC(a);
-        s = fresnelSeriesS(b) - fresnelSeriesS(a);
-        return;
-    }
-
-    c = 0.0;
-    s = 0.0;
-    double t = a;
-    while (t < b) {
-        const double u = std::min(b, t + FRESNEL_PANEL);
+    c = fresnelSeriesC(FRESNEL_SERIES_LIMIT);
+    s = fresnelSeriesS(FRESNEL_SERIES_LIMIT);
+    // The phase rate is t, so narrow the panels as t grows.
+    double t = FRESNEL_SERIES_LIMIT;
+    while (t < x) {
+        const double width = std::min(FRESNEL_PANEL, FRESNEL_PANEL_PHASE / (t + FRESNEL_PANEL));
+        const double u = std::min(x, t + width);
         double dc = 0.0;
         double ds = 0.0;
         fresnelPanel(t, u, dc, ds);
@@ -171,167 +162,86 @@ fresnelIncrement(double a, double b, double& c, double& s)
     }
 }
 
-double
-curvatureRate(const Parameters& curve)
-{
-    if (!(curve.length > 0.0)) {
-        return 0.0;
-    }
-    return (curve.k1 - curve.k0) / curve.length;
-}
-
+// C2 and S2 for x >= FRESNEL_ASYMPTOTIC_LIMIT from the auxiliary functions
+//   C2 = sqrt(pi)/2 + f sin(x^2/2) - g cos(x^2/2)
+//   S2 = sqrt(pi)/2 - f cos(x^2/2) - g sin(x^2/2)
+// with f and g summed from the asymptotic series (2n-1)!! / x^(2n+1).
 void
-positionConstantCurvature(const Parameters& curve, double s, double& x, double& y)
+fresnelFar(double x, double cosPhase, double sinPhase, double& c, double& s)
 {
-    const double k = curve.k0;
-    if (std::abs(k) * std::abs(s) < TAYLOR_TURN) {
-        const double c = std::cos(curve.theta0);
-        const double sn = std::sin(curve.theta0);
-        const double s2 = s * s;
-        const double s3 = s2 * s;
-        x = curve.x0 + c * s - sn * k * s2 / 2.0 - c * k * k * s3 / 6.0;
-        y = curve.y0 + sn * s + c * k * s2 / 2.0 - sn * k * k * s3 / 6.0;
-        return;
-    }
-    const double th1 = curve.theta0 + k * s;
-    x = curve.x0 + (std::sin(th1) - std::sin(curve.theta0)) / k;
-    y = curve.y0 - (std::cos(th1) - std::cos(curve.theta0)) / k;
-}
-
-void
-positionFresnel(const Parameters& curve, double s, double alpha, double& x, double& y)
-{
-    const double phi = curve.theta0 - (curve.k0 * curve.k0) / (2.0 * alpha);
-    const double gamma = std::sqrt(std::abs(alpha));
-    const double sigma = alpha >= 0.0 ? 1.0 : -1.0;
-    const auto vOf = [&](double t) {
-        return (t + curve.k0 / alpha) * gamma;
-    };
-    double dC = 0.0;
-    double dSraw = 0.0;
-    fresnelIncrement(vOf(0.0), vOf(s), dC, dSraw);
-    dC /= gamma;
-    const double dS = sigma * dSraw / gamma;
-    const double cphi = std::cos(phi);
-    const double sphi = std::sin(phi);
-    x = curve.x0 + cphi * dC - sphi * dS;
-    y = curve.y0 + sphi * dC + cphi * dS;
-}
-
-double
-localHeading(const Parameters& curve, double s)
-{
-    const double alpha = curvatureRate(curve);
-    return curve.theta0 + curve.k0 * s + 0.5 * alpha * s * s;
-}
-
-void
-positionQuadrature(const Parameters& curve, double s, double& x, double& y)
-{
-    const double turn = std::abs(localHeading(curve, s) - curve.theta0);
-    if (!std::isfinite(turn) || !std::isfinite(s)) {
-        throw util::IllegalArgumentException("Clothoid turn is too large to integrate");
-    }
-    const double panelCount = std::ceil(turn / QUADRATURE_PANEL_RADIANS);
-    if (!(panelCount <= static_cast<double>(QUADRATURE_MAX_PANELS))) {
-        throw util::IllegalArgumentException("Clothoid turn is too large to integrate");
-    }
-    const std::size_t panels = std::max<std::size_t>(
-                                   1, panelCount > 0.0 ? static_cast<std::size_t>(panelCount) : 1);
-    const double h = s / static_cast<double>(panels);
-    double sx = 0.0;
-    double sy = 0.0;
-    for (std::size_t i = 0; i < panels; ++i) {
-        const double a = h * static_cast<double>(i);
-        const double mid = a + 0.5 * h;
-        const double half = 0.5 * h;
-        for (int k = 0; k < FRESNEL_GL_N; ++k) {
-            const double t = mid + half * FRESNEL_XI[k];
-            const double th = localHeading(curve, t);
-            const double w = FRESNEL_WI[k] * half;
-            sx += w * std::cos(th);
-            sy += w * std::sin(th);
+    const double inv = 1.0 / x;
+    const double inv2 = inv * inv;
+    double term = inv;
+    double f = term;
+    double g = 0.0;
+    for (int n = 1; n < 100; ++n) {
+        const double next = term * (2.0 * n - 1.0) * inv2;
+        if (!(next < term)) {
+            break;
+        }
+        term = next;
+        const double signedTerm = ((n / 2) % 2 == 0) ? term : -term;
+        if (n % 2 == 0) {
+            f += signedTerm;
+        }
+        else {
+            g += signedTerm;
+        }
+        if (term <= SERIES_TERM_RELATIVE * inv) {
+            break;
         }
     }
-    x = curve.x0 + sx;
-    y = curve.y0 + sy;
-}
-
-bool
-fresnelReductionIsStable(const Parameters& curve, double s, double alpha)
-{
-    if (!(std::abs(alpha) > 0.0) || !std::isfinite(alpha)) {
-        return false;
-    }
-    const double gamma = std::sqrt(std::abs(alpha));
-    const double v0 = (curve.k0 / alpha) * gamma;
-    const double vs = (s + curve.k0 / alpha) * gamma;
-    // Large Fresnel arguments are still defined, but a tiny rate makes the
-    // completed-square shift cancel. Fall back to parameter quadrature then.
-    if (std::abs(v0) > FRESNEL_ARGUMENT_LIMIT || std::abs(vs) > FRESNEL_ARGUMENT_LIMIT) {
-        return false;
-    }
-    if (std::abs(alpha) * curve.length * curve.length < MIN_FRESNEL_PHASE) {
-        return false;
-    }
-    return std::isfinite(v0) && std::isfinite(vs);
+    const double half = 0.5 * std::sqrt(MATH_PI);
+    c = half + f * sinPhase - g * cosPhase;
+    s = half - f * cosPhase - g * sinPhase;
 }
 
 } // namespace
 
-double
-fresnelC2(double x)
+void
+halfSquarePhase(double t, double scale, double& c, double& s)
 {
-    double c = 0.0;
-    double s = 0.0;
-    fresnelIncrement(0.0, x, c, s);
-    return c;
-}
-
-double
-fresnelS2(double x)
-{
-    double c = 0.0;
-    double s = 0.0;
-    fresnelIncrement(0.0, x, c, s);
-    return s;
-}
-
-geom::CoordinateXY
-position(const Parameters& curve, double s)
-{
-    if (!(s > 0.0) || !(curve.length > 0.0)) {
-        return geom::CoordinateXY(curve.x0, curve.y0);
-    }
-    double x = 0.0;
-    double y = 0.0;
-    const double alpha = curvatureRate(curve);
-    if (curve.k0 == curve.k1 || !fresnelReductionIsStable(curve, s, alpha)) {
-        if (curve.k0 == curve.k1) {
-            positionConstantCurvature(curve, s, x, y);
-        }
-        else {
-            positionQuadrature(curve, s, x, y);
-        }
-    }
-    else {
-        positionFresnel(curve, s, alpha, x, y);
-    }
-    return geom::CoordinateXY(x, y);
+    // theta = (t / A)^2 / 2 with the quotient and the square carried in two
+    // parts, so that theta keeps its low digits at any distance.
+    const double a = std::abs(scale);
+    const double x = t / a;
+    const double r = std::fma(-x, a, t) / a;
+    const double hi = x * x;
+    const double lo = std::fma(x, x, -hi) + 2.0 * x * r;
+    const double cosHi = std::cos(0.5 * hi);
+    const double sinHi = std::sin(0.5 * hi);
+    const double cosLo = std::cos(0.5 * lo);
+    const double sinLo = std::sin(0.5 * lo);
+    c = cosHi * cosLo - sinHi * sinLo;
+    s = sinHi * cosLo + cosHi * sinLo;
 }
 
 geom::CoordinateXY
-constructiveOffset(double t, double a2)
+constructiveOffset(double t, double scale)
 {
-    if (!(t != 0.0) || !(a2 > 0.0) || !std::isfinite(a2)) {
+    const double a = std::abs(scale);
+    if (!(t != 0.0) || !(a > 0.0) || !std::isfinite(a)) {
         return geom::CoordinateXY(0.0, 0.0);
     }
-    const double amplitude = std::sqrt(a2);
-    const double argument = t / amplitude;
-    if (!std::isfinite(argument) || !std::isfinite(amplitude)) {
-        throw util::IllegalArgumentException("Clothoid scale is too small to evaluate");
+    const double x = std::abs(t) / a;
+    if (!(x <= MAX_FRESNEL_ARGUMENT)) {
+        throw util::IllegalArgumentException(
+            "Clothoid distance is too far from the inflection to evaluate");
     }
-    return geom::CoordinateXY(amplitude * fresnelC2(argument), amplitude * fresnelS2(argument));
+    double c = 0.0;
+    double s = 0.0;
+    if (x < FRESNEL_ASYMPTOTIC_LIMIT) {
+        fresnelNear(x, c, s);
+    }
+    else {
+        double cosPhase = 0.0;
+        double sinPhase = 0.0;
+        halfSquarePhase(t, a, cosPhase, sinPhase);
+        fresnelFar(x, cosPhase, sinPhase, c, s);
+    }
+    // C2 and S2 are odd.
+    const double sign = (t < 0.0) ? -1.0 : 1.0;
+    return geom::CoordinateXY(sign * a * c, sign * a * s);
 }
 
 std::size_t

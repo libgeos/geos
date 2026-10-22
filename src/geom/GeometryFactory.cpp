@@ -783,11 +783,15 @@ GeometryFactory::createClothoid(
     const double t0 = k0 * a2 * direction;
     const double t1 = k1 * a2 * direction;
 
-    const CoordinateXY offset = algorithm::clothoid::constructiveOffset(t0, a2);
-    const double headingDt = (t0 * t0) / (2.0 * a2);
-    const double alpha = reflected ? (theta0 + headingDt) : (theta0 - headingDt);
-    const double c = std::cos(alpha);
-    const double s = std::sin(alpha);
+    const CoordinateXY offset = algorithm::clothoid::constructiveOffset(t0, scale);
+    // alpha = theta0 -/+ the constructive heading at t0, which can be large.
+    double cosDt = 0.0;
+    double sinDt = 0.0;
+    algorithm::clothoid::halfSquarePhase(t0, scale, cosDt, sinDt);
+    const double cos0 = std::cos(theta0);
+    const double sin0 = std::sin(theta0);
+    const double c = cos0 * cosDt + (reflected ? -sin0 * sinDt : sin0 * sinDt);
+    const double s = sin0 * cosDt + (reflected ? cos0 * sinDt : -cos0 * sinDt);
 
     ClothoidReferenceLocation location;
     location.u = Coordinate(c, s, 0.0);
