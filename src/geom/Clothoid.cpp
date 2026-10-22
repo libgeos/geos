@@ -59,6 +59,11 @@ identicalDouble(double a, double b)
 // Relative gap allowed when testing a similarity frame.
 constexpr double SIMILARITY_RELATIVE = 1e-12;
 
+// Endpoint snap tolerance, in ulps of the reference location extent.
+// Evaluation rounding is about one ulp. Reading 16-digit WKT perturbs the
+// origin, directions, scale and distances by about two ulps each.
+constexpr double ENDPOINT_SNAP_ULPS = 32.0;
+
 // 8-point Gauss–Legendre nodes and weights on [-1, 1].
 constexpr int GL_N = 8;
 constexpr double GL_X[GL_N] = {
@@ -740,6 +745,30 @@ Clothoid::validateConstruction() const
         throw util::IllegalArgumentException(
             "Clothoid STARTM and ENDM must both be finite");
     }
+}
+
+void
+Clothoid::snapEndpoint(std::size_t index, const CoordinateXY& target)
+{
+    const CoordinateXY& stored = points->getAt<CoordinateXY>(index);
+    if (stored == target) {
+        return;
+    }
+    // The endpoints are evaluated from the reference location, whose terms are
+    // at most this large. Evaluating it again, or from 16-digit WKT, moves an
+    // endpoint by about one ulp of it.
+    Frame frame = frameOf(getReferenceLocation(), m_scale, m_t0, m_t1, m_startM, m_endM);
+    const double extent = std::max(std::abs(m_origin.x), std::abs(m_origin.y))
+                          + operatorNorm(frame) * std::max(std::abs(m_t0), std::abs(m_t1));
+    const double tolerance = ENDPOINT_SNAP_ULPS * std::numeric_limits<double>::epsilon() * extent;
+    if (!(stored.distance(target) <= tolerance)) {
+        return;
+    }
+    auto seq = points->clone();
+    seq->setOrdinate(index, CoordinateSequence::X, target.x);
+    seq->setOrdinate(index, CoordinateSequence::Y, target.y);
+    points = std::move(seq);
+    envelope.expandToInclude(target);
 }
 
 void

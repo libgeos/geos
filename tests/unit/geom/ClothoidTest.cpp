@@ -572,4 +572,65 @@ void object::test<29>()
     ensure_THROW(wkbReader.readHEX(hex), geos::io::ParseException);
 }
 
+template<>
+template<>
+void object::test<30>()
+{
+    set_test_name("ISO clothoid after a line");
+
+    // The evaluated start of this clothoid is one ulp short of (1 0).
+    const std::string clothoid =
+        "CLOTHOID (REFERENCELOCATION AFFINEPLACEMENT (LOCATION (-3.999166699734872 0.0833273811026917), "
+        "REFERENCEDIRECTIONS (VECTOR (0.9996875162757026 -0.0249973959147123), "
+        "VECTOR (0.0249973959147123 0.9996875162757026))), "
+        "SCALEFACTOR 22.360679774997898, STARTDISTANCE 5, ENDDISTANCE 10)";
+    const CoordinateXY junction(1.0, 0.0);
+    auto alone = reader_.read<Clothoid>(clothoid);
+    ensure(alone->getStartCoordinate() != junction);
+    ensure(alone->getStartCoordinate().distance(junction) < 1e-15);
+
+    auto curve = reader_.read<CompoundCurve>("COMPOUNDCURVE ((0 0, 1 0), " + clothoid + ")");
+    ensure(curve->getCurveN(1)->getStartCoordinate() == junction);
+
+    geos::io::WKTWriter writer;
+    auto fromWkt = reader_.read<CompoundCurve>(writer.write(curve.get()));
+    ensure(fromWkt->getCurveN(1)->getStartCoordinate() == junction);
+
+    geos::io::WKBWriter wkbWriter;
+    std::stringstream wkb;
+    wkbWriter.write(*curve, wkb);
+    geos::io::WKBReader wkbReader(*factory_);
+    auto fromWkb = wkbReader.read(wkb);
+    const auto* compound = dynamic_cast<const CompoundCurve*>(fromWkb.get());
+    ensure(compound != nullptr);
+    ensure(compound->getCurveN(1)->getStartCoordinate() == junction);
+
+    std::vector<std::unique_ptr<SimpleCurve>> sections;
+    sections.push_back(factory_->createLineString({CoordinateXY(0.0, 0.0), junction}));
+    sections.push_back(make(1.0, 0.0, 0.0, 0.01, 0.02, 5.0));
+    auto built = factory_->createCompoundCurve(std::move(sections));
+    ensure(built->getCurveN(1)->getStartCoordinate() == junction);
+    auto reversed = built->reverse();
+    ensure(reversed->getCurveN(0)->getEndCoordinate() == junction);
+    reversed->normalize();
+    ensure(reversed->getCurveN(1)->getStartCoordinate() == junction);
+}
+
+template<>
+template<>
+void object::test<31>()
+{
+    set_test_name("ISO clothoid that misses the previous end");
+
+    const std::string clothoid =
+        "CLOTHOID (REFERENCELOCATION AFFINEPLACEMENT (LOCATION (-3.999166699734872 0.0833273811026917), "
+        "REFERENCEDIRECTIONS (VECTOR (0.9996875162757026 -0.0249973959147123), "
+        "VECTOR (0.0249973959147123 0.9996875162757026))), "
+        "SCALEFACTOR 22.360679774997898, STARTDISTANCE 5, ENDDISTANCE 10)";
+    ensure_THROW(reader_.read("COMPOUNDCURVE ((0 0, 1.000000001 0), " + clothoid + ")"),
+                 geos::util::IllegalArgumentException);
+    ensure_THROW(reader_.read("COMPOUNDCURVE ((0 0, 1.000000000001 0), " + clothoid + ")"),
+                 geos::util::IllegalArgumentException);
+}
+
 } // namespace tut

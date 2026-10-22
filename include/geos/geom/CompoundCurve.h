@@ -138,6 +138,8 @@ private:
 
     void reverseInPlace();
 
+    void snapClothoidEndpoints();
+
     std::vector<std::unique_ptr<SimpleCurve>> curves;
     Envelope envelope;
 };

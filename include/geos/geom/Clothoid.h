@@ -49,6 +49,7 @@ class GEOS_DLL Clothoid : public SimpleCurve {
 public:
 
     friend class GeometryFactory;
+    friend class CompoundCurve;
 
     ~Clothoid() override = default;
 
@@ -181,6 +182,10 @@ private:
     double travelHeading(double constructiveDistance) const;
 
     double travelCurvature(double constructiveDistance) const;
+
+    /// Move stored endpoint 0 or 1 onto a neighbor's coordinate when they
+    /// differ only by rounding in the evaluation of the reference location.
+    void snapEndpoint(std::size_t index, const CoordinateXY& target);
 
     Coordinate m_origin;
     Coordinate m_u;
