@@ -268,10 +268,24 @@ curvatureOf(const Frame& frame, double t)
     const double kappa = direction * t / a2;
     double scale = 1.0;
     int orientation = 1;
-    if (similarityScale(frame, scale, orientation) && scale > 0.0) {
+    if (frame.uz == 0.0 && frame.vz == 0.0
+            && similarityScale(frame, scale, orientation) && scale > 0.0) {
         return orientation * kappa / scale;
     }
-    return kappa;
+    // Plan curvature (x'y'' - y'x'') / |r'|^3 of the placed curve. With
+    // r' = cos(theta) u + sin(theta) v and r'' = theta' (-sin(theta) u + cos(theta) v),
+    // theta' = t / A^2, the cross product is theta' (ux vy - uy vx).
+    double c = 0.0;
+    double s = 0.0;
+    algorithm::clothoid::halfSquarePhase(t, frame.scale, c, s);
+    const double dx = c * frame.ux + s * frame.vx;
+    const double dy = c * frame.uy + s * frame.vy;
+    const double speed = std::hypot(dx, dy);
+    if (!(speed > 0.0)) {
+        return 0.0;
+    }
+    const double det = frame.ux * frame.vy - frame.uy * frame.vx;
+    return kappa * (det / speed) / speed / speed;
 }
 
 std::unique_ptr<CoordinateSequence>

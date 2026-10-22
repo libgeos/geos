@@ -63,8 +63,10 @@ public:
 
     double getStartHeading() const;
 
+    /// Signed plan curvature of the placed curve, in the direction of travel.
     double getStartCurvature() const;
 
+    /// Signed plan curvature of the placed curve, in the direction of travel.
     double getEndCurvature() const;
 
     double getEndHeading() const;
