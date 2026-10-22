@@ -65,6 +65,12 @@ constexpr double SIMILARITY_RELATIVE = 1e-12;
 constexpr double ENDPOINT_SNAP_ULPS = 32.0;
 
 // 8-point Gauss–Legendre nodes and weights on [-1, 1].
+// Gauss panels span at most this fraction of the speed's analytic radius.
+constexpr double PANEL_ANALYTIC_FRACTION = 0.5;
+
+// Panels per side of the inflection: 16384 rad at 0.25 rad a panel.
+constexpr double MAX_SIDE_PANELS = 65536.0;
+
 constexpr int GL_N = 8;
 constexpr double GL_X[GL_N] = {
     -0.96028985649753623168,
@@ -210,6 +216,69 @@ speedAt(const Frame& frame, double t)
     return std::hypot(dx, dy, dz);
 }
 
+// Imaginary distance in heading from the real axis to the nearest zero of
+// the speed |cos(theta) u + sin(theta) v|: atanh(sigmaMin / sigmaMax) for the
+// singular values of the frame. A Gauss panel much wider than this converges
+// slowly, so the panels are kept to a fraction of it.
+double
+speedAnalyticRadius(const Frame& frame)
+{
+    const double uu = frame.ux * frame.ux + frame.uy * frame.uy + frame.uz * frame.uz;
+    const double vv = frame.vx * frame.vx + frame.vy * frame.vy + frame.vz * frame.vz;
+    const double uv = frame.ux * frame.vx + frame.uy * frame.vy + frame.uz * frame.vz;
+    const double big = 0.5 * (uu + vv) + std::hypot(0.5 * (uu - vv), uv);
+    if (!(big > 0.0)) {
+        return 0.0;
+    }
+    const double small = std::max(0.0, (uu * vv - uv * uv) / big);
+    const double ratio = std::sqrt(small / big);
+    if (!(ratio < 1.0)) {
+        return std::numeric_limits<double>::infinity();
+    }
+    return std::atanh(ratio);
+}
+
+// Integrate the speed over [tLo, tHi] with 0 <= tLo < tHi. The panels cover
+// equal steps of heading, so each takes the same share of the turn.
+double
+integrateSpeedOneSide(const Frame& frame, double tLo, double tHi, double panelRadians)
+{
+    if (!(tHi > tLo)) {
+        return 0.0;
+    }
+    const double a2 = frame.scale * frame.scale;
+    const double dTheta = (tHi - tLo) * (tHi + tLo) / (2.0 * a2);
+    if (!std::isfinite(dTheta)
+            || !(dTheta <= MAX_SIDE_PANELS * algorithm::clothoid::QUADRATURE_PANEL_RADIANS)) {
+        throw util::IllegalArgumentException("Clothoid turn is too large to integrate");
+    }
+    // Past MAX_SIDE_PANELS the panels widen rather than the count grow.
+    const double panelCount = std::min(MAX_SIDE_PANELS, std::ceil(dTheta / panelRadians));
+    const std::size_t panels = panelCount >= 1.0 ? static_cast<std::size_t>(panelCount) : 1;
+    // t_k^2 = tLo^2 + (k / n) (tHi^2 - tLo^2), as an offset from tLo so that
+    // a short range far from the inflection keeps its digits.
+    const double span = (tHi - tLo) * (tHi + tLo);
+    auto boundary = [&](std::size_t k) {
+        if (k == panels) {
+            return tHi;
+        }
+        const double w = span * (static_cast<double>(k) / static_cast<double>(panels));
+        return tLo + w / (tLo + std::sqrt(tLo * tLo + w));
+    };
+    double sum = 0.0;
+    double a = tLo;
+    for (std::size_t p = 0; p < panels; ++p) {
+        const double b = boundary(p + 1);
+        const double mid = 0.5 * (a + b);
+        const double half = 0.5 * (b - a);
+        for (int i = 0; i < GL_N; ++i) {
+            sum += GL_W[i] * half * speedAt(frame, mid + half * GL_X[i]);
+        }
+        a = b;
+    }
+    return sum;
+}
+
 double
 integrateSpeed(const Frame& frame)
 {
@@ -219,27 +288,18 @@ integrateSpeed(const Frame& frame)
     if (!(tHi > tLo) || !(a2 > 0.0)) {
         return 0.0;
     }
-    const double dTheta = std::abs(tHi * tHi - tLo * tLo) / (2.0 * a2);
-    if (!std::isfinite(dTheta)) {
-        throw util::IllegalArgumentException("Clothoid turn is too large to integrate");
-    }
-    const double panelCount = std::ceil(dTheta / algorithm::clothoid::QUADRATURE_PANEL_RADIANS);
-    if (!(panelCount <= static_cast<double>(algorithm::clothoid::QUADRATURE_MAX_PANELS))) {
-        throw util::IllegalArgumentException("Clothoid turn is too large to integrate");
-    }
-    const std::size_t panels = std::max<std::size_t>(
-                                   1, panelCount > 0.0 ? static_cast<std::size_t>(panelCount) : 1);
-    const double width = (tHi - tLo) / static_cast<double>(panels);
-    double sum = 0.0;
-    for (std::size_t p = 0; p < panels; ++p) {
-        const double a = tLo + width * static_cast<double>(p);
-        const double mid = a + 0.5 * width;
-        const double half = 0.5 * width;
-        for (int i = 0; i < GL_N; ++i) {
-            sum += GL_W[i] * half * speedAt(frame, mid + half * GL_X[i]);
-        }
-    }
-    return sum;
+    // A degenerate frame has a kink in the speed rather than a pole near
+    // it; it keeps the plain panels.
+    const double radius = speedAnalyticRadius(frame);
+    const double panelRadians = (radius > 0.0)
+                                ? std::min(algorithm::clothoid::QUADRATURE_PANEL_RADIANS,
+                                           PANEL_ANALYTIC_FRACTION * radius)
+                                : algorithm::clothoid::QUADRATURE_PANEL_RADIANS;
+    // The speed is even in t, so a range below the inflection is integrated
+    // as its mirror. Across the inflection the heading turns back: the turn
+    // is (tLo^2 + tHi^2) / (2 A^2), so each side is integrated on its own.
+    return integrateSpeedOneSide(frame, std::max(0.0, tLo), tHi, panelRadians)
+           + integrateSpeedOneSide(frame, std::max(0.0, -tHi), -tLo, panelRadians);
 }
 
 double

@@ -38,8 +38,9 @@ constexpr double MIN_ABS_SCALE = 1e-100;
 constexpr double MAX_ABS_SCALE = 1e100;
 
 // Past this |t / A| the heading (t / A)^2 / 2 is beyond the 159-bit 2 pi
-// used to reduce it. Only a zero-length clothoid gets that far: any turn
-// of at most 1024 rad keeps |t / A| below about 2e9.
+// used to reduce it. A clothoid on one side of the inflection with a turn
+// of at most 1024 rad stays below about 2e9; the limit only binds for one
+// of zero length or one crossing the inflection, whose net turn cancels.
 constexpr double MAX_FRESNEL_ARGUMENT = 1e15;
 
 struct Parameters {

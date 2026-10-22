@@ -474,4 +474,36 @@ void object::test<15>()
     ensure_THROW(transformer.transform(closed.get()), UnsupportedOperationException);
 }
 
+
+template<>
+template<>
+void object::test<16>()
+{
+    set_test_name("sheared length across the inflection");
+
+    const ClothoidReferenceLocation sheared{
+        Coordinate(0.0, 0.0, 0.0), Coordinate(2.0, 0.0, 0.0), Coordinate(0.5, 1.0, 0.0)};
+    auto make = [&](const ClothoidReferenceLocation& location, double t0, double t1) {
+        return factory_->createClothoid(location, 1.0, t0, t1, false, false,
+                                        geos::DoubleNotANumber, geos::DoubleNotANumber);
+    };
+
+    // Net turn 0, but each side turns 16200 rad: still integrated.
+    const double length = make(sheared, -180.0, 180.0)->getLength();
+    ensure(std::isfinite(length) && length > 360.0);
+    // Each side turns 20000 rad, past the panel limit.
+    auto tooLong = make(sheared, -200.0, 200.0);
+    ensure_THROW(tooLong->getLength(), IllegalArgumentException);
+
+    // u and v parallel: the speed 2 cos + sin has no pole to size panels by.
+    const ClothoidReferenceLocation flat{
+        Coordinate(0.0, 0.0, 0.0), Coordinate(2.0, 0.0, 0.0), Coordinate(1.0, 0.0, 0.0)};
+    ensure_equals("flat length", make(flat, 0.0, 1.0)->getLength(), 2.1142894237763897, 1e-15);
+    ensure_equals("mirrored flat length", make(flat, -1.0, 0.0)->getLength(), 2.1142894237763897, 1e-15);
+
+    const ClothoidReferenceLocation point{
+        Coordinate(1.0, 2.0, 0.0), Coordinate(0.0, 0.0, 0.0), Coordinate(0.0, 0.0, 0.0)};
+    ensure_equals("point length", make(point, -1.0, 2.0)->getLength(), 0.0);
+}
+
 } // namespace tut
