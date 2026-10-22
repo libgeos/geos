@@ -19,6 +19,7 @@
 #include <geos/util/IllegalArgumentException.h>
 
 #include <algorithm>
+#include <cfloat>
 #include <cmath>
 #include <cstddef>
 
@@ -200,28 +201,46 @@ fresnelFar(double x, double cosPhase, double sinPhase, double& c, double& s)
     s = half - f * cosPhase - g * sinPhase;
 }
 
+#if defined(FLT_EVAL_METHOD) && FLT_EVAL_METHOD != 0
+// x87 keeps intermediates in extended precision, which breaks the error-free
+// sums and products below; store each step to round it to double.
+double
+rounded(double x)
+{
+    volatile double stored = x;
+    return stored;
+}
+#else
+constexpr double
+rounded(double x)
+{
+    return x;
+}
+#endif
+
 // Error-free product p + e = a b (Dekker), without relying on a correctly
 // rounded std::fma.
 void
 twoProduct(double a, double b, double& product, double& error)
 {
     constexpr double SPLIT = 134217729.0; // 2^27 + 1
-    product = a * b;
-    const double ca = SPLIT * a;
-    const double aHead = ca - (ca - a);
-    const double aTail = a - aHead;
-    const double cb = SPLIT * b;
-    const double bHead = cb - (cb - b);
-    const double bTail = b - bHead;
-    error = ((aHead * bHead - product) + aHead * bTail + aTail * bHead) + aTail * bTail;
+    product = rounded(a * b);
+    const double ca = rounded(SPLIT * a);
+    const double aHead = rounded(ca - rounded(ca - a));
+    const double aTail = rounded(a - aHead);
+    const double cb = rounded(SPLIT * b);
+    const double bHead = rounded(cb - rounded(cb - b));
+    const double bTail = rounded(b - bHead);
+    error = rounded(rounded(rounded(rounded(aHead * bHead) - product) + rounded(aHead * bTail)
+                            + rounded(aTail * bHead)) + rounded(aTail * bTail));
 }
 
 void
 twoSum(double a, double b, double& sum, double& error)
 {
-    sum = a + b;
-    const double bb = sum - a;
-    error = (a - (sum - bb)) + (b - bb);
+    sum = rounded(a + b);
+    const double bb = rounded(sum - a);
+    error = rounded(rounded(a - rounded(sum - bb)) + rounded(b - bb));
 }
 
 // (hi + lo) mod 2 pi. Some libm reduce large arguments with too short a pi
@@ -231,7 +250,7 @@ double
 reduceTwoPi(double hi, double lo)
 {
     for (int pass = 0; pass < 3; ++pass) {
-        const double k = std::nearbyint(hi / TWO_PI_HI);
+        const double k = std::nearbyint(rounded(hi / TWO_PI_HI));
         if (k == 0.0) {
             break;
         }
@@ -242,7 +261,7 @@ reduceTwoPi(double hi, double lo)
         double qError = 0.0;
         twoProduct(k, TWO_PI_MID, q, qError);
         // hi and p are within a factor 2, so this is exact.
-        const double d = hi - p;
+        const double d = rounded(hi - p);
         double s1 = 0.0;
         double e1 = 0.0;
         twoSum(d, -pError, s1, e1);
@@ -266,7 +285,7 @@ halfSquarePhase(double t, double scale, double& c, double& s)
     // theta = (t / A)^2 / 2 with the quotient and the square carried in two
     // parts, so that theta keeps its low digits at any distance.
     const double a = std::abs(scale);
-    const double x = t / a;
+    const double x = rounded(t / a);
     double xa = 0.0;
     double xaError = 0.0;
     twoProduct(x, a, xa, xaError);
