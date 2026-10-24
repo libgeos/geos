@@ -18,6 +18,8 @@
 
 #include <cassert>
 #include <cmath>
+#include <cstdint>
+#include <limits>
 #include <vector>
 
 #include <geos/algorithm/Area.h>
@@ -27,10 +29,80 @@
 #include <geos/geom/Coordinate.h>
 #include <geos/util/IllegalArgumentException.h>
 
+#include "../util/SimdAvx512.h"
+
 using geos::geom::CoordinateXY;
 
 namespace geos {
 namespace algorithm { // geos.algorithm
+
+namespace {
+
+#if GEOS_SIMD_AVX512
+/*
+ * Finds the index of the highest point of the ring that ends a rising segment,
+ * as computed by the first loop of Orientation::isCCW: the last rising
+ * endpoint at the maximum height, or 0 if no rising endpoint is as high as
+ * the first point. Returns false if any Y ordinate is NaN.
+ */
+template<std::size_t S>
+GEOS_AVX512_TARGET bool
+findUpHiAvx512(const double* data, std::size_t npts, std::uint32_t& iUpHi)
+{
+    namespace simd = geos::util::simd::detail;
+
+    __m512d maxY = _mm512_set1_pd(-std::numeric_limits<double>::infinity());
+    __m512i maxIndex = _mm512_setzero_si512();
+    __mmask8 nan = 0;
+
+    simd::SegmentBlocks<S> blocks(data, npts);
+    while (blocks.next()) {
+        const __mmask8 lanes = simd::laneMask(blocks.count());
+        const __m512d y0 = blocks.y0;
+        const __m512d y1 = blocks.y1;
+        nan = static_cast<__mmask8>(nan | _mm512_mask_cmp_pd_mask(lanes, y1, y1, _CMP_UNORD_Q));
+
+        // segments rising to a point at least as high as the lane maximum
+        const __mmask8 rising = _mm512_mask_cmp_pd_mask(lanes, y1, y0, _CMP_GT_OQ);
+        const __mmask8 higher = _mm512_mask_cmp_pd_mask(rising, y1, maxY, _CMP_GE_OQ);
+        const auto end = static_cast<long long>(blocks.start() + 1);
+        maxY = _mm512_mask_mov_pd(maxY, higher, y1);
+        maxIndex = _mm512_mask_mov_epi64(maxIndex, higher,
+            _mm512_add_epi64(_mm512_set1_epi64(end), _mm512_setr_epi64(0, 1, 2, 3, 4, 5, 6, 7)));
+    }
+    if (nan || std::isnan(data[1])) {
+        return false;
+    }
+
+    const double y = _mm512_reduce_max_pd(maxY);
+    if (!(y >= data[1])) {
+        iUpHi = 0;
+        return true;
+    }
+    const __mmask8 atMax = _mm512_cmp_pd_mask(maxY, _mm512_set1_pd(y), _CMP_EQ_OQ);
+    iUpHi = static_cast<std::uint32_t>(_mm512_mask_reduce_max_epi64(atMax, maxIndex));
+    return true;
+}
+#endif
+
+bool
+findUpHiAvx512(const geom::CoordinateSequence& ring, std::uint32_t& iUpHi)
+{
+#if GEOS_SIMD_AVX512
+    if (geos::util::simd::detail::useAvx512()) {
+        switch (geos::util::simd::detail::coordinateStride(ring)) {
+            case 2: return findUpHiAvx512<2>(ring.data(), ring.size(), iUpHi);
+            case 3: return findUpHiAvx512<3>(ring.data(), ring.size(), iUpHi);
+            case 4: return findUpHiAvx512<4>(ring.data(), ring.size(), iUpHi);
+        }
+    }
+#else
+    (void) ring; (void) iUpHi;
+#endif
+    return false;
+}
+
+} // anonymous namespace
 
 /* public static */
 // inlining this method worsened performance slightly
@@ -64,19 +136,27 @@ Orientation::isCCW(const geom::CoordinateSequence* ring)
     const CoordinateXY* upHiPt = &ring->getAt<CoordinateXY>(0);
     const CoordinateXY* upLowPt = &CoordinateXY::getNull();
 
-    double prevY = upHiPt->y;
     uint32_t iUpHi = 0;
-    for (uint32_t i = 1; i <= nPts; i++) {
-        double py = ring->getY(i);
-        /**
-        * If segment is upwards and endpoint is higher, record it
-        */
-        if (py > prevY && py >= upHiPt->y) {
-            iUpHi = i;
-            upHiPt = &ring->getAt<CoordinateXY>(i);
-            upLowPt = &ring->getAt<CoordinateXY>(i-1);
+    if (findUpHiAvx512(*ring, iUpHi)) {
+        if (iUpHi > 0) {
+            upHiPt = &ring->getAt<CoordinateXY>(iUpHi);
+            upLowPt = &ring->getAt<CoordinateXY>(iUpHi - 1);
         }
-        prevY = py;
+    }
+    else {
+        double prevY = upHiPt->y;
+        for (uint32_t i = 1; i <= nPts; i++) {
+            double py = ring->getY(i);
+            /**
+            * If segment is upwards and endpoint is higher, record it
+            */
+            if (py > prevY && py >= upHiPt->y) {
+                iUpHi = i;
+                upHiPt = &ring->getAt<CoordinateXY>(i);
+                upLowPt = &ring->getAt<CoordinateXY>(i-1);
+            }
+            prevY = py;
+        }
     }
     /**
      * Check if ring is flat and return default value if so

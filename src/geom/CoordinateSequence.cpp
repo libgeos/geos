@@ -23,6 +23,8 @@
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/util.h>
 
+#include "../util/SimdAvx512.h"
+
 #include <cstdio>
 #include <cstring>
 #include <algorithm>
@@ -308,9 +310,42 @@ CoordinateSequence::getOrdinate(std::size_t index, std::size_t ordinateIndex) co
     }
 }
 
+namespace {
+
+#if GEOS_SIMD_AVX512
+template<std::size_t S>
+GEOS_AVX512_TARGET bool
+hasRepeatedPointsAvx512(const double* data, std::size_t npts)
+{
+    namespace simd = geos::util::simd::detail;
+
+    simd::SegmentBlocks<S> blocks(data, npts);
+    while (blocks.next()) {
+        const __mmask8 lanes = simd::laneMask(blocks.count());
+        if (_mm512_mask_cmp_pd_mask(_mm512_mask_cmp_pd_mask(lanes, blocks.x0, blocks.x1, _CMP_EQ_OQ),
+                                    blocks.y0, blocks.y1, _CMP_EQ_OQ)) {
+            return true;
+        }
+    }
+    return false;
+}
+#endif
+
+} // anonymous namespace
+
 bool
 CoordinateSequence::hasRepeatedPoints() const
 {
+#if GEOS_SIMD_AVX512
+    if (geos::util::simd::detail::useAvx512()) {
+        switch (stride()) {
+            case 2: return hasRepeatedPointsAvx512<2>(m_vect.data(), size());
+            case 3: return hasRepeatedPointsAvx512<3>(m_vect.data(), size());
+            case 4: return hasRepeatedPointsAvx512<4>(m_vect.data(), size());
+        }
+    }
+#endif
+
     // Iterate over the array of doubles and check x/y values directly.
     // This is about 30% faster than retrieving/comparing CoordinateXY&.
     for (std::size_t i = stride(); i < m_vect.size(); i += stride()) {

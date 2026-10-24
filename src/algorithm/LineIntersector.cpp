@@ -20,6 +20,7 @@
 #include <geos/constants.h>
 #include <geos/algorithm/Interpolate.h>
 #include <geos/algorithm/LineIntersector.h>
+#include <geos/algorithm/CGAlgorithmsDD.h>
 #include <geos/algorithm/Distance.h>
 #include <geos/algorithm/Orientation.h>
 #include <geos/algorithm/Intersection.h>
@@ -35,6 +36,7 @@
 #include <cmath> // for fabs()
 #include <cassert>
 
+#include "../util/SimdAvx512.h"
 
 #ifndef GEOS_DEBUG
 #define GEOS_DEBUG 0
@@ -48,6 +50,93 @@ using namespace geos::geom;
 
 namespace geos {
 namespace algorithm { // geos.algorithm
+
+namespace {
+
+#if GEOS_SIMD_AVX512
+/*
+ * Computes the four orientation filters of LineIntersector::computeOrientations
+ * at once. Lanes are (p1, p2, q1), (p1, p2, q2), (q1, q2, p1), (q1, q2, p2).
+ * Returns false if any ordinate is not finite, leaving it to the scalar path.
+ */
+GEOS_AVX512_TARGET bool
+orientationFiltersAvx512(const CoordinateXY& p1, const CoordinateXY& p2,
+                         const CoordinateXY& q1, const CoordinateXY& q2,
+                         unsigned& pos, unsigned& neg, unsigned& certain)
+{
+    const __m256d P = _mm256_insertf128_pd(_mm256_castpd128_pd256(_mm_loadu_pd(&p1.x)), _mm_loadu_pd(&p2.x), 1);
+    const __m256d Q = _mm256_insertf128_pd(_mm256_castpd128_pd256(_mm_loadu_pd(&q1.x)), _mm_loadu_pd(&q2.x), 1);
+    // QNaN, +Inf, -Inf, SNaN
+    if ((_mm256_fpclass_pd_mask(P, 0x99) | _mm256_fpclass_pd_mask(Q, 0x99)) != 0) {
+        return false;
+    }
+
+    // CGAlgorithmsDD::orientationIndexFilter(a, b, c)
+    const __m256d ax = _mm256_permutex2var_pd(P, _mm256_setr_epi64x(0, 0, 4, 4), Q);
+    const __m256d ay = _mm256_permutex2var_pd(P, _mm256_setr_epi64x(1, 1, 5, 5), Q);
+    const __m256d bx = _mm256_permutex2var_pd(P, _mm256_setr_epi64x(2, 2, 6, 6), Q);
+    const __m256d by = _mm256_permutex2var_pd(P, _mm256_setr_epi64x(3, 3, 7, 7), Q);
+    const __m256d cx = _mm256_permutex2var_pd(P, _mm256_setr_epi64x(4, 6, 0, 2), Q);
+    const __m256d cy = _mm256_permutex2var_pd(P, _mm256_setr_epi64x(5, 7, 1, 3), Q);
+
+    const __m256d detleft = _mm256_mul_pd(_mm256_sub_pd(ax, cx), _mm256_sub_pd(by, cy));
+    const __m256d detright = _mm256_mul_pd(_mm256_sub_pd(ay, cy), _mm256_sub_pd(bx, cx));
+    const __m256d det = _mm256_sub_pd(detleft, detright);
+    const __m256d signBit = _mm256_set1_pd(-0.0);
+    const __m256d error = _mm256_mul_pd(_mm256_andnot_pd(signBit, _mm256_add_pd(detleft, detright)),
+                                        _mm256_set1_pd(3.3306690621773724e-16));
+
+    const __m256d zero = _mm256_setzero_pd();
+    certain = _mm256_cmp_pd_mask(_mm256_andnot_pd(signBit, det), error, _CMP_GE_OQ);
+    pos = _mm256_mask_cmp_pd_mask(static_cast<__mmask8>(certain), det, zero, _CMP_GT_OQ);
+    neg = _mm256_mask_cmp_pd_mask(static_cast<__mmask8>(certain), det, zero, _CMP_LT_OQ);
+    return true;
+}
+
+// Orientation index of lane `lane` from the filter result, or computed robustly
+int
+laneOrientation(unsigned lane, unsigned pos, unsigned neg, unsigned certain,
+                const CoordinateXY& a, const CoordinateXY& b, const CoordinateXY& c)
+{
+    if ((certain >> lane) & 1) {
+        return static_cast<int>((pos >> lane) & 1) - static_cast<int>((neg >> lane) & 1);
+    }
+    return CGAlgorithmsDD::orientationIndex(a, b, c);
+}
+#endif
+
+} // anonymous namespace
+
+/*private static*/
+bool
+LineIntersector::computeOrientations(const CoordinateXY& p1, const CoordinateXY& p2,
+                                     const CoordinateXY& q1, const CoordinateXY& q2,
+                                     int& Pq1, int& Pq2, int& Qp1, int& Qp2)
+{
+#if GEOS_SIMD_AVX512
+    unsigned pos, neg, certain;
+    if (geos::util::simd::detail::useAvx512() &&
+            orientationFiltersAvx512(p1, p2, q1, q2, pos, neg, certain)) {
+        Pq1 = laneOrientation(0, pos, neg, certain, p1, p2, q1);
+        Pq2 = laneOrientation(1, pos, neg, certain, p1, p2, q2);
+        if ((Pq1 > 0 && Pq2 > 0) || (Pq1 < 0 && Pq2 < 0)) {
+            return false;
+        }
+        Qp1 = laneOrientation(2, pos, neg, certain, q1, q2, p1);
+        Qp2 = laneOrientation(3, pos, neg, certain, q1, q2, p2);
+        return !((Qp1 > 0 && Qp2 > 0) || (Qp1 < 0 && Qp2 < 0));
+    }
+#endif
+
+    Pq1 = CGAlgorithmsDD::orientationIndex(p1, p2, q1);
+    Pq2 = CGAlgorithmsDD::orientationIndex(p1, p2, q2);
+    if ((Pq1 > 0 && Pq2 > 0) || (Pq1 < 0 && Pq2 < 0)) {
+        return false;
+    }
+    Qp1 = CGAlgorithmsDD::orientationIndex(q1, q2, p1);
+    Qp2 = CGAlgorithmsDD::orientationIndex(q1, q2, p2);
+    return !((Qp1 > 0 && Qp2 > 0) || (Qp1 < 0 && Qp2 < 0));
+}
 
 /*public static*/
 double
