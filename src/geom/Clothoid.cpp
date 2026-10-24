@@ -498,10 +498,10 @@ Clothoid::hasCurvedComponents() const
     if (isEmpty() || !(std::abs(m_t1 - m_t0) > 0.0)) {
         return false;
     }
-    const double cross = m_u.x * m_v.y - m_u.y * m_v.x;
-    const double crossZ = m_u.y * m_v.z - m_u.z * m_v.y;
-    const double crossY = m_u.z * m_v.x - m_u.x * m_v.z;
-    return cross != 0.0 || crossZ != 0.0 || crossY != 0.0;
+    // Collinear directions still trace the curve back and forth along a
+    // line, beyond the chord. Only a plan image that is a single point is
+    // its two control points.
+    return m_u.x != 0.0 || m_u.y != 0.0 || m_v.x != 0.0 || m_v.y != 0.0;
 }
 
 void
