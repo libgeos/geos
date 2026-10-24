@@ -713,19 +713,6 @@ Clothoid::computeClothoidEnvelope() const
     }
     const double tLo = std::min(m_t0, m_t1);
     const double tHi = std::max(m_t0, m_t1);
-    auto thetaOf = [a2](double t) {
-        return (t * t) / (2.0 * a2);
-    };
-    double thetaMin = 0.0;
-    double thetaMax = 0.0;
-    if (tLo <= 0.0 && tHi >= 0.0) {
-        thetaMin = 0.0;
-        thetaMax = std::max(thetaOf(tLo), thetaOf(tHi));
-    }
-    else {
-        thetaMin = std::min(thetaOf(tLo), thetaOf(tHi));
-        thetaMax = std::max(thetaOf(tLo), thetaOf(tHi));
-    }
 
     auto addIfInterior = [&](double t) {
         if (t > tLo && t < tHi) {
@@ -740,41 +727,45 @@ Clothoid::computeClothoidEnvelope() const
         }
     };
 
-    auto solveAxis = [&](double coeffCos, double coeffSin) {
-        const double norm = std::hypot(coeffCos, coeffSin);
-        if (!(norm > 0.0)) {
+    // A coordinate is extreme where the heading theta = t^2 / (2 A^2) is
+    // base + k pi. Far from the inflection theta has no digits left to step
+    // by pi, so each side is walked from its own start |t| = s0: the heading
+    // there is taken reduced, and |t| is recovered from the turn since s0.
+    // Construction bounds that turn on each side.
+    auto solveSide = [&](double s0, double s1, double sign, double base) {
+        if (!(s1 > s0)) {
             return;
         }
-        const double alpha = std::atan2(coeffSin, coeffCos);
-        const double base = alpha + MATH_PI / 2.0;
-        // The window is at most MAX_TURN_RADIANS on one side of the
-        // inflection and MAX_SIDE_PANELS panels across it. Absolute
-        // constructive heading is not, so the half-turn index does not fit in int.
-        // Walk the window [thetaMin, thetaMax] instead of casting it.
-        const double halfTurns = (thetaMax - thetaMin) / MATH_PI;
-        const double first = std::floor((thetaMin - base) / MATH_PI) - 1.0;
-        if (!std::isfinite(halfTurns) || !std::isfinite(first)
-                || halfTurns < 0.0
-                || halfTurns > static_cast<double>(std::numeric_limits<int>::max() - 5)) {
-            throw util::IllegalArgumentException(
-                "Clothoid turn is too large to integrate");
+        double c = 0.0;
+        double s = 0.0;
+        algorithm::clothoid::halfSquarePhase(s0, m_scale, c, s);
+        const double turn = (s1 - s0) * (s1 + s0) / (2.0 * a2);
+        double offset = std::fmod(base - std::atan2(s, c), MATH_PI);
+        if (offset < 0.0) {
+            offset += MATH_PI;
         }
-        const int steps = static_cast<int>(std::ceil(halfTurns)) + 5;
-        for (int i = 0; i < steps; ++i) {
-            const double theta = base + (first + static_cast<double>(i)) * MATH_PI;
-            if (theta < thetaMin || theta > thetaMax) {
-                continue;
+        for (double k = 0.0; ; k += 1.0) {
+            const double delta = offset + k * MATH_PI;
+            if (!(delta <= turn)) {
+                break;
             }
-            if (theta == 0.0) {
-                addIfInterior(0.0);
-                continue;
-            }
-            if (theta < 0.0) {
-                continue;
-            }
-            const double root = std::sqrt(theta * 2.0 * a2);
-            addIfInterior(root);
-            addIfInterior(-root);
+            // |t|^2 = s0^2 + w, as an offset from s0 to keep its digits.
+            const double w = 2.0 * a2 * delta;
+            const double t = (w > 0.0) ? s0 + w / (s0 + std::sqrt(s0 * s0 + w)) : s0;
+            addIfInterior(sign * t);
+        }
+    };
+
+    auto solveAxis = [&](double coeffCos, double coeffSin) {
+        if (!(std::hypot(coeffCos, coeffSin) > 0.0)) {
+            return;
+        }
+        const double base = std::atan2(coeffSin, coeffCos) + MATH_PI / 2.0;
+        if (tHi > 0.0) {
+            solveSide(std::max(0.0, tLo), tHi, 1.0, base);
+        }
+        if (tLo < 0.0) {
+            solveSide(std::max(0.0, -tHi), -tLo, -1.0, base);
         }
     };
     solveAxis(m_u.x, m_v.x);
