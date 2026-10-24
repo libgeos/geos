@@ -214,6 +214,12 @@ void object::test<5>()
     ensure_NO_THROW(iso(loc, 1.0, 0.0, 45.25));
     ensure_THROW(iso(loc, 1.0, 0.0, 45.26), IllegalArgumentException);
     ensure_THROW(iso(loc, 1.0, -45.26, 0.0), IllegalArgumentException);
+    // Across the inflection the net turn cancels; each side is bounded.
+    // 181^2 / 2 is 16380.5 rad, just inside the 16384 rad side limit.
+    ensure_NO_THROW(iso(loc, 1.0, -181.0, 181.0));
+    ensure_THROW(iso(loc, 1.0, -182.0, 182.0), IllegalArgumentException);
+    ensure_THROW(iso(loc, 1.0, 182.0, -182.0), IllegalArgumentException);
+    ensure_THROW(iso(loc, 1.0, -30000.0, 30000.0), IllegalArgumentException);
     // Past 1e15 A the heading cannot be reduced; only a point gets that far.
     ensure_NO_THROW(iso(loc, 1.0, 1e15, 1e15));
     ensure_THROW(iso(loc, 1.0, 1.01e15, 1.01e15), IllegalArgumentException);
@@ -491,9 +497,9 @@ void object::test<16>()
     // Net turn 0, but each side turns 16200 rad: still integrated.
     const double length = make(sheared, -180.0, 180.0)->getLength();
     ensure(std::isfinite(length) && length > 360.0);
-    // Each side turns 20000 rad, past the panel limit.
-    auto tooLong = make(sheared, -200.0, 200.0);
-    ensure_THROW(tooLong->getLength(), IllegalArgumentException);
+    // Each side turns 20000 rad, past the panel limit: refused when built,
+    // not when the length is asked for.
+    ensure_THROW(make(sheared, -200.0, 200.0), IllegalArgumentException);
 
     // u and v parallel: the speed 2 cos + sin has no pole to size panels by.
     const ClothoidReferenceLocation flat{

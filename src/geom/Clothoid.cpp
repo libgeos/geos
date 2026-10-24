@@ -747,8 +747,9 @@ Clothoid::computeClothoidEnvelope() const
         }
         const double alpha = std::atan2(coeffSin, coeffCos);
         const double base = alpha + MATH_PI / 2.0;
-        // The net turn is at most MAX_TURN_RADIANS. Absolute constructive
-        // heading is not, so the half-turn index does not fit in int.
+        // The window is at most MAX_TURN_RADIANS on one side of the
+        // inflection and MAX_SIDE_PANELS panels across it. Absolute
+        // constructive heading is not, so the half-turn index does not fit in int.
         // Walk the window [thetaMin, thetaMax] instead of casting it.
         const double halfTurns = (thetaMax - thetaMin) / MATH_PI;
         const double first = std::floor((thetaMin - base) / MATH_PI) - 1.0;
@@ -803,6 +804,15 @@ Clothoid::validateConstruction() const
     const double turn = std::abs(m_t1 * m_t1 - m_t0 * m_t0) / (2.0 * a2);
     if (!std::isfinite(turn) || turn > algorithm::clothoid::MAX_TURN_RADIANS) {
         throw util::IllegalArgumentException("Clothoid turn is too large to integrate");
+    }
+    // Across the inflection the net turn cancels, but the envelope and the
+    // length still walk each side. Bound each side as integrateSpeed does.
+    const bool crossesInflection = (m_t0 < 0.0 && m_t1 > 0.0) || (m_t0 > 0.0 && m_t1 < 0.0);
+    if (crossesInflection) {
+        const double sideTurn = std::max(m_t0 * m_t0, m_t1 * m_t1) / (2.0 * a2);
+        if (!(sideTurn <= MAX_SIDE_PANELS * algorithm::clothoid::QUADRATURE_PANEL_RADIANS)) {
+            throw util::IllegalArgumentException("Clothoid turn is too large to integrate");
+        }
     }
     const double coords[] = {
         m_origin.x, m_origin.y, m_origin.z,
