@@ -343,7 +343,19 @@ void
 WKTWriter::appendClothoidTaggedText(const Clothoid& clothoid, OrdinateSet outputOrdinates, int level, Writer& writer) const
 {
     (void) level;
-    appendTag(clothoid, outputOrdinates, writer);
+    // The CLOTHOID body tags its components with Z, and the reader matches
+    // them against this tag rather than counting ordinates, so the tag is
+    // written in full even in old 3D style.
+    writer.write("CLOTHOID ");
+    if (outputOrdinates.hasZ()) {
+        writer.write("Z");
+    }
+    if (outputOrdinates.hasM()) {
+        writer.write("M");
+    }
+    if (outputOrdinates.hasZ() || outputOrdinates.hasM()) {
+        writer.write(" ");
+    }
     if (clothoid.isEmpty()) {
         writer.write("EMPTY");
         return;
