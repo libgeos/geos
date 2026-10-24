@@ -471,8 +471,16 @@ WKBReader::readClothoid()
 {
     // Empty omits the reference-location body. A following geometry also
     // starts with a byte order and a type word, so that header is not consumed.
+    // A non-empty body is at least a placement header, so a byte order with
+    // fewer bytes than a header after it is a truncated placement.
     const int clothoidOrder = dis.getOrder();
     if (dis.size() < 5) {
+        if (dis.size() > 0) {
+            const unsigned char orderByte = dis.peekByte(0);
+            if (orderByte == WKBConstants::wkbXDR || orderByte == WKBConstants::wkbNDR) {
+                throw ParseException("Unexpected EOF parsing WKB");
+            }
+        }
         return factory.createClothoid(hasZ, hasM);
     }
 
