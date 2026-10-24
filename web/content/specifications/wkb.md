@@ -213,6 +213,25 @@ WKBMultiSurface {
     uint32  numSurfaces;
     WKBSurface   surfaces[numSurfaces];
 }
+
+WKBClothoid {
+    byte                byteOrder;
+    uint32              wkbType; // 22, 1022, 2022, or 3022
+    WKBAffinePlacement  referenceLocation; // omitted when EMPTY
+    double              scaleFactor;
+    double              startDistance;
+    double              endDistance;
+    double              startM; // only when wkbType is 2022 or 3022
+    double              endM;
+}
+
+WKBAffinePlacement {
+    byte    byteOrder;
+    uint32  wkbType; // 102, or 1102 when Z
+    double  location[2 or 3];
+    uint32  numDirections; // 2
+    double  directions[numDirections][2 or 3];
+}
 ```
 
 

@@ -63,6 +63,10 @@ addCoordinates(geom::util::CurveBuilder& curveBuilder, const SimpleCurve* curve,
         return;
     }
 
+    if (curve->getGeometryTypeId() == GEOS_CLOTHOID) {
+        throw util::UnsupportedOperationException("Clothoid line merge is not implemented");
+    }
+
     const CoordinateSequence& srcCoords = *curve->getCoordinatesRO();
     const bool isCurved = curve->getGeometryTypeId() == GEOS_CIRCULARSTRING;
 

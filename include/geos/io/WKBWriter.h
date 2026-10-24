@@ -33,6 +33,7 @@ namespace geos {
 namespace geom {
 
 class CoordinateSequence;
+class Clothoid;
 class CompoundCurve;
 class CurvePolygon;
 class Geometry;
@@ -223,6 +224,8 @@ private:
     void writeSimpleCurve(const geom::SimpleCurve& ls);
     // throws IOException
 
+    void writeClothoid(const geom::Clothoid& clothoid);
+
     void writeCompoundCurve(const geom::CompoundCurve& curve);
 
     void writePolygon(const geom::Polygon& p);
@@ -250,6 +253,8 @@ private:
 
     void writeInt(int intValue);
     // throws IOException
+
+    void writeDouble(double value);
 
     OrdinateSet getOutputOrdinates(OrdinateSet ordinates);
 

@@ -23,6 +23,7 @@
 #include <geos/io/CLocalizer.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CircularString.h>
+#include <geos/geom/Clothoid.h>
 #include <geos/geom/CompoundCurve.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/LinearRing.h>
@@ -335,6 +336,9 @@ WKTReader::readGeometryTaggedText(StringTokenizer* tokenizer, OrdinateSet& ordin
     else if(isTypeName(type, "CIRCULARSTRING")) {
         geom = readCircularStringText(tokenizer, newFlags);
     }
+    else if(isTypeName(type, "CLOTHOID")) {
+        geom = readClothoidText(tokenizer, newFlags);
+    }
     else if(isTypeName(type, "COMPOUNDCURVE")) {
         geom = readCompoundCurveText(tokenizer, newFlags);
     }
@@ -404,6 +408,134 @@ WKTReader::readCircularStringText(StringTokenizer* tokenizer, OrdinateSet& ordin
 {
     auto&& coords = getCoordinates(tokenizer, ordinateFlags);
     return geometryFactory->createCircularString(std::move(coords));
+}
+
+std::unique_ptr<Clothoid>
+WKTReader::readClothoidText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const
+{
+    std::string nextToken = getNextEmptyOrOpener(tokenizer, ordinateFlags);
+    if (nextToken == "EMPTY") {
+        return geometryFactory->createClothoid(ordinateFlags.hasZ(), ordinateFlags.hasM());
+    }
+
+    if (isNumberNext(tokenizer)) {
+        throw ParseException("CLOTHOID WKT requires REFERENCELOCATION");
+    }
+
+    const bool hasZ = ordinateFlags.hasZ();
+    const bool hasM = ordinateFlags.hasM();
+
+    auto expect = [&](const char* word) {
+        const std::string got = getNextWord(tokenizer);
+        if (got != word) {
+            throw ParseException(std::string("Expected ") + word + " in CLOTHOID but encountered", got);
+        }
+    };
+
+    auto takeZFlag = [&](std::string& word) {
+        if (word == "Z") {
+            word = getNextWord(tokenizer);
+            return true;
+        }
+        return false;
+    };
+
+    expect("REFERENCELOCATION");
+    std::string word = getNextWord(tokenizer);
+    if (word != "AFFINEPLACEMENT") {
+        throw ParseException("Expected AFFINEPLACEMENT in CLOTHOID but encountered", word);
+    }
+    word = getNextWord(tokenizer);
+    const bool placementZ = takeZFlag(word);
+    if (word == "EMPTY") {
+        throw ParseException("CLOTHOID reference location must not be EMPTY");
+    }
+    if (word != "(") {
+        throw ParseException("Expected '(' after AFFINEPLACEMENT but encountered", word);
+    }
+    if (placementZ != hasZ) {
+        throw ParseException(hasZ
+            ? "CLOTHOID Z requires AFFINEPLACEMENT Z"
+            : "CLOTHOID without Z must not use AFFINEPLACEMENT Z");
+    }
+
+    auto readComponents = [&](const char* keyword, double& x, double& y, double& z, bool snap) {
+        word = getNextWord(tokenizer);
+        if (word != keyword) {
+            throw ParseException(std::string("Expected ") + keyword + " in CLOTHOID but encountered", word);
+        }
+        word = getNextWord(tokenizer);
+        const bool componentZ = takeZFlag(word);
+        if (componentZ != hasZ) {
+            throw ParseException(std::string(keyword) + (hasZ
+                ? " must be Z when CLOTHOID is Z"
+                : " must not be Z when CLOTHOID is not Z"));
+        }
+        if (word != "(") {
+            throw ParseException(std::string("Expected '(' after ") + keyword + " but encountered", word);
+        }
+        x = getNextNumber(tokenizer);
+        y = getNextNumber(tokenizer);
+        z = 0.0;
+        if (hasZ) {
+            z = getNextNumber(tokenizer);
+        }
+        if (snap) {
+            CoordinateXYZM coord(x, y, z, DoubleNotANumber);
+            precisionModel->makePrecise(coord);
+            x = coord.x;
+            y = coord.y;
+            z = hasZ ? coord.z : 0.0;
+        }
+        expect(")");
+    };
+
+    ClothoidReferenceLocation location;
+    readComponents("LOCATION", location.origin.x, location.origin.y, location.origin.z, true);
+    expect(",");
+    expect("REFERENCEDIRECTIONS");
+    expect("(");
+    readComponents("VECTOR", location.u.x, location.u.y, location.u.z, false);
+    expect(",");
+    readComponents("VECTOR", location.v.x, location.v.y, location.v.z, false);
+    expect(")");
+    expect(")");
+
+    expect(",");
+    expect("SCALEFACTOR");
+    const double scale = getNextNumber(tokenizer);
+    expect(",");
+    expect("STARTDISTANCE");
+    const double startDistance = getNextNumber(tokenizer);
+    expect(",");
+    expect("ENDDISTANCE");
+    const double endDistance = getNextNumber(tokenizer);
+
+    double startM = 0.0;
+    double endM = 0.0;
+    word = getNextWord(tokenizer);
+    if (word == ",") {
+        if (!hasM) {
+            throw ParseException("CLOTHOID STARTM/ENDM require the M or ZM type flag");
+        }
+        expect("STARTM");
+        startM = getNextNumber(tokenizer);
+        expect(",");
+        expect("ENDM");
+        endM = getNextNumber(tokenizer);
+        expect(")");
+    }
+    else if (word == ")") {
+        if (hasM) {
+            throw ParseException("CLOTHOID M or ZM requires STARTM and ENDM");
+        }
+    }
+    else {
+        throw ParseException("Expected ',' or ')' in CLOTHOID but encountered", word);
+    }
+
+    return geometryFactory->createClothoid(
+        location, scale, startDistance, endDistance, hasZ, hasM, startM, endM);
 }
 
 std::unique_ptr<Curve>
