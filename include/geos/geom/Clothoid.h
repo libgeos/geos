@@ -20,11 +20,6 @@
 #include <geos/geom/SimpleCurve.h>
 
 namespace geos {
-namespace algorithm {
-namespace clothoid {
-struct Parameters;
-}
-}
 namespace geom {
 
 /// Affine reference location: origin and the images of the constructive axes.

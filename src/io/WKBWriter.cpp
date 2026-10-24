@@ -246,9 +246,7 @@ WKBWriter::writeCompoundCurve(const CompoundCurve& g)
     for (std::size_t i = 0; i < g.getNumCurves(); i++) {
         const SimpleCurve& section = *g.getCurveN(i);
         if (section.getGeometryTypeId() == GEOS_CLOTHOID) {
-            const OrdinateSet savedOrdinates = outputOrdinates;
-            write(section, *outStream);
-            outputOrdinates = savedOrdinates;
+            writeClothoid(static_cast<const Clothoid&>(section));
         } else {
             writeSimpleCurve(section);
         }
