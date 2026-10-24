@@ -5,6 +5,8 @@
 #include <geos/algorithm/CurveToLineParams.h>
 #include <geos/algorithm/LineToCurveParams.h>
 #include <geos/algorithm/PointLocator.h>
+#include <geos/algorithm/RayCrossingCounter.h>
+#include <geos/algorithm/locate/SimplePointInAreaLocator.h>
 #include <geos/constants.h>
 #include <geos/geom/Clothoid.h>
 #include <geos/geom/CompoundCurve.h>
@@ -461,6 +463,13 @@ void object::test<15>()
 
     geos::algorithm::PointLocator locator;
     ensure_THROW(locator.locate(CoordinateXY(0.5, 0.5), curve.get()), UnsupportedOperationException);
+    // A clothoid ring section must not be counted as a circular arc.
+    const CoordinateXY inside(1.5, 0.1);
+    ensure(polygon->getEnvelopeInternal()->contains(inside));
+    ensure_THROW(geos::algorithm::RayCrossingCounter::locatePointInRing(inside, *closed),
+                 UnsupportedOperationException);
+    ensure_THROW(geos::algorithm::locate::SimplePointInAreaLocator::locate(inside, polygon.get()),
+                 UnsupportedOperationException);
 
     geos::operation::polygonize::Polygonizer polygonizer;
     ensure_THROW(polygonizer.add(static_cast<const geos::geom::Geometry*>(curve.get())),
@@ -510,6 +519,112 @@ void object::test<16>()
     const ClothoidReferenceLocation point{
         Coordinate(1.0, 2.0, 0.0), Coordinate(0.0, 0.0, 0.0), Coordinate(0.0, 0.0, 0.0)};
     ensure_equals("point length", make(point, -1.0, 2.0)->getLength(), 0.0);
+}
+
+template<>
+template<>
+void object::test<17>()
+{
+    set_test_name("collinear placement is curved");
+
+    // u = v: the image runs back and forth along y = x past its chord.
+    auto collinear = iso(at(0.0, 0.0, 1.0, 1.0, 1.0, 1.0), 1.0, 0.0, 4.0);
+    ensure(collinear->hasCurvedComponents());
+    ensure(collinear->isCurved());
+    ensure(collinear->getEnvelopeInternal()->getMaxX() > collinear->getEndCoordinate().x);
+    ensure_THROW(collinear->getCentroid(), UnsupportedOperationException);
+
+    // v = 0: the image is a line, still not monotonic past a quarter turn.
+    ensure(iso(at(0.0, 0.0, 1.0, 0.0, 0.0, 0.0), 1.0, 0.0, 4.0)->hasCurvedComponents());
+    // No plan direction: the plan image is a single point.
+    ensure(!iso(at(1.0, 2.0, 0.0, 0.0, 0.0, 0.0), 1.0, 0.0, 4.0)->hasCurvedComponents());
+}
+
+template<>
+template<>
+void object::test<18>()
+{
+    set_test_name("ring closes on a clothoid's evaluated start");
+
+    // The pose start comes back from the reference location one ulp off.
+    auto curve = factory_->createClothoid(geos::geom::CoordinateXYZM(0.1, 0.3, 0.0, 0.0),
+                                          false, false, 0.7, 0.01, 0.1, 20.0);
+    const CoordinateXY end = curve->getEndCoordinate();
+    std::vector<std::unique_ptr<SimpleCurve>> sections;
+    sections.push_back(std::move(curve));
+    sections.push_back(factory_->createLineString({end, CoordinateXY(0.1, 0.3)}));
+    auto ring = factory_->createCompoundCurve(std::move(sections));
+    ensure(ring->isClosed());
+    ensure(ring->getStartPoint()->getCoordinate()->equals2D(CoordinateXY(0.1, 0.3)));
+
+    // Clothoid last: its end is snapped to the first section's start.
+    std::vector<std::unique_ptr<SimpleCurve>> reversed;
+    auto back = factory_->createClothoid(geos::geom::CoordinateXYZM(0.1, 0.3, 0.0, 0.0),
+                                         false, false, 0.7, 0.01, 0.1, 20.0)->reverse();
+    const CoordinateXY backStart = static_cast<const Clothoid&>(*back).getStartCoordinate();
+    reversed.push_back(factory_->createLineString({CoordinateXY(0.1, 0.3), backStart}));
+    reversed.push_back(std::unique_ptr<SimpleCurve>(static_cast<SimpleCurve*>(back.release())));
+    ensure(factory_->createCompoundCurve(std::move(reversed))->isClosed());
+}
+
+template<>
+template<>
+void object::test<19>()
+{
+    set_test_name("old 3D WKT round trip");
+
+    geos::io::WKTWriter writer;
+    writer.setOld3D(true);
+    writer.setRoundingPrecision(17);
+    const char* wkts[] = {
+        "CLOTHOID Z (REFERENCELOCATION AFFINEPLACEMENT Z (LOCATION Z (0 0 5), REFERENCEDIRECTIONS (VECTOR Z (1 0 0), VECTOR Z (0 1 0))), SCALEFACTOR 10, STARTDISTANCE 1, ENDDISTANCE 5)",
+        "CLOTHOID M (REFERENCELOCATION AFFINEPLACEMENT (LOCATION (0 0), REFERENCEDIRECTIONS (VECTOR (1 0), VECTOR (0 1))), SCALEFACTOR 10, STARTDISTANCE 1, ENDDISTANCE 5, STARTM 2, ENDM 3)",
+        "CLOTHOID ZM (REFERENCELOCATION AFFINEPLACEMENT Z (LOCATION Z (0 0 5), REFERENCEDIRECTIONS (VECTOR Z (1 0 0), VECTOR Z (0 1 0))), SCALEFACTOR 10, STARTDISTANCE 1, ENDDISTANCE 5, STARTM 2, ENDM 3)",
+        "CLOTHOID Z EMPTY",
+    };
+    for (const char* wkt : wkts) {
+        auto geom = reader_.read(wkt);
+        const std::string text = writer.write(geom.get());
+        ensure(text, geom->equalsIdentical(reader_.read(text).get()));
+    }
+}
+
+template<>
+template<>
+void object::test<20>()
+{
+    set_test_name("envelope far from the inflection");
+
+    // At t = 1e8 A the heading is about 5e15 rad, past where stepping it by
+    // pi in double finds the extreme headings.
+    const double t0 = 1e8;
+    double t1 = t0;
+    for (int i = 0; i < 9; i++) {
+        t1 = std::nextafter(t1, 2.0 * t0);
+    }
+    auto curve = iso(at(0.0, 0.0), 1.0, t0, t1);
+    auto line = curve->getLinearized(geos::algorithm::CurveToLineParams::stepSizeDegrees(1));
+    const auto& env = *curve->getEnvelopeInternal();
+    const auto& lineEnv = *line->getEnvelopeInternal();
+    const double tol = 1e-15;
+    ensure(env.getMinX() <= lineEnv.getMinX() + tol);
+    ensure(env.getMaxX() >= lineEnv.getMaxX() - tol);
+    ensure(env.getMinY() <= lineEnv.getMinY() + tol);
+    ensure(env.getMaxY() >= lineEnv.getMaxY() - tol);
+}
+
+template<>
+template<>
+void object::test<21>()
+{
+    set_test_name("truncated WKB placement");
+
+    const std::string hex = hexOf(*spiral());
+    // Byte order and type word: 10 hex digits. The placement header follows.
+    for (std::size_t bytes = 1; bytes < 5; bytes++) {
+        ensure_THROW(fromHex(hex.substr(0, 10 + 2 * bytes)), ParseException);
+    }
+    ensure(fromHex(hex.substr(0, 10))->isEmpty());
 }
 
 } // namespace tut
