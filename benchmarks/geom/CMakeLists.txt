@@ -24,7 +24,8 @@ IF(benchmark_FOUND)
     add_executable(perf_coordseq
             CoordinateSequencePerfTest.cpp
             ${PROJECT_SOURCE_DIR}/src/geom/CoordinateSequence.cpp
-            ${PROJECT_SOURCE_DIR}/src/geom/Coordinate.cpp)
+            ${PROJECT_SOURCE_DIR}/src/geom/Coordinate.cpp
+            ${PROJECT_SOURCE_DIR}/src/util/Simd.cpp)
     target_include_directories(perf_coordseq PUBLIC
             $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
             $<BUILD_INTERFACE:${PROJECT_BINARY_DIR}/include>)

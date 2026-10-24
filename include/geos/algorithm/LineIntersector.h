@@ -329,6 +329,18 @@ private:
         return result == COLLINEAR_INTERSECTION;
     }
 
+    /**
+     * Computes the orientation index of each endpoint of each segment relative
+     * to the other segment, as computed by Orientation::index.
+     *
+     * Returns false without computing Qp1 and Qp2 if q1 and q2 lie strictly on
+     * the same side of p1-p2, and false if p1 and p2 lie strictly on the same
+     * side of q1-q2.
+     */
+    static bool computeOrientations(const geom::CoordinateXY& p1, const geom::CoordinateXY& p2,
+                                    const geom::CoordinateXY& q1, const geom::CoordinateXY& q2,
+                                    int& Pq1, int& Pq2, int& Qp1, int& Qp2);
+
     template<typename C1, typename C2>
     uint8_t computeIntersect(const C1& p1, const C1& p2, const C2& q1, const C2& q2)
     {
@@ -342,17 +354,8 @@ private:
         // for each endpoint, compute which side of the other segment it lies
         // if both endpoints lie on the same side of the other segment,
         // the segments do not intersect
-        int Pq1 = Orientation::index(p1, p2, q1);
-        int Pq2 = Orientation::index(p1, p2, q2);
-
-        if((Pq1 > 0 && Pq2 > 0) || (Pq1 < 0 && Pq2 < 0)) {
-            return NO_INTERSECTION;
-        }
-
-        int Qp1 = Orientation::index(q1, q2, p1);
-        int Qp2 = Orientation::index(q1, q2, p2);
-
-        if((Qp1 > 0 && Qp2 > 0) || (Qp1 < 0 && Qp2 < 0)) {
+        int Pq1, Pq2, Qp1, Qp2;
+        if(!computeOrientations(p1, p2, q1, q2, Pq1, Pq2, Qp1, Qp2)) {
             return NO_INTERSECTION;
         }
 
