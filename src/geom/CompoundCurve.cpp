@@ -497,6 +497,17 @@ CompoundCurve::snapClothoidEndpoints()
             static_cast<Clothoid&>(prev).snapEndpoint(1, next.getCoordinatesRO()->front<CoordinateXY>());
         }
     }
+    // The same rounding can keep a ring from closing.
+    if (curves.size() < 2 || curves.front()->isEmpty() || curves.back()->isEmpty()) {
+        return;
+    }
+    SimpleCurve& first = *curves.front();
+    SimpleCurve& last = *curves.back();
+    if (first.getGeometryTypeId() == GEOS_CLOTHOID) {
+        static_cast<Clothoid&>(first).snapEndpoint(0, last.getCoordinatesRO()->back<CoordinateXY>());
+    } else if (last.getGeometryTypeId() == GEOS_CLOTHOID) {
+        static_cast<Clothoid&>(last).snapEndpoint(1, first.getCoordinatesRO()->front<CoordinateXY>());
+    }
 }
 
 
