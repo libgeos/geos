@@ -59,6 +59,9 @@ identicalDouble(double a, double b)
 // Relative gap allowed when testing a similarity frame.
 constexpr double SIMILARITY_RELATIVE = 1e-12;
 
+// Plan determinant, relative to |u| |v|, below which a placement is singular.
+constexpr double SINGULAR_RELATIVE = 1e-12;
+
 // Endpoint snap tolerance, in ulps of the reference location extent.
 // Evaluation rounding is about one ulp. Reading 16-digit WKT perturbs the
 // origin, directions, scale and distances by about two ulps each.
@@ -198,6 +201,27 @@ similarityScale(const Frame& frame, double& scale, int& orientation)
     scale = uLen;
     const double crossZ = ux * vy - uy * vx;
     orientation = (crossZ < 0.0) ? -1 : 1;
+    return true;
+}
+
+// Plan lengths of u and v, and the cosine and sine of the plan angle from
+// u to v. The angle is taken from unit directions, so that it neither
+// overflows nor underflows at extreme placement scales.
+bool
+planAngle(const Coordinate& u, const Coordinate& v,
+          double& uLen, double& vLen, double& cosine, double& sine)
+{
+    uLen = std::hypot(u.x, u.y);
+    vLen = std::hypot(v.x, v.y);
+    if (!(uLen > 0.0) || !(vLen > 0.0)) {
+        return false;
+    }
+    const double ux = u.x / uLen;
+    const double uy = u.y / uLen;
+    const double vx = v.x / vLen;
+    const double vy = v.y / vLen;
+    cosine = ux * vx + uy * vy;
+    sine = ux * vy - uy * vx;
     return true;
 }
 
@@ -497,6 +521,66 @@ Clothoid::getReferenceLocation() const
     location.u = m_u;
     location.v = m_v;
     return location;
+}
+
+bool
+Clothoid::isEulerSpiral() const
+{
+    if (isEmpty()) {
+        return false;
+    }
+    // Both tests are relative to |u| and |v|, so they hold at any placement
+    // scale.
+    double uLen = 0.0;
+    double vLen = 0.0;
+    double cosine = 0.0;
+    double sine = 0.0;
+    if (!planAngle(m_u, m_v, uLen, vLen, cosine, sine)) {
+        return false;
+    }
+    return hasRegularPlacement()
+           && std::abs(uLen - vLen) <= SIMILARITY_RELATIVE * std::max(uLen, vLen)
+           && std::abs(cosine) <= SIMILARITY_RELATIVE;
+}
+
+bool
+Clothoid::hasRegularPlacement() const
+{
+    if (isEmpty()) {
+        return false;
+    }
+    double uLen = 0.0;
+    double vLen = 0.0;
+    double cosine = 0.0;
+    double sine = 0.0;
+    return planAngle(m_u, m_v, uLen, vLen, cosine, sine) && std::abs(sine) > SINGULAR_RELATIVE;
+}
+
+std::unique_ptr<Clothoid>
+Clothoid::affineTransform(double m00, double m01, double m02,
+                          double m10, double m11, double m12) const
+{
+    const double map[] = {m00, m01, m02, m10, m11, m12};
+    for (double value : map) {
+        if (!std::isfinite(value)) {
+            throw util::IllegalArgumentException("Clothoid affine map must be finite");
+        }
+    }
+    if (isEmpty()) {
+        return clone();
+    }
+    // The origin is a point and takes the translation; u and v are
+    // directions and take only the linear part.
+    ClothoidReferenceLocation location;
+    location.origin = Coordinate(m00 * m_origin.x + m01 * m_origin.y + m02,
+                                 m10 * m_origin.x + m11 * m_origin.y + m12,
+                                 m_origin.z);
+    location.u = Coordinate(m00 * m_u.x + m01 * m_u.y, m10 * m_u.x + m11 * m_u.y, m_u.z);
+    location.v = Coordinate(m00 * m_v.x + m01 * m_v.y, m10 * m_v.x + m11 * m_v.y, m_v.z);
+    auto image = getFactory()->createClothoid(location, m_scale, m_t0, m_t1,
+                 hasZ(), hasM(), m_startM, m_endM);
+    image->setSRID(getSRID());
+    return image;
 }
 
 bool
