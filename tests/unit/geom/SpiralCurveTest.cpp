@@ -217,7 +217,9 @@ void object::test<5>()
     std::vector<CoordinateXYZM> mids;
     for (SpiralType type : allTypes()) {
         auto spiral = make(L, k0, k1, type);
-        const auto& u = spiral->reverse()->getReferenceLocation().u;
+        // Keep the reversed curve alive while reading its placement.
+        auto reversed = spiral->reverse();
+        const auto& u = reversed->getReferenceLocation().u;
         ensure_equals("heading x", u.x, -std::cos(end), 1e-14);
         ensure_equals("heading y", u.y, -std::sin(end), 1e-14);
         mids.push_back(spiral->getPointAtFraction(0.5));
