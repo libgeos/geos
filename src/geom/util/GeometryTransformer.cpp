@@ -100,6 +100,9 @@ GeometryTransformer::transform(const Geometry* nInputGeom)
             return transformPolygon(detail::down_cast<const Polygon*>(inputGeom), nullptr);
         case GEOS_CIRCULARSTRING:
             return transformCircularString(detail::down_cast<const CircularString*>(inputGeom), nullptr);
+        case GEOS_ELLIPTICALCURVE:
+            throw geos::util::UnsupportedOperationException(
+                "Elliptical curve coordinate transform is not implemented");
         case GEOS_COMPOUNDCURVE:
             return transformCompoundCurve(detail::down_cast<const CompoundCurve*>(inputGeom), nullptr);
         case GEOS_CURVEPOLYGON:
@@ -271,6 +274,10 @@ GeometryTransformer::transformCompoundCurve(
         std::unique_ptr<Geometry> transformGeom;
         if(const CircularString* cs = dynamic_cast<const CircularString*>(c)) {
             transformGeom = transformCircularString(cs, geom);
+        }
+        else if(c->getGeometryTypeId() == GEOS_ELLIPTICALCURVE) {
+            throw geos::util::UnsupportedOperationException(
+                "Elliptical curve coordinate transform is not implemented");
         }
         else if(const LineString* ls = dynamic_cast<const LineString*>(c)) {
             transformGeom = transformLineString(ls, geom);

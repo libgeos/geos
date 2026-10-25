@@ -23,6 +23,7 @@
 #include <geos/io/CLocalizer.h>
 #include <geos/io/CheckOrdinatesFilter.h>
 #include <geos/geom/CircularString.h>
+#include <geos/geom/EllipticalCurve.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequenceFilter.h>
 #include <geos/geom/CompoundCurve.h>
@@ -239,6 +240,7 @@ WKTWriter::appendGeometryTaggedText(const Geometry& geometry,
         case GEOS_LINESTRING:
         case GEOS_LINEARRING:
         case GEOS_CIRCULARSTRING: appendSimpleCurveTaggedText(static_cast<const SimpleCurve&>(geometry), outputOrdinates, level, writer); break;
+        case GEOS_ELLIPTICALCURVE: appendEllipticalCurveTaggedText(static_cast<const EllipticalCurve&>(geometry), outputOrdinates, level, writer); break;
         case GEOS_COMPOUNDCURVE: appendCompoundCurveTaggedText(static_cast<const CompoundCurve&>(geometry), outputOrdinates, level, writer); break;
         case GEOS_CURVEPOLYGON:
         case GEOS_POLYGON:    appendSurfaceTaggedText(static_cast<const Surface&>(geometry), outputOrdinates, level, writer); break;
@@ -315,6 +317,8 @@ WKTWriter::appendCurveText(const Curve& curve, OrdinateSet outputOrdinates, int 
 
     if (curve.getGeometryTypeId() == GEOS_COMPOUNDCURVE) {
         appendCompoundCurveTaggedText(static_cast<const CompoundCurve&>(curve), outputOrdinates, level, writer);
+    } else if (curve.getGeometryTypeId() == GEOS_ELLIPTICALCURVE) {
+        appendEllipticalCurveTaggedText(static_cast<const EllipticalCurve&>(curve), outputOrdinates, level, writer);
     } else {
         appendSimpleCurveText(static_cast<const SimpleCurve&>(curve), outputOrdinates, level, false, writer);
     }
@@ -328,9 +332,87 @@ WKTWriter::appendSimpleCurveText(const SimpleCurve& curve, OrdinateSet outputOrd
 
     if (curve.getGeometryTypeId() == GEOS_CIRCULARSTRING) {
         appendSimpleCurveTaggedText(curve, outputOrdinates, level, writer);
+    } else if (curve.getGeometryTypeId() == GEOS_ELLIPTICALCURVE) {
+        appendEllipticalCurveTaggedText(static_cast<const EllipticalCurve&>(curve), outputOrdinates, level, writer);
     } else {
         appendSequenceText(*curve.getCoordinatesRO(), outputOrdinates, level, false, writer);
     }
+}
+
+void
+WKTWriter::appendReferenceLocationText(const AffinePlacement& loc, bool hasZ, Writer& writer) const
+{
+    auto component = [&](const char* keyword, double x, double y, double z) {
+        writer.write(keyword);
+        writer.write(" ");
+        if (hasZ) {
+            writer.write("Z ");
+        }
+        writer.write("(");
+        writer.write(writeNumber(x));
+        writer.write(" ");
+        writer.write(writeNumber(y));
+        if (hasZ) {
+            writer.write(" ");
+            writer.write(writeNumber(z));
+        }
+        writer.write(")");
+    };
+
+    writer.write("REFERENCELOCATION AFFINEPLACEMENT ");
+    if (hasZ) {
+        writer.write("Z ");
+    }
+    writer.write("(");
+    component("LOCATION", loc.origin.x, loc.origin.y, loc.origin.z);
+    writer.write(", REFERENCEDIRECTIONS (");
+    component("VECTOR", loc.u.x, loc.u.y, loc.u.z);
+    writer.write(", ");
+    component("VECTOR", loc.v.x, loc.v.y, loc.v.z);
+    writer.write("))");
+}
+
+void
+WKTWriter::appendEllipticalCurveTaggedText(const EllipticalCurve& curve, OrdinateSet outputOrdinates, int level, Writer& writer) const
+{
+    (void) level;
+    // The body tags its placement with Z, and the reader matches it against
+    // this tag rather than counting ordinates, so the tag is written in
+    // full even in old 3D style.
+    writer.write("ELLIPTICALCURVE ");
+    if (outputOrdinates.hasZ()) {
+        writer.write("Z");
+    }
+    if (outputOrdinates.hasM()) {
+        writer.write("M");
+    }
+    if (outputOrdinates.hasZ() || outputOrdinates.hasM()) {
+        writer.write(" ");
+    }
+    if (curve.isEmpty()) {
+        writer.write("EMPTY");
+        return;
+    }
+
+    // Angles are stored in radians, as ST_Angle is.
+    writer.write("(");
+    appendReferenceLocationText(curve.getReferenceLocation(), outputOrdinates.hasZ(), writer);
+    writer.write(", UAXISLENGTH ");
+    writer.write(writeNumber(curve.getUAxisLength()));
+    writer.write(", VAXISLENGTH ");
+    writer.write(writeNumber(curve.getVAxisLength()));
+    writer.write(", STARTANGLE ANGLE RADIANS (");
+    writer.write(writeNumber(curve.getStartAngle()));
+    writer.write("), ENDANGLE ANGLE RADIANS (");
+    writer.write(writeNumber(curve.getEndAngle()));
+    writer.write(")");
+    if (outputOrdinates.hasM()) {
+        writer.write(", STARTM ");
+        writer.write(writeNumber(curve.getStartM()));
+        writer.write(", ENDM ");
+        writer.write(writeNumber(curve.getEndM()));
+    }
+    writer.write(")");
 }
 
 

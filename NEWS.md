@@ -2,6 +2,7 @@
 2027-xx-xx
 
 - New things:
+  - Elliptical curve WKT/WKB (ISO type 20)
   - Add DirectedHausdorffDistance and C API GEOSDirectedHausdorffDistance /
     GEOSSymmetricHausdorffDistance (Martin Davis, Jeroen Bloemscheer, Dan Baston)
 

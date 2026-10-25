@@ -41,6 +41,8 @@ namespace geom {
 class GeometryFactory;
 class Coordinate;
 class CircularString;
+class EllipticalCurve;
+struct AffinePlacement;
 class CompoundCurve;
 class CurvePolygon;
 class Geometry;
@@ -167,6 +169,13 @@ private:
     std::unique_ptr<geom::LinearRing> readLinearRing();
 
     std::unique_ptr<geom::CircularString> readCircularString();
+
+    std::unique_ptr<geom::EllipticalCurve> readEllipticalCurve();
+
+    /// The nested affine placement that starts an elliptical body.
+    /// Returns false, consuming nothing, when the body is omitted because
+    /// the curve is empty.
+    bool readReferenceLocation(geom::AffinePlacement& location, const std::string& typeName);
 
     std::unique_ptr<geom::CompoundCurve> readCompoundCurve();
 
