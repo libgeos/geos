@@ -21,6 +21,7 @@
 #include <geos/io/ByteOrderValues.h>
 #include <geos/io/ParseException.h>
 #include <geos/geom/CircularString.h>
+#include <geos/geom/NurbsCurve.h>
 #include <geos/geom/CompoundCurve.h>
 #include <geos/geom/CurvePolygon.h>
 #include <geos/geom/Geometry.h>
@@ -38,6 +39,7 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/util.h>
+#include <geos/util/GEOSException.h>
 
 #include <iomanip>
 #include <ostream>
@@ -210,6 +212,7 @@ WKBReader::minMemSize(geom::GeometryTypeId geomType, uint64_t size) const
         case GEOS_LINEARRING:
         case GEOS_CIRCULARSTRING:
         case GEOS_COMPOUNDCURVE:
+        case GEOS_NURBSCURVE:
         case GEOS_POINT:
             perElement = minCoordSize;
             break;
@@ -344,6 +347,9 @@ WKBReader::readGeometry()
     case WKBConstants::wkbCircularString :
         result = readCircularString();
         break;
+    case WKBConstants::wkbNurbsCurve :
+        result = readNurbsCurve();
+        break;
     case WKBConstants::wkbCompoundCurve :
         result = readCompoundCurve();
         break;
@@ -430,6 +436,154 @@ WKBReader::readCircularString()
     minMemSize(GEOS_CIRCULARSTRING, size);
     auto pts = readCoordinateSequence(size);
     return factory.createCircularString(std::move(pts));
+}
+
+namespace {
+
+bool
+isGeometryWkbType(uint32_t base)
+{
+    switch (base) {
+    case WKBConstants::wkbPoint:
+    case WKBConstants::wkbLineString:
+    case WKBConstants::wkbPolygon:
+    case WKBConstants::wkbMultiPoint:
+    case WKBConstants::wkbMultiLineString:
+    case WKBConstants::wkbMultiPolygon:
+    case WKBConstants::wkbGeometryCollection:
+    case WKBConstants::wkbCircularString:
+    case WKBConstants::wkbCompoundCurve:
+    case WKBConstants::wkbCurvePolygon:
+    case WKBConstants::wkbMultiCurve:
+    case WKBConstants::wkbMultiSurface:
+    case WKBConstants::wkbNurbsCurve:
+        return true;
+    default:
+        return false;
+    }
+}
+
+} // namespace
+bool
+WKBReader::isGeometryHeaderNext() const
+{
+    if (dis.size() < 5) {
+        return false;
+    }
+    const unsigned char orderByte = dis.peekByte(0);
+    if (orderByte != WKBConstants::wkbXDR && orderByte != WKBConstants::wkbNDR) {
+        return false;
+    }
+    const int order = (orderByte == WKBConstants::wkbNDR)
+        ? ByteOrderValues::ENDIAN_LITTLE
+        : ByteOrderValues::ENDIAN_BIG;
+    const uint32_t type = dis.peekUnsigned(1, order);
+    return (type & 0xffffu) / 1000u <= 3u && isGeometryWkbType((type & 0xffffu) % 1000u);
+}
+
+std::unique_ptr<NurbsCurve>
+WKBReader::readNurbsCurve()
+{
+    // Empty omits the body, and a body starts with the degree byte. A
+    // following geometry starts with a byte order, 0 or 1. Degree 0 is not a
+    // curve, so 0 starts a following geometry; 1 is also degree 1, so that
+    // body is parsed tentatively, and taken as empty only when it fails and
+    // a geometry header follows.
+    if (dis.size() == 0) {
+        return factory.createNurbsCurve(hasZ, hasM);
+    }
+    const unsigned char first = dis.peekByte(0);
+    if (first > 1) {
+        return readNurbsCurveBody();
+    }
+    if (first == 1) {
+        const unsigned char* mark = dis.buf;
+        const int order = dis.getOrder();
+        try {
+            return readNurbsCurveBody();
+        }
+        catch (const util::GEOSException&) {
+            dis.buf = mark;
+            dis.setOrder(order);
+            if (!isGeometryHeaderNext()) {
+                throw;
+            }
+        }
+        return factory.createNurbsCurve(hasZ, hasM);
+    }
+    if (isGeometryHeaderNext()) {
+        return factory.createNurbsCurve(hasZ, hasM);
+    }
+    throw ParseException("NURBSCURVE degree must be at least 1");
+}
+
+std::unique_ptr<NurbsCurve>
+WKBReader::readNurbsCurveBody()
+{
+    const int curveOrder = dis.getOrder();
+    auto readOrder = [this]() {
+        const unsigned char orderByte = dis.readByte();
+        if (orderByte == WKBConstants::wkbNDR) {
+            dis.setOrder(ByteOrderValues::ENDIAN_LITTLE);
+        }
+        else if (orderByte == WKBConstants::wkbXDR) {
+            dis.setOrder(ByteOrderValues::ENDIAN_BIG);
+        }
+        else {
+            throw ParseException("Invalid byte order in NURBSCURVE");
+        }
+    };
+
+    const int degree = dis.readByte();
+    // A point is at least a byte order, x, y and the weight flag; a knot is
+    // a byte order, a value and a multiplicity.
+    constexpr std::size_t minPointSize = 1 + 2 * sizeof(double) + 1;
+    constexpr std::size_t minKnotSize = 1 + sizeof(double) + 1;
+
+    const uint32_t numPoints = dis.readUnsigned();
+    if (numPoints > dis.size() / minPointSize) {
+        throw ParseException("Input buffer is smaller than requested object size");
+    }
+    std::vector<NurbsPoint> controlPoints(numPoints);
+    for (NurbsPoint& cp : controlPoints) {
+        // Weighted points are not cartesian, so they are not snapped to the
+        // precision model.
+        readOrder();
+        cp.weightedPoint.x = dis.readDouble();
+        cp.weightedPoint.y = dis.readDouble();
+        if (hasZ) {
+            cp.weightedPoint.z = dis.readDouble();
+        }
+        const unsigned char weightFlag = dis.readByte();
+        if (weightFlag == 1) {
+            cp.weight = dis.readDouble();
+        }
+        else if (weightFlag != 0) {
+            throw ParseException("NURBSCURVE weight flag must be 0 or 1");
+        }
+    }
+    dis.setOrder(curveOrder);
+
+    const uint32_t numKnots = dis.readUnsigned();
+    if (numKnots > dis.size() / minKnotSize) {
+        throw ParseException("Input buffer is smaller than requested object size");
+    }
+    std::vector<NurbsKnot> knots(numKnots);
+    for (NurbsKnot& knot : knots) {
+        readOrder();
+        knot.value = dis.readDouble();
+        knot.multiplicity = dis.readByte();
+    }
+    dis.setOrder(curveOrder);
+
+    double startM = 0.0;
+    double endM = 0.0;
+    if (hasM) {
+        startM = dis.readDouble();
+        endM = dis.readDouble();
+    }
+    return factory.createNurbsCurve(degree, std::move(controlPoints), std::move(knots),
+                                    hasZ, hasM, startM, endM);
 }
 
 std::unique_ptr<CompoundCurve>

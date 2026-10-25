@@ -40,6 +40,7 @@ class CoordinateXY;
 class CoordinateXYZM;
 class CoordinateSequence;
 class Curve;
+class NurbsCurve;
 class CompoundCurve;
 class Geometry;
 class GeometryCollection;
@@ -224,6 +225,11 @@ protected:
 
     void appendSimpleCurveTaggedText(
         const geom::SimpleCurve& lineString,
+        OrdinateSet outputOrdinates,
+        int level, Writer& writer) const;
+
+    void appendNurbsCurveTaggedText(
+        const geom::NurbsCurve& nurbs,
         OrdinateSet outputOrdinates,
         int level, Writer& writer) const;
 

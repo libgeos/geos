@@ -2122,6 +2122,11 @@ extern "C" {
     {
         return GEOSGeom_createEmptyCircularString_r(handle);
     }
+    geos::geom::Geometry*
+    GEOSGeom_createEmptyNurbsCurve(void)
+    {
+        return GEOSGeom_createEmptyNurbsCurve_r(handle);
+    }
 
     geos::geom::Geometry*
     GEOSGeom_createEmptyCompoundCurve(void)

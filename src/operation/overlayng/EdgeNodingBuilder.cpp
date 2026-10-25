@@ -217,6 +217,8 @@ EdgeNodingBuilder::add(const Geometry* g, uint8_t geomIndex)
         case GEOS_POINT:
         case GEOS_MULTIPOINT:
             return; // do nothing
+        case GEOS_NURBSCURVE:
+            throw util::UnsupportedOperationException("NURBS intersection is not implemented");
         default:
             throw util::IllegalArgumentException("Unexpected geometry type: " + g->getGeometryType());
             return; // do nothing
@@ -273,6 +275,10 @@ EdgeNodingBuilder::addPolygonRing(const Curve* ring, bool isHole, uint8_t geomIn
     if (isClippedCompletely(ring->getEnvelopeInternal()))
       return;
 
+    if (ring->getGeometryTypeId() == GEOS_NURBSCURVE) {
+        throw util::UnsupportedOperationException("NURBS intersection is not implemented");
+    }
+
     const auto type = ring->getGeometryTypeId();
 
     if (type == GEOS_COMPOUNDCURVE) {
@@ -285,6 +291,9 @@ EdgeNodingBuilder::addPolygonRing(const Curve* ring, bool isHole, uint8_t geomIn
         for (std::size_t i = 0; i < cc->getNumCurves(); i++) {
             const SimpleCurve* section = cc->getCurveN(i);
             if (section->getNumPoints() >= 2) {
+                if (section->getGeometryTypeId() == GEOS_NURBSCURVE) {
+                    throw util::UnsupportedOperationException("NURBS intersection is not implemented");
+                }
                 if (section->getGeometryTypeId() == GEOS_CIRCULARSTRING) {
                     const CircularString* cs = static_cast<const CircularString*>(section);
                     addCurvedEdge(cs->getSharedCoordinates(), cs->getArcs(), eso);
@@ -444,6 +453,10 @@ EdgeNodingBuilder::addSimpleCurve(const SimpleCurve* curve, uint8_t geomIndex)
 
     if (isClippedCompletely(curve->getEnvelopeInternal()))
         return;
+
+    if (curve->getGeometryTypeId() == GEOS_NURBSCURVE) {
+        throw util::UnsupportedOperationException("NURBS intersection is not implemented");
+    }
 
     if (curve->getGeometryTypeId() == GEOS_CIRCULARSTRING) {
         // TODO: Support CircularString in LineLimiter

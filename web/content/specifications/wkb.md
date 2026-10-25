@@ -213,6 +213,31 @@ WKBMultiSurface {
     uint32  numSurfaces;
     WKBSurface   surfaces[numSurfaces];
 }
+
+WKBNurbsCurve {
+    byte                byteOrder;
+    uint32              wkbType; // 21, 1021, 2021, or 3021
+    byte                degree; // the body is omitted when EMPTY
+    uint32              numControlPoints;
+    WKBNurbsPoint       controlPoints[numControlPoints];
+    uint32              numKnots;
+    WKBKnot             knots[numKnots];
+    double              startM; // only when wkbType is 2021 or 3021
+    double              endM;
+}
+
+WKBNurbsPoint {
+    byte    byteOrder;
+    double  weightedPoint[2 or 3]; // weight times the cartesian point
+    byte    hasWeight; // 0 or 1; all points have a weight or none
+    double  weight; // only when hasWeight is 1
+}
+
+WKBKnot {
+    byte    byteOrder;
+    double  value;
+    byte    multiplicity;
+}
 ```
 
 
