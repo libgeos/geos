@@ -22,6 +22,7 @@
 #include <geos/io/CheckOrdinatesFilter.h>
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/EllipticalCurve.h>
 #include <geos/geom/CompoundCurve.h>
 #include <geos/geom/CurvePolygon.h>
 #include <geos/geom/Point.h>
@@ -117,6 +118,7 @@ WKBWriter::write(const Geometry& g, std::ostream& os)
         case GEOS_LINESTRING:
         case GEOS_LINEARRING:
         case GEOS_CIRCULARSTRING: writeSimpleCurve(static_cast<const SimpleCurve&>(g)); break;
+        case GEOS_ELLIPTICALCURVE: writeEllipticalCurve(static_cast<const EllipticalCurve&>(g)); break;
         case GEOS_COMPOUNDCURVE: writeCompoundCurve(static_cast<const CompoundCurve&>(g)); break;
         case GEOS_POLYGON: writePolygon(static_cast<const Polygon&>(g)); break;
         case GEOS_CURVEPOLYGON: writeCurvePolygon(static_cast<const CurvePolygon&>(g)); break;
@@ -174,6 +176,64 @@ WKBWriter::writeSimpleCurve(const SimpleCurve& g)
 }
 
 void
+WKBWriter::writeDouble(double value)
+{
+    ByteOrderValues::putDouble(value, buf, byteOrder);
+    outStream->write(reinterpret_cast<char*>(buf), 8);
+}
+
+void
+WKBWriter::writeReferenceLocation(const AffinePlacement& loc)
+{
+    const bool hasZ = outputOrdinates.hasZ();
+
+    // Nested affine placement: own byte order, type 102 or 1102, raw doubles.
+    writeByteOrder();
+    int placementType = WKBConstants::wkbAffinePlacement;
+    if (hasZ) {
+        placementType += 1000;
+    }
+    writeInt(placementType);
+    writeDouble(loc.origin.x);
+    writeDouble(loc.origin.y);
+    if (hasZ) {
+        writeDouble(loc.origin.z);
+    }
+    writeInt(2);
+    writeDouble(loc.u.x);
+    writeDouble(loc.u.y);
+    if (hasZ) {
+        writeDouble(loc.u.z);
+    }
+    writeDouble(loc.v.x);
+    writeDouble(loc.v.y);
+    if (hasZ) {
+        writeDouble(loc.v.z);
+    }
+}
+
+void
+WKBWriter::writeEllipticalCurve(const EllipticalCurve& g)
+{
+    writeByteOrder();
+    writeGeometryType(WKBConstants::wkbEllipticalCurve, g.getSRID());
+    writeSRID(g.getSRID());
+
+    // Empty omits the body.
+    if (g.isEmpty()) {
+        return;
+    }
+    writeReferenceLocation(g.getReferenceLocation());
+    writeDouble(g.getUAxisLength());
+    writeDouble(g.getVAxisLength());
+    writeDouble(g.getStartAngle());
+    writeDouble(g.getEndAngle());
+    if (outputOrdinates.hasM()) {
+        writeDouble(g.getStartM());
+        writeDouble(g.getEndM());
+    }
+}
+void
 WKBWriter::writeCompoundCurve(const CompoundCurve& g)
 {
     writeByteOrder();
@@ -188,7 +248,11 @@ WKBWriter::writeCompoundCurve(const CompoundCurve& g)
 
     for (std::size_t i = 0; i < g.getNumCurves(); i++) {
         const SimpleCurve& section = *g.getCurveN(i);
-        writeSimpleCurve(section);
+        if (section.getGeometryTypeId() == GEOS_ELLIPTICALCURVE) {
+            writeEllipticalCurve(static_cast<const EllipticalCurve&>(section));
+        } else {
+            writeSimpleCurve(section);
+        }
     }
 
     includeSRID = orig_includeSRID;
@@ -428,6 +492,7 @@ WKBWriter::getWkbType(const Geometry& g) {
         case GEOS_LINESTRING:
         case GEOS_LINEARRING: return WKBConstants::wkbLineString;
         case GEOS_CIRCULARSTRING: return WKBConstants::wkbCircularString;
+        case GEOS_ELLIPTICALCURVE: return WKBConstants::wkbEllipticalCurve;
         case GEOS_COMPOUNDCURVE: return WKBConstants::wkbCompoundCurve;
         case GEOS_POLYGON: return WKBConstants::wkbPolygon;
         case GEOS_CURVEPOLYGON: return WKBConstants::wkbCurvePolygon;

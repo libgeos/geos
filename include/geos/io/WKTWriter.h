@@ -40,6 +40,8 @@ class CoordinateXY;
 class CoordinateXYZM;
 class CoordinateSequence;
 class Curve;
+class EllipticalCurve;
+struct AffinePlacement;
 class CompoundCurve;
 class Geometry;
 class GeometryCollection;
@@ -226,6 +228,16 @@ protected:
         const geom::SimpleCurve& lineString,
         OrdinateSet outputOrdinates,
         int level, Writer& writer) const;
+
+    void appendEllipticalCurveTaggedText(
+        const geom::EllipticalCurve& curve,
+        OrdinateSet outputOrdinates,
+        int level, Writer& writer) const;
+
+    /// REFERENCELOCATION AFFINEPLACEMENT [Z] (LOCATION, REFERENCEDIRECTIONS)
+    void appendReferenceLocationText(
+        const geom::AffinePlacement& location,
+        bool hasZ, Writer& writer) const;
 
     void appendCompoundCurveTaggedText(
         const geom::CompoundCurve& lineString,

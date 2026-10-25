@@ -213,6 +213,26 @@ WKBMultiSurface {
     uint32  numSurfaces;
     WKBSurface   surfaces[numSurfaces];
 }
+
+WKBEllipticalCurve {
+    byte                byteOrder;
+    uint32              wkbType; // 20, 1020, 2020, or 3020
+    WKBAffinePlacement  referenceLocation; // omitted when EMPTY
+    double              uAxisLength;
+    double              vAxisLength;
+    double              startAngle; // radians
+    double              endAngle; // radians
+    double              startM; // only when wkbType is 2020 or 3020
+    double              endM;
+}
+
+WKBAffinePlacement {
+    byte    byteOrder;
+    uint32  wkbType; // 102, or 1102 when Z
+    double  location[2 or 3];
+    uint32  numDirections; // 2
+    double  directions[numDirections][2 or 3];
+}
 ```
 
 

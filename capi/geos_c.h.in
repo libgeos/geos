@@ -270,6 +270,7 @@ enum GEOSGeomTypes {
     GEOS_CURVEPOLYGON,
     GEOS_MULTICURVE,
     GEOS_MULTISURFACE,
+    GEOS_ELLIPTICALCURVE,
 };
 
 /**
@@ -967,6 +968,10 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createCircularString_r(
 
 /** \see GEOSGeom_createEmptyCircularString */
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCircularString_r(
+    GEOSContextHandle_t handle);
+
+/** \see GEOSGeom_createEmptyEllipticalCurve */
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyEllipticalCurve_r(
     GEOSContextHandle_t handle);
 
 /** \see GEOSGeom_createCompoundCurve */
@@ -3079,6 +3084,13 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createCircularString(GEOSCoordSequence* s
 * \since 3.13
 */
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCircularString(void);
+
+/**
+* Creates an empty elliptical curve geometry.
+* \return A newly allocated elliptical curve geometry. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyEllipticalCurve(void);
 
 /**
 * Creates a CompoundCurve geometry.

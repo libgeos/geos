@@ -33,6 +33,8 @@ namespace geos {
 namespace geom {
 
 class CoordinateSequence;
+class EllipticalCurve;
+struct AffinePlacement;
 class CompoundCurve;
 class CurvePolygon;
 class Geometry;
@@ -223,6 +225,10 @@ private:
     void writeSimpleCurve(const geom::SimpleCurve& ls);
     // throws IOException
 
+    void writeEllipticalCurve(const geom::EllipticalCurve& curve);
+
+    void writeReferenceLocation(const geom::AffinePlacement& location);
+
     void writeCompoundCurve(const geom::CompoundCurve& curve);
 
     void writePolygon(const geom::Polygon& p);
@@ -250,6 +256,8 @@ private:
 
     void writeInt(int intValue);
     // throws IOException
+
+    void writeDouble(double value);
 
     OrdinateSet getOutputOrdinates(OrdinateSet ordinates);
 

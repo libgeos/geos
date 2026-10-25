@@ -25,6 +25,7 @@
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Location.h>
 #include <geos/geom/SimpleCurve.h>
+#include <geos/util/UnsupportedOperationException.h>
 
 using geos::geom::CoordinateXY;
 
@@ -87,6 +88,10 @@ RayCrossingCounter::locatePointInRing(const geom::CoordinateXY& point,
 
     for (std::size_t i = 0; i < ring.getNumCurves(); i++) {
         const geom::SimpleCurve* curve = ring.getCurveN(i);
+        if (curve->getGeometryTypeId() == geom::GEOS_ELLIPTICALCURVE) {
+            throw util::UnsupportedOperationException(
+                "Elliptical curve point location is not implemented");
+        }
         rcc.processSequence(*curve->getCoordinatesRO(), !curve->hasCurvedComponents());
     }
 

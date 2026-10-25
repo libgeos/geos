@@ -39,6 +39,8 @@ namespace geos {
 namespace geom {
 class Coordinate;
 class CircularString;
+struct AffinePlacement;
+class EllipticalCurve;
 class CompoundCurve;
 class CoordinateSequence;
 class Curve;
@@ -357,6 +359,20 @@ public:
     /// Construct a CircularString with a deep-copy of given argument
     std::unique_ptr<CircularString> createCircularString(
         const CoordinateSequence& coordinates) const;
+
+    /// Construct an empty elliptical curve
+    std::unique_ptr<EllipticalCurve> createEllipticalCurve(bool hasZ, bool hasM) const;
+
+    /// Construct an elliptical curve from its placement, axis lengths and
+    /// start and end angles in radians. When hasM is set, startM and endM
+    /// are the measures at the ends.
+    std::unique_ptr<EllipticalCurve> createEllipticalCurve(
+        const AffinePlacement& referenceLocation,
+        double uAxisLength, double vAxisLength,
+        double startAngle, double endAngle,
+        bool hasZ, bool hasM,
+        double startM = DoubleNotANumber,
+        double endM = DoubleNotANumber) const;
 
     /// Construct an EMPTY CompoundCurve
     std::unique_ptr<CompoundCurve> createCompoundCurve() const;
