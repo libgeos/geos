@@ -103,6 +103,10 @@ public:
 
     virtual bool isCurved() const = 0;
 
+    /// Append linearized points, omitting the start point.
+    virtual void addLinearizedPoints(CoordinateSequence& seq,
+                                     const algorithm::CurveToLineParams& params) const;
+
     bool isEmpty() const override;
 
     std::unique_ptr<SimpleCurve> clone() const;

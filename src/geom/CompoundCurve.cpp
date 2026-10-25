@@ -15,10 +15,9 @@
 #include <sstream>
 
 #include <geos/algorithm/Orientation.h>
-#include <geos/geom/CircularArc.h>
+#include <geos/geom/Clothoid.h>
 #include <geos/geom/CompoundCurve.h>
 #include <geos/geom/CoordinateFilter.h>
-#include <geos/geom/CircularString.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/operation/BoundaryOp.h>
 #include <geos/operation/split/SplitLinealAtPoint.h>
@@ -31,8 +30,9 @@ namespace geom {
 CompoundCurve::CompoundCurve(std::vector<std::unique_ptr<SimpleCurve>>&& p_curves,
                              const GeometryFactory& gf)
     : Curve(gf),
-      curves(std::move(p_curves)),
-      envelope(computeEnvelopeInternal()) {
+      curves(std::move(p_curves)) {
+    snapClothoidEndpoints();
+    envelope = computeEnvelopeInternal();
     validateConstruction();
 }
 
@@ -258,21 +258,11 @@ CompoundCurve::getLinearizedImpl(const algorithm::CurveToLineParams& params) con
 {
     auto seq = std::make_shared<CoordinateSequence>(0, hasZ(), hasM());
     for (const auto& curve : curves) {
-        const CoordinateSequence* curveSeq = curve->getCoordinatesRO();
-
         if (seq->isEmpty()) {
+            const CoordinateSequence* curveSeq = curve->getCoordinatesRO();
             seq->add(*curveSeq, static_cast<size_t>(0), 0);
         }
-
-        if (curve->isCurved()) {
-            const CircularString* cs = detail::down_cast<const CircularString*>(curve.get());
-
-            for (const auto& arc : cs->getArcs()) {
-                arc.addLinearizedPoints(*seq, params);
-            }
-        } else {
-            seq->add(*curveSeq, 1, curveSeq->size() - 1);
-        }
+        curve->addLinearizedPoints(*seq, params);
     }
     return getFactory()->createLineString(std::move(seq)).release();
 }
@@ -486,6 +476,37 @@ CompoundCurve::reverseInPlace()
     std::reverse(curves.begin(), curves.end());
     for (auto& curve: curves) {
         curve = curve->reverse();
+    }
+    snapClothoidEndpoints();
+}
+
+void
+CompoundCurve::snapClothoidEndpoints()
+{
+    // A clothoid's endpoints are evaluated, not stored, so they can miss the
+    // neighbor's coordinate by rounding. Keep the neighbor's coordinate.
+    for (std::size_t i = 1; i < curves.size(); i++) {
+        SimpleCurve& prev = *curves[i - 1];
+        SimpleCurve& next = *curves[i];
+        if (prev.isEmpty() || next.isEmpty()) {
+            continue;
+        }
+        if (next.getGeometryTypeId() == GEOS_CLOTHOID) {
+            static_cast<Clothoid&>(next).snapEndpoint(0, prev.getCoordinatesRO()->back<CoordinateXY>());
+        } else if (prev.getGeometryTypeId() == GEOS_CLOTHOID) {
+            static_cast<Clothoid&>(prev).snapEndpoint(1, next.getCoordinatesRO()->front<CoordinateXY>());
+        }
+    }
+    // The same rounding can keep a ring from closing.
+    if (curves.size() < 2 || curves.front()->isEmpty() || curves.back()->isEmpty()) {
+        return;
+    }
+    SimpleCurve& first = *curves.front();
+    SimpleCurve& last = *curves.back();
+    if (first.getGeometryTypeId() == GEOS_CLOTHOID) {
+        static_cast<Clothoid&>(first).snapEndpoint(0, last.getCoordinatesRO()->back<CoordinateXY>());
+    } else if (last.getGeometryTypeId() == GEOS_CLOTHOID) {
+        static_cast<Clothoid&>(last).snapEndpoint(1, first.getCoordinatesRO()->front<CoordinateXY>());
     }
 }
 

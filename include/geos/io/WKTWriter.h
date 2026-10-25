@@ -40,6 +40,7 @@ class CoordinateXY;
 class CoordinateXYZM;
 class CoordinateSequence;
 class Curve;
+class Clothoid;
 class CompoundCurve;
 class Geometry;
 class GeometryCollection;
@@ -224,6 +225,11 @@ protected:
 
     void appendSimpleCurveTaggedText(
         const geom::SimpleCurve& lineString,
+        OrdinateSet outputOrdinates,
+        int level, Writer& writer) const;
+
+    void appendClothoidTaggedText(
+        const geom::Clothoid& clothoid,
         OrdinateSet outputOrdinates,
         int level, Writer& writer) const;
 
