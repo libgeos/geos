@@ -37,6 +37,7 @@ class EllipticalCurve;
 class Clothoid;
 class SpiralCurve;
 struct AffinePlacement;
+class NurbsCurve;
 class CompoundCurve;
 class CurvePolygon;
 class Geometry;
@@ -234,6 +235,8 @@ private:
 
     void writeReferenceLocation(const geom::AffinePlacement& location);
 
+    void writeNurbsCurve(const geom::NurbsCurve& nurbs);
+
     void writeCompoundCurve(const geom::CompoundCurve& curve);
 
     void writePolygon(const geom::Polygon& p);
@@ -263,6 +266,8 @@ private:
     // throws IOException
 
     void writeDouble(double value);
+
+    void writeByte(unsigned char value);
 
     OrdinateSet getOutputOrdinates(OrdinateSet ordinates);
 

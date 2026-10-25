@@ -26,6 +26,7 @@
 #include <geos/geom/EllipticalCurve.h>
 #include <geos/geom/Clothoid.h>
 #include <geos/geom/SpiralCurve.h>
+#include <geos/geom/NurbsCurve.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequenceFilter.h>
 #include <geos/geom/CompoundCurve.h>
@@ -245,6 +246,7 @@ WKTWriter::appendGeometryTaggedText(const Geometry& geometry,
         case GEOS_ELLIPTICALCURVE: appendEllipticalCurveTaggedText(static_cast<const EllipticalCurve&>(geometry), outputOrdinates, level, writer); break;
         case GEOS_CLOTHOID: appendClothoidTaggedText(static_cast<const Clothoid&>(geometry), outputOrdinates, level, writer); break;
         case GEOS_SPIRALCURVE: appendSpiralCurveTaggedText(static_cast<const SpiralCurve&>(geometry), outputOrdinates, level, writer); break;
+        case GEOS_NURBSCURVE: appendNurbsCurveTaggedText(static_cast<const NurbsCurve&>(geometry), outputOrdinates, level, writer); break;
         case GEOS_COMPOUNDCURVE: appendCompoundCurveTaggedText(static_cast<const CompoundCurve&>(geometry), outputOrdinates, level, writer); break;
         case GEOS_CURVEPOLYGON:
         case GEOS_POLYGON:    appendSurfaceTaggedText(static_cast<const Surface&>(geometry), outputOrdinates, level, writer); break;
@@ -327,6 +329,8 @@ WKTWriter::appendCurveText(const Curve& curve, OrdinateSet outputOrdinates, int 
         appendClothoidTaggedText(static_cast<const Clothoid&>(curve), outputOrdinates, level, writer);
     } else if (curve.getGeometryTypeId() == GEOS_SPIRALCURVE) {
         appendSpiralCurveTaggedText(static_cast<const SpiralCurve&>(curve), outputOrdinates, level, writer);
+    } else if (curve.getGeometryTypeId() == GEOS_NURBSCURVE) {
+        appendNurbsCurveTaggedText(static_cast<const NurbsCurve&>(curve), outputOrdinates, level, writer);
     } else {
         appendSimpleCurveText(static_cast<const SimpleCurve&>(curve), outputOrdinates, level, false, writer);
     }
@@ -346,6 +350,8 @@ WKTWriter::appendSimpleCurveText(const SimpleCurve& curve, OrdinateSet outputOrd
         appendClothoidTaggedText(static_cast<const Clothoid&>(curve), outputOrdinates, level, writer);
     } else if (curve.getGeometryTypeId() == GEOS_SPIRALCURVE) {
         appendSpiralCurveTaggedText(static_cast<const SpiralCurve&>(curve), outputOrdinates, level, writer);
+    } else if (curve.getGeometryTypeId() == GEOS_NURBSCURVE) {
+        appendNurbsCurveTaggedText(static_cast<const NurbsCurve&>(curve), outputOrdinates, level, writer);
     } else {
         appendSequenceText(*curve.getCoordinatesRO(), outputOrdinates, level, false, writer);
     }
@@ -504,6 +510,80 @@ WKTWriter::appendClothoidTaggedText(const Clothoid& clothoid, OrdinateSet output
         writer.write(writeNumber(clothoid.getStartM()));
         writer.write(", ENDM ");
         writer.write(writeNumber(clothoid.getEndM()));
+    }
+    writer.write(")");
+}
+
+void
+WKTWriter::appendNurbsCurveTaggedText(const NurbsCurve& nurbs, OrdinateSet outputOrdinates, int level, Writer& writer) const
+{
+    (void) level;
+    // The body tags its points with Z, and the reader matches them against
+    // this tag rather than counting ordinates, so the tag is written in
+    // full even in old 3D style.
+    writer.write("NURBSCURVE ");
+    if (outputOrdinates.hasZ()) {
+        writer.write("Z");
+    }
+    if (outputOrdinates.hasM()) {
+        writer.write("M");
+    }
+    if (outputOrdinates.hasZ() || outputOrdinates.hasM()) {
+        writer.write(" ");
+    }
+    if (nurbs.isEmpty()) {
+        writer.write("EMPTY");
+        return;
+    }
+
+    const bool hasZ = outputOrdinates.hasZ();
+    const char* zTag = hasZ ? "Z " : "";
+
+    writer.write("(DEGREE ");
+    writer.write(std::to_string(nurbs.getDegree()));
+    writer.write(", CONTROLPOINTS ");
+    writer.write(zTag);
+    writer.write("(");
+    bool first = true;
+    for (const NurbsPoint& cp : nurbs.getControlPoints()) {
+        if (!first) {
+            writer.write(", ");
+        }
+        first = false;
+        writer.write("NURBSPOINT (WEIGHTEDPOINT ");
+        writer.write(zTag);
+        writer.write("(");
+        writer.write(writeNumber(cp.weightedPoint.x));
+        writer.write(" ");
+        writer.write(writeNumber(cp.weightedPoint.y));
+        if (hasZ) {
+            writer.write(" ");
+            writer.write(writeNumber(cp.weightedPoint.z));
+        }
+        // The WKT grammar always has a weight; an absent one is 1.
+        writer.write("), WEIGHT ");
+        writer.write(writeNumber(cp.effectiveWeight()));
+        writer.write(")");
+    }
+    writer.write("), KNOTS (");
+    first = true;
+    for (const NurbsKnot& knot : nurbs.getKnots()) {
+        if (!first) {
+            writer.write(", ");
+        }
+        first = false;
+        writer.write("KNOT (VALUE ");
+        writer.write(writeNumber(knot.value));
+        writer.write(", MULTIPLICITY ");
+        writer.write(std::to_string(knot.multiplicity));
+        writer.write(")");
+    }
+    writer.write(")");
+    if (outputOrdinates.hasM()) {
+        writer.write(", STARTM ");
+        writer.write(writeNumber(nurbs.getStartM()));
+        writer.write(", ENDM ");
+        writer.write(writeNumber(nurbs.getEndM()));
     }
     writer.write(")");
 }

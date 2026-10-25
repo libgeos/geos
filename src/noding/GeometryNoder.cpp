@@ -91,6 +91,10 @@ public:
             throw util::UnsupportedOperationException("Spiral curve noding is not implemented");
         }
 
+        if (g->getGeometryTypeId() == geom::GEOS_NURBSCURVE) {
+            throw util::UnsupportedOperationException("NURBS noding is not implemented");
+        }
+
         if(const auto* ls = dynamic_cast<const geom::LineString*>(g)) {
             auto coord = ls->getSharedCoordinates();
             auto ss = std::make_unique<NodedSegmentString>(coord, _constructZ, _constructM, ls);

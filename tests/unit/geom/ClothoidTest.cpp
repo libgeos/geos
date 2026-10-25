@@ -76,7 +76,7 @@ void object::test<1>()
 {
     set_test_name("type id");
 
-    ensure_equals(static_cast<int>(geos::geom::GEOS_CLOTHOID), 13);
+    ensure_equals(static_cast<int>(geos::geom::GEOS_CLOTHOID), 15);
     auto empty = factory_->createClothoid(false, false);
     ensure_equals(empty->getGeometryTypeId(), geos::geom::GEOS_CLOTHOID);
     ensure_equals(empty->getGeometryType(), "Clothoid");

@@ -45,6 +45,7 @@ class EllipticalCurve;
 class Clothoid;
 class SpiralCurve;
 struct AffinePlacement;
+class NurbsCurve;
 class CompoundCurve;
 class CurvePolygon;
 class Geometry;
@@ -183,6 +184,13 @@ private:
     /// Returns false, consuming nothing, when the body is omitted because
     /// the curve is empty.
     bool readReferenceLocation(geom::AffinePlacement& location, const std::string& typeName);
+
+    std::unique_ptr<geom::NurbsCurve> readNurbsCurve();
+
+    std::unique_ptr<geom::NurbsCurve> readNurbsCurveBody();
+
+    /// True when a geometry header follows: a byte order and a known type.
+    bool isGeometryHeaderNext() const;
 
     std::unique_ptr<geom::CompoundCurve> readCompoundCurve();
 

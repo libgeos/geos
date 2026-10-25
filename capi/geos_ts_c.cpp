@@ -40,6 +40,7 @@
 #include <geos/geom/EllipticalCurve.h>
 #include <geos/geom/Clothoid.h>
 #include <geos/geom/SpiralCurve.h>
+#include <geos/geom/NurbsCurve.h>
 #include <geos/geom/CompoundCurve.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -491,6 +492,7 @@ isCurvedType (geos::geom::GeometryTypeId typ) {
         typ == geos::geom::GeometryTypeId::GEOS_ELLIPTICALCURVE ||
         typ == geos::geom::GeometryTypeId::GEOS_CLOTHOID ||
         typ == geos::geom::GeometryTypeId::GEOS_SPIRALCURVE ||
+        typ == geos::geom::GeometryTypeId::GEOS_NURBSCURVE ||
         typ == geos::geom::GeometryTypeId::GEOS_COMPOUNDCURVE ||
         typ == geos::geom::GeometryTypeId::GEOS_CURVEPOLYGON ||
         typ == geos::geom::GeometryTypeId::GEOS_MULTICURVE ||
@@ -3983,6 +3985,16 @@ extern "C" {
             const GeometryFactory* gf = handle->geomFactory;
 
             return gf->createSpiralCurve(false, false).release();
+        });
+    }
+    Geometry*
+    GEOSGeom_createEmptyNurbsCurve_r(GEOSContextHandle_t extHandle)
+    {
+        return execute(extHandle, [&]() {
+            GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+            const GeometryFactory* gf = handle->geomFactory;
+
+            return gf->createNurbsCurve(false, false).release();
         });
     }
 

@@ -223,6 +223,8 @@ EdgeNodingBuilder::add(const Geometry* g, uint8_t geomIndex)
             throw util::UnsupportedOperationException("Clothoid intersection is not implemented");
         case GEOS_SPIRALCURVE:
             throw util::UnsupportedOperationException("Spiral curve intersection is not implemented");
+        case GEOS_NURBSCURVE:
+            throw util::UnsupportedOperationException("NURBS intersection is not implemented");
         default:
             throw util::IllegalArgumentException("Unexpected geometry type: " + g->getGeometryType());
             return; // do nothing
@@ -289,6 +291,10 @@ EdgeNodingBuilder::addPolygonRing(const Curve* ring, bool isHole, uint8_t geomIn
         throw util::UnsupportedOperationException("Spiral curve intersection is not implemented");
     }
 
+    if (ring->getGeometryTypeId() == GEOS_NURBSCURVE) {
+        throw util::UnsupportedOperationException("NURBS intersection is not implemented");
+    }
+
     const auto type = ring->getGeometryTypeId();
 
     if (type == GEOS_COMPOUNDCURVE) {
@@ -309,6 +315,9 @@ EdgeNodingBuilder::addPolygonRing(const Curve* ring, bool isHole, uint8_t geomIn
                 }
                 if (section->getGeometryTypeId() == GEOS_SPIRALCURVE) {
                     throw util::UnsupportedOperationException("Spiral curve intersection is not implemented");
+                }
+                if (section->getGeometryTypeId() == GEOS_NURBSCURVE) {
+                    throw util::UnsupportedOperationException("NURBS intersection is not implemented");
                 }
                 if (section->getGeometryTypeId() == GEOS_CIRCULARSTRING) {
                     const CircularString* cs = static_cast<const CircularString*>(section);
@@ -478,6 +487,10 @@ EdgeNodingBuilder::addSimpleCurve(const SimpleCurve* curve, uint8_t geomIndex)
     }
     if (curve->getGeometryTypeId() == GEOS_SPIRALCURVE) {
         throw util::UnsupportedOperationException("Spiral curve intersection is not implemented");
+    }
+
+    if (curve->getGeometryTypeId() == GEOS_NURBSCURVE) {
+        throw util::UnsupportedOperationException("NURBS intersection is not implemented");
     }
 
     if (curve->getGeometryTypeId() == GEOS_CIRCULARSTRING) {

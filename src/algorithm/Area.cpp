@@ -139,6 +139,10 @@ Area::ofClosedCurve(const geom::Curve& ring) {
             throw util::UnsupportedOperationException("Spiral curve area is not implemented");
         }
 
+        if (section.getGeometryTypeId() == geom::GEOS_NURBSCURVE) {
+            throw util::UnsupportedOperationException("NURBS area is not implemented");
+        }
+
         if (section.isCurved()) {
             const auto* cs = detail::down_cast<const geom::CircularString*>(&section);
 

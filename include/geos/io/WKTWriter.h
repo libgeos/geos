@@ -44,6 +44,7 @@ class EllipticalCurve;
 class Clothoid;
 class SpiralCurve;
 struct AffinePlacement;
+class NurbsCurve;
 class CompoundCurve;
 class Geometry;
 class GeometryCollection;
@@ -250,6 +251,11 @@ protected:
     void appendReferenceLocationText(
         const geom::AffinePlacement& location,
         bool hasZ, Writer& writer) const;
+
+    void appendNurbsCurveTaggedText(
+        const geom::NurbsCurve& nurbs,
+        OrdinateSet outputOrdinates,
+        int level, Writer& writer) const;
 
     void appendCompoundCurveTaggedText(
         const geom::CompoundCurve& lineString,

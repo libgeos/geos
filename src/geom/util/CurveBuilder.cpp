@@ -46,6 +46,10 @@ CurveBuilder::add(const Curve& geom)
         throw geos::util::UnsupportedOperationException("Spiral curves are not supported");
     }
 
+    if (geom.getGeometryTypeId() == GEOS_NURBSCURVE) {
+        throw geos::util::UnsupportedOperationException("NURBS curves are not supported");
+    }
+
     if (geom.getGeometryTypeId() == GEOS_COMPOUNDCURVE) {
         const CompoundCurve& cc = static_cast<const CompoundCurve&>(geom);
         for (std::size_t i = 0; i < cc.getNumCurves(); i++) {

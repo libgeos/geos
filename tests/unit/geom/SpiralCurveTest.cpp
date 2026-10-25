@@ -112,7 +112,7 @@ void object::test<1>()
 {
     set_test_name("type id, names and empty");
 
-    ensure_equals(static_cast<int>(geos::geom::GEOS_SPIRALCURVE), 14);
+    ensure_equals(static_cast<int>(geos::geom::GEOS_SPIRALCURVE), 16);
     auto empty = factory_->createSpiralCurve(false, false);
     ensure(empty->isEmpty());
     ensure_equals(empty->getGeometryType(), std::string("SpiralCurve"));

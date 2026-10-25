@@ -377,6 +377,9 @@ DistanceOp::computeMinDistanceLines(
         if (line0->getGeometryTypeId() == GEOS_SPIRALCURVE) {
             throw util::UnsupportedOperationException("Spiral curve distance is not implemented");
         }
+        if (line0->getGeometryTypeId() == GEOS_NURBSCURVE) {
+            throw util::UnsupportedOperationException("NURBS distance is not implemented");
+        }
         const bool isCurved0 = line0->getGeometryTypeId() == GEOS_CIRCULARSTRING;
 
         for(const SimpleCurve* line1 : lines1) {
@@ -388,6 +391,9 @@ DistanceOp::computeMinDistanceLines(
             }
             if (line1->getGeometryTypeId() == GEOS_SPIRALCURVE) {
                 throw util::UnsupportedOperationException("Spiral curve distance is not implemented");
+            }
+            if (line1->getGeometryTypeId() == GEOS_NURBSCURVE) {
+                throw util::UnsupportedOperationException("NURBS distance is not implemented");
             }
             const bool isCurved1 = line1->getGeometryTypeId() == GEOS_CIRCULARSTRING;
 
@@ -475,6 +481,9 @@ DistanceOp::computeMinDistanceLinesPoints(
             }
             if (sc->getGeometryTypeId() == GEOS_SPIRALCURVE) {
                 throw util::UnsupportedOperationException("Spiral curve distance is not implemented");
+            }
+            if (sc->getGeometryTypeId() == GEOS_NURBSCURVE) {
+                throw util::UnsupportedOperationException("NURBS distance is not implemented");
             }
             if (sc->getGeometryTypeId() == GEOS_CIRCULARSTRING) {
                 const CircularString* cs = detail::down_cast<const CircularString*>(sc);

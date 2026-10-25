@@ -271,6 +271,7 @@ enum GEOSGeomTypes {
     GEOS_MULTICURVE,
     GEOS_MULTISURFACE,
     GEOS_ELLIPTICALCURVE,
+    GEOS_NURBSCURVE,
     GEOS_CLOTHOID,
     GEOS_SPIRALCURVE,
 };
@@ -982,6 +983,10 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyClothoid_r(
 
 /** \see GEOSGeom_createEmptySpiralCurve */
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptySpiralCurve_r(
+    GEOSContextHandle_t handle);
+
+/** \see GEOSGeom_createEmptyNurbsCurve */
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyNurbsCurve_r(
     GEOSContextHandle_t handle);
 
 /** \see GEOSGeom_createCompoundCurve */
@@ -3115,6 +3120,13 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyClothoid(void);
 * Caller is responsible for freeing with GEOSGeom_destroy().
 */
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptySpiralCurve(void);
+
+/**
+* Creates an empty NURBS curve geometry.
+* \return A newly allocated NURBS curve geometry. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyNurbsCurve(void);
 
 /**
 * Creates a CompoundCurve geometry.
