@@ -20,7 +20,10 @@
 
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <algorithm/ClothoidMath.h>
 #include <geos/geom/CircularString.h>
+#include <geos/geom/Clothoid.h>
+#include <geos/geom/SpiralCurve.h>
 #include <geos/geom/CurvePolygon.h>
 #include <geos/geom/CompoundCurve.h>
 #include <geos/geom/GeometryFactory.h>
@@ -375,6 +378,8 @@ GeometryFactory::createEmptyGeometry(GeometryTypeId type, bool hasZ, bool hasM) 
         case GEOS_MULTIPOLYGON: return createMultiPolygon();
         case GEOS_GEOMETRYCOLLECTION: return createGeometryCollection();
         case GEOS_CIRCULARSTRING: return createCircularString(hasZ, hasM);
+        case GEOS_CLOTHOID: return createClothoid(hasZ, hasM);
+        case GEOS_SPIRALCURVE: return createSpiralCurve(hasZ, hasM);
         case GEOS_COMPOUNDCURVE: return createCompoundCurve();
         case GEOS_CURVEPOLYGON: return createCurvePolygon(hasZ, hasM);
         case GEOS_MULTICURVE: return createMultiCurve();
@@ -724,6 +729,108 @@ GeometryFactory::createCircularString(bool hasZ, bool hasM) const
     return createCircularString(std::move(cs));
 }
 
+std::unique_ptr<Clothoid>
+GeometryFactory::createClothoid(bool hasZ, bool hasM) const
+{
+    return std::unique_ptr<Clothoid>(new Clothoid(hasZ, hasM, *this));
+}
+
+std::unique_ptr<Clothoid>
+GeometryFactory::createClothoid(
+    const ClothoidReferenceLocation& referenceLocation,
+    double scaleFactor,
+    double startDistance,
+    double endDistance,
+    bool hasZ, bool hasM,
+    double startM, double endM) const
+{
+    return std::unique_ptr<Clothoid>(new Clothoid(
+        referenceLocation, scaleFactor, startDistance, endDistance,
+        hasZ, hasM, startM, endM, *this));
+}
+
+std::unique_ptr<Clothoid>
+GeometryFactory::createClothoid(
+    const CoordinateXYZM& start,
+    bool hasZ, bool hasM,
+    double theta0, double k0, double k1, double length,
+    double endM) const
+{
+    if (!std::isfinite(start.x) || !std::isfinite(start.y) || !std::isfinite(theta0)
+            || !std::isfinite(k0) || !std::isfinite(k1) || !std::isfinite(length)
+            || !(length > 0.0)
+            || (hasZ && !std::isfinite(start.z))
+            || (hasM && (!std::isfinite(start.m) || !std::isfinite(endM)))) {
+        throw geos::util::IllegalArgumentException(
+            "Clothoid pose, curvatures, and length must be finite and length must be positive");
+    }
+    const double rate = (k1 - k0) / length;
+    if (!(rate != 0.0) || !std::isfinite(rate)) {
+        throw geos::util::IllegalArgumentException(
+            "Constant curvature is not a clothoid");
+    }
+
+    // Curvature increases along the constructive curve. Decreasing curvature
+    // is that curve reflected, with distances still running forward.
+    const bool reflected = rate < 0.0;
+    const double direction = reflected ? -1.0 : 1.0;
+    const double a2 = 1.0 / std::abs(rate);
+    const double scale = std::sqrt(a2);
+    if (!std::isfinite(scale)
+            || !(scale >= algorithm::clothoid::MIN_ABS_SCALE)
+            || !(scale <= algorithm::clothoid::MAX_ABS_SCALE)) {
+        throw geos::util::IllegalArgumentException(
+            "Clothoid scale factor must be finite and non-zero");
+    }
+    const double t0 = k0 * a2 * direction;
+    const double t1 = k1 * a2 * direction;
+
+    const CoordinateXY offset = algorithm::clothoid::constructiveOffset(t0, scale);
+    // alpha = theta0 -/+ the constructive heading at t0, which can be large.
+    double cosDt = 0.0;
+    double sinDt = 0.0;
+    algorithm::clothoid::halfSquarePhase(t0, scale, cosDt, sinDt);
+    const double cos0 = std::cos(theta0);
+    const double sin0 = std::sin(theta0);
+    // cos and sin of the one reduced angle keep the direction unit length to
+    // an ulp, which the similarity length scale * |t1 - t0| relies on.
+    const double alpha = std::atan2(sin0 * cosDt + (reflected ? cos0 * sinDt : -cos0 * sinDt),
+                                    cos0 * cosDt + (reflected ? -sin0 * sinDt : sin0 * sinDt));
+    const double c = std::cos(alpha);
+    const double s = std::sin(alpha);
+
+    ClothoidReferenceLocation location;
+    location.u = Coordinate(c, s, 0.0);
+    location.v = Coordinate(reflected ? s : -s, reflected ? -c : c, 0.0);
+    location.origin = Coordinate(
+                          start.x - offset.x * location.u.x - offset.y * location.v.x,
+                          start.y - offset.x * location.u.y - offset.y * location.v.y,
+                          hasZ ? start.z : 0.0);
+
+    const double startM = hasM ? start.m : 0.0;
+    const double storedEndM = hasM ? endM : 0.0;
+    return createClothoid(location, scale, t0, t1, hasZ, hasM, startM, storedEndM);
+}
+
+std::unique_ptr<SpiralCurve>
+GeometryFactory::createSpiralCurve(bool hasZ, bool hasM) const
+{
+    return std::unique_ptr<SpiralCurve>(new SpiralCurve(hasZ, hasM, *this));
+}
+
+std::unique_ptr<SpiralCurve>
+GeometryFactory::createSpiralCurve(
+    const AffinePlacement& referenceLocation,
+    double length, double startCurvature, double endCurvature,
+    SpiralType spiralType,
+    bool hasZ, bool hasM,
+    double startM, double endM) const
+{
+    return std::unique_ptr<SpiralCurve>(new SpiralCurve(
+        referenceLocation, length, startCurvature, endCurvature,
+        spiralType, hasZ, hasM, startM, endM, *this));
+}
+
 /*public*/
 std::unique_ptr<LineString>
 GeometryFactory::createLineString(const LineString& ls) const
@@ -840,6 +947,8 @@ GeometryFactory::createEmpty(GeometryTypeId typeId) const
         case GEOS_LINESTRING: return createLineString();
         case GEOS_POLYGON: return createPolygon();
         case GEOS_CIRCULARSTRING: return createCircularString(false, false);
+        case GEOS_CLOTHOID: return createClothoid(false, false);
+        case GEOS_SPIRALCURVE: return createSpiralCurve(false, false);
         case GEOS_COMPOUNDCURVE: return createCompoundCurve();
         case GEOS_CURVEPOLYGON: return createCurvePolygon(false, false);
         case GEOS_MULTIPOINT: return createMultiPoint();
@@ -879,6 +988,8 @@ GeometryFactory::createMulti(std::unique_ptr<Geometry> && geom) const
             return gf->createMultiPolygon(std::move(subgeoms));
         case GEOS_CIRCULARSTRING:
         case GEOS_COMPOUNDCURVE:
+        case GEOS_CLOTHOID:
+        case GEOS_SPIRALCURVE:
             return gf->createMultiCurve(std::move(subgeoms));
         case GEOS_CURVEPOLYGON:
             return gf->createMultiSurface(std::move(subgeoms));
@@ -911,7 +1022,9 @@ GeometryTypeId commonType(const T& geoms) {
     switch(geoms[0]->getGeometryTypeId()) {
         case GEOS_POINT: return GEOS_MULTIPOINT;
         case GEOS_COMPOUNDCURVE:
-        case GEOS_CIRCULARSTRING: return GEOS_MULTICURVE;
+        case GEOS_CIRCULARSTRING:
+        case GEOS_CLOTHOID:
+        case GEOS_SPIRALCURVE: return GEOS_MULTICURVE;
         case GEOS_LINEARRING:
         case GEOS_LINESTRING: return curvedType ? GEOS_MULTICURVE : GEOS_MULTILINESTRING;
         case GEOS_CURVEPOLYGON: return GEOS_MULTISURFACE;
@@ -998,7 +1111,8 @@ GeometryFactory::buildGeometry(std::vector<std::unique_ptr<Curve>> && geoms) con
 
     const bool hasCurves = std::any_of(geoms.begin(), geoms.end(), [](const auto& geom) {
         const auto typeId = geom->getGeometryTypeId();
-        return typeId == GEOS_COMPOUNDCURVE || typeId == GEOS_CIRCULARSTRING;
+        return typeId == GEOS_COMPOUNDCURVE || typeId == GEOS_CIRCULARSTRING
+            || typeId == GEOS_CLOTHOID || typeId == GEOS_SPIRALCURVE;
     });
 
     if (hasCurves) {

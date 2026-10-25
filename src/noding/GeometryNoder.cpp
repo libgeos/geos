@@ -40,6 +40,7 @@
 #include <geos/noding/SimpleNoder.h>
 
 #include <geos/util/Assert.h>
+#include <geos/util/UnsupportedOperationException.h>
 
 #include <memory> // for unique_ptr
 #include <set>
@@ -78,6 +79,13 @@ public:
     {
         if (g->isEmpty()) {
             return;
+        }
+
+        if (g->getGeometryTypeId() == geom::GEOS_CLOTHOID) {
+            throw util::UnsupportedOperationException("Clothoid noding is not implemented");
+        }
+        if (g->getGeometryTypeId() == geom::GEOS_SPIRALCURVE) {
+            throw util::UnsupportedOperationException("Spiral curve noding is not implemented");
         }
 
         if(const auto* ls = dynamic_cast<const geom::LineString*>(g)) {

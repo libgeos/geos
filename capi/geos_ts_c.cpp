@@ -37,6 +37,8 @@
 #include <geos/coverage/CoverageUnion.h>
 #include <geos/coverage/CoverageValidator.h>
 #include <geos/geom/CircularString.h>
+#include <geos/geom/Clothoid.h>
+#include <geos/geom/SpiralCurve.h>
 #include <geos/geom/CompoundCurve.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -485,6 +487,8 @@ private:
 static bool
 isCurvedType (geos::geom::GeometryTypeId typ) {
     return typ == geos::geom::GeometryTypeId::GEOS_CIRCULARSTRING ||
+        typ == geos::geom::GeometryTypeId::GEOS_CLOTHOID ||
+        typ == geos::geom::GeometryTypeId::GEOS_SPIRALCURVE ||
         typ == geos::geom::GeometryTypeId::GEOS_COMPOUNDCURVE ||
         typ == geos::geom::GeometryTypeId::GEOS_CURVEPOLYGON ||
         typ == geos::geom::GeometryTypeId::GEOS_MULTICURVE ||
@@ -3945,6 +3949,28 @@ extern "C" {
             const GeometryFactory* gf = handle->geomFactory;
 
             return gf->createCircularString(false, false).release();
+        });
+    }
+
+    Geometry*
+    GEOSGeom_createEmptyClothoid_r(GEOSContextHandle_t extHandle)
+    {
+        return execute(extHandle, [&]() {
+            GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+            const GeometryFactory* gf = handle->geomFactory;
+
+            return gf->createClothoid(false, false).release();
+        });
+    }
+
+    Geometry*
+    GEOSGeom_createEmptySpiralCurve_r(GEOSContextHandle_t extHandle)
+    {
+        return execute(extHandle, [&]() {
+            GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+            const GeometryFactory* gf = handle->geomFactory;
+
+            return gf->createSpiralCurve(false, false).release();
         });
     }
 

@@ -368,9 +368,21 @@ DistanceOp::computeMinDistanceLines(
     std::array<GeometryLocation, 2> & locGeom)
 {
     for(const SimpleCurve* line0 : lines0) {
+        if (line0->getGeometryTypeId() == GEOS_CLOTHOID) {
+            throw util::UnsupportedOperationException("Clothoid distance is not implemented");
+        }
+        if (line0->getGeometryTypeId() == GEOS_SPIRALCURVE) {
+            throw util::UnsupportedOperationException("Spiral curve distance is not implemented");
+        }
         const bool isCurved0 = line0->getGeometryTypeId() == GEOS_CIRCULARSTRING;
 
         for(const SimpleCurve* line1 : lines1) {
+            if (line1->getGeometryTypeId() == GEOS_CLOTHOID) {
+                throw util::UnsupportedOperationException("Clothoid distance is not implemented");
+            }
+            if (line1->getGeometryTypeId() == GEOS_SPIRALCURVE) {
+                throw util::UnsupportedOperationException("Spiral curve distance is not implemented");
+            }
             const bool isCurved1 = line1->getGeometryTypeId() == GEOS_CIRCULARSTRING;
 
             if (line0->isEmpty() || line1->isEmpty())
@@ -449,6 +461,12 @@ DistanceOp::computeMinDistanceLinesPoints(
             if (sc->isEmpty() || pt->isEmpty())
                 continue;
 
+            if (sc->getGeometryTypeId() == GEOS_CLOTHOID) {
+                throw util::UnsupportedOperationException("Clothoid distance is not implemented");
+            }
+            if (sc->getGeometryTypeId() == GEOS_SPIRALCURVE) {
+                throw util::UnsupportedOperationException("Spiral curve distance is not implemented");
+            }
             if (sc->getGeometryTypeId() == GEOS_CIRCULARSTRING) {
                 const CircularString* cs = detail::down_cast<const CircularString*>(sc);
                 computeMinDistance(cs, pt, locGeom);

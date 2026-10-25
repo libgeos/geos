@@ -49,7 +49,8 @@ SimpleCurveExtracter::filter_ro(const Geometry* geom)
 
     const auto typ = geom->getGeometryTypeId();
 
-    if (typ == GEOS_LINEARRING || typ == GEOS_LINESTRING || typ == GEOS_CIRCULARSTRING) {
+    if (typ == GEOS_LINEARRING || typ == GEOS_LINESTRING || typ == GEOS_CIRCULARSTRING
+            || typ == GEOS_CLOTHOID || typ == GEOS_SPIRALCURVE) {
         comps.push_back(detail::down_cast<const SimpleCurve*>(geom));
     }
 

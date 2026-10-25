@@ -29,6 +29,7 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Polygon.h>
 #include <geos/util/Interrupt.h>
+#include <geos/util/UnsupportedOperationException.h>
 // std
 #include <vector>
 
@@ -112,6 +113,12 @@ Polygonizer::add(const SimpleCurve* line)
         graph.reset(new PolygonizeGraph(line->getFactory()));
     }
 
+    if (line->getGeometryTypeId() == GEOS_CLOTHOID) {
+        throw util::UnsupportedOperationException("Clothoid polygonize is not implemented");
+    }
+    if (line->getGeometryTypeId() == GEOS_SPIRALCURVE) {
+        throw util::UnsupportedOperationException("Spiral curve polygonize is not implemented");
+    }
     if (line->getGeometryTypeId() == GEOS_CIRCULARSTRING) {
         graph->addEdge(detail::down_cast<const CircularString*>(line));
     } else {

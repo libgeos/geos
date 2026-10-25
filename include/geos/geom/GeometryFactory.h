@@ -28,6 +28,7 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/Polygon.h>
 #include <geos/util/IllegalArgumentException.h>
+#include <geos/constants.h>
 #include <geos/export.h>
 
 #include <vector>
@@ -39,6 +40,11 @@ namespace geos {
 namespace geom {
 class Coordinate;
 class CircularString;
+struct ClothoidReferenceLocation;
+class Clothoid;
+struct AffinePlacement;
+class SpiralCurve;
+enum class SpiralType : int;
 class CompoundCurve;
 class CoordinateSequence;
 class Curve;
@@ -357,6 +363,40 @@ public:
     /// Construct a CircularString with a deep-copy of given argument
     std::unique_ptr<CircularString> createCircularString(
         const CoordinateSequence& coordinates) const;
+
+    /// Construct an empty clothoid
+    std::unique_ptr<Clothoid> createClothoid(bool hasZ, bool hasM) const;
+
+    /// Construct a clothoid from an affine placement and constructive distances
+    std::unique_ptr<Clothoid> createClothoid(
+        const ClothoidReferenceLocation& referenceLocation,
+        double scaleFactor,
+        double startDistance,
+        double endDistance,
+        bool hasZ, bool hasM,
+        double startM, double endM) const;
+
+    /// Construct a clothoid from an arc-length pose. Constant curvature is rejected.
+    /// When hasM is set, endM is stored separately from start.m.
+    std::unique_ptr<Clothoid> createClothoid(
+        const CoordinateXYZM& start,
+        bool hasZ, bool hasM,
+        double theta0, double k0, double k1, double length,
+        double endM = DoubleNotANumber) const;
+
+    /// Construct an empty spiral curve
+    std::unique_ptr<SpiralCurve> createSpiralCurve(bool hasZ, bool hasM) const;
+
+    /// Construct a spiral curve from its placement, length, start and end
+    /// curvature and type. When hasM is set, startM and endM are the
+    /// measures at the ends.
+    std::unique_ptr<SpiralCurve> createSpiralCurve(
+        const AffinePlacement& referenceLocation,
+        double length, double startCurvature, double endCurvature,
+        SpiralType spiralType,
+        bool hasZ, bool hasM,
+        double startM = DoubleNotANumber,
+        double endM = DoubleNotANumber) const;
 
     /// Construct an EMPTY CompoundCurve
     std::unique_ptr<CompoundCurve> createCompoundCurve() const;
