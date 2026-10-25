@@ -633,4 +633,31 @@ void object::test<31>()
                  geos::util::IllegalArgumentException);
 }
 
+template<>
+template<>
+void object::test<32>()
+{
+    set_test_name("similarity test is relative at any scale");
+
+    // The same shapes at plan scale 1 and at plan scale k: curvature scales
+    // by 1/k and length by k.
+    const double scales[] = {1e-13, 1e-6, 1e6};
+    const double squash[] = {1.0, 0.1};
+    for (double q : squash) {
+        ClothoidReferenceLocation unit{
+            Coordinate(0.0, 0.0, 0.0), Coordinate(1.0, 0.0, 0.0), Coordinate(0.0, q, 0.0)};
+        auto ref = factory_->createClothoid(unit, 1.0, 0.5, 2.0, false, false, 0.0, 0.0);
+        for (double k : scales) {
+            ClothoidReferenceLocation small{
+                Coordinate(0.0, 0.0, 0.0), Coordinate(k, 0.0, 0.0), Coordinate(0.0, q * k, 0.0)};
+            auto curve = factory_->createClothoid(small, 1.0, 0.5, 2.0, false, false, 0.0, 0.0);
+            ensure_equals("start curvature", curve->getStartCurvature() * k, ref->getStartCurvature(),
+                          1e-12 * std::abs(ref->getStartCurvature()));
+            ensure_equals("end curvature", curve->getEndCurvature() * k, ref->getEndCurvature(),
+                          1e-12 * std::abs(ref->getEndCurvature()));
+            ensure_equals("length", curve->getLength() / k, ref->getLength(), 1e-12 * ref->getLength());
+        }
+    }
+}
+
 } // namespace tut

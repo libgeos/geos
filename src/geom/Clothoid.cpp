@@ -176,20 +176,27 @@ pointOnFrame(const Frame& frame, double travel, double& x, double& y, double& z,
 bool
 similarityScale(const Frame& frame, double& scale, int& orientation)
 {
-    const double u2 = frame.ux * frame.ux + frame.uy * frame.uy + frame.uz * frame.uz;
-    const double v2 = frame.vx * frame.vx + frame.vy * frame.vy + frame.vz * frame.vz;
-    const double dot = frame.ux * frame.vx + frame.uy * frame.vy + frame.uz * frame.vz;
-    const double uLen = std::sqrt(u2);
-    const double vLen = std::sqrt(v2);
+    const double uLen = std::hypot(frame.ux, frame.uy, frame.uz);
+    const double vLen = std::hypot(frame.vx, frame.vy, frame.vz);
     if (!(uLen > 0.0) || !(vLen > 0.0)) {
         return false;
     }
-    const double tol = SIMILARITY_RELATIVE * std::max(1.0, uLen);
-    if (std::abs(uLen - vLen) > tol || std::abs(dot) > tol * uLen) {
+    // Both tests are relative, so that they hold at any placement scale. The
+    // angle is taken from unit directions, so that it neither overflows nor
+    // underflows.
+    const double ux = frame.ux / uLen;
+    const double uy = frame.uy / uLen;
+    const double uz = frame.uz / uLen;
+    const double vx = frame.vx / vLen;
+    const double vy = frame.vy / vLen;
+    const double vz = frame.vz / vLen;
+    const double cosine = ux * vx + uy * vy + uz * vz;
+    if (std::abs(uLen - vLen) > SIMILARITY_RELATIVE * std::max(uLen, vLen)
+            || std::abs(cosine) > SIMILARITY_RELATIVE) {
         return false;
     }
     scale = uLen;
-    const double crossZ = frame.ux * frame.vy - frame.uy * frame.vx;
+    const double crossZ = ux * vy - uy * vx;
     orientation = (crossZ < 0.0) ? -1 : 1;
     return true;
 }
