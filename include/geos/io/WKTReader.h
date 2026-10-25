@@ -42,6 +42,8 @@ class LineString;
 class LinearRing;
 class CircularString;
 class Clothoid;
+class SpiralCurve;
+struct AffinePlacement;
 class CompoundCurve;
 class Polygon;
 class CurvePolygon;
@@ -137,6 +139,9 @@ protected:
     std::unique_ptr<geom::GeometryCollection> readGeometryCollectionText(io::StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const;
     std::unique_ptr<geom::CircularString> readCircularStringText(io::StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const;
     std::unique_ptr<geom::Clothoid> readClothoidText(io::StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const;
+    std::unique_ptr<geom::SpiralCurve> readSpiralCurveText(io::StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const;
+    /// REFERENCELOCATION AFFINEPLACEMENT [Z] (LOCATION, REFERENCEDIRECTIONS)
+    geom::AffinePlacement readReferenceLocationText(io::StringTokenizer* tokenizer, bool hasZ, const std::string& typeName) const;
     std::unique_ptr<geom::CompoundCurve> readCompoundCurveText(io::StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const;
     std::unique_ptr<geom::CurvePolygon> readCurvePolygonText(io::StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const;
     std::unique_ptr<geom::MultiCurve> readMultiCurveText(io::StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const;

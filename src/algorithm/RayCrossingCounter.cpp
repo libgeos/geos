@@ -92,6 +92,10 @@ RayCrossingCounter::locatePointInRing(const geom::CoordinateXY& point,
             throw util::UnsupportedOperationException(
                 "Clothoid point location is not implemented");
         }
+        if (curve->getGeometryTypeId() == geom::GEOS_SPIRALCURVE) {
+            throw util::UnsupportedOperationException(
+                "Spiral curve point location is not implemented");
+        }
         rcc.processSequence(*curve->getCoordinatesRO(), !curve->hasCurvedComponents());
     }
 

@@ -2130,6 +2130,12 @@ extern "C" {
     }
 
     geos::geom::Geometry*
+    GEOSGeom_createEmptySpiralCurve(void)
+    {
+        return GEOSGeom_createEmptySpiralCurve_r(handle);
+    }
+
+    geos::geom::Geometry*
     GEOSGeom_createEmptyCompoundCurve(void)
     {
         return GEOSGeom_createEmptyCompoundCurve_r(handle);

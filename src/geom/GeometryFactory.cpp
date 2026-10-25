@@ -23,6 +23,7 @@
 #include <algorithm/ClothoidMath.h>
 #include <geos/geom/CircularString.h>
 #include <geos/geom/Clothoid.h>
+#include <geos/geom/SpiralCurve.h>
 #include <geos/geom/CurvePolygon.h>
 #include <geos/geom/CompoundCurve.h>
 #include <geos/geom/GeometryFactory.h>
@@ -378,6 +379,7 @@ GeometryFactory::createEmptyGeometry(GeometryTypeId type, bool hasZ, bool hasM) 
         case GEOS_GEOMETRYCOLLECTION: return createGeometryCollection();
         case GEOS_CIRCULARSTRING: return createCircularString(hasZ, hasM);
         case GEOS_CLOTHOID: return createClothoid(hasZ, hasM);
+        case GEOS_SPIRALCURVE: return createSpiralCurve(hasZ, hasM);
         case GEOS_COMPOUNDCURVE: return createCompoundCurve();
         case GEOS_CURVEPOLYGON: return createCurvePolygon(hasZ, hasM);
         case GEOS_MULTICURVE: return createMultiCurve();
@@ -810,6 +812,25 @@ GeometryFactory::createClothoid(
     return createClothoid(location, scale, t0, t1, hasZ, hasM, startM, storedEndM);
 }
 
+std::unique_ptr<SpiralCurve>
+GeometryFactory::createSpiralCurve(bool hasZ, bool hasM) const
+{
+    return std::unique_ptr<SpiralCurve>(new SpiralCurve(hasZ, hasM, *this));
+}
+
+std::unique_ptr<SpiralCurve>
+GeometryFactory::createSpiralCurve(
+    const AffinePlacement& referenceLocation,
+    double length, double startCurvature, double endCurvature,
+    SpiralType spiralType,
+    bool hasZ, bool hasM,
+    double startM, double endM) const
+{
+    return std::unique_ptr<SpiralCurve>(new SpiralCurve(
+        referenceLocation, length, startCurvature, endCurvature,
+        spiralType, hasZ, hasM, startM, endM, *this));
+}
+
 /*public*/
 std::unique_ptr<LineString>
 GeometryFactory::createLineString(const LineString& ls) const
@@ -927,6 +948,7 @@ GeometryFactory::createEmpty(GeometryTypeId typeId) const
         case GEOS_POLYGON: return createPolygon();
         case GEOS_CIRCULARSTRING: return createCircularString(false, false);
         case GEOS_CLOTHOID: return createClothoid(false, false);
+        case GEOS_SPIRALCURVE: return createSpiralCurve(false, false);
         case GEOS_COMPOUNDCURVE: return createCompoundCurve();
         case GEOS_CURVEPOLYGON: return createCurvePolygon(false, false);
         case GEOS_MULTIPOINT: return createMultiPoint();
@@ -967,6 +989,7 @@ GeometryFactory::createMulti(std::unique_ptr<Geometry> && geom) const
         case GEOS_CIRCULARSTRING:
         case GEOS_COMPOUNDCURVE:
         case GEOS_CLOTHOID:
+        case GEOS_SPIRALCURVE:
             return gf->createMultiCurve(std::move(subgeoms));
         case GEOS_CURVEPOLYGON:
             return gf->createMultiSurface(std::move(subgeoms));
@@ -1000,7 +1023,8 @@ GeometryTypeId commonType(const T& geoms) {
         case GEOS_POINT: return GEOS_MULTIPOINT;
         case GEOS_COMPOUNDCURVE:
         case GEOS_CIRCULARSTRING:
-        case GEOS_CLOTHOID: return GEOS_MULTICURVE;
+        case GEOS_CLOTHOID:
+        case GEOS_SPIRALCURVE: return GEOS_MULTICURVE;
         case GEOS_LINEARRING:
         case GEOS_LINESTRING: return curvedType ? GEOS_MULTICURVE : GEOS_MULTILINESTRING;
         case GEOS_CURVEPOLYGON: return GEOS_MULTISURFACE;
@@ -1088,7 +1112,7 @@ GeometryFactory::buildGeometry(std::vector<std::unique_ptr<Curve>> && geoms) con
     const bool hasCurves = std::any_of(geoms.begin(), geoms.end(), [](const auto& geom) {
         const auto typeId = geom->getGeometryTypeId();
         return typeId == GEOS_COMPOUNDCURVE || typeId == GEOS_CIRCULARSTRING
-            || typeId == GEOS_CLOTHOID;
+            || typeId == GEOS_CLOTHOID || typeId == GEOS_SPIRALCURVE;
     });
 
     if (hasCurves) {

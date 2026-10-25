@@ -41,6 +41,8 @@ class CoordinateXYZM;
 class CoordinateSequence;
 class Curve;
 class Clothoid;
+class SpiralCurve;
+struct AffinePlacement;
 class CompoundCurve;
 class Geometry;
 class GeometryCollection;
@@ -232,6 +234,16 @@ protected:
         const geom::Clothoid& clothoid,
         OrdinateSet outputOrdinates,
         int level, Writer& writer) const;
+
+    void appendSpiralCurveTaggedText(
+        const geom::SpiralCurve& curve,
+        OrdinateSet outputOrdinates,
+        int level, Writer& writer) const;
+
+    /// REFERENCELOCATION AFFINEPLACEMENT [Z] (LOCATION, REFERENCEDIRECTIONS)
+    void appendReferenceLocationText(
+        const geom::AffinePlacement& location,
+        bool hasZ, Writer& writer) const;
 
     void appendCompoundCurveTaggedText(
         const geom::CompoundCurve& lineString,

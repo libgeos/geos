@@ -22,6 +22,8 @@
 #include <geos/io/ParseException.h>
 #include <geos/geom/CircularString.h>
 #include <geos/geom/Clothoid.h>
+#include <geos/geom/SpiralCurve.h>
+#include <geos/util/IllegalArgumentException.h>
 #include <geos/geom/CompoundCurve.h>
 #include <geos/geom/CurvePolygon.h>
 #include <geos/geom/Geometry.h>
@@ -203,7 +205,10 @@ WKBReader::minMemSize(geom::GeometryTypeId geomType, uint64_t size) const
     constexpr uint64_t minLineSize = (1+4+4); // empty line
     constexpr uint64_t minRingSize = 4; // empty ring
     constexpr uint64_t minPolySize = (1+4+4); // empty polygon
-    constexpr uint64_t minGeomSize = minLineSize;
+    // An empty clothoid or spiral curve is only a byte order and a type
+    // word.
+    constexpr uint64_t minCurveSize = (1+4);
+    constexpr uint64_t minGeomSize = minCurveSize;
 
     uint64_t perElement = 0;
     switch(geomType) {
@@ -212,6 +217,7 @@ WKBReader::minMemSize(geom::GeometryTypeId geomType, uint64_t size) const
         case GEOS_CIRCULARSTRING:
         case GEOS_COMPOUNDCURVE:
         case GEOS_CLOTHOID:
+        case GEOS_SPIRALCURVE:
         case GEOS_POINT:
             perElement = minCoordSize;
             break;
@@ -223,8 +229,10 @@ WKBReader::minMemSize(geom::GeometryTypeId geomType, uint64_t size) const
             perElement = minPtSize;
             break;
         case GEOS_MULTILINESTRING:
-        case GEOS_MULTICURVE:
             perElement = minLineSize;
+            break;
+        case GEOS_MULTICURVE:
+            perElement = minCurveSize;
             break;
         case GEOS_MULTIPOLYGON:
         case GEOS_MULTISURFACE:
@@ -349,6 +357,9 @@ WKBReader::readGeometry()
     case WKBConstants::wkbClothoid :
         result = readClothoid();
         break;
+    case WKBConstants::wkbSpiralCurve :
+        result = readSpiralCurve();
+        break;
     case WKBConstants::wkbCompoundCurve :
         result = readCompoundCurve();
         break;
@@ -466,14 +477,13 @@ isGeometryWkbType(uint32_t base)
 
 } // namespace
 
-std::unique_ptr<Clothoid>
-WKBReader::readClothoid()
+bool
+WKBReader::readReferenceLocation(AffinePlacement& location, const std::string& typeName)
 {
     // Empty omits the reference-location body. A following geometry also
     // starts with a byte order and a type word, so that header is not consumed.
     // A non-empty body is at least a placement header, so a byte order with
     // fewer bytes than a header after it is a truncated placement.
-    const int clothoidOrder = dis.getOrder();
     if (dis.size() < 5) {
         if (dis.size() > 0) {
             const unsigned char orderByte = dis.peekByte(0);
@@ -481,12 +491,12 @@ WKBReader::readClothoid()
                 throw ParseException("Unexpected EOF parsing WKB");
             }
         }
-        return factory.createClothoid(hasZ, hasM);
+        return false;
     }
 
     const unsigned char nextOrderByte = dis.peekByte(0);
     if (nextOrderByte != WKBConstants::wkbXDR && nextOrderByte != WKBConstants::wkbNDR) {
-        throw ParseException("CLOTHOID WKB requires an affine placement");
+        throw ParseException(typeName + " WKB requires an affine placement");
     }
     const int nextOrder = (nextOrderByte == WKBConstants::wkbNDR)
         ? ByteOrderValues::ENDIAN_LITTLE
@@ -495,11 +505,12 @@ WKBReader::readClothoid()
     const uint32_t nextBase = (nextType & 0xffffu) % 1000u;
     if (nextBase != static_cast<uint32_t>(WKBConstants::wkbAffinePlacement)) {
         if (isGeometryWkbType(nextBase)) {
-            return factory.createClothoid(hasZ, hasM);
+            return false;
         }
-        throw ParseException("CLOTHOID WKB requires an affine placement");
+        throw ParseException(typeName + " WKB requires an affine placement");
     }
 
+    const int curveOrder = dis.getOrder();
     dis.readByte();
     dis.setOrder(nextOrder);
     const uint32_t placementType = dis.readUnsigned();
@@ -509,11 +520,10 @@ WKBReader::readClothoid()
         || ((placementType & 0x40000000u) != 0);
     if ((placementType & 0x20000000u) != 0 || placementM || placementZ != hasZ || placementRange > 1u) {
         throw ParseException(
-            "CLOTHOID reference location must be affine placement type 102 or 1102");
+            typeName + " reference location must be affine placement type 102 or 1102");
     }
 
     const PrecisionModel& pm = *factory.getPrecisionModel();
-    ClothoidReferenceLocation location;
     location.origin.x = pm.makePrecise(dis.readDouble());
     location.origin.y = pm.makePrecise(dis.readDouble());
     location.origin.z = 0.0;
@@ -523,7 +533,7 @@ WKBReader::readClothoid()
     const uint32_t directionCount = dis.readUnsigned();
     if (directionCount != 2u) {
         throw ParseException(
-            "CLOTHOID reference location requires exactly 2 reference directions");
+            typeName + " reference location requires exactly 2 reference directions");
     }
     location.u.x = dis.readDouble();
     location.u.y = dis.readDouble();
@@ -537,9 +547,56 @@ WKBReader::readClothoid()
     if (hasZ) {
         location.v.z = dis.readDouble();
     }
+    // What follows uses the curve's byte order, not the placement's.
+    dis.setOrder(curveOrder);
+    return true;
+}
 
-    // Scale and distances use the clothoid byte order, not the placement's.
-    dis.setOrder(clothoidOrder);
+std::unique_ptr<SpiralCurve>
+WKBReader::readSpiralCurve()
+{
+    AffinePlacement location;
+    if (!readReferenceLocation(location, "SPIRALCURVE")) {
+        return factory.createSpiralCurve(hasZ, hasM);
+    }
+    const double length = dis.readDouble();
+    const double startCurvature = dis.readDouble();
+    const double endCurvature = dis.readDouble();
+    // <wkbspiraltype> is a byte count and that many letters.
+    const unsigned char count = dis.readByte();
+    std::string name;
+    for (unsigned char i = 0; i < count; ++i) {
+        name.push_back(static_cast<char>(dis.readByte()));
+    }
+    SpiralType type;
+    try {
+        type = SpiralCurve::typeFromName(name);
+    }
+    catch (const util::IllegalArgumentException&) {
+        throw ParseException("Unknown SPIRALCURVE spiral type '" + name + "'");
+    }
+    double startM = 0.0;
+    double endM = 0.0;
+    if (hasM) {
+        startM = dis.readDouble();
+        endM = dis.readDouble();
+    }
+    return factory.createSpiralCurve(
+        location, length, startCurvature, endCurvature, type, hasZ, hasM, startM, endM);
+}
+
+std::unique_ptr<Clothoid>
+WKBReader::readClothoid()
+{
+    AffinePlacement placement;
+    if (!readReferenceLocation(placement, "CLOTHOID")) {
+        return factory.createClothoid(hasZ, hasM);
+    }
+    ClothoidReferenceLocation location;
+    location.origin = placement.origin;
+    location.u = placement.u;
+    location.v = placement.v;
+
     const double scale = dis.readDouble();
     const double startDistance = dis.readDouble();
     const double endDistance = dis.readDouble();

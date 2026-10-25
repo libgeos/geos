@@ -42,6 +42,9 @@ class Coordinate;
 class CircularString;
 struct ClothoidReferenceLocation;
 class Clothoid;
+struct AffinePlacement;
+class SpiralCurve;
+enum class SpiralType : int;
 class CompoundCurve;
 class CoordinateSequence;
 class Curve;
@@ -379,6 +382,20 @@ public:
         const CoordinateXYZM& start,
         bool hasZ, bool hasM,
         double theta0, double k0, double k1, double length,
+        double endM = DoubleNotANumber) const;
+
+    /// Construct an empty spiral curve
+    std::unique_ptr<SpiralCurve> createSpiralCurve(bool hasZ, bool hasM) const;
+
+    /// Construct a spiral curve from its placement, length, start and end
+    /// curvature and type. When hasM is set, startM and endM are the
+    /// measures at the ends.
+    std::unique_ptr<SpiralCurve> createSpiralCurve(
+        const AffinePlacement& referenceLocation,
+        double length, double startCurvature, double endCurvature,
+        SpiralType spiralType,
+        bool hasZ, bool hasM,
+        double startM = DoubleNotANumber,
         double endM = DoubleNotANumber) const;
 
     /// Construct an EMPTY CompoundCurve

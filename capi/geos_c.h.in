@@ -271,6 +271,7 @@ enum GEOSGeomTypes {
     GEOS_MULTICURVE,
     GEOS_MULTISURFACE,
     GEOS_CLOTHOID,
+    GEOS_SPIRALCURVE,
 };
 
 /**
@@ -972,6 +973,10 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCircularString_r(
 
 /** \see GEOSGeom_createEmptyClothoid */
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyClothoid_r(
+    GEOSContextHandle_t handle);
+
+/** \see GEOSGeom_createEmptySpiralCurve */
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptySpiralCurve_r(
     GEOSContextHandle_t handle);
 
 /** \see GEOSGeom_createCompoundCurve */
@@ -3091,6 +3096,13 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCircularString(void);
 * Caller is responsible for freeing with GEOSGeom_destroy().
 */
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyClothoid(void);
+
+/**
+* Creates an empty spiral curve geometry.
+* \return A newly allocated spiral curve geometry. NULL on exception.
+* Caller is responsible for freeing with GEOSGeom_destroy().
+*/
+extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptySpiralCurve(void);
 
 /**
 * Creates a CompoundCurve geometry.

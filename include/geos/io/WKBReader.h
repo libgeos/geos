@@ -42,6 +42,8 @@ class GeometryFactory;
 class Coordinate;
 class CircularString;
 class Clothoid;
+class SpiralCurve;
+struct AffinePlacement;
 class CompoundCurve;
 class CurvePolygon;
 class Geometry;
@@ -170,6 +172,13 @@ private:
     std::unique_ptr<geom::CircularString> readCircularString();
 
     std::unique_ptr<geom::Clothoid> readClothoid();
+
+    std::unique_ptr<geom::SpiralCurve> readSpiralCurve();
+
+    /// The nested affine placement that starts a clothoid or spiral body.
+    /// Returns false, consuming nothing, when the body is omitted because
+    /// the curve is empty.
+    bool readReferenceLocation(geom::AffinePlacement& location, const std::string& typeName);
 
     std::unique_ptr<geom::CompoundCurve> readCompoundCurve();
 

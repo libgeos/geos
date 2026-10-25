@@ -219,6 +219,8 @@ EdgeNodingBuilder::add(const Geometry* g, uint8_t geomIndex)
             return; // do nothing
         case GEOS_CLOTHOID:
             throw util::UnsupportedOperationException("Clothoid intersection is not implemented");
+        case GEOS_SPIRALCURVE:
+            throw util::UnsupportedOperationException("Spiral curve intersection is not implemented");
         default:
             throw util::IllegalArgumentException("Unexpected geometry type: " + g->getGeometryType());
             return; // do nothing
@@ -278,6 +280,9 @@ EdgeNodingBuilder::addPolygonRing(const Curve* ring, bool isHole, uint8_t geomIn
     if (ring->getGeometryTypeId() == GEOS_CLOTHOID) {
         throw util::UnsupportedOperationException("Clothoid intersection is not implemented");
     }
+    if (ring->getGeometryTypeId() == GEOS_SPIRALCURVE) {
+        throw util::UnsupportedOperationException("Spiral curve intersection is not implemented");
+    }
 
     const auto type = ring->getGeometryTypeId();
 
@@ -293,6 +298,9 @@ EdgeNodingBuilder::addPolygonRing(const Curve* ring, bool isHole, uint8_t geomIn
             if (section->getNumPoints() >= 2) {
                 if (section->getGeometryTypeId() == GEOS_CLOTHOID) {
                     throw util::UnsupportedOperationException("Clothoid intersection is not implemented");
+                }
+                if (section->getGeometryTypeId() == GEOS_SPIRALCURVE) {
+                    throw util::UnsupportedOperationException("Spiral curve intersection is not implemented");
                 }
                 if (section->getGeometryTypeId() == GEOS_CIRCULARSTRING) {
                     const CircularString* cs = static_cast<const CircularString*>(section);
@@ -456,6 +464,9 @@ EdgeNodingBuilder::addSimpleCurve(const SimpleCurve* curve, uint8_t geomIndex)
 
     if (curve->getGeometryTypeId() == GEOS_CLOTHOID) {
         throw util::UnsupportedOperationException("Clothoid intersection is not implemented");
+    }
+    if (curve->getGeometryTypeId() == GEOS_SPIRALCURVE) {
+        throw util::UnsupportedOperationException("Spiral curve intersection is not implemented");
     }
 
     if (curve->getGeometryTypeId() == GEOS_CIRCULARSTRING) {

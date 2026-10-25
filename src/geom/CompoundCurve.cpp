@@ -16,6 +16,7 @@
 
 #include <geos/algorithm/Orientation.h>
 #include <geos/geom/Clothoid.h>
+#include <geos/geom/SpiralCurve.h>
 #include <geos/geom/CompoundCurve.h>
 #include <geos/geom/CoordinateFilter.h>
 #include <geos/geom/GeometryFactory.h>
@@ -31,7 +32,7 @@ CompoundCurve::CompoundCurve(std::vector<std::unique_ptr<SimpleCurve>>&& p_curve
                              const GeometryFactory& gf)
     : Curve(gf),
       curves(std::move(p_curves)) {
-    snapClothoidEndpoints();
+    snapEvaluatedEndpoints();
     envelope = computeEnvelopeInternal();
     validateConstruction();
 }
@@ -477,24 +478,37 @@ CompoundCurve::reverseInPlace()
     for (auto& curve: curves) {
         curve = curve->reverse();
     }
-    snapClothoidEndpoints();
+    snapEvaluatedEndpoints();
+}
+
+bool
+CompoundCurve::snapEvaluatedEndpoint(SimpleCurve& curve, std::size_t index, const CoordinateXY& target)
+{
+    if (curve.getGeometryTypeId() == GEOS_CLOTHOID) {
+        static_cast<Clothoid&>(curve).snapEndpoint(index, target);
+        return true;
+    }
+    if (curve.getGeometryTypeId() == GEOS_SPIRALCURVE) {
+        static_cast<SpiralCurve&>(curve).snapEndpoint(index, target);
+        return true;
+    }
+    return false;
 }
 
 void
-CompoundCurve::snapClothoidEndpoints()
+CompoundCurve::snapEvaluatedEndpoints()
 {
-    // A clothoid's endpoints are evaluated, not stored, so they can miss the
-    // neighbor's coordinate by rounding. Keep the neighbor's coordinate.
+    // Clothoid and spiral endpoints are evaluated, not stored, so they can
+    // miss the neighbor's coordinate by rounding. Keep the neighbor's
+    // coordinate.
     for (std::size_t i = 1; i < curves.size(); i++) {
         SimpleCurve& prev = *curves[i - 1];
         SimpleCurve& next = *curves[i];
         if (prev.isEmpty() || next.isEmpty()) {
             continue;
         }
-        if (next.getGeometryTypeId() == GEOS_CLOTHOID) {
-            static_cast<Clothoid&>(next).snapEndpoint(0, prev.getCoordinatesRO()->back<CoordinateXY>());
-        } else if (prev.getGeometryTypeId() == GEOS_CLOTHOID) {
-            static_cast<Clothoid&>(prev).snapEndpoint(1, next.getCoordinatesRO()->front<CoordinateXY>());
+        if (!snapEvaluatedEndpoint(next, 0, prev.getCoordinatesRO()->back<CoordinateXY>())) {
+            snapEvaluatedEndpoint(prev, 1, next.getCoordinatesRO()->front<CoordinateXY>());
         }
     }
     // The same rounding can keep a ring from closing.
@@ -503,10 +517,8 @@ CompoundCurve::snapClothoidEndpoints()
     }
     SimpleCurve& first = *curves.front();
     SimpleCurve& last = *curves.back();
-    if (first.getGeometryTypeId() == GEOS_CLOTHOID) {
-        static_cast<Clothoid&>(first).snapEndpoint(0, last.getCoordinatesRO()->back<CoordinateXY>());
-    } else if (last.getGeometryTypeId() == GEOS_CLOTHOID) {
-        static_cast<Clothoid&>(last).snapEndpoint(1, first.getCoordinatesRO()->front<CoordinateXY>());
+    if (!snapEvaluatedEndpoint(first, 0, last.getCoordinatesRO()->back<CoordinateXY>())) {
+        snapEvaluatedEndpoint(last, 1, first.getCoordinatesRO()->front<CoordinateXY>());
     }
 }
 

@@ -137,6 +137,7 @@ IsSimpleOp::computeSimple(const Geometry& geom)
             }
         case GEOS_CIRCULARSTRING:
         case GEOS_CLOTHOID:
+        case GEOS_SPIRALCURVE:
         case GEOS_MULTICURVE:
         case GEOS_CURVEPOLYGON:
         case GEOS_MULTISURFACE:

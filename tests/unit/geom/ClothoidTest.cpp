@@ -460,9 +460,12 @@ void object::test<23>()
 {
     set_test_name("WKB type 23");
 
+    // Type 23 is ST_SpiralCurve, not a clothoid.
     geos::io::WKBReader wkbReader(*factory_);
     std::stringstream spiral("0117000000");
-    ensure_THROW(wkbReader.readHEX(spiral), geos::io::ParseException);
+    auto geom = wkbReader.readHEX(spiral);
+    ensure(geom->isEmpty());
+    ensure_equals(geom->getGeometryTypeId(), geos::geom::GEOS_SPIRALCURVE);
 }
 
 template<>

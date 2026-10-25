@@ -84,6 +84,9 @@ public:
         if (g->getGeometryTypeId() == geom::GEOS_CLOTHOID) {
             throw util::UnsupportedOperationException("Clothoid noding is not implemented");
         }
+        if (g->getGeometryTypeId() == geom::GEOS_SPIRALCURVE) {
+            throw util::UnsupportedOperationException("Spiral curve noding is not implemented");
+        }
 
         if(const auto* ls = dynamic_cast<const geom::LineString*>(g)) {
             auto coord = ls->getSharedCoordinates();

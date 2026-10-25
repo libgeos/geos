@@ -104,6 +104,7 @@ IsValidOp::isValidGeometry(const Geometry* g)
             return isValid(static_cast<const GeometryCollection*>(g));
         case GEOS_CIRCULARSTRING:
         case GEOS_CLOTHOID:
+        case GEOS_SPIRALCURVE:
         case GEOS_COMPOUNDCURVE:
         case GEOS_CURVEPOLYGON:
         case GEOS_MULTICURVE:
