@@ -37,7 +37,11 @@ namespace io {
  * istream, with the representation being in either common byte ordering.
  *
  */
+class WKBReader;
+
 class GEOS_DLL ByteOrderDataInStream {
+
+    friend class WKBReader;
 
 public:
 
@@ -113,8 +117,29 @@ public:
         return static_cast<size_t>(end - buf);
     };
 
+    int getOrder() const
+    {
+        return byteOrder;
+    }
 
 private:
+
+    unsigned char peekByte(std::size_t offset) const
+    {
+        if (size() < offset + 1) {
+            throw ParseException("Unexpected EOF parsing WKB");
+        }
+        return buf[offset];
+    }
+
+    uint32_t peekUnsigned(std::size_t offset, int order) const
+    {
+        if (size() < offset + 4) {
+            throw ParseException("Unexpected EOF parsing WKB");
+        }
+        return ByteOrderValues::getUnsigned(buf + offset, order);
+    }
+
     int byteOrder;
     const unsigned char* buf;
     const unsigned char* end;

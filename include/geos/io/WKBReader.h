@@ -41,6 +41,7 @@ namespace geom {
 class GeometryFactory;
 class Coordinate;
 class CircularString;
+class NurbsCurve;
 class CompoundCurve;
 class CurvePolygon;
 class Geometry;
@@ -167,6 +168,13 @@ private:
     std::unique_ptr<geom::LinearRing> readLinearRing();
 
     std::unique_ptr<geom::CircularString> readCircularString();
+
+    std::unique_ptr<geom::NurbsCurve> readNurbsCurve();
+
+    std::unique_ptr<geom::NurbsCurve> readNurbsCurveBody();
+
+    /// True when a geometry header follows: a byte order and a known type.
+    bool isGeometryHeaderNext() const;
 
     std::unique_ptr<geom::CompoundCurve> readCompoundCurve();
 

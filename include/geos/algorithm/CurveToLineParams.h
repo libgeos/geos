@@ -59,6 +59,14 @@ public:
           .setMaxDeviation(DoubleInfinity);
     }
 
+    double getMaxStepDegrees() const {
+        return m_maxStepDegrees;
+    }
+
+    double getMaxDeviation() const {
+        return m_maxDeviation;
+    }
+
     double getStepSizeDegrees(const geom::CircularArc& arc) const {
         const double deviationRatio = 1 - m_maxDeviation / arc.getRadius();
         const double maxStepFromDeviation = deviationRatio < 0 ? 180 : std::acos(deviationRatio) * 360 / MATH_PI;

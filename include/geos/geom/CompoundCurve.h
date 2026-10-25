@@ -138,6 +138,13 @@ private:
 
     void reverseInPlace();
 
+    /// Snap endpoint 0 or 1 of a section whose endpoints are evaluated
+    /// rather than stored. Returns false for any other section.
+    static bool snapEvaluatedEndpoint(SimpleCurve& curve, std::size_t index,
+                                      const CoordinateXY& target);
+
+    void snapEvaluatedEndpoints();
+
     std::vector<std::unique_ptr<SimpleCurve>> curves;
     Envelope envelope;
 };

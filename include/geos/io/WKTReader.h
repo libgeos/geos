@@ -41,6 +41,7 @@ class Point;
 class LineString;
 class LinearRing;
 class CircularString;
+class NurbsCurve;
 class CompoundCurve;
 class Polygon;
 class CurvePolygon;
@@ -135,6 +136,7 @@ protected:
     std::unique_ptr<geom::MultiPolygon> readMultiPolygonText(io::StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const;
     std::unique_ptr<geom::GeometryCollection> readGeometryCollectionText(io::StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const;
     std::unique_ptr<geom::CircularString> readCircularStringText(io::StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const;
+    std::unique_ptr<geom::NurbsCurve> readNurbsCurveText(io::StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const;
     std::unique_ptr<geom::CompoundCurve> readCompoundCurveText(io::StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const;
     std::unique_ptr<geom::CurvePolygon> readCurvePolygonText(io::StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const;
     std::unique_ptr<geom::MultiCurve> readMultiCurveText(io::StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const;
