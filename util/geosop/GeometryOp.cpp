@@ -330,7 +330,7 @@ std::vector<GeometryOpCreator> opRegistry {
         }
         else if (join < 0) {
             param.setJoinStyle(geos::operation::buffer::BufferParameters::JOIN_MITRE);
-            param.setMitreLimit( (int) -join );
+            param.setMitreLimit( -join );
         }
         std::unique_ptr<Geometry> g3 = geos::operation::buffer::BufferOp::bufferOp(&geom, d, param);
         return new Result( g3.release() );
