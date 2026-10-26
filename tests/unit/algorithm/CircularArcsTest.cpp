@@ -970,4 +970,22 @@ set_test_name("getMidpointAngle");
     ensure_equals(CircularArcs::getMidpointAngle(0, 0, false), MATH_PI);
 }
 
+
+template<>
+template<>
+void object::test<71>()
+{
+    set_test_name("arc-arc distance, point opposite the other center is outside the arc");
+
+    // The point of A opposite B's center lies outside A, and was accepted
+    // as a candidate. The closest pair is A's end (5 0) and B's circle,
+    // centered at (-4 3) with radius 10.
+    CircularArc a = CircularArc::create(XY{-4, -3}, XY{0, 5}, XY{5, 0});
+    CircularArc b = CircularArc::create(XY{2, -5}, XY{4, -3}, XY{6, 3});
+    const double expected = 10 - 3*std::sqrt(10);
+
+    ensure_equals("distance", a.distance(b), expected, 1e-12);
+    ensure_equals("distance reversed", b.distance(a), expected, 1e-12);
+}
+
 }

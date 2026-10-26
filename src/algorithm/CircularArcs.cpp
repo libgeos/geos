@@ -416,6 +416,8 @@ CircularArcs::circleIntersectsSegment(const CoordinateXY& center, double r,
 bool
 CircularArcs::containsAngle(double t0, double t2, bool isCCW, double theta)
 {
+    theta = Angle::normalize(theta);
+
     if (theta == t0 || theta == t2) {
         return true;
     }
