@@ -970,4 +970,42 @@ set_test_name("getMidpointAngle");
     ensure_equals(CircularArcs::getMidpointAngle(0, 0, false), MATH_PI);
 }
 
+
+template<>
+template<>
+void object::test<71>()
+{
+    set_test_name("arc-seg distance, segment inside circle, closest to arc endpoint");
+
+    // The segment lies inside the circle and does not reach the arc, so the
+    // closest pair joins the arc endpoint at 70 degrees to the segment interior.
+    const double r = 10;
+    CircularArc arc = CircularArc::create(XY{r*std::cos(MATH_PI/3), r*std::sin(MATH_PI/3)},
+                                          XY{r*std::cos(13*MATH_PI/36), r*std::sin(13*MATH_PI/36)},
+                                          XY{r*std::cos(7*MATH_PI/18), r*std::sin(7*MATH_PI/18)});
+    XY q0{2, 0};
+    XY q1{2, 9.5};
+
+    ensure_equals("distance", arc.distance(q0, q1), arc.p2().x - 2, 1e-12);
+}
+
+template<>
+template<>
+void object::test<72>()
+{
+    set_test_name("arc-seg distance, segment outside circle, closest to segment endpoint");
+
+    // The closest pair joins a segment endpoint to the arc interior.
+    CircularArc arc = CircularArc::create(XY{-3.48172, 2.91175}, XY{9.45735, -6.02278}, XY{1.44247, -0.448891});
+    XY q0{4.48559, 4.09741};
+    XY q1{-5.45188, -9.20177};
+
+    ensure_equals("distance", arc.distance(q0, q1), 0.2835665009749685, 1e-9);
+
+    const auto pts = CircularArcs::closestPointsArcSegment(arc.getCenter(), arc.getRadius(),
+                     arc.p0(), arc.p2(), arc.isCCW(), q0, q1);
+    ensure("first point is on the arc", std::abs(pts[0].distance(arc.getCenter()) - arc.getRadius()) < 1e-9);
+    ensure_equals("closest points distance", pts[0].distance(pts[1]), 0.2835665009749685, 1e-9);
+}
+
 }

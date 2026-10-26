@@ -20,6 +20,8 @@
 #include <geos/geom/Quadrant.h>
 #include <geos/math/DD.h>
 
+#include <limits>
+
 using geos::geom::CoordinateSequence;
 using geos::geom::CoordinateXY;
 using geos::geom::Envelope;
@@ -511,50 +513,57 @@ CircularArcs::closestPointsArcSegment(const CoordinateXY& c, double r,
         return geom::LineSegment::closestPoints(p0, p2, q0, q1);
     }
 
-    // Calculate distance between line and circle center
-    const CoordinateXY d = geom::LineSegment::closestPoint(q0, q1, c);
-    const double dist_cd = d.distance(c);
-
-    if (dist_cd <= r) {
-        // Segment is at least partially within circle; check to see if it intersects
-        CoordinateXY isect0, isect1;
-        auto n = circleIntersectsSegment(c, r, q0, q1, isect0, isect1);
-        if (n > 0 && containsPointOnCircle(c, p0, p2, isCCW, isect0)) {
-            return {isect0, isect0};
+    // An arc endpoint on the segment is an intersection.
+    for (const CoordinateXY& p : {p0, p2}) {
+        if (Envelope(q0, q1).intersects(p) && Orientation::index(q0, q1, p) == Orientation::COLLINEAR) {
+            return {p, p};
         }
-        if (n > 1 && containsPointOnCircle(c, p0, p2, isCCW, isect1)) {
-            return {isect1, isect1};
-        }
-
-        // Closest point is one of the segment endpoints.
-        const auto e0 = closestPointArcPoint(c, r, p0, p2, isCCW, q0);
-        const auto e1 = closestPointArcPoint(c, r, p0, p2, isCCW, q1);
-        if (e0.distance(q0) < e1.distance(q1)) {
-            return {e0, q0};
-        }
-
-        return {e1, q1};
     }
 
-    // Find closest point on circle
-    const CoordinateXY g{c.x + (d.x - c.x) * (r / dist_cd),
-                   c.y + (d.y - c.y) * (r / dist_cd)};
-
-    const bool ptInArc = containsPointOnCircle(c, p0, p2, isCCW, g);
-
-    if (ptInArc) {
-        return {g, d};
+    // If the segment crosses the arc, an intersection point is a closest pair.
+    CoordinateXY isect0, isect1;
+    const auto n = circleIntersectsSegment(c, r, q0, q1, isect0, isect1);
+    if (n > 0 && containsPointOnCircle(c, p0, p2, isCCW, isect0)) {
+        return {isect0, isect0};
+    }
+    if (n > 1 && containsPointOnCircle(c, p0, p2, isCCW, isect1)) {
+        return {isect1, isect1};
     }
 
-    // Closest distance is between the segment and one of the arc endpoints
-    const auto e0 = LineSegment::closestPoint(q0, q1, p0);
-    const auto e1 = LineSegment::closestPoint(q0, q1, p2);
+    // Otherwise the closest pair has an endpoint of the arc or of the segment,
+    // or it joins an interior point of each. In the last case the connecting
+    // line is perpendicular to the segment and radial on the circle, so the
+    // arc point is the center offset by the radius along the segment normal.
+    std::array<CoordinateXY, 2> ret;
+    double minDist = std::numeric_limits<double>::infinity();
 
-    if (e0.distance(p0) < e1.distance(p2)) {
-        return {e0, p0};
+    auto update = [&ret, &minDist](const CoordinateXY& a, const CoordinateXY& b) {
+        const double dist = a.distance(b);
+        if (dist < minDist) {
+            minDist = dist;
+            ret = {a, b};
+        }
+    };
+
+    update(closestPointArcPoint(c, r, p0, p2, isCCW, q0), q0);
+    update(closestPointArcPoint(c, r, p0, p2, isCCW, q1), q1);
+    update(p0, LineSegment::closestPoint(q0, q1, p0));
+    update(p2, LineSegment::closestPoint(q0, q1, p2));
+
+    const double len = q0.distance(q1);
+    if (len > 0) {
+        const double nx = -(q1.y - q0.y) / len;
+        const double ny = (q1.x - q0.x) / len;
+
+        for (double side : {1.0, -1.0}) {
+            const CoordinateXY g{c.x + side * r * nx, c.y + side * r * ny};
+            if (containsPointOnCircle(c, p0, p2, isCCW, g)) {
+                update(g, LineSegment::closestPoint(q0, q1, g));
+            }
+        }
     }
 
-    return {e1, p2};
+    return ret;
 }
 
 double
