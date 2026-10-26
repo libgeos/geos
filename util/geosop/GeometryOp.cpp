@@ -370,7 +370,7 @@ std::vector<GeometryOpCreator> opRegistry {
         }
         else if (join < 0) {
             joinStyle = geos::operation::buffer::BufferParameters::JOIN_MITRE;
-            miterLimit = (int) -join;
+            miterLimit = -join;
         }
         std::unique_ptr<Geometry> g3 = geos::operation::buffer::OffsetCurve::getCurve(geom, d, quadSegs, joinStyle, miterLimit);
         return new Result( g3.release() );
