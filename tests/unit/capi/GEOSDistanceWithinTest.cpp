@@ -437,4 +437,18 @@ void object::test<33>()
 }
 
 
+
+template<>
+template<>
+void object::test<34>() {
+    set_test_name("lines touching at endpoint");
+
+    testGEOSDistanceWithin(
+        "LINESTRING (0 -80, 64 -48)",
+        "LINESTRING (64 -48, 0 -0.1)",
+        0.0,
+        1
+    );
+}
+
 } // namespace tut
