@@ -742,8 +742,6 @@ public:
      */
     double distanceSquared(const Envelope& env) const
     {
-        // Each gap is a single rounded difference, so envelopes that touch are
-        // exactly zero apart.
         double dx = std::max(0.0, std::max(minx - env.maxx, env.minx - maxx));
         double dy = std::max(0.0, std::max(miny - env.maxy, env.miny - maxy));
 

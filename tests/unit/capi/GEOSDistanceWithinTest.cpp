@@ -438,16 +438,16 @@ void object::test<33>()
 
 
 
-// lines touching at an endpoint are within distance 0
-// (their envelopes touch along y = -48)
-template <>
-template <>
+template<>
+template<>
 void object::test<34>() {
-  testGEOSDistanceWithin(
-      "LINESTRING (0 -80, 64 -48)",
-      "LINESTRING (64 -48, 0 -0.1)",
-      0.0,
-      1
+    set_test_name("lines touching at endpoint");
+
+    testGEOSDistanceWithin(
+        "LINESTRING (0 -80, 64 -48)",
+        "LINESTRING (64 -48, 0 -0.1)",
+        0.0,
+        1
     );
 }
 

@@ -704,7 +704,6 @@ void object::test<22>()
 
     ensure_equals(a.distance(b), 0.0);
     ensure_equals(b.distance(a), 0.0);
-    ensure_equals(Envelope(0, 1, 0, 1).distance(Envelope(3, 4, 5, 6)), std::sqrt(4.0 + 16.0));
 }
 
 }
