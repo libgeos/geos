@@ -692,4 +692,19 @@ void object::test<21>()
     ensure(env.containsProperly({3.0000001, 8}));
 }
 
+
+template<>
+template<>
+void object::test<22>()
+{
+    set_test_name("distance between touching envelopes is zero");
+
+    Envelope a(0, 64, -80, -48);
+    Envelope b(0, 64, -48, -0.1);
+
+    ensure_equals(a.distance(b), 0.0);
+    ensure_equals(b.distance(a), 0.0);
+    ensure_equals(Envelope(0, 1, 0, 1).distance(Envelope(3, 4, 5, 6)), std::sqrt(4.0 + 16.0));
+}
+
 }
