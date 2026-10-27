@@ -98,10 +98,12 @@ public:
                             const geom::CoordinateXY& p0, const geom::CoordinateXY& p1,
                             geom::CoordinateXY& isect0, geom::CoordinateXY& isect1);
 
-    /** Returns whether an angle is included between two other angles.
+    /** Returns whether an angle is included between two other angles. The angles
+     *  do not need to be normalized. If the start and end angles are the same,
+     *  the input is assumed to represent a full circle.
      *
      * @param t0 starting angle (radians)
-     * @param t2 ending engle (radians)
+     * @param t2 ending angle (radians)
      * @param isCCW whether the interval from t0 to t2 is counterclockwise
      * @param theta angle to test (radians)
      * @return true if theta is included between t0 and t2
