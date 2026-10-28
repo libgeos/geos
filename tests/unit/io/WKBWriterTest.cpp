@@ -3,6 +3,7 @@
 
 // tut
 #include <tut/tut.hpp>
+#include <tut/tut_macros.hpp>
 // geos
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKBWriter.h>
@@ -478,6 +479,39 @@ void object::test<19>
                            "010A0000200E1600000200000001090000000200000001080000000500000000000000000000000000000000000000000000000000004000000000000000000000000000000040000000000000F03F00000000000000400000000000000840000000000000104000000000000008400102000000040000000000000000001040000000000000084000000000000010400000000000001440000000000000F03F000000000000104000000000000000000000000000000000010800000005000000333333333333FB3F000000000000F03F666666666666F63F9A9999999999D93F9A9999999999F93F9A9999999999D93F9A9999999999F93F000000000000E03F333333333333FB3F000000000000F03F");
 }
 
+// includeSRID is kept when writing a collection or a compound curve fails
+// because the output stream throws
+template<>
+template<>
+void object::test<20>
+() {
+    // accepts 20 bytes, then fails
+    struct FixedBuf : std::streambuf {
+        char data[20]{};
+        FixedBuf() { setp(data, data + sizeof data); }
+    };
+
+    geos::io::WKBWriter writer(2, geos::io::ByteOrderValues::ENDIAN_LITTLE, true);
+    auto point = wktreader.read("POINT (1 2)");
+    point->setSRID(4326);
+
+    for (const char *wkt: {
+             "GEOMETRYCOLLECTION (POINT (1 2), LINESTRING (0 0, 1 1))",
+             "COMPOUNDCURVE (CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 3 0))"
+         }) {
+        auto geom = wktreader.read(wkt);
+        geom->setSRID(3857);
+
+        FixedBuf buf;
+        std::ostream os(&buf);
+        os.exceptions(std::ios::badbit | std::ios::failbit);
+        ensure_THROW(writer.write(*geom, os), std::ios_base::failure);
+        ensure("getIncludeSRID() should be set after writing " + std::string(wkt), writer.getIncludeSRID());
+        std::stringstream out;
+        writer.writeHEX(*point, out);
+        ensure_equals(wkt, out.str(), "0101000020E6100000000000000000F03F0000000000000040");
+    }
+}
 
 } // namespace tut
 
