@@ -186,9 +186,14 @@ WKBWriter::writeCompoundCurve(const CompoundCurve& g)
     auto orig_includeSRID = includeSRID;
     includeSRID = false;
 
-    for (std::size_t i = 0; i < g.getNumCurves(); i++) {
-        const SimpleCurve& section = *g.getCurveN(i);
-        writeSimpleCurve(section);
+    try {
+        for (std::size_t i = 0; i < g.getNumCurves(); i++) {
+            const SimpleCurve& section = *g.getCurveN(i);
+            writeSimpleCurve(section);
+        }
+    } catch (...) {
+        includeSRID = orig_includeSRID;
+        throw;
     }
 
     includeSRID = orig_includeSRID;
@@ -273,12 +278,19 @@ WKBWriter::writeGeometryCollection(const GeometryCollection& g)
     includeSRID = false;
 
     assert(outStream);
-    for(std::size_t i = 0; i < ngeoms; i++) {
-        const Geometry* elem = g.getGeometryN(i);
-        assert(elem);
 
-        write(*elem, *outStream);
+    try {
+        for(std::size_t i = 0; i < ngeoms; i++) {
+            const Geometry* elem = g.getGeometryN(i);
+            assert(elem);
+
+            write(*elem, *outStream);
+        }
+    } catch (...) {
+        includeSRID = orig_includeSRID;
+        throw;
     }
+
     includeSRID = orig_includeSRID;
 }
 
