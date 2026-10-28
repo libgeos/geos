@@ -416,10 +416,6 @@ CircularArcs::circleIntersectsSegment(const CoordinateXY& center, double r,
 bool
 CircularArcs::containsAngle(double t0, double t2, bool isCCW, double theta)
 {
-    if (theta == t0 || theta == t2) {
-        return true;
-    }
-
     if (isCCW) {
         std::swap(t0, t2);
     }
@@ -427,15 +423,9 @@ CircularArcs::containsAngle(double t0, double t2, bool isCCW, double theta)
     t2 -= t0;
     theta -= t0;
 
-    if (t2 < 0) {
-        t2 += 2*MATH_PI;
-    }
-    if (theta < 0) {
-        theta += 2*MATH_PI;
-    }
+    const auto norm = Angle::normalizePositive(theta);
 
-    return theta >= t2;
-
+    return norm == 0 || norm >= Angle::normalizePositive(t2);
 }
 
 bool
