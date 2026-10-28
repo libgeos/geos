@@ -20,7 +20,40 @@ namespace tut {
 struct test_circulararcs_data {
     const double eps = 1e-8;
 
+    static constexpr int CCW_ = geos::algorithm::Orientation::COUNTERCLOCKWISE;
+    static constexpr int CW_ = geos::algorithm::Orientation::CLOCKWISE;
+    static constexpr int BOTH_ = 0;
+    static constexpr int NONE_ = -2;
+
     using XY = CoordinateXY;
+
+    static void checkAngleContained(double theta, double t0, double t2, int orientation)
+    {
+        std::string angleRange = std::to_string(t0) + " to " + std::to_string(t2);
+
+        if (orientation == CCW_) {
+            ensure(std::to_string(theta) + " should be contained in ccw angle from " + angleRange,
+                   CircularArcs::containsAngle(t0, t2, true, theta));
+            ensure(std::to_string(theta) + " should not be contained in cw angle from " + angleRange,
+                   !CircularArcs::containsAngle(t0, t2, false, theta));
+        }
+        else if (orientation == CW_) {
+            ensure(std::to_string(theta) + " should not be contained in ccw angle from " + angleRange,
+                   !CircularArcs::containsAngle(t0, t2, true, theta));
+            ensure(std::to_string(theta) + " should be contained in cw angle from " + angleRange,
+                   CircularArcs::containsAngle(t0, t2, false, theta));
+        } else if (orientation == BOTH_) {
+            ensure(std::to_string(theta) + " should be contained in ccw angle from " + angleRange,
+                   CircularArcs::containsAngle(t0, t2, true, theta));
+            ensure(std::to_string(theta) + " should be contained in cw angle from " + angleRange,
+                   CircularArcs::containsAngle(t0, t2, false, theta));
+        } else {
+            ensure(std::to_string(theta) + " should not be contained in ccw angle from " + angleRange,
+                   !CircularArcs::containsAngle(t0, t2, true, theta));
+            ensure(std::to_string(theta) + " should not be contained in cw angle from " + angleRange,
+                   !CircularArcs::containsAngle(t0, t2, false, theta));
+        }
+    }
 
     void checkEnvelope(const CoordinateXY& p0, const CoordinateXY& p1, const CoordinateXY& p2,
                        double xmin, double ymin, double xmax, double ymax) const
@@ -968,6 +1001,46 @@ set_test_name("getMidpointAngle");
     // full circle
     ensure_equals(CircularArcs::getMidpointAngle(0, 0, true), MATH_PI);
     ensure_equals(CircularArcs::getMidpointAngle(0, 0, false), MATH_PI);
+}
+
+
+template<>
+template<>
+void object::test<71>()
+{
+    set_test_name("containsAngle");
+
+    using geos::algorithm::Orientation;
+
+    checkAngleContained(MATH_PI / 2, 0, MATH_PI, CCW_);
+    checkAngleContained(MATH_PI / 2, 2*MATH_PI, 3*MATH_PI, CCW_);
+    checkAngleContained(5*MATH_PI / 2, 2*MATH_PI, 3*MATH_PI, CCW_);
+    checkAngleContained(-MATH_PI / 2, 0, MATH_PI, CW_);
+    checkAngleContained(2.5 + MATH_PI, -2.5, 0, CCW_);
+
+    checkAngleContained(0, -MATH_PI / 2, MATH_PI / 2, CCW_);
+    checkAngleContained(2*MATH_PI, -MATH_PI / 2, MATH_PI / 2, CCW_);
+    checkAngleContained(4*MATH_PI, -MATH_PI / 2, MATH_PI / 2, CCW_);
+    checkAngleContained(-2*MATH_PI, -MATH_PI / 2, MATH_PI / 2, CCW_);
+    checkAngleContained(-4*MATH_PI, -MATH_PI / 2, MATH_PI / 2, CCW_);
+
+    checkAngleContained(MATH_PI, 3*MATH_PI/4, -3*MATH_PI/4, CCW_);
+    checkAngleContained(-MATH_PI, 3*MATH_PI/4, -3*MATH_PI/4, CCW_);
+    checkAngleContained(0, 3*MATH_PI/4, -3*MATH_PI/4, CW_);
+    checkAngleContained(MATH_PI/2, 3*MATH_PI/4, -3*MATH_PI/4, CW_);
+
+    // theta == t0
+    checkAngleContained(0, 0, 0, BOTH_);
+    checkAngleContained(0, 0, MATH_PI, BOTH_);
+    checkAngleContained(2*MATH_PI, 0, MATH_PI, BOTH_);
+
+    // t0 == t2, t0 == 0, full circle
+    checkAngleContained(MATH_PI, 0, 0, BOTH_);
+    checkAngleContained(MATH_PI, 0, 2*MATH_PI, BOTH_);
+
+    // t0 == t2, t0 != 0, full circle
+    checkAngleContained(MATH_PI, MATH_PI/4, MATH_PI/4, BOTH_);
+    checkAngleContained(MATH_PI, MATH_PI/4, 9*MATH_PI/4, BOTH_);
 }
 
 }
