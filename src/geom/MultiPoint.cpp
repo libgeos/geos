@@ -22,6 +22,7 @@
 #include <geos/geom/MultiPoint.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Dimension.h>
+#include <geos/util/IllegalArgumentException.h>
 
 #include <vector>
 
@@ -40,7 +41,11 @@ MultiPoint::MultiPoint(std::vector<std::unique_ptr<Geometry>> && newPoints, cons
         :
         GeometryCollection(std::move(newPoints), factory)
 {
-
+    for (const auto& geom : geometries) {
+        if (geom->getGeometryTypeId() != GEOS_POINT) {
+            throw util::IllegalArgumentException("All elements of MultiPoint must be a Point");
+        }
+    }
 }
 
 Dimension::DimensionType

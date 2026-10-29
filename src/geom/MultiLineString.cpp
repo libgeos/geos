@@ -45,7 +45,14 @@ MultiLineString::MultiLineString(std::vector<std::unique_ptr<LineString>> && new
 MultiLineString::MultiLineString(std::vector<std::unique_ptr<Geometry>> && newLines,
                                  const GeometryFactory& factory)
         : GeometryCollection(std::move(newLines), factory)
-{}
+{
+    for (const auto& geom : geometries) {
+        const auto typeId = geom->getGeometryTypeId();
+        if (typeId != GEOS_LINESTRING && typeId != GEOS_LINEARRING) {
+            throw util::IllegalArgumentException("All elements of MultiLineString must be a LineString");
+        }
+    }
+}
 
 MultiLineString::MultiLineString(std::vector<std::unique_ptr<Curve>> && newLines,
                                  const GeometryFactory& factory)

@@ -434,54 +434,7 @@ public:
     std::unique_ptr<Geometry>
     buildGeometry(T from, T toofar) const
     {
-        bool isHeterogeneous = false;
-        std::size_t count = 0;
-        int geomClass = -1;
-        for(T i = from; i != toofar; ++i) {
-            ++count;
-            const Geometry* g = *i;
-            if(geomClass < 0) {
-                geomClass = g->getSortIndex();
-            }
-            else if(geomClass != g->getSortIndex()) {
-                isHeterogeneous = true;
-            }
-        }
-
-        // for the empty geometry, return an empty GeometryCollection
-        if(count == 0) {
-            return std::unique_ptr<Geometry>(createGeometryCollection());
-        }
-
-        // for the single geometry, return a clone
-        if(count == 1) {
-            return (*from)->clone();
-        }
-
-        // Now we know it is a collection
-
-        // FIXME:
-        // Until we tweak all the createMulti* interfaces
-        // to support taking iterators we'll have to build
-        // a custom vector here.
-        std::vector<std::unique_ptr<Geometry>> fromGeoms;
-        for(T i = from; i != toofar; ++i) {
-            fromGeoms.push_back((*i)->clone());
-        }
-
-        // for an heterogeneous ...
-        if(isHeterogeneous) {
-            return createGeometryCollection(std::move(fromGeoms));
-        }
-
-        // At this point we know the collection is not hetereogenous.
-        switch((*from)->getDimension()) {
-            case Dimension::A: return createMultiPolygon(std::move(fromGeoms));
-            case Dimension::L: return createMultiLineString(std::move(fromGeoms));
-            case Dimension::P: return createMultiPoint(std::move(fromGeoms));
-            default:
-                throw geos::util::IllegalArgumentException(std::string("Invalid geometry type."));
-        }
+        return buildGeometry(std::vector<const Geometry*>(from, toofar));
     }
 
     /** \brief

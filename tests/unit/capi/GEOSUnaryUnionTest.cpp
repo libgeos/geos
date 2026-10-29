@@ -333,6 +333,21 @@ void object::test<17>()
     ensure_geometry_equals(result_, input_, 1e-8);
 }
 
+template<>
+template<>
+void object::test<18>()
+{
+    set_test_name("CircularString-only dim=1 inputs");
+
+    input_ = fromWKT("MULTICURVE (CIRCULARSTRING (0 0, 1 1, 2 0), CIRCULARSTRING (2 0, 3 -1, 4 0))");
+
+    result_ = GEOSUnaryUnion(input_);
+    ensure(result_);
+
+    expected_ = fromWKT("CIRCULARSTRING (0 0, 1 1, 2 0, 3 -1, 4 0)");
+    ensure_geometry_equals(result_, expected_, 1e-8);
+}
+
 } // namespace tut
 
 
