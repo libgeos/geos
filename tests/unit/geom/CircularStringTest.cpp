@@ -6,7 +6,9 @@
 #include <geos/geom/CircularArc.h>
 #include <geos/geom/CircularString.h>
 #include <geos/geom/GeometryFactory.h>
+#include <geos/geom/CoordinateFilter.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/geom/CoordinateSequenceFilter.h>
 #include <geos/geom/IntersectionMatrix.h>
 #include <geos/io/WKTReader.h>
 #include <geos/util/UnsupportedOperationException.h>
@@ -48,6 +50,29 @@ struct test_circularstring_data {
         auto expected = wktreader_.read<CircularString>(wkt_expected);
 
         ensure_equals_exact_geometry_xyzm(cs.get(), expected.get(), 0);
+    }
+
+    // Check that the arcs of a CircularString refer to its current coordinates and
+    // match the arcs of a new CircularString created from the same coordinates.
+    void checkArcs(const CircularString& cs) const {
+        auto expected = factory_->createCircularString(*cs.getCoordinatesRO());
+
+        const auto& arcs = cs.getArcs();
+        const auto& expectedArcs = expected->getArcs();
+
+        ensure_equals("number of arcs", arcs.size(), expectedArcs.size());
+        for (std::size_t i = 0; i < arcs.size(); i++) {
+            ensure("arc refers to coordinates of CircularString", arcs[i].getCoordinateSequence() == cs.getCoordinatesRO());
+            ensure_equals("arc position", arcs[i].getCoordinatePosition(), 2*i);
+            ensure_equals_xy(arcs[i].p0(), expectedArcs[i].p0());
+            ensure_equals_xy(arcs[i].p1(), expectedArcs[i].p1());
+            ensure_equals_xy(arcs[i].p2(), expectedArcs[i].p2());
+            ensure_equals("orientation", arcs[i].getOrientation(), expectedArcs[i].getOrientation());
+            ensure_equals_xy(arcs[i].getCenter(), expectedArcs[i].getCenter());
+            ensure_equals("radius", arcs[i].getRadius(), expectedArcs[i].getRadius());
+        }
+
+        ensure_equals("length", cs.getLength(), expected->getLength());
     }
 
     void checkLinearizeMaxDeviation(const std::string& wkt_in, const std::string& wkt_expected, double maxDeviation, double tol=1e-12) {
@@ -533,6 +558,151 @@ void object::test<27>()
 
     // line point 5 is 30 degrees from end of the arc. Z/M interpolated from CircularString points 1 and 2
     ensure_equals_xyzm(seq->getAt<XYZM>(5), XYZM{2.5, -4.33, 6 + (30.0 - 6)*(2.0/3), 8 + (40.0 - 8)*(2.0/3)}, 1e-3);
+}
+
+template<>
+template<>
+void object::test<28>()
+{
+    set_test_name("getArcs() after normalize() of closed CircularString");
+
+    for (const char* wkt : {
+        // circle, start point is OK but need to reverse points
+        "CIRCULARSTRING (-5 0, 0 -5, 5 0, 0 5, -5 0)",
+        // circle, need to change start point but orientation is OK
+        "CIRCULARSTRING (5 0, 0 -5, -5 0, 0 5, 5 0)",
+        // circle, need to change start point and orientation
+        "CIRCULARSTRING (5 0, 0 5, -5 0, 0 -5, 5 0)",
+        // half-moon, start point is OK but need to make CW
+        "CIRCULARSTRING (0 0, -3 5, 0 10, -5 5, 0 0)",
+        // half-moon, need to change start point but orientation is OK
+        "CIRCULARSTRING (0 10, -3 5, 0 0, -5 5, 0 10)"
+    }) {
+        auto cs = wktreader_.read<CircularString>(wkt);
+        cs->getLength(); // create arcs, computing their center, radius and orientation
+        cs->normalize();
+
+        checkArcs(*cs);
+    }
+}
+
+template<>
+template<>
+void object::test<29>()
+{
+    set_test_name("getArcs() after normalize() of closed CircularString with shared coordinates");
+
+    for (const char* wkt : {
+        // start point is OK but need to reverse points
+        "CIRCULARSTRING (-5 0, 0 -5, 5 0, 0 5, -5 0)",
+        // need to change start point but orientation is OK
+        "CIRCULARSTRING (5 0, 0 -5, -5 0, 0 5, 5 0)",
+        // need to change start point and orientation
+        "CIRCULARSTRING (5 0, 0 5, -5 0, 0 -5, 5 0)"
+    }) {
+        auto other = wktreader_.read<CircularString>(wkt);
+        auto cs = factory_->createCircularString(other->getSharedCoordinates());
+        cs->getLength(); // create arcs, computing their center, radius and orientation
+        cs->normalize();
+        other.reset(); // destroy the coordinates used by cs before normalize()
+
+        checkArcs(*cs);
+    }
+}
+
+template<>
+template<>
+void object::test<30>()
+{
+    set_test_name("getArcs() after apply_rw(const CoordinateFilter*)");
+
+    struct ScaleFilter : public geos::geom::CoordinateFilter {
+        void filter_rw(XY* c) const override
+        {
+            c->x *= 2;
+            c->y *= 2;
+        }
+    };
+
+    ScaleFilter filter;
+
+    // coordinates modified in place
+    cs_->getLength(); // create arcs, computing their center, radius and orientation
+    cs_->apply_rw(&filter);
+    checkArcs(*cs_);
+
+    // coordinates copied before modification because they are shared
+    auto cs = factory_->createCircularString(cs_->getSharedCoordinates());
+    cs->getLength(); // create arcs, computing their center, radius and orientation
+    cs->apply_rw(&filter);
+    checkArcs(*cs);
+    cs_.reset(); // destroy the coordinates used by cs before apply_rw()
+    checkArcs(*cs);
+
+    // arcs copied by clone()
+    auto copy = cs->clone();
+    copy->apply_rw(&filter);
+    checkArcs(*copy);
+}
+
+template<>
+template<>
+void object::test<31>()
+{
+    set_test_name("getArcs() after apply_rw(CoordinateSequenceFilter&)");
+
+    struct ScaleFilter : public geos::geom::CoordinateSequenceFilter {
+        explicit ScaleFilter(double p_factor) : factor(p_factor) {}
+
+        void filter_rw(CoordinateSequence& seq, std::size_t i) override
+        {
+            auto& c = seq.getAt<XY>(i);
+            c.x *= factor;
+            c.y *= factor;
+        }
+
+        bool isDone() const override
+        {
+            return false;
+        }
+
+        bool isGeometryChanged() const override
+        {
+            return factor != 1;
+        }
+
+        double factor;
+    };
+
+    // coordinates modified in place
+    ScaleFilter scale(2);
+    cs_->getLength(); // create arcs, computing their center, radius and orientation
+    cs_->apply_rw(scale);
+    checkArcs(*cs_);
+
+    // coordinates unchanged, but copied before the filter is applied because they are shared
+    ScaleFilter identity(1);
+    auto cs = factory_->createCircularString(cs_->getSharedCoordinates());
+    cs->getLength(); // create arcs, computing their center, radius and orientation
+    cs->apply_rw(identity);
+    checkArcs(*cs);
+    cs_.reset(); // destroy the coordinates used by cs before apply_rw()
+    checkArcs(*cs);
+}
+
+template<>
+template<>
+void object::test<32>()
+{
+    set_test_name("getArcs() after geometryChanged()");
+
+    cs_->getLength(); // create arcs, computing their center, radius and orientation
+
+    auto& pts = *const_cast<CoordinateSequence*>(cs_->getCoordinatesRO());
+    pts.setAt(XY(1, 2), 1);
+    cs_->geometryChanged();
+
+    checkArcs(*cs_);
 }
 
 }
