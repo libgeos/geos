@@ -22,6 +22,8 @@
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/util.h>
 // std
+#include <string>
+#include <utility>
 #include <vector>
 #include <cstring> // std::size_t
 
@@ -1575,5 +1577,49 @@ void object::test<43>()
         ensure_equals(g->getNumGeometries(), 2u);
     }
 }
-    
+
+template<>
+template<>
+void object::test<44>()
+{
+    set_test_name("buildGeometry returns a GeometryCollection when an element is a collection");
+
+    using geos::geom::Geometry;
+
+    const std::vector<std::pair<std::string, std::string>> cases = {
+        { "POINT (1 1)", "MULTIPOINT ((2 2), (3 3))" },
+        { "LINESTRING (0 0, 1 1)", "MULTILINESTRING ((2 2, 3 3), (4 4, 5 5))" },
+        { "POLYGON ((0 0, 1 0, 1 1, 0 0))", "MULTIPOLYGON (((2 2, 3 2, 3 3, 2 2)))" },
+        { "LINESTRING (0 0, 1 1)", "GEOMETRYCOLLECTION (LINESTRING (2 2, 3 3))" },
+        { "CIRCULARSTRING (0 0, 1 1, 2 0)", "MULTICURVE ((2 2, 3 3))" },
+        { "POLYGON ((0 0, 1 0, 1 1, 0 0))", "MULTISURFACE (((2 2, 3 2, 3 3, 2 2)))" },
+    };
+
+    for (const auto& c : cases) {
+        auto single = reader_.read(c.first);
+        auto multi = reader_.read(c.second);
+
+        for (bool multiFirst : { false, true }) {
+            const Geometry* a = multiFirst ? multi.get() : single.get();
+            const Geometry* b = multiFirst ? single.get() : multi.get();
+
+            std::vector<std::unique_ptr<Geometry>> owned;
+            owned.push_back(a->clone());
+            owned.push_back(b->clone());
+            auto fromOwned = factory_->buildGeometry(std::move(owned));
+            ensure_equals(c.second, fromOwned->getGeometryTypeId(), geos::geom::GEOS_GEOMETRYCOLLECTION);
+            ensure_equals(c.second, fromOwned->getNumGeometries(), 2u);
+
+            std::vector<const Geometry*> borrowed{ a, b };
+            auto fromBorrowed = factory_->buildGeometry(borrowed);
+            ensure_equals(c.second, fromBorrowed->getGeometryTypeId(), geos::geom::GEOS_GEOMETRYCOLLECTION);
+            ensure_equals(c.second, fromBorrowed->getNumGeometries(), 2u);
+
+            auto fromIterators = factory_->buildGeometry(borrowed.begin(), borrowed.end());
+            ensure_equals(c.second, fromIterators->getGeometryTypeId(), geos::geom::GEOS_GEOMETRYCOLLECTION);
+            ensure_equals(c.second, fromIterators->getNumGeometries(), 2u);
+        }
+    }
+}
+
 } // namespace tut

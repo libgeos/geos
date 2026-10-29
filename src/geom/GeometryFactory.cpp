@@ -903,7 +903,9 @@ GeometryTypeId commonType(const T& geoms) {
     for (std::size_t i = 1; i < geoms.size(); i++) {
         curvedType |= geoms[i]->hasCurvedTypes();
 
-        if (geoms[i]->getDimension() != dim) {
+        // A collection can only be an element of a GeometryCollection,
+        // even when its dimension matches the other elements.
+        if (geoms[i]->isCollection() || geoms[i]->getDimension() != dim) {
             return GEOS_GEOMETRYCOLLECTION;
         }
     }
