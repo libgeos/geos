@@ -27,6 +27,31 @@ using namespace geos::geom;
 namespace geos {
 namespace io {
 
+static bool
+isWhitespaceOnly(const std::string& s)
+{
+    return s.find_last_not_of(" \t\r\n") == std::string::npos;
+}
+
+static bool
+isEndedWithEmpty(const std::string& s)
+{
+    auto pos = s.find_last_not_of(" \t\r\n");
+    if (pos == std::string::npos || pos < 4) {
+        return false;
+    }
+    std::string tail = s.substr(pos - 4, 5);
+    for (char& c : tail) {
+        c = static_cast<char>(std::toupper(static_cast<unsigned char>(c)));
+    }
+    if (tail == "EMPTY") {
+        if (pos == 4 || std::isspace(static_cast<unsigned char>(s[pos - 5]))) {
+            return true;
+        }
+    }
+    return false;
+}
+
 WKTStreamReader::WKTStreamReader(std::istream& p_instr)
     : instr(p_instr)
 {
@@ -49,18 +74,33 @@ WKTStreamReader::next()
 
     std::string::difference_type lParen = 0;
     std::string::difference_type rParen = 0;
-    do {
+    while (true) {
         std::string line;
-        std::getline(instr, line);
-        if (! instr) {
-            return nullptr;
+        if (!std::getline(instr, line)) {
+            if (isWhitespaceOnly(wkt)) {
+                return nullptr;
+            }
+            break;
         }
 
         lParen += std::count(line.begin(), line.end(), '(');
         rParen += std::count(line.begin(), line.end(), ')');
 
+        if (!wkt.empty()) {
+            wkt += "\n";
+        }
         wkt += line;
-    } while (lParen == 0 || lParen != rParen);
+
+        if (lParen == 0 && rParen == 0 && isWhitespaceOnly(wkt)) {
+            wkt.clear();
+            continue;
+        }
+
+        if ((lParen > 0 && lParen == rParen) ||
+            (lParen == 0 && rParen == 0 && isEndedWithEmpty(wkt))) {
+            break;
+        }
+    }
 
     auto g = rdr.read( wkt.c_str() );
     return g;
