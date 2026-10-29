@@ -202,5 +202,46 @@ void object::test<9>
 }
 
 
-} // namespace tut
+// Error on an element of another type, ownership is still transferred
+template<>
+template<>
+void object::test<10>
+()
+{
+    GEOSGeometry* points[2];
+    points[0] = fromWKT("POINT (0 0)");
+    points[1] = fromWKT("LINESTRING (0 0, 1 1)");
+    geom1_ = GEOSGeom_createCollection(GEOS_MULTIPOINT, points, 2);
+    ensure(geom1_ == nullptr);
 
+    GEOSGeometry* lines[2];
+    lines[0] = fromWKT("LINESTRING (0 0, 1 1)");
+    lines[1] = fromWKT("MULTILINESTRING ((2 2, 3 3))");
+    geom1_ = GEOSGeom_createCollection(GEOS_MULTILINESTRING, lines, 2);
+    ensure(geom1_ == nullptr);
+
+    GEOSGeometry* polygons[2];
+    polygons[0] = fromWKT("POLYGON ((0 0, 1 0, 1 1, 0 0))");
+    polygons[1] = fromWKT("POINT (5 5)");
+    geom1_ = GEOSGeom_createCollection(GEOS_MULTIPOLYGON, polygons, 2);
+    ensure(geom1_ == nullptr);
+}
+
+// A LinearRing is accepted as an element of a MultiLineString
+template<>
+template<>
+void object::test<11>
+()
+{
+    GEOSGeometry* lines[2];
+    lines[0] = fromWKT("LINEARRING (0 0, 1 0, 1 1, 0 0)");
+    lines[1] = fromWKT("LINESTRING (2 2, 3 3)");
+    geom1_ = GEOSGeom_createCollection(GEOS_MULTILINESTRING, lines, 2);
+    ensure(geom1_ != nullptr);
+
+    ensure_equals(GEOSGeomTypeId(geom1_), GEOS_MULTILINESTRING);
+    ensure_equals(GEOSGetNumGeometries(geom1_), 2);
+    ensure_equals(GEOSGeomTypeId(GEOSGetGeometryN(geom1_, 0)), GEOS_LINEARRING);
+}
+
+} // namespace tut

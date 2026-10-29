@@ -3,6 +3,7 @@
 
 // tut
 #include <tut/tut.hpp>
+#include <tut/tut_macros.hpp>
 #include <utility.h>
 // geos
 #include <geos/geom/GeometryFactory.h>
@@ -1619,6 +1620,89 @@ void object::test<44>()
             ensure_equals(c.second, fromIterators->getGeometryTypeId(), geos::geom::GEOS_GEOMETRYCOLLECTION);
             ensure_equals(c.second, fromIterators->getNumGeometries(), 2u);
         }
+    }
+}
+
+template<>
+template<>
+void object::test<45>()
+{
+    set_test_name("createMultiPoint, createMultiLineString, createMultiPolygon reject elements of another type");
+
+    using geos::geom::Geometry;
+    using geos::util::IllegalArgumentException;
+
+    auto elements = [this](const std::string& wkt1, const std::string& wkt2) {
+        std::vector<std::unique_ptr<Geometry>> geoms;
+        geoms.push_back(reader_.read(wkt1));
+        geoms.push_back(reader_.read(wkt2));
+        return geoms;
+    };
+
+    ensure_THROW(factory_->createMultiPoint(elements("POINT (0 0)", "MULTIPOINT ((1 1))")), IllegalArgumentException);
+    ensure_THROW(factory_->createMultiPoint(elements("POINT (0 0)", "LINESTRING (0 0, 1 1)")), IllegalArgumentException);
+
+    ensure_THROW(factory_->createMultiLineString(elements("LINESTRING (0 0, 1 1)", "MULTILINESTRING ((2 2, 3 3))")), IllegalArgumentException);
+    ensure_THROW(factory_->createMultiLineString(elements("LINESTRING (0 0, 1 1)", "CIRCULARSTRING (0 0, 1 1, 2 0)")), IllegalArgumentException);
+    ensure_THROW(factory_->createMultiLineString(elements("LINESTRING (0 0, 1 1)", "POINT (0 0)")), IllegalArgumentException);
+
+    ensure_THROW(factory_->createMultiPolygon(elements("POLYGON ((0 0, 1 0, 1 1, 0 0))", "MULTIPOLYGON (((2 2, 3 2, 3 3, 2 2)))")), IllegalArgumentException);
+    ensure_THROW(factory_->createMultiPolygon(elements("POLYGON ((0 0, 1 0, 1 1, 0 0))", "CURVEPOLYGON ((2 2, 3 2, 3 3, 2 2))")), IllegalArgumentException);
+    ensure_THROW(factory_->createMultiPolygon(elements("POLYGON ((0 0, 1 0, 1 1, 0 0))", "LINESTRING (0 0, 1 1)")), IllegalArgumentException);
+
+    // createMultiPolygon(const std::vector<const Geometry*>&) clones into the checked constructor
+    auto poly = reader_.read("POLYGON ((0 0, 1 0, 1 1, 0 0))");
+    auto mpoly = reader_.read("MULTIPOLYGON (((2 2, 3 2, 3 3, 2 2)))");
+    std::vector<const Geometry*> borrowed{ poly.get(), mpoly.get() };
+    ensure_THROW(factory_->createMultiPolygon(borrowed), IllegalArgumentException);
+
+    // A LinearRing is a LineString
+    auto mls = factory_->createMultiLineString(elements("LINESTRING (0 0, 1 1)", "LINEARRING (2 2, 3 2, 3 3, 2 2)"));
+    ensure_equals(mls->getNumGeometries(), 2u);
+}
+
+template<>
+template<>
+void object::test<46>()
+{
+    set_test_name("buildGeometry(from, toofar) and buildGeometry(const std::vector<const Geometry*>&) give the same type");
+
+    using geos::geom::Geometry;
+    using geos::geom::GeometryTypeId;
+
+    struct Case {
+        std::string wkt1;
+        std::string wkt2;
+        GeometryTypeId type;
+    };
+
+    const std::vector<Case> cases = {
+        { "POINT (1 1)", "POINT (2 2)", geos::geom::GEOS_MULTIPOINT },
+        { "LINESTRING (0 0, 1 1)", "LINESTRING (2 2, 3 3)", geos::geom::GEOS_MULTILINESTRING },
+        { "LINESTRING (0 0, 1 1)", "LINEARRING (2 2, 3 2, 3 3, 2 2)", geos::geom::GEOS_MULTILINESTRING },
+        { "POLYGON ((0 0, 1 0, 1 1, 0 0))", "POLYGON ((2 2, 3 2, 3 3, 2 2))", geos::geom::GEOS_MULTIPOLYGON },
+        { "CIRCULARSTRING (0 0, 1 1, 2 0)", "CIRCULARSTRING (2 0, 3 1, 4 0)", geos::geom::GEOS_MULTICURVE },
+        { "COMPOUNDCURVE ((0 0, 1 1))", "COMPOUNDCURVE ((2 2, 3 3))", geos::geom::GEOS_MULTICURVE },
+        { "LINESTRING (0 0, 1 1)", "CIRCULARSTRING (2 0, 3 1, 4 0)", geos::geom::GEOS_MULTICURVE },
+        { "CURVEPOLYGON ((0 0, 1 0, 1 1, 0 0))", "CURVEPOLYGON ((2 2, 3 2, 3 3, 2 2))", geos::geom::GEOS_MULTISURFACE },
+        { "POLYGON ((0 0, 1 0, 1 1, 0 0))", "CURVEPOLYGON ((2 2, 3 2, 3 3, 2 2))", geos::geom::GEOS_MULTISURFACE },
+        { "MULTIPOINT ((0 0))", "MULTIPOINT ((2 2), (3 3))", geos::geom::GEOS_GEOMETRYCOLLECTION },
+        { "MULTIPOLYGON (((0 0, 1 0, 1 1, 0 0)))", "MULTIPOLYGON (((2 2, 3 2, 3 3, 2 2)))", geos::geom::GEOS_GEOMETRYCOLLECTION },
+        { "POINT (1 1)", "LINESTRING (2 2, 3 3)", geos::geom::GEOS_GEOMETRYCOLLECTION },
+    };
+
+    for (const auto& c : cases) {
+        auto g1 = reader_.read(c.wkt1);
+        auto g2 = reader_.read(c.wkt2);
+        std::vector<const Geometry*> geoms{ g1.get(), g2.get() };
+
+        auto fromVector = factory_->buildGeometry(geoms);
+        ensure_equals(c.wkt2, fromVector->getGeometryTypeId(), c.type);
+        ensure_equals(c.wkt2, fromVector->getNumGeometries(), 2u);
+
+        auto fromIterators = factory_->buildGeometry(geoms.begin(), geoms.end());
+        ensure_equals(c.wkt2, fromIterators->getGeometryTypeId(), c.type);
+        ensure_equals(c.wkt2, fromIterators->getNumGeometries(), 2u);
     }
 }
 

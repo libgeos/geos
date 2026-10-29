@@ -25,6 +25,7 @@
 #include <geos/geom/MultiSurface.h>
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/Dimension.h>
+#include <geos/util/IllegalArgumentException.h>
 
 #include <cassert>
 #include <string>
@@ -42,7 +43,13 @@ MultiPolygon::MultiPolygon(std::vector<std::unique_ptr<Polygon>> && newPolys, co
 
 MultiPolygon::MultiPolygon(std::vector<std::unique_ptr<Geometry>> && newPolys, const GeometryFactory& factory)
         : GeometryCollection(std::move(newPolys), factory)
-{}
+{
+    for (const auto& geom : geometries) {
+        if (geom->getGeometryTypeId() != GEOS_POLYGON) {
+            throw util::IllegalArgumentException("All elements of MultiPolygon must be a Polygon");
+        }
+    }
+}
 
 MultiPolygon::~MultiPolygon() {}
 
