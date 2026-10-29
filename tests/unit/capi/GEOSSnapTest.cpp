@@ -220,5 +220,20 @@ void object::test<11>()
     ensure("curved geometry not supported", result_ == nullptr);
 }
 
-} // namespace tut
+template<>
+template<>
+void object::test<12>()
+{
+    set_test_name("MultiPolygon with rings collapsed to lines gives a GeometryCollection");
 
+    input_ = fromWKT("MULTIPOLYGON (((0 0, 1 1, 0 0)), ((10 10, 11 11, 10 10), (0 0, 30 0, 30 30, 0 30, 0 0)))");
+
+    result_ = GEOSSnap(input_, input_, 0);
+    ensure(result_);
+
+    // Not a MultiLineString with a MultiLineString element
+    ensure_equals(GEOSGeomTypeId(result_), GEOS_GEOMETRYCOLLECTION);
+    ensure_equals(toWKT(result_), "GEOMETRYCOLLECTION (LINESTRING (0 0, 1 1, 0 0), MULTILINESTRING ((10 10, 11 11, 10 10), (0 0, 30 0, 30 30, 0 30, 0 0)))");
+}
+
+} // namespace tut
