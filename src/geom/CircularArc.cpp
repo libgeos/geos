@@ -145,27 +145,9 @@ CircularArc::CircularArc(CircularArc&& other) noexcept {
 CircularArc&
 CircularArc::operator=(const CircularArc& other)
 {
-    if (this == &other) {
-        return *this;
+    if (this != &other) {
+        *this = CircularArc(other);
     }
-
-    if (m_own_coordinates) {
-        delete m_seq;
-    }
-
-    m_seq = new CoordinateSequence(0, other.getCoordinateSequence()->hasZ(), other.getCoordinateSequence()->hasM());
-    m_pos = other.m_pos;
-    m_own_coordinates = true;
-    m_orientation = other.m_orientation;
-    m_orientation_known = other.m_orientation_known;
-    m_center = other.m_center;
-    m_center_known = other.m_center_known;
-    m_radius = other.m_radius;
-    m_radius_known = other.m_radius_known;
-
-    CoordinateSequence* seq = const_cast<CoordinateSequence*>(m_seq);
-    seq->reserve(3);
-    seq->add(*other.getCoordinateSequence(), other.getCoordinatePosition(), other.getCoordinatePosition() + 2);
 
     return *this;
 }
