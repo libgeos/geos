@@ -454,4 +454,30 @@ void object::test<13>()
     ensure_equals_exact_geometry_xyzm(curved.get(), cc_.get(), 0);
 }
 
+template<>
+template<>
+void object::test<14>()
+{
+    set_test_name("getEnvelopeInternal() after apply_rw(const CoordinateFilter*) and geometryChanged()");
+
+    struct TranslateFilter : public geos::geom::CoordinateFilter {
+        void filter_rw(CoordinateXY* c) const override
+        {
+            c->x += 10;
+        }
+    };
+
+    TranslateFilter filter;
+    cc_->apply_rw(&filter);
+    cc_->geometryChanged();
+
+    auto expected = wktreader_.read<CompoundCurve>("COMPOUNDCURVE(CIRCULARSTRING(10 0, 11 1, 12 0), (12 0, 12 2))");
+
+    ensure_equals(*cc_->getEnvelopeInternal(), *expected->getEnvelopeInternal());
+    for (std::size_t i = 0; i < cc_->getNumCurves(); i++) {
+        ensure_equals(*cc_->getCurveN(i)->getEnvelopeInternal(), *expected->getCurveN(i)->getEnvelopeInternal());
+    }
+    ensure_equals("length", cc_->getLength(), expected->getLength(), 1e-12);
+}
+
 }
