@@ -1013,4 +1013,78 @@ void object::test<54>()
     ensure_equals("check area", tot/100, g->getArea(), 1e-6);
 }
 
+template<>
+template<>
+void object::test<55>()
+{
+    set_test_name("getIntersectionFractions: traversal stays in grid when a vertex is the top corner of the geometry envelope");
+
+    // The vertex at (-259.05369950585896 811.4225290921494) is the upper-left corner of the polygon envelope
+    // and lies on a cell boundary, to within rounding.
+    Envelope e(-300.91149168825694, -175.33811514106293, 225.41343853857734, 602.13356818015927);
+    Grid<bounded_extent> ext(e, e.getWidth() / 6, e.getHeight() / 18);
+
+    auto g = wkt_reader_.read("POLYGON ((-70.69363468506793 685.8491525449554, -133.48032295866494 748.6358408185523, -175.33811514106293 790.4936330009504, -259.05369950585896 811.4225290921494, -238.12480341465994 706.7780486361544, -259.05369950585896 664.9202564537563, -259.05369950585896 581.2046720889604, -196.26701123226195 643.9913603625573, -112.55142686746595 623.0624642713583, -70.69363468506793 685.8491525449554))");
+
+    auto fracs = GridIntersection::getIntersectionFractions(ext, *g);
+
+    auto inside = g->intersection(g->getFactory()->toGeometry(&e).get());
+    check_area(*fracs, ext, *inside);
+}
+
+template<>
+template<>
+void object::test<56>()
+{
+    set_test_name("getIntersectionFractions: traversal stays in grid when a vertex is the bottom corner of the geometry envelope");
+
+    // The vertex at (68.44482903503193 -90.56515438144179) is the lower-right corner of the polygon envelope
+    // and lies on a cell boundary, to within rounding.
+    Envelope e(-10.004484448704343, 152.12409675101728, 35.385086543444757, 73.717768564062396);
+    Grid<bounded_extent> ext(e, e.getWidth() / 31, e.getHeight() / 14);
+
+    auto g = wkt_reader_.read("POLYGON ((173.04391368001362 60.02752498527039, 78.9047374995301 109.31240186892164, 89.36464596402827 257.1670325198754, -25.694347145451598 213.35825306774097, -93.68375216468971 161.3353274683313, -104.14366062918788 90.14606085861283, -119.83352332593513 24.432891680411146, -51.84411830669703 5.266550670102323, -20.464392913202513 -52.23247236082415, 68.44482903503193 -90.56515438144179, 173.04391368001362 -54.97052107658256, 173.04391368001362 60.02752498527039))");
+
+    auto fracs = GridIntersection::getIntersectionFractions(ext, *g);
+
+    auto inside = g->intersection(g->getFactory()->toGeometry(&e).get());
+    check_area(*fracs, ext, *inside);
+}
+
+template<>
+template<>
+void object::test<57>()
+{
+    set_test_name("subdividePolygon: traversal stays in grid when padding is lost to rounding at large coordinates");
+
+    // At 1e22, adding a fixed padding of 1 to the geometry envelope has no effect,
+    // so the vertex at (1e22 0.9) would lie on the outer edge of a padding cell.
+    Envelope e(-0.375, 2.1875, -0.375, 2.1875);
+    Grid<bounded_extent> ext(e, e.getWidth() / 64, e.getHeight() / 2);
+
+    auto g = wkt_reader_.read("POLYGON ((0.1 0.1, 0.1 0.2, 0.95 0.95, 1e22 0.9, 0.1 0.1))");
+
+    auto subd = GridIntersection::subdividePolygon(ext, *g, false);
+
+    auto inside = g->intersection(g->getFactory()->toGeometry(&e).get());
+    check_subdivided_polygon(*inside, *subd);
+}
+
+template<>
+template<>
+void object::test<58>()
+{
+    set_test_name("getIntersectionFractions: box sharing an edge with the grid");
+
+    Envelope e(0, 10, 0, 10);
+    Grid<bounded_extent> ext(e, 1, 1);
+
+    for (const auto& box : { Envelope(10, 20, 0, 10), Envelope(0, 10, 10, 20), Envelope(-10, 0, -10, 0) }) {
+        auto fracs = GridIntersection::getIntersectionFractions(ext, box);
+        auto tot = std::accumulate(fracs->begin(), fracs->end(), 0.0);
+
+        ensure_equals(tot, 0.0);
+    }
+}
+
 }

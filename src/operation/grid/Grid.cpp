@@ -12,6 +12,9 @@
  *
  **********************************************************************/
 
+#include <algorithm>
+#include <cmath>
+
 #include <geos/operation/grid/Grid.h>
 
 using geos::geom::Envelope;
@@ -35,17 +38,39 @@ Grid<bounded_extent>::getCellEnvelope(size_t row, size_t col) const
     };
 }
 
+// Return an Envelope that covers both the regular grid and the domain, with room to spare:
+// the outer edges of the padding cells. No coordinate of the domain may lie on an outer edge,
+// or a traversal could leave the grid through it. A fixed padding is lost to rounding for
+// large coordinates, so it grows with their magnitude.
+static Envelope
+getPaddedExtent(const Envelope& extent, const Envelope& domain)
+{
+    constexpr double PADDED_CELL_SIZE = 1.0;
+    constexpr double PADDED_CELL_RELATIVE_SIZE = 1e-12;
+
+    Envelope padded(extent);
+    padded.expandToInclude(domain);
+
+    const double xmag = std::max(std::abs(padded.getMinX()), std::abs(padded.getMaxX()));
+    const double ymag = std::max(std::abs(padded.getMinY()), std::abs(padded.getMaxY()));
+
+    padded.expandBy(std::max(PADDED_CELL_SIZE, PADDED_CELL_RELATIVE_SIZE * xmag),
+                    std::max(PADDED_CELL_SIZE, PADDED_CELL_RELATIVE_SIZE * ymag));
+
+    return padded;
+}
+
 template<>
 Envelope GEOS_DLL
 Grid<infinite_extent>::getCellEnvelope(size_t row, size_t col) const
 {
     double cell_xmin, cell_xmax, cell_ymin, cell_ymax;
 
-    constexpr double PADDED_CELL_SIZE = 1.0;
+    const Envelope padded = getPaddedExtent(m_extent, m_domain);
 
     if (col == 0) {
         // Left-side padding
-        cell_xmin = std::min(xmin() - PADDED_CELL_SIZE, m_domain.getMinX());
+        cell_xmin = padded.getMinX();
     } else if (col == getNumCols() - 1) {
         // Right-side padding
         cell_xmin = xmax(); // because rightmost col of regular may have different width from others
@@ -57,7 +82,7 @@ Grid<infinite_extent>::getCellEnvelope(size_t row, size_t col) const
     switch (getNumCols() - col) {
         case 1:
             // Right-side padding
-            cell_xmax = std::max(xmax() + PADDED_CELL_SIZE, m_domain.getMaxX());
+            cell_xmax = padded.getMaxX();
             break;
         case 2:
             // Rightmost internal cell
@@ -69,7 +94,7 @@ Grid<infinite_extent>::getCellEnvelope(size_t row, size_t col) const
 
     if (row == 0) {
         // Top row padding
-        cell_ymax = std::max(ymax() + PADDED_CELL_SIZE, m_domain.getMaxY());
+        cell_ymax = padded.getMaxY();
     } else if (row == getNumRows() - 1) {
         // Bottom row padding
         cell_ymax = ymin(); // because bottom row of regular may have different height from others
@@ -80,7 +105,7 @@ Grid<infinite_extent>::getCellEnvelope(size_t row, size_t col) const
     switch (getNumRows() - row) {
         case 1:
             // Bottom row padding
-            cell_ymin = std::min(xmin() - PADDED_CELL_SIZE, m_domain.getMinY());
+            cell_ymin = padded.getMinY();
             break;
         case 2:
             // Bottom-most internal row

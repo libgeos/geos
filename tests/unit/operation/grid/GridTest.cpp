@@ -333,4 +333,32 @@ void object::test<17>()
     ensure_equals("maxY", env0.getMaxY(), env1.getMaxY());
 }
 
+template<>
+template<>
+void object::test<18>()
+{
+    set_test_name("Infinite grid padding cells extend beyond the domain");
+
+    // x and y have different magnitudes, so that padding computed from the wrong axis is detected
+    const Envelope extent{ 100, 110, 0, 10 };
+
+    const std::vector<Envelope> domains{
+        extent,
+        { 50, 160, -50, 60 },
+        { 105, 1e22, -1e22, 5 },
+    };
+
+    for (const auto& domain : domains) {
+        Grid<infinite_extent> grid{ extent, 1, 1, domain };
+
+        const auto ul = grid.getCellEnvelope(0, 0);
+        const auto lr = grid.getCellEnvelope(grid.getNumRows() - 1, grid.getNumCols() - 1);
+
+        ensure("left", ul.getMinX() < std::min(extent.getMinX(), domain.getMinX()));
+        ensure("top", ul.getMaxY() > std::max(extent.getMaxY(), domain.getMaxY()));
+        ensure("right", lr.getMaxX() > std::max(extent.getMaxX(), domain.getMaxX()));
+        ensure("bottom", lr.getMinY() < std::min(extent.getMinY(), domain.getMinY()));
+    }
+}
+
 }
