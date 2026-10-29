@@ -3,6 +3,7 @@
 #include <geos/algorithm/Orientation.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CircularArc.h>
+#include <geos/geom/CoordinateSequence.h>
 #include <geos/constants.h>
 
 using geos::geom::CoordinateXY;
@@ -175,5 +176,32 @@ void object::test<7>() {
     ensure_equals(arc.getOrientation(), orientation);
 }
 
+
+template<>
+template<>
+void object::test<8>() {
+    set_test_name("copy assignment from arc that does not start at the beginning of its CoordinateSequence");
+
+    CoordinateSequence seq{
+        CoordinateXY(0, 0),
+        CoordinateXY(1, 1),
+        CoordinateXY(2, 0),
+        CoordinateXY(3, -1),
+        CoordinateXY(4, 0)
+    };
+
+    CircularArc second(seq, 2);
+
+    CircularArc arc = CircularArc::create(CoordinateXY(0, 0), CoordinateXY(1, 1), CoordinateXY(2, 0));
+    arc = second;
+
+    ensure_equals(arc.p0(), CoordinateXY(2, 0));
+    ensure_equals(arc.p1(), CoordinateXY(3, -1));
+    ensure_equals(arc.p2(), CoordinateXY(4, 0));
+
+    // arc has its own copy of the points
+    seq.setAt(CoordinateXY(5, 5), 2);
+    ensure_equals(arc.p0(), CoordinateXY(2, 0));
+}
 
 }
