@@ -10,6 +10,7 @@
   - GeometrySplitter: Allow splitting a MultiSurface (GH-1520, Dan Baston)
   - GEOSGridIntersectionFractions: Set cells outside geometry bounding box to zero (GH-1532, Dan Baston)
   - GEOSisSimpleDetail returns locations with input SRID (Sandro Santilli)
+  - CircularString: clear cached arcs when coordinates change (Alejandro Pacheco)
 
 - New things:
   - Expose code revision: GEOS_REVISION, GEOSrevision, geos-config --revision

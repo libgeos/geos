@@ -25,10 +25,15 @@ class GEOS_DLL CircularString : public SimpleCurve {
 
 public:
     using SimpleCurve::SimpleCurve;
+    using SimpleCurve::apply_rw;
 
     friend class GeometryFactory;
 
     ~CircularString() override;
+
+    void apply_rw(const CoordinateFilter* filter) override;
+
+    void apply_rw(CoordinateSequenceFilter& filter) override;
 
     std::unique_ptr<CircularString> clone() const;
 
@@ -82,6 +87,7 @@ protected:
     void geometryChangedAction() override
     {
         envelope = computeEnvelopeInternal(false);
+        arcs.clear();
     }
 
     CircularString* getCurvedImpl(const algorithm::LineToCurveParams&) const override {
@@ -105,6 +111,9 @@ private:
 
     void normalizeClosed();
 
+    /// Arcs describing `points`, created on demand by getArcs(). They refer to
+    /// positions in `points` (or, in a copy, to copies of the points of the
+    /// original) and must be cleared whenever `points` is replaced or modified.
     mutable std::vector<CircularArc> arcs;
 
 };
