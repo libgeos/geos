@@ -1,6 +1,7 @@
 #include <tut/tut.hpp>
 
 #include <geos/geom/Coordinate.h>
+#include <geos/geom/CircularString.h>
 #include <geos/algorithm/CircularArcs.h>
 #include <geos/geom/CircularArc.h>
 #include <geos/geom/Quadrant.h>
@@ -1006,8 +1007,7 @@ set_test_name("getMidpointAngle");
 
 template<>
 template<>
-void object::test<71>()
-{
+void object::test<71>() {
     set_test_name("containsAngle");
 
     using geos::algorithm::Orientation;
@@ -1041,6 +1041,92 @@ void object::test<71>()
     // t0 == t2, t0 != 0, full circle
     checkAngleContained(MATH_PI, MATH_PI/4, MATH_PI/4, BOTH_);
     checkAngleContained(MATH_PI, MATH_PI/4, 9*MATH_PI/4, BOTH_);
+}
+
+template<>
+template<>
+void object::test<72>()
+{
+    set_test_name("arc-seg distance, segment inside circle, closest to arc endpoint");
+
+    // The segment lies inside the circle and does not reach the arc, so the
+    // closest pair joins the arc endpoint at 70 degrees to the segment interior.
+    const double r = 10;
+    CircularArc arc = CircularArc::create(XY{r*std::cos(MATH_PI/3), r*std::sin(MATH_PI/3)},
+                                          XY{r*std::cos(13*MATH_PI/36), r*std::sin(13*MATH_PI/36)},
+                                          XY{r*std::cos(7*MATH_PI/18), r*std::sin(7*MATH_PI/18)});
+    XY q0{2, 0};
+    XY q1{2, 9.5};
+
+    ensure_equals("distance", arc.distance(q0, q1), arc.p2().x - 2, 1e-12);
+}
+
+template<>
+template<>
+void object::test<73>()
+{
+    set_test_name("arc-seg distance, segment outside circle, closest to segment endpoint");
+
+    // The closest pair joins a segment endpoint to the arc interior.
+    CircularArc arc = CircularArc::create(XY{-3.48172, 2.91175}, XY{9.45735, -6.02278}, XY{1.44247, -0.448891});
+    XY q0{4.48559, 4.09741};
+    XY q1{-5.45188, -9.20177};
+
+    ensure_equals("distance", arc.distance(q0, q1), 0.2835665009749685, 1e-9);
+
+    const auto pts = CircularArcs::closestPointsArcSegment(arc.getCenter(), arc.getRadius(),
+                     arc.p0(), arc.p2(), arc.isCCW(), q0, q1);
+    ensure("first point is on the arc", std::abs(pts[0].distance(arc.getCenter()) - arc.getRadius()) < 1e-9);
+    ensure_equals("closest points distance", pts[0].distance(pts[1]), 0.2835665009749685, 1e-9);
+}
+
+template<>
+template<>
+void object::test<74>()
+{
+    set_test_name("arc-seg distance, segment tangent to arc");
+
+    // The segment is tangent to the circle at (4, 3), which lies on the arc,
+    // but roundoff hides the intersection from circleIntersectsSegment.
+    CircularArc arc = CircularArc::create(XY{0, -5}, XY{4, -3}, XY{0, 5});
+    XY q0{7, -1};
+    XY q1{1, 7};
+
+    ensure_equals("distance", arc.distance(q0, q1), 0, 1e-12);
+    ensure_equals("distance (reversed segment)", arc.distance(q1, q0), 0, 1e-12);
+}
+
+template<>
+template<>
+void object::test<75>()
+{
+    set_test_name("arc-seg distance, segment nearly tangent to arc");
+
+    // Found by differential testing against NetTopologySuite.Proofs ARC_SEGMENT_DISTANCE.
+    CircularArc arc = CircularArc::create(XY{-81.85405104117687, -125.94712311622965},
+                                          XY{118.46299847713223, -81.33910481556457},
+                                          XY{73.85498017646715, 118.97794470274454});
+    XY q0{176.08930671152348, -164.72607692939968};
+    XY q1{97.98804198508518, 227.31432409657776};
+
+    ensure_equals("distance", arc.distance(q0, q1), 0, 1e-9);
+    ensure_equals("distance (reversed segment)", arc.distance(q1, q0), 0, 1e-9);
+}
+
+template<>
+template<>
+void object::test<76>()
+{
+    set_test_name("arc-seg closest points, segment outside circle, closest to arc endpoint");
+
+    // Closest pair joins the arc endpoint (5, 0) to the segment endpoint (10, -1).
+    CircularArc arc = CircularArc::create(XY{5, 0}, XY{3, 4}, XY{0, 5});
+    XY q0{10, -10};
+    XY q1{10, -1};
+
+    const auto pts = arc.closestPoints(q0, q1);
+    ensure_equals("first point is on the arc", pts[0], XY{5, 0});
+    ensure_equals("second point is on the segment", pts[1], XY{10, -1});
 }
 
 }
