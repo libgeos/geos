@@ -76,4 +76,29 @@ void object::test<3>()
     ensure_equals(GEOSGeomTypeId_r(ctxt_, GEOSGetGeometryN_r(ctxt_, result_, 1)), GEOS_CURVEPOLYGON);
 }
 
+template<>
+template<>
+void object::test<4>()
+{
+    set_test_name("vertex far outside the grid at large coordinates");
+
+    input_ = fromWKT("POLYGON ((0.1 0.1, 0.1 0.2, 0.95 0.95, 1e22 0.9, 0.1 0.1))");
+
+    const double xmin = -0.375;
+    const double ymin = -0.375;
+    const double xmax = 2.1875;
+    const double ymax = 2.1875;
+
+    result_ = GEOSSubdivideByGrid(input_, xmin, ymin, xmax, ymax, 64, 2, false);
+    ensure(result_ != nullptr);
+
+    geom1_ = GEOSGeom_createRectangle(xmin, ymin, xmax, ymax);
+    geom2_ = GEOSIntersection(input_, geom1_);
+    double expected_area, area;
+    GEOSArea(geom2_, &expected_area);
+    GEOSArea(result_, &area);
+
+    ensure_equals("area", area, expected_area, 1e-6 * expected_area);
+}
+
 }

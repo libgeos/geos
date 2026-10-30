@@ -51,8 +51,12 @@ GridIntersection::getIntersectionFractions(const Grid<bounded_extent>& raster_gr
 static Cell*
 get_cell(Matrix<std::unique_ptr<Cell>>& cells, const Grid<infinite_extent>& ex, size_t row, size_t col)
 {
-    assert(row < cells.getNumRows());
-    assert(col < cells.getNumCols());
+    // A traversal that leaves the grid through its first row or column
+    // wraps around to SIZE_MAX, so one comparison covers both directions.
+    if (row >= cells.getNumRows() || col >= cells.getNumCols()) {
+        throw util::GEOSException("Grid traversal left the grid.");
+    }
+
     if (cells(row, col) == nullptr) {
         cells(row, col) = std::make_unique<Cell>(ex.getCellEnvelope(row, col));
     }
@@ -73,6 +77,17 @@ getSubgrid(const Geometry& ls, const Grid<infinite_extent>& geometry_grid)
     return getSubgrid(*ls.getEnvelopeInternal(), geometry_grid);
 }
 
+
+// The result matrix may be a caller-owned buffer, so check that a block of
+// nrows x ncols values starting at (i0, j0) fits in it before writing them.
+static void
+checkResultsFit(const Matrix<float>& results, size_t i0, size_t j0, size_t nrows, size_t ncols)
+{
+    if (i0 > results.getNumRows() || nrows > results.getNumRows() - i0 ||
+        j0 > results.getNumCols() || ncols > results.getNumCols() - j0) {
+        throw util::GEOSException("Grid results out of range.");
+    }
+}
 
 template<typename T>
 static void
@@ -176,7 +191,8 @@ GridIntersection::process(const Geometry& g)
 void
 GridIntersection::processRectangularRing(const Envelope& box, bool exterior_ring)
 {
-    if (!box.intersects(m_geometry_grid.getExtent())) {
+    // A box that only touches the grid would produce an empty subgrid
+    if (box.intersection(m_geometry_grid.getExtent()).getArea() == 0) {
         return;
     }
 
@@ -439,6 +455,8 @@ GridIntersection::processLine(const LineString& ls, bool exterior_ring)
         size_t i0 = ring_grid.getRowOffset(m_geometry_grid);
         size_t j0 = ring_grid.getColOffset(m_geometry_grid);
 
+        checkResultsFit(*m_results, i0, j0, 1, 1);
+
         if (m_areal) {
             auto ring_area = static_cast<float>(algorithm::Area::ofRing(&coords) / ring_grid.getCellEnvelope(1, 1).getArea());
 
@@ -479,6 +497,8 @@ GridIntersection::processLine(const LineString& ls, bool exterior_ring)
 void
 GridIntersection::addRingResults(size_t i0, size_t j0, const Matrix<float>& areas, bool exterior_ring)
 {
+    checkResultsFit(*m_results, i0, j0, areas.getNumRows(), areas.getNumCols());
+
     float factor = exterior_ring ? 1.0f : -1.0f;
 
     for (size_t i = 0; i < areas.getNumRows(); i++) {
@@ -590,10 +610,7 @@ GridIntersection::subdividePolygon(const Grid<bounded_extent>& p_grid, const Geo
 
     const auto cropped_grid = p_grid.shrinkToFit(p_grid.getExtent().intersection(*g.getEnvelopeInternal()), false);
 
-    geom::Envelope gridExtent = *g.getEnvelopeInternal();
-    gridExtent.expandBy(1);
-
-    const Grid<infinite_extent> cell_grid = make_infinite(cropped_grid, gridExtent);
+    const Grid<infinite_extent> cell_grid = make_infinite(cropped_grid, *g.getEnvelopeInternal());
     Matrix<std::unique_ptr<Cell>> cells(cell_grid.getNumRows(), cell_grid.getNumCols());
 
     traversePolygons(cells, cell_grid, g, true);
