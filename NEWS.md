@@ -10,6 +10,10 @@
   - GeometrySplitter: Allow splitting a MultiSurface (GH-1520, Dan Baston)
   - GEOSGridIntersectionFractions: Set cells outside geometry bounding box to zero (GH-1532, Dan Baston)
   - GEOSisSimpleDetail returns locations with input SRID (Sandro Santilli)
+  - Runtime-dispatched AVX-512 code paths for overlay ring clipping, point-in-ring
+    tests, monotone chain construction and segment intersection, speeding up
+    intersection and intersects. Disable with GEOS_ENABLE_AVX512=OFF (CMake)
+    or the GEOS_DISABLE_AVX512 environment variable.
 
 - New things:
   - Expose code revision: GEOS_REVISION, GEOSrevision, geos-config --revision

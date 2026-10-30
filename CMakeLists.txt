@@ -171,6 +171,7 @@ set(CMAKE_CXX_STANDARD 17 CACHE STRING "C++ standard version to use (minimum req
 
 ## GEOS custom variables
 option(BUILD_BENCHMARKS "Build GEOS benchmarks" OFF)
+option(GEOS_ENABLE_AVX512 "Build runtime-dispatched AVX-512 code paths (x86-64, GCC or Clang)" ON)
 cmake_dependent_option(GEOS_BUILD_DEVELOPER
   "Build with compilation flags useful for development" ON
   "GEOS_BUILD_FROM_GIT;PROJECT_IS_TOP_LEVEL" OFF)
@@ -414,6 +415,10 @@ target_link_libraries(geos PUBLIC geos_cxx_flags PRIVATE $<BUILD_INTERFACE:ryu>)
 #  set_target_properties(geos PROPERTIES
 #    INSTALL_NAME_DIR "${CMAKE_INSTALL_FULL_LIBDIR}")
 #endif()
+
+if(NOT GEOS_ENABLE_AVX512)
+  target_compile_definitions(geos PRIVATE GEOS_DISABLE_AVX512)
+endif()
 
 add_subdirectory(include)
 add_subdirectory(src)

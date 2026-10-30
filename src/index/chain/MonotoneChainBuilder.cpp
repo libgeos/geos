@@ -22,6 +22,7 @@
 #include <geos/geom/CoordinateFilter.h>
 #include <geos/geom/Quadrant.h>
 
+#include "../../util/SimdAvx512.h"
 
 #include <cassert>
 #include <cstdio>
@@ -103,10 +104,95 @@ private:
 };
 
 
+#if GEOS_SIMD_AVX512
+/*
+ * Finds the monotone chains of a sequence exactly as ChainBuilder does,
+ * computing the quadrants of eight segments at a time.
+ */
+template<std::size_t S>
+GEOS_AVX512_TARGET void
+getChainsAvx512(const CoordinateSequence* pts, void* context,
+                std::vector<MonotoneChain>& mcList)
+{
+    namespace simd = geos::util::simd::detail;
+
+    const std::size_t n = pts->size();
+    if (n == 0) {
+        return;
+    }
+    const double* data = pts->data();
+
+    std::size_t start = 0;
+    // quadrant of the last non-repeated segment, encoded as east * 2 + north,
+    // or -1 before the first one
+    int quadrant = -1;
+
+    simd::SegmentBlocks<S> blocks(data, n);
+    while (blocks.next()) {
+        // segment k + lane runs from point k + lane to point k + lane + 1
+        const std::size_t k = blocks.start();
+        const std::size_t count = blocks.count();
+        const __mmask8 lanes = simd::laneMask(count);
+        const __m512d x0 = blocks.x0;
+        const __m512d y0 = blocks.y0;
+        const __m512d x1 = blocks.x1;
+        const __m512d y1 = blocks.y1;
+
+        const unsigned repeated = _mm512_mask_cmp_pd_mask(lanes, x1, x0, _CMP_EQ_OQ) &
+                                  _mm512_mask_cmp_pd_mask(lanes, y1, y0, _CMP_EQ_OQ);
+        const unsigned east = _mm512_mask_cmp_pd_mask(lanes, x1, x0, _CMP_GE_OQ);
+        const unsigned north = _mm512_mask_cmp_pd_mask(lanes, y1, y0, _CMP_GE_OQ);
+
+        if (repeated == 0 && quadrant >= 0) {
+            const unsigned prevEast = (east << 1) | static_cast<unsigned>(quadrant >> 1);
+            const unsigned prevNorth = (north << 1) | static_cast<unsigned>(quadrant & 1);
+            unsigned change = ((east ^ prevEast) | (north ^ prevNorth)) & lanes;
+            while (change) {
+                const std::size_t chainEnd = k + simd::countTrailingZeros(change);
+                mcList.emplace_back(*pts, start, chainEnd, context);
+                start = chainEnd;
+                change &= change - 1;
+            }
+            const std::size_t last = count - 1;
+            quadrant = static_cast<int>(((east >> last) & 1) * 2 + ((north >> last) & 1));
+        }
+        else {
+            for (std::size_t lane = 0; lane < count; lane++) {
+                if ((repeated >> lane) & 1) {
+                    continue;
+                }
+                const int q = static_cast<int>(((east >> lane) & 1) * 2 + ((north >> lane) & 1));
+                if (quadrant < 0) {
+                    quadrant = q;
+                }
+                if (q != quadrant) {
+                    const std::size_t chainEnd = k + lane;
+                    mcList.emplace_back(*pts, start, chainEnd, context);
+                    start = chainEnd;
+                    quadrant = q;
+                }
+            }
+        }
+    }
+
+    mcList.emplace_back(*pts, start, n - 1, context);
+}
+#endif
+
 /* static public */
 void
 MonotoneChainBuilder::getChains(const CoordinateSequence* pts, void* context,
                                 std::vector<MonotoneChain>& mcList) {
+#if GEOS_SIMD_AVX512
+    if (geos::util::simd::detail::useAvx512()) {
+        switch (geos::util::simd::detail::coordinateStride(*pts)) {
+            case 2: getChainsAvx512<2>(pts, context, mcList); return;
+            case 3: getChainsAvx512<3>(pts, context, mcList); return;
+            case 4: getChainsAvx512<4>(pts, context, mcList); return;
+        }
+    }
+#endif
+
     ChainBuilder builder(pts, context, mcList);
     pts->apply_ro(&builder);
     builder.finish();
