@@ -268,7 +268,7 @@ public:
             m_coords = std::make_unique<geom::CoordinateSequence>(0, m_constructZ, m_constructM);
         }
 
-        m_coords->add(seq, pos, pos + 2, false);
+        m_coords->add(seq, pos + !m_coords->isEmpty(), pos + 2, true);
         m_arcs.emplace_back(*m_coords, m_coords->getSize() - 3, center, radius, orientation);
     }
 

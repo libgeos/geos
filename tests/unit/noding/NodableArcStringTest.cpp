@@ -12,6 +12,7 @@ using geos::geom::CoordinateXY;
 using geos::geom::CoordinateXYZM;
 using geos::noding::ArcString;
 using geos::noding::NodableArcString;
+using namespace std::string_literals;
 
 namespace tut {
 
@@ -223,4 +224,72 @@ void object::test<5>()
                 });
 }
 
+template<>
+template<>
+void object::test<6>()
+{
+    set_test_name("getNoded keeps all three points of arcs with repeated points");
+
+    for (const char* wkt : {
+            "CIRCULARSTRING (0 0, 0 0, 0 0)", // 0 == 1 == 2
+            "CIRCULARSTRING (0 0, 0 0, 2 0, 3 1, 4 0)", // 0 == 1
+            "CIRCULARSTRING (0 0, 1 1, 1 1, 3 1, 4 0)", // 1 == 2
+            "CIRCULARSTRING (0 0, 1 1, 2 0, 2 0, 4 0)", // 2 == 3
+            "CIRCULARSTRING (0 0, 1 1, 2 0, 3 1, 3 1)" // 3 == 4
+        }) {
+        const auto g = reader_.read<CircularString>(wkt);
+
+        NodableArcString nas(g->getArcs(), g->getSharedCoordinates(), false, false, nullptr);
+
+        std::vector<std::unique_ptr<ArcString>> noded;
+        nas.getNoded(noded);
+
+        ensure_equals("noded.size(): "s + wkt, noded.size(), 1u);
+        ensure_equals("noded[0]->getSize(): "s + wkt, noded[0]->getSize(), g->getArcs().size());
+        ensure("noded[0]->getCoordinates(): "s + wkt, noded[0]->getCoordinates()->equalsIdentical(*g->getCoordinatesRO()));
+        for (std::size_t i = 0; i < noded[0]->getSize(); i++) {
+            ensure_equals(wkt, noded[0]->getArc(i).getCoordinatePosition(), 2*i);
+        }
+    }
 }
+
+template<>
+template<>
+void object::test<7>()
+{
+    set_test_name("getNoded keeps arc with repeated points before a split arc");
+
+    const auto g = reader_.read<CircularString>("CIRCULARSTRING (0 0, 0 0, 2 0, 3 1, 4 0)");
+
+    NodableArcString nas(g->getArcs(), g->getSharedCoordinates(), false, false, nullptr);
+    nas.addIntersection(CoordinateXY{3, 1}, 1);
+
+    std::vector<std::unique_ptr<ArcString>> noded;
+    nas.getNoded(noded);
+
+    ensure_equals(noded.size(), 2u);
+
+    const auto& seq = *noded[0]->getCoordinates();
+    ensure_equals(noded[0]->getSize(), 2u);
+    ensure_equals(seq.size(), 5u);
+
+    const CircularArc& arc0 = noded[0]->getArc(0);
+    ensure_equals(arc0.getCoordinatePosition(), 0u);
+    ensure_equals(arc0.p0(), XY{0, 0});
+    ensure_equals(arc0.p1(), XY{0, 0});
+    ensure_equals(arc0.p2(), XY{2, 0});
+
+    const CircularArc& arc1 = noded[0]->getArc(1);
+    ensure_equals(arc1.getCoordinatePosition(), 2u);
+    ensure_equals(arc1.p0(), XY{2, 0});
+    ensure_equals(arc1.p2(), XY{3, 1});
+
+    ensure_equals(noded[1]->getSize(), 1u);
+    ensure_equals(noded[1]->getCoordinates()->size(), 3u);
+
+    const CircularArc& arc2 = noded[1]->getArc(0);
+    ensure_arc_equals(arc2, CircularArc::create(XY{3, 1}, XY{4, 0}, XY{3, 0}, 1, Orientation::CLOCKWISE), 1e-8);
+    ensure_equals(arc2.p2(), XY{4, 0});
+}
+
+} // namespace tut
