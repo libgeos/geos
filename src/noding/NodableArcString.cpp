@@ -256,11 +256,14 @@ public:
             m_coords = std::make_unique<geom::CoordinateSequence>(0, m_constructZ, m_constructM);
         }
 
+        // Skip p0 if it repeats the end of the previous arc, but always add p1 and p2,
+        // even if repeated, so that the arc keeps its three points.
         m_coords->add(p0, false);
-        m_coords->add(p1, false);
-        m_coords->add(p2, false);
+        const std::size_t arcPos = m_coords->getSize() - 1;
+        m_coords->add(p1);
+        m_coords->add(p2);
 
-        m_arcs.emplace_back(*m_coords, m_coords->getSize() - 3, center, radius, orientation);
+        m_arcs.emplace_back(*m_coords, arcPos, center, radius, orientation);
     }
 
     void addArc(const geom::CoordinateSequence& seq, std::size_t pos, const geom::CoordinateXY& center, double radius, int orientation) {
@@ -268,8 +271,12 @@ public:
             m_coords = std::make_unique<geom::CoordinateSequence>(0, m_constructZ, m_constructM);
         }
 
-        m_coords->add(seq, pos, pos + 2, false);
-        m_arcs.emplace_back(*m_coords, m_coords->getSize() - 3, center, radius, orientation);
+        // As above, only the start point may be shared with the previous arc.
+        m_coords->add(seq, pos, pos, false);
+        const std::size_t arcPos = m_coords->getSize() - 1;
+        m_coords->add(seq, pos + 1, pos + 2);
+
+        m_arcs.emplace_back(*m_coords, arcPos, center, radius, orientation);
     }
 
     void finish() {

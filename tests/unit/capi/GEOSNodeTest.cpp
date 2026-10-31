@@ -414,5 +414,28 @@ void object::test<19>()
                                       reinterpret_cast<Geometry*>(expected_), 1e-4);
 }
 
+template<>
+template<>
+void object::test<20>()
+{
+    set_test_name("CircularString with repeated points");
+
+    input_ = fromWKT("MULTICURVE (CIRCULARSTRING (0 0, 0 0, 2 0, 3 1, 4 0), LINESTRING (3 0, 3 2))");
+
+    result_ = GEOSNode(input_);
+    ensure(result_);
+
+    ensure_equals(GEOSGetNumGeometries(result_), 4);
+
+    expected_ = fromWKT("MULTICURVE ("
+                        "CIRCULARSTRING (0 0, 0 0, 2 0, 2.2928932188 0.7071067812, 3 1),"
+                        "CIRCULARSTRING (3 1, 3.7071067812 0.7071067812, 4 0),"
+                        "(3 0, 3 1),"
+                        "(3 1, 3 2))");
+
+    ensure_equals_exact_geometry_xyzm(reinterpret_cast<Geometry*>(result_),
+                                      reinterpret_cast<Geometry*>(expected_), 1e-4);
+}
+
 } // namespace tut
 
