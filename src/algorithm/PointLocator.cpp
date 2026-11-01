@@ -101,6 +101,12 @@ PointLocator::computeLocation(const CoordinateXY& p, const Geometry* geom)
         case GEOS_ELLIPTICALCURVE:
             throw util::UnsupportedOperationException(
                 "Elliptical curve point location is not implemented");
+        case GEOS_CLOTHOID:
+            throw util::UnsupportedOperationException(
+                "Clothoid point location is not implemented");
+        case GEOS_SPIRALCURVE:
+            throw util::UnsupportedOperationException(
+                "Spiral curve point location is not implemented");
         case GEOS_CIRCULARSTRING: {
             const CircularString* cs = static_cast<const CircularString*>(geom);
             updateLocationInfo(locate(p, cs));
@@ -249,6 +255,14 @@ PointLocator::locate(const CoordinateXY& p, const CompoundCurve* cc)
         if (curve->getGeometryTypeId() == GEOS_ELLIPTICALCURVE) {
             throw util::UnsupportedOperationException(
                 "Elliptical curve point location is not implemented");
+        }
+        if (curve->getGeometryTypeId() == GEOS_CLOTHOID) {
+            throw util::UnsupportedOperationException(
+                "Clothoid point location is not implemented");
+        }
+        if (curve->getGeometryTypeId() == GEOS_SPIRALCURVE) {
+            throw util::UnsupportedOperationException(
+                "Spiral curve point location is not implemented");
         }
         if (curve->getGeometryTypeId() == GEOS_CIRCULARSTRING) {
             const CircularString* cs = static_cast<const CircularString*>(curve);

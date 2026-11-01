@@ -22,6 +22,9 @@
 #include <geos/io/ParseException.h>
 #include <geos/geom/CircularString.h>
 #include <geos/geom/EllipticalCurve.h>
+#include <geos/geom/Clothoid.h>
+#include <geos/geom/SpiralCurve.h>
+#include <geos/util/IllegalArgumentException.h>
 #include <geos/geom/CompoundCurve.h>
 #include <geos/geom/CurvePolygon.h>
 #include <geos/geom/Geometry.h>
@@ -205,6 +208,8 @@ WKBReader::minMemSize(geom::GeometryTypeId geomType, uint64_t size) const
     constexpr uint64_t minRingSize = 4; // empty ring
     constexpr uint64_t minPolySize = (1+4+4); // empty polygon
     // An empty elliptical curve is only a byte order and a type word.
+    // An empty clothoid or spiral curve is only a byte order and a type
+    // word.
     constexpr uint64_t minCurveSize = (1+4);
     constexpr uint64_t minGeomSize = minCurveSize;
 
@@ -215,6 +220,8 @@ WKBReader::minMemSize(geom::GeometryTypeId geomType, uint64_t size) const
         case GEOS_CIRCULARSTRING:
         case GEOS_COMPOUNDCURVE:
         case GEOS_ELLIPTICALCURVE:
+        case GEOS_CLOTHOID:
+        case GEOS_SPIRALCURVE:
         case GEOS_POINT:
             perElement = minCoordSize;
             break;
@@ -354,6 +361,12 @@ WKBReader::readGeometry()
     case WKBConstants::wkbEllipticalCurve :
         result = readEllipticalCurve();
         break;
+    case WKBConstants::wkbClothoid :
+        result = readClothoid();
+        break;
+    case WKBConstants::wkbSpiralCurve :
+        result = readSpiralCurve();
+        break;
     case WKBConstants::wkbCompoundCurve :
         result = readCompoundCurve();
         break;
@@ -461,6 +474,9 @@ isGeometryWkbType(uint32_t base)
     case WKBConstants::wkbMultiCurve:
     case WKBConstants::wkbMultiSurface:
     case WKBConstants::wkbEllipticalCurve:
+    case WKBConstants::wkbCircle:
+    case WKBConstants::wkbClothoid:
+    case WKBConstants::wkbSpiralCurve:
         return true;
     default:
         return false;
@@ -468,6 +484,7 @@ isGeometryWkbType(uint32_t base)
 }
 
 } // namespace
+
 bool
 WKBReader::readReferenceLocation(AffinePlacement& location, const std::string& typeName)
 {
@@ -563,6 +580,64 @@ WKBReader::readEllipticalCurve()
     }
     return factory.createEllipticalCurve(
         location, uAxis, vAxis, startAngle, endAngle, hasZ, hasM, startM, endM);
+}
+
+std::unique_ptr<SpiralCurve>
+WKBReader::readSpiralCurve()
+{
+    AffinePlacement location;
+    if (!readReferenceLocation(location, "SPIRALCURVE")) {
+        return factory.createSpiralCurve(hasZ, hasM);
+    }
+    const double length = dis.readDouble();
+    const double startCurvature = dis.readDouble();
+    const double endCurvature = dis.readDouble();
+    // <wkbspiraltype> is a byte count and that many letters.
+    const unsigned char count = dis.readByte();
+    std::string name;
+    for (unsigned char i = 0; i < count; ++i) {
+        name.push_back(static_cast<char>(dis.readByte()));
+    }
+    SpiralType type;
+    try {
+        type = SpiralCurve::typeFromName(name);
+    }
+    catch (const util::IllegalArgumentException&) {
+        throw ParseException("Unknown SPIRALCURVE spiral type '" + name + "'");
+    }
+    double startM = 0.0;
+    double endM = 0.0;
+    if (hasM) {
+        startM = dis.readDouble();
+        endM = dis.readDouble();
+    }
+    return factory.createSpiralCurve(
+        location, length, startCurvature, endCurvature, type, hasZ, hasM, startM, endM);
+}
+
+std::unique_ptr<Clothoid>
+WKBReader::readClothoid()
+{
+    AffinePlacement placement;
+    if (!readReferenceLocation(placement, "CLOTHOID")) {
+        return factory.createClothoid(hasZ, hasM);
+    }
+    ClothoidReferenceLocation location;
+    location.origin = placement.origin;
+    location.u = placement.u;
+    location.v = placement.v;
+
+    const double scale = dis.readDouble();
+    const double startDistance = dis.readDouble();
+    const double endDistance = dis.readDouble();
+    double startM = 0.0;
+    double endM = 0.0;
+    if (hasM) {
+        startM = dis.readDouble();
+        endM = dis.readDouble();
+    }
+    return factory.createClothoid(
+        location, scale, startDistance, endDistance, hasZ, hasM, startM, endM);
 }
 
 std::unique_ptr<CompoundCurve>

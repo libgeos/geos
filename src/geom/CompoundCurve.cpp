@@ -16,6 +16,8 @@
 
 #include <geos/algorithm/Orientation.h>
 #include <geos/geom/EllipticalCurve.h>
+#include <geos/geom/Clothoid.h>
+#include <geos/geom/SpiralCurve.h>
 #include <geos/geom/CompoundCurve.h>
 #include <geos/geom/CoordinateFilter.h>
 #include <geos/geom/GeometryFactory.h>
@@ -487,13 +489,21 @@ CompoundCurve::snapEvaluatedEndpoint(SimpleCurve& curve, std::size_t index, cons
         static_cast<EllipticalCurve&>(curve).snapEndpoint(index, target);
         return true;
     }
+    if (curve.getGeometryTypeId() == GEOS_CLOTHOID) {
+        static_cast<Clothoid&>(curve).snapEndpoint(index, target);
+        return true;
+    }
+    if (curve.getGeometryTypeId() == GEOS_SPIRALCURVE) {
+        static_cast<SpiralCurve&>(curve).snapEndpoint(index, target);
+        return true;
+    }
     return false;
 }
 
 void
 CompoundCurve::snapEvaluatedEndpoints()
 {
-    // Elliptical curve endpoints are evaluated, not stored, so they can
+    // Elliptical, clothoid and spiral endpoints are evaluated, not stored, so they can
     // miss the neighbor's coordinate by rounding. Keep the neighbor's
     // coordinate.
     for (std::size_t i = 1; i < curves.size(); i++) {

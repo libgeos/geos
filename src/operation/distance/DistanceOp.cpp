@@ -371,11 +371,23 @@ DistanceOp::computeMinDistanceLines(
         if (line0->getGeometryTypeId() == GEOS_ELLIPTICALCURVE) {
             throw util::UnsupportedOperationException("Elliptical curve distance is not implemented");
         }
+        if (line0->getGeometryTypeId() == GEOS_CLOTHOID) {
+            throw util::UnsupportedOperationException("Clothoid distance is not implemented");
+        }
+        if (line0->getGeometryTypeId() == GEOS_SPIRALCURVE) {
+            throw util::UnsupportedOperationException("Spiral curve distance is not implemented");
+        }
         const bool isCurved0 = line0->getGeometryTypeId() == GEOS_CIRCULARSTRING;
 
         for(const SimpleCurve* line1 : lines1) {
             if (line1->getGeometryTypeId() == GEOS_ELLIPTICALCURVE) {
                 throw util::UnsupportedOperationException("Elliptical curve distance is not implemented");
+            }
+            if (line1->getGeometryTypeId() == GEOS_CLOTHOID) {
+                throw util::UnsupportedOperationException("Clothoid distance is not implemented");
+            }
+            if (line1->getGeometryTypeId() == GEOS_SPIRALCURVE) {
+                throw util::UnsupportedOperationException("Spiral curve distance is not implemented");
             }
             const bool isCurved1 = line1->getGeometryTypeId() == GEOS_CIRCULARSTRING;
 
@@ -457,6 +469,12 @@ DistanceOp::computeMinDistanceLinesPoints(
 
             if (sc->getGeometryTypeId() == GEOS_ELLIPTICALCURVE) {
                 throw util::UnsupportedOperationException("Elliptical curve distance is not implemented");
+            }
+            if (sc->getGeometryTypeId() == GEOS_CLOTHOID) {
+                throw util::UnsupportedOperationException("Clothoid distance is not implemented");
+            }
+            if (sc->getGeometryTypeId() == GEOS_SPIRALCURVE) {
+                throw util::UnsupportedOperationException("Spiral curve distance is not implemented");
             }
             if (sc->getGeometryTypeId() == GEOS_CIRCULARSTRING) {
                 const CircularString* cs = detail::down_cast<const CircularString*>(sc);

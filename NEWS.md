@@ -3,6 +3,8 @@
 
 - New things:
   - Elliptical curve WKT/WKB (ISO type 20)
+  - Clothoid WKT/WKB (ISO type 22)
+  - Spiral curve WKT/WKB (ISO type 23)
   - Add DirectedHausdorffDistance and C API GEOSDirectedHausdorffDistance /
     GEOSSymmetricHausdorffDistance (Martin Davis, Jeroen Bloemscheer, Dan Baston)
 

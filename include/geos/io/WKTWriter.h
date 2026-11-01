@@ -41,6 +41,8 @@ class CoordinateXYZM;
 class CoordinateSequence;
 class Curve;
 class EllipticalCurve;
+class Clothoid;
+class SpiralCurve;
 struct AffinePlacement;
 class CompoundCurve;
 class Geometry;
@@ -231,6 +233,16 @@ protected:
 
     void appendEllipticalCurveTaggedText(
         const geom::EllipticalCurve& curve,
+        OrdinateSet outputOrdinates,
+        int level, Writer& writer) const;
+
+    void appendClothoidTaggedText(
+        const geom::Clothoid& clothoid,
+        OrdinateSet outputOrdinates,
+        int level, Writer& writer) const;
+
+    void appendSpiralCurveTaggedText(
+        const geom::SpiralCurve& curve,
         OrdinateSet outputOrdinates,
         int level, Writer& writer) const;
 

@@ -39,6 +39,12 @@ CurveBuilder::add(const Curve& geom)
     if (geom.getGeometryTypeId() == GEOS_ELLIPTICALCURVE) {
         throw geos::util::UnsupportedOperationException("Elliptical curves are not supported");
     }
+    if (geom.getGeometryTypeId() == GEOS_CLOTHOID) {
+        throw geos::util::UnsupportedOperationException("Clothoid curves are not supported");
+    }
+    if (geom.getGeometryTypeId() == GEOS_SPIRALCURVE) {
+        throw geos::util::UnsupportedOperationException("Spiral curves are not supported");
+    }
 
     if (geom.getGeometryTypeId() == GEOS_COMPOUNDCURVE) {
         const CompoundCurve& cc = static_cast<const CompoundCurve&>(geom);

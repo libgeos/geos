@@ -34,6 +34,8 @@ namespace geom {
 
 class CoordinateSequence;
 class EllipticalCurve;
+class Clothoid;
+class SpiralCurve;
 struct AffinePlacement;
 class CompoundCurve;
 class CurvePolygon;
@@ -226,6 +228,9 @@ private:
     // throws IOException
 
     void writeEllipticalCurve(const geom::EllipticalCurve& curve);
+    void writeClothoid(const geom::Clothoid& clothoid);
+
+    void writeSpiralCurve(const geom::SpiralCurve& curve);
 
     void writeReferenceLocation(const geom::AffinePlacement& location);
 
