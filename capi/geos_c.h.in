@@ -2385,6 +2385,13 @@ typedef struct GEOSGeoJSONReader_t GEOSGeoJSONReader;
 */
 typedef struct GEOSGeoJSONWriter_t GEOSGeoJSONWriter;
 
+/**
+* Writer of Esri JSON that keeps curves as true curves
+* \see GEOSEsriJSONWriter_create()
+* \see GEOSEsriJSONWriter_destroy()
+*/
+typedef struct GEOSEsriJSONWriter_t GEOSEsriJSONWriter;
+
 #endif
 
 /* ========== WKT Reader ========== */
@@ -2613,6 +2620,48 @@ extern void GEOS_DLL GEOSGeoJSONWriter_setOutputDimension_r(
 extern int  GEOS_DLL GEOSGeoJSONWriter_getOutputDimension_r(
     GEOSContextHandle_t handle,
     GEOSGeoJSONWriter *writer);
+
+/** \see GEOSEsriJSONWriter_create */
+extern GEOSEsriJSONWriter GEOS_DLL *GEOSEsriJSONWriter_create_r(
+    GEOSContextHandle_t handle);
+
+/** \see GEOSEsriJSONWriter_destroy */
+extern void GEOS_DLL GEOSEsriJSONWriter_destroy_r(
+    GEOSContextHandle_t handle,
+    GEOSEsriJSONWriter* writer);
+
+/** \see GEOSEsriJSONWriter_setTolerance */
+extern int GEOS_DLL GEOSEsriJSONWriter_setTolerance_r(
+    GEOSContextHandle_t handle,
+    GEOSEsriJSONWriter* writer,
+    double tolerance);
+
+/** \see GEOSEsriJSONWriter_setMatchCurvature */
+extern void GEOS_DLL GEOSEsriJSONWriter_setMatchCurvature_r(
+    GEOSContextHandle_t handle,
+    GEOSEsriJSONWriter* writer,
+    int matchCurvature);
+
+/** \see GEOSEsriJSONWriter_writeGeometry */
+extern char GEOS_DLL *GEOSEsriJSONWriter_writeGeometry_r(
+    GEOSContextHandle_t handle,
+    GEOSEsriJSONWriter* writer,
+    const GEOSGeometry* g);
+
+/** \see GEOSEsriJSONWriter_getNumSegments */
+extern size_t GEOS_DLL GEOSEsriJSONWriter_getNumSegments_r(
+    GEOSContextHandle_t handle,
+    const GEOSEsriJSONWriter* writer);
+
+/** \see GEOSEsriJSONWriter_getNumApproximated */
+extern size_t GEOS_DLL GEOSEsriJSONWriter_getNumApproximated_r(
+    GEOSContextHandle_t handle,
+    const GEOSEsriJSONWriter* writer);
+
+/** \see GEOSEsriJSONWriter_getMaxDeviation */
+extern double GEOS_DLL GEOSEsriJSONWriter_getMaxDeviation_r(
+    GEOSContextHandle_t handle,
+    const GEOSEsriJSONWriter* writer);
 
 /** \see GEOSFree */
 extern void GEOS_DLL GEOSFree_r(
@@ -7637,6 +7686,94 @@ extern void GEOS_DLL GEOSGeoJSONWriter_setOutputDimension(
 * \since 3.14
 */
 extern int  GEOS_DLL GEOSGeoJSONWriter_getOutputDimension(GEOSGeoJSONWriter *writer);
+
+/**
+* Creates a writer of Esri JSON that keeps curves as true curves.
+*
+* Curved geometry is written as `curvePaths` or `curveRings` whose segments
+* are lines, circular arcs (`c`), elliptic arcs (`a`) and cubic Beziers
+* (`b`), which ArcGIS reads with `arcpy.AsShape(json, True)`. Points are
+* written as `x`/`y` (an empty point as `{"x":null}`) or `points`, linear
+* geometry as `paths` or `rings`. Z and M are not written. A positive SRID
+* is written as the `spatialReference` `wkid`. Polygon shells are written
+* clockwise and holes counterclockwise.
+*
+* These curve types are mapped exactly, up to rounding of doubles:
+* CircularString (circular arcs), EllipticalCurve (elliptic or circular
+* arcs), and the parts of a NURBSCurve that are lines, polynomial of
+* degree 3 or less (also exactly cubic ones of higher degree, and
+* rational ones whose weights are a geometric progression), parabolas,
+* or ellipses and circles (rational quadratics).
+*
+* These are approximations: Clothoid, SpiralCurve (all spiral types) and any
+* other part of a NURBSCurve. An approximation is a chain of cubic Beziers,
+* G1 continuous and, unless GEOSEsriJSONWriter_setMatchCurvature() turns it
+* off, matching curvature at the joints (G2) where the fit allows it.
+*
+* GEOSCurveToLine and the other conversions are not affected.
+*
+* \return a new writer. Caller must free with GEOSEsriJSONWriter_destroy()
+* \since 3.16
+*/
+extern GEOSEsriJSONWriter GEOS_DLL *GEOSEsriJSONWriter_create(void);
+
+/**
+* \param writer the writer to free
+* \since 3.16
+*/
+extern void GEOS_DLL GEOSEsriJSONWriter_destroy(GEOSEsriJSONWriter* writer);
+
+/**
+* Sets the largest distance allowed between an approximating Bezier and the
+* curve it approximates, in the units of the coordinates. It does not affect
+* the exact mappings. There is NO default tolerance, because a sensible
+* value depends on the coordinate system (0.001 is a millimetre in metres
+* but about 111 m in degrees): GEOSEsriJSONWriter_writeGeometry() fails
+* until it is set.
+*
+* The distance is measured, not proven: a sampled Hausdorff distance with at
+* least 256 points per Bezier, each projected onto the other curve, and a
+* Bezier that measures above the tolerance is split.
+*
+* \param writer the writer
+* \param tolerance positive and finite
+* \return 1 on success, 0 if the tolerance is not positive and finite
+* \since 3.16
+*/
+extern int GEOS_DLL GEOSEsriJSONWriter_setTolerance(
+    GEOSEsriJSONWriter* writer,
+    double tolerance);
+
+/**
+* Asks for curvature-matched (G2) Bezier fits where possible. Default 1.
+* \since 3.16
+*/
+extern void GEOS_DLL GEOSEsriJSONWriter_setMatchCurvature(
+    GEOSEsriJSONWriter* writer,
+    int matchCurvature);
+
+/**
+* Writes a geometry. The statistics getters below describe this call, and are
+* all 0 when it fails.
+*
+* \return a NUL-terminated string, to be freed with GEOSFree(), or NULL on
+*         error (tolerance not set, a GeometryCollection that is not a
+*         MultiCurve or MultiSurface, or a clothoid or spiral with a
+*         singular placement).
+* \since 3.16
+*/
+extern char GEOS_DLL *GEOSEsriJSONWriter_writeGeometry(
+    GEOSEsriJSONWriter* writer,
+    const GEOSGeometry* g);
+
+/** Number of segments written by the last GEOSEsriJSONWriter_writeGeometry(). \since 3.16 */
+extern size_t GEOS_DLL GEOSEsriJSONWriter_getNumSegments(const GEOSEsriJSONWriter* writer);
+
+/** Number of those segments that approximate the source curve. \since 3.16 */
+extern size_t GEOS_DLL GEOSEsriJSONWriter_getNumApproximated(const GEOSEsriJSONWriter* writer);
+
+/** Largest measured deviation of any approximating segment, 0 if all are exact. \since 3.16 */
+extern double GEOS_DLL GEOSEsriJSONWriter_getMaxDeviation(const GEOSEsriJSONWriter* writer);
 
 ///@}
 
