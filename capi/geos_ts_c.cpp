@@ -74,6 +74,7 @@
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKTWriter.h>
 #include <geos/io/GeoJSONReader.h>
+#include <geos/io/EsriJsonWriter.h>
 #include <geos/io/GeoJSONWriter.h>
 #include <geos/linearref/LengthIndexedLine.h>
 #include <geos/noding/GeometryNoder.h>
@@ -1535,6 +1536,35 @@ extern "C" {
             writer.setTrim(false);
             writer.setOutputDimension(2);
             char* result = gstrdup(writer.write(g1));
+            return result;
+        });
+    }
+
+    char*
+    GEOSGeomToEsriCurveJSON_r(GEOSContextHandle_t extHandle, const Geometry* g, double tolerance)
+    {
+        return GEOSGeomToEsriCurveJSONWithStats_r(extHandle, g, tolerance, nullptr, nullptr, nullptr);
+    }
+
+    char*
+    GEOSGeomToEsriCurveJSONWithStats_r(GEOSContextHandle_t extHandle, const Geometry* g, double tolerance,
+                                       std::size_t* numSegments, std::size_t* numApproximated,
+                                       double* maxDeviation)
+    {
+        return execute(extHandle, [&]() {
+            geos::io::EsriJsonWriter writer;
+            writer.setTolerance(tolerance);
+            char* result = gstrdup(writer.write(*g));
+            const geos::io::EsriJsonWriter::Stats& stats = writer.getStats();
+            if (numSegments) {
+                *numSegments = stats.numSegments;
+            }
+            if (numApproximated) {
+                *numApproximated = stats.numApproximated;
+            }
+            if (maxDeviation) {
+                *maxDeviation = stats.maxDeviation;
+            }
             return result;
         });
     }

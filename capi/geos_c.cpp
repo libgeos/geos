@@ -525,6 +525,20 @@ extern "C" {
     }
 
     char*
+    GEOSGeomToEsriCurveJSON(const Geometry* g, double tolerance)
+    {
+        return GEOSGeomToEsriCurveJSON_r(handle, g, tolerance);
+    }
+
+    char*
+    GEOSGeomToEsriCurveJSONWithStats(const Geometry* g, double tolerance,
+                                     std::size_t* numSegments, std::size_t* numApproximated,
+                                     double* maxDeviation)
+    {
+        return GEOSGeomToEsriCurveJSONWithStats_r(handle, g, tolerance, numSegments, numApproximated, maxDeviation);
+    }
+
+    char*
     GEOSGeomToWKT(const Geometry* g)
     {
         return GEOSGeomToWKT_r(handle, g);

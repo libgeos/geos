@@ -2614,6 +2614,21 @@ extern int  GEOS_DLL GEOSGeoJSONWriter_getOutputDimension_r(
     GEOSContextHandle_t handle,
     GEOSGeoJSONWriter *writer);
 
+/** \see GEOSGeomToEsriCurveJSON */
+extern char GEOS_DLL *GEOSGeomToEsriCurveJSON_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* g,
+    double tolerance);
+
+/** \see GEOSGeomToEsriCurveJSONWithStats */
+extern char GEOS_DLL *GEOSGeomToEsriCurveJSONWithStats_r(
+    GEOSContextHandle_t handle,
+    const GEOSGeometry* g,
+    double tolerance,
+    size_t* numSegments,
+    size_t* numApproximated,
+    double* maxDeviation);
+
 /** \see GEOSFree */
 extern void GEOS_DLL GEOSFree_r(
     GEOSContextHandle_t handle,
@@ -7637,6 +7652,66 @@ extern void GEOS_DLL GEOSGeoJSONWriter_setOutputDimension(
 * \since 3.14
 */
 extern int  GEOS_DLL GEOSGeoJSONWriter_getOutputDimension(GEOSGeoJSONWriter *writer);
+
+/**
+* Writes a geometry as Esri JSON, keeping curves as true curves.
+*
+* Curved geometry is written as `curvePaths` or `curveRings` whose
+* segments are lines, circular arcs (`c`), elliptic arcs (`a`) and cubic
+* Beziers (`b`), which ArcGIS reads with `arcpy.AsShape(json, True)`. Points
+* are written as `x`/`y` or `points`; linear geometry as `paths` or `rings`.
+* Z and M are not written. A positive SRID is written as the
+* `spatialReference` `wkid`. Polygon shells are written clockwise and
+* holes counterclockwise.
+*
+* Each curve type is mapped as follows. These are exact, up to rounding
+* of doubles: CircularString (circular arcs), EllipticalCurve (elliptic or
+* circular arcs), and the parts of a NURBSCurve that are lines, polynomial
+* of degree 3 or less, parabolas, ellipses or circles (a rational quadratic).
+* These are approximations: Clothoid, SpiralCurve (all spiral types) and any
+* other part of a NURBSCurve. An approximation is a chain of cubic Beziers,
+* G1 continuous and, where the fit allows it, matching curvature at the
+* joints (G2).
+*
+* \c tolerance is the largest distance allowed between an approximating
+* Bezier and the curve it approximates, in the units of the coordinates.
+* It does not affect the exact mappings. The distance is measured by
+* dense sampling (at least 256 points per Bezier, each projected onto the
+* other curve), not proven, and a Bezier that measures above the tolerance
+* is split. The GEOSCurveToLine functions are not affected by this function.
+*
+* \param g Input geometry
+* \param tolerance maximum deviation of an approximating Bezier, positive
+* \return a NUL-terminated string, to be freed with GEOSFree(), or NULL on
+*         error (a non-positive tolerance, an unsupported geometry type
+*         such as a general GeometryCollection, or a clothoid or spiral
+*         with a singular placement).
+* \since 3.15
+*/
+extern char GEOS_DLL *GEOSGeomToEsriCurveJSON(
+    const GEOSGeometry* g,
+    double tolerance);
+
+/**
+* Like GEOSGeomToEsriCurveJSON(), and also reports what was written. Any of
+* the output pointers may be NULL.
+*
+* \param g Input geometry
+* \param tolerance maximum deviation of an approximating Bezier, positive
+* \param numSegments receives the number of segments written
+* \param numApproximated receives the number of segments that are
+*        approximations (cubic Beziers fitted within tolerance)
+* \param maxDeviation receives the largest measured deviation of any
+*        approximating segment, 0 when all segments are exact
+* \return a NUL-terminated string, to be freed with GEOSFree(), or NULL on error
+* \since 3.15
+*/
+extern char GEOS_DLL *GEOSGeomToEsriCurveJSONWithStats(
+    const GEOSGeometry* g,
+    double tolerance,
+    size_t* numSegments,
+    size_t* numApproximated,
+    double* maxDeviation);
 
 ///@}
 

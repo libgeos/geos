@@ -12,6 +12,10 @@
 
 - New things:
   - Elliptical curve WKT/WKB (ISO type 20)
+  - GEOSGeomToEsriCurveJSON: write curved geometry as Esri JSON with true
+    circular arcs, elliptic arcs and cubic Beziers (exact for circular strings,
+    elliptical curves and conic or cubic NURBS spans; tolerance-bounded cubic
+    Bezier fits for clothoids, spiral curves and other NURBS spans)
   - Clothoid WKT/WKB (ISO type 22)
   - Spiral curve WKT/WKB (ISO type 23)
   - NURBS curve WKT/WKB (ISO type 21)
