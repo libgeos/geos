@@ -92,6 +92,18 @@ RayCrossingCounter::locatePointInRing(const geom::CoordinateXY& point,
             throw util::UnsupportedOperationException(
                 "Elliptical curve point location is not implemented");
         }
+        if (curve->getGeometryTypeId() == geom::GEOS_CLOTHOID) {
+            throw util::UnsupportedOperationException(
+                "Clothoid point location is not implemented");
+        }
+        if (curve->getGeometryTypeId() == geom::GEOS_SPIRALCURVE) {
+            throw util::UnsupportedOperationException(
+                "Spiral curve point location is not implemented");
+        }
+        if (curve->getGeometryTypeId() == geom::GEOS_NURBSCURVE) {
+            throw util::UnsupportedOperationException(
+                "NURBS point location is not implemented");
+        }
         rcc.processSequence(*curve->getCoordinatesRO(), !curve->hasCurvedComponents());
     }
 

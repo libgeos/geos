@@ -2129,6 +2129,23 @@ extern "C" {
     }
 
     geos::geom::Geometry*
+    GEOSGeom_createEmptyClothoid(void)
+    {
+        return GEOSGeom_createEmptyClothoid_r(handle);
+    }
+
+    geos::geom::Geometry*
+    GEOSGeom_createEmptySpiralCurve(void)
+    {
+        return GEOSGeom_createEmptySpiralCurve_r(handle);
+    }
+    geos::geom::Geometry*
+    GEOSGeom_createEmptyNurbsCurve(void)
+    {
+        return GEOSGeom_createEmptyNurbsCurve_r(handle);
+    }
+
+    geos::geom::Geometry*
     GEOSGeom_createEmptyCompoundCurve(void)
     {
         return GEOSGeom_createEmptyCompoundCurve_r(handle);

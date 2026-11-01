@@ -23,6 +23,9 @@
 #include <geos/util/IllegalArgumentException.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/EllipticalCurve.h>
+#include <geos/geom/Clothoid.h>
+#include <geos/geom/SpiralCurve.h>
+#include <geos/geom/NurbsCurve.h>
 #include <geos/geom/CompoundCurve.h>
 #include <geos/geom/CurvePolygon.h>
 #include <geos/geom/Point.h>
@@ -119,6 +122,9 @@ WKBWriter::write(const Geometry& g, std::ostream& os)
         case GEOS_LINEARRING:
         case GEOS_CIRCULARSTRING: writeSimpleCurve(static_cast<const SimpleCurve&>(g)); break;
         case GEOS_ELLIPTICALCURVE: writeEllipticalCurve(static_cast<const EllipticalCurve&>(g)); break;
+        case GEOS_CLOTHOID: writeClothoid(static_cast<const Clothoid&>(g)); break;
+        case GEOS_SPIRALCURVE: writeSpiralCurve(static_cast<const SpiralCurve&>(g)); break;
+        case GEOS_NURBSCURVE: writeNurbsCurve(static_cast<const NurbsCurve&>(g)); break;
         case GEOS_COMPOUNDCURVE: writeCompoundCurve(static_cast<const CompoundCurve&>(g)); break;
         case GEOS_POLYGON: writePolygon(static_cast<const Polygon&>(g)); break;
         case GEOS_CURVEPOLYGON: writeCurvePolygon(static_cast<const CurvePolygon&>(g)); break;
@@ -233,6 +239,112 @@ WKBWriter::writeEllipticalCurve(const EllipticalCurve& g)
         writeDouble(g.getEndM());
     }
 }
+
+void
+WKBWriter::writeSpiralCurve(const SpiralCurve& g)
+{
+    writeByteOrder();
+    writeGeometryType(WKBConstants::wkbSpiralCurve, g.getSRID());
+    writeSRID(g.getSRID());
+
+    // Empty omits the body.
+    if (g.isEmpty()) {
+        return;
+    }
+    writeReferenceLocation(g.getReferenceLocation());
+    writeDouble(g.getSpiralLength());
+    writeDouble(g.getStartCurvature());
+    writeDouble(g.getEndCurvature());
+    // <wkbspiraltype> is a byte count and that many letters.
+    const std::string name = SpiralCurve::typeName(g.getSpiralType());
+    buf[0] = static_cast<unsigned char>(name.size());
+    outStream->write(reinterpret_cast<char*>(buf), 1);
+    outStream->write(name.data(), static_cast<std::streamsize>(name.size()));
+    if (outputOrdinates.hasM()) {
+        writeDouble(g.getStartM());
+        writeDouble(g.getEndM());
+    }
+}
+
+void
+WKBWriter::writeClothoid(const Clothoid& g)
+{
+    writeByteOrder();
+    writeGeometryType(WKBConstants::wkbClothoid, g.getSRID());
+    writeSRID(g.getSRID());
+
+    // Empty omits the reference-location body.
+    if (g.isEmpty()) {
+        return;
+    }
+
+    const ClothoidReferenceLocation loc = g.getReferenceLocation();
+    writeReferenceLocation(AffinePlacement{loc.origin, loc.u, loc.v});
+
+    writeDouble(g.getScaleFactor());
+    writeDouble(g.getStartDistance());
+    writeDouble(g.getEndDistance());
+    if (outputOrdinates.hasM()) {
+        writeDouble(g.getStartM());
+        writeDouble(g.getEndM());
+    }
+}
+
+void
+WKBWriter::writeByte(unsigned char value)
+{
+    buf[0] = value;
+    outStream->write(reinterpret_cast<char*>(buf), 1);
+}
+
+void
+WKBWriter::writeNurbsCurve(const NurbsCurve& g)
+{
+    writeByteOrder();
+    writeGeometryType(WKBConstants::wkbNurbsCurve, g.getSRID());
+    writeSRID(g.getSRID());
+
+    // Empty omits the body.
+    if (g.isEmpty()) {
+        return;
+    }
+
+    const bool hasZ = outputOrdinates.hasZ();
+
+    // The degree and each multiplicity are one byte; NurbsCurve::MAX_DEGREE
+    // keeps both in range.
+    writeByte(static_cast<unsigned char>(g.getDegree()));
+    const auto& controlPoints = g.getControlPoints();
+    writeInt(static_cast<int>(controlPoints.size()));
+    for (const NurbsPoint& cp : controlPoints) {
+        // Each point has its own byte order, then the weighted point, then a
+        // flag that is 1 when a weight follows. 5.1.68 calls the flag a
+        // <bit>; it is written as a whole byte, as WKB has no smaller unit.
+        writeByteOrder();
+        writeDouble(cp.weightedPoint.x);
+        writeDouble(cp.weightedPoint.y);
+        if (hasZ) {
+            writeDouble(cp.weightedPoint.z);
+        }
+        if (cp.hasWeight()) {
+            writeByte(1);
+            writeDouble(cp.weight);
+        } else {
+            writeByte(0);
+        }
+    }
+    const auto& knots = g.getKnots();
+    writeInt(static_cast<int>(knots.size()));
+    for (const NurbsKnot& knot : knots) {
+        writeByteOrder();
+        writeDouble(knot.value);
+        writeByte(static_cast<unsigned char>(knot.multiplicity));
+    }
+    if (outputOrdinates.hasM()) {
+        writeDouble(g.getStartM());
+        writeDouble(g.getEndM());
+    }
+}
 void
 WKBWriter::writeCompoundCurve(const CompoundCurve& g)
 {
@@ -250,6 +362,12 @@ WKBWriter::writeCompoundCurve(const CompoundCurve& g)
         const SimpleCurve& section = *g.getCurveN(i);
         if (section.getGeometryTypeId() == GEOS_ELLIPTICALCURVE) {
             writeEllipticalCurve(static_cast<const EllipticalCurve&>(section));
+        } else if (section.getGeometryTypeId() == GEOS_NURBSCURVE) {
+            writeNurbsCurve(static_cast<const NurbsCurve&>(section));
+        } else if (section.getGeometryTypeId() == GEOS_CLOTHOID) {
+            writeClothoid(static_cast<const Clothoid&>(section));
+        } else if (section.getGeometryTypeId() == GEOS_SPIRALCURVE) {
+            writeSpiralCurve(static_cast<const SpiralCurve&>(section));
         } else {
             writeSimpleCurve(section);
         }
@@ -493,6 +611,9 @@ WKBWriter::getWkbType(const Geometry& g) {
         case GEOS_LINEARRING: return WKBConstants::wkbLineString;
         case GEOS_CIRCULARSTRING: return WKBConstants::wkbCircularString;
         case GEOS_ELLIPTICALCURVE: return WKBConstants::wkbEllipticalCurve;
+        case GEOS_CLOTHOID: return WKBConstants::wkbClothoid;
+        case GEOS_SPIRALCURVE: return WKBConstants::wkbSpiralCurve;
+        case GEOS_NURBSCURVE: return WKBConstants::wkbNurbsCurve;
         case GEOS_COMPOUNDCURVE: return WKBConstants::wkbCompoundCurve;
         case GEOS_POLYGON: return WKBConstants::wkbPolygon;
         case GEOS_CURVEPOLYGON: return WKBConstants::wkbCurvePolygon;

@@ -42,7 +42,10 @@ class GeometryFactory;
 class Coordinate;
 class CircularString;
 class EllipticalCurve;
+class Clothoid;
+class SpiralCurve;
 struct AffinePlacement;
+class NurbsCurve;
 class CompoundCurve;
 class CurvePolygon;
 class Geometry;
@@ -172,10 +175,22 @@ private:
 
     std::unique_ptr<geom::EllipticalCurve> readEllipticalCurve();
 
-    /// The nested affine placement that starts an elliptical body.
+    std::unique_ptr<geom::Clothoid> readClothoid();
+
+    std::unique_ptr<geom::SpiralCurve> readSpiralCurve();
+
+    /// The nested affine placement that starts an elliptical, clothoid or
+    /// spiral body.
     /// Returns false, consuming nothing, when the body is omitted because
     /// the curve is empty.
     bool readReferenceLocation(geom::AffinePlacement& location, const std::string& typeName);
+
+    std::unique_ptr<geom::NurbsCurve> readNurbsCurve();
+
+    std::unique_ptr<geom::NurbsCurve> readNurbsCurveBody();
+
+    /// True when a geometry header follows: a byte order and a known type.
+    bool isGeometryHeaderNext() const;
 
     std::unique_ptr<geom::CompoundCurve> readCompoundCurve();
 

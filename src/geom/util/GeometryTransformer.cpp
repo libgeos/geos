@@ -103,6 +103,15 @@ GeometryTransformer::transform(const Geometry* nInputGeom)
         case GEOS_ELLIPTICALCURVE:
             throw geos::util::UnsupportedOperationException(
                 "Elliptical curve coordinate transform is not implemented");
+        case GEOS_CLOTHOID:
+            throw geos::util::UnsupportedOperationException(
+                "Clothoid coordinate transform is not implemented");
+        case GEOS_SPIRALCURVE:
+            throw geos::util::UnsupportedOperationException(
+                "Spiral curve coordinate transform is not implemented");
+        case GEOS_NURBSCURVE:
+            throw geos::util::UnsupportedOperationException(
+                "NURBS coordinate transform is not implemented");
         case GEOS_COMPOUNDCURVE:
             return transformCompoundCurve(detail::down_cast<const CompoundCurve*>(inputGeom), nullptr);
         case GEOS_CURVEPOLYGON:
@@ -278,6 +287,18 @@ GeometryTransformer::transformCompoundCurve(
         else if(c->getGeometryTypeId() == GEOS_ELLIPTICALCURVE) {
             throw geos::util::UnsupportedOperationException(
                 "Elliptical curve coordinate transform is not implemented");
+        }
+        else if(c->getGeometryTypeId() == GEOS_CLOTHOID) {
+            throw geos::util::UnsupportedOperationException(
+                "Clothoid coordinate transform is not implemented");
+        }
+        else if(c->getGeometryTypeId() == GEOS_SPIRALCURVE) {
+            throw geos::util::UnsupportedOperationException(
+                "Spiral curve coordinate transform is not implemented");
+        }
+        else if(c->getGeometryTypeId() == GEOS_NURBSCURVE) {
+            throw geos::util::UnsupportedOperationException(
+                "NURBS coordinate transform is not implemented");
         }
         else if(const LineString* ls = dynamic_cast<const LineString*>(c)) {
             transformGeom = transformLineString(ls, geom);

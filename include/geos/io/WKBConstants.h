@@ -44,7 +44,11 @@ namespace WKBConstants {
         wkbMultiCurve = 11,
         wkbMultiSurface = 12,
         wkbEllipticalCurve = 20,
+        wkbCircle = 18,
+        wkbClothoid = 22,
+        wkbSpiralCurve = 23,
         wkbAffinePlacement = 102,
+        wkbNurbsCurve = 21,
     };
 
     enum wkbFlavour {
