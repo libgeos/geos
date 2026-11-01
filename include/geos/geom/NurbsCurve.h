@@ -124,6 +124,13 @@ public:
     /// End of the knot domain, u_n.
     double getEndParameter() const;
 
+    /// The rational Bezier form of each knot span of the domain, in order,
+    /// as degree + 1 control points per span. Each NurbsPoint holds the
+    /// control point times its weight, and the weight (1 for a curve
+    /// that has no weights). The spans join end to end and together
+    /// trace the whole curve. An empty curve has none.
+    std::vector<std::vector<NurbsPoint>> getBezierSpans() const;
+
     /// The point at knot parameter u, clamped to the knot domain. Z is set
     /// when the curve has Z. M is NaN, since a NURBS measure is only given
     /// at its ends. Throws IllegalArgumentException when the curve is empty

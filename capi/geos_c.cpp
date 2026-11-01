@@ -24,6 +24,7 @@
 #include <geos/io/WKTWriter.h>
 #include <geos/io/WKBWriter.h>
 #include <geos/io/GeoJSONReader.h>
+#include <geos/io/EsriJsonWriter.h>
 #include <geos/io/GeoJSONWriter.h>
 #include <geos/operation/buffer/BufferParameters.h>
 #include <geos/operation/cluster/Clusters.h>
@@ -55,6 +56,7 @@
 #define GEOSWKBWriter geos::io::WKBWriter
 #define GEOSGeoJSONReader geos::io::GeoJSONReader
 #define GEOSGeoJSONWriter geos::io::GeoJSONWriter
+#define GEOSEsriJSONWriter geos::io::EsriJsonWriter
 
 // Implementation struct for the GEOSCoverageCleanParams object
 typedef struct {
@@ -522,20 +524,6 @@ extern "C" {
     GEOSGeomFromWKT(const char* wkt)
     {
         return GEOSGeomFromWKT_r(handle, wkt);
-    }
-
-    char*
-    GEOSGeomToEsriCurveJSON(const Geometry* g, double tolerance)
-    {
-        return GEOSGeomToEsriCurveJSON_r(handle, g, tolerance);
-    }
-
-    char*
-    GEOSGeomToEsriCurveJSONWithStats(const Geometry* g, double tolerance,
-                                     std::size_t* numSegments, std::size_t* numApproximated,
-                                     double* maxDeviation)
-    {
-        return GEOSGeomToEsriCurveJSONWithStats_r(handle, g, tolerance, numSegments, numApproximated, maxDeviation);
     }
 
     char*
@@ -1885,6 +1873,55 @@ extern "C" {
     GEOSGeoJSONWriter_getOutputDimension(GeoJSONWriter* writer)
     {
         return GEOSGeoJSONWriter_getOutputDimension_r(handle, writer);
+    }
+
+    /* Esri JSON Writer */
+    GEOSEsriJSONWriter*
+    GEOSEsriJSONWriter_create(void)
+    {
+        return GEOSEsriJSONWriter_create_r(handle);
+    }
+
+    void
+    GEOSEsriJSONWriter_destroy(GEOSEsriJSONWriter* writer)
+    {
+        GEOSEsriJSONWriter_destroy_r(handle, writer);
+    }
+
+    int
+    GEOSEsriJSONWriter_setTolerance(GEOSEsriJSONWriter* writer, double tolerance)
+    {
+        return GEOSEsriJSONWriter_setTolerance_r(handle, writer, tolerance);
+    }
+
+    void
+    GEOSEsriJSONWriter_setMatchCurvature(GEOSEsriJSONWriter* writer, int matchCurvature)
+    {
+        GEOSEsriJSONWriter_setMatchCurvature_r(handle, writer, matchCurvature);
+    }
+
+    char*
+    GEOSEsriJSONWriter_writeGeometry(GEOSEsriJSONWriter* writer, const Geometry* g)
+    {
+        return GEOSEsriJSONWriter_writeGeometry_r(handle, writer, g);
+    }
+
+    std::size_t
+    GEOSEsriJSONWriter_getNumSegments(const GEOSEsriJSONWriter* writer)
+    {
+        return GEOSEsriJSONWriter_getNumSegments_r(handle, writer);
+    }
+
+    std::size_t
+    GEOSEsriJSONWriter_getNumApproximated(const GEOSEsriJSONWriter* writer)
+    {
+        return GEOSEsriJSONWriter_getNumApproximated_r(handle, writer);
+    }
+
+    double
+    GEOSEsriJSONWriter_getMaxDeviation(const GEOSEsriJSONWriter* writer)
+    {
+        return GEOSEsriJSONWriter_getMaxDeviation_r(handle, writer);
     }
 
 

@@ -1,5 +1,5 @@
 """
-Measure GEOSGeomToEsriCurveJSON on curves like the ones in the ArcGIS test
+Measure GEOSEsriJSONWriter on curves like the ones in the ArcGIS test
 notebook, without ArcGIS: segment counts, exact versus approximated, and the
 largest measured deviation.
 

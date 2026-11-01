@@ -14,6 +14,7 @@
 
 #include <geos/io/EsriJsonWriter.h>
 
+#include <geos/io/CLocalizer.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/GeometryCollection.h>
@@ -22,7 +23,8 @@
 #include <geos/util/UnsupportedOperationException.h>
 
 #include <cmath>
-#include <iomanip>
+#include <cstdio>
+#include <cstdlib>
 #include <locale>
 #include <sstream>
 
@@ -42,8 +44,15 @@ writeNumber(std::ostream& os, double v)
     if (!std::isfinite(v)) {
         throw util::IllegalArgumentException("Esri JSON cannot represent a non-finite ordinate");
     }
-    // 17 significant digits round-trip a double.
-    os << std::setprecision(17) << v;
+    // The shortest of 15, 16 or 17 significant digits that reads back as v.
+    char buf[40];
+    for (int digits = 15; digits <= 17; digits++) {
+        std::snprintf(buf, sizeof buf, "%.*g", digits, v);
+        if (digits == 17 || std::strtod(buf, nullptr) == v) {
+            break;
+        }
+    }
+    os << buf;
 }
 
 void
@@ -137,7 +146,7 @@ writePoints(std::ostream& os, const geom::Geometry& g)
     if (g.getGeometryTypeId() == geom::GEOS_POINT) {
         const auto& pt = static_cast<const geom::Point&>(g);
         if (pt.isEmpty()) {
-            os << "{\"x\":\"NaN\",\"y\":\"NaN\"";
+            os << "{\"x\":null";
         }
         else {
             os << "{\"x\":";
@@ -177,7 +186,12 @@ EsriJsonWriter::setTolerance(double tolerance)
 std::string
 EsriJsonWriter::write(const geom::Geometry& g)
 {
+    CLocalizer clocale;
     stats = Stats();
+    if (!(params.tolerance > 0.0) || !std::isfinite(params.tolerance)) {
+        throw util::IllegalArgumentException(
+            "Esri JSON curve tolerance must be set to a positive, finite value");
+    }
     std::ostringstream os;
     os.imbue(std::locale::classic());
 

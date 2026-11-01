@@ -170,6 +170,7 @@
 #define GEOSWKBWriter geos::io::WKBWriter
 #define GEOSGeoJSONReader geos::io::GeoJSONReader
 #define GEOSGeoJSONWriter geos::io::GeoJSONWriter
+#define GEOSEsriJSONWriter geos::io::EsriJsonWriter
 
 // Implementation struct for the GEOSCoverageCleanParams object
 typedef struct {
@@ -1536,35 +1537,6 @@ extern "C" {
             writer.setTrim(false);
             writer.setOutputDimension(2);
             char* result = gstrdup(writer.write(g1));
-            return result;
-        });
-    }
-
-    char*
-    GEOSGeomToEsriCurveJSON_r(GEOSContextHandle_t extHandle, const Geometry* g, double tolerance)
-    {
-        return GEOSGeomToEsriCurveJSONWithStats_r(extHandle, g, tolerance, nullptr, nullptr, nullptr);
-    }
-
-    char*
-    GEOSGeomToEsriCurveJSONWithStats_r(GEOSContextHandle_t extHandle, const Geometry* g, double tolerance,
-                                       std::size_t* numSegments, std::size_t* numApproximated,
-                                       double* maxDeviation)
-    {
-        return execute(extHandle, [&]() {
-            geos::io::EsriJsonWriter writer;
-            writer.setTolerance(tolerance);
-            char* result = gstrdup(writer.write(*g));
-            const geos::io::EsriJsonWriter::Stats& stats = writer.getStats();
-            if (numSegments) {
-                *numSegments = stats.numSegments;
-            }
-            if (numApproximated) {
-                *numApproximated = stats.numApproximated;
-            }
-            if (maxDeviation) {
-                *maxDeviation = stats.maxDeviation;
-            }
             return result;
         });
     }
@@ -4690,6 +4662,72 @@ extern "C" {
     {
         return execute(extHandle, -1, [&]() {
             return writer->getOutputDimension();
+        });
+    }
+
+    /* Esri JSON Writer */
+    GEOSEsriJSONWriter*
+    GEOSEsriJSONWriter_create_r(GEOSContextHandle_t extHandle)
+    {
+        return execute(extHandle, [&]() {
+            return new geos::io::EsriJsonWriter();
+        });
+    }
+
+    void
+    GEOSEsriJSONWriter_destroy_r(GEOSContextHandle_t extHandle, GEOSEsriJSONWriter* writer)
+    {
+        execute(extHandle, [&]() {
+            delete writer;
+        });
+    }
+
+    int
+    GEOSEsriJSONWriter_setTolerance_r(GEOSContextHandle_t extHandle, GEOSEsriJSONWriter* writer, double tolerance)
+    {
+        return execute(extHandle, 0, [&]() {
+            writer->setTolerance(tolerance);
+            return 1;
+        });
+    }
+
+    void
+    GEOSEsriJSONWriter_setMatchCurvature_r(GEOSContextHandle_t extHandle, GEOSEsriJSONWriter* writer, int matchCurvature)
+    {
+        execute(extHandle, [&]() {
+            writer->setMatchCurvature(matchCurvature != 0);
+        });
+    }
+
+    char*
+    GEOSEsriJSONWriter_writeGeometry_r(GEOSContextHandle_t extHandle, GEOSEsriJSONWriter* writer, const GEOSGeometry* g)
+    {
+        return execute(extHandle, [&]() {
+            return gstrdup(writer->write(*g));
+        });
+    }
+
+    std::size_t
+    GEOSEsriJSONWriter_getNumSegments_r(GEOSContextHandle_t extHandle, const GEOSEsriJSONWriter* writer)
+    {
+        return execute(extHandle, std::size_t(0), [&]() {
+            return writer->getStats().numSegments;
+        });
+    }
+
+    std::size_t
+    GEOSEsriJSONWriter_getNumApproximated_r(GEOSContextHandle_t extHandle, const GEOSEsriJSONWriter* writer)
+    {
+        return execute(extHandle, std::size_t(0), [&]() {
+            return writer->getStats().numApproximated;
+        });
+    }
+
+    double
+    GEOSEsriJSONWriter_getMaxDeviation_r(GEOSContextHandle_t extHandle, const GEOSEsriJSONWriter* writer)
+    {
+        return execute(extHandle, 0.0, [&]() {
+            return writer->getStats().maxDeviation;
         });
     }
 

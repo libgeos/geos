@@ -32,7 +32,10 @@ namespace io {
 /**
  * Writes a geometry as Esri JSON, with curves kept as true curves.
  *
- * Points and multipoints are written as `x`/`y` and `points`. Linear
+ * The tolerance must be set before writing (see setTolerance()).
+ *
+ * Points and multipoints are written as `x`/`y` and `points`; an empty
+ * point as `{"x":null}`. Linear
  * geometries are written as `paths` and `rings`. A geometry with curved
  * parts is written as `curvePaths` or `curveRings`, whose segments are
  * lines (`[x, y]`), circular arcs (`{"c": [[x, y], [interiorX, interiorY]]}`),
@@ -72,7 +75,9 @@ public:
 
     /// The largest distance between an approximating Bezier and its
     /// source curve, in coordinate units. Must be positive and finite.
-    /// Default 0.001.
+    /// There is no default, since a sensible value depends on the
+    /// coordinate system: write() throws util::IllegalArgumentException
+    /// until this is set.
     void setTolerance(double tolerance);
 
     double getTolerance() const
@@ -89,7 +94,7 @@ public:
 
     std::string write(const geom::Geometry& geometry);
 
-    /// Statistics of the most recent write().
+    /// Statistics of the most recent write(); all zero when it threw.
     const Stats& getStats() const
     {
         return stats;

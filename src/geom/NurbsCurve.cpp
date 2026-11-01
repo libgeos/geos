@@ -918,6 +918,27 @@ NurbsCurve::computeNurbsEnvelope() const
     return env;
 }
 
+std::vector<std::vector<NurbsPoint>>
+NurbsCurve::getBezierSpans() const
+{
+    std::vector<std::vector<NurbsPoint>> result;
+    if (isEmpty()) {
+        return result;
+    }
+    const Evaluator curve(m_degree, m_controlPoints, m_expandedKnots);
+    for (std::size_t k : curve.spans()) {
+        std::vector<NurbsPoint> span;
+        for (const Homogeneous& h : curve.bezier(k)) {
+            NurbsPoint cp;
+            cp.weightedPoint = Coordinate(h.x, h.y, h.z);
+            cp.weight = h.w;
+            span.push_back(cp);
+        }
+        result.push_back(std::move(span));
+    }
+    return result;
+}
+
 void
 NurbsCurve::validateConstruction() const
 {

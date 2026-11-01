@@ -1,6 +1,6 @@
 # ArcGIS Pro: GEOS curves as true curves
 
-* `geos_true_curves.py`: ctypes binding for `GEOSGeomToEsriCurveJSON` and
+* `geos_true_curves.py`: ctypes binding for `GEOSEsriJSONWriter_*` and
   `to_arcpy_true_curve(geos, geom, tolerance)`, which loads the Esri JSON with
   `arcpy.AsShape(json, True)`.
 * `GEOS_True_Curves_demo.ipynb`: a demo notebook (a reconstruction; it is not

@@ -18,6 +18,7 @@
 #include <geos/geom/Coordinate.h>
 
 #include <cstddef>
+#include <limits>
 #include <vector>
 
 // Forward declarations
@@ -124,13 +125,17 @@ struct GEOS_DLL NativeCurvePath {
  * Parameters of the conversion.
  *
  * `tolerance` bounds the distance between the source curve and every
- * approximating cubic Bezier. It is in the units of the coordinates. It
- * has no effect on segments that are exact, and every curve kind that has
- * an exact mapping uses it (see NativeCurveSegments).
+ * approximating cubic Bezier. It is in the units of the coordinates, so
+ * the right value depends on the coordinate system (0.001 is a millimetre
+ * in metres but about 111 m in degrees), and for that reason it has NO
+ * default: it starts as NaN and a conversion with it unset throws
+ * util::IllegalArgumentException. It has no effect on segments that are
+ * exact.
  *
- * The bound is checked, not proven: the distance is measured by sampling
- * the source curve and the Bezier densely (at least 256 points per
- * segment, each projected onto the other curve), and a segment that
+ * The bound is measured, not proven. The measure is a sampled Hausdorff
+ * distance: n + 1 points of the source curve and of the Bezier, each
+ * projected onto the other curve near where the previous point matched. It
+ * is taken with at least 256 points per segment, and a segment that
  * measures above `tolerance` is split and refitted. A curve whose features
  * are finer than the sampling can in principle hide a larger deviation.
  *
@@ -139,7 +144,7 @@ struct GEOS_DLL NativeCurvePath {
  * possible; otherwise the fit is only G1 (positions and tangents).
  */
 struct GEOS_DLL NativeCurveParams {
-    double tolerance = 0.001;
+    double tolerance = std::numeric_limits<double>::quiet_NaN();
     bool matchCurvature = true;
 };
 

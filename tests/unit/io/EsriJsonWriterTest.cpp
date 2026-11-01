@@ -20,6 +20,11 @@ struct test_esrijsonwriter_data {
     geos::io::WKTReader reader_;
     geos::io::EsriJsonWriter writer_;
 
+    test_esrijsonwriter_data()
+    {
+        writer_.setTolerance(1e-3);
+    }
+
     std::string write(const std::string& wkt)
     {
         auto g = reader_.read(wkt);
@@ -60,7 +65,7 @@ void object::test<1>()
     set_test_name("points, linear geometry and polygons");
 
     ensure_equals(write("POINT (1 2.5)"), std::string("{\"x\":1,\"y\":2.5}"));
-    ensure_equals(write("POINT EMPTY"), std::string("{\"x\":\"NaN\",\"y\":\"NaN\"}"));
+    ensure_equals(write("POINT EMPTY"), std::string("{\"x\":null}"));
     ensure_equals(write("MULTIPOINT ((1 2), (3 4))"), std::string("{\"points\":[[1,2],[3,4]]}"));
     ensure_equals(write("LINESTRING (0 0, 1 1, 2 0)"), std::string("{\"paths\":[[[0,0],[1,1],[2,0]]]}"));
     ensure_equals(write("MULTILINESTRING ((0 0, 1 1), (5 5, 6 6))"),
@@ -101,14 +106,14 @@ void object::test<3>()
         "(VECTOR (1 0), VECTOR (0 1))), UAXISLENGTH 3, VAXISLENGTH 2, "
         "STARTANGLE ANGLE RADIANS (0), ENDANGLE ANGLE RADIANS (1.5707963267948966))");
     // end point, centre, minor, clockwise, rotation, semi-major axis, ratio
-    ensure_equals(json, std::string("{\"curvePaths\":[[[3,0],{\"a\":[[0,2],[0,0],1,0,0,3,0.66666666666666663]}]]}"));
+    ensure_equals(json, std::string("{\"curvePaths\":[[[3,0],{\"a\":[[0,2],[0,0],1,0,0,3,0.6666666666666666]}]]}"));
 
     // The same quarter run clockwise from (0, 2) to (3, 0).
     const std::string cw = write(
         "ELLIPTICALCURVE (REFERENCELOCATION AFFINEPLACEMENT (LOCATION (0 0), REFERENCEDIRECTIONS "
         "(VECTOR (1 0), VECTOR (0 1))), UAXISLENGTH 3, VAXISLENGTH 2, "
         "STARTANGLE ANGLE RADIANS (1.5707963267948966), ENDANGLE ANGLE RADIANS (0))");
-    ensure_equals(cw, std::string("{\"curvePaths\":[[[0,2],{\"a\":[[3,0],[0,0],1,1,0,3,0.66666666666666663]}]]}"));
+    ensure_equals(cw, std::string("{\"curvePaths\":[[[0,2],{\"a\":[[3,0],[0,0],1,1,0,3,0.6666666666666666]}]]}"));
 
     // A major axis along v: the semi-major axis is the v length and the
     // major axis points along +y (rotation pi/2).
@@ -116,7 +121,7 @@ void object::test<3>()
         "ELLIPTICALCURVE (REFERENCELOCATION AFFINEPLACEMENT (LOCATION (0 0), REFERENCEDIRECTIONS "
         "(VECTOR (1 0), VECTOR (0 1))), UAXISLENGTH 2, VAXISLENGTH 3, "
         "STARTANGLE ANGLE RADIANS (0), ENDANGLE ANGLE RADIANS (1.5707963267948966))");
-    ensure("major axis 3", tall.find(",3,0.66666666666666663]}") != std::string::npos);
+    ensure("major axis 3", tall.find(",3,0.6666666666666666]}") != std::string::npos);
     ensure("rotation about pi/2", tall.find(",1.5707963267948966,3,") != std::string::npos
            || tall.find(",1.570796326794896") != std::string::npos);
 }
@@ -189,6 +194,10 @@ void object::test<6>()
     ensure_equals(writer_.write(*g),
                   std::string("{\"curvePaths\":[[[0,0],{\"c\":[[2,0],[1,1]]}]],\"spatialReference\":{\"wkid\":3857}}"));
 
+    // No default tolerance.
+    geos::io::EsriJsonWriter fresh;
+    ensure_THROW(fresh.write(*g), geos::util::IllegalArgumentException);
+    ensure_equals(fresh.getStats().numSegments, 0u);
     ensure_THROW(writer_.setTolerance(0.0), geos::util::IllegalArgumentException);
     ensure_THROW(writer_.setTolerance(-1.0), geos::util::IllegalArgumentException);
     ensure_THROW(writer_.setTolerance(std::numeric_limits<double>::infinity()),

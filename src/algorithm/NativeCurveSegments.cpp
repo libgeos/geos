@@ -446,8 +446,9 @@ projectDistance(const EvalFn& evalAt, const CoordinateXY& q, double x, double lo
     return norm(evalAt(xc).p - q);
 }
 
-// The largest distance between the exact curve on [sa, sb] and the Bezier,
-// measured both ways with n samples each, and the total turn of the exact
+// The sampled Hausdorff distance between the exact curve on [sa, sb] and the
+// Bezier: n + 1 samples of each, every one projected onto the other curve
+// near where the previous one matched. Also the total turn of the exact
 // tangent.
 double
 measureDeviation(const ParamCurve& pc, double sa, double sb, const Bez& bez,
@@ -498,40 +499,55 @@ measureDeviation(const ParamCurve& pc, double sa, double sb, const Bez& bez,
         return pc.eval(s);
     };
 
+    // Both polylines run along the same curve in the same direction, so the
+    // nearest point of one to a sample of the other is looked for only in a
+    // window of the other's samples that follows the previous match. That
+    // keeps a sample of a curve that comes back close to itself from
+    // matching the wrong branch, and costs O(window) per sample.
+    const std::size_t window = std::max<std::size_t>(16, m / 16);
+    auto nearestIn = [&](auto&& pointAt, const CoordinateXY& q, std::size_t expected,
+                         std::size_t& best, double& bestD) {
+        const std::size_t lo = expected > window ? expected - window : 0;
+        const std::size_t hi = std::min(m, expected + window);
+        bestD = std::numeric_limits<double>::infinity();
+        for (std::size_t k = lo; k <= hi; k++) {
+            const CoordinateXY r = pointAt(k) - q;
+            const double d = r.x * r.x + r.y * r.y;
+            if (d < bestD) {
+                bestD = d;
+                best = k;
+            }
+        }
+    };
+    auto exactAt = [&](std::size_t k) {
+        return exact[k].p;
+    };
+    auto bezierAt = [&](std::size_t k) {
+        return bpts[k];
+    };
+
     double dev = 0.0;
+    std::size_t prevBez = 0;
+    std::size_t prevExact = 0;
     for (std::size_t i = 0; i <= n; i++) {
         // exact sample -> Bezier
         {
-            const CoordinateXY& q = exact[4 * i].p;
-            std::size_t best = 0;
-            double bestD = std::numeric_limits<double>::infinity();
-            for (std::size_t k = 0; k <= m; k++) {
-                const CoordinateXY r = bpts[k] - q;
-                const double d = r.x * r.x + r.y * r.y;
-                if (d < bestD) {
-                    bestD = d;
-                    best = k;
-                }
-            }
-            const double d = projectDistance(bezEval, q,
+            std::size_t best = prevBez;
+            double bestD = 0.0;
+            nearestIn(bezierAt, exact[4 * i].p, std::max(prevBez, 4 * i), best, bestD);
+            prevBez = best;
+            const double d = projectDistance(bezEval, exact[4 * i].p,
                                              static_cast<double>(best) / static_cast<double>(m), 0.0, 1.0);
             dev = std::max(dev, std::min(d, std::sqrt(bestD)));
         }
         // Bezier sample -> exact
         {
-            const CoordinateXY& q = bpts[4 * i];
-            std::size_t best = 0;
-            double bestD = std::numeric_limits<double>::infinity();
-            for (std::size_t k = 0; k <= m; k++) {
-                const CoordinateXY r = exact[k].p - q;
-                const double d = r.x * r.x + r.y * r.y;
-                if (d < bestD) {
-                    bestD = d;
-                    best = k;
-                }
-            }
+            std::size_t best = prevExact;
+            double bestD = 0.0;
+            nearestIn(exactAt, bpts[4 * i], std::max(prevExact, 4 * i), best, bestD);
+            prevExact = best;
             const double x0 = sa + (sb - sa) * static_cast<double>(best) / static_cast<double>(m);
-            const double d = projectDistance(exactEval, q, x0, std::min(sa, sb), std::max(sa, sb));
+            const double d = projectDistance(exactEval, bpts[4 * i], x0, std::min(sa, sb), std::max(sa, sb));
             dev = std::max(dev, std::min(d, std::sqrt(bestD)));
         }
     }
@@ -665,7 +681,9 @@ approximateRange(const ParamCurve& pc, double s0, double s1, const NativeCurvePa
     const bool g2 = params.matchCurvature;
     const double span = s1 - s0;
 
-    // Greedy: take the longest piece that fits.
+    // Greedy: take the longest piece that fits, found by bisection. "Fits" is
+    // not monotone in the length (the G2 solve can fail to converge and the
+    // turn cap can bind), so this is a good piece, not provably the longest.
     std::vector<double> breaks;
     breaks.push_back(s0);
     double pos = s0;
@@ -875,80 +893,6 @@ struct BezierSpan {
     std::vector<HPoint> h; // homogeneous control values
 };
 
-std::vector<double>
-expandedKnots(const geom::NurbsCurve& nc)
-{
-    std::vector<double> u;
-    for (const geom::NurbsKnot& k : nc.getKnots()) {
-        for (std::size_t i = 0; i < k.multiplicity; i++) {
-            u.push_back(k.value);
-        }
-    }
-    return u;
-}
-
-std::vector<BezierSpan>
-bezierSpans(const geom::NurbsCurve& nc)
-{
-    const std::size_t p = static_cast<std::size_t>(nc.getDegree());
-    const auto& cps = nc.getControlPoints();
-    const std::size_t count = cps.size();
-    const std::vector<double> U = expandedKnots(nc);
-
-    std::vector<HPoint> pw(count);
-    for (std::size_t i = 0; i < count; i++) {
-        const double w = nc.isRational() ? cps[i].effectiveWeight() : 1.0;
-        pw[i] = {cps[i].weightedPoint.x, cps[i].weightedPoint.y, w};
-    }
-
-    const double a = U[p];
-    const double b = U[count];
-    std::vector<double> breaks;
-    breaks.push_back(a);
-    for (const geom::NurbsKnot& k : nc.getKnots()) {
-        if (k.value > a && k.value < b) {
-            breaks.push_back(k.value);
-        }
-    }
-    breaks.push_back(b);
-
-    std::vector<BezierSpan> spans;
-    for (std::size_t s = 0; s + 1 < breaks.size(); s++) {
-        const double lo = breaks[s];
-        const double hi = breaks[s + 1];
-        if (!(hi > lo)) {
-            continue;
-        }
-        std::size_t k = p;
-        while (k + 1 < count && !(U[k] <= lo && lo < U[k + 1])) {
-            k++;
-        }
-        BezierSpan span;
-        span.h.resize(p + 1);
-        for (std::size_t j = 0; j <= p; j++) {
-            // Blossom of the span at (lo ^ (p - j), hi ^ j), by de Boor.
-            std::vector<HPoint> d(p + 1);
-            for (std::size_t q = 0; q <= p; q++) {
-                d[q] = pw[k - p + q];
-            }
-            for (std::size_t r = 1; r <= p; r++) {
-                const double ur = (r <= p - j) ? lo : hi;
-                for (std::size_t q = p; q >= r; q--) {
-                    const std::size_t i0 = k - p + q;
-                    const double denom = U[i0 + p - r + 1] - U[i0];
-                    const double alpha = denom > 0.0 ? (ur - U[i0]) / denom : 0.0;
-                    for (std::size_t c = 0; c < 3; c++) {
-                        d[q][c] = (1.0 - alpha) * d[q - 1][c] + alpha * d[q][c];
-                    }
-                }
-            }
-            span.h[j] = d[p];
-        }
-        spans.push_back(std::move(span));
-    }
-    return spans;
-}
-
 CoordinateXY
 cartesian(const HPoint& h)
 {
@@ -987,7 +931,8 @@ reduceToCubic(const std::vector<CoordinateXY>& pts, Bez& cubic)
         }
         if (order >= 4) {
             for (std::size_t i = 0; i + order < n; i++) {
-                if (norm(diff[i]) > 1e-12 * extent) {
+                // Rounding in a k-th difference grows like 2^k.
+                if (norm(diff[i]) > 1e-12 * extent * std::ldexp(1.0, static_cast<int>(order))) {
                     return false;
                 }
             }
@@ -1013,13 +958,21 @@ reduceToCubic(const std::vector<CoordinateXY>& pts, Bez& cubic)
     return true;
 }
 
+// True when the weights w_i, divided by r^i with r = (w_n / w_0)^(1/n), are
+// all equal. Such a rational Bezier is a projective reparametrisation of the
+// polynomial Bezier with the same control points (equal weights being the
+// case r = 1), so it traces exactly that polynomial curve.
 bool
-equalWeights(const std::vector<HPoint>& h)
+polynomialWeights(const std::vector<HPoint>& h)
 {
-    for (const HPoint& p : h) {
-        if (std::abs(p[2] / h[0][2] - 1.0) > 1e-13) {
+    const std::size_t n = h.size() - 1;
+    const double r = std::pow(h[n][2] / h[0][2], 1.0 / static_cast<double>(n));
+    double ri = 1.0;
+    for (std::size_t i = 0; i <= n; i++) {
+        if (std::abs(h[i][2] / h[0][2] / ri - 1.0) > 1e-13) {
             return false;
         }
+        ri *= r;
     }
     return true;
 }
@@ -1040,7 +993,7 @@ appendNurbsSpan(std::vector<NativeCurveSegment>& out, const BezierSpan& span,
         return;
     }
 
-    if (equalWeights(h)) {
+    if (polynomialWeights(h)) {
         if (deg == 2) {
             out.push_back(segmentFromBezier(elevateQuadratic(pts[0], pts[1], pts[2]), true, 0.0));
             return;
@@ -1061,7 +1014,7 @@ appendNurbsSpan(std::vector<NativeCurveSegment>& out, const BezierSpan& span,
         }
     }
     else if (deg == 2) {
-        // Rational quadratic: a conic.
+        // Rational quadratic that is not a parabola: an ellipse or a hyperbola.
         const double w = h[1][2] / std::sqrt(h[0][2] * h[2][2]);
         if (std::abs(w - 1.0) <= PARABOLA_WEIGHT_TOLERANCE) {
             out.push_back(segmentFromBezier(elevateQuadratic(pts[0], pts[1], pts[2]), true, 0.0));
@@ -1088,17 +1041,18 @@ appendNurbsSpan(std::vector<NativeCurveSegment>& out, const BezierSpan& span,
     // No exact form: a Bezier fit, by u in [0, 1].
     RationalBezierParam pc(h);
     approximateRange(pc, 0.0, 1.0, params, out);
-    // The fit's ends are the span's own ends.
-    // (The fitted first and last points are the evaluated span ends.)
 }
 
 void
 appendNurbs(std::vector<NativeCurveSegment>& out, const geom::NurbsCurve& nc,
             const NativeCurveParams& params)
 {
-    const std::vector<BezierSpan> spans = bezierSpans(nc);
-    for (const BezierSpan& span : spans) {
-        appendNurbsSpan(out, span, params);
+    for (const std::vector<geom::NurbsPoint>& span : nc.getBezierSpans()) {
+        BezierSpan bs;
+        for (const geom::NurbsPoint& cp : span) {
+            bs.h.push_back({cp.weightedPoint.x, cp.weightedPoint.y, cp.effectiveWeight()});
+        }
+        appendNurbsSpan(out, bs, params);
     }
 }
 
@@ -1279,11 +1233,13 @@ signedAreaApprox(const NativeCurvePath& path)
     for (const NativeCurveSegment& s : path.segments) {
         samplePoints(s, pts);
     }
+    // Relative to the first point, so that large coordinates (projected
+    // systems reach 1e7) do not cancel.
+    const CoordinateXY origin = pts.front();
     double area = 0.0;
     for (std::size_t i = 0; i + 1 < pts.size(); i++) {
-        area += cross(pts[i], pts[i + 1]);
+        area += cross(pts[i] - origin, pts[i + 1] - origin);
     }
-    area += cross(pts.back(), pts.front());
     return 0.5 * area;
 }
 

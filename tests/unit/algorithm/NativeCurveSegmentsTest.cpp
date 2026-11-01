@@ -29,6 +29,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <cstdio>
 #include <limits>
 #include <iomanip>
 #include <memory>
@@ -932,6 +933,7 @@ void object::test<15>()
     auto g = read("CURVEPOLYGON (COMPOUNDCURVE (CIRCULARSTRING (0 0, 5 5, 10 0), (10 0, 0 0)), "
                   "(3 1, 5 1, 5 2, 3 2, 3 1))");
     NativeCurveParams params;
+    params.tolerance = 1e-3;
     const auto paths = NativeCurveSegments::convert(*g, params);
     ensure_equals(paths.size(), 2u);
     ensure(paths[0].closed);
@@ -959,6 +961,9 @@ void object::test<16>()
 
     auto g = read(clothoidWkt(50, 0, 25));
     NativeCurveParams params;
+    // There is no default tolerance.
+    ensure(std::isnan(params.tolerance));
+    ensure_THROW(NativeCurveSegments::convert(*g, params), geos::util::IllegalArgumentException);
     params.tolerance = 0.0;
     ensure_THROW(NativeCurveSegments::convert(*g, params), geos::util::IllegalArgumentException);
     params.tolerance = -1.0;
@@ -989,9 +994,152 @@ void object::test<17>()
     auto g = read(clothoidWkt(50, 0, 25));
     const auto before = g->getLinearized(CurveToLineParams::maxDeviation(1e-3));
     NativeCurveParams params;
+    params.tolerance = 1e-3;
     (void) NativeCurveSegments::convert(*g, params);
     const auto after = g->getLinearized(CurveToLineParams::maxDeviation(1e-3));
     ensure(before->equalsExact(after.get(), 0.0));
+}
+
+template<>
+template<>
+void object::test<18>()
+{
+    set_test_name("ring orientation at large coordinates (1e7 offset)");
+
+    // A ring of size 1 at a projected-coordinate offset. Summing cross
+    // products of absolute coordinates would lose the area to rounding.
+    const double off = 1e7;
+    const double yoff = 5e6;
+    auto area = [](const NativeCurvePath& path) {
+        const std::vector<CoordinateXY> pts = decodePath(path, 100);
+        double a = 0;
+        for (std::size_t i = 0; i + 1 < pts.size(); i++) {
+            a += cross(sub(pts[i], pts[0]), sub(pts[i + 1], pts[0]));
+        }
+        return 0.5 * a;
+    };
+    auto pt = [&](double dx, double dy) {
+        char buf[64];
+        std::snprintf(buf, sizeof buf, "%.4f %.4f", off + dx, yoff + dy);
+        return std::string(buf);
+    };
+    NativeCurveParams params;
+    params.tolerance = 1e-3;
+    // A square 1 cm across: its area (1e-4) is below the rounding of a sum of
+    // cross products of absolute coordinates (about 1e-2 here).
+    const double s = 0.01;
+    const std::vector<std::string> wkts = {
+        "POLYGON ((" + pt(0, 0) + ", " + pt(s, 0) + ", " + pt(s, s) + ", " + pt(0, s) + ", " + pt(0, 0) + "))",
+        "POLYGON ((" + pt(0, 0) + ", " + pt(0, s) + ", " + pt(s, s) + ", " + pt(s, 0) + ", " + pt(0, 0) + "))",
+        "CURVEPOLYGON (COMPOUNDCURVE (CIRCULARSTRING (" + pt(0, 0) + ", " + pt(s / 2, s / 2) + ", " + pt(s, 0)
+            + "), (" + pt(s, 0) + ", " + pt(0, 0) + ")))",
+        "CURVEPOLYGON (COMPOUNDCURVE ((" + pt(0, 0) + ", " + pt(s, 0) + "), CIRCULARSTRING ("
+            + pt(s, 0) + ", " + pt(s / 2, s / 2) + ", " + pt(0, 0) + ")))"
+    };
+    for (const std::string& wkt : wkts) {
+        auto g = read(wkt);
+        const auto paths = NativeCurveSegments::convert(*g, params);
+        ensure_equals(paths.size(), 1u);
+        ensure("shell is clockwise: " + wkt, area(paths[0]) < 0);
+    }
+    // A hole of 1e-4 area in a shell of 1e-2, both at the same offset.
+    auto holed = read("POLYGON ((" + pt(0, 0) + ", " + pt(0, 0.1) + ", " + pt(0.1, 0.1) + ", " + pt(0.1, 0) + ", " + pt(0, 0)
+                      + "), (" + pt(0.02, 0.02) + ", " + pt(0.03, 0.02) + ", " + pt(0.03, 0.03) + ", " + pt(0.02, 0.03)
+                      + ", " + pt(0.02, 0.02) + "))");
+    const auto paths = NativeCurveSegments::convert(*holed, params);
+    ensure_equals(paths.size(), 2u);
+    ensure(area(paths[0]) < 0);
+    ensure(area(paths[1]) > 0);
+}
+
+template<>
+template<>
+void object::test<19>()
+{
+    set_test_name("tightly wound spiral: many turns, branches close together");
+
+    // A clothoid wound about five times; its radius falls to under a metre,
+    // so neighbouring turns are a few metres apart.
+    auto g = read(clothoidWkt(5, 0, 40));
+    std::size_t n = 0;
+    ensureWithinTolerance(*g, 1e-3, "wound clothoid", &n);
+    // The turn per Bezier is capped, so a 32 radian clothoid needs many.
+    ensure("many Beziers for many turns", static_cast<double>(n) >= 32.0 / 1.2);
+    auto sp = read(spiralWkt("sine", 150, 0.0, 0.25));
+    ensureWithinTolerance(*sp, 1e-3, "wound sine spiral", &n);
+}
+
+template<>
+template<>
+void object::test<20>()
+{
+    set_test_name("NURBS: rational cubic with geometric weights is an exact cubic");
+
+    // Weights w0 r^i: the rational cubic is a reparametrised polynomial cubic
+    // with the same control points.
+    auto g = factory_->createNurbsCurve(
+                 3, {weighted(0, 0, 1), weighted(1, 3, 2), weighted(3, 3, 4), weighted(4, 0, 8)},
+                 {NurbsKnot{0.0, 4}, NurbsKnot{1.0, 4}}, false, false);
+    NativeCurvePath p = convert(*g);
+    ensure_equals(p.segments.size(), 1u);
+    ensure(p.segments[0].type == Type::CUBIC_BEZIER);
+    ensure(p.segments[0].exact);
+    ensure_equals(p.segments[0].control1.x, 1.0, 1e-12);
+    ensure_equals(p.segments[0].control1.y, 3.0, 1e-12);
+    ensure_equals(p.segments[0].control2.x, 3.0, 1e-12);
+    std::vector<CoordinateXY> ref;
+    for (int i = 0; i <= 40000; i++) {
+        const auto q = static_cast<const NurbsCurve*>(g.get())->getPointAtParameter(i / 40000.0);
+        ref.push_back(CoordinateXY(q.x, q.y));
+    }
+    ensure("traces the same curve", hausdorff(p, ref, 3000) < 1e-6);
+
+    // Unequal, non-geometric weights: not a polynomial, so an approximation.
+    auto h = factory_->createNurbsCurve(
+                 3, {weighted(0, 0, 1), weighted(1, 3, 3), weighted(3, 3, 1), weighted(4, 0, 1)},
+                 {NurbsKnot{0.0, 4}, NurbsKnot{1.0, 4}}, false, false);
+    p = convert(*h, 1e-4);
+    for (const NativeCurveSegment& s : p.segments) {
+        ensure(!s.exact);
+    }
+}
+
+template<>
+template<>
+void object::test<21>()
+{
+    set_test_name("NURBS: a degree-elevated cubic is found at high degree");
+
+    // Degree elevation of a cubic's control points: P'_i = i/(n+1) P_{i-1} + (1 - i/(n+1)) P_i.
+    std::vector<CoordinateXY> pts = {CoordinateXY(0, 0), CoordinateXY(1, 4), CoordinateXY(4, 4), CoordinateXY(5, 0)};
+    for (int round = 0; round < 20; round++) {
+        const std::size_t n = pts.size();
+        std::vector<CoordinateXY> next;
+        next.push_back(pts.front());
+        for (std::size_t i = 1; i < n; i++) {
+            const double a = static_cast<double>(i) / static_cast<double>(n);
+            next.push_back(CoordinateXY(a * pts[i - 1].x + (1 - a) * pts[i].x, a * pts[i - 1].y + (1 - a) * pts[i].y));
+        }
+        next.push_back(pts.back());
+        pts = next;
+    }
+    const int degree = static_cast<int>(pts.size()) - 1;
+    ensure_equals(degree, 23);
+    std::vector<NurbsPoint> cps;
+    for (const CoordinateXY& c : pts) {
+        cps.push_back(plain(c.x, c.y));
+    }
+    auto g = factory_->createNurbsCurve(
+                 degree, std::move(cps),
+                 {NurbsKnot{0.0, static_cast<std::size_t>(degree + 1)}, NurbsKnot{1.0, static_cast<std::size_t>(degree + 1)}},
+                 false, false);
+    const NativeCurvePath p = convert(*g);
+    ensure_equals(p.segments.size(), 1u);
+    ensure(p.segments[0].exact);
+    ensure(p.segments[0].type == Type::CUBIC_BEZIER);
+    ensure_equals(p.segments[0].control1.x, 1.0, 1e-9);
+    ensure_equals(p.segments[0].control1.y, 4.0, 1e-9);
+    ensure_equals(p.segments[0].control2.x, 4.0, 1e-9);
 }
 
 } // namespace tut
