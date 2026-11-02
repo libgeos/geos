@@ -358,19 +358,24 @@ WKBWriter::writeCompoundCurve(const CompoundCurve& g)
     auto orig_includeSRID = includeSRID;
     includeSRID = false;
 
-    for (std::size_t i = 0; i < g.getNumCurves(); i++) {
-        const SimpleCurve& section = *g.getCurveN(i);
-        if (section.getGeometryTypeId() == GEOS_ELLIPTICALCURVE) {
-            writeEllipticalCurve(static_cast<const EllipticalCurve&>(section));
-        } else if (section.getGeometryTypeId() == GEOS_NURBSCURVE) {
-            writeNurbsCurve(static_cast<const NurbsCurve&>(section));
-        } else if (section.getGeometryTypeId() == GEOS_CLOTHOID) {
-            writeClothoid(static_cast<const Clothoid&>(section));
-        } else if (section.getGeometryTypeId() == GEOS_SPIRALCURVE) {
-            writeSpiralCurve(static_cast<const SpiralCurve&>(section));
-        } else {
-            writeSimpleCurve(section);
+    try {
+        for (std::size_t i = 0; i < g.getNumCurves(); i++) {
+            const SimpleCurve& section = *g.getCurveN(i);
+            if (section.getGeometryTypeId() == GEOS_ELLIPTICALCURVE) {
+                writeEllipticalCurve(static_cast<const EllipticalCurve&>(section));
+            } else if (section.getGeometryTypeId() == GEOS_NURBSCURVE) {
+                writeNurbsCurve(static_cast<const NurbsCurve&>(section));
+            } else if (section.getGeometryTypeId() == GEOS_CLOTHOID) {
+                writeClothoid(static_cast<const Clothoid&>(section));
+            } else if (section.getGeometryTypeId() == GEOS_SPIRALCURVE) {
+                writeSpiralCurve(static_cast<const SpiralCurve&>(section));
+            } else {
+                writeSimpleCurve(section);
+            }
         }
+    } catch (...) {
+        includeSRID = orig_includeSRID;
+        throw;
     }
 
     includeSRID = orig_includeSRID;
@@ -455,12 +460,19 @@ WKBWriter::writeGeometryCollection(const GeometryCollection& g)
     includeSRID = false;
 
     assert(outStream);
-    for(std::size_t i = 0; i < ngeoms; i++) {
-        const Geometry* elem = g.getGeometryN(i);
-        assert(elem);
 
-        write(*elem, *outStream);
+    try {
+        for(std::size_t i = 0; i < ngeoms; i++) {
+            const Geometry* elem = g.getGeometryN(i);
+            assert(elem);
+
+            write(*elem, *outStream);
+        }
+    } catch (...) {
+        includeSRID = orig_includeSRID;
+        throw;
     }
+
     includeSRID = orig_includeSRID;
 }
 

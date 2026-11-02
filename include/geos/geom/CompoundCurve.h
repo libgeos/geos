@@ -119,6 +119,11 @@ protected:
 
     void geometryChangedAction() override
     {
+        // The component curves are not visited by apply_rw(GeometryComponentFilter*),
+        // so update them before computing the envelope from theirs.
+        for (auto& curve : curves) {
+            curve->geometryChanged();
+        }
         envelope = computeEnvelopeInternal();
     }
 

@@ -742,12 +742,8 @@ public:
      */
     double distanceSquared(const Envelope& env) const
     {
-        double dx = std::max(0.0,
-            std::max(maxx, env.maxx) - std::min(minx, env.minx) - (maxx - minx) -
-            (env.maxx - env.minx));
-        double dy = std::max(0.0,
-            std::max(maxy, env.maxy) - std::min(miny, env.miny) - (maxy - miny) -
-            (env.maxy - env.miny));
+        double dx = std::max(0.0, std::max(minx - env.maxx, env.minx - maxx));
+        double dy = std::max(0.0, std::max(miny - env.maxy, env.miny - maxy));
 
         return dx * dx + dy * dy;
     };

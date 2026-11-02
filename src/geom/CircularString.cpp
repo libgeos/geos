@@ -40,6 +40,22 @@ CircularString::CircularString(const std::shared_ptr<const CoordinateSequence>& 
 
 CircularString::~CircularString() = default;
 
+// SimpleCurve::apply_rw may replace shared coordinates with a copy, and
+// callers are not required to call geometryChanged(), so clear the arcs here.
+void
+CircularString::apply_rw(const CoordinateFilter* filter)
+{
+    arcs.clear();
+    SimpleCurve::apply_rw(filter);
+}
+
+void
+CircularString::apply_rw(CoordinateSequenceFilter& filter)
+{
+    arcs.clear();
+    SimpleCurve::apply_rw(filter);
+}
+
 std::unique_ptr<CircularString>
 CircularString::clone() const
 {
@@ -145,11 +161,13 @@ CircularString::normalizeClosed() {
             coords->reverse();
         }
         points = std::move(coords);
+        arcs.clear();
     } else if (reverse) {
         if (points.use_count() > 1) {
             points = points->clone();
         }
         const_cast<CoordinateSequence*>(points.get())->reverse();
+        arcs.clear();
     }
 }
 
