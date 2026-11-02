@@ -70,9 +70,9 @@ public:
      * intersect the query envelope.
      *
      * @param searchEnv the envelope to query for
+     * @param matches a vector into which found items should be inserted
      */
-    //virtual std::vector<void*>* query(const geom::Envelope *searchEnv)=0;
-    virtual void query(const geom::Envelope* searchEnv, std::vector<void*>&) = 0;
+    virtual void query(const geom::Envelope* searchEnv, std::vector<void*>& matches) = 0;
 
     /** \brief
      * Queries the index for all items whose extents intersect the given search Envelope
