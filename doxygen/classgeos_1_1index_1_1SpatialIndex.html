@@ -71,9 +71,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aaac40880b4fbc4a32d1d0aba1d679117" id="r_aaac40880b4fbc4a32d1d0aba1d679117"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1index_1_1SpatialIndex.html#aaac40880b4fbc4a32d1d0aba1d679117">insert</a> (const <a class="el" href="classgeos_1_1geom_1_1Envelope.html">geom::Envelope</a> *itemEnv, void *item)=0</td></tr>
 <tr class="memdesc:aaac40880b4fbc4a32d1d0aba1d679117"><td class="mdescLeft">&#160;</td><td class="mdescRight">Adds a spatial item with an extent specified by the given Envelope to the index.  <br /></td></tr>
 <tr class="separator:aaac40880b4fbc4a32d1d0aba1d679117"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aec3aa2aafa2eff5679c75388afb34ab2" id="r_aec3aa2aafa2eff5679c75388afb34ab2"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1index_1_1SpatialIndex.html#aec3aa2aafa2eff5679c75388afb34ab2">query</a> (const <a class="el" href="classgeos_1_1geom_1_1Envelope.html">geom::Envelope</a> *searchEnv, std::vector&lt; void * &gt; &amp;)=0</td></tr>
-<tr class="memdesc:aec3aa2aafa2eff5679c75388afb34ab2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Queries the index for all items whose extents intersect the given search Envelope.  <br /></td></tr>
-<tr class="separator:aec3aa2aafa2eff5679c75388afb34ab2"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae661e4c3f6f8865c4a755f1db3cf2457" id="r_ae661e4c3f6f8865c4a755f1db3cf2457"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1index_1_1SpatialIndex.html#ae661e4c3f6f8865c4a755f1db3cf2457">query</a> (const <a class="el" href="classgeos_1_1geom_1_1Envelope.html">geom::Envelope</a> *searchEnv, std::vector&lt; void * &gt; &amp;matches)=0</td></tr>
+<tr class="memdesc:ae661e4c3f6f8865c4a755f1db3cf2457"><td class="mdescLeft">&#160;</td><td class="mdescRight">Queries the index for all items whose extents intersect the given search Envelope.  <br /></td></tr>
+<tr class="separator:ae661e4c3f6f8865c4a755f1db3cf2457"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab79a4e1da4835cbfa030f25867effcde" id="r_ab79a4e1da4835cbfa030f25867effcde"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classgeos_1_1index_1_1SpatialIndex.html#ab79a4e1da4835cbfa030f25867effcde">query</a> (const <a class="el" href="classgeos_1_1geom_1_1Envelope.html">geom::Envelope</a> *searchEnv, <a class="el" href="classgeos_1_1index_1_1ItemVisitor.html">ItemVisitor</a> &amp;visitor)=0</td></tr>
 <tr class="memdesc:ab79a4e1da4835cbfa030f25867effcde"><td class="mdescLeft">&#160;</td><td class="mdescRight">Queries the index for all items whose extents intersect the given search Envelope and applies an <a class="el" href="classgeos_1_1index_1_1ItemVisitor.html" title="A visitor for items in an index.">ItemVisitor</a> to them.  <br /></td></tr>
 <tr class="separator:ab79a4e1da4835cbfa030f25867effcde"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -181,8 +181,8 @@ Public Member Functions</h2></td></tr>
 
 </div>
 </div>
-<a id="aec3aa2aafa2eff5679c75388afb34ab2" name="aec3aa2aafa2eff5679c75388afb34ab2"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aec3aa2aafa2eff5679c75388afb34ab2">&#9670;&#160;</a></span>query() <span class="overload">[2/2]</span></h2>
+<a id="ae661e4c3f6f8865c4a755f1db3cf2457" name="ae661e4c3f6f8865c4a755f1db3cf2457"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae661e4c3f6f8865c4a755f1db3cf2457">&#9670;&#160;</a></span>query() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -200,7 +200,7 @@ Public Member Functions</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">std::vector&lt; void * &gt; &amp;&#160;</td>
-          <td class="paramname">&#160;</td>
+          <td class="paramname"><em>matches</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -220,6 +220,7 @@ Public Member Functions</h2></td></tr>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">searchEnv</td><td>the envelope to query for </td></tr>
+    <tr><td class="paramname">matches</td><td>a vector into which found items should be inserted </td></tr>
   </table>
   </dd>
 </dl>
