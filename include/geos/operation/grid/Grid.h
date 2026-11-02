@@ -19,6 +19,7 @@
 #include <vector>
 
 #include <geos/geom/Envelope.h>
+#include <geos/util/IllegalArgumentException.h>
 
 namespace geos::operation::grid {
 struct infinite_extent
@@ -69,6 +70,12 @@ class GEOS_DLL Grid
       , m_num_cols{ 2 * extent_tag::padding + (extent.getMaxX() > extent.getMinX() ? static_cast<size_t>(std::round(extent.getWidth() / dx)) : 0) }
     {
         static_assert(std::is_same_v<extent_tag, infinite_extent>);
+        if (!isEmpty()) {
+            if (m_domain.getMinX() >= m_extent.getMinX() || m_domain.getMaxX() <= m_extent.getMaxX() ||
+                m_domain.getMinY() >= m_extent.getMinY() || m_domain.getMaxY() <= m_extent.getMaxY()) {
+                throw geos::util::IllegalArgumentException("Domain of infinite grid must be larger than extent");
+            }
+        }
     }
 
 

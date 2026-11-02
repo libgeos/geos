@@ -314,8 +314,10 @@ void object::test<17>()
     set_test_name("Crop infinite grid while calculating cell boundaries relative to parent");
 
     double res = 1.0/3601;
+    Envelope domain = global;
+    domain.expandBy(1);
 
-    Grid<infinite_extent> grid{global, res, res, global};
+    Grid<infinite_extent> grid{global, res, res, domain};
 
     const auto env0 = grid.getCellEnvelope(30, 30);
 

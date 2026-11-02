@@ -41,11 +41,9 @@ Grid<infinite_extent>::getCellEnvelope(size_t row, size_t col) const
 {
     double cell_xmin, cell_xmax, cell_ymin, cell_ymax;
 
-    constexpr double PADDED_CELL_SIZE = 1.0;
-
     if (col == 0) {
         // Left-side padding
-        cell_xmin = std::min(xmin() - PADDED_CELL_SIZE, m_domain.getMinX());
+        cell_xmin = m_domain.getMinX();
     } else if (col == getNumCols() - 1) {
         // Right-side padding
         cell_xmin = xmax(); // because rightmost col of regular may have different width from others
@@ -57,7 +55,7 @@ Grid<infinite_extent>::getCellEnvelope(size_t row, size_t col) const
     switch (getNumCols() - col) {
         case 1:
             // Right-side padding
-            cell_xmax = std::max(xmax() + PADDED_CELL_SIZE, m_domain.getMaxX());
+            cell_xmax = m_domain.getMaxX();
             break;
         case 2:
             // Rightmost internal cell
@@ -69,7 +67,7 @@ Grid<infinite_extent>::getCellEnvelope(size_t row, size_t col) const
 
     if (row == 0) {
         // Top row padding
-        cell_ymax = std::max(ymax() + PADDED_CELL_SIZE, m_domain.getMaxY());
+        cell_ymax = m_domain.getMaxY();
     } else if (row == getNumRows() - 1) {
         // Bottom row padding
         cell_ymax = ymin(); // because bottom row of regular may have different height from others
@@ -80,7 +78,7 @@ Grid<infinite_extent>::getCellEnvelope(size_t row, size_t col) const
     switch (getNumRows() - row) {
         case 1:
             // Bottom row padding
-            cell_ymin = std::min(xmin() - PADDED_CELL_SIZE, m_domain.getMinY());
+            cell_ymin = m_domain.getMinY();
             break;
         case 2:
             // Bottom-most internal row
