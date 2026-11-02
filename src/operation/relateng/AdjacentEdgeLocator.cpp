@@ -133,6 +133,10 @@ AdjacentEdgeLocator::addRings(const Geometry* geom)
 void
 AdjacentEdgeLocator::addRing(const LinearRing* ring, bool requireCW)
 {
+    if (ring->isEmpty()) {
+        return;
+    }
+
     //TODO: remove repeated points?
     const CoordinateSequence* pts = ring->getCoordinatesRO();
     bool isFlipped = requireCW == Orientation::isCCW(pts);
