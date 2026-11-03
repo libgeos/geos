@@ -2,16 +2,24 @@
 2026-xx-xx
 
 - Fixes/Improvements:
-  - Fix arc noding failure with endpoint intersections (GH-1513, Dan Baston)
+  - Arc noding: fix failure with endpoint intersections (GH-1513, Dan Baston)
+  - Arc noding: handle degenerate arcs with repeated points (GH-1584, Alejandro Pacheco and Dan Baston)
   - Make GeometrySplitter able to split MultiSurface inputs (GH-1518, Dan Baston)
   - GEOSGridIntersectionFractions: Set cells outside geometry bounding box to zero (GH-1532, Dan Baston)
   - Skip testing FE_INVALID from unit-geom-Envelope for some Clang builds (GH-1555, Mike Taves)
   - Polygonize / LineMerge: Copy Z/M values at shared endpoints of mixed-dimension inputs (GH-1545, Dan Baston)  
   - CircularArcIntersector: Use Orient2D to check for arc control points on line (GH-1546, Dan Baston)
   - CircularArcIntersector: Avoid incorrectly classifying intersections as cocircular (GH-1549, Dan Baston)
+  - CircularArcIntersector: Avoid missed intersections at shared points (GH-1559, Dan Baston)
   - GEOSProject: Throw IllegalArgumentException on invalid input (GH-1547, Mohd Quamar Tyagi)
-  - CircularString: clear cached arcs when coordinates change (Alejandro Pacheco)
-
+  - CircularString: clear cached arcs when coordinates change (GH-1586, Alejandro Pacheco)
+  - CircularArc: fix copy assignment of arc not starting at position 0 (GH-1586, Alejandro Pacheco)
+  - CircularArcs: fix containsAngle for non-normalized angles (GH-1579, Dan Baston)
+  - CompoundCurve: update component curves in geometryChanged (GH-1586, Alejandro Pacheco)
+  - WKBWriter: preserve includeSRID flag after failed write (GH-1578, Dan Baston)
+  - Envelope: improve robustness of distanceSquared (GH-1576, Jeroen Bloemscheer)
+  - Distance: avoid erroneously large distance between arc and segment (GH-1577, Dan Baston and Jeroen Bloemscheer)
+  - GeometryFactory: fix return type from buildGeometry with collection inputs (GH-1580, Alejandro Pacheco)
 
 ## Changes in 3.15.0
 2026-09-01
