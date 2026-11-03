@@ -28,6 +28,7 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/geom/Polygon.h>
 #include <geos/util/IllegalArgumentException.h>
+#include <geos/constants.h>
 #include <geos/export.h>
 
 #include <vector>
@@ -39,6 +40,15 @@ namespace geos {
 namespace geom {
 class Coordinate;
 class CircularString;
+struct AffinePlacement;
+class EllipticalCurve;
+struct ClothoidReferenceLocation;
+class Clothoid;
+class SpiralCurve;
+enum class SpiralType : int;
+struct NurbsKnot;
+struct NurbsPoint;
+class NurbsCurve;
 class CompoundCurve;
 class CoordinateSequence;
 class Curve;
@@ -357,6 +367,67 @@ public:
     /// Construct a CircularString with a deep-copy of given argument
     std::unique_ptr<CircularString> createCircularString(
         const CoordinateSequence& coordinates) const;
+
+    /// Construct an empty elliptical curve
+    std::unique_ptr<EllipticalCurve> createEllipticalCurve(bool hasZ, bool hasM) const;
+
+    /// Construct an elliptical curve from its placement, axis lengths and
+    /// start and end angles in radians. When hasM is set, startM and endM
+    /// are the measures at the ends.
+    std::unique_ptr<EllipticalCurve> createEllipticalCurve(
+        const AffinePlacement& referenceLocation,
+        double uAxisLength, double vAxisLength,
+        double startAngle, double endAngle,
+        bool hasZ, bool hasM,
+        double startM = DoubleNotANumber,
+        double endM = DoubleNotANumber) const;
+
+    /// Construct an empty clothoid
+    std::unique_ptr<Clothoid> createClothoid(bool hasZ, bool hasM) const;
+
+    /// Construct a clothoid from an affine placement and constructive distances
+    std::unique_ptr<Clothoid> createClothoid(
+        const ClothoidReferenceLocation& referenceLocation,
+        double scaleFactor,
+        double startDistance,
+        double endDistance,
+        bool hasZ, bool hasM,
+        double startM, double endM) const;
+
+    /// Construct a clothoid from an arc-length pose. Constant curvature is rejected.
+    /// When hasM is set, endM is stored separately from start.m.
+    std::unique_ptr<Clothoid> createClothoid(
+        const CoordinateXYZM& start,
+        bool hasZ, bool hasM,
+        double theta0, double k0, double k1, double length,
+        double endM = DoubleNotANumber) const;
+
+    /// Construct an empty spiral curve
+    std::unique_ptr<SpiralCurve> createSpiralCurve(bool hasZ, bool hasM) const;
+
+    /// Construct a spiral curve from its placement, length, start and end
+    /// curvature and type. When hasM is set, startM and endM are the
+    /// measures at the ends.
+    std::unique_ptr<SpiralCurve> createSpiralCurve(
+        const AffinePlacement& referenceLocation,
+        double length, double startCurvature, double endCurvature,
+        SpiralType spiralType,
+        bool hasZ, bool hasM,
+        double startM = DoubleNotANumber,
+        double endM = DoubleNotANumber) const;
+
+    /// Construct an empty NURBS curve
+    std::unique_ptr<NurbsCurve> createNurbsCurve(bool hasZ, bool hasM) const;
+
+    /// Construct a NURBS curve from its degree, weighted control points and
+    /// knots. When hasM is set, startM and endM are the measures at the ends.
+    std::unique_ptr<NurbsCurve> createNurbsCurve(
+        int degree,
+        std::vector<NurbsPoint> controlPoints,
+        std::vector<NurbsKnot> knots,
+        bool hasZ, bool hasM,
+        double startM = DoubleNotANumber,
+        double endM = DoubleNotANumber) const;
 
     /// Construct an EMPTY CompoundCurve
     std::unique_ptr<CompoundCurve> createCompoundCurve() const;

@@ -97,6 +97,10 @@ enum GeometryTypeId : int {
     GEOS_CURVEPOLYGON,
     GEOS_MULTICURVE,
     GEOS_MULTISURFACE,
+    GEOS_ELLIPTICALCURVE,
+    GEOS_NURBSCURVE,
+    GEOS_CLOTHOID,
+    GEOS_SPIRALCURVE,
 };
 
 enum GeometrySortIndex {
@@ -113,6 +117,10 @@ enum GeometrySortIndex {
     SORTINDEX_CURVEPOLYGON = 10,
     SORTINDEX_MULTICURVE = 11,
     SORTINDEX_MULTISURFACE = 12,
+    SORTINDEX_ELLIPTICALCURVE = 13,
+    SORTINDEX_NURBSCURVE = 14,
+    SORTINDEX_CLOTHOID = 15,
+    SORTINDEX_SPIRALCURVE = 16,
 };
 
 /**
@@ -423,7 +431,11 @@ public:
             case GEOS_LINESTRING: return GEOS_MULTILINESTRING;
             case GEOS_POLYGON: return GEOS_MULTIPOLYGON;
             case GEOS_CIRCULARSTRING:
-            case GEOS_COMPOUNDCURVE: return GEOS_MULTICURVE;
+            case GEOS_COMPOUNDCURVE:
+            case GEOS_ELLIPTICALCURVE:
+            case GEOS_NURBSCURVE:
+            case GEOS_CLOTHOID:
+            case GEOS_SPIRALCURVE: return GEOS_MULTICURVE;
             case GEOS_CURVEPOLYGON: return GEOS_MULTISURFACE;
             default: return typeId;
         }

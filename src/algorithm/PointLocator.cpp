@@ -98,6 +98,18 @@ PointLocator::computeLocation(const CoordinateXY& p, const Geometry* geom)
             updateLocationInfo(locate(p, ls));
             break;
         }
+        case GEOS_ELLIPTICALCURVE:
+            throw util::UnsupportedOperationException(
+                "Elliptical curve point location is not implemented");
+        case GEOS_CLOTHOID:
+            throw util::UnsupportedOperationException(
+                "Clothoid point location is not implemented");
+        case GEOS_SPIRALCURVE:
+            throw util::UnsupportedOperationException(
+                "Spiral curve point location is not implemented");
+        case GEOS_NURBSCURVE:
+            throw util::UnsupportedOperationException(
+                "NURBS point location is not implemented");
         case GEOS_CIRCULARSTRING: {
             const CircularString* cs = static_cast<const CircularString*>(geom);
             updateLocationInfo(locate(p, cs));
@@ -243,6 +255,22 @@ PointLocator::locate(const CoordinateXY& p, const CompoundCurve* cc)
 
     for (std::size_t i = 0; i < cc->getNumCurves(); i++) {
         const SimpleCurve* curve = cc->getCurveN(i);
+        if (curve->getGeometryTypeId() == GEOS_ELLIPTICALCURVE) {
+            throw util::UnsupportedOperationException(
+                "Elliptical curve point location is not implemented");
+        }
+        if (curve->getGeometryTypeId() == GEOS_CLOTHOID) {
+            throw util::UnsupportedOperationException(
+                "Clothoid point location is not implemented");
+        }
+        if (curve->getGeometryTypeId() == GEOS_SPIRALCURVE) {
+            throw util::UnsupportedOperationException(
+                "Spiral curve point location is not implemented");
+        }
+        if (curve->getGeometryTypeId() == GEOS_NURBSCURVE) {
+            throw util::UnsupportedOperationException(
+                "NURBS point location is not implemented");
+        }
         if (curve->getGeometryTypeId() == GEOS_CIRCULARSTRING) {
             const CircularString* cs = static_cast<const CircularString*>(curve);
             for (const auto& arc : cs->getArcs()) {

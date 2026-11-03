@@ -213,6 +213,75 @@ WKBMultiSurface {
     uint32  numSurfaces;
     WKBSurface   surfaces[numSurfaces];
 }
+
+WKBEllipticalCurve {
+    byte                byteOrder;
+    uint32              wkbType; // 20, 1020, 2020, or 3020
+    WKBAffinePlacement  referenceLocation; // omitted when EMPTY
+    double              uAxisLength;
+    double              vAxisLength;
+    double              startAngle; // radians
+    double              endAngle; // radians
+    double              startM; // only when wkbType is 2020 or 3020
+    double              endM;
+}
+
+WKBClothoid {
+    byte                byteOrder;
+    uint32              wkbType; // 22, 1022, 2022, or 3022
+    WKBAffinePlacement  referenceLocation; // omitted when EMPTY
+    double              scaleFactor;
+    double              startDistance;
+    double              endDistance;
+    double              startM; // only when wkbType is 2022 or 3022
+    double              endM;
+}
+
+WKBSpiralCurve {
+    byte                byteOrder;
+    uint32              wkbType; // 23, 1023, 2023, or 3023
+    WKBAffinePlacement  referenceLocation; // omitted when EMPTY
+    double              length;
+    double              startCurvature;
+    double              endCurvature;
+    byte                typeLength;
+    char                spiralType[typeLength]; // clothoid, bloss, biquadratic, sine or cosine
+    double              startM; // only when wkbType is 2023 or 3023
+    double              endM;
+}
+
+WKBAffinePlacement {
+    byte    byteOrder;
+    uint32  wkbType; // 102, or 1102 when Z
+    double  location[2 or 3];
+    uint32  numDirections; // 2
+    double  directions[numDirections][2 or 3];
+}
+
+WKBNurbsCurve {
+    byte                byteOrder;
+    uint32              wkbType; // 21, 1021, 2021, or 3021
+    byte                degree; // the body is omitted when EMPTY
+    uint32              numControlPoints;
+    WKBNurbsPoint       controlPoints[numControlPoints];
+    uint32              numKnots;
+    WKBKnot             knots[numKnots];
+    double              startM; // only when wkbType is 2021 or 3021
+    double              endM;
+}
+
+WKBNurbsPoint {
+    byte    byteOrder;
+    double  weightedPoint[2 or 3]; // weight times the cartesian point
+    byte    hasWeight; // 0 or 1; all points have a weight or none
+    double  weight; // only when hasWeight is 1
+}
+
+WKBKnot {
+    byte    byteOrder;
+    double  value;
+    byte    multiplicity;
+}
 ```
 
 
