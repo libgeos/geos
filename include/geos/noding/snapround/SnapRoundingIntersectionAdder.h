@@ -16,28 +16,21 @@
 
 #include <geos/export.h>
 
-#include <vector>
-#include <memory>
+#include <utility>
 
-#include <geos/noding/Noder.h> // for inheritance
 #include <geos/algorithm/LineIntersector.h> // for composition
-#include <geos/geom/Coordinate.h> // for use in vector
 #include <geos/geom/CoordinateSequence.h>
-#include <geos/geom/PrecisionModel.h> // for inlines (should drop)
 #include <geos/noding/SegmentIntersector.h>
 
 
 // Forward declarations
 namespace geos {
 namespace geom {
+class CoordinateXY;
 class PrecisionModel;
 }
 namespace noding {
 class SegmentString;
-class NodedSegmentString;
-namespace snapround {
-class HotPixel;
-}
 }
 }
 
@@ -54,6 +47,20 @@ namespace snapround { // geos::noding::snapround
  *
  * The intersection points are recorded, so that HotPixels can be created for them.
  *
+ * LineIntersector computes a proper intersection in double-double
+ * arithmetic and returns the nearest double, which can lie across a
+ * half-cell boundary of the snap-rounding grid from the double-double point.
+ * The hot pixel and the segment nodes would then be placed in a grid cell
+ * that does not contain the intersection.
+ * The recorded point is therefore moved by one representable double
+ * into the grid cell of the double-double point,
+ * if the precision model rounds the moved point into that cell
+ * and each moved ordinate stays within the range of both segments.
+ * The range condition keeps the rounded intersection within the
+ * envelope of each rounded segment. In particular, along a horizontal
+ * or vertical segment the intersection keeps the segment's own ordinate.
+ * Otherwise the point is recorded as computed.
+ *
  * To avoid robustness issues with vertices which lie very close to line segments
  * a heuristic is used:
  * nodes are created if a vertex lies within a tolerance distance
@@ -67,7 +74,7 @@ private:
 
     algorithm::LineIntersector li;
     geom::CoordinateSequence intersections;
-    // const geom::PrecisionModel* pm;
+    const geom::PrecisionModel& pm;
     double nearnessTol;
 
     /**
@@ -93,9 +100,18 @@ private:
 
 public:
 
-    SnapRoundingIntersectionAdder(double p_nearnessTol)
+    /**
+     * Creates an intersector which finds all snapped interior intersections,
+     * and adds them as nodes.
+     *
+     * @param p_pm the precision model of the snap-rounding grid.
+     *        It is referenced, not copied, and must outlive the intersector.
+     * @param p_nearnessTol the intersection distance tolerance
+     */
+    SnapRoundingIntersectionAdder(const geom::PrecisionModel& p_pm, double p_nearnessTol)
         : SegmentIntersector()
         , intersections(geom::CoordinateSequence::XYZM(0))
+        , pm(p_pm)
         , nearnessTol(p_nearnessTol)
     {}
 
@@ -123,4 +139,3 @@ public:
 } // namespace geos::noding::snapround
 } // namespace geos::noding
 } // namespace geos
-
