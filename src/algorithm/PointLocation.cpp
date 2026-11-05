@@ -19,6 +19,7 @@
 #include <cmath>
 #include <vector>
 
+#include <geos/algorithm/CGAlgorithmsDD.h>
 #include <geos/algorithm/LineIntersector.h>
 #include <geos/algorithm/Orientation.h>
 #include <geos/algorithm/PointLocation.h>
@@ -34,16 +35,35 @@ namespace algorithm { // geos.algorithm
 
 /* public static */
 bool
-PointLocation::isOnSegment(const geom::CoordinateXY& p, const geom::CoordinateXY& p0, const geom::CoordinateXY& p1) 
+PointLocation::isOnSegment(const geom::CoordinateXY& p, const geom::CoordinateXY& p0, const geom::CoordinateXY& p1)
 {
     //-- test envelope first since it's faster
     if (! geom::Envelope::intersects(p0, p1, p))
         return false;
-    //-- handle zero-length segments
-    if (p.equals2D(p0))
+    //-- handle endpoints and zero-length segments
+    if (p.equals2D(p0) || p.equals2D(p1))
         return true;
-    bool isOnLine = Orientation::COLLINEAR == Orientation::index(p0, p1, p);
-    return isOnLine;
+
+    // Ozaki LEFT/RIGHT is off the segment and STRAIGHT is on it.
+    // A FAILURE is on the segment only when the determinant is a
+    // small nonzero residual. Larger values are decided by DD orientation.
+    const int orient = CGAlgorithmsDD::orientationIndexFilter(
+        p0.x, p0.y, p1.x, p1.y, p.x, p.y);
+    if (orient == CGAlgorithmsDD::LEFT || orient == CGAlgorithmsDD::RIGHT) {
+        return false;
+    }
+    if (orient == CGAlgorithmsDD::STRAIGHT) {
+        return true;
+    }
+
+    const double detleft = (p0.x - p.x) * (p1.y - p.y);
+    const double detright = (p0.y - p.y) * (p1.x - p.x);
+    const double det = detleft - detright;
+    static constexpr double ON_SEGMENT_DET_TOL = 1e-12;
+    if (det != 0.0 && std::fabs(det) <= ON_SEGMENT_DET_TOL) {
+        return true;
+    }
+    return Orientation::index(p0, p1, p) == Orientation::COLLINEAR;
 }
 
 /* public static */

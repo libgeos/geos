@@ -51,5 +51,31 @@ void object::test<2>()
     ensure_equals(GEOSCovers_r(ctxt_, geom2_, geom1_), 0);
 }
 
+template<>
+template<>
+void object::test<3>()
+{
+    set_test_name("line covers collinear point");
+
+    geom1_ = fromWKT("LINESTRING (1 0, 0 2)");
+    geom2_ = fromWKT("POINT (0.9 0.2)");
+    geom3_ = fromWKT("POINT (0.1 1.8)");
+
+    ensure_equals("0.9 0.2", 1, GEOSCovers(geom1_, geom2_));
+    ensure_equals("0.1 1.8", 1, GEOSCovers(geom1_, geom3_));
+}
+
+template<>
+template<>
+void object::test<4>()
+{
+    set_test_name("line does not cover point off a long segment");
+
+    geom1_ = fromWKT("LINESTRING (0 0, 10000000000000000 10000000000000000)");
+    geom2_ = fromWKT("POINT (5000000000000000 5000000000000001)");
+
+    ensure_equals(0, GEOSCovers(geom1_, geom2_));
+}
+
 } // namespace tut
 
