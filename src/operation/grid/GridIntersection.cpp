@@ -34,6 +34,24 @@ using geos::geom::CoordinateXY;
 
 namespace geos::operation::grid {
 
+static Envelope
+getDomain(const Envelope& gridExtent, const Envelope& geomExtent)
+{
+    constexpr double PADDED_CELL_SIZE = 1.0;
+    constexpr double PADDED_CELL_RELATIVE_SIZE = 1e-12;
+
+    Envelope padded(gridExtent);
+    padded.expandToInclude(geomExtent);
+
+    const double xmag = std::max(std::abs(padded.getMinX()), std::abs(padded.getMaxX()));
+    const double ymag = std::max(std::abs(padded.getMinY()), std::abs(padded.getMaxY()));
+
+    padded.expandBy(std::max(PADDED_CELL_SIZE, PADDED_CELL_RELATIVE_SIZE * xmag),
+                    std::max(PADDED_CELL_SIZE, PADDED_CELL_RELATIVE_SIZE * ymag));
+
+    return padded;
+}
+
 std::shared_ptr<Matrix<float>>
 GridIntersection::getIntersectionFractions(const Grid<bounded_extent>& raster_grid, const Geometry& g)
 {
@@ -111,7 +129,7 @@ GridIntersection::processingRegion(const Envelope& raster_extent, const Geometry
 }
 
 GridIntersection::GridIntersection(const Grid<bounded_extent>& raster_grid, const Geometry& g, const std::shared_ptr<Matrix<float>>& cov)
-  : m_geometry_grid{ make_infinite(raster_grid, *g.getEnvelopeInternal()) }
+  : m_geometry_grid{ make_infinite(raster_grid, getDomain(raster_grid.getExtent(), *g.getEnvelopeInternal())) }
   , m_results{ cov ? cov : std::make_shared<Matrix<float>>(raster_grid.getNumRows(), raster_grid.getNumCols()) }
   , m_first_geom{ true }
   , m_areal{ false }
@@ -130,7 +148,7 @@ GridIntersection::GridIntersection(const Grid<bounded_extent>& raster_grid, cons
 }
 
 GridIntersection::GridIntersection(const Grid<bounded_extent>& raster_grid, const Envelope& box, const std::shared_ptr<Matrix<float>>& cov)
-  : m_geometry_grid{ make_infinite(raster_grid, box) }
+  : m_geometry_grid{ make_infinite(raster_grid, getDomain(raster_grid.getExtent(), box)) }
   , m_results{ cov ? cov : std::make_shared<Matrix<float>>(raster_grid.getNumRows(), raster_grid.getNumCols()) }
   , m_first_geom { true }
   , m_areal{ false }
@@ -181,6 +199,10 @@ GridIntersection::processRectangularRing(const Envelope& box, bool exterior_ring
     }
 
     auto ring_grid = getSubgrid(box, m_geometry_grid);
+
+    if (ring_grid.isEmpty()) {
+        return;
+    }
 
     auto row_min = ring_grid.getRow(box.getMaxY());
     auto row_max = ring_grid.getRow(box.getMinY());
@@ -590,8 +612,7 @@ GridIntersection::subdividePolygon(const Grid<bounded_extent>& p_grid, const Geo
 
     const auto cropped_grid = p_grid.shrinkToFit(p_grid.getExtent().intersection(*g.getEnvelopeInternal()), false);
 
-    geom::Envelope gridExtent = *g.getEnvelopeInternal();
-    gridExtent.expandBy(1);
+    geom::Envelope gridExtent = getDomain(cropped_grid.getExtent(), *g.getEnvelopeInternal());
 
     const Grid<infinite_extent> cell_grid = make_infinite(cropped_grid, gridExtent);
     Matrix<std::unique_ptr<Cell>> cells(cell_grid.getNumRows(), cell_grid.getNumCols());
