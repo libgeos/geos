@@ -925,5 +925,17 @@ void object::test<64> ()
     checkRelate(b, a, "102F01FF2");
 }
 
+template<>
+template<>
+void object::test<65>()
+{
+    set_test_name("GeometryCollection with empty polygon");
+
+    std::string a = "POINT (1 0.5)";
+    std::string b = "GEOMETRYCOLLECTION (POLYGON ((1 0, 1 1, 0 1, 0 0, 1 0)), POLYGON ((2 0, 2 1, 1 1, 1 0, 2 0)), POLYGON EMPTY)";
+
+    checkIntersectsDisjoint(a, b, true);
+}
+
 
 } // namespace tut
