@@ -6,6 +6,7 @@
   - Arc noding: handle degenerate arcs with repeated points (GH-1584, Alejandro Pacheco and Dan Baston)
   - Make GeometrySplitter able to split MultiSurface inputs (GH-1518, Dan Baston)
   - GEOSGridIntersectionFractions: Set cells outside geometry bounding box to zero (GH-1532, Dan Baston)
+  - GEOSGridIntersectionFractions: Improve robustness (GH-1589, Dan Baston, Alejandro Pacheco)
   - Skip testing FE_INVALID from unit-geom-Envelope for some Clang builds (GH-1555, Mike Taves)
   - Polygonize / LineMerge: Copy Z/M values at shared endpoints of mixed-dimension inputs (GH-1545, Dan Baston)  
   - CircularArcIntersector: Use Orient2D to check for arc control points on line (GH-1546, Dan Baston)
@@ -20,6 +21,7 @@
   - Envelope: improve robustness of distanceSquared (GH-1576, Jeroen Bloemscheer)
   - Distance: avoid erroneously large distance between arc and segment (GH-1577, Dan Baston and Jeroen Bloemscheer)
   - GeometryFactory: fix return type from buildGeometry with collection inputs (GH-1580, Alejandro Pacheco)
+  - RelateNG: fix crash with on GeometryCollection with empty Polygon (GH-1590, Dan Baston)
 
 ## Changes in 3.15.0
 2026-09-01
