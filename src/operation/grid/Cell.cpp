@@ -64,7 +64,10 @@ crossing(const geom::Envelope& e, const CoordinateXY& c1, const CoordinateXY& c2
         }
     }
 
-    const double m = std::abs((c2.y - c1.y) / (c2.x - c1.x));
+    // Interpolate with the fraction of the segment's extent in x or y rather than with its slope, which
+    // underflows to zero or overflows to infinity when the segment is nearly horizontal or vertical.
+    const double dx = std::abs(c2.x - c1.x);
+    const double dy = std::abs(c2.y - c1.y);
 
     const bool up = c2.y > c1.y;
     const bool right = c2.x > c1.x;
@@ -73,22 +76,22 @@ crossing(const geom::Envelope& e, const CoordinateXY& c1, const CoordinateXY& c2
 
         if (right) {
             // 1st quadrant
-            const double y2 = c1.y + m * (e.getMaxX() - c1.x);
+            const double y2 = c1.y + dy * ((e.getMaxX() - c1.x) / dx);
 
             if (y2 < e.getMaxY()) {
                 return Crossing{ Side::RIGHT, e.getMaxX(), std::clamp(y2, e.getMinY(), e.getMaxY()) };
             } else {
-                double x2 = c1.x + (e.getMaxY() - c1.y) / m;
+                double x2 = c1.x + dx * ((e.getMaxY() - c1.y) / dy);
                 return Crossing{ Side::TOP, std::clamp(x2, e.getMinX(), e.getMaxX()), e.getMaxY() };
             }
         } else {
             // 2nd quadrant
-            const double y2 = c1.y + m * (c1.x - e.getMinX());
+            const double y2 = c1.y + dy * ((c1.x - e.getMinX()) / dx);
 
             if (y2 < e.getMaxY()) {
                 return Crossing{ Side::LEFT, e.getMinX(), std::clamp(y2, e.getMinY(), e.getMaxY()) };
             } else {
-                double x2 = c1.x - (e.getMaxY() - c1.y) / m;
+                double x2 = c1.x - dx * ((e.getMaxY() - c1.y) / dy);
                 return Crossing{ Side::TOP, std::clamp(x2, e.getMinX(), e.getMaxX()), e.getMaxY() };
             }
         }
@@ -100,22 +103,22 @@ crossing(const geom::Envelope& e, const CoordinateXY& c1, const CoordinateXY& c2
 
         if (right) {
             // 4th quadrant
-            const double y2 = c2.y + m * (c2.x - e.getMaxX());
+            const double y2 = c2.y + dy * ((c2.x - e.getMaxX()) / dx);
 
             if (y2 > e.getMinY()) {
                 return Crossing{ Side::RIGHT, e.getMaxX(), std::clamp(y2, e.getMinY(), e.getMaxY()) };
             } else {
-                double x2 = c2.x - (e.getMinY() - c2.y) / m;
+                double x2 = c2.x - dx * ((e.getMinY() - c2.y) / dy);
                 return Crossing{ Side::BOTTOM, std::clamp(x2, e.getMinX(), e.getMaxX()), e.getMinY() };
             }
         } else {
             // 3rd quadrant
-            const double y2 = c2.y + m * (e.getMinX() - c2.x);
+            const double y2 = c2.y + dy * ((e.getMinX() - c2.x) / dx);
 
             if (y2 > e.getMinY()) {
                 return Crossing{ Side::LEFT, e.getMinX(), std::clamp(y2, e.getMinY(), e.getMaxY()) };
             } else {
-                double x2 = c2.x + (e.getMinY() - c2.y) / m;
+                double x2 = c2.x + dx * ((e.getMinY() - c2.y) / dy);
                 return Crossing{ Side::BOTTOM, std::clamp(x2, e.getMinX(), e.getMaxX()), e.getMinY() };
             }
         }
