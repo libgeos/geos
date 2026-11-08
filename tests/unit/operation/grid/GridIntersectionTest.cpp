@@ -1092,4 +1092,66 @@ void object::test<58>()
     }
 }
 
+template<>
+template<>
+void object::test<59>()
+{
+    set_test_name("subdividePolygon: traversal stays in grid when the slope of a segment underflows");
+
+    // The first edge crosses y = 0 far to the right of the grid, so it leaves the right
+    // padding cell through its top. Its slope (2e-30 / 1e300) underflows to zero.
+    Envelope e(0, 10, -5, 5);
+    Grid<bounded_extent> ext(e, 1, 5);
+
+    auto g = wkt_reader_.read("POLYGON ((2 -1e-30, 1e300 1e-30, 1e300 1, 2 1, 2 -1e-30))");
+
+    auto subd = GridIntersection::subdividePolygon(ext, *g, false);
+
+    // Part of the polygon inside the grid extent
+    // input manually because g->getFactory()->toGeometry(&e)->intersection(g.get()) gives POLYGON EMPTY
+    auto inside = wkt_reader_.read("POLYGON ((2 0, 10 0, 10 1, 2 1, 2 0))");
+    check_subdivided_polygon(*inside, *subd);
+}
+
+template<>
+template<>
+void object::test<60>()
+{
+    set_test_name("getIntersectionFractions: traversal stays in grid when the slope of a segment underflows");
+
+    // Same as the previous test, with an extra vertex so that the ring is not processed as a rectangle.
+    Envelope e(0, 10, -5, 5);
+    Grid<bounded_extent> ext(e, 1, 5);
+
+    auto g = wkt_reader_.read("POLYGON ((2 -1e-30, 1e300 1e-30, 1e300 1, 5 1, 2 1, 2 -1e-30))");
+
+    auto fracs = GridIntersection::getIntersectionFractions(ext, *g);
+
+    // Part of the polygon inside the grid extent
+    // input manually because g->getFactory()->toGeometry(&e)->intersection(g.get()) gives POLYGON EMPTY
+    auto inside = wkt_reader_.read("POLYGON ((2 0, 10 0, 10 1, 2 1, 2 0))");
+    check_area(*fracs, ext, *inside);
+}
+
+template<>
+template<>
+void object::test<61>()
+{
+    set_test_name("subdividePolygon: traversal stays in grid when the slope of a segment overflows");
+
+    // The first edge crosses x = 0 far below the grid, so it leaves the bottom padding
+    // cell through its left side. Its slope (1e300 / 2e-30) overflows to infinity.
+    Envelope e(-5, 5, -10, 0);
+    Grid<bounded_extent> ext(e, 5, 1);
+
+    auto g = wkt_reader_.read("POLYGON ((1e-30 -2.5, -1e-30 -1e300, -1 -1e300, -1 -2.5, 1e-30 -2.5))");
+
+    auto subd = GridIntersection::subdividePolygon(ext, *g, false);
+
+    // Part of the polygon inside the grid extent
+    // input manually because g->getFactory()->toGeometry(&e)->intersection(g.get()) gives a LINESTRING
+    auto inside = wkt_reader_.read("POLYGON ((-1 -10, 0 -10, 0 -2.5, -1 -2.5, -1 -10))");
+    check_subdivided_polygon(*inside, *subd);
+}
+
 }

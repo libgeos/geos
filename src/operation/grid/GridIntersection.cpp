@@ -69,8 +69,12 @@ GridIntersection::getIntersectionFractions(const Grid<bounded_extent>& raster_gr
 static Cell*
 get_cell(Matrix<std::unique_ptr<Cell>>& cells, const Grid<infinite_extent>& ex, size_t row, size_t col)
 {
-    assert(row < cells.getNumRows());
-    assert(col < cells.getNumCols());
+    // A traversal that leaves the grid through its first row or column
+    // wraps around to SIZE_MAX, so one comparison covers both directions.
+    if (row >= cells.getNumRows() || col >= cells.getNumCols()) {
+        throw util::GEOSException("Grid traversal left the grid.");
+    }
+
     if (cells(row, col) == nullptr) {
         cells(row, col) = std::make_unique<Cell>(ex.getCellEnvelope(row, col));
     }
