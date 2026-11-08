@@ -1107,7 +1107,8 @@ void object::test<59>()
 
     auto subd = GridIntersection::subdividePolygon(ext, *g, false);
 
-    // Part of the polygon inside the grid extent (the sliver below y = 0 is too thin to count)
+    // Part of the polygon inside the grid extent
+    // input manually because g->getFactory()->toGeometry(&e)->intersection(g.get()) gives POLYGON EMPTY
     auto inside = wkt_reader_.read("POLYGON ((2 0, 10 0, 10 1, 2 1, 2 0))");
     check_subdivided_polygon(*inside, *subd);
 }
@@ -1126,6 +1127,8 @@ void object::test<60>()
 
     auto fracs = GridIntersection::getIntersectionFractions(ext, *g);
 
+    // Part of the polygon inside the grid extent
+    // input manually because g->getFactory()->toGeometry(&e)->intersection(g.get()) gives POLYGON EMPTY
     auto inside = wkt_reader_.read("POLYGON ((2 0, 10 0, 10 1, 2 1, 2 0))");
     check_area(*fracs, ext, *inside);
 }
@@ -1145,6 +1148,8 @@ void object::test<61>()
 
     auto subd = GridIntersection::subdividePolygon(ext, *g, false);
 
+    // Part of the polygon inside the grid extent
+    // input manually because g->getFactory()->toGeometry(&e)->intersection(g.get()) gives a LINESTRING
     auto inside = wkt_reader_.read("POLYGON ((-1 -10, 0 -10, 0 -2.5, -1 -2.5, -1 -10))");
     check_subdivided_polygon(*inside, *subd);
 }
