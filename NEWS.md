@@ -11,6 +11,7 @@
   - GEOSGridIntersectionFractions: Set cells outside geometry bounding box to zero (GH-1532, Dan Baston)
   - GEOSisSimpleDetail returns locations with input SRID (Sandro Santilli)
   - CircularString: clear cached arcs when coordinates change (Alejandro Pacheco)
+  - WKBReader: faster reading and writing of hex WKB (Parker Loflin)
 
 - New things:
   - Expose code revision: GEOS_REVISION, GEOSrevision, geos-config --revision

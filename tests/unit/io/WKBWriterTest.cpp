@@ -54,6 +54,17 @@ struct test_wkbwriter_data {
         ensure_equals(wkt, out.str(), hex );
     }
 
+    static std::string toHex(const std::string& bytes) {
+        static const char digits[] = "0123456789ABCDEF";
+        std::string hex;
+        for(char ch : bytes) {
+            const unsigned char c = static_cast<unsigned char>(ch);
+            hex += digits[c >> 4];
+            hex += digits[c & 0x0F];
+        }
+        return hex;
+    }
+
     void checkHexOutputWithSRID(const std::string& wkt, int srid, const std::string& hex) {
         std::stringstream out;
         auto geom = wktreader.read(wkt);
@@ -510,6 +521,93 @@ void object::test<20>
         std::stringstream out;
         writer.writeHEX(*point, out);
         ensure_equals(wkt, out.str(), "0101000020E6100000000000000000F03F0000000000000040");
+    }
+}
+
+// writeHEX of large geometries in both byte orders
+template<>
+template<>
+void object::test<21>
+()
+{
+    // 255 points make 4089 bytes of WKB, 256 points make 4105
+    const std::size_t sizes[] = {255, 256, 1000};
+    const int byteOrders[] = {geos::io::WKBConstants::wkbXDR, geos::io::WKBConstants::wkbNDR};
+
+    for(std::size_t numPoints : sizes) {
+        std::string wkt = "LINESTRING (";
+        for(std::size_t i = 0; i < numPoints; ++i) {
+            if(i > 0) {
+                wkt += ", ";
+            }
+            wkt += std::to_string(i) + ".125 " + std::to_string(numPoints - i) + ".5";
+        }
+        wkt += ")";
+        auto geom = wktreader.read(wkt);
+
+        for(int byteOrder : byteOrders) {
+            wkbwriter.setByteOrder(byteOrder);
+            std::stringstream wkb;
+            wkbwriter.write(*geom, wkb);
+            std::stringstream out;
+            wkbwriter.writeHEX(*geom, out);
+            ensure_equals(out.str(), toHex(wkb.str()));
+        }
+    }
+}
+
+// printHEX at sizes around its 4096-byte block
+template<>
+template<>
+void object::test<22>
+()
+{
+    const std::size_t sizes[] = {0, 1, 4095, 4096, 4097, 8192, 8193};
+
+    for(std::size_t size : sizes) {
+        std::string bytes(size, '\0');
+        for(std::size_t i = 0; i < size; ++i) {
+            bytes[i] = static_cast<char>((i * 37 + 11) & 0xFF);
+        }
+
+        // printHEX converts the whole stream and restores its position
+        std::stringstream in(bytes);
+        in.seekg(static_cast<std::streamoff>(size / 2));
+        std::stringstream out;
+        geos::io::WKBReader::printHEX(in, out);
+
+        ensure_equals(out.str(), toHex(bytes));
+        ensure("input stream good", in.good());
+        ensure_equals(static_cast<long>(in.tellg()), static_cast<long>(size / 2));
+    }
+}
+
+// printHEX output stream formatting
+template<>
+template<>
+void object::test<23>
+()
+{
+    // A width on the output stream pads the first digit, then resets
+    {
+        std::stringstream in(std::string("\x01\xAB", 2));
+        std::stringstream out;
+        out << "x";
+        out.width(6);
+        out.fill('*');
+        geos::io::WKBReader::printHEX(in, out);
+        ensure_equals(out.str(), "x*****01AB");
+        ensure_equals(static_cast<long>(out.width()), 0L);
+    }
+
+    // Empty input writes nothing and leaves the width set
+    {
+        std::stringstream in;
+        std::stringstream out;
+        out.width(6);
+        geos::io::WKBReader::printHEX(in, out);
+        ensure_equals(out.str(), "");
+        ensure_equals(static_cast<long>(out.width()), 6L);
     }
 }
 

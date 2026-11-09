@@ -58,6 +58,48 @@ struct test_wkbreader_data {
         wktreader(gf.get())
     {}
 
+    // Checks that both readHEX overloads fail with the given message
+    void
+    testHexParseError(const std::string& hexwkb, const std::string& errstr)
+    {
+        testParseError(hexwkb, errstr);
+
+        std::string exstr;
+        try {
+            GeomPtr g(wkbreader.readHEX(hexwkb));
+            fail("readHEX(std::string) did not throw");
+        }
+        catch(const geos::util::GEOSException& ex) {
+            exstr = ex.what();
+        }
+        ensure_equals("readHEX(std::string) error", exstr, errstr);
+    }
+
+    static std::string
+    toHex(const std::string& bytes, const char* digits)
+    {
+        std::string hex;
+        for(char ch : bytes) {
+            const unsigned char c = static_cast<unsigned char>(ch);
+            hex += digits[c >> 4];
+            hex += digits[c & 0x0F];
+        }
+        return hex;
+    }
+
+    static std::string
+    lineWKT(std::size_t numPoints)
+    {
+        std::string wkt = "LINESTRING (";
+        for(std::size_t i = 0; i < numPoints; ++i) {
+            if(i > 0) {
+                wkt += ", ";
+            }
+            wkt += std::to_string(i) + " " + std::to_string(2 * i);
+        }
+        return wkt + ")";
+    }
+
     void
     testParseError(const std::string& hexwkb, const std::string& errstr)
     {
@@ -878,6 +920,176 @@ void object::test<38>
     };
 
     ensure_THROW(wkbreader.read(buf.data(), buf.size()), geos::io::ParseException);
+}
+
+// readHEX accepts upper, lower and mixed case digits
+template<>
+template<>
+void object::test<39>
+()
+{
+    // POINT (0.1 -2.75), read without the fixture's fixed precision model
+    geos::io::WKBReader reader;
+    geos::io::WKBWriter writer(2, geos::io::WKBConstants::wkbNDR);
+    const std::string expected = "01010000009A9999999999B93F00000000000006C0";
+    const std::string hexes[] = {
+        "01010000009A9999999999B93F00000000000006C0",
+        "01010000009a9999999999b93f00000000000006c0",
+        "01010000009a9999999999B93f00000000000006C0",
+        "00000000013FB999999999999AC006000000000000",
+        "00000000013fb999999999999ac006000000000000"
+    };
+
+    for(const std::string& hex : hexes) {
+        std::stringstream hexin(hex);
+        GeomPtr g1(reader.readHEX(hexin));
+        GeomPtr g2(reader.readHEX(hex));
+
+        std::stringstream out1;
+        writer.writeHEX(*g1, out1);
+        ensure_equals(hex, out1.str(), expected);
+
+        std::stringstream out2;
+        writer.writeHEX(*g2, out2);
+        ensure_equals(hex, out2.str(), expected);
+    }
+}
+
+// readHEX of empty input
+template<>
+template<>
+void object::test<40>
+()
+{
+    testHexParseError("", "ParseException: Unexpected EOF parsing WKB");
+}
+
+// readHEX of an odd number of characters
+template<>
+template<>
+void object::test<41>
+()
+{
+    testHexParseError("0", "ParseException: Premature end of HEX string");
+    testHexParseError("01010000009A9999999999B93F00000000000006C",
+                      "ParseException: Premature end of HEX string");
+    // A lone trailing character is a premature end, even if not a hex digit
+    testHexParseError("01G", "ParseException: Premature end of HEX string");
+    // An invalid character in a complete pair is reported first
+    testHexParseError("0G1", "ParseException: Invalid HEX char");
+}
+
+// readHEX of invalid characters
+template<>
+template<>
+void object::test<42>
+()
+{
+    const std::string hexes[] = {
+        "G0",
+        "0g",
+        "0x01",
+        "+1",
+        "0101000000 9A9999999999B93F00000000000006C0",
+        "0101000000\n9A9999999999B93F00000000000006C0",
+        "\xC3\xA9",
+        std::string("01\0" "1", 4),
+        "01010000009A9999999999B93F0000000000000@C0"
+    };
+
+    for(const std::string& hex : hexes) {
+        testHexParseError(hex, "ParseException: Invalid HEX char");
+    }
+}
+
+// readHEX(std::istream&) stream position and state
+template<>
+template<>
+void object::test<43>
+()
+{
+    geos::io::WKBReader reader;
+    const std::string hex = "01010000009A9999999999B93F00000000000006C0";
+
+    // Reads from the current position to the end of the stream
+    {
+        std::stringstream hexin("XXXX" + hex);
+        hexin.seekg(4);
+        GeomPtr g(reader.readHEX(hexin));
+        ensure(g->getGeometryTypeId() == geos::geom::GEOS_POINT);
+        ensure("eof", hexin.eof());
+        ensure("fail", hexin.fail());
+        ensure("bad", !hexin.bad());
+    }
+
+    // Stops after the pair holding an invalid character
+    {
+        std::stringstream hexin("XXXX0102G30405");
+        hexin.seekg(4);
+        ensure_THROW(reader.readHEX(hexin), geos::io::ParseException);
+        ensure("good", hexin.good());
+        ensure_equals(static_cast<long>(hexin.tellg()), 10L);
+    }
+
+    // Consumes everything when the last character is missing
+    {
+        std::stringstream hexin("010");
+        ensure_THROW(reader.readHEX(hexin), geos::io::ParseException);
+        ensure("eof", hexin.eof());
+        ensure("fail", hexin.fail());
+    }
+
+    // Reads nothing from a stream that is not good
+    {
+        std::stringstream hexin(hex);
+        hexin.setstate(std::ios_base::failbit);
+        std::string err;
+        try {
+            reader.readHEX(hexin);
+        }
+        catch(const geos::util::GEOSException& ex) {
+            err = ex.what();
+        }
+        ensure_equals(err, "ParseException: Unexpected EOF parsing WKB");
+        ensure("fail", hexin.fail());
+        hexin.clear();
+        ensure_equals(static_cast<long>(hexin.tellg()), 0L);
+    }
+}
+
+// readHEX round trip of large geometries in both byte orders
+template<>
+template<>
+void object::test<44>
+()
+{
+    geos::io::WKBReader reader;
+    const std::size_t sizes[] = {255, 256, 1000};
+    const int byteOrders[] = {geos::io::WKBConstants::wkbXDR, geos::io::WKBConstants::wkbNDR};
+
+    for(std::size_t numPoints : sizes) {
+        GeomPtr geom(wktreader.read(lineWKT(numPoints)));
+        for(int byteOrder : byteOrders) {
+            geos::io::WKBWriter writer(2, byteOrder);
+            std::stringstream wkb;
+            writer.write(*geom, wkb);
+            const std::string upper = toHex(wkb.str(), "0123456789ABCDEF");
+            const std::string lower = toHex(wkb.str(), "0123456789abcdef");
+            const std::string hexes[] = {upper, lower};
+
+            for(const std::string& hex : hexes) {
+                std::stringstream hexin(hex);
+                GeomPtr g1(reader.readHEX(hexin));
+                GeomPtr g2(reader.readHEX(hex));
+                ensure(g1->equalsExact(geom.get()));
+                ensure(g2->equalsExact(geom.get()));
+
+                std::stringstream out;
+                writer.writeHEX(*g1, out);
+                ensure_equals(out.str(), upper);
+            }
+        }
+    }
 }
 
 } // namespace tut
