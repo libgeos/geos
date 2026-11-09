@@ -18,6 +18,7 @@
 
 #include <geos/geom/prep/AbstractPreparedPolygonContains.h>
 #include <geos/geom/prep/PreparedPolygon.h>
+#include <geos/geom/Dimension.h>
 #include <geos/geom/Geometry.h>
 #include <geos/geom/Polygon.h>
 #include <geos/geom/MultiPolygon.h>
@@ -110,17 +111,24 @@ AbstractPreparedPolygonContains::eval(const geom::Geometry* geom)
 
     // Do point-in-poly tests first, since they are cheaper and may result
     // in a quick negative result.
-    auto outermostLoc = getOutermostTestComponentLocation(geom);
-
-    // Short-circuit for (Multi)Points
-    if (geom->getDimension() == 0) {
-        return evalPointTestGeom(geom, outermostLoc);
-    }
+    const auto outermostLoc = getOutermostTestComponentLocation(geom);
 
     if (outermostLoc == Location::EXTERIOR) {
         // If a point of any test components does not lie in target,
         // result is false
         return false;
+    }
+
+    // Check point components of the test geometry
+    if (geom->hasDimension(Dimension::P)) {
+        const bool pointsContained = evalPointTestGeom(geom, outermostLoc);
+        if (geom->isDimensionStrict(Dimension::P)) {
+            return pointsContained;
+        }
+
+        if (!pointsContained) {
+            return false;
+        }
     }
 
     // Check if there is any intersection between the line segments
