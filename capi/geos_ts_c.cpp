@@ -1603,11 +1603,8 @@ extern "C" {
             GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
             std::string hexstring(reinterpret_cast<const char*>(hex), size);
             WKBReader r(*(static_cast<GeometryFactory const*>(handle->geomFactory)));
-            std::istringstream is(std::ios_base::binary);
-            is.str(hexstring);
-            is.seekg(0, std::ios::beg); // rewind reader pointer
 
-            auto g = r.readHEX(is);
+            auto g = r.readHEX(hexstring);
             return g.release();
         });
     }
@@ -4407,11 +4404,8 @@ extern "C" {
     {
         return execute(extHandle, [&]() {
             std::string hexstring(reinterpret_cast<const char*>(hex), size);
-            std::istringstream is(std::ios_base::binary);
-            is.str(hexstring);
-            is.seekg(0, std::ios::beg); // rewind reader pointer
 
-            return reader->readHEX(is).release();
+            return reader->readHEX(hexstring).release();
         });
     }
 
