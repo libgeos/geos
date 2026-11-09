@@ -63,7 +63,7 @@ RectangleContains::isContainedInBoundary(const Geometry& geom)
 
     for(std::size_t i = 0, n = geom.getNumGeometries(); i < n; ++i) {
         const Geometry& comp = *(geom.getGeometryN(i));
-        if(!isContainedInBoundary(comp)) {
+        if(!comp.isEmpty() && !isContainedInBoundary(comp)) {
             return false;
         }
     }
