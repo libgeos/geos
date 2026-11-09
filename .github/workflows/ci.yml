@@ -31,8 +31,6 @@ env:
 jobs:
   linux:
     name: 'Linux'
-    env:
-      GEOS_INSTALL: ${{ github.workspace }}/inst
     strategy:
       fail-fast: false
       matrix:
@@ -189,8 +187,11 @@ jobs:
           packages: clang-22 valgrind
           os: ubuntu-26.04
 
-
     runs-on: ${{ matrix.ci.os }}
+    env:
+      CC: ${{ matrix.ci.c_compiler }}
+      CXX: ${{ matrix.ci.cxx_compiler }}
+
     steps:
 
     - name: 'Install Dependencies'
@@ -229,9 +230,7 @@ jobs:
           -D CMAKE_BUILD_TYPE=${{ matrix.ci.build_type }} \
           -D BUILD_SHARED_LIBS=${{ matrix.ci.library_type == 'shared' && 'ON' || 'OFF' }} \
           -D CMAKE_C_COMPILER=${{ matrix.ci.c_compiler }} \
-          -D CMAKE_CXX_COMPILER=${{ matrix.ci.cxx_compiler }} \
-          -D CMAKE_CXX_STANDARD=${{ matrix.ci.cxxstd }} \
-          -D CMAKE_INSTALL_PREFIX=$GEOS_INSTALL \
+          -D CMAKE_INSTALL_PREFIX=${{ github.workspace }}/inst \
           -D BUILD_DOCUMENTATION=YES \
           -D USE_CCACHE=ON \
           -S . -B build
@@ -251,6 +250,18 @@ jobs:
 
     - name: Install
       run: cmake --install build
+
+    - name: Post-install test with CMake
+      if: matrix.ci.build_type != 'ASAN'
+      run: tests/postinstall/test_cmake.sh ${{ github.workspace }}/inst ${{ matrix.ci.library_type }}
+
+    - name: Post-install test with pkg-config
+      if: matrix.ci.build_type != 'ASAN'
+      run: tests/postinstall/test_pkg-config.sh ${{ github.workspace }}/inst ${{ matrix.ci.library_type }}
+
+    - name: Post-install test with geos-config
+      if: matrix.ci.build_type != 'ASAN'
+      run: tests/postinstall/test_geos-config.sh ${{ github.workspace }}/inst ${{ matrix.ci.library_type }}
 
     # Run the all-unit-tests under
     # the memory checker when we have Debug symbols
@@ -287,8 +298,6 @@ jobs:
 
   windows-mingw:
     name: 'Windows (mingw-w64, x86_64, windows-2022)'
-    env:
-      GEOS_INSTALL: ${{ github.workspace }}\inst
     runs-on: windows-2022
     defaults:
       run:
@@ -329,7 +338,7 @@ jobs:
           -G "MSYS Makefiles" \
           -D CMAKE_BUILD_TYPE=${{ matrix.build_type}} \
           -D BUILD_SHARED_LIBS=${{ matrix.library_type == 'shared' && 'ON' || 'OFF' }} \
-          -D CMAKE_INSTALL_PREFIX=$GEOS_INSTALL \
+          -D CMAKE_INSTALL_PREFIX="${{ github.workspace }}\inst" \
           -D USE_CCACHE=ON \
           -S . -B build
         cmake --build build -j 4
@@ -348,11 +357,17 @@ jobs:
     - name: Install
       run: cmake --install build
 
+    - name: Post-install test with CMake
+      run: tests/postinstall/test_cmake.sh "${{ github.workspace }}\inst" ${{ matrix.library_type }}
+
+    - name: Post-install test with pkg-config
+      run: tests/postinstall/test_pkg-config.sh "${{ github.workspace }}\inst" ${{ matrix.library_type }}
+
+    - name: Post-install test with geos-config
+      run: tests/postinstall/test_geos-config.sh "${{ github.workspace }}\inst" ${{ matrix.library_type }}
+
   windows-msvc-msbuild:
     name: Windows (MSVC MSBuild)
-    env:
-      GEOS_INSTALL: ${{ github.workspace }}\inst
-    runs-on: ${{ matrix.os }}
     strategy:
       matrix:
         include:
@@ -364,11 +379,11 @@ jobs:
             generator: Visual Studio 18 2026
             arch: arm64
             library_type: static
-  
+    runs-on: ${{ matrix.os }}
     steps:
     - uses: actions/checkout@v7.0.1
 
-    # ccache not supported for this generator and/or Debug
+    # ccache not supported for Visual Studio generators and/or Debug
 
     - name: 'Build'
       shell: cmd
@@ -377,7 +392,7 @@ jobs:
           -G "${{ matrix.generator }}" ^
           -A ${{ matrix.arch }} ^
           -D CMAKE_BUILD_TYPE=Debug ^
-          -D CMAKE_INSTALL_PREFIX=%GEOS_INSTALL% ^
+          -D CMAKE_INSTALL_PREFIX=${{ github.workspace }}\inst ^
           -D CMAKE_CXX_STANDARD=17 ^
           -D BUILD_SHARED_LIBS=${{ matrix.library_type == 'shared' && 'ON' || 'OFF' }} ^
           -S . -B build
@@ -391,10 +406,16 @@ jobs:
     - name: Install
       run: cmake --install build --config Debug
 
+    - name: Post-install test with CMake
+      shell: cmd
+      env:
+        CMAKE_GENERATOR: ${{ matrix.generator }}
+        platform: ${{ matrix.arch }}
+        VCPKG_ROOT: C:\vcpkg
+      run: tests\postinstall\test_cmake.bat ${{ github.workspace }}\inst ${{ matrix.library_type }}
+
   windows-msvc-ninja:
     name: Windows (MSVC Ninja)
-    env:
-      GEOS_INSTALL: ${{ github.workspace }}\inst
     strategy:
       fail-fast: false
       matrix:
@@ -441,7 +462,7 @@ jobs:
         cmake --log-level VERBOSE ^
           -G Ninja ^
           -D CMAKE_BUILD_TYPE=Release ^
-          -D CMAKE_INSTALL_PREFIX=%GEOS_INSTALL% ^
+          -D CMAKE_INSTALL_PREFIX=${{ github.workspace }}\inst ^
           -D BUILD_SHARED_LIBS=${{ matrix.ci.library_type == 'shared' && 'ON' || 'OFF' }} ^
           -D CMAKE_CXX_STANDARD=${{ matrix.ci.cxxstd }} ^
           -D BUILD_SHARED_LIBS=ON ^
@@ -465,10 +486,16 @@ jobs:
     - name: Install
       run: cmake --install build
 
+    - name: Post-install test with CMake
+      shell: cmd
+      env:
+        CMAKE_GENERATOR: Ninja
+        platform: ${{ matrix.arch }}
+        VCPKG_ROOT: C:\vcpkg
+      run: tests\postinstall\test_cmake.bat ${{ github.workspace }}\inst ${{ matrix.ci.library_type }}
+
   macos:
     name: 'macOS clang'
-    env:
-      GEOS_INSTALL: ${{ github.workspace }}/inst
     strategy:
       fail-fast: false
       matrix:
@@ -493,7 +520,7 @@ jobs:
     steps:
 
     - name: 'Setup'
-      run: brew install ccache
+      run: brew install ccache make
 
     - name: 'Install'
       env:
@@ -521,7 +548,7 @@ jobs:
         cmake --log-level VERBOSE \
           -D CMAKE_BUILD_TYPE=${{ matrix.build_type }} \
           -D BUILD_SHARED_LIBS=${{ matrix.library_type == 'shared' && 'ON' || 'OFF' }} \
-          -D CMAKE_INSTALL_PREFIX=$GEOS_INSTALL \
+          -D CMAKE_INSTALL_PREFIX=${{ github.workspace }}/inst \
           -D CMAKE_CXX_STANDARD=${{ matrix.cxxstd }} \
           -D USE_CCACHE=ON \
           -S . -B build
@@ -540,6 +567,15 @@ jobs:
 
     - name: Install
       run: cmake --install build --config ${{ matrix.build_type }}
+
+    - name: Post-install test with CMake
+      run: tests/postinstall/test_cmake.sh ${{ github.workspace }}/inst ${{ matrix.library_type }}
+
+    - name: Post-install test with pkg-config
+      run: tests/postinstall/test_pkg-config.sh ${{ github.workspace }}/inst ${{ matrix.library_type }}
+
+    - name: Post-install test with geos-config
+      run: tests/postinstall/test_geos-config.sh ${{ github.workspace }}/inst ${{ matrix.library_type }}
 
   freebsd:
     name: FreeBSD
@@ -562,19 +598,24 @@ jobs:
         envs: CCACHE_COMPRESS CCACHE_COMPRESSLEVEL CCACHE_MAXSIZE
         usesh: true
         prepare: |
-          pkg install -y cmake ccache
+          pkg install -y ccache cmake gmake pkgconf
         run: |
           set -e
           export CCACHE_DIR=$PWD/.ccache
           cmake --log-level VERBOSE \
             -D CMAKE_INSTALL_PREFIX=/tmp/inst \
             -D USE_CCACHE=ON \
+            -D BUILD_TESTING=ON \
             -S . -B build
           cmake --build build -j $(nproc)
           ccache --show-stats
           ctest --test-dir build --output-on-failure
           cmake --install build
+          # clean-up to reduce size of cached image
           rm -rf build
+          tests/postinstall/test_cmake.sh /tmp/inst
+          tests/postinstall/test_pkg-config.sh /tmp/inst
+          tests/postinstall/test_geos-config.sh /tmp/inst
           rm -rf /tmp/inst
 
     - name: Save build cache
