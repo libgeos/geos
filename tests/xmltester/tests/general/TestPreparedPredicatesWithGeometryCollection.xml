@@ -186,4 +186,74 @@
   <test><op name="intersects" arg1="A" arg2="B">true</op></test>
 </case>
 
+<case>
+  <desc>Rectangle Polygon against GC, with empty Polygon and Point on boundary
+  </desc>
+  <a>
+  POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))
+  </a>
+  <b>
+  GEOMETRYCOLLECTION(POLYGON EMPTY, POINT(5 0))
+  </b>
+  <test><op name="contains" arg1="A" arg2="B">false</op></test>
+  <test><op name="covers" arg1="A" arg2="B">true</op></test>
+  <test><op name="intersects" arg1="A" arg2="B">true</op></test>
+</case>
+
+<case>
+  <desc>Rectangle Polygon against GC, with empty Polygon and Point on boundary
+  </desc>
+  <a>
+  POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))
+  </a>
+  <b>
+  GEOMETRYCOLLECTION(POLYGON EMPTY, POINT(5 0))
+  </b>
+  <test><op name="contains" arg1="A" arg2="B">false</op></test>
+  <test><op name="covers" arg1="A" arg2="B">true</op></test>
+  <test><op name="intersects" arg1="A" arg2="B">true</op></test>
+</case>
+
+<case>
+  <desc>Rectangle Polygon against GC, with empty Polygon and Point in interior
+  </desc>
+  <a>
+  POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))
+  </a>
+  <b>
+  GEOMETRYCOLLECTION(POLYGON EMPTY, POINT(5 5))
+  </b>
+  <test><op name="contains" arg1="A" arg2="B">true</op></test>
+  <test><op name="covers" arg1="A" arg2="B">true</op></test>
+  <test><op name="intersects" arg1="A" arg2="B">true</op></test>
+</case>
+
+<case>
+  <desc>Rectangle Polygon against MultiLineString with empty component and contained component
+  </desc>
+  <a>
+  POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))
+  </a>
+  <b>
+  MULTILINESTRING (EMPTY, (1 1, 2 2))
+  </b>
+  <test><op name="contains" arg1="A" arg2="B">true</op></test>
+  <test><op name="covers" arg1="A" arg2="B">true</op></test>
+  <test><op name="intersects" arg1="A" arg2="B">true</op></test>
+</case>
+
+<case>
+  <desc>Rectangle Polygon against MultiPoint with empty component and contained component
+  </desc>
+  <a>
+  POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))
+  </a>
+  <b>
+  MULTIPOINT (EMPTY, (5 5))
+  </b>
+  <test><op name="contains" arg1="A" arg2="B">true</op></test>
+  <test><op name="covers" arg1="A" arg2="B">true</op></test>
+  <test><op name="intersects" arg1="A" arg2="B">true</op></test>
+</case>
+
 </run>
