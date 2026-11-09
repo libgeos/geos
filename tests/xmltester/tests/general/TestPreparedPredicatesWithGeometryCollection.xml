@@ -88,5 +88,74 @@
 <test>  <op name="intersects"     arg1="A" arg2="B">   true  </op> </test>
 </case>
 
+<case>
+  <desc>Triangle Polygon against GC, with empty Polygon and Point on boundary
+  </desc>
+  <a>
+  POLYGON((0 0, 10 0, 0 10, 0 0))
+  </a>
+  <b>
+  GEOMETRYCOLLECTION(POLYGON EMPTY, POINT(5 0))
+  </b>
+  <test><op name="contains" arg1="A" arg2="B">false</op></test>
+  <test><op name="covers" arg1="A" arg2="B">true</op></test>
+  <test><op name="intersects" arg1="A" arg2="B">true</op></test>
+</case>
+
+<case>
+  <desc>Triangle Polygon against GC, with empty Polygon and two Points on boundary
+  </desc>
+  <a>
+  POLYGON((0 0, 10 0, 0 10, 0 0))
+  </a>
+  <b>
+  GEOMETRYCOLLECTION(POLYGON EMPTY, POINT(5 0), POINT (6 0))
+  </b>
+  <test><op name="contains" arg1="A" arg2="B">false</op></test>
+  <test><op name="covers" arg1="A" arg2="B">true</op></test>
+  <test><op name="intersects" arg1="A" arg2="B">true</op></test>
+</case>
+
+<case>
+  <desc>Triangle Polygon against GC, with empty Polygon and exterior Point
+  </desc>
+  <a>
+  POLYGON((0 0, 10 0, 0 10, 0 0))
+  </a>
+  <b>
+  GEOMETRYCOLLECTION(POLYGON EMPTY, POINT(5 10))
+  </b>
+  <test><op name="contains" arg1="A" arg2="B">false</op></test>
+  <test><op name="covers" arg1="A" arg2="B">false</op></test>
+  <test><op name="intersects" arg1="A" arg2="B">false</op></test>
+</case>
+
+<case>
+  <desc>Polygon against GC, with interior Point and crossing LineString with contained endpoints
+  </desc>
+  <a>
+  POLYGON((0 0, 10 0, 10 10, 5 5, 0 10, 0 0))
+  </a>
+  <b>
+  GEOMETRYCOLLECTION(POLYGON EMPTY, POINT(1 1), LINESTRING (1 8, 9 8))
+  </b>
+  <test><op name="contains" arg1="A" arg2="B">false</op></test>
+  <test><op name="covers" arg1="A" arg2="B">false</op></test>
+  <test><op name="intersects" arg1="A" arg2="B">true</op></test>
+</case>
+
+<case>
+  <desc>Rectangle Polygon against GC, interior point and LineString along boundary
+  </desc>
+  <a>
+  POLYGON((0 0, 10 0, 10 10, 0 10, 0 0))
+  </a>
+  <b>
+  GEOMETRYCOLLECTION(POLYGON EMPTY, POINT(5 5), LINESTRING(6 0, 7 0))
+  </b>
+  <test><op name="contains" arg1="A" arg2="B">true</op></test>
+  <test><op name="covers" arg1="A" arg2="B">true</op></test>
+  <test><op name="intersects" arg1="A" arg2="B">true</op></test>
+</case>
 
 </run>
