@@ -136,6 +136,10 @@ IsSimpleOp::computeSimple(const Geometry& geom)
                 throw util::UnsupportedOperationException("Curved types not supported in IsSimpleOp.");
             }
         case GEOS_CIRCULARSTRING:
+        case GEOS_ELLIPTICALCURVE:
+        case GEOS_CLOTHOID:
+        case GEOS_SPIRALCURVE:
+        case GEOS_NURBSCURVE:
         case GEOS_MULTICURVE:
         case GEOS_CURVEPOLYGON:
         case GEOS_MULTISURFACE:

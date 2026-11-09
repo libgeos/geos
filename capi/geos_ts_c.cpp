@@ -37,6 +37,10 @@
 #include <geos/coverage/CoverageUnion.h>
 #include <geos/coverage/CoverageValidator.h>
 #include <geos/geom/CircularString.h>
+#include <geos/geom/EllipticalCurve.h>
+#include <geos/geom/Clothoid.h>
+#include <geos/geom/SpiralCurve.h>
+#include <geos/geom/NurbsCurve.h>
 #include <geos/geom/CompoundCurve.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
@@ -70,6 +74,7 @@
 #include <geos/io/WKTReader.h>
 #include <geos/io/WKTWriter.h>
 #include <geos/io/GeoJSONReader.h>
+#include <geos/io/EsriJsonWriter.h>
 #include <geos/io/GeoJSONWriter.h>
 #include <geos/linearref/LengthIndexedLine.h>
 #include <geos/noding/GeometryNoder.h>
@@ -165,6 +170,7 @@
 #define GEOSWKBWriter geos::io::WKBWriter
 #define GEOSGeoJSONReader geos::io::GeoJSONReader
 #define GEOSGeoJSONWriter geos::io::GeoJSONWriter
+#define GEOSEsriJSONWriter geos::io::EsriJsonWriter
 
 // Implementation struct for the GEOSCoverageCleanParams object
 typedef struct {
@@ -485,6 +491,10 @@ private:
 static bool
 isCurvedType (geos::geom::GeometryTypeId typ) {
     return typ == geos::geom::GeometryTypeId::GEOS_CIRCULARSTRING ||
+        typ == geos::geom::GeometryTypeId::GEOS_ELLIPTICALCURVE ||
+        typ == geos::geom::GeometryTypeId::GEOS_CLOTHOID ||
+        typ == geos::geom::GeometryTypeId::GEOS_SPIRALCURVE ||
+        typ == geos::geom::GeometryTypeId::GEOS_NURBSCURVE ||
         typ == geos::geom::GeometryTypeId::GEOS_COMPOUNDCURVE ||
         typ == geos::geom::GeometryTypeId::GEOS_CURVEPOLYGON ||
         typ == geos::geom::GeometryTypeId::GEOS_MULTICURVE ||
@@ -3947,6 +3957,48 @@ extern "C" {
             return gf->createCircularString(false, false).release();
         });
     }
+    Geometry*
+    GEOSGeom_createEmptyEllipticalCurve_r(GEOSContextHandle_t extHandle)
+    {
+        return execute(extHandle, [&]() {
+            GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+            const GeometryFactory* gf = handle->geomFactory;
+
+            return gf->createEllipticalCurve(false, false).release();
+        });
+    }
+
+    Geometry*
+    GEOSGeom_createEmptyClothoid_r(GEOSContextHandle_t extHandle)
+    {
+        return execute(extHandle, [&]() {
+            GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+            const GeometryFactory* gf = handle->geomFactory;
+
+            return gf->createClothoid(false, false).release();
+        });
+    }
+
+    Geometry*
+    GEOSGeom_createEmptySpiralCurve_r(GEOSContextHandle_t extHandle)
+    {
+        return execute(extHandle, [&]() {
+            GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+            const GeometryFactory* gf = handle->geomFactory;
+
+            return gf->createSpiralCurve(false, false).release();
+        });
+    }
+    Geometry*
+    GEOSGeom_createEmptyNurbsCurve_r(GEOSContextHandle_t extHandle)
+    {
+        return execute(extHandle, [&]() {
+            GEOSContextHandleInternal_t* handle = reinterpret_cast<GEOSContextHandleInternal_t*>(extHandle);
+            const GeometryFactory* gf = handle->geomFactory;
+
+            return gf->createNurbsCurve(false, false).release();
+        });
+    }
 
     Geometry*
     GEOSGeom_createCompoundCurve_r(GEOSContextHandle_t extHandle, Geometry** geoms, unsigned int ngeoms)
@@ -4610,6 +4662,72 @@ extern "C" {
     {
         return execute(extHandle, -1, [&]() {
             return writer->getOutputDimension();
+        });
+    }
+
+    /* Esri JSON Writer */
+    GEOSEsriJSONWriter*
+    GEOSEsriJSONWriter_create_r(GEOSContextHandle_t extHandle)
+    {
+        return execute(extHandle, [&]() {
+            return new geos::io::EsriJsonWriter();
+        });
+    }
+
+    void
+    GEOSEsriJSONWriter_destroy_r(GEOSContextHandle_t extHandle, GEOSEsriJSONWriter* writer)
+    {
+        execute(extHandle, [&]() {
+            delete writer;
+        });
+    }
+
+    int
+    GEOSEsriJSONWriter_setTolerance_r(GEOSContextHandle_t extHandle, GEOSEsriJSONWriter* writer, double tolerance)
+    {
+        return execute(extHandle, 0, [&]() {
+            writer->setTolerance(tolerance);
+            return 1;
+        });
+    }
+
+    void
+    GEOSEsriJSONWriter_setMatchCurvature_r(GEOSContextHandle_t extHandle, GEOSEsriJSONWriter* writer, int matchCurvature)
+    {
+        execute(extHandle, [&]() {
+            writer->setMatchCurvature(matchCurvature != 0);
+        });
+    }
+
+    char*
+    GEOSEsriJSONWriter_writeGeometry_r(GEOSContextHandle_t extHandle, GEOSEsriJSONWriter* writer, const GEOSGeometry* g)
+    {
+        return execute(extHandle, [&]() {
+            return gstrdup(writer->write(*g));
+        });
+    }
+
+    std::size_t
+    GEOSEsriJSONWriter_getNumSegments_r(GEOSContextHandle_t extHandle, const GEOSEsriJSONWriter* writer)
+    {
+        return execute(extHandle, std::size_t(0), [&]() {
+            return writer->getStats().numSegments;
+        });
+    }
+
+    std::size_t
+    GEOSEsriJSONWriter_getNumApproximated_r(GEOSContextHandle_t extHandle, const GEOSEsriJSONWriter* writer)
+    {
+        return execute(extHandle, std::size_t(0), [&]() {
+            return writer->getStats().numApproximated;
+        });
+    }
+
+    double
+    GEOSEsriJSONWriter_getMaxDeviation_r(GEOSContextHandle_t extHandle, const GEOSEsriJSONWriter* writer)
+    {
+        return execute(extHandle, 0.0, [&]() {
+            return writer->getStats().maxDeviation;
         });
     }
 
