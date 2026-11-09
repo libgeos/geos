@@ -67,17 +67,27 @@ public:
     static double
     getScanLineY(const Polygon& poly)
     {
-        ScanLineYOrdinateFinder finder(poly);
+        const auto& env = *poly.getEnvelopeInternal();
+        auto targetY = avg(env.getMinY(), env.getMaxY());
+
+        ScanLineYOrdinateFinder finder(poly, targetY);
         return finder.getScanLineY();
     }
 
-    ScanLineYOrdinateFinder(const Polygon& nPoly)
+    static double
+    getScanLineY(const Polygon& poly, double targetY)
+    {
+        ScanLineYOrdinateFinder finder(poly, targetY);
+        return finder.getScanLineY();
+    }
+
+    ScanLineYOrdinateFinder(const Polygon& nPoly, double targetY)
         : poly(nPoly)
     {
         // initialize using extremal values
         hiY = poly.getEnvelopeInternal()->getMaxY();
         loY = poly.getEnvelopeInternal()->getMinY();
-        centreY = avg(loY, hiY);
+        centreY = targetY;
     }
 
     double
@@ -126,10 +136,9 @@ private:
 
 class InteriorPointPolygon {
 public:
-    InteriorPointPolygon(const Polygon& poly)
+    explicit InteriorPointPolygon(const Polygon& poly)
         : polygon(poly)
     {
-        interiorPointY = ScanLineYOrdinateFinder::getScanLineY(polygon);
     }
 
     bool
@@ -147,8 +156,6 @@ public:
     void
     process()
     {
-        std::vector<double> crossings;
-
         /*
          * This results in returning a null Coordinate
          */
@@ -158,32 +165,79 @@ public:
          */
         interiorPoint = *polygon.getCoordinate();
 
-        const LinearRing* shell = polygon.getExteriorRing();
-        scanRing(*shell, crossings);
-        for (std::size_t i = 0; i < polygon.getNumInteriorRing(); i++) {
-            const LinearRing* hole = polygon.getInteriorRingN(i);
-            scanRing(*hole, crossings);
+        const double centralY = ScanLineYOrdinateFinder::getScanLineY(polygon);
+        scanAtY(centralY);
+
+        double envWidth = polygon.getEnvelopeInternal()->getWidth();
+        double threshold = std::max(1e-10, envWidth * 1e-6);
+
+        if (interiorSectionWidth > threshold) {
+            return;
         }
-        findBestMidpoint(crossings);
+
+        // The primary scan line yielded negligible or zero interior width
+        // Try a scanline at the centroid.
+        CoordinateXY centroid;
+        polygon.getCentroid(centroid);
+        const double centroidScanY = ScanLineYOrdinateFinder::getScanLineY(polygon, centroid.y);
+        if (centroidScanY != centralY) {
+            scanAtY(centroidScanY);
+        }
+
+        // Try scan-lines at the midpoints of other segments.
+        if (interiorSectionWidth <= threshold) {
+            std::set<double> scanLines;
+            scanLines.insert(centralY);
+            scanLines.insert(centroidScanY);
+
+            const CoordinateSequence* shellCoords = polygon.getExteriorRing()->getCoordinatesRO();
+            for (std::size_t i = 1; i < shellCoords->size(); i++) {
+                const double y0 = shellCoords->getY(i-1);
+                const double y1 = shellCoords->getY(i);
+                if (y0 != y1) {
+                    const double scanY = avg(y0, y1);
+
+                    const auto [it, notAlreadyTested] = scanLines.insert(scanY);
+
+                    if (notAlreadyTested) {
+                        scanAtY(avg(y0, y1));
+                        if (interiorSectionWidth > threshold) {
+                            break;
+                        }
+                    }
+                }
+            }
+        }
     }
 
 private:
     const Polygon& polygon;
-    double interiorPointY;
     double interiorSectionWidth = 0.0;
     CoordinateXY interiorPoint;
 
-    void scanRing(const LinearRing& ring, std::vector<double>& crossings)
+    void scanAtY(double scanY)
+    {
+        std::vector<double> crossings;
+        const LinearRing* shell = polygon.getExteriorRing();
+        scanRing(*shell, scanY, crossings);
+        for (std::size_t i = 0; i < polygon.getNumInteriorRing(); i++) {
+            const LinearRing* hole = polygon.getInteriorRingN(i);
+            scanRing(*hole, scanY, crossings);
+        }
+        findBestMidpoint(crossings, scanY);
+    }
+
+    static void scanRing(const LinearRing& ring, double scanY, std::vector<double>& crossings)
     {
         // skip rings which don't cross scan line
-        if (! intersectsHorizontalLine(ring.getEnvelopeInternal(), interiorPointY))
+        if (! intersectsHorizontalLine(ring.getEnvelopeInternal(), scanY))
             return;
 
         const CoordinateSequence* seq = ring.getCoordinatesRO();
         for (std::size_t i = 1; i < seq->size(); i++) {
             const CoordinateXY& ptPrev = seq->getAt<CoordinateXY>(i - 1);
             const CoordinateXY& pt = seq->getAt<CoordinateXY>(i);
-            addEdgeCrossing(ptPrev, pt, interiorPointY, crossings);
+            addEdgeCrossing(ptPrev, pt, scanY, crossings);
         }
     }
 
@@ -200,14 +254,14 @@ private:
         crossings.push_back(xInt);
     }
 
-    void findBestMidpoint(std::vector<double>& crossings)
+    void findBestMidpoint(std::vector<double>& crossings, double scanY)
     {
         // zero-area polygons will have no crossings
         if (crossings.empty()) return;
 
         //Assert.isTrue(0 == crossings.size() % 2, "Interior Point robustness failure: odd number of scanline crossings");
 
-        sort(crossings.begin(), crossings.end());
+        std::sort(crossings.begin(), crossings.end());
         /*
          * Entries in crossings list are expected to occur in pairs representing a
          * section of the scan line interior to the polygon (which may be zero-length)
@@ -221,7 +275,7 @@ private:
             if (width > interiorSectionWidth) {
                 interiorSectionWidth = width;
                 double interiorPointX = avg(x1, x2);
-                interiorPoint = Coordinate(interiorPointX, interiorPointY);
+                interiorPoint = CoordinateXY(interiorPointX, scanY);
             }
         }
     }

@@ -255,5 +255,19 @@ void object::test<11>()
     ensure(!GEOSHasM(result_));
 }
 
+template<>
+template<>
+void object::test<12>()
+{
+    set_test_name("polygon with boundary spike where center scanline has zero width (#1242, #1495)");
+
+    input_ = fromWKT("POLYGON ((2653.9 425.9100000000003, 2653.8999999999996 1067.39, 1331.61 1067.3900000000003, 1331.61 1223.5586000000003, 2653.9 1223.5586000000003, 2653.9 425.9100000000003))");
+    ensure(input_);
+
+    result_ = GEOSPointOnSurface(input_);
+    ensure(result_);
+    ensure_equals(GEOSContains(input_, result_), 1);
+}
+
 } // namespace tut
 
