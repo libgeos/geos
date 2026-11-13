@@ -603,7 +603,12 @@ RelateNG::computeAreaVertex(RelateGeometry& geom, bool isA, RelateGeometry& geom
                 return true;
             }
             for (std::size_t j = 0; j < poly->getNumInteriorRing(); j++) {
-                hasExteriorIntersection |= computeAreaVertex(geom, isA, poly->getInteriorRingN(j), geomTarget, topoComputer);
+                const LinearRing* hole = poly->getInteriorRingN(j);
+                if (hole->isEmpty()) {
+                    continue;
+                }
+
+                hasExteriorIntersection |= computeAreaVertex(geom, isA, hole, geomTarget, topoComputer);
                 if (topoComputer.isResultKnown()) {
                     return true;
                 }
