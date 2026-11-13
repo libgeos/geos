@@ -937,5 +937,18 @@ void object::test<65>()
     checkIntersectsDisjoint(a, b, true);
 }
 
+template<>
+template<>
+void object::test<66>()
+{
+    set_test_name("Polygon with empty hole");
+
+    std::string a = "POLYGON ((1 1, 2 1, 2 2, 1 1), EMPTY)";
+    std::string b = "POLYGON ((1 2, 2 1, 1 1, 1 2), EMPTY)";
+
+    checkIntersectsDisjoint(a, b, true);
+    checkContainsWithin(a, b, false);
+}
+
 
 } // namespace tut
