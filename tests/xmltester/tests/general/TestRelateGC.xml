@@ -634,7 +634,7 @@ GEOMETRYCOLLECTION (POLYGON ((1 9, 5 9, 6 6, 1 5, 1 9), (2 6, 4 8, 6 6, 2 6)), P
 
 <case>
   <!-- https://github.com/libgeos/geos/issues/1602 -->
-  <desc>A/GC:A, test polygon with repeated point is one of two polygons in a collection</desc>
+  <desc>A/GC:A, test polygon is a member of the collection, other member has a repeated point</desc>
   <a>
     POLYGON ((3 3, 0 8, 2 5, 3 3))
   </a>
