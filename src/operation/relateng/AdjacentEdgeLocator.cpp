@@ -25,6 +25,8 @@
 #include <geos/operation/relateng/NodeSection.h>
 #include <geos/operation/relateng/NodeSections.h>
 #include <geos/operation/relateng/RelateNode.h>
+#include <geos/operation/valid/RepeatedPointRemover.h>
+#include <geos/operation/valid/RepeatedPointTester.h>
 #include <geos/constants.h>
 
 
@@ -137,17 +139,29 @@ AdjacentEdgeLocator::addRing(const LinearRing* ring, bool requireCW)
         return;
     }
 
-    //TODO: remove repeated points?
     const CoordinateSequence* pts = ring->getCoordinatesRO();
     bool isFlipped = requireCW == Orientation::isCCW(pts);
+
+    valid::RepeatedPointTester rpt;
+    bool hasRepeatedPoints = rpt.hasRepeatedPoint(pts);
+
     /*
      * In case of flipped rings, we need to keep a local copy
      * since we cannot mutate the const geometry we are fed
      * in the constructor.
      */
-    if (isFlipped) {
-        std::unique_ptr<CoordinateSequence> localPts = pts->clone();
-        localPts->reverse();
+    if (isFlipped || hasRepeatedPoints) {
+        std::unique_ptr<CoordinateSequence> localPts;
+        if (hasRepeatedPoints) {
+            localPts = valid::RepeatedPointRemover::removeRepeatedPoints(pts);
+        } else {
+            localPts = pts->clone();
+        }
+
+        if (isFlipped) {
+            localPts->reverse();
+        }
+
         ringList.push_back(localPts.get());
         localRingList.push_back(std::move(localPts));
     }
