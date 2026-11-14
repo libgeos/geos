@@ -355,7 +355,8 @@ EdgeNodingBuilder::addEdge(const std::shared_ptr<const CoordinateSequence>& cas,
 void
 EdgeNodingBuilder::addCurvedEdge(const std::shared_ptr<const CoordinateSequence>& cas, const std::vector<CircularArc>& arcs, const EdgeSourceInfo* info)
 {
-    NodableArcString* as = new NodableArcString(arcs, cas, inputHasZ, inputHasM, reinterpret_cast<const void*>(info));
+    constexpr double controlPointTolerance = 1e-10;
+    NodableArcString* as = new NodableArcString(arcs, cas, inputHasZ, inputHasM, controlPointTolerance, reinterpret_cast<const void*>(info));
     inputEdges.push_back(as);
 }
 

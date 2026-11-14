@@ -18,6 +18,7 @@
 #include <algorithm>
 #include <iomanip>
 
+using geos::geom::CoordinateXY;
 using geos::geom::CoordinateXYZM;
 using geos::geom::CircularArc;
 
@@ -36,8 +37,14 @@ pseudoAngleDiffCCW(double paStart, double pa) {
     return diff;
 }
 
-NodableArcString::NodableArcString(std::vector<geom::CircularArc> arcs, const std::shared_ptr<const geom::CoordinateSequence>& coords, bool constructZ, bool constructM, const void* p_context) :
+NodableArcString::NodableArcString(std::vector<geom::CircularArc> arcs,
+    const std::shared_ptr<const geom::CoordinateSequence>& coords,
+    bool constructZ,
+    bool constructM,
+    double controlPointTolerance,
+    const void* p_context) :
     ArcString(std::move(arcs), coords, p_context),
+    m_controlPointTolerance(controlPointTolerance),
     m_constructZ(constructZ),
     m_constructM(constructM)
 {
@@ -245,31 +252,62 @@ class ArcBuilder {
 
 public:
 
-    ArcBuilder(std::vector<std::unique_ptr<ArcString>>& splitArcs, const void* data, bool constructZ, bool constructM) :
+    ArcBuilder(std::vector<std::unique_ptr<ArcString>>& splitArcs, const void* data, bool constructZ, bool constructM, double controlPointTolerance) :
         m_data(data),
         m_splitArcs(splitArcs),
+        m_controlPointTolerance(controlPointTolerance),
         m_constructZ(constructZ),
-        m_constructM(constructM) {}
+        m_constructM(constructM)
+    {}
 
-    void addArc(const CoordinateXYZM& p0, const CoordinateXYZM& p1, const CoordinateXYZM& p2, const geom::CoordinateXY& center, double radius, int orientation) {
+    template<typename CoordType>
+    void addArc(const CoordType& p0, const CoordType& p1, const CoordType& p2, const CoordinateXY& center, double radius, int orientation) {
         if (!m_coords) {
             m_coords = std::make_unique<geom::CoordinateSequence>(0, m_constructZ, m_constructM);
+            m_coords->add(p0);
         }
 
-        m_coords->add(p0, false);
-        m_coords->add(p1, false);
-        m_coords->add(p2, false);
+        m_coords->add(p1, true);
+        m_coords->add(p2, true);
 
         m_arcs.emplace_back(*m_coords, m_coords->getSize() - 3, center, radius, orientation);
     }
 
     void addArc(const geom::CoordinateSequence& seq, std::size_t pos, const geom::CoordinateXY& center, double radius, int orientation) {
-        if (!m_coords) {
-            m_coords = std::make_unique<geom::CoordinateSequence>(0, m_constructZ, m_constructM);
+        if (preserveControlPoint()) {
+            if (!m_coords) {
+                m_coords = std::make_unique<geom::CoordinateSequence>(0, m_constructZ, m_constructM);
+            }
+
+            m_coords->add(seq, pos + !m_coords->isEmpty(), pos + 2, true);
+            m_arcs.emplace_back(*m_coords, m_coords->getSize() - 3, center, radius, orientation);
+
+            return;
         }
 
-        m_coords->add(seq, pos + !m_coords->isEmpty(), pos + 2, true);
-        m_arcs.emplace_back(*m_coords, m_coords->getSize() - 3, center, radius, orientation);
+        const double distSquaredTol = radius * m_controlPointTolerance * m_controlPointTolerance;
+
+        seq.applyAt(pos, [&](const auto& p0) {
+            using CoordType = std::decay_t<decltype(p0)>;
+
+            const CoordType& p1 = *(&p0 + 1);
+            const CoordType& p2 = *(&p0 + 2);
+
+            CoordType mid{algorithm::CircularArcs::getMidpoint(p0, p2, center, radius, orientation == algorithm::Orientation::COUNTERCLOCKWISE)};
+
+            if (!p1.equals2D(mid) && p1.distanceSquared(mid) > distSquaredTol) {
+                if constexpr(CoordType::template has<geom::Ordinate::Z>()) {
+                    mid.z = (p0.z + p2.z) / 2;
+                }
+                if constexpr(CoordType::template has<geom::Ordinate::M>()) {
+                    mid.m = (p0.m + p2.m) / 2;
+                }
+
+                addArc(p0, mid, p2, center, radius, orientation);
+            } else {
+                addArc(p0, p1, p2, center, radius, orientation);
+            }
+        });
     }
 
     void finish() {
@@ -277,8 +315,12 @@ public:
             return;
         }
 
-        m_splitArcs.push_back(std::make_unique<NodableArcString>(std::move(m_arcs), std::move(m_coords), m_constructZ, m_constructM, m_data));
+        m_splitArcs.push_back(std::make_unique<NodableArcString>(std::move(m_arcs), std::move(m_coords), m_constructZ, m_constructM, m_controlPointTolerance, m_data));
         m_arcs = std::vector<CircularArc>();
+    }
+
+    bool preserveControlPoint() const {
+        return std::isinf(m_controlPointTolerance);
     }
 
 private:
@@ -286,13 +328,14 @@ private:
     std::vector<std::unique_ptr<ArcString>>& m_splitArcs;
     std::vector<CircularArc> m_arcs;
     std::unique_ptr<geom::CoordinateSequence> m_coords;
+    const double m_controlPointTolerance;
     const bool m_constructZ;
     const bool m_constructM;
 };
 
 void
 NodableArcString::getNoded(std::vector<std::unique_ptr<ArcString>>& splitArcs) {
-    ArcBuilder builder(splitArcs, getData(), m_constructZ, m_constructM);
+    ArcBuilder builder(splitArcs, getData(), m_constructZ, m_constructM, m_controlPointTolerance);
 
     for (size_t arcIndex = 0; arcIndex < m_arcs.size(); arcIndex++) {
 #if DEBUG_NODABLE_ARC_STRING
@@ -305,8 +348,6 @@ NodableArcString::getNoded(std::vector<std::unique_ptr<ArcString>>& splitArcs) {
 
         SplitPoints split;
 
-        const bool preserveControlPoint = true;
-
         const auto it = m_adds.find(arcIndex);
         if (it != m_adds.end()) {
             split = prepareArcPoints(toSplit, it->second);
@@ -316,7 +357,7 @@ NodableArcString::getNoded(std::vector<std::unique_ptr<ArcString>>& splitArcs) {
             builder.finish();
         }
 
-        if (preserveControlPoint && split.points.size() <= 2) {
+        if (split.points.size() <= 2) {
             // No nodes added, just copy the coordinates into the sequence.
             const geom::CoordinateSequence* srcSeq = m_arcs[arcIndex].getCoordinateSequence();
             std::size_t srcPos = m_arcs[arcIndex].getCoordinatePosition();
@@ -338,11 +379,11 @@ NodableArcString::getNoded(std::vector<std::unique_ptr<ArcString>>& splitArcs) {
 
             // TODO: Check if control point of original arc falls into this section,
             // and use it instead of calculating a midpoint here?
-            CoordinateXYZM p1(algorithm::CircularArcs::getMidpoint(p0, p2, center, radius, isCCW));
-            p1.z = (p0.z + p2.z) / 2;
-            p1.m = (p0.m + p2.m) / 2;
+            CoordinateXYZM mid(algorithm::CircularArcs::getMidpoint(p0, p2, center, radius, isCCW));
+            mid.z = (p0.z + p2.z) / 2;
+            mid.m = (p0.m + p2.m) / 2;
 
-            builder.addArc(p0, p1, p2, center, radius, orientation);
+            builder.addArc(p0, mid, p2, center, radius, orientation);
 
             // Finish the ArcString, start a new one.
             const bool isSplitPoint = (i < split.points.size() - 1) || split.splitEnd;
