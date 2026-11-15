@@ -209,7 +209,7 @@ Geometry::getCentroid(CoordinateXY& ret) const
 std::unique_ptr<Point>
 Geometry::getInteriorPoint() const
 {
-    geos::util::ensureNoCurvedComponents(this);
+    geos::util::ensureNoCurvedTypes(this);
 
     Coordinate interiorPt;
     int dim = getDimension();
@@ -261,7 +261,7 @@ Geometry::getEnvelope() const
 bool
 Geometry::disjoint(const Geometry* g) const
 {
-    if (hasCurvedComponents() || g->hasCurvedComponents()) {
+    if (hasCurvedTypes() || g->hasCurvedTypes()) {
         return !intersects(g);
     }
 
@@ -327,7 +327,7 @@ Geometry::intersects(const Geometry* g) const
         return predicate::RectangleIntersects::intersects(*p, *this);
     }
 
-    if (hasCurvedComponents() || g->hasCurvedComponents()) {
+    if (hasCurvedTypes() || g->hasCurvedTypes()) {
         if (isDimensionStrict(Dimension::A) && g->getDimension() == Dimension::P) {
             return locate::SimplePointInAreaLocator::isAnyPointContained(*g, *this);
         }

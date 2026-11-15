@@ -299,5 +299,22 @@ void object::test<16>()
     ensure_equals(GEOSIntersects(geom2_, geom1_), 2);
 }
 
+template<>
+template<>
+void object::test<17>()
+{
+    set_test_name("PIP on CurvePolygon with linear shell");
+
+    geom1_ = fromWKT("CURVEPOLYGON ((0 0, 10 0, 10 10, 0 10, 0 0))");
+    geom2_ = fromWKT("POINT (5 5)");
+    geom3_ = fromWKT("POINT (100 100)");
+
+    ensure_equals(GEOSIntersects(geom1_, geom2_), 1);
+    ensure_equals(GEOSIntersects(geom2_, geom1_), 1);
+
+    ensure_equals(GEOSIntersects(geom3_, geom1_), 0);
+    ensure_equals(GEOSIntersects(geom1_, geom3_), 0);
+}
+
 } // namespace tut
 

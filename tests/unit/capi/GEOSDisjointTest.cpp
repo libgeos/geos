@@ -71,5 +71,22 @@ void object::test<4>()
     ensure_equals(GEOSDisjoint(geom2_, geom1_), 0);
 }
 
+template<>
+template<>
+void object::test<5>()
+{
+    set_test_name("PIP on CurvePolygon with linear shell");
+
+    geom1_ = fromWKT("CURVEPOLYGON ((0 0, 10 0, 10 10, 0 10, 0 0))");
+    geom2_ = fromWKT("POINT (5 5)");
+    geom3_ = fromWKT("POINT (100 100)");
+
+    ensure_equals(GEOSDisjoint(geom1_, geom2_), 0);
+    ensure_equals(GEOSDisjoint(geom2_, geom1_), 0);
+
+    ensure_equals(GEOSDisjoint(geom3_, geom1_), 1);
+    ensure_equals(GEOSDisjoint(geom1_, geom3_), 1);
+}
+
 } // namespace tut
 
