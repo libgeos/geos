@@ -106,7 +106,7 @@ AbstractPreparedPolygonContains::findAndClassifyIntersections(const geom::Geomet
 bool
 AbstractPreparedPolygonContains::eval(const geom::Geometry* geom)
 {
-    geos::util::ensureNoCurvedComponents(geom);
+    geos::util::ensureNoCurvedTypes(geom);
 
     // Do point-in-poly tests first, since they are cheaper and may result
     // in a quick negative result.

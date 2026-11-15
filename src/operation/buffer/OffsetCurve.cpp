@@ -62,7 +62,7 @@ OffsetCurve::setJoined(bool pIsJoined)
 std::unique_ptr<Geometry>
 OffsetCurve::getCurve()
 {
-    util::ensureNoCurvedComponents(inputGeom);
+    util::ensureNoCurvedTypes(inputGeom);
 
     GeometryMapper::mapOp GetCurveMapOp = [this](const Geometry& geom)->std::unique_ptr<Geometry> {
 

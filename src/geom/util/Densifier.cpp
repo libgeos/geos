@@ -104,7 +104,7 @@ Densifier::DensifyTransformer::createValidArea(const Geometry* roughAreaGeom)
 Densifier::Densifier(const Geometry* geom):
     inputGeom(geom)
 {
-    geos::util::ensureNoCurvedComponents(geom);
+    geos::util::ensureNoCurvedTypes(geom);
 }
 
 std::unique_ptr<CoordinateSequence>

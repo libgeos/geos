@@ -322,8 +322,8 @@ RelateNG::evaluate(const Geometry* b, TopologyPredicate& predicate)
         return false;
     }
 
-    geos::util::ensureNoCurvedComponents(geomA.getGeometry());
-    geos::util::ensureNoCurvedComponents(b);
+    geos::util::ensureNoCurvedTypes(geomA.getGeometry());
+    geos::util::ensureNoCurvedTypes(b);
     
     RelateGeometry geomB(b, boundaryNodeRule);
 

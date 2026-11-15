@@ -610,7 +610,7 @@ getExtraNodes(const Matrix<std::unique_ptr<Cell> > &cells, size_t i, size_t j) {
 std::unique_ptr<Geometry>
 GridIntersection::subdividePolygon(const Grid<bounded_extent>& p_grid, const Geometry& g, bool includeExterior)
 {
-    util::ensureNoCurvedComponents(g);
+    util::ensureNoCurvedTypes(g);
 
     const geom::GeometryFactory& gfact = *g.getFactory();
 
