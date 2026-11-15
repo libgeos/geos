@@ -347,7 +347,7 @@ GeometrySplitter::splitPolygonalWithEdge(const Geometry &geom, const Geometry &e
 
     auto surfaces = polygonizer.getSurfaces();
 
-    const bool usePrepared = !geom.hasCurvedComponents() && !edge.hasCurvedComponents();
+    const bool usePrepared = !geom.hasCurvedTypes() && !edge.hasCurvedTypes();
     std::vector<std::unique_ptr<Geometry>> keep;
 
     if (usePrepared) {
