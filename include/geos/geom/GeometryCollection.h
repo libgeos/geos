@@ -179,6 +179,8 @@ public:
     /// Returns a pointer to the nth Geometry in this collection
     const Geometry* getGeometryN(std::size_t n) const override;
 
+    bool hasCurvedTypes() const override;
+
     /**
      * \brief
      * Take ownership of the sub-geometries managed by this GeometryCollection.
@@ -214,6 +216,7 @@ protected:
         bool hasM;
         bool hasZ;
         bool hasCurves;
+        bool hasCurvedTypes;
     };
 
     GeometryCollection(const GeometryCollection& gc);
