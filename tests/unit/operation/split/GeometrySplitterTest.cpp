@@ -947,4 +947,16 @@ void object::test<78>()
         "GEOMETRYCOLLECTION (CURVEPOLYGON (COMPOUNDCURVE ((0 5, 0 10, 1 10), CIRCULARSTRING (1 10, 3 7, 1 5), (1 5, 0 5))), CURVEPOLYGON (COMPOUNDCURVE ((1 10, 10 10, 10 5, 1 5), CIRCULARSTRING (1 5, 3 7, 1 10))))");
 }
 
+template<>
+template<>
+void object::test<79>()
+{
+    set_test_name("split CurvePolygon having a LineString shell");
+    // https://github.com/libgeos/geos/issues/1608
+
+    testSplit("CURVEPOLYGON ((0 0, 10 0, 10 10, 0 10, 0 0))",
+              "LINESTRING (5 -5, 5 15)",
+              "GEOMETRYCOLLECTION(POLYGON ((0 0, 5 0, 5 10, 0 10, 0 0)), POLYGON ((5 0, 10 0, 10 10, 5 10, 5 0)))");
+}
+
 }
