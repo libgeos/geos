@@ -22,6 +22,7 @@
 #include <geos/geom/Location.h>
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/LineString.h>
+#include <geos/util/Assert.h>
 
 using namespace geos::geom;
 
@@ -44,6 +45,24 @@ bool
 SimplePointInAreaLocator::isContained(const CoordinateXY& p, const Geometry* geom)
 {
     return Location::EXTERIOR != locate(p, geom);
+}
+
+bool
+SimplePointInAreaLocator::isAnyPointContained(const geom::Geometry& pt, const geom::Geometry& area)
+{
+    util::Assert::isTrue(area.getDimension() == Dimension::A);
+    util::Assert::isTrue(pt.getDimension() == Dimension::P);
+
+    if (pt.getNumGeometries() > 1) {
+        for (size_t i = 0; i < pt.getNumGeometries(); i++ ) {
+            if (isAnyPointContained(*pt.getGeometryN(i), area)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    return isContained(*pt.getCoordinate(), &area);
 }
 
 geom::Location

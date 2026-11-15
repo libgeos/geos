@@ -209,7 +209,7 @@ Geometry::getCentroid(CoordinateXY& ret) const
 std::unique_ptr<Point>
 Geometry::getInteriorPoint() const
 {
-    geos::util::ensureNoCurvedComponents(this);
+    geos::util::ensureNoCurvedTypes(this);
 
     Coordinate interiorPt;
     int dim = getDimension();
@@ -261,6 +261,10 @@ Geometry::getEnvelope() const
 bool
 Geometry::disjoint(const Geometry* g) const
 {
+    if (hasCurvedTypes() || g->hasCurvedTypes()) {
+        return !intersects(g);
+    }
+
 #if USE_RELATENG
     return operation::relateng::RelateNG::disjoint(this, g);
 #else
@@ -323,13 +327,13 @@ Geometry::intersects(const Geometry* g) const
         return predicate::RectangleIntersects::intersects(*p, *this);
     }
 
-    auto typ = getGeometryTypeId();
-    if (typ == GEOS_CURVEPOLYGON && g->getGeometryTypeId() == GEOS_POINT) {
-        auto loc = locate::SimplePointInAreaLocator::locatePointInSurface(*g->getCoordinate(), *detail::down_cast<const Surface*>(this));
-        return loc != Location::EXTERIOR;
-    } else if (typ == GEOS_POINT && g->getGeometryTypeId() == GEOS_CURVEPOLYGON) {
-        auto loc = locate::SimplePointInAreaLocator::locatePointInSurface(*getCoordinate(), *detail::down_cast<const Surface*>(g));
-        return loc != Location::EXTERIOR;
+    if (hasCurvedTypes() || g->hasCurvedTypes()) {
+        if (isDimensionStrict(Dimension::A) && g->getDimension() == Dimension::P) {
+            return locate::SimplePointInAreaLocator::isAnyPointContained(*g, *this);
+        }
+        if (g->isDimensionStrict(Dimension::A) && getDimension() == Dimension::P) {
+            return locate::SimplePointInAreaLocator::isAnyPointContained(*this, *g);
+        }
     }
 
 #if USE_RELATENG

@@ -58,5 +58,35 @@ void object::test<3>()
     ensure_equals(0, GEOSDisjoint_r(ctxt_, geom1_, geom2_));
 }
 
+template<>
+template<>
+void object::test<4>()
+{
+    set_test_name("MultiSurface / MultiPoint PIP");
+
+    geom1_ = fromWKT("MULTISURFACE(POLYGON ((100 100, 200 100, 200 200, 100 100)), CURVEPOLYGON (COMPOUNDCURVE(CIRCULARSTRING(0 0, 1 1, 2 0), (2 0, 0 0))))");
+    geom2_ = fromWKT("MULTIPOINT ((5000 5000), (0.1556955 0.5355459))");
+
+    ensure_equals(GEOSDisjoint(geom1_, geom2_), 0);
+    ensure_equals(GEOSDisjoint(geom2_, geom1_), 0);
+}
+
+template<>
+template<>
+void object::test<5>()
+{
+    set_test_name("PIP on CurvePolygon with linear shell");
+
+    geom1_ = fromWKT("CURVEPOLYGON ((0 0, 10 0, 10 10, 0 10, 0 0))");
+    geom2_ = fromWKT("POINT (5 5)");
+    geom3_ = fromWKT("POINT (100 100)");
+
+    ensure_equals(GEOSDisjoint(geom1_, geom2_), 0);
+    ensure_equals(GEOSDisjoint(geom2_, geom1_), 0);
+
+    ensure_equals(GEOSDisjoint(geom3_, geom1_), 1);
+    ensure_equals(GEOSDisjoint(geom1_, geom3_), 1);
+}
+
 } // namespace tut
 
