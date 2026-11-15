@@ -67,7 +67,7 @@ template<typename T>
 void ensureNoCurvedComponents(const T& geom)
 {
     if (geom.hasCurvedComponents()) {
-        throw UnsupportedOperationException("Curved geometry types are not supported.");
+        throw UnsupportedOperationException("Curved geometry components are not supported.");
     }
 }
 
@@ -75,6 +75,20 @@ template<typename T>
 void ensureNoCurvedComponents(const T* geom)
 {
     ensureNoCurvedComponents(*geom);
+}
+
+template<typename T>
+void ensureNoCurvedTypes(const T& geom)
+{
+    if (geom.hasCurvedTypes()) {
+        throw UnsupportedOperationException("Curved geometry types are not supported.");
+    }
+}
+
+template<typename T>
+void ensureNoCurvedTypes(const T* geom)
+{
+    ensureNoCurvedTypes(*geom);
 }
 
 
