@@ -284,7 +284,7 @@ public:
 bool
 RectangleIntersects::intersects(const geom::Geometry& geom)
 {
-    util::ensureNoCurvedComponents(geom);
+    util::ensureNoCurvedTypes(geom);
 
     if(!rectEnv.intersects(geom.getEnvelopeInternal())) {
         return false;

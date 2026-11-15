@@ -42,7 +42,7 @@ ConstrainedDelaunayTriangulator::triangulate(const Geometry* geom)
 std::unique_ptr<Geometry>
 ConstrainedDelaunayTriangulator::compute() const
 {
-    util::ensureNoCurvedComponents(inputGeom);
+    util::ensureNoCurvedTypes(inputGeom);
 
     // short circuit empty input case
     if(inputGeom->isEmpty()) {

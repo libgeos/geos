@@ -2,6 +2,7 @@
 // Test Suite for geos::operation::relateng::RelateNG class.
 
 #include <tut/tut.hpp>
+#include <tut/tut_macros.hpp>
 #include <utility.h>
 
 // geos
@@ -950,5 +951,17 @@ void object::test<66>()
     checkContainsWithin(a, b, false);
 }
 
+template<>
+template<>
+void object::test<67>()
+{
+    set_test_name("CurvePolygon with linear shell");
+
+    auto geomA = r.read("CURVEPOLYGON ((0 0, 10 0, 10 10, 0 10, 0 0))");
+    auto geomB = r.read("POINT (5 5)");
+
+    ensure_THROW(RelateNG::intersects(geomA.get(), geomB.get()), geos::util::UnsupportedOperationException);
+    ensure_THROW(RelateNG::intersects(geomB.get(), geomA.get()), geos::util::UnsupportedOperationException);
+}
 
 } // namespace tut

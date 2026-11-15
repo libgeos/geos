@@ -30,7 +30,7 @@ namespace distance {
 std::unique_ptr<TemplateSTRtree<const FacetSequence*>>
 FacetSequenceTreeBuilder::build(const Geometry* g)
 {
-    util::ensureNoCurvedComponents(g);
+    util::ensureNoCurvedTypes(g);
 
     std::unique_ptr<TemplateSTRtree<const FacetSequence*>> tree(new FacetSequenceTree(computeFacetSequences(g)));
 

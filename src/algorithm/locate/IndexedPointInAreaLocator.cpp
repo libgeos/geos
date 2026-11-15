@@ -99,7 +99,7 @@ IndexedPointInAreaLocator::buildIndex(const geom::Geometry& g)
 IndexedPointInAreaLocator::IndexedPointInAreaLocator(const geom::Geometry& g)
     :	areaGeom(g)
 {
-    util::ensureNoCurvedComponents(g);
+    util::ensureNoCurvedTypes(g);
 }
 
 geom::Location
