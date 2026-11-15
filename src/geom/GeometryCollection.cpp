@@ -158,6 +158,7 @@ GeometryCollection::setFlags() const {
     flags.hasM = false;
     flags.hasZ = false;
     flags.hasCurves = false;
+    flags.hasCurvedTypes = false;
 
     for (const auto& geom : geometries) {
         flags.hasPoints |= geom->hasDimension(Dimension::P);
@@ -166,6 +167,7 @@ GeometryCollection::setFlags() const {
         flags.hasM |= geom->hasM();
         flags.hasZ |= geom->hasZ();
         flags.hasCurves |= geom->hasCurvedComponents();
+        flags.hasCurvedTypes |= geom->hasCurvedTypes();
     }
 
     flags.flagsCalculated = true;
@@ -406,6 +408,11 @@ GeometryCollection::compareToSameClass(const Geometry* g) const
 bool GeometryCollection::hasCurvedComponents() const {
     setFlags();
     return flags.hasCurves;
+}
+
+bool GeometryCollection::hasCurvedTypes() const {
+    setFlags();
+    return flags.hasCurvedTypes;
 }
 
 const CoordinateXY*
