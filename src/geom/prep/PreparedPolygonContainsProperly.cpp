@@ -46,7 +46,7 @@ namespace prep { // geos.geom.prep
 bool
 PreparedPolygonContainsProperly::containsProperly(const geom::Geometry* geom)
 {
-    geos::util::ensureNoCurvedComponents(geom);
+    geos::util::ensureNoCurvedTypes(geom);
 
     // Do point-in-poly tests first, since they are cheaper and may result
     // in a quick negative result.

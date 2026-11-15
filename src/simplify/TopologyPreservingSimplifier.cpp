@@ -216,7 +216,7 @@ TopologyPreservingSimplifier::TopologyPreservingSimplifier(const Geometry* geom)
     inputGeom(geom),
     lineSimplifier(new TaggedLinesSimplifier())
 {
-    util::ensureNoCurvedComponents(geom);
+    util::ensureNoCurvedTypes(geom);
 }
 
 /*public*/

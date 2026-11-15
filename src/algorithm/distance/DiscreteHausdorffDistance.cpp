@@ -103,8 +103,8 @@ DiscreteHausdorffDistance::computeOrientedDistance(
     const geom::Geometry& geom,
     PointPairDistance& p_ptDist)
 {
-    util::ensureNoCurvedComponents(discreteGeom);
-    util::ensureNoCurvedComponents(geom);
+    util::ensureNoCurvedTypes(discreteGeom);
+    util::ensureNoCurvedTypes(geom);
 
     // can't calculate distance with empty
     if (discreteGeom.isEmpty() || geom.isEmpty()) return;

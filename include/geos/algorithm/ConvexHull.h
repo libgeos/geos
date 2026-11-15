@@ -181,7 +181,7 @@ public:
         : inputGeom(newGeometry)
         , geomFactory(newGeometry->getFactory())
     {
-      util::ensureNoCurvedComponents(inputGeom);
+      util::ensureNoCurvedTypes(inputGeom);
     };
 
     ~ConvexHull() {};

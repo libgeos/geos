@@ -108,7 +108,7 @@ CoverageCleaner::CoverageCleaner(std::vector<const Geometry*>& p_coverage)
     , snappingDistance(computeDefaultSnappingDistance(p_coverage))
 {
     for (const auto& geom : coverage) {
-        util::ensureNoCurvedComponents(geom);
+        util::ensureNoCurvedTypes(geom);
     }
 }
 

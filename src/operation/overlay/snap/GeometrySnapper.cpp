@@ -90,7 +90,7 @@ public:
 GeometrySnapper::GeometrySnapper(const Geometry& g)
     : srcGeom(g)
 {
-    util::ensureNoCurvedComponents(g);
+    util::ensureNoCurvedTypes(g);
 }
 
 /*private*/
