@@ -4,7 +4,8 @@
 - Fixes/Improvements:
   - Arc noding: fix failure with endpoint intersections (GH-1513, Dan Baston)
   - Arc noding: handle degenerate arcs with repeated points (GH-1584, Alejandro Pacheco and Dan Baston)
-  - Make GeometrySplitter able to split MultiSurface inputs (GH-1518, Dan Baston)
+  - GeometrySplitter: add ability to split MultiSurface inputs (GH-1518, Dan Baston)
+  - GeometrySplitter: fix result when splitting CurvePolygon inputs having only linear rings (GH-1609, Dan Baston)
   - GEOSGridIntersectionFractions: Set cells outside geometry bounding box to zero (GH-1532, Dan Baston)
   - GEOSGridIntersectionFractions: Improve robustness (GH-1589, Dan Baston, Alejandro Pacheco)
   - Skip testing FE_INVALID from unit-geom-Envelope for some Clang builds (GH-1555, Mike Taves)
@@ -22,6 +23,8 @@
   - Distance: avoid erroneously large distance between arc and segment (GH-1577, Dan Baston and Jeroen Bloemscheer)
   - GeometryFactory: fix return type from buildGeometry with collection inputs (GH-1580, Alejandro Pacheco)
   - RelateNG: fix crash with on GeometryCollection with empty Polygon (GH-1590, Dan Baston)
+  - RelateNG: fix crash with on Polygon with empty hole (GH-1607, Dan Baston)
+  - RelateNG: fix "Cannot compute the quadrant" error for certain inputs with repeated points (GH-1603, Dan Baston)
 
 ## Changes in 3.15.0
 2026-09-01
