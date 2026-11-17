@@ -22,6 +22,7 @@ using geos::geom::CompoundCurve;
 using geos::geom::Curve;
 using geos::geom::CoordinateXY;
 using geos::geom::CoordinateSequence;
+using geos::geom::Envelope;
 using geos::geom::SimpleCurve;
 
 namespace tut {
@@ -205,11 +206,12 @@ void object::test<3>()
     auto cc3 = cc_->reverse();
 }
 
-// GeometryFilter
 template<>
 template<>
 void object::test<4>()
 {
+    set_test_name("GeometryFilter");
+
     struct TestGeometryFilter : public geos::geom::GeometryFilter {
         void filter_ro(const geos::geom::Geometry* g) override
         {
@@ -228,11 +230,12 @@ void object::test<4>()
     ensure_equals(tgf.last_arg, cc_.get());
 }
 
-// GeometryComponentFilter RO
 template<>
 template<>
 void object::test<5>()
 {
+    set_test_name("GeometryComponentFilter RO");
+
     struct TestGeometryComponentFilter : public geos::geom::GeometryComponentFilter {
         void filter_ro(const geos::geom::Geometry* g) override
         {
@@ -251,11 +254,12 @@ void object::test<5>()
     ensure_equals(tgf.last_arg, cc_.get());
 }
 
-// CoordinateFilter RO
 template<>
 template<>
 void object::test<6>()
 {
+    set_test_name("CoordinateFilter RO");
+
     struct TestCoordinateFilter : public geos::geom::CoordinateFilter {
         void filter_ro(const geos::geom::Coordinate* x) override
         {
@@ -280,11 +284,12 @@ void object::test<6>()
     ensure_equals(tcf.coords[3], CoordinateXY(2, 0));
 }
 
-// CoordinateFilter RW
 template<>
 template<>
 void object::test<7>()
 {
+    set_test_name("CoordinateFilter RW");
+
     struct TestCoordinateFilter : public geos::geom::CoordinateFilter {
         void filter_rw(geos::geom::Coordinate* c) const override
         {
@@ -313,11 +318,12 @@ void object::test<7>()
     ensure_same(newCoords->getOrdinate(4, CoordinateSequence::Z), geos::DoubleNotANumber);
 }
 
-// CoordinateSequenceFilter RO
 template<>
 template<>
 void object::test<8>()
 {
+    set_test_name("CoordinateSequenceFilter RO");
+
     struct TestCoordinateSequenceFilter : public geos::geom::CoordinateSequenceFilter {
         void filter_ro(const CoordinateSequence& seq, std::size_t i) override
         {
@@ -478,6 +484,68 @@ void object::test<14>()
         ensure_equals(*cc_->getCurveN(i)->getEnvelopeInternal(), *expected->getCurveN(i)->getEnvelopeInternal());
     }
     ensure_equals("length", cc_->getLength(), expected->getLength(), 1e-12);
+}
+
+template<>
+template<>
+void object::test<15>()
+{
+    set_test_name("CoordinateSequenceFilter RW");
+
+    struct TestCoordinateSequenceFilter : public geos::geom::CoordinateSequenceFilter {
+        void filter_rw(CoordinateSequence& seq, std::size_t i) override
+        {
+            if (i == 0) {
+                seq.reverse();
+            }
+
+            auto& pt = seq.getAt<CoordinateXY>(i);
+            pt.x *= 2;
+            pt.y *= 2;
+        }
+
+        bool isDone() const override
+        {
+            return false;
+        }
+
+        bool isGeometryChanged() const override
+        {
+            return true;
+        }
+
+        bool done = false;
+    };
+
+    TestCoordinateSequenceFilter tcsf;
+
+    // Reverse and scale the components in two-curve ring
+    {
+        auto geom  = wktreader_.read("COMPOUNDCURVE (CIRCULARSTRING (0 0, 1 1, 2 0), (2 0, 0 0))");
+        Envelope origEnv = *geom->getEnvelopeInternal(); // force generation
+        ensure_equals(origEnv.getMinX(), 0);
+        ensure_equals(origEnv.getMaxX(), 2);
+        ensure_equals(origEnv.getMinY(), 0);
+        ensure_equals(origEnv.getMaxY(), 1);
+
+        geom->apply_rw(tcsf);
+        auto expected = wktreader_.read("COMPOUNDCURVE (CIRCULARSTRING (4 0, 2 2, 0 0), (0 0, 4 0))");
+        ensure_equals_exact_geometry_xyzm(geom.get(), expected.get(), 0);
+
+        Envelope modifiedEnv = *geom->getEnvelopeInternal();
+        ensure_equals(modifiedEnv.getMinX(), 0);
+        ensure_equals(modifiedEnv.getMaxX(), 4);
+        ensure_equals(modifiedEnv.getMinY(), 0);
+        ensure_equals(modifiedEnv.getMaxY(), 2);
+    }
+
+    // Try reverse the components in a two-curve line. Result would be a CompoundCurve whose curves are not
+    // contiguous, so an exception is thrown.
+    {
+        auto geom = wktreader_.read("COMPOUNDCURVE ((1 1, 2 2), (2 2, 3 3))");
+        ensure_THROW(geom->apply_rw(tcsf), geos::util::GEOSException);
+    }
+
 }
 
 }
