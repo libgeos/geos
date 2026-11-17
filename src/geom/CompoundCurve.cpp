@@ -90,9 +90,19 @@ CompoundCurve::apply_rw(const CoordinateFilter* cf)
 }
 
 void
-CompoundCurve::apply_rw(CoordinateSequenceFilter&)
+CompoundCurve::apply_rw(CoordinateSequenceFilter& csf)
 {
-    throw util::UnsupportedOperationException();
+    bool geometryChanged = false;
+    for (auto& curve : curves) {
+        curve->apply_rw(csf);
+        geometryChanged |= csf.isGeometryChanged();
+    }
+
+    validateConstruction();
+
+    if (geometryChanged) {
+        geometryChangedAction();
+    }
 }
 
 std::unique_ptr<CompoundCurve>
