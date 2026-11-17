@@ -548,4 +548,26 @@ void object::test<15>()
 
 }
 
+template<>
+template<>
+void object::test<16>()
+{
+    set_test_name("CoordinateFilter cannot produce discontinuous CompoundCurve");
+
+    struct TestCoordinateFilter : public geos::geom::CoordinateFilter {
+        void filter_rw(geos::geom::Coordinate* c) const override
+        {
+            c->x += count;
+            count += 1.0;
+        }
+
+        mutable double count = 0.0;
+    };
+
+    TestCoordinateFilter filter;
+
+    auto geom = wktreader_.read("COMPOUNDCURVE ((0 0, 1 1), (1 1, 2 2))");
+    ensure_THROW(geom->apply_rw(&filter), geos::util::GEOSException);
+}
+
 }

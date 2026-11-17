@@ -87,6 +87,7 @@ CompoundCurve::apply_rw(const CoordinateFilter* cf)
     for (auto& curve : curves) {
         curve->apply_rw(cf);
     }
+    validateConstruction();
 }
 
 void
