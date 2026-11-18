@@ -169,7 +169,7 @@ InputGeometry::getLocator(uint8_t geomIndex)
 {
     if (geomIndex == 0) {
         if (ptLocatorA == nullptr) {
-            if (geom[0]->hasCurvedComponents()) {
+            if (geom[0]->hasCurvedTypes()) {
                 ptLocatorA = std::make_unique<SimplePointInAreaLocator>(*getGeometry(geomIndex));
             } else {
                 ptLocatorA = std::make_unique<IndexedPointInAreaLocator>(*getGeometry(geomIndex));
@@ -179,7 +179,7 @@ InputGeometry::getLocator(uint8_t geomIndex)
     }
     else {
         if (ptLocatorB == nullptr) {
-            if (geom[1]->hasCurvedComponents()) {
+            if (geom[1]->hasCurvedTypes()) {
                 ptLocatorB = std::make_unique<SimplePointInAreaLocator>(*getGeometry(geomIndex));
             } else {
                 ptLocatorB = std::make_unique<IndexedPointInAreaLocator>(*getGeometry(geomIndex));
