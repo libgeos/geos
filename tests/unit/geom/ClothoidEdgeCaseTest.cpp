@@ -17,8 +17,10 @@
 #include <geos/geom/GeometryFactory.h>
 #include <geos/geom/LineString.h>
 #include <geos/geom/MultiCurve.h>
+#include <geos/geom/prep/PreparedGeometryFactory.h>
 #include <geos/geom/util/CurveBuilder.h>
 #include <geos/geom/util/GeometryTransformer.h>
+#include <geos/operation/buffer/BufferOp.h>
 #include <geos/io/ParseException.h>
 #include <geos/io/WKBReader.h>
 #include <geos/io/WKBWriter.h>
@@ -625,6 +627,113 @@ void object::test<21>()
         ensure_THROW(fromHex(hex.substr(0, 10 + 2 * bytes)), ParseException);
     }
     ensure(fromHex(hex.substr(0, 10))->isEmpty());
+}
+
+template<>
+template<>
+void object::test<22>()
+{
+    set_test_name("length is planar when the frame has Z");
+
+    // Plan directions are an orthonormal pair, so the plan length is |t1-t0|.
+    // The Z component of u makes the 3D speed larger than 1.
+    const ClothoidReferenceLocation tilted{
+        Coordinate(0.0, 0.0, 1.0), Coordinate(1.0, 0.0, 1.0), Coordinate(0.0, 1.0, 0.0)};
+    auto curve = factory_->createClothoid(tilted, 2.0, -1.0, 3.0, true, false,
+                                          geos::DoubleNotANumber, geos::DoubleNotANumber);
+    ensure_equals("plan length", curve->getLength(), 4.0, 1e-12);
+
+    // v is shorter in the plane than u, so this is not a plan similarity.
+    // The 3D frame is orthonormal and the old length was |t1-t0| = 4.
+    const ClothoidReferenceLocation shearedUp{
+        Coordinate(0.0, 0.0, 1.0), Coordinate(1.0, 0.0, 0.0), Coordinate(0.0, 0.6, 0.8)};
+    auto lifted = factory_->createClothoid(shearedUp, 2.0, -1.0, 3.0, true, false,
+                                           geos::DoubleNotANumber, geos::DoubleNotANumber);
+    ensure_equals("lifted plan length", lifted->getLength(), 3.78748389840030, 1e-9);
+}
+
+template<>
+template<>
+void object::test<23>()
+{
+    set_test_name("prepared rectangle contains does not recurse");
+
+    auto rect = reader_.read("POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0))");
+    auto prep = geos::geom::prep::PreparedGeometryFactory::prepare(rect.get());
+    auto inside = iso(at(2.0, 2.0), 2.0, 0.0, 2.0);
+    ensure_THROW(prep->contains(inside.get()), UnsupportedOperationException);
+
+    auto arc = reader_.read("CIRCULARSTRING (2 2, 3 3, 4 2)");
+    ensure_THROW(prep->contains(arc.get()), UnsupportedOperationException);
+
+    auto straight = reader_.read("COMPOUNDCURVE ((1 1, 2 1), (2 1, 2 2))");
+    ensure(prep->contains(straight.get()));
+    auto onEdge = reader_.read("COMPOUNDCURVE ((0 0, 5 0), (5 0, 10 0))");
+    ensure(!prep->contains(onEdge.get()));
+    auto line = reader_.read("LINESTRING (1 1, 2 2)");
+    ensure(prep->contains(line.get()));
+}
+
+template<>
+template<>
+void object::test<24>()
+{
+    set_test_name("truncated clothoid WKB is not an empty clothoid");
+
+    // Type 22, then a point header with no coordinates.
+    const unsigned char pointHeader[] = {
+        0x01, 0x16, 0x00, 0x00, 0x00, 0x01, 0x01, 0x00, 0x00, 0x00
+    };
+    geos::io::WKBReader reader(*factory_);
+    ensure_THROW(reader.read(pointHeader, sizeof(pointHeader)), ParseException);
+
+    // Leftover bytes that are not a byte order.
+    const unsigned char junk[] = {0x01, 0x16, 0x00, 0x00, 0x00, 0x41, 0x42, 0x43};
+    ensure_THROW(reader.read(junk, sizeof(junk)), ParseException);
+
+    // A nested empty clothoid is still distinct from the following point.
+    auto collection = reader_.read("GEOMETRYCOLLECTION (CLOTHOID EMPTY, POINT (1 2))");
+    geos::io::WKBWriter writer;
+    std::stringstream hex;
+    writer.writeHEX(*collection, hex);
+    auto back = fromHex(hex.str());
+    ensure(collection->equalsIdentical(back.get()));
+    ensure_equals(back->getNumGeometries(), 2u);
+    ensure(back->getGeometryN(0)->isEmpty());
+    ensure_equals(back->getGeometryN(0)->getGeometryTypeId(), geos::geom::GEOS_CLOTHOID);
+}
+
+template<>
+template<>
+void object::test<25>()
+{
+    set_test_name("buffer names the clothoid");
+
+    auto curve = spiral();
+    try {
+        geos::operation::buffer::BufferOp::bufferOp(curve.get(), 1.0);
+        ensure(false);
+    }
+    catch (const UnsupportedOperationException& ex) {
+        const std::string message(ex.what());
+        ensure(message.find("Clothoid") != std::string::npos);
+        ensure(message.find("GeometryGraph") == std::string::npos);
+    }
+}
+
+template<>
+template<>
+void object::test<26>()
+{
+    set_test_name("closed compound curve with a clothoid is not normalized from its chord");
+
+    // The return chord makes a degenerate ring. The curve has positive area,
+    // so a chord isCCW test would leave the counter-clockwise ring unreversed.
+    ensure_THROW(closedSpiral()->normalize(), UnsupportedOperationException);
+
+    auto open = spiral();
+    open->normalize();
+    ensure(!open->isEmpty());
 }
 
 } // namespace tut

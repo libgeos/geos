@@ -3089,6 +3089,7 @@ extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyCircularString(void);
 * Creates an empty Clothoid geometry.
 * \return A newly allocated Clothoid geometry. NULL on exception.
 * Caller is responsible for freeing with GEOSGeom_destroy().
+* \since 3.16
 */
 extern GEOSGeometry GEOS_DLL *GEOSGeom_createEmptyClothoid(void);
 

@@ -3258,7 +3258,8 @@ extern "C" {
                     auto typeId = geoms[i]->getGeometryTypeId();
                     if (typeId == geos::geom::GEOS_LINESTRING ||
                         typeId == geos::geom::GEOS_CIRCULARSTRING ||
-                        typeId == geos::geom::GEOS_COMPOUNDCURVE) {
+                        typeId == geos::geom::GEOS_COMPOUNDCURVE ||
+                        typeId == geos::geom::GEOS_CLOTHOID) {
                         curvevec[i] = static_cast<const Curve*>(geoms[i]);
                     }
                     else {

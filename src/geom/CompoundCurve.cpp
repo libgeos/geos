@@ -379,6 +379,16 @@ CompoundCurve::normalize()
 void
 CompoundCurve::normalizeClosed()
 {
+    // A clothoid section stores only its endpoints, so the chord ring has
+    // no area and isCCW cannot see the curve. Reversing from that sample
+    // leaves a counter-clockwise ring unreversed.
+    for (const auto& curve : curves) {
+        if (curve->getGeometryTypeId() == GEOS_CLOTHOID) {
+            throw util::UnsupportedOperationException(
+                "CompoundCurve normalize is not implemented for a clothoid section");
+        }
+    }
+
     std::size_t minCurve = 0;
     std::size_t minInd = 0;
     const CoordinateXY* minPt = nullptr;

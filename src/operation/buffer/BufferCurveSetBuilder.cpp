@@ -159,8 +159,8 @@ BufferCurveSetBuilder::add(const Geometry& g)
         return;
     }
 
-    std::string out = typeid(g).name();
-    throw util::UnsupportedOperationException("GeometryGraph::add(Geometry &): unknown geometry type: " + out);
+    throw util::UnsupportedOperationException(
+        "Buffer is not implemented for " + g.getGeometryType());
 }
 
 /*private*/

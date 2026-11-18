@@ -17,7 +17,11 @@
  **********************************************************************/
 
 #include <geos/operation/predicate/RectangleContains.h>
+#include <geos/geom/CompoundCurve.h>
 #include <geos/geom/Geometry.h>
+#include <geos/geom/GeometryCollection.h>
+#include <geos/geom/Surface.h>
+#include <geos/util/UnsupportedOperationException.h>
 #include <geos/geom/Envelope.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/Polygon.h>
@@ -50,8 +54,9 @@ RectangleContains::contains(const Geometry& geom)
 bool
 RectangleContains::isContainedInBoundary(const Geometry& geom)
 {
-    // polygons can never be wholly contained in the boundary
-    if(dynamic_cast<const geom::Polygon*>(&geom)) {
+    // Areas cannot lie wholly in the boundary. Polygon and CurvePolygon are
+    // both Surfaces; a curve polygon is not a Polygon.
+    if(dynamic_cast<const geom::Surface*>(&geom)) {
         return false;
     }
     if(const Point* p = dynamic_cast<const Point*>(&geom)) {
@@ -60,15 +65,33 @@ RectangleContains::isContainedInBoundary(const Geometry& geom)
     if(const LineString* l = dynamic_cast<const LineString*>(&geom)) {
         return isLineStringContainedInBoundary(*l);
     }
-
-    for(std::size_t i = 0, n = geom.getNumGeometries(); i < n; ++i) {
-        const Geometry& comp = *(geom.getGeometryN(i));
-        if(!isContainedInBoundary(comp)) {
-            return false;
+    // A straight compound curve is a chain of lines. A curved one is not a
+    // chord: reporting containment from its endpoints would be wrong.
+    if(const CompoundCurve* curve = dynamic_cast<const CompoundCurve*>(&geom)) {
+        if(curve->hasCurvedComponents()) {
+            throw util::UnsupportedOperationException(
+                "Rectangle contains is not implemented for curved geometries");
         }
+        for(std::size_t i = 0, n = curve->getNumCurves(); i < n; ++i) {
+            if(!isContainedInBoundary(*curve->getCurveN(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+    if(const GeometryCollection* collection = dynamic_cast<const GeometryCollection*>(&geom)) {
+        for(std::size_t i = 0, n = collection->getNumGeometries(); i < n; ++i) {
+            if(!isContainedInBoundary(*collection->getGeometryN(i))) {
+                return false;
+            }
+        }
+        return true;
     }
 
-    return true;
+    // CircularString and Clothoid are not LineStrings. Falling through to
+    // getGeometryN() recurses on the geometry itself.
+    throw util::UnsupportedOperationException(
+        "Rectangle contains is not implemented for curved geometries");
 }
 
 /*private*/

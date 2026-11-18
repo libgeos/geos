@@ -35,8 +35,9 @@ namespace tut {
 // The worst point in the table misses by 2e-16 R. The cases far from the
 // inflection include placements that CLOTHOID (k0, k1, length) produces for
 // nearly circular arcs.
-// Lengths and curvatures are checked to 1e-12 relative, and headings to
-// 1e-12 (1 + turn) because the heading grows with the turn.
+// Lengths and curvatures are checked to 1e-12 relative. Length is the plan
+// length. Headings are reduced into (-pi, pi], so the tolerance is an
+// absolute angle and is not scaled by the unreduced turn.
 struct OracleCase {
     const char* name;
     bool hasZ;
@@ -171,7 +172,7 @@ const OracleCase ORACLE_CASES[] = {
      {26582645.471349612, 26583066.20683912, 6666192.147864391, 6666421.996714643},
      {{0.25, 26582769.17332922, 6666207.691653658}, {0.5, 26582885.184118696, 6666253.35658404}, {0.75, 26582986.290728632, 6666326.3034315845}}},
     {"tilted 3D similarity", true, {0.0, 0.0, 1.0}, {1.0, 0.0, 0.0}, {0.0, 0.6, 0.8}, 2.0, -1.0, 3.0,
-     {-0.9984386298732051, -0.02497211208212836, 0.9667038505571622}, {2.6419211461129612, 0.6163825557959421, 1.8218434077279229}, 4.0,
+     {-0.9984386298732051, -0.02497211208212836, 0.9667038505571622}, {2.6419211461129612, 0.6163825557959421, 1.8218434077279229}, 3.78748389840030,
      0.07525071945889673, 0.8982125791839706, -0.15226646572803404, 1.3574705131614133,
      {-0.9984386298732051, 2.6419211461129612, -0.02497211208212836, 0.6163825557959421},
      {{0.25, 0.0, 0.0}, {0.5, 0.9984386298732051, 0.02497211208212836}, {0.75, 1.950575376400689, 0.1964568568508407}}},
@@ -196,7 +197,7 @@ const OracleCase ORACLE_CASES[] = {
      {0.9040362211165338, 7.095963778883466, -1.9804815583638538, 3.9804815583638535},
      {{0.25, 3.0059707061328993, 0.6815338080486764}, {0.5, 2.289984701689552, -1.5346897741851429}, {0.75, 2.0091899786587093, -1.3146335058348473}}},
     {"tilted 3D placement", true, {1.0, 2.0, 3.0}, {1.0, 0.0, 0.5}, {0.0, 1.0, 0.0}, 2.0, 0.0, 3.0,
-     {1.0, 2.0, 3.0}, {3.6419211461129612, 3.0273042596599034, 4.320960573056481}, 3.285155617550895,
+     {1.0, 2.0, 3.0}, {3.6419211461129612, 3.0273042596599034, 4.320960573056481}, 3.0,
      0.0, 1.125, 0.0, 0.75,
      {1.0, 3.6419211461129612, 2.0, 3.0273042596599034},
      {{0.25, 1.7496292962828692, 2.01757191857836}, {0.5, 2.4881781381788683, 2.1398324500653794}, {0.75, 3.1615534564127508, 2.461205566607571}}},
@@ -312,11 +313,6 @@ struct test_clothoidoracle_data {
         return o + std::max(u, v) * std::max(std::abs(c.t0), std::abs(c.t1));
     }
 
-    static double turn(const OracleCase& c)
-    {
-        return std::abs(c.t1 * c.t1 - c.t0 * c.t0) / (2.0 * c.scale * c.scale);
-    }
-
     static void near(const std::string& what, double got, double expected, double tol)
     {
         ensure(what + ": got " + std::to_string(got) + " expected " + std::to_string(expected),
@@ -356,7 +352,7 @@ void object::test<1>()
             near(name + " end z", e.z, c.end[2], tol);
         }
         nearRelative(name + " length", curve->getLength(), c.length);
-        const double htol = 1e-12 * (1.0 + turn(c));
+        const double htol = 1e-9;
         near(name + " start heading", curve->getStartHeading(), c.startHeading, htol);
         near(name + " end heading", curve->getEndHeading(), c.endHeading, htol);
     }
@@ -445,7 +441,7 @@ void object::test<5>()
         if (c.t0 == 0.0 && std::hypot(c.u[0], c.u[1]) == 0.0) {
             continue;
         }
-        const double htol = 1e-12 * (1.0 + turn(c));
+        const double htol = 1e-9;
         const double back = std::remainder(reversed->getEndHeading() - (c.startHeading + geos::MATH_PI),
                                            2.0 * geos::MATH_PI);
         near(name + " reversed end heading", back, 0.0, htol);

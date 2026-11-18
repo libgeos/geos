@@ -172,4 +172,35 @@ void object::test<6> ()
     }
 }
 
+// A clothoid is a curve. Dropping it leaves both results at 0.
+template<>
+template<>
+void object::test<7> ()
+{
+    constexpr int size = 2;
+    const char* wkt =
+        "CLOTHOID (REFERENCELOCATION AFFINEPLACEMENT (LOCATION (0 0), "
+        "REFERENCEDIRECTIONS (VECTOR (1 0), VECTOR (0 1))), "
+        "SCALEFACTOR 10, STARTDISTANCE 0, ENDDISTANCE 5)";
+    GEOSGeometry* geoms[size];
+    geoms[0] = GEOSGeomFromWKT(wkt);
+    geoms[1] = GEOSGeomFromWKT(wkt);
+    ensure(nullptr != geoms[0]);
+    ensure(nullptr != geoms[1]);
+
+    size_t* result = GEOSMinimumSpanningTree(geoms, size);
+    ensure(nullptr != result);
+
+    int count = 0;
+    for (int i = 0; i < size; ++i) {
+        if (result[i] > 0) count++;
+    }
+    ensure_equals(count, 1);
+
+    GEOSFree(result);
+    for (auto& input : geoms) {
+        GEOSGeom_destroy(input);
+    }
+}
+
 } // namespace tut

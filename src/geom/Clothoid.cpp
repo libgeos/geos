@@ -177,30 +177,33 @@ pointOnFrame(const Frame& frame, double travel, double& x, double& y, double& z,
 }
 
 bool
+planAngle(const Coordinate& u, const Coordinate& v,
+          double& uLen, double& vLen, double& cosine, double& sine);
+
+bool
 similarityScale(const Frame& frame, double& scale, int& orientation)
 {
-    const double uLen = std::hypot(frame.ux, frame.uy, frame.uz);
-    const double vLen = std::hypot(frame.vx, frame.vy, frame.vz);
-    if (!(uLen > 0.0) || !(vLen > 0.0)) {
+    // Plan length and plan curvature see only the XY part of the placement.
+    // A Z component changes the 3D speed but not the plan image, and
+    // Geometry::getLength elsewhere in GEOS is the plan length.
+    double uLen = 0.0;
+    double vLen = 0.0;
+    double cosine = 0.0;
+    double sine = 0.0;
+    const Coordinate u(frame.ux, frame.uy);
+    const Coordinate v(frame.vx, frame.vy);
+    if (!planAngle(u, v, uLen, vLen, cosine, sine)) {
         return false;
     }
     // Both tests are relative, so that they hold at any placement scale. The
     // angle is taken from unit directions, so that it neither overflows nor
     // underflows.
-    const double ux = frame.ux / uLen;
-    const double uy = frame.uy / uLen;
-    const double uz = frame.uz / uLen;
-    const double vx = frame.vx / vLen;
-    const double vy = frame.vy / vLen;
-    const double vz = frame.vz / vLen;
-    const double cosine = ux * vx + uy * vy + uz * vz;
     if (std::abs(uLen - vLen) > SIMILARITY_RELATIVE * std::max(uLen, vLen)
             || std::abs(cosine) > SIMILARITY_RELATIVE) {
         return false;
     }
     scale = uLen;
-    const double crossZ = ux * vy - uy * vx;
-    orientation = (crossZ < 0.0) ? -1 : 1;
+    orientation = (sine < 0.0) ? -1 : 1;
     return true;
 }
 
@@ -243,8 +246,7 @@ speedAt(const Frame& frame, double t)
     algorithm::clothoid::halfSquarePhase(t, frame.scale, c, s);
     const double dx = c * frame.ux + s * frame.vx;
     const double dy = c * frame.uy + s * frame.vy;
-    const double dz = c * frame.uz + s * frame.vz;
-    return std::hypot(dx, dy, dz);
+    return std::hypot(dx, dy);
 }
 
 // Imaginary distance in heading from the real axis to the nearest zero of
@@ -254,9 +256,9 @@ speedAt(const Frame& frame, double t)
 double
 speedAnalyticRadius(const Frame& frame)
 {
-    const double uu = frame.ux * frame.ux + frame.uy * frame.uy + frame.uz * frame.uz;
-    const double vv = frame.vx * frame.vx + frame.vy * frame.vy + frame.vz * frame.vz;
-    const double uv = frame.ux * frame.vx + frame.uy * frame.vy + frame.uz * frame.vz;
+    const double uu = frame.ux * frame.ux + frame.uy * frame.uy;
+    const double vv = frame.vx * frame.vx + frame.vy * frame.vy;
+    const double uv = frame.ux * frame.vx + frame.uy * frame.vy;
     const double big = 0.5 * (uu + vv) + std::hypot(0.5 * (uu - vv), uv);
     if (!(big > 0.0)) {
         return 0.0;
@@ -469,6 +471,8 @@ Clothoid::getLength() const
         return 0.0;
     }
     Frame frame = frameOf(getReferenceLocation(), m_scale, m_t0, m_t1, m_startM, m_endM);
+    // Plan arc length, as LineString and CircularString report it. A Z
+    // component of the reference directions does not add to the length.
     double scale = 1.0;
     int orientation = 1;
     if (similarityScale(frame, scale, orientation)) {

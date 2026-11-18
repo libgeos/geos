@@ -469,19 +469,19 @@ isGeometryWkbType(uint32_t base)
 std::unique_ptr<Clothoid>
 WKBReader::readClothoid()
 {
-    // Empty omits the reference-location body. A following geometry also
-    // starts with a byte order and a type word, so that header is not consumed.
-    // A non-empty body is at least a placement header, so a byte order with
-    // fewer bytes than a header after it is a truncated placement.
+    // Empty omits the reference-location body. ISO WKB has no empty flag, so
+    // a clothoid nested in a collection is empty when the next bytes are
+    // another geometry rather than an affine placement. At the top level
+    // there is no following geometry: leftover bytes are a truncated or
+    // corrupt body, not an empty clothoid. A following geometry header is
+    // 5 bytes, so fewer leftover bytes cannot be one.
     const int clothoidOrder = dis.getOrder();
-    if (dis.size() < 5) {
-        if (dis.size() > 0) {
-            const unsigned char orderByte = dis.peekByte(0);
-            if (orderByte == WKBConstants::wkbXDR || orderByte == WKBConstants::wkbNDR) {
-                throw ParseException("Unexpected EOF parsing WKB");
-            }
-        }
+    const bool nested = parseDepth_ > 1;
+    if (dis.size() == 0) {
         return factory.createClothoid(hasZ, hasM);
+    }
+    if (dis.size() < 5) {
+        throw ParseException("Unexpected EOF parsing WKB");
     }
 
     const unsigned char nextOrderByte = dis.peekByte(0);
@@ -494,7 +494,7 @@ WKBReader::readClothoid()
     const uint32_t nextType = dis.peekUnsigned(1, nextOrder);
     const uint32_t nextBase = (nextType & 0xffffu) % 1000u;
     if (nextBase != static_cast<uint32_t>(WKBConstants::wkbAffinePlacement)) {
-        if (isGeometryWkbType(nextBase)) {
+        if (nested && isGeometryWkbType(nextBase)) {
             return factory.createClothoid(hasZ, hasM);
         }
         throw ParseException("CLOTHOID WKB requires an affine placement");

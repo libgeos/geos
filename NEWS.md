@@ -5,17 +5,15 @@
   - Clothoid WKT/WKB (ISO type 22)
   - Add DirectedHausdorffDistance and C API GEOSDirectedHausdorffDistance /
     GEOSSymmetricHausdorffDistance (Martin Davis, Jeroen Bloemscheer, Dan Baston)
+  - Expose code revision: GEOS_REVISION, GEOSrevision, geos-config --revision
+    (GH-1446 Sandro Santilli)
+  - GEOSisSimpleWithParams (GH-1543 Sandro Santilli)
 
 - Fixes/Improvements:
   - Curve overlay robustness improvements (GH-1513, Dan Baston)
   - GeometrySplitter: Allow splitting a MultiSurface (GH-1520, Dan Baston)
   - GEOSGridIntersectionFractions: Set cells outside geometry bounding box to zero (GH-1532, Dan Baston)
   - GEOSisSimpleDetail returns locations with input SRID (Sandro Santilli)
-
-- New things:
-  - Expose code revision: GEOS_REVISION, GEOSrevision, geos-config --revision
-    (GH-1446 Sandro Santilli)
-  - GEOSisSimpleWithParams (GH-1543 Sandro Santilli)
 
 ## Changes in 3.15.0
 2026-09-01
