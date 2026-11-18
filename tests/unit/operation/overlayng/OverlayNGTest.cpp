@@ -856,4 +856,19 @@ void object::test<65>()
     testOverlay(a, a, a, OverlayNG::INTERSECTION, 0);
 }
 
+template<>
+template<>
+void object::test<66>()
+{
+    set_test_name("Union of CurvePolygon with CurvePolygon containing only linear edges");
+    // https://github.com/libgeos/geos/issues/1613
+
+    std::string a = "CURVEPOLYGON (COMPOUNDCURVE ((2.2174 14.391, 2.2167 14.391, 2.2163 14.3916, 2.2171 14.3923), CIRCULARSTRING (2.2171 14.3923, 2.2175 14.3918, 2.2174 14.391)))";
+    std::string b = "CURVEPOLYGON ((2.2167 14.391, 2.2158 14.3911, 2.2163 14.3916, 2.2167 14.391))";
+
+    std::string exp = "CURVEPOLYGON (COMPOUNDCURVE ((2.2174 14.391, 2.2167 14.391, 2.2158 14.3911, 2.2163 14.3916, 2.2171 14.3923), CIRCULARSTRING (2.2171 14.3923, 2.2175 14.3918, 2.2174 14.391)))";
+
+    testOverlay(a, b, exp, OverlayNG::UNION, 0);
+}
+
 } // namespace tut
