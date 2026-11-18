@@ -238,17 +238,38 @@ RelateGeometry::locateWithDim(const CoordinateXY* pt)
 bool
 RelateGeometry::isSelfNodingRequired() const
 {
-    GeometryTypeId typeId = geom->getGeometryTypeId();
-    if (typeId == GEOS_POINT
-        || typeId == GEOS_MULTIPOINT
-        || typeId == GEOS_POLYGON
-        || typeId == GEOS_MULTIPOLYGON)
-    {
-         return false;
-     }
-    //-- a GC with a single polygon does not need noding
-    if (hasAreas && geom->getNumGeometries() == 1)
+    // Geometries with only points do not need noding
+    if (!hasEdges()) {
         return false;
+    }
+
+    // https://github.com/libgeos/geos/issues/1558
+    if (isPolygonalNoHoles(geom)) {
+        return false;
+    }
+
+    // TODO: could avoid self-noding GC with single polygon with no holes
+    return true;
+}
+
+/* private static */
+bool
+RelateGeometry::isPolygonalNoHoles(const Geometry* geom)
+{
+    const auto typ = geom->getGeometryTypeId();
+    if (!(typ == GEOS_POLYGON || typ == GEOS_MULTIPOLYGON)) {
+        return false;
+    }
+
+    // test if any Polygon element has a hole
+    for (std::size_t i = 0; i < geom->getNumGeometries(); i++)
+    {
+        const Surface* surf = detail::down_cast<const Surface*>(geom->getGeometryN(i));
+        if (surf->getNumInteriorRing() > 0) {
+            return false;
+        }
+    }
+
     return true;
 }
 

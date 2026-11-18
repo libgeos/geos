@@ -132,6 +132,8 @@ private:
         std::vector<const SegmentString*>& segStrings,
         std::vector<std::unique_ptr<const RelateSegmentString>>& segStore);
 
+    static bool isPolygonalNoHoles(const Geometry* geom);
+
     static std::shared_ptr<const CoordinateSequence> orientAndRemoveRepeated(
         const std::shared_ptr<const CoordinateSequence>& cs, bool orientCW);
 
@@ -215,18 +217,18 @@ public:
     int locateWithDim(const CoordinateXY* pt);
 
     /**
-     * Indicates whether the geometry requires self-noding
-     * for correct evaluation of specific spatial predicates.
-     * Self-noding is required for geometries which may self-cross
-     * - i.e. lines, and overlapping elements in GeometryCollections.
-     * Self-noding is not required for polygonal geometries,
-     * since they can only touch at vertices.
-     * This ensures that the coordinates of nodes created by
-     * crossing segments are computed explicitly.
-     * This ensures that node locations match in situations
-     * where a self-crossing and mutual crossing occur at the same logical location.
-     * E.g. a self-crossing line tested against a single segment
-     * identical to one of the crossed segments.
+     * Indicates whether the geometry requires self-noding for correct
+     * evaluation of spatial predicates which need it.
+     *
+     * Generally self-noding is required for geometries containing edges
+     * (i.e., polygons or lines). However, polygonal geometries which do
+     * not contain holes do not need to be self-noded. This is a relatively
+     * common case, so it is worth checking for efficiency. Self noding is
+     * not required because while MultiPolygon elements may self-touch at
+     * a vertex and an edge, that vertex is noded against the other predicate
+     * input geometry. The situation where this doesn't hold is when a hole
+     * vertex touches the shell, and the other geometry has an identical shell.
+     * Thus the presence of holes indicates self-noding is required.
      *
      * @return true if self-noding is required for this geometry
      */

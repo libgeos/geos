@@ -151,12 +151,22 @@ public:
      * Indicates whether the input geometries require self-noding
      * for correct evaluation of specific spatial predicates.
      * Self-noding is required for geometries which may
-     * have self-crossing linework.
+     * have self-crossing or non-noded self-touching linework,
+     * or may have lines lying in the boundary of an area.
      * This causes the coordinates of nodes created by
      * crossing segments to be computed explicitly.
      * This ensures that node locations match in situations
      * where a self-crossing and mutual crossing occur at the same logical location.
-     * The canonical example is a self-crossing line tested against a single segment     * identical to one of the crossed segments.
+     *
+     * The canonical example is a self-crossing line tested against a single segment
+     * identical to one of the crossed segments.
+     *
+     * Currently, requiring self-noding prevents noder caching.
+     * So it is important to limit the cases which require self-noding.
+     * However, avoiding self-noding needs to be conservative, to ensure
+     * correct predicate evaluation.
+     * Current self-noding is required for most geometry containing edges,
+     * except for the (common) case of polygonal geometries with no holes.
      *
      * @return true if self-noding is required
      */
