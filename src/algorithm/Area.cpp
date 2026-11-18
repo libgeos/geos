@@ -129,6 +129,20 @@ Area::ofClosedCurve(const geom::Curve& ring) {
 
         const geom::CoordinateSequence& coords = *section.getCoordinatesRO();
 
+        if (section.getGeometryTypeId() == geom::GEOS_ELLIPTICALCURVE) {
+            throw util::UnsupportedOperationException("Elliptical curve area is not implemented");
+        }
+        if (section.getGeometryTypeId() == geom::GEOS_CLOTHOID) {
+            throw util::UnsupportedOperationException("Clothoid area is not implemented");
+        }
+        if (section.getGeometryTypeId() == geom::GEOS_SPIRALCURVE) {
+            throw util::UnsupportedOperationException("Spiral curve area is not implemented");
+        }
+
+        if (section.getGeometryTypeId() == geom::GEOS_NURBSCURVE) {
+            throw util::UnsupportedOperationException("NURBS area is not implemented");
+        }
+
         if (section.isCurved()) {
             const auto* cs = detail::down_cast<const geom::CircularString*>(&section);
 

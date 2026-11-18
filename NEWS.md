@@ -1,7 +1,24 @@
 ## Changes in 3.16.0
 2027-xx-xx
 
+- Breaking Changes:
+  - The curve types added by the ISO/IEC 13249-3 work take these enum values in
+    GeometryTypeId and GEOSGeomTypes: GEOS_ELLIPTICALCURVE = 13,
+    GEOS_NURBSCURVE = 14, GEOS_CLOTHOID = 15, GEOS_SPIRALCURVE = 16 (ordered by
+    ISO type 20-23). Fork builds made from the separate type branches gave these
+    types overlapping values (for example GEOS_CLOTHOID and GEOS_NURBSCURVE both
+    13), so anything compiled against those and switching on the geometry type id
+    must be rebuilt. Released GEOS has none of these types.
+
 - New things:
+  - Elliptical curve WKT/WKB (ISO type 20)
+  - GEOSEsriJSONWriter_*: write curved geometry as Esri JSON with true
+    circular arcs, elliptic arcs and cubic Beziers (exact for circular strings,
+    elliptical curves and conic or cubic NURBS spans; tolerance-bounded cubic
+    Bezier fits for clothoids, spiral curves and other NURBS spans)
+  - Clothoid WKT/WKB (ISO type 22)
+  - Spiral curve WKT/WKB (ISO type 23)
+  - NURBS curve WKT/WKB (ISO type 21)
   - Add DirectedHausdorffDistance and C API GEOSDirectedHausdorffDistance /
     GEOSSymmetricHausdorffDistance (Martin Davis, Jeroen Bloemscheer, Dan Baston)
 

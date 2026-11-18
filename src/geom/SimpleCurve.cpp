@@ -17,6 +17,7 @@
 
 #include <geos/geom/SimpleCurve.h>
 
+#include <geos/algorithm/CurveToLineParams.h>
 #include <geos/algorithm/CircularArcs.h>
 #include <geos/algorithm/Orientation.h>
 #include <geos/geom/CoordinateFilter.h>
@@ -326,6 +327,14 @@ SimpleCurve::isClosed() const
     }
 
     return points->front<CoordinateXY>().equals2D(points->back<CoordinateXY>());
+}
+
+void
+SimpleCurve::addLinearizedPoints(CoordinateSequence& seq,
+                                 const algorithm::CurveToLineParams&) const
+{
+    const CoordinateSequence* curveSeq = getCoordinatesRO();
+    seq.add(*curveSeq, 1, curveSeq->size() - 1);
 }
 
 bool
