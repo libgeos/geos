@@ -1065,6 +1065,25 @@ void object::test<72>()
     checkTouches(a, b, true);
 }
 
+template<>
+template<>
+void object::test<73>()
+{
+    set_test_name("testSelfNodingMultiPolygonTouch");
+
+    std::string a = "MULTIPOLYGON (((1 5, 5 5, 5 1, 1 1, 1 5)), ((1 8, 5 8, 3 5, 1 8)))";
+    std::string b = "POLYGON ((1 5, 5 5, 5 1, 1 1, 1 5))";
+
+    //checkRelate(a, b, "2FF11F212");
+    checkIntersectsDisjoint(a, b, true);
+    checkContainsWithin(a, b, true);
+    checkContainsWithin(b, a, false);
+    checkCoversCoveredBy(a, b, true);
+    checkCoversCoveredBy(b, a, false);
+    checkOverlaps(b, a, false);
+    checkTouches(a, b, false);
+}
+
 //-------------------------------------------
 
 } // namespace tut

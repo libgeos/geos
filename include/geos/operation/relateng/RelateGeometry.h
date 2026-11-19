@@ -132,7 +132,7 @@ private:
         std::vector<const SegmentString*>& segStrings,
         std::vector<std::unique_ptr<const RelateSegmentString>>& segStore);
 
-    static bool isPolygonalNoHoles(const Geometry* geom);
+    static bool isSinglePolygonNoHoles(const Geometry* geom);
 
     static std::shared_ptr<const CoordinateSequence> orientAndRemoveRepeated(
         const std::shared_ptr<const CoordinateSequence>& cs, bool orientCW);
@@ -221,14 +221,12 @@ public:
      * evaluation of spatial predicates which need it.
      *
      * Generally self-noding is required for geometries containing edges
-     * (i.e., polygons or lines). However, polygonal geometries which do
-     * not contain holes do not need to be self-noded. This is a relatively
-     * common case, so it is worth checking for efficiency. Self noding is
-     * not required because while MultiPolygon elements may self-touch at
-     * a vertex and an edge, that vertex is noded against the other predicate
-     * input geometry. The situation where this doesn't hold is when a hole
-     * vertex touches the shell, and the other geometry has an identical shell.
-     * Thus the presence of holes indicates self-noding is required.
+     * (i.e., polygons or lines). However, a single Polygon which does not
+     * contain holes does not need to be self-noded. Self-noding is not
+     * required because the shall of a valid Polygon cannot self-touch
+     * (whereas valid MultiPolygons and holes can self-touch.) This is a
+     * relatively common case, common case, so it is worth checking for
+     * efficiency.
      *
      * @return true if self-noding is required for this geometry
      */

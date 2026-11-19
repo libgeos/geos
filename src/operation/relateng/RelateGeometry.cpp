@@ -244,30 +244,37 @@ RelateGeometry::isSelfNodingRequired() const
     }
 
     // https://github.com/libgeos/geos/issues/1558
-    if (isPolygonalNoHoles(geom)) {
+    if (isSinglePolygonNoHoles(geom)) {
         return false;
     }
 
-    // TODO: could avoid self-noding GC with single polygon with no holes
     return true;
 }
 
 /* private static */
 bool
-RelateGeometry::isPolygonalNoHoles(const Geometry* geom)
+RelateGeometry::isSinglePolygonNoHoles(const Geometry* geom)
 {
-    const auto typ = geom->getGeometryTypeId();
-    if (!(typ == GEOS_POLYGON || typ == GEOS_MULTIPOLYGON)) {
+    if (!geom->isDimensionStrict(Dimension::A)) {
         return false;
     }
 
-    // test if any Polygon element has a hole
-    for (std::size_t i = 0; i < geom->getNumGeometries(); i++)
-    {
-        const Surface* surf = detail::down_cast<const Surface*>(geom->getGeometryN(i));
-        if (surf->getNumInteriorRing() > 0) {
-            return false;
-        }
+    const auto ngeom = geom->getNumGeometries();
+    if (ngeom > 1) {
+        return false;
+    }
+
+    if (ngeom == 0) {
+        return true;
+    }
+
+    if (geom->getGeometryN(0)->isCollection()) {
+        return isSinglePolygonNoHoles(geom->getGeometryN(0));
+    }
+
+    const Surface* surf = detail::down_cast<const Surface*>(geom->getGeometryN(0));
+    if (surf->getNumInteriorRing() > 0) {
+        return false;
     }
 
     return true;
