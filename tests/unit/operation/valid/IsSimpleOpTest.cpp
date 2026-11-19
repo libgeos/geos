@@ -254,4 +254,15 @@ void object::test<12>()
     ensure_THROW(IsSimpleOp::isSimple(*g), geos::util::UnsupportedOperationException);
 }
 
+template<>
+template<>
+void object::test<13>()
+{
+    set_test_name("MultiPoint with empty components");
+
+    checkIsSimple("MULTIPOINT EMPTY", BoundaryNodeRule::getBoundaryRuleMod2(), true);
+    checkIsSimple("MULTIPOINT (EMPTY, EMPTY, (1 2))", BoundaryNodeRule::getBoundaryRuleMod2(), true);
+    checkIsSimple("MULTIPOINT (EMPTY, EMPTY, (1 2), (1 2))", BoundaryNodeRule::getBoundaryRuleMod2(), false);
+}
+
 } // namespace tut
