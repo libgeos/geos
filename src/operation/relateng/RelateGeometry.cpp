@@ -351,6 +351,7 @@ RelateGeometry::extractSegmentStrings(bool isA, const Envelope* env)
     // using an envelope filter.
     else {
         segStringTempStore.clear();
+        elementId = 0;
         extractSegmentStrings(isA, env, geom, segStrings, segStringTempStore);
     }
     return segStrings;
