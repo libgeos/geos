@@ -964,4 +964,126 @@ void object::test<67>()
     ensure_THROW(RelateNG::intersects(geomB.get(), geomA.get()), geos::util::UnsupportedOperationException);
 }
 
+//-----------  Tests for self-noding -----------------
+
+// see https://github.com/libgeos/geos/issues/1558
+template<>
+template<>
+void object::test<68>()
+{
+    set_test_name("testSelfNodingPolygonWithHole");
+
+    std::string a = "POLYGON ((0 0, 4 0, 4 4, 0 4, 0 0), (2 0, 1 1, 3 1, 2 0))";
+    std::string b = "POLYGON ((0 0, 4 0, 4 4, 0 4, 0 0))";
+
+    checkRelate(a, b, "2FF11F2F2");
+    checkIntersectsDisjoint(a, b, true);
+    checkContainsWithin(a, b, false);
+    checkContainsWithin(b, a, true);
+    checkCoversCoveredBy(a, b, false);
+    checkCoversCoveredBy(b, a, true);
+    checkOverlaps(b, a, false);
+    checkTouches(a, b, false);
+}
+
+template<>
+template<>
+void object::test<69>()
+{
+    set_test_name("testSelfNodingMultiPolygonWithHole");
+
+    std::string a = "MULTIPOLYGON (((0 0, 4 0, 4 4, 0 4, 0 0), (2 0, 1 1, 3 1, 2 0)))";
+    std::string b = "POLYGON ((0 0, 4 0, 4 4, 0 4, 0 0))";
+
+    checkRelate(a, b, "2FF11F2F2");
+    checkIntersectsDisjoint(a, b, true);
+    checkContainsWithin(a, b, false);
+    checkContainsWithin(b, a, true);
+    checkCoversCoveredBy(a, b, false);
+    checkCoversCoveredBy(b, a, true);
+    checkOverlaps(b, a, false);
+    checkTouches(a, b, false);
+}
+
+template<>
+template<>
+void object::test<70>()
+{
+    // see https://github.com/libgeos/geos/issues/1597
+    set_test_name("testSelfNodingNestedGC");
+
+    std::string a = "GEOMETRYCOLLECTION(GEOMETRYCOLLECTION(LINESTRING(0 0,10 10), POLYGON((-2 -1,4 -1,4 6,-2 6,-2 -1))))";
+    std::string b = "LINESTRING(0 0,10 10)";
+
+    checkRelate(a, b, "102001FF2");
+    checkIntersectsDisjoint(a, b, true);
+    checkContainsWithin(a, b, true);
+    checkContainsWithin(b, a, false);
+    checkCoversCoveredBy(a, b, true);
+    checkCoversCoveredBy(b, a, false);
+    checkOverlaps(b, a, false);
+    checkTouches(a, b, false);
+}
+
+template<>
+template<>
+void object::test<71>()
+{
+    // see https://github.com/libgeos/geos/issues/1595
+    set_test_name("testSelfNodingBOverlappingPolygons");
+
+    std::string a = "POLYGON((0 0,10 0,10 10,0 10,0 0))";
+    std::string b = "GEOMETRYCOLLECTION(POLYGON((0 0,10 0,10 10,0 10,0 0)), POLYGON((5 -5,15 -5,15 5,5 5,5 -5)))";
+
+    checkRelate(a, b, "2FF11F212");
+    checkIntersectsDisjoint(a, b, true);
+    checkContainsWithin(a, b, false);
+    checkContainsWithin(b, a, true);
+    checkCoversCoveredBy(a, b, false);
+    checkCoversCoveredBy(b, a, true);
+    checkOverlaps(b, a, false);
+    checkTouches(a, b, false);
+}
+
+template<>
+template<>
+void object::test<72>()
+{
+    // see https://github.com/libgeos/geos/issues/1595
+    set_test_name("testSelfNodingBLines");
+
+    std::string a = "POLYGON((0 0,10 0,0 10,0 0))";
+    std::string b = "MULTILINESTRING((0 0,10 0,0 10,0 0),(2 -5,2 0))";
+
+    checkRelate(a, b, "FF210F102");
+    checkIntersectsDisjoint(a, b, true);
+    checkContainsWithin(a, b, false);
+    checkContainsWithin(b, a, false);
+    checkCoversCoveredBy(a, b, false);
+    checkCoversCoveredBy(b, a, false);
+    checkOverlaps(b, a, false);
+    checkTouches(a, b, true);
+}
+
+template<>
+template<>
+void object::test<73>()
+{
+    set_test_name("testSelfNodingMultiPolygonTouch");
+
+    std::string a = "MULTIPOLYGON (((1 5, 5 5, 5 1, 1 1, 1 5)), ((1 8, 5 8, 3 5, 1 8)))";
+    std::string b = "POLYGON ((1 5, 5 5, 5 1, 1 1, 1 5))";
+
+    //checkRelate(a, b, "2FF11F212");
+    checkIntersectsDisjoint(a, b, true);
+    checkContainsWithin(a, b, true);
+    checkContainsWithin(b, a, false);
+    checkCoversCoveredBy(a, b, true);
+    checkCoversCoveredBy(b, a, false);
+    checkOverlaps(b, a, false);
+    checkTouches(a, b, false);
+}
+
+//-------------------------------------------
+
 } // namespace tut
