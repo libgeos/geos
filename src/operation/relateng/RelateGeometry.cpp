@@ -238,17 +238,45 @@ RelateGeometry::locateWithDim(const CoordinateXY* pt)
 bool
 RelateGeometry::isSelfNodingRequired() const
 {
-    GeometryTypeId typeId = geom->getGeometryTypeId();
-    if (typeId == GEOS_POINT
-        || typeId == GEOS_MULTIPOINT
-        || typeId == GEOS_POLYGON
-        || typeId == GEOS_MULTIPOLYGON)
-    {
-         return false;
-     }
-    //-- a GC with a single polygon does not need noding
-    if (hasAreas && geom->getNumGeometries() == 1)
+    // Geometries with only points do not need noding
+    if (!hasEdges()) {
         return false;
+    }
+
+    // https://github.com/libgeos/geos/issues/1558
+    if (isSinglePolygonNoHoles(geom)) {
+        return false;
+    }
+
+    return true;
+}
+
+/* private static */
+bool
+RelateGeometry::isSinglePolygonNoHoles(const Geometry* geom)
+{
+    if (!geom->isDimensionStrict(Dimension::A)) {
+        return false;
+    }
+
+    const auto ngeom = geom->getNumGeometries();
+    if (ngeom > 1) {
+        return false;
+    }
+
+    if (ngeom == 0) {
+        return true;
+    }
+
+    if (geom->getGeometryN(0)->isCollection()) {
+        return isSinglePolygonNoHoles(geom->getGeometryN(0));
+    }
+
+    const Surface* surf = detail::down_cast<const Surface*>(geom->getGeometryN(0));
+    if (surf->getNumInteriorRing() > 0) {
+        return false;
+    }
+
     return true;
 }
 
