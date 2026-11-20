@@ -39,6 +39,7 @@
 #include <geos/geom/PrecisionModel.h>
 #include <geos/util.h>
 
+#include <array>
 #include <iomanip>
 #include <ostream>
 #include <sstream>
@@ -82,12 +83,27 @@ WKBReader::printHEX(std::istream& is, std::ostream& os)
     std::streampos pos = is.tellg(); // take note of input stream get pointer
     is.seekg(0, std::ios::beg); // rewind input stream
 
-    char each = 0;
-    while(is.read(&each, 1)) {
-        const unsigned char c = static_cast<unsigned char>(each);
-        int low = (c & 0x0F);
-        int high = (c >> 4);
-        os << hex[high] << hex[low];
+    // Convert and write in blocks
+    char in[4096];
+    char out[2 * sizeof(in)];
+    bool first = true;
+    while(is.read(in, sizeof(in)) || is.gcount() > 0) {
+        const std::size_t n = static_cast<std::size_t>(is.gcount());
+        for(std::size_t i = 0; i < n; ++i) {
+            const unsigned char c = static_cast<unsigned char>(in[i]);
+            out[2 * i] = hex[c >> 4];
+            out[2 * i + 1] = hex[c & 0x0F];
+        }
+
+        std::size_t start = 0;
+        if(first) {
+            // Write the first digit with operator<< so that a width set
+            // on os applies to it
+            os << out[0];
+            start = 1;
+            first = false;
+        }
+        os.write(out + start, static_cast<std::streamsize>(2 * n - start));
     }
 
     is.clear(); // clear input stream eof flag
@@ -99,51 +115,35 @@ WKBReader::printHEX(std::istream& is, std::ostream& os)
 
 namespace {
 
-unsigned char
-ASCIIHexToUChar(char val)
+constexpr std::array<unsigned char, 256>
+makeHexDigitValues()
 {
-    switch(val) {
-    case '0' :
-        return 0;
-    case '1' :
-        return 1;
-    case '2' :
-        return 2;
-    case '3' :
-        return 3;
-    case '4' :
-        return 4;
-    case '5' :
-        return 5;
-    case '6' :
-        return 6;
-    case '7' :
-        return 7;
-    case '8' :
-        return 8;
-    case '9' :
-        return 9;
-    case 'A' :
-    case 'a' :
-        return 10;
-    case 'B' :
-    case 'b' :
-        return 11;
-    case 'C' :
-    case 'c' :
-        return 12;
-    case 'D' :
-    case 'd' :
-        return 13;
-    case 'E' :
-    case 'e' :
-        return 14;
-    case 'F' :
-    case 'f' :
-        return 15;
-    default:
+    std::array<unsigned char, 256> values{};
+    for(std::size_t i = 0; i < values.size(); ++i) {
+        values[i] = 0xFF;
+    }
+    for(std::size_t i = 0; i < 10; ++i) {
+        values['0' + i] = static_cast<unsigned char>(i);
+    }
+    for(std::size_t i = 0; i < 6; ++i) {
+        values['A' + i] = static_cast<unsigned char>(10 + i);
+        values['a' + i] = static_cast<unsigned char>(10 + i);
+    }
+    return values;
+}
+
+// Hex digit value by character, 0xFF for non-digits
+constexpr std::array<unsigned char, 256> hexDigitValues = makeHexDigitValues();
+
+unsigned char
+decodeHexPair(int high, int low)
+{
+    const unsigned char h = hexDigitValues[static_cast<unsigned char>(high)];
+    const unsigned char l = hexDigitValues[static_cast<unsigned char>(low)];
+    if((h | l) > 0x0F) {
         throw ParseException("Invalid HEX char");
     }
+    return static_cast<unsigned char>((h << 4) | l);
 }
 
 }  // namespace
@@ -153,45 +153,49 @@ ASCIIHexToUChar(char val)
 std::unique_ptr<Geometry>
 WKBReader::readHEX(std::istream& is)
 {
-    // setup input/output stream
-    std::stringstream os(std::ios_base::binary | std::ios_base::in | std::ios_base::out);
+    std::vector<unsigned char> buf;
 
-    while(true) {
-        const int input_high = is.get();
-        if(input_high == std::char_traits<char>::eof()) {
-            break;
+    // Read the stream buffer directly. Consumes the same characters and
+    // sets the same state bits as calling is.get() per character.
+    const std::istream::sentry ok(is, true);
+    if(ok) {
+        std::streambuf& sb = *is.rdbuf();
+        const int eof = std::char_traits<char>::eof();
+
+        while(true) {
+            const int high = sb.sbumpc();
+            if(high == eof) {
+                is.setstate(std::ios_base::eofbit | std::ios_base::failbit);
+                break;
+            }
+
+            const int low = sb.sbumpc();
+            if(low == eof) {
+                is.setstate(std::ios_base::eofbit | std::ios_base::failbit);
+                throw ParseException("Premature end of HEX string");
+            }
+
+            buf.push_back(decodeHexPair(high, low));
         }
-
-        const int input_low = is.get();
-        if(input_low == std::char_traits<char>::eof()) {
-            throw ParseException("Premature end of HEX string");
-        }
-
-        const char high = static_cast<char>(input_high);
-        const char low = static_cast<char>(input_low);
-
-        const unsigned char result_high = ASCIIHexToUChar(high);
-        const unsigned char result_low = ASCIIHexToUChar(low);
-
-        const unsigned char value =
-            static_cast<unsigned char>((result_high << 4) + result_low);
-
-#if DEBUG_HEX_READER
-        std::cout << "HEX " << high << low << " -> DEC " << (int)value << std::endl;
-#endif
-        // write the value to the output stream
-        os << value;
     }
 
     // now call read to convert the geometry
-    return this->read(os);
+    return read(buf.data(), buf.size());
 }
 
 std::unique_ptr<Geometry>
 WKBReader::readHEX(const std::string& hex)
 {
-    std::istringstream ss(hex);
-    return readHEX(ss);
+    // Same checks, in the same order, as readHEX(std::istream&)
+    std::vector<unsigned char> buf(hex.size() / 2);
+    for(std::size_t i = 0; i < buf.size(); ++i) {
+        buf[i] = decodeHexPair(hex[2 * i], hex[2 * i + 1]);
+    }
+    if(hex.size() % 2 != 0) {
+        throw ParseException("Premature end of HEX string");
+    }
+
+    return read(buf.data(), buf.size());
 }
 
 void
