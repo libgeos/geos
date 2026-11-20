@@ -1,5 +1,5 @@
 ## Changes in 3.15.1
-2026-xx-xx
+2026-11-xx
 
 - Fixes/Improvements:
   - Arc noding: fix failure with endpoint intersections (GH-1513, Dan Baston)
@@ -26,6 +26,10 @@
   - RelateNG: fix crash with on GeometryCollection with empty Polygon (GH-1590, Dan Baston)
   - RelateNG: fix crash with on Polygon with empty hole (GH-1607, Dan Baston)
   - RelateNG: fix "Cannot compute the quadrant" error for certain inputs with repeated points (GH-1603, Dan Baston)
+  - RelateNG: fix strategy for self-noding (GH-1615, Martin Davis and Dan Baston)
+  - PreparedPolygonContains: Resolve errors with on collections with mixed dims or empty components (GH-1601, Dan Baston)
+  - PreparedPolygonContains: Fix infinite recursion with curved inputs (GH-1617, Dan Baston)
+
 
 ## Changes in 3.15.0
 2026-09-01
