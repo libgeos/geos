@@ -122,6 +122,28 @@ void object::test<6> ()
     checkOnSegment(1, 2, "LINESTRING(1 1, 1 1)", false);
 }
 
+template<>
+template<>
+void object::test<7> ()
+{
+    set_test_name("collinear point on segment");
+
+    checkOnSegment(0.9, 0.2, "LINESTRING (1 0, 0 2)", true);
+    checkOnSegment(0.1, 1.8, "LINESTRING (1 0, 0 2)", true);
+    checkOnSegment(0.5, 1.0, "LINESTRING (1 0, 0 2)", true);
+    checkOnSegment(0.5, 0.5, "LINESTRING (1 0, 0 2)", false);
+}
+
+template<>
+template<>
+void object::test<8> ()
+{
+    set_test_name("point off a long segment");
+
+    checkOnSegment(5000000000000000.0, 5000000000000001.0,
+        "LINESTRING (0 0, 10000000000000000 10000000000000000)", false);
+}
+
 
 } // namespace tut
 
