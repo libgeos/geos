@@ -3,6 +3,7 @@
 
 // tut
 #include <tut/tut.hpp>
+#include <tut/tut_macros.hpp>
 #include <utility.h>
 // geos
 #include <geos/geom/prep/PreparedGeometryFactory.h>
@@ -99,5 +100,18 @@ void object::test<3>
     ensure( pg1->contains(g2.get()) );
 }
 
+template<>
+template<>
+void object::test<4>()
+{
+    set_test_name("CircularString contained in Polygon");
+
+    g1 = reader.read("POLYGON ((0 0, 10 0, 10 10, 0 10, 0 0))");
+    g2 = reader.read("CIRCULARSTRING (1 5, 5 1, 9 5)");
+
+    pg1 = prep::PreparedGeometryFactory::prepare(g1.get());
+
+    ensure_THROW(pg1->contains(g2.get()), geos::util::GEOSException);
+}
 
 } // namespace tut
