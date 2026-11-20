@@ -126,6 +126,9 @@ public:
     /// The origin point of the arc will NOT be added.
     void addLinearizedPoints(CoordinateSequence& seq, const algorithm::CurveToLineParams& params) const;
 
+    /// Calculate the midpoint of the arc. This is not necessarily the same as the control point.
+    CoordinateXY getMidpoint() const;
+
     /// Return the orientation of the arc as one of:
     /// - algorithm::Orientation::CLOCKWISE,
     /// - algorithm::Orientation::COUNTERCLOCKWISE

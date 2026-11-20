@@ -23,9 +23,24 @@ namespace geos::noding {
 class GEOS_DLL NodableArcString : public ArcString, public NodablePath {
 
 public:
-    NodableArcString(std::vector<geom::CircularArc> arcs, const std::shared_ptr<const geom::CoordinateSequence>& coords, bool constructZ, bool constructM, const void* context);
-
-    std::unique_ptr<ArcString> clone() const;
+    /** Construct a NodableArcString
+     *
+     * @param arcs a vector of CircularArcs
+     * @param coords arc coordinates
+     * @param constructZ whether new vertices should be constructed with a Z dimension
+     * @param constructM whether new vertices should be constructed with an M dimension
+     * @param controlPointTolerance whether to re-use an arc's supplied control point or
+     *                              compute a new one at the central angle. A new point
+     *                              will be used if it is more than radius * tol from the
+     *                              original control point.
+     * @param context data object
+     */
+    NodableArcString(std::vector<geom::CircularArc> arcs,
+                     const std::shared_ptr<const geom::CoordinateSequence>& coords,
+                     bool constructZ,
+                     bool constructM,
+                     double controlPointTolerance,
+                     const void* context);
 
     using NodablePath::addIntersection;
 
@@ -37,8 +52,9 @@ public:
 
 private:
     std::map<size_t, std::vector<geom::CoordinateXYZM>> m_adds;
-    bool m_constructZ = false;
-    bool m_constructM = false;
+    const double m_controlPointTolerance = 0;
+    const bool m_constructZ = false;
+    const bool m_constructM = false;
 };
 
 }

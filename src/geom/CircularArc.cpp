@@ -329,6 +329,11 @@ CircularArc::getLength() const
     return getAngle()*getRadius();
 }
 
+CoordinateXY
+CircularArc::getMidpoint() const
+{
+    return CircularArcs::getMidpoint(p0(), p2(), getCenter(), getRadius(), isCCW());
+}
 
 void
 CircularArc::addLinearizedPoints(CoordinateSequence& seq, const algorithm::CurveToLineParams& params) const

@@ -88,7 +88,8 @@ public:
             const auto& coords = cs->getSharedCoordinates();
             auto arcs = cs->getArcs();
 
-            auto as = std::make_unique<NodableArcString>(std::move(arcs), coords, _constructZ, _constructM, cs);
+            constexpr double controlPointTolerance = DoubleInfinity; // keep original control points on unmodified arcs
+            auto as = std::make_unique<NodableArcString>(std::move(arcs), coords, _constructZ, _constructM, controlPointTolerance, cs);
             _to.push_back(std::move(as));
         } else if (const auto* cc = dynamic_cast<const geom::CompoundCurve*>(g)) {
             _foundCompoundCurve = true;
