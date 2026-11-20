@@ -366,7 +366,7 @@ RelateGeometry::extractSegmentStrings(bool isA, const Envelope* env)
     // so check and reuse them if possible
     if (isA && isPrepared() && env == nullptr) {
         if (segStringPermStore.empty()) {
-            extractSegmentStrings(isA, env, geom, segStrings, segStringPermStore);
+            extractSegmentStrings(isA, env, geom, 0, segStrings, segStringPermStore);
         }
         else {
             for (auto& ss : segStringPermStore) {
@@ -379,16 +379,17 @@ RelateGeometry::extractSegmentStrings(bool isA, const Envelope* env)
     // using an envelope filter.
     else {
         segStringTempStore.clear();
-        extractSegmentStrings(isA, env, geom, segStrings, segStringTempStore);
+        extractSegmentStrings(isA, env, geom, 0, segStrings, segStringTempStore);
     }
     return segStrings;
 }
 
 
 /* private */
-void
+int
 RelateGeometry::extractSegmentStrings(bool isA,
     const Envelope* env, const Geometry* p_geom,
+    int elementId,
     std::vector<const SegmentString*>& segStrings,
     std::vector<std::unique_ptr<const RelateSegmentString>>& segStore)
 {
@@ -402,12 +403,15 @@ RelateGeometry::extractSegmentStrings(bool isA,
         const Geometry* g = p_geom->getGeometryN(i);
         // if (g->getGeometryTypeId() == GEOS_GEOMETRYCOLLECTION) {
         if (g->isCollection()) {
-            extractSegmentStrings(isA, env, g, segStrings, segStore);
+            elementId = extractSegmentStrings(isA, env, g, elementId, segStrings, segStore);
         }
         else {
-            extractSegmentStringsFromAtomic(isA, g, parentPolygonal, env, segStrings, segStore);
+            elementId++;
+            extractSegmentStringsFromAtomic(isA, g, parentPolygonal, env, elementId, segStrings, segStore);
         }
     }
+
+    return elementId;
 }
 
 
@@ -415,7 +419,7 @@ RelateGeometry::extractSegmentStrings(bool isA,
 void
 RelateGeometry::extractSegmentStringsFromAtomic(bool isA,
     const Geometry* p_geom, const MultiPolygon* parentPolygonal,
-    const Envelope* env,
+    const Envelope* env, int elementId,
     std::vector<const SegmentString*>& segStrings,
     std::vector<std::unique_ptr<const RelateSegmentString>>& segStore)
 {
@@ -426,7 +430,6 @@ RelateGeometry::extractSegmentStringsFromAtomic(bool isA,
     if (! doExtract)
         return;
 
-    elementId++;
     if (p_geom->getGeometryTypeId() == GEOS_LINESTRING ||
         p_geom->getGeometryTypeId() == GEOS_LINEARRING) {
         const LineString* line = static_cast<const LineString*>(p_geom);
@@ -440,14 +443,10 @@ RelateGeometry::extractSegmentStringsFromAtomic(bool isA,
     }
     else if (p_geom->getGeometryTypeId() == GEOS_POLYGON) {
         const Polygon* poly = static_cast<const Polygon*>(p_geom);
-        const Geometry* parentPoly;
-        if (parentPolygonal != nullptr)
-            parentPoly = static_cast<const Geometry*>(parentPolygonal);
-        else
-            parentPoly = static_cast<const Geometry*>(poly);
-        extractRingToSegmentString(isA, poly->getExteriorRing(), 0, env, parentPoly, segStrings, segStore);
+        const Geometry* parentPoly = parentPolygonal ? parentPolygonal : p_geom;
+        extractRingToSegmentString(isA, poly->getExteriorRing(), 0, env, parentPoly, elementId, segStrings, segStore);
         for (uint32_t i = 0; i < poly->getNumInteriorRing(); i++) {
-            extractRingToSegmentString(isA, poly->getInteriorRingN(i), static_cast<int>(i+1), env, parentPoly, segStrings, segStore);
+            extractRingToSegmentString(isA, poly->getInteriorRingN(i), static_cast<int>(i+1), env, parentPoly, elementId, segStrings, segStore);
         }
     }
 }
@@ -457,7 +456,7 @@ RelateGeometry::extractSegmentStringsFromAtomic(bool isA,
 void
 RelateGeometry::extractRingToSegmentString(bool isA,
     const LinearRing* ring, int ringId, const Envelope* env,
-    const Geometry* parentPoly,
+    const Geometry* parentPoly, int elementId,
     std::vector<const SegmentString*>& segStrings,
     std::vector<std::unique_ptr<const RelateSegmentString>>& segStore)
 {
