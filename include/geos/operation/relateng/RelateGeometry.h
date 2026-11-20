@@ -77,7 +77,6 @@ private:
 
     Coordinate::ConstXYSet uniquePoints;
     std::unique_ptr<RelatePointLocator> locator;
-    int elementId = 0;
     bool hasPoints = false;
     bool hasLines = false;
     bool hasAreas = false;
@@ -117,18 +116,34 @@ private:
 
     void extractSegmentStringsFromAtomic(bool isA,
         const Geometry* geom, const MultiPolygon* parentPolygonal,
-        const Envelope* env,
+        const Envelope* env, int elementId,
         std::vector<const SegmentString*>& segStrings,
         std::vector<std::unique_ptr<const RelateSegmentString>>& segStore);
 
     void extractRingToSegmentString(bool isA,
         const LinearRing* ring, int ringId, const Envelope* env,
-        const Geometry* parentPoly,
+        const Geometry* parentPoly, int elementId,
         std::vector<const SegmentString*>& segStrings,
         std::vector<std::unique_ptr<const RelateSegmentString>>& segStore);
 
-    void extractSegmentStrings(bool isA,
-        const Envelope* env, const Geometry* geom,
+
+    /**
+     * Extracts RelateSegmentStrings from the linework of geometry
+     * (which may be atomic or a collection,
+     * in which case this is called recursively).
+     * The elementId is the index of atomic geometries scanned.
+     * It is initially passed in as 0.
+     *
+     * @param isA the input parameter
+     * @param env the envelope to extract over (null to extract all segStrings)
+     * @param geom the geometry to extract from
+     * @param elementId the geometry element id
+     * @param segStrings the extracted segstrings
+     * @param segStore store into which segStrings are constructed
+     * @return the updated element id
+     */
+    int extractSegmentStrings(bool isA,
+        const Envelope* env, const Geometry* geom, int elementId,
         std::vector<const SegmentString*>& segStrings,
         std::vector<std::unique_ptr<const RelateSegmentString>>& segStore);
 
@@ -253,12 +268,12 @@ public:
     std::vector<const Point*> getEffectivePoints();
 
     /**
-     * Extract RSegmentStrings from the geometry which
+     * Extract RelateSegmentStrings from the geometry which
      * intersect a given envelope.
      * If the envelope is null all edges are extracted.
-     * @param geomA
      *
-     * @param env the envelope to extract around (may be null)
+     * @param isA the input parameter
+     * @param env the envelope to extract over (null to extract all segStrings)
      * @return a list of SegmentStrings
      */
     std::vector<const SegmentString*> extractSegmentStrings(bool isA, const Envelope* env);
