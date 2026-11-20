@@ -24,6 +24,7 @@
 #include <geos/geom/LineString.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CoordinateSequence.h>
+#include <geos/util.h>
 
 using namespace geos::geom;
 
@@ -34,6 +35,8 @@ namespace predicate { // geos.operation.predicate
 bool
 RectangleContains::contains(const Geometry& geom)
 {
+    util::ensureNoCurvedTypes(geom);
+
     if(! rectEnv.contains(geom.getEnvelopeInternal())) {
         return false;
     }
