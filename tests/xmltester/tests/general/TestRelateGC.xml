@@ -126,6 +126,27 @@
   <test><op name="within"     arg1="A" arg2="B"> false </op></test>
 </case>
 
+<case>
+  <desc>L/GC:PL - line with ends on points of GC with points and a disjoint line</desc>
+  <a>
+    LINESTRING(0 0, 5 5, 10 0)
+  </a>
+  <b>
+    GEOMETRYCOLLECTION(MULTIPOINT((0 0), (10 0)), LINESTRING(100 100, 101 101))
+  </b>
+  <test><op name="relate" arg3="FF10FF102" arg1="A" arg2="B"> true </op></test>
+  <test><op name="contains"   arg1="A" arg2="B"> false </op></test>
+  <test><op name="coveredBy"  arg1="A" arg2="B"> false </op></test>
+  <test><op name="covers"     arg1="A" arg2="B"> false </op></test>
+  <test><op name="crosses"    arg1="A" arg2="B"> false </op></test>
+  <test><op name="disjoint"   arg1="A" arg2="B"> false </op></test>
+  <test><op name="equalsTopo" arg1="A" arg2="B"> false </op></test>
+  <test><op name="intersects" arg1="A" arg2="B"> true </op></test>
+  <test><op name="overlaps"   arg1="A" arg2="B"> false </op></test>
+  <test><op name="touches"    arg1="A" arg2="B"> true </op></test>
+  <test><op name="within"     arg1="A" arg2="B"> false </op></test>
+</case>
+
 
 <case>
   <desc>L/GC:A - line in interior of GC of overlapping polygons</desc>

@@ -355,5 +355,69 @@ void object::test<25> ()
     checkCoversCoveredBy(b, a, true);}
 
 
+// testLineEndsOnPointsOfGCWithLine
+// https://github.com/libgeos/geos/issues/1596
+template<>
+template<>
+void object::test<26> ()
+{
+    std::string a = "LINESTRING (0 0, 5 5, 10 0)";
+    std::string b = "GEOMETRYCOLLECTION (MULTIPOINT ((0 0), (10 0)), LINESTRING (100 100, 101 101))";
+    checkRelate(a, b, "FF10FF102");
+    checkRelate(b, a, "F01FF01F2");
+    checkCoversCoveredBy(b, a, false);
+    checkIntersectsDisjoint(a, b, true);
+}
+
+
+// testLineEndsOnPointsOfGCWithPolygon
+template<>
+template<>
+void object::test<27> ()
+{
+    std::string a = "LINESTRING (0 0, 5 5, 10 0)";
+    std::string b = "GEOMETRYCOLLECTION (MULTIPOINT ((0 0), (10 0)), POLYGON ((20 0, 30 0, 30 10, 20 10, 20 0)))";
+    checkRelate(a, b, "FF10FF212");
+    checkCoversCoveredBy(b, a, false);
+}
+
+
+// testClosedLineEndOnPointOfGCWithLine
+template<>
+template<>
+void object::test<28> ()
+{
+    std::string a = "LINESTRING (0 0, 10 0, 10 10, 0 10, 0 0)";
+    std::string b = "GEOMETRYCOLLECTION (POINT (0 0), LINESTRING (20 20, 30 30))";
+    checkRelate(a, b, "0F1FFF102");
+    checkCoversCoveredBy(b, a, false);
+}
+
+
+// testZeroLengthLineOnPointOfGCWithLine
+// a zero-length line is topologically a point
+template<>
+template<>
+void object::test<29> ()
+{
+    std::string a = "LINESTRING (0 0, 0 0)";
+    std::string b = "GEOMETRYCOLLECTION (POINT (0 0), LINESTRING (20 20, 30 30))";
+    checkRelate(a, b, "0FFFFF102");
+    checkCoversCoveredBy(b, a, true);
+}
+
+
+// testZeroLengthLineElementOnPointOfGCWithLine
+template<>
+template<>
+void object::test<30> ()
+{
+    std::string a = "MULTILINESTRING ((0 0, 0 0), (20 20, 30 30))";
+    std::string b = "GEOMETRYCOLLECTION (POINT (0 0), LINESTRING (20 20, 30 30))";
+    checkRelate(a, b, "1FFF0FFF2");
+    checkEquals(a, b, true);
+}
+
+
 
 } // namespace tut

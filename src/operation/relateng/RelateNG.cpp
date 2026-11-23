@@ -534,16 +534,17 @@ RelateNG::computeLineEnds(
                 continue;
 
             const LineString* line = static_cast<const LineString*>(elem);
+            bool isLineZeroLength = RelateGeometry::isZeroLength(line);
             //TODO: add optimization to skip disjoint elements once exterior point found
             const CoordinateXY& e0 = line->getCoordinatesRO()->getAt(0);
-            hasExteriorIntersection |= computeLineEnd(geom, isA, &e0, geomTarget, topoComputer);
+            hasExteriorIntersection |= computeLineEnd(geom, isA, &e0, isLineZeroLength, geomTarget, topoComputer);
             if (topoComputer.isResultKnown()) {
                 return true;
             }
 
             if (! line->isClosed()) {
                 const CoordinateXY& e1 = line->getCoordinatesRO()->getAt(line->getNumPoints() - 1);
-                hasExteriorIntersection |= computeLineEnd(geom, isA, &e1, geomTarget, topoComputer);
+                hasExteriorIntersection |= computeLineEnd(geom, isA, &e1, isLineZeroLength, geomTarget, topoComputer);
                 if (topoComputer.isResultKnown()) {
                     return true;
                 }
@@ -557,7 +558,7 @@ RelateNG::computeLineEnds(
 
 /* private */
 bool
-RelateNG::computeLineEnd(RelateGeometry& geom, bool isA, const CoordinateXY* pt,
+RelateNG::computeLineEnd(RelateGeometry& geom, bool isA, const CoordinateXY* pt, bool isLineZeroLength,
       RelateGeometry& geomTarget, TopologyComputer& topoComputer)
 {
     int locDimLineEnd = geom.locateLineEndWithDim(pt);
@@ -569,7 +570,7 @@ RelateNG::computeLineEnd(RelateGeometry& geom, bool isA, const CoordinateXY* pt,
     int locDimTarget = geomTarget.locateWithDim(pt);
     Location locTarget = DimensionLocation::location(locDimTarget);
     int dimTarget = DimensionLocation::dimension(locDimTarget, topoComputer.getDimension(! isA));
-    topoComputer.addLineEndOnGeometry(isA, locLineEnd, locTarget, dimTarget, pt);
+    topoComputer.addLineEndOnGeometry(isA, locLineEnd, isLineZeroLength, locTarget, dimTarget, pt);
     return locTarget == Location::EXTERIOR;
 }
 

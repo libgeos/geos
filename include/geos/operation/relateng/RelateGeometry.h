@@ -102,8 +102,6 @@ private:
     */
     static bool isZeroLength(const Geometry* geom);
 
-    static bool isZeroLength(const LineString* line);
-
     bool isZeroLengthLine(const Geometry* g) const {
         // avoid expensive zero-length calculation if not linear
         if (getDimension() != Dimension::L)
@@ -156,6 +154,15 @@ public:
     RelateGeometry(const Geometry* input, bool p_isPrepared, const BoundaryNodeRule& bnRule);
 
     static std::string name(bool isA);
+
+    /**
+    * Tests if a line is zero-length (i.e. all its vertices are equal in 2D).
+    * For efficiency the test avoids computing actual length.
+    *
+    * @param line the line to test
+    * @return true if the line is zero-length
+    */
+    static bool isZeroLength(const LineString* line);
 
     const Geometry* getGeometry() const {
         return geom;

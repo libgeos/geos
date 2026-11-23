@@ -339,7 +339,7 @@ TopologyComputer::addPointOnGeometry(bool isPointA, Location locTarget, int dimT
 
 /* public */
 void
-TopologyComputer::addLineEndOnGeometry(bool isLineA, Location locLineEnd, Location locTarget, int dimTarget, const CoordinateXY* pt)
+TopologyComputer::addLineEndOnGeometry(bool isLineA, Location locLineEnd, bool isLineZeroLength, Location locTarget, int dimTarget, const CoordinateXY* pt)
 {
     (void)pt;
 
@@ -350,9 +350,20 @@ TopologyComputer::addLineEndOnGeometry(bool isLineA, Location locLineEnd, Locati
     if (getGeometry(! isLineA).isEmpty())
       return;
       
-    //-- Line and Area targets may have additional topology
+    //-- the target may have additional topology
     switch (dimTarget) {
     case Dimension::P:
+        /**
+         * The line end is on a target point,
+         * or in the exterior of a target which has only points.
+         * Either way no target line or area contains the line end,
+         * so some length of the source Line INTERIOR
+         * is in the target EXTERIOR.
+         * This does not hold for zero-length lines, since they are topologically points.
+         */
+        if (! isLineZeroLength) {
+            updateDim(isLineA, Location::INTERIOR, Location::EXTERIOR, Dimension::L);
+        }
         return;
     case Dimension::L:
         addLineEndOnLine(isLineA, locLineEnd, locTarget, pt);
