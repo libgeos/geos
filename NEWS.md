@@ -1,5 +1,5 @@
 ## Changes in 3.15.1
-2026-11-xx
+2026-11-23
 
 - Fixes/Improvements:
   - Arc noding: fix failure with endpoint intersections (GH-1513, Dan Baston)
