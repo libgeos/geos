@@ -56,11 +56,12 @@ RelateGeometry::RelateGeometry(const Geometry* input, bool isPrepared, const Bou
     , m_isPrepared(isPrepared)
     , geomEnv(input->getEnvelopeInternal())
     , boundaryNodeRule(bnRule)
-    , geomDim(input->getDimension())
-    , isLineZeroLen(isZeroLengthLine(input))
     , isGeomEmpty(input->isEmpty())
 {
+    //-- geomDim is determined by the non-empty elements only
     analyzeDimensions();
+    //-- must follow analyzeDimensions(), since it uses geomDim
+    isLineZeroLen = isZeroLengthLine(input);
 }
 
 

@@ -1086,4 +1086,65 @@ void object::test<73>()
 
 //-------------------------------------------
 
+template<>
+template<>
+void object::test<74>()
+{
+    // see https://github.com/libgeos/geos/issues/1594
+    set_test_name("Empty vs GeometryCollection with empty line");
+
+    std::string b = "GEOMETRYCOLLECTION (LINESTRING EMPTY, POINT (1 1))";
+
+    for (const std::string& empty : empties) {
+        checkRelate(empty, b, "FFFFFF0F2");
+        checkRelate(b, empty, "FF0FFFFF2");
+    }
+}
+
+template<>
+template<>
+void object::test<75>()
+{
+    // see https://github.com/libgeos/geos/issues/1594
+    set_test_name("Empty vs GeometryCollection with empty polygon");
+
+    std::string b = "GEOMETRYCOLLECTION (POLYGON EMPTY, POINT (1 1))";
+
+    for (const std::string& empty : empties) {
+        checkRelate(empty, b, "FFFFFF0F2");
+        checkRelate(b, empty, "FF0FFFFF2");
+    }
+}
+
+template<>
+template<>
+void object::test<76>()
+{
+    // see https://github.com/libgeos/geos/issues/1594
+    set_test_name("GeometryCollection covers GeometryCollection with empty polygon");
+
+    std::string a = "GEOMETRYCOLLECTION (LINESTRING (0 0, 10 0), POINT (50 50))";
+    std::string b = "GEOMETRYCOLLECTION (LINESTRING (0 0, 10 0), POLYGON EMPTY)";
+
+    checkRelate(a, b, "1F0F0FFF2");
+    checkRelate(b, a, "1FFF0F0F2");
+    checkCoversCoveredBy(a, b, true);
+    checkCoversCoveredBy(b, a, false);
+    checkContainsWithin(a, b, true);
+    checkContainsWithin(b, a, false);
+}
+
+template<>
+template<>
+void object::test<77>()
+{
+    // see https://github.com/libgeos/geos/issues/1594
+    set_test_name("Point vs GeometryCollection with empty polygon and zero-length line");
+
+    std::string b = "GEOMETRYCOLLECTION (POLYGON EMPTY, LINESTRING (0 0, 0 0))";
+
+    checkRelate("POINT (5 5)", b, "FF0FFF0F2");
+    checkRelate("POINT (0 0)", b, "0FFFFFFF2");
+}
+
 } // namespace tut

@@ -120,7 +120,7 @@ template<>
 template<>
 void object::test<9> ()
 {
-    checkDimension("GEOMETRYCOLLECTION (POLYGON EMPTY, LINESTRING (1 1, 5 4), POINT (6 5))", 2, 1);
+    checkDimension("GEOMETRYCOLLECTION (POLYGON EMPTY, LINESTRING (1 1, 5 4), POINT (6 5))", 1, 1);
 }
 
 template<>
@@ -128,6 +128,28 @@ template<>
 void object::test<10> ()
 {
     checkDimension("LINESTRING (0 0, 0 0, 9 9)", 1, 1);
+}
+
+// https://github.com/libgeos/geos/issues/1594
+template<>
+template<>
+void object::test<11> ()
+{
+    checkDimension("GEOMETRYCOLLECTION (LINESTRING EMPTY, POINT (1 1))", 0, 0);
+}
+
+template<>
+template<>
+void object::test<12> ()
+{
+    checkDimension("GEOMETRYCOLLECTION (POLYGON EMPTY, LINESTRING (0 0, 0 0))", 1, 0);
+}
+
+template<>
+template<>
+void object::test<13> ()
+{
+    checkDimension("GEOMETRYCOLLECTION (POLYGON EMPTY)", Dimension::False, Dimension::False);
 }
 
 
