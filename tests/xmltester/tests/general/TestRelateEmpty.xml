@@ -1133,4 +1133,53 @@
 </case>
 
 
+<!-- ================  GC with EMPTY element ============== -->
+
+<case>
+  <!-- https://github.com/libgeos/geos/issues/1594 -->
+  <desc>P/GC - empty Point VS GC with empty LineString and Point</desc>
+  <a>
+    POINT EMPTY
+  </a>
+  <b>
+    GEOMETRYCOLLECTION (LINESTRING EMPTY, POINT (1 1))
+  </b>
+  <test><op name="relate" arg3="FFFFFF0F2" arg1="A" arg2="B"> true </op></test>
+  <test><op name="relate" arg3="FF0FFFFF2" arg1="B" arg2="A"> true </op></test>
+  <test><op name="contains"   arg1="A" arg2="B"> false </op></test>
+  <test><op name="coveredBy"  arg1="A" arg2="B"> false </op></test>
+  <test><op name="covers"     arg1="A" arg2="B"> false </op></test>
+  <test><op name="crosses"    arg1="A" arg2="B"> false </op></test>
+  <test><op name="disjoint"   arg1="A" arg2="B"> true </op></test>
+  <test><op name="equalsTopo" arg1="A" arg2="B"> false </op></test>
+  <test><op name="intersects" arg1="A" arg2="B"> false </op></test>
+  <test><op name="overlaps"   arg1="A" arg2="B"> false </op></test>
+  <test><op name="touches"    arg1="A" arg2="B"> false </op></test>
+  <test><op name="within"     arg1="A" arg2="B"> false </op></test>
+</case>
+
+<case>
+  <!-- https://github.com/libgeos/geos/issues/1594 -->
+  <desc>P/GC - empty Point VS GC with empty Polygon and Point</desc>
+  <a>
+    POINT EMPTY
+  </a>
+  <b>
+    GEOMETRYCOLLECTION (POLYGON EMPTY, POINT (1 1))
+  </b>
+  <test><op name="relate" arg3="FFFFFF0F2" arg1="A" arg2="B"> true </op></test>
+  <test><op name="relate" arg3="FF0FFFFF2" arg1="B" arg2="A"> true </op></test>
+  <test><op name="contains"   arg1="A" arg2="B"> false </op></test>
+  <test><op name="coveredBy"  arg1="A" arg2="B"> false </op></test>
+  <test><op name="covers"     arg1="A" arg2="B"> false </op></test>
+  <test><op name="crosses"    arg1="A" arg2="B"> false </op></test>
+  <test><op name="disjoint"   arg1="A" arg2="B"> true </op></test>
+  <test><op name="equalsTopo" arg1="A" arg2="B"> false </op></test>
+  <test><op name="intersects" arg1="A" arg2="B"> false </op></test>
+  <test><op name="overlaps"   arg1="A" arg2="B"> false </op></test>
+  <test><op name="touches"    arg1="A" arg2="B"> false </op></test>
+  <test><op name="within"     arg1="A" arg2="B"> false </op></test>
+</case>
+
+
 </run>
