@@ -27,7 +27,7 @@ struct test_nodablearcstring_data {
                                 const std::vector<std::vector<CircularArc>>& expected, bool reversed=false) {
         std::vector<CircularArc> arcs;
         arcs.push_back(arc);
-        NodableArcString nas(arcs, nullptr, false, false, nullptr);
+        NodableArcString nas(arcs, nullptr, false, false, true, nullptr);
 
         for (const auto& coord : coords) {
             nas.addIntersection(coord, 0);
@@ -61,12 +61,18 @@ struct test_nodablearcstring_data {
         }
     }
 
-    void checkSplit(const std::string& wkt, const CoordinateXY& splitPt, std::size_t pathIndex, const std::vector<std::string>& expected_wkt)
+    void checkSplit(const std::string& wkt,
+        const CoordinateXY& splitPt,
+        std::size_t pathIndex,
+        bool preserveControlPoint,
+        const std::vector<std::string>& expected_wkt) const
     {
         const auto g = reader_.read<CircularString>(wkt);
         const auto& gfact = *g->getFactory();
 
-        NodableArcString nas(g->getArcs(), g->getSharedCoordinates(), false, false, nullptr);
+        const double controlPointTol = preserveControlPoint ? geos::DoubleInfinity : 0;
+
+        NodableArcString nas(g->getArcs(), g->getSharedCoordinates(), false, false, controlPointTol, nullptr);
         nas.addIntersection(splitPt, pathIndex);
 
         std::vector<std::unique_ptr<ArcString>> noded;
@@ -174,7 +180,7 @@ void object::test<4>()
     CoordinateXYZM intPt{4, 3, 13, 5};
 
     std::vector<CircularArc> in { arc };
-    NodableArcString nas(std::move(in), nullptr, true, true, nullptr);
+    NodableArcString nas(std::move(in), nullptr, true, true, geos::DoubleInfinity, nullptr);
 
     nas.addIntersection( intPt, 0);
 
@@ -200,25 +206,25 @@ void object::test<5>()
     set_test_name("splits at arc endpoints");
 
     checkSplit("CIRCULARSTRING (100 0, 50 50, 0 0, -50 50, 0 100, 50 80, 100 100, 150 50, 100 0)",
-                {0, 0}, 0, {
+                {0, 0}, 0, true, {
                  "CIRCULARSTRING (100 0, 50 50, 0 0)",
                  "CIRCULARSTRING (0 0, -50 50, 0 100, 50 80, 100 100, 150 50, 100 0)"
                 });
 
     checkSplit("CIRCULARSTRING (100 0, 50 50, 0 0, -50 50, 0 100, 50 80, 100 100, 150 50, 100 0)",
-                {0, 0}, 1, {
+                {0, 0}, 1, true, {
                  "CIRCULARSTRING (100 0, 50 50, 0 0)",
                  "CIRCULARSTRING (0 0, -50 50, 0 100, 50 80, 100 100, 150 50, 100 0)"
                 });
 
     checkSplit("CIRCULARSTRING (100 0, 50 50, 0 0, -50 50, 0 100, 50 80, 100 100, 150 50, 100 0)",
-                {100, 100}, 2, {
+                {100, 100}, 2, true, {
                  "CIRCULARSTRING (100 0, 50 50, 0 0)",
                  "CIRCULARSTRING (0 0, -50 50, 0 100, 50 80, 100 100, 150 50, 100 0)"
                 });
 
     checkSplit("CIRCULARSTRING (100 0, 50 50, 0 0, -50 50, 0 100, 50 80, 100 100, 150 50, 100 0)",
-                {100, 100}, 3, {
+                {100, 100}, 3, true, {
                  "CIRCULARSTRING (100 0, 50 50, 0 0)",
                  "CIRCULARSTRING (0 0, -50 50, 0 100, 50 80, 100 100, 150 50, 100 0)"
                 });
@@ -239,7 +245,7 @@ void object::test<6>()
         }) {
         const auto g = reader_.read<CircularString>(wkt);
 
-        NodableArcString nas(g->getArcs(), g->getSharedCoordinates(), false, false, nullptr);
+        NodableArcString nas(g->getArcs(), g->getSharedCoordinates(), false, false, geos::DoubleInfinity, nullptr);
 
         std::vector<std::unique_ptr<ArcString>> noded;
         nas.getNoded(noded);
@@ -261,7 +267,7 @@ void object::test<7>()
 
     const auto g = reader_.read<CircularString>("CIRCULARSTRING (0 0, 0 0, 2 0, 3 1, 4 0)");
 
-    NodableArcString nas(g->getArcs(), g->getSharedCoordinates(), false, false, nullptr);
+    NodableArcString nas(g->getArcs(), g->getSharedCoordinates(), false, false, geos::DoubleInfinity, nullptr);
     nas.addIntersection(CoordinateXY{3, 1}, 1);
 
     std::vector<std::unique_ptr<ArcString>> noded;

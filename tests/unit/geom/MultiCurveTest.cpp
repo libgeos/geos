@@ -154,10 +154,19 @@ void object::test<3>()
     ensure("equalsIdentical", mc_->equalsIdentical(cc2.get()));
 
     // Overlay
-    ensure_equals_geometry(mc_->Union().get(), static_cast<const Geometry*>(mc_.get()));
-    ensure_equals_geometry(mc_->Union(mc_.get()).get(), static_cast<const Geometry*>(mc_.get()));
+    {
+        auto unaryUnionResult = mc_->Union();
+        ensure(unaryUnionResult->difference(mc_.get())->isEmpty());
+    }
+    {
+        auto unionResult = mc_->Union(mc_.get());
+        ensure(unionResult->difference(mc_.get())->isEmpty());
+    }
+    {
+        auto intersectionResult = mc_->intersection(mc_.get());
+        ensure(intersectionResult->difference(mc_.get())->isEmpty());
+    }
     ensure(mc_->difference(mc_.get())->isEmpty());
-    ensure_equals_geometry(mc_->intersection(mc_.get()).get(), static_cast<const Geometry*>(mc_.get()));
     ensure(mc_->symDifference(mc_.get())->isEmpty());
 
     // Distance

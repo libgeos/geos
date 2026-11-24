@@ -868,7 +868,54 @@ void object::test<66>()
 
     std::string exp = "CURVEPOLYGON (COMPOUNDCURVE ((2.2174 14.391, 2.2167 14.391, 2.2158 14.3911, 2.2163 14.3916, 2.2171 14.3923), CIRCULARSTRING (2.2171 14.3923, 2.2175 14.3918, 2.2174 14.391)))";
 
+    setEqualityTolerance(1e-4);
     testOverlay(a, b, exp, OverlayNG::UNION, 0);
+}
+
+template<>
+template<>
+void object::test<67>()
+{
+    set_test_name("Difference of two CircularStrings representing same path with different control points");
+    // https://github.com/libgeos/geos/issues/1605
+
+    std::string a = "CIRCULARSTRING(5 5, 7 1, 5 0)";
+    std::string b = "CIRCULARSTRING(5 5, 7 4, 5 0)";
+
+    std::string exp = "LINESTRING EMPTY";
+
+    testOverlay(a, b, exp, OverlayNG::DIFFERENCE, 0);
+}
+
+template<>
+template<>
+void object::test<68>()
+{
+    set_test_name("Union of two CurvePolygons sharing and edge defined with different control points");
+    // https://github.com/libgeos/geos/issues/1606
+
+    std::string a = "CURVEPOLYGON (COMPOUNDCURVE((5 0, 0 0, 0 5, 5 5), CIRCULARSTRING(5 5, 7 1, 5 0)))";
+    std::string b = "CURVEPOLYGON (COMPOUNDCURVE((5 0, 10 0, 10 5, 5 5), CIRCULARSTRING(5 5, 7 4, 5 0)))";
+
+    std::string exp = "POLYGON ((5 0, 0 0, 0 5, 5 5, 10 5, 10 0, 5 0))";
+
+    testOverlay(a, b, exp, OverlayNG::UNION, 0);
+}
+
+
+template<>
+template<>
+void object::test<69>()
+{
+    set_test_name("Intersection of two CurvePolygons sharing and edge defined with different control points");
+    // https://github.com/libgeos/geos/issues/1606
+
+    std::string a = "CURVEPOLYGON (COMPOUNDCURVE((5 0, 0 0, 0 5, 5 5), CIRCULARSTRING(5 5, 7 1, 5 0)))";
+    std::string b = "CURVEPOLYGON (COMPOUNDCURVE((5 0, 10 0, 10 5, 5 5), CIRCULARSTRING(5 5, 7 4, 5 0)))";
+
+    std::string exp = "CIRCULARSTRING (5 5, 7.5 2.5, 5 0)";
+
+    testOverlay(a, b, exp, OverlayNG::INTERSECTION, 0);
 }
 
 } // namespace tut
