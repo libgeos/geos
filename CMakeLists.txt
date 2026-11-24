@@ -414,11 +414,6 @@ target_link_libraries(geos PRIVATE $<BUILD_INTERFACE:ryu>)
 # ryu is an object library, nothing is actually being linked here. The BUILD_INTERFACE
 # switch was necessary to build on AppVeyor (CMake 3.16.2) but not locally (CMake 3.16.3)
 
-if(COMPILER_HAS_SIMD)
-  target_compile_options(geos PRIVATE ${SIMD_FLAGS})
-  target_compile_definitions(geos PRIVATE HAVE_OPEN_SIMD)
-endif()
-
 # Leave install with an RPATH approach to linking
 #if(APPLE AND BUILD_SHARED_LIBS)
 #  set_target_properties(geos PROPERTIES
