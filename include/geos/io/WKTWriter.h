@@ -40,6 +40,11 @@ class CoordinateXY;
 class CoordinateXYZM;
 class CoordinateSequence;
 class Curve;
+class EllipticalCurve;
+class Clothoid;
+class SpiralCurve;
+struct AffinePlacement;
+class NurbsCurve;
 class CompoundCurve;
 class Geometry;
 class GeometryCollection;
@@ -224,6 +229,31 @@ protected:
 
     void appendSimpleCurveTaggedText(
         const geom::SimpleCurve& lineString,
+        OrdinateSet outputOrdinates,
+        int level, Writer& writer) const;
+
+    void appendEllipticalCurveTaggedText(
+        const geom::EllipticalCurve& curve,
+        OrdinateSet outputOrdinates,
+        int level, Writer& writer) const;
+
+    void appendClothoidTaggedText(
+        const geom::Clothoid& clothoid,
+        OrdinateSet outputOrdinates,
+        int level, Writer& writer) const;
+
+    void appendSpiralCurveTaggedText(
+        const geom::SpiralCurve& curve,
+        OrdinateSet outputOrdinates,
+        int level, Writer& writer) const;
+
+    /// REFERENCELOCATION AFFINEPLACEMENT [Z] (LOCATION, REFERENCEDIRECTIONS)
+    void appendReferenceLocationText(
+        const geom::AffinePlacement& location,
+        bool hasZ, Writer& writer) const;
+
+    void appendNurbsCurveTaggedText(
+        const geom::NurbsCurve& nurbs,
         OrdinateSet outputOrdinates,
         int level, Writer& writer) const;
 

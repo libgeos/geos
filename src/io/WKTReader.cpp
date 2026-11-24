@@ -23,6 +23,12 @@
 #include <geos/io/CLocalizer.h>
 #include <geos/geom/Coordinate.h>
 #include <geos/geom/CircularString.h>
+#include <geos/geom/EllipticalCurve.h>
+#include <geos/constants.h>
+#include <geos/geom/Clothoid.h>
+#include <geos/geom/SpiralCurve.h>
+#include <geos/util/IllegalArgumentException.h>
+#include <geos/geom/NurbsCurve.h>
 #include <geos/geom/CompoundCurve.h>
 #include <geos/geom/Point.h>
 #include <geos/geom/LinearRing.h>
@@ -39,6 +45,7 @@
 #include <geos/util.h>
 #include <geos/util/string.h>
 
+#include <cmath>
 #include <sstream>
 #include <string>
 #include <cassert>
@@ -335,6 +342,18 @@ WKTReader::readGeometryTaggedText(StringTokenizer* tokenizer, OrdinateSet& ordin
     else if(isTypeName(type, "CIRCULARSTRING")) {
         geom = readCircularStringText(tokenizer, newFlags);
     }
+    else if(isTypeName(type, "ELLIPTICALCURVE")) {
+        geom = readEllipticalCurveText(tokenizer, newFlags);
+    }
+    else if(isTypeName(type, "CLOTHOID")) {
+        geom = readClothoidText(tokenizer, newFlags);
+    }
+    else if(isTypeName(type, "SPIRALCURVE")) {
+        geom = readSpiralCurveText(tokenizer, newFlags);
+    }
+    else if(isTypeName(type, "NURBSCURVE")) {
+        geom = readNurbsCurveText(tokenizer, newFlags);
+    }
     else if(isTypeName(type, "COMPOUNDCURVE")) {
         geom = readCompoundCurveText(tokenizer, newFlags);
     }
@@ -404,6 +423,476 @@ WKTReader::readCircularStringText(StringTokenizer* tokenizer, OrdinateSet& ordin
 {
     auto&& coords = getCoordinates(tokenizer, ordinateFlags);
     return geometryFactory->createCircularString(std::move(coords));
+}
+std::unique_ptr<NurbsCurve>
+WKTReader::readNurbsCurveText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const
+{
+    std::string nextToken = getNextEmptyOrOpener(tokenizer, ordinateFlags);
+    if (nextToken == "EMPTY") {
+        return geometryFactory->createNurbsCurve(ordinateFlags.hasZ(), ordinateFlags.hasM());
+    }
+
+    const bool hasZ = ordinateFlags.hasZ();
+    const bool hasM = ordinateFlags.hasM();
+
+    auto expect = [&](const char* word) {
+        const std::string got = getNextWord(tokenizer);
+        if (got != word) {
+            throw ParseException(std::string("Expected ") + word + " in NURBSCURVE but encountered", got);
+        }
+    };
+
+    // A <just z> tag after keyword, matched against the NURBSCURVE tag.
+    // Returns the word after it.
+    auto expectZFlag = [&](const char* keyword) {
+        std::string word = getNextWord(tokenizer);
+        const bool componentZ = (word == "Z");
+        if (componentZ) {
+            word = getNextWord(tokenizer);
+        }
+        if (componentZ != hasZ) {
+            throw ParseException(std::string(keyword) + (hasZ
+                ? " must be Z when NURBSCURVE is Z"
+                : " must not be Z when NURBSCURVE is not Z"));
+        }
+        return word;
+    };
+
+    auto readInteger = [&](const char* keyword) {
+        const double value = getNextNumber(tokenizer);
+        if (!(value >= 0.0) || !(value <= 1e9) || std::floor(value) != value) {
+            throw ParseException(std::string("NURBSCURVE ") + keyword + " must be a non-negative integer");
+        }
+        return static_cast<std::size_t>(value);
+    };
+
+    // The comma before the next item, or false at the closing parenthesis.
+    auto nextItem = [&](const char* list) {
+        const std::string word = getNextWord(tokenizer);
+        if (word == ",") {
+            return true;
+        }
+        if (word == ")") {
+            return false;
+        }
+        throw ParseException(std::string("Expected ',' or ')' in ") + list + " but encountered", word);
+    };
+
+    expect("DEGREE");
+    const std::size_t degree = readInteger("DEGREE");
+    if (degree > static_cast<std::size_t>(NurbsCurve::MAX_DEGREE)) {
+        throw ParseException("NURBSCURVE DEGREE is too large");
+    }
+    expect(",");
+
+    expect("CONTROLPOINTS");
+    std::string word = expectZFlag("CONTROLPOINTS");
+    if (word == "EMPTY") {
+        throw ParseException("NURBSCURVE CONTROLPOINTS must not be EMPTY");
+    }
+    if (word != "(") {
+        throw ParseException("Expected '(' after CONTROLPOINTS but encountered", word);
+    }
+    std::vector<NurbsPoint> controlPoints;
+    do {
+        expect("NURBSPOINT");
+        word = getNextWord(tokenizer);
+        if (word == "EMPTY") {
+            throw ParseException("NURBSCURVE NURBSPOINT must not be EMPTY");
+        }
+        if (word != "(") {
+            throw ParseException("Expected '(' after NURBSPOINT but encountered", word);
+        }
+        expect("WEIGHTEDPOINT");
+        word = expectZFlag("WEIGHTEDPOINT");
+        if (word == "EMPTY") {
+            throw ParseException("NURBSCURVE WEIGHTEDPOINT must not be EMPTY");
+        }
+        if (word != "(") {
+            throw ParseException("Expected '(' after WEIGHTEDPOINT but encountered", word);
+        }
+        // The point is weighted, not cartesian, so it is not snapped to the
+        // precision model.
+        NurbsPoint cp;
+        cp.weightedPoint.x = getNextNumber(tokenizer);
+        cp.weightedPoint.y = getNextNumber(tokenizer);
+        if (hasZ) {
+            cp.weightedPoint.z = getNextNumber(tokenizer);
+        }
+        expect(")");
+        expect(",");
+        expect("WEIGHT");
+        cp.weight = getNextNumber(tokenizer);
+        expect(")");
+        controlPoints.push_back(cp);
+    } while (nextItem("CONTROLPOINTS"));
+    expect(",");
+
+    expect("KNOTS");
+    word = getNextWord(tokenizer);
+    if (word == "EMPTY") {
+        throw ParseException("NURBSCURVE KNOTS must not be EMPTY");
+    }
+    if (word != "(") {
+        throw ParseException("Expected '(' after KNOTS but encountered", word);
+    }
+    std::vector<NurbsKnot> knots;
+    do {
+        expect("KNOT");
+        word = getNextWord(tokenizer);
+        if (word == "EMPTY") {
+            throw ParseException("NURBSCURVE KNOT must not be EMPTY");
+        }
+        if (word != "(") {
+            throw ParseException("Expected '(' after KNOT but encountered", word);
+        }
+        expect("VALUE");
+        NurbsKnot knot;
+        knot.value = getNextNumber(tokenizer);
+        expect(",");
+        expect("MULTIPLICITY");
+        knot.multiplicity = readInteger("MULTIPLICITY");
+        expect(")");
+        knots.push_back(knot);
+    } while (nextItem("KNOTS"));
+
+    double startM = 0.0;
+    double endM = 0.0;
+    word = getNextWord(tokenizer);
+    if (word == ",") {
+        if (!hasM) {
+            throw ParseException("NURBSCURVE STARTM/ENDM require the M or ZM type flag");
+        }
+        expect("STARTM");
+        startM = getNextNumber(tokenizer);
+        expect(",");
+        expect("ENDM");
+        endM = getNextNumber(tokenizer);
+        expect(")");
+    }
+    else if (word == ")") {
+        // 5.1.67 bh) names <startangle text representation> here; the
+        // NURBSCURVE grammar has STARTM and ENDM.
+        if (hasM) {
+            throw ParseException("NURBSCURVE M or ZM requires STARTM and ENDM");
+        }
+    }
+    else {
+        throw ParseException("Expected ',' or ')' in NURBSCURVE but encountered", word);
+    }
+
+    return geometryFactory->createNurbsCurve(
+        static_cast<int>(degree), std::move(controlPoints), std::move(knots),
+        hasZ, hasM, startM, endM);
+}
+
+AffinePlacement
+WKTReader::readReferenceLocationText(StringTokenizer* tokenizer, bool hasZ, const std::string& typeName) const
+{
+    auto expect = [&](const char* word) {
+        const std::string got = getNextWord(tokenizer);
+        if (got != word) {
+            throw ParseException(std::string("Expected ") + word + " in " + typeName + " but encountered", got);
+        }
+    };
+
+    auto takeZFlag = [&](std::string& word) {
+        if (word == "Z") {
+            word = getNextWord(tokenizer);
+            return true;
+        }
+        return false;
+    };
+
+    expect("REFERENCELOCATION");
+    std::string word = getNextWord(tokenizer);
+    if (word != "AFFINEPLACEMENT") {
+        throw ParseException("Expected AFFINEPLACEMENT in " + typeName + " but encountered", word);
+    }
+    word = getNextWord(tokenizer);
+    const bool placementZ = takeZFlag(word);
+    if (word == "EMPTY") {
+        throw ParseException(typeName + " reference location must not be EMPTY");
+    }
+    if (word != "(") {
+        throw ParseException("Expected '(' after AFFINEPLACEMENT but encountered", word);
+    }
+    if (placementZ != hasZ) {
+        throw ParseException(hasZ
+            ? typeName + " Z requires AFFINEPLACEMENT Z"
+            : typeName + " without Z must not use AFFINEPLACEMENT Z");
+    }
+
+    auto readComponents = [&](const char* keyword, double& x, double& y, double& z, bool snap) {
+        word = getNextWord(tokenizer);
+        if (word != keyword) {
+            throw ParseException(std::string("Expected ") + keyword + " in " + typeName + " but encountered", word);
+        }
+        word = getNextWord(tokenizer);
+        const bool componentZ = takeZFlag(word);
+        if (componentZ != hasZ) {
+            throw ParseException(std::string(keyword) + (hasZ
+                ? " must be Z when " + typeName + " is Z"
+                : " must not be Z when " + typeName + " is not Z"));
+        }
+        if (word != "(") {
+            throw ParseException(std::string("Expected '(' after ") + keyword + " but encountered", word);
+        }
+        x = getNextNumber(tokenizer);
+        y = getNextNumber(tokenizer);
+        z = 0.0;
+        if (hasZ) {
+            z = getNextNumber(tokenizer);
+        }
+        if (snap) {
+            CoordinateXYZM coord(x, y, z, DoubleNotANumber);
+            precisionModel->makePrecise(coord);
+            x = coord.x;
+            y = coord.y;
+            z = hasZ ? coord.z : 0.0;
+        }
+        expect(")");
+    };
+
+    // Exactly two reference directions, as ST_EllipticalCurve requires
+    // (7.6.1 Desc 13).
+    AffinePlacement location;
+    readComponents("LOCATION", location.origin.x, location.origin.y, location.origin.z, true);
+    expect(",");
+    expect("REFERENCEDIRECTIONS");
+    expect("(");
+    readComponents("VECTOR", location.u.x, location.u.y, location.u.z, false);
+    expect(",");
+    readComponents("VECTOR", location.v.x, location.v.y, location.v.z, false);
+    expect(")");
+    expect(")");
+    return location;
+}
+
+std::unique_ptr<EllipticalCurve>
+WKTReader::readEllipticalCurveText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const
+{
+    std::string nextToken = getNextEmptyOrOpener(tokenizer, ordinateFlags);
+    if (nextToken == "EMPTY") {
+        return geometryFactory->createEllipticalCurve(ordinateFlags.hasZ(), ordinateFlags.hasM());
+    }
+
+    const bool hasZ = ordinateFlags.hasZ();
+    const bool hasM = ordinateFlags.hasM();
+
+    auto expect = [&](const char* word) {
+        const std::string got = getNextWord(tokenizer);
+        if (got != word) {
+            throw ParseException(std::string("Expected ") + word + " in ELLIPTICALCURVE but encountered", got);
+        }
+    };
+
+    // <length text> may be EMPTY in the grammar, but a curve needs both.
+    auto readLength = [&](const char* keyword) {
+        expect(keyword);
+        if (!isNumberNext(tokenizer)) {
+            throw ParseException(std::string("ELLIPTICALCURVE ") + keyword + " must be a number");
+        }
+        return getNextNumber(tokenizer);
+    };
+
+    // ANGLE DEGREES (n), ANGLE GRADIANS (n) or ANGLE RADIANS (n), in radians.
+    auto readAngle = [&](const char* keyword) {
+        expect(keyword);
+        expect("ANGLE");
+        const std::string unit = getNextWord(tokenizer);
+        double toRadians = 1.0;
+        if (unit == "DEGREES") {
+            toRadians = MATH_PI / 180.0;
+        }
+        else if (unit == "GRADIANS") {
+            toRadians = MATH_PI / 200.0;
+        }
+        else if (unit != "RADIANS") {
+            throw ParseException("Expected DEGREES, GRADIANS or RADIANS in ELLIPTICALCURVE but encountered", unit);
+        }
+        expect("(");
+        const double value = getNextNumber(tokenizer);
+        expect(")");
+        return value * toRadians;
+    };
+
+    const AffinePlacement location = readReferenceLocationText(tokenizer, hasZ, "ELLIPTICALCURVE");
+    expect(",");
+    const double uAxis = readLength("UAXISLENGTH");
+    expect(",");
+    const double vAxis = readLength("VAXISLENGTH");
+    expect(",");
+    const double startAngle = readAngle("STARTANGLE");
+    expect(",");
+    const double endAngle = readAngle("ENDANGLE");
+
+    double startM = 0.0;
+    double endM = 0.0;
+    const std::string word = getNextWord(tokenizer);
+    if (word == ",") {
+        if (!hasM) {
+            throw ParseException("ELLIPTICALCURVE STARTM/ENDM require the M or ZM type flag");
+        }
+        expect("STARTM");
+        startM = getNextNumber(tokenizer);
+        expect(",");
+        expect("ENDM");
+        endM = getNextNumber(tokenizer);
+        expect(")");
+    }
+    else if (word == ")") {
+        if (hasM) {
+            throw ParseException("ELLIPTICALCURVE M or ZM requires STARTM and ENDM");
+        }
+    }
+    else {
+        throw ParseException("Expected ',' or ')' in ELLIPTICALCURVE but encountered", word);
+    }
+
+    return geometryFactory->createEllipticalCurve(
+        location, uAxis, vAxis, startAngle, endAngle, hasZ, hasM, startM, endM);
+}
+
+std::unique_ptr<SpiralCurve>
+WKTReader::readSpiralCurveText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const
+{
+    std::string nextToken = getNextEmptyOrOpener(tokenizer, ordinateFlags);
+    if (nextToken == "EMPTY") {
+        return geometryFactory->createSpiralCurve(ordinateFlags.hasZ(), ordinateFlags.hasM());
+    }
+
+    const bool hasZ = ordinateFlags.hasZ();
+    const bool hasM = ordinateFlags.hasM();
+
+    auto expect = [&](const char* word) {
+        const std::string got = getNextWord(tokenizer);
+        if (got != word) {
+            throw ParseException(std::string("Expected ") + word + " in SPIRALCURVE but encountered", got);
+        }
+    };
+
+    // <spirallength text> and <curvature text> may be EMPTY in the
+    // grammar, but a curve needs them.
+    auto readNumber = [&](const char* keyword) {
+        expect(keyword);
+        if (!isNumberNext(tokenizer)) {
+            throw ParseException(std::string("SPIRALCURVE ") + keyword + " must be a number");
+        }
+        return getNextNumber(tokenizer);
+    };
+
+    const AffinePlacement location = readReferenceLocationText(tokenizer, hasZ, "SPIRALCURVE");
+    expect(",");
+    const double length = readNumber("LENGTH");
+    expect(",");
+    const double startCurvature = readNumber("STARTCURVATURE");
+    expect(",");
+    const double endCurvature = readNumber("ENDCURVATURE");
+    expect(",");
+    expect("SPIRALTYPE");
+    const std::string typeWord = getNextWord(tokenizer);
+    SpiralType type;
+    try {
+        type = SpiralCurve::typeFromName(typeWord);
+    }
+    catch (const util::IllegalArgumentException&) {
+        throw ParseException("Expected clothoid, bloss, biquadratic, sine or cosine as SPIRALTYPE but encountered", typeWord);
+    }
+
+    double startM = 0.0;
+    double endM = 0.0;
+    const std::string word = getNextWord(tokenizer);
+    if (word == ",") {
+        if (!hasM) {
+            throw ParseException("SPIRALCURVE STARTM/ENDM require the M or ZM type flag");
+        }
+        expect("STARTM");
+        startM = getNextNumber(tokenizer);
+        expect(",");
+        expect("ENDM");
+        endM = getNextNumber(tokenizer);
+        expect(")");
+    }
+    else if (word == ")") {
+        // 5.1.67 cb) names <startangle text representation>
+        // and ST_EllipticalCurve here; the spiral grammar has STARTM and ENDM.
+        if (hasM) {
+            throw ParseException("SPIRALCURVE M or ZM requires STARTM and ENDM");
+        }
+    }
+    else {
+        throw ParseException("Expected ',' or ')' in SPIRALCURVE but encountered", word);
+    }
+
+    return geometryFactory->createSpiralCurve(
+        location, length, startCurvature, endCurvature, type, hasZ, hasM, startM, endM);
+}
+
+std::unique_ptr<Clothoid>
+WKTReader::readClothoidText(StringTokenizer* tokenizer, OrdinateSet& ordinateFlags) const
+{
+    std::string nextToken = getNextEmptyOrOpener(tokenizer, ordinateFlags);
+    if (nextToken == "EMPTY") {
+        return geometryFactory->createClothoid(ordinateFlags.hasZ(), ordinateFlags.hasM());
+    }
+
+    if (isNumberNext(tokenizer)) {
+        throw ParseException("CLOTHOID WKT requires REFERENCELOCATION");
+    }
+
+    const bool hasZ = ordinateFlags.hasZ();
+    const bool hasM = ordinateFlags.hasM();
+
+    auto expect = [&](const char* word) {
+        const std::string got = getNextWord(tokenizer);
+        if (got != word) {
+            throw ParseException(std::string("Expected ") + word + " in CLOTHOID but encountered", got);
+        }
+    };
+
+    const AffinePlacement placement = readReferenceLocationText(tokenizer, hasZ, "CLOTHOID");
+    ClothoidReferenceLocation location;
+    location.origin = placement.origin;
+    location.u = placement.u;
+    location.v = placement.v;
+    std::string word;
+
+    expect(",");
+    expect("SCALEFACTOR");
+    const double scale = getNextNumber(tokenizer);
+    expect(",");
+    expect("STARTDISTANCE");
+    const double startDistance = getNextNumber(tokenizer);
+    expect(",");
+    expect("ENDDISTANCE");
+    const double endDistance = getNextNumber(tokenizer);
+
+    double startM = 0.0;
+    double endM = 0.0;
+    word = getNextWord(tokenizer);
+    if (word == ",") {
+        if (!hasM) {
+            throw ParseException("CLOTHOID STARTM/ENDM require the M or ZM type flag");
+        }
+        expect("STARTM");
+        startM = getNextNumber(tokenizer);
+        expect(",");
+        expect("ENDM");
+        endM = getNextNumber(tokenizer);
+        expect(")");
+    }
+    else if (word == ")") {
+        if (hasM) {
+            throw ParseException("CLOTHOID M or ZM requires STARTM and ENDM");
+        }
+    }
+    else {
+        throw ParseException("Expected ',' or ')' in CLOTHOID but encountered", word);
+    }
+
+    return geometryFactory->createClothoid(
+        location, scale, startDistance, endDistance, hasZ, hasM, startM, endM);
 }
 
 std::unique_ptr<Curve>

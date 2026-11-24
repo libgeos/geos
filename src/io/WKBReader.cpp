@@ -21,6 +21,11 @@
 #include <geos/io/ByteOrderValues.h>
 #include <geos/io/ParseException.h>
 #include <geos/geom/CircularString.h>
+#include <geos/geom/EllipticalCurve.h>
+#include <geos/geom/Clothoid.h>
+#include <geos/geom/SpiralCurve.h>
+#include <geos/util/IllegalArgumentException.h>
+#include <geos/geom/NurbsCurve.h>
 #include <geos/geom/CompoundCurve.h>
 #include <geos/geom/CurvePolygon.h>
 #include <geos/geom/Geometry.h>
@@ -38,6 +43,7 @@
 #include <geos/geom/CoordinateSequence.h>
 #include <geos/geom/PrecisionModel.h>
 #include <geos/util.h>
+#include <geos/util/GEOSException.h>
 
 #include <iomanip>
 #include <ostream>
@@ -202,7 +208,11 @@ WKBReader::minMemSize(geom::GeometryTypeId geomType, uint64_t size) const
     constexpr uint64_t minLineSize = (1+4+4); // empty line
     constexpr uint64_t minRingSize = 4; // empty ring
     constexpr uint64_t minPolySize = (1+4+4); // empty polygon
-    constexpr uint64_t minGeomSize = minLineSize;
+    // An empty elliptical curve is only a byte order and a type word.
+    // An empty clothoid or spiral curve is only a byte order and a type
+    // word.
+    constexpr uint64_t minCurveSize = (1+4);
+    constexpr uint64_t minGeomSize = minCurveSize;
 
     uint64_t perElement = 0;
     switch(geomType) {
@@ -210,6 +220,10 @@ WKBReader::minMemSize(geom::GeometryTypeId geomType, uint64_t size) const
         case GEOS_LINEARRING:
         case GEOS_CIRCULARSTRING:
         case GEOS_COMPOUNDCURVE:
+        case GEOS_ELLIPTICALCURVE:
+        case GEOS_CLOTHOID:
+        case GEOS_SPIRALCURVE:
+        case GEOS_NURBSCURVE:
         case GEOS_POINT:
             perElement = minCoordSize;
             break;
@@ -221,8 +235,10 @@ WKBReader::minMemSize(geom::GeometryTypeId geomType, uint64_t size) const
             perElement = minPtSize;
             break;
         case GEOS_MULTILINESTRING:
-        case GEOS_MULTICURVE:
             perElement = minLineSize;
+            break;
+        case GEOS_MULTICURVE:
+            perElement = minCurveSize;
             break;
         case GEOS_MULTIPOLYGON:
         case GEOS_MULTISURFACE:
@@ -344,6 +360,18 @@ WKBReader::readGeometry()
     case WKBConstants::wkbCircularString :
         result = readCircularString();
         break;
+    case WKBConstants::wkbEllipticalCurve :
+        result = readEllipticalCurve();
+        break;
+    case WKBConstants::wkbClothoid :
+        result = readClothoid();
+        break;
+    case WKBConstants::wkbSpiralCurve :
+        result = readSpiralCurve();
+        break;
+    case WKBConstants::wkbNurbsCurve :
+        result = readNurbsCurve();
+        break;
     case WKBConstants::wkbCompoundCurve :
         result = readCompoundCurve();
         break;
@@ -430,6 +458,314 @@ WKBReader::readCircularString()
     minMemSize(GEOS_CIRCULARSTRING, size);
     auto pts = readCoordinateSequence(size);
     return factory.createCircularString(std::move(pts));
+}
+
+namespace {
+
+bool
+isGeometryWkbType(uint32_t base)
+{
+    switch (base) {
+    case WKBConstants::wkbPoint:
+    case WKBConstants::wkbLineString:
+    case WKBConstants::wkbPolygon:
+    case WKBConstants::wkbMultiPoint:
+    case WKBConstants::wkbMultiLineString:
+    case WKBConstants::wkbMultiPolygon:
+    case WKBConstants::wkbGeometryCollection:
+    case WKBConstants::wkbCircularString:
+    case WKBConstants::wkbCompoundCurve:
+    case WKBConstants::wkbCurvePolygon:
+    case WKBConstants::wkbMultiCurve:
+    case WKBConstants::wkbMultiSurface:
+    case WKBConstants::wkbEllipticalCurve:
+    case WKBConstants::wkbCircle:
+    case WKBConstants::wkbClothoid:
+    case WKBConstants::wkbSpiralCurve:
+    case WKBConstants::wkbNurbsCurve:
+        return true;
+    default:
+        return false;
+    }
+}
+
+} // namespace
+
+bool
+WKBReader::readReferenceLocation(AffinePlacement& location, const std::string& typeName)
+{
+    // Empty omits the reference-location body. A following geometry also
+    // starts with a byte order and a type word, so that header is not consumed.
+    // A non-empty body is at least a placement header, so a byte order with
+    // fewer bytes than a header after it is a truncated placement.
+    if (dis.size() < 5) {
+        if (dis.size() > 0) {
+            const unsigned char orderByte = dis.peekByte(0);
+            if (orderByte == WKBConstants::wkbXDR || orderByte == WKBConstants::wkbNDR) {
+                throw ParseException("Unexpected EOF parsing WKB");
+            }
+        }
+        return false;
+    }
+
+    const unsigned char nextOrderByte = dis.peekByte(0);
+    if (nextOrderByte != WKBConstants::wkbXDR && nextOrderByte != WKBConstants::wkbNDR) {
+        throw ParseException(typeName + " WKB requires an affine placement");
+    }
+    const int nextOrder = (nextOrderByte == WKBConstants::wkbNDR)
+        ? ByteOrderValues::ENDIAN_LITTLE
+        : ByteOrderValues::ENDIAN_BIG;
+    const uint32_t nextType = dis.peekUnsigned(1, nextOrder);
+    const uint32_t nextBase = (nextType & 0xffffu) % 1000u;
+    if (nextBase != static_cast<uint32_t>(WKBConstants::wkbAffinePlacement)) {
+        if (isGeometryWkbType(nextBase)) {
+            return false;
+        }
+        throw ParseException(typeName + " WKB requires an affine placement");
+    }
+
+    const int curveOrder = dis.getOrder();
+    dis.readByte();
+    dis.setOrder(nextOrder);
+    const uint32_t placementType = dis.readUnsigned();
+    const uint32_t placementRange = (placementType & 0xffffu) / 1000u;
+    const bool placementZ = (placementRange == 1u) || ((placementType & 0x80000000u) != 0);
+    const bool placementM = (placementRange == 2u) || (placementRange == 3u)
+        || ((placementType & 0x40000000u) != 0);
+    if ((placementType & 0x20000000u) != 0 || placementM || placementZ != hasZ || placementRange > 1u) {
+        throw ParseException(
+            typeName + " reference location must be affine placement type 102 or 1102");
+    }
+
+    const PrecisionModel& pm = *factory.getPrecisionModel();
+    location.origin.x = pm.makePrecise(dis.readDouble());
+    location.origin.y = pm.makePrecise(dis.readDouble());
+    location.origin.z = 0.0;
+    if (hasZ) {
+        location.origin.z = dis.readDouble();
+    }
+    const uint32_t directionCount = dis.readUnsigned();
+    if (directionCount != 2u) {
+        throw ParseException(
+            typeName + " reference location requires exactly 2 reference directions");
+    }
+    location.u.x = dis.readDouble();
+    location.u.y = dis.readDouble();
+    location.u.z = 0.0;
+    if (hasZ) {
+        location.u.z = dis.readDouble();
+    }
+    location.v.x = dis.readDouble();
+    location.v.y = dis.readDouble();
+    location.v.z = 0.0;
+    if (hasZ) {
+        location.v.z = dis.readDouble();
+    }
+    // What follows uses the curve's byte order, not the placement's.
+    dis.setOrder(curveOrder);
+    return true;
+}
+
+std::unique_ptr<EllipticalCurve>
+WKBReader::readEllipticalCurve()
+{
+    AffinePlacement location;
+    if (!readReferenceLocation(location, "ELLIPTICALCURVE")) {
+        return factory.createEllipticalCurve(hasZ, hasM);
+    }
+    // Angles are ST_Angle values, which a bare double gives in radians.
+    const double uAxis = dis.readDouble();
+    const double vAxis = dis.readDouble();
+    const double startAngle = dis.readDouble();
+    const double endAngle = dis.readDouble();
+    double startM = 0.0;
+    double endM = 0.0;
+    if (hasM) {
+        startM = dis.readDouble();
+        endM = dis.readDouble();
+    }
+    return factory.createEllipticalCurve(
+        location, uAxis, vAxis, startAngle, endAngle, hasZ, hasM, startM, endM);
+}
+
+std::unique_ptr<SpiralCurve>
+WKBReader::readSpiralCurve()
+{
+    AffinePlacement location;
+    if (!readReferenceLocation(location, "SPIRALCURVE")) {
+        return factory.createSpiralCurve(hasZ, hasM);
+    }
+    const double length = dis.readDouble();
+    const double startCurvature = dis.readDouble();
+    const double endCurvature = dis.readDouble();
+    // <wkbspiraltype> is a byte count and that many letters.
+    const unsigned char count = dis.readByte();
+    std::string name;
+    for (unsigned char i = 0; i < count; ++i) {
+        name.push_back(static_cast<char>(dis.readByte()));
+    }
+    SpiralType type;
+    try {
+        type = SpiralCurve::typeFromName(name);
+    }
+    catch (const util::IllegalArgumentException&) {
+        throw ParseException("Unknown SPIRALCURVE spiral type '" + name + "'");
+    }
+    double startM = 0.0;
+    double endM = 0.0;
+    if (hasM) {
+        startM = dis.readDouble();
+        endM = dis.readDouble();
+    }
+    return factory.createSpiralCurve(
+        location, length, startCurvature, endCurvature, type, hasZ, hasM, startM, endM);
+}
+
+std::unique_ptr<Clothoid>
+WKBReader::readClothoid()
+{
+    AffinePlacement placement;
+    if (!readReferenceLocation(placement, "CLOTHOID")) {
+        return factory.createClothoid(hasZ, hasM);
+    }
+    ClothoidReferenceLocation location;
+    location.origin = placement.origin;
+    location.u = placement.u;
+    location.v = placement.v;
+
+    const double scale = dis.readDouble();
+    const double startDistance = dis.readDouble();
+    const double endDistance = dis.readDouble();
+    double startM = 0.0;
+    double endM = 0.0;
+    if (hasM) {
+        startM = dis.readDouble();
+        endM = dis.readDouble();
+    }
+    return factory.createClothoid(
+        location, scale, startDistance, endDistance, hasZ, hasM, startM, endM);
+}
+
+bool
+WKBReader::isGeometryHeaderNext() const
+{
+    if (dis.size() < 5) {
+        return false;
+    }
+    const unsigned char orderByte = dis.peekByte(0);
+    if (orderByte != WKBConstants::wkbXDR && orderByte != WKBConstants::wkbNDR) {
+        return false;
+    }
+    const int order = (orderByte == WKBConstants::wkbNDR)
+        ? ByteOrderValues::ENDIAN_LITTLE
+        : ByteOrderValues::ENDIAN_BIG;
+    const uint32_t type = dis.peekUnsigned(1, order);
+    return (type & 0xffffu) / 1000u <= 3u && isGeometryWkbType((type & 0xffffu) % 1000u);
+}
+
+std::unique_ptr<NurbsCurve>
+WKBReader::readNurbsCurve()
+{
+    // Empty omits the body, and a body starts with the degree byte. A
+    // following geometry starts with a byte order, 0 or 1. Degree 0 is not a
+    // curve, so 0 starts a following geometry; 1 is also degree 1, so that
+    // body is parsed tentatively, and taken as empty only when it fails and
+    // a geometry header follows.
+    if (dis.size() == 0) {
+        return factory.createNurbsCurve(hasZ, hasM);
+    }
+    const unsigned char first = dis.peekByte(0);
+    if (first > 1) {
+        return readNurbsCurveBody();
+    }
+    if (first == 1) {
+        const unsigned char* mark = dis.buf;
+        const int order = dis.getOrder();
+        try {
+            return readNurbsCurveBody();
+        }
+        catch (const util::GEOSException&) {
+            dis.buf = mark;
+            dis.setOrder(order);
+            if (!isGeometryHeaderNext()) {
+                throw;
+            }
+        }
+        return factory.createNurbsCurve(hasZ, hasM);
+    }
+    if (isGeometryHeaderNext()) {
+        return factory.createNurbsCurve(hasZ, hasM);
+    }
+    throw ParseException("NURBSCURVE degree must be at least 1");
+}
+
+std::unique_ptr<NurbsCurve>
+WKBReader::readNurbsCurveBody()
+{
+    const int curveOrder = dis.getOrder();
+    auto readOrder = [this]() {
+        const unsigned char orderByte = dis.readByte();
+        if (orderByte == WKBConstants::wkbNDR) {
+            dis.setOrder(ByteOrderValues::ENDIAN_LITTLE);
+        }
+        else if (orderByte == WKBConstants::wkbXDR) {
+            dis.setOrder(ByteOrderValues::ENDIAN_BIG);
+        }
+        else {
+            throw ParseException("Invalid byte order in NURBSCURVE");
+        }
+    };
+
+    const int degree = dis.readByte();
+    // A point is at least a byte order, x, y and the weight flag; a knot is
+    // a byte order, a value and a multiplicity.
+    constexpr std::size_t minPointSize = 1 + 2 * sizeof(double) + 1;
+    constexpr std::size_t minKnotSize = 1 + sizeof(double) + 1;
+
+    const uint32_t numPoints = dis.readUnsigned();
+    if (numPoints > dis.size() / minPointSize) {
+        throw ParseException("Input buffer is smaller than requested object size");
+    }
+    std::vector<NurbsPoint> controlPoints(numPoints);
+    for (NurbsPoint& cp : controlPoints) {
+        // Weighted points are not cartesian, so they are not snapped to the
+        // precision model.
+        readOrder();
+        cp.weightedPoint.x = dis.readDouble();
+        cp.weightedPoint.y = dis.readDouble();
+        if (hasZ) {
+            cp.weightedPoint.z = dis.readDouble();
+        }
+        const unsigned char weightFlag = dis.readByte();
+        if (weightFlag == 1) {
+            cp.weight = dis.readDouble();
+        }
+        else if (weightFlag != 0) {
+            throw ParseException("NURBSCURVE weight flag must be 0 or 1");
+        }
+    }
+    dis.setOrder(curveOrder);
+
+    const uint32_t numKnots = dis.readUnsigned();
+    if (numKnots > dis.size() / minKnotSize) {
+        throw ParseException("Input buffer is smaller than requested object size");
+    }
+    std::vector<NurbsKnot> knots(numKnots);
+    for (NurbsKnot& knot : knots) {
+        readOrder();
+        knot.value = dis.readDouble();
+        knot.multiplicity = dis.readByte();
+    }
+    dis.setOrder(curveOrder);
+
+    double startM = 0.0;
+    double endM = 0.0;
+    if (hasM) {
+        startM = dis.readDouble();
+        endM = dis.readDouble();
+    }
+    return factory.createNurbsCurve(degree, std::move(controlPoints), std::move(knots),
+                                    hasZ, hasM, startM, endM);
 }
 
 std::unique_ptr<CompoundCurve>

@@ -12,5 +12,7 @@ file(GLOB_RECURSE _sources ${CMAKE_CURRENT_LIST_DIR}/*.cpp  CONFIGURE_DEPEND)
 target_sources(geos PRIVATE ${_sources})
 unset(_sources)
 
+target_include_directories(geos PRIVATE ${CMAKE_CURRENT_LIST_DIR})
+
 add_subdirectory(deps)
 

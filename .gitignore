@@ -65,3 +65,5 @@ util/CTestTestfile.cmake
 util/cmake_install.cmake
 util/geosop/CTestTestfile.cmake
 util/geosop/cmake_install.cmake
+__pycache__/
+*.pyc
