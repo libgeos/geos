@@ -136,7 +136,7 @@ RelateGeometry::isZeroLength(const Geometry* geom)
     return true;
 }
 
-/* private static */
+/* public static */
 bool
 RelateGeometry::isZeroLength(const LineString* line) {
     if (line->getNumPoints() >= 2) {

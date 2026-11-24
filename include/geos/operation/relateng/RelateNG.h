@@ -134,11 +134,12 @@ private:
      * @param geom
      * @param isA
      * @param pt
+     * @param isLineZeroLength true if the line containing the endpoint has zero length
      * @param geomTarget
      * @param topoComputer
      * @return true if the line endpoint is in the exterior of the target
      */
-    bool computeLineEnd(RelateGeometry& geom, bool isA, const CoordinateXY* pt, RelateGeometry& geomTarget, TopologyComputer& topoComputer);
+    bool computeLineEnd(RelateGeometry& geom, bool isA, const CoordinateXY* pt, bool isLineZeroLength, RelateGeometry& geomTarget, TopologyComputer& topoComputer);
 
     bool computeAreaVertex(RelateGeometry& geom, bool isA, RelateGeometry& geomTarget, TopologyComputer& topoComputer);
 

@@ -200,12 +200,13 @@ public:
      *
      * @param isLineA the input containing the line end
      * @param locLineEnd the location of the line end (Interior or Boundary)
+     * @param isLineZeroLength true if the line containing the line end has zero length
      * @param locTarget the location on the target geometry
      * @param dimTarget the dimension of the interacting target geometry element,
      *    (if any), or the dimension of the target
      * @param pt the line end coordinate
      */
-    void addLineEndOnGeometry(bool isLineA, Location locLineEnd, Location locTarget, int dimTarget, const CoordinateXY* pt);
+    void addLineEndOnGeometry(bool isLineA, Location locLineEnd, bool isLineZeroLength, Location locTarget, int dimTarget, const CoordinateXY* pt);
 
     /**
      * Adds topology for an area vertex interaction with a target geometry element.
