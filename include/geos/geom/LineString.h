@@ -118,6 +118,8 @@ protected:
 
     LineString(const LineString& ls);
 
+    LineString& operator=(const LineString& ls) = default;
+
     /// \brief
     /// Constructs a LineString taking ownership the
     /// given CoordinateSequence.

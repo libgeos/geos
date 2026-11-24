@@ -576,5 +576,33 @@ void object::test<29>
     ensure(IntersectionMatrix("**F*TF***").isCoveredBy());
 }
 
+// Test of operator= (GH-1528 follow-up)
+template<>
+template<>
+void object::test<30>
+()
+{
+    using geos::geom::IntersectionMatrix;
+
+    IntersectionMatrix a("T*F**F***");
+    IntersectionMatrix b("012*TF012");
+
+    a = b;
+
+    ensure_equals(a.toString(), b.toString());
+
+    // Mutating b afterward must not affect a: operator= must copy the
+    // matrix by value, not alias any shared state.
+    b.set(geos::geom::Location::INTERIOR, geos::geom::Location::INTERIOR, 2);
+    ensure(a.toString() != b.toString());
+
+    // Self-assignment must not corrupt the object.
+    IntersectionMatrix c("FT1*F*2**");
+    std::string beforeSelf = c.toString();
+    IntersectionMatrix& cref = c;
+    c = cref;
+    ensure_equals(c.toString(), beforeSelf);
+}
+
 } // namespace tut
 
