@@ -971,4 +971,16 @@ void object::test<80>()
               "GEOMETRYCOLLECTION (POLYGON ((0 0, 3 3, 6 0, 0 0)), POLYGON ((3 3, 5 5, 10 0, 6 0, 3 3)))");
 }
 
+template<>
+template<>
+void object::test<81>()
+{
+    set_test_name("split non-simple LineString with disjoint LineString");
+    // https://trac.osgeo.org/postgis/ticket/6157
+
+    testSplit("LINESTRING (0 0, 10 10, 10 0, 0 10)",
+              "LINESTRING (100 100, 101 101)",
+              "LINESTRING (0 0, 10 10, 10 0, 0 10)");
+}
+
 }
