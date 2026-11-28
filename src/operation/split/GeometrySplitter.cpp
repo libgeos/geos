@@ -160,6 +160,10 @@ GeometrySplitter::splitAtPoints(const Geometry& geom, const Geometry& splitPoint
     std::vector<const Point*> points;
     PointExtracter::getPoints(splitPoints, points);
 
+    if (points.empty()) {
+        return geom.clone();
+    }
+
     std::unique_ptr<Geometry> result;
 
     for (const auto& point : points) {
